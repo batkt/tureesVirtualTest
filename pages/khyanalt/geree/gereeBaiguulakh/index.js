@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Steps, Divider } from "antd"
-import Admin from "../../../components/Admin"
+import Admin from "components/Admin"
 
 const { Step } = Steps
 

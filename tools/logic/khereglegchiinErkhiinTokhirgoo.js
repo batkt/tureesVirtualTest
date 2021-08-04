@@ -3,14 +3,14 @@ import { useRouter } from "next/router"
 const khereglegchiinErkh = [
   {
     erkh: "Admin",
-    tsonkhnuud: ["/khyanalt/gereeBurtgel", "/khyanalt/gereeBaiguulakh"]
+    tsonkhnuud: ["/khyanalt/geree/gereeBurtgel", "/khyanalt/geree/gereeBaiguulakh"]
   }
 ]
 
 export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
   switch (erkh) {
     case "Admin":
-      window.location.href = "/khyanalt/gereeBurtgel"
+      window.location.href = "/khyanalt/geree/gereeBurtgel"
       break
     default:
       break
@@ -21,27 +21,27 @@ const khuudasnuud = [
   {
     ner: "Гэрээний жагсаалт",
     khuudasniiNer: "gereeBurtgel",
-    href: "/khyanalt/gereeBurtgel"
+    href: "/khyanalt/geree/gereeBurtgel"
   },
   {
     ner: "Гэрээ байгуулах",
     khuudasniiNer: "gereeBaiguulakh",
-    href: "/khyanalt/gereeBaiguulakh"
+    href: "/khyanalt/geree/gereeBaiguulakh"
   },
   {
     ner: "Харилцагчийн жагсаалт",
-    khuudasniiNer: "gereeBurtgel",
-    href: "/khyanalt/gereeBurtgel"
+    khuudasniiNer: "geree/gereeBurtgel",
+    href: "/khyanalt/geree/gereeBurtgel"
   },
   {
     ner: "Ажилчдын бүртгэл",
-    khuudasniiNer: "gereeBurtgel",
-    href: "/khyanalt/gereeBurtgel"
+    khuudasniiNer: "geree/gereeBurtgel",
+    href: "/khyanalt/geree/gereeBurtgel"
   },
   {
     ner: "Тайлан",
-    khuudasniiNer: "gereeBurtgel",
-    href: "/khyanalt/gereeBurtgel"
+    khuudasniiNer: "geree/gereeBurtgel",
+    href: "/khyanalt/geree/gereeBurtgel"
   }
 ]
 
