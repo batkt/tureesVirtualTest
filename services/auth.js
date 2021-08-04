@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const t = parseCookies()
-        setToken(t?.hitoken)
+        setToken(t?.tureestoken)
         const la = localStorage.getItem('ajiltniiJagsaalt')
         if (!!la)
             setAjiltniiJagsaalt(JSON.parse(la))
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
             uilchilgee().post('/ajiltanNevtrey', khereglech).then(({ data, status }) => {
                 if (status === 200) {
                     if (!!data.token) {
-                        setCookie(null, 'hitoken', data.token, {
+                        setCookie(null, 'tureestoken', data.token, {
                             maxAge: 30 * 24 * 60 * 60,
                             path: '/',
                         })
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
                         ajiltniiJagsaalt.push(a)
                         localStorage.setItem('ajiltniiJagsaalt', JSON.stringify(ajiltniiJagsaalt))
                         setAjiltniiJagsaalt(ajiltniiJagsaalt)
-                        setCookie(null, 'hitoken', data.token, {
+                        setCookie(null, 'tureestoken', data.token, {
                             maxAge: 30 * 24 * 60 * 60,
                             path: '/',
                         })

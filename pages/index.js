@@ -116,7 +116,7 @@ function Ajiltan() {
 }
 
 export const getServerSideProps = async (ctx) => {
-  destroyCookie(ctx, 'hitoken')
+  destroyCookie(ctx, 'tureestoken')
   return { props: {} }
 };
 
