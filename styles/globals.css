@@ -620,3 +620,7 @@ input:-webkit-autofill {
     --tw-bg-opacity: 1;
     background-color: rgba(26,56,159,var(--tw-bg-opacity));
 }
+
+.ant-steps-item-icon{
+    @apply flex items-center justify-center !important
+}
