@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     const auth = useMemo(() => ({
         newterya: async khereglech => {
             if (khereglech.namaigsana)
-                localStorage.setItem('newtrekhNerHicar', khereglech.mail)
+                localStorage.setItem('newtrekhNerTurees', khereglech.mail)
 
             uilchilgee().post('/ajiltanNevtrey', khereglech).then(({ data, status }) => {
                 if (status === 200) {

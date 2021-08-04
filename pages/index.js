@@ -26,7 +26,7 @@ function Ajiltan() {
 
   useEffect(async () => {
     localStorage.removeItem('ajiltniiJagsaalt')
-    const newtrekhNer = await localStorage.getItem('newtrekhNerHicar');
+    const newtrekhNer = await localStorage.getItem('newtrekhNerTurees');
     form.setFieldsValue({ mail: newtrekhNer })
   }, [])
 
