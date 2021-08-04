@@ -1,0 +1,37 @@
+.table {
+  table-layout: fixed;
+  border: 0;
+  border-collapse: collapse;
+  width: 100%;
+  page-break-after: always;
+}
+
+.table table{
+  width: 100%;
+}
+.table thead {
+  @apply bg-gray-700 dark:bg-gray-800 text-white
+}
+
+.table thead th {
+  text-align: center;
+}
+
+.table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.table tbody tr:hover {
+  @apply bg-gray-300 transform border-gray-400 duration-100;
+  --tw-scale-x:1.005;
+  --tw-scale-y:1.005;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ccc;
+  @apply text-center
+}
+.table tr:nth-child(even) {
+  @apply bg-gray-200 dark:bg-gray-900;
+}
