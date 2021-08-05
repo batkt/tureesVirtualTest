@@ -39,16 +39,6 @@ function Ajiltan() {
       <div className="container sm:px-10">
         <div className="block xl:grid grid-cols-2 gap-4">
           <div className="hidden xl:flex flex-col min-h-screen z-10">
-            <a href="" className="-intro-x flex items-center pt-5">
-              <img
-                alt="Icewall Tailwind HTML Admin Template"
-                className="w-6"
-                src="/car.png"
-              />
-              <span className="text-white text-lg ml-3">
-                Hi <span className="font-medium">Car</span>
-              </span>
-            </a>
             <div className="my-auto">
               <img
                 alt="Icewall Tailwind HTML Admin Template"
@@ -56,15 +46,13 @@ function Ajiltan() {
                 src="http://icewall-laravel.left4code.com/dist/images/illustration.svg"
               />
               <div className="-intro-x text-white font-medium text-4xl leading-tight mt-10">
-                Авто машины бүртгэл <br /> Засварын систем
+                Түрээсийн удирдлагын систем
               </div>
             </div>
           </div>
           <div className="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
             <div className="my-auto mx-auto xl:ml-20 bg-white dark:bg-gray-900 xl:dark:bg-gray-800 xl:bg-transparent px-5 sm:px-8 py-8 xl:p-0 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto">
-              <h2 className="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left dark:text-gray-300">
-                Хяналт
-              </h2>
+              <h2 className="intro-x font-bold text-2xl xl:text-3xl text-center xl:text-left dark:text-gray-300"></h2>
               <Form
                 form={form}
                 initialValues={{}}

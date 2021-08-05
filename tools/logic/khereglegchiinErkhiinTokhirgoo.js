@@ -3,7 +3,11 @@ import { useRouter } from "next/router"
 const khereglegchiinErkh = [
   {
     erkh: "Admin",
-    tsonkhnuud: ["/khyanalt/geree/gereeBurtgel", "/khyanalt/geree/gereeBaiguulakh"]
+    tsonkhnuud: [
+      "/khyanalt/geree/gereeBurtgel",
+      "/khyanalt/geree/gereeBaiguulakh",
+      "/khyanalt/ajiltan/ajiltanBurtgel"
+    ]
   }
 ]
 
@@ -29,14 +33,14 @@ const khuudasnuud = [
     href: "/khyanalt/geree/gereeBaiguulakh"
   },
   {
-    ner: "Харилцагчийн жагсаалт",
+    ner: "Харилцагч жагсаалт",
     khuudasniiNer: "geree/gereeBurtgel",
     href: "/khyanalt/geree/gereeBurtgel"
   },
   {
-    ner: "Ажилчдын бүртгэл",
-    khuudasniiNer: "geree/gereeBurtgel",
-    href: "/khyanalt/geree/gereeBurtgel"
+    ner: "Ажилтан бүртгэл",
+    khuudasniiNer: "ajiltanBurtgel",
+    href: "/khyanalt/ajiltan/ajiltanBurtgel"
   },
   {
     ner: "Тайлан",
