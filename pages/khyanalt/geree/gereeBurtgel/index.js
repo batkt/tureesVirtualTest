@@ -270,8 +270,8 @@ function ZakhialgiinKhyanalt({ token }) {
                 key={index}
                 className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer"
               >
-                <div className="zoom-in">
-                  <div className="box p-5">
+                <div className="zoom-in rounded-xl h-1">
+                  <div className="p-3 rounded-xl">
                     <div className="flex">
                       <div>
                         <div className="text-3xl text-green-600 font-bold">
