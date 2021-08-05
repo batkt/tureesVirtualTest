@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "pm2": "pm2 start yarn --name \"turees\" --interpreter bash -- start --port 3030"
+    "pm2": "pm2 start yarn --name \"turees\" --interpreter bash -- start --port 3001"
   },
   "author": "Bat-Erdene.TS SumiyaDagva",
   "license": "ISC",
