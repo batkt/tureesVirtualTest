@@ -1,7 +1,7 @@
 import React from "react"
 import Admin from "components/Admin"
 import uilchilgee from "services/uilchilgee"
-import { Steps } from 'antd';
+import { message, Steps } from 'antd';
 import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
 import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
 import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
@@ -44,6 +44,13 @@ function GereeBaiguulakh() {
       data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`
       data.gereeniiOgnoo = new Date()
       uilchilgee().post('/api/geree', data)
+        .then(({ data }) => {
+          if (!!data) {
+            setKhagalakhGeree({})
+            setCurrent(0)
+            message.success('Амжилттай хадгаллаа')
+          }
+        })
     }
   };
 
