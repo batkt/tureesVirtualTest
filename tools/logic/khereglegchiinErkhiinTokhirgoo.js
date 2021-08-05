@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 
 const khereglegchiinErkh = [
   {
-    erkh: "Admin",
+    role: "Admin",
     tsonkhnuud: [
       "/khyanalt/geree/gereeBurtgel",
       "/khyanalt/geree/gereeBaiguulakh",
@@ -11,8 +11,8 @@ const khereglegchiinErkh = [
   }
 ]
 
-export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
-  switch (erkh) {
+export function ekhniiTsonkhruuOchyo(role, zam = "") {
+  switch (role) {
     case "Admin":
       window.location.href = "/khyanalt/geree/gereeBurtgel"
       break
@@ -52,13 +52,13 @@ const khuudasnuud = [
 function useErkh(ajiltan) {
   const router = useRouter()
   if (!ajiltan) return []
-  const erkh = khereglegchiinErkh.find((x) => x.erkh === ajiltan.erkh)
-  if (!erkh || !erkh.tsonkhnuud.find((x) => !!router.pathname.includes(x))) {
+  const role = khereglegchiinErkh.find((x) => x.role === ajiltan.role)
+  if (!role || !role.tsonkhnuud.find((x) => !!router.pathname.includes(x))) {
     router.replace("/404")
     return []
   }
   return khuudasnuud.filter(
-    (x) => !!erkh.tsonkhnuud.find((y) => x.href.includes(y))
+    (x) => !!role.tsonkhnuud.find((y) => x.href.includes(y))
   )
 }
 
