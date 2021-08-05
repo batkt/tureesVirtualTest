@@ -1,12 +1,13 @@
 import React from "react"
 import Admin from "components/Admin"
+import uilchilgee from "services/uilchilgee"
 import { Steps } from 'antd';
 import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
 import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
 import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
 import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
 import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
-
+import moment from 'moment'
 const { Step } = Steps;
 
 const steps = [
@@ -36,12 +37,19 @@ function GereeBaiguulakh() {
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({});
 
-  const next = () => {
-    setCurrent(current + 1);
+  const next = (data) => {
+    if (current < 4)
+      setCurrent(current + 1);
+    if (!!data) {
+      data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`
+      data.gereeniiOgnoo = new Date()
+      uilchilgee().post('/api/geree', data)
+    }
   };
 
   const prev = () => {
-    setCurrent(current - 1);
+    if (current > 0)
+      setCurrent(current - 1);
   };
 
   const currentItem = steps[current]
