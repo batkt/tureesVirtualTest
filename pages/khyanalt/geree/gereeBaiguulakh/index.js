@@ -1,18 +1,50 @@
-import React, { useState } from "react"
-import { Steps, Divider } from "antd"
+import React from "react"
 import Admin from "components/Admin"
+import { Steps } from 'antd';
+import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
+import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
+import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
+import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
+import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
 
-const { Step } = Steps
+const { Step } = Steps;
+
+const steps = [
+  {
+    title: 'Ерөнхий мэдээлэл',
+    content: YurunkhiiMedeelel,
+  },
+  {
+    title: 'Барьцаа бүртгэл',
+    content: Baritsaa,
+  },
+  {
+    title: 'Хөрөнгийн бүртгэл',
+    content: KhurungiinBurtgel,
+  },
+  {
+    title: 'Гэрээний хугацаа',
+    content: KhugatsaaBurtgel,
+  },
+  {
+    title: 'Төлбөр тооцоо',
+    content: TulburTootsoo,
+  }
+];
 
 function GereeBaiguulakh() {
-  const [state, setState] = useState({ current: 0 })
+  const [current, setCurrent] = React.useState(0);
+  const [khadgalakhGeree, setKhagalakhGeree] = React.useState({});
 
-  function onChange(current) {
-    console.log("onChange:", current)
-    setState({ current })
-  }
+  const next = () => {
+    setCurrent(current + 1);
+  };
 
-  const { current } = state
+  const prev = () => {
+    setCurrent(current - 1);
+  };
+
+  const currentItem = steps[current]
 
   return (
     <Admin
@@ -20,11 +52,14 @@ function GereeBaiguulakh() {
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
     >
-      <Steps current={current} onChange={onChange}>
-        <Step title="Step 1" description="This is a description." />
-        <Step title="Step 2" description="This is a description." />
-        <Step title="Step 3" description="This is a description." />
-      </Steps>
+      <div className='col-span-12 p-2'>
+        <Steps current={current}>
+          {steps.map(item => (
+            <Step key={item.title} title={item.title} />
+          ))}
+        </Steps>
+        <div className="box p-2 my-1"><currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} /></div>
+      </div>
     </Admin>
   )
 }
