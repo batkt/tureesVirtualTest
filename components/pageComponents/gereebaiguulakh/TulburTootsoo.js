@@ -16,7 +16,7 @@ const formItemLayout = {
 const Demo = ({ value, onChange, next, prev }) => {
     const onFinish = (values) => {
         onChange({ ...value, ...values })
-        next()
+        next({ ...value, ...values })
     };
 
     return (

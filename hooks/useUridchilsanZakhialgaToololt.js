@@ -17,15 +17,6 @@ const fetcher = (url, token, baiguullagiinId, ekhlekhOgnoo, duusakhOgnoo, ajiltn
 function useUridchilsanZakhialgaToololt(token, baiguullagiinId, zakhialgaMutate, ekhlekhOgnoo, duusakhOgnoo, ajiltniiId) {
     const { data, mutate } = useSWR(!!token && !!baiguullagiinId ? ['/zakhialgiinTooAvya', token, baiguullagiinId, ekhlekhOgnoo, duusakhOgnoo, ajiltniiId] : null, fetcher, { revalidateOnFocus: false })
 
-    useEffect(() => {
-        if (!!baiguullagiinId) {
-            socket().on(`baiguullaga${baiguullagiinId}`, (d) => {
-                mutate(d, false)
-                zakhialgaMutate((garalt) => ({ ...garalt, jagsaalt: [...garalt.jagsaalt] }))
-            });
-        }
-    }, [baiguullagiinId])
-
     return {
         zakhialga: data?.find((mur) => mur._id.tuluv === "0")?.count || 0,
         tsagOirtson: data?.find((mur) => mur._id.tuluv === "1")?.count || 0,

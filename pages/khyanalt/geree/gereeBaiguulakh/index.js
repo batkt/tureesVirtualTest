@@ -1,5 +1,6 @@
 import React from "react"
 import Admin from "components/Admin"
+import uilchilgee from "services/uilchilgee"
 import { Steps } from 'antd';
 import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
 import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
@@ -36,12 +37,16 @@ function GereeBaiguulakh() {
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({});
 
-  const next = () => {
-    setCurrent(current + 1);
+  const next = (data) => {
+    if (current < 4)
+      setCurrent(current + 1);
+    if (!!data)
+      uilchilgee().post('/api/geree', data)
   };
 
   const prev = () => {
-    setCurrent(current - 1);
+    if (current > 0)
+      setCurrent(current - 1);
   };
 
   const currentItem = steps[current]
