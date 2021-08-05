@@ -52,13 +52,13 @@ function GereeBaiguulakh() {
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
     >
-      <div className='col-span-12 p-2'>
+      <div className='col-span-12 p-2 box'>
         <Steps current={current}>
           {steps.map(item => (
             <Step key={item.title} title={item.title} />
           ))}
         </Steps>
-        <div className="box p-2 my-1"><currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} /></div>
+        <div className="p-2 mt-1"><currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} /></div>
       </div>
     </Admin>
   )
