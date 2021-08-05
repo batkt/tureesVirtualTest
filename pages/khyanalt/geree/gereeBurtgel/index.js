@@ -36,7 +36,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import uilchilgee from "services/uilchilgee"
 
 import formatNumber from "tools/function/formatNumber"
-import { useState, useRef, useMemo } from "react"
+import { useState, useRef, useMemo, useEffect } from "react"
 import useZakhialga from "hooks/useZakhialga"
 import useUridchilsanZakhialgaToololt from "hooks/useUridchilsanZakhialgaToololt"
 import useKhuviarlagdaaguiZakhialga from "hooks/useKhuviarlagdaaguiZakhialga"
@@ -95,6 +95,22 @@ const garalt = {
 function ZakhialgiinKhyanalt({ token }) {
   const { ajiltan, baiguullaga } = useAuth()
   const router = useRouter()
+  const [gereeJagsaalt, setGereeJagsaalt] = useState([])
+
+  useEffect(() => {
+    gereeniiJagsaalt()
+  }, [])
+
+  function gereeniiJagsaalt() {
+    uilchilgee()
+      .get("/api/geree")
+      .then(({ data }) => {
+        console.log("data", data)
+        if (!!data) {
+          setGereeJagsaalt(data.rows)
+        }
+      })
+  }
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -138,118 +154,144 @@ function ZakhialgiinKhyanalt({ token }) {
   }, [])
   const columns = useMemo(() => {
     var jagsaalt = [
+      // {
+      //   title: "№",
+      //   key: "index",
+      //   className: "text-center",
+      //   render: (text, record, index) =>
+      //     (zakhialgiinGaralt?.khuudasniiDugaar || 0) *
+      //       (zakhialgiinGaralt?.khuudasniiKhemjee || 0) -
+      //     (zakhialgiinGaralt?.khuudasniiKhemjee || 0) +
+      //     index +
+      //     1
+      // },
       {
-        title: "№",
-        key: "index",
-        className: "text-center",
-        render: (text, record, index) =>
-          (zakhialgiinGaralt?.khuudasniiDugaar || 0) *
-            (zakhialgiinGaralt?.khuudasniiKhemjee || 0) -
-          (zakhialgiinGaralt?.khuudasniiKhemjee || 0) +
-          index +
-          1
+        title: "Овог",
+        dataIndex: "ovog",
+        key: "ovog",
+        ellipsis: true
       },
       {
         title: "Нэр",
-        dataIndex: "khariltsagchiinNer",
-        key: "khariltsagchiinNer",
+        dataIndex: "ner",
+        key: "ner",
         ellipsis: true
       },
       {
         title: "Утас",
-        dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
+        dataIndex: "utas",
+        ellipsis: true,
+        render: (data) => {
+          var dugaar = data?.map((x) => x).join(";")
+          dugaar = Array.from(new Set(dugaar.split(";"))).toString()
+          return <a>{dugaar}</a>
+        }
       },
       {
         title: "Регистер",
-        dataIndex: "khariltsagchiinNer",
-        key: "khariltsagchiinNer",
+        dataIndex: "register",
+        key: "register",
         ellipsis: true
       },
 
       {
         title: "Гэрээ",
-        dataIndex: "khariltsagchiinUtas",
+        dataIndex: "gereeniiDugaar",
         ellipsis: true
       },
       {
         title: "Повьлон",
-        dataIndex: "khariltsagchiinUtas",
+        dataIndex: "gereeniiDugaar",
         ellipsis: true
       },
       {
         title: "Талбай /м2/",
         dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
+        ellipsis: true,
+        render: () => {
+          return "50 м2"
+        }
       },
       {
         title: "Эхлэх",
-        dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
+        dataIndex: "gereeniiOgnoo",
+        ellipsis: true,
+        render: (data) => {
+          return moment(data).format("YYYY-MM-DD")
+        }
       },
       {
         title: "Дуусах",
-        dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
-      },
-      {
-        title: "Хугацаа",
-        dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
-      },
-      {
-        title: "Дүн",
-        dataIndex: "khariltsagchiinUtas",
-        ellipsis: true
-      },
-      {
-        title: "Төлөв",
-        align: "center",
+        dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (data) => {
-          if (data.tuluv !== undefined) {
-            var tuluv = ""
-            var khugatsaa = ""
-            let color = "geekblue"
-            switch (data.tuluv) {
-              case "1":
-                tuluv = "ХУВИАРЛАГДСАН"
-                color = "orange"
-                khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
-                break
-              case "2":
-                tuluv = "ХИЙГДЭЖ БАЙНА"
-                khugatsaa = moment(data.ekhelsenTsag).format("YYYY-MM-DD HH:mm")
-                break
-              case "3":
-                tuluv = "ДУУССАН"
-                color = "green"
-                khugatsaa = moment(data.duussanTsag).format("YYYY-MM-DD HH:mm")
-                break
-              case "-1":
-                tuluv = "ЦУЦЛАГДСАН"
-                color = "red"
-                khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
-                break
-              default:
-                break
-            }
-            return (
-              <div style={tuluvStyle} className="whitespace-nowrap">
-                <Tag color={color}>
-                  <span>{tuluv}</span>
-                </Tag>
-                <span>{khugatsaa}</span>
-              </div>
-            )
-          }
+          return moment(data).format("YYYY-MM-DD")
         }
       },
+      {
+        title: "Хугацаа/сар/",
+        dataIndex: "khugatsaa",
+        ellipsis: true
+      },
+      {
+        title: "Сарын түрээс",
+        dataIndex: "sariinTurees",
+        ellipsis: true,
+        render: (data) => {
+          return formatNumber(data) + "₮"
+        }
+      },
+      // {
+      //   title: "Төлөв",
+      //   align: "center",
+      //   ellipsis: true,
+      //   render: (data) => {
+      //     if (data.tuluv !== undefined) {
+      //       var tuluv = ""
+      //       var khugatsaa = ""
+      //       let color = "geekblue"
+      //       switch (data.tuluv) {
+      //         case "1":
+      //           tuluv = "ХУВИАРЛАГДСАН"
+      //           color = "orange"
+      //           khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
+      //           break
+      //         case "2":
+      //           tuluv = "ХИЙГДЭЖ БАЙНА"
+      //           khugatsaa = moment(data.ekhelsenTsag).format("YYYY-MM-DD HH:mm")
+      //           break
+      //         case "3":
+      //           tuluv = "ДУУССАН"
+      //           color = "green"
+      //           khugatsaa = moment(data.duussanTsag).format("YYYY-MM-DD HH:mm")
+      //           break
+      //         case "-1":
+      //           tuluv = "ЦУЦЛАГДСАН"
+      //           color = "red"
+      //           khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
+      //           break
+      //         default:
+      //           break
+      //       }
+      //       return (
+      //         <div style={tuluvStyle} className="whitespace-nowrap">
+      //           <Tag color={color}>
+      //             <span>{tuluv}</span>
+      //           </Tag>
+      //           <span>{khugatsaa}</span>
+      //         </div>
+      //       )
+      //     }
+      //   }
+      // },
 
       {
         title: "Бүртгэсэн",
         dataIndex: "burtgesenAjiltaniiNer",
-        ellipsis: true
+        ellipsis: true,
+        render: () => {
+          return "Админ"
+        }
       }
     ]
 
@@ -270,7 +312,7 @@ function ZakhialgiinKhyanalt({ token }) {
                 key={index}
                 className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer"
               >
-                <div className="zoom-in rounded-xl h-1">
+                <div>
                   <div className="p-3 rounded-xl">
                     <div className="flex">
                       <div>
@@ -292,146 +334,6 @@ function ZakhialgiinKhyanalt({ token }) {
               </div>
             )
           })}
-
-          {/* <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2 focus:bg-blue-500 focus-within:bg-blue-500"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1F618D",
-              borderLeft: "5px solid #1F618D",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1F618D",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Бүх</span>
-          </Card>
-
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1990ff",
-              borderLeft: "5px solid #1990ff",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1990ff",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Хэвийн</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#52BE80",
-              borderLeft: "5px solid #52BE80",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#52BE80",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Хугацаа хэтэрсэн</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#52BE80",
-              borderLeft: "5px solid #52BE80",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#52BE80",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Төлбөр дутуу</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#FF7F50",
-              borderLeft: "5px solid #FF7F50",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#FF7F50",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Хаагдсан</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1F618D",
-              borderLeft: "5px solid #1F618D",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1F618D",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            ></span>
-            <span className="ml-4 2xl:text-xl">Цуцласан</span>
-          </Card> */}
         </div>
 
         {/* <div>
@@ -447,14 +349,14 @@ function ZakhialgiinKhyanalt({ token }) {
             onChange={onChangeOgnoo}
           />
         </div> */}
-        <div className="overflow-auto hidden md:block mt-5">
+        <div className="overflow-auto hidden md:block mt-8">
           <Table
             bordered
             scroll={{ y: "calc(100vh - 32rem)" }}
             size="small"
             rowKey={(row) => row._id}
             columns={columns}
-            //dataSource={zakhialgiinGaralt?.jagsaalt}
+            dataSource={gereeJagsaalt}
           />
         </div>
       </Card>
