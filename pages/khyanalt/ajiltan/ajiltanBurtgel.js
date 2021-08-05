@@ -414,8 +414,7 @@ function AjiltanBurtgel({ token }) {
             ajilchdiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
           }
           rowKey={(row) => row._id}
-          loading={!ajilchdiinGaralt}
-          dataSource={ajilchdiinGaralt?.jagsaalt}
+          dataSource={[]}
           pagination={{
             current: ajilchdiinGaralt?.khuudasniiDugaar,
             pageSize: ajilchdiinGaralt?.khuudasniiKhemjee,
