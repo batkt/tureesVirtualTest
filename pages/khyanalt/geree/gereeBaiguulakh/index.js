@@ -1,30 +1,35 @@
 import React from "react"
 import Admin from "components/Admin"
-import { Steps, Button, message } from 'antd';
+import { Steps } from 'antd';
 import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
+import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
+import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
+import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
+import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
+
 const { Step } = Steps;
 
 const steps = [
   {
-    title: 'First',
+    title: 'Ерөнхий мэдээлэл',
     content: YurunkhiiMedeelel,
   },
   {
-    title: 'Second',
-    content: 'Second-content',
+    title: 'Барьцаа бүртгэл',
+    content: Baritsaa,
   },
   {
-    title: 'third',
-    content: 'Last-content',
+    title: 'Хөрөнгийн бүртгэл',
+    content: KhurungiinBurtgel,
   },
   {
-    title: 'fourth',
-    content: 'Second-content',
+    title: 'Гэрээний хугацаа',
+    content: KhugatsaaBurtgel,
   },
   {
-    title: 'fifth',
-    content: 'Last-content',
-  },
+    title: 'Төлбөр тооцоо',
+    content: TulburTootsoo,
+  }
 ];
 
 function GereeBaiguulakh() {

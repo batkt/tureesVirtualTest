@@ -5,8 +5,10 @@ import {
     Switch,
     Button,
     Upload,
+    Space,
 } from 'antd';
-import { UploadOutlined, InboxOutlined, SolutionOutlined } from '@ant-design/icons';
+import { UploadOutlined, InboxOutlined, SolutionOutlined, ArrowRightOutlined, MinusCircleOutlined, PlusOutlined, PhoneOutlined } from '@ant-design/icons';
+import React from 'react';
 
 const formItemLayout = {
     labelCol: {
@@ -43,27 +45,47 @@ const normFile = (e) => {
 // 	        Хаяг	
 // 	        Зөвшөөрлийн бичгийн хуулбар	
 // 	        Иргэний үнэмлэхний хуулбар	
+/*
+baiguullagiinNer
+register
+ovog 
+ner
+utas1 utas2
+baiguullaga
+khayag
+gerchilgeeniiKhuulbar
+zuvshuurliinBichgiinKhuulbar
+irgeniiUnemlekhiinKhuulbar
+*/
+const YurunkhiiMedeele = ({ next, onChange, value }) => {
 
-const YurunkhiiMedeele = () => {
+    const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false)
+
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        console.log(values)
+        onChange({ ...value, ...values })
+        next()
     };
 
     return (
         <Form
             name="validate_other"
             {...formItemLayout}
+            initialValues={value}
             onFinish={onFinish}
-            initialValues={{
-                'input-number': 3,
-                'checkbox-group': ['A', 'B'],
-                rate: 3.5,
-            }}
         >
             <Form.Item name="baiguullagaEsekh" label="Байгууллага эсэх" valuePropName="checked">
-                <Switch />
+                <Switch onChange={(v) => setBaiguullagaEsekh(v)} />
             </Form.Item>
-            <Form.Item label="Регистр" rules={[
+            <Form.Item name='baiguullagiinNer' hidden={!baiguullagaEsekh} label="Байгууллага нэр">
+                <Input
+                    allowClear
+                    maxLength={10}
+                    placeholder="Байгууллага нэр"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>
+            <Form.Item name='register' label="Регистр" rules={[
                 {
                     required: true,
                     len: 10,
@@ -78,38 +100,121 @@ const YurunkhiiMedeele = () => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
+            <Form.Item name='ovog' label="Овог">
+                <Input
+                    allowClear
+                    maxLength={10}
+                    placeholder="Овог"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>
+            <Form.Item name='ner' label="Нэр">
+                <Input
+                    allowClear
+                    maxLength={10}
+                    placeholder="Нэр"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>
+            <Form.Item label="Утас">
+                <Form.List
+                    name="utas"
+                    rules={[
+                        {
+                            validator: async (_, names) => {
+                                if (!names || names.length < 2) {
+                                    return Promise.reject(new Error('Багадаа 2 дугаар оруулна уу!'));
+                                }
+                            },
+                        },
+                    ]}
+                >
+                    {(fields, { add, remove }, { errors }) => (
+                        <>
+                            {fields.map((field) => (
+                                <Form.Item
+                                    required={false}
+                                    key={field.key}
+                                >
+                                    <Form.Item
+                                        {...field}
+                                        validateTrigger={['onChange', 'onBlur']}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                whitespace: true,
+                                                message: "Утас оруулна уу.",
+                                            },
+                                        ]}
+                                        noStyle
+                                    >
+                                        <Input prefix={<PhoneOutlined />} placeholder="Утас" style={{ width: '60%' }} />
+                                    </Form.Item>
+                                    {fields.length > 1 ? (
+                                        <MinusCircleOutlined
+                                            className="ml-2"
+                                            onClick={() => remove(field.name)}
+                                        />
+                                    ) : null}
+                                </Form.Item>
+                            ))}
+                            <Form.Item>
+                                <Button
+                                    type="dashed"
+                                    onClick={() => add()}
+                                    style={{ width: '60%' }}
+                                    icon={<PlusOutlined />}
+                                >
+                                    Утас нэмэх
+                                </Button>
+                                <Form.ErrorList errors={errors} />
+                            </Form.Item>
+                        </>
+                    )}
+                </Form.List>
+            </Form.Item>
             <Form.Item
+                hidden={!baiguullagaEsekh}
                 name="upload"
-                label="Upload"
+                label="Гэрчилгээний хуулбар"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
-                extra="longgggggggggggggggggggggggggggggggggg"
+                extra="Гэрчилгээний хуулбар"
             >
                 <Upload name="logo" action="/upload.do" listType="picture">
                     <Button icon={<UploadOutlined />}>Click to upload</Button>
                 </Upload>
             </Form.Item>
-
-            <Form.Item label="Dragger">
-                <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                    <Upload.Dragger name="files" action="/upload.do">
-                        <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
-                        </p>
-                        <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                        <p className="ant-upload-hint">Support for a single or bulk upload.</p>
-                    </Upload.Dragger>
-                </Form.Item>
+            <Form.Item
+                name="upload"
+                label="Зөвшөөрлийн бичгийн хуулбар"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+                extra="Зөвшөөрлийн бичгийн хуулбар"
+            >
+                <Upload name="logo" action="/upload.do" listType="picture">
+                    <Button icon={<UploadOutlined />}>Click to upload</Button>
+                </Upload>
             </Form.Item>
-
+            <Form.Item
+                name="upload"
+                label="Иргэний үнэмлэхний хуулбар"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+                extra="Иргэний үнэмлэхний хуулбар"
+            >
+                <Upload name="logo" action="/upload.do" listType="picture">
+                    <Button icon={<UploadOutlined />}>Click to upload</Button>
+                </Upload>
+            </Form.Item>
             <Form.Item
                 wrapperCol={{
                     span: 12,
                     offset: 6,
                 }}
             >
-                <Button type="primary" htmlType="submit">
-                    Submit
+                <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} >
+                    Барьцаа бүртгэл
                 </Button>
             </Form.Item>
         </Form>
