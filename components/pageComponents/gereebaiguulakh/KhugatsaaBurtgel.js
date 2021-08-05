@@ -5,6 +5,7 @@ import {
     Switch,
     Button,
     Upload,
+    DatePicker,
 } from 'antd';
 import { UploadOutlined, InboxOutlined, SolutionOutlined, ArrowRightOutlined, ArrowLeftOutlined, DatabaseOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import React from 'react';
@@ -94,10 +95,10 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
-            <Form.Item name='duusakhOgnoo' label="Гэрээ цуцлах бол урьдчилж сануулах хугацаа /ажлын" >
-                <Input
+            <Form.Item name='duusakhOgnoo' label="Гэрээ дуусах хугацаа" >
+                <DatePicker
                     allowClear
-                    placeholder="Гэрээ цуцлах бол урьдчилж сануулах хугацаа /ажлын"
+                    placeholder="Гэрээ дуусах хугацаа"
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
