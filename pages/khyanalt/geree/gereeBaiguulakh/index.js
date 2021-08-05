@@ -7,7 +7,7 @@ import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
 import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
 import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
 import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
-
+import moment from 'moment'
 const { Step } = Steps;
 
 const steps = [
@@ -40,8 +40,11 @@ function GereeBaiguulakh() {
   const next = (data) => {
     if (current < 4)
       setCurrent(current + 1);
-    if (!!data)
+    if (!!data) {
+      data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`
+      data.gereeniiOgnoo = new Date()
       uilchilgee().post('/api/geree', data)
+    }
   };
 
   const prev = () => {
