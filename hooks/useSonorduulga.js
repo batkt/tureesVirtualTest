@@ -8,7 +8,7 @@ var sonorduulgaId = null
 
 function useSonorduulga(token, ajiltniiId) {
     const [khuudaslalt, setKhuudaslalt] = useState({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, jagsaalt: [] })
-    const { data, mutate } = useSWR(!!token && !!ajiltniiId ? ['/sonorduulgaAvya', token, ajiltniiId, khuudaslalt] : null, fetcher, { revalidateOnFocus: false })
+    const { data, mutate } = {}
 
     useEffect(() => {
         if (ajiltniiId) {

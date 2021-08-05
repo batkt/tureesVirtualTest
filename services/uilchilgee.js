@@ -8,7 +8,7 @@ import _ from "lodash";
 // }
 //export const url = `http://${hostnameAvya()}:8080`;
 //export const url = "http://192.168.1.12:8080";
-export const url = "http://103.50.205.33:8080";
+export const url = "http://103.50.205.33:8081";
 
 export const socket = () => socketIOClient(url, { transports: ['websocket'] });
 

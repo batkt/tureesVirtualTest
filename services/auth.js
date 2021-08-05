@@ -33,25 +33,18 @@ export const AuthProvider = ({ children }) => {
     const auth = useMemo(() => ({
         newterya: async khereglech => {
             if (khereglech.namaigsana)
-                localStorage.setItem('newtrekhNerTurees', khereglech.mail)
+                localStorage.setItem('newtrekhNerTurees', khereglech.ner)
 
-            uilchilgee().post('/ajiltanNevtrey', khereglech).then(({ data, status }) => {
+            uilchilgee().post('/api/ajiltan/nevtrey', khereglech).then(({ data, status }) => {
                 if (status === 200) {
-                    if (!!data.token) {
-                        setCookie(null, 'tureestoken', data.token, {
+                    if (!!data) {
+                        setCookie(null, 'tureestoken', data._id, {
                             maxAge: 30 * 24 * 60 * 60,
                             path: '/',
                         })
-                        setToken(data.token)
-                        ajiltanMutate(data.result)
-                        if (data.result.erkh === 'Zasvarchin' || data.result.erkh === 'Injener') {
-                            const { erkh, ner, zurgiinNer, baiguullagiinId, _id } = data.result
-                            let a = { token: data.token, erkh, ner, zurgiinNer, baiguullagiinId, _id }
-                            ajiltniiJagsaalt.push(a)
-                            localStorage.setItem('ajiltniiJagsaalt', JSON.stringify(ajiltniiJagsaalt))
-                            setAjiltniiJagsaalt(ajiltniiJagsaalt)
-                        }
-                        ekhniiTsonkhruuOchyo(data.result.erkh, '/' + data.result._id)
+                        setToken(data._id)
+                        ajiltanMutate(data)
+                        ekhniiTsonkhruuOchyo(data.role, '/' + data._id)
                         message.success('Тавтай морил')
                     }
                     else message.error('Хэрэглэгчийн мэдээлэл буруу байна')
