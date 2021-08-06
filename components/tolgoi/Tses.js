@@ -63,7 +63,10 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   return (
     <Link href={mur.href}>
       <li className={selected ? "selected-menu" : "menu-item"}>
-        {mur.ner}
+        <div className='flex flex-row p-1'>
+          <div className={`mr-2 ${selected ? 'text-green-600' : ''}`}>{mur.icon}</div>
+          {mur.ner}
+        </div>
         <span className={selected ? "selected-menu-top" : "hidden"}>
           <span className="h-10 w-10 rounded-br-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
         </span>
@@ -113,9 +116,8 @@ function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
             </div>
           </div>
           <div
-            className={`ml-auto flex items-center z-10 ${
-              olonEsekh ? "" : "hidden"
-            }`}
+            className={`ml-auto flex items-center z-10 ${olonEsekh ? "" : "hidden"
+              }`}
             onClick={(e) => ajiltanGargaya(mur, e)}
           >
             <CloseCircleOutlined />
