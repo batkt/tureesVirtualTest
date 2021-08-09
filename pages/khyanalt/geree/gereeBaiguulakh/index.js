@@ -8,7 +8,8 @@ import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/Khurung
 import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
 import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
 import moment from 'moment'
-import shalgaltKhiikh from "../../../../services/shalgaltKhiikh";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+
 const { Step } = Steps;
 
 const steps = [
@@ -76,8 +77,13 @@ function GereeBaiguulakh() {
             ))}
           </Steps>
         </div>
-        <div className="p-2 mt-1 bg-gray-50">
-          <currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} />
+        <div className='mt-3 grid grid-cols-12 gap-6'>
+          <div className="p-2 mt-3 bg-gray-50 col-span-4">
+            <currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} />
+          </div>
+          <div className="p-2 mt-3 bg-gray-50 col-span-8">
+
+          </div>
         </div>
       </div>
     </Admin>

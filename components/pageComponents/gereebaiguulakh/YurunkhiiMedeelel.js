@@ -28,8 +28,7 @@ const normFile = (e) => {
 };
 
 const YurunkhiiMedeele = ({ next, onChange, value }) => {
-
-    const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false)
+    const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(value.baiguullagaEsekh)
 
     const onFinish = (values) => {
         console.log(values)
@@ -45,7 +44,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
             onFinish={onFinish}
         >
             <Form.Item name="baiguullagaEsekh" label="Байгууллага эсэх" valuePropName="checked">
-                <Switch onChange={(v) => setBaiguullagaEsekh(v)} />
+                <Switch onChange={setBaiguullagaEsekh} />
             </Form.Item>
             <Form.Item name='baiguullagiinNer' hidden={!baiguullagaEsekh} label="Байгууллага нэр">
                 <Input
@@ -136,6 +135,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                                 <Form.Item
                                     required={false}
                                     key={field.key}
+                                    className='w-full'
                                 >
                                     <Form.Item
                                         {...field}
@@ -149,7 +149,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                                         ]}
                                         noStyle
                                     >
-                                        <Input prefix={<PhoneOutlined />} placeholder="Утас" style={{ width: '10rem', minWidth: '2rem' }} />
+                                        <Input prefix={<PhoneOutlined />} placeholder="Утас" style={{ width: '90%' }} />
                                     </Form.Item>
                                     {fields.length > 1 ? (
                                         <MinusCircleOutlined
@@ -163,7 +163,6 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                                 <Button
                                     type="dashed"
                                     onClick={() => add()}
-                                    style={{ marginLeft: '1rem' }}
                                     icon={<PlusOutlined />}
                                 >
                                     Утас нэмэх
@@ -182,37 +181,33 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                 getValueFromEvent={normFile}
                 extra="Гэрчилгээний хуулбар"
             >
-                <Upload name="logo" action="/upload.do" listType="picture">
+                <Upload name="logo" action="/upload.do" listType="picture" response={false}>
                     <Button icon={<UploadOutlined />}>Файл сонгох</Button>
                 </Upload>
             </Form.Item>
             <Form.Item label='Хавсаргал' hidden={baiguullagaEsekh} className='w-full'>
-                <div className='flex md:flex-row w-full'>
-                    <Form.Item
-                        name="zuvshuurliinZurag"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        extra="Зөвшөөрлийн бичгийн хуулбар"
-                        className='md:w-1/2'
-                    >
-                        <Upload name="logo" action="/upload.do" listType="picture">
-                            <Button icon={<UploadOutlined />}>Файл сонгох</Button>
-                        </Upload>
-                    </Form.Item>
-                    <div className='md:ml-10 md:w-1/2'>
-                        <Form.Item
-                            name="unemlekhniiZurag"
-                            valuePropName="fileList"
-                            getValueFromEvent={normFile}
-                            extra="Иргэний үнэмлэхний хуулбар"
+                <Form.Item
+                    name="zuvshuurliinZurag"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    extra="Зөвшөөрлийн бичгийн хуулбар"
+                    className='md:w-1/2'
+                >
+                    <Upload name="logo" action="/upload.do" listType="picture" response={false}>
+                        <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                    </Upload>
+                </Form.Item>
+                <Form.Item
+                    name="unemlekhniiZurag"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
+                    extra="Иргэний үнэмлэхний хуулбар"
 
-                        >
-                            <Upload name="logo" action="/upload.do" listType="picture">
-                                <Button icon={<UploadOutlined />}>Файл сонгох</Button>
-                            </Upload>
-                        </Form.Item>
-                    </div>
-                </div>
+                >
+                    <Upload name="logo" action="/upload.do" listType="picture" response={false}>
+                        <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                    </Upload>
+                </Form.Item>
             </Form.Item>
             <Form.Item
                 wrapperCol={{

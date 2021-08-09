@@ -123,12 +123,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
-            <Form.Item
-                wrapperCol={{
-                    span: 12,
-                    offset: 6,
-                }}
-            >
+            <Form.Item noStyle className='w-full flex flex-row justify-between'>
                 <Button onClick={prev} icon={<ArrowLeftOutlined />} className='mr-4'>
                     Хөрөнгийн бүртгэл
                 </Button>

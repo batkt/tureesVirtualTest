@@ -34,12 +34,7 @@ const Demo = ({ value, onChange, next, prev }) => {
                     prefix={<ClockCircleOutlined />}
                 />
             </Form.Item>
-            <Form.Item
-                wrapperCol={{
-                    span: 12,
-                    offset: 6,
-                }}
-            >
+            <Form.Item noStyle className='w-full flex flex-row justify-between'>
                 <Button onClick={prev} icon={<ArrowLeftOutlined />} className='mr-4'>
                     Гэрээний хугацаа
                 </Button>
