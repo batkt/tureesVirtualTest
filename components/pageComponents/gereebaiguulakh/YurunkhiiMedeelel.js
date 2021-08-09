@@ -161,7 +161,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
             </Form.Item>
             <Form.Item
                 hidden={!baiguullagaEsekh}
-                name="upload"
+                name="gerchilgeeniiZurag"
                 label="Гэрчилгээний хуулбар"
                 valuePropName="fileList"
                 getValueFromEvent={normFile}
@@ -174,7 +174,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
             <Form.Item label='Хавсаргал' hidden={baiguullagaEsekh} className='w-full'>
                 <div className='flex md:flex-row w-full'>
                     <Form.Item
-                        name="upload"
+                        name="zuvshuurliinZurag"
                         valuePropName="fileList"
                         getValueFromEvent={normFile}
                         extra="Зөвшөөрлийн бичгийн хуулбар"
@@ -186,7 +186,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     </Form.Item>
                     <div className='md:ml-10 md:w-1/2'>
                         <Form.Item
-                            name="upload"
+                            name="unemlekhniiZurag"
                             valuePropName="fileList"
                             getValueFromEvent={normFile}
                             extra="Иргэний үнэмлэхний хуулбар"
