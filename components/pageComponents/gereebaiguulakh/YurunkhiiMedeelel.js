@@ -181,7 +181,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                 getValueFromEvent={normFile}
                 extra="Гэрчилгээний хуулбар"
             >
-                <Upload name="logo" action="/upload.do" listType="picture" response={false}>
+                <Upload name="logo" action="/upload.do" listType="picture" >
                     <Button icon={<UploadOutlined />}>Файл сонгох</Button>
                 </Upload>
             </Form.Item>
@@ -193,7 +193,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     extra="Зөвшөөрлийн бичгийн хуулбар"
                     className='md:w-1/2'
                 >
-                    <Upload name="logo" action="/upload.do" listType="picture" response={false}>
+                    <Upload name="logo" action="/upload.do" listType="picture" >
                         <Button icon={<UploadOutlined />}>Файл сонгох</Button>
                     </Upload>
                 </Form.Item>
@@ -204,7 +204,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     extra="Иргэний үнэмлэхний хуулбар"
 
                 >
-                    <Upload name="logo" action="/upload.do" listType="picture" response={false}>
+                    <Upload name="logo" action="/upload.do" listType="picture" >
                         <Button icon={<UploadOutlined />}>Файл сонгох</Button>
                     </Upload>
                 </Form.Item>
