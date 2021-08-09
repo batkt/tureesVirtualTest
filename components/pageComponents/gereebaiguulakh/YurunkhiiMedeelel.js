@@ -55,7 +55,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
-            <Form.Item name='register' label="Регистр" rules={[
+            {!baiguullagaEsekh && <Form.Item hidden={baiguullagaEsekh} name='register' label="Регистр" rules={[
                 {
                     required: true,
                     len: 10,
@@ -69,7 +69,22 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     placeholder="Регистр"
                     prefix={<SolutionOutlined />}
                 />
-            </Form.Item>
+            </Form.Item>}
+            {baiguullagaEsekh && <Form.Item hidden={!baiguullagaEsekh} name='register' label="Регистр" rules={[
+                {
+                    required: true,
+                    len: 7,
+                    pattern: new RegExp("(\\d{7})"),
+                    message: "Регистр бүртгэнэ үү!",
+                },
+            ]}>
+                <Input
+                    allowClear
+                    maxLength={7}
+                    placeholder="Регистр"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>}
             <Form.Item hidden={baiguullagaEsekh} name='ovog' label="Овог">
                 <Input
                     allowClear
