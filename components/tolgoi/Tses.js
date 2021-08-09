@@ -158,7 +158,7 @@ function NTses({
                   src={
                     baiguullaga?.zurgiinNer
                       ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                      : "/car.png"
+                      : "/rent.png"
                   }
                 />
                 <div
@@ -196,7 +196,7 @@ function NTses({
                 src={
                   baiguullaga?.zurgiinNer
                     ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                    : "/car.png"
+                    : "/rent.png"
                 }
               />
               <div

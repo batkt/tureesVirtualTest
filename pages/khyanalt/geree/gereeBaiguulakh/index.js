@@ -8,6 +8,7 @@ import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/Khurung
 import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
 import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
 import moment from 'moment'
+import shalgaltKhiikh from "../../../../services/shalgaltKhiikh";
 const { Step } = Steps;
 
 const steps = [
@@ -67,16 +68,22 @@ function GereeBaiguulakh() {
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
     >
-      <div className='col-span-12 p-2 box'>
-        <Steps current={current}>
-          {steps.map(item => (
-            <Step key={item.title} title={item.title} />
-          ))}
-        </Steps>
-        <div className="p-2 mt-1"><currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} /></div>
+      <div className='col-span-12 p-5 box'>
+        <div className='px-10'>
+          <Steps current={current} >
+            {steps.map(item => (
+              <Step key={item.title} title={item.title} />
+            ))}
+          </Steps>
+        </div>
+        <div className="p-2 mt-1 bg-gray-50">
+          <currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} />
+        </div>
       </div>
     </Admin>
   )
 }
+
+export const getServerSideProps = shalgaltKhiikh;
 
 export default GereeBaiguulakh

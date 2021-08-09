@@ -1,13 +1,11 @@
 import {
     Form,
-    Select,
     Input,
     Switch,
     Button,
     Upload,
-    Space,
 } from 'antd';
-import { UploadOutlined, InboxOutlined, SolutionOutlined, ArrowRightOutlined, MinusCircleOutlined, PlusOutlined, PhoneOutlined } from '@ant-design/icons';
+import { UploadOutlined, SolutionOutlined, ArrowRightOutlined, MinusCircleOutlined, PlusOutlined, PhoneOutlined } from '@ant-design/icons';
 import React from 'react';
 
 const formItemLayout = {
@@ -29,34 +27,6 @@ const normFile = (e) => {
     return e && e.fileList;
 };
 
-// ААН	Байгууллага нэр	
-// 	    Регистр	
-// 	    Албан тушаал	
-// 	    Овог	
-// 	    Нэр	
-// 	    Утас	Гар утас
-// 		Байгууллага
-// 	    Хаяг	
-// 	    Гэрчилгээний хуулбар	
-// Иргэн	Овог	
-// 	        Нэр	
-// 	        Регистр	
-// 	        Гар утас	
-// 	        Хаяг	
-// 	        Зөвшөөрлийн бичгийн хуулбар	
-// 	        Иргэний үнэмлэхний хуулбар	
-/*
-baiguullagiinNer
-register
-ovog 
-ner
-utas1 utas2
-baiguullaga
-khayag
-gerchilgeeniiKhuulbar
-zuvshuurliinBichgiinKhuulbar
-irgeniiUnemlekhiinKhuulbar
-*/
 const YurunkhiiMedeele = ({ next, onChange, value }) => {
 
     const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false)
@@ -100,7 +70,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
-            <Form.Item name='ovog' label="Овог">
+            <Form.Item hidden={baiguullagaEsekh} name='ovog' label="Овог">
                 <Input
                     allowClear
                     maxLength={10}
@@ -108,7 +78,23 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     prefix={<SolutionOutlined />}
                 />
             </Form.Item>
-            <Form.Item name='ner' label="Нэр">
+            <Form.Item hidden={baiguullagaEsekh} name='ner' label="Нэр">
+                <Input
+                    allowClear
+                    maxLength={10}
+                    placeholder="Нэр"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>
+            <Form.Item hidden={!baiguullagaEsekh} name='zakhirliinOvog' label="Захирлын овог">
+                <Input
+                    allowClear
+                    maxLength={10}
+                    placeholder="Овог"
+                    prefix={<SolutionOutlined />}
+                />
+            </Form.Item>
+            <Form.Item hidden={!baiguullagaEsekh} name='zakhirliinNer' label="Захирлын нэр">
                 <Input
                     allowClear
                     maxLength={10}
@@ -130,7 +116,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     ]}
                 >
                     {(fields, { add, remove }, { errors }) => (
-                        <>
+                        <div className='flex flex-wrap'>
                             {fields.map((field) => (
                                 <Form.Item
                                     required={false}
@@ -148,11 +134,11 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                                         ]}
                                         noStyle
                                     >
-                                        <Input prefix={<PhoneOutlined />} placeholder="Утас" style={{ width: '60%' }} />
+                                        <Input prefix={<PhoneOutlined />} placeholder="Утас" style={{ width: '10rem', minWidth: '2rem' }} />
                                     </Form.Item>
                                     {fields.length > 1 ? (
                                         <MinusCircleOutlined
-                                            className="ml-2"
+                                            className="mx-2"
                                             onClick={() => remove(field.name)}
                                         />
                                     ) : null}
@@ -162,14 +148,14 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                                 <Button
                                     type="dashed"
                                     onClick={() => add()}
-                                    style={{ width: '60%' }}
+                                    style={{ marginLeft: '1rem' }}
                                     icon={<PlusOutlined />}
                                 >
                                     Утас нэмэх
                                 </Button>
                                 <Form.ErrorList errors={errors} />
                             </Form.Item>
-                        </>
+                        </div>
                     )}
                 </Form.List>
             </Form.Item>
@@ -182,30 +168,36 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                 extra="Гэрчилгээний хуулбар"
             >
                 <Upload name="logo" action="/upload.do" listType="picture">
-                    <Button icon={<UploadOutlined />}>Click to upload</Button>
+                    <Button icon={<UploadOutlined />}>Файл сонгох</Button>
                 </Upload>
             </Form.Item>
-            <Form.Item
-                name="upload"
-                label="Зөвшөөрлийн бичгийн хуулбар"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                extra="Зөвшөөрлийн бичгийн хуулбар"
-            >
-                <Upload name="logo" action="/upload.do" listType="picture">
-                    <Button icon={<UploadOutlined />}>Click to upload</Button>
-                </Upload>
-            </Form.Item>
-            <Form.Item
-                name="upload"
-                label="Иргэний үнэмлэхний хуулбар"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                extra="Иргэний үнэмлэхний хуулбар"
-            >
-                <Upload name="logo" action="/upload.do" listType="picture">
-                    <Button icon={<UploadOutlined />}>Click to upload</Button>
-                </Upload>
+            <Form.Item label='Хавсаргал' hidden={baiguullagaEsekh} className='w-full'>
+                <div className='flex md:flex-row w-full'>
+                    <Form.Item
+                        name="upload"
+                        valuePropName="fileList"
+                        getValueFromEvent={normFile}
+                        extra="Зөвшөөрлийн бичгийн хуулбар"
+                        className='md:w-1/2'
+                    >
+                        <Upload name="logo" action="/upload.do" listType="picture">
+                            <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                        </Upload>
+                    </Form.Item>
+                    <div className='md:ml-10 md:w-1/2'>
+                        <Form.Item
+                            name="upload"
+                            valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                            extra="Иргэний үнэмлэхний хуулбар"
+
+                        >
+                            <Upload name="logo" action="/upload.do" listType="picture">
+                                <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+                            </Upload>
+                        </Form.Item>
+                    </div>
+                </div>
             </Form.Item>
             <Form.Item
                 wrapperCol={{
@@ -217,7 +209,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
                     Барьцаа бүртгэл
                 </Button>
             </Form.Item>
-        </Form>
+        </Form >
     );
 };
 

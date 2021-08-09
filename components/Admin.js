@@ -60,7 +60,7 @@ function Admin({
     <div className="w-screen min-h-screen bg-green-600 dark:bg-gray-900 flex flex-row md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
-        <link rel="icon" href="/car.png" />
+        <link rel="icon" href="/rent.png" />
       </Head>
       {!dedKhuudas && (
         <NTses
@@ -74,11 +74,7 @@ function Admin({
           ajiltanKhasya={ajiltanKhasya}
         />
       )}
-      <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
-          dedKhuudas ? "w-full" : "main"
-        }`}
-      >
+      <div className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"}`}>
         <div className="h-12 border-b p-2 flex flex-row justify-between">
           <div className="flex flex-row">
             {!dedKhuudas && (

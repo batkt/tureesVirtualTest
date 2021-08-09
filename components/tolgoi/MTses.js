@@ -33,7 +33,7 @@ function MTses({ khuudasnuud, khuudasniiNer, baiguullaga, themeValue, setTheme }
                 >
                     <div className='h-14 border-b px-2'>
                         <div className='flex flex-row items-center space-x-2'>
-                            <img className='h-10 w-10 rounded-full border-solid border-2 border-blue-500' alt={baiguullaga?.ner} src={baiguullaga?.zurgiinNer ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}` : '/car.png'} />
+                            <img className='h-10 w-10 rounded-full border-solid border-2 border-blue-500' alt={baiguullaga?.ner} src={baiguullaga?.zurgiinNer ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}` : '/rent.png'} />
                             <div className='dark:text-gray-100 text-xl'>{baiguullaga?.ner}</div>
                         </div>
                     </div>
