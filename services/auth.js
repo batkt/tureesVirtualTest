@@ -38,13 +38,13 @@ export const AuthProvider = ({ children }) => {
             uilchilgee().post('/ajiltanNevtrey', khereglech).then(({ data, status }) => {
                 if (status === 200) {
                     if (!!data) {
-                        setCookie(null, 'tureestoken', data._id, {
+                        setCookie(null, 'tureestoken', data.token, {
                             maxAge: 30 * 24 * 60 * 60,
                             path: '/',
                         })
-                        setToken(data._id)
-                        ajiltanMutate(data)
-                        ekhniiTsonkhruuOchyo(data.role, '/' + data._id)
+                        setToken(data.token)
+                        ajiltanMutate(data.result)
+                        ekhniiTsonkhruuOchyo(data.result.role, '/' + data._id)
                         message.success('Тавтай морил')
                     }
                     else message.error('Хэрэглэгчийн мэдээлэл буруу байна')

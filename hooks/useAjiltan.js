@@ -45,13 +45,13 @@ export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
 
 const fetcher = (url, token) =>
   axios(token)
-    .get(url)
+    .post(url)
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
 function useAjiltan(token) {
   const { data, error, mutate } = useSWR(
-    !!token ? [`/ajiltan/${token}`, token] : null,
+    !!token ? [`/tokenoorAjiltanAvya`, token] : null,
     fetcher
   );
 
