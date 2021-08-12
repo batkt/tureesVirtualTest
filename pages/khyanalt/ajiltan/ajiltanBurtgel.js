@@ -213,7 +213,7 @@ function AjiltanBurtgel({ token }) {
       className="p-0 md:p-4"
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        <div>
+        {/* <div>
           <Upload {...props}>
             <div ref={empty}>
               <Empty
@@ -227,7 +227,7 @@ function AjiltanBurtgel({ token }) {
               className="w-24 h-24 border border-dashed border-blue-500 hidden"
             />
           </Upload>
-        </div>
+        </div> */}
         <Form
           ref={formRef}
           name="control-ref"
@@ -455,47 +455,43 @@ function AjiltanBurtgel({ token }) {
                 </span>
               )
             },
+
             // {
-            //   title: "Албан тушаал",
-            //   dataIndex: "albanTushaal",
-            //   ellipsis: true
+            //   title: "Зураг",
+            //   dataIndex: "",
+            //   ellipsis: true,
+            //   render: (record) => {
+            //     if (record.zurgiinNer !== undefined)
+            //       var zuragcomp = (
+            //         <img
+            //           src={
+            //             record?.zurgiinNer
+            //               ? `${url}/ajiltniiZuragAvya/${record?.baiguullagiinId}/${record?.zurgiinNer}`
+            //               : "/profile.svg"
+            //           }
+            //           style={{ borderRadius: "50%" }}
+            //         />
+            //       )
+            //     return (
+            //       zuragcomp && (
+            //         <Popover
+            //           content={
+            //             <div className="h-24 w-24 flex">{zuragcomp}</div>
+            //           }
+            //         >
+            //           <div className="h-8 w-8 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
+            //             {zuragcomp}
+            //           </div>
+            //         </Popover>
+            //       )
+            //     )
+            //   }
             // },
-            {
-              title: "Зураг",
-              dataIndex: "",
-              ellipsis: true,
-              render: (record) => {
-                if (record.zurgiinNer !== undefined)
-                  var zuragcomp = (
-                    <img
-                      src={
-                        record?.zurgiinNer
-                          ? `${url}/ajiltniiZuragAvya/${record?.baiguullagiinId}/${record?.zurgiinNer}`
-                          : "/profile.svg"
-                      }
-                      style={{ borderRadius: "50%" }}
-                    />
-                  )
-                return (
-                  zuragcomp && (
-                    <Popover
-                      content={
-                        <div className="h-24 w-24 flex">{zuragcomp}</div>
-                      }
-                    >
-                      <div className="h-8 w-8 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
-                        {zuragcomp}
-                      </div>
-                    </Popover>
-                  )
-                )
-              }
-            },
             {
               title: "Тохиргоо",
               ellipsis: true,
               render: (data) =>
-                ajiltan?.erkh === "Admin" && (
+                ajiltan?.role === "Admin" && (
                   <Space size="middle">
                     <a
                       className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"

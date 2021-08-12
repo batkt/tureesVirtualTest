@@ -1,58 +1,39 @@
 import React, { forwardRef, useImperativeHandle } from "react"
-import { Divider, Form, Input, Select, TimePicker, Upload, Modal } from "antd"
+import {
+  Divider,
+  Form,
+  Input,
+  Select,
+  TimePicker,
+  Upload,
+  Modal,
+  message
+} from "antd"
 import moment from "moment"
 import getBase64 from "tools/function/getBase64"
-import { url } from "../../../../services/uilchilgee"
+import uilchilgee, { url } from "../../../../services/uilchilgee"
+import otoFormData from "tools/function/otoFormData"
 const { TextArea } = Input
 const { Option } = Select
 const { RangePicker } = TimePicker
 const { confirm } = Modal
 
 const BarilgaBurtgekh = forwardRef(
-  ({ ugugdul, readonly, tuvEsekh, destroy }, ref) => {
+  ({ ugugdul, readonly, tuvEsekh, destroy, token, salbarMutate }, ref) => {
     const [form] = Form.useForm()
 
     useImperativeHandle(
       ref,
       () => ({
         khadgalya() {
-          let baiguullagaUtga = baiguullagaRef.current?.burtgelAvya()
-          let bairshil = bairshilRef.current?.burtgelAvya()
-          if (baiguullagaUtga === false) {
-            message.warning("Заавал бөглөх талбаруудыг бөглөнө үү!")
-            return
-          } else if (!bairshil.lat && !bairshil.lng) {
-            setCurrent(1)
-            message.warning("Байршил заавал оруулна уу!")
-            return
-          }
-
-          let file =
-            baiguullagaUtga.logo && Object.assign(baiguullagaUtga.logo, {})
-          baiguullagaUtga.logo = undefined
-          baiguullagaUtga._id = ugugdul?._id
-          baiguullagaUtga.zasakhEsekh = ugugdul?._id ? true : false
-          baiguullagaUtga.tolgoinId =
-            ugugdul?._id === baiguullagiinId ? undefined : baiguullagiinId
-          baiguullagaUtga.bairshil = {
-            type: "Point",
-            coordinates: [bairshil.lat, bairshil.lng]
-          }
-
-          let baiguullagaForm = otoFormData({
-            ner: baiguullagaUtga.ner,
-            baiguullaga: baiguullagaUtga
-          })
-          file && baiguullagaForm.append("logo", file.file)
-          message.loading("Хадгалж байна")
+          var { ...baiguullagaData } = form.getFieldsValue()
+          let formData = otoFormData(baiguullagaData)
           uilchilgee(token)
-            .post("/baiguullagaBurtgekh", baiguullagaForm)
+            .post("/baiguullaga", baiguullagaData)
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 message.destroy()
                 message.success("Амжилттай хадгаллаа")
-                baiguullagaUtga._id === baiguullagiinId &&
-                  baiguullagaMutate((b) => ({ ...b }))
                 salbarMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }))
                 destroy()
               } else {
@@ -137,18 +118,11 @@ const BarilgaBurtgekh = forwardRef(
           </Form.Item>
         )}
         <Form.Item
-          label="Барилгын Нэр"
+          label="Байгууллагын нэр"
           name="ner"
           rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}
         >
           <Input disabled={readonly} />
-        </Form.Item>
-        <Form.Item
-          label="Хаяг"
-          name="khayag"
-          rules={[{ required: true, message: "Хаяг заавал оруулна уу!" }]}
-        >
-          <TextArea disabled={readonly} />
         </Form.Item>
         <Form.Item
           label="Утас"
@@ -158,11 +132,11 @@ const BarilgaBurtgekh = forwardRef(
           <Input disabled={readonly} type={"tel"} />
         </Form.Item>
         <Form.Item
-          label="Байршил"
-          name="utas"
-          rules={[{ required: true, message: "Утас заавал оруулна уу!" }]}
+          label="Хаяг"
+          name="khayag"
+          rules={[{ required: true, message: "Хаяг заавал оруулна уу!" }]}
         >
-          <Input disabled={readonly} type={"tel"} />
+          <TextArea disabled={readonly} />
         </Form.Item>
       </Form>
     )

@@ -48,8 +48,8 @@ function BarilgaBurtgel({ token }) {
   const columns = useMemo(
     () => [
       {
-        title: "Барилгын нэр",
-        dataIndex: "barilgiinNer",
+        title: "Нэр",
+        dataIndex: "ner",
         key: "ner",
         render: (text) => <a>{text}</a>,
         ellipsis: true
@@ -61,38 +61,29 @@ function BarilgaBurtgel({ token }) {
         ellipsis: true
       },
       {
+        title: "Утас",
+        key: "utas",
+        dataIndex: "utas",
+        render: (text) => <>{text}</>,
+        ellipsis: true
+      },
+      {
         title: "Давхар",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
-        ellipsis: true
+        key: "burtgesen",
+        dataIndex: "burtgesen",
+        render: () => <>{"6"}</>
       },
       {
-        title: "Талбай/м2/",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
-        ellipsis: true
+        title: "Талбай /м2/",
+        key: "burtgesen",
+        dataIndex: "burtgesen",
+        render: () => <>{"500"}</>
       },
       {
-        title: "Повьлон тоо",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
-        ellipsis: true
-      },
-      {
-        title: "Сул повьлон тоо",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
-        ellipsis: true
-      },
-      {
-        title: "Хариуцсан",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
+        title: "Бүртгэсэн",
+        key: "burtgesen",
+        dataIndex: "burtgesen",
+        render: () => <>{"Админ"}</>,
         ellipsis: true
       },
       {
@@ -119,7 +110,7 @@ function BarilgaBurtgel({ token }) {
   const khyanaltiinDun = useMemo(() => {
     return [
       {
-        too: _.get(toololt, "0.baraa") || 0,
+        too: _.get(toololt, "0.baraa") || 15,
         icon: (
           <svg
             className="w-8 h-8 text-green-500"
@@ -136,10 +127,10 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 100,
-        utga: "Нийт барилга"
+        utga: "Нийт байгууллага"
       },
       {
-        too: formatNumber(_.get(toololt, "0.mungunDun"), 0) + "₮",
+        too: "10.2сая",
         icon: (
           <svg
             className="w-8 h-8 text-green-500"
@@ -155,11 +146,11 @@ function BarilgaBurtgel({ token }) {
             <polyline points="17 6 23 6 23 12" />
           </svg>
         ),
-        khuvi: -30,
+        khuvi: 30,
         utga: "Түрээсийн орлого"
       },
       {
-        too: _.get(toololt, "0.zakhialga") || 0,
+        too: "1.5сая",
         icon: (
           <svg
             class="h-8 w-8 text-red-500"
@@ -179,7 +170,7 @@ function BarilgaBurtgel({ token }) {
         utga: "Төлбөр дутуу"
       },
       {
-        too: _.get(toololt, "0.khariltsagchiinToo") || 0,
+        too: _.get(toololt, "0.khariltsagchiinToo") || 500,
         icon: (
           <svg
             class="h-8 w-8 text-green-500"
@@ -304,7 +295,7 @@ function BarilgaBurtgel({ token }) {
           </div>
           <div className="intro-y flex items-center h-10 mt-8">
             <h2 className="text-lg font-medium truncate mr-5 dark:text-gray-300">
-              Барилгын жагсаалт
+              Байгууллагын жагсаалт
             </h2>
             <div className="ml-auto flex items-center text-theme-1 dark:text-theme-10 text-blue-400 dark:text-gray-400">
               <Button
