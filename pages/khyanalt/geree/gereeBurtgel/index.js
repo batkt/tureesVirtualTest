@@ -1,81 +1,25 @@
 import moment from "moment"
 import { useAuth } from "services/auth"
-import { modal } from "components/ant/Modal"
 import {
   FileDoneOutlined,
-  FileSearchOutlined,
-  PlusOutlined,
-  StarTwoTone,
-  CheckCircleTwoTone,
-  OrderedListOutlined,
-  EditOutlined,
   UserOutlined,
   HistoryOutlined,
   FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined
 } from "@ant-design/icons"
-import {
-  Table,
-  Select,
-  Form,
-  Input,
-  Button,
-  Tabs,
-  Card,
-  DatePicker,
-  message,
-  Tag,
-  Popover,
-  Modal
-} from "antd"
+import { Table, Form, Input, Tabs, Card, DatePicker } from "antd"
 
 import Admin from "components/Admin"
-import CardList from "components/cardList"
+
 import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee from "services/uilchilgee"
 
 import formatNumber from "tools/function/formatNumber"
 import { useState, useRef, useMemo, useEffect } from "react"
-import useZakhialga from "hooks/useZakhialga"
-import useUridchilsanZakhialgaToololt from "hooks/useUridchilsanZakhialgaToololt"
-import useKhuviarlagdaaguiZakhialga from "hooks/useKhuviarlagdaaguiZakhialga"
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import { useRouter } from "next/router"
 //#region const
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0
-          }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`
-            }
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  )
-}
+
 const { TabPane } = Tabs
 const { RangePicker } = DatePicker
 
@@ -92,25 +36,26 @@ const garalt = {
 
 //#endregion
 
-function ZakhialgiinKhyanalt({ token }) {
+function ZakhialgiinKhyanalt() {
   const { ajiltan, baiguullaga } = useAuth()
+  const { gereeniiMedeelel } = useGereeniiJagsaalt()
   const router = useRouter()
-  const [gereeJagsaalt, setGereeJagsaalt] = useState([])
+  //const [gereeJagsaalt, setGereeJagsaalt] = useState([])
 
-  useEffect(() => {
-    gereeniiJagsaalt()
-  }, [])
+  // useEffect(() => {
+  //   gereeniiJagsaalt()
+  // }, [])
 
-  function gereeniiJagsaalt() {
-    uilchilgee()
-      .get("/api/geree")
-      .then(({ data }) => {
-        console.log("data", data)
-        if (!!data) {
-          setGereeJagsaalt(data.rows)
-        }
-      })
-  }
+  // function gereeniiJagsaalt() {
+  //   uilchilgee()
+  //     .get("/api/geree")
+  //     .then(({ data }) => {
+  //       console.log("data", data)
+  //       if (!!data) {
+  //         setGereeJagsaalt(data.rows)
+  //       }
+  //     })
+  // }
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -297,6 +242,7 @@ function ZakhialgiinKhyanalt({ token }) {
 
     return jagsaalt
   }, [])
+
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"
@@ -354,9 +300,10 @@ function ZakhialgiinKhyanalt({ token }) {
             bordered
             scroll={{ y: "calc(100vh - 32rem)" }}
             size="small"
+            loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
             columns={columns}
-            dataSource={gereeJagsaalt}
+            dataSource={gereeniiMedeelel?.rows}
           />
         </div>
       </Card>

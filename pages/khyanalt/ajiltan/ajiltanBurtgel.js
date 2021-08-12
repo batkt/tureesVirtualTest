@@ -84,7 +84,7 @@ function AjiltanBurtgel({ token }) {
       form_data.append(key, ajiltanState[key])
     }
     uilchilgee(token)
-      .post("/ajiltanBurtgekh", form_data)
+      .post("/ajiltan", form_data)
       .then(({ data }) => {
         if (data !== undefined) {
           message.success("Бүртгэл амжилттай хийгдлээ")
@@ -397,7 +397,6 @@ function AjiltanBurtgel({ token }) {
           </Form.Item>
           <Form.Item>
             <Button
-              //type="primary"
               htmlType="submit"
               //onClick={ajiltanBurtgekh}
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
@@ -414,7 +413,7 @@ function AjiltanBurtgel({ token }) {
             ajilchdiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
           }
           rowKey={(row) => row._id}
-          dataSource={[]}
+          dataSource={ajilchdiinGaralt?.jagsaalt}
           pagination={{
             current: ajilchdiinGaralt?.khuudasniiDugaar,
             pageSize: ajilchdiinGaralt?.khuudasniiKhemjee,
