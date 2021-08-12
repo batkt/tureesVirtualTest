@@ -51,7 +51,7 @@ const fetcher = (url, token) =>
 
 function useAjiltan(token) {
   const { data, error, mutate } = useSWR(
-    !!token ? [`/api/ajiltan/${token}`, token] : null,
+    !!token ? [`/ajiltan/${token}`, token] : null,
     fetcher
   );
 

@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             if (khereglech.namaigsana)
                 localStorage.setItem('newtrekhNerTurees', khereglech.ner)
 
-            uilchilgee().post('/api/ajiltan/nevtrey', khereglech).then(({ data, status }) => {
+            uilchilgee().post('/ajiltanNevtrey', khereglech).then(({ data, status }) => {
                 if (status === 200) {
                     if (!!data) {
                         setCookie(null, 'tureestoken', data._id, {
