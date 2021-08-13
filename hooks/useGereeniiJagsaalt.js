@@ -1,18 +1,18 @@
-import { useState } from "react"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import { useState } from "react";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
-const fetcher = (url) =>
-  axios()
+const fetcher = (url, token) =>
+  axios(token)
     .get(url)
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-function useGereeniiJagsaalt() {
-  const { data, mutate } = useSWR("/api/geree", fetcher, {
-    revalidateOnFocus: false
-  })
-  return { gereeniiMedeelel: data }
+function useGereeniiJagsaalt(token) {
+  const { data, mutate } = useSWR(token ? ["/geree", token] : null, fetcher, {
+    revalidateOnFocus: false,
+  });
+  return { gereeniiMedeelel: data };
 }
 
-export default useGereeniiJagsaalt
+export default useGereeniiJagsaalt;

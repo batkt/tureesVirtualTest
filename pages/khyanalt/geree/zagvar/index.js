@@ -3,35 +3,15 @@ import Admin from "components/Admin";
 import SunEditor, { buttonList } from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { Button, Table, Form, Input, Select } from "antd";
-import { SolutionOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SolutionOutlined } from "@ant-design/icons";
 import { useAuth } from "services/auth";
 import createMethod from "tools/function/crud/createMethod";
+import deleteMethod from "tools/function/crud/deleteMethod";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { aldaaBarigch } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import _ from "lodash";
-
-const columns = [
-  {
-    title: "Дэс дугаар",
-    dataIndex: "desDugaar",
-  },
-  {
-    title: "Харагдах дугаар",
-    dataIndex: "kharagdakhDugaar",
-  },
-  {
-    title: "Хамаарагдах хэсэг",
-    dataIndex: "khamaarakhKheseg",
-  },
-  {
-    title: "Заалт",
-    dataIndex: "zaalt",
-    render: (value) => {
-      return <div dangerouslySetInnerHTML={{ __html: value }} />;
-    },
-  },
-];
+import confirm from "antd/lib/modal/confirm";
 
 const khamaaragdakhKheseg = [
   {
@@ -162,6 +142,53 @@ function index({ token }) {
     );
     return utga;
   }, [zaalt]);
+
+  const ustgakh = (data) => {
+    confirm({
+      content: <div dangerouslySetInnerHTML={{ __html: data.zaalt }} />,
+      okText: "Тийм",
+      cancelText: "Үгүй",
+      onOk: () => {
+        deleteMethod("gereeniiZagvar", token, data._id).then(({ data }) => {
+          if (data === "Amjilttai") gereeniiZagvarMutate();
+        });
+      },
+    });
+  };
+
+  const columns = React.useMemo(
+    () => [
+      {
+        title: "№",
+        dataIndex: "kharagdakhDugaar",
+        ellipsis: true,
+      },
+      {
+        title: "Заалт",
+        dataIndex: "zaalt",
+        render: (value, row) => {
+          return (
+            <div className="flex flex-row justify-between">
+              <div dangerouslySetInnerHTML={{ __html: value }} />
+              <div className="w-8">
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={() => ustgakh(row)}
+                />
+              </div>
+            </div>
+          );
+        },
+        ellipsis: true,
+      },
+      {
+        title: "Хамаарагдах хэсэг",
+        dataIndex: "khamaarakhKheseg",
+        ellipsis: true,
+      },
+    ],
+    [token]
+  );
 
   const onFinish = (values) => {
     values["zaalt"] = zaalt;

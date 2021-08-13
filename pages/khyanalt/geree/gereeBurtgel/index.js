@@ -1,45 +1,45 @@
-import moment from "moment"
-import { useAuth } from "services/auth"
+import moment from "moment";
+import { useAuth } from "services/auth";
 import {
   FileDoneOutlined,
   UserOutlined,
   HistoryOutlined,
   FileSyncOutlined,
   WarningOutlined,
-  FileExcelOutlined
-} from "@ant-design/icons"
-import { Table, Form, Input, Tabs, Card, DatePicker } from "antd"
+  FileExcelOutlined,
+} from "@ant-design/icons";
+import { Table, Form, Input, Tabs, Card, DatePicker } from "antd";
 
-import Admin from "components/Admin"
+import Admin from "components/Admin";
 
-import shalgaltKhiikh from "services/shalgaltKhiikh"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
 
-import formatNumber from "tools/function/formatNumber"
-import { useState, useRef, useMemo, useEffect } from "react"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import { useRouter } from "next/router"
+import formatNumber from "tools/function/formatNumber";
+import { useState, useRef, useMemo, useEffect } from "react";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import { useRouter } from "next/router";
 //#region const
 
-const { TabPane } = Tabs
-const { RangePicker } = DatePicker
+const { TabPane } = Tabs;
+const { RangePicker } = DatePicker;
 
 const tuluvStyle = {
   display: "flex",
   fontSize: "0.8rem",
   fontWeight: "bold",
-  justifyContent: "space-between"
-}
+  justifyContent: "space-between",
+};
 const garalt = {
   khuudasniiDugaar: 1,
-  khuudasniiKhemjee: 10
-}
+  khuudasniiKhemjee: 10,
+};
 
 //#endregion
 
 function ZakhialgiinKhyanalt() {
-  const { ajiltan, baiguullaga } = useAuth()
-  const { gereeniiMedeelel } = useGereeniiJagsaalt()
-  const router = useRouter()
+  const { ajiltan, baiguullaga, token } = useAuth();
+  const { gereeniiMedeelel } = useGereeniiJagsaalt(token);
+  const router = useRouter();
   //const [gereeJagsaalt, setGereeJagsaalt] = useState([])
 
   // useEffect(() => {
@@ -63,40 +63,40 @@ function ZakhialgiinKhyanalt() {
         too: 150,
         icon: <UserOutlined />,
         khuvi: 100,
-        utga: "Нийт"
+        utga: "Нийт",
       },
       {
         too: 100,
         icon: <FileDoneOutlined />,
         khuvi: -30,
-        utga: "Хэвийн"
+        utga: "Хэвийн",
       },
       {
         too: 5,
         icon: <HistoryOutlined />,
         khuvi: 100,
-        utga: "Хугацаа хэтэрсэн"
+        utga: "Хугацаа хэтэрсэн",
       },
       {
         too: 15,
         icon: <FileSyncOutlined />,
         khuvi: 100,
-        utga: "Хаагдсан"
+        utga: "Хаагдсан",
       },
       {
         too: 20,
         icon: <WarningOutlined />,
         khuvi: 100,
-        utga: "Төлбөр дутуу"
+        utga: "Төлбөр дутуу",
       },
       {
         too: 10,
         icon: <FileExcelOutlined />,
         khuvi: 100,
-        utga: "Цуцласан"
-      }
-    ]
-  }, [])
+        utga: "Цуцласан",
+      },
+    ];
+  }, []);
   const columns = useMemo(() => {
     var jagsaalt = [
       // {
@@ -114,77 +114,77 @@ function ZakhialgiinKhyanalt() {
         title: "Овог",
         dataIndex: "ovog",
         key: "ovog",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Нэр",
         dataIndex: "ner",
         key: "ner",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Утас",
         dataIndex: "utas",
         ellipsis: true,
         render: (data) => {
-          var dugaar = data?.map((x) => x).join(";")
-          dugaar = Array.from(new Set(dugaar.split(";"))).toString()
-          return <a>{dugaar}</a>
-        }
+          var dugaar = data?.map((x) => x).join(";");
+          dugaar = Array.from(new Set(dugaar?.split(";"))).toString();
+          return <a>{dugaar}</a>;
+        },
       },
       {
         title: "Регистер",
         dataIndex: "register",
         key: "register",
-        ellipsis: true
+        ellipsis: true,
       },
 
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Повьлон",
         dataIndex: "gereeniiDugaar",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Талбай /м2/",
         dataIndex: "khariltsagchiinUtas",
         ellipsis: true,
         render: () => {
-          return "50 м2"
-        }
+          return "50 м2";
+        },
       },
       {
         title: "Эхлэх",
         dataIndex: "gereeniiOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
-        }
+          return moment(data).format("YYYY-MM-DD");
+        },
       },
       {
         title: "Дуусах",
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
-        }
+          return moment(data).format("YYYY-MM-DD");
+        },
       },
       {
         title: "Хугацаа/сар/",
         dataIndex: "khugatsaa",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Сарын түрээс",
         dataIndex: "sariinTurees",
         ellipsis: true,
         render: (data) => {
-          return formatNumber(data) + "₮"
-        }
+          return formatNumber(data) + "₮";
+        },
       },
       // {
       //   title: "Төлөв",
@@ -235,13 +235,13 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "burtgesenAjiltaniiNer",
         ellipsis: true,
         render: () => {
-          return "Админ"
-        }
-      }
-    ]
+          return "Админ";
+        },
+      },
+    ];
 
-    return jagsaalt
-  }, [])
+    return jagsaalt;
+  }, []);
 
   return (
     <Admin
@@ -278,7 +278,7 @@ function ZakhialgiinKhyanalt() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -303,14 +303,14 @@ function ZakhialgiinKhyanalt() {
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
             columns={columns}
-            dataSource={gereeniiMedeelel?.rows}
+            dataSource={gereeniiMedeelel?.jagsaalt}
           />
         </div>
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default ZakhialgiinKhyanalt
+export default ZakhialgiinKhyanalt;
