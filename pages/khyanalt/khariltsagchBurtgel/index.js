@@ -206,8 +206,8 @@ function AjiltanBurtgel({ token }) {
   }
   return (
     <Admin
-      title="Ажилтан бүртгэл"
-      khuudasniiNer="ajiltanBurtgel"
+      title="Харилцагч бүртгэл"
+      khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
@@ -323,41 +323,6 @@ function AjiltanBurtgel({ token }) {
               onChange={(e) => onChange("utas", e.target.value)}
               prefix={<PhoneOutlined style={iconColor} />}
             ></Input>
-          </Form.Item>
-          <Form.Item
-            name="ajildOrsonOgnoo"
-            rules={[
-              {
-                required: true,
-                message: "Ажилд орсон огноо бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <DatePicker
-              style={{ width: "100%" }}
-              placeholder="ажилд орсон огноо"
-              onChange={({}, v) => onChange("ajildOrsonOgnoo", v)}
-            ></DatePicker>
-          </Form.Item>
-          <Form.Item
-            name="albanTushaal"
-            rules={[
-              {
-                required: true,
-                message: "Албан тушаал бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Select
-              placeholder="албан тушаал"
-              value={ajiltanState.albanTushaal}
-              style={{ width: "100%" }}
-              onChange={(v) => onChange("albanTushaal", v)}
-            >
-              <Option value="Админ">Админ</Option>
-              <Option value="Зохион байгуулагч">Зохион байгуулагч</Option>
-              <Option value="Санхүү">Санхүү</Option>
-            </Select>
           </Form.Item>
 
           <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>

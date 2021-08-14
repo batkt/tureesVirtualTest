@@ -9,18 +9,21 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt }
 ) =>
   axios(token)
-    .post(url, {
+    .get(url, {
       query: {
         baiguullagiinId,
-        $or: [{ ner: { $regex: search, $options: "i" } }, { id: { $regex: search, $options: "i" } }],
+        $or: [
+          { ner: { $regex: search, $options: "i" } },
+          { id: { $regex: search, $options: "i" } },
+        ],
       },
       ...khuudaslalt,
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useBaraa(token, baiguullagiinId) {
-  const [khuudaslalt, setBaraaiiKhuudaslalt] = useState({
+export function useLanguu(token, baiguullagiinId) {
+  const [khuudaslalt, setLanguuKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
@@ -28,16 +31,16 @@ function useBaraa(token, baiguullagiinId) {
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/baraaniiJagsaaltAvya", token, baiguullagiinId, khuudaslalt]
+      ? ["/languu", token, baiguullagiinId, khuudaslalt]
       : null,
     fetcher,
     { revalidateOnFocus: false }
   );
   return {
-    setBaraaiiKhuudaslalt,
-    baraaiiGaralt: data,
-    baraaiiMutate: mutate,
+    setLanguuKhuudaslalt,
+    languuniiGaralt: data,
+    languuniiJagsaaltMutate: mutate,
   };
 }
 
-export default useBaraa
+export default useLanguu;

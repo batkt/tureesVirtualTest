@@ -7,6 +7,9 @@ const khereglegchiinErkh = [
       "/khyanalt/geree",
       "/khyanalt/ajiltan/ajiltanBurtgel",
       "/khyanalt/barilgaBurtgel",
+      "/khyanalt/khariltsagchBurtgel",
+      "khyanalt/languuBurtgel",
+      "khyanalt/tailan",
     ],
   },
 ];
@@ -116,6 +119,30 @@ const khuudasnuud = [
     ),
   },
   {
+    ner: "Повьлон бүртгэл",
+    khuudasniiNer: "languuBurtgekh",
+    href: "/khyanalt/languuBurtgel/languuBurtgekh",
+    icon: (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        {" "}
+        <path stroke="none" d="M0 0h24v24H0z" />{" "}
+        <rect x="3" y="4" width="18" height="16" rx="3" />{" "}
+        <circle cx="9" cy="10" r="2" /> <line x1="15" y1="8" x2="17" y2="8" />{" "}
+        <line x1="15" y1="12" x2="17" y2="12" />{" "}
+        <line x1="7" y1="16" x2="17" y2="16" />
+      </svg>
+    ),
+  },
+  {
     ner: "Ажилтан бүртгэл",
     khuudasniiNer: "ajiltanBurtgel",
     href: "/khyanalt/ajiltan/ajiltanBurtgel",
@@ -140,27 +167,45 @@ const khuudasnuud = [
     ),
   },
   {
-    ner: "Тайлан",
-    khuudasniiNer: "geree/gereeBurtgel",
-    href: "/khyanalt/tailan",
+    ner: "Харилцагч жагсаалт",
+    khuudasniiNer: "khariltsagchBurtgel",
+    href: "/khyanalt/khariltsagchBurtgel",
     icon: (
       <svg
-        xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="feather feather-file-text"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-        <polyline points="14 2 14 8 20 8"></polyline>
-        <line x1="16" y1="13" x2="8" y2="13"></line>
-        <line x1="16" y1="17" x2="8" y2="17"></line>
-        <polyline points="10 9 9 9 8 9"></polyline>
+        {" "}
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />{" "}
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
+    ner: "Тайлан",
+    khuudasniiNer: "tailan",
+    href: "/khyanalt/tailan",
+    icon: (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        {" "}
+        <path stroke="none" d="M0 0h24v24H0z" />{" "}
+        <path d="M10 3.2a9 9 0 1 0 10.8 10.8a1 1 0 0 0 -1 -1h-6.8a2 2 0 0 1 -2 -2v-7a.9 .9 0 0 0 -1 -.8" />{" "}
+        <path d="M15 3.5a9 9 0 0 1 5.5 5.5h-4.5a1 1 0 0 1 -1 -1v-4.5" />
       </svg>
     ),
   },
