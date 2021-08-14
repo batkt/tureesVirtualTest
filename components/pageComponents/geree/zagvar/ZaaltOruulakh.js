@@ -1,11 +1,9 @@
 import React from "react";
-import Admin from "components/Admin";
 import SunEditor, { buttonList } from "suneditor-react";
-import { Button, Table, Form, Input, Select } from "antd";
-import { SolutionOutlined } from "@ant-design/icons";
-import { useAuth } from "services/auth";
+import { Form, Input, Select, Upload } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
-import { aldaaBarigch } from "services/uilchilgee";
+import { aldaaBarigch, url } from "services/uilchilgee";
 import _ from "lodash";
 
 const khamaaragdakhKheseg = [
@@ -15,6 +13,16 @@ const khamaaragdakhKheseg = [
   "Гэрээний хугацаа",
   "Төлбөр тооцоо",
 ];
+
+const talbaruud = [
+  { ner: "Овог", talbar: "ovog" },
+  { ner: "Нэр", talbar: "ner" },
+];
+
+const props = {
+  name: "file",
+  action: `${url}/gereeniiZaaltTatya`,
+};
 
 var customPlugin = {
   // @Required @Unique
@@ -79,7 +87,6 @@ var customPlugin = {
     this.insertNode(node);
     const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace);
     node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling);
-
     this.submenuOff();
   },
 };
@@ -93,27 +100,40 @@ const formItemLayout = {
   },
 };
 
-function index({ token, baiguullaga }) {
+function index({ token, baiguullaga, destroy }, ref) {
   const editorRef = React.useRef();
   const [form] = Form.useForm();
   const [zaalt, setZaalt] = React.useState("");
-
   const onFinish = (values) => {
+    if (zaalt === "") return;
     values["zaalt"] = zaalt;
     values["baiguullagiinNer"] = baiguullaga.ner;
     values["baiguullagiinId"] = baiguullaga._id;
-    createMethod("gereeniiZagvar", token, values)
+    createMethod("gereeniiZaalt", token, values)
       .then(({ data }) => {
         if (data === "Amjilttai") {
           form.resetFields();
-          editorRef.current.editor.setContents("");
+          destroy();
         }
       })
       .catch(aldaaBarigch);
   };
 
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        onFinish(form.getFieldsValue());
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [form, zaalt]
+  );
+
   return (
-    <Form form={form} {...formItemLayout} onFinish={onFinish}>
+    <Form form={form} {...formItemLayout}>
       <Form.Item label="Дэс дугаар" name="desDugaar">
         <Input />
       </Form.Item>
@@ -138,15 +158,26 @@ function index({ token, baiguullaga }) {
         showToolbar={true}
         ref={editorRef}
       />
-      <div className="w-full mt-2">
-        <Form.Item className="ml-auto">
-          <Button type="primary" htmlType="submit" icon={<SolutionOutlined />}>
-            Хадгалах
-          </Button>
-        </Form.Item>
-      </div>
+      <Upload
+        type="drag"
+        multiple={false}
+        {...props}
+        method="POST"
+        headers={{ Authorization: `bearer ${token}` }}
+      >
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">
+          Click or drag file to this area to upload
+        </p>
+        <p className="ant-upload-hint">
+          Support for a single or bulk upload. Strictly prohibit from uploading
+          company data or other band files
+        </p>
+      </Upload>
     </Form>
   );
 }
 
-export default index;
+export default React.forwardRef(index);
