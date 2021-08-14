@@ -1,67 +1,88 @@
-import React from "react"
-import Admin from "components/Admin"
-import uilchilgee from "services/uilchilgee"
-import { message, Steps } from 'antd';
-import YurunkhiiMedeelel from 'components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel'
-import Baritsaa from 'components/pageComponents/gereebaiguulakh/Baritsaa'
-import KhurungiinBurtgel from 'components/pageComponents/gereebaiguulakh/KhurungiinBurtgel'
-import KhugatsaaBurtgel from 'components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel'
-import TulburTootsoo from 'components/pageComponents/gereebaiguulakh/TulburTootsoo'
-import moment from 'moment'
+import React from "react";
+import Admin from "components/Admin";
+import uilchilgee from "services/uilchilgee";
+import useGereeniiZagvar from "hooks/useGereeniiZagvar";
+import createMethod from "tools/function/crud/createMethod";
+import { message, Select, Steps } from "antd";
+import { useAuth } from "services/auth";
+import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
+import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa";
+import KhurungiinBurtgel from "components/pageComponents/gereebaiguulakh/KhurungiinBurtgel";
+import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel";
+import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
+import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
 const { Step } = Steps;
 
 const steps = [
   {
-    title: 'Ерөнхий мэдээлэл',
+    title: "Ерөнхий мэдээлэл",
     content: YurunkhiiMedeelel,
   },
   {
-    title: 'Барьцаа бүртгэл',
+    title: "Барьцаа бүртгэл",
     content: Baritsaa,
   },
   {
-    title: 'Хөрөнгийн бүртгэл',
+    title: "Хөрөнгийн бүртгэл",
     content: KhurungiinBurtgel,
   },
   {
-    title: 'Гэрээний хугацаа',
+    title: "Гэрээний хугацаа",
     content: KhugatsaaBurtgel,
   },
   {
-    title: 'Төлбөр тооцоо',
+    title: "Төлбөр тооцоо",
     content: TulburTootsoo,
-  }
+  },
 ];
 
-function GereeBaiguulakh() {
+function GereeBaiguulakh({ token }) {
+  const { baiguullaga } = useAuth();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({});
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
+  const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
+    useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
-    if (current < 4)
-      setCurrent(current + 1);
+    if (current < 4) setCurrent(current + 1);
     if (!!data) {
-      data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`
-      data.gereeniiOgnoo = new Date()
-      uilchilgee().post('/api/geree', data)
-        .then(({ data }) => {
-          if (!!data) {
-            setKhagalakhGeree({})
-            setCurrent(0)
-            message.success('Амжилттай хадгаллаа')
-          }
-        })
+      data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`;
+      data.gereeniiOgnoo = new Date();
+      createMethod("geree", token, data).then(({ data }) => {
+        if (!!data) {
+          setKhagalakhGeree({});
+          setCurrent(0);
+          message.success("Амжилттай хадгаллаа");
+        }
+      });
     }
   };
 
-  const prev = () => {
-    if (current > 0)
-      setCurrent(current - 1);
+  const onChangeGereeniiZagvar = (_id) => {
+    let gereeniiZagvar =
+      gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
+    uilchilgee(token)
+      .get("/gereeniiZaalt", {
+        query: {
+          _id: gereeniiZagvar.dedKhesguud,
+        },
+      })
+      .then(({ data }) => {
+        if (!!data?.jagsaalt) {
+          gereeniiZagvar.dedKhesguud = data?.jagsaalt;
+          setGereeniiZagvar({ ...gereeniiZagvar });
+        }
+      });
   };
 
-  const currentItem = steps[current]
+  const prev = () => {
+    if (current > 0) setCurrent(current - 1);
+  };
+
+  const currentItem = steps[current];
 
   return (
     <Admin
@@ -69,27 +90,64 @@ function GereeBaiguulakh() {
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
     >
-      <div className='col-span-12 p-5 box'>
-        <div className='px-10'>
-          <Steps current={current} >
-            {steps.map(item => (
+      <div className="col-span-12 p-5 box">
+        <div className="px-10">
+          <Steps current={current}>
+            {steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}
           </Steps>
         </div>
-        <div className='mt-3 grid grid-cols-12 gap-6'>
+        <div className="mt-3 grid grid-cols-12 gap-6">
           <div className="p-2 mt-3 bg-gray-50 col-span-4">
-            <currentItem.content next={next} prev={prev} onChange={setKhagalakhGeree} value={khadgalakhGeree} />
+            <currentItem.content
+              next={next}
+              prev={prev}
+              onChange={setKhagalakhGeree}
+              value={khadgalakhGeree}
+            />
           </div>
           <div className="p-2 mt-3 bg-gray-50 col-span-8">
-
+            <Select
+              showSearch
+              placeholder="Үйлчилгээ сонгох"
+              className="w-full"
+              placeholder="Үйлчилгээ сонгох"
+              size="large"
+              value={null}
+              filterOption={(o) => o}
+              onSearch={(search) =>
+                setGereeniiZagvarKhuudaslalt((a) => ({ ...a, search }))
+              }
+              onChange={onChangeGereeniiZagvar}
+            >
+              {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
+                return (
+                  <Select.Option key={mur._id}>
+                    <div dangerouslySetInnerHTML={{ __html: mur.ner }} />
+                  </Select.Option>
+                );
+              })}
+            </Select>
+            <div className="w-full">
+              {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
+                return (
+                  <div className="flex flex-row">
+                    <div>
+                      {mur.khamaarakhKheseg || 1}.{index + 1}:
+                    </div>
+                    <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
     </Admin>
-  )
+  );
 }
 
 export const getServerSideProps = shalgaltKhiikh;
 
-export default GereeBaiguulakh
+export default GereeBaiguulakh;
