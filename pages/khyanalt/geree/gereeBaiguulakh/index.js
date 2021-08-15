@@ -68,8 +68,10 @@ function GereeBaiguulakh({ token }) {
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     uilchilgee(token)
       .get("/gereeniiZaalt", {
-        query: {
-          _id: gereeniiZagvar.dedKhesguud,
+        data: {
+          query: {
+            _id: gereeniiZagvar.dedKhesguud,
+          },
         },
       })
       .then(({ data }) => {
