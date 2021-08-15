@@ -167,11 +167,11 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Төлбөр",
-        dataIndex: "tureesiinTulbur",
+        dataIndex: "sariinTurees",
         ellipsis: true,
         align: "center",
-        render: (tureesiinTulbur) => {
-          return formatNumber(tureesiinTulbur || 0)
+        render: (sariinTurees) => {
+          return formatNumber(sariinTurees || 0)
         },
       },
       {
