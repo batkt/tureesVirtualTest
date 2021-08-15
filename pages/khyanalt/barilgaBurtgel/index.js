@@ -18,7 +18,7 @@ export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
   if (id)
     uilchilgee(token)
       .post("/baiguullagiinJagsaaltAvya", {
-        query: { "$or": [{ tolgoinId: id }, { _id: id }] }
+        query: { $or: [{ tolgoinId: id }, { _id: id }] },
       })
       .then(({ data }) => {
         data.jagsaalt.forEach((x) => (x.ley = x._id))
@@ -40,7 +40,7 @@ function BarilgaBurtgel({ token }) {
     return (salbariinGaralt?.jagsaalt || []).map((mur) => {
       return {
         lat: mur?.bairshil?.coordinates[0] || 47.927094,
-        lng: mur?.bairshil?.coordinates[1] || 106.887425
+        lng: mur?.bairshil?.coordinates[1] || 106.887425,
       }
     })
   }, [salbariinGaralt])
@@ -52,39 +52,39 @@ function BarilgaBurtgel({ token }) {
         dataIndex: "ner",
         key: "ner",
         render: (text) => <a>{text}</a>,
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Хаяг",
         dataIndex: "khayag",
         key: "khayag",
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Утас",
         key: "utas",
         dataIndex: "utas",
         render: (text) => <>{text}</>,
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Давхар",
         key: "burtgesen",
         dataIndex: "burtgesen",
-        render: () => <>{"6"}</>
+        render: () => <>{"6"}</>,
       },
       {
         title: "Талбай /м2/",
         key: "burtgesen",
         dataIndex: "burtgesen",
-        render: () => <>{"500"}</>
+        render: () => <>{"500"}</>,
       },
       {
         title: "Бүртгэсэн",
         key: "burtgesen",
         dataIndex: "burtgesen",
         render: () => <>{"Админ"}</>,
-        ellipsis: true
+        ellipsis: true,
       },
       {
         title: "Үйлдэл",
@@ -93,7 +93,7 @@ function BarilgaBurtgel({ token }) {
             <Space size="middle">
               <a
                 className="text-yellow-500 hover:text-yellow-400"
-                onClick={() => zasakh(row)}
+                //onClick={() => zasakh(row)}
               >
                 Засах
               </a>
@@ -101,8 +101,8 @@ function BarilgaBurtgel({ token }) {
             </Space>
           )
         },
-        ellipsis: true
-      }
+        ellipsis: true,
+      },
     ],
     []
   )
@@ -127,7 +127,7 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 100,
-        utga: "Нийт байгууллага"
+        utga: "Нийт байгууллага",
       },
       {
         too: "10.2сая",
@@ -147,7 +147,7 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 30,
-        utga: "Түрээсийн орлого"
+        utga: "Түрээсийн орлого",
       },
       {
         too: "1.5сая",
@@ -167,7 +167,7 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 100,
-        utga: "Төлбөр дутуу"
+        utga: "Төлбөр дутуу",
       },
       {
         too: _.get(toololt, "0.khariltsagchiinToo") || 500,
@@ -189,14 +189,14 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 100,
-        utga: "Түрээслэгч"
-      }
+        utga: "Түрээслэгч",
+      },
     ]
   }, [toololt])
 
   const zasakh = (salbar, readonly) => {
     const footer = [
-      <Button onClick={() => burtgel.current.khaaya()}>Хаах</Button>
+      <Button onClick={() => burtgel.current.khaaya()}>Хаах</Button>,
     ]
     if (!readonly) {
       footer.push(
@@ -224,7 +224,7 @@ function BarilgaBurtgel({ token }) {
           baiguullagaMutate={baiguullagaMutate}
         />
       ),
-      footer
+      footer,
     })
   }
 
@@ -243,7 +243,7 @@ function BarilgaBurtgel({ token }) {
         setKhuudaslalt((kh) => ({ ...kh, khuudasniiDugaar: 1, search }))
       }
     >
-      <div className="col-span-12 xl:col-span-9">
+      <div className="col-span-12 xl:col-span-12">
         <div className="col-span-12 mt-3 px-2">
           <div className="grid grid-cols-12 gap-6 mt-5">
             {khyanaltiinDun.map((mur, index) => {
@@ -303,7 +303,7 @@ function BarilgaBurtgel({ token }) {
                   display: "flex",
                   alignItems: "center",
                   backgroundColor: "#209669",
-                  color: "#ffffff"
+                  color: "#ffffff",
                 }}
                 onClick={() => zasakh()}
                 icon={<PlusOutlined />}
@@ -330,8 +330,8 @@ function BarilgaBurtgel({ token }) {
                 setKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
-                  khuudasniiKhemjee
-                }))
+                  khuudasniiKhemjee,
+                })),
             }}
           />
         </div>

@@ -8,6 +8,7 @@ import {
   Form,
   Popconfirm,
   Card,
+  InputNumber,
 } from "antd"
 import {
   UserOutlined,
@@ -32,6 +33,7 @@ import getBase64 from "tools/function/getBase64"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
+import formatNumber from "tools/function/formatNumber"
 
 const iconColor = { fontSize: "18px" }
 
@@ -48,6 +50,8 @@ function LanguuBurtgekh({ token }) {
     kod: undefined,
     talbainKhemjee: undefined,
     tailbar: undefined,
+    talbainNegjUne: undefined,
+    talbainNiitUne: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
 
@@ -198,7 +202,7 @@ function LanguuBurtgekh({ token }) {
   }
   function languuBurtgekh() {
     languuState.baiguullagiinId = ajiltan?.baiguullagiinId
-    debugger
+
     if (languuState.zasakhEsekh === true) {
       updateMethod("languu", token, languuState)
         .then(({ data }) => {
@@ -324,7 +328,6 @@ function LanguuBurtgekh({ token }) {
               allowClear
               placeholder="дугаар"
               value={languuState.kod}
-              prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("kod", e.target.value)}
             ></Input>
           </Form.Item>
@@ -342,9 +345,48 @@ function LanguuBurtgekh({ token }) {
               allowClear
               placeholder="талбайн хэмжээ/м2/"
               value={languuState.talbainKhemjee}
-              prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("talbainKhemjee", e.target.value)}
             ></Input>
+          </Form.Item>
+          <Form.Item
+            name="talbainNegjUne"
+            rules={[
+              {
+                required: true,
+                message: "Нэгж үнэ бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <InputNumber
+              style={{ width: "50%" }}
+              placeholder="нэгж үнэ"
+              value={languuState.talbainNegjUne}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              onChange={(target) => onChange("talbainNegjUne", target)}
+            />
+          </Form.Item>
+          <Form.Item
+            name="talbainNiitUne"
+            rules={[
+              {
+                required: true,
+                message: "Нийт үнэ бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <InputNumber
+              style={{ width: "50%" }}
+              placeholder="нийт үнэ"
+              value={languuState.talbainNiitUne}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              onChange={(target) => onChange("talbainNiitUne", target)}
+            />
           </Form.Item>
 
           <Form.Item name="tailbar">
@@ -353,7 +395,6 @@ function LanguuBurtgekh({ token }) {
               placeholder="тайлбар"
               value={languuState.tailbar}
               onChange={(e) => onChange("tailbar", e.target.value)}
-              prefix={<HomeOutlined style={iconColor} />}
             ></Input>
           </Form.Item>
 
@@ -403,10 +444,28 @@ function LanguuBurtgekh({ token }) {
             {
               title: "Талбай/м2/",
               dataIndex: "talbainKhemjee",
+              align: "center",
               ellipsis: true,
             },
+            {
+              title: "Нэгж үнэ/₮/",
+              dataIndex: "talbainNegjUne",
+              ellipsis: true,
+              align: "center",
+              render: (talbainNegjUne) => {
+                return formatNumber(talbainNegjUne || 0)
+              },
+            },
+            {
+              title: "Нийт үнэ/₮/",
+              dataIndex: "talbainNiitUne",
+              ellipsis: true,
+              align: "center",
+              render: (talbainNiitUne) => {
+                return formatNumber(talbainNiitUne || 0)
+              },
+            },
             { title: "Тайлбар", dataIndex: "tailbar", ellipsis: true },
-
             {
               title: "Тохиргоо",
               ellipsis: true,

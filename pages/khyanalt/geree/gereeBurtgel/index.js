@@ -1,5 +1,5 @@
-import moment from "moment";
-import { useAuth } from "services/auth";
+import moment from "moment"
+import { useAuth } from "services/auth"
 import {
   FileDoneOutlined,
   UserOutlined,
@@ -7,39 +7,39 @@ import {
   FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined,
-} from "@ant-design/icons";
-import { Table, Form, Input, Tabs, Card, DatePicker } from "antd";
+} from "@ant-design/icons"
+import { Table, Form, Input, Tabs, Card, DatePicker } from "antd"
 
-import Admin from "components/Admin";
+import Admin from "components/Admin"
 
-import shalgaltKhiikh from "services/shalgaltKhiikh";
+import shalgaltKhiikh from "services/shalgaltKhiikh"
 
-import formatNumber from "tools/function/formatNumber";
-import { useState, useRef, useMemo, useEffect } from "react";
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
-import { useRouter } from "next/router";
+import formatNumber from "tools/function/formatNumber"
+import { useState, useRef, useMemo, useEffect } from "react"
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
+import { useRouter } from "next/router"
 //#region const
 
-const { TabPane } = Tabs;
-const { RangePicker } = DatePicker;
+const { TabPane } = Tabs
+const { RangePicker } = DatePicker
 
 const tuluvStyle = {
   display: "flex",
   fontSize: "0.8rem",
   fontWeight: "bold",
   justifyContent: "space-between",
-};
+}
 const garalt = {
   khuudasniiDugaar: 1,
   khuudasniiKhemjee: 10,
-};
+}
 
 //#endregion
 
 function ZakhialgiinKhyanalt() {
-  const { ajiltan, baiguullaga, token } = useAuth();
-  const { gereeniiMedeelel } = useGereeniiJagsaalt(token);
-  const router = useRouter();
+  const { ajiltan, baiguullaga, token } = useAuth()
+  const { gereeniiMedeelel } = useGereeniiJagsaalt(token)
+  const router = useRouter()
   //const [gereeJagsaalt, setGereeJagsaalt] = useState([])
 
   // useEffect(() => {
@@ -95,8 +95,8 @@ function ZakhialgiinKhyanalt() {
         khuvi: 100,
         utga: "Цуцласан",
       },
-    ];
-  }, []);
+    ]
+  }, [])
   const columns = useMemo(() => {
     var jagsaalt = [
       // {
@@ -110,35 +110,17 @@ function ZakhialgiinKhyanalt() {
       //     index +
       //     1
       // },
-      {
-        title: "Овог",
-        dataIndex: "ovog",
-        key: "ovog",
-        ellipsis: true,
-      },
-      {
-        title: "Нэр",
-        dataIndex: "ner",
-        key: "ner",
-        ellipsis: true,
-      },
-      {
-        title: "Утас",
-        dataIndex: "utas",
-        ellipsis: true,
-        render: (data) => {
-          var dugaar = data?.map((x) => x).join(";");
-          dugaar = Array.from(new Set(dugaar?.split(";"))).toString();
-          return <a>{dugaar}</a>;
-        },
-      },
-      {
-        title: "Регистер",
-        dataIndex: "register",
-        key: "register",
-        ellipsis: true,
-      },
 
+      // {
+      //   title: "Утас",
+      //   dataIndex: "utas",
+      //   ellipsis: true,
+      //   render: (data) => {
+      //     var dugaar = data?.map((x) => x).join(";")
+      //     dugaar = Array.from(new Set(dugaar?.split(";"))).toString()
+      //     return <a>{dugaar}</a>
+      //   },
+      // },
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
@@ -150,11 +132,55 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
       },
       {
+        title: "Бүртгэгдсэн",
+        dataIndex: "createdAt",
+        ellipsis: true,
+        render: (data) => {
+          return moment(data).format("YYYY-MM-DD")
+        },
+      },
+      {
+        title: "Төрөл",
+        dataIndex: "turul",
+        ellipsis: true,
+        render: () => {
+          return "Иргэн"
+        },
+      },
+
+      {
         title: "Талбай /м2/",
         dataIndex: "khariltsagchiinUtas",
         ellipsis: true,
         render: () => {
-          return "50 м2";
+          return "50 м2"
+        },
+      },
+      {
+        title: "Үнэ/м2/",
+        dataIndex: "talbainNegjUne",
+        ellipsis: true,
+        align: "center",
+        render: (talbainNegjUne) => {
+          return formatNumber(talbainNegjUne || 0)
+        },
+      },
+      {
+        title: "Төлбөр",
+        dataIndex: "tureesiinTulbur",
+        ellipsis: true,
+        align: "center",
+        render: (tureesiinTulbur) => {
+          return formatNumber(tureesiinTulbur || 0)
+        },
+      },
+      {
+        title: "Барьцаа дүн",
+        dataIndex: "baritsaaDun",
+        ellipsis: true,
+        align: "center",
+        render: (baritsaaDun) => {
+          return formatNumber(baritsaaDun || 0)
         },
       },
       {
@@ -162,30 +188,40 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "gereeniiOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD")
         },
+      },
+      {
+        title: "Дуусах хоног",
+        dataIndex: "duusakhKhonog",
+        ellipsis: true,
+        render: () => {
+          return "30"
+        },
+      },
+      {
+        title: "Авлага дүн",
+        dataIndex: "avlagaDun",
+        ellipsis: true,
+        align: "center",
+        render: (avlagaDun) => {
+          return formatNumber(avlagaDun || 0)
+        },
+      },
+      {
+        title: "Тэмдэглэл",
+        dataIndex: "temdeglel",
+        ellipsis: true,
       },
       {
         title: "Дуусах",
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD")
         },
       },
-      {
-        title: "Хугацаа/сар/",
-        dataIndex: "khugatsaa",
-        ellipsis: true,
-      },
-      {
-        title: "Сарын түрээс",
-        dataIndex: "sariinTurees",
-        ellipsis: true,
-        render: (data) => {
-          return formatNumber(data) + "₮";
-        },
-      },
+
       // {
       //   title: "Төлөв",
       //   align: "center",
@@ -231,17 +267,17 @@ function ZakhialgiinKhyanalt() {
       // },
 
       {
-        title: "Бүртгэсэн",
+        title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
         ellipsis: true,
         render: () => {
-          return "Админ";
+          return "Админ"
         },
       },
-    ];
+    ]
 
-    return jagsaalt;
-  }, []);
+    return jagsaalt
+  }, [])
 
   return (
     <Admin
@@ -278,7 +314,7 @@ function ZakhialgiinKhyanalt() {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
 
@@ -308,9 +344,9 @@ function ZakhialgiinKhyanalt() {
         </div>
       </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default ZakhialgiinKhyanalt;
+export default ZakhialgiinKhyanalt
