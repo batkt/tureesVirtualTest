@@ -198,6 +198,12 @@ function LanguuBurtgekh({ token }) {
   }, [])
 
   function onChange(talbar, utga) {
+    if (talbar === "talbainNegjUne") {
+      languuState.talbainNiitUne = utga * languuState.talbainKhemjee
+      formRef.current.setFieldsValue({
+        talbainNiitUne: languuState.talbainNiitUne,
+      })
+    }
     setLanguuState((a) => ({ ...a, [talbar]: utga }))
   }
   function languuBurtgekh() {
@@ -378,6 +384,7 @@ function LanguuBurtgekh({ token }) {
             ]}
           >
             <InputNumber
+              readOnly={true}
               style={{ width: "50%" }}
               placeholder="нийт үнэ"
               value={languuState.talbainNiitUne}

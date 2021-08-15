@@ -22,6 +22,7 @@ import {
   SolutionOutlined,
   MailOutlined,
   SecurityScanOutlined,
+  BellOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
@@ -325,42 +326,9 @@ function AjiltanBurtgel({ token }) {
             ></Input>
           </Form.Item>
 
-          <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
-          <Form.Item
-            name="mail"
-            rules={[
-              {
-                required: true,
-                message: "Нэвтрэх нэр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Нэвтрэх нэр"
-              value={ajiltanState.mail}
-              onChange={(e) => onChange("mail", e.target.value)}
-              prefix={<MailOutlined style={iconColor} />}
-            />
-          </Form.Item>
-          <Form.Item
-            name="nuutsUg"
-            rules={[
-              {
-                required: true,
-                message: "Нууц үг бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input.Password
-              placeholder="Нууц үг"
-              value={ajiltanState.nuutsUg}
-              onChange={(e) => onChange("nuutsUg", e.target.value)}
-              prefix={<SecurityScanOutlined style={iconColor} />}
-            />
-          </Form.Item>
           <Form.Item>
             <Button
-              htmlType="submit"
+              //htmlType="submit"
               //onClick={ajiltanBurtgekh}
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
             >
@@ -370,13 +338,26 @@ function AjiltanBurtgel({ token }) {
         </Form>
       </div>
       <div className="col-span-12 md:col-span-6 xl:col-span-9 box p-5 overflow-auto">
+        <div className="flex justify-end mb-5">
+          <Button
+            style={{
+              alignItems: "end",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+            }}
+            icon={<BellOutlined style={{ fontSize: "16px" }} />}
+          >
+            Мэдэгдэл илгээх
+          </Button>
+        </div>
+
         <Table
           bordered
           tableLayout={
             ajilchdiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
           }
           rowKey={(row) => row._id}
-          dataSource={ajilchdiinGaralt?.jagsaalt}
+          dataSource={[]}
           pagination={{
             current: ajilchdiinGaralt?.khuudasniiDugaar,
             pageSize: ajilchdiinGaralt?.khuudasniiKhemjee,
@@ -404,7 +385,6 @@ function AjiltanBurtgel({ token }) {
             },
             { title: "Ангилал", dataIndex: "angilal", ellipsis: true },
             { title: "Нэр", dataIndex: "ner", ellipsis: true },
-            { title: "Регистр", dataIndex: "register", ellipsis: true },
             { title: "Хаяг", dataIndex: "khayag", ellipsis: true },
             { title: "Утас", dataIndex: "utas", ellipsis: true },
             { title: "Мэйл хаяг", dataIndex: "email", ellipsis: true },
@@ -413,17 +393,16 @@ function AjiltanBurtgel({ token }) {
               title: "Төрөл",
               dataIndex: "turul",
               ellipsis: true,
-              render: () => {
-                return "Идэвхтэй"
-              },
+            },
+            {
+              title: "Түүх",
+              dataIndex: "turul",
+              ellipsis: true,
             },
             {
               title: "Бүртгэгдсэн",
               dataIndex: "createdAt",
               ellipsis: true,
-              render: (data) => (
-                <span>{moment(data).format("YYYY-MM-DD")}</span>
-              ),
             },
 
             // {
