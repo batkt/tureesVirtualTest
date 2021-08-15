@@ -117,6 +117,24 @@ function ZakhialgaNemekh({ token }) {
         </div>
       </div>
       <div className="col-span-12 lg:col-span-9 xl:col-span-10 box p-4">
+        <div className="flex flex-col w-full space-y-1">
+          {gereeniiZagvar?.zaaltuud?.map((mur, index) => {
+            return (
+              <div
+                key={mur._id}
+                className="flex flex-row w-full space-x-1 border-b p-1 focus-within:bg-blue-50"
+              >
+                <input
+                  className="w-6 border text-center"
+                  value={index + 1}
+                  onKeyDown={(e) => onKeyDown(e, index)}
+                />
+                <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+              </div>
+            );
+          })}
+        </div>
+        <Divider />
         <div className="flex flex-row w-full">
           <Select
             showSearch
@@ -139,24 +157,6 @@ function ZakhialgaNemekh({ token }) {
               );
             })}
           </Select>
-        </div>
-        <Divider />
-        <div className="flex flex-col w-full space-y-1">
-          {gereeniiZagvar?.zaaltuud?.map((mur, index) => {
-            return (
-              <div
-                key={mur._id}
-                className="flex flex-row w-full space-x-1 border-b p-1 focus-within:bg-blue-50"
-              >
-                <input
-                  className="w-6 border text-center"
-                  value={index + 1}
-                  onKeyDown={(e) => onKeyDown(e, index)}
-                />
-                <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
-              </div>
-            );
-          })}
         </div>
       </div>
     </Admin>
