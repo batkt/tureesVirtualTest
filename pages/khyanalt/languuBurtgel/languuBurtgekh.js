@@ -8,7 +8,7 @@ import {
   Form,
   Popconfirm,
   Card,
-} from "antd";
+} from "antd"
 import {
   UserOutlined,
   HomeOutlined,
@@ -19,36 +19,39 @@ import {
   FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined,
-} from "@ant-design/icons";
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
+} from "@ant-design/icons"
+import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin";
-import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee";
-import { useAuth } from "../../../services/auth";
-import React, { useState, useRef, useMemo } from "react";
-import moment from "moment";
-import { useLanguu } from "hooks/useLanguu";
-import getBase64 from "tools/function/getBase64";
+import Admin from "../../../components/Admin"
+import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee"
+import { useAuth } from "../../../services/auth"
+import React, { useState, useRef, useMemo } from "react"
+import moment from "moment"
+import { useLanguu } from "hooks/useLanguu"
+import getBase64 from "tools/function/getBase64"
+import deleteMethod from "tools/function/crud/deleteMethod"
+import createMethod from "tools/function/crud/createMethod"
+import updateMethod from "tools/function/crud/updateMethod"
 
-const iconColor = { fontSize: "18px" };
+const iconColor = { fontSize: "18px" }
 
 function LanguuBurtgekh({ token }) {
-  const formRef = useRef();
-  const zurag = useRef();
-  const empty = useRef();
+  const formRef = useRef()
+  const zurag = useRef()
+  const empty = useRef()
 
-  const { ajiltan, baiguullaga } = useAuth();
+  const { ajiltan, baiguullaga } = useAuth()
   const { languuniiGaralt, setLanguuKhuudaslalt, languuniiJagsaaltMutate } =
-    useLanguu(token, baiguullaga?._id);
+    useLanguu(token, baiguullaga?._id)
 
   const [languuState, setLanguuState] = useState({
     kod: undefined,
     talbainKhemjee: undefined,
     tailbar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
-  });
+  })
 
-  const { Option } = Select;
+  const { Option } = Select
   const khyanaltiinDun = useMemo(() => {
     return [
       {
@@ -187,58 +190,65 @@ function LanguuBurtgekh({ token }) {
         khuvi: 100,
         utga: "Засвартай",
       },
-    ];
-  }, []);
+    ]
+  }, [])
 
   function onChange(talbar, utga) {
-    setLanguuState((a) => ({ ...a, [talbar]: utga }));
+    setLanguuState((a) => ({ ...a, [talbar]: utga }))
   }
-  function ajiltanBurtgekh() {
-    languuState.baiguullagiinId = ajiltan?.baiguullagiinId;
-
-    uilchilgee(token)
-      .post("/languu", languuState)
-      .then(({ data }) => {
-        if (data !== undefined) {
-          message.success("Бүртгэл амжилттай хийгдлээ");
-          formRef.current.resetFields();
-          languuniiJagsaaltMutate(
-            (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-            true
-          );
-        }
-      })
-      .catch(aldaaBarigch);
+  function languuBurtgekh() {
+    languuState.baiguullagiinId = ajiltan?.baiguullagiinId
+    debugger
+    if (languuState.zasakhEsekh === true) {
+      updateMethod("languu", token, languuState)
+        .then(({ data }) => {
+          if (data !== undefined) {
+            message.success("Бүртгэл амжилттай засагдлаа")
+            formRef.current.resetFields()
+            languuniiJagsaaltMutate(
+              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+              true
+            )
+          }
+        })
+        .catch(aldaaBarigch)
+    } else
+      createMethod("languu", token, languuState)
+        .then(({ data }) => {
+          if (data !== undefined) {
+            message.success("Бүртгэл амжилттай хийгдлээ")
+            formRef.current.resetFields()
+            languuniiJagsaaltMutate(
+              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+              true
+            )
+          }
+        })
+        .catch(aldaaBarigch)
   }
 
   function zasya(data) {
-    data.zasakhEsekh = true;
+    data.zasakhEsekh = true
     if (!!data.zurgiinNer) {
-      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`;
-      zurag.current.classList.remove("hidden");
-      empty.current.classList.add("hidden");
+      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`
+      zurag.current.classList.remove("hidden")
+      empty.current.classList.add("hidden")
     }
-    formRef.current.setFieldsValue({ ...data });
-    setLanguuState(data);
+    formRef.current.setFieldsValue({ ...data })
+    setLanguuState(data)
   }
 
-  function ajiltanUstgay(mur) {
-    if (ajiltan._id === mur._id) {
-      message.warning("Та өөрийгөө устгаж болохгүй!");
-      return;
-    }
-    uilchilgee(token)
-      .post("/ajiltanUstgay", { id: mur._id })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success("Устгагдлаа");
-        }
-      });
+  function languuUstgay(mur) {
+    deleteMethod("languu", token, mur._id).then(({ data }) => {
+      if (data === "Amjilttai") {
+        languuniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+        message.success("Устгагдлаа")
+      }
+    })
   }
 
   function onFinish() {
-    ajiltanBurtgekh();
+    languuBurtgekh()
   }
   return (
     <Admin
@@ -274,7 +284,7 @@ function LanguuBurtgekh({ token }) {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </Card>
@@ -391,7 +401,7 @@ function LanguuBurtgekh({ token }) {
             },
             { title: "Дугаар", dataIndex: "kod", ellipsis: true },
             {
-              title: "Талбай/m2/",
+              title: "Талбай/м2/",
               dataIndex: "talbainKhemjee",
               ellipsis: true,
             },
@@ -410,10 +420,10 @@ function LanguuBurtgekh({ token }) {
                       <EditOutlined style={{ fontSize: "18px" }} />
                     </a>
                     <Popconfirm
-                      title="Ажилтан устгах уу?"
+                      title="Повьлон устгах уу?"
                       okText="Тийм"
                       cancelText="Үгүй"
-                      onConfirm={() => ajiltanUstgay(data)}
+                      onConfirm={() => languuUstgay(data)}
                     >
                       <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
                         <DeleteOutlined
@@ -428,9 +438,9 @@ function LanguuBurtgekh({ token }) {
         />
       </div>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default LanguuBurtgekh;
+export default LanguuBurtgekh

@@ -32,6 +32,9 @@ import React, { useState, useRef } from "react";
 import moment from "moment";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import getBase64 from "tools/function/getBase64";
+import deleteMethod from "tools/function/crud/deleteMethod";
+import createMethod from "tools/function/crud/createMethod";
+import updateMethod from "tools/function/crud/updateMethod";
 
 const iconColor = { fontSize: "18px" };
 
@@ -83,16 +86,33 @@ function AjiltanBurtgel({ token }) {
     for (var key in ajiltanState) {
       form_data.append(key, ajiltanState[key]);
     }
-    uilchilgee(token)
-      .post("/ajiltan", form_data)
-      .then(({ data }) => {
-        if (data !== undefined) {
-          message.success("Бүртгэл амжилттай хийгдлээ");
-          formRef.current.resetFields();
-          ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        }
-      })
-      .catch(aldaaBarigch);
+    if (ajiltanState.zasakhEsekh === true) {
+      updateMethod("ajiltan", token, ajiltanState)
+        .then(({ data }) => {
+          if (data !== undefined) {
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            ajiltniiJagsaaltMutate(
+              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+              true
+            );
+          }
+        })
+        .catch(aldaaBarigch);
+    } else {
+      createMethod("ajiltan", token, form_data)
+        .then(({ data }) => {
+          if (data !== undefined) {
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            ajiltniiJagsaaltMutate(
+              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+              true
+            );
+          }
+        })
+        .catch(aldaaBarigch);
+    }
   }
 
   function zasya(data) {
@@ -112,14 +132,13 @@ function AjiltanBurtgel({ token }) {
       message.warning("Та өөрийгөө устгаж болохгүй!");
       return;
     }
-    uilchilgee(token)
-      .post("/ajiltanUstgay", { id: mur._id })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success("Устгагдлаа");
-        }
-      });
+    deleteMethod("ajiltan", token, mur._id).then(({ data }) => {
+      debugger;
+      if (data !== undefined || data !== null) {
+        ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+        message.success("Устгагдлаа");
+      }
+    });
   }
 
   const props = {
