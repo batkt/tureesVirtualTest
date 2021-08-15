@@ -142,7 +142,6 @@ function ZakhialgaNemekh({ token }) {
         </div>
         <Divider />
         <div className="flex flex-col w-full space-y-1">
-          {JSON.stringify(gereeniiZagvar)}
           {gereeniiZagvar?.zaaltuud?.map((mur, index) => {
             return (
               <div
