@@ -41,7 +41,9 @@ const steps = [
 function GereeBaiguulakh({ token }) {
   const { baiguullaga } = useAuth();
   const [current, setCurrent] = React.useState(0);
-  const [khadgalakhGeree, setKhagalakhGeree] = React.useState({});
+  const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
+    ognoo: new Date(),
+  });
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
@@ -66,8 +68,10 @@ function GereeBaiguulakh({ token }) {
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     uilchilgee(token)
       .get("/gereeniiZaalt", {
-        query: {
-          _id: gereeniiZagvar.dedKhesguud,
+        data: {
+          query: {
+            _id: gereeniiZagvar.dedKhesguud,
+          },
         },
       })
       .then(({ data }) => {
@@ -129,14 +133,52 @@ function GereeBaiguulakh({ token }) {
                 );
               })}
             </Select>
-            <div className="w-full">
+            <div className="w-full space-y-2">
+              {current === 0 && (
+                <>
+                  <div className="flex flex-row justify-between">
+                    <div>
+                      БАТЛАВ: ИХ НАЯД ПЛАЗА ХХК <br />
+                      ГҮЙЦЭТГЭХ ЗАХИРАЛ <br />
+                      .......................................... /Д.БИЛГҮҮНДОРЖ/
+                    </div>
+                    <div>
+                      БАТЛАВ:
+                      <br />
+                      _____________________________ХХК, ИРГЭН
+                      <br />
+                      ЗАХИРАЛ
+                      <br />
+                      ......................................................./..................................../
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-between">
+                    <div>
+                      {moment(khadgalakhGeree.ognoo).format("YYYY")} он{" "}
+                      {moment(khadgalakhGeree.ognoo).format("MM")} сар{" "}
+                      {moment(khadgalakhGeree.ognoo).format("DD")} өдөр
+                    </div>
+                    <div>№</div>
+                    <div>Улаанбаатар хот</div>
+                  </div>
+                  <div className="w-full text-center font-medium">
+                    АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
+                  </div>
+                  <div className="w-full text-center font-medium">
+                    НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ
+                  </div>
+                </>
+              )}
               {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
                 return (
                   <div className="flex flex-row">
                     <div>
                       {mur.khamaarakhKheseg || 1}.{index + 1}:
                     </div>
-                    <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+                    <div
+                      className="ml-5"
+                      dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                    />
                   </div>
                 );
               })}
