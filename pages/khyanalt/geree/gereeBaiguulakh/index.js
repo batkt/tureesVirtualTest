@@ -82,6 +82,22 @@ function GereeBaiguulakh({ token }) {
       });
   };
 
+  const alkhamiinGereeniiZagvar = React.useMemo(() => {
+    var { dedKhesguud, ...busad } = gereeniiZagvar;
+    if (!dedKhesguud) return {};
+    let butsaakhUtga = busad;
+    for (const [key, value] of Object.entries(khadgalakhGeree)) {
+      dedKhesguud
+        .filter((a) => a.zaalt.indexOf(key) !== -1)
+        .map((b) => {
+          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+        });
+      console.log(`${key}: ${value}`);
+    }
+    butsaakhUtga.dedKhesguud = dedKhesguud;
+    return butsaakhUtga;
+  }, [gereeniiZagvar, khadgalakhGeree]);
+
   const prev = () => {
     if (current > 0) setCurrent(current - 1);
   };
@@ -140,7 +156,7 @@ function GereeBaiguulakh({ token }) {
                     <div>
                       БАТЛАВ: ИХ НАЯД ПЛАЗА ХХК <br />
                       ГҮЙЦЭТГЭХ ЗАХИРАЛ <br />
-                      .......................................... /Д.БИЛГҮҮНДОРЖ/
+                      {gereeniiZagvar?.baruunTolgoi}
                     </div>
                     <div>
                       БАТЛАВ:
@@ -149,7 +165,7 @@ function GereeBaiguulakh({ token }) {
                       <br />
                       ЗАХИРАЛ
                       <br />
-                      ......................................................./..................................../
+                      {gereeniiZagvar?.zuunTolgoi}
                     </div>
                   </div>
                   <div className="flex flex-row justify-between">
@@ -169,7 +185,7 @@ function GereeBaiguulakh({ token }) {
                   </div>
                 </>
               )}
-              {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
+              {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
                 return (
                   <div className="flex flex-row">
                     <div>
