@@ -34,7 +34,7 @@ const steps = [
     zaaltiinTolgoi: "ГУРАВ. БАРЬЦАА",
   },
   {
-    title: "Хөрөнгийн бүртгэл",
+    title: "Түрээсийн талбай",
     content: KhurungiinBurtgel,
     zaaltiinTolgoi: "ДӨРӨВ. БАЙРЛАЛ, ДУГААР, ХЭМЖЭЭ",
   },
