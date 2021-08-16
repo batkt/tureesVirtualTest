@@ -32,7 +32,6 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
   );
 
   const onFinish = (values) => {
-    console.log(values);
     onChange({ ...value, ...values });
     next();
   };
@@ -42,6 +41,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
+      onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
       <Form.Item

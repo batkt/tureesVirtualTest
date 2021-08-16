@@ -10,10 +10,12 @@ import router from "next/router";
 import { FileExcelOutlined, UserAddOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import ZaaltOruulakh from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
+import ZaaltExceleesOruulakh from "components/pageComponents/geree/zagvar/ZaaltExceleesOruulakh";
 
 function index({ token }) {
   const { baiguullaga } = useAuth();
   const ref = React.useRef();
+  const excelref = React.useRef();
   const { gereeniiZagvarGaralt, gereeniiZagvarMutate } = useGereeniiZagvar(
     token,
     baiguullaga?._id
@@ -32,6 +34,18 @@ function index({ token }) {
       content: (
         <ZaaltOruulakh ref={ref} token={token} baiguullaga={baiguullaga} />
       ),
+      footer,
+    });
+  }
+
+  function zaaltOruulakhExcel() {
+    const footer = [
+      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: <ZaaltExceleesOruulakh ref={excelref} token={token} />,
       footer,
     });
   }
@@ -278,12 +292,20 @@ function index({ token }) {
               overlay={
                 <Menu className="p-2">
                   <Menu.Item
-                    key="Мэдэгдэл үүсгэх"
+                    key="Заалт нэмэх"
                     className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
                     onClick={zaaltOruulakh}
                   >
                     <UserAddOutlined />
                     <span>Заалт нэмэх</span>
+                  </Menu.Item>
+                  <Menu.Item
+                    key="Заалт Excel-ээс оруулах"
+                    className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                    onClick={zaaltOruulakhExcel}
+                  >
+                    <UserAddOutlined />
+                    <span>Заалт Excel-ээс оруулах</span>
                   </Menu.Item>
                 </Menu>
               }

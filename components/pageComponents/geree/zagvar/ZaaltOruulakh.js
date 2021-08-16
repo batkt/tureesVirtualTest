@@ -1,28 +1,14 @@
 import React from "react";
 import SunEditor, { buttonList } from "suneditor-react";
-import { Form, Input, Select, Upload } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
+import { Form, Input } from "antd";
 import createMethod from "tools/function/crud/createMethod";
-import { aldaaBarigch, url } from "services/uilchilgee";
+import { aldaaBarigch } from "services/uilchilgee";
 import _ from "lodash";
-
-const khamaaragdakhKheseg = [
-  "Ерөнхий мэдээлэл",
-  "Барьцаа бүртгэл",
-  "Хөрөнгийн бүртгэл",
-  "Гэрээний хугацаа",
-  "Төлбөр тооцоо",
-];
 
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
 ];
-
-const props = {
-  name: "file",
-  action: `${url}/gereeniiZaaltTatya`,
-};
 
 var customPlugin = {
   // @Required @Unique
@@ -134,18 +120,11 @@ function index({ token, baiguullaga, destroy }, ref) {
 
   return (
     <Form form={form} {...formItemLayout}>
-      <Form.Item label="Дэс дугаар" name="desDugaar">
-        <Input />
-      </Form.Item>
       <Form.Item label="Харагдах дугаар" name="kharagdakhDugaar">
         <Input />
       </Form.Item>
       <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
-        <Select>
-          {khamaaragdakhKheseg.map((mur) => (
-            <Select.Option key={mur}>{mur}</Select.Option>
-          ))}
-        </Select>
+        <Input />
       </Form.Item>
       <SunEditor
         onChange={setZaalt}
@@ -158,24 +137,6 @@ function index({ token, baiguullaga, destroy }, ref) {
         showToolbar={true}
         ref={editorRef}
       />
-      <Upload
-        type="drag"
-        multiple={false}
-        {...props}
-        method="POST"
-        headers={{ Authorization: `bearer ${token}` }}
-      >
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">
-          Click or drag file to this area to upload
-        </p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibit from uploading
-          company data or other band files
-        </p>
-      </Upload>
     </Form>
   );
 }
