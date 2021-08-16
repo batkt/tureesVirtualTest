@@ -7,7 +7,7 @@ import {
   TimePicker,
   Upload,
   Modal,
-  message
+  message,
 } from "antd"
 import moment from "moment"
 import getBase64 from "tools/function/getBase64"
@@ -43,7 +43,6 @@ const BarilgaBurtgekh = forwardRef(
             })
         },
         khaaya() {
-          debugger
           if (readonly) destroy()
           else
             confirm({
@@ -51,9 +50,9 @@ const BarilgaBurtgekh = forwardRef(
               okText: "Тийм",
               cancelText: "Үгүй",
               content: "Та хадгалахгүй гарахдаа итгэлтэй байна уу",
-              onOk: destroy
+              onOk: destroy,
             })
-        }
+        },
       }),
       [form]
     )
@@ -87,8 +86,8 @@ const BarilgaBurtgekh = forwardRef(
             rules={[
               {
                 required: ugugdul?.zurgiinNer ? false : true,
-                message: "Лого заавал оруулна уу!"
-              }
+                message: "Лого заавал оруулна уу!",
+              },
             ]}
           >
             <Upload
