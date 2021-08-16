@@ -47,8 +47,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
       <Form.Item name="gereeniiDugaar" label="Гэрээний дугаар">
         <Input
           allowClear
-          maxLength={10}
-          placeholder="Байгууллага нэр"
+          placeholder="Гэрээний дугаар"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
@@ -66,7 +65,6 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
       >
         <Input
           allowClear
-          maxLength={10}
           placeholder="Байгууллага нэр"
           prefix={<SolutionOutlined />}
         />
@@ -102,7 +100,6 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
             {
               required: true,
               len: 7,
-              max: 7,
               pattern: new RegExp("(\\d{7})"),
               message: "Регистр бүртгэнэ үү!",
             },
@@ -117,44 +114,24 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
         </Form.Item>
       )}
       <Form.Item hidden={baiguullagaEsekh} name="ovog" label="Овог">
-        <Input
-          allowClear
-          maxLength={10}
-          placeholder="Овог"
-          prefix={<SolutionOutlined />}
-        />
+        <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
       </Form.Item>
       <Form.Item hidden={baiguullagaEsekh} name="ner" label="Нэр">
-        <Input
-          allowClear
-          maxLength={10}
-          placeholder="Нэр"
-          prefix={<SolutionOutlined />}
-        />
+        <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
       </Form.Item>
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="zakhirliinOvog"
         label="Захирлын овог"
       >
-        <Input
-          allowClear
-          maxLength={10}
-          placeholder="Овог"
-          prefix={<SolutionOutlined />}
-        />
+        <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
       </Form.Item>
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="zakhirliinNer"
         label="Захирлын нэр"
       >
-        <Input
-          allowClear
-          maxLength={10}
-          placeholder="Нэр"
-          prefix={<SolutionOutlined />}
-        />
+        <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
       </Form.Item>
       <Form.Item name="utas" label="Утас">
         <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />

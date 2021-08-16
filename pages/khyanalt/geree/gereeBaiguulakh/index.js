@@ -26,23 +26,22 @@ const steps = [
   {
     title: "Гэрээний хугацаа",
     content: KhugatsaaBurtgel,
-    zaaltiinTolgoi:
-      "ХОЁР. ГЭРЭЭНИЙ ХУГАЦАА, БАЙРЛАЛ, ДУГААР,ХЭМЖЭЭ, ТӨЛБӨР ТООЦОО",
+    zaaltiinTolgoi: "ХОЁР. ГЭРЭЭНИЙ ХУГАЦАА",
   },
   {
     title: "Барьцаа бүртгэл",
     content: Baritsaa,
-    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
+    zaaltiinTolgoi: "ГУРАВ. БАРЬЦАА",
   },
   {
     title: "Хөрөнгийн бүртгэл",
     content: KhurungiinBurtgel,
-    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
+    zaaltiinTolgoi: "ДӨРӨВ. БАЙРЛАЛ, ДУГААР, ХЭМЖЭЭ",
   },
   {
     title: "Төлбөр тооцоо",
     content: TulburTootsoo,
-    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
+    zaaltiinTolgoi: "ТАВ.ТӨЛБӨР ТООЦОО",
   },
 ];
 
