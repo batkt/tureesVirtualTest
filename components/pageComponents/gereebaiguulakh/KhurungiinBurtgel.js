@@ -1,14 +1,7 @@
-import { Form, Select, Input, Switch, Button, Upload, Space } from "antd";
-import {
-  UploadOutlined,
-  InboxOutlined,
-  SolutionOutlined,
-  ArrowRightOutlined,
-  ArrowLeftOutlined,
-  PlusOutlined,
-  MinusCircleOutlined,
-} from "@ant-design/icons";
+import { Form, Select, Button, Input, InputNumber } from "antd";
+import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
+import useLanguu from "hooks/useLanguu";
 
 const formItemLayout = {
   labelCol: {
@@ -18,115 +11,103 @@ const formItemLayout = {
     span: 14,
   },
 };
+const YurunkhiiMedeele = ({
+  token,
+  baiguullaga,
+  next,
+  prev,
+  onChange,
+  value,
+}) => {
+  const [form] = Form.useForm();
+  const { languuniiGaralt, setLanguuKhuudaslalt } = useLanguu(
+    token,
+    baiguullaga?._id
+  );
 
-const normFile = (e) => {
-  console.log("Upload event:", e);
-
-  if (Array.isArray(e)) {
-    return e;
-  }
-
-  return e && e.fileList;
-};
-
-// ААН	Байгууллага нэр
-// 	    Регистр
-// 	    Албан тушаал
-// 	    Овог
-// 	    Нэр
-// 	    Утас	Гар утас
-// 		Байгууллага
-// 	    Хаяг
-// 	    Гэрчилгээний хуулбар
-// Иргэн	Овог
-// 	        Нэр
-// 	        Регистр
-// 	        Гар утас
-// 	        Хаяг
-// 	        Зөвшөөрлийн бичгийн хуулбар
-// 	        Иргэний үнэмлэхний хуулбар
-/*
-baiguullagiinNer
-register
-ovog 
-ner
-utas1 utas2
-baiguullaga
-khayag
-gerchilgeeniiKhuulbar
-zuvshuurliinBichgiinKhuulbar
-irgeniiUnemlekhiinKhuulbar
-*/
-const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   const onFinish = (values) => {
+    values.baritsaaAvakhDun = values.talbainNiitUne;
+    values.sariinTurees = values.talbainNiitUne;
     onChange({ ...value, ...values });
     next();
   };
 
+  const onChangeLanguu = (v) => {
+    var languu = languuniiGaralt.jagsaalt.find((a) => a._id === v);
+    languu.languuniiDugaar = languu.kod;
+    form.setFieldsValue(languu);
+  };
+
   return (
     <Form
+      form={form}
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
       onFinish={onFinish}
     >
-      <Form.Item label="Хө">
-        <Form.List name="users">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map(({ key, name, fieldKey, ...restField }) => (
-                <Space
-                  key={key}
-                  style={{ display: "flex", marginBottom: 8 }}
-                  align="baseline"
-                >
-                  <Form.Item
-                    {...restField}
-                    name={[name, "ner"]}
-                    fieldKey={[fieldKey, "ner"]}
-                    rules={[{ required: true, message: "Нэр оруулна уу" }]}
-                  >
-                    <Input placeholder="Нэр" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "too"]}
-                    fieldKey={[fieldKey, "too"]}
-                    rules={[{ required: true, message: "too оруулна уу" }]}
-                  >
-                    <Input placeholder="too" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "unelgee"]}
-                    fieldKey={[fieldKey, "unelgee"]}
-                    rules={[{ required: true, message: "Үнэлгээ оруулна уу" }]}
-                  >
-                    <Input placeholder="Үнэлгээ" />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </Space>
-              ))}
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Хөрөнгө нэмэх
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List>
+      <Form.Item label="Түрээсийн талбай" name="tureesiinTalbainId">
+        <Select
+          showSearch
+          placeholder="Үйлчилгээ сонгох"
+          className="w-full"
+          placeholder="Үйлчилгээ сонгох"
+          size="large"
+          value={null}
+          filterOption={(o) => o}
+          onSearch={(search) => setLanguuKhuudaslalt((a) => ({ ...a, search }))}
+          onChange={onChangeLanguu}
+        >
+          {languuniiGaralt?.jagsaalt?.map((mur) => {
+            return <Select.Option key={mur._id}>{mur.kod}</Select.Option>;
+          })}
+        </Select>
+      </Form.Item>
+      <Form.Item label="Лангууний дугаар" name="languuniiDugaar">
+        <Input />
+      </Form.Item>
+      <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label="Талбайн нийт үнэ" name="talbainNiitUne">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label="Түрээсийн талбайн давхар" name="davkhar">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
       </Form.Item>
       <Form.Item noStyle className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Барьцаа бүртгэл
+          Гэрээний хугацаа
         </Button>
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Төлбөр тооцоо
+          Барьцаа бүртгэл
         </Button>
       </Form.Item>
     </Form>

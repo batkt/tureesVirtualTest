@@ -1,12 +1,8 @@
-import { Form, Select, Input, Switch, Button, Upload, DatePicker } from "antd";
+import { Form, Input, Button, DatePicker, InputNumber } from "antd";
 import {
-  UploadOutlined,
-  InboxOutlined,
   SolutionOutlined,
   ArrowRightOutlined,
   ArrowLeftOutlined,
-  DatabaseOutlined,
-  ClockCircleOutlined,
 } from "@ant-design/icons";
 import React from "react";
 
@@ -19,79 +15,60 @@ const formItemLayout = {
   },
 };
 
-const normFile = (e) => {
-  console.log("Upload event:", e);
-
-  if (Array.isArray(e)) {
-    return e;
-  }
-
-  return e && e.fileList;
-};
-
-// ААН	Байгууллага нэр
-// 	    Регистр
-// 	    Албан тушаал
-// 	    Овог
-// 	    Нэр
-// 	    Утас	Гар утас
-// 		Байгууллага
-// 	    Хаяг
-// 	    Гэрчилгээний хуулбар
-// Иргэн	Овог
-// 	        Нэр
-// 	        Регистр
-// 	        Гар утас
-// 	        Хаяг
-// 	        Зөвшөөрлийн бичгийн хуулбар
-// 	        Иргэний үнэмлэхний хуулбар
-/*
-baiguullagiinNer
-register
-ovog 
-ner
-utas1 utas2
-baiguullaga
-khayag
-gerchilgeeniiKhuulbar
-zuvshuurliinBichgiinKhuulbar
-irgeniiUnemlekhiinKhuulbar
-*/
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
     onChange({ ...value, ...values });
     next();
   };
 
+  const onValuesChange = (values) => {
+    if (!!values?.gereeniiOgnoo && !!values?.khugatsaa) {
+      values.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
+        values.khugatsaa,
+        "M"
+      );
+      form.setFieldsValue(values);
+    }
+    onChange({ ...value, ...values });
+  };
+
   return (
     <Form
+      form={form}
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
-      onValuesChange={(values) => onChange({ ...value, ...values })}
+      onValuesChange={onValuesChange}
       onFinish={onFinish}
     >
       <Form.Item name="gereeniiOgnoo">
         <DatePicker
           style={{ width: "100%" }}
           allowClear
-          placeholder="Гэрээ дуусах хугацаа"
+          placeholder="Гэрээ хийх огноо"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
       <Form.Item name="khugatsaa">
-        <Input
-          allowClear
-          maxLength={10}
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           placeholder="Гэрээний хугацаа"
-          prefix={<ClockCircleOutlined />}
         />
       </Form.Item>
       <Form.Item name="khungulukhKhugatsaa">
-        <Input
-          allowClear
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           placeholder="Хөнгөлөх хугацаа"
-          prefix={<SolutionOutlined />}
         />
       </Form.Item>
       <Form.Item>
@@ -106,13 +83,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           style={{ width: "100%" }}
           allowClear
           placeholder="Гэрээ дуусах хугацаа"
-          prefix={<SolutionOutlined />}
-        />
-      </Form.Item>
-      <Form.Item>
-        <Input
-          allowClear
-          placeholder="Гэрээний хугацааг сунгах"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
@@ -135,7 +105,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           Ерөнхий мэдээлэл
         </Button>
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Барьцаа бүртгэл
+          Түрээсийн талбай
         </Button>
       </Form.Item>
     </Form>

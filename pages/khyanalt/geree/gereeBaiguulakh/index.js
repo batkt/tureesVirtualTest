@@ -3,7 +3,6 @@ import Admin from "components/Admin";
 import uilchilgee from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
-import otoFormData from "tools/function/otoFormData";
 import { message, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
@@ -29,14 +28,14 @@ const steps = [
     zaaltiinTolgoi: "ХОЁР. ГЭРЭЭНИЙ ХУГАЦАА",
   },
   {
-    title: "Барьцаа бүртгэл",
-    content: Baritsaa,
-    zaaltiinTolgoi: "ГУРАВ. БАРЬЦАА",
-  },
-  {
     title: "Түрээсийн талбай",
     content: KhurungiinBurtgel,
     zaaltiinTolgoi: "ДӨРӨВ. БАЙРЛАЛ, ДУГААР, ХЭМЖЭЭ",
+  },
+  {
+    title: "Барьцаа бүртгэл",
+    content: Baritsaa,
+    zaaltiinTolgoi: "ГУРАВ. БАРЬЦАА",
   },
   {
     title: "Төлбөр тооцоо",
@@ -153,6 +152,8 @@ function GereeBaiguulakh({ token }) {
               prev={prev}
               onChange={setKhagalakhGeree}
               value={khadgalakhGeree}
+              token={token}
+              baiguullaga={baiguullaga}
             />
           </div>
           <div className="p-2 mt-3 bg-gray-50 col-span-8">

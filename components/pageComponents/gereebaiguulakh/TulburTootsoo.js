@@ -1,10 +1,6 @@
-import { Form, Input, Button } from "antd";
-import {
-  ArrowLeftOutlined,
-  ArrowRightOutlined,
-  ClockCircleOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
+import { Form, Button } from "antd";
+import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import formatNumber from "tools/function/formatNumber";
 const formItemLayout = {
   labelCol: {
     span: 6,
@@ -27,17 +23,25 @@ const Demo = ({ value, onChange, next, prev }) => {
       initialValues={value}
       onFinish={onFinish}
     >
-      <Form.Item name="sariinTurees" label="Сарын түрээс">
-        <Input
-          allowClear
-          maxLength={10}
-          placeholder="Үнэлгээ"
-          prefix={<ClockCircleOutlined />}
-        />
-      </Form.Item>
+      <div className="p-2 bg-white rounded-md space-y-3 text-lg divide-y-2 divide-dashed">
+        <div>Сарын түрээс {formatNumber(value.sariinTurees)}₮</div>
+        <div>
+          Барьцаа төлбөр {formatNumber(value.sariinTurees)}₮ x{" "}
+          {value.baritsaaAvakhKhugatsaa} сар ={" "}
+          {formatNumber(value.sariinTurees * value.baritsaaAvakhKhugatsaa)}₮
+        </div>
+        <div>
+          Нийт төлөх дүн{" "}
+          {formatNumber(
+            value.sariinTurees +
+              value.sariinTurees * value.baritsaaAvakhKhugatsaa
+          )}
+          ₮
+        </div>
+      </div>
       <Form.Item noStyle className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Хөрөнгийн бүртгэл
+          Барьцаа бүртгэл
         </Button>
         <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
           Хадгалах

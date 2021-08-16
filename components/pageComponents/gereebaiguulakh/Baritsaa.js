@@ -1,4 +1,4 @@
-import { Form, Select, Input, Switch, Button, Upload } from "antd";
+import { Form, Select, Input, Switch, Button, Upload, InputNumber } from "antd";
 import {
   UploadOutlined,
   InboxOutlined,
@@ -72,10 +72,12 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       initialValues={value}
     >
       <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
-        <Input
-          allowClear
-          placeholder="Барьцаа дүн"
-          prefix={<DollarCircleOutlined />}
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
       <Form.Item name="baritsaaAvakhKhugatsaa" label="Барьцаа авах хугацаа">
@@ -89,18 +91,20 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         name="baritsaaBairshuulakhKhugatsaa"
         label="Барьцаа байршуулалтын хугацаа"
       >
-        <Input
-          allowClear
-          placeholder="Барьцаа байршуулалтын хугацаа"
-          suffix={<div>сар</div>}
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
       <Form.Item noStyle className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Гэрээний хугацаа
+          Түрээсийн талбай
         </Button>
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Хөрөнгийн бүртгэл
+          Төлбөр тооцоо
         </Button>
       </Form.Item>
     </Form>
