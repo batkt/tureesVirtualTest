@@ -44,6 +44,14 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >
+      <Form.Item name="gereeniiDugaar" label="Гэрээний дугаар">
+        <Input
+          allowClear
+          maxLength={10}
+          placeholder="Байгууллага нэр"
+          prefix={<SolutionOutlined />}
+        />
+      </Form.Item>
       <Form.Item
         name="baiguullagaEsekh"
         label="Байгууллага эсэх"
@@ -193,7 +201,7 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
         }}
       >
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Барьцаа бүртгэл
+          Гэрээний хугацаа
         </Button>
       </Form.Item>
     </Form>

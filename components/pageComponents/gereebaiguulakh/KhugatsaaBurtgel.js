@@ -132,10 +132,10 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       </Form.Item>
       <Form.Item noStyle className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Хөрөнгийн бүртгэл
+          Ерөнхий мэдээлэл
         </Button>
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Төлбөр тооцоо
+          Барьцаа бүртгэл
         </Button>
       </Form.Item>
     </Form>

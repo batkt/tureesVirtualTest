@@ -51,6 +51,7 @@ function GereeBaiguulakh({ token }) {
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
+    gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
   });
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
@@ -202,7 +203,7 @@ function GereeBaiguulakh({ token }) {
                       {moment(khadgalakhGeree.ognoo).format("MM")} сар{" "}
                       {moment(khadgalakhGeree.ognoo).format("DD")} өдөр
                     </div>
-                    <div>№</div>
+                    <div>№{khadgalakhGeree.gereeniiDugaar}</div>
                     <div>Улаанбаатар хот</div>
                   </div>
                   <div className="w-full text-center font-medium">

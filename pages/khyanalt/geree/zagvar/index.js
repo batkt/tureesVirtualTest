@@ -301,7 +301,7 @@ function index({ token }) {
                     href=""
                     className="w-3/5 file__icon file__icon--file mx-auto"
                   >
-                    <div className="file__icon__file-name">PHP</div>
+                    <div className="file__icon__file-name"></div>
                   </a>
                   <a
                     href=""
