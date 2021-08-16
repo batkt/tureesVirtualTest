@@ -124,6 +124,7 @@ function ZakhialgaNemekh({ token }) {
                 key={mur._id}
                 className="flex flex-row w-full space-x-1 border-b p-1 focus-within:bg-blue-50"
               >
+                <div className="text-center">{mur.khamaarakhKheseg}</div>
                 <input
                   className="w-6 border text-center"
                   value={index + 1}
@@ -152,7 +153,13 @@ function ZakhialgaNemekh({ token }) {
             {gereeniiZaaltGaralt?.jagsaalt?.map((mur) => {
               return (
                 <Select.Option key={mur._id}>
-                  <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+                  <div className="flex flex-row">
+                    <div>{mur.khamaarakhKheseg}</div>
+                    <Divider type="vertical" />
+                    <div>{mur.kharagdakhDugaar}</div>
+                    <Divider type="vertical" />
+                    <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+                  </div>
                 </Select.Option>
               );
             })}

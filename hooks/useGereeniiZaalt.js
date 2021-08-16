@@ -5,16 +5,16 @@ import useSWR from "swr";
 const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt }) =>
   axios(token)
     .get(url, {
-      order: { createdAt: -1 },
-      query: {
-        baiguullagiinId,
-        $or: [
-          { ner: { $regex: search, $options: "i" } },
-          { utas: { $regex: search } },
-          { "mashinuud.dugaar": { $regex: search, $options: "i" } },
-        ],
+      params: {
+        query: {
+          baiguullagiinId,
+          $or: [
+            { kharagdakhDugaar: { $regex: search, $options: "i" } },
+            { zaalt: { $regex: search, $options: "i" } },
+            { khamaarakhKheseg: { $regex: search, $options: "i" } },
+          ],
+        },
       },
-      ...khuudaslalt,
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
