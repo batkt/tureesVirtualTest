@@ -78,7 +78,7 @@ function index({ token }) {
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                 <polyline points="21 15 16 10 5 21"></polyline>
               </svg>
-              Images
+              Гэрээний загвар
             </a>
             <a href="" className="flex items-center px-3 py-2 mt-2 rounded-md">
               <svg
@@ -96,63 +96,7 @@ function index({ token }) {
                 <polygon points="23 7 16 12 23 17 23 7"></polygon>
                 <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
               </svg>
-              Videos
-            </a>
-            <a href="" className="flex items-center px-3 py-2 mt-2 rounded-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-file w-4 h-4 mr-2"
-              >
-                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                <polyline points="13 2 13 9 20 9"></polyline>
-              </svg>
-              Documents
-            </a>
-            <a href="" className="flex items-center px-3 py-2 mt-2 rounded-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-users w-4 h-4 mr-2"
-              >
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-              Shared
-            </a>
-            <a href="" className="flex items-center px-3 py-2 mt-2 rounded-md">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-trash w-4 h-4 mr-2"
-              >
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              Trash
+              Гэрээний заалт
             </a>
           </div>
         </div>
@@ -374,7 +318,12 @@ function index({ token }) {
                       overlay={
                         <div className="dropdown-menu w-40">
                           <div className="dropdown-menu__content box dark:bg-dark-1 p-2">
-                            <div className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md">
+                            <div
+                              onClick={() =>
+                                router.push(`/khyanalt/geree/zagvar/${a._id}`)
+                              }
+                              className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

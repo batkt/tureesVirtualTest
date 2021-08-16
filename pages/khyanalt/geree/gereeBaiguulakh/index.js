@@ -3,6 +3,7 @@ import Admin from "components/Admin";
 import uilchilgee from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
+import otoFormData from "tools/function/otoFormData";
 import { message, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
@@ -12,6 +13,7 @@ import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/Khugatsa
 import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import _ from "lodash";
 
 const { Step } = Steps;
 
@@ -19,22 +21,28 @@ const steps = [
   {
     title: "Ерөнхий мэдээлэл",
     content: YurunkhiiMedeelel,
-  },
-  {
-    title: "Барьцаа бүртгэл",
-    content: Baritsaa,
-  },
-  {
-    title: "Хөрөнгийн бүртгэл",
-    content: KhurungiinBurtgel,
+    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
   },
   {
     title: "Гэрээний хугацаа",
     content: KhugatsaaBurtgel,
+    zaaltiinTolgoi:
+      "ХОЁР. ГЭРЭЭНИЙ ХУГАЦАА, БАЙРЛАЛ, ДУГААР,ХЭМЖЭЭ, ТӨЛБӨР ТООЦОО",
+  },
+  {
+    title: "Барьцаа бүртгэл",
+    content: Baritsaa,
+    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
+  },
+  {
+    title: "Хөрөнгийн бүртгэл",
+    content: KhurungiinBurtgel,
+    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
   },
   {
     title: "Төлбөр тооцоо",
     content: TulburTootsoo,
+    zaaltiinTolgoi: "НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ",
   },
 ];
 
@@ -51,10 +59,8 @@ function GereeBaiguulakh({ token }) {
   const next = (data) => {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
-      data.gereeniiDugaar = `ГД${moment(new Date()).format("YYMMDD")}`;
-      data.gereeniiOgnoo = new Date();
       createMethod("geree", token, data).then(({ data }) => {
-        if (!!data) {
+        if (data === "Amjilttai") {
           setKhagalakhGeree({});
           setCurrent(0);
           message.success("Амжилттай хадгаллаа");
@@ -83,20 +89,42 @@ function GereeBaiguulakh({ token }) {
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
-    var { dedKhesguud, ...busad } = gereeniiZagvar;
-    if (!dedKhesguud) return {};
-    let butsaakhUtga = busad;
+    let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
+    if (!butsaakhUtga?.dedKhesguud) return {};
+
+    if (khadgalakhGeree.gereeniiOgnoo) {
+      khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
+        "YYYY"
+      );
+      khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
+        "MM"
+      );
+      khadgalakhGeree.ekhlekhUdur = moment(
+        khadgalakhGeree.gereeniiOgnoo
+      ).format("DD");
+      if (khadgalakhGeree.khugatsaa > 0) {
+        let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
+          khadgalakhGeree.khugatsaa,
+          "M"
+        );
+        khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
+        khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
+        khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
+      }
+    }
+
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
-      dedKhesguud
+      butsaakhUtga.dedKhesguud
         .filter((a) => a.zaalt.indexOf(key) !== -1)
         .map((b) => {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
-      console.log(`${key}: ${value}`);
     }
-    butsaakhUtga.dedKhesguud = dedKhesguud;
+    butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+      (a) => a.khamaarakhKheseg === String(current + 1)
+    );
     return butsaakhUtga;
-  }, [gereeniiZagvar, khadgalakhGeree]);
+  }, [gereeniiZagvar, khadgalakhGeree, current]);
 
   const prev = () => {
     if (current > 0) setCurrent(current - 1);
@@ -150,7 +178,7 @@ function GereeBaiguulakh({ token }) {
               })}
             </Select>
             <div className="w-full space-y-2">
-              {current === 0 && (
+              {current === 0 && gereeniiZagvar?.ner && (
                 <>
                   <div className="flex flex-row justify-between">
                     <div>
@@ -180,11 +208,11 @@ function GereeBaiguulakh({ token }) {
                   <div className="w-full text-center font-medium">
                     АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
                   </div>
-                  <div className="w-full text-center font-medium">
-                    НЭГ. АГУУЛГА, ҮНДСЭН ЗҮЙЛ
-                  </div>
                 </>
               )}
+              <div className="w-full text-center font-medium">
+                {currentItem?.zaaltiinTolgoi}
+              </div>
               {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
                 return (
                   <div className="flex flex-row">

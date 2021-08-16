@@ -148,64 +148,8 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item label="Утас">
-        <Form.List
-          name="utas"
-          rules={[
-            {
-              validator: async (_, names) => {
-                if (!names || names.length < 2) {
-                  return Promise.reject(
-                    new Error("Багадаа 2 дугаар оруулна уу!")
-                  );
-                }
-              },
-            },
-          ]}
-        >
-          {(fields, { add, remove }, { errors }) => (
-            <div className="flex flex-wrap">
-              {fields.map((field) => (
-                <Form.Item required={false} key={field.key} className="w-full">
-                  <Form.Item
-                    {...field}
-                    validateTrigger={["onChange", "onBlur"]}
-                    rules={[
-                      {
-                        required: true,
-                        whitespace: true,
-                        message: "Утас оруулна уу.",
-                      },
-                    ]}
-                    noStyle
-                  >
-                    <Input
-                      prefix={<PhoneOutlined />}
-                      placeholder="Утас"
-                      style={{ width: "90%" }}
-                    />
-                  </Form.Item>
-                  {fields.length > 1 ? (
-                    <MinusCircleOutlined
-                      className="mx-2"
-                      onClick={() => remove(field.name)}
-                    />
-                  ) : null}
-                </Form.Item>
-              ))}
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  icon={<PlusOutlined />}
-                >
-                  Утас нэмэх
-                </Button>
-                <Form.ErrorList errors={errors} />
-              </Form.Item>
-            </div>
-          )}
-        </Form.List>
+      <Form.Item name="utas" label="Утас">
+        <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
       </Form.Item>
       <Form.Item
         hidden={!baiguullagaEsekh}
