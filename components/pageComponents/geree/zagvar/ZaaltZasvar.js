@@ -3,7 +3,7 @@ import SunEditor, { buttonList } from "suneditor-react";
 import _ from "lodash";
 import { customPlugin } from "./ZaaltOruulakh";
 
-function ZaaltZasvar({ songolt, destroy, value }) {
+function ZaaltZasvar({ songolt, destroy, value, change }, ref) {
   const editorRef = React.useRef();
   const [sunValue, setValue] = React.useState(value);
 
@@ -11,13 +11,14 @@ function ZaaltZasvar({ songolt, destroy, value }) {
     ref,
     () => ({
       khadgalya() {
+        change(sunValue);
         destroy();
       },
       khaaya() {
         destroy();
       },
     }),
-    []
+    [sunValue]
   );
 
   const custom = React.useMemo(() => {

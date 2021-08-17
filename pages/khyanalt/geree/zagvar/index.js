@@ -10,7 +10,7 @@ import router from "next/router";
 import { FileExcelOutlined, UserAddOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import ZaaltOruulakh from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
-import ZaaltExceleesOruulakh from "components/pageComponents/geree/zagvar/ZaaltExceleesOruulakh";
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 
 function index({ token }) {
   const { baiguullaga } = useAuth();
@@ -45,7 +45,35 @@ function index({ token }) {
     modal({
       title: "",
       icon: <FileExcelOutlined />,
-      content: <ZaaltExceleesOruulakh ref={excelref} token={token} />,
+      content: (
+        <ExceleesOruulakh
+          ref={excelref}
+          token={token}
+          zam="gereeniiZaaltTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Заалтын excel файл"
+        />
+      ),
+      footer,
+    });
+  }
+
+  function zagvarOruulakhExcel() {
+    const footer = [
+      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ExceleesOruulakh
+          ref={excelref}
+          token={token}
+          zam="gereeniiZagvarTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Гэрээний загварын excel файл"
+        />
+      ),
       footer,
     });
   }
@@ -83,6 +111,14 @@ function index({ token }) {
                     <UserAddOutlined />
                     <span>Заалт Excel-ээс оруулах</span>
                   </Menu.Item>
+                  <Menu.Item
+                    key="Заалт Excel-ээс оруулах"
+                    className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                    onClick={zagvarOruulakhExcel}
+                  >
+                    <UserAddOutlined />
+                    <span>Гэрээний загвар Excel-ээс оруулах</span>
+                  </Menu.Item>
                 </Menu>
               }
               trigger="click"
@@ -93,7 +129,6 @@ function index({ token }) {
                 aria-expanded="false"
               >
                 <span className="w-5 h-5 flex items-center justify-center">
-                  {" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -108,9 +143,8 @@ function index({ token }) {
                   >
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>{" "}
+                  </svg>
                 </span>
-                Заалт
               </button>
             </Dropdown>
           </div>

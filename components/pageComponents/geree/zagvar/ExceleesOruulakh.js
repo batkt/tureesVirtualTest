@@ -4,12 +4,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import { url } from "services/uilchilgee";
 import _ from "lodash";
 
-const props = {
-  name: "file",
-  action: `${url}/gereeniiZaaltTatya`,
-};
-
-function index({ token, destroy }, ref) {
+function index({ token, destroy, zam, garchig, tailbar }, ref) {
   React.useImperativeHandle(
     ref,
     () => ({
@@ -19,11 +14,13 @@ function index({ token, destroy }, ref) {
     }),
     []
   );
+
   return (
     <Upload
       type="drag"
       multiple={false}
-      {...props}
+      name="file"
+      action={`${url}/${zam}`}
       method="POST"
       headers={{ Authorization: `bearer ${token}` }}
       onChange={({ file }) => {
@@ -36,13 +33,8 @@ function index({ token, destroy }, ref) {
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>
-      <p className="ant-upload-text">
-        Click or drag file to this area to upload
-      </p>
-      <p className="ant-upload-hint">
-        Support for a single or bulk upload. Strictly prohibit from uploading
-        company data or other band files
-      </p>
+      <p className="ant-upload-text">{garchig}</p>
+      <p className="ant-upload-hint">{tailbar}</p>
     </Upload>
   );
 }

@@ -1,15 +1,15 @@
-import { CloseCircleOutlined } from "@ant-design/icons"
-import { Badge, Modal } from "antd"
-import useSonorduulga from "hooks/useSonorduulga"
-import Link from "next/link"
-import React from "react"
-import { url } from "services/uilchilgee"
-import AjiltanNemekh from "./AjiltanNemekh"
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { Badge, Modal } from "antd";
+import useSonorduulga from "hooks/useSonorduulga";
+import Link from "next/link";
+import React from "react";
+import { url } from "services/uilchilgee";
+import AjiltanNemekh from "./AjiltanNemekh";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
-  )
+  );
   if (mur.sub) {
     return (
       <>
@@ -54,17 +54,19 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
                   </div>
                 </li>
               </Link>
-            )
+            );
           })}
         </ul>
       </>
-    )
+    );
   }
   return (
     <Link href={mur.href}>
       <li className={selected ? "selected-menu" : "menu-item"}>
-        <div className='flex flex-row p-1'>
-          <div className={`mr-2 ${selected ? 'text-green-600' : ''}`}>{mur.icon}</div>
+        <div className="flex flex-row p-1">
+          <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+            {mur.icon}
+          </div>
           {mur.ner}
         </div>
         <span className={selected ? "selected-menu-top" : "hidden"}>
@@ -75,21 +77,21 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         </span>
       </li>
     </Link>
-  )
+  );
 }
 
 function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
-  const { sonorduulga } = useSonorduulga(mur?.token, mur?._id)
+  const { sonorduulga } = useSonorduulga(mur?.token, mur?._id);
 
   function ajiltanGargaya(a, e) {
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
     Modal.confirm({
       content: `${a?.ner} ажилтныг системээс гаргахдаа итгэлтэй байна уу?`,
       okText: "Тийм",
       cancelText: "Үгүй",
-      onOk: () => ajiltanKhasya(a)
-    })
+      onOk: () => ajiltanKhasya(a),
+    });
   }
 
   return (
@@ -116,8 +118,9 @@ function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
             </div>
           </div>
           <div
-            className={`ml-auto flex items-center z-10 ${olonEsekh ? "" : "hidden"
-              }`}
+            className={`ml-auto flex items-center z-10 ${
+              olonEsekh ? "" : "hidden"
+            }`}
             onClick={(e) => ajiltanGargaya(mur, e)}
           >
             <CloseCircleOutlined />
@@ -132,7 +135,7 @@ function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
         </span>
       </li>
     </Link>
-  )
+  );
 }
 
 function NTses({
@@ -143,7 +146,7 @@ function NTses({
   ajiltniiJagsaalt,
   ajiltanNemya,
   setToken,
-  ajiltanKhasya
+  ajiltanKhasya,
 }) {
   if (ajiltan?.erkh === "Zasvarchin" || ajiltan?.erkh === "Injener")
     return (
@@ -183,7 +186,7 @@ function NTses({
           ))}
         </ul>
       </nav>
-    )
+    );
   return (
     <nav className="h-full w-44 hidden md:block">
       <ul>
@@ -191,7 +194,7 @@ function NTses({
           <div className="border-b px-2 pb-2">
             <div className="flex flex-col items-center space-x-2">
               <img
-                className="h-10 w-10 rounded-full border-solid border-2 border-blue-500"
+                className="h-10 w-10 "
                 alt={baiguullaga?.ner}
                 src={
                   baiguullaga?.zurgiinNer
@@ -218,7 +221,7 @@ function NTses({
         ))}
       </ul>
     </nav>
-  )
+  );
 }
 
-export default NTses
+export default NTses;

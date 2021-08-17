@@ -29,7 +29,7 @@ const talbaruud = [
   { ner: "Эхлэх өдөр", talbar: "duusakhUdur" },
 ];
 
-export var customPlugin = (songokhTalbaruud) => ({
+export var customPlugin = (songokhTalbaruud = talbaruud) => ({
   // @Required @Unique
   name: "custom_example",
   // @Required
