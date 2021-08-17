@@ -4,74 +4,30 @@ import Admin from "components/Admin";
 import { useRouter } from "next/router";
 import readMethod from "tools/function/crud/readMethod";
 import createMethod from "tools/function/crud/createMethod";
-import { Button, Divider, Form, Input, message, Select } from "antd";
-import useGereeniiZaalt from "hooks/useGereeniiZaalt";
+import { Button, Form, Input, message } from "antd";
 import { useAuth } from "services/auth";
-
-const steps = [
-  {
-    title: "Ерөнхий мэдээлэл",
-  },
-  {
-    title: "Барьцаа бүртгэл",
-  },
-  {
-    title: "Хөрөнгийн бүртгэл",
-  },
-  {
-    title: "Гэрээний хугацаа",
-  },
-  {
-    title: "Төлбөр тооцоо",
-  },
-];
+import { EditOutlined, FileExcelOutlined } from "@ant-design/icons";
+import { modal } from "components/ant/Modal";
+import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
+import _ from "lodash";
 
 function ZakhialgaNemekh({ token }) {
   const router = useRouter();
   const { id } = router.query;
+  const [form] = Form.useForm();
   const { baiguullaga } = useAuth();
-  const { setGereeniiZaaltKhuudaslalt, gereeniiZaaltGaralt } = useGereeniiZaalt(
-    token,
-    baiguullaga?._id
-  );
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
-  const [current, setCurrent] = React.useState(0);
+  const ref = React.useRef();
 
   React.useEffect(() => {
     if (id !== "new")
       readMethod("gereeniiZagvar", token, id).then(({ data }) => {
-        if (data) setGereeniiZagvar({ ...data });
+        if (data) {
+          form.setFieldsValue(data);
+          setGereeniiZagvar({ ...data });
+        }
       });
   }, [id]);
-
-  function onChange(v) {
-    let zaaltuud = gereeniiZagvar?.zaaltuud || [];
-    let zaalt = gereeniiZaaltGaralt.jagsaalt.filter((a) => a._id === v);
-    if (zaalt.length > 0) {
-      // zaalt[0].khamaarakhKheseg = current;
-      zaaltuud.push(zaalt[0]);
-    }
-    setGereeniiZagvar((a) => ({ ...a, zaaltuud }));
-  }
-
-  function onKeyDown(e, index) {
-    let zaaltuud = gereeniiZagvar?.zaaltuud || [];
-    let zaalt = zaaltuud[index];
-    if (e.keyCode === 46) {
-      zaaltuud.splice(index, 1);
-      setGereeniiZagvar((a) => ({ ...a, zaaltuud }));
-    }
-    if (e.keyCode === 38 && index > 0) {
-      zaaltuud.splice(index, 1);
-      zaaltuud.splice(index - 1, 0, zaalt);
-      setGereeniiZagvar((a) => ({ ...a, zaaltuud }));
-    }
-    if (e.keyCode === 40 && index < zaaltuud.length) {
-      zaaltuud.splice(index, 1);
-      zaaltuud.splice(index + 1, 0, zaalt);
-      setGereeniiZagvar((a) => ({ ...a, zaaltuud }));
-    }
-  }
 
   function onFinish(values) {
     values["baiguullagiinNer"] = baiguullaga.ner;
@@ -85,6 +41,27 @@ function ZakhialgaNemekh({ token }) {
     });
   }
 
+  function docZasya(key, value) {
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khadgalya()}>Хадгалах</Button>,
+    ];
+
+    function change(utga) {
+      _.set(gereeniiZagvar, key, utga);
+      let value = _.cloneDeep(gereeniiZagvar);
+      setGereeniiZagvar(value);
+    }
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ZaaltZasvar ref={ref} token={token} value={value} change={change} />
+      ),
+      footer,
+    });
+  }
+
   return (
     <Admin
       khuudasniiNer="zakhialgiinKhyanalt"
@@ -93,20 +70,84 @@ function ZakhialgaNemekh({ token }) {
       dedKhuudas
       className="p-4"
     >
+      <div className="col-span-12 lg:col-span-9 xl:col-span-10 box p-4">
+        <div className="flex flex-col w-full space-y-1">
+          <div className="w-full flex flex-row justify-between">
+            <div className="relative group">
+              <div
+                className="p-2 border border-dashed border-gray-600 rounded-md"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    gereeniiZagvar.zuunTolgoi ||
+                    "Гэрээний загварын баруун толгой",
+                }}
+              />
+              <div
+                className="absolute hidden -top-2 -right-2 group-hover:block"
+                onClick={() =>
+                  docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi)
+                }
+              >
+                <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+              </div>
+            </div>
+            <div className="relative group">
+              <div
+                className="p-2 border border-dashed border-gray-600 rounded-md"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    gereeniiZagvar.baruunTolgoi ||
+                    "Гэрээний загварын зүүн толгой",
+                }}
+              />
+              <div
+                className="absolute hidden -top-2 -right-2 group-hover:block"
+                onClick={() =>
+                  docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi)
+                }
+              >
+                <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+              </div>
+            </div>
+          </div>
+          {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
+            return (
+              <div
+                key={mur._id}
+                className="flex flex-row w-full p-1 relative group hover:bg-gray-100 rounded-md"
+              >
+                {mur.kharagdakhDugaar ? (
+                  <>
+                    <div className="text-center">{mur.kharagdakhDugaar}</div>
+                    <div
+                      className="ml-5"
+                      dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                    />
+                  </>
+                ) : (
+                  <div
+                    className="w-full text-center font-medium"
+                    dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                  />
+                )}
+                <div
+                  className="absolute hidden -top-2 -right-2 group-hover:block"
+                  onClick={() =>
+                    docZasya(`dedKhesguud.${index}.zaalt`, mur.zaalt)
+                  }
+                >
+                  <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
       <div className="col-span-12 lg:col-span-3 xl:col-span-2">
         <div className="box p-5">
-          <Form onFinish={onFinish}>
+          <Form form={form} onFinish={onFinish}>
             <Form.Item name="ner">
               <Input placeholder="Гэрээний загварын нэр" />
-            </Form.Item>
-            <Form.Item name="baruunTolgoi">
-              <Input.TextArea placeholder="Гэрээний загварын баруун толгой" />
-            </Form.Item>
-            <Form.Item name="zuunTolgoi">
-              <Input.TextArea placeholder="Гэрээний загварын зүүн толгой" />
-            </Form.Item>
-            <Form.Item name="khul">
-              <Input.TextArea placeholder="Гэрээний загварын хөл" />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -114,56 +155,6 @@ function ZakhialgaNemekh({ token }) {
               </Button>
             </Form.Item>
           </Form>
-        </div>
-      </div>
-      <div className="col-span-12 lg:col-span-9 xl:col-span-10 box p-4">
-        <div className="flex flex-col w-full space-y-1">
-          {gereeniiZagvar?.zaaltuud?.map((mur, index) => {
-            return (
-              <div
-                key={mur._id}
-                className="flex flex-row w-full space-x-1 border-b p-1 focus-within:bg-blue-50"
-              >
-                <div className="text-center">{mur.khamaarakhKheseg}</div>
-                <input
-                  className="w-6 border text-center"
-                  value={index + 1}
-                  onKeyDown={(e) => onKeyDown(e, index)}
-                />
-                <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
-              </div>
-            );
-          })}
-        </div>
-        <Divider />
-        <div className="flex flex-row w-full">
-          <Select
-            showSearch
-            placeholder="Үйлчилгээ сонгох"
-            className="w-full"
-            placeholder="Үйлчилгээ сонгох"
-            size="large"
-            value={null}
-            filterOption={(o) => o}
-            onSearch={(search) =>
-              setGereeniiZaaltKhuudaslalt((a) => ({ ...a, search }))
-            }
-            onChange={onChange}
-          >
-            {gereeniiZaaltGaralt?.jagsaalt?.map((mur) => {
-              return (
-                <Select.Option key={mur._id}>
-                  <div className="flex flex-row">
-                    <div>{mur.khamaarakhKheseg}</div>
-                    <Divider type="vertical" />
-                    <div>{mur.kharagdakhDugaar}</div>
-                    <Divider type="vertical" />
-                    <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
-                  </div>
-                </Select.Option>
-              );
-            })}
-          </Select>
         </div>
       </div>
     </Admin>

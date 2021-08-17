@@ -1,6 +1,6 @@
 import React from "react";
 import SunEditor, { buttonList } from "suneditor-react";
-import { Form, Input } from "antd";
+import { Form, Input, Select } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import _ from "lodash";
@@ -29,7 +29,7 @@ const talbaruud = [
   { ner: "Эхлэх өдөр", talbar: "duusakhUdur" },
 ];
 
-var customPlugin = {
+export var customPlugin = (songokhTalbaruud = talbaruud) => ({
   // @Required @Unique
   name: "custom_example",
   // @Required
@@ -50,7 +50,6 @@ var customPlugin = {
 
   // @Required
   add: function (core, targetElement) {
-    console.log("est");
     // Generate submenu HTML
     // Always bind "core" when calling a plugin function
     let listDiv = this.setSubmenu.call(core);
@@ -75,10 +74,12 @@ var customPlugin = {
     listDiv.className = "se-submenu se-list-layer";
     listDiv.innerHTML =
       '<div class="se-list-inner se-list-font-size"><ul class="se-list-basic">' +
-      talbaruud.map(
-        (a) =>
-          `<li><button type="button" class="se-btn-list" value="&lt;${a.talbar}&gt;">{${a.ner}}</button></li>`
-      ) +
+      songokhTalbaruud
+        .map(
+          (a) =>
+            `<li><button type="button" class="se-btn-list" value="&lt;${a.talbar}&gt;">{${a.ner}}</button></li>`
+        )
+        .join("") +
       "</ul></div>";
 
     return listDiv;
@@ -94,7 +95,7 @@ var customPlugin = {
     node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling);
     this.submenuOff();
   },
-};
+});
 
 const formItemLayout = {
   labelCol: {
@@ -137,19 +138,31 @@ function index({ token, baiguullaga, destroy }, ref) {
     [form, zaalt]
   );
 
+  const plugin = React.useMemo(() => customPlugin(talbaruud), []);
+
   return (
     <Form form={form} {...formItemLayout}>
       <Form.Item label="Харагдах дугаар" name="kharagdakhDugaar">
         <Input />
       </Form.Item>
       <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
-        <Input />
+        <Select>
+          {[
+            "Ерөнхий мэдээлэл",
+            "Гэрээний хугацаа",
+            "Түрээсийн талбай",
+            "Барьцаа бүртгэл",
+            "Төлбөр тооцоо",
+          ].map((a, i) => (
+            <Select.Option value={i + 1}>{a}</Select.Option>
+          ))}
+        </Select>
       </Form.Item>
       <SunEditor
         onChange={setZaalt}
         defaultValue={zaalt}
         setOptions={{
-          plugins: [customPlugin],
+          plugins: [plugin],
           height: 200,
           buttonList: [...buttonList.formatting, ["custom_example"]],
         }}
