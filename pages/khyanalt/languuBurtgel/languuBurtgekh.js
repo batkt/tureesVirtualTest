@@ -11,36 +11,29 @@ import {
   InputNumber,
 } from "antd";
 import {
-  UserOutlined,
-  HomeOutlined,
   EditOutlined,
   DeleteOutlined,
-  FileDoneOutlined,
-  HistoryOutlined,
-  FileSyncOutlined,
-  WarningOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
 
 import Admin from "../../../components/Admin";
-import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee";
+import { aldaaBarigch, url } from "../../../services/uilchilgee";
 import { useAuth } from "../../../services/auth";
 import React, { useState, useRef, useMemo } from "react";
-import moment from "moment";
 import { useLanguu } from "hooks/useLanguu";
-import getBase64 from "tools/function/getBase64";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import formatNumber from "tools/function/formatNumber";
-
-const iconColor = { fontSize: "18px" };
+import { modal } from "components/ant/Modal";
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 
 function LanguuBurtgekh({ token }) {
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
+  const excelref = useRef();
 
   const { ajiltan, baiguullaga } = useAuth();
   const { languuniiGaralt, setLanguuKhuudaslalt, languuniiJagsaaltMutate } =
@@ -55,7 +48,6 @@ function LanguuBurtgekh({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
 
-  const { Option } = Select;
   const khyanaltiinDun = useMemo(() => {
     return [
       {
@@ -260,6 +252,29 @@ function LanguuBurtgekh({ token }) {
   function onFinish() {
     languuBurtgekh();
   }
+
+  function languuOruulakhExcel() {
+    const footer = [
+      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ExceleesOruulakh
+          ref={excelref}
+          token={token}
+          zam="languuTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Гэрээний загварын excel файл"
+          zagvariinZam="languuniiZagvarAvya"
+          onFinish={() => languuniiJagsaaltMutate()}
+        />
+      ),
+      footer,
+    });
+  }
+
   return (
     <Admin
       title="Лангуу бүртгэл"
@@ -298,22 +313,33 @@ function LanguuBurtgekh({ token }) {
           })}
         </div>
       </Card>
+      <div className="col-span-12 w-full">
+        <button
+          className="dropdown-toggle btn px-2 box text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 w-full md:w-auto mt-4 md:mt-0 ml-auto"
+          aria-expanded="false"
+          onClick={languuOruulakhExcel}
+        >
+          <span className="w-5 h-5 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-plus w-4 h-4"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </span>
+          <span>Excel -ээс Лангуу татах</span>
+        </button>
+      </div>
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        {/* <div>
-          <Upload {...props}>
-            <div ref={empty}>
-              <Empty
-                className="w-24 h-24 border border-dashed border-blue-500 zurag"
-                description=""
-              />
-            </div>
-            <img
-              ref={zurag}
-              alt="Зураг сонгох"
-              className="w-24 h-24 border border-dashed border-blue-500 hidden"
-            />
-          </Upload>
-        </div> */}
         <Form
           ref={formRef}
           name="control-ref"

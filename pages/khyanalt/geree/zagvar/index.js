@@ -72,6 +72,7 @@ function index({ token }) {
           zam="gereeniiZagvarTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"
+          onFinish={() => gereeniiZagvarMutate()}
         />
       ),
       footer,
