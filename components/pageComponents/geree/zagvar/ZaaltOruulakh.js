@@ -17,16 +17,14 @@ const talbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "Хугацаа", talbar: "khugatsaa" },
-  { ner: "Гэрээ дуусах огноо", talbar: "duusakhOgnoo" },
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
-  { ner: "Нэр", talbar: "khungulukhKhugatsaa" },
   { ner: "Эхлэх он", talbar: "ekhlekhOn" },
   { ner: "Эхлэх сар", talbar: "ekhelkhSar" },
   { ner: "Эхлэх өдөр", talbar: "ekhlekhUdur" },
-  { ner: "Эхлэх он", talbar: "duusakhOn" },
-  { ner: "Эхлэх сар", talbar: "duusakhSar" },
-  { ner: "Эхлэх өдөр", talbar: "duusakhUdur" },
+  { ner: "Дуусах он", talbar: "duusakhOn" },
+  { ner: "Дуусах сар", talbar: "duusakhSar" },
+  { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
 ];
 
 export var customPlugin = (songokhTalbaruud = talbaruud) => ({
