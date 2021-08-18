@@ -10,6 +10,7 @@ import { useAuth } from "services/auth";
 import {
   DeleteOutlined,
   EditOutlined,
+  FileAddOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
@@ -97,6 +98,13 @@ function ZakhialgaNemekh({ token }) {
     });
   }
 
+  function docNemekh(key, mur) {
+    mur.zaalt = "<b>Шинэ заалт</b>";
+    gereeniiZagvar.dedKhesguud.splice(key + 1, 0, mur);
+    let value = _.cloneDeep(gereeniiZagvar);
+    setGereeniiZagvar(value);
+  }
+
   return (
     <Admin
       khuudasniiNer="zakhialgiinKhyanalt"
@@ -177,6 +185,11 @@ function ZakhialgaNemekh({ token }) {
                     <DeleteOutlined className="rounded-full p-1 fill-current bg-white border cursor-pointer hover:bg-red-400" />
                   </div>
                 </div>
+                {/* <div className="absolute hidden -bottom-2 -right-2 group-hover:flex flex-row space-x-2">
+                  <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
+                    <FileAddOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-green-400" />
+                  </div>
+                </div> */}
               </div>
             );
           })}

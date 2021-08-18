@@ -36,6 +36,7 @@ const YurunkhiiMedeele = ({
     var languu = languuniiGaralt.jagsaalt.find((a) => a._id === v);
     languu.languuniiDugaar = languu.kod;
     form.setFieldsValue(languu);
+    onChange({ ...value, ...languu });
   };
 
   return (
@@ -50,9 +51,9 @@ const YurunkhiiMedeele = ({
       <Form.Item label="Түрээсийн талбай" name="tureesiinTalbainId">
         <Select
           showSearch
-          placeholder="Үйлчилгээ сонгох"
+          placeholder="Талбай сонгох"
           className="w-full"
-          placeholder="Үйлчилгээ сонгох"
+          placeholder="Талбай сонгох"
           size="large"
           value={null}
           filterOption={(o) => o}
@@ -94,7 +95,7 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Түрээсийн талбайн давхар" name="davkhar">
+      <Form.Item label="Давхар" name="davkhar">
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
