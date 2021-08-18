@@ -194,7 +194,7 @@ function NTses({
           <div className="border-b px-2 pb-2">
             <div className="flex flex-col items-center space-x-2">
               <img
-                className="h-10 w-10 "
+                className="h-20 w-20 "
                 alt={baiguullaga?.ner}
                 src={
                   baiguullaga?.zurgiinNer
