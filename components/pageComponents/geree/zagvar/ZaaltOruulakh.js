@@ -153,8 +153,8 @@ function index({ token, baiguullaga, destroy }, ref) {
             "Түрээсийн талбай",
             "Барьцаа бүртгэл",
             "Төлбөр тооцоо",
-          ].map((a, i) => (
-            <Select.Option value={i + 1}>{a}</Select.Option>
+          ].map((a) => (
+            <Select.Option value={a}>{a}</Select.Option>
           ))}
         </Select>
       </Form.Item>

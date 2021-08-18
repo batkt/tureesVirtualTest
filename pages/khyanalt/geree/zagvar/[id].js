@@ -4,6 +4,7 @@ import Admin from "components/Admin";
 import { useRouter } from "next/router";
 import readMethod from "tools/function/crud/readMethod";
 import createMethod from "tools/function/crud/createMethod";
+import updateMethod from "tools/function/crud/updateMethod";
 import { Button, Form, Input, message } from "antd";
 import { useAuth } from "services/auth";
 import { EditOutlined, FileExcelOutlined } from "@ant-design/icons";
@@ -30,15 +31,25 @@ function ZakhialgaNemekh({ token }) {
   }, [id]);
 
   function onFinish(values) {
-    values["baiguullagiinNer"] = baiguullaga.ner;
-    values["baiguullagiinId"] = baiguullaga._id;
-    values["dedKhesguud"] = gereeniiZagvar.zaaltuud.map((a) => a._id);
-    createMethod("gereeniiZagvar", token, values).then(({ data }) => {
-      if (data === "Amjilttai") {
-        message.success("Амжилттай хадгаллаа");
-        router.back();
-      }
-    });
+    if (!gereeniiZagvar?._id) {
+      values["baiguullagiinNer"] = baiguullaga.ner;
+      values["baiguullagiinId"] = baiguullaga._id;
+      values["dedKhesguud"] = gereeniiZagvar.zaaltuud.map((a) => a._id);
+      createMethod("gereeniiZagvar", token, values).then(({ data }) => {
+        if (data === "Amjilttai") {
+          message.success("Амжилттай хадгаллаа");
+          router.back();
+        }
+      });
+    } else if (!!gereeniiZagvar?._id) {
+      gereeniiZagvar.ner = values.ner;
+      updateMethod("gereeniiZagvar", token, gereeniiZagvar).then(({ data }) => {
+        if (data === "Amjilttai") {
+          message.success("Амжилттай хадгаллаа");
+          router.back();
+        }
+      });
+    }
   }
 
   function docZasya(key, value) {
