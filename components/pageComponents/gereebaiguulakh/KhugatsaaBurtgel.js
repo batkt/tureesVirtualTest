@@ -30,6 +30,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         "M"
       );
       form.setFieldsValue(values);
+      console.log(values);
     }
     onChange({ ...value, ...values });
   };

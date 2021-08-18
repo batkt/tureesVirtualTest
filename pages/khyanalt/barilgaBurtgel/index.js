@@ -1,18 +1,18 @@
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import formatNumber from "tools/function/formatNumber"
-import { useCallback, useMemo, useRef } from "react"
-import uilchilgee, { url } from "services/uilchilgee"
-import { useAuth } from "services/auth"
-import { Button, Space, Table } from "antd"
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons"
-import BaiguullagaBurtgelAlkham from "./dedKheseg/barilgaBurtgekh"
-import { Marker } from "@react-google-maps/api"
-import useSalbar from "hooks/useSalbar"
-import GazriinZurag from "components/gazriinZurag/GazriinZurag"
-import { modal } from "components/ant/Modal"
-import _ from "lodash"
-import useKhyanakhSambar from "hooks/useKhyanakhSambar"
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import formatNumber from "tools/function/formatNumber";
+import { useCallback, useMemo, useRef } from "react";
+import uilchilgee, { url } from "services/uilchilgee";
+import { useAuth } from "services/auth";
+import { Button, Space, Table } from "antd";
+import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
+import BaiguullagaBurtgelAlkham from "./dedKheseg/barilgaBurtgekh";
+import { Marker } from "@react-google-maps/api";
+import useSalbar from "hooks/useSalbar";
+import GazriinZurag from "components/gazriinZurag/GazriinZurag";
+import { modal } from "components/ant/Modal";
+import _ from "lodash";
+import useKhyanakhSambar from "hooks/useKhyanakhSambar";
 
 export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
   if (id)
@@ -21,29 +21,29 @@ export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
         query: { $or: [{ tolgoinId: id }, { _id: id }] },
       })
       .then(({ data }) => {
-        data.jagsaalt.forEach((x) => (x.ley = x._id))
-        set([...data.jagsaalt])
-        setLoadData(false)
-      })
+        data.jagsaalt.forEach((x) => (x.ley = x._id));
+        set([...data.jagsaalt]);
+        setLoadData(false);
+      });
 }
 
 function BarilgaBurtgel({ token }) {
-  const ref = useRef(null)
-  const burtgel = useRef(null)
-  const { ajiltan, baiguullaga, baiguullagaMutate } = useAuth()
+  const ref = useRef(null);
+  const burtgel = useRef(null);
+  const { ajiltan, baiguullaga, baiguullagaMutate } = useAuth();
   const { salbariinGaralt, setKhuudaslalt, salbarMutate } = useSalbar(
     token,
     ajiltan?.baiguullagiinId
-  )
-  const { toololt } = useKhyanakhSambar(token)
+  );
+  const { toololt } = useKhyanakhSambar(token);
   const bairshiluud = useMemo(() => {
     return (salbariinGaralt?.jagsaalt || []).map((mur) => {
       return {
         lat: mur?.bairshil?.coordinates[0] || 47.927094,
         lng: mur?.bairshil?.coordinates[1] || 106.887425,
-      }
-    })
-  }, [salbariinGaralt])
+      };
+    });
+  }, [salbariinGaralt]);
 
   const columns = useMemo(
     () => [
@@ -99,13 +99,13 @@ function BarilgaBurtgel({ token }) {
               </a>
               <a onClick={() => zasakh(row, true)}>Харах</a>
             </Space>
-          )
+          );
         },
         ellipsis: true,
       },
     ],
     []
-  )
+  );
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -119,9 +119,9 @@ function BarilgaBurtgel({ token }) {
             stroke="currentColor"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.5"
               d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
             />
           </svg>
@@ -137,9 +137,9 @@ function BarilgaBurtgel({ token }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             {" "}
             <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />{" "}
@@ -157,9 +157,9 @@ function BarilgaBurtgel({ token }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             {" "}
             <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />{" "}
@@ -177,9 +177,9 @@ function BarilgaBurtgel({ token }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             {" "}
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
@@ -191,13 +191,13 @@ function BarilgaBurtgel({ token }) {
         khuvi: 100,
         utga: "Түрээслэгч",
       },
-    ]
-  }, [toololt])
+    ];
+  }, [toololt]);
 
   const zasakh = (salbar, readonly) => {
     const footer = [
       <Button onClick={() => burtgel.current.khaaya()}>Хаах</Button>,
-    ]
+    ];
     if (!readonly) {
       footer.push(
         <Button
@@ -207,7 +207,7 @@ function BarilgaBurtgel({ token }) {
         >
           Хадгалах
         </Button>
-      )
+      );
     }
     modal({
       style: { minWidth: "50vw" },
@@ -225,15 +225,15 @@ function BarilgaBurtgel({ token }) {
         />
       ),
       footer,
-    })
-  }
+    });
+  };
 
   const afterLoadMap = useCallback(
     function callback() {
-      ref.current && ref.current.fitBounds(bairshiluud)
+      ref.current && ref.current.fitBounds(bairshiluud);
     },
     [bairshiluud, ref]
-  )
+  );
 
   return (
     <Admin
@@ -290,7 +290,7 @@ function BarilgaBurtgel({ token }) {
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
           <div className="intro-y flex items-center h-10 mt-8">
@@ -423,9 +423,9 @@ function BarilgaBurtgel({ token }) {
         </div>
       </div> */}
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default BarilgaBurtgel
+export default BarilgaBurtgel;
