@@ -5,7 +5,7 @@ import {
   ArrowLeftOutlined,
 } from "@ant-design/icons";
 import React from "react";
-
+import moment from "moment";
 const formItemLayout = {
   labelCol: {
     span: 0,
@@ -23,14 +23,21 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     next();
   };
 
-  const onValuesChange = (values) => {
-    if (!!values?.gereeniiOgnoo && !!values?.khugatsaa) {
-      values.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
+  const onValuesChange = (values, v) => {
+    console.log(values);
+    if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
+      value.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
+        value.khugatsaa,
+        "M"
+      );
+      form.setFieldsValue({ ...value, ...values });
+    }
+    if (!!value?.gereeniiOgnoo && !!values?.khugatsaa) {
+      value.duusakhOgnoo = moment(value.gereeniiOgnoo).add(
         values.khugatsaa,
         "M"
       );
-      form.setFieldsValue(values);
-      console.log(values);
+      form.setFieldsValue({ ...value, ...values });
     }
     onChange({ ...value, ...values });
   };
