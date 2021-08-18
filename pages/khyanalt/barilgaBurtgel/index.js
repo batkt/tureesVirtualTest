@@ -153,7 +153,7 @@ function BarilgaBurtgel({ token }) {
         too: "1.5сая",
         icon: (
           <svg
-            class="h-8 w-8 text-red-500"
+            className="h-8 w-8 text-red-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -173,7 +173,7 @@ function BarilgaBurtgel({ token }) {
         too: _.get(toololt, "0.khariltsagchiinToo") || 500,
         icon: (
           <svg
-            class="h-8 w-8 text-green-500"
+            className="h-8 w-8 text-green-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"

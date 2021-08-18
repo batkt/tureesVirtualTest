@@ -69,6 +69,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       name="validate_other"
       {...formItemLayout}
       onFinish={onFinish}
+      onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
     >
       <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">

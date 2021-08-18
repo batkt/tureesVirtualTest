@@ -5,9 +5,13 @@ import { useRouter } from "next/router";
 import readMethod from "tools/function/crud/readMethod";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { useAuth } from "services/auth";
-import { EditOutlined, FileExcelOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FileExcelOutlined,
+} from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import _ from "lodash";
@@ -70,6 +74,26 @@ function ZakhialgaNemekh({ token }) {
         <ZaaltZasvar ref={ref} token={token} value={value} change={change} />
       ),
       footer,
+    });
+  }
+
+  function docUstgaya(key, mur) {
+    Modal.confirm({
+      content: (
+        <div>
+          <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
+          <span className="font-medium">
+            Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?
+          </span>
+        </div>
+      ),
+      okText: "Тийм",
+      cancelText: "Үгүй",
+      onOk: () => {
+        gereeniiZagvar.dedKhesguud.splice(key, 1);
+        let value = _.cloneDeep(gereeniiZagvar);
+        setGereeniiZagvar(value);
+      },
     });
   }
 
@@ -141,13 +165,17 @@ function ZakhialgaNemekh({ token }) {
                     dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                   />
                 )}
-                <div
-                  className="absolute hidden -top-2 -right-2 group-hover:block"
-                  onClick={() =>
-                    docZasya(`dedKhesguud.${index}.zaalt`, mur.zaalt)
-                  }
-                >
-                  <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                <div className="absolute hidden -top-2 -right-2 group-hover:flex flex-row space-x-2">
+                  <div
+                    onClick={() =>
+                      docZasya(`dedKhesguud.${index}.zaalt`, mur.zaalt)
+                    }
+                  >
+                    <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                  </div>
+                  <div onClick={() => docUstgaya(index, mur)}>
+                    <DeleteOutlined className="rounded-full p-1 fill-current bg-white border cursor-pointer hover:bg-red-400" />
+                  </div>
                 </div>
               </div>
             );
