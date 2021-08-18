@@ -30,6 +30,7 @@ const talbaruud = [
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
+  { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
   {
     ner: "Барьцаа байршуулах хугацаа",
