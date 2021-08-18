@@ -8,6 +8,7 @@ import _ from "lodash";
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
+  { ner: "Байгууллага нэр", talbar: "baiguullagiinNer" },
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
