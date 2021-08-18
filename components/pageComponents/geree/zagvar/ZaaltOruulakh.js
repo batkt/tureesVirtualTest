@@ -25,6 +25,15 @@ const talbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
+  { ner: "Лангууны дугаар", talbar: "languuniiDugaar" },
+  { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
+  { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
+  { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
+  { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
+  {
+    ner: "Барьцаа байршуулах хугацаа",
+    talbar: "baritsaaBairshuulakhKhugatsaa",
+  },
 ];
 
 export var customPlugin = (songokhTalbaruud = talbaruud) => ({
