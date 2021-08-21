@@ -487,11 +487,11 @@ function LanguuBurtgekh({ token }) {
                           {mur.utga}
                         </div>
                       </div>
-                      <div className="ml-auto">
+                      {/* <div className="ml-auto">
                         <div className="text-green-600 text-2xl">
                           {mur.icon}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
