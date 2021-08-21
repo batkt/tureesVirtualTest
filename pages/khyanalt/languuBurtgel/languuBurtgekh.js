@@ -9,6 +9,7 @@ import {
   Popconfirm,
   Card,
   InputNumber,
+  Divider,
 } from "antd"
 import {
   EditOutlined,
@@ -385,6 +386,7 @@ function LanguuBurtgekh({ token }) {
               ></Input>
             </Form.Item>
           </div>
+          <Divider>Хөрөнгийн бүртгэл</Divider>
           <div className="w-full">
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
