@@ -1,5 +1,5 @@
-import moment from "moment"
-import { useAuth } from "services/auth"
+import moment from "moment";
+import { useAuth } from "services/auth";
 import {
   FileDoneOutlined,
   UserOutlined,
@@ -7,55 +7,25 @@ import {
   FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined,
-} from "@ant-design/icons"
-import { Table, Form, Input, Tabs, Card, DatePicker } from "antd"
+} from "@ant-design/icons";
+import { Table, Card } from "antd";
 
-import Admin from "components/Admin"
+import Admin from "components/Admin";
 
-import shalgaltKhiikh from "services/shalgaltKhiikh"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
 
-import formatNumber from "tools/function/formatNumber"
-import { useState, useRef, useMemo, useEffect } from "react"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import { useRouter } from "next/router"
+import formatNumber from "tools/function/formatNumber";
+import { useMemo } from "react";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import { useRouter } from "next/router";
 //#region const
-
-const { TabPane } = Tabs
-const { RangePicker } = DatePicker
-
-const tuluvStyle = {
-  display: "flex",
-  fontSize: "0.8rem",
-  fontWeight: "bold",
-  justifyContent: "space-between",
-}
-const garalt = {
-  khuudasniiDugaar: 1,
-  khuudasniiKhemjee: 10,
-}
 
 //#endregion
 
 function ZakhialgiinKhyanalt() {
-  const { ajiltan, baiguullaga, token } = useAuth()
-  const { gereeniiMedeelel } = useGereeniiJagsaalt(token)
-  const router = useRouter()
-  //const [gereeJagsaalt, setGereeJagsaalt] = useState([])
-
-  // useEffect(() => {
-  //   gereeniiJagsaalt()
-  // }, [])
-
-  // function gereeniiJagsaalt() {
-  //   uilchilgee()
-  //     .get("/api/geree")
-  //     .then(({ data }) => {
-  //       console.log("data", data)
-  //       if (!!data) {
-  //         setGereeJagsaalt(data.rows)
-  //       }
-  //     })
-  // }
+  const { token } = useAuth();
+  const { gereeniiMedeelel } = useGereeniiJagsaalt(token);
+  const router = useRouter();
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -95,8 +65,8 @@ function ZakhialgiinKhyanalt() {
         khuvi: 100,
         utga: "Цуцласан",
       },
-    ]
-  }, [])
+    ];
+  }, []);
   const columns = useMemo(() => {
     var jagsaalt = [
       // {
@@ -136,7 +106,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "createdAt",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
+          return moment(data).format("YYYY-MM-DD");
         },
       },
       {
@@ -144,7 +114,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "turul",
         ellipsis: true,
         render: () => {
-          return "Иргэн"
+          return "Иргэн";
         },
       },
 
@@ -153,7 +123,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "khariltsagchiinUtas",
         ellipsis: true,
         render: () => {
-          return "50 м2"
+          return "50 м2";
         },
       },
       {
@@ -162,7 +132,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (talbainNegjUne) => {
-          return formatNumber(talbainNegjUne || 0)
+          return formatNumber(talbainNegjUne || 0);
         },
       },
       {
@@ -171,7 +141,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0)
+          return formatNumber(sariinTurees || 0);
         },
       },
       {
@@ -180,7 +150,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (baritsaaDun) => {
-          return formatNumber(baritsaaDun || 0)
+          return formatNumber(baritsaaDun || 0);
         },
       },
       {
@@ -188,7 +158,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "gereeniiOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
+          return moment(data).format("YYYY-MM-DD");
         },
       },
       {
@@ -196,7 +166,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "duusakhKhonog",
         ellipsis: true,
         render: () => {
-          return "30"
+          return "30";
         },
       },
       {
@@ -205,7 +175,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (avlagaDun) => {
-          return formatNumber(avlagaDun || 0)
+          return formatNumber(avlagaDun || 0);
         },
       },
       {
@@ -218,7 +188,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
+          return moment(data).format("YYYY-MM-DD");
         },
       },
 
@@ -271,13 +241,13 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "burtgesenAjiltaniiNer",
         ellipsis: true,
         render: () => {
-          return "Админ"
+          return "Админ";
         },
       },
-    ]
+    ];
 
-    return jagsaalt
-  }, [])
+    return jagsaalt;
+  }, []);
 
   return (
     <Admin
@@ -314,7 +284,7 @@ function ZakhialgiinKhyanalt() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -344,9 +314,9 @@ function ZakhialgiinKhyanalt() {
         </div>
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default ZakhialgiinKhyanalt
+export default ZakhialgiinKhyanalt;

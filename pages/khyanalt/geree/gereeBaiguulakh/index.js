@@ -1,6 +1,5 @@
 import React from "react";
 import Admin from "components/Admin";
-import uilchilgee from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
 import { message, Select, Steps } from "antd";
@@ -57,10 +56,8 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
-    console.log("data", khadgalakhGeree);
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
-      console.log(data);
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 

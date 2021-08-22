@@ -16,8 +16,6 @@ const Tulbur = ({ value, onChange, next, prev }) => {
     next({ ...value, ...values });
   };
 
-  console.log("value", value);
-
   return (
     <Form
       name="validate_other"

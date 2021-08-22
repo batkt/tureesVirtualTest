@@ -25,7 +25,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   };
 
   const onValuesChange = (values, v) => {
-    console.log(values);
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
       value.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
         value.khugatsaa,
