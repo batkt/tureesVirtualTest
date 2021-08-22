@@ -10,11 +10,13 @@ const formItemLayout = {
   },
 };
 
-const Demo = ({ value, onChange, next, prev }) => {
+const Tulbur = ({ value, onChange, next, prev }) => {
   const onFinish = (values) => {
     onChange({ ...value, ...values });
     next({ ...value, ...values });
   };
+
+  console.log("value", value);
 
   return (
     <Form
@@ -27,6 +29,23 @@ const Demo = ({ value, onChange, next, prev }) => {
       <Form.Item label="Түрээсийн төлбөр">
         {formatNumber(value.sariinTurees)}₮
       </Form.Item>
+      <Form.Item label="Барьцаа төлбөр">
+        {`${formatNumber(value.baritsaaAvakhDun)}₮ x ${
+          value.baritsaaAvakhKhugatsaa
+        } сар = ${formatNumber(
+          value.baritsaaAvakhDun * value.baritsaaAvakhKhugatsaa
+        )}₮`}
+      </Form.Item>
+      <Form.Item name="buunTulult" label="Бөөн төлөлт">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          placeholder="Бөөн төлөлт"
+        />
+      </Form.Item>
       <Form.Item name="khungulukhKhugatsaa" label="Хөнгөлөх хугацаа">
         <InputNumber
           style={{ width: "100%" }}
@@ -37,14 +56,14 @@ const Demo = ({ value, onChange, next, prev }) => {
           placeholder="Хөнгөлөх хугацаа"
         />
       </Form.Item>
-      <Form.Item name="buunTulult" label="Бөөн төлөлт">
+      <Form.Item name="khyamdaral" label="Хямдрал">
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          placeholder="Бөөн төлөлт"
+          placeholder="Хямдрал"
         />
       </Form.Item>
       <Form.Item name="uramshuulal" label="Урамшуулал">
@@ -59,21 +78,32 @@ const Demo = ({ value, onChange, next, prev }) => {
       </Form.Item>
       <div className="p-2 bg-white rounded-md divide-y-2 divide-dashed">
         <Form.Item label="Нийт дүн" className="text-lg">
-          {formatNumber(value.sariinTurees)}₮
+          {formatNumber(
+            (value.sariinTurees || 0) * (value.buunTulult || 0) +
+              (value.baritsaaAvakhDun || 0) *
+                (value.baritsaaAvakhKhugatsaa || 0)
+          )}
+          ₮
         </Form.Item>
         <Form.Item label="ХӨНГӨЛӨЛТ" className="text-lg">
-          {formatNumber(value.sariinTurees)}₮
+          {formatNumber(
+            (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0)
+          )}
+          ₮
         </Form.Item>
         <Form.Item label="ХАСАГДСАН ДҮН" className="text-lg">
-          {formatNumber(value.sariinTurees)}₮
+          {formatNumber(value.khyamdaral)}₮
         </Form.Item>
         <Form.Item label="НӨАТ" className="text-lg">
-          {formatNumber(value.sariinTurees)}₮
+          {formatNumber(0)}₮
         </Form.Item>
         <Form.Item label="ТӨЛБӨЛ ЗОХИХ" className="text-lg">
           {formatNumber(
-            value.sariinTurees +
-              value.sariinTurees * value.baritsaaAvakhKhugatsaa
+            (value.sariinTurees || 0) * (value.buunTulult || 0) +
+              (value.baritsaaAvakhDun || 0) *
+                (value.baritsaaAvakhKhugatsaa || 0) -
+              (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0) -
+              (value.khyamdaral || 0)
           )}
           ₮
         </Form.Item>
@@ -90,4 +120,4 @@ const Demo = ({ value, onChange, next, prev }) => {
   );
 };
 
-export default Demo;
+export default Tulbur;

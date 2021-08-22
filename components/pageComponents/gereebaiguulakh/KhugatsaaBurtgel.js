@@ -9,10 +9,10 @@ import moment from "moment";
 
 const formItemLayout = {
   labelCol: {
-    span: 16,
+    span: 6,
   },
   wrapperCol: {
-    span: 8,
+    span: 14,
   },
 };
 
@@ -70,14 +70,21 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           placeholder="Гэрээний хугацаа"
         />
       </Form.Item>
-      <Form.Item label="Төлөлт хийх огноо сар бүрийн / өдөр">
+      <Form.Item
+        label="Төлөлт хийх өдөр"
+        extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+      >
         <Input
           allowClear
           placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item name="duusakhOgnoo" label="Гэрээ дуусах хугацаа">
+      <Form.Item
+        name="duusakhOgnoo"
+        label="Гэрээ дуусах хугацаа"
+        extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+      >
         <DatePicker
           style={{ width: "100%" }}
           allowClear
@@ -85,14 +92,20 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item label="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа">
+      <Form.Item
+        label="Хэтрэлт тооцох"
+        extra="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
+      >
         <Input
           allowClear
           placeholder="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item label="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө">
+      <Form.Item
+        label="Төлөлт сануулах"
+        extra="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"
+      >
         <Input
           allowClear
           placeholder="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"

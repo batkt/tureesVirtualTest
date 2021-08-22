@@ -5,12 +5,13 @@ import useLanguu from "hooks/useLanguu";
 
 const formItemLayout = {
   labelCol: {
-    span: 16,
+    span: 6,
   },
   wrapperCol: {
-    span: 8,
+    span: 14,
   },
 };
+
 const YurunkhiiMedeele = ({
   token,
   baiguullaga,
@@ -26,8 +27,6 @@ const YurunkhiiMedeele = ({
   );
 
   const onFinish = (values) => {
-    values.baritsaaAvakhDun = values.talbainNiitUne;
-    values.sariinTurees = values.talbainNiitUne;
     onChange({ ...value, ...values });
     next();
   };
@@ -35,6 +34,8 @@ const YurunkhiiMedeele = ({
   const onChangeLanguu = (v) => {
     var languu = languuniiGaralt.jagsaalt.find((a) => a._id === v);
     languu.languuniiDugaar = languu.kod;
+    languu.baritsaaAvakhDun = languu.talbainNiitUne;
+    languu.sariinTurees = languu.talbainNiitUne;
     form.setFieldsValue(languu);
     onChange({ ...value, ...languu });
   };

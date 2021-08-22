@@ -4,10 +4,10 @@ import React from "react";
 
 const formItemLayout = {
   labelCol: {
-    span: 16,
+    span: 6,
   },
   wrapperCol: {
-    span: 8,
+    span: 14,
   },
 };
 
@@ -43,7 +43,8 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       </Form.Item>
       <Form.Item
         name="baritsaaBairshuulakhKhugatsaa"
-        label="Барьцаа байршуулалтын хугацаа"
+        label="Хугацаа"
+        extra="Барьцаа байршуулалтын хугацаа"
       >
         <InputNumber
           style={{ width: "100%" }}
