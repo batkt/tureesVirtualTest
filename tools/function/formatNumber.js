@@ -8,8 +8,9 @@ function formatNumber(num, fixed = 0) {
   var firstFormatNum = numSplit[0]
     .toString()
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  if (isNaN(firstFormatNum)) return 0;
   if (fixed === 0) return firstFormatNum;
   return firstFormatNum + "." + numSplit[1];
 }
 
-export default formatNumber
+export default formatNumber;

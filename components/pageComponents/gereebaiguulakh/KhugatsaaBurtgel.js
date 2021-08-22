@@ -6,12 +6,13 @@ import {
 } from "@ant-design/icons";
 import React from "react";
 import moment from "moment";
+
 const formItemLayout = {
   labelCol: {
-    span: 0,
+    span: 16,
   },
   wrapperCol: {
-    span: 24,
+    span: 8,
   },
 };
 
@@ -51,7 +52,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       onValuesChange={onValuesChange}
       onFinish={onFinish}
     >
-      <Form.Item name="gereeniiOgnoo">
+      <Form.Item name="gereeniiOgnoo" label="Гэрээ хийх огноо">
         <DatePicker
           style={{ width: "100%" }}
           allowClear
@@ -59,7 +60,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item name="khugatsaa">
+      <Form.Item name="khugatsaa" label="Гэрээний хугацаа">
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
@@ -69,24 +70,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           placeholder="Гэрээний хугацаа"
         />
       </Form.Item>
-      <Form.Item name="khungulukhKhugatsaa">
-        <InputNumber
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          placeholder="Хөнгөлөх хугацаа"
-        />
-      </Form.Item>
-      <Form.Item>
+      <Form.Item label="Төлөлт хийх огноо сар бүрийн / өдөр">
         <Input
           allowClear
           placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item name="duusakhOgnoo">
+      <Form.Item name="duusakhOgnoo" label="Гэрээ дуусах хугацаа">
         <DatePicker
           style={{ width: "100%" }}
           allowClear
@@ -94,14 +85,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа">
         <Input
           allowClear
           placeholder="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item>
+      <Form.Item label="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө">
         <Input
           allowClear
           placeholder="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"

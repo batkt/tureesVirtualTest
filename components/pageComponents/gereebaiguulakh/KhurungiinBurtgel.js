@@ -5,10 +5,10 @@ import useLanguu from "hooks/useLanguu";
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 16,
   },
   wrapperCol: {
-    span: 14,
+    span: 8,
   },
 };
 const YurunkhiiMedeele = ({

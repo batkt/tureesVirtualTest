@@ -60,6 +60,8 @@ function GereeBaiguulakh({ token }) {
     console.log("data", khadgalakhGeree);
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
+      console.log(data);
+      /*
       createMethod("geree", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
@@ -67,6 +69,7 @@ function GereeBaiguulakh({ token }) {
           message.success("Амжилттай хадгаллаа");
         }
       });
+      */
     }
   };
 

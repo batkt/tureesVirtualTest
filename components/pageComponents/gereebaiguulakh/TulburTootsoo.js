@@ -1,9 +1,9 @@
-import { Form, Button } from "antd";
+import { Form, Button, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import formatNumber from "tools/function/formatNumber";
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 8,
   },
   wrapperCol: {
     span: 14,
@@ -22,22 +22,61 @@ const Demo = ({ value, onChange, next, prev }) => {
       {...formItemLayout}
       initialValues={value}
       onFinish={onFinish}
+      onValuesChange={(values) => onChange({ ...value, ...values })}
     >
-      <div className="p-2 bg-white rounded-md space-y-3 text-lg divide-y-2 divide-dashed">
-        <div>Сарын түрээс {formatNumber(value.sariinTurees)}₮</div>
-        <div>
-          Барьцаа төлбөр {formatNumber(value.sariinTurees)}₮ x{" "}
-          {value.baritsaaAvakhKhugatsaa} сар ={" "}
-          {formatNumber(value.sariinTurees * value.baritsaaAvakhKhugatsaa)}₮
-        </div>
-        <div>
-          Нийт төлөх дүн{" "}
+      <Form.Item label="Түрээсийн төлбөр">
+        {formatNumber(value.sariinTurees)}₮
+      </Form.Item>
+      <Form.Item name="khungulukhKhugatsaa" label="Хөнгөлөх хугацаа">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          placeholder="Хөнгөлөх хугацаа"
+        />
+      </Form.Item>
+      <Form.Item name="buunTulult" label="Бөөн төлөлт">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          placeholder="Бөөн төлөлт"
+        />
+      </Form.Item>
+      <Form.Item name="uramshuulal" label="Урамшуулал">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          placeholder="Урамшуулал"
+        />
+      </Form.Item>
+      <div className="p-2 bg-white rounded-md divide-y-2 divide-dashed">
+        <Form.Item label="Нийт дүн" className="text-lg">
+          {formatNumber(value.sariinTurees)}₮
+        </Form.Item>
+        <Form.Item label="ХӨНГӨЛӨЛТ" className="text-lg">
+          {formatNumber(value.sariinTurees)}₮
+        </Form.Item>
+        <Form.Item label="ХАСАГДСАН ДҮН" className="text-lg">
+          {formatNumber(value.sariinTurees)}₮
+        </Form.Item>
+        <Form.Item label="НӨАТ" className="text-lg">
+          {formatNumber(value.sariinTurees)}₮
+        </Form.Item>
+        <Form.Item label="ТӨЛБӨЛ ЗОХИХ" className="text-lg">
           {formatNumber(
             value.sariinTurees +
               value.sariinTurees * value.baritsaaAvakhKhugatsaa
           )}
           ₮
-        </div>
+        </Form.Item>
       </div>
       <Form.Item noStyle className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">

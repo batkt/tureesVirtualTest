@@ -1,64 +1,17 @@
-import { Form, Select, Input, Switch, Button, Upload, InputNumber } from "antd";
-import {
-  UploadOutlined,
-  InboxOutlined,
-  SolutionOutlined,
-  ArrowRightOutlined,
-  ArrowLeftOutlined,
-  DollarCircleOutlined,
-} from "@ant-design/icons";
+import { Form, Select, Button, InputNumber } from "antd";
+import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 16,
   },
   wrapperCol: {
-    span: 14,
+    span: 8,
   },
 };
 
-const normFile = (e) => {
-  console.log("Upload event:", e);
-
-  if (Array.isArray(e)) {
-    return e;
-  }
-
-  return e && e.fileList;
-};
-
-// ААН	Байгууллага нэр
-// 	    Регистр
-// 	    Албан тушаал
-// 	    Овог
-// 	    Нэр
-// 	    Утас	Гар утас
-// 		Байгууллага
-// 	    Хаяг
-// 	    Гэрчилгээний хуулбар
-// Иргэн	Овог
-// 	        Нэр
-// 	        Регистр
-// 	        Гар утас
-// 	        Хаяг
-// 	        Зөвшөөрлийн бичгийн хуулбар
-// 	        Иргэний үнэмлэхний хуулбар
-/*
-baiguullagiinNer
-register
-ovog 
-ner
-utas1 utas2
-baiguullaga
-khayag
-gerchilgeeniiKhuulbar
-zuvshuurliinBichgiinKhuulbar
-irgeniiUnemlekhiinKhuulbar
-*/
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
-  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
-
   const onFinish = (values) => {
     onChange({ ...value, ...values });
     next();
