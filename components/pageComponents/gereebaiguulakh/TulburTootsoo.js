@@ -27,14 +27,18 @@ const Tulbur = ({ value, onChange, next, prev }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <Form.Item label="Түрээсийн төлбөр">
-        {formatNumber(value.sariinTurees)}₮
+        <div className="text-lg font-medium">
+          {formatNumber(value.sariinTurees)}
+        </div>
       </Form.Item>
       <Form.Item label="Барьцаа төлбөр">
-        {`${formatNumber(value.baritsaaAvakhDun)}₮ x ${
-          value.baritsaaAvakhKhugatsaa
-        } сар = ${formatNumber(
-          value.baritsaaAvakhDun * value.baritsaaAvakhKhugatsaa
-        )}₮`}
+        <div className="text-lg font-medium">
+          {`${formatNumber(value.baritsaaAvakhDun)} x ${
+            value.baritsaaAvakhKhugatsaa
+          } сар = ${formatNumber(
+            value.baritsaaAvakhDun * value.baritsaaAvakhKhugatsaa
+          )}`}
+        </div>
       </Form.Item>
       <Form.Item name="buunTulult" label="Бөөн төлөлт">
         <InputNumber
@@ -77,35 +81,42 @@ const Tulbur = ({ value, onChange, next, prev }) => {
         />
       </Form.Item>
       <div className="p-2 bg-white rounded-md divide-y-2 divide-dashed">
-        <Form.Item label="Нийт дүн" className="text-lg">
-          {formatNumber(
-            (value.sariinTurees || 0) * (value.buunTulult || 0) +
-              (value.baritsaaAvakhDun || 0) *
-                (value.baritsaaAvakhKhugatsaa || 0)
-          )}
-          ₮
+        <Form.Item label="Нийт дүн">
+          <div className="text-lg font-medium">
+            {formatNumber(
+              (value.sariinTurees || 0) * (value.buunTulult || 0) +
+                (value.baritsaaAvakhDun || 0) *
+                  (value.baritsaaAvakhKhugatsaa || 0)
+            )}
+          </div>
         </Form.Item>
-        <Form.Item label="ХӨНГӨЛӨЛТ" className="text-lg">
-          {formatNumber(
-            (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0)
-          )}
-          ₮
+        <Form.Item label="ХӨНГӨЛӨЛТ">
+          <div className="text-lg font-medium text-red-500">
+            -
+            {formatNumber(
+              (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0)
+            )}
+          </div>
         </Form.Item>
-        <Form.Item label="ХАСАГДСАН ДҮН" className="text-lg">
-          {formatNumber(value.khyamdaral)}₮
+        <Form.Item label="ХАСАГДСАН ДҮН">
+          <div className="text-lg font-medium text-red-500">
+            -{formatNumber(value.khyamdaral)}
+          </div>
         </Form.Item>
-        <Form.Item label="НӨАТ" className="text-lg">
-          {formatNumber(0)}₮
+        <Form.Item label="НӨАТ">
+          <div className="text-lg font-medium">{formatNumber(0)}</div>
         </Form.Item>
-        <Form.Item label="ТӨЛБӨЛ ЗОХИХ" className="text-lg">
-          {formatNumber(
-            (value.sariinTurees || 0) * (value.buunTulult || 0) +
-              (value.baritsaaAvakhDun || 0) *
-                (value.baritsaaAvakhKhugatsaa || 0) -
-              (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0) -
-              (value.khyamdaral || 0)
-          )}
-          ₮
+        <Form.Item label="ТӨЛБӨЛ ЗОХИХ">
+          <div className="text-lg font-medium">
+            {formatNumber(
+              (value.sariinTurees || 0) * (value.buunTulult || 0) +
+                (value.baritsaaAvakhDun || 0) *
+                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0) -
+                (value.khyamdaral || 0)
+            )}
+            ₮
+          </div>
         </Form.Item>
       </div>
       <Form.Item noStyle className="w-full flex flex-row justify-between">

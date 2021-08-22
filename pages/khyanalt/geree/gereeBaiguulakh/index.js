@@ -61,7 +61,18 @@ function GereeBaiguulakh({ token }) {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
       console.log(data);
-      /*
+      if (!!data?.unemlekhniiZurag)
+        data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
+
+      if (!!data?.gerchilgeeniiZurag)
+        data.gerchilgeeniiZurag = _.get(
+          data,
+          "gerchilgeeniiZurag.0.response.id"
+        );
+
+      if (!!data?.zuvshuurliinZurag)
+        data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
+
       createMethod("geree", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
@@ -69,7 +80,6 @@ function GereeBaiguulakh({ token }) {
           message.success("Амжилттай хадгаллаа");
         }
       });
-      */
     }
   };
 
