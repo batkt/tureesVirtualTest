@@ -8,6 +8,7 @@ import {
   PhoneOutlined,
 } from "@ant-design/icons";
 import React from "react";
+import { url } from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
@@ -26,7 +27,7 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const YurunkhiiMedeele = ({ next, onChange, value }) => {
+const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
@@ -144,7 +145,14 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
         getValueFromEvent={normFile}
         extra="Гэрчилгээний хуулбар"
       >
-        <Upload name="logo" action="/upload.do" listType="picture">
+        <Upload
+          multiple={false}
+          name="file"
+          action={`${url}/zuragKhadgalya`}
+          method="POST"
+          data={{ turul: "gerchilgeeniiZurag" }}
+          headers={{ Authorization: `bearer ${token}` }}
+        >
           <Button icon={<UploadOutlined />}>Файл сонгох</Button>
         </Upload>
       </Form.Item>
@@ -154,9 +162,15 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
           valuePropName="fileList"
           getValueFromEvent={normFile}
           extra="Зөвшөөрлийн бичгийн хуулбар"
-          className="md:w-1/2"
         >
-          <Upload name="logo" action="/upload.do" listType="picture">
+          <Upload
+            multiple={false}
+            name="file"
+            action={`${url}/zuragKhadgalya`}
+            method="POST"
+            data={{ turul: "zuvshuurliinZurag" }}
+            headers={{ Authorization: `bearer ${token}` }}
+          >
             <Button icon={<UploadOutlined />}>Файл сонгох</Button>
           </Upload>
         </Form.Item>
@@ -166,7 +180,14 @@ const YurunkhiiMedeele = ({ next, onChange, value }) => {
           getValueFromEvent={normFile}
           extra="Иргэний үнэмлэхний хуулбар"
         >
-          <Upload name="logo" action="/upload.do" listType="picture">
+          <Upload
+            multiple={false}
+            name="file"
+            action={`${url}/zuragKhadgalya`}
+            method="POST"
+            data={{ turul: "unemlekhniiZurag" }}
+            headers={{ Authorization: `bearer ${token}` }}
+          >
             <Button icon={<UploadOutlined />}>Файл сонгох</Button>
           </Upload>
         </Form.Item>
