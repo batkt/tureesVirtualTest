@@ -57,6 +57,7 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
+    console.log("data", khadgalakhGeree);
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
       createMethod("geree", token, data).then(({ data }) => {
