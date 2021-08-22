@@ -9,35 +9,38 @@ import {
   Popconfirm,
   Card,
   InputNumber,
-} from "antd";
+  Divider,
+} from "antd"
 import {
   EditOutlined,
   DeleteOutlined,
   FileExcelOutlined,
-} from "@ant-design/icons";
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
+  PlusOutlined,
+  MinusCircleOutlined,
+} from "@ant-design/icons"
+import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin";
-import { aldaaBarigch, url } from "../../../services/uilchilgee";
-import { useAuth } from "../../../services/auth";
-import React, { useState, useRef, useMemo } from "react";
-import { useLanguu } from "hooks/useLanguu";
-import deleteMethod from "tools/function/crud/deleteMethod";
-import createMethod from "tools/function/crud/createMethod";
-import updateMethod from "tools/function/crud/updateMethod";
-import formatNumber from "tools/function/formatNumber";
-import { modal } from "components/ant/Modal";
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
+import Admin from "../../../components/Admin"
+import { aldaaBarigch, url } from "../../../services/uilchilgee"
+import { useAuth } from "../../../services/auth"
+import React, { useState, useRef, useMemo } from "react"
+import { useLanguu } from "hooks/useLanguu"
+import deleteMethod from "tools/function/crud/deleteMethod"
+import createMethod from "tools/function/crud/createMethod"
+import updateMethod from "tools/function/crud/updateMethod"
+import formatNumber from "tools/function/formatNumber"
+import { modal } from "components/ant/Modal"
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 
 function LanguuBurtgekh({ token }) {
-  const formRef = useRef();
-  const zurag = useRef();
-  const empty = useRef();
-  const excelref = useRef();
+  const formRef = useRef()
+  const zurag = useRef()
+  const empty = useRef()
+  const excelref = useRef()
 
-  const { ajiltan, baiguullaga } = useAuth();
+  const { ajiltan, baiguullaga } = useAuth()
   const { languuniiGaralt, setLanguuKhuudaslalt, languuniiJagsaaltMutate } =
-    useLanguu(token, baiguullaga?._id);
+    useLanguu(token, baiguullaga?._id)
 
   const [languuState, setLanguuState] = useState({
     kod: undefined,
@@ -46,7 +49,7 @@ function LanguuBurtgekh({ token }) {
     talbainNegjUne: undefined,
     talbainNiitUne: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
-  });
+  })
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -186,77 +189,85 @@ function LanguuBurtgekh({ token }) {
         khuvi: 100,
         utga: "Засвартай",
       },
-    ];
-  }, []);
+    ]
+  }, [])
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      languuState.talbainNiitUne = utga * languuState.talbainKhemjee;
+      languuState.talbainNiitUne = utga * languuState.talbainKhemjee
       formRef.current.setFieldsValue({
         talbainNiitUne: languuState.talbainNiitUne,
-      });
+      })
     }
-    setLanguuState((a) => ({ ...a, [talbar]: utga }));
+    if (talbar === "khurunguUne") {
+      languuState.talbainNiitUne = utga * languuState.talbainKhemjee
+      formRef.current.setFieldsValue({})
+    }
+    setLanguuState((a) => ({ ...a, [talbar]: utga }))
   }
   function languuBurtgekh() {
-    languuState.baiguullagiinId = ajiltan?.baiguullagiinId;
+    debugger
+    const khurunguud = formRef.current.getFieldsValue(khurunguud)
+    languuState.baiguullagiinId = ajiltan?.baiguullagiinId
+    languuState.khurunguud = khurunguud.khurunguud
 
     if (languuState.zasakhEsekh === true) {
       updateMethod("languu", token, languuState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай засагдлаа");
-            formRef.current.resetFields();
+            message.success("Бүртгэл амжилттай засагдлаа")
+            formRef.current.resetFields()
             languuniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            );
+            )
           }
         })
-        .catch(aldaaBarigch);
+        .catch(aldaaBarigch)
     } else
       createMethod("languu", token, languuState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай хийгдлээ");
-            formRef.current.resetFields();
+            message.success("Бүртгэл амжилттай хийгдлээ")
+            formRef.current.resetFields()
             languuniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            );
+            )
           }
         })
-        .catch(aldaaBarigch);
+        .catch(aldaaBarigch)
   }
 
   function zasya(data) {
-    data.zasakhEsekh = true;
+    data.zasakhEsekh = true
     if (!!data.zurgiinNer) {
-      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`;
-      zurag.current.classList.remove("hidden");
-      empty.current.classList.add("hidden");
+      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`
+      zurag.current.classList.remove("hidden")
+      empty.current.classList.add("hidden")
     }
-    formRef.current.setFieldsValue({ ...data });
-    setLanguuState(data);
+    formRef.current.setFieldsValue({ ...data })
+    setLanguuState(data)
   }
 
   function languuUstgay(mur) {
     deleteMethod("languu", token, mur._id).then(({ data }) => {
       if (data === "Amjilttai") {
-        languuniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        message.success("Устгагдлаа");
+        languuniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+        message.success("Устгагдлаа")
       }
-    });
+    })
   }
 
   function onFinish() {
-    languuBurtgekh();
+    languuBurtgekh()
   }
+  const [form] = Form.useForm()
 
   function languuOruulakhExcel() {
     const footer = [
       <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
-    ];
+    ]
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -272,7 +283,7 @@ function LanguuBurtgekh({ token }) {
         />
       ),
       footer,
-    });
+    })
   }
 
   return (
@@ -281,7 +292,185 @@ function LanguuBurtgekh({ token }) {
       khuudasniiNer="languuBurtgekh"
       className="p-0 md:p-4"
     >
-      <Card size="small" className="col-span-12 p-5 cardgrid">
+      <div className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5">
+        <Form
+          ref={formRef}
+          form={form}
+          name="control-ref"
+          onFinish={onFinish}
+          initialValues={{ remember: true }}
+        >
+          <div>
+            <Form.Item
+              name="kod"
+              rules={[
+                {
+                  required: true,
+                  message: "Дугаар бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                allowClear
+                placeholder="дугаар"
+                value={languuState.kod}
+                onChange={(e) => onChange("kod", e.target.value)}
+              ></Input>
+            </Form.Item>
+            <Form.Item
+              name="talbainKhemjee"
+              rules={[
+                {
+                  required: true,
+                  message: "Талбайн хэмжээ бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                allowClear
+                placeholder="талбайн хэмжээ/м2/"
+                value={languuState.talbainKhemjee}
+                onChange={(e) => onChange("talbainKhemjee", e.target.value)}
+              ></Input>
+            </Form.Item>
+            <Form.Item
+              name="talbainNegjUne"
+              rules={[
+                {
+                  required: true,
+                  message: "Нэгж үнэ бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "50%" }}
+                placeholder="нэгж үнэ"
+                value={languuState.talbainNegjUne}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                onChange={(target) => onChange("talbainNegjUne", target)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="talbainNiitUne"
+              rules={[
+                {
+                  required: true,
+                  message: "Нийт үнэ бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                readOnly={true}
+                style={{ width: "50%" }}
+                placeholder="нийт үнэ"
+                value={languuState.talbainNiitUne}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                onChange={(target) => onChange("talbainNiitUne", target)}
+              />
+            </Form.Item>
+
+            <Form.Item name="tailbar">
+              <Input
+                allowClear
+                placeholder="тайлбар"
+                value={languuState.tailbar}
+                onChange={(e) => onChange("tailbar", e.target.value)}
+              ></Input>
+            </Form.Item>
+          </div>
+          <Divider>Хөрөнгийн бүртгэл</Divider>
+          <div className="w-full">
+            <Form.List name="khurunguud">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <Space
+                      key={key}
+                      style={{ display: "flex", marginBottom: 8 }}
+                      align="baseline"
+                    >
+                      <Form.Item
+                        {...restField}
+                        name={[name, "ner"]}
+                        fieldKey={[fieldKey, "ner"]}
+                        rules={[{ required: true, message: "Нэр бүртгэнэ үү" }]}
+                      >
+                        <Input placeholder="нэр" />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "too"]}
+                        fieldKey={[fieldKey, "too"]}
+                        rules={[
+                          {
+                            required: false,
+                            message: "Тоо ширхэг бүртгэнэ үү",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="Тоо" />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "une"]}
+                        fieldKey={[fieldKey, "une"]}
+                        rules={[
+                          { required: false, message: "Үнэ бүртгэнэ үү" },
+                        ]}
+                      >
+                        <Input
+                          placeholder="Нэгж үнэ"
+                          onChange={(e) => onChange(fieldKey, e.target.value)}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "niitUne"]}
+                        fieldKey={[fieldKey, "niitUne"]}
+                        rules={[
+                          { required: false, message: "Нийт бүртгэнэ үү" },
+                        ]}
+                      >
+                        <Input placeholder="Нийт үнэ" />
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(name)} />
+                    </Space>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Хөрөнгө бүртгэх
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </div>
+
+          <Form.Item>
+            <Button
+              htmlType="submit"
+              //onClick={ajiltanBurtgekh}
+              style={{ backgroundColor: "#209669", color: "#ffffff" }}
+            >
+              хадгалах
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+      <Card size="small" className="col-span-8 p-5 cardgrid">
         <div className="w-full border-solid grid grid-cols-12 gap-6">
           {khyanaltiinDun.map((mur, index) => {
             return (
@@ -300,150 +489,53 @@ function LanguuBurtgekh({ token }) {
                           {mur.utga}
                         </div>
                       </div>
-                      <div className="ml-auto">
+                      {/* <div className="ml-auto">
                         <div className="text-green-600 text-2xl">
                           {mur.icon}
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
-      </Card>
-      <div className="col-span-12 w-full">
-        <button
-          className="dropdown-toggle btn px-2 box text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 w-full md:w-auto mt-4 md:mt-0 ml-auto"
-          aria-expanded="false"
-          onClick={languuOruulakhExcel}
-        >
-          <span className="w-5 h-5 flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-plus w-4 h-4"
-            >
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-          </span>
-          <span>Excel -ээс Лангуу татах</span>
-        </button>
-      </div>
-      <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        <Form
-          ref={formRef}
-          name="control-ref"
-          onFinish={onFinish}
-          initialValues={{ remember: true }}
-        >
-          <Form.Item
-            name="kod"
-            rules={[
-              {
-                required: true,
-                message: "Дугаар бүртгэнэ үү!",
-              },
-            ]}
+        <div className="col-span-12 w-full">
+          <button
+            style={{
+              backgroundColor: "#209669",
+              marginTop: "12px",
+              display: "flex",
+              justifyContent: "end",
+            }}
+            className="dropdown-toggle btn px-2 box bg-green-500 text-white  focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 w-full md:w-auto mt-8 md:mt-0 ml-auto"
+            aria-expanded="false"
+            onClick={languuOruulakhExcel}
           >
-            <Input
-              type="text"
-              allowClear
-              placeholder="дугаар"
-              value={languuState.kod}
-              onChange={(e) => onChange("kod", e.target.value)}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="talbainKhemjee"
-            rules={[
-              {
-                required: true,
-                message: "Талбайн хэмжээ бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              type="text"
-              allowClear
-              placeholder="талбайн хэмжээ/м2/"
-              value={languuState.talbainKhemjee}
-              onChange={(e) => onChange("talbainKhemjee", e.target.value)}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="talbainNegjUne"
-            rules={[
-              {
-                required: true,
-                message: "Нэгж үнэ бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <InputNumber
-              style={{ width: "50%" }}
-              placeholder="нэгж үнэ"
-              value={languuState.talbainNegjUne}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              onChange={(target) => onChange("talbainNegjUne", target)}
-            />
-          </Form.Item>
-          <Form.Item
-            name="talbainNiitUne"
-            rules={[
-              {
-                required: true,
-                message: "Нийт үнэ бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <InputNumber
-              readOnly={true}
-              style={{ width: "50%" }}
-              placeholder="нийт үнэ"
-              value={languuState.talbainNiitUne}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              onChange={(target) => onChange("talbainNiitUne", target)}
-            />
-          </Form.Item>
+            <span className="w-5 h-5 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-plus w-4 h-4"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </span>
+            <span>Excel -ээс Лангуу татах</span>
+          </button>
+        </div>
 
-          <Form.Item name="tailbar">
-            <Input
-              allowClear
-              placeholder="тайлбар"
-              value={languuState.tailbar}
-              onChange={(e) => onChange("tailbar", e.target.value)}
-            ></Input>
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              htmlType="submit"
-              //onClick={ajiltanBurtgekh}
-              style={{ backgroundColor: "#209669", color: "#ffffff" }}
-            >
-              хадгалах
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
-      <div className="col-span-12 md:col-span-6 xl:col-span-9 box p-5 overflow-auto">
         <Table
+          className={"mt-6"}
           bordered
           tableLayout={languuniiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
           rowKey={(row) => row._id}
@@ -486,7 +578,7 @@ function LanguuBurtgekh({ token }) {
               ellipsis: true,
               align: "center",
               render: (talbainNegjUne) => {
-                return formatNumber(talbainNegjUne || 0);
+                return formatNumber(talbainNegjUne || 0)
               },
             },
             {
@@ -495,7 +587,7 @@ function LanguuBurtgekh({ token }) {
               ellipsis: true,
               align: "center",
               render: (talbainNiitUne) => {
-                return formatNumber(talbainNiitUne || 0);
+                return formatNumber(talbainNiitUne || 0)
               },
             },
             { title: "Тайлбар", dataIndex: "tailbar", ellipsis: true },
@@ -528,11 +620,11 @@ function LanguuBurtgekh({ token }) {
             },
           ]}
         />
-      </div>
+      </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default LanguuBurtgekh;
+export default LanguuBurtgekh
