@@ -2,7 +2,7 @@ import {
   Button,
   Input,
   message,
-  Select,
+  Popover,
   Table,
   Space,
   Form,
@@ -10,6 +10,9 @@ import {
   Card,
   InputNumber,
   Divider,
+  Upload,
+  Row,
+  Col,
 } from "antd"
 import {
   EditOutlined,
@@ -17,6 +20,8 @@ import {
   FileExcelOutlined,
   PlusOutlined,
   MinusCircleOutlined,
+  EyeOutlined,
+  UploadOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
@@ -31,6 +36,14 @@ import updateMethod from "tools/function/crud/updateMethod"
 import formatNumber from "tools/function/formatNumber"
 import { modal } from "components/ant/Modal"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
+
+const normFile = (e) => {
+  if (Array.isArray(e)) {
+    return e
+  }
+
+  return e && e.fileList
+}
 
 function LanguuBurtgekh({ token }) {
   const formRef = useRef()
@@ -210,7 +223,9 @@ function LanguuBurtgekh({ token }) {
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     languuState.baiguullagiinId = ajiltan?.baiguullagiinId
     languuState.khurunguud = khurunguud.khurunguud
-
+    languuState.khurunguud.map(
+      (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
+    )
     if (languuState.zasakhEsekh === true) {
       updateMethod("languu", token, languuState)
         .then(({ data }) => {
@@ -241,11 +256,6 @@ function LanguuBurtgekh({ token }) {
 
   function zasya(data) {
     data.zasakhEsekh = true
-    if (!!data.zurgiinNer) {
-      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`
-      zurag.current.classList.remove("hidden")
-      empty.current.classList.add("hidden")
-    }
     formRef.current.setFieldsValue({ ...data })
     setLanguuState(data)
   }
@@ -397,53 +407,97 @@ function LanguuBurtgekh({ token }) {
                       style={{ display: "flex", marginBottom: 8 }}
                       align="baseline"
                     >
-                      <Form.Item
-                        {...restField}
-                        name={[name, "ner"]}
-                        fieldKey={[fieldKey, "ner"]}
-                        rules={[{ required: true, message: "Нэр бүртгэнэ үү" }]}
-                      >
-                        <Input placeholder="нэр" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "too"]}
-                        fieldKey={[fieldKey, "too"]}
-                        rules={[
-                          {
-                            required: false,
-                            message: "Тоо ширхэг бүртгэнэ үү",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="Тоо" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "une"]}
-                        fieldKey={[fieldKey, "une"]}
-                        rules={[
-                          { required: false, message: "Үнэ бүртгэнэ үү" },
-                        ]}
-                      >
-                        <Input
-                          placeholder="Нэгж үнэ"
-                          onChange={(e) => onChange(fieldKey, e.target.value)}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "niitUne"]}
-                        fieldKey={[fieldKey, "niitUne"]}
-                        rules={[
-                          { required: false, message: "Нийт бүртгэнэ үү" },
-                        ]}
-                      >
-                        <Input placeholder="Нийт үнэ" />
-                      </Form.Item>
+                      <Row gutter={24}>
+                        <Space>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "ner"]}
+                            fieldKey={[fieldKey, "ner"]}
+                            rules={[
+                              { required: true, message: "Нэр бүртгэнэ үү" },
+                            ]}
+                          >
+                            <Input placeholder="нэр" />
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "too"]}
+                            fieldKey={[fieldKey, "too"]}
+                            rules={[
+                              {
+                                required: false,
+                                message: "Тоо ширхэг бүртгэнэ үү",
+                              },
+                            ]}
+                          >
+                            <Input placeholder="Тоо" />
+                          </Form.Item>
+                        </Space>
+                        <Space>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "une"]}
+                            fieldKey={[fieldKey, "une"]}
+                            rules={[
+                              { required: false, message: "Үнэ бүртгэнэ үү" },
+                            ]}
+                          >
+                            <InputNumber
+                              style={{ width: "100%" }}
+                              placeholder="Нэгж үнэ"
+                              formatter={(value) =>
+                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "niit"]}
+                            fieldKey={[fieldKey, "niit"]}
+                            rules={[
+                              { required: false, message: "Нийт бүртгэнэ үү" },
+                            ]}
+                          >
+                            <InputNumber
+                              style={{ width: "100%" }}
+                              placeholder="Нийт үнэ"
+                              formatter={(value) =>
+                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                            />
+                          </Form.Item>
+                        </Space>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "zurgiinId"]}
+                          fieldKey={[fieldKey, "zurgiinId"]}
+                          getValueFromEvent={normFile}
+                        >
+                          <Upload
+                            multiple={false}
+                            name="file"
+                            action={`${url}/zuragKhadgalya`}
+                            method="POST"
+                            data={{ turul: "khurungu" }}
+                            headers={{ Authorization: `bearer ${token}` }}
+                          >
+                            <Button icon={<UploadOutlined />}>
+                              Зураг оруулах
+                            </Button>
+                          </Upload>
+                        </Form.Item>
+                      </Row>
+
                       <MinusCircleOutlined onClick={() => remove(name)} />
                     </Space>
                   ))}
+
                   <Form.Item>
                     <Button
                       type="dashed"
@@ -591,6 +645,80 @@ function LanguuBurtgekh({ token }) {
               },
             },
             { title: "Тайлбар", dataIndex: "tailbar", ellipsis: true },
+            {
+              title: "Хөрөнгө",
+              align: "center",
+              ellipsis: true,
+              render: (data) => {
+                return (
+                  data?.khurunguud !== undefined && (
+                    <Popover
+                      content={
+                        <Table
+                          pagination={false}
+                          size="small"
+                          dataSource={data?.khurunguud}
+                          columns={[
+                            {
+                              title: "Нэр",
+                              dataIndex: "ner",
+                            },
+                            {
+                              title: "Тоо",
+                              dataIndex: "too",
+                              align: "center",
+                            },
+                            {
+                              title: "Үнэ",
+                              dataIndex: "une",
+                              align: "center",
+                              render: (data) => {
+                                return formatNumber(data) + "₮"
+                              },
+                            },
+                            {
+                              title: "Нийт",
+                              dataIndex: "niit",
+                              align: "center",
+                              render: (data) => {
+                                return formatNumber(data) + "₮"
+                              },
+                            },
+                            {
+                              title: "Зураг",
+                              dataIndex: "zurgiinId",
+                              render: (data) => {
+                                if (data !== undefined)
+                                  return (
+                                    <img
+                                      className="h-36 w-36"
+                                      src={`${url}/zuragAvya/khurungu/${baiguullaga._id}/${data}`}
+                                    />
+                                  )
+                                // return (
+                                //   zurgiinNer !== undefined && (
+                                //     <Popover content={<div className="h-36 w-36 flex">{zurag}</div>}>
+                                //       <div className="h-7 w-7 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
+                                //         {zurag}
+                                //       </div>
+                                //     </Popover>
+                                //   )
+                                // );
+                              },
+                            },
+                          ]}
+                        ></Table>
+                      }
+                      trigger="click"
+                    >
+                      <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  )
+                )
+              },
+            },
             {
               title: "Тохиргоо",
               ellipsis: true,
