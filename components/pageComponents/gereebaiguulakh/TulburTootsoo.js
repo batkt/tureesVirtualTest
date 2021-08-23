@@ -3,10 +3,18 @@ import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import formatNumber from "tools/function/formatNumber";
 const formItemLayout = {
   labelCol: {
-    span: 8,
+    span: 10,
   },
   wrapperCol: {
     span: 14,
+  },
+};
+const customItemLayout = {
+  labelCol: {
+    span: 18,
+  },
+  wrapperCol: {
+    span: 6,
   },
 };
 
@@ -25,12 +33,12 @@ const Tulbur = ({ value, onChange, next, prev }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <Form.Item label="Түрээсийн төлбөр">
-        <div className="text-lg font-medium">
+        <div className="text-lg font-medium text-right">
           {formatNumber(value.sariinTurees)}
         </div>
       </Form.Item>
       <Form.Item label="Барьцаа төлбөр">
-        <div className="text-lg font-medium">
+        <div className="text-lg font-medium text-right">
           {`${formatNumber(value.baritsaaAvakhDun)} x ${
             value.baritsaaAvakhKhugatsaa
           } сар = ${formatNumber(
@@ -55,32 +63,32 @@ const Tulbur = ({ value, onChange, next, prev }) => {
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          placeholder="Хөнгөлөх хугацаа"
+          placeholder="өдөр"
         />
       </Form.Item>
-      <Form.Item name="khyamdaral" label="Хямдрал">
+      <Form.Item name="khyamdaral" label="Хөнгөлөх дүн">
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          placeholder="Хямдрал"
+          placeholder="Хөнгөлөх дүн"
         />
       </Form.Item>
-      <Form.Item name="uramshuulal" label="Урамшуулал">
+      <Form.Item name="aldangi" label="Алданги" >
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          placeholder="Урамшуулал"
+          placeholder="Хоног %"
         />
       </Form.Item>
       <div className="p-2 bg-white rounded-md divide-y-2 divide-dashed">
-        <Form.Item label="Нийт дүн">
-          <div className="text-lg font-medium">
+        <Form.Item label="Нийт дүн" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
+          <div className="text-lg font-medium text-right">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 0) +
                 (value.baritsaaAvakhDun || 0) *
@@ -88,42 +96,46 @@ const Tulbur = ({ value, onChange, next, prev }) => {
             )}
           </div>
         </Form.Item>
-        <Form.Item label="ХӨНГӨЛӨЛТ">
-          <div className="text-lg font-medium text-red-500">
+        <Form.Item label="ХӨНГӨЛӨЛТ" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
+          <div className="text-lg font-medium text-red-500 text-right">
             -
             {formatNumber(
-              (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0)
+              ((value.sariinTurees || 0) * 12 / 365) *
+              (value.khungulukhKhugatsaa || 0)
             )}
           </div>
         </Form.Item>
-        <Form.Item label="ХАСАГДСАН ДҮН">
-          <div className="text-lg font-medium text-red-500">
+        <Form.Item label="ХАСАГДСАН ДҮН" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
+          <div className="text-lg font-medium text-red-500 text-right">
             -{formatNumber(value.khyamdaral)}
           </div>
         </Form.Item>
-        <Form.Item label="НӨАТ">
-          <div className="text-lg font-medium">{formatNumber(0)}</div>
+        <Form.Item label="НӨАТ" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
+          <div className="text-lg font-medium text-right">{formatNumber(0)}</div>
         </Form.Item>
-        <Form.Item label="ТӨЛБӨЛ ЗОХИХ">
-          <div className="text-lg font-medium">
+        <Form.Item label="ТӨЛБӨЛ ЗОХИХ" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
+          <div className="text-lg font-medium text-right">
             {formatNumber(
-              (value.sariinTurees || 0) * (value.buunTulult || 0) +
-                (value.baritsaaAvakhDun || 0) *
-                  (value.baritsaaAvakhKhugatsaa || 0) -
-                (value.khungulukhKhugatsaa || 0) * (value.sariinTurees || 0) -
+              ((value.sariinTurees || 0) * (value.buunTulult || 0)) +
+                ((value.baritsaaAvakhDun || 0) *
+                (value.baritsaaAvakhKhugatsaa || 0)) -
+                (((value.sariinTurees || 0) * 12 / 365) *
+                (value.khungulukhKhugatsaa || 0)) -
                 (value.khyamdaral || 0)
             )}
             ₮
           </div>
         </Form.Item>
       </div>
-      <Form.Item noStyle className="w-full flex flex-row justify-between">
-        <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Барьцаа бүртгэл
-        </Button>
-        <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
-          Хадгалах
-        </Button>
+      <Form.Item noStyle wrapperCol={{span: 24}}>
+        <div className="w-full flex flex-row justify-between mt-4">
+          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
+            Барьцаа бүртгэл
+          </Button>
+          <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+            Хадгалах
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   );

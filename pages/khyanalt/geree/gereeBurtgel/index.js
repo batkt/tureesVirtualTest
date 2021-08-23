@@ -98,7 +98,7 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Повьлон",
-        dataIndex: "gereeniiDugaar",
+        dataIndex: "languuniiDugaar",
         ellipsis: true,
       },
       {
@@ -120,10 +120,10 @@ function ZakhialgiinKhyanalt() {
 
       {
         title: "Талбай /м2/",
-        dataIndex: "khariltsagchiinUtas",
+        dataIndex: "talbainKhemjee",
         ellipsis: true,
-        render: () => {
-          return "50 м2";
+        render: (talbainKhemjee) => {
+          return `${talbainKhemjee} м2`;
         },
       },
       {
@@ -146,7 +146,7 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Барьцаа дүн",
-        dataIndex: "baritsaaDun",
+        dataIndex: "baritsaaAvakhDun",
         ellipsis: true,
         align: "center",
         render: (baritsaaDun) => {
@@ -163,19 +163,18 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Дуусах хоног",
-        dataIndex: "duusakhKhonog",
+        dataIndex: "duusakhOgnoo",
         ellipsis: true,
-        render: () => {
-          return "30";
+        render: (duusakhOgnoo) => {
+          return moment(duusakhOgnoo).diff(moment(new Date()),'days');
         },
       },
       {
         title: "Авлага дүн",
-        dataIndex: "avlagaDun",
         ellipsis: true,
         align: "center",
-        render: (avlagaDun) => {
-          return formatNumber(avlagaDun || 0);
+        render: (row) => {
+          return formatNumber(((row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0)) + (row.sariinTurees || 0));
         },
       },
       {

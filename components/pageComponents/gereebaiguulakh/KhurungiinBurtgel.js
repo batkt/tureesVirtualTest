@@ -5,7 +5,7 @@ import useLanguu from "hooks/useLanguu";
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 10,
   },
   wrapperCol: {
     span: 14,
@@ -105,13 +105,15 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item noStyle className="w-full flex flex-row justify-between">
-        <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Гэрээний хугацаа
-        </Button>
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
-          Барьцаа бүртгэл
-        </Button>
+      <Form.Item wrapperCol={{span: 24}}>
+        <div className="w-full flex flex-row justify-between">
+          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
+            Гэрээний хугацаа
+          </Button>
+          <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
+            Барьцаа бүртгэл
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   );

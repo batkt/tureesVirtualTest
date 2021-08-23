@@ -3,16 +3,13 @@ import {
   UploadOutlined,
   SolutionOutlined,
   ArrowRightOutlined,
-  MinusCircleOutlined,
-  PlusOutlined,
-  PhoneOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { url } from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 10,
   },
   wrapperCol: {
     span: 14,
@@ -194,8 +191,8 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
       </Form.Item>
       <Form.Item
         wrapperCol={{
-          span: 12,
-          offset: 6,
+          span: 14,
+          offset: 10,
         }}
       >
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>

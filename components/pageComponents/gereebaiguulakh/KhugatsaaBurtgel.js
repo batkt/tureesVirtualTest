@@ -9,7 +9,7 @@ import moment from "moment";
 
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 10,
   },
   wrapperCol: {
     span: 14,
@@ -111,13 +111,15 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item noStyle className="w-full flex flex-row justify-between">
+      <Form.Item wrapperCol={{span: 24}} >
+        <div className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
           Ерөнхий мэдээлэл
         </Button>
         <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
           Түрээсийн талбай
         </Button>
+        </div>
       </Form.Item>
     </Form>
   );
