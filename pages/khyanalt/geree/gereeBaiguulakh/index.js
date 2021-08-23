@@ -58,6 +58,7 @@ function GereeBaiguulakh({ token }) {
   const next = (data) => {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
+      data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 
