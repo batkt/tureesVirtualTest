@@ -54,7 +54,7 @@ function GereeBaiguulakh({ token,data }) {
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
   });
 
-  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState(data?.gereeniiZagvar || {});
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
 
@@ -284,7 +284,8 @@ const ugudulAvchirya = async (ctx,session) => {
       thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     });
   }
-
+  const gereeniiZagvar = await readMethod('gereeniiZagvar',session.tureestoken,data.gereeniiZagvariinId)
+  data.gereeniiZagvar = gereeniiZagvar.data
   return data
 };
 

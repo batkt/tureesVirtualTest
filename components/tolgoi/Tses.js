@@ -12,7 +12,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   );
   if (mur.sub) {
     return (
-      <div className='mb-10'>
+      <div className=''>
         <li
           className={"menu-item flex flex-row"}
           onClick={() => setOpen(!open)}
@@ -45,9 +45,9 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
-                <li className={`menu-item ${
+                <li className={`rounded-l-lg relative cursor-pointer text-white p-2 ${
                       a.khuudasniiNer === khuudasniiNer
-                        ? "bg-white rounded-l-lg"
+                        ? "bg-white"
                         : ""}`}>
                   <div
                     className={`${
@@ -78,12 +78,6 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           </div>
           {mur.ner}
         </div>
-        <span className={selected ? "selected-menu-top" : "hidden"}>
-          <span className="h-10 w-10 rounded-br-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
-        </span>
-        <span className={selected ? "selected-menu-bottom" : "hidden"}>
-          <span className="h-10 w-10 rounded-tr-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
-        </span>
       </li>
     </Link>
   );
@@ -135,7 +129,6 @@ function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
             <CloseCircleOutlined />
           </div>
         </div>
-
         <span className={selected ? "selected-menu-top" : "hidden"}>
           <span className="h-10 w-10 rounded-br-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
         </span>
