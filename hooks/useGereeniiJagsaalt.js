@@ -12,7 +12,7 @@ function useGereeniiJagsaalt(token) {
   const { data, mutate } = useSWR(token ? ["/geree", token] : null, fetcher, {
     revalidateOnFocus: false,
   });
-  return { gereeniiMedeelel: data };
+  return { gereeniiMedeelel: data,gereeniiMedeelelMutate:mutate };
 }
 
 export default useGereeniiJagsaalt;

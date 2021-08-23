@@ -38,20 +38,20 @@ const talbaruud = [
   },
 ];
 
-export var customPlugin = (songokhTalbaruud = talbaruud) => ({
+export var customPlugin = ({name="custom_example",title="Талбарийн нэр",button='T',songokhTalbaruud=talbaruud}) => ({
   // @Required @Unique
-  name: "custom_example",
+  name: name,
   // @Required
   display: "container" || "command" || "submenu" || "dialog",
 
   // @options
   // * You can also set from the button list
   // HTML title attribute (tooltip) - default: plugin's name
-  title: "Талбарийн нэр",
+  title: title,
   // HTML to be append to button (icon)
   // Recommend using the inline svg icon. - default: "<span class="se-icon-text">!</span>"
 
-  innerHTML: '<span style="padding:5px;">Т</span>',
+  innerHTML: `<span style="padding:5px;">${button}</span>`,
   // The class of the button. - default: "se-btn"
   // "se-code-view-enabled": It is not disable when on code view mode.
   // "se-resizing-enabled": It is not disable when on using resizing module.
@@ -147,7 +147,7 @@ function index({ token, baiguullaga, destroy }, ref) {
     [form, zaalt]
   );
 
-  const plugin = React.useMemo(() => customPlugin(talbaruud), []);
+  const plugin = React.useMemo(() => customPlugin({songokhTalbaruud:talbaruud}), []);
 
   return (
     <Form form={form} {...formItemLayout}>

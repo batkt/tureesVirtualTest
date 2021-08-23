@@ -185,11 +185,11 @@ function ZakhialgaNemekh({ token }) {
                     <DeleteOutlined className="rounded-full p-1 fill-current bg-white border cursor-pointer hover:bg-red-400" />
                   </div>
                 </div>
-                {/* <div className="absolute hidden -bottom-2 -right-2 group-hover:flex flex-row space-x-2">
+                <div className="absolute hidden -bottom-2 -right-2 group-hover:flex flex-row space-x-2">
                   <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
                     <FileAddOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-green-400" />
                   </div>
-                </div> */}
+                </div>
               </div>
             );
           })}

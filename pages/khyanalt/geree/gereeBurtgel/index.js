@@ -7,25 +7,26 @@ import {
   FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined,
+  EyeOutlined,
+  EditOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
-import { Table, Card } from "antd";
+import { Table, Card, Popover, Badge,Button, Popconfirm } from "antd";
 
 import Admin from "components/Admin";
-
-import shalgaltKhiikh from "services/shalgaltKhiikh";
 
 import formatNumber from "tools/function/formatNumber";
 import { useMemo } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
-import { useRouter } from "next/router";
+import { url } from "services/uilchilgee";
+import deleteMethod from "tools/function/crud/deleteMethod";
 //#region const
 
 //#endregion
 
 function ZakhialgiinKhyanalt() {
-  const { token } = useAuth();
-  const { gereeniiMedeelel } = useGereeniiJagsaalt(token);
-  const router = useRouter();
+  const { token,baiguullaga } = useAuth();
+  const { gereeniiMedeelel,gereeniiMedeelelMutate } = useGereeniiJagsaalt(token);
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -67,30 +68,9 @@ function ZakhialgiinKhyanalt() {
       },
     ];
   }, []);
+
   const columns = useMemo(() => {
     var jagsaalt = [
-      // {
-      //   title: "№",
-      //   key: "index",
-      //   className: "text-center",
-      //   render: (text, record, index) =>
-      //     (zakhialgiinGaralt?.khuudasniiDugaar || 0) *
-      //       (zakhialgiinGaralt?.khuudasniiKhemjee || 0) -
-      //     (zakhialgiinGaralt?.khuudasniiKhemjee || 0) +
-      //     index +
-      //     1
-      // },
-
-      // {
-      //   title: "Утас",
-      //   dataIndex: "utas",
-      //   ellipsis: true,
-      //   render: (data) => {
-      //     var dugaar = data?.map((x) => x).join(";")
-      //     dugaar = Array.from(new Set(dugaar?.split(";"))).toString()
-      //     return <a>{dugaar}</a>
-      //   },
-      // },
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
@@ -113,9 +93,6 @@ function ZakhialgiinKhyanalt() {
         title: "Төрөл",
         dataIndex: "turul",
         ellipsis: true,
-        render: () => {
-          return "Иргэн";
-        },
       },
 
       {
@@ -178,11 +155,6 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Тэмдэглэл",
-        dataIndex: "temdeglel",
-        ellipsis: true,
-      },
-      {
         title: "Дуусах",
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
@@ -190,51 +162,6 @@ function ZakhialgiinKhyanalt() {
           return moment(data).format("YYYY-MM-DD");
         },
       },
-
-      // {
-      //   title: "Төлөв",
-      //   align: "center",
-      //   ellipsis: true,
-      //   render: (data) => {
-      //     if (data.tuluv !== undefined) {
-      //       var tuluv = ""
-      //       var khugatsaa = ""
-      //       let color = "geekblue"
-      //       switch (data.tuluv) {
-      //         case "1":
-      //           tuluv = "ХУВИАРЛАГДСАН"
-      //           color = "orange"
-      //           khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
-      //           break
-      //         case "2":
-      //           tuluv = "ХИЙГДЭЖ БАЙНА"
-      //           khugatsaa = moment(data.ekhelsenTsag).format("YYYY-MM-DD HH:mm")
-      //           break
-      //         case "3":
-      //           tuluv = "ДУУССАН"
-      //           color = "green"
-      //           khugatsaa = moment(data.duussanTsag).format("YYYY-MM-DD HH:mm")
-      //           break
-      //         case "-1":
-      //           tuluv = "ЦУЦЛАГДСАН"
-      //           color = "red"
-      //           khugatsaa = moment(data.updatedAt).format("YYYY-MM-DD HH:mm")
-      //           break
-      //         default:
-      //           break
-      //       }
-      //       return (
-      //         <div style={tuluvStyle} className="whitespace-nowrap">
-      //           <Tag color={color}>
-      //             <span>{tuluv}</span>
-      //           </Tag>
-      //           <span>{khugatsaa}</span>
-      //         </div>
-      //       )
-      //     }
-      //   }
-      // },
-
       {
         title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
@@ -243,10 +170,73 @@ function ZakhialgiinKhyanalt() {
           return "Админ";
         },
       },
+      {
+        title: "Хавсралт",
+        ellipsis: true,
+        width:'4%',
+        render:(mur)=>{
+          const data = []
+          if(!!mur?.gerchilgeeniiZurag)
+            data.push({label:'Гэрчилгээний зураг',turul:"gerchilgeeniiZurag",zurgiinId:mur?.gerchilgeeniiZurag})
+          if(!!mur?.unemlekhniiZurag)
+            data.push({label:'Үнэмлэхний зураг',turul:"unemlekhniiZurag",zurgiinId:mur?.unemlekhniiZurag})
+          if(!!mur?.zuvshuurliinZurag)
+            data.push({label:'Зөвшөөрлийн зураг',turul:"zuvshuurliinZurag",zurgiinId:mur?.zuvshuurliinZurag})
+          
+          if(data.length > 0)
+          return (
+              <Popover
+                content={
+                  <Table
+                    pagination={false}
+                    size="small"
+                    dataSource={data}
+                    columns={[
+                      {
+                        title: "Хавсралт",
+                        dataIndex: "label",
+                      },
+                      {
+                        render: (data) => {
+                            return (
+                              <img
+                                className="h-36 w-36"
+                                src={`${url}/zuragAvya/${data?.turul}/${baiguullaga?._id}/${data?.zurgiinId}`}
+                              />
+                            )
+                        },
+                      },
+                    ]}
+                  ></Table>
+                }
+                trigger="click"
+              >
+                <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                  <Badge count={data.length}>
+                    <EyeOutlined style={{ fontSize: "18px" }} />
+                  </Badge>
+                </a>
+              </Popover>
+          )
+        }
+      },
+      {
+        title: "Тохиргоо",
+        ellipsis: true,
+        render: (data) => 
+          <div className='w-full flex flex-row'>
+            <Button icon={<EyeOutlined style={{ fontSize: "18px" }} />} type='text'/>
+            <Button icon={<EditOutlined style={{ fontSize: "18px" }} />} type='text'/>
+            <Popconfirm title="Усгахдаа итгэлтэй байна уу?" okText='Тийм' cancelText='Үгүй' onConfirm={()=>deleteMethod('geree',token,data._id).then(()=>gereeniiMedeelelMutate())}>
+              <Button icon={<DeleteOutlined style={{ fontSize: "18px" }} />} type='text'/>
+            </Popconfirm>
+          </div>
+        ,
+      },
     ];
 
     return jagsaalt;
-  }, []);
+  }, [baiguullaga,token]);
 
   return (
     <Admin
@@ -286,20 +276,6 @@ function ZakhialgiinKhyanalt() {
             );
           })}
         </div>
-
-        {/* <div>
-          <RangePicker
-            style={{ marginBottom: "15px" }}
-            size="large"
-            disabledTime
-            defaultValue={[
-              moment(new Date(), "YYYY-MM-DD"),
-              moment(new Date(), "YYYY-MM-DD")
-            ]}
-            format={"YYYY-MM-DD"}
-            onChange={onChangeOgnoo}
-          />
-        </div> */}
         <div className="overflow-auto hidden md:block mt-8">
           <Table
             bordered
@@ -315,7 +291,5 @@ function ZakhialgiinKhyanalt() {
     </Admin>
   );
 }
-
-export const getServerSideProps = shalgaltKhiikh;
 
 export default ZakhialgiinKhyanalt;
