@@ -17,6 +17,9 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           className={"menu-item flex flex-row"}
           onClick={() => setOpen(!open)}
         >
+          <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+            {mur.icon}
+          </div>
           {mur.ner}
           <div
             className={`transform ${open ? "rotate-180" : ""} ml-auto`}
@@ -38,18 +41,21 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             </svg>
           </div>
         </li>
-        <ul className="sub-menu" style={{ display: open ? "block" : "none" }}>
+        <ul className="sub-menu mb-10" style={{ display: open ? "block" : "none" }}>
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
                 <li className={`menu-item`}>
                   <div
-                    className={
+                    className={`${
                       a.khuudasniiNer === khuudasniiNer
-                        ? "text-gray-100 font-medium"
-                        : ""
+                        ? "text-blue-300 font-medium"
+                        : ""} flex flex-row`
                     }
                   >
+                    <div className={`mr-2`}>
+                      {a.icon}
+                    </div>
                     {a.ner}
                   </div>
                 </li>

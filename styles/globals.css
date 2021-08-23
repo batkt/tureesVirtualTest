@@ -618,7 +618,7 @@ input:-webkit-autofill {
     display: none;
     border-radius: .375rem;
     --tw-bg-opacity: 1;
-    background-color: rgba(26,56,159,var(--tw-bg-opacity));
+    @apply bg-green-500 !important
 }
 
 .ant-steps-item-icon{
