@@ -108,6 +108,18 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      <Form.Item label="Зардлын дүн" name="zardliinDun">
+        <InputNumber
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label="Зориулалт" name="zoriulalt">
+        <Input />
+      </Form.Item>
       <Form.Item wrapperCol={{span: 24}}>
         <div className="w-full flex flex-row justify-between">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">

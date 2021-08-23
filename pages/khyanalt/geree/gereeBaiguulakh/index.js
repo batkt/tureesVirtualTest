@@ -93,7 +93,9 @@ function GereeBaiguulakh({ token }) {
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
     if (!butsaakhUtga?.dedKhesguud) return {};
-
+    butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+      (a) => a.khamaarakhKheseg === steps[current].title
+    );
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -121,10 +123,9 @@ function GereeBaiguulakh({ token }) {
         .map((b) => {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
     }
-    butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-      (a) => a.khamaarakhKheseg === steps[current].title
-    );
+   
     return butsaakhUtga;
   }, [gereeniiZagvar, khadgalakhGeree, current]);
 
@@ -186,17 +187,17 @@ function GereeBaiguulakh({ token }) {
               </Select>
             )}
             <div className="w-full space-y-2">
-              {current === 0 && gereeniiZagvar?.ner && (
+              {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                 <>
                   <div className="flex flex-row justify-between">
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: gereeniiZagvar?.zuunTolgoi,
+                        __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
                       }}
                     />
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: gereeniiZagvar?.baruunTolgoi,
+                        __html: alkhamiinGereeniiZagvar?.baruunTolgoi,
                       }}
                     />
                   </div>

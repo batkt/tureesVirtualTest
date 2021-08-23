@@ -8,7 +8,6 @@ import { BankOutlined, ClockCircleOutlined, DollarCircleOutlined, LockOutlined, 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
-  { ner: "Байгууллага нэр", talbar: "baiguullagiinNer" },
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
@@ -32,11 +31,13 @@ const khugatsaaniiTalbaruud = [
 const languuniiTalbaruud = [
   { ner: "Лангууны дугаар", talbar: "languuniiDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
+  { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
+  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
-  { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
-  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" }
+  { ner: "Зардлын дүн", talbar: "zardliinDun" },
+  { ner: "Зориулалт", talbar: "zoriulalt" },
 ]
 
 const baritsaaniiTalbaruud = [
