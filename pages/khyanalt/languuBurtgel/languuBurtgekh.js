@@ -13,6 +13,7 @@ import {
   Upload,
   Row,
   Col,
+  Badge,
 } from "antd"
 import {
   EditOutlined,
@@ -712,7 +713,9 @@ function LanguuBurtgekh({ token }) {
                       trigger="click"
                     >
                       <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                        <EyeOutlined style={{ fontSize: "18px" }} />
+                        <Badge count={data?.khurunguud?.length}>
+                          <EyeOutlined style={{ fontSize: "18px" }} />
+                        </Badge>
                       </a>
                     </Popover>
                   )
