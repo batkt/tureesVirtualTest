@@ -20,6 +20,7 @@ import { useMemo } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { url } from "services/uilchilgee";
 import deleteMethod from "tools/function/crud/deleteMethod";
+import router from "next/router";
 //#region const
 
 //#endregion
@@ -226,7 +227,7 @@ function ZakhialgiinKhyanalt() {
         render: (data) => 
           <div className='w-full flex flex-row'>
             <Button icon={<EyeOutlined style={{ fontSize: "18px" }} />} type='text'/>
-            <Button icon={<EditOutlined style={{ fontSize: "18px" }} />} type='text'/>
+            <Button icon={<EditOutlined style={{ fontSize: "18px" }} />} type='text' onClick={()=>router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)}/>
             <Popconfirm title="Усгахдаа итгэлтэй байна уу?" okText='Тийм' cancelText='Үгүй' onConfirm={()=>deleteMethod('geree',token,data._id).then(()=>gereeniiMedeelelMutate())}>
               <Button icon={<DeleteOutlined style={{ fontSize: "18px" }} />} type='text'/>
             </Popconfirm>

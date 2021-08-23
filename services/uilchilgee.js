@@ -6,7 +6,7 @@ import _ from "lodash";
 function hostnameAvya() {
   return global.window?.location?.hostname
 }
-export const url = `http://${hostnameAvya()}:8081`;
+export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
 //export const url = "http://192.168.1.12:8080";
 //export const url = "http://103.50.205.33:8081";
 

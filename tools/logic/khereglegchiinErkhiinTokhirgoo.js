@@ -26,7 +26,7 @@ export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
 
 const khuudasnuud = [
   {
-    ner: "Гэрээний",
+    ner: "Гэрээ",
     khuudasniiNer: "geree",
     href:'/khyanalt/geree',
     icon: (

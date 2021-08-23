@@ -42,6 +42,8 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     onChange({ ...value, ...values });
   };
 
+  value.gereeniiOgnoo = moment(value.gereeniiOgnoo)
+  value.duusakhOgnoo = moment(value.duusakhOgnoo)
   return (
     <Form
       form={form}

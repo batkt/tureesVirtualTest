@@ -57,7 +57,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
         <Switch onChange={setBaiguullagaEsekh} />
       </Form.Item>
       <Form.Item
-        name="baiguullagiinNer"
+        name="ner"
         hidden={!baiguullagaEsekh}
         label="Байгууллага нэр"
       >

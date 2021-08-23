@@ -1,7 +1,8 @@
 import React from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
-import createMethod from "tools/function/crud/createMethod";
+import updateMethod from "tools/function/crud/updateMethod";
+import readMethod from "tools/function/crud/readMethod";
 import { message, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
@@ -12,6 +13,7 @@ import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburToots
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 const { Step } = Steps;
 
@@ -43,10 +45,11 @@ const steps = [
   },
 ];
 
-function GereeBaiguulakh({ token }) {
+function GereeBaiguulakh({ token,data }) {
   const { baiguullaga } = useAuth();
+  const router = useRouter()
   const [current, setCurrent] = React.useState(0);
-  const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
+  const [khadgalakhGeree, setKhagalakhGeree] = React.useState(data || {
     ognoo: new Date(),
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
   });
@@ -59,9 +62,6 @@ function GereeBaiguulakh({ token }) {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
       data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
-      data.baiguullagiinNer = baiguullaga.ner
-      data.baiguullagiinId = baiguullaga._id
-      
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 
@@ -74,10 +74,11 @@ function GereeBaiguulakh({ token }) {
       if (!!data?.zuvshuurliinZurag)
         data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
 
-      createMethod("geree", token, data).then(({ data }) => {
+      updateMethod("geree", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
           setCurrent(0);
+          router.back()
           message.success("Амжилттай хадгаллаа");
         }
       });
@@ -247,6 +248,46 @@ function GereeBaiguulakh({ token }) {
   );
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+const ugudulAvchirya = async (ctx,session) => {
+  const {data} = await readMethod('geree',session.tureestoken,ctx.query.id)
+  data.baiguullagaEsekh = data.turul === 'ААН' ? true : false;
+  
+  if (!!data?.unemlekhniiZurag){
+    _.set(data, "unemlekhniiZurag.0.response.id",data?.unemlekhniiZurag);
+    _.set(data, "unemlekhniiZurag.fileList",{
+      uid: '-1',
+      name: 'xxx.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    });
+  }
+
+  if (!!data?.gerchilgeeniiZurag){
+    _.set(data,"gerchilgeeniiZurag.0.response.id",data?.gerchilgeeniiZurag);
+    _.set(data, "gerchilgeeniiZurag.fileList",{
+      uid: '-1',
+      name: 'xxx.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    });
+  }
+
+  if (!!data?.zuvshuurliinZurag){
+    _.set(data,"zuvshuurliinZurag.0.response.id",data?.zuvshuurliinZurag);
+    _.set(data, "zuvshuurliinZurag.fileList",{
+      uid: '-1',
+      name: 'xxx.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+    });
+  }
+
+  return data
+};
+
+export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx,ugudulAvchirya);
 
 export default GereeBaiguulakh;

@@ -1,6 +1,7 @@
 import { Form, Select, Button, Input, InputNumber } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
+import {toWords} from "mon_num";
 import useLanguu from "hooks/useLanguu";
 
 const formItemLayout = {
@@ -36,6 +37,8 @@ const YurunkhiiMedeele = ({
     languu.languuniiDugaar = languu.kod;
     languu.baritsaaAvakhDun = languu.talbainNiitUne;
     languu.sariinTurees = languu.talbainNiitUne;
+    languu.talbainNegjUneUsgeer = toWords(languu.talbainNegjUne)
+    languu.talbainNiitUneUsgeer = toWords(languu.talbainNiitUne)
     form.setFieldsValue(languu);
     onChange({ ...value, ...languu });
   };

@@ -34,7 +34,9 @@ const languuniiTalbaruud = [
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
-  { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" }
+  { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
+  { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
+  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" }
 ]
 
 const baritsaaniiTalbaruud = [
@@ -48,6 +50,7 @@ const baritsaaniiTalbaruud = [
 const tulburiinTalbaruud = [
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
+  { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
 ]
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
