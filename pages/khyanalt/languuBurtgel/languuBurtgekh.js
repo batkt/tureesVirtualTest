@@ -650,6 +650,7 @@ function LanguuBurtgekh({ token }) {
               title: "Хөрөнгө",
               align: "center",
               ellipsis: true,
+              width:'2rem',
               render: (data) => {
                 return (
                   data?.khurunguud !== undefined && (
