@@ -145,6 +145,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
         <Upload
           multiple={false}
           name="file"
+          listType="picture"
           action={`${url}/zuragKhadgalya`}
           method="POST"
           data={{ turul: "gerchilgeeniiZurag" }}
@@ -163,6 +164,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
           <Upload
             multiple={false}
             name="file"
+            listType="picture"
             action={`${url}/zuragKhadgalya`}
             method="POST"
             data={{ turul: "zuvshuurliinZurag" }}
@@ -180,6 +182,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
           <Upload
             multiple={false}
             name="file"
+            listType="picture"
             action={`${url}/zuragKhadgalya`}
             method="POST"
             data={{ turul: "unemlekhniiZurag" }}

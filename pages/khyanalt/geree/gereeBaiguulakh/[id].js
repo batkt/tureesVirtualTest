@@ -12,6 +12,7 @@ import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/Khugatsa
 import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import {url} from "services/uilchilgee";
 import _ from "lodash";
 import { useRouter } from "next/router";
 
@@ -44,6 +45,10 @@ const steps = [
     zaaltiinTolgoi: "ТАВ.ТӨЛБӨР ТООЦОО",
   },
 ];
+
+function zurgiinListUusgeye(token,data){
+
+} 
 
 function GereeBaiguulakh({ token,data }) {
   const { baiguullaga } = useAuth();
@@ -253,36 +258,42 @@ const ugudulAvchirya = async (ctx,session) => {
   data.baiguullagaEsekh = data.turul === 'ААН' ? true : false;
   
   if (!!data?.unemlekhniiZurag){
-    _.set(data, "unemlekhniiZurag.0.response.id",data?.unemlekhniiZurag);
-    _.set(data, "unemlekhniiZurag.fileList",{
+    _.set(data, "unemlekhniiZurag",[{
       uid: '-1',
-      name: 'xxx.png',
+      name: data?.unemlekhniiZurag,
       status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    });
+      url: `${url}/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
+      thumbUrl: `${url}/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
+      response:{
+        id:data?.unemlekhniiZurag
+      }
+    }]);
   }
 
   if (!!data?.gerchilgeeniiZurag){
-    _.set(data,"gerchilgeeniiZurag.0.response.id",data?.gerchilgeeniiZurag);
-    _.set(data, "gerchilgeeniiZurag.fileList",{
+    _.set(data, "gerchilgeeniiZurag",[{
       uid: '-1',
-      name: 'xxx.png',
+      name: data?.gerchilgeeniiZurag,
       status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    });
+      url: `${url}/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
+      thumbUrl: `${url}/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
+      response:{
+        id:data?.gerchilgeeniiZurag
+      }
+    }]);
   }
 
   if (!!data?.zuvshuurliinZurag){
-    _.set(data,"zuvshuurliinZurag.0.response.id",data?.zuvshuurliinZurag);
-    _.set(data, "zuvshuurliinZurag.fileList",{
+    _.set(data, "zuvshuurliinZurag",[{
       uid: '-1',
-      name: 'xxx.png',
+      name: data?.zuvshuurliinZurag,
       status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    });
+      url: `${url}/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
+      thumbUrl: `${url}/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
+      response:{
+        id:data?.zuvshuurliinZurag
+      }
+    }]);
   }
   const gereeniiZagvar = await readMethod('gereeniiZagvar',session.tureestoken,data.gereeniiZagvariinId)
   data.gereeniiZagvar = gereeniiZagvar.data

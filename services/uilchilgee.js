@@ -7,9 +7,10 @@ import _ from "lodash";
 //   return global.window?.location?.hostname
 // }
 
-//export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
+//export const url = `http://${hostnameAvya()}:8081`;
+export const url = `http://localhost:8081`;
 //export const url = "http://192.168.1.12:8080";
-export const url = "http://103.50.205.33:8081";
+//export const url = "http://103.50.205.33:8081";
 
 export const socket = () => socketIOClient(url, { transports: ['websocket'] });
 

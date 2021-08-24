@@ -616,9 +616,8 @@ input:-webkit-autofill {
 
 .sub-menu {
     display: none;
-    border-radius: .375rem;
     --tw-bg-opacity: 1;
-    @apply bg-green-500 !important
+    @apply rounded-l-lg bg-green-500 !important
 }
 
 .ant-steps-item-icon{
