@@ -145,6 +145,8 @@ function GereeBaiguulakh({ token,data }) {
       khuudasniiNer="gereeBaiguulakh"
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
+      hideSearch
+      dedKhuudas
     >
       <div className="col-span-12 p-5 box">
         <div className="px-10">
