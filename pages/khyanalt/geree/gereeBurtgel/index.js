@@ -301,7 +301,7 @@ function ZakhialgiinKhyanalt() {
         visible={!!kharuulakhGeree}
         footer={ <div><button onClick={handlePrint}>Хэвлэх</button></div>}
       >
-        {!!kharuulakhGeree && <GereeKharakh ref={componentRef} data={kharuulakhGeree}/>}
+        {!!kharuulakhGeree && <GereeKharakh ref={componentRef} print={handlePrint} data={kharuulakhGeree}/>}
       </Drawer>
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full border-solid grid grid-cols-12 gap-6">

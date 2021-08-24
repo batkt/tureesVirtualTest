@@ -1,8 +1,19 @@
 import React from 'react'
 import moment from 'moment'
 
-function Kharakh({data},ref) {
+function Kharakh({data,print},ref) {
     const {geree , ...gereeniiZagvar} = data
+
+    React.useEffect(()=>{
+      document.addEventListener('keydown',(e)=>{
+        if(e.ctrlKey === true && e.key === "p" && print){
+          e.preventDefault()
+          e.stopPropagation()
+          print()
+        }  
+      })
+    },[])
+
     return (
         <div className="w-full space-y-2 p-5" ref={ref}>
               {gereeniiZagvar?.ner && (
