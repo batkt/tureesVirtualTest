@@ -90,7 +90,7 @@ const Tulbur = ({ value, onChange, next, prev }) => {
         <Form.Item label="Нийт дүн" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
           <div className="text-lg font-medium text-right">
             {formatNumber(
-              (value.sariinTurees || 0) * (value.buunTulult || 0) +
+              (value.sariinTurees || 0) * (value.buunTulult || 1) +
                 (value.baritsaaAvakhDun || 0) *
                   (value.baritsaaAvakhKhugatsaa || 0)
             )}
@@ -116,7 +116,7 @@ const Tulbur = ({ value, onChange, next, prev }) => {
         <Form.Item label="ТӨЛБӨЛ ЗОХИХ" {...customItemLayout} style={{marginBottom:0,padding:'8px 0'}}>
           <div className="text-lg font-medium text-right">
             {formatNumber(
-              ((value.sariinTurees || 0) * (value.buunTulult || 0)) +
+              ((value.sariinTurees || 0) * (value.buunTulult || 1)) +
                 ((value.baritsaaAvakhDun || 0) *
                 (value.baritsaaAvakhKhugatsaa || 0)) -
                 (((value.sariinTurees || 0) * 12 / 365) *
