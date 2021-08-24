@@ -1,5 +1,6 @@
 import moment from "moment";
 import { useAuth } from "services/auth";
+import readMethod from "tools/function/crud/readMethod";
 import {
   FileDoneOutlined,
   UserOutlined,
@@ -11,24 +12,30 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { Table, Card, Popover, Badge,Button, Popconfirm } from "antd";
-
+import { Table, Card, Popover, Badge,Button, Popconfirm, Drawer } from "antd";
+import {toWords} from "mon_num";
 import Admin from "components/Admin";
-
 import formatNumber from "tools/function/formatNumber";
-import { useMemo } from "react";
+import React,{ useMemo } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { url } from "services/uilchilgee";
 import deleteMethod from "tools/function/crud/deleteMethod";
+import GereeKharakh from 'components/pageComponents/geree/Kharakh'
 import router from "next/router";
-//#region const
-
-//#endregion
+import { useReactToPrint } from 'react-to-print';
 
 function ZakhialgiinKhyanalt() {
   const { token,baiguullaga } = useAuth();
   const { gereeniiMedeelel,gereeniiMedeelelMutate } = useGereeniiJagsaalt(token);
+  const [kharuulakhGeree,setKharuulakhGeree] = React.useState(null)
+  const componentRef = React.useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
+
+
+  
   const khyanaltiinDun = useMemo(() => {
     return [
       {
@@ -174,7 +181,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Хавсралт",
         ellipsis: true,
-        width:'4%',
+        width:'4rem',
         render:(mur)=>{
           const data = []
           if(!!mur?.gerchilgeeniiZurag)
@@ -226,7 +233,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         render: (data) => 
           <div className='w-full flex flex-row'>
-            <Button icon={<EyeOutlined style={{ fontSize: "18px" }} />} type='text'/>
+            <Button icon={<EyeOutlined style={{ fontSize: "18px" }} />} type='text' onClick={()=>gereeKharya(data)}/>
             <Button icon={<EditOutlined style={{ fontSize: "18px" }} />} type='text' onClick={()=>router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)}/>
             <Popconfirm title="Усгахдаа итгэлтэй байна уу?" okText='Тийм' cancelText='Үгүй' onConfirm={()=>deleteMethod('geree',token,data._id).then(()=>gereeniiMedeelelMutate())}>
               <Button icon={<DeleteOutlined style={{ fontSize: "18px" }} />} type='text'/>
@@ -239,6 +246,47 @@ function ZakhialgiinKhyanalt() {
     return jagsaalt;
   }, [baiguullaga,token]);
 
+  function gereeKharya(geree) {
+    readMethod('gereeniiZagvar',token,geree.gereeniiZagvariinId).then(({data})=>{
+      if(!!data)
+        {
+          if (geree.gereeniiOgnoo) {
+            geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format(
+              "YYYY"
+            );
+            geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format(
+              "MM"
+            );
+            geree.ekhlekhUdur = moment(
+              geree.gereeniiOgnoo
+            ).format("DD");
+            if (geree.khugatsaa > 0) {
+              let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
+                geree.khugatsaa,
+                "M"
+              );
+              geree.duusakhOn = duusakhOgnoo.format("YYYY");
+              geree.duusakhSar = duusakhOgnoo.format("MM");
+              geree.duusakhUdur = duusakhOgnoo.format("DD");
+            }
+          }
+          geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne)
+          geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne)
+      
+          for (const [key, value] of Object.entries(geree)) {
+            data.dedKhesguud
+              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+              .map((b) => {
+                b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+              });
+              data.baruunTolgoi = data.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          }
+          data.geree = geree
+          setKharuulakhGeree(data)
+        }
+    })
+  }
+
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"
@@ -246,6 +294,15 @@ function ZakhialgiinKhyanalt() {
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
     >
+      <Drawer
+        title={kharuulakhGeree?.gereeniiDugaar}
+        width={'50vw'}
+        onClose={()=>setKharuulakhGeree(null)}
+        visible={!!kharuulakhGeree}
+        footer={ <div><button onClick={handlePrint}>Хэвлэх</button></div>}
+      >
+        {!!kharuulakhGeree && <GereeKharakh ref={componentRef} data={kharuulakhGeree}/>}
+      </Drawer>
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full border-solid grid grid-cols-12 gap-6">
           {khyanaltiinDun.map((mur, index) => {

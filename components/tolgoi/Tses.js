@@ -12,7 +12,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   );
   if (mur.sub) {
     return (
-      <>
+      <div className='mb-10'>
         <li
           className={"menu-item flex flex-row"}
           onClick={() => setOpen(!open)}
@@ -41,15 +41,18 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             </svg>
           </div>
         </li>
-        <ul className="sub-menu mb-10" style={{ display: open ? "block" : "none" }}>
+        <ul className="sub-menu " style={{ display: open ? "block" : "none" }}>
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
-                <li className={`menu-item`}>
+                <li className={`menu-item ${
+                      a.khuudasniiNer === khuudasniiNer
+                        ? "bg-white rounded-l-lg"
+                        : ""}`}>
                   <div
                     className={`${
                       a.khuudasniiNer === khuudasniiNer
-                        ? "text-blue-300 font-medium"
+                        ? "text-green-500 font-medium"
                         : ""} flex flex-row`
                     }
                   >
@@ -63,7 +66,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             );
           })}
         </ul>
-      </>
+      </div>
     );
   }
   return (

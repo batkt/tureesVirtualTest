@@ -61,6 +61,7 @@ function GereeBaiguulakh({ token }) {
       data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
       data.baiguullagiinNer = baiguullaga.ner
       data.baiguullagiinId = baiguullaga._id
+      data.gereeniiZagvariinId = gereeniiZagvar._id
       
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
