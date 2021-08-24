@@ -33,7 +33,7 @@ const YurunkhiiMedeele = ({
   };
 
   const onChangeLanguu = (v) => {
-    var languu = languuniiGaralt.jagsaalt.find((a) => a._id === v);
+    var {_id,...languu} = languuniiGaralt.jagsaalt.find((a) => a._id === v);
     languu.languuniiDugaar = languu.kod;
     languu.baritsaaAvakhDun = languu.talbainNiitUne;
     languu.sariinTurees = languu.talbainNiitUne;

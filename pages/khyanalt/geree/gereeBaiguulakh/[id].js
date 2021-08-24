@@ -262,8 +262,8 @@ const ugudulAvchirya = async (ctx,session) => {
       uid: '-1',
       name: data?.unemlekhniiZurag,
       status: 'done',
-      url: `${url}/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
-      thumbUrl: `${url}/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
+      url: `${url}/zuragAvya/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
+      thumbUrl: `${url}/zuragAvya/unemlekhniiZurag/${data?.baiguullagiinId}/${data?.unemlekhniiZurag}`,
       response:{
         id:data?.unemlekhniiZurag
       }
@@ -275,8 +275,8 @@ const ugudulAvchirya = async (ctx,session) => {
       uid: '-1',
       name: data?.gerchilgeeniiZurag,
       status: 'done',
-      url: `${url}/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
-      thumbUrl: `${url}/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
+      url: `${url}/zuragAvya/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
+      thumbUrl: `${url}/zuragAvya/gerchilgeeniiZurag/${data?.baiguullagiinId}/${data?.gerchilgeeniiZurag}`,
       response:{
         id:data?.gerchilgeeniiZurag
       }
@@ -288,8 +288,8 @@ const ugudulAvchirya = async (ctx,session) => {
       uid: '-1',
       name: data?.zuvshuurliinZurag,
       status: 'done',
-      url: `${url}/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
-      thumbUrl: `${url}/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
+      url: `${url}/zuragAvya/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
+      thumbUrl: `${url}/zuragAvya/zuvshuurliinZurag/${data?.baiguullagiinId}/${data?.zuvshuurliinZurag}`,
       response:{
         id:data?.zuvshuurliinZurag
       }
