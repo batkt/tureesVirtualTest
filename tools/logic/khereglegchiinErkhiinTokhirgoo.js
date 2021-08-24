@@ -12,11 +12,36 @@ const khereglegchiinErkh = [
       "khyanalt/tailan",
     ],
   },
+  {
+    erkh: "ZokhionBaiguulagch",
+    tsonkhnuud: [
+      "/khyanalt/geree",
+      "/khyanalt/ajiltan/ajiltanBurtgel",
+      "/khyanalt/barilgaBurtgel",
+      "/khyanalt/khariltsagchBurtgel",
+      "khyanalt/languuBurtgel",
+      "khyanalt/tailan",
+    ],
+  },
+  {
+    erkh: "Sankhuu",
+    tsonkhnuud: [
+      "/khyanalt/geree",
+      "/khyanalt/ajiltan/ajiltanBurtgel",
+      "/khyanalt/barilgaBurtgel",
+      "/khyanalt/khariltsagchBurtgel",
+      "khyanalt/languuBurtgel",
+      "khyanalt/tailan",
+    ],
+  },
+  
 ];
 
 export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
   switch (erkh) {
-    case "Admin":
+    case "Admin" :
+    case "Sankhuu" :
+    case "ZokhionBaiguulagch" :
       window.location.href = "/khyanalt/geree/gereeBurtgel";
       break;
     default:
