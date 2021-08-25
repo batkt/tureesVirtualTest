@@ -69,7 +69,7 @@ const YurunkhiiMedeele = ({
           })}
         </Select>
       </Form.Item>
-      <Form.Item label="Лангууний дугаар" name="talbainiiDugaar">
+      <Form.Item label="Талбайн дугаар" name="talbainiiDugaar">
         <Input />
       </Form.Item>
       <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">

@@ -172,7 +172,7 @@ const khuudasnuud = [
     ),
   },
   {
-    ner: "Повьлон бүртгэл",
+    ner: "Талбай бүртгэл",
     khuudasniiNer: "talbaiBurtgekh",
     href: "/khyanalt/talbaiBurtgel/talbaiBurtgekh",
     icon: (

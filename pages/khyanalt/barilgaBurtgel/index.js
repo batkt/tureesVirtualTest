@@ -383,7 +383,7 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Повьлон тоо:{" "}
+                Талбай тоо:{" "}
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
@@ -391,7 +391,7 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Сул повьлон тоо:{" "}
+                Сул Талбай тоо:{" "}
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>

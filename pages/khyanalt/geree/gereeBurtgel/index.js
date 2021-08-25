@@ -85,7 +85,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
       },
       {
-        title: "Повьлон",
+        title: "Талбай",
         dataIndex: "talbainiiDugaar",
         ellipsis: true,
       },

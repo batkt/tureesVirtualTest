@@ -299,7 +299,7 @@ function talbaiBurtgekh({ token }) {
 
   return (
     <Admin
-      title="Лангуу бүртгэл"
+      title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
     >
@@ -585,7 +585,7 @@ function talbaiBurtgekh({ token }) {
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </span>
-            <span>Excel -ээс Лангуу татах</span>
+            <span>Excel -ээс Талбай татах</span>
           </button>
         </div>
 
@@ -736,7 +736,7 @@ function talbaiBurtgekh({ token }) {
                       <EditOutlined style={{ fontSize: "18px" }} />
                     </a>
                     <Popconfirm
-                      title="Повьлон устгах уу?"
+                      title="Талбай устгах уу?"
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => talbaiUstgay(data)}

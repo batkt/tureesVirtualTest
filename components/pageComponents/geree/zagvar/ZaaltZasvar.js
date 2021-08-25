@@ -29,7 +29,7 @@ const khugatsaaniiTalbaruud = [
 ]
 
 const talbainiiTalbaruud = [
-  { ner: "Лангууны дугаар", talbar: "talbainiiDugaar" },
+  { ner: "Талбайн дугаар", talbar: "talbainiiDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
