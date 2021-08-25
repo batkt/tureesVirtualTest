@@ -2,7 +2,7 @@ import { Form, Select, Button, Input, InputNumber } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
 import {toWords} from "mon_num";
-import usetalbai from "hooks/usetalbai";
+import useTalbai from "hooks/useTalbai";
 
 const formItemLayout = {
   labelCol: {
@@ -22,7 +22,7 @@ const YurunkhiiMedeele = ({
   value,
 }) => {
   const [form] = Form.useForm();
-  const { talbainiiGaralt, settalbaiKhuudaslalt } = usetalbai(
+  const { talbainiiGaralt, settalbaiKhuudaslalt } = useTalbai(
     token,
     baiguullaga?._id
   );

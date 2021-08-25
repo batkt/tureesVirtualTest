@@ -30,7 +30,7 @@ import Admin from "../../../components/Admin"
 import { aldaaBarigch, url } from "../../../services/uilchilgee"
 import { useAuth } from "../../../services/auth"
 import React, { useState, useRef, useMemo } from "react"
-import { usetalbai } from "hooks/usetalbai"
+import { useTalbai } from "hooks/useTalbai"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
@@ -48,13 +48,11 @@ const normFile = (e) => {
 
 function talbaiBurtgekh({ token }) {
   const formRef = useRef()
-  const zurag = useRef()
-  const empty = useRef()
   const excelref = useRef()
 
   const { ajiltan, baiguullaga } = useAuth()
   const { talbainiiGaralt, settalbaiKhuudaslalt, talbainiiJagsaaltMutate } =
-    usetalbai(token, baiguullaga?._id)
+  useTalbai(token, baiguullaga?._id)
 
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,

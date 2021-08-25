@@ -22,7 +22,7 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-export function usetalbai(token, baiguullagiinId) {
+export function useTalbai(token, baiguullagiinId) {
   const [khuudaslalt, settalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -43,4 +43,4 @@ export function usetalbai(token, baiguullagiinId) {
   };
 }
 
-export default usetalbai;
+export default useTalbai;
