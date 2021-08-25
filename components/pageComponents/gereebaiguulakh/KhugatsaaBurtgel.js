@@ -1,4 +1,4 @@
-import { Form, Input, Button, DatePicker, InputNumber } from "antd";
+import { Form, Input, Button, DatePicker, InputNumber, Select } from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
@@ -74,12 +74,15 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       <Form.Item
         label="Төлөлт хийх өдөр"
         extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+        name='tulukhUdur'
       >
-        <Input
-          allowClear
-          placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
-          prefix={<SolutionOutlined />}
-        />
+        <Select
+        mode='multiple'
+        placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
+        prefix={<SolutionOutlined />}
+        >
+          {new Array(31).fill('').map((a,i)=><Select.Option key={`${i+1}tulukhUdur`}>{i+1}</Select.Option>)}
+        </Select>
       </Form.Item>
       <Form.Item
         name="duusakhOgnoo"
@@ -94,8 +97,9 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Хэтрэлт тооцох"
+        label="Хүлээх хоног"
         extra="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
+        name='khuleekhKhonog'
       >
         <Input
           allowClear
@@ -106,6 +110,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       <Form.Item
         label="Төлөлт сануулах"
         extra="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"
+        name='sanuulakhKhonog'
       >
         <Input
           allowClear

@@ -287,7 +287,7 @@ function talbaiBurtgekh({ token }) {
           zam="talbaiTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"
-          zagvariinZam="talbainiiZagvarAvya"
+          zagvariinZam="talbainZagvarAvya"
           onFinish={() => talbainiiJagsaaltMutate()}
         />
       ),
