@@ -2,7 +2,7 @@ import { Form, Select, Button, Input, InputNumber } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
 import {toWords} from "mon_num";
-import useLanguu from "hooks/useLanguu";
+import usetalbai from "hooks/usetalbai";
 
 const formItemLayout = {
   labelCol: {
@@ -22,7 +22,7 @@ const YurunkhiiMedeele = ({
   value,
 }) => {
   const [form] = Form.useForm();
-  const { languuniiGaralt, setLanguuKhuudaslalt } = useLanguu(
+  const { talbainiiGaralt, settalbaiKhuudaslalt } = usetalbai(
     token,
     baiguullaga?._id
   );
@@ -32,15 +32,15 @@ const YurunkhiiMedeele = ({
     next();
   };
 
-  const onChangeLanguu = (v) => {
-    var {_id,...languu} = languuniiGaralt.jagsaalt.find((a) => a._id === v);
-    languu.languuniiDugaar = languu.kod;
-    languu.baritsaaAvakhDun = languu.talbainNiitUne;
-    languu.sariinTurees = languu.talbainNiitUne;
-    languu.talbainNegjUneUsgeer = toWords(languu.talbainNegjUne)
-    languu.talbainNiitUneUsgeer = toWords(languu.talbainNiitUne)
-    form.setFieldsValue(languu);
-    onChange({ ...value, ...languu });
+  const onChangetalbai = (v) => {
+    var {_id,...talbai} = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
+    talbai.talbainiiDugaar = talbai.kod;
+    talbai.baritsaaAvakhDun = talbai.talbainNiitUne;
+    talbai.sariinTurees = talbai.talbainNiitUne;
+    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne)
+    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne)
+    form.setFieldsValue(talbai);
+    onChange({ ...value, ...talbai });
   };
 
   return (
@@ -61,15 +61,15 @@ const YurunkhiiMedeele = ({
           size="large"
           value={null}
           filterOption={(o) => o}
-          onSearch={(search) => setLanguuKhuudaslalt((a) => ({ ...a, search }))}
-          onChange={onChangeLanguu}
+          onSearch={(search) => settalbaiKhuudaslalt((a) => ({ ...a, search }))}
+          onChange={onChangetalbai}
         >
-          {languuniiGaralt?.jagsaalt?.map((mur) => {
+          {talbainiiGaralt?.jagsaalt?.map((mur) => {
             return <Select.Option key={mur._id}>{mur.kod}</Select.Option>;
           })}
         </Select>
       </Form.Item>
-      <Form.Item label="Лангууний дугаар" name="languuniiDugaar">
+      <Form.Item label="Лангууний дугаар" name="talbainiiDugaar">
         <Input />
       </Form.Item>
       <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">

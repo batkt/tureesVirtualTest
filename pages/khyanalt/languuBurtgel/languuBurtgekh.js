@@ -30,7 +30,7 @@ import Admin from "../../../components/Admin"
 import { aldaaBarigch, url } from "../../../services/uilchilgee"
 import { useAuth } from "../../../services/auth"
 import React, { useState, useRef, useMemo } from "react"
-import { useLanguu } from "hooks/useLanguu"
+import { usetalbai } from "hooks/usetalbai"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
@@ -46,17 +46,17 @@ const normFile = (e) => {
   return e && e.fileList
 }
 
-function LanguuBurtgekh({ token }) {
+function talbaiBurtgekh({ token }) {
   const formRef = useRef()
   const zurag = useRef()
   const empty = useRef()
   const excelref = useRef()
 
   const { ajiltan, baiguullaga } = useAuth()
-  const { languuniiGaralt, setLanguuKhuudaslalt, languuniiJagsaaltMutate } =
-    useLanguu(token, baiguullaga?._id)
+  const { talbainiiGaralt, settalbaiKhuudaslalt, talbainiiJagsaaltMutate } =
+    usetalbai(token, baiguullaga?._id)
 
-  const [languuState, setLanguuState] = useState({
+  const [talbaiState, settalbaiState] = useState({
     kod: undefined,
     talbainKhemjee: undefined,
     tailbar: undefined,
@@ -208,32 +208,32 @@ function LanguuBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      languuState.talbainNiitUne = utga * languuState.talbainKhemjee
+      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
       formRef.current.setFieldsValue({
-        talbainNiitUne: languuState.talbainNiitUne,
+        talbainNiitUne: talbaiState.talbainNiitUne,
       })
     }
     if (talbar === "khurunguUne") {
-      languuState.talbainNiitUne = utga * languuState.talbainKhemjee
+      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
       formRef.current.setFieldsValue({})
     }
-    setLanguuState((a) => ({ ...a, [talbar]: utga }))
+    settalbaiState((a) => ({ ...a, [talbar]: utga }))
   }
-  function languuBurtgekh() {
+  function talbaiBurtgekh() {
     debugger
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
-    languuState.baiguullagiinId = ajiltan?.baiguullagiinId
-    languuState.khurunguud = khurunguud.khurunguud
-    languuState.khurunguud.map(
+    talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
+    talbaiState.khurunguud = khurunguud.khurunguud
+    talbaiState.khurunguud.map(
       (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
     )
-    if (languuState.zasakhEsekh === true) {
-      updateMethod("languu", token, languuState)
+    if (talbaiState.zasakhEsekh === true) {
+      updateMethod("talbai", token, talbaiState)
         .then(({ data }) => {
           if (data !== undefined) {
             message.success("Бүртгэл амжилттай засагдлаа")
             formRef.current.resetFields()
-            languuniiJagsaaltMutate(
+            talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
             )
@@ -241,12 +241,12 @@ function LanguuBurtgekh({ token }) {
         })
         .catch(aldaaBarigch)
     } else
-      createMethod("languu", token, languuState)
+      createMethod("talbai", token, talbaiState)
         .then(({ data }) => {
           if (data !== undefined) {
             message.success("Бүртгэл амжилттай хийгдлээ")
             formRef.current.resetFields()
-            languuniiJagsaaltMutate(
+            talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
             )
@@ -258,24 +258,24 @@ function LanguuBurtgekh({ token }) {
   function zasya(data) {
     data.zasakhEsekh = true
     formRef.current.setFieldsValue({ ...data })
-    setLanguuState(data)
+    settalbaiState(data)
   }
 
-  function languuUstgay(mur) {
-    deleteMethod("languu", token, mur._id).then(({ data }) => {
+  function talbaiUstgay(mur) {
+    deleteMethod("talbai", token, mur._id).then(({ data }) => {
       if (data === "Amjilttai") {
-        languuniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+        talbainiiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
         message.success("Устгагдлаа")
       }
     })
   }
 
   function onFinish() {
-    languuBurtgekh()
+    talbaiBurtgekh()
   }
   const [form] = Form.useForm()
 
-  function languuOruulakhExcel() {
+  function talbaiOruulakhExcel() {
     const footer = [
       <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
     ]
@@ -286,11 +286,11 @@ function LanguuBurtgekh({ token }) {
         <ExceleesOruulakh
           ref={excelref}
           token={token}
-          zam="languuTatya"
+          zam="talbaiTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"
-          zagvariinZam="languuniiZagvarAvya"
-          onFinish={() => languuniiJagsaaltMutate()}
+          zagvariinZam="talbainiiZagvarAvya"
+          onFinish={() => talbainiiJagsaaltMutate()}
         />
       ),
       footer,
@@ -300,7 +300,7 @@ function LanguuBurtgekh({ token }) {
   return (
     <Admin
       title="Лангуу бүртгэл"
-      khuudasniiNer="languuBurtgekh"
+      khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
     >
       <div className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5">
@@ -325,7 +325,7 @@ function LanguuBurtgekh({ token }) {
                 type="text"
                 allowClear
                 placeholder="дугаар"
-                value={languuState.kod}
+                value={talbaiState.kod}
                 onChange={(e) => onChange("kod", e.target.value)}
               ></Input>
             </Form.Item>
@@ -342,7 +342,7 @@ function LanguuBurtgekh({ token }) {
                 type="text"
                 allowClear
                 placeholder="талбайн хэмжээ/м2/"
-                value={languuState.talbainKhemjee}
+                value={talbaiState.talbainKhemjee}
                 onChange={(e) => onChange("talbainKhemjee", e.target.value)}
               ></Input>
             </Form.Item>
@@ -358,7 +358,7 @@ function LanguuBurtgekh({ token }) {
               <InputNumber
                 style={{ width: "50%" }}
                 placeholder="нэгж үнэ"
-                value={languuState.talbainNegjUne}
+                value={talbaiState.talbainNegjUne}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
@@ -379,7 +379,7 @@ function LanguuBurtgekh({ token }) {
                 readOnly={true}
                 style={{ width: "50%" }}
                 placeholder="нийт үнэ"
-                value={languuState.talbainNiitUne}
+                value={talbaiState.talbainNiitUne}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
@@ -392,7 +392,7 @@ function LanguuBurtgekh({ token }) {
               <Input
                 allowClear
                 placeholder="тайлбар"
-                value={languuState.tailbar}
+                value={talbaiState.tailbar}
                 onChange={(e) => onChange("tailbar", e.target.value)}
               ></Input>
             </Form.Item>
@@ -566,7 +566,7 @@ function LanguuBurtgekh({ token }) {
             }}
             className="dropdown-toggle btn px-2 box bg-green-500 text-white  focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 w-full md:w-auto mt-8 md:mt-0 ml-auto"
             aria-expanded="false"
-            onClick={languuOruulakhExcel}
+            onClick={talbaiOruulakhExcel}
           >
             <span className="w-5 h-5 flex items-center justify-center">
               <svg
@@ -592,16 +592,16 @@ function LanguuBurtgekh({ token }) {
         <Table
           className={"mt-6"}
           bordered
-          tableLayout={languuniiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
+          tableLayout={talbainiiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
           rowKey={(row) => row._id}
-          dataSource={languuniiGaralt?.jagsaalt}
+          dataSource={talbainiiGaralt?.jagsaalt}
           pagination={{
-            current: languuniiGaralt?.khuudasniiDugaar,
-            pageSize: languuniiGaralt?.khuudasniiKhemjee,
-            total: languuniiGaralt?.niitMur,
+            current: talbainiiGaralt?.khuudasniiDugaar,
+            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+            total: talbainiiGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setLanguuKhuudaslalt((kh) => ({
+              settalbaiKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,
@@ -614,9 +614,9 @@ function LanguuBurtgekh({ token }) {
               key: "index",
               className: "text-center",
               render: (text, record, index) =>
-                (languuniiGaralt?.khuudasniiDugaar || 0) *
-                  (languuniiGaralt?.khuudasniiKhemjee || 0) -
-                (languuniiGaralt?.khuudasniiKhemjee || 0) +
+                (talbainiiGaralt?.khuudasniiDugaar || 0) *
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,
             },
@@ -739,7 +739,7 @@ function LanguuBurtgekh({ token }) {
                       title="Повьлон устгах уу?"
                       okText="Тийм"
                       cancelText="Үгүй"
-                      onConfirm={() => languuUstgay(data)}
+                      onConfirm={() => talbaiUstgay(data)}
                     >
                       <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
                         <DeleteOutlined
@@ -759,4 +759,4 @@ function LanguuBurtgekh({ token }) {
 
 export const getServerSideProps = shalgaltKhiikh
 
-export default LanguuBurtgekh
+export default talbaiBurtgekh

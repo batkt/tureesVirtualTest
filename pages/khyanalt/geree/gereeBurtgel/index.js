@@ -26,7 +26,7 @@ import { useReactToPrint } from 'react-to-print';
 
 function ZakhialgiinKhyanalt() {
   const { token,baiguullaga } = useAuth();
-  const { gereeniiMedeelel,gereeniiMedeelelMutate } = useGereeniiJagsaalt(token);
+  const { gereeniiMedeelel,gereeniiMedeelelMutate } = useGereeniiJagsaalt(token,baiguullaga?._id);
   const [kharuulakhGeree,setKharuulakhGeree] = React.useState(null)
   const componentRef = React.useRef();
   const handlePrint = useReactToPrint({
@@ -86,7 +86,7 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Повьлон",
-        dataIndex: "languuniiDugaar",
+        dataIndex: "talbainiiDugaar",
         ellipsis: true,
       },
       {

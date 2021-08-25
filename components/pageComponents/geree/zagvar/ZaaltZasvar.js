@@ -28,8 +28,8 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" }
 ]
 
-const languuniiTalbaruud = [
-  { ner: "Лангууны дугаар", talbar: "languuniiDugaar" },
+const talbainiiTalbaruud = [
+  { ner: "Лангууны дугаар", talbar: "talbainiiDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
@@ -75,10 +75,10 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
   const custom = React.useMemo(() => {
     const undsen = customPlugin({songokhTalbaruud:undsenTalbaruud,name:'undsen',title:'Үндсэн мэдээлэл',button:renderToString(<SolutionOutlined/>)})
     const khugatsaa = customPlugin({songokhTalbaruud:khugatsaaniiTalbaruud,name:'khugatsaa',title:'Хугацаа',button:renderToString(<ClockCircleOutlined/>)})
-    const baritsaa = customPlugin({songokhTalbaruud:languuniiTalbaruud,name:'languu',title:'Түрээсийн талбай',button:renderToString(<BankOutlined/>)})
-    const languu = customPlugin({songokhTalbaruud:baritsaaniiTalbaruud,name:'baritsaa',title:'Барьцаа',button:renderToString(<LockOutlined />)})
+    const baritsaa = customPlugin({songokhTalbaruud:talbainiiTalbaruud,name:'talbai',title:'Түрээсийн талбай',button:renderToString(<BankOutlined/>)})
+    const talbai = customPlugin({songokhTalbaruud:baritsaaniiTalbaruud,name:'baritsaa',title:'Барьцаа',button:renderToString(<LockOutlined />)})
     const tulbur = customPlugin({songokhTalbaruud:tulburiinTalbaruud,name:'tulbur',title:'Төлбөр',button:renderToString(<DollarCircleOutlined/>)})
-    return [undsen,khugatsaa,baritsaa,languu,tulbur];
+    return [undsen,khugatsaa,baritsaa,talbai,tulbur];
   }, []);
 
   return (
@@ -88,7 +88,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       setOptions={{
         plugins: custom,
         height: 200,
-        buttonList: [...buttonList.formatting, ["undsen","khugatsaa","languu","baritsaa","tulbur"]],
+        buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
       }}
       showToolbar={true}
       ref={editorRef}

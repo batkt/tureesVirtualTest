@@ -22,8 +22,8 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-export function useLanguu(token, baiguullagiinId) {
-  const [khuudaslalt, setLanguuKhuudaslalt] = useState({
+export function usetalbai(token, baiguullagiinId) {
+  const [khuudaslalt, settalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
@@ -31,16 +31,16 @@ export function useLanguu(token, baiguullagiinId) {
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/languu", token, baiguullagiinId, khuudaslalt]
+      ? ["/talbai", token, baiguullagiinId, khuudaslalt]
       : null,
     fetcher,
     { revalidateOnFocus: false }
   );
   return {
-    setLanguuKhuudaslalt,
-    languuniiGaralt: data,
-    languuniiJagsaaltMutate: mutate,
+    settalbaiKhuudaslalt,
+    talbainiiGaralt: data,
+    talbainiiJagsaaltMutate: mutate,
   };
 }
 
-export default useLanguu;
+export default usetalbai;

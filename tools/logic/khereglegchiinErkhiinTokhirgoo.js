@@ -8,7 +8,7 @@ const khereglegchiinErkh = [
       "/khyanalt/ajiltan/ajiltanBurtgel",
       "/khyanalt/barilgaBurtgel",
       "/khyanalt/khariltsagchBurtgel",
-      "khyanalt/languuBurtgel",
+      "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
     ],
   },
@@ -19,7 +19,7 @@ const khereglegchiinErkh = [
       "/khyanalt/ajiltan/ajiltanBurtgel",
       "/khyanalt/barilgaBurtgel",
       "/khyanalt/khariltsagchBurtgel",
-      "khyanalt/languuBurtgel",
+      "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
     ],
   },
@@ -30,7 +30,7 @@ const khereglegchiinErkh = [
       "/khyanalt/ajiltan/ajiltanBurtgel",
       "/khyanalt/barilgaBurtgel",
       "/khyanalt/khariltsagchBurtgel",
-      "khyanalt/languuBurtgel",
+      "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
     ],
   },
@@ -173,8 +173,8 @@ const khuudasnuud = [
   },
   {
     ner: "Повьлон бүртгэл",
-    khuudasniiNer: "languuBurtgekh",
-    href: "/khyanalt/languuBurtgel/languuBurtgekh",
+    khuudasniiNer: "talbaiBurtgekh",
+    href: "/khyanalt/talbaiBurtgel/talbaiBurtgekh",
     icon: (
       <svg
         width="24"

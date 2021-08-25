@@ -8,9 +8,9 @@ import _ from "lodash";
 // }
 
 //export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
-//export const url = `http://localhost:8081`;
-//export const url = "http://192.168.1.12:8080";
-export const url = "http://103.50.205.33:8081";
+export const url = `http://localhost:8081`;
+//export const url = "http://192.168.0.103:8081";
+//export const url = "http://103.50.205.33:8081";
 
 export const socket = () => socketIOClient(url, { transports: ['websocket'] });
 
@@ -21,7 +21,7 @@ export const aldaaBarigch = (e) => {
   else if (!!e?.response?.data?.aldaa)
     message.error(e?.response?.data?.aldaa)
   else if (!!e?.response?.errors) message.error(JSON.stringify(e?.response?.errors))
-  else message.error(JSON.stringify(e?.response))
+  else message.error(JSON.stringify(e))
 }
 
 /*axios.interceptors.response.use(function (response) {

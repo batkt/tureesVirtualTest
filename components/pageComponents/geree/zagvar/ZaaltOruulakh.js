@@ -26,7 +26,7 @@ const talbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-  { ner: "Лангууны дугаар", talbar: "languuniiDugaar" },
+  { ner: "Лангууны дугаар", talbar: "talbainiiDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
