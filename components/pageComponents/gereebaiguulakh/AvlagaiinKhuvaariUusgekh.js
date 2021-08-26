@@ -101,8 +101,11 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
           Хөнгөлөлт оруулах
         </Button>
         <Modal closable={false} title="Хугацааны хөнгөлөлт оруулах" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
-          <div>
-            <InputNumber style={{width:'100%'}} min={0} max={12} defaultValue={jagsaalt.length} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
+          <div className='divide-y-2 space-y-2'>
+            <div className='flex flex-row space-x-2'>
+              <span className='whitespace-nowrap'>Хөнгөлөх сар:</span>
+              <InputNumber style={{width:'100%'}} min={0} max={12} defaultValue={jagsaalt.length} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
+            </div>
             <Table
               className='mt-2'
               data={jagsaalt}
