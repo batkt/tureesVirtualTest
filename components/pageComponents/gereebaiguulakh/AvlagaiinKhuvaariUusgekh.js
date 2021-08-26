@@ -5,19 +5,43 @@ import moment from 'moment'
 import { CloseCircleOutlined, MenuOutlined } from '@ant-design/icons';
 
 function Table({data,updateMyData}) {
-    return data?.map((mur,index)=>
-        <div className='w-full flex flex-row space-x-2 mt-2 text-center items-center' key={index+'khyamdral'}>
-          <div >
+    return (
+      <div className='table w-full'>
+        <div className='table-row'>
+          <div className='table-cell text-center'>
+            №
+          </div>
+          <div className='table-cell text-center'>
+          Огноо
+          </div>
+          <div className='table-cell text-center'>
+          Хөнгөлөх хувь
+          </div>
+          <div className='table-cell text-center'>
+          Төлөх дүн
+          </div>
+        </div>
+        {data?.map((mur,index)=>
+        <div className='table-row mt-2' key={index+'khyamdral'}>
+          <div className='table-cell text-center'>
             {index + 1}
           </div>
-          <DatePicker placeholder='Огноо' disabled value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
-          <InputNumber placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
-          <InputNumber placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} max={100} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
-          <div className='fill-current text-red-500 cursor-pointer'>
+          <div className='table-cell ' >
+            <DatePicker style={{width:'100%'}} placeholder='Огноо' disabled value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
+          </div>
+          <div className='table-cell '>
+            <InputNumber style={{width:'100%'}} placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
+          </div>
+          <div className='table-cell '>
+          <InputNumber style={{width:'100%'}} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} max={100} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
+          </div>
+          <div className='table-cell fill-current text-red-500 cursor-pointer p-2'>
             <CloseCircleOutlined />
           </div>
         </div>
-      )
+      )}
+      </div>
+    )
     
 }
 
