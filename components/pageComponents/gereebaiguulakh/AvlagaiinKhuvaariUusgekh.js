@@ -10,7 +10,7 @@ function Table({data,updateMyData}) {
           <div >
             {index + 1}
           </div>
-          <DatePicker placeholder='Огноо' value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
+          <DatePicker placeholder='Огноо' disabled value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
           <InputNumber placeholder='Хөнгөлөх хувь' value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
           <InputNumber placeholder='Хөнгөлөх дүн' value={mur.tulukhDun} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
           <div className='fill-current text-red-500 cursor-pointer'>
@@ -23,9 +23,8 @@ function Table({data,updateMyData}) {
 
 function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
   const [isModalVisible,setIsModalVisible] = React.useState(false)
-  const [jagsaalt,setJagsaalt] = React.useState(value.guilgeenuud || [])
+  const [jagsaalt,setJagsaalt] = React.useState(value?.guilgeenuud || [])
   const {ekhlekhOgnoo,tulukhUdur=[],sariinTurees} = ugugdul
- 
 
   const handleVisible = () => {
     setIsModalVisible(!isModalVisible)
@@ -55,8 +54,8 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
             [columnId]: value,
           }
           const tulukhDun = (sariinTurees / tulukhUdur.length)
-          if(columnId === 'khungulukhKhuvi')
-          val['khungulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
+          if(columnId === 'khyamdral')
+          val['tulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
           return {...val}
         }
         return row
@@ -74,11 +73,10 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
           onClick={handleVisible}
           type="primary"
           icon={<MenuOutlined/>}
-          toolTip={'Хөнгөлөлт оруулах'}
         >
           Хугацааны хөнгөлөлт оруулах
         </Button>
-        <Modal title="Basic Modal" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
+        <Modal closable={false} title="Basic Modal" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
           <div>
             <InputNumber style={{width:'100%'}} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
             <Table

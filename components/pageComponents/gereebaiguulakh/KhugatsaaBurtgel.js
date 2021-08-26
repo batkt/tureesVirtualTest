@@ -81,7 +81,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
         prefix={<SolutionOutlined />}
         >
-          {new Array(31).fill('').map((a,i)=><Select.Option key={`${i+1}tulukhUdur`}>{i+1}</Select.Option>)}
+          {new Array(31).fill('').map((a,i)=><Select.Option key={`${i+1}tulukhUdur`} value={i+1}>{i+1}</Select.Option>)}
         </Select>
       </Form.Item>
       <Form.Item
