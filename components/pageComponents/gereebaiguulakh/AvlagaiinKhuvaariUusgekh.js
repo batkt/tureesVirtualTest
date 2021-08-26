@@ -11,8 +11,8 @@ function Table({data,updateMyData}) {
             {index + 1}
           </div>
           <DatePicker placeholder='Огноо' disabled value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
-          <InputNumber placeholder='Хөнгөлөх хувь' value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
-          <InputNumber placeholder='Хөнгөлөх дүн' value={mur.tulukhDun} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
+          <InputNumber placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
+          <InputNumber placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} max={100} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
           <div className='fill-current text-red-500 cursor-pointer'>
             <CloseCircleOutlined />
           </div>
@@ -24,15 +24,14 @@ function Table({data,updateMyData}) {
 function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
   const [isModalVisible,setIsModalVisible] = React.useState(false)
   const [jagsaalt,setJagsaalt] = React.useState(value?.guilgeenuud || [])
-  const {ekhlekhOgnoo,tulukhUdur=[],sariinTurees} = ugugdul
-
+  const {gereeniiOgnoo,tulukhUdur=[],sariinTurees} = ugugdul
   const handleVisible = () => {
     setIsModalVisible(!isModalVisible)
   }
 
   const sarOruulya = (v) => {
     var data = []
-    const ognoo = moment(ekhlekhOgnoo)
+    const ognoo = moment(gereeniiOgnoo)
     new Array(v).fill('').map((mur,index)=>{
       tulukhUdur.forEach((udur)=>{
         data.push({
@@ -77,9 +76,9 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
         >
           Хөнгөлөлт оруулах
         </Button>
-        <Modal closable={false} title="Basic Modal" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
+        <Modal closable={false} title="Хугацааны хөнгөлөлт оруулах" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
           <div>
-            <InputNumber style={{width:'100%'}} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
+            <InputNumber style={{width:'100%'}} min={0} max={12} defaultValue={jagsaalt.length} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
             <Table
               className='mt-2'
               data={jagsaalt}
