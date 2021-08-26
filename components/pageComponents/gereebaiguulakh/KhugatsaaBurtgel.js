@@ -75,6 +75,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         label="Төлөлт хийх өдөр"
         extra="Төлөлт хийх огноо сар бүрийн / өдөр"
         name='tulukhUdur'
+        required
       >
         <Select
         mode='multiple'
