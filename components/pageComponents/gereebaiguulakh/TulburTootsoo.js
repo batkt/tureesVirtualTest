@@ -68,7 +68,7 @@ const Tulbur = ({ value, onChange, next, prev }) => {
           placeholder="өдөр"
         />
       </Form.Item>
-      <Form.Item name='avlaga'>
+      <Form.Item name='avlaga' label="Хугацааны хөнгөлөлт оруулах">
         <AvlagiinKhuvaariUusgekh ugugdul={value}/>
       </Form.Item>
       <Form.Item name="khyamdaral" label="Хөнгөлөх дүн">

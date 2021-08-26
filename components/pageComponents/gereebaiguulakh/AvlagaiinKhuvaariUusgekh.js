@@ -68,13 +68,14 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
   }
  
   return(
-      <div>
+      <div className='w-full'>
         <Button
           onClick={handleVisible}
           type="primary"
           icon={<MenuOutlined/>}
+          style={{width:'100%'}}
         >
-          Хугацааны хөнгөлөлт оруулах
+          Хөнгөлөлт оруулах
         </Button>
         <Modal closable={false} title="Basic Modal" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
           <div>
