@@ -1,6 +1,8 @@
 import { Form, Button, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
+
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -65,6 +67,9 @@ const Tulbur = ({ value, onChange, next, prev }) => {
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           placeholder="өдөр"
         />
+      </Form.Item>
+      <Form.Item name='avlaga'>
+        <AvlagiinKhuvaariUusgekh ugugdul={value}/>
       </Form.Item>
       <Form.Item name="khyamdaral" label="Хөнгөлөх дүн">
         <InputNumber
