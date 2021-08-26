@@ -33,7 +33,7 @@ function Table({data,updateMyData}) {
             <InputNumber style={{width:'100%'}} placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
           </div>
           <div className='table-cell '>
-          <InputNumber style={{width:'100%'}} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} max={100} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
+            <InputNumber style={{width:'100%'}} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
           </div>
           <div className='table-cell fill-current text-red-500 cursor-pointer p-2'>
             <CloseCircleOutlined />
