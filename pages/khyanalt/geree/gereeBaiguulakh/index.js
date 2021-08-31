@@ -145,8 +145,8 @@ function GereeBaiguulakh({ token }) {
       <div className="col-span-12 p-5 box">
         <div className="px-10">
           <Steps current={current}>
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
+            {steps.map((item,index) => (
+              <Step key={item.title} title={item.title} onStepClick={()=>(index < current) && setCurrent(index)} />
             ))}
           </Steps>
         </div>
