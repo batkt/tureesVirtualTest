@@ -26,7 +26,7 @@ import { useReactToPrint } from 'react-to-print';
 
 function ZakhialgiinKhyanalt() {
   const { token,baiguullaga } = useAuth();
-  const { gereeniiMedeelel,gereeniiMedeelelMutate } = useGereeniiJagsaalt(token,baiguullaga?._id);
+  const { gereeniiMedeelel,gereeniiMedeelelMutate,setGereeniiKhuudaslalt } = useGereeniiJagsaalt(token,baiguullaga?._id);
   const [kharuulakhGeree,setKharuulakhGeree] = React.useState(null)
   const componentRef = React.useRef();
   const handlePrint = useReactToPrint({
@@ -358,6 +358,18 @@ function ZakhialgiinKhyanalt() {
             rowKey={(row) => row._id}
             columns={columns}
             dataSource={gereeniiMedeelel?.jagsaalt}
+            pagination={{
+              current: gereeniiMedeelel?.khuudasniiDugaar,
+              pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+              total: gereeniiMedeelel?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setGereeniiKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
           />
         </div>
       </Card>
