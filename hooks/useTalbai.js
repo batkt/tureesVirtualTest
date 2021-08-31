@@ -1,6 +1,6 @@
-import { useState } from "react";
-import axios, { aldaaBarigch } from "services/uilchilgee";
-import useSWR from "swr";
+import { useState } from "react"
+import axios, { aldaaBarigch } from "services/uilchilgee"
+import useSWR from "swr"
 
 const fetcher = (
   url,
@@ -20,27 +20,27 @@ const fetcher = (
       ...khuudaslalt,
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch);
+    .catch(aldaaBarigch)
 
 export function useTalbai(token, baiguullagiinId) {
-  const [khuudaslalt, settalbaiKhuudaslalt] = useState({
+  const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
     jagsaalt: [],
-  });
+  })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
       ? ["/talbai", token, baiguullagiinId, khuudaslalt]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  );
+  )
   return {
-    settalbaiKhuudaslalt,
+    setTalbaiKhuudaslalt,
     talbainiiGaralt: data,
     talbainiiJagsaaltMutate: mutate,
-  };
+  }
 }
 
-export default useTalbai;
+export default useTalbai

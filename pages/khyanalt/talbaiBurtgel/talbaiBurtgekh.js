@@ -51,8 +51,8 @@ function talbaiBurtgekh({ token }) {
   const excelref = useRef()
 
   const { ajiltan, baiguullaga } = useAuth()
-  const { talbainiiGaralt, settalbaiKhuudaslalt, talbainiiJagsaaltMutate } =
-  useTalbai(token, baiguullaga?._id)
+  const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
+    useTalbai(token, baiguullaga?._id)
 
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
@@ -218,7 +218,6 @@ function talbaiBurtgekh({ token }) {
     settalbaiState((a) => ({ ...a, [talbar]: utga }))
   }
   function talbaiBurtgekh() {
-    debugger
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
     talbaiState.khurunguud = khurunguud.khurunguud
@@ -472,7 +471,32 @@ function talbaiBurtgekh({ token }) {
                             />
                           </Form.Item>
                         </Space>
+                        <Space>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "ashiglaltiinZardal"]}
+                            fieldKey={[fieldKey, "ashiglaltiinZardal"]}
+                            rules={[
+                              {
+                                required: false,
+                                message: "Зардал бүртгэнэ үү",
+                              },
+                            ]}
+                          >
+                            <InputNumber
+                              style={{ width: "100%" }}
+                              placeholder="Ашиглалтын зардал"
+                              formatter={(value) =>
+                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              }
+                              parser={(value) =>
+                                value.replace(/\$\s?|(,*)/g, "")
+                              }
+                            />
+                          </Form.Item>
+                        </Space>
                         <Form.Item
+                          style={{ marginLeft: "10px" }}
                           {...restField}
                           name={[name, "zurgiinId"]}
                           fieldKey={[fieldKey, "zurgiinId"]}
@@ -480,6 +504,7 @@ function talbaiBurtgekh({ token }) {
                         >
                           <Upload
                             multiple={false}
+                            listType="picture"
                             name="file"
                             action={`${url}/zuragKhadgalya`}
                             method="POST"
@@ -599,7 +624,7 @@ function talbaiBurtgekh({ token }) {
             total: talbainiiGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              settalbaiKhuudaslalt((kh) => ({
+              setTalbaiKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,
@@ -648,7 +673,7 @@ function talbaiBurtgekh({ token }) {
               title: "Хөрөнгө",
               align: "center",
               ellipsis: true,
-              width:'2rem',
+              width: "2rem",
               render: (data) => {
                 return (
                   data?.khurunguud !== undefined && (
