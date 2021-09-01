@@ -2,31 +2,26 @@ import { useState } from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
-const fetcher = (url, token, { search, ...khuudaslalt }) =>
+const fetcher = (url, token,baiguullagiinId, { search, ...khuudaslalt }) =>
   axios(token)
-    .get(url, {
+    .get(url, {params:{
       order: { createdAt: -1 },
       query: {
-        $or: [
-          { ner: { $regex: search, $options: "i" } },
-          { utas: { $regex: search } },
-          { "mashinuud.dugaar": { $regex: search, $options: "i" } },
-        ],
+        baiguullagiinId
       },
       ...khuudaslalt,
-    })
+    }})
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-export function useKhariltsagch(token, khuudaslaltAnkhniiUtga = {}) {
+export function useKhariltsagch(token, baiguullagiinId) {
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
-    search: "",
-    ...khuudaslaltAnkhniiUtga,
+    search: ""
   })
   const { data, mutate } = useSWR(
-    !!token ? ["khariltsagch", token, khuudaslalt] : null,
+    !!token && !!baiguullagiinId ? ["khariltsagch", token,baiguullagiinId, khuudaslalt] : null,
     fetcher,
     { revalidateOnFocus: false }
   )

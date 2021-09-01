@@ -45,9 +45,9 @@ function AjiltanBurtgel({ token }) {
   const zurag = useRef()
   const empty = useRef()
 
-  const { ajiltan, baiguullaga } = useAuth()
+  const { ajiltan } = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, baiguullaga?._id)
+    useKhariltsagch(token, ajiltan?.baiguullagiinId)
   const [formNuukh, setFormNuukh] = useState(false)
 
   const [khariltsagchState, setkhariltsagchState] = useState({

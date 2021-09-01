@@ -4,7 +4,7 @@ import useSWR from "swr";
 
 const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt }) =>
   axios(token)
-    .get(url, {
+    .get(url, {params:{
       order: { createdAt: -1 },
       query: {
         baiguullagiinId,
@@ -15,7 +15,7 @@ const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt }) =>
         ],
       },
       ...khuudaslalt,
-    })
+    }})
     .then((res) => res.data)
     .catch(aldaaBarigch);
 

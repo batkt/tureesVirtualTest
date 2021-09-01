@@ -10,7 +10,7 @@ const fetcherJagsaalt = (
   query = {}
 ) =>
   axios(token)
-    .get(url, {
+    .get(url, {params:{
       query: {
         baiguullagiinId,
         erkh: { $nin: ["Admin"] },
@@ -18,7 +18,7 @@ const fetcherJagsaalt = (
         ...query
       },
       ...khuudaslalt
-    })
+    }})
     .then((res) => res.data)
     .catch(aldaaBarigch)
 

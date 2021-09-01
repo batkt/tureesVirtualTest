@@ -13,12 +13,12 @@ import ZaaltOruulakh from "components/pageComponents/geree/zagvar/ZaaltOruulakh"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 
 function index({ token }) {
-  const { baiguullaga } = useAuth();
+  const { ajiltan,baiguullaga } = useAuth();
   const ref = React.useRef();
   const excelref = React.useRef();
   const { gereeniiZagvarGaralt, gereeniiZagvarMutate } = useGereeniiZagvar(
     token,
-    baiguullaga?._id
+    ajiltan?.baiguullagiinId
   );
 
   function zaaltOruulakh() {

@@ -43,9 +43,9 @@ function AjiltanBurtgel({ token }) {
   const zurag = useRef();
   const empty = useRef();
 
-  const { ajiltan, baiguullaga } = useAuth();
+  const { ajiltan } = useAuth();
   const { ajilchdiinGaralt, setAjiltniiKhuudaslalt, ajiltniiJagsaaltMutate } =
-    useAjiltniiJagsaalt(token, baiguullaga?._id);
+    useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId);
 
   const [ajiltanState, setAjiltanState] = useState({
     ner: undefined,
