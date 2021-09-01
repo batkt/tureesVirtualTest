@@ -9,16 +9,12 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt }
 ) =>
   axios(token)
-    .get(url, {
+    .get(url, {params:{
       query: {
-        baiguullagiinId,
-        $or: [
-          { ner: { $regex: search, $options: "i" } },
-          { id: { $regex: search, $options: "i" } },
-        ],
+        baiguullagiinId
       },
       ...khuudaslalt,
-    })
+    }})
     .then((res) => res.data)
     .catch(aldaaBarigch);
 

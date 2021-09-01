@@ -61,7 +61,7 @@ function Ajiltan() {
                     newterya({ ...form.getFieldsValue(), namaigsana })
                 }}
               >
-                <Form.Item name="ner">
+                <Form.Item name="nevtrekhNer">
                   <Input
                     placeholder="Нэвтрэх нэр"
                     className="login-input"

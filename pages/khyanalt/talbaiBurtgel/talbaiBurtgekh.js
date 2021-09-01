@@ -50,9 +50,8 @@ function talbaiBurtgekh({ token }) {
   const formRef = useRef()
   const excelref = useRef()
 
-  const { ajiltan, baiguullaga } = useAuth()
-  const { talbainiiGaralt, settalbaiKhuudaslalt, talbainiiJagsaaltMutate } =
-  useTalbai(token, baiguullaga?._id)
+  const { ajiltan } = useAuth()
+  const { talbainiiGaralt, settalbaiKhuudaslalt, talbainiiJagsaaltMutate } = useTalbai(token, ajiltan?.baiguullagiinId)
 
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
@@ -692,7 +691,7 @@ function talbaiBurtgekh({ token }) {
                                   return (
                                     <img
                                       className="h-36 w-36"
-                                      src={`${url}/zuragAvya/khurungu/${baiguullaga._id}/${data}`}
+                                      src={`${url}/zuragAvya/khurungu/${ajiltan?.baiguullagiinId}/${data}`}
                                     />
                                   )
                                 // return (
