@@ -5,14 +5,8 @@ import useSWR from "swr";
 const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt }) =>
   axios(token)
     .get(url, {params:{
-      order: { createdAt: -1 },
       query: {
-        baiguullagiinId,
-        $or: [
-          { ner: { $regex: search, $options: "i" } },
-          { utas: { $regex: search } },
-          { "mashinuud.dugaar": { $regex: search, $options: "i" } },
-        ],
+        baiguullagiinId
       },
       ...khuudaslalt,
     }})
