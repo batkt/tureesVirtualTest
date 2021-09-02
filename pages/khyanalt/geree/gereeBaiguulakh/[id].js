@@ -297,7 +297,10 @@ const ugudulAvchirya = async (ctx,session) => {
       }
     }]);
   }
-  const gereeniiZagvar = await readMethod('gereeniiZagvar',session.tureestoken,data.gereeniiZagvariinId)
+  var gereeniiZagvar = {data:null}
+  if(data?.gereeniiZagvariinId)
+    gereeniiZagvar = await readMethod('gereeniiZagvar',session.tureestoken,data.gereeniiZagvariinId)
+    
   data.gereeniiZagvar = gereeniiZagvar.data
   return data
 };
