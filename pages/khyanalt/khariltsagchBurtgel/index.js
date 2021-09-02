@@ -373,6 +373,7 @@ function AjiltanBurtgel({ token }) {
           tableLayout={
             khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
           }
+          scroll={{ y: "calc(100vh - 19rem)" }}
           rowKey={(row) => row._id}
           dataSource={khariltsagchiinGaralt?.jagsaalt}
           pagination={{

@@ -617,6 +617,7 @@ function talbaiBurtgekh({ token }) {
           bordered
           tableLayout={talbainiiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
           rowKey={(row) => row._id}
+          scroll={{y:'calc(100vh - 25rem)'}}
           dataSource={talbainiiGaralt?.jagsaalt}
           pagination={{
             current: talbainiiGaralt?.khuudasniiDugaar,
