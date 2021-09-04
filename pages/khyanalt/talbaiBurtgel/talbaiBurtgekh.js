@@ -60,6 +60,8 @@ function talbaiBurtgekh({ token }) {
     tailbar: undefined,
     talbainNegjUne: undefined,
     talbainNiitUne: undefined,
+    ashiglaltiinZardal: undefined,
+    davkhar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
 
@@ -414,6 +416,23 @@ function talbaiBurtgekh({ token }) {
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                 onChange={(target) => onChange("ashiglaltiinZardal", target)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="davkhar"
+              rules={[
+                {
+                  required: true,
+                  message: "Давхар бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="number"
+                style={{ width: "50%" }}
+                placeholder="Давхар"
+                value={talbaiState.davkhar}
+                onChange={(target) => onChange("davkhar", target)}
               />
             </Form.Item>
             <Form.Item name="tailbar">
