@@ -56,6 +56,11 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
+    if(current === 0 && !gereeniiZagvar){
+      message.warning('Гэрээний загвар сонгоно уу!')
+      return
+    }
+
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
       data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
