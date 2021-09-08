@@ -60,6 +60,8 @@ function talbaiBurtgekh({ token }) {
     tailbar: undefined,
     talbainNegjUne: undefined,
     talbainNiitUne: undefined,
+    ashiglaltiinZardal: undefined,
+    davkhar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
 
@@ -274,7 +276,16 @@ function talbaiBurtgekh({ token }) {
 
   function talbaiOruulakhExcel() {
     const footer = [
-      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+        <Button
+          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          onClick={() => talbainiiJagsaaltMutate().finally(() => duusgakh())}
+        >
+          хадгалах
+        </Button>
+        ,
+      </Space>,
     ]
     modal({
       title: "",
@@ -287,11 +298,14 @@ function talbaiBurtgekh({ token }) {
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"
           zagvariinZam="talbainZagvarAvya"
-          onFinish={() => talbainiiJagsaaltMutate()}
         />
       ),
       footer,
     })
+  }
+  function duusgakh() {
+    message.success("Амжилттай бүртгэгдлээ")
+    setTimeout(excelref.current.khaaya(), 2500)
   }
 
   return (
@@ -384,7 +398,43 @@ function talbaiBurtgekh({ token }) {
                 onChange={(target) => onChange("talbainNiitUne", target)}
               />
             </Form.Item>
-
+            <Form.Item
+              name="ashiglaltiinZardal"
+              rules={[
+                {
+                  required: true,
+                  message: "Зардал бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "50%" }}
+                placeholder="Ашиглалтын зардал"
+                value={talbaiState.ashiglaltiinZardal}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                onChange={(target) => onChange("ashiglaltiinZardal", target)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="davkhar"
+              rules={[
+                {
+                  required: true,
+                  message: "Давхар бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="number"
+                style={{ width: "50%" }}
+                placeholder="Давхар"
+                value={talbaiState.davkhar}
+                onChange={(target) => onChange("davkhar", target)}
+              />
+            </Form.Item>
             <Form.Item name="tailbar">
               <Input
                 allowClear
@@ -471,30 +521,7 @@ function talbaiBurtgekh({ token }) {
                             />
                           </Form.Item>
                         </Space>
-                        <Space>
-                          <Form.Item
-                            {...restField}
-                            name={[name, "ashiglaltiinZardal"]}
-                            fieldKey={[fieldKey, "ashiglaltiinZardal"]}
-                            rules={[
-                              {
-                                required: false,
-                                message: "Зардал бүртгэнэ үү",
-                              },
-                            ]}
-                          >
-                            <InputNumber
-                              style={{ width: "100%" }}
-                              placeholder="Ашиглалтын зардал"
-                              formatter={(value) =>
-                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              }
-                              parser={(value) =>
-                                value.replace(/\$\s?|(,*)/g, "")
-                              }
-                            />
-                          </Form.Item>
-                        </Space>
+                        <Space></Space>
                         <Form.Item
                           style={{ marginLeft: "10px" }}
                           {...restField}
@@ -617,7 +644,7 @@ function talbaiBurtgekh({ token }) {
           bordered
           tableLayout={talbainiiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
           rowKey={(row) => row._id}
-          scroll={{y:'calc(100vh - 25rem)'}}
+          scroll={{ y: "calc(100vh - 25rem)" }}
           dataSource={talbainiiGaralt?.jagsaalt}
           pagination={{
             current: talbainiiGaralt?.khuudasniiDugaar,
@@ -667,6 +694,14 @@ function talbaiBurtgekh({ token }) {
               align: "center",
               render: (talbainNiitUne) => {
                 return formatNumber(talbainNiitUne || 0)
+              },
+            },
+            {
+              title: "Зардал",
+              dataIndex: "ashiglaltiinZardal",
+              align: "center",
+              render: (data) => {
+                return formatNumber(data) + "₮"
               },
             },
             { title: "Тайлбар", dataIndex: "tailbar", ellipsis: true },
