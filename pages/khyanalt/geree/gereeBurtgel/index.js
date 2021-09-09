@@ -1,6 +1,6 @@
-import moment from "moment";
-import { useAuth } from "services/auth";
-import readMethod from "tools/function/crud/readMethod";
+import moment from "moment"
+import { useAuth } from "services/auth"
+import readMethod from "tools/function/crud/readMethod"
 import {
   FileDoneOutlined,
   UserOutlined,
@@ -11,71 +11,74 @@ import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
-} from "@ant-design/icons";
-import { Table, Card, Popover, Badge,Button, Popconfirm, Drawer } from "antd";
-import {toWords} from "mon_num";
-import Admin from "components/Admin";
-import formatNumber from "tools/function/formatNumber";
-import React,{ useMemo } from "react";
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
-import { url } from "services/uilchilgee";
-import deleteMethod from "tools/function/crud/deleteMethod";
-import GereeKharakh from 'components/pageComponents/geree/Kharakh'
-import router from "next/router";
-import { useReactToPrint } from 'react-to-print';
+} from "@ant-design/icons"
+import { Table, Card, Popover, Badge, Button, Popconfirm, Drawer } from "antd"
+import { toWords } from "mon_num"
+import Admin from "components/Admin"
+import formatNumber from "tools/function/formatNumber"
+import React, { useMemo } from "react"
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
+import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt"
+import { url } from "services/uilchilgee"
+import deleteMethod from "tools/function/crud/deleteMethod"
+import GereeKharakh from "components/pageComponents/geree/Kharakh"
+import router from "next/router"
+import { useReactToPrint } from "react-to-print"
 
 function ZakhialgiinKhyanalt() {
-  const { token,baiguullaga } = useAuth();
-  const { gereeniiMedeelel,gereeniiMedeelelMutate,setGereeniiKhuudaslalt } = useGereeniiJagsaalt(token,baiguullaga?._id);
-  const [kharuulakhGeree,setKharuulakhGeree] = React.useState(null)
-  const componentRef = React.useRef();
+  const { token, baiguullaga } = useAuth()
+  const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
+    useGereeniiJagsaalt(token, baiguullaga?._id)
+  const { gereeToollolt, gereeToolloltMutate } =
+    useGereeniiJagsaaltToollolt(token)
+  const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
+  const componentRef = React.useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-  });
+  })
 
-
-
-  
-  const khyanaltiinDun = useMemo(() => {
-    return [
-      {
-        too: 150,
-        icon: <UserOutlined />,
-        khuvi: 100,
-        utga: "Нийт",
-      },
-      {
-        too: 100,
-        icon: <FileDoneOutlined />,
-        khuvi: -30,
-        utga: "Хэвийн",
-      },
-      {
-        too: 5,
-        icon: <HistoryOutlined />,
-        khuvi: 100,
-        utga: "Хугацаа хэтэрсэн",
-      },
-      {
-        too: 15,
-        icon: <FileSyncOutlined />,
-        khuvi: 100,
-        utga: "Хаагдсан",
-      },
-      {
-        too: 20,
-        icon: <WarningOutlined />,
-        khuvi: 100,
-        utga: "Төлбөр дутуу",
-      },
-      {
-        too: 10,
-        icon: <FileExcelOutlined />,
-        khuvi: 100,
-        utga: "Цуцласан",
-      },
-    ];
-  }, []);
+  const khyanaltiinDun = [
+    {
+      too: gereeniiMedeelel?.niitMur,
+      icon: <UserOutlined />,
+      khuvi: 100,
+      utga: "Нийт",
+    },
+    {
+      too:
+        Number(gereeniiMedeelel?.niitMur) -
+        Number(
+          gereeToollolt.length > 0 ? gereeToollolt[0].khugatsaaKhetersen : 0
+        ),
+      icon: <FileDoneOutlined />,
+      khuvi: -30,
+      utga: "Хэвийн",
+    },
+    {
+      too: gereeToollolt.length > 0 ? gereeToollolt[0].khugatsaaKhetersen : 0,
+      icon: <HistoryOutlined />,
+      khuvi: 100,
+      utga: "Хугацаа хэтэрсэн",
+    },
+    {
+      too: 0,
+      icon: <FileSyncOutlined />,
+      khuvi: 100,
+      utga: "Хаагдсан",
+    },
+    {
+      too: 0,
+      icon: <WarningOutlined />,
+      khuvi: 100,
+      utga: "Төлбөр дутуу",
+    },
+    {
+      too: 0,
+      icon: <FileExcelOutlined />,
+      khuvi: 100,
+      utga: "Цуцласан",
+    },
+  ]
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -94,7 +97,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "createdAt",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD")
         },
       },
       {
@@ -108,7 +111,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainKhemjee",
         ellipsis: true,
         render: (talbainKhemjee) => {
-          return `${talbainKhemjee} м2`;
+          return `${talbainKhemjee} м2`
         },
       },
       {
@@ -117,7 +120,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (talbainNegjUne) => {
-          return formatNumber(talbainNegjUne || 0);
+          return formatNumber(talbainNegjUne || 0)
         },
       },
       {
@@ -126,7 +129,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0);
+          return formatNumber(sariinTurees || 0)
         },
       },
       {
@@ -135,7 +138,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (baritsaaDun) => {
-          return formatNumber(baritsaaDun || 0);
+          return formatNumber(baritsaaDun || 0)
         },
       },
       {
@@ -143,7 +146,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "gereeniiOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD")
         },
       },
       {
@@ -151,7 +154,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (duusakhOgnoo) => {
-          return moment(duusakhOgnoo).diff(moment(new Date()),'days');
+          return moment(duusakhOgnoo).diff(moment(new Date()), "days")
         },
       },
       {
@@ -159,7 +162,10 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         align: "center",
         render: (row) => {
-          return formatNumber(((row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0)) + (row.sariinTurees || 0));
+          return formatNumber(
+            (row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0) +
+              (row.sariinTurees || 0)
+          )
         },
       },
       {
@@ -167,7 +173,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "duusakhOgnoo",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD")
         },
       },
       {
@@ -175,24 +181,36 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "burtgesenAjiltaniiNer",
         ellipsis: true,
         render: () => {
-          return "Админ";
+          return "Админ"
         },
       },
       {
         title: "Хавсралт",
         ellipsis: true,
-        width:'4rem',
-        render:(mur)=>{
+        width: "4rem",
+        render: (mur) => {
           const data = []
-          if(!!mur?.gerchilgeeniiZurag)
-            data.push({label:'Гэрчилгээний зураг',turul:"gerchilgeeniiZurag",zurgiinId:mur?.gerchilgeeniiZurag})
-          if(!!mur?.unemlekhniiZurag)
-            data.push({label:'Үнэмлэхний зураг',turul:"unemlekhniiZurag",zurgiinId:mur?.unemlekhniiZurag})
-          if(!!mur?.zuvshuurliinZurag)
-            data.push({label:'Зөвшөөрлийн зураг',turul:"zuvshuurliinZurag",zurgiinId:mur?.zuvshuurliinZurag})
-          
-          if(data.length > 0)
-          return (
+          if (!!mur?.gerchilgeeniiZurag)
+            data.push({
+              label: "Гэрчилгээний зураг",
+              turul: "gerchilgeeniiZurag",
+              zurgiinId: mur?.gerchilgeeniiZurag,
+            })
+          if (!!mur?.unemlekhniiZurag)
+            data.push({
+              label: "Үнэмлэхний зураг",
+              turul: "unemlekhniiZurag",
+              zurgiinId: mur?.unemlekhniiZurag,
+            })
+          if (!!mur?.zuvshuurliinZurag)
+            data.push({
+              label: "Зөвшөөрлийн зураг",
+              turul: "zuvshuurliinZurag",
+              zurgiinId: mur?.zuvshuurliinZurag,
+            })
+
+          if (data.length > 0)
+            return (
               <Popover
                 content={
                   <Table
@@ -206,12 +224,12 @@ function ZakhialgiinKhyanalt() {
                       },
                       {
                         render: (data) => {
-                            return (
-                              <img
-                                className="h-36 w-36"
-                                src={`${url}/zuragAvya/${data?.turul}/${baiguullaga?._id}/${data?.zurgiinId}`}
-                              />
-                            )
+                          return (
+                            <img
+                              className="h-36 w-36"
+                              src={`${url}/zuragAvya/${data?.turul}/${baiguullaga?._id}/${data?.zurgiinId}`}
+                            />
+                          )
                         },
                       },
                     ]}
@@ -225,83 +243,93 @@ function ZakhialgiinKhyanalt() {
                   </Badge>
                 </a>
               </Popover>
-          )
-        }
+            )
+        },
       },
       {
         title: "Тохиргоо",
-        fixed: 'right',
-        width:'8rem',
-        render: (data) => 
-          <div className='flex flex-row'>
+        fixed: "right",
+        width: "8rem",
+        render: (data) => (
+          <div className="flex flex-row">
             <a
               className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-              onClick={()=>gereeKharya(data)}
+              onClick={() => gereeKharya(data)}
             >
               <EyeOutlined style={{ fontSize: "18px" }} />
             </a>
             <a
               className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-              onClick={()=>router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)}
+              onClick={() =>
+                router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
+              }
             >
               <EditOutlined style={{ fontSize: "18px" }} />
             </a>
-            <Popconfirm title="Усгахдаа итгэлтэй байна уу?" okText='Тийм' cancelText='Үгүй' onConfirm={()=>deleteMethod('geree',token,data._id).then(()=>gereeniiMedeelelMutate())}>
-              <a
-                className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-              >
+            <Popconfirm
+              title="Усгахдаа итгэлтэй байна уу?"
+              okText="Тийм"
+              cancelText="Үгүй"
+              onConfirm={() =>
+                deleteMethod("geree", token, data._id).then(() =>
+                  gereeniiMedeelelMutate()
+                )
+              }
+            >
+              <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
                 <DeleteOutlined style={{ fontSize: "18px" }} />
               </a>
             </Popconfirm>
           </div>
-        ,
+        ),
       },
-    ];
+    ]
 
-    return jagsaalt;
-  }, [baiguullaga,token]);
+    return jagsaalt
+  }, [baiguullaga, token])
 
   function gereeKharya(geree) {
-    readMethod('gereeniiZagvar',token,geree.gereeniiZagvariinId).then(({data})=>{
-      if(!!data)
-        {
+    readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
+      ({ data }) => {
+        if (!!data) {
           if (geree.gereeniiOgnoo) {
-            geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format(
-              "YYYY"
-            );
-            geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format(
-              "MM"
-            );
-            geree.ekhlekhUdur = moment(
-              geree.gereeniiOgnoo
-            ).format("DD");
+            geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY")
+            geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM")
+            geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD")
             if (geree.khugatsaa > 0) {
               let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
                 geree.khugatsaa,
                 "M"
-              );
-              geree.duusakhOn = duusakhOgnoo.format("YYYY");
-              geree.duusakhSar = duusakhOgnoo.format("MM");
-              geree.duusakhUdur = duusakhOgnoo.format("DD");
+              )
+              geree.duusakhOn = duusakhOgnoo.format("YYYY")
+              geree.duusakhSar = duusakhOgnoo.format("MM")
+              geree.duusakhUdur = duusakhOgnoo.format("DD")
             }
           }
           geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne)
           geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne)
-      
+
           for (const [key, value] of Object.entries(geree)) {
             data.dedKhesguud
               .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
               .map((b) => {
-                b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-              });
-              data.baruunTolgoi = data.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+                b.zaalt = b.zaalt.replace(
+                  new RegExp(`&lt;${key}&gt;`, "g"),
+                  value
+                )
+              })
+            data.baruunTolgoi = data.baruunTolgoi?.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              value
+            )
           }
           data.geree = geree
           setKharuulakhGeree(data)
         }
-    })
+      }
+    )
   }
-
+  console.log("www", gereeToollolt)
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"
@@ -311,12 +339,22 @@ function ZakhialgiinKhyanalt() {
     >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}
-        width={'50vw'}
-        onClose={()=>setKharuulakhGeree(null)}
+        width={"50vw"}
+        onClose={() => setKharuulakhGeree(null)}
         visible={!!kharuulakhGeree}
-        footer={ <div><button onClick={handlePrint}>Хэвлэх</button></div>}
+        footer={
+          <div>
+            <button onClick={handlePrint}>Хэвлэх</button>
+          </div>
+        }
       >
-        {!!kharuulakhGeree && <GereeKharakh ref={componentRef} print={handlePrint} data={kharuulakhGeree}/>}
+        {!!kharuulakhGeree && (
+          <GereeKharakh
+            ref={componentRef}
+            print={handlePrint}
+            data={kharuulakhGeree}
+          />
+        )}
       </Drawer>
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full border-solid grid grid-cols-12 gap-6">
@@ -346,7 +384,7 @@ function ZakhialgiinKhyanalt() {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div className="overflow-auto hidden md:block mt-8">
@@ -364,7 +402,7 @@ function ZakhialgiinKhyanalt() {
               total: gereeniiMedeelel?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setGereeniiKhuudaslalt((kh) => ({
+                setGereeniiKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
                   khuudasniiKhemjee,
@@ -374,7 +412,7 @@ function ZakhialgiinKhyanalt() {
         </div>
       </Card>
     </Admin>
-  );
+  )
 }
 
-export default ZakhialgiinKhyanalt;
+export default ZakhialgiinKhyanalt

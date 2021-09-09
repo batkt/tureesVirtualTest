@@ -49,7 +49,7 @@ const normFile = (e) => {
 function talbaiBurtgekh({ token }) {
   const formRef = useRef()
   const excelref = useRef()
-
+  const { TextArea } = Input
   const { ajiltan, baiguullaga } = useAuth()
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
     useTalbai(token, baiguullaga?._id)
@@ -65,146 +65,144 @@ function talbaiBurtgekh({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
 
-  const khyanaltiinDun = useMemo(() => {
-    return [
-      {
-        too: 150,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            fill="none"
+  const khyanaltiinDun = [
+    {
+      too: talbainiiGaralt?.niitMur,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <line x1="3" y1="21" x2="21" y2="21" />{" "}
+          <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />{" "}
+          <path d="M5 21v-10.15" /> <path d="M19 21v-10.15" />{" "}
+          <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "Нийт",
+    },
+    {
+      too: 20,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
             strokeLinecap="round"
             strokeLinejoin="round"
-          >
-            {" "}
-            <path stroke="none" d="M0 0h24v24H0z" />{" "}
-            <line x1="3" y1="21" x2="21" y2="21" />{" "}
-            <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />{" "}
-            <path d="M5 21v-10.15" /> <path d="M19 21v-10.15" />{" "}
-            <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
-          </svg>
-        ),
-        khuvi: 100,
-        utga: "Нийт",
-      },
-      {
-        too: 20,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-            />
-          </svg>
-        ),
-        khuvi: 100,
-        utga: "VIP",
-      },
-      {
-        too: 100,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
             strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {" "}
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
-            <circle cx="8.5" cy="7" r="4" />{" "}
-            <polyline points="17 11 19 13 23 9" />
-          </svg>
-        ),
-        khuvi: -30,
-        utga: "Идэвхтэй",
-      },
-      {
-        too: 5,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {" "}
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
-            <circle cx="8.5" cy="7" r="4" />{" "}
-            <line x1="18" y1="8" x2="23" y2="13" />{" "}
-            <line x1="23" y1="8" x2="18" y2="13" />
-          </svg>
-        ),
-        khuvi: 100,
-        utga: "Идэвхгүй",
-      },
+            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+          />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "VIP",
+    },
+    {
+      too: 100,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
+          <circle cx="8.5" cy="7" r="4" />{" "}
+          <polyline points="17 11 19 13 23 9" />
+        </svg>
+      ),
+      khuvi: -30,
+      utga: "Идэвхтэй",
+    },
+    {
+      too: 5,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
+          <circle cx="8.5" cy="7" r="4" />{" "}
+          <line x1="18" y1="8" x2="23" y2="13" />{" "}
+          <line x1="23" y1="8" x2="18" y2="13" />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "Идэвхгүй",
+    },
 
-      {
-        too: 15,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {" "}
-            <path stroke="none" d="M0 0h24v24H0z" />{" "}
-            <circle cx="9" cy="7" r="4" />{" "}
-            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />{" "}
-            <line x1="19" y1="7" x2="19" y2="10" />{" "}
-            <line x1="19" y1="14" x2="19" y2="14.01" />
-          </svg>
-        ),
-        khuvi: 100,
-        utga: "Анхаарах",
-      },
-      {
-        too: 20,
-        icon: (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {" "}
-            <path stroke="none" d="M0 0h24v24H0z" />{" "}
-            <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6-6a6 6 0 0 1 -8 -8l3.5 3.5" />
-          </svg>
-        ),
-        khuvi: 100,
-        utga: "Засвартай",
-      },
-    ]
-  }, [])
+    {
+      too: 15,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <circle cx="9" cy="7" r="4" />{" "}
+          <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />{" "}
+          <line x1="19" y1="7" x2="19" y2="10" />{" "}
+          <line x1="19" y1="14" x2="19" y2="14.01" />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "Анхаарах",
+    },
+    {
+      too: 20,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6-6a6 6 0 0 1 -8 -8l3.5 3.5" />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "Засвартай",
+    },
+  ]
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
@@ -317,6 +315,8 @@ function talbaiBurtgekh({ token }) {
       <div className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5">
         <Form
           ref={formRef}
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 15 }}
           form={form}
           name="control-ref"
           onFinish={onFinish}
@@ -325,6 +325,7 @@ function talbaiBurtgekh({ token }) {
           <div>
             <Form.Item
               name="kod"
+              label="Дугаар"
               rules={[
                 {
                   required: true,
@@ -341,6 +342,7 @@ function talbaiBurtgekh({ token }) {
               ></Input>
             </Form.Item>
             <Form.Item
+              label="Талбайн хэмжээ"
               name="talbainKhemjee"
               rules={[
                 {
@@ -359,6 +361,7 @@ function talbaiBurtgekh({ token }) {
             </Form.Item>
             <Form.Item
               name="talbainNegjUne"
+              label="Нэгж үнэ"
               rules={[
                 {
                   required: true,
@@ -379,6 +382,7 @@ function talbaiBurtgekh({ token }) {
             </Form.Item>
             <Form.Item
               name="talbainNiitUne"
+              label="Нийт үнэ"
               rules={[
                 {
                   required: true,
@@ -400,6 +404,7 @@ function talbaiBurtgekh({ token }) {
             </Form.Item>
             <Form.Item
               name="ashiglaltiinZardal"
+              label="Ашиглалтын зардал"
               rules={[
                 {
                   required: true,
@@ -420,6 +425,7 @@ function talbaiBurtgekh({ token }) {
             </Form.Item>
             <Form.Item
               name="davkhar"
+              label="Давхар"
               rules={[
                 {
                   required: true,
@@ -435,13 +441,14 @@ function talbaiBurtgekh({ token }) {
                 onChange={(target) => onChange("davkhar", target)}
               />
             </Form.Item>
-            <Form.Item name="tailbar">
-              <Input
+            <Form.Item name="tailbar" label="Тайлбар">
+              <TextArea
+                rows={4}
                 allowClear
                 placeholder="тайлбар"
                 value={talbaiState.tailbar}
                 onChange={(e) => onChange("tailbar", e.target.value)}
-              ></Input>
+              ></TextArea>
             </Form.Item>
           </div>
           <Divider>Хөрөнгийн бүртгэл</Divider>
@@ -459,6 +466,7 @@ function talbaiBurtgekh({ token }) {
                         <Space>
                           <Form.Item
                             {...restField}
+                            label="Нэр"
                             name={[name, "ner"]}
                             fieldKey={[fieldKey, "ner"]}
                             rules={[
@@ -469,6 +477,7 @@ function talbaiBurtgekh({ token }) {
                           </Form.Item>
                           <Form.Item
                             {...restField}
+                            label="Тоо"
                             name={[name, "too"]}
                             fieldKey={[fieldKey, "too"]}
                             rules={[
@@ -484,6 +493,7 @@ function talbaiBurtgekh({ token }) {
                         <Space>
                           <Form.Item
                             {...restField}
+                            label="Үнэ"
                             name={[name, "une"]}
                             fieldKey={[fieldKey, "une"]}
                             rules={[
@@ -503,6 +513,7 @@ function talbaiBurtgekh({ token }) {
                           </Form.Item>
                           <Form.Item
                             {...restField}
+                            label="Нийт"
                             name={[name, "niit"]}
                             fieldKey={[fieldKey, "niit"]}
                             rules={[

@@ -61,6 +61,101 @@ function AjiltanBurtgel({ token }) {
     tuluv: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
+  const khyanaltiinDun = [
+    {
+      too: khariltsagchiinGaralt?.niitMur,
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-users"
+        >
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      ),
+
+      khuvi: 100,
+      utga: "Нийт",
+    },
+    {
+      too: 20,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
+          <circle cx="8.5" cy="7" r="4" />{" "}
+          <polyline points="17 11 19 13 23 9" />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "Иргэн",
+    },
+    {
+      too: 100,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          {" "}
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <line x1="3" y1="21" x2="21" y2="21" />{" "}
+          <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />{" "}
+          <path d="M5 21v-10.15" /> <path d="M19 21v-10.15" />{" "}
+          <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
+        </svg>
+      ),
+
+      khuvi: -30,
+      utga: "Аж ахуй нэгж",
+    },
+    {
+      too: 5,
+      icon: (
+        <svg
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+          />
+        </svg>
+      ),
+      khuvi: 100,
+      utga: "VIP",
+    },
+  ]
 
   const { Option } = Select
 
@@ -355,12 +450,43 @@ function AjiltanBurtgel({ token }) {
         </Form>
       </div>
       <div className="col-span-12 md:col-span-6 xl:col-span-9 box p-5 overflow-auto">
+        <div className="w-full flex border-solid  grid-cols-12 gap-6">
+          {khyanaltiinDun.map((mur, index) => {
+            return (
+              <div
+                key={index}
+                className="w-full block justify-between border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+              >
+                <div className="h-full rounded-xl">
+                  <div className="p-3 rounded-xl">
+                    <div className="flex">
+                      <div>
+                        <div className="text-2xl text-green-600 font-bold">
+                          {mur.too}
+                        </div>
+                        <div className="text-base text-gray-500">
+                          {mur.utga}
+                        </div>
+                      </div>
+                      <div className="ml-auto">
+                        <div className="text-green-600 text-2xl">
+                          {mur.icon}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
         <div className="flex justify-end mb-5">
           <Button
             style={{
               alignItems: "end",
               backgroundColor: "#209669",
               color: "#ffffff",
+              marginTop: "20px",
             }}
             icon={<BellOutlined style={{ fontSize: "16px" }} />}
           >
