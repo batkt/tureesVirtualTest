@@ -21,17 +21,12 @@ const customItemLayout = {
 };
 
 const Tulbur = ({ value, onChange, next, prev }) => {
-  const onFinish = (values) => {
-    onChange({ ...value, ...values });
-    next({ ...value, ...values });
-  };
 
   return (
     <Form
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
-      onFinish={onFinish}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <Form.Item label="Түрээсийн төлбөр">
@@ -137,7 +132,7 @@ const Tulbur = ({ value, onChange, next, prev }) => {
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Барьцаа бүртгэл
           </Button>
-          <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} onClick={()=>next(value)}>
             Хадгалах
           </Button>
         </div>
