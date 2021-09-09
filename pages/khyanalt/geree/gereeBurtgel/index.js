@@ -47,13 +47,16 @@ function ZakhialgiinKhyanalt() {
     {
       too:
         Number(gereeniiMedeelel?.niitMur) -
-        Number(gereeToollolt[0].khugatsaaKhetersen),
+        Number(
+          gereeToollolt !== undefined ? gereeToollolt[0].khugatsaaKhetersen : 0
+        ),
       icon: <FileDoneOutlined />,
       khuvi: -30,
       utga: "Хэвийн",
     },
     {
-      too: gereeToollolt[0].khugatsaaKhetersen,
+      too:
+        gereeToollolt !== undefined ? gereeToollolt[0].khugatsaaKhetersen : 0,
       icon: <HistoryOutlined />,
       khuvi: 100,
       utga: "Хугацаа хэтэрсэн",
