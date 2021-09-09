@@ -41,7 +41,7 @@ function AjiltanBurtgel({ token }) {
       <Admin title="Төлбөр тооцоо" khuudasniiNer="tulburTootsoo" className="p-0 md:p-4">
         <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
-        {[{too:1,utga:'Нийт Авлага'},{too:1,utga:'Хугацаа хэтэрсэн'},{too:1,utga:'График төлөлттэй'},{too:1,utga:'Өнөөдөр	 орж ирэх'}].map((mur, index) => {
+        {[{too:1,utga:'Нийт Авлага'},{too:1,utga:'Хугацаа хэтэрсэн'},{too:1,utga:'График төлөлттэй'},{too:1,utga:'Өнөөдөр	 орж ирэх'},{too:1,utga:'Бартерын дүн'},{too:1,utga:'Нийт хөнгөлөлт'}].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
