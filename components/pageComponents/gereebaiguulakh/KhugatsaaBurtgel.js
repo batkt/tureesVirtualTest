@@ -19,11 +19,6 @@ const formItemLayout = {
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   const [form] = Form.useForm();
 
-  const onFinish = (values) => {
-    onChange({ ...value, ...values });
-    next();
-  };
-
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
       value.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
@@ -51,7 +46,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       {...formItemLayout}
       initialValues={value}
       onValuesChange={onValuesChange}
-      onFinish={onFinish}
     >
       <Form.Item name="gereeniiOgnoo" label="Гэрээ хийх огноо">
         <DatePicker
@@ -124,7 +118,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
           Ерөнхий мэдээлэл
         </Button>
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
+        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
           Түрээсийн талбай
         </Button>
         </div>

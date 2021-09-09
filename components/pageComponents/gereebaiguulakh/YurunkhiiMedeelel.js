@@ -29,18 +29,12 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
     value.baiguullagaEsekh
   );
 
-  const onFinish = (values) => {
-    onChange({ ...value, ...values });
-    next();
-  };
-
   return (
     <Form
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
-      onFinish={onFinish}
     >
       <Form.Item name="gereeniiDugaar" label="Гэрээний дугаар">
         <Input
@@ -198,7 +192,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
           offset: 10,
         }}
       >
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
+        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
           Гэрээний хугацаа
         </Button>
       </Form.Item>

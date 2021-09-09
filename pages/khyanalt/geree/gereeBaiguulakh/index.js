@@ -45,19 +45,21 @@ const steps = [
 
 function GereeBaiguulakh({ token }) {
   const { baiguullaga } = useAuth();
+  const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
   });
 
-  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
     if(current === 0 && !gereeniiZagvar){
       message.warning('Гэрээний загвар сонгоно уу!')
+      zagvarRef.current.focus()
       return
     }
 
@@ -151,7 +153,7 @@ function GereeBaiguulakh({ token }) {
         <div className="px-10">
           <Steps current={current}>
             {steps.map((item,index) => (
-              <Step key={item.title} title={item.title} onStepClick={()=>(index < current) && setCurrent(index)} />
+              <Step key={item.title} title={item.title} onStepClick={()=>setCurrent(index)} />
             ))}
           </Steps>
         </div>
@@ -172,6 +174,7 @@ function GereeBaiguulakh({ token }) {
           >
             {current === 0 && (
               <Select
+                ref={zagvarRef}
                 showSearch
                 placeholder="Гэрээний загвар сонгох"
                 className="w-full"

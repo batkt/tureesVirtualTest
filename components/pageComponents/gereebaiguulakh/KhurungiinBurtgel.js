@@ -27,11 +27,6 @@ const YurunkhiiMedeele = ({
     baiguullaga?._id
   );
 
-  const onFinish = (values) => {
-    onChange({ ...value, ...values });
-    next();
-  };
-
   const onChangetalbai = (v) => {
     var {_id,...talbai} = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
     talbai.talbainiiDugaar = talbai.kod;
@@ -50,7 +45,6 @@ const YurunkhiiMedeele = ({
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
-      onFinish={onFinish}
     >
       <Form.Item label="Түрээсийн талбай" name="tureesiinTalbainId">
         <Select
@@ -108,7 +102,7 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Зардлын дүн" name="zardliinDun">
+      <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
@@ -125,7 +119,7 @@ const YurunkhiiMedeele = ({
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Гэрээний хугацаа
           </Button>
-          <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
+          <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
             Барьцаа бүртгэл
           </Button>
         </div>

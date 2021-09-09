@@ -12,16 +12,12 @@ const formItemLayout = {
 };
 
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
-  const onFinish = (values) => {
-    onChange({ ...value, ...values });
-    next();
-  };
+ 
 
   return (
     <Form
       name="validate_other"
       {...formItemLayout}
-      onFinish={onFinish}
       onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
     >
@@ -59,7 +55,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
           Түрээсийн талбай
         </Button>
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />}>
+        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
           Төлбөр тооцоо
         </Button>
         </div>
