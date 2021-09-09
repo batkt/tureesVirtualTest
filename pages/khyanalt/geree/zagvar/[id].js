@@ -69,7 +69,7 @@ function ZakhialgaNemekh({ token }) {
       setGereeniiZagvar(value);
     }
     modal({
-      title: "",
+      title: "Заалт засах",
       icon: <FileExcelOutlined />,
       content: (
         <ZaaltZasvar ref={ref} token={token} value={value} change={change} />
@@ -176,7 +176,7 @@ function ZakhialgaNemekh({ token }) {
                 <div className="absolute hidden -top-2 -right-2 group-hover:flex flex-row space-x-2">
                   <div
                     onClick={() =>
-                      docZasya(`dedKhesguud.${index}.zaalt`, mur.zaalt)
+                      docZasya(`dedKhesguud.${index}`, mur)
                     }
                   >
                     <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />

@@ -1,6 +1,6 @@
 import React from "react";
 import Admin from "components/Admin";
-import { Button, Dropdown, Menu } from "antd";
+import { Button, Drawer, Dropdown, Menu } from "antd";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
@@ -11,9 +11,11 @@ import { FileExcelOutlined, UserAddOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import ZaaltOruulakh from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
+import GereeKharakh from 'components/pageComponents/geree/Kharakh'
 
 function index({ token }) {
   const { ajiltan,baiguullaga } = useAuth();
+  const [kharuulakhGeree,setKharuulakhGeree] = React.useState()
   const ref = React.useRef();
   const excelref = React.useRef();
   const { gereeniiZagvarGaralt, gereeniiZagvarMutate } = useGereeniiZagvar(
@@ -80,12 +82,18 @@ function index({ token }) {
   }
 
   return (
-    <Admin khuudasniiNer="gereeniiZagvar" className="p-4">
+    <Admin khuudasniiNer="gereeniiZagvar" title='Гэрээний загвар' className="p-4">
       <div className="col-span-12">
         <div className="intro-y flex flex-col-reverse sm:flex-row items-center">
-          <h2 className="intro-y text-lg font-medium mr-auto mt-2">
-            Гэрээний загвар
-          </h2>
+          <Drawer
+            title={kharuulakhGeree?.gereeniiDugaar}
+            width={'50vw'}
+            onClose={()=>setKharuulakhGeree(null)}
+            visible={!!kharuulakhGeree}
+            footer={<Button type='primary' onClick={()=>setKharuulakhGeree(null)}>Хаах</Button>}
+          >
+            {!!kharuulakhGeree && <GereeKharakh data={{...kharuulakhGeree,geree:{}}}/>}
+          </Drawer>
           <div className="w-full sm:w-auto flex">
             <button
               className="btn bg-theme-1 text-white font-medium shadow-md mr-2"
@@ -156,6 +164,7 @@ function index({ token }) {
               <div
                 key={a._id}
                 className="intro-y col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2"
+                onClick={()=>setKharuulakhGeree(a)}
               >
                 <div className="file box rounded-md px-5 pt-8 pb-5 px-3 sm:px-5 relative zoom-in">
                   <div className="absolute left-0 top-0 mt-3 ml-3">
@@ -164,18 +173,16 @@ function index({ token }) {
                       type="checkbox"
                     />
                   </div>
-                  <a
-                    href=""
+                  <div
                     className="w-3/5 file__icon file__icon--file mx-auto"
                   >
                     <div className="file__icon__file-name"></div>
-                  </a>
-                  <a
-                    href=""
+                  </div>
+                  <div
                     className="block font-medium mt-4 text-center truncate"
                   >
                     {a.ner}
-                  </a>
+                  </div>
                   <div className="text-gray-600 text-xs text-center mt-0.5">
                     1 KB
                   </div>
@@ -186,9 +193,11 @@ function index({ token }) {
                         <div className="dropdown-menu w-40">
                           <div className="dropdown-menu__content box dark:bg-dark-1 p-2">
                             <div
-                              onClick={() =>
+                              onClick={(e) =>{
+                                e.preventDefault()
+                                e.stopPropagation()
                                 router.push(`/khyanalt/geree/zagvar/${a._id}`)
-                              }
+                              }}
                               className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                             >
                               <svg
@@ -211,13 +220,15 @@ function index({ token }) {
                               Засах
                             </div>
                             <div
-                              onClick={() =>
+                              onClick={(e) =>{
+                                e.preventDefault()
+                                e.stopPropagation()
                                 deleteMethod(
                                   "gereeniiZagvar",
                                   token,
                                   a._id
                                 ).then(() => gereeniiZagvarMutate())
-                              }
+                              }}
                               className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-dark-1 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md"
                             >
                               <svg
@@ -241,10 +252,13 @@ function index({ token }) {
                         </div>
                       }
                     >
-                      <a
+                      <div
                         className="dropdown-toggle w-5 h-5 block"
-                        href="javascript:;"
                         aria-expanded="false"
+                        onClick={(e)=>{
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +276,7 @@ function index({ token }) {
                           <circle cx="12" cy="5" r="1"></circle>
                           <circle cx="12" cy="19" r="1"></circle>
                         </svg>
-                      </a>
+                      </div>
                     </Dropdown>
                   </div>
                 </div>

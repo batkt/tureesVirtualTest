@@ -4,6 +4,7 @@ import SunEditor, { buttonList } from "suneditor-react";
 import _ from "lodash";
 import { customPlugin } from "./ZaaltOruulakh";
 import { BankOutlined, ClockCircleOutlined, DollarCircleOutlined, LockOutlined, SolutionOutlined } from "@ant-design/icons";
+import {Input, Select} from "antd";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -56,20 +57,20 @@ const tulburiinTalbaruud = [
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef();
-  const [sunValue, setValue] = React.useState(value);
+  const [utga, setUtga] = React.useState(value);
 
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        change(sunValue);
+        change(utga);
         destroy();
       },
       khaaya() {
         destroy();
       },
     }),
-    [sunValue]
+    [utga]
   );
 
   const custom = React.useMemo(() => {
@@ -81,19 +82,56 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
     return [undsen,khugatsaa,baritsaa,talbai,tulbur];
   }, []);
 
+  if(_.isString(value))
+    return (
+      <SunEditor
+        onChange={setUtga}
+        defaultValue={utga}
+        setOptions={{
+          plugins: custom,
+          height: 200,
+          buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
+        }}
+        showToolbar={true}
+        ref={editorRef}
+      />
+    );
   return (
-    <SunEditor
-      onChange={setValue}
-      defaultValue={sunValue}
-      setOptions={{
-        plugins: custom,
-        height: 200,
-        buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
-      }}
-      showToolbar={true}
-      ref={editorRef}
-    />
-  );
+    <React.Fragment>
+      <div className='w-full flex flex-row'>
+        <span className='w-1/3 text-right'>Харагдах дугаар:</span>
+        <div className='w-2/3'>
+          <Input placeholder='Харагдах дугаар'  value={utga?.kharagdakhDugaar} onChange={(v)=>setUtga(a=>({...a,kharagdakhDugaar:v}))}/>
+        </div>
+      </div>
+      <div className='w-full flex flex-row mt-5'>
+        <span className='w-1/3 text-right'>Хамаарагдах хэсэг:</span>
+        <Select placeholder='Хамаарагдах хэсэг' className='w-2/3' value={utga?.khamaarakhKheseg} onChange={(v)=>setUtga(a=>({...a,khamaarakhKheseg:v}))}>
+          {[
+            "Ерөнхий мэдээлэл",
+            "Гэрээний хугацаа",
+            "Түрээсийн талбай",
+            "Барьцаа бүртгэл",
+            "Төлбөр тооцоо",
+          ].map((a) => (
+            <Select.Option value={a}>{a}</Select.Option>
+          ))}
+        </Select>
+      </div>
+      <div className='mt-5'/>
+      <SunEditor
+        onChange={(v)=>setUtga(a=>({...a,zaalt:v}))}
+        defaultValue={utga?.zaalt}
+        setOptions={{
+          plugins: custom,
+          height: 200,
+          buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
+        }}
+        showToolbar={true}
+        ref={editorRef}
+      />
+    </React.Fragment>
+  )
 }
 
 export default React.forwardRef(ZaaltZasvar);
