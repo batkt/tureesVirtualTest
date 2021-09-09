@@ -41,157 +41,38 @@ function AjiltanBurtgel({ token }) {
       <Admin title="Төлбөр тооцоо" khuudasniiNer="tulburTootsoo" className="p-0 md:p-4">
         <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              height: "50px",
-              fontSize: "1.3rem",
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "#1890ff"
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                color: "white"
-              }}
-            >
-              <PlusOutlined style={{ fontSize: "24px" }} />
-              <span style={{ marginLeft: "5px" }}>Гүйлгээ</span>
-            </div>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2 focus:bg-blue-500 focus-within:bg-blue-500"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1F618D",
-              borderLeft: "5px solid #1F618D",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1F618D",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            >
-                15
-            </span>
-            <span className="ml-4 2xl:text-xl">Бүх</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1990ff",
-              borderLeft: "5px solid #1990ff",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1990ff",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            >
-              10
-            </span>
-            <span className="ml-4 2xl:text-xl">Эхэлсэн</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#52BE80",
-              borderLeft: "5px solid #52BE80",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#52BE80",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            >
-              5
-            </span>
-            <span className="ml-4 2xl:text-xl">Дууссан</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#FF7F50",
-              borderLeft: "5px solid #FF7F50",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#FF7F50",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            >
-              15
-            </span>
-            <span className="ml-4 2xl:text-xl">Хувaaрилсан</span>
-          </Card>
-          <Card
-            hoverable={true}
-            className="col-span-12 lg:col-span-6 xl:col-span-4 2xl:col-span-2"
-            style={{
-              borderRadius: "10px",
-              borderColor: "#1F618D",
-              borderLeft: "5px solid #1F618D",
-              height: "50px",
-              fontSize: "1.4rem",
-              display: "flex",
-              alignItems: "center",
-              padding: "10px"
-            }}
-          >
-            <span
-              style={{
-                color: "#1F618D",
-                fontWeight: "bold",
-                fontSize: "1.5rem"
-              }}
-            >
-              15
-            </span>
-            <span className="ml-4 2xl:text-xl">Цуцалсан</span>
-          </Card>
+        {[{too:1,utga:'Нийт Авлага'},{too:1,utga:'Хугацаа хэтэрсэн'},{too:1,utga:'График төлөлттэй'},{too:1,utga:'Өнөөдөр	 орж ирэх'}].map((mur, index) => {
+            return (
+              <div
+                key={`${index}toololt`}
+                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-3 intro-y cursor-pointer zoom-in"
+              >
+                <div className="h-full rounded-xl">
+                  <div className="p-3 rounded-xl">
+                    <div className="flex">
+                      <div>
+                        <div className="text-3xl text-green-600 font-bold">
+                          {mur.too}
+                        </div>
+                        <div className="text-base text-gray-500">
+                          {mur.utga}
+                        </div>
+                      </div>
+                      <div className="ml-auto">
+                        <div className="text-green-600 text-2xl">
+                          {mur.icon}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
         <Tabs size="large" style={{ marginTop: "20px" }}>
           <Tabs.TabPane
-            key="1"
+            key="1tab1"
             tab={
               <span>
                 <FileDoneOutlined style={{ fontSize: "32px" }} />
@@ -217,12 +98,12 @@ function AjiltanBurtgel({ token }) {
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
-                dataSource={[{talbai:'йллл'}]}
+                dataSource={[{key:'1'}]}
               />
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane
-            key="2"
+            key="2tab2"
             tab={
               <span>
                 <FileSearchOutlined style={{ fontSize: "32px" }} />
@@ -250,7 +131,7 @@ function AjiltanBurtgel({ token }) {
               },
               { title: "Нэр", dataIndex: "ner", ellipsis: true },
             ]}
-            dataSource={[{talbai:'йллл'}]}
+            dataSource={[]}
             />
           </Tabs.TabPane>
         </Tabs>
