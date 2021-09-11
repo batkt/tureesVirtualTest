@@ -48,7 +48,11 @@ function ZakhialgiinKhyanalt() {
       too:
         Number(gereeniiMedeelel?.niitMur) -
         Number(
-          gereeToollolt !== undefined ? gereeToollolt[0].khugatsaaKhetersen : 0
+          gereeToollolt !== undefined
+            ? gereeToollolt[0]?.khugatsaaKhetersen
+              ? 0
+              : 0
+            : 0
         ),
       icon: <FileDoneOutlined />,
       khuvi: -30,
@@ -56,7 +60,11 @@ function ZakhialgiinKhyanalt() {
     },
     {
       too:
-        gereeToollolt !== undefined ? gereeToollolt[0].khugatsaaKhetersen : 0,
+        gereeToollolt !== undefined
+          ? gereeToollolt[0]?.khugatsaaKhetersen
+            ? 0
+            : 0
+          : 0,
       icon: <HistoryOutlined />,
       khuvi: 100,
       utga: "Хугацаа хэтэрсэн",
@@ -330,7 +338,7 @@ function ZakhialgiinKhyanalt() {
       }
     )
   }
-  console.log("www", gereeToollolt)
+
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"

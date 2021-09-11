@@ -312,7 +312,10 @@ function talbaiBurtgekh({ token }) {
       khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
     >
-      <div className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5">
+      <div
+        className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"
+        style={{ maxHeight: "calc(100vh - 11rem)" }}
+      >
         <Form
           ref={formRef}
           labelCol={{ span: 8 }}
