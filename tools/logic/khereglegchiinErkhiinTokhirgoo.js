@@ -11,6 +11,7 @@ const khereglegchiinErkh = [
       "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
       "khyanalt/tulburTootsoo",
+      "khyanalt/tokhirgoo",
     ],
   },
   {
@@ -22,6 +23,7 @@ const khereglegchiinErkh = [
       "/khyanalt/khariltsagchBurtgel",
       "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
+      "khyanalt/tokhirgoo",
     ],
   },
   {
@@ -33,16 +35,16 @@ const khereglegchiinErkh = [
       "/khyanalt/khariltsagchBurtgel",
       "khyanalt/talbaiBurtgel",
       "khyanalt/tailan",
+      "khyanalt/tokhirgoo",
     ],
   },
-  
 ];
 
 export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
   switch (erkh) {
-    case "Admin" :
-    case "Sankhuu" :
-    case "ZokhionBaiguulagch" :
+    case "Admin":
+    case "Sankhuu":
+    case "ZokhionBaiguulagch":
       window.location.href = "/khyanalt/geree/gereeBurtgel";
       break;
     default:
@@ -54,7 +56,7 @@ const khuudasnuud = [
   {
     ner: "Гэрээ",
     khuudasniiNer: "geree",
-    href:'/khyanalt/geree',
+    href: "/khyanalt/geree",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +77,7 @@ const khuudasnuud = [
         <polyline points="10 9 9 9 8 9"></polyline>
       </svg>
     ),
-    sub:[
+    sub: [
       {
         ner: "Гэрээний жагсаалт",
         khuudasniiNer: "gereeBurtgel",
@@ -121,7 +123,7 @@ const khuudasnuud = [
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
-        )
+        ),
       },
       {
         ner: "Гэрээний загвар",
@@ -146,11 +148,11 @@ const khuudasnuud = [
             <line x1="16" y1="17" x2="8" y2="17"></line>
             <polyline points="10 9 9 9 8 9"></polyline>
           </svg>
-        )
-      }
-    ]
+        ),
+      },
+    ],
   },
-  
+
   {
     ner: "Байгууллага бүртгэл",
     khuudasniiNer: "barilgaBurtgel",
@@ -264,27 +266,26 @@ const khuudasnuud = [
     ),
   },
   {
-    ner:'Төлбөр тооцоо',
-    khuudasniiNer:'tulburTootsoo',
-    href:'/khyanalt/tulburTootsoo',
+    ner: "Төлбөр тооцоо",
+    khuudasniiNer: "tulburTootsoo",
+    href: "/khyanalt/tulburTootsoo",
     icon: (
       <svg
+        xmlns="http://www.w3.org/2000/svg"
         width="24"
         height="24"
         viewBox="0 0 24 24"
-        strokeWidth="2"
-        stroke="currentColor"
         fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {" "}
-        <path stroke="none" d="M0 0h24v24H0z" />{" "}
-        <path d="M10 3.2a9 9 0 1 0 10.8 10.8a1 1 0 0 0 -1 -1h-6.8a2 2 0 0 1 -2 -2v-7a.9 .9 0 0 0 -1 -.8" />{" "}
-        <path d="M15 3.5a9 9 0 0 1 5.5 5.5h-4.5a1 1 0 0 1 -1 -1v-4.5" />
+        <line x1="12" y1="1" x2="12" y2="23"></line>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
     ),
-  }
+  },
 ];
 
 function useErkh(ajiltan) {
