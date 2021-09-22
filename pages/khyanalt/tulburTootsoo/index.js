@@ -3,13 +3,15 @@ import Admin from "components/Admin";
 import React from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table } from "antd";
+import { Card, Tabs, DatePicker, Table,Select } from "antd";
 import {
   FileDoneOutlined,
   FileSearchOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
+import useDans from "../../../hooks/khuulga/useDans";
+import formatNumber from "../../../tools/function/formatNumber";
+import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 const { RangePicker } = DatePicker;
 
 const columns = [
@@ -37,9 +39,17 @@ function AjiltanBurtgel({ token }) {
   const { ajiltan, baiguullaga } = useAuth();
   const router = useRouter();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([
-    moment(new Date()).format("YYYY-MM-DD 00:00:00"),
-    moment(new Date()).format("YYYY-MM-DD 23:59:59"),
+    moment(),
+    moment(),
   ]);
+  const {dans} = useDans(token)
+  const [songogdsonDans,setSongogdsonDans] = React.useState(null)
+  const {dansniiKhuulgaGaralt} = useDansKhuulga(token,baiguullaga?._id,songogdsonDans,ekhlekhOgnoo)
+  
+  function dansSongoy(number) {
+     let songogdsonDans = dans?.accounts?.find(a=>a.number === number)
+     setSongogdsonDans(songogdsonDans)
+  }
 
   return (
     <Admin
@@ -114,6 +124,7 @@ function AjiltanBurtgel({ token }) {
                 size="small"
                 columns={columns}
                 dataSource={[{ key: "1" }]}
+                rowKey={a=>a._id}
               />
             </div>
           </Tabs.TabPane>
@@ -122,31 +133,43 @@ function AjiltanBurtgel({ token }) {
             tab={
               <span>
                 <FileSearchOutlined style={{ fontSize: "32px" }} />
-                Төлөгдсөн
+                Хуулга
               </span>
             }
           >
+            <div className='w-full flex flex-row'>
             <RangePicker
               style={{ marginBottom: "20px" }}
-              size="large"
-              defaultValue={[
-                moment(new Date(), "YYYY-MM-DD"),
-                moment(new Date(), "YYYY-MM-DD"),
-              ]}
+              value={ekhlekhOgnoo}
+              onChange={setEkhlekhOgnoo}
             />
+            <div className='w-40 ml-4'>
+              <Select placeholder='Данс' style={{width:'100%'}} onChange={dansSongoy}>
+                {dans?.accounts?.map((a)=><Select.Option key={a.number} value={a.number}>
+                  <div>{a.number}</div>
+                </Select.Option>)}
+              </Select>
+            </div>
+            {songogdsonDans && <div className='p-1 flex flex-row space-x-2 ml-auto font-medium'>Үлдэгдэл: {formatNumber(songogdsonDans.balance)} {songogdsonDans.currency}</div>}
+            </div>
             <Table
               bordered
               size="middle"
+              loading={!dansniiKhuulgaGaralt}
               columns={[
                 {
-                  title: "№",
-                  key: "index",
-                  className: "text-center",
-                  render: (text, record, index) => index + 1,
+                  title: "Огноо",
+                  key: "tranDate",
                 },
-                { title: "Нэр", dataIndex: "ner", ellipsis: true },
+                { title: "Цаг", dataIndex: "time", ellipsis: true ,render(a){return moment(new Date(a)).format('hh:mm')}},
+                { title: "Гүйлгээний утга", dataIndex: "description", ellipsis: true },
+                { title: "Гүйлгээний дүн", dataIndex: "amount", ellipsis: true },
+                { title: "Шилжүүлсэн данс", dataIndex: "relatedAccount", ellipsis: true },
+                { title: "Төлөв", dataIndex: "ner", ellipsis: true },
+                { title: "Талбай", dataIndex: "ner", ellipsis: true },
               ]}
-              dataSource={[]}
+              dataSource={dansniiKhuulgaGaralt?.transactions}
+              rowKey={a=>a._id}
             />
           </Tabs.TabPane>
         </Tabs>
