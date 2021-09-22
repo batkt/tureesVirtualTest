@@ -3,10 +3,11 @@ import Admin from "components/Admin";
 import React from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table,Select } from "antd";
+import { Card, Tabs, DatePicker, Table, Select } from "antd";
 import {
   FileDoneOutlined,
   FileSearchOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import useDans from "../../../hooks/khuulga/useDans";
@@ -38,17 +39,19 @@ const columns = [
 function AjiltanBurtgel({ token }) {
   const { ajiltan, baiguullaga } = useAuth();
   const router = useRouter();
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([
-    moment(),
-    moment(),
-  ]);
-  const {dans} = useDans(token)
-  const [songogdsonDans,setSongogdsonDans] = React.useState(null)
-  const {dansniiKhuulgaGaralt} = useDansKhuulga(token,baiguullaga?._id,songogdsonDans,ekhlekhOgnoo)
-  
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
+  const { dans } = useDans(token);
+  const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const { dansniiKhuulgaGaralt } = useDansKhuulga(
+    token,
+    baiguullaga?._id,
+    songogdsonDans,
+    ekhlekhOgnoo
+  );
+
   function dansSongoy(number) {
-     let songogdsonDans = dans?.accounts?.find(a=>a.number === number)
-     setSongogdsonDans(songogdsonDans)
+    let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
+    setSongogdsonDans(songogdsonDans);
   }
 
   return (
@@ -124,7 +127,7 @@ function AjiltanBurtgel({ token }) {
                 size="small"
                 columns={columns}
                 dataSource={[{ key: "1" }]}
-                rowKey={a=>a._id}
+                rowKey={(a) => a._id}
               />
             </div>
           </Tabs.TabPane>
@@ -137,39 +140,92 @@ function AjiltanBurtgel({ token }) {
               </span>
             }
           >
-            <div className='w-full flex flex-row'>
-            <RangePicker
-              style={{ marginBottom: "20px" }}
-              value={ekhlekhOgnoo}
-              onChange={setEkhlekhOgnoo}
-            />
-            <div className='w-40 ml-4'>
-              <Select placeholder='Данс' style={{width:'100%'}} onChange={dansSongoy}>
-                {dans?.accounts?.map((a)=><Select.Option key={a.number} value={a.number}>
-                  <div>{a.number}</div>
-                </Select.Option>)}
-              </Select>
-            </div>
-            {songogdsonDans && <div className='p-1 flex flex-row space-x-2 ml-auto font-medium'>Үлдэгдэл: {formatNumber(songogdsonDans.balance)} {songogdsonDans.currency}</div>}
+            <div className="w-full flex flex-row">
+              <RangePicker
+                style={{ marginBottom: "20px" }}
+                value={ekhlekhOgnoo}
+                onChange={setEkhlekhOgnoo}
+              />
+              <div className="w-40 ml-4">
+                <Select
+                  placeholder="Данс"
+                  style={{ width: "100%" }}
+                  onChange={dansSongoy}
+                >
+                  {dans?.accounts?.map((a) => (
+                    <Select.Option key={a.number} value={a.number}>
+                      <div>{a.number}</div>
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
+              {songogdsonDans && (
+                <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
+                  Үлдэгдэл: {formatNumber(songogdsonDans.balance)}{" "}
+                  {songogdsonDans.currency}
+                </div>
+              )}
             </div>
             <Table
               bordered
               size="middle"
               loading={!dansniiKhuulgaGaralt}
+              scroll={{ y: "calc(100vh - 30rem)" }}
               columns={[
                 {
                   title: "Огноо",
-                  key: "tranDate",
+                  dataIndex: "tranDate",
+                  width: "7rem",
                 },
-                { title: "Цаг", dataIndex: "time", ellipsis: true ,render(a){return moment(new Date(a)).format('hh:mm')}},
-                { title: "Гүйлгээний утга", dataIndex: "description", ellipsis: true },
-                { title: "Гүйлгээний дүн", dataIndex: "amount", ellipsis: true },
-                { title: "Шилжүүлсэн данс", dataIndex: "relatedAccount", ellipsis: true },
-                { title: "Төлөв", dataIndex: "ner", ellipsis: true },
-                { title: "Талбай", dataIndex: "ner", ellipsis: true },
+                {
+                  title: "Цаг",
+                  dataIndex: "time",
+                  ellipsis: true,
+                  width: "4rem",
+                  render(a) {
+                    return moment(new Date(a * 1000)).format("HH:mm");
+                  },
+                },
+                {
+                  title: "Гүйлгээний утга",
+                  dataIndex: "description",
+                },
+                {
+                  title: "Гүйлгээний дүн",
+                  dataIndex: "amount",
+                  ellipsis: true,
+                  width: "9rem",
+                  align: "right",
+                  render(a) {
+                    return `${formatNumber(a)}₮`;
+                  },
+                },
+                {
+                  title: "Шилжүүлсэн данс",
+                  dataIndex: "relatedAccount",
+                  ellipsis: true,
+                  width: "10rem",
+                },
+                {
+                  title: "Төлөв",
+                  dataIndex: "ner",
+                  ellipsis: true,
+                  width: "4rem",
+                  align: "center",
+                  className: "text-yellow-500",
+                  render() {
+                    return <WarningOutlined />;
+                  },
+                },
+                {
+                  title: "Талбай",
+                  dataIndex: "ner",
+                  ellipsis: true,
+                  width: "5rem",
+                },
               ]}
               dataSource={dansniiKhuulgaGaralt?.transactions}
-              rowKey={a=>a._id}
+              rowKey={(a) => a.record}
             />
           </Tabs.TabPane>
         </Tabs>
