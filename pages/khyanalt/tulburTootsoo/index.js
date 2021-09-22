@@ -51,6 +51,7 @@ function AjiltanBurtgel({ token }) {
 
   function dansSongoy(number) {
     let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
+    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
     setSongogdsonDans(songogdsonDans);
   }
 
