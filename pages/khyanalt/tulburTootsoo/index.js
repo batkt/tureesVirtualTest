@@ -42,7 +42,7 @@ function AjiltanBurtgel({ token }) {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
-  const { dansniiKhuulgaGaralt } = useDansKhuulga(
+  const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt } = useDansKhuulga(
     token,
     baiguullaga?._id,
     songogdsonDans,
@@ -169,7 +169,6 @@ function AjiltanBurtgel({ token }) {
             <Table
               bordered
               size="middle"
-              loading={!dansniiKhuulgaGaralt}
               scroll={{ y: "calc(100vh - 30rem)" }}
               columns={[
                 {
@@ -225,6 +224,15 @@ function AjiltanBurtgel({ token }) {
                 },
               ]}
               dataSource={dansniiKhuulgaGaralt?.transactions}
+              pagination={{
+                total: dansniiKhuulgaGaralt?.total?.count,
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  setDansniiKhuulgaKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }}
               rowKey={(a) => a.record}
             />
           </Tabs.TabPane>

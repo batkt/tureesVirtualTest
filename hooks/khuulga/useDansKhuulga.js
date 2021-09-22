@@ -1,7 +1,7 @@
-import { useState } from "react"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
-import moment from "moment"
+import { useState } from "react";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
+import moment from "moment";
 const fetcher = (
   url,
   token,
@@ -12,36 +12,41 @@ const fetcher = (
 ) =>
   axios(token)
     .post(url, {
-      dansniiDugaar:dans.number,
-      ekhlekhOgnoo:moment(ognoo[0]).format('YYYYMMDD'),
-      duusakhOgnoo:moment(ognoo[0]).format('YYYYMMDD'),
+      dansniiDugaar: dans.number,
+      ekhlekhOgnoo: moment(ognoo[0]).format("YYYYMMDD"),
+      duusakhOgnoo: moment(ognoo[1]).format("YYYYMMDD"),
       query: {
-        baiguullagiinId
+        baiguullagiinId,
       },
       ...khuudaslalt,
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-function useDansKhuulga(token, baiguullagiinId,dans,ognoo) {
+function useDansKhuulga(token, baiguullagiinId, dans, ognoo) {
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
-    search: "",
-    jagsaalt: [],
-  })
+    khuudasniiKhemjee: 100,
+  });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId && !!dans && !!ognoo
-      ? ["/bankniiDansniiKhuulgaAvya", token, baiguullagiinId, khuudaslalt,dans,ognoo]
+      ? [
+          "/bankniiDansniiKhuulgaAvya",
+          token,
+          baiguullagiinId,
+          khuudaslalt,
+          dans,
+          ognoo,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setDansniiKhuulgaKhuudaslalt,
     dansniiKhuulgaGaralt: data,
     dansniiKhuulgaMutate: mutate,
-  }
+  };
 }
 
-export default useDansKhuulga
+export default useDansKhuulga;
