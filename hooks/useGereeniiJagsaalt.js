@@ -2,9 +2,9 @@ import { useState } from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
-const fetcher = (url, token, baiguullagiinId, khuudaslalt) =>
+const fetcher = (url, token, baiguullagiinId, khuudaslalt,register) =>
   axios(token)
-    .get(url, { params: { query: { baiguullagiinId }, ...khuudaslalt } })
+    .get(url, { params: { query: {register, baiguullagiinId }, ...khuudaslalt } })
     .then((res) => res.data)
     .catch(aldaaBarigch)
 const fetcherToololt = (url, token) =>
@@ -13,7 +13,7 @@ const fetcherToololt = (url, token) =>
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useGereeniiJagsaalt(token, baiguullagiinId) {
+function useGereeniiJagsaalt(token, baiguullagiinId,register) {
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -22,7 +22,7 @@ function useGereeniiJagsaalt(token, baiguullagiinId) {
 
   const { data, mutate } = useSWR(
     token && baiguullagiinId
-      ? ["/geree", token, baiguullagiinId, khuudaslalt]
+      ? ["/geree", token, baiguullagiinId, khuudaslalt,register]
       : null,
     fetcher,
     {

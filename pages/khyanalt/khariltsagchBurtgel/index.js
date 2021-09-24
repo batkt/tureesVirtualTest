@@ -5,12 +5,8 @@ import {
   Select,
   Table,
   Space,
-  DatePicker,
-  Divider,
-  Upload,
   Form,
   Popconfirm,
-  Popover,
   Tag,
 } from "antd"
 import {
@@ -21,14 +17,15 @@ import {
   DeleteOutlined,
   SolutionOutlined,
   MailOutlined,
-  SecurityScanOutlined,
   BellOutlined,
   FileTextOutlined,
+  FileExcelOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
 import Admin from "../../../components/Admin"
-import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee"
+import Tuukh from "components/pageComponents/khariltsagch/Tuukh"
+import { aldaaBarigch } from "../../../services/uilchilgee"
 import { useAuth } from "../../../services/auth"
 import React, { useState, useRef } from "react"
 import moment from "moment"
@@ -37,13 +34,15 @@ import getBase64 from "tools/function/getBase64"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
+import { modal } from "components/ant/Modal"
 
 const iconColor = { fontSize: "18px" }
 
 function AjiltanBurtgel({ token }) {
   const formRef = useRef()
-  const zurag = useRef()
-  const empty = useRef()
+  const excelref = useRef()
+  const tuukhref = useRef()
 
   const { ajiltan } = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
@@ -61,6 +60,7 @@ function AjiltanBurtgel({ token }) {
     tuluv: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   })
+
   const khyanaltiinDun = [
     {
       too: khariltsagchiinGaralt?.niitMur,
@@ -163,7 +163,6 @@ function AjiltanBurtgel({ token }) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }))
   }
   function khariltsagchBurtgekh() {
-    var form_data = new FormData()
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
@@ -201,21 +200,6 @@ function AjiltanBurtgel({ token }) {
         message.success("Устгагдлаа")
       }
     })
-  }
-
-  const props = {
-    listType: "picture",
-    showUploadList: false,
-    className: "avatar-uploader",
-    name: "avatar",
-    multiple: false,
-    beforeUpload: (file) => {
-      getBase64(file, (img) => (zurag.current.src = img))
-      zurag.current.classList.remove("hidden")
-      empty.current.classList.add("hidden")
-      onChange("zurag", file)
-      return false
-    },
   }
 
   function onFinish() {
@@ -288,6 +272,65 @@ function AjiltanBurtgel({ token }) {
   function turulSongokh(value) {
     setFormNuukh(value)
   }
+
+  function tuukhKharya(mur) {
+    console.log(mur)
+    const footer = [
+      <Space>
+        <Button onClick={() => tuukhref.current.khaaya()}>Хаах</Button>,
+        <Button
+          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          onClick={() => tuukhref.current.khaaya()}
+        >
+          Хадгалах
+        </Button>
+        ,
+      </Space>,
+    ]
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <Tuukh
+          ref={tuukhref}
+          token={token}
+          data={mur}
+        />
+      ),
+      footer,
+    })
+  }
+
+  function talbaiOruulakhExcel() {
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+        <Button
+          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          onClick={() => excelref.current.khaaya()}
+        >
+          хадгалах
+        </Button>
+        ,
+      </Space>,
+    ]
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ExceleesOruulakh
+          ref={excelref}
+          token={token}
+          zam=""
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Гэрээний загварын excel файл"
+          zagvariinZam="talbainZagvarAvya"
+        />
+      ),
+      footer,
+    })
+  }
+
   return (
     <Admin
       title="Харилцагч бүртгэл"
@@ -295,21 +338,6 @@ function AjiltanBurtgel({ token }) {
       className="p-0 md:p-4"
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        {/* <div>
-          <Upload {...props}>
-            <div ref={empty}>
-              <Empty
-                className="w-24 h-24 border border-dashed border-blue-500 zurag"
-                description=""
-              />
-            </div>
-            <img
-              ref={zurag}
-              alt="Зураг сонгох"
-              className="w-24 h-24 border border-dashed border-blue-500 hidden"
-            />
-          </Upload>
-        </div> */}
         <Form
           ref={formRef}
           name="control-ref"
@@ -480,7 +508,8 @@ function AjiltanBurtgel({ token }) {
             )
           })}
         </div>
-        <div className="flex justify-end mb-5">
+        <div className="flex flex-row mb-5">
+          <div>
           <Button
             style={{
               alignItems: "end",
@@ -492,8 +521,22 @@ function AjiltanBurtgel({ token }) {
           >
             Мэдэгдэл илгээх
           </Button>
+          </div>
+          <div className='ml-auto'>
+          <Button
+            style={{
+              alignItems: "end",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+              marginTop: "20px",
+            }}
+            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+            onClick={talbaiOruulakhExcel}
+          >
+            Excel -ээс Харилцагч татах 
+          </Button>
+          </div>
         </div>
-
         <Table
           bordered
           tableLayout={
@@ -515,6 +558,11 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
           size="small"
+          rowSelection={{
+            onSelect:selectedRowKeys => {
+              console.log('selectedRowKeys changed: ', selectedRowKeys);
+            }
+          }}
           columns={[
             {
               title: "№",
@@ -544,7 +592,6 @@ function AjiltanBurtgel({ token }) {
             { title: "Хаяг", dataIndex: "khayag", ellipsis: true },
             { title: "Утас", dataIndex: "utas", ellipsis: true },
             { title: "И-мэйл хаяг", dataIndex: "mail", ellipsis: true },
-
             {
               title: "Төлөв",
               dataIndex: "tuluv",
@@ -555,10 +602,9 @@ function AjiltanBurtgel({ token }) {
             },
             {
               title: "Түүх",
-              dataIndex: "turul",
               ellipsis: true,
-              render: () => (
-                <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+              render: (mur) => (
+                <a className="p-2 rounded-full hover:bg-gray-200 flex items-center justify-center" onClick={()=>tuukhKharya(mur)}>
                   <FileTextOutlined style={{ fontSize: "18px" }} />
                 </a>
               ),
@@ -571,38 +617,6 @@ function AjiltanBurtgel({ token }) {
                 return moment(data).format("YYYY-MM-DD")
               },
             },
-
-            // {
-            //   title: "Зураг",
-            //   dataIndex: "",
-            //   ellipsis: true,
-            //   render: (record) => {
-            //     if (record.zurgiinNer !== undefined)
-            //       var zuragcomp = (
-            //         <img
-            //           src={
-            //             record?.zurgiinNer
-            //               ? `${url}/ajiltniiZuragAvya/${record?.baiguullagiinId}/${record?.zurgiinNer}`
-            //               : "/profile.svg"
-            //           }
-            //           style={{ borderRadius: "50%" }}
-            //         />
-            //       )
-            //     return (
-            //       zuragcomp && (
-            //         <Popover
-            //           content={
-            //             <div className="h-24 w-24 flex">{zuragcomp}</div>
-            //           }
-            //         >
-            //           <div className="h-8 w-8 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
-            //             {zuragcomp}
-            //           </div>
-            //         </Popover>
-            //       )
-            //     )
-            //   }
-            // },
             {
               title: "Тохиргоо",
               ellipsis: true,
