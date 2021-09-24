@@ -37,8 +37,7 @@ const columns = [
 ];
 
 function AjiltanBurtgel({ token }) {
-  const { ajiltan, baiguullaga } = useAuth();
-  const router = useRouter();
+  const { baiguullaga } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
@@ -60,6 +59,7 @@ function AjiltanBurtgel({ token }) {
       title="Төлбөр тооцоо"
       khuudasniiNer="tulburTootsoo"
       className="p-0 md:p-4"
+      onSearch={(search)=>setDansniiKhuulgaKhuudaslalt(a=>({...a,search}))}
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
@@ -227,6 +227,7 @@ function AjiltanBurtgel({ token }) {
               dataSource={dansniiKhuulgaGaralt?.transactions}
               pagination={{
                 total: dansniiKhuulgaGaralt?.total?.count,
+                showSizeChanger: true,
                 onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                   setDansniiKhuulgaKhuudaslalt((kh) => ({
                     ...kh,

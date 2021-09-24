@@ -381,7 +381,7 @@ function AjiltanBurtgel({ token }) {
 
           <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
           <Form.Item
-            name="mail"
+            name="nevtrekhNer"
             rules={[
               {
                 required: true,
@@ -391,8 +391,8 @@ function AjiltanBurtgel({ token }) {
           >
             <Input
               placeholder="Нэвтрэх нэр"
-              value={ajiltanState.mail}
-              onChange={(e) => onChange("mail", e.target.value)}
+              value={ajiltanState.nevtrekhNer}
+              onChange={(e) => onChange("nevtrekhNer", e.target.value)}
               prefix={<MailOutlined style={iconColor} />}
             />
           </Form.Item>
