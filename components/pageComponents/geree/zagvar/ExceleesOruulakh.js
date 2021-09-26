@@ -1,8 +1,8 @@
-import React from "react"
-import { message, Upload } from "antd"
-import { InboxOutlined } from "@ant-design/icons"
-import { url } from "services/uilchilgee"
-import _ from "lodash"
+import React from "react";
+import { message, Upload } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+import { url } from "services/uilchilgee";
+import _ from "lodash";
 
 function index(
   { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish },
@@ -12,11 +12,12 @@ function index(
     ref,
     () => ({
       khaaya() {
-        destroy()
+        _.isFunction(onFinish) && onFinish();
+        destroy();
       },
     }),
     []
-  )
+  );
 
   return (
     <div>
@@ -29,7 +30,7 @@ function index(
         headers={{ Authorization: `bearer ${token}` }}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
-            message.success("Гэрээний заалт Excel -ээс амжилттай орууллаа")
+            message.success("Гэрээний заалт Excel -ээс амжилттай орууллаа");
           }
         }}
       >
@@ -49,7 +50,7 @@ function index(
         </a>
       )}
     </div>
-  )
+  );
 }
 
-export default React.forwardRef(index)
+export default React.forwardRef(index);
