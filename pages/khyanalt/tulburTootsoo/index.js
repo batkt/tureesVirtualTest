@@ -12,6 +12,7 @@ import moment from "moment";
 import useDans from "../../../hooks/khuulga/useDans";
 import formatNumber from "../../../tools/function/formatNumber";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
+import _ from "lodash";
 const { RangePicker } = DatePicker;
 
 const columns = [
@@ -58,7 +59,9 @@ function AjiltanBurtgel({ token }) {
       title="Төлбөр тооцоо"
       khuudasniiNer="tulburTootsoo"
       className="p-0 md:p-4"
-      onSearch={(search)=>setDansniiKhuulgaKhuudaslalt(a=>({...a,search}))}
+      onSearch={(search) =>
+        setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }))
+      }
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
@@ -175,9 +178,9 @@ function AjiltanBurtgel({ token }) {
                   title: "Огноо",
                   dataIndex: "tranDate",
                   width: "7rem",
-                  render(date){
-                    return moment(date).format('YYYY-MM-DD')
-                  }
+                  render(date) {
+                    return moment(date).format("YYYY-MM-DD");
+                  },
                 },
                 {
                   title: "Цаг",
@@ -185,7 +188,9 @@ function AjiltanBurtgel({ token }) {
                   ellipsis: true,
                   width: "4rem",
                   render(a) {
-                    return moment(new Date(a * 1000)).format("HH:mm");
+                    if (_.isString(a))
+                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+                    return "";
                   },
                 },
                 {

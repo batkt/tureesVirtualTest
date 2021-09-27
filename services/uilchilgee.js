@@ -12,17 +12,17 @@ import _ from "lodash";
 //export const url = "http://192.168.0.103:8081";
 export const url = "http://103.50.205.33:8081";
 
-export const socket = () => socketIOClient(url, { transports: ['websocket'] });
+export const socket = () => socketIOClient(url, { transports: ["websocket"] });
 
 export const aldaaBarigch = (e) => {
-  if (e?.response?.data?.aldaa === 'jwt expired') {
+  if (e?.response?.data?.aldaa === "jwt expired") {
     window.location.href = "/";
-  }
-  else if (!!e?.response?.data?.aldaa)
-    message.error(e?.response?.data?.aldaa)
-  else if (!!e?.response?.errors) message.error(JSON.stringify(e?.response?.errors))
-  else message.error(JSON.stringify(e))
-}
+  } else if (!!e?.response?.data?.aldaa)
+    message.error(e?.response?.data?.aldaa);
+  else if (!!e?.response?.errors)
+    message.error(JSON.stringify(e?.response?.errors));
+  else message.error(JSON.stringify(e));
+};
 
 /*axios.interceptors.response.use(function (response) {
     // Do something with response data
@@ -35,13 +35,12 @@ export const aldaaBarigch = (e) => {
 const uilchilgee = (token) => {
   const headers = {
     "Content-type": "application/json",
-  }
-  if (!!token)
-    headers["Authorization"] = `bearer ${token}`
+  };
+  if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
     baseURL: url,
-    headers
+    headers,
   });
-}
+};
 
-export default uilchilgee
+export default uilchilgee;
