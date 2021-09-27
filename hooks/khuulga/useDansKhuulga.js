@@ -2,6 +2,18 @@ import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
+import _ from "lodash";
+
+function getSearch(search){
+  var fallback = [{ description: { $regex: search, $options: "i" } }]
+  console.log(search,'/^\d+$/.test(search)',/^\d+$/.test(search))
+  if(/^\d+$/.test(search)){
+    fallback.push({ amount: search})
+    fallback.push({ relatedAccount:search})
+  }
+  return fallback
+}
+
 const fetcher = (
   url,
   token,
@@ -11,15 +23,16 @@ const fetcher = (
   ognoo
 ) =>
   axios(token)
-    .post(url, {
-      dansniiDugaar: dans.number,
-      ekhlekhOgnoo: moment(ognoo[0]).format("YYYYMMDD"),
-      duusakhOgnoo: moment(ognoo[1]).format("YYYYMMDD"),
-      query: {
+    .get(url,{params:{
+      query:{
+        dansniiDugaar: dans.number,
         baiguullagiinId,
+        amount:{ $gt: 0 },
+        tranDate:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59'),},
+        $or: getSearch(search),
       },
-      ...khuudaslalt,
-    })
+      ...khuudaslalt
+    }})
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
@@ -27,11 +40,12 @@ function useDansKhuulga(token, baiguullagiinId, dans, ognoo) {
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
+    search:''
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId && !!dans && !!ognoo
       ? [
-          "/bankniiDansniiKhuulgaAvya",
+          "/bankniiGuilgee",
           token,
           baiguullagiinId,
           khuudaslalt,

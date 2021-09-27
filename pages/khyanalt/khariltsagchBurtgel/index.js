@@ -336,6 +336,7 @@ function AjiltanBurtgel({ token }) {
       title="Харилцагч бүртгэл"
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
+      onSearch={(search)=>setKhuudaslalt(a=>({...a,search}))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         <Form
@@ -516,6 +517,7 @@ function AjiltanBurtgel({ token }) {
                 backgroundColor: "#209669",
                 color: "#ffffff",
                 marginTop: "20px",
+                display:'flex'
               }}
               icon={<BellOutlined style={{ fontSize: "16px" }} />}
             >
@@ -529,6 +531,7 @@ function AjiltanBurtgel({ token }) {
                 backgroundColor: "#209669",
                 color: "#ffffff",
                 marginTop: "20px",
+                display:'flex'
               }}
               icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               onClick={talbaiOruulakhExcel}

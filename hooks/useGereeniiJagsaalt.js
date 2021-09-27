@@ -4,7 +4,12 @@ import useSWR from "swr"
 
 const fetcher = (url, token, baiguullagiinId, khuudaslalt,register) =>
   axios(token)
-    .get(url, { params: { query: {register, baiguullagiinId }, ...khuudaslalt } })
+    .get(url, { params: { 
+      query: {
+        register, 
+        baiguullagiinId,
+        $or: [{ ner: { $regex: search, $options: "i" } },{ register: { $regex: search, $options: "i" } },{ utas: { $regex: search, $options: "i" }},{gereeniiDugaar:{ $regex: search, $options: "i" }}],
+      }, ...khuudaslalt } })
     .then((res) => res.data)
     .catch(aldaaBarigch)
 const fetcherToololt = (url, token) =>

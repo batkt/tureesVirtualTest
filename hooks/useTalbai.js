@@ -11,7 +11,8 @@ const fetcher = (
   axios(token)
     .get(url, {params:{
       query: {
-        baiguullagiinId
+        baiguullagiinId,
+        $or: [{ kod: { $regex: search, $options: "i" } },{ talbainKhemjee: search },{ tailbar: { $regex: search, $options: "i" } }],
       },
       ...khuudaslalt,
     }})

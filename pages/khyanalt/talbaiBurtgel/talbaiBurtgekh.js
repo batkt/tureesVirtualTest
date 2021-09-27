@@ -311,6 +311,7 @@ function talbaiBurtgekh({ token }) {
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
+      onSearch={(search)=>setTalbaiKhuudaslalt(a=>({...a,search}))}
     >
       <div
         className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"

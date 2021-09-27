@@ -7,7 +7,8 @@ const fetcher = (url, token,baiguullagiinId, { search, ...khuudaslalt }) =>
     .get(url, {params:{
       order: { createdAt: -1 },
       query: {
-        baiguullagiinId
+        baiguullagiinId,
+        $or: [{ ner: { $regex: search, $options: "i" } },{ register: { $regex: search, $options: "i" } },{ utas: { $regex: search, $options: "i" } }],
       },
       ...khuudaslalt,
     }})

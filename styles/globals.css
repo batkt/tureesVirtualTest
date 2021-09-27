@@ -614,6 +614,13 @@ input:-webkit-autofill {
     @apply dark:text-gray-200;
 }
 
+.anticon{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
 .sub-menu {
     display: none;
     --tw-bg-opacity: 1;

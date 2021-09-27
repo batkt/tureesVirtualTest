@@ -228,6 +228,7 @@ function AjiltanBurtgel({ token }) {
       title="Ажилтан бүртгэл"
       khuudasniiNer="ajiltanBurtgel"
       className="p-0 md:p-4"
+      onSearch={(search)=>setAjiltniiKhuudaslalt(a=>({...a,search}))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         {/* <div>

@@ -1,7 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
-import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
 import { Card, Tabs, DatePicker, Table, Select } from "antd";
 import {
@@ -127,7 +126,7 @@ function AjiltanBurtgel({ token }) {
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
-                dataSource={[{ key: "1" }]}
+                dataSource={[]}
                 rowKey={(a) => a._id}
               />
             </div>
@@ -176,6 +175,9 @@ function AjiltanBurtgel({ token }) {
                   title: "Огноо",
                   dataIndex: "tranDate",
                   width: "7rem",
+                  render(date){
+                    return moment(date).format('YYYY-MM-DD')
+                  }
                 },
                 {
                   title: "Цаг",
@@ -224,9 +226,11 @@ function AjiltanBurtgel({ token }) {
                   width: "5rem",
                 },
               ]}
-              dataSource={dansniiKhuulgaGaralt?.transactions}
+              dataSource={dansniiKhuulgaGaralt?.jagsaalt}
               pagination={{
-                total: dansniiKhuulgaGaralt?.total?.count,
+                current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
+                pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
+                total: dansniiKhuulgaGaralt?.niitMur,
                 showSizeChanger: true,
                 onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                   setDansniiKhuulgaKhuudaslalt((kh) => ({
