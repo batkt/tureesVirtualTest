@@ -6,10 +6,9 @@ import _ from "lodash";
 
 function getSearch(search){
   var fallback = [{ description: { $regex: search, $options: "i" } }]
-  console.log(search,'/^\d+$/.test(search)',/^\d+$/.test(search))
+  fallback.push({ relatedAccount:{ $regex: search, $options: "i" }})
   if(/^\d+$/.test(search)){
     fallback.push({ amount: search})
-    fallback.push({ relatedAccount:search})
   }
   return fallback
 }
