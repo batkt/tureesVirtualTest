@@ -64,10 +64,11 @@ const YurunkhiiMedeele = ({
         </Select>
       </Form.Item>
       <Form.Item label="Талбайн дугаар" name="talbainiiDugaar">
-        <Input />
+        <Input placeholder='Талбайн дугаар'/>
       </Form.Item>
       <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
         <InputNumber
+          placeholder='Талбайн нэгж үнэ'
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -77,6 +78,7 @@ const YurunkhiiMedeele = ({
       </Form.Item>
       <Form.Item label="Талбайн нийт үнэ" name="talbainNiitUne">
         <InputNumber
+          placeholder='Талбайн нийт үнэ'
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -86,6 +88,7 @@ const YurunkhiiMedeele = ({
       </Form.Item>
       <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
         <InputNumber
+          placeholder='Талбайн хэмжээ'
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -95,6 +98,7 @@ const YurunkhiiMedeele = ({
       </Form.Item>
       <Form.Item label="Давхар" name="davkhar">
         <InputNumber
+          placeholder='Давхар'
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -104,6 +108,7 @@ const YurunkhiiMedeele = ({
       </Form.Item>
       <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
         <InputNumber
+          placeholder='Ашиглалтын зардал'
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -112,7 +117,7 @@ const YurunkhiiMedeele = ({
         />
       </Form.Item>
       <Form.Item label="Зориулалт" name="zoriulalt">
-        <Input />
+        <Input placeholder='Зориулалт'/>
       </Form.Item>
       <Form.Item wrapperCol={{span: 24}}>
         <div className="w-full flex flex-row justify-between">

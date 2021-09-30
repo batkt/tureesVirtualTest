@@ -23,6 +23,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     >
       <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
         <InputNumber
+        placeholder="Барьцаа дүн"
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -43,6 +44,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         extra="Барьцаа байршуулалтын хугацаа"
       >
         <InputNumber
+          placeholder="Барьцаа байршуулалтын хугацаа"
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

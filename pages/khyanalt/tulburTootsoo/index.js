@@ -4,6 +4,8 @@ import React from "react";
 import { useAuth } from "services/auth";
 import { Card, Tabs, DatePicker, Table, Select } from "antd";
 import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
   FileDoneOutlined,
   FileSearchOutlined,
   WarningOutlined,
@@ -36,16 +38,30 @@ const columns = [
   { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
 ];
 
+function Head({title,sort}) {
+  var icon = <ArrowUpOutlined/>
+  if(sort === -1)
+  icon = <ArrowDownOutlined/>
+  
+  return(
+    <div className='w-full flex flex-row justify-between items-center'>{title} 
+      {icon}
+    </div>
+  )
+}
+
 function AjiltanBurtgel({ token }) {
   const { baiguullaga } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const [order, setOrder] = React.useState({tranDate:-1,time:0});
   const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt } = useDansKhuulga(
     token,
     baiguullaga?._id,
     songogdsonDans,
-    ekhlekhOgnoo
+    ekhlekhOgnoo,
+    order
   );
 
   function dansSongoy(number) {
@@ -106,38 +122,6 @@ function AjiltanBurtgel({ token }) {
             key="1tab1"
             tab={
               <span>
-                <FileDoneOutlined style={{ fontSize: "32px" }} />
-                Авлага
-              </span>
-            }
-          >
-            <div>
-              <RangePicker
-                style={{ marginBottom: "15px" }}
-                size="large"
-                disabledTime
-                defaultValue={[
-                  moment(new Date(), "YYYY-MM-DD"),
-                  moment(new Date(), "YYYY-MM-DD"),
-                ]}
-                format={"YYYY-MM-DD"}
-              />
-            </div>
-            <div className="overflow-auto hidden md:block">
-              <Table
-                bordered
-                scroll={{ y: "calc(100vh - 32rem)" }}
-                size="small"
-                columns={columns}
-                dataSource={[]}
-                rowKey={(a) => a._id}
-              />
-            </div>
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            key="2tab2"
-            tab={
-              <span>
                 <FileSearchOutlined style={{ fontSize: "32px" }} />
                 Хуулга
               </span>
@@ -175,15 +159,21 @@ function AjiltanBurtgel({ token }) {
               scroll={{ y: "calc(100vh - 30rem)" }}
               columns={[
                 {
-                  title: "Огноо",
+                  title: ()=><Head title='Огноо' sort={order?.tranDate}/>,
                   dataIndex: "tranDate",
                   width: "7rem",
                   render(date) {
                     return moment(date).format("YYYY-MM-DD");
                   },
+                  onHeaderCell:
+                    (cell, index) => {
+                      return {
+                        onClick: () => setOrder(o=>({...o,tranDate:(o.tranDate === -1 ? 1 : o.tranDate - 1)})), // click header row
+                      };
+                  }
                 },
                 {
-                  title: "Цаг",
+                  title: ()=><Head title='Цаг' sort={order?.time}/>,
                   dataIndex: "time",
                   ellipsis: true,
                   width: "4rem",
@@ -192,13 +182,19 @@ function AjiltanBurtgel({ token }) {
                       return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
                     return "";
                   },
+                  onHeaderCell:
+                    (cell, index) => {
+                      return {
+                        onClick: () => setOrder(o=>({...o,time:(o.time === -1 ? 1 : o.time - 1)})), // click header row
+                      };
+                  }
                 },
                 {
                   title: "Гүйлгээний утга",
                   dataIndex: "description",
                 },
                 {
-                  title: "Гүйлгээний дүн",
+                  title: ()=><Head title='Гүйлгээний дүн' sort={order?.amount}/>,
                   dataIndex: "amount",
                   ellipsis: true,
                   width: "9rem",
@@ -206,6 +202,12 @@ function AjiltanBurtgel({ token }) {
                   render(a) {
                     return `${formatNumber(a)}₮`;
                   },
+                  onHeaderCell:
+                    (cell, index) => {
+                      return {
+                        onClick: () => setOrder(o=>({...o,amount:(o.amount === -1 ? 1 : (o.amount || 0) - 1)})), // click header row
+                      };
+                  }
                 },
                 {
                   title: "Шилжүүлсэн данс",
@@ -246,6 +248,38 @@ function AjiltanBurtgel({ token }) {
               }}
               rowKey={(a) => a.record}
             />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            key="2tab2"
+            tab={
+              <span>
+                <FileDoneOutlined style={{ fontSize: "32px" }} />
+                Авлага
+              </span>
+            }
+          >
+            <div>
+              <RangePicker
+                style={{ marginBottom: "15px" }}
+                size="large"
+                disabledTime
+                defaultValue={[
+                  moment(new Date(), "YYYY-MM-DD"),
+                  moment(new Date(), "YYYY-MM-DD"),
+                ]}
+                format={"YYYY-MM-DD"}
+              />
+            </div>
+            <div className="overflow-auto hidden md:block">
+              <Table
+                bordered
+                scroll={{ y: "calc(100vh - 32rem)" }}
+                size="small"
+                columns={columns}
+                dataSource={[]}
+                rowKey={(a) => a._id}
+              />
+            </div>
           </Tabs.TabPane>
         </Tabs>
       </Card>

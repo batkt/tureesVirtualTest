@@ -67,6 +67,10 @@ function GereeBaiguulakh({ token,data }) {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
       data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
+      data.baiguullagiinNer = baiguullaga.ner
+      data.baiguullagiinId = baiguullaga._id
+      data.gereeniiZagvariinId = gereeniiZagvar._id
+
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 
@@ -151,8 +155,8 @@ function GereeBaiguulakh({ token,data }) {
       <div className="col-span-12 p-5 box">
         <div className="px-10">
           <Steps current={current}>
-            {steps.map((item) => (
-              <Step key={item.title} title={item.title} />
+            {steps.map((item,index) => (
+              <Step key={item.title} title={item.title} onStepClick={()=>setCurrent(index)}/>
             ))}
           </Steps>
         </div>

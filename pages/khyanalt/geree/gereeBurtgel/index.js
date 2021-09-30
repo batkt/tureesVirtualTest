@@ -12,7 +12,7 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons"
-import { Table, Card, Popover, Badge, Button, Popconfirm, Drawer } from "antd"
+import { Table, Card, Popover, Badge, Popconfirm, Drawer, DatePicker } from "antd"
 import { toWords } from "mon_num"
 import Admin from "components/Admin"
 import formatNumber from "tools/function/formatNumber"
@@ -24,6 +24,7 @@ import deleteMethod from "tools/function/crud/deleteMethod"
 import GereeKharakh from "components/pageComponents/geree/Kharakh"
 import router from "next/router"
 import { useReactToPrint } from "react-to-print"
+import locale from 'antd/lib/date-picker/locale/mn_MN'
 
 function ZakhialgiinKhyanalt() {
   const { token, baiguullaga } = useAuth()
@@ -79,7 +80,7 @@ function ZakhialgiinKhyanalt() {
       too: 0,
       icon: <WarningOutlined />,
       khuvi: 100,
-      utga: "Төлбөр дутуу",
+      utga: "Сунгах гэрээ",
     },
     {
       too: 0,
@@ -395,6 +396,9 @@ function ZakhialgiinKhyanalt() {
               </div>
             )
           })}
+        </div>
+        <div className='mt-5'>
+          <DatePicker.RangePicker locale={locale} />
         </div>
         <div className="overflow-auto hidden md:block mt-8">
           <Table
