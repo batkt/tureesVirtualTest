@@ -23,6 +23,8 @@ import {
   MinusCircleOutlined,
   EyeOutlined,
   UploadOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
@@ -44,6 +46,17 @@ const normFile = (e) => {
   }
 
   return e && e.fileList
+}
+function Head({ title, sort }) {
+  var icon = <ArrowUpOutlined />
+  if (sort === -1) icon = <ArrowDownOutlined />
+
+  return (
+    <div className="w-full flex flex-row justify-between items-center">
+      {title}
+      {icon}
+    </div>
+  )
 }
 
 function talbaiBurtgekh({ token }) {
@@ -67,6 +80,7 @@ function talbaiBurtgekh({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
     zasakhEsekh: false,
   })
+  const [order, setOrder] = useState({})
 
   const khyanaltiinDun = [
     {
@@ -293,6 +307,21 @@ function talbaiBurtgekh({ token }) {
   function onFinish() {
     talbaiBurtgekh()
   }
+  function test(data) {
+    debugger
+    const khurunguud = formRef.current.getFieldsValue(khurunguud)
+    formRef.current.setFieldsValue({
+      [khurunguud]: {
+        ...khurunguud,
+        ["niit"]: khurunguud.une * khurunguud.too,
+      },
+    })
+    // formRef.current.setFieldsValue({
+    //   niit: khurunguud.une * khurunguud.too,
+    // })
+
+    console.log("data", khurunguud)
+  }
   const [form] = Form.useForm()
 
   function talbaiOruulakhExcel() {
@@ -338,7 +367,7 @@ function talbaiBurtgekh({ token }) {
     >
       <div
         className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"
-        style={{ maxHeight: "calc(100vh - 11rem)" }}
+        style={{ maxHeight: "calc(100vh - 7rem)" }}
       >
         <Form
           ref={formRef}
@@ -584,6 +613,7 @@ function talbaiBurtgekh({ token }) {
                               parser={(value) =>
                                 value.replace(/\$\s?|(,*)/g, "")
                               }
+                              onChange={() => test({ ...fields })}
                             />
                           </Form.Item>
                           <Form.Item
@@ -730,7 +760,7 @@ function talbaiBurtgekh({ token }) {
         <Table
           className={"mt-6"}
           bordered
-          tableLayout={talbainiiGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"}
+          tableLayout={"fixed"}
           rowKey={(row) => row._id}
           scroll={{ y: "calc(100vh - 25rem)" }}
           dataSource={talbainiiGaralt?.jagsaalt}
@@ -758,23 +788,34 @@ function talbaiBurtgekh({ token }) {
                 (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,
+              width: "1rem",
             },
-            { title: "Дугаар", dataIndex: "kod", ellipsis: true },
+            {
+              title: "Дугаар",
+              dataIndex: "kod",
+              ellipsis: true,
+              width: "2rem",
+            },
             {
               title: "Талбай/м2/",
               dataIndex: "talbainKhemjee",
               align: "center",
               ellipsis: true,
+              width: "2.1rem",
+              showSorterTooltip: false,
+              defaultSortOrder: "descend",
+              sorter: (a, b) =>
+                Number(a.talbainKhemjee) - Number(b.talbainKhemjee),
             },
-            {
-              title: "Нэгж үнэ/₮/",
-              dataIndex: "talbainNegjUne",
-              ellipsis: true,
-              align: "center",
-              render: (talbainNegjUne) => {
-                return formatNumber(talbainNegjUne || 0)
-              },
-            },
+            // {
+            //   title: "Нэгж үнэ/₮/",
+            //   dataIndex: "talbainNegjUne",
+            //   ellipsis: true,
+            //   align: "center",
+            //   render: (talbainNegjUne) => {
+            //     return formatNumber(talbainNegjUne || 0)
+            //   },
+            // },
             {
               title: "Нийт үнэ/₮/",
               dataIndex: "talbainNiitUne",
@@ -783,18 +824,24 @@ function talbaiBurtgekh({ token }) {
               render: (talbainNiitUne) => {
                 return formatNumber(talbainNiitUne || 0)
               },
-            },
-            {
-              title: "Зардал",
-              dataIndex: "ashiglaltiinZardal",
-              align: "center",
-              render: (data) => {
-                return formatNumber(data) + "₮"
-              },
+              showSorterTooltip: false,
               defaultSortOrder: "descend",
               sorter: (a, b) =>
-                Number(a.ashiglaltiinZardal) - Number(b.ashiglaltiinZardal),
+                Number(a.talbainNiitUne || 0) - Number(b.talbainNiitUne || 0),
+              width: "3rem",
             },
+            // {
+            //   title: "Зардал",
+            //   dataIndex: "ashiglaltiinZardal",
+            //   align: "center",
+            //   render: (data) => {
+            //     return formatNumber(data) + "₮"
+            //   },
+            //   defaultSortOrder: "descend",
+            //   showSorterTooltip: false,
+            //   sorter: (a, b) =>
+            //     Number(a.ashiglaltiinZardal) - Number(b.ashiglaltiinZardal),
+            // },
             {
               title: "Нийт зардал",
               dataIndex: "niitAshiglaltiinZardal",
@@ -802,6 +849,12 @@ function talbaiBurtgekh({ token }) {
               render: (data) => {
                 return formatNumber(data) + "₮"
               },
+              showSorterTooltip: false,
+              defaultSortOrder: "descend",
+              sorter: (a, b) =>
+                Number(a.niitAshiglaltiinZardal || 0) -
+                Number(b.niitAshiglaltiinZardal || 0),
+              width: "3rem",
             },
             {
               title: "Төлбөр",
@@ -810,13 +863,24 @@ function talbaiBurtgekh({ token }) {
               render: (data) => {
                 return formatNumber(data) + "₮"
               },
+              showSorterTooltip: false,
+              defaultSortOrder: "descend",
+              sorter: (a, b) =>
+                Number(a.tureesiinTulbur || 0) - Number(b.tureesiinTulbur || 0),
+              width: "3rem",
             },
-            { title: "Тайлбар", dataIndex: "tailbar", ellipsis: true },
+            {
+              title: "Тайлбар",
+              dataIndex: "tailbar",
+              ellipsis: true,
+              width: "3rem",
+            },
             {
               title: "Хөрөнгө",
               align: "center",
               ellipsis: true,
               width: "2rem",
+
               render: (data) => {
                 return (
                   data?.khurunguud !== undefined && (
@@ -892,6 +956,7 @@ function talbaiBurtgekh({ token }) {
             {
               title: "Тохиргоо",
               ellipsis: true,
+              width: "2rem",
               render: (data) =>
                 ajiltan?.erkh === "Admin" && (
                   <Space size="middle">

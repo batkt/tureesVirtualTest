@@ -110,14 +110,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         ellipsis: true,
       },
-      {
-        title: "Бүртгэгдсэн",
-        dataIndex: "createdAt",
-        ellipsis: true,
-        render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
-        },
-      },
+
       {
         title: "Төрөл",
         dataIndex: "turul",
@@ -131,16 +124,20 @@ function ZakhialgiinKhyanalt() {
         render: (talbainKhemjee) => {
           return `${talbainKhemjee} м2`
         },
+        showSorterTooltip: false,
+        defaultSortOrder: "descend",
+        sorter: (a, b) =>
+          Number(a.talbainKhemjee || 0) - Number(b.talbainKhemjee || 0),
       },
-      {
-        title: "Үнэ/м2/",
-        dataIndex: "talbainNegjUne",
-        ellipsis: true,
-        align: "center",
-        render: (talbainNegjUne) => {
-          return formatNumber(talbainNegjUne || 0)
-        },
-      },
+      // {
+      //   title: "Үнэ/м2/",
+      //   dataIndex: "talbainNegjUne",
+      //   ellipsis: true,
+      //   align: "center",
+      //   render: (talbainNegjUne) => {
+      //     return formatNumber(talbainNegjUne || 0)
+      //   },
+      // },
       {
         title: "Төлбөр",
         dataIndex: "sariinTurees",
@@ -149,16 +146,20 @@ function ZakhialgiinKhyanalt() {
         render: (sariinTurees) => {
           return formatNumber(sariinTurees || 0)
         },
+        showSorterTooltip: false,
+        defaultSortOrder: "descend",
+        sorter: (a, b) =>
+          Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
       },
-      {
-        title: "Барьцаа дүн",
-        dataIndex: "baritsaaAvakhDun",
-        ellipsis: true,
-        align: "center",
-        render: (baritsaaDun) => {
-          return formatNumber(baritsaaDun || 0)
-        },
-      },
+      // {
+      //   title: "Барьцаа дүн",
+      //   dataIndex: "baritsaaAvakhDun",
+      //   ellipsis: true,
+      //   align: "center",
+      //   render: (baritsaaDun) => {
+      //     return formatNumber(baritsaaDun || 0)
+      //   },
+      // },
       {
         title: "Эхлэх",
         dataIndex: "gereeniiOgnoo",
@@ -175,17 +176,17 @@ function ZakhialgiinKhyanalt() {
           return moment(duusakhOgnoo).diff(moment(new Date()), "days")
         },
       },
-      {
-        title: "Авлага дүн",
-        ellipsis: true,
-        align: "center",
-        render: (row) => {
-          return formatNumber(
-            (row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0) +
-              (row.sariinTurees || 0)
-          )
-        },
-      },
+      // {
+      //   title: "Авлага дүн",
+      //   ellipsis: true,
+      //   align: "center",
+      //   render: (row) => {
+      //     return formatNumber(
+      //       (row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0) +
+      //         (row.sariinTurees || 0)
+      //     )
+      //   },
+      // },
       {
         title: "Дуусах",
         dataIndex: "duusakhOgnoo",
@@ -193,6 +194,10 @@ function ZakhialgiinKhyanalt() {
         render: (data) => {
           return moment(data).format("YYYY-MM-DD")
         },
+        showSorterTooltip: false,
+        defaultSortOrder: "descend",
+        sorter: (a, b) =>
+          moment(a.duusakhOgnoo).unix() - moment(b.duusakhOgnoo).unix(),
       },
       {
         title: "Ажилтан",
@@ -205,7 +210,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Хавсралт",
         ellipsis: true,
-        width: "4rem",
+        width: "5rem",
         render: (mur) => {
           const data = []
           if (!!mur?.gerchilgeeniiZurag)

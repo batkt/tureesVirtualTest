@@ -31,14 +31,14 @@ import { aldaaBarigch } from "../../../services/uilchilgee"
 import { useAuth } from "../../../services/auth"
 import React, { useState, useRef } from "react"
 import moment from "moment"
-import { useKhariltsagch } from "hooks/useKhariltsagch"
+import useKhariltsagch from "hooks/useKhariltsagch"
 import getBase64 from "tools/function/getBase64"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
 import getListMethod from "tools/function/crud/getListMethod"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
+import { useKhariltsagchToololt } from "hooks/useKhariltsagch"
 import { modal } from "components/ant/Modal"
 import formatNumber from "tools/function/formatNumber"
 
@@ -52,6 +52,8 @@ function AjiltanBurtgel({ token }) {
   const { ajiltan } = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
     useKhariltsagch(token, ajiltan?.baiguullagiinId)
+  const { khariltsagchToololt, khariltsagchToololtMutate } =
+    useKhariltsagchToololt(token)
   const [formNuukh, setFormNuukh] = useState(false)
   const [jagsaaltTuukh, setJagsaaltTuukh] = useState([])
 
@@ -94,7 +96,7 @@ function AjiltanBurtgel({ token }) {
       utga: "Нийт",
     },
     {
-      too: 20,
+      too: khariltsagchToololt?.find((x) => x._id === "Иргэн")?.too || 0,
       icon: (
         <svg
           width="24"
@@ -116,7 +118,7 @@ function AjiltanBurtgel({ token }) {
       utga: "Иргэн",
     },
     {
-      too: 100,
+      too: khariltsagchToololt?.find((x) => x._id === "ААН")?.too || 0,
       icon: (
         <svg
           width="24"
@@ -141,7 +143,7 @@ function AjiltanBurtgel({ token }) {
       utga: "Аж ахуй нэгж",
     },
     {
-      too: 5,
+      too: 0,
       icon: (
         <svg
           width="24"
@@ -618,9 +620,19 @@ function AjiltanBurtgel({ token }) {
             },
             { title: "Регистр", dataIndex: "register", ellipsis: true },
             { title: "Нэр", dataIndex: "ner", ellipsis: true },
-            { title: "Хаяг", dataIndex: "khayag", ellipsis: true },
+            {
+              title: "Хаяг",
+              dataIndex: "khayag",
+              ellipsis: true,
+              width: "5rem",
+            },
             { title: "Утас", dataIndex: "utas", ellipsis: true },
-            { title: "И-мэйл хаяг", dataIndex: "mail", ellipsis: true },
+            {
+              title: "И-мэйл",
+              dataIndex: "mail",
+              ellipsis: true,
+              width: "5rem",
+            },
             {
               title: "Төлөв",
               dataIndex: "tuluv",
