@@ -351,14 +351,7 @@ function ZakhialgiinKhyanalt() {
   function gereeOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
-        <Button
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() => excelref.current.khaaya()}
-        >
-          хадгалах
-        </Button>
-        ,
+        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
       </Space>,
     ];
     modal({
