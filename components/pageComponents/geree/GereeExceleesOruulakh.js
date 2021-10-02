@@ -11,6 +11,7 @@ function GereeExceleesOruulakh(
 ) {
 
   const [zagvariinId,setGereeniiZagvar] = React.useState(null)
+  const [aldaa,setAldaa] = React.useState(null)
 
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
@@ -32,8 +33,9 @@ function GereeExceleesOruulakh(
         {gereeniiZagvarGaralt?.jagsaalt?.map(a=><Select.Option value={a._id}>{a.ner}</Select.Option>)}
       </Select>
       <div className='mt-5'/>
-      <Upload
+      {!!zagvariinId && <Upload
         type="drag"
+        showUploadList={false}
         multiple={false}
         name="file"
         data={{zagvariinId}}
@@ -48,14 +50,13 @@ function GereeExceleesOruulakh(
           return file
         }}
         onChange={({ file }) => {
-          console.log(file.response)
           if (file.response === "Amjilttai") {
             message.success("Гэрээний заалт Excel -ээс амжилттай орууллаа");
             _.isFunction(onFinish) && onFinish();
             destroy();
           }
           else if(!!file.response?.aldaa)
-          message.warning(file.response?.aldaa);
+            setAldaa(file.response?.aldaa);
         }}
       >
         <p className="ant-upload-drag-icon">
@@ -63,7 +64,12 @@ function GereeExceleesOruulakh(
         </p>
         <p className="ant-upload-text">{garchig}</p>
         <p className="ant-upload-hint">{tailbar}</p>
-      </Upload>
+      </Upload>}
+      {aldaa && <div
+                className='max-h-52 overflow-auto text-red-600'
+                dangerouslySetInnerHTML={{
+                    __html: aldaa
+                }} />}
       {zagvariinZam && (
         <a
           className="cursor-pointer text-blue-600 font-medium"
