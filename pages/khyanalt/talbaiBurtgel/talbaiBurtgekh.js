@@ -561,132 +561,144 @@ function talbaiBurtgekh({ token }) {
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Space
-                      key={key}
-                      style={{ display: "flex", marginBottom: 8 }}
-                      align="baseline"
-                    >
-                      <Row gutter={24}>
-                        <Space>
+                    <Card>
+                      <Space
+                        key={key}
+                        style={{ display: "flex", marginBottom: 8 }}
+                        align="baseline"
+                      >
+                        <Row gutter={24}>
+                          <Space>
+                            <Form.Item
+                              {...restField}
+                              label="Нэр"
+                              name={[name, "ner"]}
+                              fieldKey={[fieldKey, "ner"]}
+                              rules={[
+                                { required: true, message: "Нэр бүртгэнэ үү" },
+                              ]}
+                            >
+                              <Input placeholder="нэр" />
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              label="Тоо"
+                              name={[name, "too"]}
+                              fieldKey={[fieldKey, "too"]}
+                              rules={[
+                                {
+                                  required: false,
+                                  message: "Тоо ширхэг бүртгэнэ үү",
+                                },
+                              ]}
+                            >
+                              <Input placeholder="Тоо" />
+                            </Form.Item>
+                          </Space>
+                          <Space>
+                            <Form.Item
+                              {...restField}
+                              label="Үнэ"
+                              name={[name, "une"]}
+                              fieldKey={[fieldKey, "une"]}
+                              rules={[
+                                { required: false, message: "Үнэ бүртгэнэ үү" },
+                              ]}
+                            >
+                              <InputNumber
+                                style={{ width: "100%" }}
+                                placeholder="Нэгж үнэ"
+                                formatter={(value) =>
+                                  `${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ","
+                                  )
+                                }
+                                parser={(value) =>
+                                  value.replace(/\$\s?|(,*)/g, "")
+                                }
+                                onChange={() => test({ ...fields })}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              {...restField}
+                              label="Нийт"
+                              name={[name, "niit"]}
+                              fieldKey={[fieldKey, "niit"]}
+                              rules={[
+                                {
+                                  required: false,
+                                  message: "Нийт бүртгэнэ үү",
+                                },
+                              ]}
+                            >
+                              <InputNumber
+                                style={{ width: "100%" }}
+                                placeholder="Нийт үнэ"
+                                formatter={(value) =>
+                                  `${value}`.replace(
+                                    /\B(?=(\d{3})+(?!\d))/g,
+                                    ","
+                                  )
+                                }
+                                parser={(value) =>
+                                  value.replace(/\$\s?|(,*)/g, "")
+                                }
+                              />
+                            </Form.Item>
+                          </Space>
+                          <Space></Space>
                           <Form.Item
+                            style={{ marginLeft: "10px" }}
                             {...restField}
-                            label="Нэр"
-                            name={[name, "ner"]}
-                            fieldKey={[fieldKey, "ner"]}
-                            rules={[
-                              { required: true, message: "Нэр бүртгэнэ үү" },
-                            ]}
+                            name={[name, "zurgiinId"]}
+                            fieldKey={[fieldKey, "zurgiinId"]}
+                            getValueFromEvent={normFile}
                           >
-                            <Input placeholder="нэр" />
+                            <Upload
+                              multiple={false}
+                              listType="picture"
+                              name="file"
+                              action={`${url}/zuragKhadgalya`}
+                              method="POST"
+                              data={{ turul: "khurungu" }}
+                              headers={{ Authorization: `bearer ${token}` }}
+                            >
+                              <Button icon={<UploadOutlined />}>
+                                Зураг оруулах
+                              </Button>
+                            </Upload>
                           </Form.Item>
-                          <Form.Item
-                            {...restField}
-                            label="Тоо"
-                            name={[name, "too"]}
-                            fieldKey={[fieldKey, "too"]}
-                            rules={[
-                              {
-                                required: false,
-                                message: "Тоо ширхэг бүртгэнэ үү",
-                              },
-                            ]}
-                          >
-                            <Input placeholder="Тоо" />
-                          </Form.Item>
-                        </Space>
-                        <Space>
-                          <Form.Item
-                            {...restField}
-                            label="Үнэ"
-                            name={[name, "une"]}
-                            fieldKey={[fieldKey, "une"]}
-                            rules={[
-                              { required: false, message: "Үнэ бүртгэнэ үү" },
-                            ]}
-                          >
-                            <InputNumber
-                              style={{ width: "100%" }}
-                              placeholder="Нэгж үнэ"
-                              formatter={(value) =>
-                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              }
-                              parser={(value) =>
-                                value.replace(/\$\s?|(,*)/g, "")
-                              }
-                              onChange={() => test({ ...fields })}
-                            />
-                          </Form.Item>
-                          <Form.Item
-                            {...restField}
-                            label="Нийт"
-                            name={[name, "niit"]}
-                            fieldKey={[fieldKey, "niit"]}
-                            rules={[
-                              { required: false, message: "Нийт бүртгэнэ үү" },
-                            ]}
-                          >
-                            <InputNumber
-                              style={{ width: "100%" }}
-                              placeholder="Нийт үнэ"
-                              formatter={(value) =>
-                                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              }
-                              parser={(value) =>
-                                value.replace(/\$\s?|(,*)/g, "")
-                              }
-                            />
-                          </Form.Item>
-                        </Space>
-                        <Space></Space>
-                        <Form.Item
-                          style={{ marginLeft: "10px" }}
-                          {...restField}
-                          name={[name, "zurgiinId"]}
-                          fieldKey={[fieldKey, "zurgiinId"]}
-                          getValueFromEvent={normFile}
-                        >
-                          <Upload
-                            multiple={false}
-                            listType="picture"
-                            name="file"
-                            action={`${url}/zuragKhadgalya`}
-                            method="POST"
-                            data={{ turul: "khurungu" }}
-                            headers={{ Authorization: `bearer ${token}` }}
-                          >
-                            <Button icon={<UploadOutlined />}>
-                              Зураг оруулах
-                            </Button>
-                          </Upload>
-                        </Form.Item>
-                      </Row>
+                        </Row>
 
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    </Card>
                   ))}
-
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      style={{ width: "60%" }}
-                      icon={<PlusOutlined />}
-                    >
-                      Хөрөнгө бүртгэх
-                    </Button>
-                    <Button
-                      htmlType="submit"
-                      //onClick={onFinish}
-                      style={{
-                        backgroundColor: "#209669",
-                        color: "#ffffff",
-                        marginLeft: "10px",
-                      }}
-                    >
-                      хадгалах
-                    </Button>
-                  </Form.Item>
+                  <div className="flex justify-center">
+                    <Form.Item>
+                      <Space>
+                        <Button
+                          type="dashed"
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Хөрөнгө бүртгэх
+                        </Button>
+                        <Button
+                          htmlType="submit"
+                          //onClick={onFinish}
+                          style={{
+                            backgroundColor: "#209669",
+                            color: "#ffffff",
+                          }}
+                        >
+                          хадгалах
+                        </Button>
+                      </Space>
+                    </Form.Item>
+                  </div>
                 </>
               )}
             </Form.List>
