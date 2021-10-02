@@ -12,15 +12,7 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons"
-import {
-  Table,
-  Card,
-  Popover,
-  Badge,
-  Popconfirm,
-  Drawer,
-  DatePicker,
-} from "antd"
+import { Table, Card, Popover, Badge, Popconfirm, Drawer, DatePicker, Button, Space } from "antd"
 import { toWords } from "mon_num"
 import Admin from "components/Admin"
 import formatNumber from "tools/function/formatNumber"
@@ -32,7 +24,9 @@ import deleteMethod from "tools/function/crud/deleteMethod"
 import GereeKharakh from "components/pageComponents/geree/Kharakh"
 import router from "next/router"
 import { useReactToPrint } from "react-to-print"
-import locale from "antd/lib/date-picker/locale/mn_MN"
+import locale from 'antd/lib/date-picker/locale/mn_MN'
+import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh"
+import { modal } from "components/ant/Modal"
 
 function ZakhialgiinKhyanalt() {
   const { token, baiguullaga } = useAuth()
@@ -42,6 +36,7 @@ function ZakhialgiinKhyanalt() {
     useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
   const componentRef = React.useRef()
+  const excelref = React.useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
@@ -353,6 +348,38 @@ function ZakhialgiinKhyanalt() {
     )
   }
 
+  function gereeOruulakhExcel() {
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+        <Button
+          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          onClick={() => excelref.current.khaaya()}
+        >
+          хадгалах
+        </Button>
+        ,
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <GereeExceleesOruulakh
+          ref={excelref}
+          token={token}
+          baiguullaga={baiguullaga}
+          onFinish={gereeniiMedeelelMutate}
+          zam="gereeniiExcelTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Харилцагч загварын excel файл"
+          zagvariinZam="gereeniiExcelAvya"
+        />
+      ),
+      footer,
+    });
+  }
+
   return (
     <Admin
       khuudasniiNer="gereeBurtgel"
@@ -410,8 +437,22 @@ function ZakhialgiinKhyanalt() {
             )
           })}
         </div>
-        <div className="mt-5">
+        <div className='mt-5 flex flex-row'>
           <DatePicker.RangePicker locale={locale} />
+          <div className='ml-auto'>
+            <Button
+              style={{
+                alignItems: "end",
+                backgroundColor: "#209669",
+                color: "#ffffff",
+                display: "flex",
+              }}
+              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              onClick={gereeOruulakhExcel}
+            >
+              Excel -ээс Гэрээ татах
+            </Button>
+          </div>
         </div>
         <div className="overflow-auto hidden md:block mt-8">
           <Table
