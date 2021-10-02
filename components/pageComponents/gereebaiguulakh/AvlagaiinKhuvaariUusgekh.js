@@ -1,8 +1,7 @@
-import React from 'react';
-import { Button,  DatePicker, InputNumber } from 'antd';
-import Modal from 'antd/lib/modal/Modal';
+import React, { useEffect } from 'react';
+import { Input, InputNumber } from 'antd';
 import moment from 'moment'
-import { CloseCircleOutlined, MenuOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 function Table({data,updateMyData}) {
     return (
@@ -11,29 +10,35 @@ function Table({data,updateMyData}) {
           <div className='table-cell text-center'>
             №
           </div>
-          <div className='table-cell text-center'>
-          Огноо
+          <div className='table-cell text-center w-20'>
+            Огноо
+          </div>
+          <div className='table-cell text-center w-14'>
+            Хувь
           </div>
           <div className='table-cell text-center'>
-          Хөнгөлөх хувь
+            Төлөх дүн
           </div>
           <div className='table-cell text-center'>
-          Төлөх дүн
+            Тайлбар
           </div>
         </div>
         {data?.map((mur,index)=>
         <div className='table-row mt-2' key={index+'khyamdral'}>
-          <div className='table-cell text-center'>
-            {index + 1}
+          <div className='table-cell text-center p-1'>
+            {index + 1}.
           </div>
-          <div className='table-cell ' >
-            <DatePicker style={{width:'100%'}} placeholder='Огноо' disabled value={mur.ognoo} onChange={(v)=>updateMyData(index,'ognoo',v)}/>
+          <div className='table-cell w-20' >
+            {moment(mur.ognoo).format('YYYY-MM-DD')}
+          </div>
+          <div className='table-cell w-14'>
+            <InputNumber style={{width:'100%'}}  placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
           </div>
           <div className='table-cell '>
-            <InputNumber style={{width:'100%'}} placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
+            <InputNumber style={{width:'100%'}} formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
           </div>
           <div className='table-cell '>
-            <InputNumber style={{width:'100%'}} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
+            <Input style={{width:'100%'}} placeholder='Тайлбар' value={mur.tailbar} onChange={({target})=>updateMyData(index,'tailbar',target.value)}/>
           </div>
           <div className='table-cell fill-current text-red-500 cursor-pointer p-2'>
             <CloseCircleOutlined />
@@ -49,24 +54,21 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
   const [isModalVisible,setIsModalVisible] = React.useState(false)
   const [jagsaalt,setJagsaalt] = React.useState(value?.guilgeenuud || [])
   const {gereeniiOgnoo,tulukhUdur=[],sariinTurees} = ugugdul
-  const handleVisible = () => {
-    setIsModalVisible(!isModalVisible)
-  }
 
-  const sarOruulya = (v) => {
+  useEffect(()=>{
     var data = []
     const ognoo = moment(gereeniiOgnoo)
-    new Array(v).fill('').map((mur,index)=>{
+    new Array(ugugdul?.khugatsaa || 0).fill('').map((mur,index)=>{
       tulukhUdur.forEach((udur)=>{
         data.push({
           ognoo:moment(`${ognoo}`).add(index+1,'month').set('date',udur),
           khyamdral:0,
-          tulukhDun:0
+          tulukhDun:ugugdul.talbainNiitUne
         })
       })
     })
-    setJagsaalt(data)
-  }
+    setJagsaalt([...data])
+  },[])
 
   const updateMyData = (rowIndex, columnId, value) => {
     setJagsaalt(old =>
@@ -85,34 +87,16 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
       })
     )
   }
-  const onOk = ()=>{
-    onChange({guilgeenuud:jagsaalt})
-    setIsModalVisible(false)
-  }
  
   return(
       <div className='w-full'>
-        <Button
-          onClick={handleVisible}
-          type="primary"
-          icon={<MenuOutlined/>}
-          style={{width:'100%'}}
-        >
-          Хөнгөлөлт оруулах
-        </Button>
-        <Modal closable={false} title="Хугацааны хөнгөлөлт оруулах" visible={isModalVisible} okText='Хадгалах' cancelText='Хаах' onOk={onOk} onCancel={handleVisible}>
           <div className='divide-y-2 space-y-2'>
-            <div className='flex flex-row space-x-2'>
-              <span className='whitespace-nowrap'>Хөнгөлөх сар:</span>
-              <InputNumber style={{width:'100%'}} min={0} max={12} defaultValue={jagsaalt.length} placeholder='Хөнгөлөх сар' onChange={sarOruulya}/>
-            </div>
             <Table
               className='mt-2'
               data={jagsaalt}
               updateMyData={updateMyData}
             />
           </div>
-        </Modal>
       </div>
   )
 }
