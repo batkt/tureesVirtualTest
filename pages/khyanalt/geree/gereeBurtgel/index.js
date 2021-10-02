@@ -102,7 +102,7 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Талбай",
-        dataIndex: "talbainiiDugaar",
+        dataIndex: "talbainDugaar",
         ellipsis: true,
       },
       {

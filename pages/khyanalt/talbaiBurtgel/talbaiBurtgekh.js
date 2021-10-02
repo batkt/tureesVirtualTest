@@ -61,8 +61,11 @@ function talbaiBurtgekh({ token }) {
     talbainNegjUne: undefined,
     talbainNiitUne: undefined,
     ashiglaltiinZardal: undefined,
+    niitAshiglaltiinZardal: undefined,
+    tureesiinTulbur: undefined,
     davkhar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
+    zasakhEsekh: false,
   })
 
   const khyanaltiinDun = [
@@ -210,6 +213,22 @@ function talbaiBurtgekh({ token }) {
       formRef.current.setFieldsValue({
         talbainNiitUne: talbaiState.talbainNiitUne,
       })
+      talbaiState.tureesiinTulbur =
+        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
+      formRef.current.setFieldsValue({
+        tureesiinTulbur: talbaiState.tureesiinTulbur,
+      })
+    }
+    if (talbar === "ashiglaltiinZardal") {
+      talbaiState.niitAshiglaltiinZardal = utga * talbaiState.talbainKhemjee
+      formRef.current.setFieldsValue({
+        niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
+      })
+      talbaiState.tureesiinTulbur =
+        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
+      formRef.current.setFieldsValue({
+        tureesiinTulbur: talbaiState.tureesiinTulbur,
+      })
     }
     if (talbar === "khurunguUne") {
       talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
@@ -218,12 +237,16 @@ function talbaiBurtgekh({ token }) {
     settalbaiState((a) => ({ ...a, [talbar]: utga }))
   }
   function talbaiBurtgekh() {
+    debugger
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
-    talbaiState.khurunguud = khurunguud.khurunguud
-    talbaiState.khurunguud.map(
-      (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
-    )
+    if (khurunguud.length > 0) {
+      talbaiState.khurunguud = khurunguud.khurunguud
+      talbaiState.khurunguud.map(
+        (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
+      )
+    }
+
     if (talbaiState.zasakhEsekh === true) {
       updateMethod("talbai", token, talbaiState)
         .then(({ data }) => {
@@ -311,7 +334,7 @@ function talbaiBurtgekh({ token }) {
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
-      onSearch={(search)=>setTalbaiKhuudaslalt(a=>({...a,search}))}
+      onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search }))}
     >
       <div
         className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"
@@ -428,6 +451,54 @@ function talbaiBurtgekh({ token }) {
               />
             </Form.Item>
             <Form.Item
+              name="niitAshiglaltiinZardal"
+              label="Нийт зардал"
+              rules={[
+                {
+                  required: true,
+                  message: "Зардал бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "50%" }}
+                readOnly={true}
+                placeholder="Нийт зардал"
+                value={talbaiState.niitAshiglaltiinZardal}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                // onChange={(target) =>
+                //   onChange("niitAshiglaltiinZardal", target)
+                // }
+              />
+            </Form.Item>
+            <Form.Item
+              name="tureesiinTulbur"
+              label="Түрээсийн төлбөр"
+              rules={[
+                {
+                  required: true,
+                  message: "Түрээсийн бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                style={{ width: "50%" }}
+                readOnly={true}
+                placeholder="Түрээсийн төлбөр"
+                value={talbaiState.tureesiinTulbur}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                // onChange={(target) =>
+                //   onChange("niitAshiglaltiinZardal", target)
+                // }
+              />
+            </Form.Item>
+            <Form.Item
               name="davkhar"
               label="Давхар"
               rules={[
@@ -442,7 +513,7 @@ function talbaiBurtgekh({ token }) {
                 style={{ width: "50%" }}
                 placeholder="Давхар"
                 value={talbaiState.davkhar}
-                onChange={(target) => onChange("davkhar", target)}
+                onChange={(e) => onChange("davkhar", e.target.value)}
               />
             </Form.Item>
             <Form.Item name="tailbar" label="Тайлбар">
@@ -569,25 +640,27 @@ function talbaiBurtgekh({ token }) {
                       type="dashed"
                       onClick={() => add()}
                       block
+                      style={{ width: "60%" }}
                       icon={<PlusOutlined />}
                     >
                       Хөрөнгө бүртгэх
+                    </Button>
+                    <Button
+                      htmlType="submit"
+                      //onClick={onFinish}
+                      style={{
+                        backgroundColor: "#209669",
+                        color: "#ffffff",
+                        marginLeft: "10px",
+                      }}
+                    >
+                      хадгалах
                     </Button>
                   </Form.Item>
                 </>
               )}
             </Form.List>
           </div>
-
-          <Form.Item>
-            <Button
-              htmlType="submit"
-              //onClick={ajiltanBurtgekh}
-              style={{ backgroundColor: "#209669", color: "#ffffff" }}
-            >
-              хадгалах
-            </Button>
-          </Form.Item>
         </Form>
       </div>
       <Card size="small" className="col-span-8 p-5 cardgrid">
@@ -714,6 +787,25 @@ function talbaiBurtgekh({ token }) {
             {
               title: "Зардал",
               dataIndex: "ashiglaltiinZardal",
+              align: "center",
+              render: (data) => {
+                return formatNumber(data) + "₮"
+              },
+              defaultSortOrder: "descend",
+              sorter: (a, b) =>
+                Number(a.ashiglaltiinZardal) - Number(b.ashiglaltiinZardal),
+            },
+            {
+              title: "Нийт зардал",
+              dataIndex: "niitAshiglaltiinZardal",
+              align: "center",
+              render: (data) => {
+                return formatNumber(data) + "₮"
+              },
+            },
+            {
+              title: "Төлбөр",
+              dataIndex: "tureesiinTulbur",
               align: "center",
               render: (data) => {
                 return formatNumber(data) + "₮"

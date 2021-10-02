@@ -1,9 +1,9 @@
-import React from "react";
-import SunEditor, { buttonList } from "suneditor-react";
-import { Form, Input, Select } from "antd";
-import createMethod from "tools/function/crud/createMethod";
-import { aldaaBarigch } from "services/uilchilgee";
-import _ from "lodash";
+import React from "react"
+import SunEditor, { buttonList } from "suneditor-react"
+import { Form, Input, Select } from "antd"
+import createMethod from "tools/function/crud/createMethod"
+import { aldaaBarigch } from "services/uilchilgee"
+import _ from "lodash"
 
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -26,7 +26,7 @@ const talbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-  { ner: "Талбайн дугаар", talbar: "talbainiiDugaar" },
+  { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
@@ -36,9 +36,14 @@ const talbaruud = [
     ner: "Барьцаа байршуулах хугацаа",
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
-];
+]
 
-export var customPlugin = ({name="custom_example",title="Талбарийн нэр",button='T',songokhTalbaruud=talbaruud}) => ({
+export var customPlugin = ({
+  name = "custom_example",
+  title = "Талбарийн нэр",
+  button = "T",
+  songokhTalbaruud = talbaruud,
+}) => ({
   // @Required @Unique
   name: name,
   // @Required
@@ -61,26 +66,26 @@ export var customPlugin = ({name="custom_example",title="Талбарийн нэ
   add: function (core, targetElement) {
     // Generate submenu HTML
     // Always bind "core" when calling a plugin function
-    let listDiv = this.setSubmenu.call(core);
+    let listDiv = this.setSubmenu.call(core)
 
     // You must bind "core" object when registering an event.
     /** add event listeners */
-    var self = this;
+    var self = this
     listDiv.querySelectorAll(".se-btn-list").forEach(function (btn) {
-      btn.addEventListener("click", self.onClick.bind(core));
-    });
+      btn.addEventListener("click", self.onClick.bind(core))
+    })
 
     // @Required
     // You must add the "submenu" element using the "core.initMenuTarget" method.
     /** append target button menu */
-    core.initMenuTarget(this.name, targetElement, listDiv);
+    core.initMenuTarget(this.name, targetElement, listDiv)
   },
 
   setSubmenu: function () {
-    const listDiv = this.util.createElement("DIV");
+    const listDiv = this.util.createElement("DIV")
     // @Required
     // A "se-submenu" class is required for the top level element.
-    listDiv.className = "se-submenu se-list-layer";
+    listDiv.className = "se-submenu se-list-layer"
     listDiv.innerHTML =
       '<div class="se-list-inner se-list-font-size"><ul class="se-list-basic">' +
       songokhTalbaruud
@@ -89,22 +94,22 @@ export var customPlugin = ({name="custom_example",title="Талбарийн нэ
             `<li><button type="button" class="se-btn-list" value="&lt;${a.talbar}&gt;">{${a.ner}}</button></li>`
         )
         .join("") +
-      "</ul></div>";
+      "</ul></div>"
 
-    return listDiv;
+    return listDiv
   },
   onClick: function (e) {
-    const value = e.target.value;
-    const node = this.util.createElement("span");
-    this.util.addClass(node, "se-custom-tag");
-    node.textContent = value;
+    const value = e.target.value
+    const node = this.util.createElement("span")
+    this.util.addClass(node, "se-custom-tag")
+    node.textContent = value
 
-    this.insertNode(node);
-    const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace);
-    node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling);
-    this.submenuOff();
+    this.insertNode(node)
+    const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace)
+    node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling)
+    this.submenuOff()
   },
-});
+})
 
 const formItemLayout = {
   labelCol: {
@@ -113,41 +118,44 @@ const formItemLayout = {
   wrapperCol: {
     span: 14,
   },
-};
+}
 
 function index({ token, baiguullaga, destroy }, ref) {
-  const editorRef = React.useRef();
-  const [form] = Form.useForm();
-  const [zaalt, setZaalt] = React.useState("");
+  const editorRef = React.useRef()
+  const [form] = Form.useForm()
+  const [zaalt, setZaalt] = React.useState("")
   const onFinish = (values) => {
-    if (zaalt === "") return;
-    values["zaalt"] = zaalt;
-    values["baiguullagiinNer"] = baiguullaga.ner;
-    values["baiguullagiinId"] = baiguullaga._id;
+    if (zaalt === "") return
+    values["zaalt"] = zaalt
+    values["baiguullagiinNer"] = baiguullaga.ner
+    values["baiguullagiinId"] = baiguullaga._id
     createMethod("gereeniiZaalt", token, values)
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          form.resetFields();
-          destroy();
+          form.resetFields()
+          destroy()
         }
       })
-      .catch(aldaaBarigch);
-  };
+      .catch(aldaaBarigch)
+  }
 
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        onFinish(form.getFieldsValue());
+        onFinish(form.getFieldsValue())
       },
       khaaya() {
-        destroy();
+        destroy()
       },
     }),
     [form, zaalt]
-  );
+  )
 
-  const plugin = React.useMemo(() => customPlugin({songokhTalbaruud:talbaruud}), []);
+  const plugin = React.useMemo(
+    () => customPlugin({ songokhTalbaruud: talbaruud }),
+    []
+  )
 
   return (
     <Form form={form} {...formItemLayout}>
@@ -179,7 +187,7 @@ function index({ token, baiguullaga, destroy }, ref) {
         ref={editorRef}
       />
     </Form>
-  );
+  )
 }
 
-export default React.forwardRef(index);
+export default React.forwardRef(index)

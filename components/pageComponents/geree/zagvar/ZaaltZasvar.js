@@ -1,10 +1,16 @@
-import React from "react";
-import {renderToString} from "react-dom/server";
-import SunEditor, { buttonList } from "suneditor-react";
-import _ from "lodash";
-import { customPlugin } from "./ZaaltOruulakh";
-import { BankOutlined, ClockCircleOutlined, DollarCircleOutlined, LockOutlined, SolutionOutlined } from "@ant-design/icons";
-import {Input, Select} from "antd";
+import React from "react"
+import { renderToString } from "react-dom/server"
+import SunEditor, { buttonList } from "suneditor-react"
+import _ from "lodash"
+import { customPlugin } from "./ZaaltOruulakh"
+import {
+  BankOutlined,
+  ClockCircleOutlined,
+  DollarCircleOutlined,
+  LockOutlined,
+  SolutionOutlined,
+} from "@ant-design/icons"
+import { Input, Select } from "antd"
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -16,7 +22,7 @@ const undsenTalbaruud = [
   { ner: "Захиралын овог", talbar: "zakhirliinOvog" },
   { ner: "Захиралын нэр", talbar: "zakhirliinNer" },
   { ner: "Утас", talbar: "utas" },
-  { ner: "Хаяг", talbar: "khayag" }
+  { ner: "Хаяг", talbar: "khayag" },
 ]
 
 const khugatsaaniiTalbaruud = [
@@ -26,11 +32,11 @@ const khugatsaaniiTalbaruud = [
   { ner: "Эхлэх өдөр", talbar: "ekhlekhUdur" },
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
-  { ner: "Дуусах өдөр", talbar: "duusakhUdur" }
+  { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
 ]
 
 const talbainiiTalbaruud = [
-  { ner: "Талбайн дугаар", talbar: "talbainiiDugaar" },
+  { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
@@ -46,7 +52,7 @@ const baritsaaniiTalbaruud = [
   {
     ner: "Барьцаа байршуулах хугацаа",
     talbar: "baritsaaBairshuulakhKhugatsaa",
-  }
+  },
 ]
 
 const tulburiinTalbaruud = [
@@ -56,33 +62,58 @@ const tulburiinTalbaruud = [
 ]
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
-  const editorRef = React.useRef();
-  const [utga, setUtga] = React.useState(value);
+  const editorRef = React.useRef()
+  const [utga, setUtga] = React.useState(value)
 
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        change(utga);
-        destroy();
+        change(utga)
+        destroy()
       },
       khaaya() {
-        destroy();
+        destroy()
       },
     }),
     [utga]
-  );
+  )
 
   const custom = React.useMemo(() => {
-    const undsen = customPlugin({songokhTalbaruud:undsenTalbaruud,name:'undsen',title:'Үндсэн мэдээлэл',button:renderToString(<SolutionOutlined/>)})
-    const khugatsaa = customPlugin({songokhTalbaruud:khugatsaaniiTalbaruud,name:'khugatsaa',title:'Хугацаа',button:renderToString(<ClockCircleOutlined/>)})
-    const baritsaa = customPlugin({songokhTalbaruud:talbainiiTalbaruud,name:'talbai',title:'Түрээсийн талбай',button:renderToString(<BankOutlined/>)})
-    const talbai = customPlugin({songokhTalbaruud:baritsaaniiTalbaruud,name:'baritsaa',title:'Барьцаа',button:renderToString(<LockOutlined />)})
-    const tulbur = customPlugin({songokhTalbaruud:tulburiinTalbaruud,name:'tulbur',title:'Төлбөр',button:renderToString(<DollarCircleOutlined/>)})
-    return [undsen,khugatsaa,baritsaa,talbai,tulbur];
-  }, []);
+    const undsen = customPlugin({
+      songokhTalbaruud: undsenTalbaruud,
+      name: "undsen",
+      title: "Үндсэн мэдээлэл",
+      button: renderToString(<SolutionOutlined />),
+    })
+    const khugatsaa = customPlugin({
+      songokhTalbaruud: khugatsaaniiTalbaruud,
+      name: "khugatsaa",
+      title: "Хугацаа",
+      button: renderToString(<ClockCircleOutlined />),
+    })
+    const baritsaa = customPlugin({
+      songokhTalbaruud: talbainiiTalbaruud,
+      name: "talbai",
+      title: "Түрээсийн талбай",
+      button: renderToString(<BankOutlined />),
+    })
+    const talbai = customPlugin({
+      songokhTalbaruud: baritsaaniiTalbaruud,
+      name: "baritsaa",
+      title: "Барьцаа",
+      button: renderToString(<LockOutlined />),
+    })
+    const tulbur = customPlugin({
+      songokhTalbaruud: tulburiinTalbaruud,
+      name: "tulbur",
+      title: "Төлбөр",
+      button: renderToString(<DollarCircleOutlined />),
+    })
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur]
+  }, [])
 
-  if(_.isString(value))
+  if (_.isString(value))
     return (
       <SunEditor
         onChange={setUtga}
@@ -90,23 +121,35 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         setOptions={{
           plugins: custom,
           height: 200,
-          buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
+          buttonList: [
+            ...buttonList.formatting,
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+          ],
         }}
         showToolbar={true}
         ref={editorRef}
       />
-    );
+    )
   return (
     <React.Fragment>
-      <div className='w-full flex flex-row'>
-        <span className='w-1/3 text-right'>Харагдах дугаар:</span>
-        <div className='w-2/3'>
-          <Input placeholder='Харагдах дугаар'  value={utga?.kharagdakhDugaar} onChange={(v)=>setUtga(a=>({...a,kharagdakhDugaar:v}))}/>
+      <div className="w-full flex flex-row">
+        <span className="w-1/3 text-right">Харагдах дугаар:</span>
+        <div className="w-2/3">
+          <Input
+            placeholder="Харагдах дугаар"
+            value={utga?.kharagdakhDugaar}
+            onChange={(v) => setUtga((a) => ({ ...a, kharagdakhDugaar: v }))}
+          />
         </div>
       </div>
-      <div className='w-full flex flex-row mt-5'>
-        <span className='w-1/3 text-right'>Хамаарагдах хэсэг:</span>
-        <Select placeholder='Хамаарагдах хэсэг' className='w-2/3' value={utga?.khamaarakhKheseg} onChange={(v)=>setUtga(a=>({...a,khamaarakhKheseg:v}))}>
+      <div className="w-full flex flex-row mt-5">
+        <span className="w-1/3 text-right">Хамаарагдах хэсэг:</span>
+        <Select
+          placeholder="Хамаарагдах хэсэг"
+          className="w-2/3"
+          value={utga?.khamaarakhKheseg}
+          onChange={(v) => setUtga((a) => ({ ...a, khamaarakhKheseg: v }))}
+        >
           {[
             "Ерөнхий мэдээлэл",
             "Гэрээний хугацаа",
@@ -118,14 +161,17 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           ))}
         </Select>
       </div>
-      <div className='mt-5'/>
+      <div className="mt-5" />
       <SunEditor
-        onChange={(v)=>setUtga(a=>({...a,zaalt:v}))}
+        onChange={(v) => setUtga((a) => ({ ...a, zaalt: v }))}
         defaultValue={utga?.zaalt}
         setOptions={{
           plugins: custom,
           height: 200,
-          buttonList: [...buttonList.formatting, ["undsen","khugatsaa","talbai","baritsaa","tulbur"]],
+          buttonList: [
+            ...buttonList.formatting,
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+          ],
         }}
         showToolbar={true}
         ref={editorRef}
@@ -134,4 +180,4 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
   )
 }
 
-export default React.forwardRef(ZaaltZasvar);
+export default React.forwardRef(ZaaltZasvar)
