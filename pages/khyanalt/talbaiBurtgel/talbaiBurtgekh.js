@@ -408,6 +408,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <Input
+                style={{ width: "50%" }}
                 type="text"
                 allowClear
                 placeholder="талбайн хэмжээ/м2/"
@@ -807,6 +808,7 @@ function talbaiBurtgekh({ token }) {
               dataIndex: "kod",
               ellipsis: true,
               width: "2rem",
+              align: "center",
             },
             {
               title: "Талбай/м2/",
