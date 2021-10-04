@@ -98,7 +98,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className="text-lg font-medium truncate mr-5 dark:text-gray-300 whitespace-normal md:whitespace-nowrap"
+              className="text-lg font-medium mr-5 dark:text-gray-300 whitespace-normal md:whitespace-nowrap"
             >
               {title}
             </h2>

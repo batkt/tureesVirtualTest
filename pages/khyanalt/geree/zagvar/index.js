@@ -179,7 +179,7 @@ function index({ token }) {
                     <div className="file__icon__file-name"></div>
                   </div>
                   <div
-                    className="block font-medium mt-4 text-center truncate"
+                    className="block font-medium mt-4 text-center"
                   >
                     {a.ner}
                   </div>

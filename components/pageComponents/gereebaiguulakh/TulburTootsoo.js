@@ -21,26 +21,19 @@ const Tulbur = ({ value, onChange, next, prev }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <Form.Item label="Түрээсийн төлбөр" style={{marginBottom:10}}>
-        <div className="text-lg font-medium text-right">
+        <div className="text-lg font-medium text-right dark:text-gray-100">
           {formatNumber(value.sariinTurees)}
         </div>
       </Form.Item>
       <Form.Item label="Барьцаа төлбөр" style={{marginBottom:10}}>
-        <div className="text-lg font-medium text-right">
+        <div className="text-lg font-medium text-right dark:text-gray-100">
           {`${formatNumber(
             (value.baritsaaAvakhDun || 0) * (value.baritsaaAvakhKhugatsaa || 0)
           )}`}
         </div>
       </Form.Item>
-      {/* <Form.Item label="Алданги" style={{marginBottom:10}}>
-        <div className="text-lg font-medium text-right">
-          {`${formatNumber(
-            0.1,2
-          )}%`}
-        </div>
-      </Form.Item> */}
       <Form.Item label="Нийт дүн" style={{marginBottom:10}}>
-        <div className="text-lg font-medium text-right">
+        <div className="text-lg font-medium text-right dark:text-gray-100">
           {formatNumber(
             ((value.sariinTurees || 0) * (value.buunTulult || 1)) +
             ((value.baritsaaAvakhDun || 0) *
@@ -52,7 +45,7 @@ const Tulbur = ({ value, onChange, next, prev }) => {
         </div>
       </Form.Item>
       <Form.Item label="Төлбөрийн хуваарь" style={{marginBottom:10}}>
-        <div className='w-full flex justify-end'>
+        <div className='w-full flex justify-end dark:text-gray-100'>
           <Switch/>
         </div>
       </Form.Item>

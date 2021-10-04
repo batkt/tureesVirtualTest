@@ -101,14 +101,14 @@ function ProfileTovch({ ajiltan, garya, token }) {
                       </div>
                       <div className="ml-2 overflow-hidden w-60">
                         <div className="w-full flex items-center">
-                          <a className="font-medium truncate mr-5">
+                          <a className="font-medium mr-5">
                             {khariltsagchiinNer}
                           </a>
                           <div className="text-xs text-gray-500 ml-auto whitespace-nowrap">
                             {moment(ognoo).format("YYYY-MM-DD HH:mm")}
                           </div>
                         </div>
-                        <div className="w-full truncate text-gray-600 mt-0.5">
+                        <div className="w-full text-gray-600 mt-0.5">
                           {mashiniiDugaar}
                         </div>
                         <label>{khariltsagchiinUtas}</label>

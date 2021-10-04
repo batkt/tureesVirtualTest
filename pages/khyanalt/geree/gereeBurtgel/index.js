@@ -96,25 +96,43 @@ function ZakhialgiinKhyanalt() {
   const columns = useMemo(() => {
     var jagsaalt = [
       {
+        title: "Бүртгэсэн",
+        dataIndex: "createdAt",
+        ellipsis: true,
+        className: "text-center",
+        align:'center',
+        render(date){
+          return moment(date).format('YYYY-MM-DD HH:mm')
+        }
+      },
+      {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
+        className: "text-center",
+        align:'center',
         ellipsis: true,
       },
       {
         title: "Талбай",
         dataIndex: "talbainDugaar",
+        className: "text-center",
+        align:'center',
         ellipsis: true,
       },
 
       {
         title: "Төрөл",
         dataIndex: "turul",
+        align:'center',
+        className: "text-center",
         ellipsis: true,
       },
 
       {
         title: "Талбай /м2/",
         dataIndex: "talbainKhemjee",
+        align: "center",
+        className: "text-center",
         ellipsis: true,
         render: (talbainKhemjee) => {
           return `${talbainKhemjee} м2`
@@ -124,20 +142,12 @@ function ZakhialgiinKhyanalt() {
         sorter: (a, b) =>
           Number(a.talbainKhemjee || 0) - Number(b.talbainKhemjee || 0),
       },
-      // {
-      //   title: "Үнэ/м2/",
-      //   dataIndex: "talbainNegjUne",
-      //   ellipsis: true,
-      //   align: "center",
-      //   render: (talbainNegjUne) => {
-      //     return formatNumber(talbainNegjUne || 0)
-      //   },
-      // },
       {
         title: "Төлбөр",
         dataIndex: "sariinTurees",
-        ellipsis: true,
+        className: "text-center",
         align: "center",
+        ellipsis: true,
         render: (sariinTurees) => {
           return formatNumber(sariinTurees || 0)
         },
@@ -146,18 +156,11 @@ function ZakhialgiinKhyanalt() {
         sorter: (a, b) =>
           Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
       },
-      // {
-      //   title: "Барьцаа дүн",
-      //   dataIndex: "baritsaaAvakhDun",
-      //   ellipsis: true,
-      //   align: "center",
-      //   render: (baritsaaDun) => {
-      //     return formatNumber(baritsaaDun || 0)
-      //   },
-      // },
       {
         title: "Эхлэх",
         dataIndex: "gereeniiOgnoo",
+        className: "text-center",
+        align: "center",
         ellipsis: true,
         render: (data) => {
           return moment(data).format("YYYY-MM-DD")
@@ -166,25 +169,18 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Дуусах хоног",
         dataIndex: "duusakhOgnoo",
+        className: "text-center",
+        align: "center",
         ellipsis: true,
         render: (duusakhOgnoo) => {
           return moment(duusakhOgnoo).diff(moment(new Date()), "days")
         },
       },
-      // {
-      //   title: "Авлага дүн",
-      //   ellipsis: true,
-      //   align: "center",
-      //   render: (row) => {
-      //     return formatNumber(
-      //       (row.baritsaaAvakhDun || 0) * (row.baritsaaAvakhKhugatsaa || 0) +
-      //         (row.sariinTurees || 0)
-      //     )
-      //   },
-      // },
       {
         title: "Дуусах",
         dataIndex: "duusakhOgnoo",
+        className: "text-center",
+        align: "center",
         ellipsis: true,
         render: (data) => {
           return moment(data).format("YYYY-MM-DD")
@@ -197,6 +193,8 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
+        className: "text-center",
+        align: "center",
         ellipsis: true,
         render: () => {
           return "Админ"
@@ -205,6 +203,8 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Хавсралт",
         ellipsis: true,
+        className: "text-center",
+        align: "center",
         width: "5rem",
         render: (mur) => {
           const data = []
@@ -267,6 +267,8 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Тохиргоо",
         fixed: "right",
+        className: "text-center",
+        align: "center",
         width: "8rem",
         render: (data) => (
           <div className="flex flex-row">

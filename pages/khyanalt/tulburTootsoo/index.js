@@ -38,18 +38,6 @@ const columns = [
   { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
 ];
 
-function Head({title,sort}) {
-  var icon = <ArrowUpOutlined/>
-  if(sort === -1)
-  icon = <ArrowDownOutlined/>
-  
-  return(
-    <div className='w-full flex flex-row justify-between items-center'>{title} 
-      {icon}
-    </div>
-  )
-}
-
 function AjiltanBurtgel({ token }) {
   const { baiguullaga } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
@@ -159,7 +147,8 @@ function AjiltanBurtgel({ token }) {
               scroll={{ y: "calc(100vh - 30rem)" }}
               columns={[
                 {
-                  title: ()=><Head title='Огноо' sort={order?.tranDate}/>,
+                  title:'Огноо',
+                  sorter:true,
                   dataIndex: "tranDate",
                   width: "7rem",
                   render(date) {
@@ -173,7 +162,8 @@ function AjiltanBurtgel({ token }) {
                   }
                 },
                 {
-                  title: ()=><Head title='Цаг' sort={order?.time}/>,
+                  title:'Цаг',
+                  sorter:true,
                   dataIndex: "time",
                   ellipsis: true,
                   width: "4rem",
@@ -194,11 +184,12 @@ function AjiltanBurtgel({ token }) {
                   dataIndex: "description",
                 },
                 {
-                  title: ()=><Head title='Гүйлгээний дүн' sort={order?.amount}/>,
+                  title:'Гүйлгээний дүн',
+                  sorter:true,
                   dataIndex: "amount",
                   ellipsis: true,
                   width: "9rem",
-                  align: "right",
+                  className:'text-right',
                   render(a) {
                     return `${formatNumber(a)}₮`;
                   },
@@ -211,6 +202,7 @@ function AjiltanBurtgel({ token }) {
                 },
                 {
                   title: "Шилжүүлсэн данс",
+                  align:'center',
                   dataIndex: "relatedAccount",
                   ellipsis: true,
                   width: "10rem",

@@ -621,12 +621,31 @@ input:-webkit-autofill {
     height: 100%;
 }
 
+.ant-pagination-item-link>.anticon{
+    align-items: center;
+    display: flex !important;
+    justify-content: center;
+    height: 100%;
+}
+
+.ant-input-suffix>.anticon{
+    display: flex !important;
+}
+
 .sub-menu {
     display: none;
     --tw-bg-opacity: 1;
-    @apply rounded-l-lg bg-green-500 !important
+    @apply rounded-l-lg bg-green-500 dark:bg-gray-600 !important
 }
 
 .ant-steps-item-icon{
     @apply flex items-center justify-center !important
+}
+
+.ant-table-row:hover{
+    @apply bg-green-100 dark:bg-gray-600
+}
+
+.ant-form-item-extra{
+    @apply dark:text-gray-100
 }

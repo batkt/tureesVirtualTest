@@ -7,19 +7,19 @@ function Table({data,updateMyData}) {
     return (
       <div className='table w-full'>
         <div className='table-row'>
-          <div className='table-cell text-center'>
+          <div className='table-cell text-center dark:text-gray-100'>
             №
           </div>
-          <div className='table-cell text-center w-20'>
+          <div className='table-cell text-center w-20 dark:text-gray-100'>
             Огноо
           </div>
-          <div className='table-cell text-center w-14'>
+          <div className='table-cell text-center w-14 dark:text-gray-100'>
             Хувь
           </div>
-          <div className='table-cell text-center'>
+          <div className='table-cell text-center dark:text-gray-100'>
             Төлөх дүн
           </div>
-          <div className='table-cell text-center'>
+          <div className='table-cell text-center dark:text-gray-100'>
             Тайлбар
           </div>
         </div>

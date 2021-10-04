@@ -294,7 +294,7 @@ function BarilgaBurtgel({ token }) {
             })}
           </div>
           <div className="intro-y flex items-center h-10 mt-8">
-            <h2 className="text-lg font-medium truncate mr-5 dark:text-gray-300">
+            <h2 className="text-lg font-medium mr-5 dark:text-gray-300">
               Байгууллагын жагсаалт
             </h2>
             <div className="ml-auto flex items-center text-theme-1 dark:text-theme-10 text-blue-400 dark:text-gray-400">
