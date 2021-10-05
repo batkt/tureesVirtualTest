@@ -304,6 +304,7 @@ function AjiltanBurtgel({ token }) {
     }
   }
   function turulSongokh(value) {
+    onChange("turul", value);
     setFormNuukh(value);
   }
 
@@ -346,12 +347,7 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        <Form
-          ref={formRef}
-          name="control-ref"
-          onFinish={onFinish}
-          initialValues={{ remember: true }}
-        >
+        <Form ref={formRef} name="control-ref" onFinish={onFinish}>
           <Form.Item
             name="turul"
             rules={[
