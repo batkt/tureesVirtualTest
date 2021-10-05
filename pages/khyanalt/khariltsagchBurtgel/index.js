@@ -9,7 +9,7 @@ import {
   Popconfirm,
   Tag,
   Popover,
-} from "antd"
+} from "antd";
 import {
   UserOutlined,
   PhoneOutlined,
@@ -22,40 +22,40 @@ import {
   FileTextOutlined,
   FileExcelOutlined,
   EyeOutlined,
-} from "@ant-design/icons"
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
+} from "@ant-design/icons";
+import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
 
-import Admin from "../../../components/Admin"
-import Tuukh from "components/pageComponents/khariltsagch/Tuukh"
-import { aldaaBarigch } from "../../../services/uilchilgee"
-import { useAuth } from "../../../services/auth"
-import React, { useState, useRef } from "react"
-import moment from "moment"
-import useKhariltsagch from "hooks/useKhariltsagch"
-import getBase64 from "tools/function/getBase64"
-import deleteMethod from "tools/function/crud/deleteMethod"
-import createMethod from "tools/function/crud/createMethod"
-import updateMethod from "tools/function/crud/updateMethod"
-import getListMethod from "tools/function/crud/getListMethod"
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
-import { useKhariltsagchToololt } from "hooks/useKhariltsagch"
-import { modal } from "components/ant/Modal"
-import formatNumber from "tools/function/formatNumber"
+import Admin from "../../../components/Admin";
+import Tuukh from "components/pageComponents/khariltsagch/Tuukh";
+import { aldaaBarigch } from "../../../services/uilchilgee";
+import { useAuth } from "../../../services/auth";
+import React, { useState, useRef } from "react";
+import moment from "moment";
+import useKhariltsagch from "hooks/useKhariltsagch";
+import getBase64 from "tools/function/getBase64";
+import deleteMethod from "tools/function/crud/deleteMethod";
+import createMethod from "tools/function/crud/createMethod";
+import updateMethod from "tools/function/crud/updateMethod";
+import getListMethod from "tools/function/crud/getListMethod";
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
+import { useKhariltsagchToololt } from "hooks/useKhariltsagch";
+import { modal } from "components/ant/Modal";
+import formatNumber from "tools/function/formatNumber";
 
-const iconColor = { fontSize: "18px" }
+const iconColor = { fontSize: "18px" };
 
 function AjiltanBurtgel({ token }) {
-  const formRef = useRef()
-  const excelref = useRef()
-  const tuukhref = useRef()
+  const formRef = useRef();
+  const excelref = useRef();
+  const tuukhref = useRef();
 
-  const { ajiltan } = useAuth()
+  const { ajiltan } = useAuth();
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId)
+    useKhariltsagch(token, ajiltan?.baiguullagiinId);
   const { khariltsagchToololt, khariltsagchToololtMutate } =
-    useKhariltsagchToololt(token)
-  const [formNuukh, setFormNuukh] = useState(false)
-  const [jagsaaltTuukh, setJagsaaltTuukh] = useState([])
+    useKhariltsagchToololt(token);
+  const [formNuukh, setFormNuukh] = useState(false);
+  const [jagsaaltTuukh, setJagsaaltTuukh] = useState([]);
 
   const [khariltsagchState, setkhariltsagchState] = useState({
     ner: undefined,
@@ -67,7 +67,7 @@ function AjiltanBurtgel({ token }) {
     turul: undefined,
     tuluv: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
-  })
+  });
 
   const khyanaltiinDun = [
     {
@@ -163,15 +163,15 @@ function AjiltanBurtgel({ token }) {
       khuvi: 100,
       utga: "VIP",
     },
-  ]
+  ];
 
-  const { Option } = Select
+  const { Option } = Select;
 
   function onChange(talbar, utga) {
-    setkhariltsagchState((a) => ({ ...a, [talbar]: utga }))
+    setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
   function tuukh(data) {
-    debugger
+    debugger;
 
     getListMethod(
       "geree",
@@ -185,62 +185,68 @@ function AjiltanBurtgel({ token }) {
     )
       .then(({ data }) => {
         if (data !== undefined) {
-          setJagsaaltTuukh(data)
+          setJagsaaltTuukh(data);
         }
       })
-      .catch(aldaaBarigch)
+      .catch(aldaaBarigch);
   }
   function khariltsagchBurtgekh() {
-    khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId
+    khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId;
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай засагдлаа")
-            formRef.current.resetFields()
-            khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+            message.success("Бүртгэл амжилттай засагдлаа");
+            formRef.current.resetFields();
+            khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     } else {
       createMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай хийгдлээ")
-            formRef.current.resetFields()
-            khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     }
   }
 
   function zasya(data) {
-    data.zasakhEsekh = true
-    formRef.current.setFieldsValue({ ...data })
-    setkhariltsagchState(data)
+    data.zasakhEsekh = true;
+    formRef.current.setFieldsValue({ ...data });
+    setkhariltsagchState(data);
   }
 
   function khariltsagchUstgay(mur) {
     deleteMethod("khariltsagch", token, mur._id).then(({ data }) => {
       if (data !== undefined) {
-        khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-        message.success("Устгагдлаа")
+        khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+        message.success("Устгагдлаа");
       }
-    })
+    });
   }
 
   function onFinish() {
-    khariltsagchBurtgekh()
+    khariltsagchBurtgekh();
   }
+
+  function onRefresh() {
+    khariltsagchMutate();
+    khariltsagchToololtMutate();
+  }
+
   function checkRegister() {
-    var value1 = khariltsagchState.register.substring(0, 2)
-    var value2 = khariltsagchState.register.substring(2, 10)
-    var error = 0
+    var value1 = khariltsagchState.register.substring(0, 2);
+    var value2 = khariltsagchState.register.substring(2, 10);
+    var error = 0;
     for (var i = 0; i < 2; i++) {
-      var c = value1.charCodeAt(i)
+      var c = value1.charCodeAt(i);
       if (c) {
-        var alp = value1.charAt(i)
+        var alp = value1.charAt(i);
         if (
           c !== 32 &&
           c !== 45 &&
@@ -248,18 +254,18 @@ function AjiltanBurtgel({ token }) {
           (c < 65 || (c < 97 && c > 90) || c > 122) &&
           (c < 1024 || c > 1535)
         ) {
-          value1 = value1.replace(alp, "")
-          error++
+          value1 = value1.replace(alp, "");
+          error++;
         }
       }
     }
     for (i = 0; i < 8; i++) {
-      c = value2.charCodeAt(i)
+      c = value2.charCodeAt(i);
       if (c) {
-        alp = value2.charAt(i)
+        alp = value2.charAt(i);
         if (c < 48 || c > 57) {
-          value2 = value2.replace(alp, "")
-          error++
+          value2 = value2.replace(alp, "");
+          error++;
         }
       }
     }
@@ -268,65 +274,37 @@ function AjiltanBurtgel({ token }) {
       khariltsagchState.register.length > 10 ||
       error > 0
     ) {
-      khariltsagchState.register = value1.toUpperCase() + value2
+      khariltsagchState.register = value1.toUpperCase() + value2;
     }
     if (khariltsagchState.register.length === 10) {
-      var year = parseInt(khariltsagchState.register.substring(2, 4))
-      var month = parseInt(khariltsagchState.register.substring(4, 6))
-      month = month - 1
-      var day = parseInt(khariltsagchState.register.substring(6, 8))
-      var nowYear = new Date().getFullYear().toString().substring(2, 4)
+      var year = parseInt(khariltsagchState.register.substring(2, 4));
+      var month = parseInt(khariltsagchState.register.substring(4, 6));
+      month = month - 1;
+      var day = parseInt(khariltsagchState.register.substring(6, 8));
+      var nowYear = new Date().getFullYear().toString().substring(2, 4);
       if (month > 32 || (12 < month && month < 21)) {
-        message.warning("Регистерийн дугаарын сар буруу байна!")
-        khariltsagchState.register = ""
-        return
+        message.warning("Регистерийн дугаарын сар буруу байна!");
+        khariltsagchState.register = "";
+        return;
       } else if (year > nowYear && 21 <= month && month <= 32) {
-        message.warning("Регистерийн дугаарын жил, сарын хослол буруу байна!")
-        khariltsagchState.register = ""
-        return
+        message.warning("Регистерийн дугаарын жил, сарын хослол буруу байна!");
+        khariltsagchState.register = "";
+        return;
       }
 
-      var jil = month <= 32 && month >= 21 ? 2000 + year : 1900 + year
-      var sar = month <= 32 && month >= 21 ? month - 20 : month
-      var shineDate = new Date(jil, sar, 1)
-      var shine = new Date(shineDate - 1)
-      var nowDay = shine.getDate()
+      var jil = month <= 32 && month >= 21 ? 2000 + year : 1900 + year;
+      var sar = month <= 32 && month >= 21 ? month - 20 : month;
+      var shineDate = new Date(jil, sar, 1);
+      var shine = new Date(shineDate - 1);
+      var nowDay = shine.getDate();
       if (nowDay < day) {
-        message.warning("Регистерийн дугаарын өдөр буруу байна!")
-        return
+        message.warning("Регистерийн дугаарын өдөр буруу байна!");
+        return;
       }
     }
   }
   function turulSongokh(value) {
-    setFormNuukh(value)
-  }
-
-  function tuukhKharya(mur) {
-    const footer = [
-      <Space>
-        <Button onClick={() => tuukhref.current.khaaya()}>Хаах</Button>,
-        <Button
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() => tuukhref.current.khaaya()}
-        >
-          Хадгалах
-        </Button>
-        ,
-      </Space>,
-    ]
-    modal({
-      title: "",
-      icon: <FileExcelOutlined />,
-      content: (
-        <Tuukh
-          ref={tuukhref}
-          token={token}
-          data={mur}
-          onFinish={khariltsagchMutate}
-        />
-      ),
-      footer,
-    })
+    setFormNuukh(value);
   }
 
   function talbaiOruulakhExcel() {
@@ -341,12 +319,13 @@ function AjiltanBurtgel({ token }) {
         </Button>
         ,
       </Space>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
       content: (
         <ExceleesOruulakh
+          onFinish={onRefresh}
           ref={excelref}
           token={token}
           zam="khariltsagchTatya"
@@ -356,7 +335,7 @@ function AjiltanBurtgel({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   return (
@@ -534,7 +513,7 @@ function AjiltanBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
         <div className="flex flex-row mb-5">
@@ -591,7 +570,7 @@ function AjiltanBurtgel({ token }) {
           size="small"
           rowSelection={{
             onSelect: (selectedRowKeys) => {
-              console.log("selectedRowKeys changed: ", selectedRowKeys)
+              console.log("selectedRowKeys changed: ", selectedRowKeys);
             },
           }}
           columns={[
@@ -615,7 +594,7 @@ function AjiltanBurtgel({ token }) {
                   <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
                     {turul}
                   </Tag>
-                )
+                );
               },
             },
             { title: "Регистр", dataIndex: "register", ellipsis: true },
@@ -638,21 +617,9 @@ function AjiltanBurtgel({ token }) {
               dataIndex: "tuluv",
               ellipsis: true,
               render: () => {
-                return <Tag color="green">Идэвхтэй</Tag>
+                return <Tag color="green">Идэвхтэй</Tag>;
               },
             },
-            // {
-            //   title: "Түүх",
-            //   ellipsis: true,
-            //   render: (mur) => (
-            //     <a
-            //       className="p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-            //       onClick={() => tuukhKharya(mur)}
-            //     >
-            //       <FileTextOutlined style={{ fontSize: "18px" }} />
-            //     </a>
-            //   ),
-            // },
             {
               title: "Түүх",
 
@@ -692,7 +659,7 @@ function AjiltanBurtgel({ token }) {
                             dataIndex: "gereeniiOgnoo",
                             ellipsis: true,
                             render: (gereeniiOgnoo) => {
-                              return moment(gereeniiOgnoo).format("YYYY-MM-DD")
+                              return moment(gereeniiOgnoo).format("YYYY-MM-DD");
                             },
                           },
                           {
@@ -700,7 +667,7 @@ function AjiltanBurtgel({ token }) {
                             dataIndex: "duusakhOgnoo",
                             ellipsis: true,
                             render: (duusakhOgnoo) => {
-                              return moment(duusakhOgnoo).format("YYYY-MM-DD")
+                              return moment(duusakhOgnoo).format("YYYY-MM-DD");
                             },
                           },
                           {
@@ -718,7 +685,7 @@ function AjiltanBurtgel({ token }) {
                             dataIndex: "sariinTurees",
                             ellipsis: true,
                             render: (sariinTurees) => {
-                              return formatNumber(sariinTurees)
+                              return formatNumber(sariinTurees);
                             },
                           },
                           {
@@ -726,7 +693,7 @@ function AjiltanBurtgel({ token }) {
                             dataIndex: "talbainNiitUne",
                             ellipsis: true,
                             render: (talbainNiitUne) => {
-                              return formatNumber(talbainNiitUne)
+                              return formatNumber(talbainNiitUne);
                             },
                           },
                           // { title: "Утас", dataIndex: "utas", ellipsis: true },
@@ -754,7 +721,7 @@ function AjiltanBurtgel({ token }) {
                       <EyeOutlined style={{ fontSize: "18px" }} />
                     </a>
                   </Popover>
-                )
+                );
               },
             },
             {
@@ -762,7 +729,7 @@ function AjiltanBurtgel({ token }) {
               dataIndex: "createdAt",
               ellipsis: true,
               render: (data) => {
-                return moment(data).format("YYYY-MM-DD")
+                return moment(data).format("YYYY-MM-DD");
               },
             },
             {
@@ -796,9 +763,9 @@ function AjiltanBurtgel({ token }) {
         />
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel
+export default AjiltanBurtgel;

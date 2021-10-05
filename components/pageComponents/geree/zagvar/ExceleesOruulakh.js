@@ -30,7 +30,9 @@ function index(
         headers={{ Authorization: `bearer ${token}` }}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
-            message.success("Гэрээний заалт Excel -ээс амжилттай орууллаа");
+            _.isFunction(onFinish) && onFinish();
+            message.success("Excel -ээс мэдээлэл амжилттай орууллаа");
+            destroy();
           }
         }}
       >
