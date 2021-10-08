@@ -1,21 +1,21 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh";
-import Admin from "components/Admin";
-import React from "react";
-import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table, Select } from "antd";
+import shalgaltKhiikh from "services/shalgaltKhiikh"
+import Admin from "components/Admin"
+import React from "react"
+import { useAuth } from "services/auth"
+import { Card, Tabs, DatePicker, Table, Select } from "antd"
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   FileDoneOutlined,
   FileSearchOutlined,
   WarningOutlined,
-} from "@ant-design/icons";
-import moment from "moment";
-import useDans from "../../../hooks/khuulga/useDans";
-import formatNumber from "../../../tools/function/formatNumber";
-import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
-import _ from "lodash";
-const { RangePicker } = DatePicker;
+} from "@ant-design/icons"
+import moment from "moment"
+import useDans from "../../../hooks/khuulga/useDans"
+import formatNumber from "../../../tools/function/formatNumber"
+import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga"
+import _ from "lodash"
+const { RangePicker } = DatePicker
 
 const columns = [
   {
@@ -36,26 +36,26 @@ const columns = [
   { title: "Гүйлгээний утга", dataIndex: "ner", ellipsis: true },
   { title: "Үлдэгдэл", dataIndex: "ner", ellipsis: true },
   { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
-];
+]
 
 function AjiltanBurtgel({ token }) {
-  const { baiguullaga } = useAuth();
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
-  const { dans } = useDans(token);
-  const [songogdsonDans, setSongogdsonDans] = React.useState(null);
-  const [order, setOrder] = React.useState({tranDate:-1,time:0});
+  const { baiguullaga } = useAuth()
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
+  const { dans } = useDans(token)
+  const [songogdsonDans, setSongogdsonDans] = React.useState(null)
+  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
   const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt } = useDansKhuulga(
     token,
     baiguullaga?._id,
     songogdsonDans,
     ekhlekhOgnoo,
     order
-  );
+  )
 
   function dansSongoy(number) {
-    let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
-    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
-    setSongogdsonDans(songogdsonDans);
+    let songogdsonDans = dans?.accounts?.find((a) => a.number === number)
+    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
+    setSongogdsonDans(songogdsonDans)
   }
 
   return (
@@ -102,7 +102,7 @@ function AjiltanBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <Tabs size="large" style={{ marginTop: "20px" }}>
@@ -147,62 +147,65 @@ function AjiltanBurtgel({ token }) {
               scroll={{ y: "calc(100vh - 30rem)" }}
               columns={[
                 {
-                  title:'Огноо',
-                  sorter:true,
+                  title: "Огноо",
+                  sorter: true,
                   dataIndex: "tranDate",
                   width: "7rem",
                   render(date) {
-                    return moment(date).format("YYYY-MM-DD");
+                    return moment(date).format("YYYY-MM-DD")
                   },
-                  onHeaderCell:
-                    (cell, index) => {
-                      return {
-                        onClick: () => setOrder(o=>({...o,tranDate:(o.tranDate === -1 ? 1 : o.tranDate - 1)})), // click header row
-                      };
-                  }
+                  onHeaderCell: (cell, index) => {
+                    return {
+                      onClick: () =>
+                        setOrder((o) => ({
+                          ...o,
+                          tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
+                        })), // click header row
+                    }
+                  },
                 },
                 {
-                  title:'Цаг',
-                  sorter:true,
+                  title: "Цаг",
+                  sorter: true,
                   dataIndex: "time",
                   ellipsis: true,
                   width: "4rem",
                   render(a) {
                     if (_.isString(a))
-                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
-                    return "";
+                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`
+                    return ""
                   },
-                  onHeaderCell:
-                    (cell, index) => {
-                      return {
-                        onClick: () => setOrder(o=>({...o,time:(o.time === -1 ? 1 : o.time - 1)})), // click header row
-                      };
-                  }
+                  onHeaderCell: (cell, index) => {
+                    return {
+                      onClick: () =>
+                        setOrder((o) => ({
+                          ...o,
+                          time: o.time === -1 ? 1 : o.time - 1,
+                        })), // click header row
+                    }
+                  },
                 },
                 {
                   title: "Гүйлгээний утга",
                   dataIndex: "description",
                 },
                 {
-                  title:'Гүйлгээний дүн',
-                  sorter:true,
+                  title: "Гүйлгээний дүн",
+                  sorter: true,
                   dataIndex: "amount",
                   ellipsis: true,
                   width: "9rem",
-                  className:'text-right',
+                  className: "text-right",
+                  showSorterTooltip: false,
                   render(a) {
-                    return `${formatNumber(a)}₮`;
+                    return `${formatNumber(a)}₮`
                   },
-                  onHeaderCell:
-                    (cell, index) => {
-                      return {
-                        onClick: () => setOrder(o=>({...o,amount:(o.amount === -1 ? 1 : (o.amount || 0) - 1)})), // click header row
-                      };
-                  }
+                  sorter: (a, b) =>
+                    Number(a.amount || 0) - Number(b.amount || 0),
                 },
                 {
                   title: "Шилжүүлсэн данс",
-                  align:'center',
+                  align: "center",
                   dataIndex: "relatedAccount",
                   ellipsis: true,
                   width: "10rem",
@@ -215,7 +218,7 @@ function AjiltanBurtgel({ token }) {
                   align: "center",
                   className: "text-yellow-500",
                   render() {
-                    return <WarningOutlined />;
+                    return <WarningOutlined />
                   },
                 },
                 {
@@ -276,9 +279,9 @@ function AjiltanBurtgel({ token }) {
         </Tabs>
       </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default AjiltanBurtgel;
+export default AjiltanBurtgel
