@@ -800,6 +800,7 @@ function talbaiBurtgekh({ token }) {
             {
               title: "№",
               key: "index",
+              align: "center",
               className: "text-center",
               render: (text, record, index) =>
                 (talbainiiGaralt?.khuudasniiDugaar || 0) *
@@ -813,14 +814,14 @@ function talbaiBurtgekh({ token }) {
               title: "Дугаар",
               dataIndex: "kod",
               ellipsis: true,
-              width: "2rem",
+              width: "1.75rem",
               align: "center",
             },
             {
               title: "Давхар",
               dataIndex: "davkhar",
               ellipsis: true,
-              width: "1.5rem",
+              width: "1.2rem",
               align: "center",
             },
             {
@@ -855,7 +856,7 @@ function talbaiBurtgekh({ token }) {
               defaultSortOrder: "descend",
               sorter: (a, b) =>
                 Number(a.talbainNiitUne || 0) - Number(b.talbainNiitUne || 0),
-              width: "3rem",
+              width: "2.5rem",
             },
             // {
             //   title: "Зардал",
@@ -870,7 +871,7 @@ function talbaiBurtgekh({ token }) {
             //     Number(a.ashiglaltiinZardal) - Number(b.ashiglaltiinZardal),
             // },
             {
-              title: "Нийт зардал",
+              title: "Зардал",
               dataIndex: "niitAshiglaltiinZardal",
               align: "center",
               render: (data) => {
@@ -881,7 +882,7 @@ function talbaiBurtgekh({ token }) {
               sorter: (a, b) =>
                 Number(a.niitAshiglaltiinZardal || 0) -
                 Number(b.niitAshiglaltiinZardal || 0),
-              width: "3rem",
+              width: "2rem",
             },
             {
               title: "Төлбөр",
@@ -894,19 +895,19 @@ function talbaiBurtgekh({ token }) {
               defaultSortOrder: "descend",
               sorter: (a, b) =>
                 Number(a.tureesiinTulbur || 0) - Number(b.tureesiinTulbur || 0),
-              width: "3rem",
+              width: "2.5rem",
             },
             {
               title: "Тайлбар",
               dataIndex: "tailbar",
               ellipsis: true,
-              width: "3rem",
+              width: "4.5rem",
             },
             {
               title: "Хөрөнгө",
               align: "center",
               ellipsis: true,
-              width: "2rem",
+              width: "1.5rem",
 
               render: (data) => {
                 return (
