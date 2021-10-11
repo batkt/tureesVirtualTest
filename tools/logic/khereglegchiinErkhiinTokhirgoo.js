@@ -12,6 +12,7 @@ const khereglegchiinErkh = [
       "khyanalt/tailan",
       "khyanalt/tulburTootsoo",
       "khyanalt/tokhirgoo",
+      "khyanalt/zogsool",
     ],
   },
   {
@@ -283,6 +284,29 @@ const khuudasnuud = [
       >
         <line x1="12" y1="1" x2="12" y2="23"></line>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+      </svg>
+    ),
+  },
+  {
+    ner: "Зогсоол",
+    khuudasniiNer: "zogsool",
+    href: "/khyanalt/zogsool",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect x="1" y="3" width="15" height="13"></rect>
+        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+        <circle cx="18.5" cy="18.5" r="2.5"></circle>
       </svg>
     ),
   },

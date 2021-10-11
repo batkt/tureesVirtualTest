@@ -1,8 +1,9 @@
-import { Form, Select, Button, Input, InputNumber } from "antd"
-import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons"
-import React from "react"
-import { toWords } from "mon_num"
-import useTalbai from "hooks/useTalbai"
+import { Form, Select, Button, Input, InputNumber } from "antd";
+import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import React from "react";
+import { toWords } from "mon_num";
+import useTalbai from "hooks/useTalbai";
+import uilchilgee from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
@@ -11,7 +12,7 @@ const formItemLayout = {
   wrapperCol: {
     span: 14,
   },
-}
+};
 
 const YurunkhiiMedeele = ({
   token,
@@ -21,21 +22,64 @@ const YurunkhiiMedeele = ({
   onChange,
   value,
 }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const { talbainiiGaralt, settalbaiKhuudaslalt } = useTalbai(
     token,
     baiguullaga?._id
-  )
+  );
 
   const onChangetalbai = (v) => {
-    var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v)
-    talbai.talbainDugaar = talbai.kod
-    talbai.baritsaaAvakhDun = talbai.talbainNiitUne
-    talbai.sariinTurees = talbai.talbainNiitUne
-    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne)
-    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne)
-    form.setFieldsValue(talbai)
-    onChange({ ...value, ...talbai })
+    var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
+    talbai.talbainDugaar =
+      (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") + talbai.kod;
+    talbai.baritsaaAvakhDun =
+      (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+    talbai.sariinTurees = (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+    talbai.talbainNegjUne =
+      (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
+    talbai.talbainNiitUne =
+      (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
+    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
+    form.setFieldsValue(talbai);
+    onChange({ ...value, ...talbai });
+  };
+
+  function talbainDugaarUurchilyu({ target }) {
+    if (typeof target.value !== "string") return;
+    const talbainDugaaruud = [...new Set(target.value.split(","))];
+    uilchilgee(token)
+      .get("/talbai", {
+        params: {
+          query: {
+            kod: talbainDugaaruud,
+            baiguullagiinId: baiguullaga._id,
+          },
+        },
+      })
+      .then((a) => a.data)
+      .then((talbainuud) => {
+        var talbai = {};
+        talbainuud?.jagsaalt?.forEach((a) => {
+          talbai.baritsaaAvakhDun =
+            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+          talbai.sariinTurees =
+            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+          talbai.talbainNegjUne =
+            (talbai?.talbainNegjUne || 0) + a.talbainNegjUne;
+          talbai.talbainNiitUne =
+            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+          talbai.talbainKhemjee =
+            (talbai?.talbainKhemjee || 0) + a.talbainKhemjee;
+          talbai.davkhar =
+            (!!talbai?.davkhar ? `${talbai?.davkhar},` : "") + a.davkhar;
+        });
+        talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
+        talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
+        talbai.davkhar = [...new Set(talbai.davkhar.split(","))].join(",");
+        form.setFieldsValue(talbai);
+        onChange({ ...value, ...talbai });
+      });
   }
 
   return (
@@ -59,12 +103,12 @@ const YurunkhiiMedeele = ({
           onChange={onChangetalbai}
         >
           {talbainiiGaralt?.jagsaalt?.map((mur) => {
-            return <Select.Option key={mur._id}>{mur.kod}</Select.Option>
+            return <Select.Option key={mur._id}>{mur.kod}</Select.Option>;
           })}
         </Select>
       </Form.Item>
       <Form.Item label="Талбайн дугаар" name="talbainDugaar">
-        <Input placeholder="Талбайн дугаар" />
+        <Input placeholder="Талбайн дугаар" onChange={talbainDugaarUurchilyu} />
       </Form.Item>
       <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
         <InputNumber
@@ -135,7 +179,7 @@ const YurunkhiiMedeele = ({
         </div>
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
-export default YurunkhiiMedeele
+export default YurunkhiiMedeele;
