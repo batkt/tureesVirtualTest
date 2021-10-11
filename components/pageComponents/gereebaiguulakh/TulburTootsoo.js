@@ -44,15 +44,13 @@ const Tulbur = ({ value, onChange, next, prev }) => {
           )}
         </div>
       </Form.Item>
-      <Form.Item label="Төлбөрийн хуваарь" style={{marginBottom:10}}>
-        <div className='w-full flex justify-end dark:text-gray-100'>
-          <Switch/>
-        </div>
+      <Form.Item label="Төлбөрийн хуваарь" name='khungulukhEsekh' style={{marginBottom:10}} className='w-full flex justify-end dark:text-gray-100'>
+          <Switch style={{marginLeft:'auto'}}/>
       </Form.Item>
       <Divider/>
-      <Form.Item name='avlaga' noStyle>
+      {!!value?.khungulukhEsekh && <Form.Item name='avlaga' noStyle>
         <AvlagiinKhuvaariUusgekh ugugdul={value}/>
-      </Form.Item>
+      </Form.Item>}
       <Form.Item noStyle wrapperCol={{span: 24}}>
         <div className="w-full flex flex-row justify-between mt-4">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
