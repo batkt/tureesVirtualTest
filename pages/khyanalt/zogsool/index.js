@@ -54,7 +54,7 @@ function Zogsool({ token }) {
           }
         >
           <Table 
-            columns={[{title:'№',align:'center'},{title:'Хэн бэ ?',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},{title:'Цагийн үнэлгээ',align:'center'},{title:'Төлөх дүн',align:'center'},{title:'Утасны дугаар',align:'center'}]}
+            columns={[{title:'№',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},{title:'Цагийн үнэлгээ',align:'center'},{title:'Төлөх дүн',align:'center'},{title:'Утасны дугаар',align:'center'}]}
           />
         </Tabs.TabPane>
         <Tabs.TabPane
@@ -67,7 +67,7 @@ function Zogsool({ token }) {
           }
         >
           <Table 
-            columns={[{title:'№',align:'center'},{title:'Хэн бэ ?',align:'center',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},
+            columns={[{title:'№',align:'center'},{title:'Талбай',align:'center',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},
             {title:'Сарын зогссолын лимит цаг',align:'center'},{title:'Зогсох үлдсэн цаг',align:'center'},{title:'Илүү зогссон цаг',align:'center'},
             {title:'Энгийн цагийн үнэлгээ',align:'center'},{title:'Илүү цагийн үнэлгээ',align:'center'},{title:'Төлөх дүн',align:'center'},{title:'Утасны дугаар',align:'center'},{title:'Сануулга',align:'center'}]}
           />
