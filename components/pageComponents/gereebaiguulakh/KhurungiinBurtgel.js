@@ -47,7 +47,9 @@ const YurunkhiiMedeele = ({
 
   function talbainDugaarUurchilyu({ target }) {
     if (typeof target.value !== "string") return;
-    const talbainDugaaruud = [...new Set(target.value.split(","))];
+    const talbainDugaaruud = target.value?.includes(",")
+      ? [...new Set(target.value.split(","))]
+      : target.value;
     uilchilgee(token)
       .get("/talbai", {
         params: {
@@ -76,7 +78,10 @@ const YurunkhiiMedeele = ({
         });
         talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
         talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-        talbai.davkhar = [...new Set(talbai.davkhar.split(","))].join(",");
+        talbai.davkhar = talbai.davkhar.includes(",")
+          ? [...new Set(talbai.davkhar.split(","))].join(",")
+          : talbai.davkhar;
+        talbai.talbainDugaar = target.value;
         form.setFieldsValue(talbai);
         onChange({ ...value, ...talbai });
       });
