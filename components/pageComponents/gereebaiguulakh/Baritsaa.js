@@ -31,13 +31,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item name="baritsaaAvakhKhugatsaa" label="Барьцаа авах хугацаа">
-        <Select placeholder="Барьцаа авах хугацаа">
-          <Option value="1">1</Option>
-          <Option value="2">2</Option>
-          <Option value="3">3</Option>
-        </Select>
-      </Form.Item>
       <Form.Item
         name="baritsaaBairshuulakhKhugatsaa"
         label="Хугацаа"

@@ -91,28 +91,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
-      <Form.Item
-        label="Хүлээх хоног"
-        extra="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
-        name='khuleekhKhonog'
-      >
-        <Input
-          allowClear
-          placeholder="Хугацаа хэтрэвэл төлөлт хийх боломжит хугацаа"
-          prefix={<SolutionOutlined />}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Төлөлт сануулах"
-        extra="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"
-        name='sanuulakhKhonog'
-      >
-        <Input
-          allowClear
-          placeholder="Төлөлт сануулах мэдээлэл хугацаа дуусахаас /өдрийн өмнө"
-          prefix={<SolutionOutlined />}
-        />
-      </Form.Item>
       <Form.Item wrapperCol={{span: 24}} >
         <div className="w-full flex flex-row justify-between">
         <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
