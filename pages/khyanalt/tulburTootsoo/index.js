@@ -2,11 +2,10 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React from "react"
 import { useAuth } from "services/auth"
-import { Card, Tabs, DatePicker, Table, Select } from "antd"
+import { Card, Tabs, DatePicker, Table, Select, Button } from "antd"
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
   FileDoneOutlined,
+  FileExcelOutlined,
   FileSearchOutlined,
   WarningOutlined,
 } from "@ant-design/icons"
@@ -14,31 +13,15 @@ import moment from "moment"
 import useDans from "../../../hooks/khuulga/useDans"
 import formatNumber from "../../../tools/function/formatNumber"
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga"
+import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh"
 import _ from "lodash"
+import { modal } from "components/ant/Modal"
 const { RangePicker } = DatePicker
 
-const columns = [
-  {
-    title: "№",
-    key: "index",
-    width: "3rem",
-    className: "text-center",
-    render: (text, record, index) => index + 1,
-  },
-  { title: "Талбай", dataIndex: "ner", ellipsis: true },
-  { title: "Гэрээ", dataIndex: "ner", ellipsis: true },
-  { title: "Утас", dataIndex: "ner", ellipsis: true },
-  { title: "Огноо", dataIndex: "ner", ellipsis: true },
-  { title: "Гэрээний дүн", dataIndex: "ner", ellipsis: true },
-  { title: "Хөнгөлөлт", dataIndex: "ner", ellipsis: true },
-  { title: "Авлага дүн", dataIndex: "ner", ellipsis: true },
-  { title: "Орлого", dataIndex: "ner", ellipsis: true },
-  { title: "Гүйлгээний утга", dataIndex: "ner", ellipsis: true },
-  { title: "Үлдэгдэл", dataIndex: "ner", ellipsis: true },
-  { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
-]
+
 
 function AjiltanBurtgel({ token }) {
+  const ref = React.useRef(null)
   const { baiguullaga } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
   const { dans } = useDans(token)
@@ -57,6 +40,45 @@ function AjiltanBurtgel({ token }) {
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
     setSongogdsonDans(songogdsonDans)
   }
+
+  function guilgeeKhiiya(data) {
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+          Бүртгэл нэмэх
+      </Button>,
+  ];
+  modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+          <VoucheraarTootsooKhiikh
+              ref={ref}
+          />
+      ),
+      footer,
+  });
+  }
+
+  const columns = [
+    {
+      title: "№",
+      key: "index",
+      width: "3rem",
+      className: "text-center",
+      render: (text, record, index) => index + 1,
+    },
+    { title: "Талбай", dataIndex: "ner", ellipsis: true },
+    { title: "Утас", dataIndex: "ner", ellipsis: true },
+    { title: "Огноо", dataIndex: "ner", ellipsis: true },
+    { title: "Хөнгөлөлт", dataIndex: "ner", ellipsis: true },
+    { title: "Үлдэгдэл", dataIndex: "ner", ellipsis: true },
+    { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
+    { title: "Үйлдэл",  ellipsis: true,render:(row)=>
+    <div className='rounded-full p-1 border bg-gray-50 cursor-pointer dark:bg-gray-600 text-lg font-medium' onClick={()=>guilgeeKhiiya(row)}>
+      Гүйлгээ хийх
+    </div> },
+  ]
 
   return (
     <Admin
@@ -253,7 +275,7 @@ function AjiltanBurtgel({ token }) {
               </span>
             }
           >
-            <div>
+            <div className='flex flex-row '>
               <RangePicker
                 style={{ marginBottom: "15px" }}
                 size="large"
@@ -271,7 +293,7 @@ function AjiltanBurtgel({ token }) {
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
-                dataSource={[]}
+                dataSource={[{}]}
                 rowKey={(a) => a._id}
               />
             </div>
