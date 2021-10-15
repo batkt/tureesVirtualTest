@@ -1,63 +1,86 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import Admin from "components/Admin"
-import React from "react"
-import { useAuth } from "services/auth"
-import { Card, Tabs, DatePicker, Table, Select, Button } from "antd"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import React from "react";
+import { useAuth } from "services/auth";
+import { Card, Tabs, DatePicker, Table, Select, Button } from "antd";
 import {
   FileDoneOutlined,
   FileExcelOutlined,
   FileSearchOutlined,
   WarningOutlined,
-} from "@ant-design/icons"
-import moment from "moment"
-import useDans from "../../../hooks/khuulga/useDans"
-import formatNumber from "../../../tools/function/formatNumber"
-import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga"
-import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh"
-import _ from "lodash"
-import { modal } from "components/ant/Modal"
-const { RangePicker } = DatePicker
-
-
+} from "@ant-design/icons";
+import moment from "moment";
+import useDans from "../../../hooks/khuulga/useDans";
+import formatNumber from "../../../tools/function/formatNumber";
+import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
+import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
+import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
+import _ from "lodash";
+import { modal } from "components/ant/Modal";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+const { RangePicker } = DatePicker;
 
 function AjiltanBurtgel({ token }) {
-  const ref = React.useRef(null)
-  const { baiguullaga } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
-  const { dans } = useDans(token)
-  const [songogdsonDans, setSongogdsonDans] = React.useState(null)
-  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
+  const ref = React.useRef(null);
+  const refGuilgee = React.useRef(null);
+  const { baiguullaga } = useAuth();
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
+  const { dans } = useDans(token);
+  const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 });
   const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt } = useDansKhuulga(
     token,
     baiguullaga?._id,
     songogdsonDans,
     ekhlekhOgnoo,
     order
-  )
+  );
+
+  const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
+    token,
+    baiguullaga?._id
+  );
 
   function dansSongoy(number) {
-    let songogdsonDans = dans?.accounts?.find((a) => a.number === number)
-    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
-    setSongogdsonDans(songogdsonDans)
+    let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
+    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
+    setSongogdsonDans(songogdsonDans);
   }
 
   function guilgeeKhiiya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-          Бүртгэл нэмэх
+        Бүртгэл нэмэх
       </Button>,
-  ];
-  modal({
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: <VoucheraarTootsooKhiikh ref={ref} />,
+      footer,
+    });
+  }
+
+  function guilgeeKholbyo(data) {
+    const footer = [
+      <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
+        Бүртгэл нэмэх
+      </Button>,
+    ];
+    modal({
       title: "",
       icon: <FileExcelOutlined />,
       content: (
-          <VoucheraarTootsooKhiikh
-              ref={ref}
-          />
+        <GuilgeeKholbokh
+          ref={refGuilgee}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+        />
       ),
       footer,
-  });
+    });
   }
 
   const columns = [
@@ -68,17 +91,36 @@ function AjiltanBurtgel({ token }) {
       className: "text-center",
       render: (text, record, index) => index + 1,
     },
-    { title: "Талбай", dataIndex: "ner", ellipsis: true },
-    { title: "Утас", dataIndex: "ner", ellipsis: true },
-    { title: "Огноо", dataIndex: "ner", ellipsis: true },
-    { title: "Хөнгөлөлт", dataIndex: "ner", ellipsis: true },
-    { title: "Үлдэгдэл", dataIndex: "ner", ellipsis: true },
-    { title: "Дараагийн төлөлт", dataIndex: "ner", ellipsis: true },
-    { title: "Үйлдэл",  ellipsis: true,render:(row)=>
-    <div className='rounded-full p-1 border bg-gray-50 cursor-pointer dark:bg-gray-600 text-lg font-medium' onClick={()=>guilgeeKhiiya(row)}>
-      Гүйлгээ хийх
-    </div> },
-  ]
+    { title: "Талбай", dataIndex: "talbainDugaar", ellipsis: true },
+    { title: "Утас", dataIndex: "utas", ellipsis: true },
+    {
+      title: "Огноо",
+      dataIndex: "gereeniiOgnoo",
+      ellipsis: true,
+      render(a) {
+        return moment(a).format("YYYY-MM-DD");
+      },
+    },
+    { title: "Түрээслэгч", dataIndex: "ner", ellipsis: true },
+    { title: "Үлдэгдэл", dataIndex: "avlaga", ellipsis: true },
+    {
+      title: "Дараагийн төлөлт",
+      dataIndex: "tulultKhiikhOgnoo",
+      ellipsis: true,
+    },
+    {
+      title: "Үйлдэл",
+      ellipsis: true,
+      render: (row) => (
+        <div
+          className="rounded-full p-1 border bg-gray-50 cursor-pointer dark:bg-gray-600 text-lg font-medium"
+          onClick={() => guilgeeKhiiya(row)}
+        >
+          Гүйлгээ хийх
+        </div>
+      ),
+    },
+  ];
 
   return (
     <Admin
@@ -124,7 +166,7 @@ function AjiltanBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
         <Tabs size="large" style={{ marginTop: "20px" }}>
@@ -174,7 +216,7 @@ function AjiltanBurtgel({ token }) {
                   dataIndex: "tranDate",
                   width: "7rem",
                   render(date) {
-                    return moment(date).format("YYYY-MM-DD")
+                    return moment(date).format("YYYY-MM-DD");
                   },
                   onHeaderCell: (cell, index) => {
                     return {
@@ -183,7 +225,7 @@ function AjiltanBurtgel({ token }) {
                           ...o,
                           tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
                         })), // click header row
-                    }
+                    };
                   },
                 },
                 {
@@ -194,8 +236,8 @@ function AjiltanBurtgel({ token }) {
                   width: "4rem",
                   render(a) {
                     if (_.isString(a))
-                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`
-                    return ""
+                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+                    return "";
                   },
                   onHeaderCell: (cell, index) => {
                     return {
@@ -204,7 +246,7 @@ function AjiltanBurtgel({ token }) {
                           ...o,
                           time: o.time === -1 ? 1 : o.time - 1,
                         })), // click header row
-                    }
+                    };
                   },
                 },
                 {
@@ -220,7 +262,7 @@ function AjiltanBurtgel({ token }) {
                   className: "text-right",
                   showSorterTooltip: false,
                   render(a) {
-                    return `${formatNumber(a)}₮`
+                    return `${formatNumber(a)}₮`;
                   },
                   sorter: (a, b) =>
                     Number(a.amount || 0) - Number(b.amount || 0),
@@ -240,7 +282,13 @@ function AjiltanBurtgel({ token }) {
                   align: "center",
                   className: "text-yellow-500",
                   render() {
-                    return <WarningOutlined />
+                    return (
+                      <Button
+                        shape="circle"
+                        className="ant-pagination-item-link text-yellow-500"
+                        icon={<WarningOutlined onClick={guilgeeKholbyo} />}
+                      />
+                    );
                   },
                 },
                 {
@@ -275,7 +323,7 @@ function AjiltanBurtgel({ token }) {
               </span>
             }
           >
-            <div className='flex flex-row '>
+            <div className="flex flex-row ">
               <RangePicker
                 style={{ marginBottom: "15px" }}
                 size="large"
@@ -293,17 +341,30 @@ function AjiltanBurtgel({ token }) {
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
-                dataSource={[{}]}
+                loading={!gereeniiMedeelel}
+                dataSource={gereeniiMedeelel?.jagsaalt}
                 rowKey={(a) => a._id}
+                pagination={{
+                  current: gereeniiMedeelel?.khuudasniiDugaar,
+                  pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+                  total: gereeniiMedeelel?.niitMur,
+                  showSizeChanger: true,
+                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                    setGereeniiKhuudaslalt((kh) => ({
+                      ...kh,
+                      khuudasniiDugaar,
+                      khuudasniiKhemjee,
+                    })),
+                }}
               />
             </div>
           </Tabs.TabPane>
         </Tabs>
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel
+export default AjiltanBurtgel;
