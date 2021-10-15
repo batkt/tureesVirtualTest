@@ -2,13 +2,15 @@ import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-const fetcher = (url, token, baiguullagiinId, khuudaslalt, register) =>
+const fetcher = (url, token, baiguullagiinId, {search='',...khuudaslalt}, register,query) =>
   axios(token)
     .get(url, {
       params: {
         query: {
           register,
           baiguullagiinId,
+          $or:[{register:{$regex:search,$options:'i'}},{talbainDugaar:{$regex:search,$options:'i'}},{gereeniiDugaar:{$regex:search,$options:'i'}},{utas:{$regex:search,$options:'i'}}],
+          ...query
         },
         ...khuudaslalt,
       },
@@ -22,7 +24,7 @@ const fetcherToololt = (url, token) =>
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useGereeniiJagsaalt(token, baiguullagiinId, register) {
+function useGereeniiJagsaalt(token, baiguullagiinId, register,query) {
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -31,7 +33,7 @@ function useGereeniiJagsaalt(token, baiguullagiinId, register) {
 
   const { data, mutate } = useSWR(
     token && baiguullagiinId
-      ? ["/geree", token, baiguullagiinId, khuudaslalt, register]
+      ? ["/geree", token, baiguullagiinId, khuudaslalt, register,query]
       : null,
     fetcher,
     {
