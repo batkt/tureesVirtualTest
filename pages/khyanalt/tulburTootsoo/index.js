@@ -16,6 +16,7 @@ import formatNumber from "../../../tools/function/formatNumber";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
 import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
+import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
@@ -26,6 +27,7 @@ function AjiltanBurtgel({ token }) {
   const refGuilgee = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [tab, setTab] = React.useState('1tab1');
+  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
@@ -366,13 +368,14 @@ function AjiltanBurtgel({ token }) {
             </div>
             <div className="overflow-auto hidden md:block">
               <Table
-                bordered
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
                 loading={!gereeniiMedeelel}
                 dataSource={gereeniiMedeelel?.jagsaalt}
                 rowKey={(a) => a._id}
+                className='t-head'
+                rowClassName={(record, index) => index % 2 === 0 ? 'bg-white' :  'bg-gray-100'}
                 pagination={{
                   current: gereeniiMedeelel?.khuudasniiDugaar,
                   pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
@@ -384,6 +387,10 @@ function AjiltanBurtgel({ token }) {
                       khuudasniiDugaar,
                       khuudasniiKhemjee,
                     })),
+                }}
+                expandable={{
+                  expandedRowRender: mur => mur?._id === delgegdsenGeree && <GuilgeeniiTuukh mur={mur} token={token} data={mur} />,
+                  onExpand:(a,b)=>setDelgegdsenGeree(a === true && b._id),
                 }}
               />
             </div>
