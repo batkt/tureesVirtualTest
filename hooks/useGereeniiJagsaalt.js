@@ -48,7 +48,7 @@ function useGereeniiJagsaalt(token, baiguullagiinId, register,query) {
 }
 export function useGereeniiJagsaaltToollolt(token) {
   const { data, mutate } = useSWR(
-    token ? ["/toololtAvya", token] : null,
+    token ? ["/gereeniiToololtAvya", token] : null,
     fetcherToololt,
     {
       revalidateOnFocus: false,
