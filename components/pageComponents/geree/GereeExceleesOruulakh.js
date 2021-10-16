@@ -1,10 +1,11 @@
 import React from "react";
-import { message, Select, Upload } from "antd";
+import { DatePicker, message, Select, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
+import local from 'antd/lib/date-picker/locale/mn_MN'
 import _ from "lodash";
-
+import moment from 'moment'
 function GereeExceleesOruulakh(
   {
     token,
@@ -19,6 +20,7 @@ function GereeExceleesOruulakh(
   ref
 ) {
   const [zagvariinId, setGereeniiZagvar] = React.useState(null);
+  const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
 
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
@@ -37,15 +39,18 @@ function GereeExceleesOruulakh(
 
   return (
     <div>
-      <Select
-        placeholder="Гэрээний загвар"
-        onChange={setGereeniiZagvar}
-        style={{ width: "100%" }}
-      >
-        {gereeniiZagvarGaralt?.jagsaalt?.map((a) => (
-          <Select.Option value={a._id}>{a.ner}</Select.Option>
-        ))}
-      </Select>
+      <div className='w-full grid grid-cols-2 gap-4'>
+        <DatePicker.MonthPicker locale={local} onChange={setOgnoo} />
+        <Select
+          placeholder="Гэрээний загвар"
+          onChange={setGereeniiZagvar}
+          style={{ width: "100%" }}
+        >
+          {gereeniiZagvarGaralt?.jagsaalt?.map((a) => (
+            <Select.Option value={a._id}>{a.ner}</Select.Option>
+          ))}
+        </Select>
+      </div>
       <div className="mt-5" />
       {!!zagvariinId && (
         <Upload
@@ -53,7 +58,7 @@ function GereeExceleesOruulakh(
           showUploadList={false}
           multiple={false}
           name="file"
-          data={{ zagvariinId }}
+          data={{ zagvariinId,ognoo:moment(ognoo).format('YYYY-MM-01 00:00:00')}}
           action={`${url}/${zam}`}
           method="POST"
           headers={{ Authorization: `bearer ${token}` }}
@@ -89,6 +94,7 @@ function GereeExceleesOruulakh(
           }}
         />
       )}
+      <div className="mt-5" />
       {zagvariinZam && (
         <a
           className="cursor-pointer text-blue-600 font-medium"

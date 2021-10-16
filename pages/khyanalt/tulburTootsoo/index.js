@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table, Select, Button } from "antd";
+import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd";
 import {
   CheckOutlined,
   FileDoneOutlined,
@@ -81,6 +81,12 @@ function AjiltanBurtgel({ token }) {
   }
 
   function guilgeeKholbyo(data) {
+
+    if(data?.kholbosonGereeniiId){
+      message.info('Гүйлгээ гэрээнд холбогдсон байна.')
+      return 
+    }
+
     const footer = [
       <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
