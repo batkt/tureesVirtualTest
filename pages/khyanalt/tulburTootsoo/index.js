@@ -329,9 +329,9 @@ function AjiltanBurtgel({ token }) {
                               }-500 flex items-center justify-center`}
                             >
                               {!a?.kholbosonGereeniiId ? (
-                                <WarningOutlined />
+                                <WarningOutlined style={{ fontSize: "22px" }} />
                               ) : (
-                                <CheckOutlined />
+                                <CheckOutlined style={{ fontSize: "22px" }} />
                               )}
                             </div>
                           }
