@@ -368,7 +368,7 @@ function AjiltanBurtgel({ token }) {
             tab={
               <span>
                 <FileDoneOutlined style={{ fontSize: "32px" }} />
-                Авлага
+                Гүйлгээний жагсаалт
               </span>
             }
           >
