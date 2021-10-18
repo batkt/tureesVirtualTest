@@ -14,7 +14,7 @@ import {
   Row,
   Col,
   Badge,
-} from "antd";
+} from "antd"
 import {
   EditOutlined,
   DeleteOutlined,
@@ -25,47 +25,47 @@ import {
   UploadOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
-} from "@ant-design/icons";
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
+} from "@ant-design/icons"
+import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin";
-import { aldaaBarigch, url } from "../../../services/uilchilgee";
-import { useAuth } from "../../../services/auth";
-import React, { useState, useRef, useMemo } from "react";
-import { useTalbai } from "hooks/useTalbai";
-import deleteMethod from "tools/function/crud/deleteMethod";
-import createMethod from "tools/function/crud/createMethod";
-import updateMethod from "tools/function/crud/updateMethod";
-import formatNumber from "tools/function/formatNumber";
-import { modal } from "components/ant/Modal";
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
+import Admin from "../../../components/Admin"
+import { aldaaBarigch, url } from "../../../services/uilchilgee"
+import { useAuth } from "../../../services/auth"
+import React, { useState, useRef, useMemo } from "react"
+import { useTalbai } from "hooks/useTalbai"
+import deleteMethod from "tools/function/crud/deleteMethod"
+import createMethod from "tools/function/crud/createMethod"
+import updateMethod from "tools/function/crud/updateMethod"
+import formatNumber from "tools/function/formatNumber"
+import { modal } from "components/ant/Modal"
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
-    return e;
+    return e
   }
 
-  return e && e.fileList;
-};
+  return e && e.fileList
+}
 function Head({ title, sort }) {
-  var icon = <ArrowUpOutlined />;
-  if (sort === -1) icon = <ArrowDownOutlined />;
+  var icon = <ArrowUpOutlined />
+  if (sort === -1) icon = <ArrowDownOutlined />
 
   return (
     <div className="w-full flex flex-row justify-between items-center">
       {title}
       {icon}
     </div>
-  );
+  )
 }
 
 function talbaiBurtgekh({ token }) {
-  const formRef = useRef();
-  const excelref = useRef();
-  const { TextArea } = Input;
-  const { ajiltan, baiguullaga } = useAuth();
+  const formRef = useRef()
+  const excelref = useRef()
+  const { TextArea } = Input
+  const { ajiltan, baiguullaga } = useAuth()
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
-    useTalbai(token, baiguullaga?._id);
+    useTalbai(token, baiguullaga?._id)
 
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
@@ -79,8 +79,8 @@ function talbaiBurtgekh({ token }) {
     davkhar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
     zasakhEsekh: false,
-  });
-  const [order, setOrder] = useState({});
+  })
+  const [order, setOrder] = useState({})
 
   const khyanaltiinDun = [
     {
@@ -219,115 +219,115 @@ function talbaiBurtgekh({ token }) {
       khuvi: 100,
       utga: "Засвартай",
     },
-  ];
+  ]
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee;
+      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
       formRef.current.setFieldsValue({
         talbainNiitUne: talbaiState.talbainNiitUne,
-      });
+      })
       talbaiState.tureesiinTulbur =
-        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne;
+        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
       formRef.current.setFieldsValue({
         tureesiinTulbur: talbaiState.tureesiinTulbur,
-      });
+      })
     }
     if (talbar === "ashiglaltiinZardal") {
-      talbaiState.niitAshiglaltiinZardal = utga * talbaiState.talbainKhemjee;
+      talbaiState.niitAshiglaltiinZardal = utga * talbaiState.talbainKhemjee
       formRef.current.setFieldsValue({
         niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
-      });
+      })
       talbaiState.tureesiinTulbur =
-        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne;
+        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
       formRef.current.setFieldsValue({
         tureesiinTulbur: talbaiState.tureesiinTulbur,
-      });
+      })
     }
     if (talbar === "khurunguUne") {
-      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee;
-      formRef.current.setFieldsValue({});
+      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
+      formRef.current.setFieldsValue({})
     }
-    settalbaiState((a) => ({ ...a, [talbar]: utga }));
+    settalbaiState((a) => ({ ...a, [talbar]: utga }))
   }
   function talbaiBurtgekh() {
-    debugger;
-    const khurunguud = formRef.current.getFieldsValue(khurunguud);
-    talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
+    debugger
+    const khurunguud = formRef.current.getFieldsValue(khurunguud)
+    talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
     if (khurunguud.length > 0) {
-      talbaiState.khurunguud = khurunguud.khurunguud;
+      talbaiState.khurunguud = khurunguud.khurunguud
       talbaiState.khurunguud.map(
         (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
-      );
+      )
     }
 
     if (talbaiState.zasakhEsekh === true) {
       updateMethod("talbai", token, talbaiState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай засагдлаа");
-            formRef.current.resetFields();
+            message.success("Бүртгэл амжилттай засагдлаа")
+            formRef.current.resetFields()
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            );
+            )
           }
         })
-        .catch(aldaaBarigch);
+        .catch(aldaaBarigch)
     } else
       createMethod("talbai", token, talbaiState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай хийгдлээ");
-            formRef.current.resetFields();
+            message.success("Бүртгэл амжилттай хийгдлээ")
+            formRef.current.resetFields()
             talbainiiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            );
+            )
           }
         })
-        .catch(aldaaBarigch);
+        .catch(aldaaBarigch)
   }
 
   function zasya(data) {
-    data.zasakhEsekh = true;
-    formRef.current.setFieldsValue({ ...data });
-    settalbaiState(data);
+    data.zasakhEsekh = true
+    formRef.current.setFieldsValue({ ...data })
+    settalbaiState(data)
   }
 
   function talbaiUstgay(mur) {
     deleteMethod("talbai", token, mur._id).then(({ data }) => {
       if (data === "Amjilttai") {
-        talbainiiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        message.success("Устгагдлаа");
+        talbainiiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+        message.success("Устгагдлаа")
       }
-    });
+    })
   }
 
   function onFinish() {
-    talbaiBurtgekh();
+    talbaiBurtgekh()
   }
 
   function onRefresh() {
-    talbainiiJagsaaltMutate();
+    talbainiiJagsaaltMutate()
   }
 
   function test(data) {
-    debugger;
-    const khurunguud = formRef.current.getFieldsValue(khurunguud);
+    debugger
+    const khurunguud = formRef.current.getFieldsValue(khurunguud)
     formRef.current.setFieldsValue({
       [khurunguud]: {
         ...khurunguud,
         ["niit"]: khurunguud.une * khurunguud.too,
       },
-    });
+    })
     // formRef.current.setFieldsValue({
     //   niit: khurunguud.une * khurunguud.too,
     // })
 
-    console.log("data", khurunguud);
+    console.log("data", khurunguud)
   }
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
 
   function talbaiOruulakhExcel() {
     const footer = [
@@ -341,7 +341,7 @@ function talbaiBurtgekh({ token }) {
         </Button>
         ,
       </Space>,
-    ];
+    ]
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -357,11 +357,11 @@ function talbaiBurtgekh({ token }) {
         />
       ),
       footer,
-    });
+    })
   }
   function duusgakh() {
-    message.success("Амжилттай бүртгэгдлээ");
-    setTimeout(excelref.current.khaaya(), 2500);
+    message.success("Амжилттай бүртгэгдлээ")
+    setTimeout(excelref.current.khaaya(), 2500)
   }
 
   return (
@@ -739,7 +739,7 @@ function talbaiBurtgekh({ token }) {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div className="col-span-12 w-full">
@@ -822,6 +822,9 @@ function talbaiBurtgekh({ token }) {
               ellipsis: true,
               width: "1.2rem",
               align: "center",
+              showSorterTooltip: false,
+              defaultSortOrder: "descend",
+              sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
             },
             {
               title: "Талбай/м2/",
@@ -849,7 +852,7 @@ function talbaiBurtgekh({ token }) {
               ellipsis: true,
               align: "center",
               render: (talbainNiitUne) => {
-                return formatNumber(talbainNiitUne || 0);
+                return formatNumber(talbainNiitUne || 0)
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
@@ -874,7 +877,7 @@ function talbaiBurtgekh({ token }) {
               dataIndex: "niitAshiglaltiinZardal",
               align: "center",
               render: (data) => {
-                return formatNumber(data) + "₮";
+                return formatNumber(data) + "₮"
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
@@ -888,7 +891,7 @@ function talbaiBurtgekh({ token }) {
               dataIndex: "tureesiinTulbur",
               align: "center",
               render: (data) => {
-                return formatNumber(data) + "₮";
+                return formatNumber(data) + "₮"
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
@@ -932,7 +935,7 @@ function talbaiBurtgekh({ token }) {
                               dataIndex: "une",
                               align: "center",
                               render: (data) => {
-                                return formatNumber(data) + "₮";
+                                return formatNumber(data) + "₮"
                               },
                             },
                             {
@@ -940,7 +943,7 @@ function talbaiBurtgekh({ token }) {
                               dataIndex: "niit",
                               align: "center",
                               render: (data) => {
-                                return formatNumber(data) + "₮";
+                                return formatNumber(data) + "₮"
                               },
                             },
                             {
@@ -953,7 +956,7 @@ function talbaiBurtgekh({ token }) {
                                       className="h-36 w-36"
                                       src={`${url}/zuragAvya/khurungu/${ajiltan?.baiguullagiinId}/${data}`}
                                     />
-                                  );
+                                  )
                                 // return (
                                 //   zurgiinNer !== undefined && (
                                 //     <Popover content={<div className="h-36 w-36 flex">{zurag}</div>}>
@@ -977,7 +980,7 @@ function talbaiBurtgekh({ token }) {
                       </a>
                     </Popover>
                   )
-                );
+                )
               },
             },
             {
@@ -1012,9 +1015,9 @@ function talbaiBurtgekh({ token }) {
         />
       </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default talbaiBurtgekh;
+export default talbaiBurtgekh
