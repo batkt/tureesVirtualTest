@@ -1,14 +1,10 @@
-import {Badge, Table} from 'antd';
-import React from 'react'
+import { Badge, Table } from "antd";
+import React, { Fragment } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
-import moment from 'moment'
-import formatNumber from 'tools/function/formatNumber';
-const fetcher = (
-  url,
-  token,
-  gereeniiId
-) =>
+import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
+const fetcher = (url, token, gereeniiId) =>
   axios(token)
     .get(`${url}/${gereeniiId}`)
     .then((res) => res.data)
@@ -16,8 +12,7 @@ const fetcher = (
 
 function useGuilgee(token, gereeniiId) {
   const { data, mutate } = useSWR(
-    !!token ? ["/gereeniiTulultAvya", token, gereeniiId]
-      : null,
+    !!token ? ["/gereeniiTulultAvya", token, gereeniiId] : null,
     fetcher,
     { revalidateOnFocus: false }
   );
@@ -27,30 +22,33 @@ function useGuilgee(token, gereeniiId) {
   };
 }
 
-
-function GuilgeeniiTuukh({token,data}) {
-    const {guilgeeniiTuukh} =useGuilgee(token,data?._id)
-    /*'/gereeniiTulultAvya/:gereeniiId'*/
-    return (
-        <div className='py-3'>
-            <Table
-                rowKey={(a) => a.ognoo}
-                columns={[{
-                    title: "№",
-                    key: "index",
-                    className: "text-center",
-                    render: (text, record, index) =>index +1,
-                  },
-                  {title:'Огноо',dataIndex:'ognoo',render(o){return moment(o).format('YYYY-MM-DD')}},
-                  {title:'Сарын түрээс',dataIndex:'undsenDun',render(a){return formatNumber(a,0)}},
-                  {title:'Хөнгөлөлт',dataIndex:'khyamdral',render(a){return formatNumber(a,0)}},
-                  {title:'Төлөх дүн',dataIndex:'tulukhDun',render(a){return formatNumber(a,0)}},
-                  {title:'Төлсөн дүн',dataIndex:'tulsunDun',render(a){return formatNumber(a,0)}},
-                  {title:'Хэлбэр',dataIndex:'turul',render(a){return <Badge>{a}</Badge>}}]}
-                dataSource={guilgeeniiTuukh}
-            />
+function GuilgeeniiTuukh({ token, data }) {
+  const { guilgeeniiTuukh } = useGuilgee(token, data?._id);
+  /*'/gereeniiTulultAvya/:gereeniiId'*/
+  return (
+    <React.Fragment>
+      <div className="ml-12 p-1 grid grid-cols-7 text-gray-700 dark:text-gray-500 bg-gray-100 border-b border-gray-200">
+        <div>№</div>
+        <div>Огноо</div>
+        <div>Түрээс</div>
+        <div>Хямдрал</div>
+        <div>Төлөх дүн</div>
+        <div>Төлсөн дүн</div>
+        <div>Хэлбэр</div>
+      </div>
+      {guilgeeniiTuukh?.map((a, i) => (
+        <div className="ml-12 p-1 grid grid-cols-7 text-gray-700 dark:text-gray-500 bg-gray-50 border-b border-gray-200 zoom-in">
+          <div>{i + 1}</div>
+          <div>{moment(a.ognoo).format("YYYY-MM-DD")}</div>
+          <div>{formatNumber(a.undsenDun, 0)}</div>
+          <div>{formatNumber(a.khyamdral, 0)}</div>
+          <div>{formatNumber(a.tulukhDun, 0)}</div>
+          <div>{formatNumber(a.tulsunDun, 0)}</div>
+          <div>{a.turul}</div>
         </div>
-    )
+      ))}
+    </React.Fragment>
+  );
 }
 
-export default GuilgeeniiTuukh
+export default GuilgeeniiTuukh;
