@@ -45,9 +45,7 @@ function AjiltanBurtgel({ token }) {
   );
 
   const query = React.useMemo(() => {
-    return {
-      uldegdel: { $gt: 0 },
-    };
+    return {};
   }, []);
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
