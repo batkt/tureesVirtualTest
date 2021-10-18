@@ -40,7 +40,7 @@ function ZakhialgiinKhyanalt() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
-
+  
   const khyanaltiinDun = [
     {
       too: gereeniiMedeelel?.niitMur,
@@ -49,26 +49,16 @@ function ZakhialgiinKhyanalt() {
       utga: "Нийт",
     },
     {
-      too:
-        Number(gereeniiMedeelel?.niitMur) -
-        Number(
-          gereeToollolt !== undefined
-            ? gereeToollolt[0]?.khugatsaaKhetersen
-              ? 0
-              : 0
-            : 0
-        ),
+      too:   gereeToollolt !== undefined
+      ? gereeToollolt?.reduce((a, b) => b.kheviin, 0):0,  
+        
       icon: <FileDoneOutlined />,
       khuvi: -30,
       utga: "Хэвийн",
     },
     {
-      too:
-        gereeToollolt !== undefined
-          ? gereeToollolt[0]?.khugatsaaKhetersen
-            ? 0
-            : 0
-          : 0,
+      too:   gereeToollolt !== undefined
+      ? gereeToollolt?.reduce((a, b) => b.khugatsaaKhetersen, 0) :0,  
       icon: <HistoryOutlined />,
       khuvi: 100,
       utga: "Хугацаа хэтэрсэн",
@@ -80,7 +70,8 @@ function ZakhialgiinKhyanalt() {
       utga: "Хаагдсан",
     },
     {
-      too: 0,
+      too:   gereeToollolt !== undefined
+      ? gereeToollolt?.reduce((a, b) => b.sungakh, 0) :0,  
       icon: <WarningOutlined />,
       khuvi: 100,
       utga: "Сунгах гэрээ",

@@ -2,8 +2,9 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table, Select, Button } from "antd";
+import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd";
 import {
+  CheckOutlined,
   FileDoneOutlined,
   FileExcelOutlined,
   FileSearchOutlined,
@@ -15,6 +16,7 @@ import formatNumber from "../../../tools/function/formatNumber";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
 import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
+import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
@@ -24,11 +26,13 @@ function AjiltanBurtgel({ token }) {
   const ref = React.useRef(null);
   const refGuilgee = React.useRef(null);
   const { baiguullaga } = useAuth();
+  const [tab, setTab] = React.useState('1tab1');
+  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
   const [order, setOrder] = React.useState({ tranDate: -1, time: 0 });
-  const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt } = useDansKhuulga(
+  const { dansniiKhuulgaGaralt, setDansniiKhuulgaKhuudaslalt,dansniiKhuulgaMutate } = useDansKhuulga(
     token,
     baiguullaga?._id,
     songogdsonDans,
@@ -36,9 +40,17 @@ function AjiltanBurtgel({ token }) {
     order
   );
 
-  const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
+  const query = React.useMemo(()=>{
+    return {
+      uldegdel:{'$gt': 0}
+    }
+  },[])
+
+  const { gereeniiMedeelel, setGereeniiKhuudaslalt ,gereeniiMedeelelMutate} = useGereeniiJagsaalt(
     token,
-    baiguullaga?._id
+    baiguullaga?._id,
+    undefined,
+    query
   );
 
   function dansSongoy(number) {
@@ -51,22 +63,34 @@ function AjiltanBurtgel({ token }) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Бүртгэл нэмэх
+        Хадгалах
       </Button>,
     ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
-      content: <VoucheraarTootsooKhiikh ref={ref} />,
+      content: <VoucheraarTootsooKhiikh  
+        data={data}
+        ref={ref}
+        token={token}
+        baiguullagiinId={baiguullaga?._id}
+        onFinish={gereeniiMedeelelMutate} 
+      />,
       footer,
     });
   }
 
   function guilgeeKholbyo(data) {
+
+    if(data?.kholbosonGereeniiId){
+      message.info('Гүйлгээ гэрээнд холбогдсон байна.')
+      return 
+    }
+
     const footer = [
       <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
-        Бүртгэл нэмэх
+        Хадгалах
       </Button>,
     ];
     modal({
@@ -74,9 +98,11 @@ function AjiltanBurtgel({ token }) {
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKholbokh
+          data={data}
           ref={refGuilgee}
           token={token}
           baiguullagiinId={baiguullaga?._id}
+          onFinish={dansniiKhuulgaMutate}
         />
       ),
       footer,
@@ -102,22 +128,26 @@ function AjiltanBurtgel({ token }) {
       },
     },
     { title: "Түрээслэгч", dataIndex: "ner", ellipsis: true },
-    { title: "Үлдэгдэл", dataIndex: "avlaga", ellipsis: true },
+    { title: "Үлдэгдэл", dataIndex: "uldegdel", ellipsis: true,render(a){
+      return formatNumber(a)
+    } },
     {
       title: "Дараагийн төлөлт",
-      dataIndex: "tulultKhiikhOgnoo",
+      dataIndex: "daraagiinTulukhOgnoo",
       ellipsis: true,
+      render(a){
+        return moment(a).format('YYYY-MM-DD')
+      }
     },
     {
       title: "Үйлдэл",
       ellipsis: true,
       render: (row) => (
-        <div
-          className="rounded-full p-1 border bg-gray-50 cursor-pointer dark:bg-gray-600 text-lg font-medium"
+        <a
           onClick={() => guilgeeKhiiya(row)}
         >
           Гүйлгээ хийх
-        </div>
+        </a>
       ),
     },
   ];
@@ -127,9 +157,12 @@ function AjiltanBurtgel({ token }) {
       title="Төлбөр тооцоо"
       khuudasniiNer="tulburTootsoo"
       className="p-0 md:p-4"
-      onSearch={(search) =>
-        setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }))
-      }
+      onSearch={(search) =>{
+        if(tab === '1tab1')
+          setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }))
+        else if(tab === '2tab2')
+          setGereeniiKhuudaslalt((a) => ({ ...a, search }))
+      }}
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
@@ -169,7 +202,7 @@ function AjiltanBurtgel({ token }) {
             );
           })}
         </div>
-        <Tabs size="large" style={{ marginTop: "20px" }}>
+        <Tabs size="large" style={{ marginTop: "20px" }} onChange={setTab}>
           <Tabs.TabPane
             key="1tab1"
             tab={
@@ -276,18 +309,22 @@ function AjiltanBurtgel({ token }) {
                 },
                 {
                   title: "Төлөв",
-                  dataIndex: "ner",
-                  ellipsis: true,
                   width: "4rem",
                   align: "center",
-                  className: "text-yellow-500",
-                  render() {
+                  render(a) {
                     return (
-                      <Button
-                        shape="circle"
-                        className="ant-pagination-item-link text-yellow-500"
-                        icon={<WarningOutlined onClick={guilgeeKholbyo} />}
-                      />
+                      <div className='flex items-center justify-center'>
+                        <Button
+                          shape="circle"
+                          className="ant-pagination-item-link"
+                          onClick={()=>guilgeeKholbyo(a)}
+                          icon={
+                            <div className={`text-${!a?.kholbosonGereeniiId ? 'yellow' : 'green'}-500 flex items-center justify-center`}>
+                              {!a?.kholbosonGereeniiId ? <WarningOutlined /> : <CheckOutlined/>}
+                            </div>
+                          }
+                        />
+                      </div>
                     );
                   },
                 },
@@ -337,13 +374,14 @@ function AjiltanBurtgel({ token }) {
             </div>
             <div className="overflow-auto hidden md:block">
               <Table
-                bordered
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
                 columns={columns}
                 loading={!gereeniiMedeelel}
                 dataSource={gereeniiMedeelel?.jagsaalt}
                 rowKey={(a) => a._id}
+                className='t-head'
+                rowClassName={(record, index) => index % 2 === 0 ? 'bg-white' :  'bg-gray-100'}
                 pagination={{
                   current: gereeniiMedeelel?.khuudasniiDugaar,
                   pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
@@ -355,6 +393,10 @@ function AjiltanBurtgel({ token }) {
                       khuudasniiDugaar,
                       khuudasniiKhemjee,
                     })),
+                }}
+                expandable={{
+                  expandedRowRender: mur => mur?._id === delgegdsenGeree && <GuilgeeniiTuukh mur={mur} token={token} data={mur} />,
+                  onExpand:(a,b)=>setDelgegdsenGeree(a === true && b._id),
                 }}
               />
             </div>
