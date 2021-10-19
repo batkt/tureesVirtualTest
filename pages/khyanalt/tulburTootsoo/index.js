@@ -1,37 +1,37 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import Admin from "components/Admin"
-import React from "react"
-import { useAuth } from "services/auth"
-import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import React from "react";
+import { useAuth } from "services/auth";
+import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd";
 import {
   CheckOutlined,
   FileDoneOutlined,
   FileExcelOutlined,
   FileSearchOutlined,
   WarningOutlined,
-} from "@ant-design/icons"
-import moment from "moment"
-import useDans from "../../../hooks/khuulga/useDans"
-import formatNumber from "../../../tools/function/formatNumber"
-import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga"
-import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh"
-import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh"
-import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh"
-import _ from "lodash"
-import { modal } from "components/ant/Modal"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-const { RangePicker } = DatePicker
+} from "@ant-design/icons";
+import moment from "moment";
+import useDans from "../../../hooks/khuulga/useDans";
+import formatNumber from "../../../tools/function/formatNumber";
+import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
+import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
+import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
+import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
+import _ from "lodash";
+import { modal } from "components/ant/Modal";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+const { RangePicker } = DatePicker;
 
 function AjiltanBurtgel({ token }) {
-  const ref = React.useRef(null)
-  const refGuilgee = React.useRef(null)
-  const { baiguullaga } = useAuth()
-  const [tab, setTab] = React.useState("1tab1")
-  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null)
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
-  const { dans } = useDans(token)
-  const [songogdsonDans, setSongogdsonDans] = React.useState(null)
-  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
+  const ref = React.useRef(null);
+  const refGuilgee = React.useRef(null);
+  const { baiguullaga } = useAuth();
+  const [tab, setTab] = React.useState("1tab1");
+  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
+  const { dans } = useDans(token);
+  const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 });
   const {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
@@ -42,25 +42,25 @@ function AjiltanBurtgel({ token }) {
     songogdsonDans,
     ekhlekhOgnoo,
     order
-  )
+  );
 
   const query = React.useMemo(() => {
-    return {}
-  }, [])
+    return {};
+  }, []);
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query)
+    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query);
 
   function refreshData() {
-    gereeniiMedeelelMutate()
-    dansniiKhuulgaMutate()
-    setDelgegdsenGeree()
+    gereeniiMedeelelMutate();
+    dansniiKhuulgaMutate();
+    setDelgegdsenGeree();
   }
 
   function dansSongoy(number) {
-    let songogdsonDans = dans?.accounts?.find((a) => a.number === number)
-    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
-    setSongogdsonDans(songogdsonDans)
+    let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
+    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
+    setSongogdsonDans(songogdsonDans);
   }
 
   function guilgeeKhiiya(data) {
@@ -69,7 +69,7 @@ function AjiltanBurtgel({ token }) {
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         Хадгалах
       </Button>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -83,13 +83,13 @@ function AjiltanBurtgel({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   function guilgeeKholbyo(data) {
     if (data?.kholbosonGereeniiId) {
-      message.info("Гүйлгээ гэрээнд холбогдсон байна.")
-      return
+      message.info("Гүйлгээ гэрээнд холбогдсон байна.");
+      return;
     }
 
     const footer = [
@@ -97,7 +97,7 @@ function AjiltanBurtgel({ token }) {
       <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
         Хадгалах
       </Button>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -111,7 +111,7 @@ function AjiltanBurtgel({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   const columns = [
@@ -154,7 +154,7 @@ function AjiltanBurtgel({ token }) {
       ellipsis: true,
       align: "right",
       render(a) {
-        return formatNumber(a)
+        return formatNumber(a);
       },
       showSorterTooltip: false,
       defaultSortOrder: "descend",
@@ -166,7 +166,7 @@ function AjiltanBurtgel({ token }) {
       ellipsis: true,
       align: "center",
       render(a) {
-        return moment(a).format("YYYY-MM-DD")
+        return moment(a).format("YYYY-MM-DD");
       },
     },
     {
@@ -175,7 +175,7 @@ function AjiltanBurtgel({ token }) {
       align: "center",
       ellipsis: true,
       render(a) {
-        return moment(a).format("YYYY-MM-DD")
+        return moment(a).format("YYYY-MM-DD");
       },
     },
     {
@@ -183,7 +183,7 @@ function AjiltanBurtgel({ token }) {
       ellipsis: true,
       render: (row) => <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>,
     },
-  ]
+  ];
 
   return (
     <Admin
@@ -192,9 +192,9 @@ function AjiltanBurtgel({ token }) {
       className="p-0 md:p-4"
       onSearch={(search) => {
         if (tab === "1tab1")
-          setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }))
+          setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }));
         else if (tab === "2tab2")
-          setGereeniiKhuudaslalt((a) => ({ ...a, search }))
+          setGereeniiKhuudaslalt((a) => ({ ...a, search }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
@@ -232,7 +232,7 @@ function AjiltanBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
         <Tabs size="large" style={{ marginTop: "20px" }} onChange={setTab}>
@@ -282,7 +282,7 @@ function AjiltanBurtgel({ token }) {
                   dataIndex: "tranDate",
                   width: "7rem",
                   render(date) {
-                    return moment(date).format("YYYY-MM-DD")
+                    return moment(date).format("YYYY-MM-DD");
                   },
                   onHeaderCell: (cell, index) => {
                     return {
@@ -291,7 +291,7 @@ function AjiltanBurtgel({ token }) {
                           ...o,
                           tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
                         })), // click header row
-                    }
+                    };
                   },
                 },
                 {
@@ -302,8 +302,8 @@ function AjiltanBurtgel({ token }) {
                   width: "4rem",
                   render(a) {
                     if (_.isString(a))
-                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`
-                    return ""
+                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+                    return "";
                   },
                   onHeaderCell: (cell, index) => {
                     return {
@@ -312,7 +312,7 @@ function AjiltanBurtgel({ token }) {
                           ...o,
                           time: o.time === -1 ? 1 : o.time - 1,
                         })), // click header row
-                    }
+                    };
                   },
                 },
                 {
@@ -328,7 +328,7 @@ function AjiltanBurtgel({ token }) {
                   className: "text-right",
                   showSorterTooltip: false,
                   render(a) {
-                    return `${formatNumber(a)}₮`
+                    return `${formatNumber(a)}₮`;
                   },
                   sorter: (a, b) =>
                     Number(a.amount || 0) - Number(b.amount || 0),
@@ -366,12 +366,12 @@ function AjiltanBurtgel({ token }) {
                           }
                         />
                       </div>
-                    )
+                    );
                   },
                 },
                 {
                   title: "Талбай",
-                  dataIndex: "ner",
+                  dataIndex: "kholbosonTalbainId",
                   ellipsis: true,
                   width: "5rem",
                 },
@@ -454,9 +454,9 @@ function AjiltanBurtgel({ token }) {
         </Tabs>
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel
+export default AjiltanBurtgel;
