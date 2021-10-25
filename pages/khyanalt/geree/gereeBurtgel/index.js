@@ -38,6 +38,7 @@ function ZakhialgiinKhyanalt() {
   const { gereeToollolt, gereeToolloltMutate } =
     useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
+  const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null)
   const componentRef = React.useRef()
   const excelref = React.useRef()
   const handlePrint = useReactToPrint({
@@ -267,6 +268,8 @@ function ZakhialgiinKhyanalt() {
         render: (data) => (
           <div className="flex flex-row">
             <Popover 
+              onVisibleChange={(visible)=>setGereeniiTokhirgoo(visible === true ? data?._id : null)}
+              visible={data?._id === gereeniiTokhirgoo}
               content={()=>
               (<div className='flex flex-col space-y-2 w-24'>
                 <a
@@ -295,11 +298,7 @@ function ZakhialgiinKhyanalt() {
                   title="Усгахдаа итгэлтэй байна уу?"
                   okText="Тийм"
                   cancelText="Үгүй"
-                  onConfirm={() =>
-                    deleteMethod("geree", token, data._id).then(() =>
-                      gereeniiMedeelelMutate()
-                    )
-                  }
+                  onConfirm={() => deleteMethod("geree", token, data._id).then(() =>gereeniiMedeelelMutate())}
                 >
                   <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between">
                     <DeleteOutlined style={{ fontSize: "18px" }} /><label> Усгах</label>
@@ -319,7 +318,7 @@ function ZakhialgiinKhyanalt() {
     ]
 
     return jagsaalt
-  }, [baiguullaga, token])
+  }, [baiguullaga, token,gereeniiTokhirgoo])
 
   function gereeKharya(geree) {
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
@@ -358,6 +357,7 @@ function ZakhialgiinKhyanalt() {
           }
           data.geree = geree
           setKharuulakhGeree(data)
+          setGereeniiTokhirgoo(null)
         }
       }
     )
