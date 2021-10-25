@@ -1,15 +1,38 @@
-import { message, Popconfirm } from "antd"
-import React from "react"
+import { Button, Input, message, Popconfirm } from "antd"
+import React, { useState } from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import { DeleteOutlined } from "@ant-design/icons"
+import { modal } from "components/ant/Modal"
 const fetcher = (url, token, gereeniiId) =>
   axios(token)
     .get(`${url}/${gereeniiId}`)
     .then((res) => res.data)
     .catch(aldaaBarigch)
+
+const Tailbar = React.forwardRef(({destroy,confirm},ref)=> {
+  const [tailbar,setTailbar] = useState('')
+  React.useImperativeHandle(
+    ref,
+    () => ({
+        khadgalya() {
+          confirm(tailbar)
+          destroy()
+        },
+        khaaya() {
+            destroy()
+        },
+    }),
+    [tailbar],
+  )
+  return(
+    <div>
+      <Input.TextArea value={tailbar} onChange={({target})=>setTailbar(target?.value)}/>
+    </div>
+  )
+})
 
 function useGuilgee(token, gereeniiId) {
   const { data, mutate } = useSWR(
@@ -25,15 +48,28 @@ function useGuilgee(token, gereeniiId) {
 
 function GuilgeeniiTuukh({ token, data,refreshData }) {
   const { guilgeeniiTuukh } = useGuilgee(token, data?._id)
-
+  const tailbarRef = React.useRef(null);
   function tulultUstgaya({guilgeeniiId,tulsunDun,_id}) {
-    axios(token).post('/tulultUstgaya',{guilgeeniiId,gereeniiId:data?._id,tulsunDun,objectiinId:_id}).then(({data})=>{
-      if(data?.ok === 1)
-      {
-        message.success('Төлөлт амжилттай устгагдлаа!')
-        refreshData()
-      }
+    const footer = [
+      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+          Устгах
+      </Button>,
+  ];
+    modal({
+      title: "Төлөлт устгах шалтгаан",
+      icon: <DeleteOutlined />,
+      content:<Tailbar ref={tailbarRef} confirm={(tailbar)=>axios(token).post('/tulultUstgaya',{guilgeeniiId,gereeniiId:data?._id,tulsunDun,objectiinId:_id,tailbar}).then(({data})=>{
+        if(data?.ok === 1)
+        {
+          message.success('Төлөлт амжилттай устгагдлаа!')
+          refreshData()
+        }
+      })}/>,
+      footer
     })
+
+    
   }
 
   /*'/gereeniiTulultAvya/:gereeniiId'*/
@@ -65,7 +101,7 @@ function GuilgeeniiTuukh({ token, data,refreshData }) {
               onConfirm={() => tulultUstgaya(a)}
             >
               <div className='ml-auto flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer' >
-                <DeleteOutlined style={{}}/>
+                <DeleteOutlined />
               </div>
             </Popconfirm>}
           </div>
