@@ -1,4 +1,4 @@
-import { Popconfirm } from "antd"
+import { message, Popconfirm } from "antd"
 import React from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
@@ -28,8 +28,11 @@ function GuilgeeniiTuukh({ token, data,refreshData }) {
 
   function tulultUstgaya({guilgeeniiId,tulsunDun,_id}) {
     axios(token).post('/tulultUstgaya',{guilgeeniiId,gereeniiId:data?._id,tulsunDun,objectiinId:_id}).then(({data})=>{
-      console.log(data)
-      refreshData()
+      if(data?.ok === 1)
+      {
+        message.success('Төлөлт амжилттай устгагдлаа!')
+        refreshData()
+      }
     })
   }
 
