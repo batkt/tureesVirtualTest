@@ -26,11 +26,11 @@ import {
   ArrowUpOutlined,
   ArrowDownOutlined,
 } from "@ant-design/icons"
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin"
-import { aldaaBarigch, url } from "../../../services/uilchilgee"
-import { useAuth } from "../../../services/auth"
+import Admin from "components/Admin"
+import { aldaaBarigch, url } from "services/uilchilgee"
+import { useAuth } from "services/auth"
 import React, { useState, useRef, useMemo } from "react"
 import { useTalbai } from "hooks/useTalbai"
 import deleteMethod from "tools/function/crud/deleteMethod"

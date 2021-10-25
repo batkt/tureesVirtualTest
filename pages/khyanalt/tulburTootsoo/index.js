@@ -441,7 +441,7 @@ function AjiltanBurtgel({ token }) {
                 expandable={{
                   expandedRowRender: (mur) =>
                     mur?._id === delgegdsenGeree && (
-                      <GuilgeeniiTuukh mur={mur} token={token} data={mur} />
+                      <GuilgeeniiTuukh mur={mur} token={token} data={mur} refreshData={refreshData}/>
                     ),
                   expandedRowKeys: [delgegdsenGeree],
                   expandedRowClassName: (a, index) =>

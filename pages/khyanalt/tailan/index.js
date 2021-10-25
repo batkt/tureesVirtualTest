@@ -23,11 +23,11 @@ import {
   MailOutlined,
   SecurityScanOutlined,
 } from "@ant-design/icons";
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
 
-import Admin from "../../../components/Admin";
-import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee";
-import { useAuth } from "../../../services/auth";
+import Admin from "components/Admin";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import { useAuth } from "services/auth";
 import React, { useState, useRef } from "react";
 import moment from "moment";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
