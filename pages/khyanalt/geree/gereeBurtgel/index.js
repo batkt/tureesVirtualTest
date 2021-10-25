@@ -51,20 +51,20 @@ const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
     <div className='space-y-2 w-full'>
       <div className='space-y-1 w-full font-medium'>
         <div className='w-full flex flex-row justify-between'>
-          <div className=' text-right'>Эхлэх огноо:</div>
-          <div className=''>{moment(data?.gereeniiOgnoo).format('YYYY-MM-DD')}</div>
+          <div className='text-right'>Эхлэх огноо:</div>
+          <div>{moment(data?.gereeniiOgnoo).format('YYYY-MM-DD')}</div>
         </div>
         <div className='w-full flex flex-row justify-between'>
-          <div className=' text-right'>Дуусах огноо:</div>
-          <div className=''>{moment(data?.duusakhOgnoo).format('YYYY-MM-DD')}</div>
+          <div className='text-right'>Дуусах огноо:</div>
+          <div>{moment(data?.duusakhOgnoo).format('YYYY-MM-DD')}</div>
         </div>
         <div className='w-full flex flex-row justify-between'>
-          <div className=' text-right'>Ашигласан хоног:</div>
-          <div className=''>{moment(new Date()).diff(moment(data?.gereeniiOgnoo),'day')}</div>
+          <div className='text-right'>Ашигласан хоног:</div>
+          <div>{moment(new Date()).diff(moment(data?.gereeniiOgnoo),'day')}</div>
         </div>
         <div className='w-full flex flex-row justify-between'>
-          <div className=' text-right'>Авлагын дүн:</div>
-          <div className=''>{formatNumber(data?.uldegdel)}</div>
+          <div className='text-right'>Авлагын дүн:</div>
+          <div>{formatNumber(data?.uldegdel)}</div>
         </div>
       </div>
       
