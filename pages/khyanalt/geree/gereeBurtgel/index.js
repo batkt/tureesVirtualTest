@@ -301,7 +301,7 @@ function ZakhialgiinKhyanalt() {
                   onConfirm={() => deleteMethod("geree", token, data._id).then(() =>gereeniiMedeelelMutate())}
                 >
                   <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between">
-                    <DeleteOutlined style={{ fontSize: "18px" }} /><label> Усгах</label>
+                    <DeleteOutlined style={{ fontSize: "18px" }} /><label> Цуцлах</label>
                   </a>
                 </Popconfirm>
               </div>)}
