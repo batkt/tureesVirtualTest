@@ -31,7 +31,7 @@ import locale from 'antd/lib/date-picker/locale/mn_MN'
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh"
 import { modal } from "components/ant/Modal"
 
-const Tailbar = React.forwardRef(({destroy,confirm},ref)=> {
+const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
   const [tailbar,setTailbar] = React.useState('')
   React.useImperativeHandle(
     ref,
@@ -46,8 +46,29 @@ const Tailbar = React.forwardRef(({destroy,confirm},ref)=> {
     }),
     [tailbar],
   )
+
+  console.log(data)
   return(
-    <div>
+    <div className='space-y-2 w-full'>
+      <div className='space-y-1 w-full font-medium'>
+        <div className='w-full flex flex-row justify-between'>
+          <div className=' text-right'>Эхлэх огноо:</div>
+          <div className=''>{moment(data?.ekhlekhOgnoo).format('YYYY-MM-DD')}</div>
+        </div>
+        <div className='w-full flex flex-row justify-between'>
+          <div className=' text-right'>Дуусах огноо:</div>
+          <div className=''>{moment(data?.duusakhOgnoo).format('YYYY-MM-DD')}</div>
+        </div>
+        <div className='w-full flex flex-row justify-between'>
+          <div className=' text-right'>Ашигласан хоног:</div>
+          <div className=''>{moment(new Date()).diff(moment(data?.ekhlekhOgnoo),'day')}</div>
+        </div>
+        <div className='w-full flex flex-row justify-between'>
+          <div className=' text-right'>Авлагын дүн:</div>
+          <div className=''>{formatNumber(data?.uldegdel)}</div>
+        </div>
+      </div>
+      
       <Input.TextArea value={tailbar} onChange={({target})=>setTailbar(target?.value)}/>
     </div>
   )
@@ -352,9 +373,10 @@ function ZakhialgiinKhyanalt() {
         </Button>,
     ];
       modal({
+        width:'20vw',
         title: "Цуцалсан шалтгаан",
         icon: <MinusCircleOutlined />,
-        content:<Tailbar ref={tailbarRef} confirm={(tailbar)=>message.success(tailbar)}/>,
+        content:<Tailbar ref={tailbarRef} data={data} confirm={(tailbar)=>message.success(tailbar)}/>,
         footer
       })
   }
