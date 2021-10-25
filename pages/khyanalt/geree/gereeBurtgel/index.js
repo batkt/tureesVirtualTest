@@ -348,7 +348,7 @@ function ZakhialgiinKhyanalt() {
       const footer = [
         <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
         <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-            Устгах
+            Цуцлах
         </Button>,
     ];
       modal({
