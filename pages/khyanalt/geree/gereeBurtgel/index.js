@@ -11,6 +11,9 @@ import {
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
+  MoreOutlined,
+  SettingOutlined,
+  FieldTimeOutlined,
 } from "@ant-design/icons"
 import { Table, Card, Popover, Badge, Popconfirm, Drawer, DatePicker, Button, Space } from "antd"
 import { toWords } from "mon_num"
@@ -256,41 +259,60 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Тохиргоо",
+        title: ()=><SettingOutlined/>,
         fixed: "right",
         className: "text-center",
         align: "center",
-        width: "8rem",
+        width: "3rem",
         render: (data) => (
           <div className="flex flex-row">
-            <a
-              className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-              onClick={() => gereeKharya(data)}
-            >
-              <EyeOutlined style={{ fontSize: "18px" }} />
-            </a>
-            <a
-              className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-              onClick={() =>
-                router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
-              }
-            >
-              <EditOutlined style={{ fontSize: "18px" }} />
-            </a>
-            <Popconfirm
-              title="Усгахдаа итгэлтэй байна уу?"
-              okText="Тийм"
-              cancelText="Үгүй"
-              onConfirm={() =>
-                deleteMethod("geree", token, data._id).then(() =>
-                  gereeniiMedeelelMutate()
-                )
-              }
+            <Popover 
+              content={()=>
+              (<div className='flex flex-col space-y-2 w-24'>
+                <a
+                  className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full"
+                  onClick={() => gereeKharya(data)}
+                >
+                  <EyeOutlined style={{ fontSize: "18px" }} /> <label> Харах</label>
+                </a>
+                <a
+                  className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
+                  onClick={() =>
+                    router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
+                  }
+                >
+                  <EditOutlined style={{ fontSize: "18px" }} /><label> Засах</label>
+                </a>
+                <a
+                  className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
+                  onClick={() =>
+                    router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
+                  }
+                >
+                  <FieldTimeOutlined style={{ fontSize: "18px" }} /><label> Сунгах</label>
+                </a>
+                <Popconfirm
+                  title="Усгахдаа итгэлтэй байна уу?"
+                  okText="Тийм"
+                  cancelText="Үгүй"
+                  onConfirm={() =>
+                    deleteMethod("geree", token, data._id).then(() =>
+                      gereeniiMedeelelMutate()
+                    )
+                  }
+                >
+                  <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between">
+                    <DeleteOutlined style={{ fontSize: "18px" }} /><label> Усгах</label>
+                  </a>
+                </Popconfirm>
+              </div>)}
+              placement='bottom'
+              trigger='click'
             >
               <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                <DeleteOutlined style={{ fontSize: "18px" }} />
+                <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
-            </Popconfirm>
+            </Popover>
           </div>
         ),
       },
