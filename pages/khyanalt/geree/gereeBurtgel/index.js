@@ -14,8 +14,9 @@ import {
   MoreOutlined,
   SettingOutlined,
   FieldTimeOutlined,
+  MinusCircleOutlined,
 } from "@ant-design/icons"
-import { Table, Card, Popover, Badge, Popconfirm, Drawer, DatePicker, Button, Space } from "antd"
+import { Table, Card, Popover, Badge, Popconfirm, Drawer, DatePicker, Button, Space, message, Input } from "antd"
 import { toWords } from "mon_num"
 import Admin from "components/Admin"
 import formatNumber from "tools/function/formatNumber"
@@ -23,13 +24,34 @@ import React, { useMemo } from "react"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt"
 import { url } from "services/uilchilgee"
-import deleteMethod from "tools/function/crud/deleteMethod"
 import GereeKharakh from "components/pageComponents/geree/Kharakh"
 import router from "next/router"
 import { useReactToPrint } from "react-to-print"
 import locale from 'antd/lib/date-picker/locale/mn_MN'
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh"
 import { modal } from "components/ant/Modal"
+
+const Tailbar = React.forwardRef(({destroy,confirm},ref)=> {
+  const [tailbar,setTailbar] = React.useState('')
+  React.useImperativeHandle(
+    ref,
+    () => ({
+        khadgalya() {
+          confirm(tailbar)
+          destroy()
+        },
+        khaaya() {
+            destroy()
+        },
+    }),
+    [tailbar],
+  )
+  return(
+    <div>
+      <Input.TextArea value={tailbar} onChange={({target})=>setTailbar(target?.value)}/>
+    </div>
+  )
+})
 
 function ZakhialgiinKhyanalt() {
   const { token, baiguullaga } = useAuth()
@@ -41,6 +63,7 @@ function ZakhialgiinKhyanalt() {
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null)
   const componentRef = React.useRef()
   const excelref = React.useRef()
+  const tailbarRef = React.useRef()
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
@@ -295,13 +318,13 @@ function ZakhialgiinKhyanalt() {
                   <FieldTimeOutlined style={{ fontSize: "18px" }} /><label> Сунгах</label>
                 </a>
                 <Popconfirm
-                  title="Усгахдаа итгэлтэй байна уу?"
+                  title="Цуцлахдаа итгэлтэй байна уу?"
                   okText="Тийм"
                   cancelText="Үгүй"
-                  onConfirm={() => deleteMethod("geree", token, data._id).then(() =>gereeniiMedeelelMutate())}
+                  onConfirm={() =>gereeTsutsalya(data)}
                 >
                   <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between">
-                    <DeleteOutlined style={{ fontSize: "18px" }} /><label> Цуцлах</label>
+                    <MinusCircleOutlined style={{ fontSize: "18px" }} /><label> Цуцлах</label>
                   </a>
                 </Popconfirm>
               </div>)}
@@ -319,6 +342,22 @@ function ZakhialgiinKhyanalt() {
 
     return jagsaalt
   }, [baiguullaga, token,gereeniiTokhirgoo])
+
+  function gereeTsutsalya(data) {
+      setGereeniiTokhirgoo(null)
+      const footer = [
+        <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+        <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+            Устгах
+        </Button>,
+    ];
+      modal({
+        title: "Цуцалсан шалтгаан",
+        icon: <MinusCircleOutlined />,
+        content:<Tailbar ref={tailbarRef} confirm={(tailbar)=>message.success(tailbar)}/>,
+        footer
+      })
+  }
 
   function gereeKharya(geree) {
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
