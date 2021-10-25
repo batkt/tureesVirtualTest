@@ -47,13 +47,12 @@ const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
     [tailbar],
   )
 
-  console.log(data)
   return(
     <div className='space-y-2 w-full'>
       <div className='space-y-1 w-full font-medium'>
         <div className='w-full flex flex-row justify-between'>
           <div className=' text-right'>Эхлэх огноо:</div>
-          <div className=''>{moment(data?.ekhlekhOgnoo).format('YYYY-MM-DD')}</div>
+          <div className=''>{moment(data?.gereeniiOgnoo).format('YYYY-MM-DD')}</div>
         </div>
         <div className='w-full flex flex-row justify-between'>
           <div className=' text-right'>Дуусах огноо:</div>
@@ -61,7 +60,7 @@ const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
         </div>
         <div className='w-full flex flex-row justify-between'>
           <div className=' text-right'>Ашигласан хоног:</div>
-          <div className=''>{moment(new Date()).diff(moment(data?.ekhlekhOgnoo),'day')}</div>
+          <div className=''>{moment(new Date()).diff(moment(data?.gereeniiOgnoo),'day')}</div>
         </div>
         <div className='w-full flex flex-row justify-between'>
           <div className=' text-right'>Авлагын дүн:</div>
