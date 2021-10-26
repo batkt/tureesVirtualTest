@@ -10,7 +10,6 @@ import {
   FileExcelOutlined,
   EyeOutlined,
   EditOutlined,
-  DeleteOutlined,
   MoreOutlined,
   SettingOutlined,
   FieldTimeOutlined,
@@ -29,6 +28,7 @@ import router from "next/router"
 import { useReactToPrint } from "react-to-print"
 import locale from 'antd/lib/date-picker/locale/mn_MN'
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh"
+import Sungakh from "components/pageComponents/geree/Sungakh"
 import { modal } from "components/ant/Modal"
 
 const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
@@ -85,6 +85,8 @@ function ZakhialgiinKhyanalt() {
   const componentRef = React.useRef()
   const excelref = React.useRef()
   const tailbarRef = React.useRef()
+  const sungaltRef = React.useRef()
+  
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   })
@@ -332,9 +334,7 @@ function ZakhialgiinKhyanalt() {
                 </a>
                 <a
                   className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
-                  onClick={() =>
-                    router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
-                  }
+                  onClick={() =>gereeSungaya(data)}
                 >
                   <FieldTimeOutlined style={{ fontSize: "18px" }} /><label> Сунгах</label>
                 </a>
@@ -380,6 +380,23 @@ function ZakhialgiinKhyanalt() {
         footer
       })
   }
+
+  function gereeSungaya(data) {
+    setGereeniiTokhirgoo(null)
+    const footer = [
+      <Button onClick={() => sungaltRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => sungaltRef.current.khadgalya()}>
+          Цуцлах
+      </Button>,
+  ];
+    modal({
+      width:'20vw',
+      title: "Цуцалсан шалтгаан",
+      icon: <MinusCircleOutlined />,
+      content:<Sungakh ref={sungaltRef} data={data} confirm={(tailbar)=>message.success(tailbar)}/>,
+      footer
+    })
+}
 
   function gereeKharya(geree) {
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
