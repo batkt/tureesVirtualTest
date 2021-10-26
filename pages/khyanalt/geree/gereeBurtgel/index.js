@@ -75,8 +75,9 @@ const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
 
 function ZakhialgiinKhyanalt() {
   const { token, baiguullaga } = useAuth()
+  const [shuult, setShuult] = React.useState(null)
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
-    useGereeniiJagsaalt(token, baiguullaga?._id)
+    useGereeniiJagsaalt(token, baiguullaga?._id,undefined,shuult?.query)
   const { gereeToollolt, gereeToolloltMutate } =
     useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
@@ -480,7 +481,8 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className={`border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in ${mur?.utga === shuult?.utga ? 'bg-green-100' : ''}`}
+                onClick={()=>setShuult(mur)}
               >
                 <div className="h-full rounded-xl">
                   <div className="p-3 rounded-xl">
