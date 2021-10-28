@@ -163,19 +163,10 @@ function AjiltanBurtgel({ token }) {
       sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
     },
     {
-      title: "Огноо",
+      title: "Гэрээний огноо",
       dataIndex: "gereeniiOgnoo",
       ellipsis: true,
       align: "center",
-      render(a) {
-        return moment(a).format("YYYY-MM-DD");
-      },
-    },
-    {
-      title: "Дараагийн төлөлт",
-      dataIndex: "daraagiinTulukhOgnoo",
-      align: "center",
-      ellipsis: true,
       render(a) {
         return moment(a).format("YYYY-MM-DD");
       },
@@ -356,16 +347,26 @@ function AjiltanBurtgel({ token }) {
                           icon={
                             <div
                               className={`text-${
-                                (!a?.kholbosonGereeniiId ? (a?.magadlaltaiGereenuud?.length > 0 ? 'yellow' : "red") : "green")
+                                !a?.kholbosonGereeniiId
+                                  ? a?.magadlaltaiGereenuud?.length > 0
+                                    ? "yellow"
+                                    : "red"
+                                  : "green"
                               }-500 flex items-center justify-center`}
                             >
-                              
-                              { (!a?.kholbosonGereeniiId ? (
-                                a?.magadlaltaiGereenuud?.length > 0 ? <QuestionOutlined style={{ fontSize: "22px" }} /> :
-                                <ExclamationOutlined style={{ fontSize: "22px" }} />
+                              {!a?.kholbosonGereeniiId ? (
+                                a?.magadlaltaiGereenuud?.length > 0 ? (
+                                  <QuestionOutlined
+                                    style={{ fontSize: "22px" }}
+                                  />
+                                ) : (
+                                  <ExclamationOutlined
+                                    style={{ fontSize: "22px" }}
+                                  />
+                                )
                               ) : (
                                 <CheckOutlined style={{ fontSize: "22px" }} />
-                              ))}
+                              )}
                             </div>
                           }
                         />
@@ -428,7 +429,9 @@ function AjiltanBurtgel({ token }) {
                 rowKey={(a) => a._id}
                 className="t-head"
                 rowClassName={(record, index) =>
-                  index % 2 === 0 ? "bg-white" : "bg-gray-100"
+                  index % 2 === 0
+                    ? "bg-white dark:bg-gray-600"
+                    : "bg-gray-200 dark:bg-gray-800"
                 }
                 pagination={{
                   current: gereeniiMedeelel?.khuudasniiDugaar,
@@ -445,11 +448,18 @@ function AjiltanBurtgel({ token }) {
                 expandable={{
                   expandedRowRender: (mur) =>
                     mur?._id === delgegdsenGeree && (
-                      <GuilgeeniiTuukh mur={mur} token={token} data={mur} refreshData={refreshData}/>
+                      <GuilgeeniiTuukh
+                        mur={mur}
+                        token={token}
+                        data={mur}
+                        refreshData={refreshData}
+                      />
                     ),
                   expandedRowKeys: [delgegdsenGeree],
                   expandedRowClassName: (a, index) =>
-                    index % 2 === 0 ? "bg-white" : "bg-gray-100",
+                    index % 2 === 0
+                      ? "bg-white dark:bg-gray-600"
+                      : "bg-gray-200 dark:bg-gray-800",
                   onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
                 }}
               />
