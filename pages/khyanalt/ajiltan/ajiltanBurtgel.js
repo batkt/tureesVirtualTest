@@ -22,6 +22,8 @@ import {
   SolutionOutlined,
   MailOutlined,
   SecurityScanOutlined,
+  MoreOutlined,
+  SettingOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
@@ -228,7 +230,7 @@ function AjiltanBurtgel({ token }) {
       title="Ажилтан бүртгэл"
       khuudasniiNer="ajiltanBurtgel"
       className="p-0 md:p-4"
-      onSearch={(search)=>setAjiltniiKhuudaslalt(a=>({...a,search}))}
+      onSearch={(search) => setAjiltniiKhuudaslalt((a) => ({ ...a, search }))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         {/* <div>
@@ -506,30 +508,46 @@ function AjiltanBurtgel({ token }) {
             //   }
             // },
             {
-              title: "Тохиргоо",
+              title: () => <SettingOutlined />,
+              align: "center",
+              width: "1rem",
               ellipsis: true,
               render: (data) =>
                 ajiltan?.erkh === "Admin" && (
-                  <Space size="middle">
-                    <a
-                      className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
-                      onClick={() => zasya(data)}
-                    >
-                      <EditOutlined style={{ fontSize: "18px" }} />
-                    </a>
-                    <Popconfirm
-                      title="Ажилтан устгах уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
-                      onConfirm={() => ajiltanUstgay(data)}
+                  <div className="flex flex-row">
+                    <Popover
+                      placement="bottom"
+                      trigger="click"
+                      content={() => (
+                        <div className="flex flex-col space-y-2 w-24">
+                          <a
+                            className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full"
+                            onClick={() => zasya(data)}
+                          >
+                            <EditOutlined style={{ fontSize: "18px" }} />
+                            <label>Засах</label>
+                          </a>
+                          <Popconfirm
+                            title="Ажилтан устгах уу?"
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                            onConfirm={() => ajiltanUstgay(data)}
+                          >
+                            <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full">
+                              <DeleteOutlined
+                                style={{ fontSize: "18px", color: "red" }}
+                              />
+                              <label>Устгах</label>
+                            </a>
+                          </Popconfirm>
+                        </div>
+                      )}
                     >
                       <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                        <DeleteOutlined
-                          style={{ fontSize: "18px", color: "red" }}
-                        />
+                        <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
-                    </Popconfirm>
-                  </Space>
+                    </Popover>
+                  </div>
                 ),
             },
           ]}
