@@ -41,8 +41,12 @@ const Tailbar = React.forwardRef(({token,destroy,confirm,data},ref)=> {
             "gereeniiId" : data?._id,
             shaltgaan
           }).then(({data})=>{
-            confirm(shaltgaan)
-            destroy()
+            if(data === 'Amjilttai'){
+              message.success('Гэрээ амжилттай цуцаллаа')
+              confirm(shaltgaan)
+              destroy()
+            }
+            
           })
         },
         khaaya() {

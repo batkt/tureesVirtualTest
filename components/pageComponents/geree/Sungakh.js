@@ -1,7 +1,7 @@
 import React from 'react'
 import formatNumber from 'tools/function/formatNumber'
 import uilchilgee from 'services/uilchilgee'
-const { DatePicker, InputNumber } = require("antd")
+const { DatePicker, InputNumber, message } = require("antd")
 const moment = require('moment')
 
 const Sungakh = React.forwardRef(({token,destroy,confirm,data},ref)=> {
@@ -20,8 +20,11 @@ const Sungakh = React.forwardRef(({token,destroy,confirm,data},ref)=> {
               "gereeniiId" : data?._id,
               duusakhOgnoo
           }).then(({data})=>{
-              confirm(duusakhOgnoo)
-              destroy()
+              if(data === 'Amjilttai'){
+                message.success('Гэрээ амжилттай цуцаллаа')
+                confirm(duusakhOgnoo)
+                destroy()
+              }
             })
           },
           khaaya() {
