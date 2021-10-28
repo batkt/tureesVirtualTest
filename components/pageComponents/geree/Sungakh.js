@@ -21,7 +21,7 @@ const Sungakh = React.forwardRef(({token,destroy,confirm,data},ref)=> {
               duusakhOgnoo
           }).then(({data})=>{
               if(data === 'Amjilttai'){
-                message.success('Гэрээ амжилттай цуцаллаа')
+                message.success('Гэрээ амжилттай сунгалаа')
                 confirm(duusakhOgnoo)
                 destroy()
               }
