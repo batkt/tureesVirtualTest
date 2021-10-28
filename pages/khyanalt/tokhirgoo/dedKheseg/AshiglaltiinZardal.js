@@ -4,7 +4,7 @@ import { url } from "services/uilchilgee";
 
 import {useAjiltniiJagsaalt} from "hooks/useAjiltan";
 
-function KhuviinMedeelel({
+function AshiglaltiinZardal({
   ajiltan = {},
   token,
   ajiltanMutate,
@@ -22,48 +22,13 @@ function KhuviinMedeelel({
         <div className='intro-y box mt-5 lg:mt-0'>
           <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
-              Талбайн m2-н үнэ засах
-            </h2>
-          </div>
-          {
-            ajilchdiinGaralt?.jagsaalt?.map((a)=>
-              <div className="box" key={a?._id}>
-                <div className="flex flex-col lg:flex-row items-center p-5">
-                  <div className="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
-                  <img
-                    alt={a?.ner}
-                    src={
-                      a?.zurgiinNer
-                        ? `${url}/ajiltniiZuragAvya/${a?.baiguullagiinId}/${a?.zurgiinNer}`
-                        : "/profile.svg"
-                    }
-                    className="rounded-full"
-                  />
-                  </div>
-                  <div className="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-                    <a className="font-medium">{a?.ner}</a> 
-                    <div className="text-gray-600 text-xs mt-0.5">{a?.erkh}</div>
-                  </div>
-                  <div className="flex mt-4 lg:mt-0">
-                    <Switch />
-                  </div>
-                </div>
-              </div>
-            )
-          }
-        </div>
-      </div>
-      <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
-        <div className='intro-y box mt-5 lg:mt-0'>
-          <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
-            <h2 className="font-medium text-base mr-auto dark:text-gray-200">
-              Талбайн m2 үнэ оруулах
+              Ус
             </h2>
           </div>
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">B1</div> 
+                  <div className="font-medium">Цэвэр ус/<label className='text-red-500 font-medium'>Халуун</label>/</div> 
                   <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
@@ -74,8 +39,73 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">B2</div> 
+                  <div className="font-medium">Цэвэр ус/<label className='text-blue-500 font-medium'>Хүйтэн</label>/</div> 
+                  <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber/>
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Бохир ус</div> 
                   <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber/>
+              </div>
+            </div>
+          </div>
+          
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Халуун ус халаасан дулаан</div> 
+                  <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber/>
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Усны суурь хураамж</div> 
+                  <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
+        <div className='intro-y box mt-5 lg:mt-0'>
+          <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
+            <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+              Халаалт
+            </h2>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Халаалт</div> 
+                  <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber/>
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Дулааны суурь хураамж</div> 
+                  <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
                 <InputNumber/>
@@ -88,4 +118,4 @@ function KhuviinMedeelel({
   );
 }
 
-export default KhuviinMedeelel;
+export default AshiglaltiinZardal;

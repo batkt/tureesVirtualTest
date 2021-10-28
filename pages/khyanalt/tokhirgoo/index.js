@@ -67,15 +67,15 @@ function AjiltanBurtgel({ token }) {
         <div className="intro-y box mt-5 lg:mt-0">
           <div className="relative flex items-center p-5">
             <div className="w-12 h-12 image-fit">
-              <img alt={ajiltan?.ner} src={ajiltan?.zurgiinNer ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}` : '/profile.svg'} className="rounded-full w-12 h-12 ring-2 ring-blue-600 ring-opacity-50" />
+              <img alt={ajiltan?.ner} src={ajiltan?.zurgiinNer ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}` : '/profile.svg'} className="rounded-full w-12 h-12 ring-2 ring-green-600 ring-opacity-50" />
             </div>
             <div className="ml-4 mr-auto">
               <div className="font-medium text-base">{`${ajiltan?.ovog} ${ajiltan?.ner}`}</div>
               <div className="text-gray-600">{ajiltan?.albanTushaal}</div>
             </div>
           </div>
-          <div className="p-5 border-t border-gray-200 dark:border-dark-5">
-            {tokhirgoo?.map(mur=><a className="flex items-center mt-5" onClick={()=>setTsonkh(mur.tsonkh)}>{mur.icon}  {mur.text}</a>)}
+          <div className="p-5 border-t border-gray-200 dark:border-dark-5 text-green-600">
+            {tokhirgoo?.map(mur=><div className="flex items-center mt-5 cursor-pointer" onClick={()=>setTsonkh(mur.tsonkh)}>{mur.icon}  {mur.text}</div>)}
           </div>
         </div>
       </div>
