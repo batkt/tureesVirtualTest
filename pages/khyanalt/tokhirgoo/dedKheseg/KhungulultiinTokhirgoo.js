@@ -53,7 +53,7 @@ function KhuviinMedeelel({
           }
         </div>
       </div>
-      <div className='col-span-12 lg:col-span-4 xxl:col-span-4 mt-5'>
+      <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
         <div className='intro-y box mt-5 lg:mt-0'>
           <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
