@@ -22,7 +22,7 @@ import formatNumber from "tools/function/formatNumber"
 import React, { useMemo } from "react"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt"
-import { url } from "services/uilchilgee"
+import uilchilgee, { url } from "services/uilchilgee"
 import GereeKharakh from "components/pageComponents/geree/Kharakh"
 import router from "next/router"
 import { useReactToPrint } from "react-to-print"
@@ -31,20 +31,25 @@ import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExcelees
 import Sungakh from "components/pageComponents/geree/Sungakh"
 import { modal } from "components/ant/Modal"
 
-const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
-  const [tailbar,setTailbar] = React.useState('')
+const Tailbar = React.forwardRef(({token,destroy,confirm,data},ref)=> {
+  const [shaltgaan,setTailbar] = React.useState('')
   React.useImperativeHandle(
     ref,
     () => ({
         khadgalya() {
-          confirm(tailbar)
-          destroy()
+          uilchilgee(token).post('/gereeTsutslaya',{
+            "gereeniiId" : data?._id,
+            shaltgaan
+          }).then(({data})=>{
+            confirm(shaltgaan)
+            destroy()
+          })
         },
         khaaya() {
             destroy()
         },
     }),
-    [tailbar],
+    [shaltgaan],
   )
 
   return(
@@ -68,7 +73,7 @@ const Tailbar = React.forwardRef(({destroy,confirm,data},ref)=> {
         </div>
       </div>
       
-      <Input.TextArea value={tailbar} onChange={({target})=>setTailbar(target?.value)}/>
+      <Input.TextArea value={shaltgaan} onChange={({target})=>setTailbar(target?.value)}/>
     </div>
   )
 })
@@ -376,7 +381,7 @@ function ZakhialgiinKhyanalt() {
         width:'20vw',
         title: "Цуцалсан шалтгаан",
         icon: <MinusCircleOutlined />,
-        content:<Tailbar ref={tailbarRef} data={data} token={token} confirm={()=>()=>gereeniiMedeelelMutate()}/>,
+        content:<Tailbar ref={tailbarRef} data={data} token={token} confirm={()=>gereeniiMedeelelMutate()}/>,
         footer
       })
   }
