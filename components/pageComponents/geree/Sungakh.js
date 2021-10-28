@@ -1,22 +1,34 @@
 import React from 'react'
 import formatNumber from 'tools/function/formatNumber'
+import uilchilgee from 'services/uilchilgee'
 const { DatePicker, InputNumber } = require("antd")
 const moment = require('moment')
-const Sungakh = React.forwardRef(({destroy,confirm,data},ref)=> {
+
+const Sungakh = React.forwardRef(({token,destroy,confirm,data},ref)=> {
     const [sar,setSar] = React.useState(1)
-    const [duusakhOgnoo,setDuusakhOgnoo] = React.useState(moment(data?.gereeniiOgnoo).add(1,'month'))
+    const [duusakhOgnoo,setDuusakhOgnoo] = React.useState(moment(data?.duusakhOgnoo).add(1,'month'))
+
+    React.useEffect(()=>{
+      setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar,'month'))
+    },[sar])
+
     React.useImperativeHandle(
       ref,
       () => ({
           khadgalya() {
-            confirm(tailbar)
-            destroy()
+            uilchilgee(token).post('/gereeSungaya',{
+              "gereeniiId" : data?._id,
+              duusakhOgnoo
+          }).then(({data})=>{
+              confirm(duusakhOgnoo)
+              destroy()
+            })
           },
           khaaya() {
               destroy()
           },
       }),
-      [duusakhOgnoo,sar],
+      [duusakhOgnoo],
     )
   
     return(

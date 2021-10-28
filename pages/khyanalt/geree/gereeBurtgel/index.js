@@ -376,7 +376,7 @@ function ZakhialgiinKhyanalt() {
         width:'20vw',
         title: "Цуцалсан шалтгаан",
         icon: <MinusCircleOutlined />,
-        content:<Tailbar ref={tailbarRef} data={data} confirm={(tailbar)=>message.success(tailbar)}/>,
+        content:<Tailbar ref={tailbarRef} data={data} token={token} confirm={()=>()=>gereeniiMedeelelMutate()}/>,
         footer
       })
   }
@@ -386,14 +386,14 @@ function ZakhialgiinKhyanalt() {
     const footer = [
       <Button onClick={() => sungaltRef.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => sungaltRef.current.khadgalya()}>
-          Цуцлах
+          Сунгах
       </Button>,
   ];
     modal({
       width:'20vw',
-      title: "Цуцалсан шалтгаан",
+      title: "Гэрээ сунгах",
       icon: <MinusCircleOutlined />,
-      content:<Sungakh ref={sungaltRef} data={data} confirm={(tailbar)=>message.success(tailbar)}/>,
+      content:<Sungakh ref={sungaltRef} data={data} token={token} confirm={()=>gereeniiMedeelelMutate()}/>,
       footer
     })
 }

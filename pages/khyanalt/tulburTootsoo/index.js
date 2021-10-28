@@ -5,9 +5,11 @@ import { useAuth } from "services/auth";
 import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd";
 import {
   CheckOutlined,
+  ExclamationOutlined,
   FileDoneOutlined,
   FileExcelOutlined,
   FileSearchOutlined,
+  QuestionOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
@@ -354,14 +356,16 @@ function AjiltanBurtgel({ token }) {
                           icon={
                             <div
                               className={`text-${
-                                !a?.kholbosonGereeniiId ? "yellow" : "green"
+                                (!a?.kholbosonGereeniiId ? (a?.magadlaltaiGereenuud?.length > 0 ? 'yellow' : "red") : "green")
                               }-500 flex items-center justify-center`}
                             >
-                              {!a?.kholbosonGereeniiId ? (
-                                <WarningOutlined style={{ fontSize: "22px" }} />
+                              
+                              { (!a?.kholbosonGereeniiId ? (
+                                a?.magadlaltaiGereenuud?.length > 0 ? <QuestionOutlined style={{ fontSize: "22px" }} /> :
+                                <ExclamationOutlined style={{ fontSize: "22px" }} />
                               ) : (
                                 <CheckOutlined style={{ fontSize: "22px" }} />
-                              )}
+                              ))}
                             </div>
                           }
                         />

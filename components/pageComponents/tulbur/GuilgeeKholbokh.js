@@ -3,15 +3,19 @@ import _ from "lodash";
 import React from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import formatNumber from "../../../tools/function/formatNumber";
+import getListMethod from "../../../tools/function/crud/getListMethod";
 import uilchilgee from "../../../services/uilchilgee";
 import moment from 'moment'
 
 function GuilgeeKholbokh({data, token, baiguullagiinId, onFinish, destroy }, ref) {
   const [geree, setGeree] = React.useState(null);
+  const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
+  
   const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
     token,
     baiguullagiinId
   );
+
   React.useImperativeHandle(
     ref,
     () => ({
@@ -44,8 +48,29 @@ function GuilgeeKholbokh({data, token, baiguullagiinId, onFinish, destroy }, ref
     [geree]
   );
 
+    React.useEffect(()=>{
+      getListMethod('geree',token,{query:{_id:data?.magadlaltaiGereenuud}})
+      .then(({data})=>{
+        setMagadlaltaiGereenuud(data?.jagsaalt)
+      })
+    },[])
+
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-4">
+      {magadlaltaiGereenuud?.length > 0 &&
+        <div>
+          <label>Санал болгох гэрээ сонгох</label>
+          {magadlaltaiGereenuud.map((a,i)=>
+            <div className={`border-l border-r border-b p-2 grid grid-cols-12 gap-1 zoom-in ${i === 0 ? 'border-t' : ''} ${a?._id === geree ? 'bg-green-100' : ''}`} key={a?._id} onClick={()=>setGeree(a?._id)}>
+              <div className='col-span-3 font-medium'>{a?.gereeniiDugaar}</div>
+              <div className='col-span-3'>{a?.ner}</div>
+              <div className='col-span-2 font-medium'>{a?.utas}</div>
+              <div className='col-span-2'>{a?.talbainDugaar}</div>
+              <div className='col-span-2'>{formatNumber(a?.uldegdel)}₮</div>
+            </div>
+          )}
+        </div>
+      }
       <label className="text-lg font-medium">Гүйлгээнд талбай холбох</label>
       <Select
         placeholder="Талбай"
