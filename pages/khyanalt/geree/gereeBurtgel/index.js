@@ -157,7 +157,9 @@ function ZakhialgiinKhyanalt() {
       query: { tuluv: { $nin: [-1] } },
     },
     {
-      too: 0,
+      too: gereeToollolt !== undefined
+      ? gereeToollolt?.reduce((a, b) => b.tsutsalsan, 0)
+      : 0,
       icon: <FileSyncOutlined />,
       khuvi: 100,
       utga: "Хаагдсан",
@@ -174,7 +176,9 @@ function ZakhialgiinKhyanalt() {
       query: { duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") } },
     },
     {
-      too: 0,
+      too: gereeToollolt !== undefined
+      ? gereeToollolt?.reduce((a, b) => b.tsutsalsan, 0)
+      : 0,
       icon: <FileExcelOutlined />,
       khuvi: 100,
       utga: "Цуцласан",
