@@ -26,7 +26,6 @@ function KhuviinMedeelel({
       if (status === 200 && "Amjilttai" === data) {
         message.success("Амжилттай заслаа");
         ajiltanMutate({ ...ajiltanObject });
-        khadgalsniiDaraa();
       }
     });
   }

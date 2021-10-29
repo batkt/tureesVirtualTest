@@ -26,7 +26,6 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
         if (status === 200 && "Amjilttai" === data) {
           message.success("Амжилттай заслаа");
           ajiltanMutate({ ...ajiltanObject });
-          khadgalsniiDaraa();
         }
       });
     } else message.warning("Мэдээлэл буруу оруулсан байна");

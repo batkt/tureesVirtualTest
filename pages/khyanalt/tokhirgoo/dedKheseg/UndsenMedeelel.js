@@ -29,7 +29,6 @@ function KhuviinMedeelel({
       if (status === 200 && "Amjilttai" === data) {
         message.success("Амжилттай заслаа");
         ajiltanMutate({ ...ajiltanObject });
-        khadgalsniiDaraa();
       }
     });
   }
@@ -48,9 +47,31 @@ function KhuviinMedeelel({
           </h2>
         </div>
         <div className="p-5">
-          <div className="flex flex-col-reverse xl:flex-row flex-col">
+          <div className="flex xl:flex-row flex-col">
             <div className="flex-1 mt-6 xl:mt-0">
               <div className="grid grid-cols-12 gap-x-5">
+                <div className="col-span-12 xxl:col-span-6">
+                  <div className="mt-3">
+                    <label className="form-label">Овог</label>
+                    <Input
+                      name="ovog"
+                      placeholder="Овог"
+                      defaultValue={ajiltan.ovog}
+                      onChange={(e) => onChange(e, "ovog")}
+                    />
+                  </div>
+                </div>
+                <div className="col-span-12 xxl:col-span-6">
+                  <div className="mt-3">
+                    <label className="form-label">Нэр</label>
+                    <Input
+                      name="ner"
+                      placeholder="Нэр"
+                      defaultValue={ajiltan.ner}
+                      onChange={(e) => onChange(e, "ner")}
+                    />
+                  </div>
+                </div>
                 <div className="col-span-12 xxl:col-span-6">
                   <div className="mt-3">
                     <label className="form-label">Нэвтрэх нэр</label>
