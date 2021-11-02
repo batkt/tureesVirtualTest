@@ -1,3 +1,4 @@
+//#region import
 import moment from "moment";
 import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
@@ -42,6 +43,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh";
 import Sungakh from "components/pageComponents/geree/Sungakh";
 import { modal } from "components/ant/Modal";
+//#endregion
 
 const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   const [shaltgaan, setTailbar] = React.useState("");
@@ -101,6 +103,7 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 });
 
 function ZakhialgiinKhyanalt() {
+  //#region const
   const { token, baiguullaga } = useAuth();
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $nin: [-1] } },
@@ -115,6 +118,8 @@ function ZakhialgiinKhyanalt() {
   const excelref = React.useRef();
   const tailbarRef = React.useRef();
   const sungaltRef = React.useRef();
+
+  //#endregion
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -133,6 +138,9 @@ function ZakhialgiinKhyanalt() {
       icon: <UserOutlined />,
       khuvi: 100,
       utga: "Нийт",
+      color:'text-green-500',
+      selectedColor:'bg-green-100',
+      border:'border-green-500',
       query: { tuluv: { $nin: [-1] } },
     },
     {
@@ -144,6 +152,9 @@ function ZakhialgiinKhyanalt() {
       icon: <FileDoneOutlined />,
       khuvi: -30,
       utga: "Хэвийн",
+      color:'text-green-500',
+      selectedColor:'bg-green-100',
+      border:'border-green-500',
       query: { tuluv: { $nin: [-1] } },
     },
     {
@@ -154,6 +165,9 @@ function ZakhialgiinKhyanalt() {
       icon: <HistoryOutlined />,
       khuvi: 100,
       utga: "Хугацаа хэтэрсэн",
+      color:'text-red-500',
+      selectedColor:'bg-red-100',
+      border:'border-red-500',
       query: { tuluv: { $nin: [-1] } },
     },
     {
@@ -163,6 +177,9 @@ function ZakhialgiinKhyanalt() {
       icon: <FileSyncOutlined />,
       khuvi: 100,
       utga: "Хаагдсан",
+      color:'text-blue-500',
+      selectedColor:'bg-blue-100',
+      border:'border-blue-500',
       query: { tuluv: -1 },
     },
     {
@@ -173,6 +190,9 @@ function ZakhialgiinKhyanalt() {
       icon: <WarningOutlined />,
       khuvi: 100,
       utga: "Сунгах гэрээ",
+      color:'text-yellow-500',
+      selectedColor:'bg-yellow-100',
+      border:'border-yellow-500',
       query: { duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") } },
     },
     {
@@ -182,6 +202,9 @@ function ZakhialgiinKhyanalt() {
       icon: <FileExcelOutlined />,
       khuvi: 100,
       utga: "Цуцласан",
+      color:'text-gray-800',
+      selectedColor:'bg-gray-200',
+      border:'border-gray-800',
       query: { tuluv: -1 },
     },
   ];
@@ -571,8 +594,8 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in ${
-                  mur?.utga === shuult?.utga ? "bg-green-100" : ""
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : 'border-green-500'} rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in ${
+                  mur?.utga === shuult?.utga ? mur.selectedColor : ''
                 }`}
                 onClick={() => setShuult(mur)}
               >
@@ -580,7 +603,7 @@ function ZakhialgiinKhyanalt() {
                   <div className="p-3 rounded-xl">
                     <div className="flex">
                       <div>
-                        <div className="text-3xl text-green-600 font-bold">
+                        <div className={`text-3xl ${mur?.utga === shuult?.utga ? mur.color : 'text-green-500'} font-bold`}>
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -588,7 +611,7 @@ function ZakhialgiinKhyanalt() {
                         </div>
                       </div>
                       <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
+                        <div className={`${mur?.utga === shuult?.utga ? mur.color : 'text-green-500'} text-2xl`}>
                           {mur.icon}
                         </div>
                       </div>
