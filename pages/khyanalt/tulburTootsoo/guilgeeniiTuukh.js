@@ -2,10 +2,8 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card,  Table,  Button } from "antd";
-import {
-  FileExcelOutlined,
-} from "@ant-design/icons";
+import { Card, Table, Button } from "antd";
+import { FileExcelOutlined } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "../../../tools/function/formatNumber";
 import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
@@ -20,7 +18,11 @@ function guilgeeniiTuukh({ token }) {
   const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
-  const {guilgeeniiToololt} = useGuilgeeniiToololtAvya(token,moment().startOf('month').format('YYYY-MM-DD 00:00:00'),moment().endOf('month').format('YYYY-MM-DD 23:59:59'))
+  const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(
+    token,
+    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+    moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+  );
   const query = React.useMemo(() => {
     return {};
   }, []);
@@ -61,7 +63,7 @@ function guilgeeniiTuukh({ token }) {
       title: "№",
       key: "index",
       width: "3rem",
-      align:'center',
+      align: "center",
       render: (text, record, index) => index + 1,
     },
     {
@@ -95,7 +97,15 @@ function guilgeeniiTuukh({ token }) {
       ellipsis: true,
       align: "right",
       render(a) {
-        return <div className={`font-medium ${a > 0 ? 'text-red-500' : 'text-green-500'}`}>{formatNumber(a)}</div>;
+        return (
+          <div
+            className={`font-medium ${
+              a > 0 ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {formatNumber(a)}
+          </div>
+        );
       },
       showSorterTooltip: false,
       defaultSortOrder: "descend",
@@ -113,10 +123,16 @@ function guilgeeniiTuukh({ token }) {
     {
       title: "Үйлдэл",
       ellipsis: true,
-      render: (row) => <>
-        <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a> 
-        {row?._id === delgegdsenGeree && <a className='ml-6' onClick={() => refTuukh.current.khevlekh()}>Хэвлэх</a>}
-      </>,
+      render: (row) => (
+        <>
+          <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>
+          {row?._id === delgegdsenGeree && (
+            <a className="ml-6" onClick={() => refTuukh.current.khevlekh()}>
+              Хэвлэх
+            </a>
+          )}
+        </>
+      ),
     },
   ];
 
@@ -126,18 +142,44 @@ function guilgeeniiTuukh({ token }) {
       khuudasniiNer="guilgeeniiTuukh"
       className="p-0 md:p-4"
       onSearch={(search) => {
-          setGereeniiKhuudaslalt((a) => ({ ...a, search }));
+        setGereeniiKhuudaslalt((a) => ({ ...a, search }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
           {[
-            { too: formatNumber( _.get(guilgeeniiToololt,'avlaga.0.dun') || 0) , utga: "Нийт Авлага" },
-            { too:formatNumber( _.get(guilgeeniiToololt,'avlaga.0.dun') || 0), utga: "Нийт Өглөг" },
-            { too:formatNumber( _.get(guilgeeniiToololt,'khugatsaaKhersen.0.dun') || 0), utga: "Хугацаа хэтэрсэн" },
-            { too:formatNumber( _.get(guilgeeniiToololt,'eneSardTulukh.0.dun') || 0), utga: "Сард орж ирэх дүн" },
-            { too:formatNumber( _.get(guilgeeniiToololt,'eneSardTulsun.0.dun') || 0), utga: "Гүйцэтгэлийн дүн" },
-            { too:formatNumber( _.get(guilgeeniiToololt,'khungulult.0.dun') || 0), utga: "Нийт хөнгөлөлт" },
+            {
+              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              utga: "Нийт Авлага",
+            },
+            {
+              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              utga: "Нийт Өглөг",
+            },
+            {
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "khugatsaaKhersen.0.dun") || 0
+              ),
+              utga: "Хугацаа хэтэрсэн",
+            },
+            {
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
+              ),
+              utga: "Сард орж ирэх дүн",
+            },
+            {
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
+              ),
+              utga: "Гүйцэтгэлийн дүн",
+            },
+            {
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
+              ),
+              utga: "Нийт хөнгөлөлт",
+            },
           ].map((mur, index) => {
             return (
               <div
@@ -148,7 +190,7 @@ function guilgeeniiTuukh({ token }) {
                   <div className="p-3 rounded-xl">
                     <div className="flex">
                       <div>
-                        <div className="text-3xl text-green-600 font-bold">
+                        <div className="text-2xl text-green-600 font-bold">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -167,56 +209,54 @@ function guilgeeniiTuukh({ token }) {
             );
           })}
         </div>
-            <div className="flex flex-row mt-5">
-              
-            </div>
-            <div className="overflow-auto hidden md:block">
-              <Table
-                scroll={{ y: "calc(100vh - 32rem)" }}
-                size="small"
-                bordered
-                columns={columns}
-                loading={!gereeniiMedeelel}
-                dataSource={gereeniiMedeelel?.jagsaalt}
-                rowKey={(a) => a._id}
-                className="t-head"
-                rowClassName={(record, index) =>
-                  index % 2 === 0
-                    ? "bg-white dark:bg-gray-600"
-                    : "bg-gray-200 dark:bg-gray-800"
-                }
-                pagination={{
-                  current: gereeniiMedeelel?.khuudasniiDugaar,
-                  pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-                  total: gereeniiMedeelel?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setGereeniiKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-                expandable={{
-                  expandedRowRender: (mur) =>
-                    mur?._id === delgegdsenGeree && (
-                      <GuilgeeniiTuukh
-                        ref={refTuukh}
-                        mur={mur}
-                        token={token}
-                        data={mur}
-                        refreshData={refreshData}
-                      />
-                    ),
-                  expandedRowKeys: [delgegdsenGeree],
-                  expandedRowClassName: (a, index) =>
-                    index % 2 === 0
-                      ? "bg-white dark:bg-gray-600"
-                      : "bg-gray-200 dark:bg-gray-800",
-                  onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
-                }}
-              />
-            </div>
+        <div className="flex flex-row mt-5"></div>
+        <div className="overflow-auto hidden md:block">
+          <Table
+            scroll={{ y: "calc(100vh - 32rem)" }}
+            size="small"
+            bordered
+            columns={columns}
+            loading={!gereeniiMedeelel}
+            dataSource={gereeniiMedeelel?.jagsaalt}
+            rowKey={(a) => a._id}
+            className="t-head"
+            rowClassName={(record, index) =>
+              index % 2 === 0
+                ? "bg-white dark:bg-gray-600"
+                : "bg-gray-200 dark:bg-gray-800"
+            }
+            pagination={{
+              current: gereeniiMedeelel?.khuudasniiDugaar,
+              pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+              total: gereeniiMedeelel?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setGereeniiKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+            expandable={{
+              expandedRowRender: (mur) =>
+                mur?._id === delgegdsenGeree && (
+                  <GuilgeeniiTuukh
+                    ref={refTuukh}
+                    mur={mur}
+                    token={token}
+                    data={mur}
+                    refreshData={refreshData}
+                  />
+                ),
+              expandedRowKeys: [delgegdsenGeree],
+              expandedRowClassName: (a, index) =>
+                index % 2 === 0
+                  ? "bg-white dark:bg-gray-600"
+                  : "bg-gray-200 dark:bg-gray-800",
+              onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
+            }}
+          />
+        </div>
       </Card>
     </Admin>
   );
