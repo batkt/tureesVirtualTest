@@ -12,6 +12,7 @@ const fetcher = (url, token, baiguullagiinId, {search='',...khuudaslalt}, regist
           $or:[{register:{$regex:search,$options:'i'}},{talbainDugaar:{$regex:search,$options:'i'}},{gereeniiDugaar:{$regex:search,$options:'i'}},{utas:{$regex:search,$options:'i'}}],
           ...query
         },
+        order:{createdAt:-1},
         ...khuudaslalt,
       },
     })

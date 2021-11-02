@@ -13,13 +13,14 @@ import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/Guilgeeni
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya";
 
 function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null);
   const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
-
+  const {guilgeeniiToololt} = useGuilgeeniiToololtAvya(token,moment().startOf('month').format('YYYY-MM-DD 00:00:00'),moment().endOf('month').format('YYYY-MM-DD 23:59:59'))
   const query = React.useMemo(() => {
     return {};
   }, []);
@@ -60,7 +61,7 @@ function guilgeeniiTuukh({ token }) {
       title: "№",
       key: "index",
       width: "3rem",
-      className: "text-center",
+      align:'center',
       render: (text, record, index) => index + 1,
     },
     {
@@ -94,7 +95,7 @@ function guilgeeniiTuukh({ token }) {
       ellipsis: true,
       align: "right",
       render(a) {
-        return <div className={`${a > 0 ? 'text-red-500' : 'text-green-500'}`}>{formatNumber(a)}</div>;
+        return <div className={`font-medium ${a > 0 ? 'text-red-500' : 'text-green-500'}`}>{formatNumber(a)}</div>;
       },
       showSorterTooltip: false,
       defaultSortOrder: "descend",
@@ -131,12 +132,12 @@ function guilgeeniiTuukh({ token }) {
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
           {[
-            { too: 1, utga: "Нийт Авлага" },
-            { too: 1, utga: "Нийт Өглөг" },
-            { too: 1, utga: "Хугацаа хэтэрсэн" },
-            { too: 1, utga: "Сард орж ирэх дүн" },
-            { too: 1, utga: "Гүйцэтгэлийн дүн" },
-            { too: 1, utga: "Нийт хөнгөлөлт" },
+            { too: formatNumber( _.get(guilgeeniiToololt,'avlaga.0.dun') || 0) , utga: "Нийт Авлага" },
+            { too:formatNumber( _.get(guilgeeniiToololt,'avlaga.0.dun') || 0), utga: "Нийт Өглөг" },
+            { too:formatNumber( _.get(guilgeeniiToololt,'khugatsaaKhersen.0.dun') || 0), utga: "Хугацаа хэтэрсэн" },
+            { too:formatNumber( _.get(guilgeeniiToololt,'eneSardTulukh.0.dun') || 0), utga: "Сард орж ирэх дүн" },
+            { too:formatNumber( _.get(guilgeeniiToololt,'eneSardTulsun.0.dun') || 0), utga: "Гүйцэтгэлийн дүн" },
+            { too:formatNumber( _.get(guilgeeniiToololt,'khungulult.0.dun') || 0), utga: "Нийт хөнгөлөлт" },
           ].map((mur, index) => {
             return (
               <div

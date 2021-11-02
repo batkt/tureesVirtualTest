@@ -253,7 +253,7 @@ function ZakhialgiinKhyanalt() {
           return `${talbainKhemjee} м2`
         },
         showSorterTooltip: false,
-        defaultSortOrder: "descend",
+        
         sorter: (a, b) =>
           Number(a.talbainKhemjee || 0) - Number(b.talbainKhemjee || 0),
       },
@@ -267,7 +267,6 @@ function ZakhialgiinKhyanalt() {
           return formatNumber(sariinTurees || 0)
         },
         showSorterTooltip: false,
-        defaultSortOrder: "descend",
         sorter: (a, b) =>
           Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
       },
