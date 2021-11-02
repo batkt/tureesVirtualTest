@@ -1,0 +1,222 @@
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import React from "react";
+import { useAuth } from "services/auth";
+import { Card,  Table,  Button } from "antd";
+import {
+  FileExcelOutlined,
+} from "@ant-design/icons";
+import moment from "moment";
+import formatNumber from "../../../tools/function/formatNumber";
+import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
+import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
+import _ from "lodash";
+import { modal } from "components/ant/Modal";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+
+function guilgeeniiTuukh({ token }) {
+  const ref = React.useRef(null);
+  const { baiguullaga } = useAuth();
+  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
+
+  const query = React.useMemo(() => {
+    return {};
+  }, []);
+
+  const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
+    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query);
+
+  function refreshData() {
+    gereeniiMedeelelMutate();
+    setDelgegdsenGeree();
+  }
+
+  function guilgeeKhiiya(data) {
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <VoucheraarTootsooKhiikh
+          data={data}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
+  }
+
+  const columns = [
+    {
+      title: "№",
+      key: "index",
+      width: "3rem",
+      className: "text-center",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Талбай",
+      dataIndex: "talbainDugaar",
+      ellipsis: true,
+      align: "center",
+      width: "5rem",
+    },
+    {
+      title: "Давхар",
+      dataIndex: "davkhar",
+      ellipsis: true,
+      align: "center",
+      width: "5rem",
+      showSorterTooltip: false,
+      defaultSortOrder: "descend",
+      sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
+    },
+
+    {
+      title: "Түрээслэгч",
+      dataIndex: "ner",
+      ellipsis: true,
+      align: "center",
+      width: "12rem",
+    },
+    { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center" },
+    {
+      title: "Үлдэгдэл",
+      dataIndex: "uldegdel",
+      ellipsis: true,
+      align: "right",
+      render(a) {
+        return formatNumber(a);
+      },
+      showSorterTooltip: false,
+      defaultSortOrder: "descend",
+      sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
+    },
+    {
+      title: "Гэрээний огноо",
+      dataIndex: "gereeniiOgnoo",
+      ellipsis: true,
+      align: "center",
+      render(a) {
+        return moment(a).format("YYYY-MM-DD");
+      },
+    },
+    {
+      title: "Үйлдэл",
+      ellipsis: true,
+      render: (row) => <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>,
+    },
+  ];
+
+  return (
+    <Admin
+      title="Гүйлгээний түүх"
+      khuudasniiNer="guilgeeniiTuukh"
+      className="p-0 md:p-4"
+      onSearch={(search) => {
+          setGereeniiKhuudaslalt((a) => ({ ...a, search }));
+      }}
+    >
+      <Card className="col-span-12 p-5 cardgrid">
+        <div className="w-full grid grid-cols-12 gap-4">
+          {[
+            { too: 1, utga: "Нийт Авлага" },
+            { too: 1, utga: "Хугацаа хэтэрсэн" },
+            { too: 1, utga: "График төлөлттэй" },
+            { too: 1, utga: "Өнөөдөр	 орж ирэх" },
+            { too: 1, utga: "Бартерын дүн" },
+            { too: 1, utga: "Нийт хөнгөлөлт" },
+          ].map((mur, index) => {
+            return (
+              <div
+                key={`${index}toololt`}
+                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+              >
+                <div className="h-full rounded-xl">
+                  <div className="p-3 rounded-xl">
+                    <div className="flex">
+                      <div>
+                        <div className="text-3xl text-green-600 font-bold">
+                          {mur.too}
+                        </div>
+                        <div className="text-base text-gray-500">
+                          {mur.utga}
+                        </div>
+                      </div>
+                      <div className="ml-auto">
+                        <div className="text-green-600 text-2xl">
+                          {mur.icon}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+            <div className="flex flex-row mt-5">
+              
+            </div>
+            <div className="overflow-auto hidden md:block">
+              <Table
+                scroll={{ y: "calc(100vh - 32rem)" }}
+                size="small"
+                bordered
+                columns={columns}
+                loading={!gereeniiMedeelel}
+                dataSource={gereeniiMedeelel?.jagsaalt}
+                rowKey={(a) => a._id}
+                className="t-head"
+                rowClassName={(record, index) =>
+                  index % 2 === 0
+                    ? "bg-white dark:bg-gray-600"
+                    : "bg-gray-200 dark:bg-gray-800"
+                }
+                pagination={{
+                  current: gereeniiMedeelel?.khuudasniiDugaar,
+                  pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+                  total: gereeniiMedeelel?.niitMur,
+                  showSizeChanger: true,
+                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                    setGereeniiKhuudaslalt((kh) => ({
+                      ...kh,
+                      khuudasniiDugaar,
+                      khuudasniiKhemjee,
+                    })),
+                }}
+                expandable={{
+                  expandedRowRender: (mur) =>
+                    mur?._id === delgegdsenGeree && (
+                      <GuilgeeniiTuukh
+                        mur={mur}
+                        token={token}
+                        data={mur}
+                        refreshData={refreshData}
+                      />
+                    ),
+                  expandedRowKeys: [delgegdsenGeree],
+                  expandedRowClassName: (a, index) =>
+                    index % 2 === 0
+                      ? "bg-white dark:bg-gray-600"
+                      : "bg-gray-200 dark:bg-gray-800",
+                  onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
+                }}
+              />
+            </div>
+      </Card>
+    </Admin>
+  );
+}
+
+export const getServerSideProps = shalgaltKhiikh;
+
+export default guilgeeniiTuukh;

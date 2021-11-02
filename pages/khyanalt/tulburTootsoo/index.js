@@ -2,34 +2,25 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, Tabs, DatePicker, Table, Select, Button, message } from "antd";
+import { Card, DatePicker, Table, Select, Button, message } from "antd";
 import {
   CheckOutlined,
   ExclamationOutlined,
-  FileDoneOutlined,
   FileExcelOutlined,
-  FileSearchOutlined,
   QuestionOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import useDans from "../../../hooks/khuulga/useDans";
 import formatNumber from "../../../tools/function/formatNumber";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
-import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
 import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
-import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 const { RangePicker } = DatePicker;
 
-function AjiltanBurtgel({ token }) {
-  const ref = React.useRef(null);
+function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null);
   const { baiguullaga } = useAuth();
-  const [tab, setTab] = React.useState("1tab1");
-  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
@@ -46,46 +37,15 @@ function AjiltanBurtgel({ token }) {
     order
   );
 
-  const query = React.useMemo(() => {
-    return {};
-  }, []);
-
-  const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query);
 
   function refreshData() {
-    gereeniiMedeelelMutate();
     dansniiKhuulgaMutate();
-    setDelgegdsenGeree();
   }
 
   function dansSongoy(number) {
     let songogdsonDans = dans?.accounts?.find((a) => a.number === number);
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
     setSongogdsonDans(songogdsonDans);
-  }
-
-  function guilgeeKhiiya(data) {
-    const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
-      </Button>,
-    ];
-    modal({
-      title: "",
-      icon: <FileExcelOutlined />,
-      content: (
-        <VoucheraarTootsooKhiikh
-          data={data}
-          ref={ref}
-          token={token}
-          baiguullagiinId={baiguullaga?._id}
-          onFinish={refreshData}
-        />
-      ),
-      footer,
-    });
   }
 
   function guilgeeKholbyo(data) {
@@ -116,78 +76,13 @@ function AjiltanBurtgel({ token }) {
     });
   }
 
-  const columns = [
-    {
-      title: "№",
-      key: "index",
-      width: "3rem",
-      className: "text-center",
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: "Талбай",
-      dataIndex: "talbainDugaar",
-      ellipsis: true,
-      align: "center",
-      width: "5rem",
-    },
-    {
-      title: "Давхар",
-      dataIndex: "davkhar",
-      ellipsis: true,
-      align: "center",
-      width: "5rem",
-      showSorterTooltip: false,
-      defaultSortOrder: "descend",
-      sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
-    },
-
-    {
-      title: "Түрээслэгч",
-      dataIndex: "ner",
-      ellipsis: true,
-      align: "center",
-      width: "12rem",
-    },
-    { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center" },
-    {
-      title: "Үлдэгдэл",
-      dataIndex: "uldegdel",
-      ellipsis: true,
-      align: "right",
-      render(a) {
-        return formatNumber(a);
-      },
-      showSorterTooltip: false,
-      defaultSortOrder: "descend",
-      sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
-    },
-    {
-      title: "Гэрээний огноо",
-      dataIndex: "gereeniiOgnoo",
-      ellipsis: true,
-      align: "center",
-      render(a) {
-        return moment(a).format("YYYY-MM-DD");
-      },
-    },
-    {
-      title: "Үйлдэл",
-      ellipsis: true,
-      render: (row) => <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>,
-    },
-  ];
-
   return (
     <Admin
-      title="Төлбөр тооцоо"
-      khuudasniiNer="tulburTootsoo"
+      title="Дансны хуулга"
+      khuudasniiNer="khuulga"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        if (tab === "1tab1")
           setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }));
-        else if (tab === "2tab2")
-          setGereeniiKhuudaslalt((a) => ({ ...a, search }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
@@ -228,17 +123,7 @@ function AjiltanBurtgel({ token }) {
             );
           })}
         </div>
-        <Tabs size="large" style={{ marginTop: "20px" }} onChange={setTab}>
-          <Tabs.TabPane
-            key="1tab1"
-            tab={
-              <span>
-                <FileSearchOutlined style={{ fontSize: "32px" }} />
-                Хуулга
-              </span>
-            }
-          >
-            <div className="w-full flex flex-row">
+            <div className="w-full flex flex-row mt-5">
               <RangePicker
                 style={{ marginBottom: "20px" }}
                 value={ekhlekhOgnoo}
@@ -396,76 +281,6 @@ function AjiltanBurtgel({ token }) {
               }}
               rowKey={(a) => a.record}
             />
-          </Tabs.TabPane>
-          <Tabs.TabPane
-            key="2tab2"
-            tab={
-              <span>
-                <FileDoneOutlined style={{ fontSize: "32px" }} />
-                Гүйлгээний жагсаалт
-              </span>
-            }
-          >
-            <div className="flex flex-row ">
-              <RangePicker
-                style={{ marginBottom: "15px" }}
-                size="large"
-                disabledTime
-                defaultValue={[
-                  moment(new Date(), "YYYY-MM-DD"),
-                  moment(new Date(), "YYYY-MM-DD"),
-                ]}
-                format={"YYYY-MM-DD"}
-              />
-            </div>
-            <div className="overflow-auto hidden md:block">
-              <Table
-                scroll={{ y: "calc(100vh - 32rem)" }}
-                size="small"
-                bordered
-                columns={columns}
-                loading={!gereeniiMedeelel}
-                dataSource={gereeniiMedeelel?.jagsaalt}
-                rowKey={(a) => a._id}
-                className="t-head"
-                rowClassName={(record, index) =>
-                  index % 2 === 0
-                    ? "bg-white dark:bg-gray-600"
-                    : "bg-gray-200 dark:bg-gray-800"
-                }
-                pagination={{
-                  current: gereeniiMedeelel?.khuudasniiDugaar,
-                  pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-                  total: gereeniiMedeelel?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setGereeniiKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-                expandable={{
-                  expandedRowRender: (mur) =>
-                    mur?._id === delgegdsenGeree && (
-                      <GuilgeeniiTuukh
-                        mur={mur}
-                        token={token}
-                        data={mur}
-                        refreshData={refreshData}
-                      />
-                    ),
-                  expandedRowKeys: [delgegdsenGeree],
-                  expandedRowClassName: (a, index) =>
-                    index % 2 === 0
-                      ? "bg-white dark:bg-gray-600"
-                      : "bg-gray-200 dark:bg-gray-800",
-                  onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
-                }}
-              />
-            </div>
-          </Tabs.TabPane>
-        </Tabs>
       </Card>
     </Admin>
   );
@@ -473,4 +288,4 @@ function AjiltanBurtgel({ token }) {
 
 export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel;
+export default tulburTootsoo;
