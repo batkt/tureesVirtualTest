@@ -1,11 +1,12 @@
 import { Button, Input, message, Popconfirm } from "antd";
-import React, { useState } from "react";
+import React, { useImperativeHandle, useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { DeleteOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
+import { useReactToPrint } from "react-to-print";
 const fetcher = (url, token, gereeniiId) =>
   axios(token)
     .get(`${url}/${gereeniiId}`)
@@ -49,9 +50,11 @@ function useGuilgee(token, gereeniiId) {
   };
 }
 
-function GuilgeeniiTuukh({ token, data, refreshData }) {
+function GuilgeeniiTuukh({ token, data, refreshData },ref) {
   const { guilgeeniiTuukh } = useGuilgee(token, data?._id);
   const tailbarRef = React.useRef(null);
+  const printRef = React.useRef(null);
+
   function tulultUstgaya({ guilgeeniiId, tulsunDun, _id }) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
@@ -87,45 +90,64 @@ function GuilgeeniiTuukh({ token, data, refreshData }) {
     });
   }
 
-  /*'/gereeniiTulultAvya/:gereeniiId'*/
+  const handlePrint = useReactToPrint({
+    content: () => printRef.current,
+  })
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      khevlekh() {
+        handlePrint()
+      },
+    }),
+    [printRef]
+  );
+
   return (
-    <React.Fragment>
-      <div className="ml-12 p-1 grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
-        <div>№</div>
-        <div>Огноо</div>
-        <div>Түрээс</div>
-        <div>Хямдрал</div>
-        <div>Төлөх дүн</div>
-        <div>Төлсөн дүн</div>
-        <div>Хэлбэр</div>
-      </div>
-      {guilgeeniiTuukh?.map((a, i) => (
-        <div className="ml-12 grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
-          <div className="p-1">{i + 1}</div>
-          <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
-          <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
-          <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
-          <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
-          <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
-          <div className="flex flex-row px-1 items-center">
-            {a.turul === "bank" ? a.tulsunDans : a.turul}
-            {(a.turul === "voucher" || a.turul === "bank") && (
-              <Popconfirm
-                title="Төлөлт устгах уу?"
-                okText="Тийм"
-                cancelText="Үгүй"
-                onConfirm={() => tulultUstgaya(a)}
-              >
-                <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer">
-                  <DeleteOutlined />
-                </div>
-              </Popconfirm>
-            )}
-          </div>
+    <div className='ml-12'>
+      <div ref={printRef} >
+        <div className='print mb-2'>
+          <div>Гүйлгээний түүх</div>
+          <div className='ml-auto'>Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-      ))}
-    </React.Fragment>
+        <div className="p-1 grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
+          <div>№</div>
+          <div>Огноо</div>
+          <div>Түрээс</div>
+          <div>Хямдрал</div>
+          <div>Төлөх дүн</div>
+          <div>Төлсөн дүн</div>
+          <div>Хэлбэр</div>
+        </div>
+        {guilgeeniiTuukh?.map((a, i) => (
+          <div className="grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
+            <div className="p-1">{i + 1}</div>
+            <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
+            <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
+            <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
+            <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
+            <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+            <div className="flex flex-row px-1 items-center ">
+              {a.turul === "bank" ? a.tulsunDans : a.turul}
+              {(a.turul === "voucher" || a.turul === "bank") && (
+                <Popconfirm
+                  title="Төлөлт устгах уу?"
+                  okText="Тийм"
+                  cancelText="Үгүй"
+                  onConfirm={() => tulultUstgaya(a)}
+                >
+                  <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer hide-on-print">
+                    <DeleteOutlined />
+                  </div>
+                </Popconfirm>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
-export default GuilgeeniiTuukh;
+export default React.forwardRef(GuilgeeniiTuukh);

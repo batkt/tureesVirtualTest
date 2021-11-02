@@ -11,6 +11,13 @@
     }
 }
 
+.print {display:none;}
+
+@media print {
+  .hide-on-print {display:none;}
+  .print  {display:block!important;}
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;     

@@ -16,6 +16,7 @@ import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 
 function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null);
+  const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
 
@@ -113,7 +114,7 @@ function guilgeeniiTuukh({ token }) {
       ellipsis: true,
       render: (row) => <>
         <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a> 
-        <a className='ml-6' onClick={() => guilgeeKhiiya(row)}>Хэвлэх</a>
+        {row?._id === delgegdsenGeree && <a className='ml-6' onClick={() => refTuukh.current.khevlekh()}>Хэвлэх</a>}
       </>,
     },
   ];
@@ -199,6 +200,7 @@ function guilgeeniiTuukh({ token }) {
                   expandedRowRender: (mur) =>
                     mur?._id === delgegdsenGeree && (
                       <GuilgeeniiTuukh
+                        ref={refTuukh}
                         mur={mur}
                         token={token}
                         data={mur}
