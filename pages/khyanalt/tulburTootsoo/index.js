@@ -37,7 +37,6 @@ function tulburTootsoo({ token }) {
     order
   );
 
-
   function refreshData() {
     dansniiKhuulgaMutate();
   }
@@ -82,23 +81,20 @@ function tulburTootsoo({ token }) {
       khuudasniiNer="khuulga"
       className="p-0 md:p-4"
       onSearch={(search) => {
-          setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }));
+        setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
           {[
-            { too: 1, utga: "Нийт Авлага" },
-            { too: 1, utga: "Хугацаа хэтэрсэн" },
-            { too: 1, utga: "График төлөлттэй" },
-            { too: 1, utga: "Өнөөдөр	 орж ирэх" },
-            { too: 1, utga: "Бартерын дүн" },
-            { too: 1, utga: "Нийт хөнгөлөлт" },
+            { too: dansniiKhuulgaGaralt?.niitMur || 0, utga: "Нийт" },
+            { too: 0, utga: "Тодорхойгүй" },
+            { too: 0, utga: "Холбогдсон" },
           ].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
-                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-4 intro-y cursor-pointer zoom-in"
               >
                 <div className="h-full rounded-xl">
                   <div className="p-3 rounded-xl">
@@ -123,164 +119,161 @@ function tulburTootsoo({ token }) {
             );
           })}
         </div>
-            <div className="w-full flex flex-row mt-5">
-              <RangePicker
-                style={{ marginBottom: "20px" }}
-                value={ekhlekhOgnoo}
-                onChange={setEkhlekhOgnoo}
-              />
-              <div className="w-40 ml-4">
-                <Select
-                  placeholder="Данс"
-                  style={{ width: "100%" }}
-                  onChange={dansSongoy}
-                >
-                  {dans?.accounts?.map((a) => (
-                    <Select.Option key={a.number} value={a.number}>
-                      <div>{a.number}</div>
-                    </Select.Option>
-                  ))}
-                </Select>
-              </div>
-              {songogdsonDans && (
-                <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
-                  Үлдэгдэл: {formatNumber(songogdsonDans.balance)}{" "}
-                  {songogdsonDans.currency}
-                </div>
-              )}
+        <div className="w-full flex flex-row mt-5">
+          <RangePicker
+            style={{ marginBottom: "20px" }}
+            value={ekhlekhOgnoo}
+            onChange={setEkhlekhOgnoo}
+          />
+          <div className="w-40 ml-4">
+            <Select
+              placeholder="Данс"
+              style={{ width: "100%" }}
+              onChange={dansSongoy}
+            >
+              {dans?.accounts?.map((a) => (
+                <Select.Option key={a.number} value={a.number}>
+                  <div>{a.number}</div>
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          {songogdsonDans && (
+            <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
+              Үлдэгдэл: {formatNumber(songogdsonDans.balance)}{" "}
+              {songogdsonDans.currency}
             </div>
-            <Table
-              bordered
-              size="middle"
-              scroll={{ y: "calc(100vh - 30rem)" }}
-              columns={[
-                {
-                  title: "Огноо",
-                  sorter: true,
-                  dataIndex: "tranDate",
-                  width: "7rem",
-                  render(date) {
-                    return moment(date).format("YYYY-MM-DD");
-                  },
-                  onHeaderCell: (cell, index) => {
-                    return {
-                      onClick: () =>
-                        setOrder((o) => ({
-                          ...o,
-                          tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
-                        })), // click header row
-                    };
-                  },
-                },
-                {
-                  title: "Цаг",
-                  sorter: true,
-                  dataIndex: "time",
-                  ellipsis: true,
-                  width: "4rem",
-                  render(a) {
-                    if (_.isString(a))
-                      return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
-                    return "";
-                  },
-                  onHeaderCell: (cell, index) => {
-                    return {
-                      onClick: () =>
-                        setOrder((o) => ({
-                          ...o,
-                          time: o.time === -1 ? 1 : o.time - 1,
-                        })), // click header row
-                    };
-                  },
-                },
-                {
-                  title: "Гүйлгээний утга",
-                  dataIndex: "description",
-                },
-                {
-                  title: "Гүйлгээний дүн",
-                  sorter: true,
-                  dataIndex: "amount",
-                  ellipsis: true,
-                  width: "9rem",
-                  className: "text-right",
-                  showSorterTooltip: false,
-                  render(a) {
-                    return `${formatNumber(a)}₮`;
-                  },
-                  sorter: (a, b) =>
-                    Number(a.amount || 0) - Number(b.amount || 0),
-                },
-                {
-                  title: "Шилжүүлсэн данс",
-                  align: "center",
-                  dataIndex: "relatedAccount",
-                  ellipsis: true,
-                  width: "10rem",
-                },
-                {
-                  title: "Төлөв",
-                  width: "4rem",
-                  align: "center",
-                  render(a) {
-                    return (
-                      <div className="flex items-center justify-center">
-                        <Button
-                          shape="circle"
-                          className="ant-pagination-item-link"
-                          onClick={() => guilgeeKholbyo(a)}
-                          icon={
-                            <div
-                              className={`text-${
-                                !a?.kholbosonGereeniiId
-                                  ? a?.magadlaltaiGereenuud?.length > 0
-                                    ? "yellow"
-                                    : "red"
-                                  : "green"
-                              }-500 flex items-center justify-center`}
-                            >
-                              {!a?.kholbosonGereeniiId ? (
-                                a?.magadlaltaiGereenuud?.length > 0 ? (
-                                  <QuestionOutlined
-                                    style={{ fontSize: "22px" }}
-                                  />
-                                ) : (
-                                  <ExclamationOutlined
-                                    style={{ fontSize: "22px" }}
-                                  />
-                                )
-                              ) : (
-                                <CheckOutlined style={{ fontSize: "22px" }} />
-                              )}
-                            </div>
-                          }
-                        />
-                      </div>
-                    );
-                  },
-                },
-                {
-                  title: "Талбай",
-                  dataIndex: "kholbosonTalbainId",
-                  ellipsis: true,
-                  width: "5rem",
-                },
-              ]}
-              dataSource={dansniiKhuulgaGaralt?.jagsaalt}
-              pagination={{
-                current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
-                pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
-                total: dansniiKhuulgaGaralt?.niitMur,
-                showSizeChanger: true,
-                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                  setDansniiKhuulgaKhuudaslalt((kh) => ({
-                    ...kh,
-                    khuudasniiDugaar,
-                    khuudasniiKhemjee,
-                  })),
-              }}
-              rowKey={(a) => a.record}
-            />
+          )}
+        </div>
+        <Table
+          bordered
+          size="middle"
+          scroll={{ y: "calc(100vh - 30rem)" }}
+          columns={[
+            {
+              title: "Огноо",
+              sorter: true,
+              dataIndex: "tranDate",
+              width: "7rem",
+              render(date) {
+                return moment(date).format("YYYY-MM-DD");
+              },
+              onHeaderCell: (cell, index) => {
+                return {
+                  onClick: () =>
+                    setOrder((o) => ({
+                      ...o,
+                      tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
+                    })), // click header row
+                };
+              },
+            },
+            {
+              title: "Цаг",
+              sorter: true,
+              dataIndex: "time",
+              ellipsis: true,
+              width: "4rem",
+              render(a) {
+                if (_.isString(a))
+                  return `${a.substring(0, 2)}:${a.substring(2, 4)}`;
+                return "";
+              },
+              onHeaderCell: (cell, index) => {
+                return {
+                  onClick: () =>
+                    setOrder((o) => ({
+                      ...o,
+                      time: o.time === -1 ? 1 : o.time - 1,
+                    })), // click header row
+                };
+              },
+            },
+            {
+              title: "Гүйлгээний утга",
+              dataIndex: "description",
+            },
+            {
+              title: "Гүйлгээний дүн",
+              sorter: true,
+              dataIndex: "amount",
+              ellipsis: true,
+              width: "9rem",
+              className: "text-right",
+              showSorterTooltip: false,
+              render(a) {
+                return `${formatNumber(a)}₮`;
+              },
+              sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
+            },
+            {
+              title: "Шилжүүлсэн данс",
+              align: "center",
+              dataIndex: "relatedAccount",
+              ellipsis: true,
+              width: "10rem",
+            },
+            {
+              title: "Төлөв",
+              width: "4rem",
+              align: "center",
+              render(a) {
+                return (
+                  <div className="flex items-center justify-center">
+                    <Button
+                      shape="circle"
+                      className="ant-pagination-item-link"
+                      onClick={() => guilgeeKholbyo(a)}
+                      icon={
+                        <div
+                          className={`text-${
+                            !a?.kholbosonGereeniiId
+                              ? a?.magadlaltaiGereenuud?.length > 0
+                                ? "yellow"
+                                : "red"
+                              : "green"
+                          }-500 flex items-center justify-center`}
+                        >
+                          {!a?.kholbosonGereeniiId ? (
+                            a?.magadlaltaiGereenuud?.length > 0 ? (
+                              <QuestionOutlined style={{ fontSize: "22px" }} />
+                            ) : (
+                              <ExclamationOutlined
+                                style={{ fontSize: "22px" }}
+                              />
+                            )
+                          ) : (
+                            <CheckOutlined style={{ fontSize: "22px" }} />
+                          )}
+                        </div>
+                      }
+                    />
+                  </div>
+                );
+              },
+            },
+            {
+              title: "Талбай",
+              dataIndex: "kholbosonTalbainId",
+              ellipsis: true,
+              width: "5rem",
+            },
+          ]}
+          dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+          pagination={{
+            current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
+            pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
+            total: dansniiKhuulgaGaralt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setDansniiKhuulgaKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+          rowKey={(a) => a.record}
+        />
       </Card>
     </Admin>
   );
