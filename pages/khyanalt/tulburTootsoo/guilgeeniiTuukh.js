@@ -79,7 +79,6 @@ function guilgeeniiTuukh({ token }) {
       defaultSortOrder: "descend",
       sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
     },
-
     {
       title: "Түрээслэгч",
       dataIndex: "ner",
@@ -94,7 +93,7 @@ function guilgeeniiTuukh({ token }) {
       ellipsis: true,
       align: "right",
       render(a) {
-        return formatNumber(a);
+        return <div className={`${a > 0 ? 'text-red-500' : 'text-green-500'}`}>{formatNumber(a)}</div>;
       },
       showSorterTooltip: false,
       defaultSortOrder: "descend",
@@ -112,7 +111,10 @@ function guilgeeniiTuukh({ token }) {
     {
       title: "Үйлдэл",
       ellipsis: true,
-      render: (row) => <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>,
+      render: (row) => <>
+        <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a> 
+        <a className='ml-6' onClick={() => guilgeeKhiiya(row)}>Хэвлэх</a>
+      </>,
     },
   ];
 
@@ -129,10 +131,10 @@ function guilgeeniiTuukh({ token }) {
         <div className="w-full grid grid-cols-12 gap-4">
           {[
             { too: 1, utga: "Нийт Авлага" },
+            { too: 1, utga: "Нийт Өглөг" },
             { too: 1, utga: "Хугацаа хэтэрсэн" },
-            { too: 1, utga: "График төлөлттэй" },
-            { too: 1, utga: "Өнөөдөр	 орж ирэх" },
-            { too: 1, utga: "Бартерын дүн" },
+            { too: 1, utga: "Сард орж ирэх дүн" },
+            { too: 1, utga: "Гүйцэтгэлийн дүн" },
             { too: 1, utga: "Нийт хөнгөлөлт" },
           ].map((mur, index) => {
             return (
