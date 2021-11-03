@@ -158,7 +158,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "khugatsaaKhersen.0.dun") || 0
+                _.get(guilgeeniiToololt, "khugatsaaKhetersen.0.dun") || 0
               ),
               utga: "Хугацаа хэтэрсэн",
             },
