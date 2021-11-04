@@ -18,6 +18,8 @@ function tulburTootsoo({ token }) {
   const [ognoo, setOgnoo] = React.useState(moment());
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo);
+  
+  const [songogdsonGereenuud,setSongogdsonGereenuud] = React.useState(null)
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -34,8 +36,8 @@ function tulburTootsoo({ token }) {
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-2 gap-2 page" ref={printRef}>
-          {["nekhemjlel?.jagsaalt", "", "", ""].map((a) => (
-            <div key={a} className="print">
+          {songogdsonGereenuud?.map((a,i) => (
+            <div key={`print${a._id}`} className="print p-5 h-full">
               <table className="w-full text-xs">
                 <tbody>
                   <tr>
@@ -192,14 +194,20 @@ function tulburTootsoo({ token }) {
             value={ognoo}
             onChange={setOgnoo}
           />
-          <div className="ml-auto" onClick={handlePrint}>
-            handlePrint
+          <div className="ml-auto" >
+            <Button onClick={handlePrint}>Хэвлэх</Button>
           </div>
         </div>
         <Table
           bordered
           size="small"
           scroll={{ y: "calc(100vh - 30rem)" }}
+          rowSelection={{
+            type:'checkbox',
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSongogdsonGereenuud(selectedRows)
+            },
+          }}
           columns={[
             {
               title: "Гэрээний дугаар",

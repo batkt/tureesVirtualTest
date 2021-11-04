@@ -22,9 +22,6 @@
   .print {
     display: block !important;
   }
-  .page {
-    break-inside: avoid;
-  }
 }
 
 ::-webkit-scrollbar {
