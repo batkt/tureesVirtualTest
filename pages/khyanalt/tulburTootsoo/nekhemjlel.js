@@ -1,7 +1,7 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
-import { Card, DatePicker, Table, Button, Select } from "antd";
+import { Card, DatePicker, Table, Button, Select, message } from "antd";
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -13,10 +13,15 @@ import useNekhemjlekh from "hooks/useNekhemjlekh";
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 
+const turul = [
+  {zurag:'/ikhNayad.png',ner:'Барааны нэхэмжлэх'},
+  {zurag:'/ikhNayadKhuns.png',ner:'Хүнсны нэхэмжлэх'},
+]
+
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
-  const [barimt, setBarimt] = React.useState(1);
+  const [barimt, setBarimt] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo);
 
@@ -25,6 +30,20 @@ function tulburTootsoo({ token }) {
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
+
+  function hevlekh() {
+    if(!barimt)
+    {
+      message.warning('Нэхэмжлэхийн төрөл сонгоно уу')
+      return
+    }
+    if(!songogdsonGereenuud)
+    {
+      message.warning('Гэрээ сонгоно уу')
+      return
+    }
+    handlePrint()
+  }
 
   return (
     <Admin
@@ -35,15 +54,15 @@ function tulburTootsoo({ token }) {
         setNekhemjlelKhuudaslalt((a) => ({ ...a, search }));
       }}
     >
-      <Card className="col-span-12 p-5 cardgrid">
-        <div className="w-full grid grid-cols-2 gap-2" ref={printRef}>
+      <Card className="col-span-12 cardgrid">
+        <div className="w-full grid grid-cols-2" ref={printRef}>
           {songogdsonGereenuud?.map((a, i) => (
-            <div key={`print${a._id}`} className="print p-5 a5">
+            <div key={`print${a._id}`} className="print p-10 a5">
               <table className="w-full text-xs">
                 <tbody>
                   <tr>
                     <td colSpan={6}>
-                      <img src="/ikhNayad.png" className="w-28" />
+                      <img src={barimt} className="w-28" />
                     </td>
                     <td colSpan={6} className="text-right">
                       Сангийн сайдын 2017 оны 12 дугаар сарын 5-ны өдрийн 347
@@ -197,11 +216,10 @@ function tulburTootsoo({ token }) {
           />
 
           <div className="ml-auto">
-            <Select>
-              <Select.Option></Select.Option>
-              <Select.Option></Select.Option>
+            <Select placeholder='Нэхэмжлэхийн төрөл' onChange={setBarimt}>
+              {turul.map(a=><Select.Option key={a.ner} value={a.zurag}>{a.ner}</Select.Option>)}
             </Select>
-            <Button onClick={handlePrint}>Хэвлэх</Button>
+            <Button onClick={hevlekh}>Хэвлэх</Button>
           </div>
         </div>
         <Table
