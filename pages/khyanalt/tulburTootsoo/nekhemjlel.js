@@ -92,11 +92,13 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td colSpan={2}></td>
                     <td colSpan={4}>
+                      <div className='w-full h-full flex flex-col'>
                       <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
                       <div>КОМПАНИЙН НЭР: {a.ner}</div>
                       <div>КОМПАНИЙН РД: </div>
                       <div>ХАЯГ: </div>
-                      <div>УТАС: 9666-6839</div>
+                      <div>УТАС: {a.utas}</div>
+                      </div>
                     </td>
                   </tr>
                   <tr>
@@ -129,7 +131,7 @@ function tulburTootsoo({ token }) {
                       <td className="border">{a.talbainKhemjee}</td>
                       <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
                       <td className="border" colSpan={2}>
-                        {formatNumber(a.talbainNiitUne)}₮
+                        {formatNumber(a.uldegdel)}₮
                       </td>
                     </tr>
                   <tr>
