@@ -12,7 +12,7 @@ import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/useNekhemjlekh";
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
-
+import {toWords} from 'mon_num'
 const turul = [
   {zurag:'/ikhNayad.png',ner:'Барааны нэхэмжлэх'},
   {zurag:'/ikhNayadKhuns.png',ner:'Хүнсны нэхэмжлэх'},
@@ -37,7 +37,7 @@ function tulburTootsoo({ token }) {
       message.warning('Нэхэмжлэхийн төрөл сонгоно уу')
       return
     }
-    if(!songogdsonGereenuud)
+    if(!songogdsonGereenuud || songogdsonGereenuud?.length === 0)
     {
       message.warning('Гэрээ сонгоно уу')
       return
@@ -93,7 +93,7 @@ function tulburTootsoo({ token }) {
                     <td colSpan={2}></td>
                     <td colSpan={4}>
                       <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
-                      <div>КОМПАНИЙН НЭР: Д.Даваадорж</div>
+                      <div>КОМПАНИЙН НЭР: {a.ner}</div>
                       <div>КОМПАНИЙН РД: </div>
                       <div>ХАЯГ: </div>
                       <div>УТАС: 9666-6839</div>
@@ -110,27 +110,33 @@ function tulburTootsoo({ token }) {
                       НИЙТ ҮНЭ
                     </td>
                   </tr>
-                  {[
-                    "11-р сарын түрээсийн төлбөр",
-                    "Өмнөх хуримтлагдсан өр төлбөр",
-                  ].map((a, i) => (
-                    <tr key={i}>
+                    <tr>
                       <td className="border">{i + 1}</td>
                       <td className="border" colSpan={6}>
-                        {a}
+                      11-р сарын түрээсийн төлбөр
                       </td>
-                      <td className="border">20</td>
-                      <td className="border">80.000₮</td>
+                      <td className="border">{a.talbainKhemjee}</td>
+                      <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
                       <td className="border" colSpan={2}>
-                        1.600.000₮
+                        {formatNumber(a.talbainNiitUne)}₮
                       </td>
                     </tr>
-                  ))}
+                    <tr>
+                      <td className="border">{i + 1}</td>
+                      <td className="border" colSpan={6}>
+                      Өмнөх хуримтлагдсан өр төлбөр
+                      </td>
+                      <td className="border">{a.talbainKhemjee}</td>
+                      <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
+                      <td className="border" colSpan={2}>
+                        {formatNumber(a.talbainNiitUne)}₮
+                      </td>
+                    </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
                       ДҮН
                     </td>
-                    <td className="border">2.450.000₮</td>
+                    <td className="border">{formatNumber(a.eneSardTulukhDun)}₮</td>
                   </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
@@ -148,12 +154,11 @@ function tulburTootsoo({ token }) {
                     <td colSpan={10} className="text-right">
                       НИЙТ ДҮН
                     </td>
-                    <td className="border">2.450.000₮</td>
+                    <td className="border">{formatNumber(a.eneSardTulukhDun)}₮</td>
                   </tr>
                   <tr>
                     <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр) Хоёр сая дөрвөн зуун тавин мянган
-                      төгрөг
+                      Мөнгөн дүн: (үсгээр) {toWords(a.eneSardTulukhDun,{suffix:'n'})} төгрөг
                     </td>
                   </tr>
                   <tr>
