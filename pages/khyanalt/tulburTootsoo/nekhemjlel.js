@@ -1,7 +1,7 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
-import { Card, DatePicker, Table, Button } from "antd";
+import { Card, DatePicker, Table, Button, Select } from "antd";
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -16,10 +16,11 @@ import { useReactToPrint } from "react-to-print";
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
+  const [barimt, setBarimt] = React.useState(1);
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo);
-  
-  const [songogdsonGereenuud,setSongogdsonGereenuud] = React.useState(null)
+
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null);
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -35,9 +36,9 @@ function tulburTootsoo({ token }) {
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
-        <div className="w-full grid grid-cols-2 gap-2 page" ref={printRef}>
-          {songogdsonGereenuud?.map((a,i) => (
-            <div key={`print${a._id}`} className="print p-5 h-full">
+        <div className="w-full grid grid-cols-2 gap-2" ref={printRef}>
+          {songogdsonGereenuud?.map((a, i) => (
+            <div key={`print${a._id}`} className="print p-5 a5">
               <table className="w-full text-xs">
                 <tbody>
                   <tr>
@@ -194,7 +195,12 @@ function tulburTootsoo({ token }) {
             value={ognoo}
             onChange={setOgnoo}
           />
-          <div className="ml-auto" >
+
+          <div className="ml-auto">
+            <Select>
+              <Select.Option></Select.Option>
+              <Select.Option></Select.Option>
+            </Select>
             <Button onClick={handlePrint}>Хэвлэх</Button>
           </div>
         </div>
@@ -203,9 +209,9 @@ function tulburTootsoo({ token }) {
           size="small"
           scroll={{ y: "calc(100vh - 30rem)" }}
           rowSelection={{
-            type:'checkbox',
+            type: "checkbox",
             onChange: (selectedRowKeys, selectedRows) => {
-              setSongogdsonGereenuud(selectedRows)
+              setSongogdsonGereenuud(selectedRows);
             },
           }}
           columns={[
