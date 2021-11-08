@@ -10,6 +10,7 @@ import {
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/useNekhemjlekh";
+import useDans from "hooks/khuulga/useDans";
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 import {toWords} from 'mon_num'
@@ -23,8 +24,10 @@ function tulburTootsoo({ token }) {
   const [ognoo, setOgnoo] = React.useState(moment());
   const [barimt, setBarimt] = React.useState();
   const [davkhar, setDavkhar] = React.useState();
+  const [songogdsonDans, setDans] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo,davkhar);
+  const { dans } = useDans(token);
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null);
 
@@ -84,7 +87,7 @@ function tulburTootsoo({ token }) {
                       <div>НЭХЭМЖЛЭГЧ БАЙГУУЛЛАГА</div>
                       <div>КОМПАНИЙН НЭР: ИХ НАЯД ПЛАЗА ХХК</div>
                       <div>КОМПАНИЙН РД: 6481523</div>
-                      <div>ДАНС: Хаан банк 5129062239 (MNT)</div>
+                      <div>ДАНС: Хаан банк {songogdsonDans?.number} (MNT)</div>
                       <div>
                         ХАЯГ: Их Наяд Плаза 5-р давхар 15-р хороо, Хан-Уул
                         дүүрэг
@@ -95,8 +98,8 @@ function tulburTootsoo({ token }) {
                     <td colSpan={4}>
                       <div className='w-full h-full flex flex-col'>
                       <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
-                      <div>КОМПАНИЙН НЭР: {a.ner}</div>
-                      <div>КОМПАНИЙН РД: </div>
+                      <div>НЭР: {a.ner}</div>
+                      <div>РД: {a.register}</div>
                       <div>ХАЯГ: </div>
                       <div>УТАС: {a.utas}</div>
                       </div>
@@ -224,6 +227,14 @@ function tulburTootsoo({ token }) {
           />
 
           <div className="ml-auto space-x-2">
+            <Select placeholder='Данс' onChange={setDans}>
+              {dans?.accounts?.filter(a=>a.type !== 'L').map((a) => (
+                <Select.Option key={a.number} value={a.number}>
+                  <div>{a.number}</div>
+                </Select.Option>
+              ))}
+            </Select>
+          
             <Select placeholder='Давхар' onChange={setDavkhar}>
               {['B1','1','2','3','4','5','6','7','8','9'].map(a=><Select.Option key={a} value={a}>{a}</Select.Option>)}
             </Select>
