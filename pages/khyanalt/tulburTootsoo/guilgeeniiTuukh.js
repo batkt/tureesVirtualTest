@@ -7,6 +7,7 @@ import { FileExcelOutlined } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "../../../tools/function/formatNumber";
 import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
+import Khungulukh from "../../../components/pageComponents/tulbur/Khungulukh";
 import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
@@ -47,6 +48,29 @@ function guilgeeniiTuukh({ token }) {
       icon: <FileExcelOutlined />,
       content: (
         <VoucheraarTootsooKhiikh
+          data={data}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
+  }
+
+  function khungulultKhiiya(data) {
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <Khungulukh
           data={data}
           ref={ref}
           token={token}
@@ -126,6 +150,7 @@ function guilgeeniiTuukh({ token }) {
       render: (row) => (
         <>
           <a onClick={() => guilgeeKhiiya(row)}>Гүйлгээ хийх</a>
+          <a onClick={() => khungulultKhiiya(row)} className="ml-6">Хөнгөлөх</a>
           {row?._id === delgegdsenGeree && (
             <a className="ml-6" onClick={() => refTuukh.current.khevlekh()}>
               Хэвлэх
@@ -212,7 +237,7 @@ function guilgeeniiTuukh({ token }) {
         <div className="flex flex-row mt-5"></div>
         <div className="overflow-auto hidden md:block">
           <Table
-            scroll={{ y: "calc(100vh - 32rem)" }}
+            scroll={{ y: "calc(100vh - 23rem)" }}
             size="small"
             bordered
             columns={columns}
