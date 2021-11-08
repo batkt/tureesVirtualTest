@@ -115,7 +115,7 @@ function tulburTootsoo({ token }) {
                     <tr>
                       <td className="border">{i + 1}</td>
                       <td className="border" colSpan={6}>
-                      11-р сарын түрээсийн төлбөр
+                      {moment(ognoo).format('MM')}-р сарын түрээсийн төлбөр
                       </td>
                       <td className="border">{a.talbainKhemjee}</td>
                       <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
