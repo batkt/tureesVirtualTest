@@ -230,7 +230,6 @@ function tulburTootsoo({ token }) {
             value={ognoo}
             onChange={setOgnoo}
           />
-
           <div className="ml-auto space-x-2">
             <Select placeholder='Дансны төрөл' onChange={setDans}>
               {dans?.accounts?.filter(a=>a.type !== 'L').map((a) => (
@@ -239,7 +238,6 @@ function tulburTootsoo({ token }) {
                 </Select.Option>
               ))}
             </Select>
-          
             <Select placeholder='Давхар' onChange={setDavkhar}>
               {['B1','1','2','3','4','5','6','7','8','9'].map(a=><Select.Option key={a} value={a}>{a}</Select.Option>)}
             </Select>
@@ -265,12 +263,14 @@ function tulburTootsoo({ token }) {
               sorter: true,
               dataIndex: "gereeniiDugaar",
               width: "7rem",
+              align:'center'
             },
             {
               title: "Талбайн дугаар",
               sorter: true,
               dataIndex: "talbainDugaar",
               width: "7rem",
+              align:'center'
             },
             {
               title: "Дараагийн төлөх огноо",
@@ -280,6 +280,7 @@ function tulburTootsoo({ token }) {
                 return moment(a).format("YYYY-MM-DD");
               },
               ellipsis: true,
+              align:'center'
             },
             {
               title: "Өмнөх хуримтлагдсан өр төлбөр",
@@ -289,6 +290,7 @@ function tulburTootsoo({ token }) {
                 return formatNumber(a);
               },
               ellipsis: true,
+              align:'center'
             },
             {
               title: "Энэ сард төлөх дүн",
@@ -298,6 +300,7 @@ function tulburTootsoo({ token }) {
                 return formatNumber(a);
               },
               ellipsis: true,
+              align:'center'
             },
             {
               title: "Төлөв",

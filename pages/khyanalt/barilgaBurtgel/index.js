@@ -1,16 +1,11 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import formatNumber from "tools/function/formatNumber";
-import { useCallback, useMemo, useRef } from "react";
+import { useMemo,useState} from "react";
 import uilchilgee, { url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Button, Space, Table } from "antd";
-import { PlusOutlined, UserAddOutlined } from "@ant-design/icons";
-import BaiguullagaBurtgelAlkham from "./dedKheseg/barilgaBurtgekh";
-import { Marker } from "@react-google-maps/api";
+import { Button, Space, Table ,Input} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import useSalbar from "hooks/useSalbar";
-import GazriinZurag from "components/gazriinZurag/GazriinZurag";
-import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useKhyanakhSambar from "hooks/useKhyanakhSambar";
 
@@ -35,7 +30,7 @@ function BarilgaBurtgel({ token }) {
   );
   const { toololt } = useKhyanakhSambar(token);
 
-  const [barilga,setBarilga] = React.useState()
+  const [barilga,setBarilga] = useState()
 
   const columns = useMemo(
     () => [
@@ -186,6 +181,11 @@ function BarilgaBurtgel({ token }) {
     ];
   }, [toololt]);
 
+
+  function onDBLClick(key) {
+    setBarilga(a=>({...(a || {}) ,uurchlukhTalbar:key}))
+  }
+
   return (
     <Admin
       khuudasniiNer="barilgaBurtgel"
@@ -309,43 +309,43 @@ function BarilgaBurtgel({ token }) {
                 </span>
               </div>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('register')}>
               <label>
                 Регистр:
                 <span className="text-gray-600 font-medium">
-                  {baiguullaga?.khayag}
+                  {barilga?.uurchlukhTalbar === 'register' ? <Input /> : baiguullaga?.register}
                 </span>
               </label>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('khayag')}>
               <label>
                 Хаяг:
                 <span className="text-gray-600 font-medium">
-                  {baiguullaga?.khayag}
+                  {barilga?.uurchlukhTalbar === 'khayag' ? <Input /> : baiguullaga?.khayag}
                 </span>
               </label>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('davkhar')}>
               <label>
                 Давхар:
                 <span className="text-gray-600 font-medium">
-                  {baiguullaga?.utas}
+                  {barilga?.uurchlukhTalbar === 'davkhar' ? <Input /> : baiguullaga?.davkhar}
                 </span>
               </label>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('talbai')}>
               <label>
                 Талбай:
                 <span className="text-gray-600 font-medium">
-                  {baiguullaga?.utas}
+                  {barilga?.uurchlukhTalbar === 'talbai' ? <Input /> :  baiguullaga?.talbai}
                 </span>
               </label>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('utas')}>
               <label>
-                Талбай тоо:
+                Утас:
                 <span className="text-gray-600 font-medium">
-                  {baiguullaga?.utas}
+                  {barilga?.uurchlukhTalbar === 'utas' ? <Input /> : baiguullaga?.utas}
                 </span>
               </label>
             </div>
@@ -357,16 +357,15 @@ function BarilgaBurtgel({ token }) {
                 </span>
               </label>
             </div>
-            
           </div>
-          <div className='flex justify-end py-2'>
+          {!!barilga?.uurchlukhTalbar && <div className='flex justify-end py-2'>
             <Button style={{
               display: "flex",
               alignItems: "center",
               backgroundColor: "#209669",
               color: "#ffffff",
             }}>Хадгалах</Button>
-          </div>
+          </div>}
         </div>
       </div>
     </Admin>
