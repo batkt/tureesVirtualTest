@@ -246,7 +246,7 @@ function tulburTootsoo({ token }) {
             <Select placeholder='Нэхэмжлэхийн төрөл' onChange={setBarimt}>
               {turul.map(a=><Select.Option key={a.ner} value={a.zurag}>{a.ner}</Select.Option>)}
             </Select>
-            <Button onClick={hevlekh}>Хэвлэх</Button>
+            <Button type='primary' onClick={hevlekh}>Хэвлэх</Button>
           </div>
         </div>
         <Table
