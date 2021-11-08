@@ -22,8 +22,9 @@ function tulburTootsoo({ token }) {
   const printRef = React.useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
   const [barimt, setBarimt] = React.useState();
+  const [davkhar, setDavkhar] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useNekhemjlekh(token, ognoo);
+    useNekhemjlekh(token, ognoo,davkhar);
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null);
 
@@ -222,7 +223,10 @@ function tulburTootsoo({ token }) {
             onChange={setOgnoo}
           />
 
-          <div className="ml-auto">
+          <div className="ml-auto space-x-2">
+            <Select placeholder='Давхар' onChange={setDavkhar}>
+              {['B1','1','2','3','4','5','6','7','8','9'].map(a=><Select.Option key={a} value={a}>{a}</Select.Option>)}
+            </Select>
             <Select placeholder='Нэхэмжлэхийн төрөл' onChange={setBarimt}>
               {turul.map(a=><Select.Option key={a.ner} value={a.zurag}>{a.ner}</Select.Option>)}
             </Select>
@@ -289,7 +293,6 @@ function tulburTootsoo({ token }) {
                     <Button
                       shape="circle"
                       className="ant-pagination-item-link"
-                      onClick={() => guilgeeKholbyo(a)}
                       icon={
                         <div
                           className={`text-${
@@ -317,13 +320,7 @@ function tulburTootsoo({ token }) {
                   </div>
                 );
               },
-            },
-            {
-              title: "Талбай",
-              dataIndex: "kholbosonTalbainId",
-              ellipsis: true,
-              width: "5rem",
-            },
+            }
           ]}
           dataSource={nekhemjlel?.jagsaalt}
           pagination={{
