@@ -28,22 +28,14 @@ export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
 }
 
 function BarilgaBurtgel({ token }) {
-  const ref = useRef(null);
-  const burtgel = useRef(null);
   const { ajiltan, baiguullaga, baiguullagaMutate } = useAuth();
   const { salbariinGaralt, setKhuudaslalt, salbarMutate } = useSalbar(
     token,
     ajiltan?.baiguullagiinId
   );
   const { toololt } = useKhyanakhSambar(token);
-  const bairshiluud = useMemo(() => {
-    return (salbariinGaralt?.jagsaalt || []).map((mur) => {
-      return {
-        lat: mur?.bairshil?.coordinates[0] || 47.927094,
-        lng: mur?.bairshil?.coordinates[1] || 106.887425,
-      };
-    });
-  }, [salbariinGaralt]);
+
+  const [barilga,setBarilga] = React.useState()
 
   const columns = useMemo(
     () => [
@@ -194,47 +186,6 @@ function BarilgaBurtgel({ token }) {
     ];
   }, [toololt]);
 
-  const zasakh = (salbar, readonly) => {
-    const footer = [
-      <Button onClick={() => burtgel.current.khaaya()}>Хаах</Button>,
-    ];
-    if (!readonly) {
-      footer.push(
-        <Button
-          type="primary"
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() => burtgel.current.khadgalya()}
-        >
-          Хадгалах
-        </Button>
-      );
-    }
-    modal({
-      style: { minWidth: "50vw" },
-      title: "Барилга бүртгэл",
-      icon: <UserAddOutlined />,
-      content: (
-        <BaiguullagaBurtgelAlkham
-          token={token}
-          ugugdul={salbar}
-          baiguullagiinId={ajiltan?.baiguullagiinId}
-          ref={burtgel}
-          readonly={readonly}
-          salbarMutate={salbarMutate}
-          baiguullagaMutate={baiguullagaMutate}
-        />
-      ),
-      footer,
-    });
-  };
-
-  const afterLoadMap = useCallback(
-    function callback() {
-      ref.current && ref.current.fitBounds(bairshiluud);
-    },
-    [bairshiluud, ref]
-  );
-
   return (
     <Admin
       khuudasniiNer="barilgaBurtgel"
@@ -243,7 +194,7 @@ function BarilgaBurtgel({ token }) {
         setKhuudaslalt((kh) => ({ ...kh, khuudasniiDugaar: 1, search }))
       }
     >
-      <div className="col-span-12 xl:col-span-12">
+      <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
           <div className="grid grid-cols-12 gap-6 mt-5">
             {khyanaltiinDun.map((mur, index) => {
@@ -292,10 +243,10 @@ function BarilgaBurtgel({ token }) {
                 </div>
               );
             })}
-          </div>
-          <div className="intro-y flex items-center h-10 mt-8">
+            <div className='col-span-12'>
+            <div className="intro-y flex items-center h-10 mt-8">
             <h2 className="text-lg font-medium mr-5 dark:text-gray-300">
-              Байгууллагын жагсаалт
+              Барилга жагсаалт
             </h2>
             <div className="ml-auto flex items-center text-theme-1 dark:text-theme-10 text-blue-400 dark:text-gray-400">
               <Button
@@ -334,11 +285,12 @@ function BarilgaBurtgel({ token }) {
                 })),
             }}
           />
+            </div>
+          </div>
         </div>
       </div>
-      {/* <div className="col-span-12 xl:col-span-3">
-        <div className="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 md:mt-3 xxl:mt-8">
-          <div className="intro-x flex items-center md:h-10" />
+      <div className="col-span-12 xl:col-span-3">
+      <div className="col-span-12 md:col-span-12 xl:col-span-4 xxl:col-span-12">
           <div className="bg-white dark:bg-gray-900 p-2 h-0md:mt-5">
             <div className="flex flex-row p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <img
@@ -347,7 +299,7 @@ function BarilgaBurtgel({ token }) {
                 src={
                   baiguullaga?.zurgiinNer
                     ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                    : "/car.png"
+                    : "/rent.png"
                 }
               />
               <div className="flex flex-col ml-3">
@@ -359,7 +311,7 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Хаяг:{" "}
+                Регистр:
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.khayag}
                 </span>
@@ -367,7 +319,15 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Давхар:{" "}
+                Хаяг:
+                <span className="text-gray-600 font-medium">
+                  {baiguullaga?.khayag}
+                </span>
+              </label>
+            </div>
+            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+              <label>
+                Давхар:
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
@@ -375,7 +335,7 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Талбай:{" "}
+                Талбай:
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
@@ -383,7 +343,7 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Талбай тоо:{" "}
+                Талбай тоо:
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
@@ -391,37 +351,24 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <label>
-                Сул Талбай тоо:{" "}
+                Сул Талбай тоо:
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
               </label>
             </div>
+            
+          </div>
+          <div className='flex justify-end py-2'>
+            <Button style={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+            }}>Хадгалах</Button>
           </div>
         </div>
-        <div className="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8 h-72">
-          <GazriinZurag
-            ref={ref}
-            center={bairshiluud[0]}
-            zoom={13}
-            afterLoadMap={afterLoadMap}
-            useAfterLoadMap={bairshiluud?.length > 0}
-            options={{
-              fullscreenControlOptions: { position: 12 },
-              disableDoubleClickZoom: true,
-              fullscreenControl: true,
-              zoomControl: false,
-              mapTypeControl: false,
-              streetViewControl: false,
-              maxZoom: 19
-            }}
-          >
-            {bairshiluud.map((mur, i) => (
-              <Marker key={i} position={mur} />
-            ))}
-          </GazriinZurag>
-        </div>
-      </div> */}
+      </div>
     </Admin>
   );
 }

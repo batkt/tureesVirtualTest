@@ -155,7 +155,7 @@ const khuudasnuud = [
   },
 
   {
-    ner: "Байгууллага бүртгэл",
+    ner: "Барилга",
     khuudasniiNer: "barilgaBurtgel",
     href: "/khyanalt/barilgaBurtgel",
     icon: (
