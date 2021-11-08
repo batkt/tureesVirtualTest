@@ -36,6 +36,11 @@ function tulburTootsoo({ token }) {
   });
 
   function hevlekh() {
+    if(!songogdsonDans)
+    {
+      message.warning('Данс сонгоно уу')
+      return
+    }
     if(!barimt)
     {
       message.warning('Нэхэмжлэхийн төрөл сонгоно уу')
@@ -227,7 +232,7 @@ function tulburTootsoo({ token }) {
           />
 
           <div className="ml-auto space-x-2">
-            <Select placeholder='Данс' onChange={setDans}>
+            <Select placeholder='Дансны төрөл' onChange={setDans}>
               {dans?.accounts?.filter(a=>a.type !== 'L').map((a) => (
                 <Select.Option key={a.number} value={a.number}>
                   <div>{a.number}</div>
@@ -279,7 +284,7 @@ function tulburTootsoo({ token }) {
             {
               title: "Өмнөх хуримтлагдсан өр төлбөр",
               sorter: true,
-              dataIndex: "uldegdel",
+              dataIndex: "umnukhSariinUrTulbur",
               render(a) {
                 return formatNumber(a);
               },
