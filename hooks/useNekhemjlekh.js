@@ -18,7 +18,7 @@ const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar
 function useNekhemjlekh(token, ognoo,davkhar) {
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
+    khuudasniiKhemjee: 100,
     search: "",
     jagsaalt: [],
   });

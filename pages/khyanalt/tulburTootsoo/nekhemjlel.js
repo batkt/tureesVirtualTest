@@ -122,7 +122,7 @@ function tulburTootsoo({ token }) {
                     </td>
                   </tr>
                     <tr>
-                      <td className="border">{i + 1}</td>
+                      <td className="border">{1}</td>
                       <td className="border" colSpan={6}>
                       {moment(ognoo).format('MM')}-р сарын түрээсийн төлбөр
                       </td>
@@ -133,7 +133,7 @@ function tulburTootsoo({ token }) {
                       </td>
                     </tr>
                     <tr>
-                      <td className="border">{i + 1}</td>
+                      <td className="border">{2}</td>
                       <td className="border" colSpan={6}>
                       Өмнөх хуримтлагдсан өр төлбөр
                       </td>
