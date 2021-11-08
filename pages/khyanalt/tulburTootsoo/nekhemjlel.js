@@ -92,7 +92,7 @@ function tulburTootsoo({ token }) {
                       <div>НЭХЭМЖЛЭГЧ БАЙГУУЛЛАГА</div>
                       <div>КОМПАНИЙН НЭР: ИХ НАЯД ПЛАЗА ХХК</div>
                       <div>КОМПАНИЙН РД: 6481523</div>
-                      <div>ДАНС: Хаан банк {songogdsonDans?.number} (MNT)</div>
+                      <div>ДАНС: Хаан банк {songogdsonDans} (MNT)</div>
                       <div>
                         ХАЯГ: Их Наяд Плаза 5-р давхар 15-р хороо, Хан-Уул
                         дүүрэг
