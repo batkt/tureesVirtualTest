@@ -8,6 +8,8 @@ import { PlusOutlined } from "@ant-design/icons";
 import useSalbar from "hooks/useSalbar";
 import _ from "lodash";
 import useKhyanakhSambar from "hooks/useKhyanakhSambar";
+import updateMethod from "tools/function/crud/updateMethod";
+import router from "next/router";
 
 export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
   if (id)
@@ -186,6 +188,23 @@ function BarilgaBurtgel({ token }) {
     setBarilga(a=>({...(a || {}) ,uurchlukhTalbar:key}))
   }
 
+  function onChange(e) {
+    setBarilga(a=>({...(a || {}) ,[a.uurchlukhTalbar]:e?.target?.value}))
+  }
+
+  function barilgaKhadgalya() {
+    updateMethod('baiguullaga',token,{...baiguullaga,...barilga}).then(({data})=>{
+      if(data === 'Amjilttai'){
+        baiguullagaMutate()
+        salbarMutate()
+      }
+    })
+  }
+
+  function barilgaBurtgel(id) {
+    router.push(`/khyanalt/barilgaBurtgel/${id || 'new'}`)
+  }
+
   return (
     <Admin
       khuudasniiNer="barilgaBurtgel"
@@ -256,7 +275,7 @@ function BarilgaBurtgel({ token }) {
                   backgroundColor: "#209669",
                   color: "#ffffff",
                 }}
-                onClick={() => zasakh()}
+                onClick={() => barilgaBurtgel()}
                 icon={<PlusOutlined />}
               >
                 Нэмэх
@@ -290,7 +309,7 @@ function BarilgaBurtgel({ token }) {
         </div>
       </div>
       <div className="col-span-12 xl:col-span-3">
-      <div className="col-span-12 md:col-span-12 xl:col-span-4 xxl:col-span-12">
+      <div className="col-span-12 mt-5 md:col-span-12 xl:col-span-4 xxl:col-span-12">
           <div className="bg-white dark:bg-gray-900 p-2 h-0md:mt-5">
             <div className="flex flex-row p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
               <img
@@ -310,56 +329,58 @@ function BarilgaBurtgel({ token }) {
               </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('register')}>
-              <label>
-                Регистр:
+              <div className='flex flex-row items-center'>
+                <span>Регистр:</span>
                 <span className="text-gray-600 font-medium">
-                  {barilga?.uurchlukhTalbar === 'register' ? <Input /> : baiguullaga?.register}
+                  {barilga?.uurchlukhTalbar === 'register' ? <Input placeholder='Регистр' defaultValue={barilga?.register || baiguullaga?.register} onChange={onChange}/> : barilga?.register || baiguullaga?.register}
                 </span>
-              </label>
+              </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('khayag')}>
-              <label>
-                Хаяг:
+              <div className='flex flex-row items-center'>
+                <span>Хаяг:</span>
                 <span className="text-gray-600 font-medium">
-                  {barilga?.uurchlukhTalbar === 'khayag' ? <Input /> : baiguullaga?.khayag}
+                  {barilga?.uurchlukhTalbar === 'khayag' ? <Input placeholder='Хаяг' defaultValue={barilga?.khayag || baiguullaga?.khayag} onChange={onChange} /> : barilga?.khayag || baiguullaga?.khayag}
                 </span>
-              </label>
+              </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('davkhar')}>
-              <label>
-                Давхар:
+              <div className='flex flex-row items-center'>
+                <span>Давхар:</span>
                 <span className="text-gray-600 font-medium">
-                  {barilga?.uurchlukhTalbar === 'davkhar' ? <Input /> : baiguullaga?.davkhar}
+                  {barilga?.uurchlukhTalbar === 'davkhar' ? <Input placeholder='Давхар' defaultValue={barilga?.davkhar || baiguullaga?.davkhar} onChange={onChange} /> : barilga?.davkhar || baiguullaga?.davkhar}
                 </span>
-              </label>
+              </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('talbai')}>
-              <label>
-                Талбай:
+              <div className='flex flex-row items-center'>
+                <span>Талбай:</span>
                 <span className="text-gray-600 font-medium">
-                  {barilga?.uurchlukhTalbar === 'talbai' ? <Input /> :  baiguullaga?.talbai}
+                  {barilga?.uurchlukhTalbar === 'talbai' ? <Input placeholder='Талбай' defaultValue={barilga?.talbai || baiguullaga?.talbai} onChange={onChange} /> :  barilga?.talbai || baiguullaga?.talbai}
                 </span>
-              </label>
+              </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md" onDoubleClick={()=>onDBLClick('utas')}>
-              <label>
-                Утас:
+              <div className='flex flex-row items-center'>
+                <span>Утас:</span>
                 <span className="text-gray-600 font-medium">
-                  {barilga?.uurchlukhTalbar === 'utas' ? <Input /> : baiguullaga?.utas}
+                  {barilga?.uurchlukhTalbar === 'utas' ? <Input placeholder='Утас' defaultValue={barilga?.utas || baiguullaga?.utas} onChange={onChange} /> : barilga?.utas || baiguullaga?.utas}
                 </span>
-              </label>
+              </div>
             </div>
             <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
-              <label>
-                Сул Талбай тоо:
+              <div className='flex flex-row items-center'>
+                <span>Сул Талбай тоо:</span>
                 <span className="text-gray-600 font-medium">
                   {baiguullaga?.utas}
                 </span>
-              </label>
+              </div>
             </div>
           </div>
           {!!barilga?.uurchlukhTalbar && <div className='flex justify-end py-2'>
-            <Button style={{
+            <Button 
+            onClick={barilgaKhadgalya}
+            style={{
               display: "flex",
               alignItems: "center",
               backgroundColor: "#209669",
