@@ -10,10 +10,12 @@ import {
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/useNekhemjlekh";
+import useNekhemjlekhDugaarlalt from "hooks/useNekhemjlekhDugaarlalt";
 import useDans from "hooks/khuulga/useDans";
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 import {toWords} from 'mon_num'
+
 const turul = [
   {zurag:'/ikhNayad.png',ner:'Барааны нэхэмжлэх'},
   {zurag:'/ikhNayadKhuns.png',ner:'Хүнсны нэхэмжлэх'},
@@ -27,12 +29,19 @@ function tulburTootsoo({ token }) {
   const [songogdsonDans, setDans] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo,davkhar);
+
+  const {dugaarlalt,dugaarlaltMutate,dugaarlaltKhadgalya} = useNekhemjlekhDugaarlalt(token)
+
   const { dans } = useDans(token);
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null);
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
+    onAfterPrint:()=>{
+      if(songogdsonGereenuud?.length > 0)
+        dugaarlaltKhadgalya((songogdsonGereenuud?.length + dugaarlalt) - 1,()=>dugaarlaltMutate())
+    }
   });
 
   function hevlekh() {
@@ -82,7 +91,7 @@ function tulburTootsoo({ token }) {
                     <td colSpan={12}>
                       <div className="flex items-center justify-center">
                         <div className="p-2 px-10 border">
-                          <div>НЭХЭМЖЛЭЛ</div> <div>№21/205</div>
+                          <div>НЭХЭМЖЛЭЛ</div> <div>№{moment().format('YY')}/{dugaarlalt + i}</div>
                         </div>
                       </div>
                     </td>
