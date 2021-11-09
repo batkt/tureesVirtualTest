@@ -28,7 +28,7 @@ const fetcherToololt = (url, token) =>
 function useGereeniiJagsaalt(token, baiguullagiinId, register,query) {
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 20,
+    khuudasniiKhemjee: 100,
     search: "",
   });
 
