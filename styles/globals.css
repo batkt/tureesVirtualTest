@@ -651,6 +651,10 @@ input:-webkit-autofill {
   height: 100%;
 }
 
+.anticon-upload{
+  display:inline-block !important;
+}
+
 .ant-pagination-item-link > .anticon {
   align-items: center;
   display: flex !important;
