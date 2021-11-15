@@ -7,7 +7,8 @@ import LocationPicker from "components/ant/LocationPicker";
 import _ from "lodash";
 import { Button, Form, Input, InputNumber, Table } from "antd";
 import axios from "axios";
-
+import updateMethod from "tools/function/crud/updateMethod";
+import { useRouter } from "next/router";
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -19,10 +20,14 @@ const formItemLayout = {
 
 function GereeBaiguulakh({ token, data }) {
   const { baiguullaga } = useAuth();
-  const [davkhar, setDavkhar] = useState([]);
-  const [bdavkhar, setBDavkhar] = useState([]);
-
+  const router = useRouter();
+  const { barilga } = router.query;
+  const [davkhar, setDavkhar] = useState(_.get(baiguullaga,`barilguud.${barilga}.davkharuud`)?.filter(a=> !a.davkhar.includes('B')) || []);
+  const [bdavkhar, setBDavkhar] = useState(_.get(baiguullaga,`barilguud.${barilga}.davkharuud`)?.filter(a=> !!a.davkhar.includes('B')) || []);
+  
   const [form] = Form.useForm();
+
+
 
   const onChange = (v) => {
     if (!!v?.davkhar) {
@@ -59,10 +64,32 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   function khadgalya() {
-    console.log(form.getFieldsValue());
+    const burtgekhBarilga = form.getFieldsValue()
+    burtgekhBarilga.davkharuud = [...davkhar,...bdavkhar]
+    if(!baiguullaga?.barilguud) 
+      baiguullaga.barilguud = []
+
+    if(barilga === 'new')
+      baiguullaga?.barilguud.push(burtgekhBarilga)
+    else
+      baiguullaga?.barilguud[barilga] = burtgekhBarilga
+    
+
+    updateMethod('baiguullaga',token,baiguullaga)
   }
 
-  function m2Uurchilyu(params) {}
+  function m2Uurchilyu(v,mur) {
+    if(_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")){
+      const index = bdavkhar.findIndex(a=>a.davkhar === mur?.davkhar)
+      bdavkhar[index].tariff = v
+      setBDavkhar(bdavkhar)
+    }
+    else{
+      const index = davkhar.findIndex(a=>a.davkhar === mur?.davkhar)
+      davkhar[index].tariff = v
+      setDavkhar(davkhar)
+    }
+  }
 
   return (
     <Admin
@@ -81,6 +108,7 @@ function GereeBaiguulakh({ token, data }) {
           name="barilga"
           {...formItemLayout}
           onValuesChange={onChange}
+          initialValues={{..._.get(baiguullaga,`barilguud.${barilga}`),davkhar:davkhar?.length,bdavkhar:bdavkhar?.length}}
         >
           <Form.Item name="ner" label="Нэр">
             <Input />
@@ -88,14 +116,6 @@ function GereeBaiguulakh({ token, data }) {
           <Form.Item
             name="register"
             label="Регистр"
-            rules={[
-              {
-                required: true,
-                len: 7,
-                pattern: new RegExp("(\\d{7})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
           >
             <Input />
           </Form.Item>
@@ -113,8 +133,8 @@ function GereeBaiguulakh({ token, data }) {
           </Form.Item>
           <Form.Item
             wrapperCol={{
-              span: 14,
-              offset: 10,
+              span: 16,
+              offset: 8,
             }}
           >
             <Button
@@ -129,12 +149,14 @@ function GereeBaiguulakh({ token, data }) {
       </div>
       <div className="col-span-12 md:col-span-6 xl:col-span-8 p-5 box">
         <Table
+          size='small'
+          pagination={{ pageSize:100}}
           columns={[
             { title: "Давхар", dataIndex: "davkhar" },
             {
               title: "m2 Үнэ",
               dataIndex: "tariff",
-              render() {
+              render(utga,mur,index) {
                 return (
                   <InputNumber
                     placeholder="m2 Үнэ"
@@ -142,10 +164,13 @@ function GereeBaiguulakh({ token, data }) {
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
                     parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    defaultValue={utga}
+                    onChange={(v)=>m2Uurchilyu(v,mur)}
                   />
                 );
               },
             },
+            { title: "План зураг" },
           ]}
           dataSource={[...davkhar, ...bdavkhar]}
         />
@@ -154,16 +179,7 @@ function GereeBaiguulakh({ token, data }) {
   );
 }
 
-const ugudulAvchirya = async (ctx, session) => {
-  if (ctx.query.barilga === "new") return null;
-  const { data } = await readMethod(
-    "barilga",
-    session.tureestoken,
-    ctx.query.barilga
-  );
-  return data;
-};
 
-export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya);
+export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx);
 
 export default GereeBaiguulakh;

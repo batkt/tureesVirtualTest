@@ -50,17 +50,9 @@ function BarilgaBurtgel({ token }) {
         ellipsis: true,
       },
       {
-        title: "Утас",
-        key: "utas",
-        dataIndex: "utas",
-        render: (text) => <>{text}</>,
-        ellipsis: true,
-      },
-      {
         title: "Давхар",
-        key: "burtgesen",
-        dataIndex: "burtgesen",
-        render: () => <>{"6"}</>,
+        dataIndex:'davkharuud',
+        render: (a) => <>{a.length}</>,
       },
       {
         title: "Талбай /м2/",
@@ -77,16 +69,15 @@ function BarilgaBurtgel({ token }) {
       },
       {
         title: "Үйлдэл",
-        render: (text, row) => {
+        render: (text,row, index) => {
           return (
             <Space size="middle">
               <a
                 className="text-yellow-500 hover:text-yellow-400"
-                //onClick={() => zasakh(row)}
+                onClick={() => barilgaBurtgel(index)}
               >
                 Засах
               </a>
-              <a onClick={() => zasakh(row, true)}>Харах</a>
             </Space>
           );
         },
@@ -202,7 +193,7 @@ function BarilgaBurtgel({ token }) {
   }
 
   function barilgaBurtgel(id) {
-    router.push(`/khyanalt/barilgaBurtgel/${id || 'new'}`)
+    router.push(`/khyanalt/barilgaBurtgel/${id}`)
   }
 
   return (
@@ -275,7 +266,7 @@ function BarilgaBurtgel({ token }) {
                   backgroundColor: "#209669",
                   color: "#ffffff",
                 }}
-                onClick={() => barilgaBurtgel()}
+                onClick={() => barilgaBurtgel('new')}
                 icon={<PlusOutlined />}
               >
                 Нэмэх
@@ -289,8 +280,8 @@ function BarilgaBurtgel({ token }) {
             scroll={{ y: "calc(100vh - 31rem)" }}
             rowKey={(row) => row._id}
             columns={columns}
-            loading={!salbariinGaralt}
-            dataSource={salbariinGaralt?.jagsaalt}
+            loading={!baiguullaga}
+            dataSource={baiguullaga?.barilguud}
             pagination={{
               current: salbariinGaralt?.khuudasniiDugaar,
               pageSize: salbariinGaralt?.khuudasniiKhemjee,

@@ -2,7 +2,7 @@ import React from 'react'
 import GazriinZurag from 'components/gazriinZurag/GazriinZurag'
 import { Marker } from '@react-google-maps/api'
 function LocationPicker({value,onChange}) {
-    const [position, setPosition] = React.useState({lat:value?.coordinates[0],lng:value?.coordinates[0]})
+    const [position, setPosition] = React.useState({lat:value?.coordinates[0],lng:value?.coordinates[1]})
     function onDragEnd(e) {
         setPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() })
         onChange({ type: 'Point', coordinates: [e.latLng.lat(), e.latLng.lng()] })
