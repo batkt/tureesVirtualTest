@@ -77,11 +77,11 @@ function GereeBaiguulakh({ token, data }) {
 
     updateMethod('baiguullaga',token,baiguullaga).then(({data})=>{
       if(data === 'Amjilttai'){
-        notification.success('Амжилттай хадгаллаа')
+        notification.success({message:'Амжилттай хадгаллаа'})
         router.back()
       }
       else 
-        notification.warning('Алдаа гарлаа')
+        notification.warning({message:'Алдаа гарлаа'})
     })
   }
 
