@@ -646,13 +646,9 @@ input:-webkit-autofill {
 
 .anticon {
   align-items: center;
-  display: flex !important;
+  display: flex;
   justify-content: center;
   height: 100%;
-}
-
-.anticon-upload{
-  display:inline-block !important;
 }
 
 .ant-pagination-item-link > .anticon {
