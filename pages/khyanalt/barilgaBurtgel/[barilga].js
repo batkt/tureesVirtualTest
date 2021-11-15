@@ -5,7 +5,7 @@ import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import LocationPicker from "components/ant/LocationPicker";
 import _ from "lodash";
-import { Button, Form, Input, InputNumber, Table } from "antd";
+import { Button, Form, Input, InputNumber, notification, Table } from "antd";
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
@@ -75,7 +75,14 @@ function GereeBaiguulakh({ token, data }) {
       baiguullaga?.barilguud[barilga] = burtgekhBarilga
     
 
-    updateMethod('baiguullaga',token,baiguullaga)
+    updateMethod('baiguullaga',token,baiguullaga).then(({data})=>{
+      if(data === 'Amjilttai'){
+        notification.success('Амжилттай хадгаллаа')
+        router.back()
+      }
+      else 
+        notification.warning('Алдаа гарлаа')
+    })
   }
 
   function m2Uurchilyu(v,mur) {
