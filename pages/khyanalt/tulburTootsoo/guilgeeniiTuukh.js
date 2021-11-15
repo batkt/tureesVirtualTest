@@ -178,7 +178,7 @@ function guilgeeniiTuukh({ token }) {
               utga: "Нийт Авлага",
             },
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              too: formatNumber(_.get(guilgeeniiToololt, "uglug.0.dun") || 0),
               utga: "Нийт Өглөг",
             },
             {
