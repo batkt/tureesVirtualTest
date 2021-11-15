@@ -42,6 +42,7 @@ function BarilgaBurtgel({ token }) {
         key: "ner",
         render: (text) => <a>{text}</a>,
         ellipsis: true,
+        align:'center'
       },
       {
         title: "Хаяг",
@@ -53,12 +54,16 @@ function BarilgaBurtgel({ token }) {
         title: "Давхар",
         dataIndex:'davkharuud',
         render: (a) => <>{a.length}</>,
+        width:'6rem',
+        align:'center'
       },
       {
         title: "Талбай /м2/",
         key: "burtgesen",
         dataIndex: "burtgesen",
         render: () => <>{"500"}</>,
+        width:'7rem',
+        align:'center'
       },
       {
         title: "Бүртгэсэн",
@@ -66,6 +71,7 @@ function BarilgaBurtgel({ token }) {
         dataIndex: "burtgesen",
         render: () => <>{"Админ"}</>,
         ellipsis: true,
+        align:'center'
       },
       {
         title: "Үйлдэл",
@@ -82,6 +88,7 @@ function BarilgaBurtgel({ token }) {
           );
         },
         ellipsis: true,
+        align:'center'
       },
     ],
     []
