@@ -73,7 +73,6 @@ function GereeBaiguulakh() {
   )
 
   const {geree,...gereeniiZagvar} = data || {}
-  console.log('geree',gereeniiZagvar)
 
   return (
     <div className="w-full space-y-2 p-5">
