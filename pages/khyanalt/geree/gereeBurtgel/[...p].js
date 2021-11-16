@@ -66,12 +66,12 @@ function GereeBaiguulakh({ data }) {
 const ugudulAvchirya = async (ctx, session) => {
   const { data: geree } = await readMethod(
     "geree",
-    session.tureestoken,
-    ctx.query.id
+    ctx.query.p[0],
+    ctx.query.p[1]
   );
   const { data } = await readMethod(
     "gereeniiZagvar",
-    session.tureestoken,
+    ctx.query.p[0],
     geree.gereeniiZagvariinId
   );
 
