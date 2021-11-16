@@ -1,11 +1,80 @@
 import readMethod from "tools/function/crud/readMethod";
-import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { toWords } from "mon_num";
 import moment from "moment";
 import _ from "lodash";
+import {useRouter} from "next/router";
+import React from 'react'
+import useSWR from "swr";
 
-function GereeBaiguulakh({ data }) {
-  const { geree, ...gereeniiZagvar } = data;
+const fetcher =async (token,id)=>{
+    if(!token || !id)
+      return {}
+    const { data: geree } = await readMethod(
+      "geree",
+      token,
+      id
+    );
+
+    const { data } = await readMethod(
+      "gereeniiZagvar",
+      token,
+      geree.gereeniiZagvariinId
+    );
+
+   
+  
+    if (!!data) {
+      if (geree.gereeniiOgnoo) {
+        geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
+        geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
+        geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
+        if (geree.khugatsaa > 0) {
+          let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
+            geree.khugatsaa,
+            "M"
+          );
+          geree.duusakhOn = duusakhOgnoo.format("YYYY");
+          geree.duusakhSar = duusakhOgnoo.format("MM");
+          geree.duusakhUdur = duusakhOgnoo.format("DD");
+        }
+      }
+      geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
+      geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
+  
+      for (const [key, value] of Object.entries(geree)) {
+        data.dedKhesguud
+          .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+          .map((b) => {
+            b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          });
+        if (!!data?.baruunTolgoi)
+          data.baruunTolgoi = data.baruunTolgoi?.replace(
+            new RegExp(`&lt;${key}&gt;`, "g"),
+            value
+          );
+      }
+      data.geree = geree;
+    }
+
+    return data;
+}
+
+function GereeBaiguulakh() {
+  const {query} = useRouter()
+
+  const { token,id} = query
+
+  const { data } = useSWR(
+    !!token && !!id
+      ? [token, id]
+      : null,
+      fetcher,
+    { revalidateOnFocus: false }
+  )
+
+  const {geree,...gereeniiZagvar} = data || {}
+  console.log('geree',gereeniiZagvar)
+
   return (
     <div className="w-full space-y-2 p-5">
       {gereeniiZagvar?.ner && (
@@ -62,55 +131,5 @@ function GereeBaiguulakh({ data }) {
     </div>
   );
 }
-
-const ugudulAvchirya = async (ctx, session) => {
-  const { data: geree } = await readMethod(
-    "geree",
-    ctx.query.p[0],
-    ctx.query.p[1]
-  );
-  const { data } = await readMethod(
-    "gereeniiZagvar",
-    ctx.query.p[0],
-    geree.gereeniiZagvariinId
-  );
-
-  if (!!data) {
-    if (geree.gereeniiOgnoo) {
-      geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
-      geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
-      geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
-      if (geree.khugatsaa > 0) {
-        let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
-          geree.khugatsaa,
-          "M"
-        );
-        geree.duusakhOn = duusakhOgnoo.format("YYYY");
-        geree.duusakhSar = duusakhOgnoo.format("MM");
-        geree.duusakhUdur = duusakhOgnoo.format("DD");
-      }
-    }
-    geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
-    geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
-
-    for (const [key, value] of Object.entries(geree)) {
-      data.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-        .map((b) => {
-          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-        });
-      if (!!data?.baruunTolgoi)
-        data.baruunTolgoi = data.baruunTolgoi?.replace(
-          new RegExp(`&lt;${key}&gt;`, "g"),
-          value
-        );
-    }
-    data.geree = geree;
-  }
-
-  return data;
-};
-
-export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya);
 
 export default GereeBaiguulakh;
