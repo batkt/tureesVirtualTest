@@ -6,7 +6,7 @@ import { Card, Table, Button } from "antd";
 import { FileExcelOutlined } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "../../../tools/function/formatNumber";
-import VoucheraarTootsooKhiikh from "../../../components/pageComponents/tulbur/VoucheraarTootsooKhiikh";
+import GuilgeeKhiikh from "../../../components/pageComponents/tulbur/GuilgeeKhiikh";
 import Khungulukh from "../../../components/pageComponents/tulbur/Khungulukh";
 import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
@@ -33,7 +33,7 @@ function guilgeeniiTuukh({ token }) {
 
   function refreshData() {
     gereeniiMedeelelMutate();
-    setDelgegdsenGeree();
+    refTuukh.current?.refreshData()
   }
 
   function guilgeeKhiiya(data) {
@@ -47,7 +47,7 @@ function guilgeeniiTuukh({ token }) {
       title: "",
       icon: <FileExcelOutlined />,
       content: (
-        <VoucheraarTootsooKhiikh
+        <GuilgeeKhiikh
           data={data}
           ref={ref}
           token={token}

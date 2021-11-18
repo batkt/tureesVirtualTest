@@ -51,7 +51,7 @@ function useGuilgee(token, gereeniiId) {
 }
 
 function GuilgeeniiTuukh({ token, data, refreshData },ref) {
-  const { guilgeeniiTuukh } = useGuilgee(token, data?._id);
+  const { guilgeeniiTuukh,guilgeeniiTuukhMutate } = useGuilgee(token, data?._id);
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
 
@@ -78,7 +78,7 @@ function GuilgeeniiTuukh({ token, data, refreshData },ref) {
                 tailbar,
               })
               .then(({ data }) => {
-                if (data?.ok === 1) {
+                if (data) {
                   message.success("Төлөлт амжилттай устгагдлаа!");
                   refreshData();
                 }
@@ -100,6 +100,9 @@ function GuilgeeniiTuukh({ token, data, refreshData },ref) {
       khevlekh() {
         handlePrint()
       },
+      refreshData(){
+        guilgeeniiTuukhMutate()
+      }
     }),
     [printRef]
   );
