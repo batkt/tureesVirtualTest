@@ -114,7 +114,7 @@ function GereeBaiguulakh() {
               <>
                 <div className="text-center">{mur.kharagdakhDugaar}</div>
                 <div
-                  className="ml-5"
+                  className="ml-5 text-justify"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
               </>
