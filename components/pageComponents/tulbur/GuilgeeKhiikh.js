@@ -6,7 +6,8 @@ import uilchilgee from "services/uilchilgee";
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
 
   const [dun,setDun] = useState(0)
-  const [turul,setTurul] = useState('Ваучераар тооцоо хийх')
+  const [turul,setTurul] = useState('voucher')
+  const [tailbar,setTailbar] = useState('')
 
   React.useImperativeHandle(
     ref,
@@ -21,12 +22,15 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           notification.warning({message:'Та гэрээгээ сонгоно уу'})
           return
         }
-        uilchilgee(token).post('/tulultKhadgalya',{
-          turul:'voucher',
-          tulsunDun:dun,
-          ognoo:new Date(),
-          gereeniiId:data?._id,
-        }).then(({data})=>{
+        uilchilgee(token).post('/gereeniiGuilgeeKhadgalya',{
+          guilgee:{
+            turul:turul,
+            tulsunDun:turul === 'voucher' ? dun : 0,
+            tulukhDun:turul === 'avlaga' ? dun : 0,
+            ognoo:new Date(),
+            gereeniiId:data?._id
+          }
+        }).then(()=>{
           notification.success({placement:'bottomRight',message:'Амжилттай'})
           _.isFunction(onFinish) && onFinish();
           destroy();
@@ -40,14 +44,14 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
     <div className="flex flex-col space-y-2">
       <div className='flex justify-center'> 
         <Radio.Group onChange={(e)=>setTurul(e.target.value)} value={turul}>
-          <Radio value={'Ваучераар тооцоо хийх'}>Ваучераар тооцоо хийх</Radio>
-          <Radio value={'Авлага үүсгэх'}>Авлага үүсгэх</Radio>
+          <Radio value={'voucher'}>Ваучераар тооцоо хийх</Radio>
+          <Radio value={'avlaga'}>Авлага үүсгэх</Radio>
         </Radio.Group>
       </div>
       <Divider/>
-      <label className="">{turul}</label>
+      <label>{turul === 'avlaga' ? 'Авлага үүсгэх' : 'Ваучераар тооцоо хийх'}</label>
       <InputNumber formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder="Дүн" style={{ width: "100%" }} onChange={setDun}/>
-      {turul === 'Авлага үүсгэх' && <Input.TextArea placeholder='Тайлбар'/>}
+      {turul === 'avlaga' && <Input.TextArea placeholder='Тайлбар' value={tailbar} onChange={e=>setTailbar(e.target.value)}/>}
     </div>
   );
 }

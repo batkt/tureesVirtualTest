@@ -1,4 +1,4 @@
-import { Divider, InputNumber,Input, notification } from "antd";
+import { Divider, InputNumber,Input, notification, DatePicker } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import uilchilgee from "services/uilchilgee";
@@ -34,10 +34,10 @@ function Table({data,updateMyData}) {
           {moment(mur.ognoo).format('YYYY-MM-DD')}
         </div>
         <div className='table-cell w-14'>
-          <InputNumber style={{width:'100%'}}  placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdral} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
+          <InputNumber style={{width:'100%'}}  placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdraliinKhuvi} onChange={(v)=>updateMyData(index,'khyamdraliinKhuvi',v)}/>
         </div>
         <div className='table-cell '>
-          <InputNumber style={{width:'100%'}} formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} onChange={(v)=>updateMyData(index,'tulukhDun',v)}/>
+          <InputNumber style={{width:'100%'}} formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder='Төлөх дүн' value={mur.khyamdral} min={0} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
         </div>
         <div className='table-cell '>
           <Input style={{width:'100%'}} placeholder='Тайлбар' value={mur.tailbar} onChange={({target})=>updateMyData(index,'tailbar',target.value)}/>
@@ -50,21 +50,21 @@ function Table({data,updateMyData}) {
     </div>
   )}
   
-function VoucheraarTootsooKhiikh({ data, token, onFinish, destroy }, ref) {
+function Khungulukh({ data, token, onFinish, destroy }, ref) {
 
-  const [dun,setDun] = useState(0)
-  const [sar,setSar] = useState(0)
+  const [sar,setSar] = useState(moment())
   const [jagsaalt,setJagsaalt] = useState([])
 
   useEffect(()=>{
     var jdata = []
-    const ognoo = moment(data?.gereeniiOgnoo)
-    new Array(sar || 0).fill('').map((mur,index)=>{
+    new Array(1).fill('').map((mur,index)=>{
       data?.tulukhUdur.forEach((udur)=>{
         jdata.push({
-          ognoo:moment(`${ognoo}`).add(index+1,'month').set('date',udur),
+          turul:'khyamdral',
+          ognoo:moment(sar).add(index+1,'month').set('date',udur),
+          khyamdraliinKhuvi:0,
           khyamdral:0,
-          tulukhDun:data?.sariinTurees
+          gereeniiId:data?._id
         })
       })
     })
@@ -80,16 +80,8 @@ function VoucheraarTootsooKhiikh({ data, token, onFinish, destroy }, ref) {
         destroy();
       },
       khadgalya() {
-        if(!dun)
-        {
-          notification.warning({message:'Та гэрээгээ сонгоно уу'})
-          return
-        }
-        uilchilgee(token).post('/tulultKhadgalya',{
-          turul:'voucher',
-          tulsunDun:dun,
-          ognoo:new Date(),
-          gereeniiId:data?._id,
+        uilchilgee(token).post('/gereeniiGuilgeeKhadgalya',{
+          guilgee:jagsaalt[0]
         }).then(({data})=>{
           notification.success({placement:'bottomRight',message:'Амжилттай'})
           _.isFunction(onFinish) && onFinish();
@@ -97,7 +89,7 @@ function VoucheraarTootsooKhiikh({ data, token, onFinish, destroy }, ref) {
         })
       },
     }),
-    [dun]
+    [jagsaalt]
   );
 
   const updateMyData = (rowIndex, columnId, value) => {
@@ -109,8 +101,8 @@ function VoucheraarTootsooKhiikh({ data, token, onFinish, destroy }, ref) {
             [columnId]: value,
           }
           const tulukhDun = (data?.sariinTurees / data?.tulukhUdur.length)
-          if(columnId === 'khyamdral')
-          val['tulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
+          if(columnId === 'khyamdraliinKhuvi')
+          val['khyamdral'] =  tulukhDun - (tulukhDun * value / 100)
           return {...val}
         }
         return row
@@ -118,22 +110,21 @@ function VoucheraarTootsooKhiikh({ data, token, onFinish, destroy }, ref) {
     )
   }
  
-
   return (
     <div className="flex flex-col space-y-2">
       <div className='flex flex-row space-x-2 items-center'>
         <label>Хөнгөлөх сар</label>
-        <InputNumber placeholder='сар' onChange={setSar}/>
+        <DatePicker picker='month' placeholder='сар' onChange={setSar}/>
       </div>
       <Divider/>
       <label>Хөнгөлөлт оруулах</label>
       <Table
-              className='mt-2'
-              data={jagsaalt}
-              updateMyData={updateMyData}
-            />
+        className='mt-2'
+        data={jagsaalt}
+        updateMyData={updateMyData}
+      />
     </div>
   );
 }
 
-export default React.forwardRef(VoucheraarTootsooKhiikh);
+export default React.forwardRef(Khungulukh);

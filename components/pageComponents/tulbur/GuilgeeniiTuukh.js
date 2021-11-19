@@ -55,7 +55,7 @@ function GuilgeeniiTuukh({ token, data, refreshData },ref) {
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
 
-  function tulultUstgaya({ guilgeeniiId, tulsunDun, _id }) {
+  function tulultUstgaya({ guilgeeniiId, tulsunDun,tulukhDun, _id,turul }) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
@@ -71,9 +71,11 @@ function GuilgeeniiTuukh({ token, data, refreshData },ref) {
           confirm={(tailbar) =>
             axios(token)
               .post("/tulultUstgaya", {
+                turul,
                 guilgeeniiId,
                 gereeniiId: data?._id,
                 tulsunDun,
+                tulukhDun,
                 objectiinId: _id,
                 tailbar,
               })
@@ -133,7 +135,7 @@ function GuilgeeniiTuukh({ token, data, refreshData },ref) {
             <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
             <div className="flex flex-row px-1 items-center ">
               {a.turul === "bank" ? a.tulsunDans : a.turul}
-              {(a.turul === "voucher" || a.turul === "bank") && (
+              {(a.turul === "avlaga" || a.turul === "voucher" || a.turul === "bank") && (
                 <Popconfirm
                   title="Төлөлт устгах уу?"
                   okText="Тийм"

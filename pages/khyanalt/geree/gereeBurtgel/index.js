@@ -570,7 +570,7 @@ function ZakhialgiinKhyanalt() {
       khuudasniiNer="gereeBurtgel"
       title="Гэрээний жагсаалт"
       className="p-0 md:p-5"
-      onSearch={(search) => setGereeniiKhuudaslalt((a) => ({ ...a, search }))}
+      onSearch={(search) => setGereeniiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
     >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}
