@@ -25,9 +25,8 @@ function Ajiltan() {
   const { newterya } = useAuth()
 
   useEffect(async () => {
-    localStorage.removeItem("ajiltniiJagsaalt")
-    const newtrekhNer = await localStorage.getItem("newtrekhNerTurees")
-    form.setFieldsValue({ mail: newtrekhNer })
+    const nevtrekhNer = await localStorage.getItem("newtrekhNerTurees")
+    form.setFieldsValue({ nevtrekhNer })
   }, [])
 
   return (
