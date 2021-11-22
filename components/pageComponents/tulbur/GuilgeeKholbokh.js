@@ -74,7 +74,7 @@ function GuilgeeKholbokh({data, token, baiguullagiinId, onFinish, destroy }, ref
       <label className="text-lg font-medium">Гүйлгээнд талбай холбох</label>
       <Select
         placeholder="Талбай"
-        onSearch={(search) => setGereeniiKhuudaslalt((a) => ({ ...a, search }))}
+        onSearch={(search) => setGereeniiKhuudaslalt((a) => ({ ...a, search ,khuudasniiDugaar:1}))}
         onChange={setGeree}
         filterOption={o=>o}
         showSearch

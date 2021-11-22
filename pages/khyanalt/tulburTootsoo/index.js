@@ -81,7 +81,7 @@ function tulburTootsoo({ token }) {
       khuudasniiNer="khuulga"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search }));
+        setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">

@@ -183,7 +183,7 @@ function GereeBaiguulakh({ token }) {
                 value={null}
                 filterOption={(o) => o}
                 onSearch={(search) =>
-                  setGereeniiZagvarKhuudaslalt((a) => ({ ...a, search }))
+                  setGereeniiZagvarKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))
                 }
                 onChange={onChangeGereeniiZagvar}
               >

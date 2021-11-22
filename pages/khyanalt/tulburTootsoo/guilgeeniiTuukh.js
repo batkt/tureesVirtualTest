@@ -19,6 +19,7 @@ function guilgeeniiTuukh({ token }) {
   const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
+  const [turul, setTurul] = React.useState(null);
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(
     token,
     moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
@@ -167,7 +168,7 @@ function guilgeeniiTuukh({ token }) {
       khuudasniiNer="guilgeeniiTuukh"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setGereeniiKhuudaslalt((a) => ({ ...a, search }));
+        setGereeniiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }));
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">

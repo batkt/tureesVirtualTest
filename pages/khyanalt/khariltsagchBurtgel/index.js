@@ -346,7 +346,7 @@ function AjiltanBurtgel({ token }) {
       title="Харилцагч бүртгэл"
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
-      onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
+      onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>

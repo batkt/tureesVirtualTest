@@ -104,7 +104,7 @@ const YurunkhiiMedeele = ({
           size="large"
           value={null}
           filterOption={(o) => o}
-          onSearch={(search) => settalbaiKhuudaslalt((a) => ({ ...a, search }))}
+          onSearch={(search) => settalbaiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
           onChange={onChangetalbai}
         >
           {talbainiiGaralt?.jagsaalt?.map((mur) => {
