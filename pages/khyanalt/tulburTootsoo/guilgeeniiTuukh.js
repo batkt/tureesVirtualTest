@@ -19,18 +19,98 @@ function guilgeeniiTuukh({ token }) {
   const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
-  const [turul, setTurul] = React.useState(null);
+  const [turul, setTurul] = React.useState('');
+  
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(
     token,
     moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
     moment().endOf("month").format("YYYY-MM-DD 23:59:59")
   );
   const query = React.useMemo(() => {
+    if(turul === 'uglug')
+      return {
+        'avlaga.guilgeenuud.ognoo': {
+          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+        },
+        'baiguullagiinId': baiguullaga._id,
+        'tuluv': {
+          '$ne': -1
+        },
+        "uldegdel": {
+          "$lt": 0
+        }
+      }
+    else if(turul === 'avlaga')
+      return {
+        'avlaga.guilgeenuud.ognoo': {
+          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+        },
+        'baiguullagiinId': baiguullaga._id,
+        'tuluv': {
+          '$ne': -1
+        },
+        "uldegdel": {
+          "$gte": 0
+        }
+      }
+    else if(turul === 'khugatsaaKhetersen')
+      return {
+        'daraagiinTulukhOgnoo': {
+          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+        },
+        'baiguullagiinId': baiguullaga._id,
+        'tuluv': {
+          '$ne': -1
+        },
+        "uldegdel": {
+          "$gte": 0
+        }
+      }
+    else if(turul === 'eneSardTulukh')
+      return {
+          'avlaga.guilgeenuud.ognoo': {
+            '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+            '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          },
+          'baiguullagiinId': baiguullaga?._id,
+          'avlaga.guilgeenuud.tulukhDun': {
+            '$gt': 0
+        }
+      }
+    else if(turul === 'eneSardTulsun')
+      return {
+        'avlaga.guilgeenuud.ognoo': {
+          '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+        },
+        'baiguullagiinId': baiguullaga?._id,
+        'avlaga.guilgeenuud.tulsunDun': {
+          '$gt': 0
+        }
+      }
+    else if(turul === 'khungulult')
+      return {
+          'avlaga.guilgeenuud.ognoo': {
+            '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+            '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          },
+          'baiguullagiinId': baiguullaga?._id,
+          'avlaga.guilgeenuud.khyamdral': {
+            '$gt': 0
+        }
+      }
     return {};
-  }, []);
+  }, [turul]);
+
+  
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query);
+
+  function onChangeTurul(turul) {
+    setTurul(turul)
+    setGereeniiKhuudaslalt(a=>({...a,khuudasniiDugaar:1}))
+  }
 
   function refreshData() {
     gereeniiMedeelelMutate();
@@ -176,34 +256,40 @@ function guilgeeniiTuukh({ token }) {
           {[
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              turul:'avlaga',
               utga: "Нийт Авлага",
             },
             {
               too: formatNumber(_.get(guilgeeniiToololt, "uglug.0.dun") || 0),
+              turul:'uglug',
               utga: "Нийт Өглөг",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "khugatsaaKhetersen.0.dun") || 0
               ),
+              turul:'khugatsaaKhetersen',
               utga: "Хугацаа хэтэрсэн",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
               ),
+              turul:'eneSardTulukh',
               utga: "Сард орж ирэх дүн",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
               ),
+              turul:'eneSardTulsun',
               utga: "Гүйцэтгэлийн дүн",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
               ),
+              turul:'khungulult',
               utga: "Нийт хөнгөлөлт",
             },
           ].map((mur, index) => {
@@ -211,6 +297,7 @@ function guilgeeniiTuukh({ token }) {
               <div
                 key={`${index}toololt`}
                 className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                onClick={()=>onChangeTurul(mur?.turul)}
               >
                 <div className="h-full rounded-xl">
                   <div className="p-3 rounded-xl">
