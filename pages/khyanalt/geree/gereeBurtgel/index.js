@@ -157,7 +157,7 @@ function ZakhialgiinKhyanalt() {
       border: "border-green-500",
       query: {
         tuluv: { $nin: [-1] },
-        daraagiinTulukhOgnoo: { $gte: new Date() },
+        duusakhOgnoo: { $gte: new Date() },
       },
     },
     {
@@ -172,6 +172,7 @@ function ZakhialgiinKhyanalt() {
       selectedColor: "bg-red-100",
       border: "border-red-500",
       query: {
+        duusakhOgnoo: { $lte: new Date() },
         tuluv: { $nin: [-1] },
       },
     },
