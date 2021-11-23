@@ -1,20 +1,26 @@
-import React, { useRef, useState } from "react";
-import { InputNumber, Switch } from "antd";
-import { url } from "services/uilchilgee";
+import React, { useState } from "react";
+import { Button, InputNumber, notification } from "antd";
+import uilchilgee from "services/uilchilgee";
 
 import {useAjiltniiJagsaalt} from "hooks/useAjiltan";
 
 function AshiglaltiinZardal({
-  ajiltan = {},
   token,
-  ajiltanMutate,
-  khadgalsniiDaraa,
+  baiguullaga,
+  baiguullagaMutate
 }) {
-  const [state, setstate] = useState(ajiltan);
-  const zuragRef = useRef(null);
 
-  const {ajilchdiinGaralt} = useAjiltniiJagsaalt(token,ajiltan?.baiguullagiinId)
+  const [sukhTokhirgoo,setSukhTokhirgoo] = useState(null)
 
+  const sukhTokhirgooKhadgalya = () => {
+    uilchilgee(token).post('/baiguullagaTokhirgooZasya',{tokhirgoo:sukhTokhirgoo}).then(({data})=>{
+      if(data === 'Amjilttai'){
+        notification.success({message:'Амжилттай засагдлаа'})
+        setSukhTokhirgoo(null)
+        baiguullagaMutate()
+      }
+    })
+  }
 
   return (
     <>
@@ -32,7 +38,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.tseverUsKhaluun} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.tseverUsKhaluun':v}))}/>
               </div>
             </div>
           </div>
@@ -43,7 +49,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.tseverUsKhuiten} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.tseverUsKhuiten':v}))}/>
               </div>
             </div>
           </div>
@@ -54,7 +60,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.bokhirUs} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.bokhirUs':v}))}/>
               </div>
             </div>
           </div>
@@ -66,7 +72,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.khaluunUsKhalaasanDulaan} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.khaluunUsKhalaasanDulaan':v}))}/>
               </div>
             </div>
           </div>
@@ -77,7 +83,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.usniiSuuriKhuraamj} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.usniiSuuriKhuraamj':v}))}/>
               </div>
             </div>
           </div>
@@ -97,7 +103,7 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.khalaalt} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.khalaalt':v}))}/>
               </div>
             </div>
           </div>
@@ -108,12 +114,17 @@ function AshiglaltiinZardal({
                   <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
               </div>
               <div className="ml-auto">
-                <InputNumber/>
+                <InputNumber value={baiguullaga?.SUKH?.dulaaniiSuuriKhuraamj} max={100} min={0} onChange={(v)=>setSukhTokhirgoo(a=>({...(a || {}),'SUKH.dulaaniiSuuriKhuraamj':v}))}/>
               </div>
             </div>
           </div>
+          <div className={`flex items-center pt-2 px-5 pb-2 border-b justify-end border-gray-200 dark:border-dark-5 ${!!sukhTokhirgoo ? 'flex' : 'hidden'}`}>
+            <Button type='primary' onClick={sukhTokhirgooKhadgalya}>Хадгалах</Button>
+          </div>
         </div>
+        
       </div>
+      
     </>
   );
 }

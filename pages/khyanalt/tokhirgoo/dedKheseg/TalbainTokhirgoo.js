@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { InputNumber, Switch } from "antd";
-import { url } from "services/uilchilgee";
+import { Button, InputNumber, notification, Switch } from "antd";
+import uilchilgee,{ url } from "services/uilchilgee";
 
 import {useAjiltniiJagsaalt} from "hooks/useAjiltan";
 
@@ -10,11 +10,23 @@ function KhuviinMedeelel({
   ajiltanMutate,
   khadgalsniiDaraa,
 }) {
-  const [state, setstate] = useState(ajiltan);
-  const zuragRef = useRef(null);
+  const [ajiltniiTokhirgoo,setAjiltniiTokhirgoo] = useState(null)
+  const {ajilchdiinGaralt,ajiltniiJagsaaltMutate} = useAjiltniiJagsaalt(token,ajiltan?.baiguullagiinId)
 
-  const {ajilchdiinGaralt} = useAjiltniiJagsaalt(token,ajiltan?.baiguullagiinId)
-
+  const ajiltniiTokhirgooKhadgalya = () => {
+    const ajiltnuud = []
+    for(const ajiltan in ajiltniiTokhirgoo)
+    ajiltnuud.push({_id:ajiltan,utga:ajiltniiTokhirgoo[ajiltan]})
+    ajiltniiTokhirgoo?.turul = 'tokhirgoo.m2UneTokhiruulakhEsekh'
+    ajiltniiTokhirgoo.ajiltnuud = ajiltnuud
+    uilchilgee(token).post('/ajiltniiTokhirgooZasya',ajiltniiTokhirgoo).then(({data})=>{
+      if(data === 'Amjilttai'){
+        ajiltniiJagsaaltMutate()
+        notification.success({message:'Амжилттай засагдлаа'})
+        setAjiltniiTokhirgoo(null)
+      }
+    })
+  }
 
   return (
     <>
@@ -45,12 +57,15 @@ function KhuviinMedeelel({
                     <div className="text-gray-600 text-xs mt-0.5">{a?.erkh}</div>
                   </div>
                   <div className="flex mt-4 lg:mt-0">
-                    <Switch />
+                    <Switch defaultChecked={a?.tokhirgoo?.m2UneTokhiruulakhEsekh || false} onChange={(v)=>setAjiltniiTokhirgoo(o=>({...(o || {}),[a._id]:v}))}/>
                   </div>
                 </div>
               </div>
             )
           }
+          <div className={`flex items-center pt-2 px-5 pb-2 border-b justify-end border-gray-200 dark:border-dark-5 ${!!ajiltniiTokhirgoo ? 'flex' : 'hidden'}`}>
+            <Button type='primary' onClick={ajiltniiTokhirgooKhadgalya}>Хадгалах</Button>
+          </div>
         </div>
       </div>
       <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
