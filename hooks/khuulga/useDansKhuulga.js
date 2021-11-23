@@ -20,7 +20,8 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   dans,
   ognoo,
-  order={}
+  order={},
+  query
 ) =>
   axios(token)
     .get(url,{params:{
@@ -31,13 +32,14 @@ const fetcher = (
         amount:{ $gt: 0 },
         tranDate:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59'),},
         $or: getSearch(search),
+        ...query
       },
       ...khuudaslalt
     }})
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useDansKhuulga(token, baiguullagiinId, dans, ognoo,order) {
+function useDansKhuulga(token, baiguullagiinId, dans, ognoo,order,query) {
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -52,7 +54,8 @@ function useDansKhuulga(token, baiguullagiinId, dans, ognoo,order) {
           khuudaslalt,
           dans,
           ognoo,
-          order
+          order,
+          query
         ]
       : null,
     fetcher,

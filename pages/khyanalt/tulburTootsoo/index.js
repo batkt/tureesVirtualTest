@@ -10,10 +10,11 @@ import {
   QuestionOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
-import useDans from "../../../hooks/khuulga/useDans";
-import formatNumber from "../../../tools/function/formatNumber";
-import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
-import GuilgeeKholbokh from "../../../components/pageComponents/tulbur/GuilgeeKholbokh";
+import useDans from "hooks/khuulga/useDans";
+import formatNumber from "tools/function/formatNumber";
+import useDansKhuulga from "hooks/khuulga/useDansKhuulga";
+import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt";
+import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeKholbokh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 const { RangePicker } = DatePicker;
@@ -24,7 +25,29 @@ function tulburTootsoo({ token }) {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
+  const [songogdsonTurul, setSongogdsonTurul] = React.useState(null);
+  const {bankniiGuilgeeToololt,bankniiGuilgeeToololtMutate} = useBankniiGuilgeeToololt(token,ekhlekhOgnoo,songogdsonDans)
   const [order, setOrder] = React.useState({ tranDate: -1, time: 0 });
+
+  const query = React.useMemo(()=>{
+    if(songogdsonTurul === 'Тодорхойгүй')
+      return {
+        magadlaltaiGereenuud:{$exists:false},
+        kholbosonGereeniiId:{$exists:false}
+      }
+    else if(songogdsonTurul === 'Холбогдсон')
+      return {
+        kholbosonGereeniiId:{$exists:true}
+      }
+    else if(songogdsonTurul === 'Магадлалтай')
+      return {
+        magadlaltaiGereenuud:{$exists:true},
+        kholbosonGereeniiId:{$exists:false}
+      }
+    else  
+      return {}
+  },[songogdsonTurul])
+
   const {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
@@ -34,11 +57,13 @@ function tulburTootsoo({ token }) {
     baiguullaga?._id,
     songogdsonDans,
     ekhlekhOgnoo,
-    order
+    order,
+    query
   );
 
   function refreshData() {
     dansniiKhuulgaMutate();
+    bankniiGuilgeeToololtMutate();
   }
 
   function dansSongoy(number) {
@@ -75,6 +100,7 @@ function tulburTootsoo({ token }) {
     });
   }
 
+
   return (
     <Admin
       title="Дансны хуулга"
@@ -87,14 +113,16 @@ function tulburTootsoo({ token }) {
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full grid grid-cols-12 gap-4">
           {[
-            { too: dansniiKhuulgaGaralt?.niitMur || 0, utga: "Нийт" },
-            { too: 0, utga: "Тодорхойгүй" },
-            { too: 0, utga: "Холбогдсон" },
+            { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
+            { too: bankniiGuilgeeToololt?.todorkhoigui, utga: "Тодорхойгүй" },
+            { too: bankniiGuilgeeToololt?.kholboson, utga: "Холбогдсон" },
+            { too: bankniiGuilgeeToololt?.magadlaltai, utga: "Магадлалтай" },
           ].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
-                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-4 intro-y cursor-pointer zoom-in"
+                className="border-2 border-green-600 rounded-xl col-span-12 md:col-span-6 lg:col-span-3 intro-y cursor-pointer zoom-in"
+                onClick={()=>setSongogdsonTurul(mur.utga)}
               >
                 <div className="h-full rounded-xl">
                   <div className="p-3 rounded-xl">
