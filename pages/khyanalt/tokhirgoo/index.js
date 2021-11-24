@@ -1,15 +1,16 @@
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh";
-import Admin from "../../../components/Admin";
-import { useAuth } from "../../../services/auth";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import { useAuth } from "services/auth";
 import { url } from "services/uilchilgee";
-import KhuviinMedeelel from "./dedKheseg/KhuviinMedeelel";
-import NuutsUgSolikh from "./dedKheseg/NuutsUgSolikh";
-import UndsenMedeelel from "./dedKheseg/UndsenMedeelel";
+import KhuviinMedeelel from "components/pageComponents/tokhirgoo/KhuviinMedeelel";
+import NuutsUgSolikh from "components/pageComponents/tokhirgoo/NuutsUgSolikh";
+import UndsenMedeelel from "components/pageComponents/tokhirgoo/UndsenMedeelel";
 
-import GereeniiTokhirgoo from "./dedKheseg/GereeniiTokhirgoo";
-import KhungulultiinTokhirgoo from "./dedKheseg/KhungulultiinTokhirgoo";
-import TalbainTokhirgoo from "./dedKheseg/TalbainTokhirgoo";
-import AshiglaltiinZardal from "./dedKheseg/AshiglaltiinZardal";
+import GereeniiTokhirgoo from "components/pageComponents/tokhirgoo/GereeniiTokhirgoo";
+import KhungulultiinTokhirgoo from "components/pageComponents/tokhirgoo/KhungulultiinTokhirgoo";
+import TalbainTokhirgoo from "components/pageComponents/tokhirgoo/TalbainTokhirgoo";
+import AshiglaltiinZardal from "components/pageComponents/tokhirgoo/AshiglaltiinZardal";
+import Medegdel from "components/pageComponents/tokhirgoo/Medegdel";
 
 import { useMemo, useState } from "react";
 
@@ -45,6 +46,11 @@ function AjiltanBurtgel({ token }) {
           icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings w-4 h-4 mr-2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>,
           text:'Ашиглалтын зардал',
           tsonkh:<AshiglaltiinZardal {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
+        },
+        {
+          icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+          text:'Мэдэгдэл',
+          tsonkh:<Medegdel {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         }
     ]
     else return [
