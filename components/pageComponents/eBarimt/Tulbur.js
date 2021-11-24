@@ -12,7 +12,7 @@ import QRCode from "react-qr-code"
 //#endregion
 
 function Tulbur(
-  { destroy, zakhialgaMutate, data, token, ajiltan, baiguullaga },
+  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga },
   ref
 ) {
   const [alkham, setAlkham] = React.useState(
@@ -38,7 +38,7 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        zakhialgaMutate()
+        dansniiKhuulgaMutate()
         destroy()
       },
     }),
@@ -54,13 +54,13 @@ function Tulbur(
         return
       }
       const body = {
-        zakhialgiinDugaar: id,
+        id: id,
       }
-      if (baiguullagaEsekh || irgenEsekh) {
-        body.register = register
-        if (baiguullagaEsekh) body.turul = "3"
-        else if (irgenEsekh) body.turul = "1"
-      }
+      // if (baiguullagaEsekh || irgenEsekh) {
+      //   body.register = register
+      //   if (baiguullagaEsekh) body.turul = "3"
+      //   else if (irgenEsekh) body.turul = "1"
+      // }
 
       uilchilgee(token)
         .post("/ebarimtShivye", body)
@@ -114,7 +114,7 @@ function Tulbur(
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
       />
-      <div>
+      {/* <div>
         <table className="w-full">
           <colgroup>
             <col className="w-1/6" />
@@ -253,7 +253,7 @@ function Tulbur(
             </tr>
           </tbody>
         </table>
-      </div>
+      </div> */}
       <div className="flex flex-row justify-between mt-5">
         <Button type="primary" danger onClick={khaaya}>
           Хаах

@@ -9,9 +9,11 @@ import { modal } from "components/ant/Modal"
 import { useReactToPrint } from "react-to-print"
 import Tulbur from "../eBarimt/Tulbur"
 
-const fetcher = (url, token, gereeniiId,ognoo) =>
+const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
-    .get(`${url}/${gereeniiId}`,{params:{duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}})
+    .get(`${url}/${gereeniiId}`, {
+      params: { duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59") },
+    })
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
@@ -40,9 +42,9 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   )
 })
 
-function useGuilgee(token, gereeniiId,ognoo) {
+function useGuilgee(token, gereeniiId, ognoo) {
   const { data, mutate } = useSWR(
-    !!token ? ["/gereeniiTulultAvya", token, gereeniiId,ognoo] : null,
+    !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
     fetcher,
     { revalidateOnFocus: false }
   )
@@ -52,7 +54,7 @@ function useGuilgee(token, gereeniiId,ognoo) {
   }
 }
 
-function GuilgeeniiTuukh({ token, data, refreshData,ognoo }, ref) {
+function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGuilgee(
     token,
     data?._id,
@@ -175,7 +177,7 @@ function GuilgeeniiTuukh({ token, data, refreshData,ognoo }, ref) {
                       <DeleteOutlined />
                     </div>
                   </Popconfirm>
-                  <Popconfirm
+                  {/* <Popconfirm
                     title="И-баримт илгээх үү"
                     okText="Тийм"
                     cancelText="Үгүй"
@@ -184,7 +186,7 @@ function GuilgeeniiTuukh({ token, data, refreshData,ognoo }, ref) {
                     <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-blue-500 w-6 h-6 cursor-pointer hide-on-print">
                       <BankOutlined />
                     </div>
-                  </Popconfirm>
+                  </Popconfirm> */}
                 </div>
               )}
             </div>

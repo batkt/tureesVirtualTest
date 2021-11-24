@@ -27,44 +27,15 @@ import useEBarimt from "hooks/useEBarimt"
 import useEBarimtMedeelel from "hooks/useEBarimtMedeelel"
 import useZakhialga from "hooks/useZakhialga"
 
-const { TabPane } = Tabs
 const { RangePicker } = DatePicker
 //#endregion
 
-function turulAvya(turul) {
-  var value = ""
-  switch (turul) {
-    case "belen":
-      value = "Бэлэн"
-      break
-    case "khaan":
-      value = "Хаан"
-      break
-    case "khariltsakh":
-      value = "Харилцах"
-      break
-    case "khas":
-      value = "Хас"
-      break
-    case "khariult":
-      value = "Хариулт"
-      break
-
-    default:
-      value = turul
-      break
-  }
-  return value
-}
-
-function ZakhialgiinKhyanalt({ token }) {
+function EbarimtMedeelel({ token }) {
   const { ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
   ])
-
-  const [tab, setTab] = useState("1")
 
   const query = useMemo(() => {
     return {
@@ -76,6 +47,41 @@ function ZakhialgiinKhyanalt({ token }) {
       tulburTulsunEsekh: true,
     }
   }, [ekhlekhOgnoo])
+  const khyanaltiinDun = [
+    {
+      too: 100,
+      utga: "Баримт авах гүйлгээний тоо",
+    },
+    {
+      too: 20,
+      utga: "Баримт авах гүйлгээний дүн",
+    },
+
+    {
+      too: 5,
+      utga: "Баримт авсан тоо",
+    },
+
+    {
+      too: 15,
+      utga: "Баримт авсан гүйлгээний дүн",
+    },
+    {
+      too: 20,
+      utga: "Буцаалт хийгдсэн тоо",
+    },
+    {
+      too: 20,
+      utga: "Буцаалт хийгдсэн дүн",
+    },
+  ]
+  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
+    token,
+    ajiltan?.baiguullagiinId,
+    ekhlekhOgnoo
+  )
+
+  const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(token)
 
   function ebarimtIlgeeye() {
     uilchilgee(token)
@@ -94,14 +100,10 @@ function ZakhialgiinKhyanalt({ token }) {
         if (!!data) {
           eBarimtMutate()
           message.success(
-            `${mur.zakhialgiinDugaar} дугаартай захиалга амжилттай ebarimt -с устгагдлаа`
+            `${mur.billId} дугаартай баримт амжилттай ebarimt -с устгагдлаа`
           )
         }
       })
-  }
-
-  function ebarimtZasya(mur) {
-    console.log(mur)
   }
 
   return (
@@ -112,160 +114,131 @@ function ZakhialgiinKhyanalt({ token }) {
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
     >
       <Card className="col-span-12 p-5 cardgrid">
-        <Tabs onChange={setTab} size="large" style={{ marginTop: "20px" }}>
-          <TabPane
-            key="1"
-            tab={
-              <span className="flex flex-row items-center space-x-2">
-                <img
-                  src="https://ebarimt.mn/assets/img/logo.svg"
-                  className="w-10 h-10"
-                />
-                <span>E Barimt</span>
-              </span>
-            }
-          >
-            <div className="w-full flex flex-row justify-between">
-              <RangePicker
-                style={{ marginBottom: "20px" }}
-                size="large"
-                defaultValue={[
-                  moment(new Date(), "YYYY-MM-DD"),
-                  moment(new Date(), "YYYY-MM-DD"),
-                ]}
-              />
-              <div className="flex flex-row space-x-2">
-                <Button title="Сүүлд илгээгдсэн огноо">
-                  {moment(new Date()).format("YYYY-MM-DD")}
-                </Button>
-                <Button danger>Татварт илгээх</Button>
-              </div>
-            </div>
-            <Table
-              bordered
-              tableLayout={"fixed"}
-              size="middle"
-              rowClassName="hover:bg-blue-100"
-              dataSource={[
-                {
-                  ognoo: "2021-11-23",
-                  turul: "Иргэн",
-                  billId: "4561215484131248",
-                  gereeniiDugaar: "ГГ-021",
-                  dun: "500.000₮",
-                },
-                {
-                  ognoo: "2021-11-23",
-                  turul: "Байгууллага",
-                  billId: "4561215484131248",
-                  gereeniiDugaar: "ГГ-025",
-                  dun: "500.000₮",
-                },
-                {
-                  ognoo: "2021-11-23",
-                  turul: "Иргэн",
-                  billId: "4561215484131248",
-                  gereeniiDugaar: "ГГ-026",
-                  dun: "250.000₮",
-                },
-                {
-                  ognoo: "2021-11-13",
-                  turul: "Иргэн",
-                  billId: "4561215484131248",
-                  gereeniiDugaar: "ГГ-012",
-                  dun: "300.000₮",
-                },
-                {
-                  ognoo: "2021-11-23",
-                  turul: "Байгууллага",
-                  billId: "4561215484131248",
-                  gereeniiDugaar: "ГГ-052",
-                  dun: "450.000₮",
-                },
-              ]}
-              // pagination={{
-              //   current: eBarimtGaralt?.khuudasniiDugaar,
-              //   pageSize: eBarimtGaralt?.khuudasniiKhemjee,
-              //   total: eBarimtGaralt?.niitMur,
-              //   showSizeChanger: true,
-              //   onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              //     setEBarimtKhuudaslalt((kh) => ({
-              //       ...kh,
-              //       khuudasniiDugaar,
-              //       khuudasniiKhemjee,
-              //     })),
-              // }}
-              scroll={{ x: "calc(100vh - 15rem)" }}
-              rowKey={(row) => row.id}
-              columns={[
-                {
-                  title: "Огноо",
-                  dataIndex: "ognoo",
-                  ellipsis: true,
-                },
-                {
-                  title: "Төрөл",
-                  dataIndex: "turul",
-                  ellipsis: true,
-                },
-                {
-                  title: "ДДТД",
-                  dataIndex: "billId",
-                  ellipsis: true,
-                },
-                {
-                  title: "Гэрээний дугаар",
-                  dataIndex: "gereeniiDugaar",
-                  ellipsis: true,
-                },
-
-                {
-                  title: "Дүн",
-                  dataIndex: "dun",
-                  ellipsis: true,
-                },
-
-                {
-                  title: "Үйлдэл",
-                  fixed: "right",
-                  render(mur) {
-                    return (
-                      <div className="flex flex-row space-x-2">
-                        <Button
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                          type="default"
-                          shape="circle"
-                          icon={<EditOutlined />}
-                        />
-                        <Popconfirm
-                          title="ebarimt устгах уу?"
-                          okText="Тийм"
-                          cancelText="Үгүй"
-                        >
-                          <Button
-                            danger
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                            type="default"
-                            shape="circle"
-                            icon={<DeleteOutlined />}
-                          />
-                        </Popconfirm>
+        <div className="w-full border-solid grid grid-cols-12 gap-6">
+          {khyanaltiinDun.map((mur, index) => {
+            return (
+              <div
+                key={index}
+                className="border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+              >
+                <div className="h-full rounded-xl">
+                  <div className="p-3 rounded-xl">
+                    <div className="flex">
+                      <div>
+                        <div className="text-3xl text-green-600 font-bold">
+                          {mur.too}
+                        </div>
+                        <div className="text-sm text-gray-500">{mur.utga}</div>
                       </div>
-                    )
-                  },
-                },
-              ]}
-            />
-          </TabPane>
-        </Tabs>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="w-full flex flex-row justify-between mt-5">
+          <RangePicker
+            style={{ marginBottom: "20px" }}
+            size="middle"
+            defaultValue={[
+              moment(new Date(), "YYYY-MM-DD"),
+              moment(new Date(), "YYYY-MM-DD"),
+            ]}
+            onChange={setEkhlekhOgnoo}
+          />
+          <div className="flex flex-row space-x-2">
+            <Button title="Сүүлд илгээгдсэн огноо" onClick={ebarimtIlgeeye}>
+              {moment(new Date()).format("YYYY-MM-DD")}
+            </Button>
+            <Button danger>Татварт илгээх</Button>
+          </div>
+        </div>
+
+        <Table
+          style={{ width: "65%" }}
+          bordered
+          tableLayout={"fixed"}
+          size="small"
+          rowClassName="hover:bg-blue-100"
+          dataSource={eBarimtGaralt?.jagsaalt}
+          pagination={{
+            current: eBarimtGaralt?.khuudasniiDugaar,
+            pageSize: eBarimtGaralt?.khuudasniiKhemjee,
+            total: eBarimtGaralt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setEBarimtKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+          scroll={{ x: "calc(100vh - 15rem)" }}
+          rowKey={(row) => row.id}
+          columns={[
+            {
+              title: "Огноо",
+              dataIndex: "date",
+              ellipsis: true,
+              render: (data) => {
+                return moment(data).format("YYYY-MM-DD hh:mm:ss")
+              },
+            },
+            // {
+            //   title: "Төрөл",
+            //   dataIndex: "turul",
+            //   ellipsis: true,
+            // },
+            {
+              title: "ДДТД",
+              dataIndex: "billId",
+              ellipsis: true,
+            },
+            // {
+            //   title: "Гэрээний дугаар",
+            //   dataIndex: "gereeniiDugaar",
+            //   ellipsis: true,
+            // },
+
+            {
+              title: "Дүн",
+              dataIndex: "cashAmount",
+              ellipsis: true,
+              render: (data) => {
+                return formatNumber(data)
+              },
+            },
+
+            {
+              width: "50px",
+              align: "center",
+              render(data) {
+                return (
+                  <Popconfirm
+                    title="ebarimt устгах уу?"
+                    okText="Тийм"
+                    cancelText="Үгүй"
+                    onConfirm={() => ebarimtUstgaya(data)}
+                  >
+                    <Button
+                      danger
+                      size="small"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                      shape="circle"
+                      icon={<DeleteOutlined />}
+                    />
+                  </Popconfirm>
+                )
+              },
+            },
+          ]}
+        />
       </Card>
     </Admin>
   )
@@ -273,4 +246,4 @@ function ZakhialgiinKhyanalt({ token }) {
 
 export const getServerSideProps = shalgaltKhiikh
 
-export default ZakhialgiinKhyanalt
+export default EbarimtMedeelel

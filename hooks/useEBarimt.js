@@ -1,9 +1,15 @@
-import { useState } from "react";
-import axios, { aldaaBarigch } from "services/uilchilgee";
-import useSWR from "swr";
-import moment from "moment";
+import { useState } from "react"
+import axios, { aldaaBarigch } from "services/uilchilgee"
+import useSWR from "swr"
+import moment from "moment"
 
-const fetcher = (url, token, { search, jagsaalt, ...khuudaslalt }, ognoo,baiguullagiinId) =>
+const fetcher = (
+  url,
+  token,
+  { search, jagsaalt, ...khuudaslalt },
+  ognoo,
+  baiguullagiinId
+) =>
   axios(token)
     .get(url, {
       query: {
@@ -17,25 +23,28 @@ const fetcher = (url, token, { search, jagsaalt, ...khuudaslalt }, ognoo,baiguul
       ...khuudaslalt,
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch);
+    .catch(aldaaBarigch)
 
-function useEBarimt(token,baiguullagiinId, ognoo) {
+function useEBarimt(token, baiguullagiinId, ognoo) {
+  debugger
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
+    khuudasniiKhemjee: 100,
     search: "",
     jagsaalt: [],
-  });
+  })
   const { data, mutate } = useSWR(
-    !!token && !!baiguullagiinId ? ["/ebarimtJagsaaltAvya", token, khuudaslalt, ognoo,baiguullagiinId] : null,
+    !!token && !!baiguullagiinId
+      ? ["/ebarimtJagsaaltAvya", token, khuudaslalt, ognoo, baiguullagiinId]
+      : null,
     fetcher,
     { revalidateOnFocus: false }
-  );
+  )
   return {
     setEBarimtKhuudaslalt,
     eBarimtGaralt: data,
     eBarimtMutate: mutate,
-  };
+  }
 }
 
-export default useEBarimt;
+export default useEBarimt

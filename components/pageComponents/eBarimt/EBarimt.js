@@ -221,14 +221,6 @@ function EBarimt({
                     </td>
                   </tr>
                 ))}
-                <tr>
-                  <td colSpan={5} className="text-right border">
-                    НӨАТ-гүй дүн
-                  </td>
-                  <td className="border text-right">
-                    {formatNumber(data.niitDun / 1.1, 2)}
-                  </td>
-                </tr>
                 {data?.khungulukhKhuvi && (
                   <tr>
                     <td colSpan={5} className="text-right border">
