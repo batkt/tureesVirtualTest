@@ -47,6 +47,14 @@ function EbarimtMedeelel({ token }) {
       tulburTulsunEsekh: true,
     }
   }, [ekhlekhOgnoo])
+
+  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
+    token,
+    ajiltan?.baiguullagiinId,
+    ekhlekhOgnoo
+  )
+
+  const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(token)
   const khyanaltiinDun = [
     {
       too: 100,
@@ -58,12 +66,14 @@ function EbarimtMedeelel({ token }) {
     },
 
     {
-      too: 5,
+      too: eBarimtGaralt?.niitMur || 0,
       utga: "Баримт авсан тоо",
     },
 
     {
-      too: 15,
+      too: formatNumber(
+        eBarimtGaralt?.jagsaalt.reduce((a, b) => a + Number(b?.cashAmount), 0)
+      ),
       utga: "Баримт авсан гүйлгээний дүн",
     },
     {
@@ -75,13 +85,6 @@ function EbarimtMedeelel({ token }) {
       utga: "Буцаалт хийгдсэн дүн",
     },
   ]
-  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
-    token,
-    ajiltan?.baiguullagiinId,
-    ekhlekhOgnoo
-  )
-
-  const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(token)
 
   function ebarimtIlgeeye() {
     uilchilgee(token)
