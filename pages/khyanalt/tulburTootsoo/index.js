@@ -32,17 +32,17 @@ function tulburTootsoo({ token }) {
   const query = React.useMemo(()=>{
     if(songogdsonTurul === 'Тодорхойгүй')
       return {
-        magadlaltaiGereenuud:{$exists:false},
-        kholbosonGereeniiId:{$exists:false}
+        magadlaltaiGereenuud:{ $eq:null},
+        kholbosonGereeniiId:{$eq:null}
       }
     else if(songogdsonTurul === 'Холбогдсон')
       return {
-        kholbosonGereeniiId:{$exists:true}
+        kholbosonGereeniiId:{$ne:null}
       }
     else if(songogdsonTurul === 'Магадлалтай')
       return {
-        magadlaltaiGereenuud:{$exists:true},
-        kholbosonGereeniiId:{$exists:false}
+        magadlaltaiGereenuud:{$exists:true,$ne:null},
+        kholbosonGereeniiId:{$eq:null}
       }
     else  
       return {}
@@ -100,6 +100,10 @@ function tulburTootsoo({ token }) {
     });
   }
 
+  function turulSongyo(utga) {
+    setSongogdsonTurul(utga)
+    setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
+  }
 
   return (
     <Admin
@@ -114,15 +118,15 @@ function tulburTootsoo({ token }) {
         <div className="w-full grid grid-cols-12 gap-4">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
-            { too: bankniiGuilgeeToololt?.todorkhoigui, utga: "Тодорхойгүй" },
-            { too: bankniiGuilgeeToololt?.kholboson, utga: "Холбогдсон" },
-            { too: bankniiGuilgeeToololt?.magadlaltai, utga: "Магадлалтай" },
+            { too: bankniiGuilgeeToololt?.todorkhoigui || 0, utga: "Тодорхойгүй" },
+            { too: bankniiGuilgeeToololt?.kholboson || 0, utga: "Холбогдсон" },
+            { too: bankniiGuilgeeToololt?.magadlaltai || 0, utga: "Магадлалтай" },
           ].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
                 className="border-2 border-green-600 rounded-xl col-span-12 md:col-span-6 lg:col-span-3 intro-y cursor-pointer zoom-in"
-                onClick={()=>setSongogdsonTurul(mur.utga)}
+                onClick={()=>turulSongyo(mur.utga)}
               >
                 <div className="h-full rounded-xl">
                   <div className="p-3 rounded-xl">
