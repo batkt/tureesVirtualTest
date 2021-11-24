@@ -4,9 +4,12 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import App,{AppContent} from "components/pageComponents/medegdel/App";
 import Mail,{MailContent} from "components/pageComponents/medegdel/Mail";
 import SMS,{SMSContent} from "components/pageComponents/medegdel/SMS";
+import { useAuth } from "services/auth";
 
 function Khyanalt({token}) {
+    const {baiguullaga} = useAuth()
     const [turul,setTurul] = useState('Апп')
+    const [khariltsagch,setKhariltsagch] = useState(null)
 
     const Tab = useMemo(()=>{
         if(turul === 'Апп')
@@ -24,7 +27,7 @@ function Khyanalt({token}) {
             return MailContent
         else if(turul === 'СМС')
             return SMSContent
-    },[])
+    },[turul])
 
   return <Admin title="Мэдэгдэл" khuudasniiNer='medegdel' className='p-0 md:p-4'>
       <div className='col-span-12 lg:col-span-4 xl:col-span-3'>
@@ -42,11 +45,11 @@ function Khyanalt({token}) {
             </div>
         </div>
         <div>
-            <Tab token={token}/>
+            <Tab token={token} baiguullaga={baiguullaga} setKhariltsagch={setKhariltsagch} khariltsagch={khariltsagch}/>
         </div>
       </div>
       <div className='intro-y col-span-12 lg:col-span-8 xl:col-span-9' style={{height:'calc(100vh - 7rem)'}}>
-        <Content/>
+        <Content token={token} khariltsagch={khariltsagch}/>
       </div>
   </Admin>;
 }
