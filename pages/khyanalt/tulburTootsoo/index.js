@@ -207,7 +207,7 @@ function tulburTootsoo({ token }) {
         </div>
         <Table
           bordered
-          size="middle"
+          size="small"
           scroll={{ y: "calc(100vh - 30rem)" }}
           columns={[
             {
