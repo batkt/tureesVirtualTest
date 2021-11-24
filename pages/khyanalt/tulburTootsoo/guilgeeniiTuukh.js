@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, Table, Button } from "antd";
+import { Card, Table, Button, DatePicker } from "antd";
 import { FileExcelOutlined } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "../../../tools/function/formatNumber";
@@ -19,18 +19,18 @@ function guilgeeniiTuukh({ token }) {
   const refTuukh = React.useRef(null);
   const { baiguullaga } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
+  const [ognoo, setOgnoo] = React.useState([moment(moment().startOf("month").format('YYYY-MM-DD 00:00:00')),moment(moment().endOf("month").format('YYYY-MM-DD 23:59:59'))]);
   const [turul, setTurul] = React.useState('');
   
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(
     token,
-    moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-    moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+    ognoo
   );
   const query = React.useMemo(() => {
     if(turul === 'uglug')
       return {
         'avlaga.guilgeenuud.ognoo': {
-          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga._id,
         'tuluv': {
@@ -43,7 +43,7 @@ function guilgeeniiTuukh({ token }) {
     else if(turul === 'avlaga')
       return {
         'avlaga.guilgeenuud.ognoo': {
-          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga._id,
         'tuluv': {
@@ -56,7 +56,7 @@ function guilgeeniiTuukh({ token }) {
     else if(turul === 'khugatsaaKhetersen')
       return {
         'daraagiinTulukhOgnoo': {
-          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga._id,
         'tuluv': {
@@ -69,8 +69,8 @@ function guilgeeniiTuukh({ token }) {
     else if(turul === 'eneSardTulukh')
       return {
           'avlaga.guilgeenuud.ognoo': {
-            '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-            '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+            '$gte': moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
+            '$lte': moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
           },
           'baiguullagiinId': baiguullaga?._id,
           'avlaga.guilgeenuud.tulukhDun': {
@@ -80,8 +80,8 @@ function guilgeeniiTuukh({ token }) {
     else if(turul === 'eneSardTulsun')
       return {
         'avlaga.guilgeenuud.ognoo': {
-          '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-          '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+          '$gte': moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
+          '$lte': moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga?._id,
         'avlaga.guilgeenuud.tulsunDun': {
@@ -91,8 +91,8 @@ function guilgeeniiTuukh({ token }) {
     else if(turul === 'khungulult')
       return {
           'avlaga.guilgeenuud.ognoo': {
-            '$gte': moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-            '$lte': moment().endOf("month").format("YYYY-MM-DD 23:59:59")
+            '$gte': moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
+            '$lte': moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
           },
           'baiguullagiinId': baiguullaga?._id,
           'avlaga.guilgeenuud.khyamdral': {
@@ -100,7 +100,7 @@ function guilgeeniiTuukh({ token }) {
         }
       }
     return {};
-  }, [turul]);
+  }, [turul,ognoo]);
 
   
 
@@ -322,10 +322,12 @@ function guilgeeniiTuukh({ token }) {
             );
           })}
         </div>
-        <div className="flex flex-row mt-5"></div>
-        <div className="overflow-auto hidden md:block">
+        <div className="flex flex-row mt-5">
+          <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
+        </div>
+        <div className="overflow-auto hidden md:block mt-5">
           <Table
-            scroll={{ y: "calc(100vh - 23rem)" }}
+            scroll={{ y: "calc(100vh - 26rem)" }}
             size="small"
             bordered
             columns={columns}
@@ -357,6 +359,7 @@ function guilgeeniiTuukh({ token }) {
                     ref={refTuukh}
                     mur={mur}
                     token={token}
+                    ognoo={ognoo}
                     data={mur}
                     refreshData={refreshData}
                   />

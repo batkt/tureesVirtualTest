@@ -8,9 +8,10 @@ import { BankOutlined, DeleteOutlined } from "@ant-design/icons"
 import { modal } from "components/ant/Modal"
 import { useReactToPrint } from "react-to-print"
 import Tulbur from "../eBarimt/Tulbur"
-const fetcher = (url, token, gereeniiId) =>
+
+const fetcher = (url, token, gereeniiId,ognoo) =>
   axios(token)
-    .get(`${url}/${gereeniiId}`)
+    .get(`${url}/${gereeniiId}`,{params:{duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}})
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
@@ -39,9 +40,9 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   )
 })
 
-function useGuilgee(token, gereeniiId) {
+function useGuilgee(token, gereeniiId,ognoo) {
   const { data, mutate } = useSWR(
-    !!token ? ["/gereeniiTulultAvya", token, gereeniiId] : null,
+    !!token ? ["/gereeniiTulultAvya", token, gereeniiId,ognoo] : null,
     fetcher,
     { revalidateOnFocus: false }
   )
@@ -51,10 +52,11 @@ function useGuilgee(token, gereeniiId) {
   }
 }
 
-function GuilgeeniiTuukh({ token, data, refreshData }, ref) {
+function GuilgeeniiTuukh({ token, data, refreshData,ognoo }, ref) {
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGuilgee(
     token,
-    data?._id
+    data?._id,
+    ognoo
   )
   const tailbarRef = React.useRef(null)
   const printRef = React.useRef(null)
