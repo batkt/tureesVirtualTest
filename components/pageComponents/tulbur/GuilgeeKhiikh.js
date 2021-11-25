@@ -2,6 +2,7 @@ import { Divider, Input, InputNumber, notification, Radio } from "antd";
 import _ from "lodash";
 import React, { useState } from "react";
 import uilchilgee from "services/uilchilgee";
+import moment from 'moment'
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
 
@@ -27,7 +28,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             turul:turul,
             tulsunDun:turul === 'voucher' ? dun : 0,
             tulukhDun:turul === 'avlaga' ? dun : 0,
-            ognoo:new Date(),
+            ognoo:turul === 'avlaga' ? moment().add(1,'month').startOf('month').format("YYYY-MM-DD 00:00:00") :new Date(),
             gereeniiId:data?._id
           }
         }).then(()=>{
@@ -37,7 +38,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         })
       },
     }),
-    [dun]
+    [dun,turul]
   );
 
   return (
