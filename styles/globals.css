@@ -683,3 +683,7 @@ input:-webkit-autofill {
 .ant-form-item-extra {
   @apply dark:text-gray-100;
 }
+
+.break-word{
+  word-break: break-word;
+}
