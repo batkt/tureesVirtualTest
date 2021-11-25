@@ -37,7 +37,7 @@ function Table({data,updateMyData}) {
           <InputNumber style={{width:'100%'}}  placeholder='Хөнгөлөх хувь' title='Хөнгөлөх хувь' min={0} max={100} value={mur.khyamdraliinKhuvi} onChange={(v)=>updateMyData(index,'khyamdraliinKhuvi',v)}/>
         </div>
         <div className='table-cell '>
-          <InputNumber style={{width:'100%'}} formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder='Төлөх дүн' value={mur.khyamdral} min={0} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
+          <InputNumber style={{width:'100%'}} formatter={(value) =>`${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} placeholder='Төлөх дүн' value={mur.tulukhDun} min={0} onChange={(v)=>updateMyData(index,'khyamdral',v)}/>
         </div>
         <div className='table-cell '>
           <Input style={{width:'100%'}} placeholder='Тайлбар' value={mur.tailbar} onChange={({target})=>updateMyData(index,'tailbar',target.value)}/>
@@ -64,6 +64,7 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
           ognoo:moment(sar).add(index+1,'month').set('date',udur),
           khyamdraliinKhuvi:0,
           khyamdral:0,
+          tulukhDun:data?.sariinTurees,
           gereeniiId:data?._id
         })
       })
@@ -81,7 +82,7 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
       },
       khadgalya() {
         uilchilgee(token).post('/gereeniiGuilgeeKhadgalya',{
-          guilgee:jagsaalt[0]
+          guilgee:{...jagsaalt[0],}
         }).then(({data})=>{
           notification.success({placement:'bottomRight',message:'Амжилттай'})
           _.isFunction(onFinish) && onFinish();
@@ -100,9 +101,11 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
             ...old[rowIndex],
             [columnId]: value,
           }
-          const tulukhDun = (data?.sariinTurees / data?.tulukhUdur.length)
-          if(columnId === 'khyamdraliinKhuvi')
-          val['khyamdral'] =  tulukhDun - (tulukhDun * value / 100)
+          var tulukhDun = (data?.sariinTurees / data?.tulukhUdur.length)
+          if(columnId === 'khyamdraliinKhuvi'){
+            val['tulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
+            val['khyamdral'] = (tulukhDun * value / 100)
+          }
           return {...val}
         }
         return row

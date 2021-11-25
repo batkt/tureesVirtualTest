@@ -165,7 +165,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
               {a.turul === "bank" ? a.tulsunDans : a.turul}
               {(a.turul === "avlaga" ||
                 a.turul === "voucher" ||
-                a.turul === "bank") && (
+                a.turul === "bank"||
+                a.turul === "khyamdral") && (
                 <div className="contents justify-between">
                   <Popconfirm
                     title="Төлөлт устгах уу?"
