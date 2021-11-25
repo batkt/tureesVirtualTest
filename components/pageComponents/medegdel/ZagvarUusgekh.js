@@ -22,6 +22,7 @@ const undsenTalbaruud = [
   { ner: "Захиралын нэр", talbar: "zakhirliinNer" },
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
+  { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
 ]
 
 const khugatsaaniiTalbaruud = [
@@ -64,7 +65,7 @@ function ZaaltZasvar({ value, change,onTextChange }) {
   const editorRef = React.useRef()
 
   useEffect(()=>{
-    onTextChange(editorRef.current.editor.getText())
+    onTextChange && onTextChange(editorRef.current.editor.getText())
   },[value])
 
   const custom = React.useMemo(() => {
@@ -105,6 +106,7 @@ function ZaaltZasvar({ value, change,onTextChange }) {
       <SunEditor
         onChange={change}
         defaultValue={value}
+        setContents={value}
         setOptions={{
 
           plugins: custom,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, InputNumber, notification, Switch } from "antd";
+import { Button, Input, InputNumber, notification, Switch } from "antd";
 import uilchilgee, { url } from "services/uilchilgee";
 
 import {useAjiltniiJagsaalt} from "hooks/useAjiltan";
@@ -34,11 +34,22 @@ function Medegdel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">Хөнгөлөлтийн хувь тохируулах</div> 
+                  <div className="font-medium">СМС илгээх түлхүүр</div> 
                   <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
               </div>
               <div className="ml-auto">
-                <InputNumber value={baiguullaga?.tokhirgoo?.deedKhungulultiinKhuvi} max={100} min={0} onChange={(v)=>setMedegdelTokhirgoo(a=>({...(a || {}),'tokhirgoo.deedKhungulultiinKhuvi':v}))}/>
+                <Input value={baiguullaga?.tokhirgoo?.msgIlgeekhKey} max={100} min={0} onChange={(v)=>setMedegdelTokhirgoo(a=>({...(a || {}),'tokhirgoo.msgIlgeekhKey':v}))}/>
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">СМС илгээх дугаар</div> 
+                  <div className="text-gray-600">Гараас гэрээ байгуулахад хөнгөлж болох дээд хувь</div>
+              </div>
+              <div className="ml-auto">
+                <Input value={baiguullaga?.tokhirgoo?.msgIlgeekhDugaar} max={100} min={0} onChange={(v)=>setMedegdelTokhirgoo(a=>({...(a || {}),'tokhirgoo.msgIlgeekhDugaar':v}))}/>
               </div>
             </div>
           </div>

@@ -152,10 +152,10 @@ function EbarimtMedeelel({ token }) {
             onChange={setEkhlekhOgnoo}
           />
           <div className="flex flex-row space-x-2">
-            <Button title="Сүүлд илгээгдсэн огноо" onClick={ebarimtIlgeeye}>
+            <Button title="Сүүлд илгээгдсэн огноо" >
               {moment(new Date()).format("YYYY-MM-DD")}
             </Button>
-            <Button danger>Татварт илгээх</Button>
+            <Button danger onClick={ebarimtIlgeeye}  >Татварт илгээх</Button>
           </div>
         </div>
 
