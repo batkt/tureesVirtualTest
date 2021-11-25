@@ -30,14 +30,14 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
 
     return (
         <>
-            <div className="box p-5 mt-5">
-                Илгээгдсэн тоо:1
+            <div className="box p-2 mt-5">
+                Нийт илгээгдсэн sms : <span className='font-medium'>1</span>
             </div>
             <div className="box p-5 mt-5">
                 <div className="text-gray-700 dark:text-gray-300">
                     <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setGereeniiKhuudaslalt(a=>({...a,search}))}/>
                 </div>
-                <div className="overflow-y-auto scrollbar-hidden h-80 mt-5">
+                <div className="overflow-y-auto scrollbar-hidden h-72 mt-5">
                     {gereeniiMedeelel?.jagsaalt?.map((mur,index)=>
                         <div className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${khariltsagch?._id === mur?._id ? 'bg-green-100' : ''} `} key={mur?._id} onClick={()=>setKhariltsagch(mur)}>
                             <div className="w-10 h-10 flex-none image-fit rounded-full relative">
@@ -94,8 +94,6 @@ export function SMSContent({khariltsagch,token}) {
         return utga
     },[khariltsagch,msj])
 
-    console.log('content',content)
-
     function msgIlgeeye() {
         uilchilgee(token).post('/msgIlgeeye',{
             "msgnuud": [
@@ -134,8 +132,8 @@ export function SMSContent({khariltsagch,token}) {
                 <ZagvarUusgekh change={setContent} value={content} onTextChange={onTextChange}/>
             </div>
             
-            <div className='w-full flex justify-end p-2'>
-                <label></label>
+            <div className='w-full flex justify-end items-center space-x-2 p-2'>
+                <label className='font-medium'>СМС Илгээх</label>
                 <div onClick={msgIlgeeye} className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 block bg-theme-1 text-white rounded-full flex-none flex items-center justify-center"> 
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                         <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -151,8 +149,8 @@ export function SMSContent({khariltsagch,token}) {
                     <img alt="Rubick Tailwind HTML Admin Template" src="/profile.svg"/>
                 </div>
                 <div className="mt-3">
-                    <div className="font-medium">Hey, Brad Pitt!</div>
-                    <div className="text-gray-600 mt-1">Please select a chat to start messaging.</div>
+                    <div className="font-medium">Өдрийн мэнд</div>
+                    <div className="text-gray-600 mt-1">Та СМС илгээх харилцагчаа сонгоно уу.</div>
                 </div>
             </div>
         </div>

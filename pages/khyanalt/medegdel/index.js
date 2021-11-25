@@ -7,7 +7,7 @@ import SMS,{SMSContent} from "components/pageComponents/medegdel/SMS";
 import { useAuth } from "services/auth";
 function Khyanalt({token}) {
     const {baiguullaga} = useAuth()
-    const [turul,setTurul] = useState('Апп')
+    const [turul,setTurul] = useState('СМС')
     const [khariltsagch,setKhariltsagch] = useState(null)
 
     const Tab = useMemo(()=>{
@@ -34,7 +34,7 @@ function Khyanalt({token}) {
             <div className="box p-2">
                 <div className="grid grid-cols-3 gap-1 font-medium" role="tablist"> 
                 {
-                        ['Апп','Мэйл','СМС'].map((mur)=>
+                        ['СМС','Апп','Мэйл'].map((mur)=>
                             <div className={`cursor-pointer flex-1 py-2 rounded-md text-center ${turul === mur ? 'bg-green-500 text-white' : ''}`} onClick={()=>setTurul(mur)}>
                                 {mur}
                             </div>
