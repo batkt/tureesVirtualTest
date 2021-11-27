@@ -7,7 +7,7 @@ const fetcher = (
   url,
   token,
   { search, jagsaalt, ...khuudaslalt },
-  ognoo,
+  query,
   baiguullagiinId
 ) =>
   axios(token)
@@ -15,10 +15,7 @@ const fetcher = (
       params: {
         query: {
           baiguullagiinId,
-          createdAt: {
-            $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-          },
+          ...query,
         },
         ...khuudaslalt,
       },
@@ -26,8 +23,7 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useEBarimt(token, baiguullagiinId, ognoo) {
-  debugger
+function useEBarimt(token, baiguullagiinId, query) {
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -36,7 +32,7 @@ function useEBarimt(token, baiguullagiinId, ognoo) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/ebarimtJagsaaltAvya", token, baiguullagiinId, khuudaslalt, ognoo]
+      ? ["/ebarimtJagsaaltAvya", token, khuudaslalt, query, baiguullagiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }
