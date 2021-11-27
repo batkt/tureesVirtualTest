@@ -38,7 +38,7 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        dansniiKhuulgaMutate()
+        eBarimtMutate()
         destroy()
       },
     }),

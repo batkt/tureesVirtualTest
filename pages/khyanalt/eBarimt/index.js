@@ -43,15 +43,13 @@ function EbarimtMedeelel({ token }) {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
-      tuluv: "3",
-      tulburTulsunEsekh: true,
     }
   }, [ekhlekhOgnoo])
 
   const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
     token,
     ajiltan?.baiguullagiinId,
-    ekhlekhOgnoo
+    query
   )
 
   const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(token)
@@ -152,10 +150,12 @@ function EbarimtMedeelel({ token }) {
             onChange={setEkhlekhOgnoo}
           />
           <div className="flex flex-row space-x-2">
-            <Button title="Сүүлд илгээгдсэн огноо" >
+            <Button title="Сүүлд илгээгдсэн огноо">
               {moment(new Date()).format("YYYY-MM-DD")}
             </Button>
-            <Button danger onClick={ebarimtIlgeeye}  >Татварт илгээх</Button>
+            <Button danger onClick={ebarimtIlgeeye}>
+              Татварт илгээх
+            </Button>
           </div>
         </div>
 
@@ -168,7 +168,7 @@ function EbarimtMedeelel({ token }) {
           dataSource={eBarimtGaralt?.jagsaalt}
           pagination={{
             current: eBarimtGaralt?.khuudasniiDugaar,
-            pageSize: eBarimtGaralt?.khuudasniiKhemjee,
+            pageSize: 100,
             total: eBarimtGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
@@ -178,8 +178,9 @@ function EbarimtMedeelel({ token }) {
                 khuudasniiKhemjee,
               })),
           }}
-          scroll={{ x: "calc(100vh - 15rem)" }}
+          scroll={{ y: "calc(100vh - 26rem)" }}
           rowKey={(row) => row.id}
+          className="t-head"
           columns={[
             {
               title: "Огноо",
@@ -189,11 +190,16 @@ function EbarimtMedeelel({ token }) {
                 return moment(data).format("YYYY-MM-DD hh:mm:ss")
               },
             },
-            // {
-            //   title: "Төрөл",
-            //   dataIndex: "turul",
-            //   ellipsis: true,
-            // },
+            {
+              title: "Утас",
+              dataIndex: "utas",
+              ellipsis: true,
+            },
+            {
+              title: "Талбайн дугаар",
+              dataIndex: "talbainDugaar",
+              ellipsis: true,
+            },
             {
               title: "ДДТД",
               dataIndex: "billId",
