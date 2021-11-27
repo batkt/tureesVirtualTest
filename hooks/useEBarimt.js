@@ -26,7 +26,8 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useEBarimt(token, baiguullagiinId, query) {
+function useEBarimt(token, baiguullagiinId, ognoo) {
+  debugger
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -35,7 +36,7 @@ function useEBarimt(token, baiguullagiinId, query) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/ebarimtJagsaaltAvya", token, baiguullagiinId, khuudaslalt]
+      ? ["/ebarimtJagsaaltAvya", token, baiguullagiinId, khuudaslalt, ognoo]
       : null,
     fetcher,
     { revalidateOnFocus: false }

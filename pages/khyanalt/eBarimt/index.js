@@ -32,10 +32,7 @@ const { RangePicker } = DatePicker
 
 function EbarimtMedeelel({ token }) {
   const { ajiltan } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
-    moment(new Date()).format("YYYY-MM-DD 00:00:00"),
-    moment(new Date()).format("YYYY-MM-DD 23:59:59"),
-  ])
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
 
   const query = useMemo(() => {
     return {
@@ -143,10 +140,7 @@ function EbarimtMedeelel({ token }) {
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
-            defaultValue={[
-              moment(new Date(), "YYYY-MM-DD"),
-              moment(new Date(), "YYYY-MM-DD"),
-            ]}
+            value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
           />
           <div className="flex flex-row space-x-2">
