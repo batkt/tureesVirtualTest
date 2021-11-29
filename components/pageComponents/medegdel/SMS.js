@@ -36,7 +36,9 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             return {}
     },[ilgeekhTurul,davkhar])
 
-    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id,undefined,query)
+    const tooAvakhEsekh = useMemo(()=> ilgeekhTurul !== 'gantsaar',[ilgeekhTurul])
+
+    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id,undefined,query,tooAvakhEsekh)
 
     return (
         <>
@@ -62,6 +64,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                                 <div className="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                             </div>
                             <div className="text-xs text-gray-600 truncate text-center">{mur?.ner}</div>
+                            <div className="text-xs text-gray-600 truncate text-center">{mur?.gereeniiDugaar}</div>
                         </div>
                     )}
                 </div>
@@ -95,6 +98,14 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
     )
 }
 
+async function replaceAll(mur,text) {
+    const returnText = text
+    for await (const [key, value] of Object.entries(mur)) {
+        returnText = returnText.replace(new RegExp(`<${key}>`, "g"),value);
+    }
+    return returnText
+}
+
 
 export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,setDavkhar}) {
     const [content,setContent] = useState('')
@@ -117,8 +128,11 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
         return utga
     },[khariltsagch,msj])
 
-    function msgIlgeeye() {
-        uilchilgee(token).post('/msgIlgeeye',{
+    async function msgIlgeeye() {
+        uilchilgee(token).post(`/msg${ilgeekhTurul !== 'gantsaar' ? 'Olnoor' : ''}Ilgeeye`,{
+            davkhar,
+            ilgeekhTurul,
+            msj,
             "msgnuud": [
                 {
                     "to":"88043808",
