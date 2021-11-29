@@ -98,15 +98,6 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
     )
 }
 
-async function replaceAll(mur,text) {
-    const returnText = text
-    for await (const [key, value] of Object.entries(mur)) {
-        returnText = returnText.replace(new RegExp(`<${key}>`, "g"),value);
-    }
-    return returnText
-}
-
-
 export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,setDavkhar}) {
     const [content,setContent] = useState('')
     const [msj,onTextChange] = useState('')
