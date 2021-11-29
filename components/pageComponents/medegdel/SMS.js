@@ -122,7 +122,7 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
     async function msgIlgeeye() {
         uilchilgee(token).post(`/msg${ilgeekhTurul !== 'gantsaar' ? 'Olnoor' : ''}Ilgeeye`,{
             davkhar,
-            ilgeekhTurul,
+            turul:ilgeekhTurul,
             msj,
             "msgnuud": [
                 {
