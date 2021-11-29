@@ -154,7 +154,6 @@ function EbarimtMedeelel({ token }) {
         </div>
 
         <Table
-          style={{ width: "65%" }}
           bordered
           tableLayout={"fixed"}
           size="small"
@@ -185,6 +184,11 @@ function EbarimtMedeelel({ token }) {
               },
             },
             {
+              title: "Гэрээний дугаар",
+              dataIndex: "gereeniiDugaar",
+              ellipsis: true,
+            },
+            {
               title: "Утас",
               dataIndex: "utas",
               ellipsis: true,
@@ -197,7 +201,8 @@ function EbarimtMedeelel({ token }) {
             {
               title: "ДДТД",
               dataIndex: "billId",
-              ellipsis: true,
+              //ellipsis: true,
+              width: "300px",
             },
             // {
             //   title: "Гэрээний дугаар",
@@ -209,13 +214,14 @@ function EbarimtMedeelel({ token }) {
               title: "Дүн",
               dataIndex: "cashAmount",
               ellipsis: true,
+              align: "right",
               render: (data) => {
                 return formatNumber(data)
               },
             },
 
             {
-              width: "50px",
+              width: "60px",
               align: "center",
               render(data) {
                 return (

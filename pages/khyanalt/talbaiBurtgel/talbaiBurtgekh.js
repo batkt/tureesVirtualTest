@@ -29,7 +29,7 @@ import {
   MoreOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
-
+import moment from "moment"
 import Admin from "components/Admin"
 import { aldaaBarigch, url } from "services/uilchilgee"
 import { useAuth } from "services/auth"
@@ -41,6 +41,7 @@ import updateMethod from "tools/function/crud/updateMethod"
 import formatNumber from "tools/function/formatNumber"
 import { modal } from "components/ant/Modal"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -66,8 +67,13 @@ function talbaiBurtgekh({ token }) {
   const excelref = useRef()
   const { TextArea } = Input
   const { ajiltan, baiguullaga } = useAuth()
+  const [shuult, setShuult] = useState({
+    query: { talbainDugaar: "105" },
+  })
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
     useTalbai(token, baiguullaga?._id)
+  const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
+    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
 
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
@@ -371,7 +377,9 @@ function talbaiBurtgekh({ token }) {
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       className="p-0 md:p-4"
-      onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
+      onSearch={(search) =>
+        setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+      }
     >
       <div
         className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"
@@ -948,28 +956,6 @@ function talbaiBurtgekh({ token }) {
                                 return formatNumber(data) + "₮"
                               },
                             },
-                            {
-                              title: "Зураг",
-                              dataIndex: "zurgiinId",
-                              render: (data) => {
-                                if (data !== undefined)
-                                  return (
-                                    <img
-                                      className="h-36 w-36"
-                                      src={`${url}/zuragAvya/khurungu/${ajiltan?.baiguullagiinId}/${data}`}
-                                    />
-                                  )
-                                // return (
-                                //   zurgiinNer !== undefined && (
-                                //     <Popover content={<div className="h-36 w-36 flex">{zurag}</div>}>
-                                //       <div className="h-7 w-7 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
-                                //         {zurag}
-                                //       </div>
-                                //     </Popover>
-                                //   )
-                                // );
-                              },
-                            },
                           ]}
                         ></Table>
                       }
@@ -982,6 +968,89 @@ function talbaiBurtgekh({ token }) {
                       </a>
                     </Popover>
                   )
+                )
+              },
+            },
+            {
+              title: "Түүх",
+              width: "1rem",
+              align: "center",
+              render: (data) => {
+                return (
+                  <Popover
+                    content={
+                      <Table
+                        style={{
+                          display: "flex",
+                          width: "900px",
+                        }}
+                        pagination={false}
+                        size="small"
+                        dataSource={gereeniiMedeelel?.jagsaalt}
+                        columns={[
+                          {
+                            title: "Гэрээ №",
+                            dataIndex: "gereeniiDugaar",
+                          },
+                          {
+                            title: "Овог",
+                            dataIndex: "ovog",
+                          },
+                          {
+                            title: "Нэр",
+                            dataIndex: "ner",
+                          },
+                          {
+                            title: "Регистр",
+                            dataIndex: "register",
+                          },
+                          {
+                            title: "Төрөл",
+                            dataIndex: "turul",
+                          },
+                          {
+                            title: "Гэрээний огноо",
+                            dataIndex: "gereeniiOgnoo",
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD")
+                            },
+                          },
+                          {
+                            title: "Дуусах огноо",
+                            dataIndex: "duusakhOgnoo",
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD")
+                            },
+                          },
+                          {
+                            title: "Хугацаа",
+                            dataIndex: "khugatsaa",
+                          },
+                          {
+                            title: "Сарын түрээс",
+                            dataIndex: "sariinTurees",
+                            align: "center",
+                            render: (data) => {
+                              return formatNumber(data) + "₮"
+                            },
+                          },
+                        ]}
+                      ></Table>
+                    }
+                    trigger="click"
+                  >
+                    <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                      <EyeOutlined
+                        style={{ fontSize: "18px" }}
+                        onClick={() =>
+                          setShuult((a) => ({
+                            ...a,
+                            query: { talbainDugaar: data.kod },
+                          }))
+                        }
+                      />
+                    </a>
+                  </Popover>
                 )
               },
             },
