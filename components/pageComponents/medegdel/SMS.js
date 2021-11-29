@@ -1,4 +1,4 @@
-import { Input, notification } from 'antd'
+import { Input, notification,Select } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import useGereeniiJagsaalt from 'hooks/useGereeniiJagsaalt'
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
@@ -25,20 +25,37 @@ const smszagvar = [
     }
 ]
 
-function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
-    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id)
+function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIlgeekhTurul,davkhar}) {
+
+    const query = useMemo(()=>{
+        if(ilgeekhTurul === 'davkharaar')
+            return {davkhar}
+        else if(ilgeekhTurul === 'avlagaar')
+            return {uldegdel:{$gt:0}}
+        else 
+            return {}
+    },[ilgeekhTurul,davkhar])
+
+    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id,undefined,query)
 
     return (
         <>
-            <div className="box p-2 mt-5">
+            <div className="box p-2 mt-5 flex flex-row">
                 Нийт илгээгдсэн sms : <span className='font-medium'>1</span>
+                <div className='ml-auto'>
+                    <Select placeholder='Илгээх төрөл' value={ilgeekhTurul} onChange={setIlgeekhTurul} >
+                        {[{key:'buunuur',v:'Бөөнөөр'},{key:'davkharaar',v:'Давхараар'},{key:'avlagaar',v:'Авлагаар'},{key:'gantsaar',v:'Ганцаар'}]
+                            .map((a)=><Select.Option key={a.key} value={a.key}>{a.v}</Select.Option>)
+                        }
+                    </Select>
+                </div>
             </div>
-            <div className="box p-5 mt-5">
+            {ilgeekhTurul === 'gantsaar' ? <div className="box p-5 mt-5">
                 <div className="text-gray-700 dark:text-gray-300">
                     <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setGereeniiKhuudaslalt(a=>({...a,search}))}/>
                 </div>
                 <div className="overflow-y-auto scrollbar-hidden h-72 mt-5">
-                    {gereeniiMedeelel?.jagsaalt?.map((mur,index)=>
+                    {gereeniiMedeelel?.jagsaalt?.map((mur)=>
                         <div className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${khariltsagch?._id === mur?._id ? 'bg-green-100' : ''} `} key={mur?._id} onClick={()=>setKhariltsagch(mur)}>
                             <div className="w-10 h-10 flex-none image-fit rounded-full relative">
                                 <img alt="Rubick" className="rounded-full" src="/profile.svg"/>
@@ -49,6 +66,12 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
                     )}
                 </div>
             </div>
+            :
+            <div className="box p-5 mt-5">
+                Илгээгдэх тоо:<span className='text-lg font-medium'>{gereeniiMedeelel?.niitMur}</span>
+            </div>
+            }
+
             <div className="p-2 mt-5 font-medium">
                 СМС загвар
             </div>
@@ -57,7 +80,6 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
                     <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.content)}>
                         <div className="w-8 h-8 flex-none image-fit mr-1 ">
                             <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
-                            {/* <div className="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div> */}
                         </div>
                         <div className="ml-2 overflow-hidden">
                             <div className="flex items-center">
@@ -66,7 +88,6 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
                             </div>
                             <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.content }}  ></div>
                         </div>
-                        {/* <div className="w-5 h-5 flex items-center justify-center absolute top-0 right-0 text-xs text-white rounded-full bg-theme-1 font-medium -mt-1 -mr-1">4</div> */}
                     </div>
                 ))
             }
@@ -75,12 +96,14 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch}) {
 }
 
 
-export function SMSContent({khariltsagch,token}) {
+export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,setDavkhar}) {
     const [content,setContent] = useState('')
     const [msj,onTextChange] = useState('')
+    
     useEffect(()=>{
         setter = setContent
     },[content])
+
     const ingeekhmSms = useMemo(()=>{
         if(!khariltsagch)
             return msj
@@ -110,11 +133,21 @@ export function SMSContent({khariltsagch,token}) {
         })
     }
 
-    if(khariltsagch)
+    if(khariltsagch || ilgeekhTurul !== 'gantsaar')
     return (
         <div className="h-full flex flex-col box">
             <div className="flex flex-col sm:flex-row border-b border-gray-200 dark:border-dark-5 px-5 py-4">
-                <div className="flex items-center">
+                {ilgeekhTurul === 'davkharaar' && <div className='flex flex-row space-x-2'>
+                    <div>Давхар сонгох</div>
+                    <div className=''>
+                        <Select placeholder='Давхар' value={davkhar} onChange={setDavkhar}>
+                            {baiguullaga?.barilguud[0]?.davkharuud
+                                .map((a)=><Select.Option key={a._id} value={a.davkhar}>{a.davkhar}</Select.Option>)
+                            }
+                        </Select>
+                    </div>
+                </div>}
+                {khariltsagch && <div className="flex items-center">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 flex-none image-fit relative">
                         <img alt="Rubick Tailwind HTML Admin Template" className="rounded-full" src="/profile.svg"/>
                     </div>
@@ -122,6 +155,9 @@ export function SMSContent({khariltsagch,token}) {
                         <div className="font-medium text-base">{khariltsagch?.ner}</div>
                         <div className="text-gray-600 text-xs sm:text-sm">{khariltsagch?.utas} <span className="mx-1">•</span> SMS</div>
                     </div>
+                </div>}
+                <div className='flex items-center ml-auto space-x-2 font-medium'>
+                   
                 </div>
             </div>
             <div className='w-full p-2'>
