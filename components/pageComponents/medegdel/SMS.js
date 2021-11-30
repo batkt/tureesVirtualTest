@@ -124,12 +124,13 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
             davkhar,
             turul:ilgeekhTurul,
             msj,
-            "msgnuud": [
+            "msgnuud": khariltsagch ? [
                 {
-                    "to":"88043808",
+                    "to": khariltsagch?.utas,
                     "text": ingeekhmSms
                 }
             ]
+            :   []
         }).then(({data})=>{
             if(data && data[0].Result === "SUCCESS")
                 {
