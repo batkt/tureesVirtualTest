@@ -1,7 +1,7 @@
 import { Divider, InputNumber,Input, notification, DatePicker } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from 'moment'
 import { CloseCircleOutlined } from "@ant-design/icons";
 
@@ -50,9 +50,14 @@ function Table({data,updateMyData}) {
     </div>
   )}
   
+function disabledDate(current) {
+  // Can not select days before today and today
+  return current && current < moment().endOf('day');
+}
+
 function Khungulukh({ data, token, onFinish, destroy }, ref) {
 
-  const [sar,setSar] = useState(moment())
+  const [sar,setSar] = useState(moment().add(1,'month'))
   const [jagsaalt,setJagsaalt] = useState([])
 
   useEffect(()=>{
@@ -61,7 +66,7 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
       data?.tulukhUdur.forEach((udur)=>{
         jdata.push({
           turul:'khyamdral',
-          ognoo:moment(sar).add(index+1,'month').set('date',udur),
+          ognoo:moment(sar).set('date',udur),
           khyamdraliinKhuvi:0,
           khyamdral:0,
           tulukhDun:data?.sariinTurees,
@@ -69,7 +74,6 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
         })
       })
     })
-    console.log('jdata',jdata,data?.tulukhUdur,sar)
     setJagsaalt([...jdata])
   },[sar])
 
@@ -81,13 +85,14 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
         destroy();
       },
       khadgalya() {
+        const {tulukhDun,...khyamdral} = jagsaalt[0]
         uilchilgee(token).post('/gereeniiGuilgeeKhadgalya',{
-          guilgee:{...jagsaalt[0],}
+          guilgee:khyamdral
         }).then(({data})=>{
           notification.success({placement:'bottomRight',message:'Амжилттай'})
           _.isFunction(onFinish) && onFinish();
           destroy();
-        })
+        }).catch(aldaaBarigch)
       },
     }),
     [jagsaalt]
@@ -117,7 +122,7 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
     <div className="flex flex-col space-y-2">
       <div className='flex flex-row space-x-2 items-center'>
         <label>Хөнгөлөх сар</label>
-        <DatePicker picker='month' placeholder='сар' onChange={setSar}/>
+        <DatePicker disabledDate={disabledDate} picker='month' placeholder='сар' onChange={setSar}/>
       </div>
       <Divider/>
       <label>Хөнгөлөлт оруулах</label>
