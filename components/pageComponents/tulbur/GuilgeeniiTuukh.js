@@ -149,8 +149,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
-          <div>Хямдрал</div>
           <div>Төлөх дүн</div>
+          <div>Хямдрал</div>
           <div>Төлсөн дүн</div>
           <div>Хэлбэр</div>
         </div>
@@ -159,8 +159,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
-            <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
             <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
+            <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
             <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
             <div className="flex justify-between ">
               {a.turul === "bank" ? a.tulsunDans : a.turul}
