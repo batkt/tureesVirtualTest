@@ -63,7 +63,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
   const tailbarRef = React.useRef(null)
   const printRef = React.useRef(null)
 
-  function tulultUstgaya({ guilgeeniiId, tulsunDun, tulukhDun, _id, turul }) {
+  function tulultUstgaya({ guilgeeniiId, tulsunDun, tulukhDun, _id, turul ,khyamdral}) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
@@ -84,6 +84,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 gereeniiId: data?._id,
                 tulsunDun,
                 tulukhDun,
+                khyamdral,
                 objectiinId: _id,
                 tailbar,
               })
