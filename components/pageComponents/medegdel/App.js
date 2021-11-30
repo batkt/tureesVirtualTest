@@ -1,6 +1,7 @@
 import { Input } from 'antd'
 import React from 'react'
 import useGereeniiJagsaalt from 'hooks/useGereeniiJagsaalt'
+import useMedegdel from 'hooks/useMedegdel'
 
 function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
     const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id)
@@ -27,7 +28,10 @@ function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
     )
 }
 
-export function AppContent() {
+export function AppContent({token}) {
+
+    const {medegdel,setMedegdelKhuudaslalt} = useMedegdel(token)
+
     return (
         <div class="h-full flex items-center box">
             <div class="mx-auto text-center">
