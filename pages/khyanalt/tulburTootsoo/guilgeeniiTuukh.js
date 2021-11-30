@@ -1,8 +1,9 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee from "services/uilchilgee";
 import Admin from "components/Admin";
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "services/auth";
-import { Card, Table, Button, DatePicker } from "antd";
+import { Card, Table, Button, DatePicker, Spin } from "antd";
 import { FileExcelOutlined } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "../../../tools/function/formatNumber";
@@ -14,6 +15,30 @@ import { modal } from "components/ant/Modal";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya";
 
+function GereeniiUldegdel({data,token,loadingIndex,index,setLoadingIndex}) {
+  const [uldegdel,setUldegdel] = useState(0)
+
+  useEffect(()=>{
+    if(index === loadingIndex)
+      uilchilgee(token).post('/uldegdelBodyo',{gereeniiDugaar:data?.gereeniiDugaar}).then(({data})=>{
+        if(!!data?.uldegdel){
+          setUldegdel(data?.uldegdel)
+        }
+        setLoadingIndex(index + 1)
+      })
+  },[data,loadingIndex])
+
+  return (
+    <div
+      className={`font-medium ${
+        uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
+    >
+      {index === loadingIndex ? <Spin size='small'/> : formatNumber(uldegdel)}
+    </div>
+  )
+}
+
 function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null);
   const refTuukh = React.useRef(null);
@@ -21,6 +46,7 @@ function guilgeeniiTuukh({ token }) {
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState([moment(moment().startOf("month").format('YYYY-MM-DD 00:00:00')),moment(moment().endOf("month").format('YYYY-MM-DD 23:59:59'))]);
   const [turul, setTurul] = React.useState('');
+  const [loadingIndex, setLoadingIndex] = React.useState(0);
   
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(
     token,
@@ -163,7 +189,7 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-  const columns = [
+  const columns = useMemo(()=>[
     {
       title: "№",
       key: "index",
@@ -199,17 +225,10 @@ function guilgeeniiTuukh({ token }) {
     {
       title: "Үлдэгдэл",
       dataIndex: "uldegdel",
-      ellipsis: true,
       align: "right",
-      render(a) {
+      render(text, record, index) {
         return (
-          <div
-            className={`font-medium ${
-              a > 0 ? "text-red-500" : "text-green-500"
-            }`}
-          >
-            {formatNumber(a)}
-          </div>
+          <GereeniiUldegdel token={token} data={record} index={index} loadingIndex={loadingIndex} setLoadingIndex={setLoadingIndex} urt={gereeniiMedeelel?.jagsaalt?.length}/>
         );
       },
       showSorterTooltip: false,
@@ -240,7 +259,7 @@ function guilgeeniiTuukh({ token }) {
         </>
       ),
     },
-  ];
+  ],[gereeniiMedeelel,loadingIndex])
 
   return (
     <Admin
@@ -323,7 +342,10 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div className="flex flex-row mt-5">
-          <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
+          <DatePicker.RangePicker value={ognoo} onChange={v=>{
+            setOgnoo(v)
+            setLoadingIndex(0)
+          }}/>
         </div>
         <div className="overflow-auto hidden md:block mt-5">
           <Table
@@ -345,12 +367,14 @@ function guilgeeniiTuukh({ token }) {
               pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
               total: gereeniiMedeelel?.niitMur,
               showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>{
+                setLoadingIndex(0)
                 setGereeniiKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
                   khuudasniiKhemjee,
-                })),
+                }))
+              },
             }}
             expandable={{
               expandedRowRender: (mur) =>
