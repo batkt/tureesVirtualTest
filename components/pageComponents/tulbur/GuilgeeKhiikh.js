@@ -29,7 +29,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             tulsunDun:turul === 'voucher' ? dun : 0,
             tulukhDun:turul === 'avlaga' ? dun : 0,
             ognoo:turul === 'avlaga' ? moment().add(1,'month').startOf('month').format("YYYY-MM-DD 00:00:00") :new Date(),
-            gereeniiId:data?._id
+            gereeniiId:data?._id,
+            tailbar
           }
         }).then(()=>{
           notification.success({placement:'bottomRight',message:'Амжилттай'})
