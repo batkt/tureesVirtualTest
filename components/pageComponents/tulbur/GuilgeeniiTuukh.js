@@ -63,7 +63,14 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
   const tailbarRef = React.useRef(null)
   const printRef = React.useRef(null)
 
-  function tulultUstgaya({ guilgeeniiId, tulsunDun, tulukhDun, _id, turul ,khyamdral}) {
+  function tulultUstgaya({
+    guilgeeniiId,
+    tulsunDun,
+    tulukhDun,
+    _id,
+    turul,
+    khyamdral,
+  }) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
@@ -145,28 +152,30 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="p-1 grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
+        <div className="p-1 grid grid-cols-8 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
           <div>Төлөх дүн</div>
           <div>Хямдрал</div>
           <div>Төлсөн дүн</div>
+          <div>Ажилтан</div>
           <div>Хэлбэр</div>
         </div>
         {guilgeeniiTuukh?.map((a, i) => (
-          <div className="grid grid-cols-7 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
+          <div className="grid grid-cols-8 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
             <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
             <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
             <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+            <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
             <div className="flex justify-between ">
               {a.turul === "bank" ? a.tulsunDans : a.turul}
               {(a.turul === "avlaga" ||
                 a.turul === "voucher" ||
-                a.turul === "bank"||
+                a.turul === "bank" ||
                 a.turul === "khyamdral") && (
                 <div className="contents justify-between">
                   <Popconfirm
