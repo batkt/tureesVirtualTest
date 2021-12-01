@@ -42,6 +42,18 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   )
 })
 
+const turulAvya = (turul) => {
+  
+  if(turul === "avlaga")
+    return 'Авлага'
+  else if(turul === "voucher")
+    return 'Купон'
+  else if(turul === "bank")
+    return 'Банк'
+  else if(turul === "khyamdral")
+    return 'Хямдрал'
+}
+
 function useGuilgee(token, gereeniiId, ognoo) {
   const { data, mutate } = useSWR(
     !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
@@ -152,7 +164,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="p-1 grid grid-cols-8 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
+        <div className="p-1 grid grid-cols-9 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
@@ -161,9 +173,10 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Төлсөн дүн</div>
           <div>Ажилтан</div>
           <div>Хэлбэр</div>
+          <div>Тайлбар</div>
         </div>
         {guilgeeniiTuukh?.map((a, i) => (
-          <div className="grid grid-cols-8 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
+          <div className="grid grid-cols-9 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
@@ -171,8 +184,11 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
             <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
             <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
             <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
-            <div className="flex justify-between ">
-              {a.turul === "bank" ? a.tulsunDans : a.turul}
+            <div className="p-1">
+              {a.turul === "bank" ? a.tulsunDans : turulAvya(a.turul)}
+            </div>
+            <div className="flex justify-between p-1">
+              {a.tailbar}
               {(a.turul === "avlaga" ||
                 a.turul === "voucher" ||
                 a.turul === "bank" ||
@@ -188,16 +204,6 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                       <DeleteOutlined />
                     </div>
                   </Popconfirm>
-                  {/* <Popconfirm
-                    title="И-баримт илгээх үү"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => ebarimtUgukh(a)}
-                  >
-                    <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-blue-500 w-6 h-6 cursor-pointer hide-on-print">
-                      <BankOutlined />
-                    </div>
-                  </Popconfirm> */}
                 </div>
               )}
             </div>
