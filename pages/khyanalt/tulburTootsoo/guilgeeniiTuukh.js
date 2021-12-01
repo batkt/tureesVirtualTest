@@ -267,8 +267,9 @@ function guilgeeniiTuukh({ token }) {
       khuudasniiNer="guilgeeniiTuukh"
       className="p-0 md:p-4"
       onSearch={(search) => {
+        if( loadingIndex !== 0)
+          setLoadingIndex(0)
         setGereeniiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }));
-        setLoadingIndex(0)
       }}
     >
       <Card className="col-span-12 p-5 cardgrid">
