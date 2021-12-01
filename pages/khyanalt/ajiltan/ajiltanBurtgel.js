@@ -135,7 +135,6 @@ function AjiltanBurtgel({ token }) {
       return
     }
     deleteMethod("ajiltan", token, mur._id).then(({ data }) => {
-      debugger
       if (data !== undefined || data !== null) {
         ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
         message.success("Устгагдлаа")
@@ -233,21 +232,6 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) => setAjiltniiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
-        {/* <div>
-          <Upload {...props}>
-            <div ref={empty}>
-              <Empty
-                className="w-24 h-24 border border-dashed border-blue-500 zurag"
-                description=""
-              />
-            </div>
-            <img
-              ref={zurag}
-              alt="Зураг сонгох"
-              className="w-24 h-24 border border-dashed border-blue-500 hidden"
-            />
-          </Upload>
-        </div> */}
         <Form
           ref={formRef}
           name="control-ref"
@@ -308,7 +292,6 @@ function AjiltanBurtgel({ token }) {
               value={ajiltanState.register}
               onChange={(e) => onChange("register", e.target.value)}
               prefix={<SolutionOutlined style={iconColor} />}
-              //onBlur={() => checkRegister()}
             ></Input>
           </Form.Item>
           <Form.Item
@@ -475,38 +458,6 @@ function AjiltanBurtgel({ token }) {
                 </span>
               ),
             },
-
-            // {
-            //   title: "Зураг",
-            //   dataIndex: "",
-            //   ellipsis: true,
-            //   render: (record) => {
-            //     if (record.zurgiinNer !== undefined)
-            //       var zuragcomp = (
-            //         <img
-            //           src={
-            //             record?.zurgiinNer
-            //               ? `${url}/ajiltniiZuragAvya/${record?.baiguullagiinId}/${record?.zurgiinNer}`
-            //               : "/profile.svg"
-            //           }
-            //           style={{ borderRadius: "50%" }}
-            //         />
-            //       )
-            //     return (
-            //       zuragcomp && (
-            //         <Popover
-            //           content={
-            //             <div className="h-24 w-24 flex">{zuragcomp}</div>
-            //           }
-            //         >
-            //           <div className="h-8 w-8 inline-flex justify-center rounded-full p-1 shadow-xl bg-gray-200">
-            //             {zuragcomp}
-            //           </div>
-            //         </Popover>
-            //       )
-            //     )
-            //   }
-            // },
             {
               title: () => <SettingOutlined />,
               align: "center",

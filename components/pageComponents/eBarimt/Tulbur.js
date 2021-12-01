@@ -46,7 +46,6 @@ function Tulbur(
   )
 
   function ebarimtAvya(id) {
-    debugger
     if (!!eBarimt) handlePrint()
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {

@@ -173,8 +173,6 @@ function AjiltanBurtgel({ token }) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }))
   }
   function tuukh(data) {
-    debugger
-
     getListMethod(
       "geree",
       token,

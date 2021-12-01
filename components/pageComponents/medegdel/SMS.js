@@ -104,6 +104,7 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
     
     useEffect(()=>{
         setter = setContent
+        return ()=> setter = null
     },[content])
 
     const ingeekhmSms = useMemo(()=>{

@@ -259,7 +259,6 @@ function talbaiBurtgekh({ token }) {
     settalbaiState((a) => ({ ...a, [talbar]: utga }))
   }
   function talbaiBurtgekh() {
-    debugger
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
     if (khurunguud.length > 0) {
@@ -321,7 +320,6 @@ function talbaiBurtgekh({ token }) {
   }
 
   function test(data) {
-    debugger
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     formRef.current.setFieldsValue({
       [khurunguud]: {

@@ -53,6 +53,7 @@ function GuilgeeKholbokh({data, token, baiguullagiinId, onFinish, destroy }, ref
       .then(({data})=>{
         setMagadlaltaiGereenuud(data?.jagsaalt)
       })
+      return ()=>setMagadlaltaiGereenuud([])
     },[])
 
   return (

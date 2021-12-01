@@ -5,13 +5,15 @@ function Kharakh({data,print},ref) {
     const {geree , ...gereeniiZagvar} = data
 
     React.useEffect(()=>{
-      document.addEventListener('keydown',(e)=>{
+      const keydown =(e)=>{
         if(e.ctrlKey === true && e.key === "p" && print){
           e.preventDefault()
           e.stopPropagation()
           print()
         }  
-      })
+      }
+      document.addEventListener('keydown',keydown)
+      return ()=> document.removeEventListener('keydown',keydown)
     },[])
 
     return (
