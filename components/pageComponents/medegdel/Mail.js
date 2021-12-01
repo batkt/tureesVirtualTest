@@ -29,12 +29,12 @@ function Mail({token,baiguullaga,khariltsagch,setKhariltsagch}) {
 
 export function MailContent() {
     return (
-        <div class="h-full flex items-center box">
-            <div class="mx-auto text-center">
-                <div class="w-16 h-16 flex-none image-fit rounded-full overflow-hidden mx-auto">
+        <div className="h-full flex items-center box">
+            <div className="mx-auto text-center">
+                <div className="w-16 h-16 flex-none image-fit rounded-full overflow-hidden mx-auto">
                     <img alt="Rubick Tailwind HTML Admin Template" src="/profile.svg"/>
                 </div>
-                <div class="mt-3">
+                <div className="mt-3">
                     <div className="font-medium">Өдрийн мэнд</div>
                     <div className="text-gray-600 mt-1">Та Mail илгээх харилцагчаа сонгоно уу.</div>
                 </div>
