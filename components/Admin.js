@@ -13,6 +13,8 @@ import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo"
 import { useThemeValue } from "pages"
 import MSearch from "./tolgoi/MSearch"
 
+var timeout = null
+
 function Admin({
   title,
   khuudasniiNer,
@@ -120,9 +122,14 @@ function Admin({
                   className="w-40 md:w-56 relative text-gray-700 dark:text-gray-300 hidden md:block"
                 >
                   <input
-                    onChange={({ target }) =>
-                      onSearch && onSearch(target.value)
-                    }
+                    onChange={({ target }) =>{
+                      if(!!onSearch){
+                        clearTimeout(timeout);
+                        timeout = setTimeout(function () {
+                          onSearch(target.value)
+                        }, 300);
+                      }
+                    }}
                     type="text"
                     className="px-3 py-1 shadow-xl w-40 md:w-56 box pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
                     placeholder="Хайлт..."
