@@ -344,7 +344,7 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div className="flex flex-row mt-5">
-          <DatePicker.RangePicker value={ognoo} onChange={v=>{
+          <DatePicker.RangePicker picker="month" value={ognoo} onChange={v=>{
             setOgnoo(v)
             setLoadingIndex(0)
           }}/>

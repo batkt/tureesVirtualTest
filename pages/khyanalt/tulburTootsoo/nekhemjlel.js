@@ -156,7 +156,7 @@ function tulburTootsoo({ token }) {
                     <td colSpan={10} className="text-right">
                       ДҮН
                     </td>
-                    <td className="border">{formatNumber(a.eneSardTulukhDun)}₮</td>
+                    <td className="border">{formatNumber(a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0))}₮</td>
                   </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
@@ -174,7 +174,7 @@ function tulburTootsoo({ token }) {
                     <td colSpan={10} className="text-right">
                       НИЙТ ДҮН
                     </td>
-                    <td className="border">{formatNumber(a.eneSardTulukhDun)}₮</td>
+                    <td className="border">{formatNumber(a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0))}₮</td>
                   </tr>
                   <tr>
                     <td colSpan={12}>
