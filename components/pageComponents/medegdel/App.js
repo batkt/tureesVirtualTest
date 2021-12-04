@@ -36,6 +36,17 @@ export function AppContent({token}) {
 
     const {medegdel,setMedegdelKhuudaslalt} = useMedegdel(token)
 
+    if(medegdel?.jagsaalt > 0)
+        return (
+            <div className='grid grid-cols-12 gap-2'>
+                {medegdel?.jagsaalt?.map((a)=>(
+                    <div className='box p-5' key={a?._id}>
+                        <div>{a.message}</div>
+                    </div>
+                ))}
+            </div>
+        )
+
     return (
         <div className="h-full flex items-center box">
             <div className="mx-auto text-center">
