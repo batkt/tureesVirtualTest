@@ -922,49 +922,53 @@ function talbaiBurtgekh({ token }) {
               render: (data) => {
                 return (
                   data?.khurunguud !== undefined && (
-                    <Popover
-                      content={
-                        <Table
-                          pagination={false}
-                          size="small"
-                          dataSource={data?.khurunguud}
-                          columns={[
-                            {
-                              title: "Нэр",
-                              dataIndex: "ner",
-                            },
-                            {
-                              title: "Тоо",
-                              dataIndex: "too",
-                              align: "center",
-                            },
-                            {
-                              title: "Үнэ",
-                              dataIndex: "une",
-                              align: "center",
-                              render: (data) => {
-                                return formatNumber(data) + "₮"
+                    <div className="flex flex-row justify-center">
+                      <Popover
+                        content={
+                          <Table
+                            pagination={false}
+                            size="small"
+                            dataSource={data?.khurunguud}
+                            columns={[
+                              {
+                                title: "Нэр",
+                                dataIndex: "ner",
                               },
-                            },
-                            {
-                              title: "Нийт",
-                              dataIndex: "niit",
-                              align: "center",
-                              render: (data) => {
-                                return formatNumber(data) + "₮"
+                              {
+                                title: "Тоо",
+                                dataIndex: "too",
+                                align: "center",
                               },
-                            },
-                          ]}
-                        ></Table>
-                      }
-                      trigger="click"
-                    >
-                      <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                        <Badge count={data?.khurunguud?.length}>
-                          <EyeOutlined style={{ fontSize: "18px" }} />
-                        </Badge>
-                      </a>
-                    </Popover>
+                              {
+                                title: "Үнэ",
+                                dataIndex: "une",
+                                align: "center",
+                                render: (data) => {
+                                  return formatNumber(data) + "₮"
+                                },
+                              },
+                              {
+                                title: "Нийт",
+                                dataIndex: "niit",
+                                align: "center",
+                                render: (data) => {
+                                  return formatNumber(data) + "₮"
+                                },
+                              },
+                            ]}
+                          ></Table>
+                        }
+                        trigger="click"
+                      >
+                        <a className="hover:bg-gray-200 flex items-center justify-center">
+                          <Badge count={data?.khurunguud?.length}>
+                            <EyeOutlined
+                              style={{ color: "#1890ff", fontSize: "18px" }}
+                            />
+                          </Badge>
+                        </a>
+                      </Popover>
+                    </div>
                   )
                 )
               },
@@ -975,80 +979,82 @@ function talbaiBurtgekh({ token }) {
               align: "center",
               render: (data) => {
                 return (
-                  <Popover
-                    content={
-                      <Table
-                        style={{
-                          display: "flex",
-                          width: "900px",
-                        }}
-                        pagination={false}
-                        size="small"
-                        dataSource={gereeniiMedeelel?.jagsaalt}
-                        columns={[
-                          {
-                            title: "Гэрээ №",
-                            dataIndex: "gereeniiDugaar",
-                          },
-                          {
-                            title: "Овог",
-                            dataIndex: "ovog",
-                          },
-                          {
-                            title: "Нэр",
-                            dataIndex: "ner",
-                          },
-                          {
-                            title: "Регистр",
-                            dataIndex: "register",
-                          },
-                          {
-                            title: "Төрөл",
-                            dataIndex: "turul",
-                          },
-                          {
-                            title: "Гэрээний огноо",
-                            dataIndex: "gereeniiOgnoo",
-                            render: (data) => {
-                              return moment(data).format("YYYY-MM-DD")
+                  <div className="flex flex-row justify-center">
+                    <Popover
+                      content={
+                        <Table
+                          style={{
+                            display: "flex",
+                            width: "900px",
+                          }}
+                          pagination={false}
+                          size="small"
+                          dataSource={gereeniiMedeelel?.jagsaalt}
+                          columns={[
+                            {
+                              title: "Гэрээ №",
+                              dataIndex: "gereeniiDugaar",
                             },
-                          },
-                          {
-                            title: "Дуусах огноо",
-                            dataIndex: "duusakhOgnoo",
-                            render: (data) => {
-                              return moment(data).format("YYYY-MM-DD")
+                            {
+                              title: "Овог",
+                              dataIndex: "ovog",
                             },
-                          },
-                          {
-                            title: "Хугацаа",
-                            dataIndex: "khugatsaa",
-                          },
-                          {
-                            title: "Сарын түрээс",
-                            dataIndex: "sariinTurees",
-                            align: "center",
-                            render: (data) => {
-                              return formatNumber(data) + "₮"
+                            {
+                              title: "Нэр",
+                              dataIndex: "ner",
                             },
-                          },
-                        ]}
-                      ></Table>
-                    }
-                    trigger="click"
-                  >
-                    <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                      <EyeOutlined
-                        style={{ fontSize: "18px" }}
-                        onClick={() =>
-                          setShuult((a) => ({
-                            ...a,
-                            query: { talbainDugaar: data.kod },
-                          }))
-                        }
-                      />
-                    </a>
-                  </Popover>
+                            {
+                              title: "Регистр",
+                              dataIndex: "register",
+                            },
+                            {
+                              title: "Төрөл",
+                              dataIndex: "turul",
+                            },
+                            {
+                              title: "Гэрээний огноо",
+                              dataIndex: "gereeniiOgnoo",
+                              render: (data) => {
+                                return moment(data).format("YYYY-MM-DD")
+                              },
+                            },
+                            {
+                              title: "Дуусах огноо",
+                              dataIndex: "duusakhOgnoo",
+                              render: (data) => {
+                                return moment(data).format("YYYY-MM-DD")
+                              },
+                            },
+                            {
+                              title: "Хугацаа",
+                              dataIndex: "khugatsaa",
+                            },
+                            {
+                              title: "Сарын түрээс",
+                              dataIndex: "sariinTurees",
+                              align: "center",
+                              render: (data) => {
+                                return formatNumber(data) + "₮"
+                              },
+                            },
+                          ]}
+                        ></Table>
+                      }
+                      trigger="click"
+                    >
+                      <a className="hover:bg-gray-200 flex items-center justify-center">
+                        <EyeOutlined
+                          style={{ fontSize: "18px" }}
+                          onClick={() =>
+                            setShuult((a) => ({
+                              ...a,
+                              query: { talbainDugaar: data.kod },
+                            }))
+                          }
+                        />
+                      </a>
+                    </Popover>
+                  </div>
                 )
               },
             },
@@ -1059,7 +1065,7 @@ function talbaiBurtgekh({ token }) {
               align: "center",
               render: (data) =>
                 ajiltan?.erkh === "Admin" && (
-                  <div className="flex flex-row">
+                  <div className="flex flex-row justify-center">
                     <Popover
                       placement="bottom"
                       trigger="click"
@@ -1088,7 +1094,7 @@ function talbaiBurtgekh({ token }) {
                         </div>
                       )}
                     >
-                      <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                      <a className=" hover:bg-gray-200 flex items-center justify-center">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>

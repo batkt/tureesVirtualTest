@@ -282,7 +282,7 @@ function tulburTootsoo({ token }) {
                   <div className="flex items-center justify-center">
                     <Button
                       shape="circle"
-                      className="ant-pagination-item-link"
+                      size="small"
                       onClick={() => guilgeeKholbyo(a)}
                       icon={
                         <div
@@ -296,14 +296,14 @@ function tulburTootsoo({ token }) {
                         >
                           {!a?.kholbosonGereeniiId ? (
                             a?.magadlaltaiGereenuud?.length > 0 ? (
-                              <QuestionOutlined style={{ fontSize: "22px" }} />
+                              <QuestionOutlined style={{ fontSize: "16px" }} />
                             ) : (
                               <ExclamationOutlined
-                                style={{ fontSize: "22px" }}
+                                style={{ fontSize: "16px" }}
                               />
                             )
                           ) : (
-                            <CheckOutlined style={{ fontSize: "22px" }} />
+                            <CheckOutlined style={{ fontSize: "16px" }} />
                           )}
                         </div>
                       }
@@ -326,8 +326,8 @@ function tulburTootsoo({ token }) {
                 return (
                   <div className="flex items-center justify-center">
                     <Button
+                      size="small"
                       shape="circle"
-                      className="ant-pagination-item-link"
                       icon={
                         <div
                           className={`text-500 flex items-center justify-center`}
@@ -336,12 +336,12 @@ function tulburTootsoo({ token }) {
                           a?.ebarimtAvsanEsekh === true ? (
                             <Tooltip title="И-баримт хэвлэсэн байна">
                               <CheckOutlined
-                                style={{ fontSize: "22px", color: "green" }}
+                                style={{ fontSize: "16px", color: "green" }}
                               />
                             </Tooltip>
                           ) : (
                             <ExclamationOutlined
-                              style={{ fontSize: "22px", color: "red" }}
+                              style={{ fontSize: "16px", color: "red" }}
                               onClick={() => ebarimtUgukh(a)}
                             />
                           )}
