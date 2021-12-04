@@ -344,7 +344,9 @@ function AjiltanBurtgel({ token }) {
       title="Харилцагч бүртгэл"
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
-      onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
+      onSearch={(search) =>
+        setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+      }
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
@@ -584,6 +586,7 @@ function AjiltanBurtgel({ token }) {
             {
               title: "Төрөл",
               dataIndex: "turul",
+              align: "center",
               ellipsis: true,
               render: (turul) => {
                 return (
@@ -607,18 +610,20 @@ function AjiltanBurtgel({ token }) {
               dataIndex: "mail",
               ellipsis: true,
               width: "5rem",
+              align: "center",
             },
             {
               title: "Төлөв",
               dataIndex: "tuluv",
               ellipsis: true,
+              align: "center",
               render: () => {
                 return <Tag color="green">Идэвхтэй</Tag>
               },
             },
             {
               title: "Түүх",
-
+              width: "4rem",
               align: "center",
               render: (data) => {
                 return (
@@ -711,7 +716,7 @@ function AjiltanBurtgel({ token }) {
                     }
                   >
                     <a
-                      className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center"
+                      className=" hover:bg-gray-200 flex items-center justify-center"
                       onClick={() => tuukh(data)}
                     >
                       <EyeOutlined style={{ fontSize: "18px" }} />
@@ -764,7 +769,7 @@ function AjiltanBurtgel({ token }) {
                         </div>
                       )}
                     >
-                      <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                      <a className="hover:bg-gray-200 flex items-center justify-center">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>

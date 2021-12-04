@@ -316,6 +316,7 @@ function tulburTootsoo({ token }) {
               title: "Талбай",
               dataIndex: "kholbosonTalbainId",
               ellipsis: true,
+              align: "center",
               width: "5rem",
             },
             {

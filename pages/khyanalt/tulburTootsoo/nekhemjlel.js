@@ -1,63 +1,63 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh";
-import Admin from "components/Admin";
-import React from "react";
-import { Card, DatePicker, Table, Button, Select, message } from "antd";
+import shalgaltKhiikh from "services/shalgaltKhiikh"
+import Admin from "components/Admin"
+import React from "react"
+import { Card, DatePicker, Table, Button, Select, message } from "antd"
 import {
   CheckOutlined,
   ExclamationOutlined,
   QuestionOutlined,
-} from "@ant-design/icons";
-import moment from "moment";
-import formatNumber from "tools/function/formatNumber";
-import useNekhemjlekh from "hooks/useNekhemjlekh";
-import useNekhemjlekhDugaarlalt from "hooks/useNekhemjlekhDugaarlalt";
-import useDans from "hooks/khuulga/useDans";
-import _ from "lodash";
-import { useReactToPrint } from "react-to-print";
-import {toWords} from 'mon_num'
+} from "@ant-design/icons"
+import moment from "moment"
+import formatNumber from "tools/function/formatNumber"
+import useNekhemjlekh from "hooks/useNekhemjlekh"
+import useNekhemjlekhDugaarlalt from "hooks/useNekhemjlekhDugaarlalt"
+import useDans from "hooks/khuulga/useDans"
+import _ from "lodash"
+import { useReactToPrint } from "react-to-print"
+import { toWords } from "mon_num"
 
 const turul = [
-  {zurag:'/ikhNayad.png',ner:'Барааны нэхэмжлэх'},
-  {zurag:'/ikhNayadKhuns.png',ner:'Хүнсны нэхэмжлэх'},
+  { zurag: "/ikhNayad.png", ner: "Барааны нэхэмжлэх" },
+  { zurag: "/ikhNayadKhuns.png", ner: "Хүнсны нэхэмжлэх" },
 ]
 
 function tulburTootsoo({ token }) {
-  const printRef = React.useRef(null);
-  const [ognoo, setOgnoo] = React.useState(moment());
-  const [barimt, setBarimt] = React.useState();
-  const [davkhar, setDavkhar] = React.useState();
-  const [songogdsonDans, setDans] = React.useState();
+  const printRef = React.useRef(null)
+  const [ognoo, setOgnoo] = React.useState(moment())
+  const [barimt, setBarimt] = React.useState()
+  const [davkhar, setDavkhar] = React.useState()
+  const [songogdsonDans, setDans] = React.useState()
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useNekhemjlekh(token, ognoo,davkhar);
+    useNekhemjlekh(token, ognoo, davkhar)
 
-  const {dugaarlalt,dugaarlaltMutate,dugaarlaltKhadgalya} = useNekhemjlekhDugaarlalt(token)
+  const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
+    useNekhemjlekhDugaarlalt(token)
 
-  const { dans } = useDans(token);
+  const { dans } = useDans(token)
 
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null);
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null)
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
-    onAfterPrint:()=>{
-      if(songogdsonGereenuud?.length > 0)
-        dugaarlaltKhadgalya((songogdsonGereenuud?.length + dugaarlalt) - 1,()=>dugaarlaltMutate())
-    }
-  });
+    onAfterPrint: () => {
+      if (songogdsonGereenuud?.length > 0)
+        dugaarlaltKhadgalya(songogdsonGereenuud?.length + dugaarlalt - 1, () =>
+          dugaarlaltMutate()
+        )
+    },
+  })
 
   function hevlekh() {
-    if(!songogdsonDans)
-    {
-      message.warning('Данс сонгоно уу')
+    if (!songogdsonDans) {
+      message.warning("Данс сонгоно уу")
       return
     }
-    if(!barimt)
-    {
-      message.warning('Нэхэмжлэхийн төрөл сонгоно уу')
+    if (!barimt) {
+      message.warning("Нэхэмжлэхийн төрөл сонгоно уу")
       return
     }
-    if(!songogdsonGereenuud || songogdsonGereenuud?.length === 0)
-    {
-      message.warning('Гэрээ сонгоно уу')
+    if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
+      message.warning("Гэрээ сонгоно уу")
       return
     }
     handlePrint()
@@ -69,7 +69,7 @@ function tulburTootsoo({ token }) {
       khuudasniiNer="nekhemjlel"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setNekhemjlelKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }));
+        setNekhemjlelKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
       <Card className="col-span-12 cardgrid">
@@ -91,7 +91,10 @@ function tulburTootsoo({ token }) {
                     <td colSpan={12}>
                       <div className="flex items-center justify-center">
                         <div className="p-2 px-10 border">
-                          <div>НЭХЭМЖЛЭЛ</div> <div>№{moment().format('YY')}/{dugaarlalt + i}</div>
+                          <div>НЭХЭМЖЛЭЛ</div>{" "}
+                          <div>
+                            №{moment().format("YY")}/{dugaarlalt + i}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -110,12 +113,12 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td colSpan={2}></td>
                     <td colSpan={4}>
-                      <div className='w-full h-full flex flex-col'>
-                      <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
-                      <div>НЭР: {a.ner}</div>
-                      <div>РД: {a.register}</div>
-                      <div>ХАЯГ: </div>
-                      <div>УТАС: {a.utas}</div>
+                      <div className="w-full h-full flex flex-col">
+                        <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
+                        <div>НЭР: {a.ner}</div>
+                        <div>РД: {a.register}</div>
+                        <div>ХАЯГ: </div>
+                        <div>УТАС: {a.utas}</div>
                       </div>
                     </td>
                   </tr>
@@ -130,33 +133,42 @@ function tulburTootsoo({ token }) {
                       НИЙТ ҮНЭ
                     </td>
                   </tr>
-                    <tr>
-                      <td className="border">{1}</td>
-                      <td className="border" colSpan={6}>
-                      {moment(ognoo).format('MM')}-р сарын түрээсийн төлбөр
-                      </td>
-                      <td className="border">{a.talbainKhemjee}</td>
-                      <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
-                      <td className="border" colSpan={2}>
-                        {formatNumber(a.eneSardTulukhDun)}₮
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="border">{2}</td>
-                      <td className="border" colSpan={6}>
+                  <tr>
+                    <td className="border">{1}</td>
+                    <td className="border" colSpan={6}>
+                      {moment(ognoo).format("MM")}-р сарын түрээсийн төлбөр
+                    </td>
+                    <td className="border">{a.talbainKhemjee}</td>
+                    <td className="border">
+                      {formatNumber(a.talbainNegjUne)}₮
+                    </td>
+                    <td className="border" colSpan={2}>
+                      {formatNumber(a.eneSardTulukhDun)}₮
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="border">{2}</td>
+                    <td className="border" colSpan={6}>
                       Өмнөх хуримтлагдсан өр төлбөр
-                      </td>
-                      <td className="border">{a.talbainKhemjee}</td>
-                      <td className="border">{formatNumber(a.talbainNegjUne)}₮</td>
-                      <td className="border" colSpan={2}>
-                        {formatNumber(a.umnukhSariinUrTulbur)}₮
-                      </td>
-                    </tr>
+                    </td>
+                    <td className="border">{a.talbainKhemjee}</td>
+                    <td className="border">
+                      {formatNumber(a.talbainNegjUne)}₮
+                    </td>
+                    <td className="border" colSpan={2}>
+                      {formatNumber(a.umnukhSariinUrTulbur)}₮
+                    </td>
+                  </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
                       ДҮН
                     </td>
-                    <td className="border">{formatNumber(a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0))}₮</td>
+                    <td className="border">
+                      {formatNumber(
+                        a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+                      )}
+                      ₮
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
@@ -174,11 +186,17 @@ function tulburTootsoo({ token }) {
                     <td colSpan={10} className="text-right">
                       НИЙТ ДҮН
                     </td>
-                    <td className="border">{formatNumber(a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0))}₮</td>
+                    <td className="border">
+                      {formatNumber(
+                        a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+                      )}
+                      ₮
+                    </td>
                   </tr>
                   <tr>
                     <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр) {toWords(a.eneSardTulukhDun,{suffix:'n'})} төгрөг
+                      Мөнгөн дүн: (үсгээр){" "}
+                      {toWords(a.eneSardTulukhDun, { suffix: "n" })} төгрөг
                     </td>
                   </tr>
                   <tr>
@@ -230,7 +248,7 @@ function tulburTootsoo({ token }) {
                   </div>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
         <div className="w-full flex flex-row mt-5">
@@ -240,20 +258,32 @@ function tulburTootsoo({ token }) {
             onChange={setOgnoo}
           />
           <div className="ml-auto space-x-2">
-            <Select placeholder='Дансны төрөл' onChange={setDans}>
-              {dans?.accounts?.filter(a=>a.type !== 'L').map((a) => (
-                <Select.Option key={a.number} value={a.number}>
-                  <div>{a.number}</div>
+            <Select placeholder="Дансны төрөл" onChange={setDans}>
+              {dans?.accounts
+                ?.filter((a) => a.type !== "L")
+                .map((a) => (
+                  <Select.Option key={a.number} value={a.number}>
+                    <div>{a.number}</div>
+                  </Select.Option>
+                ))}
+            </Select>
+            <Select placeholder="Давхар" onChange={setDavkhar}>
+              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
+                <Select.Option key={a} value={a}>
+                  {a}
                 </Select.Option>
               ))}
             </Select>
-            <Select placeholder='Давхар' onChange={setDavkhar}>
-              {['B1','1','2','3','4','5','6','7','8','9'].map(a=><Select.Option key={a} value={a}>{a}</Select.Option>)}
+            <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
+              {turul.map((a) => (
+                <Select.Option key={a.ner} value={a.zurag}>
+                  {a.ner}
+                </Select.Option>
+              ))}
             </Select>
-            <Select placeholder='Нэхэмжлэхийн төрөл' onChange={setBarimt}>
-              {turul.map(a=><Select.Option key={a.ner} value={a.zurag}>{a.ner}</Select.Option>)}
-            </Select>
-            <Button type='primary' onClick={hevlekh}>Хэвлэх</Button>
+            <Button type="primary" onClick={hevlekh}>
+              Хэвлэх
+            </Button>
           </div>
         </div>
         <Table
@@ -263,53 +293,53 @@ function tulburTootsoo({ token }) {
           rowSelection={{
             type: "checkbox",
             onChange: (selectedRowKeys, selectedRows) => {
-              setSongogdsonGereenuud(selectedRows);
+              setSongogdsonGereenuud(selectedRows)
             },
           }}
           columns={[
             {
-              title: "Гэрээний дугаар",
+              title: "Гэрээ №",
               sorter: true,
               dataIndex: "gereeniiDugaar",
               width: "7rem",
-              align:'center'
+              align: "center",
             },
             {
-              title: "Талбайн дугаар",
+              title: "Талбай №",
               sorter: true,
               dataIndex: "talbainDugaar",
               width: "7rem",
-              align:'center'
+              align: "center",
             },
             {
               title: "Дараагийн төлөх огноо",
               sorter: true,
               dataIndex: "daraagiinTulukhOgnoo",
               render(a) {
-                return moment(a).format("YYYY-MM-DD");
+                return moment(a).format("YYYY-MM-DD")
               },
               ellipsis: true,
-              align:'center'
+              align: "center",
             },
             {
               title: "Өмнөх хуримтлагдсан өр төлбөр",
               sorter: true,
               dataIndex: "umnukhSariinUrTulbur",
               render(a) {
-                return formatNumber(a);
+                return formatNumber(a)
               },
               ellipsis: true,
-              align:'center'
+              align: "center",
             },
             {
               title: "Энэ сард төлөх дүн",
               sorter: true,
               dataIndex: "eneSardTulukhDun",
               render(a) {
-                return formatNumber(a);
+                return formatNumber(a)
               },
               ellipsis: true,
-              align:'center'
+              align: "center",
             },
             {
               title: "Төлөв",
@@ -320,7 +350,7 @@ function tulburTootsoo({ token }) {
                   <div className="flex items-center justify-center">
                     <Button
                       shape="circle"
-                      className="ant-pagination-item-link"
+                      size="small"
                       icon={
                         <div
                           className={`text-${
@@ -333,22 +363,22 @@ function tulburTootsoo({ token }) {
                         >
                           {!a?.kholbosonGereeniiId ? (
                             a?.magadlaltaiGereenuud?.length > 0 ? (
-                              <QuestionOutlined style={{ fontSize: "22px" }} />
+                              <QuestionOutlined style={{ fontSize: "18px" }} />
                             ) : (
                               <ExclamationOutlined
-                                style={{ fontSize: "22px" }}
+                                style={{ fontSize: "18px" }}
                               />
                             )
                           ) : (
-                            <CheckOutlined style={{ fontSize: "22px" }} />
+                            <CheckOutlined style={{ fontSize: "18px" }} />
                           )}
                         </div>
                       }
                     />
                   </div>
-                );
+                )
               },
-            }
+            },
           ]}
           dataSource={nekhemjlel?.jagsaalt}
           pagination={{
@@ -367,9 +397,9 @@ function tulburTootsoo({ token }) {
         />
       </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default tulburTootsoo;
+export default tulburTootsoo

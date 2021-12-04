@@ -375,8 +375,8 @@ function ZakhialgiinKhyanalt() {
                 }
                 trigger="click"
               >
-                <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
-                  <Badge count={data.length}>
+                <a className="hover:bg-gray-200 flex items-center justify-center">
+                  <Badge size="small" count={data.length}>
                     <EyeOutlined style={{ fontSize: "18px" }} />
                   </Badge>
                 </a>

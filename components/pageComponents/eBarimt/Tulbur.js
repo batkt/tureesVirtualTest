@@ -32,6 +32,7 @@ function Tulbur(
 
   const handlePrint = useReactToPrint({
     content: () => eBarimtRef.current,
+    onAfterPrint: () => khaaya(),
   })
 
   React.useImperativeHandle(
@@ -76,6 +77,7 @@ function Tulbur(
 
   function khaaya() {
     destroy()
+    zakhialgaMutate()
   }
 
   return (

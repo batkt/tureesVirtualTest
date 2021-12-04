@@ -179,6 +179,7 @@ function EbarimtMedeelel({ token }) {
               title: "Огноо",
               dataIndex: "date",
               ellipsis: true,
+              align: "center",
               render: (data) => {
                 return moment(data).format("YYYY-MM-DD hh:mm:ss")
               },
@@ -187,16 +188,19 @@ function EbarimtMedeelel({ token }) {
               title: "Гэрээний дугаар",
               dataIndex: "gereeniiDugaar",
               ellipsis: true,
+              align: "center",
             },
             {
               title: "Утас",
               dataIndex: "utas",
               ellipsis: true,
+              align: "center",
             },
             {
               title: "Талбайн дугаар",
               dataIndex: "talbainDugaar",
               ellipsis: true,
+              align: "center",
             },
             {
               title: "ДДТД",
@@ -214,7 +218,7 @@ function EbarimtMedeelel({ token }) {
               title: "Дүн",
               dataIndex: "cashAmount",
               ellipsis: true,
-              align: "right",
+              align: "center",
               render: (data) => {
                 return formatNumber(data)
               },
