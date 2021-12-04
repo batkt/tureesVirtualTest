@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useAuth } from "services/auth"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
@@ -17,13 +18,15 @@ const fetcher = (
   url,
   token,
   baiguullagiinId,
-  { search, jagsaalt, ...khuudaslalt }
+  { search, jagsaalt, ...khuudaslalt },
+  barilgiinId
 ) =>
   axios(token)
     .get(url, {
       params: {
         query: {
           baiguullagiinId,
+          barilgiinId,
           $or: getSearch(search),
         },
         ...khuudaslalt,
@@ -33,6 +36,7 @@ const fetcher = (
     .catch(aldaaBarigch)
 
 export function useTalbai(token, baiguullagiinId) {
+  const {barilgiinId} = useAuth()
   const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -41,7 +45,7 @@ export function useTalbai(token, baiguullagiinId) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/talbai", token, baiguullagiinId, khuudaslalt]
+      ? ["/talbai", token, baiguullagiinId, khuudaslalt,barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }

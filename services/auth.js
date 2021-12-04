@@ -13,6 +13,27 @@ import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
 const AuthContext = createContext({});
 
+export const useBarilga = () => {
+  const [barilgiinId,setBarilgiinId] = useState(null)
+
+  useEffect(async ()=>{
+    const {barilgiinId} = await parseCookies()
+    if(barilgiinId)
+      setBarilgiinId(barilgiinId)
+  },[])
+
+  const barilgaSoliyo = (id) => {
+    console.log('id',id)
+    setBarilgiinId(id)
+    setCookie(null, "barilgiinId", id, {
+      maxAge: 30 * 24 * 60 * 60,
+      path: "/",
+    });
+  }
+
+  return {barilgiinId,barilgaSoliyo}
+}
+
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const { ajiltan, ajiltanMutate } = useAjiltan(token);
@@ -20,6 +41,7 @@ export const AuthProvider = ({ children }) => {
     token,
     ajiltan?.baiguullagiinId
   );
+  const {barilgaSoliyo,barilgiinId} = useBarilga()
 
   useEffect(() => {
     const t = parseCookies();
@@ -73,9 +95,11 @@ export const AuthProvider = ({ children }) => {
       baiguullaga,
       baiguullagaMutate,
       ajiltanMutate,
-      setToken
+      setToken,
+      barilgaSoliyo,
+      barilgiinId
     }),
-    [token, ajiltan, baiguullaga]
+    [token, ajiltan, baiguullaga,barilgiinId]
   );
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;

@@ -1,10 +1,7 @@
-import { CloseCircleOutlined } from "@ant-design/icons";
-import { Badge, Modal } from "antd";
-import useSonorduulga from "hooks/useSonorduulga";
+import _ from "lodash";
 import Link from "next/link";
 import React from "react";
 import { url } from "services/uilchilgee";
-import AjiltanNemekh from "./AjiltanNemekh";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
   const [open, setOpen] = React.useState(
@@ -83,118 +80,23 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   );
 }
 
-function ProfileItem({ mur, selected, setToken, ajiltanKhasya, olonEsekh }) {
-  const { sonorduulga } = useSonorduulga(mur?.token, mur?._id);
-
-  function ajiltanGargaya(a, e) {
-    e.preventDefault();
-    e.stopPropagation();
-    Modal.confirm({
-      content: `${a?.ner} ажилтныг системээс гаргахдаа итгэлтэй байна уу?`,
-      okText: "Тийм",
-      cancelText: "Үгүй",
-      onOk: () => ajiltanKhasya(a),
-    });
-  }
-
-  return (
-    <Link href={`/khyanalt/ajiltanKhyanalt/ajiltaniiZakhialguud/${mur?._id}`}>
-      <li
-        className={selected ? "selected-menu" : "menu-item"}
-        onClick={() => setToken(mur.token)}
-      >
-        <div className="flex items-center">
-          <div className="flex flex-row space-x-1 items-center">
-            <Badge count={sonorduulga?.kharaaguiToo}>
-              <img
-                alt={mur?.ner}
-                src={
-                  mur?.zurgiinNer
-                    ? `${url}/ajiltniiZuragAvya/${mur?.baiguullagiinId}/${mur?.zurgiinNer}`
-                    : "/profile.svg"
-                }
-                className="h-14 w-14 rounded-full p-1 shadow-xl bg-gray-200"
-              />
-            </Badge>
-            <div className=" text-sm whitespace-pre-wrap" title={mur?.ner}>
-              {mur?.ner}
-            </div>
-          </div>
-          <div
-            className={`ml-auto flex items-center z-10 ${
-              olonEsekh ? "" : "hidden"
-            }`}
-            onClick={(e) => ajiltanGargaya(mur, e)}
-          >
-            <CloseCircleOutlined />
-          </div>
-        </div>
-        <span className={selected ? "selected-menu-top" : "hidden"}>
-          <span className="h-10 w-10 rounded-br-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
-        </span>
-        <span className={selected ? "selected-menu-bottom" : "hidden"}>
-          <span className="h-10 w-10 rounded-tr-3xl bg-green-600 dark:bg-gray-900 absolute"></span>
-        </span>
-      </li>
-    </Link>
-  );
-}
-
 function NTses({
   khuudasnuud,
   khuudasniiNer,
   baiguullaga,
   ajiltan,
-  ajiltniiJagsaalt,
-  ajiltanNemya,
-  setToken,
-  ajiltanKhasya,
+  barilgaSoliyo,
+  barilgiinId
 }) {
-  if (ajiltan?.erkh === "Zasvarchin" || ajiltan?.erkh === "Injener")
-    return (
-      <nav className="h-full w-44 hidden md:block">
-        <ul>
-          <li className="px-2 mb-5">
-            <div className="border-b px-2 pb-2">
-              <div className="flex flex-col items-center space-x-2">
-                <img
-                  className="h-10 w-10 rounded-full border-solid border-2 border-blue-500"
-                  alt={baiguullaga?.ner}
-                  src={
-                    baiguullaga?.zurgiinNer
-                      ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                      : "/rent.png"
-                  }
-                />
-                <div
-                  className="text-gray-100 text-sm whitespace-pre-wrap mt-2"
-                  title={baiguullaga?.ner}
-                >
-                  {baiguullaga?.ner}
-                </div>
-              </div>
-            </div>
-          </li>
-          <AjiltanNemekh ajiltanNemya={ajiltanNemya} />
-          {ajiltniiJagsaalt?.map((mur) => (
-            <ProfileItem
-              olonEsekh={ajiltniiJagsaalt.length > 1}
-              key={mur.href}
-              mur={mur}
-              selected={mur?._id === khuudasniiNer}
-              setToken={setToken}
-              ajiltanKhasya={ajiltanKhasya}
-            />
-          ))}
-        </ul>
-      </nav>
-    );
+
+  const barilguud = baiguullaga?.barilguud?.filter(a=> !!ajiltan?.barilguud?.find(b=>b === a._id) || ajiltan?.erkh === 'Admin')
+  
   return (
     <nav className="h-full w-44 hidden md:block">
       <ul>
         <li className="px-2 mb-10">
           <div className="border-b px-2 pb-2">
-            <div className="flex flex-col items-center space-x-2">
+            <div className="flex flex-col items-center">
               <img
                 className="h-20 w-20 "
                 alt={baiguullaga?.ner}
@@ -204,12 +106,20 @@ function NTses({
                     : "/rent.png"
                 }
               />
-              <div
-                className="text-gray-100 text-sm whitespace-pre-wrap mt-2"
-                title={baiguullaga?.ner}
-              >
-                {baiguullaga?.ner}
-              </div>
+              {barilguud?.length > 0 ? <div className="inline-block relative mt-2">
+                <select defaultValue={barilgiinId} onChange={({target})=>barilgaSoliyo(target.value)} className="block appearance-none w-full bg-white dark:bg-gray-800 border border-gray-400 hover:border-gray-500 px-4 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                  {
+                    barilguud?.map(a=>(
+                      <option key={a?._id} className='' value={a?._id}>{a?.ner}</option>
+                    ))
+                  }
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div> : 
+                _.get(barilguud,'0.ner')
+              }
             </div>
           </div>
         </li>

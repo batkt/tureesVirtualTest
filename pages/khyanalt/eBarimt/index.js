@@ -1,31 +1,24 @@
 import moment from "moment"
 import { useAuth } from "services/auth"
 import {
-  EditOutlined,
   DeleteOutlined,
-  EyeOutlined,
-  DollarCircleOutlined,
 } from "@ant-design/icons"
 import {
   Table,
   Button,
-  Tabs,
   Card,
   DatePicker,
   message,
   Popconfirm,
-  Popover,
 } from "antd"
 
 import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 import formatNumber from "tools/function/formatNumber"
-import dateDiff from "tools/function/dateDiff"
 import { useMemo, useState } from "react"
 import useEBarimt from "hooks/useEBarimt"
 import useEBarimtMedeelel from "hooks/useEBarimtMedeelel"
-import useZakhialga from "hooks/useZakhialga"
 
 const { RangePicker } = DatePicker
 //#endregion

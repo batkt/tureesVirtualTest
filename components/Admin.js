@@ -37,7 +37,9 @@ function Admin({
     ajiltniiJagsaalt,
     ajiltanNemya,
     setToken,
-    ajiltanKhasya
+    ajiltanKhasya,
+    barilgaSoliyo,
+    barilgiinId
   } = useAuth()
   const khuudasnuud = useErkh(ajiltan)
 
@@ -74,6 +76,8 @@ function Admin({
           ajiltanNemya={ajiltanNemya}
           setToken={setToken}
           ajiltanKhasya={ajiltanKhasya}
+          barilgaSoliyo={barilgaSoliyo}
+          barilgiinId={barilgiinId}
         />
       )}
       <div className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"}`}>

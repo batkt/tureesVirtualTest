@@ -1,14 +1,15 @@
 import { useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
+import { useAuth } from "services/auth";
 import useSWR from "swr";
 import moment from "moment";
 
-const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar) =>
+const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar,barilgiinId) =>
   axios(token)
     .post(url, {
       ognoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       query: {
-        query: {davkhar},
+        query: {davkhar,barilgiinId},
         ...khuudaslalt,
       },
     })
@@ -16,6 +17,7 @@ const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar
     .catch(aldaaBarigch);
 
 function useNekhemjlekh(token, ognoo,davkhar) {
+  const {barilgiinId} = useAuth()
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -24,7 +26,7 @@ function useNekhemjlekh(token, ognoo,davkhar) {
   });
   const { data, mutate } = useSWR(
     !!token && !!ognoo
-      ? ["/eneSardTulukhJagsaaltAvya", token, ognoo, khuudaslalt,davkhar]
+      ? ["/eneSardTulukhJagsaaltAvya", token, ognoo, khuudaslalt,davkhar,barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }

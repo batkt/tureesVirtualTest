@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-const fetcher = (url, token, baiguullagiinId, {search='',...khuudaslalt}, register,query,tooAvakhEsekh) =>
+const fetcher = (url, token, baiguullagiinId, {search='',...khuudaslalt}, register,query,tooAvakhEsekh,barilgiinId) =>
   axios(token)
     .get(url + `${tooAvakhEsekh ? '/tooAvya' : ''}`, {
       params: {
         query: {
           register,
+          barilgiinId,
           baiguullagiinId,
           $or:[{register:{$regex:search,$options:'i'}},{talbainDugaar:{$regex:search,$options:'i'}},{gereeniiDugaar:{$regex:search,$options:'i'}},{utas:{$regex:search,$options:'i'}}],
           ...query
@@ -26,6 +28,7 @@ const fetcherToololt = (url, token) =>
     .catch(aldaaBarigch);
 
 function useGereeniiJagsaalt(token, baiguullagiinId, register,query,tooAvakhEsekh) {
+  const {barilgiinId} = useAuth()
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -34,7 +37,7 @@ function useGereeniiJagsaalt(token, baiguullagiinId, register,query,tooAvakhEsek
 
   const { data, mutate } = useSWR(
     token && baiguullagiinId
-      ? ["/geree", token, baiguullagiinId, khuudaslalt, register,query,tooAvakhEsekh]
+      ? ["/geree", token, baiguullagiinId, khuudaslalt, register,query,tooAvakhEsekh,barilgiinId]
       : null,
     fetcher,
     {

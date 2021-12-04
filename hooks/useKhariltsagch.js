@@ -1,14 +1,16 @@
 import { useState } from "react"
+import { useAuth } from "services/auth"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
-const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt }) =>
+const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgiinId) =>
   axios(token)
     .get(url, {
       params: {
         order: { createdAt: -1 },
         query: {
           baiguullagiinId,
+          barilgiinId,
           $or: [
             { ner: { $regex: search, $options: "i" } },
             { register: { $regex: search, $options: "i" } },
@@ -27,6 +29,7 @@ const fetcherToololt = (url, token) =>
     .then((res) => res.data)
     .catch(aldaaBarigch)
 function useKhariltsagch(token, baiguullagiinId) {
+  const {barilgiinId} = useAuth()
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -34,7 +37,7 @@ function useKhariltsagch(token, baiguullagiinId) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["khariltsagch", token, baiguullagiinId, khuudaslalt]
+      ? ["khariltsagch", token, baiguullagiinId, khuudaslalt,barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }

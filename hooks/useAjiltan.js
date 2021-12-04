@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useAuth } from "services/auth"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
@@ -7,12 +8,14 @@ const fetcherJagsaalt = (
   token,
   baiguullagiinId,
   { search, jagsaalt, ...khuudaslalt },
-  query = {}
+  query = {},
+  barilgiinId
 ) =>
   axios(token)
     .get(url, {params:{
       query: {
         baiguullagiinId,
+        barilgiinId,
         erkh: { $nin: ["Admin"] },
         $or: [{ ner: { $regex: search, $options: "i" } },{ register: { $regex: search, $options: "i" } },{ utas: { $regex: search, $options: "i" } }],
         ...query
@@ -23,6 +26,7 @@ const fetcherJagsaalt = (
     .catch(aldaaBarigch)
 
 export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
+  const {barilgiinId} = useAuth()
   const [khuudaslalt, setAjiltniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 20,
@@ -31,7 +35,7 @@ export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/ajiltan", token, baiguullagiinId, khuudaslalt, query]
+      ? ["/ajiltan", token, baiguullagiinId, khuudaslalt, query,barilgiinId]
       : null,
     fetcherJagsaalt,
     { revalidateOnFocus: false }

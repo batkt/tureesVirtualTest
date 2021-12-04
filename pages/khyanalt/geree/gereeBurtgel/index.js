@@ -103,14 +103,14 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 })
 
 function ZakhialgiinKhyanalt() {
-  //#region const
+  //#region const 
   const { token, baiguullaga } = useAuth()
   const [shuult, setShuult] = React.useState({
     query: {},
   })
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
-  const { gereeToollolt, gereeToolloltMutate } =
+  const { gereeToollolt } =
     useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null)
@@ -450,6 +450,7 @@ function ZakhialgiinKhyanalt() {
     return jagsaalt
   }, [baiguullaga, token, gereeniiTokhirgoo])
 
+  //#region dialogs
   function gereeTsutsalya(data) {
     setGereeniiTokhirgoo(null)
     const footer = [
@@ -565,6 +566,8 @@ function ZakhialgiinKhyanalt() {
       footer,
     })
   }
+
+  //#endregion
 
   return (
     <Admin

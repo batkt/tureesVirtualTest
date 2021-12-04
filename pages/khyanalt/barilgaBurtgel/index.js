@@ -10,7 +10,6 @@ import {
   MoreOutlined,
   EditOutlined,
 } from "@ant-design/icons"
-import useSalbar from "hooks/useSalbar"
 import _ from "lodash"
 import useKhyanakhSambar from "hooks/useKhyanakhSambar"
 import updateMethod from "tools/function/crud/updateMethod"
@@ -31,10 +30,6 @@ export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
 
 function BarilgaBurtgel({ token }) {
   const { ajiltan, baiguullaga, baiguullagaMutate } = useAuth()
-  const { salbariinGaralt, setKhuudaslalt, salbarMutate } = useSalbar(
-    token,
-    ajiltan?.baiguullagiinId
-  )
   const { toololt } = useKhyanakhSambar(token)
 
   const [barilga, setBarilga] = useState()
@@ -212,7 +207,6 @@ function BarilgaBurtgel({ token }) {
       ({ data }) => {
         if (data === "Amjilttai") {
           baiguullagaMutate()
-          salbarMutate()
         }
       }
     )
@@ -226,9 +220,6 @@ function BarilgaBurtgel({ token }) {
     <Admin
       khuudasniiNer="barilgaBurtgel"
       className="px-4"
-      onSearch={(search) =>
-        setKhuudaslalt((kh) => ({ ...kh, khuudasniiDugaar: 1, search }))
-      }
     >
       <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
@@ -301,7 +292,7 @@ function BarilgaBurtgel({ token }) {
               </div>
               <Table
                 tableLayout={
-                  salbariinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
+                  baiguullaga?.barilguud?.length > 0 ? "auto" : "fixed"
                 }
                 size="small"
                 bordered
@@ -310,18 +301,7 @@ function BarilgaBurtgel({ token }) {
                 columns={columns}
                 loading={!baiguullaga}
                 dataSource={baiguullaga?.barilguud}
-                pagination={{
-                  current: salbariinGaralt?.khuudasniiDugaar,
-                  pageSize: salbariinGaralt?.khuudasniiKhemjee,
-                  total: salbariinGaralt?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
+                
               />
             </div>
           </div>
