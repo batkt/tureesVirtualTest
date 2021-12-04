@@ -229,7 +229,9 @@ function AjiltanBurtgel({ token }) {
       title="Ажилтан бүртгэл"
       khuudasniiNer="ajiltanBurtgel"
       className="p-0 md:p-4"
-      onSearch={(search) => setAjiltniiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
+      onSearch={(search) =>
+        setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+      }
     >
       <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
         <Form
@@ -494,7 +496,7 @@ function AjiltanBurtgel({ token }) {
                         </div>
                       )}
                     >
-                      <a className="ant-dropdown-link p-2 rounded-full hover:bg-gray-200 flex items-center justify-center">
+                      <a className=" hover:bg-gray-200 flex items-center justify-center">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
