@@ -1,31 +1,15 @@
 import { Input } from 'antd'
-import React, { useEffect } from 'react'
+import React from 'react'
 import useGereeniiJagsaalt from 'hooks/useGereeniiJagsaalt'
 import useMedegdel from 'hooks/useMedegdel'
 import {useAuth} from 'services/auth'
-import { socket } from 'services/uilchilgee'
 
 function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
     const {ajiltan} = useAuth()
     const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id)
 
-    useEffect(()=>{
-        socket().on('disconnect', ()=>socket().disconnect())
-    },[])
-
-    function joinRoom() {
-        socket().emit('joinRoom', {ajiltan:ajiltan})
-    }
-
-    function close() {
-        socket().off()
-        socket().disconnect()
-        socket().connect()
-    }
-
     return (
         <>
-            <button onClick={close}>close</button>
             <div className="box p-5 mt-5">
                 <div className="text-gray-700 dark:text-gray-300">
                     <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setGereeniiKhuudaslalt(a=>({...a,search}))}/>
@@ -33,8 +17,7 @@ function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
                 <div className="overflow-y-auto scrollbar-hidden h-80 mt-5">
                     {gereeniiMedeelel?.jagsaalt?.map((mur,index)=>
                         <div className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${khariltsagch?._id === mur?._id ? 'bg-green-100' : ''} `} key={mur?._id} onClick={()=>{
-                            setKhariltsagch(mur)
-                            joinRoom()
+                                setKhariltsagch(mur)
                             }}>
                             <div className="w-10 h-10 flex-none image-fit rounded-full relative">
                                 <img alt="Rubick" className="rounded-full" src="/profile.svg"/>

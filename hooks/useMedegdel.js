@@ -6,11 +6,12 @@ const fetcher = (url, token, { search, jagsaalt, ...khuudaslalt }) =>
   axios(token)
     .get(url, {params:{
       query: {
-        ...khuudaslalt,
+        
       },
       order:{
         createAt: -1
-      }
+      },
+      ...khuudaslalt,
     }})
     .then((res) => res.data)
     .catch(aldaaBarigch);

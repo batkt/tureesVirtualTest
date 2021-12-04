@@ -278,40 +278,40 @@ function guilgeeniiTuukh({ token }) {
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
               turul:'avlaga',
-              utga: "Нийт Авлага",
+              utga: "Хуримтлагдсан авлага",
             },
             {
               too: formatNumber(_.get(guilgeeniiToololt, "uglug.0.dun") || 0),
               turul:'uglug',
-              utga: "Нийт Өглөг",
+              utga: "Илүү төлөлт",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "khugatsaaKhetersen.0.dun") || 0
               ),
               turul:'khugatsaaKhetersen',
-              utga: "Хугацаа хэтэрсэн",
+              utga: "Цуцлагдсан гэрээний авлага",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
               ),
               turul:'eneSardTulukh',
-              utga: "Сард орж ирэх дүн",
+              utga: "Төлөвлөлгөө / сар",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
               ),
               turul:'eneSardTulsun',
-              utga: "Гүйцэтгэлийн дүн",
+              utga: "Гүйцэтгэл / сар",
             },
             {
               too: formatNumber(
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
               ),
               turul:'khungulult',
-              utga: "Нийт хөнгөлөлт",
+              utga: "Хөнгөлөлт / сар",
             },
           ].map((mur, index) => {
             return (
