@@ -11,7 +11,6 @@ import {
   EditOutlined,
 } from "@ant-design/icons"
 import _ from "lodash"
-import useKhyanakhSambar from "hooks/useKhyanakhSambar"
 import updateMethod from "tools/function/crud/updateMethod"
 import router from "next/router"
 
@@ -30,7 +29,7 @@ export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
 
 function BarilgaBurtgel({ token }) {
   const { ajiltan, baiguullaga, baiguullagaMutate } = useAuth()
-  const { toololt } = useKhyanakhSambar(token)
+  const toololt = {}
 
   const [barilga, setBarilga] = useState()
 
