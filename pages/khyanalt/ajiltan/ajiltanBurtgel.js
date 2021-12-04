@@ -45,7 +45,7 @@ function AjiltanBurtgel({ token }) {
   const zurag = useRef()
   const empty = useRef()
 
-  const { ajiltan } = useAuth()
+  const { ajiltan,barilgiinId } = useAuth()
   const { ajilchdiinGaralt, setAjiltniiKhuudaslalt, ajiltniiJagsaaltMutate } =
     useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId)
 
@@ -72,6 +72,8 @@ function AjiltanBurtgel({ token }) {
 
     var form_data = new FormData()
     ajiltanState.baiguullagiinId = ajiltan?.baiguullagiinId
+    ajiltanState.barilguud = [barilgiinId]
+    
     switch (ajiltanState.albanTushaal) {
       case "Админ":
         ajiltanState.erkh = "Admin"

@@ -21,7 +21,7 @@ function ZakhialgaNemekh({ token }) {
   const router = useRouter();
   const { id } = router.query;
   const [form] = Form.useForm();
-  const { baiguullaga } = useAuth();
+  const { baiguullaga,barilgiinId } = useAuth();
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
   const ref = React.useRef();
 
@@ -40,6 +40,8 @@ function ZakhialgaNemekh({ token }) {
       values["baiguullagiinNer"] = baiguullaga.ner;
       values["baiguullagiinId"] = baiguullaga._id;
       values["dedKhesguud"] = gereeniiZagvar.zaaltuud.map((a) => a._id);
+      
+      values["barilgiinId"] = barilgiinId
       createMethod("gereeniiZagvar", token, values).then(({ data }) => {
         if (data === "Amjilttai") {
           message.success("Амжилттай хадгаллаа");

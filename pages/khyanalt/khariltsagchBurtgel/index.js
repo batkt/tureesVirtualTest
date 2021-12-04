@@ -49,9 +49,8 @@ const iconColor = { fontSize: "18px" }
 function AjiltanBurtgel({ token }) {
   const formRef = useRef()
   const excelref = useRef()
-  const tuukhref = useRef()
 
-  const { ajiltan } = useAuth()
+  const { ajiltan ,barilgiinId} = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
     useKhariltsagch(token, ajiltan?.baiguullagiinId)
   const { khariltsagchToololt, khariltsagchToololtMutate } =
@@ -192,6 +191,8 @@ function AjiltanBurtgel({ token }) {
   }
   function khariltsagchBurtgekh() {
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId
+    khariltsagchState.barilgiinId = barilgiinId
+    
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {

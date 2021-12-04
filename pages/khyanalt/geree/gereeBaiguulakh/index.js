@@ -44,7 +44,7 @@ const steps = [
 ];
 
 function GereeBaiguulakh({ token }) {
-  const { baiguullaga } = useAuth();
+  const { baiguullaga,barilgiinId } = useAuth();
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
@@ -70,6 +70,7 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinNer = baiguullaga.ner
       data.baiguullagiinId = baiguullaga._id
       data.gereeniiZagvariinId = gereeniiZagvar._id
+      data.barilgiinId = barilgiinId
       
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");

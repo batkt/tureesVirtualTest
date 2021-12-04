@@ -66,7 +66,7 @@ function talbaiBurtgekh({ token }) {
   const formRef = useRef()
   const excelref = useRef()
   const { TextArea } = Input
-  const { ajiltan, baiguullaga } = useAuth()
+  const { ajiltan, baiguullaga,barilgiinId } = useAuth()
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   })
@@ -88,8 +88,6 @@ function talbaiBurtgekh({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
     zasakhEsekh: false,
   })
-  const [order, setOrder] = useState({})
-
   const khyanaltiinDun = [
     {
       too: talbainiiGaralt?.niitMur,
@@ -261,6 +259,8 @@ function talbaiBurtgekh({ token }) {
   function talbaiBurtgekh() {
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
+    talbaiState.barilgiinId = barilgiinId
+    
     if (khurunguud.length > 0) {
       talbaiState.khurunguud = khurunguud.khurunguud
       talbaiState.khurunguud.map(

@@ -51,7 +51,7 @@ function zurgiinListUusgeye(token,data){
 } 
 
 function GereeBaiguulakh({ token,data }) {
-  const { baiguullaga } = useAuth();
+  const { baiguullaga ,barilgiinId} = useAuth();
   const router = useRouter()
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState(data || {
@@ -70,7 +70,8 @@ function GereeBaiguulakh({ token,data }) {
       data.baiguullagiinNer = baiguullaga.ner
       data.baiguullagiinId = baiguullaga._id
       data.gereeniiZagvariinId = gereeniiZagvar._id
-
+      data.barilgiinId = barilgiinId
+      
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 

@@ -15,7 +15,7 @@ const fetcherJagsaalt = (
     .get(url, {params:{
       query: {
         baiguullagiinId,
-        barilgiinId,
+        barilguud:barilgiinId,
         erkh: { $nin: ["Admin"] },
         $or: [{ ner: { $regex: search, $options: "i" } },{ register: { $regex: search, $options: "i" } },{ utas: { $regex: search, $options: "i" } }],
         ...query
