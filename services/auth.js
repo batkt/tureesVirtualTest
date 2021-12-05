@@ -14,25 +14,23 @@ import useBaiguullaga from "hooks/useBaiguullaga";
 const AuthContext = createContext({});
 
 export const useBarilga = () => {
-  const [barilgiinId,setBarilgiinId] = useState(null)
+  const [barilgiinId, setBarilgiinId] = useState(null);
 
-  useEffect(async ()=>{
-    const {barilgiinId} = await parseCookies()
-    if(barilgiinId)
-      setBarilgiinId(barilgiinId)
-  },[])
+  useEffect(async () => {
+    const { barilgiinId } = await parseCookies();
+    if (barilgiinId) setBarilgiinId(barilgiinId);
+  }, []);
 
   const barilgaSoliyo = (id) => {
-    console.log('id',id)
-    setBarilgiinId(id)
+    setBarilgiinId(id);
     setCookie(null, "barilgiinId", id, {
       maxAge: 30 * 24 * 60 * 60,
       path: "/",
     });
-  }
+  };
 
-  return {barilgiinId,barilgaSoliyo}
-}
+  return { barilgiinId, barilgaSoliyo };
+};
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
@@ -41,12 +39,12 @@ export const AuthProvider = ({ children }) => {
     token,
     ajiltan?.baiguullagiinId
   );
-  const {barilgaSoliyo,barilgiinId} = useBarilga()
+  const { barilgaSoliyo, barilgiinId } = useBarilga();
 
   useEffect(() => {
     const t = parseCookies();
     setToken(t?.tureestoken);
-    
+
     window.addEventListener("online", () =>
       message.success("Интернэт ертөнцөд тавтай морил")
     );
@@ -80,6 +78,7 @@ export const AuthProvider = ({ children }) => {
                 });
                 setToken(data.token);
                 ajiltanMutate(data.result);
+                barilgaSoliyo(data.result.barilguud[0]);
                 ekhniiTsonkhruuOchyo(data.result.erkh, "/" + data._id);
                 message.success("Тавтай морил");
               } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");
@@ -97,9 +96,9 @@ export const AuthProvider = ({ children }) => {
       ajiltanMutate,
       setToken,
       barilgaSoliyo,
-      barilgiinId
+      barilgiinId,
     }),
-    [token, ajiltan, baiguullaga,barilgiinId]
+    [token, ajiltan, baiguullaga, barilgiinId]
   );
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
