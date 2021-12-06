@@ -1,10 +1,12 @@
 import axios, { aldaaBarigch } from 'services/uilchilgee'
 import useSWR from 'swr'
 import moment from 'moment'
+import { useAuth } from 'services/auth'
 
-const fetcher = (url, token, ognoo) => {
+const fetcher = (url, token, ognoo,barilgiinId) => {
     return axios(token).post(url, 
         {
+            barilgiinId,
             ekhlekhOgnoo:moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),   
             duusakhOgnoo:moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         })
@@ -12,7 +14,8 @@ const fetcher = (url, token, ognoo) => {
 }
 
 function useGuilgeeniiToololtAvya(token,ognoo) {
-    const { data, mutate } = useSWR(!!token ? ['/guilgeeniiToololtAvya', token,ognoo] : null, fetcher, { revalidateOnFocus: false })
+    const {barilgiinId} = useAuth()
+    const { data, mutate } = useSWR(!!token ? ['/guilgeeniiToololtAvya', token,ognoo,barilgiinId] : null, fetcher, { revalidateOnFocus: false })
     return { guilgeeniiToololt: data, guilgeeniiToololtMutate: mutate }
 }
 

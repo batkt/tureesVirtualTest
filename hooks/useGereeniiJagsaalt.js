@@ -21,9 +21,9 @@ const fetcher = (url, token, baiguullagiinId, {search='',...khuudaslalt}, regist
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-const fetcherToololt = (url, token) =>
+const fetcherToololt = (url, token,barilgiinId) =>
   axios(token)
-    .get(url)
+    .post(url,{barilgiinId})
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
@@ -51,8 +51,9 @@ function useGereeniiJagsaalt(token, baiguullagiinId, register,query,tooAvakhEsek
   };
 }
 export function useGereeniiJagsaaltToollolt(token) {
+  const {barilgiinId} = useAuth()
   const { data, mutate } = useSWR(
-    token ? ["/gereeniiToololtAvya", token] : null,
+    token ? ["/gereeniiToololtAvya", token,barilgiinId] : null,
     fetcherToololt,
     {
       revalidateOnFocus: false,

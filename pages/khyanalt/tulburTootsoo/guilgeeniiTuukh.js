@@ -16,11 +16,12 @@ import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya";
 
 function GereeniiUldegdel({data,token,loadingIndex,index,setLoadingIndex}) {
+  const {barilgiinId} = useAuth()
   const [uldegdel,setUldegdel] = useState(0)
 
   useEffect(()=>{
     if(index === loadingIndex)
-      uilchilgee(token).post('/uldegdelBodyo',{gereeniiDugaar:data?.gereeniiDugaar}).then(({data})=>{
+      uilchilgee(token).post('/uldegdelBodyo',{barilgiinId,gereeniiDugaar:data?.gereeniiDugaar}).then(({data})=>{
         if(!!data?.uldegdel){
           setUldegdel(data?.uldegdel)
         }
