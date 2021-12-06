@@ -12,7 +12,7 @@ import Tulbur from "../eBarimt/Tulbur"
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
     .get(`${url}/${gereeniiId}`, {
-      params: { duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59") },
+      params: { duusakhOgnoo: moment(ognoo[1]).endOf('month').format("YYYY-MM-DD 23:59:59") },
     })
     .then((res) => res.data)
     .catch(aldaaBarigch)

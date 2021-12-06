@@ -99,22 +99,16 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
   );
 
   const updateMyData = (rowIndex, columnId, value) => {
-    setJagsaalt(old =>
-      old.map((row, index) => {
-        if (index === rowIndex) {
-          const val = {
-            ...old[rowIndex],
-            [columnId]: value,
-          }
-          var tulukhDun = (data?.sariinTurees / data?.tulukhUdur.length)
-          if(columnId === 'khyamdraliinKhuvi'){
-            val['tulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
-            val['khyamdral'] = (tulukhDun * value / 100)
-          }
-          return {...val}
-        }
-        return row
-      })
+    setJagsaalt(old =>{
+      var row = old[rowIndex]
+      row[columnId] = value
+      var tulukhDun = (data?.sariinTurees / data?.tulukhUdur.length)
+      if(columnId === 'khyamdraliinKhuvi'){
+        row['tulukhDun'] =  tulukhDun - (tulukhDun * value / 100)
+        row['khyamdral'] = (tulukhDun * value / 100)
+      }
+      return [...old]
+    }
     )
   }
  

@@ -39,7 +39,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         })
       },
     }),
-    [dun,turul]
+    [dun,turul,tailbar]
   );
 
   return (
