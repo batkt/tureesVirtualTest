@@ -53,6 +53,7 @@ function guilgeeniiTuukh({ token }) {
     token,
     ognoo
   );
+
   const query = React.useMemo(() => {
     if(turul === 'uglug')
       return {
@@ -260,7 +261,7 @@ function guilgeeniiTuukh({ token }) {
         </>
       ),
     },
-  ],[gereeniiMedeelel,loadingIndex])
+  ],[gereeniiMedeelel,loadingIndex,delgegdsenGeree])
 
   return (
     <Admin

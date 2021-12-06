@@ -10,7 +10,10 @@ const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar
       barilgiinId,
       ognoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       query: {
-        query: {davkhar},
+        query: {
+          davkhar,
+          $or:[{register:{$regex:search,$options:'i'}},{talbainDugaar:{$regex:search,$options:'i'}},{gereeniiDugaar:{$regex:search,$options:'i'}},{utas:{$regex:search,$options:'i'}}],
+        },
         ...khuudaslalt,
       },
     })
