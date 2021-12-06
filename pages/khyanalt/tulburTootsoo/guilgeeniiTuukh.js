@@ -14,28 +14,21 @@ import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya";
+import useSWR from "swr";
 
-function GereeniiUldegdel({data,token,loadingIndex,index,setLoadingIndex}) {
+function GereeniiUldegdel({ugugdul,token}) {
   const {barilgiinId} = useAuth()
-  const [uldegdel,setUldegdel] = useState(0)
-
-  useEffect(()=>{
-    if(index === loadingIndex)
-      uilchilgee(token).post('/uldegdelBodyo',{barilgiinId,gereeniiDugaar:data?.gereeniiDugaar}).then(({data})=>{
-        if(!!data?.uldegdel){
-          setUldegdel(data?.uldegdel)
-        }
-        setLoadingIndex(index + 1)
-      })
-  },[data,loadingIndex])
-
+  const {data} = useSWR(!!ugugdul?.gereeniiDugaar && !!barilgiinId ? ['/uldegdelBodyo',barilgiinId,ugugdul?.gereeniiDugaar] : null,(url,barilgiinId,gereeniiDugaar)=>uilchilgee(token).post(url,{barilgiinId,gereeniiDugaar}).then(({data})=>data),{
+    revalidateOnFocus: false,
+  })
+  
   return (
     <div
       className={`font-medium ${
-        uldegdel > 0 ? "text-red-500" : "text-green-500"
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
-      {index === loadingIndex ? <Spin size='small'/> : formatNumber(uldegdel)}
+      {!data ? <Spin size='small'/> : formatNumber(data?.uldegdel)}
     </div>
   )
 }
@@ -230,8 +223,8 @@ function guilgeeniiTuukh({ token }) {
       align: "right",
       render(text, record, index) {
         return (
-          <GereeniiUldegdel token={token} data={record} index={index} loadingIndex={loadingIndex} setLoadingIndex={setLoadingIndex} urt={gereeniiMedeelel?.jagsaalt?.length}/>
-        );
+            <GereeniiUldegdel token={token} ugugdul={record} index={index} show={index === loadingIndex} setLoadingIndex={setLoadingIndex} urt={gereeniiMedeelel?.jagsaalt?.length}/>
+          );
       },
       showSorterTooltip: false,
       defaultSortOrder: "descend",
