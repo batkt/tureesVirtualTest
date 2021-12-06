@@ -3,7 +3,7 @@ import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import updateMethod from "tools/function/crud/updateMethod";
 import readMethod from "tools/function/crud/readMethod";
-import { message, Select, Steps } from "antd";
+import { Button, message, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
 import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa";
@@ -46,10 +46,6 @@ const steps = [
   },
 ];
 
-function zurgiinListUusgeye(token,data){
-
-} 
-
 function GereeBaiguulakh({ token,data }) {
   const { baiguullaga ,barilgiinId} = useAuth();
   const router = useRouter()
@@ -66,6 +62,11 @@ function GereeBaiguulakh({ token,data }) {
   const next = (data) => {
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
+      khadgalya(data)
+    }
+  };
+
+  function khadgalya(data) {
       data.turul = data?.baiguullagaEsekh ? 'ААН' : 'Иргэн'
       data.baiguullagiinNer = baiguullaga.ner
       data.baiguullagiinId = baiguullaga._id
@@ -92,8 +93,7 @@ function GereeBaiguulakh({ token,data }) {
           message.success("Амжилттай хадгаллаа");
         }
       });
-    }
-  };
+  }
 
   const onChangeGereeniiZagvar = (_id) => {
     let gereeniiZagvar =
@@ -170,7 +170,9 @@ function GereeBaiguulakh({ token,data }) {
               value={khadgalakhGeree}
               token={token}
               baiguullaga={baiguullaga}
+              zasvar
             />
+            {JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && <Button type='primary' style={{width:'100%',marginTop:10}} onClick={()=>khadgalya(khadgalakhGeree)}>Хадгалах</Button>}
           </div>
           <div
             className="p-2 mt-3 bg-gray-50 dark:bg-gray-900 col-span-8"

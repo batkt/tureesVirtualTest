@@ -186,15 +186,12 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
           </Upload>
         </Form.Item>
       </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          span: 14,
-          offset: 10,
-        }}
-      >
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
-          Гэрээний хугацаа
-        </Button>
+      <Form.Item wrapperCol={{span: 24}}>
+        <div className="w-full flex justify-end">
+          <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
+            Гэрээний хугацаа
+          </Button>
+        </div>
       </Form.Item>
     </Form>
   );

@@ -12,7 +12,7 @@ const formItemLayout = {
   },
 };
 
-const Tulbur = ({ value, onChange, next, prev }) => {
+const Tulbur = ({ value, onChange, next, prev,zasvar }) => {
 
   return (
     <Form
@@ -51,14 +51,14 @@ const Tulbur = ({ value, onChange, next, prev }) => {
       {!!value?.khungulukhEsekh && <Form.Item name='avlaga' noStyle>
         <AvlagiinKhuvaariUusgekh ugugdul={value}/>
       </Form.Item>}
-      <Form.Item noStyle wrapperCol={{span: 24}}>
+      <Form.Item wrapperCol={{span: 24}}>
         <div className="w-full flex flex-row justify-between mt-4">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Барьцаа бүртгэл
           </Button>
-          <Button type="primary" htmlType="submit" icon={<SaveOutlined />} onClick={()=>next(value)}>
+          {!zasvar && <Button type="primary" htmlType="submit" icon={<SaveOutlined />} onClick={()=>next(value)}>
             Хадгалах
-          </Button>
+          </Button>}
         </div>
       </Form.Item>
     </Form>
