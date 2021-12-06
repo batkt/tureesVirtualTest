@@ -7,9 +7,10 @@ import moment from "moment";
 const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar,barilgiinId) =>
   axios(token)
     .post(url, {
+      barilgiinId,
       ognoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       query: {
-        query: {davkhar,barilgiinId},
+        query: {davkhar},
         ...khuudaslalt,
       },
     })
