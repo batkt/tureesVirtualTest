@@ -83,9 +83,7 @@ function guilgeeniiTuukh({ token }) {
           '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga._id,
-        'tuluv': {
-          '$ne': -1
-        },
+        'tuluv': -1,
         "uldegdel": {
           "$gte": 0
         }
