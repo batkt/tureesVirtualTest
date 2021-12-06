@@ -252,16 +252,18 @@ const khuudasnuud = [
     khuudasniiNer: "medegdel",
     href: "/khyanalt/medegdel",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" 
-        width="24" 
-        height="24" 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="1.5" 
-        strokeLinecap="round" 
-        strokeLinejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
   },
@@ -352,6 +354,28 @@ const khuudasnuud = [
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        ),
+      },
+      {
+        ner: "Хөнгөлөлт",
+        khuudasniiNer: "khungulult",
+        href: "/khyanalt/tulburTootsoo/khungulult",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="19" y1="5" x2="5" y2="19" />
+            <circle cx="6.5" cy="6.5" r="2.5" />
+            <circle cx="17.5" cy="17.5" r="2.5" />
           </svg>
         ),
       },
