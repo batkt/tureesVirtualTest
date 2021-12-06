@@ -382,9 +382,9 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "khugatsaaKhetersen.0.dun") || 0
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
               ),
-              turul:'khugatsaaKhetersen',
+              turul:'tsutslagdsanAvlaga',
               utga: "Цуцлагдсан гэрээний авлага",
             },
             {
