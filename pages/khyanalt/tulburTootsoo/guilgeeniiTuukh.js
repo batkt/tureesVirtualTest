@@ -83,9 +83,7 @@ function guilgeeniiTuukh({ token }) {
           '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
         },
         'baiguullagiinId': baiguullaga._id,
-        'tuluv': {
-          '$ne': -1
-        },
+        'tuluv': -1,
         "uldegdel": {
           "$gte": 0
         }
@@ -382,9 +380,9 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "khugatsaaKhetersen.0.dun") || 0
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
               ),
-              turul:'khugatsaaKhetersen',
+              turul:'tsutslagdsanAvlaga',
               utga: "Цуцлагдсан гэрээний авлага",
             },
             {

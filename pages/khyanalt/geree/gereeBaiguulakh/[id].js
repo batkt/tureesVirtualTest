@@ -74,16 +74,16 @@ function GereeBaiguulakh({ token,data }) {
       data.barilgiinId = barilgiinId
       
       if (!!data?.unemlekhniiZurag)
-        data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
+        data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id") || null;
 
       if (!!data?.gerchilgeeniiZurag)
         data.gerchilgeeniiZurag = _.get(
           data,
           "gerchilgeeniiZurag.0.response.id"
-        );
+        ) || null;
 
       if (!!data?.zuvshuurliinZurag)
-        data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
+        data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id") || null;
 
       updateMethod("geree", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
@@ -266,7 +266,7 @@ const ugudulAvchirya = async (ctx,session) => {
   const {data} = await readMethod('geree',session.tureestoken,ctx.query.id)
   data.baiguullagaEsekh = data.turul === 'ААН' ? true : false;
   
-  if (!!data?.unemlekhniiZurag){
+  if (!!data?.unemlekhniiZurag && data?.unemlekhniiZurag !== ""){
     _.set(data, "unemlekhniiZurag",[{
       uid: '-1',
       name: data?.unemlekhniiZurag,
@@ -279,7 +279,7 @@ const ugudulAvchirya = async (ctx,session) => {
     }]);
   }
 
-  if (!!data?.gerchilgeeniiZurag){
+  if (!!data?.gerchilgeeniiZurag && data?.gerchilgeeniiZurag !== ""){
     _.set(data, "gerchilgeeniiZurag",[{
       uid: '-1',
       name: data?.gerchilgeeniiZurag,
@@ -292,7 +292,7 @@ const ugudulAvchirya = async (ctx,session) => {
     }]);
   }
 
-  if (!!data?.zuvshuurliinZurag){
+  if (!!data?.zuvshuurliinZurag  && data?.zuvshuurliinZurag !== ""){
     _.set(data, "zuvshuurliinZurag",[{
       uid: '-1',
       name: data?.zuvshuurliinZurag,
