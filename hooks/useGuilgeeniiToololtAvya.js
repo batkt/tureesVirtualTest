@@ -7,8 +7,8 @@ const fetcher = (url, token, ognoo,barilgiinId) => {
     return axios(token).post(url, 
         {
             barilgiinId,
-            ekhlekhOgnoo:moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),   
-            duusakhOgnoo:moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
+            ekhlekhOgnoo:moment(ognoo[0]).startOf('month').format("YYYY-MM-DD 00:00:00"),   
+            duusakhOgnoo:moment(ognoo[1]).endOf('month').format("YYYY-MM-DD 23:59:59")
         })
     .then(res => res.data).catch(aldaaBarigch)
 }
