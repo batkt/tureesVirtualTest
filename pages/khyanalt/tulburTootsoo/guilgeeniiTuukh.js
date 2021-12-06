@@ -214,7 +214,7 @@ function guilgeeniiTuukh({ token }) {
       title: "Түрээслэгч",
       dataIndex: "ner",
       ellipsis: true,
-      align: "center",
+      align: "left",
       width: "12rem",
     },
     { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center" },
