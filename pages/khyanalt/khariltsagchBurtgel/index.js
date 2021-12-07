@@ -52,7 +52,7 @@ function AjiltanBurtgel({ token }) {
 
   const { ajiltan ,barilgiinId} = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId)
+    useKhariltsagch(token, ajiltan?.baiguullagiinId,100)
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token)
   const [formNuukh, setFormNuukh] = useState(false)
@@ -551,7 +551,7 @@ function AjiltanBurtgel({ token }) {
           tableLayout={
             khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
           }
-          scroll={{ y: "calc(100vh - 19rem)" }}
+          scroll={{ y: "calc(100vh - 26rem)" }}
           rowKey={(row) => row._id}
           dataSource={khariltsagchiinGaralt?.jagsaalt}
           pagination={{

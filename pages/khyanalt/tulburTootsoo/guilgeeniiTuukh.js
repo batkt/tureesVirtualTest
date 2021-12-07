@@ -441,7 +441,6 @@ function guilgeeniiTuukh({ token }) {
             setOgnoo(v)
             setLoadingIndex(0)
           }}/>
-          
         </div>
         <div className="overflow-auto hidden md:block mt-5">
           <Table

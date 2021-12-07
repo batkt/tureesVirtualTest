@@ -28,11 +28,11 @@ const fetcherToololt = (url, token) =>
     .get(url)
     .then((res) => res.data)
     .catch(aldaaBarigch)
-function useKhariltsagch(token, baiguullagiinId) {
+function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
+    khuudasniiKhemjee: khuudasniiKhemjee || 10,
     search: "",
   })
   const { data, mutate } = useSWR(
