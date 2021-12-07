@@ -1,8 +1,12 @@
-import { Input, notification,Select } from 'antd'
+import { Button, Input, notification,Select } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import useGereeniiJagsaalt from 'hooks/useGereeniiJagsaalt'
+import useMailiinZagvar from 'hooks/useMailiinZagvar'
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
+import ZagvarBurtgel from "./ZagvarBurtgel"
 import uilchilgee from 'services/uilchilgee'
+import {modal} from 'components/ant/Modal'
+import { FileExcelOutlined } from '@ant-design/icons'
 
 var setter = null
 
@@ -27,6 +31,8 @@ const smszagvar = [
 
 function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIlgeekhTurul,davkhar}) {
 
+    const ref = React.useRef(null)
+
     const query = useMemo(()=>{
         if(ilgeekhTurul === 'davkharaar')
             return {davkhar}
@@ -39,7 +45,30 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
     const tooAvakhEsekh = useMemo(()=> ilgeekhTurul !== 'gantsaar',[ilgeekhTurul])
 
     const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id,undefined,query,tooAvakhEsekh)
+    
+    const {mailiinZagvarGaralt,mailiinZagvarMutate,setMailiinZagvarKhuudaslalt} = useMailiinZagvar(token,'sms')
 
+    function smsZagvar(data) {
+        const footer = [
+            <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+            <Button type="primary" onClick={() => ref.current.khadgalya()}>
+                Бүртгэл нэмэх
+            </Button>,
+        ];
+        modal({
+            title: "",
+            icon: <FileExcelOutlined />,
+            content: (
+                <ZagvarBurtgel
+                    ref={ref}
+                    data={data}
+                    turul='sms'
+                />
+            ),
+            footer,
+        });
+    }
+    
     return (
         <>
             <div className="box p-2 mt-5 flex flex-row">
@@ -75,11 +104,14 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             </div>
             }
 
-            <div className="p-2 mt-5 font-medium">
-                СМС загвар
+            <div className="p-2 mt-5 font-medium flex flex-row">
+                <div>СМС загвар</div>
+                <button className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`} onClick={smsZagvar}>
+                    Загвар үүсгэх
+                </button>
             </div>
             {
-                smszagvar.map(a=>(
+                mailiinZagvarGaralt?.jagsaalt?.map(a=>(
                     <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.content)}>
                         <div className="w-8 h-8 flex-none image-fit mr-1 ">
                             <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
