@@ -566,6 +566,7 @@ function AjiltanBurtgel({ token }) {
                 khuudasniiKhemjee,
               })),
           }}
+          loading={!khariltsagchiinGaralt}
           size="small"
           rowSelection={{
             onSelect: (selectedRowKeys) => {
@@ -698,20 +699,6 @@ function AjiltanBurtgel({ token }) {
                               return formatNumber(talbainNiitUne)
                             },
                           },
-                          // { title: "Утас", dataIndex: "utas", ellipsis: true },
-                          // {
-                          //   title: "И-мэйл хаяг",
-                          //   dataIndex: "mail",
-                          //   ellipsis: true,
-                          // },
-                          // {
-                          //   title: "Төлөв",
-                          //   dataIndex: "tuluv",
-                          //   ellipsis: true,
-                          //   render: () => {
-                          //     return <Tag color="green">Идэвхтэй</Tag>
-                          //   },
-                          // },
                         ]}
                       ></Table>
                     }
