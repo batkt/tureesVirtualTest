@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React from "react"
+import React, { useRef } from "react"
 import {
   Card,
   DatePicker,
@@ -11,6 +11,7 @@ import {
   InputNumber,
   Input,
   Space,
+  Form,
 } from "antd"
 import {
   CheckOutlined,
@@ -39,6 +40,8 @@ function tulburTootsoo() {
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
 
   const [sar, setSar] = React.useState(moment().add(1, "month"))
+  const formRef = useRef()
+  const { Option } = Select
 
   function disabledDate(current) {
     return current && current < moment().endOf("day")
@@ -59,9 +62,99 @@ function tulburTootsoo() {
         setNekhemjlelKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
-      <Card className="col-span-12">
-        <div className="flex justify-evenly mb-5">
-          <Space>
+      <Card className="col-span-3">
+        <Form
+          ref={formRef}
+          name="control-ref"
+          initialValues={{ remember: true }}
+          labelCol={{
+            span: 9,
+          }}
+          wrapperCol={{
+            span: 14,
+          }}
+          layout="horizontal"
+        >
+          <Form.Item
+            name="khungulukhSar"
+            label="Хөнгөлөх сар"
+            rules={[
+              {
+                required: true,
+                message: "Хөнгөлөх сар бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <DatePicker
+              disabledDate={disabledDate}
+              picker="month"
+              placeholder="сар"
+            />
+          </Form.Item>
+          <Form.Item name="nukhtsul" label="Нөхцөл">
+            <Select placeholder="нөхцөл">
+              <Option value="Давхар">Давхараар</Option>
+              <Option value="Бүгд">Бүх</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="davkhar" label="Давхар">
+            <Select
+              mode="multiple"
+              placeholder="Давхар"
+              onChange={handleChange}
+            >
+              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
+                <Select.Option key={a} value={a}>
+                  {a}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
+            <Input placeholder="хөнгөлөх хувь" />
+          </Form.Item>
+          <Form.Item label="Шалтгаан" name="shaltgaan">
+            <Input.TextArea placeholder="шалтгаан" />
+          </Form.Item>
+          <div className="flex-column grid mt-12 text-base">
+            <div className="flex justify-between">
+              Нийт талбайн тоо :<a>15</a>
+            </div>
+            <div className="flex justify-between">
+              Нийт түрээсийн орлого :<a>15,000,000₮</a>
+            </div>
+            <div className="flex justify-between">
+              Нийт хөнгөлөгдсөн дүн :<a className="text-red-400">-1,500,000₮</a>
+            </div>
+            <div className="flex justify-between">
+              Нийт төлөх дүн :<a className="text-green-500">13,500,000₮</a>
+            </div>
+          </div>
+          <div className="flex flex-row justify-between mt-10">
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                //onClick={ajiltanBurtgekh}
+                style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              >
+                хадгалах
+              </Button>
+            </Form.Item>
+            <Form.Item>
+              <Button
+                htmlType="submit"
+                danger
+                type="primary"
+                //onClick={ajiltanBurtgekh}
+                //style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              >
+                цэвэрлэх
+              </Button>
+            </Form.Item>
+          </div>
+        </Form>
+        {/* <Space>
             <label>Хөнгөлөх сар:</label>
             <DatePicker
               disabledDate={disabledDate}
@@ -100,8 +193,9 @@ function tulburTootsoo() {
           </Space>
           <Space>
             <Button type="primary">Хөнгөлөх</Button>
-          </Space>
-        </div>
+          </Space> */}
+      </Card>
+      <Card className="col-span-9">
         <Table
           rowSelection={{
             type: "checkbox",
