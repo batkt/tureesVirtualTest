@@ -6,7 +6,7 @@ import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
 import ZagvarBurtgel from "./ZagvarBurtgel"
 import uilchilgee from 'services/uilchilgee'
 import {modal} from 'components/ant/Modal'
-import { FileExcelOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, FileExcelOutlined } from '@ant-design/icons'
 import { useAuth } from 'services/auth'
 
 var setter = null
@@ -119,6 +119,14 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             {
                 mailiinZagvarGaralt?.jagsaalt?.map(a=>(
                     <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.mail)}>
+                        <div className='absolute right-2 flex flex-row space-x-2'>
+                            <div className='p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full'>
+                                <DeleteOutlined/>
+                            </div>
+                            <div className='p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full' onClick={()=>smsZagvarNemya(a)}>
+                                <EditOutlined/>
+                            </div>
+                        </div>
                         <div className="w-8 h-8 flex-none image-fit mr-1 ">
                             <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
                         </div>
