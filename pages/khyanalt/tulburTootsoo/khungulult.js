@@ -12,6 +12,7 @@ import {
   Space,
   message,
   Form,
+  Tabs,
 } from "antd"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
@@ -69,10 +70,15 @@ function tulburTootsoo() {
     return current && current < moment().endOf("day")
   }
   function handleChange(value) {
+    debugger
     setDavkhar(value)
-    setShuult({
-      query: { davkhar: value },
-    })
+    if (value.length > 0) {
+      setShuult({
+        query: { davkhar: value },
+      })
+    } else {
+      setShuult()
+    }
   }
   function khungulultKhadgalya() {
     if (songogdsonGereenuud.length > 0) {
@@ -81,6 +87,9 @@ function tulburTootsoo() {
         moment(ugugdul.ognoonuud).format("YYYY-MM-01 00:00:00"),
       ]
       ugugdul.barilgiinId = barilgiinId
+      ugugdul.tulukhDun = tootsoolol.niitSariinTurees
+      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun
+      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
         (x) => (x._id = x._id)
       )
@@ -90,10 +99,14 @@ function tulburTootsoo() {
           if (data === "Amjilttai") {
             message.success("Хөнгөлөлт амжилттай хийгдлээ")
             formRef.current.resetFields()
+            setTootsoolol({})
           }
         })
         .catch(aldaaBarigch)
     }
+  }
+  function tseverlekh() {
+    window.location.reload()
   }
 
   return (
@@ -105,7 +118,7 @@ function tulburTootsoo() {
         setNekhemjlelKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
-      <Card className="col-span-3">
+      <Card className="col-span-3 ring-1 ring-green-400">
         <Form
           form={form}
           ref={formRef}
@@ -163,28 +176,23 @@ function tulburTootsoo() {
           </Form.Item>
           <div className="flex-column grid mt-12 text-base">
             <div className="flex justify-between">
-              {/* Нийт талбайн тоо :<a>{songogdsonGereenuud?.length || 0}</a> */}
               Нийт талбайн тоо :<a>{tootsoolol.niitTalbai}</a>
             </div>
             <div className="flex justify-between">
-              Нийт түрээсийн орлого :<a>{tootsoolol.niitSariinTurees}</a>
-              {/* Нийт түрээсийн орлого :
-              <a>
-                {formatNumber(
-                  songogdsonGereenuud?.reduce(
-                    (a, b) => a + Number(b?.sariinTurees),
-                    0
-                  )
-                )}
-              </a> */}
+              Нийт түрээсийн орлого :
+              <a>{formatNumber(tootsoolol.niitSariinTurees || 0)}</a>
             </div>
             <div className="flex justify-between">
               Нийт хөнгөлөгдсөн дүн :
-              <a className="text-red-400">{tootsoolol.khunglugdsunDun || 0}</a>
+              <a className="text-red-400">
+                {formatNumber(tootsoolol.khunglugdsunDun || 0)}
+              </a>
             </div>
             <div className="flex justify-between">
               Нийт төлөх дүн :
-              <a className="text-green-500">{tootsoolol.niitTulukhDun || 0}</a>
+              <a className="text-green-500">
+                {formatNumber(tootsoolol.niitTulukhDun || 0)}
+              </a>
             </div>
           </div>
           <div className="flex flex-row justify-between mt-10">
@@ -202,7 +210,7 @@ function tulburTootsoo() {
                 htmlType="submit"
                 danger
                 type="primary"
-                //onClick={ajiltanBurtgekh}
+                onClick={tseverlekh}
                 //style={{ backgroundColor: "#209669", color: "#ffffff" }}
               >
                 цэвэрлэх
@@ -210,46 +218,6 @@ function tulburTootsoo() {
             </Form.Item>
           </div>
         </Form>
-        {/* <Space>
-            <label>Хөнгөлөх сар:</label>
-            <DatePicker
-              disabledDate={disabledDate}
-              picker="month"
-              placeholder="сар"
-              onChange={setSar}
-            />
-          </Space>
-          <Space>
-            <label>Хөнгөлөх хувь:</label>
-            <InputNumber
-              placeholder="Хөнгөлөх хувь"
-              title="Хөнгөлөх хувь"
-              min={0}
-              max={100}
-            />
-          </Space>
-          <Space>
-            <label>Тайлбар:</label>
-            <Input style={{ width: "350px" }} placeholder="Тайлбар" />
-          </Space>
-          <Space>
-            <label>Давхар:</label>
-            <Select
-              style={{ width: "200px" }}
-              mode="multiple"
-              placeholder="Давхар"
-              onChange={handleChange}
-            >
-              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
-                <Select.Option key={a} value={a}>
-                  {a}
-                </Select.Option>
-              ))}
-            </Select>
-          </Space>
-          <Space>
-            <Button type="primary">Хөнгөлөх</Button>
-          </Space> */}
       </Card>
       <Card className="col-span-9">
         <Table
