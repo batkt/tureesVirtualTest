@@ -9,8 +9,8 @@ import _ from "lodash"
 
 //export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
 //export const url = `http://localhost:8081`;
-export const url = "http://192.168.0.103:8081"
-//export const url = "http://103.50.205.33:8081";
+//export const url = "http://192.168.0.103:8081"
+export const url = "http://103.50.205.33:8081"
 
 export const socket = () => socketIOClient(url, { transports: ["websocket"] })
 

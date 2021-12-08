@@ -106,7 +106,7 @@ function tulburTootsoo() {
     }
   }
   function tseverlekh() {
-    window.location.reload()
+    formRef.current.resetFields()
   }
 
   return (
