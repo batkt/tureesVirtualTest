@@ -16,11 +16,10 @@ import _ from "lodash"
 import { useReactToPrint } from "react-to-print"
 import { toWords } from "mon_num"
 
-const Dun = (a)=>{
+const Dun = (a) => {
   const dun = a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
-  if(dun < 0)
-    return <div>{toWords(dun * (-1), { suffix: "n" })} төгрөг</div>
-  return <div>{toWords(dun , { suffix: "n" })} төгрөг</div>
+  if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
+  return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
 }
 
 const turul = [
@@ -202,7 +201,7 @@ function tulburTootsoo({ token }) {
                   </tr>
                   <tr>
                     <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр){" "} <Dun {...a}/>
+                      Мөнгөн дүн: (үсгээр) <Dun {...a} />
                     </td>
                   </tr>
                   <tr>
@@ -387,18 +386,19 @@ function tulburTootsoo({ token }) {
             },
           ]}
           dataSource={nekhemjlel?.jagsaalt}
-          pagination={{
-            current: nekhemjlel?.khuudasniiDugaar,
-            pageSize: nekhemjlel?.khuudasniiKhemjee,
-            total: nekhemjlel?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setNekhemjlelKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
+          // pagination={{
+          //   current: nekhemjlel?.khuudasniiDugaar,
+          //   pageSize: nekhemjlel?.khuudasniiKhemjee,
+          //   total: nekhemjlel?.niitMur,
+          //   showSizeChanger: true,
+          //   onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+          //     setNekhemjlelKhuudaslalt((kh) => ({
+          //       ...kh,
+          //       khuudasniiDugaar,
+          //       khuudasniiKhemjee,
+          //     })),
+          // }}
+          pagination={false}
           rowKey={(a) => a._id}
         />
       </Card>

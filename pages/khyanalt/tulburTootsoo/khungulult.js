@@ -70,7 +70,6 @@ function tulburTootsoo() {
     return current && current < moment().endOf("day")
   }
   function handleChange(value) {
-    debugger
     setDavkhar(value)
     if (value.length > 0) {
       setShuult({
@@ -103,6 +102,8 @@ function tulburTootsoo() {
           }
         })
         .catch(aldaaBarigch)
+    } else {
+      message.warning("Хөнгөлөх табай сонгоно уу")
     }
   }
   function tseverlekh() {
