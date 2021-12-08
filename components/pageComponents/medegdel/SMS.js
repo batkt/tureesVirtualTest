@@ -7,6 +7,7 @@ import ZagvarBurtgel from "./ZagvarBurtgel"
 import uilchilgee from 'services/uilchilgee'
 import {modal} from 'components/ant/Modal'
 import { FileExcelOutlined } from '@ant-design/icons'
+import { useAuth } from 'services/auth'
 
 var setter = null
 
@@ -30,6 +31,8 @@ const smszagvar = [
 ]
 
 function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIlgeekhTurul,davkhar}) {
+
+    const {barilgiinId} = useAuth()
 
     const ref = React.useRef(null)
 
@@ -64,6 +67,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                     data={data}
                     token={token}
                     turul='sms'
+                    barilgiinId={barilgiinId}
                     onRefresh={mailiinZagvarMutate}
                 />
             ),
@@ -114,7 +118,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             </div>
             {
                 mailiinZagvarGaralt?.jagsaalt?.map(a=>(
-                    <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.content)}>
+                    <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.mail)}>
                         <div className="w-8 h-8 flex-none image-fit mr-1 ">
                             <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
                         </div>
@@ -123,7 +127,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                                 <div className="font-medium">{a.ner}</div> 
                                 <div className="text-xs text-gray-500 ml-auto">01:10 PM</div>
                             </div>
-                            <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.content }}  ></div>
+                            <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.mail }}  ></div>
                         </div>
                     </div>
                 ))

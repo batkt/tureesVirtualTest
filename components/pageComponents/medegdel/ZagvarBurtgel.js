@@ -12,9 +12,8 @@ function ZagvarForm({value,onChange}) {
     )
 }
 
-function ZagvarBurtgel({destroy,token,data={},turul,onRefresh},ref) {
+function ZagvarBurtgel({barilgiinId,destroy,token,data={},turul,onRefresh},ref) {
     const [form] = Form.useForm();
-    const {barilgiinId} = useAuth()
 
     const [zagvar,setZagvar] = useState(data?.mail || '') 
 
@@ -42,8 +41,6 @@ function ZagvarBurtgel({destroy,token,data={},turul,onRefresh},ref) {
         }),
         [form,barilgiinId],
     )
-
-        const ZagvarForm =({value,onChange})=><ZagvarUusgekh onTextChange={onChange} value={value} />
 
     return (
         <Form form={form} initialValues={data}>

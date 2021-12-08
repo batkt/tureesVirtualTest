@@ -77,11 +77,8 @@ function guilgeeniiTuukh({ token }) {
           "$gte": 0
         }
       }
-    else if(turul === 'khugatsaaKhetersen')
+    else if(turul === 'tsutslagdsanAvlaga')
       return {
-        'daraagiinTulukhOgnoo': {
-          '$lte': moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")
-        },
         'baiguullagiinId': baiguullaga._id,
         'tuluv': -1,
         "uldegdel": {
