@@ -107,6 +107,7 @@ function tulburTootsoo() {
   }
   function tseverlekh() {
     formRef.current.resetFields()
+    setShuult()
   }
 
   return (
@@ -160,7 +161,7 @@ function tulburTootsoo() {
               placeholder="Давхар"
               onChange={handleChange}
             >
-              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
+              {["B1", "1", "2", "3", "4", "5", "6"].map((a) => (
                 <Select.Option key={a} value={a}>
                   {a}
                 </Select.Option>

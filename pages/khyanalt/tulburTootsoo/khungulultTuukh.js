@@ -32,12 +32,16 @@ function EbarimtMedeelel({ token }) {
     useKhungulultTuukh(token, ajiltan?.baiguullagiinId, query)
 
   function ustgaya(mur) {
-    deleteMethod("khungulultiinTuukh", token, mur._id).then(({ data }) => {
-      if (data !== undefined) {
-        khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-        message.success("Устгагдлаа")
-      }
-    })
+    uilchilgee(token)
+      .post("/khungulultUstgaya", {
+        id: mur?._id,
+      })
+      .then(({ data }) => {
+        if (data !== undefined) {
+          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
+          message.success("Устгагдлаа")
+        }
+      })
   }
 
   return (
