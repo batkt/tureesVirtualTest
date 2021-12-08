@@ -108,7 +108,6 @@ function ZaaltZasvar({ value, change,onTextChange }) {
         defaultValue={value}
         setContents={value}
         setOptions={{
-
           plugins: custom,
           height: 200,
           buttonList: [

@@ -48,7 +48,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
     
     const {mailiinZagvarGaralt,mailiinZagvarMutate,setMailiinZagvarKhuudaslalt} = useMailiinZagvar(token,'sms')
 
-    function smsZagvar(data) {
+    function smsZagvarNemya(data) {
         const footer = [
             <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
             <Button type="primary" onClick={() => ref.current.khadgalya()}>
@@ -56,13 +56,15 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             </Button>,
         ];
         modal({
-            title: "",
+            title: "SMS Загвар үүсгэх",
             icon: <FileExcelOutlined />,
             content: (
                 <ZagvarBurtgel
                     ref={ref}
                     data={data}
+                    token={token}
                     turul='sms'
+                    onRefresh={mailiinZagvarMutate}
                 />
             ),
             footer,
@@ -106,7 +108,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
 
             <div className="p-2 mt-5 font-medium flex flex-row">
                 <div>СМС загвар</div>
-                <button className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`} onClick={smsZagvar}>
+                <button className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`} onClick={()=>smsZagvarNemya()}>
                     Загвар үүсгэх
                 </button>
             </div>

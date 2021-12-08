@@ -1,21 +1,38 @@
-import React, { useImperativeHandle } from 'react'
-import { Form, Input } from 'antd'
+import React, { useImperativeHandle, useState } from 'react'
+import { Form, Input, message } from 'antd'
 import updateMethod from 'tools/function/crud/updateMethod'
 import createMethod from 'tools/function/crud/createMethod'
+import ZagvarUusgekh from './ZagvarUusgekh';
+import { useAuth } from 'services/auth';
 
-function ZagvarBurtgel({destroy,data,turul},ref) {
+function ZagvarForm({value,onChange}) {
+    const [text,setText] = React.useState(value || '')
+    return (
+        <ZagvarUusgekh onTextChange={onChange} value={text} change={setText} />
+    )
+}
+
+function ZagvarBurtgel({destroy,token,data={},turul,onRefresh},ref) {
     const [form] = Form.useForm();
+    const {barilgiinId} = useAuth()
+
+    const [zagvar,setZagvar] = useState(data?.mail || '') 
+
     useImperativeHandle(
         ref,
         () => ({
             khadgalya() {
                 const method = data?._id ? updateMethod : createMethod
                 const zagvar = form.getFieldsValue()
-                method('mailiinZagvar',token,{...data,...zagvar,turul})
+                console.log('{barilgiinId,...data,...zagvar,turul}',{barilgiinId,...data,...zagvar,turul})
+                method('mailiinZagvar',token,{barilgiinId,...data,...zagvar,turul})
                 .then(({data})=>{
                     if(data === 'Amjilttai')
                         {
                             console.log(data)
+                            message.success('Амжилттай хадгаллаа')
+                            onRefresh()
+                            destroy()
                         }
                 })
             },
@@ -23,16 +40,18 @@ function ZagvarBurtgel({destroy,data,turul},ref) {
                 destroy()
             },
         }),
-        [form],
+        [form,barilgiinId],
     )
+
+        const ZagvarForm =({value,onChange})=><ZagvarUusgekh onTextChange={onChange} value={value} />
 
     return (
         <Form form={form} initialValues={data}>
             <Form.Item name="ner" >
-                <Input placeholder='Нэвтрэх нэр' type='email' className='login-input' />
+                <Input placeholder='Нэр' />
             </Form.Item>
             <Form.Item name="mail">
-                <Input placeholder='Нууц үг' className='login-input' />
+                <ZagvarForm/>
             </Form.Item>
         </Form>
     )

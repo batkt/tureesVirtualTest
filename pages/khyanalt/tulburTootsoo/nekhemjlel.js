@@ -16,6 +16,13 @@ import _ from "lodash"
 import { useReactToPrint } from "react-to-print"
 import { toWords } from "mon_num"
 
+const Dun = (a)=>{
+  const dun = a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+  if(dun < 0)
+    return <div>{toWords(dun * (-1), { suffix: "n" })} төгрөг</div>
+  return <div>{toWords(dun , { suffix: "n" })} төгрөг</div>
+}
+
 const turul = [
   { zurag: "/ikhNayad.png", ner: "Барааны нэхэмжлэх" },
   { zurag: "/ikhNayadKhuns.png", ner: "Хүнсны нэхэмжлэх" },
@@ -195,8 +202,7 @@ function tulburTootsoo({ token }) {
                   </tr>
                   <tr>
                     <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр){" "}
-                      {toWords(a.eneSardTulukhDun, { suffix: "n" })} төгрөг
+                      Мөнгөн дүн: (үсгээр){" "} <Dun {...a}/>
                     </td>
                   </tr>
                   <tr>

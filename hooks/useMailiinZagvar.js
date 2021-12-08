@@ -14,8 +14,6 @@ const fetcher = (url, token, baiguullagiinId, { search, turul,...khuudaslalt },b
           turul,
           $or: [
             { ner: { $regex: search, $options: "i" } },
-            { register: { $regex: search, $options: "i" } },
-            { utas: { $regex: search, $options: "i" } },
           ],
         },
         ...khuudaslalt,
