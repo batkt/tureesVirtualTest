@@ -7,16 +7,10 @@ import {
   Table,
   Button,
   Select,
-  message,
   InputNumber,
   Input,
   Space,
 } from "antd"
-import {
-  CheckOutlined,
-  ExclamationOutlined,
-  QuestionOutlined,
-} from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"

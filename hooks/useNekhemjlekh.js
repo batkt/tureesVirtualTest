@@ -8,7 +8,8 @@ const fetcher = (url, token, ognoo, { search, jagsaalt, ...khuudaslalt },davkhar
   axios(token)
     .post(url, {
       barilgiinId,
-      ognoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
+      ekhlekhOgnoo: moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
       query: {
         query: {
           davkhar,
