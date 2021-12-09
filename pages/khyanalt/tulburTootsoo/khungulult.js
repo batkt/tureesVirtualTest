@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import {
   Card,
   DatePicker,
@@ -10,11 +10,15 @@ import {
   InputNumber,
   Input,
   Space,
+  message,
   Form,
+  Tabs,
 } from "antd"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
+import createMethod from "tools/function/crud/createMethod"
+import { aldaaBarigch } from "services/uilchilgee"
 
 import _ from "lodash"
 import { useAuth } from "services/auth"
@@ -25,26 +29,86 @@ const turul = [
 ]
 
 function tulburTootsoo() {
-  const { token, baiguullaga } = useAuth()
+  const { token, baiguullaga, barilgiinId } = useAuth()
   const [shuult, setShuult] = React.useState({
     query: {},
   })
+  const [form] = Form.useForm()
   const [davkhar, setDavkhar] = React.useState()
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
 
   const [sar, setSar] = React.useState(moment().add(1, "month"))
+  const [khungulultState, setKhungulultState] = useState()
   const formRef = useRef()
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
+  const [tootsoolol, setTootsoolol] = useState({
+    niitTalbai: 0,
+    niitSariinTurees: 0,
+    khunglugdsunDun: 0,
+    niitTulukhDun: 0,
+  })
   const { Option } = Select
+  useEffect(() => {
+    setGereeniiKhuudaslalt({ khuudasniiKhemjee: 1000 })
+  }, [])
+  useEffect(() => {
+    var khuvi = form?.getFieldValue("khungulukhKhuvi")
+    tootsoolol.niitTalbai = songogdsonGereenuud?.length
+    tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
+      (a, b) => a + Number(b?.sariinTurees),
+      0
+    )
+    tootsoolol.khunglugdsunDun =
+      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100
+    tootsoolol.niitTulukhDun =
+      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun)
+    setTootsoolol({ ...tootsoolol })
+  }, [songogdsonGereenuud])
 
   function disabledDate(current) {
     return current && current < moment().endOf("day")
   }
   function handleChange(value) {
     setDavkhar(value)
-    setShuult({
-      query: { davkhar: value },
-    })
+    if (value.length > 0) {
+      setShuult({
+        query: { davkhar: value },
+      })
+    } else {
+      setShuult()
+    }
+  }
+  function khungulultKhadgalya() {
+    if (songogdsonGereenuud.length > 0) {
+      var ugugdul = form.getFieldsValue()
+      ugugdul.ognoonuud = [
+        moment(ugugdul.ognoonuud).format("YYYY-MM-01 00:00:00"),
+      ]
+      ugugdul.barilgiinId = barilgiinId
+      ugugdul.tulukhDun = tootsoolol.niitSariinTurees
+      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun
+      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun
+      ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
+        (x) => (x._id = x._id)
+      )
+
+      createMethod("khungulultKhadgalya", token, ugugdul)
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            message.success("Хөнгөлөлт амжилттай хийгдлээ")
+            formRef.current.resetFields()
+            setTootsoolol({})
+          }
+        })
+        .catch(aldaaBarigch)
+    } else {
+      message.warning("Хөнгөлөх табай сонгоно уу")
+    }
+  }
+  function tseverlekh() {
+    formRef.current.resetFields()
+    setShuult()
   }
 
   return (
@@ -56,8 +120,9 @@ function tulburTootsoo() {
         setNekhemjlelKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
-      <Card className="col-span-3">
+      <Card className="col-span-3 ring-1 ring-green-400">
         <Form
+          form={form}
           ref={formRef}
           name="control-ref"
           initialValues={{ remember: true }}
@@ -70,7 +135,7 @@ function tulburTootsoo() {
           layout="horizontal"
         >
           <Form.Item
-            name="khungulukhSar"
+            name="ognoonuud"
             label="Хөнгөлөх сар"
             rules={[
               {
@@ -85,10 +150,10 @@ function tulburTootsoo() {
               placeholder="сар"
             />
           </Form.Item>
-          <Form.Item name="nukhtsul" label="Нөхцөл">
+          <Form.Item name="turul" label="Нөхцөл">
             <Select placeholder="нөхцөл">
-              <Option value="Давхар">Давхараар</Option>
-              <Option value="Бүгд">Бүх</Option>
+              <Option value="Давхараар">Давхараар</Option>
+              <Option value="Бүгд">Бүгд</Option>
             </Select>
           </Form.Item>
           <Form.Item name="davkhar" label="Давхар">
@@ -97,7 +162,7 @@ function tulburTootsoo() {
               placeholder="Давхар"
               onChange={handleChange}
             >
-              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
+              {["B1", "1", "2", "3", "4", "5", "6"].map((a) => (
                 <Select.Option key={a} value={a}>
                   {a}
                 </Select.Option>
@@ -113,23 +178,30 @@ function tulburTootsoo() {
           </Form.Item>
           <div className="flex-column grid mt-12 text-base">
             <div className="flex justify-between">
-              Нийт талбайн тоо :<a>15</a>
+              Нийт талбайн тоо :<a>{tootsoolol.niitTalbai}</a>
             </div>
             <div className="flex justify-between">
-              Нийт түрээсийн орлого :<a>15,000,000₮</a>
+              Нийт түрээсийн орлого :
+              <a>{formatNumber(tootsoolol.niitSariinTurees || 0)}</a>
             </div>
             <div className="flex justify-between">
-              Нийт хөнгөлөгдсөн дүн :<a className="text-red-400">-1,500,000₮</a>
+              Нийт хөнгөлөгдсөн дүн :
+              <a className="text-red-400">
+                {formatNumber(tootsoolol.khunglugdsunDun || 0)}
+              </a>
             </div>
             <div className="flex justify-between">
-              Нийт төлөх дүн :<a className="text-green-500">13,500,000₮</a>
+              Нийт төлөх дүн :
+              <a className="text-green-500">
+                {formatNumber(tootsoolol.niitTulukhDun || 0)}
+              </a>
             </div>
           </div>
           <div className="flex flex-row justify-between mt-10">
             <Form.Item>
               <Button
                 htmlType="submit"
-                //onClick={ajiltanBurtgekh}
+                onClick={khungulultKhadgalya}
                 style={{ backgroundColor: "#209669", color: "#ffffff" }}
               >
                 хадгалах
@@ -140,7 +212,7 @@ function tulburTootsoo() {
                 htmlType="submit"
                 danger
                 type="primary"
-                //onClick={ajiltanBurtgekh}
+                onClick={tseverlekh}
                 //style={{ backgroundColor: "#209669", color: "#ffffff" }}
               >
                 цэвэрлэх
@@ -148,51 +220,14 @@ function tulburTootsoo() {
             </Form.Item>
           </div>
         </Form>
-        {/* <Space>
-            <label>Хөнгөлөх сар:</label>
-            <DatePicker
-              disabledDate={disabledDate}
-              picker="month"
-              placeholder="сар"
-              onChange={setSar}
-            />
-          </Space>
-          <Space>
-            <label>Хөнгөлөх хувь:</label>
-            <InputNumber
-              placeholder="Хөнгөлөх хувь"
-              title="Хөнгөлөх хувь"
-              min={0}
-              max={100}
-            />
-          </Space>
-          <Space>
-            <label>Тайлбар:</label>
-            <Input style={{ width: "350px" }} placeholder="Тайлбар" />
-          </Space>
-          <Space>
-            <label>Давхар:</label>
-            <Select
-              style={{ width: "200px" }}
-              mode="multiple"
-              placeholder="Давхар"
-              onChange={handleChange}
-            >
-              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
-                <Select.Option key={a} value={a}>
-                  {a}
-                </Select.Option>
-              ))}
-            </Select>
-          </Space>
-          <Space>
-            <Button type="primary">Хөнгөлөх</Button>
-          </Space> */}
       </Card>
       <Card className="col-span-9">
         <Table
           rowSelection={{
             type: "checkbox",
+            onChange: (selectedRowKeys, selectedRows) => {
+              setSongogdsonGereenuud(selectedRows)
+            },
           }}
           bordered
           scroll={{ y: "calc(100vh - 20rem)" }}
@@ -200,16 +235,6 @@ function tulburTootsoo() {
           loading={!gereeniiMedeelel}
           rowKey={(row) => row._id}
           columns={[
-            {
-              title: "Бүртгэсэн",
-              dataIndex: "createdAt",
-              ellipsis: true,
-              className: "text-center",
-              align: "center",
-              render(date) {
-                return moment(date).format("YYYY-MM-DD HH:mm")
-              },
-            },
             {
               title: "Гэрээ",
               dataIndex: "gereeniiDugaar",
@@ -226,13 +251,6 @@ function tulburTootsoo() {
             },
 
             {
-              title: "Төрөл",
-              dataIndex: "turul",
-              align: "center",
-              className: "text-center",
-              ellipsis: true,
-            },
-            {
               title: "Давхар",
               dataIndex: "davkhar",
               align: "center",
@@ -240,7 +258,6 @@ function tulburTootsoo() {
               className: "text-center",
               ellipsis: true,
             },
-
             {
               title: "Талбай /м2/",
               dataIndex: "talbainKhemjee",
@@ -269,40 +286,6 @@ function tulburTootsoo() {
                 Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
             },
             {
-              title: "Эхлэх",
-              dataIndex: "gereeniiOgnoo",
-              className: "text-center",
-              align: "center",
-              ellipsis: true,
-              render: (data) => {
-                return moment(data).format("YYYY-MM-DD")
-              },
-            },
-            {
-              title: "Дуусах хоног",
-              dataIndex: "duusakhOgnoo",
-              className: "text-center",
-              align: "center",
-              ellipsis: true,
-              render: (duusakhOgnoo) => {
-                return moment(duusakhOgnoo).diff(moment(new Date()), "days")
-              },
-            },
-            {
-              title: "Дуусах",
-              dataIndex: "duusakhOgnoo",
-              className: "text-center",
-              align: "center",
-              ellipsis: true,
-              render: (data) => {
-                return moment(data).format("YYYY-MM-DD")
-              },
-              showSorterTooltip: false,
-              defaultSortOrder: "descend",
-              sorter: (a, b) =>
-                moment(a.duusakhOgnoo).unix() - moment(b.duusakhOgnoo).unix(),
-            },
-            {
               title: "Ажилтан",
               dataIndex: "burtgesenAjiltaniiNer",
               className: "text-center",
@@ -314,18 +297,7 @@ function tulburTootsoo() {
             },
           ]}
           dataSource={gereeniiMedeelel?.jagsaalt}
-          pagination={{
-            current: gereeniiMedeelel?.khuudasniiDugaar,
-            pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-            total: gereeniiMedeelel?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setGereeniiKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
+          pagination={false}
         />
       </Card>
     </Admin>
