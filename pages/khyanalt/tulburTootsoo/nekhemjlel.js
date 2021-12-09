@@ -1,11 +1,9 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React from "react"
+import React, { useEffect } from "react"
 import { Card, DatePicker, Table, Button, Select, message } from "antd"
 import {
-  CheckOutlined,
-  ExclamationOutlined,
-  QuestionOutlined,
+  EditOutlined, FileExcelOutlined,
 } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
@@ -15,9 +13,12 @@ import useDans from "hooks/khuulga/useDans"
 import _ from "lodash"
 import { useReactToPrint } from "react-to-print"
 import { toWords } from "mon_num"
+import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar"
+import {modal} from "components/ant/Modal"
+
 
 const Dun = (a) => {
-  const dun = a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+  const dun = a.eneSardTulukhDun
   if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
   return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
 }
@@ -29,10 +30,14 @@ const turul = [
 
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null)
+  const dunZasvarRef = React.useRef(null)
   const [ognoo, setOgnoo] = React.useState(moment())
   const [barimt, setBarimt] = React.useState()
   const [davkhar, setDavkhar] = React.useState()
   const [songogdsonDans, setDans] = React.useState()
+
+
+  const [nekhemjleliinJagsaalt,setNekhemjleliinJagsaalt] = React.useState([])
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo, davkhar)
 
@@ -42,6 +47,11 @@ function tulburTootsoo({ token }) {
   const { dans } = useDans(token)
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null)
+
+  useEffect(()=>{
+    if(!!nekhemjlel)
+      setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt])
+  },[nekhemjlel])
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
@@ -67,6 +77,31 @@ function tulburTootsoo({ token }) {
       return
     }
     handlePrint()
+  }
+
+  function nekhemjlelZasya(mur,index) {
+    const footer = [
+      <Button onClick={() => dunZasvarRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => dunZasvarRef.current.khadgalya()}>
+          Хадгалах
+      </Button>,
+    ];
+    modal({
+        title: "Нэхэмжлэл засвар",
+        icon: <FileExcelOutlined />,
+        content: (
+            <DunZasvar
+                ref={dunZasvarRef}
+                data={mur}
+                index={index}
+                setNekhemjleliinJagsaalt={setNekhemjleliinJagsaalt}
+                nekhemjleliinJagsaalt={nekhemjleliinJagsaalt}
+                songogdsonGereenuud={songogdsonGereenuud}
+                setSongogdsonGereenuud={setSongogdsonGereenuud}
+            />
+        ),
+        footer,
+    })
   }
 
   return (
@@ -282,7 +317,7 @@ function tulburTootsoo({ token }) {
         <Table
           bordered
           size="small"
-          scroll={{ y: "calc(100vh - 30rem)" }}
+          scroll={{ y: "calc(100vh - 25rem)" }}
           rowSelection={{
             type: "checkbox",
             onChange: (selectedRowKeys, selectedRows) => {
@@ -337,8 +372,9 @@ function tulburTootsoo({ token }) {
             {
               title: "Төлөв",
               width: "4rem",
+              dataIndex: "tuluv",
               align: "center",
-              render(a) {
+              render(a,record,index) {
                 return (
                   <div className="flex items-center justify-center">
                     <Button
@@ -346,25 +382,12 @@ function tulburTootsoo({ token }) {
                       size="small"
                       icon={
                         <div
-                          className={`text-${
-                            !a?.kholbosonGereeniiId
-                              ? a?.magadlaltaiGereenuud?.length > 0
-                                ? "yellow"
-                                : "red"
-                              : "green"
-                          }-500 flex items-center justify-center`}
+                          className={`text-yellow-500 flex items-center justify-center`}
+                          onClick={()=>nekhemjlelZasya(record,index)}
                         >
-                          {!a?.kholbosonGereeniiId ? (
-                            a?.magadlaltaiGereenuud?.length > 0 ? (
-                              <QuestionOutlined style={{ fontSize: "18px" }} />
-                            ) : (
-                              <ExclamationOutlined
-                                style={{ fontSize: "18px" }}
-                              />
-                            )
-                          ) : (
-                            <CheckOutlined style={{ fontSize: "18px" }} />
-                          )}
+                          <EditOutlined
+                            style={{ fontSize: "18px" }}
+                          />
                         </div>
                       }
                     />
@@ -373,19 +396,7 @@ function tulburTootsoo({ token }) {
               },
             },
           ]}
-          dataSource={nekhemjlel?.jagsaalt}
-          // pagination={{
-          //   current: nekhemjlel?.khuudasniiDugaar,
-          //   pageSize: nekhemjlel?.khuudasniiKhemjee,
-          //   total: nekhemjlel?.niitMur,
-          //   showSizeChanger: true,
-          //   onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-          //     setNekhemjlelKhuudaslalt((kh) => ({
-          //       ...kh,
-          //       khuudasniiDugaar,
-          //       khuudasniiKhemjee,
-          //     })),
-          // }}
+          dataSource={nekhemjleliinJagsaalt}
           pagination={false}
           rowKey={(a) => a._id}
         />

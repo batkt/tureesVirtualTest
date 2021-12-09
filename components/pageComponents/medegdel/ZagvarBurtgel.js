@@ -13,8 +13,6 @@ function ZagvarForm({value,onChange}) {
 function ZagvarBurtgel({barilgiinId,destroy,token,data={},turul,onRefresh},ref) {
     const [form] = Form.useForm();
 
-    const [zagvar,setZagvar] = useState(data?.mail || '') 
-
     useImperativeHandle(
         ref,
         () => ({
