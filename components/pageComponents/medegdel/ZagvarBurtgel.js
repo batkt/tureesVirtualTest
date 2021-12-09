@@ -21,7 +21,6 @@ function ZagvarBurtgel({barilgiinId,destroy,token,data={},turul,onRefresh},ref) 
             khadgalya() {
                 const method = data?._id ? updateMethod : createMethod
                 const zagvar = form.getFieldsValue()
-                console.log('{barilgiinId,...data,...zagvar,turul}',{barilgiinId,...data,...zagvar,turul})
                 method('mailiinZagvar',token,{barilgiinId,...data,...zagvar,turul})
                 .then(({data})=>{
                     if(data === 'Amjilttai')
