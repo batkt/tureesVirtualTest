@@ -15,6 +15,7 @@ import { useReactToPrint } from "react-to-print"
 import { toWords } from "mon_num"
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar"
 import {modal} from "components/ant/Modal"
+import { useAuth } from "services/auth"
 
 
 const Dun = (a) => {
@@ -31,6 +32,8 @@ const turul = [
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null)
   const dunZasvarRef = React.useRef(null)
+  const {baiguullaga,barilgiinId} = useAuth()
+
   const [ognoo, setOgnoo] = React.useState(moment())
   const [barimt, setBarimt] = React.useState()
   const [davkhar, setDavkhar] = React.useState()
@@ -295,12 +298,13 @@ function tulburTootsoo({ token }) {
                   </Select.Option>
                 ))}
             </Select>
-            <Select placeholder="Давхар" onChange={setDavkhar}>
-              {["B1", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map((a) => (
-                <Select.Option key={a} value={a}>
-                  {a}
-                </Select.Option>
-              ))}
+            <Select placeholder="Давхар" onChange={(v)=>{
+                setDavkhar(v)
+                setSongogdsonGereenuud(null)
+              }} >
+              {baiguullaga?.barilguud[0]?.davkharuud
+                  .map((a)=><Select.Option key={a._id} value={a.davkhar}>{a.davkhar}</Select.Option>)
+              }
             </Select>
             <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
               {turul.map((a) => (
