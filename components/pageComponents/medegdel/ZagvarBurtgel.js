@@ -3,12 +3,10 @@ import { Form, Input, message } from 'antd'
 import updateMethod from 'tools/function/crud/updateMethod'
 import createMethod from 'tools/function/crud/createMethod'
 import ZagvarUusgekh from './ZagvarUusgekh';
-import { useAuth } from 'services/auth';
 
 function ZagvarForm({value,onChange}) {
-    const [text,setText] = React.useState(value || '')
     return (
-        <ZagvarUusgekh onTextChange={onChange} value={text} change={setText} />
+        <ZagvarUusgekh value={value} change={onChange} />
     )
 }
 
