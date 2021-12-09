@@ -27,11 +27,11 @@ const fetcherToololt = (url, token,barilgiinId) =>
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useGereeniiJagsaalt(token, baiguullagiinId, register,query,tooAvakhEsekh) {
+function useGereeniiJagsaalt(token, baiguullagiinId, register,query,tooAvakhEsekh,khuudasniiKhemjee) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: khuudasniiKhemjee || 100,
     search: "",
   });
 

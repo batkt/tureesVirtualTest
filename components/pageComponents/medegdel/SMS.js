@@ -1,13 +1,16 @@
-import { Button, Input, notification,Select } from 'antd'
+import { Button, Input, message, notification,Popconfirm,Select, Spin, Table } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 import useGereeniiJagsaalt from 'hooks/useGereeniiJagsaalt'
+import useNekhemjlekh from 'hooks/useNekhemjlekh'
 import useMailiinZagvar from 'hooks/useMailiinZagvar'
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
 import ZagvarBurtgel from "./ZagvarBurtgel"
-import uilchilgee from 'services/uilchilgee'
+import uilchilgee, { aldaaBarigch } from 'services/uilchilgee'
 import {modal} from 'components/ant/Modal'
 import { DeleteOutlined, EditOutlined, FileExcelOutlined } from '@ant-design/icons'
 import { useAuth } from 'services/auth'
+import formatNumber from 'tools/function/formatNumber'
+import deleteMethod from 'tools/function/crud/deleteMethod'
 
 var setter = null
 
@@ -36,18 +39,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
 
     const ref = React.useRef(null)
 
-    const query = useMemo(()=>{
-        if(ilgeekhTurul === 'davkharaar')
-            return {davkhar}
-        else if(ilgeekhTurul === 'avlagaar')
-            return {uldegdel:{$gt:0}}
-        else 
-            return {}
-    },[ilgeekhTurul,davkhar])
-
-    const tooAvakhEsekh = useMemo(()=> ilgeekhTurul !== 'gantsaar',[ilgeekhTurul])
-
-    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(token,baiguullaga?._id,undefined,query,tooAvakhEsekh)
+    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(ilgeekhTurul === 'gantsaar' && token,baiguullaga?._id)
     
     const {mailiinZagvarGaralt,mailiinZagvarMutate,setMailiinZagvarKhuudaslalt} = useMailiinZagvar(token,'sms')
 
@@ -74,6 +66,17 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             footer,
         });
     }
+
+    function zagvarUstgaya(mur) {
+        deleteMethod('mailiinZagvar',token,mur?._id)
+        .then(({data})=>{
+            if(data === 'Amjilttai')
+                {
+                    message.success('Устгагдлаа')
+                    mailiinZagvarMutate()
+                }
+        })
+    }
     
     return (
         <>
@@ -87,7 +90,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                     </Select>
                 </div>
             </div>
-            {ilgeekhTurul === 'gantsaar' ? <div className="box p-5 mt-5">
+            {ilgeekhTurul === 'gantsaar' && <div className="box p-5 mt-5">
                 <div className="text-gray-700 dark:text-gray-300">
                     <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setGereeniiKhuudaslalt(a=>({...a,search}))}/>
                 </div>
@@ -104,10 +107,6 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                     )}
                 </div>
             </div>
-            :
-            <div className="box p-5 mt-5">
-                Илгээгдэх тоо:<span className='text-lg font-medium'>{gereeniiMedeelel?.niitMur}</span>
-            </div>
             }
 
             <div className="p-2 mt-5 font-medium flex flex-row">
@@ -120,9 +119,16 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                 mailiinZagvarGaralt?.jagsaalt?.map(a=>(
                     <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.mail)}>
                         <div className='absolute right-2 flex flex-row space-x-2'>
-                            <div className='p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full'>
-                                <DeleteOutlined/>
-                            </div>
+                            <Popconfirm
+                                title="Загвар устгах уу?"
+                                okText="Тийм"
+                                cancelText="Үгүй"
+                                onConfirm={() => zagvarUstgaya(a)}
+                            >
+                                <div className='p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full'>
+                                    <DeleteOutlined/>
+                                </div>
+                            </Popconfirm>
                             <div className='p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full' onClick={()=>smsZagvarNemya(a)}>
                                 <EditOutlined/>
                             </div>
@@ -133,9 +139,8 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                         <div className="ml-2 overflow-hidden">
                             <div className="flex items-center">
                                 <div className="font-medium">{a.ner}</div> 
-                                <div className="text-xs text-gray-500 ml-auto">01:10 PM</div>
                             </div>
-                            <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.mail }}  ></div>
+                            <div className="w-full truncate text-gray-600 mt-0.5" >{a.mail}</div>
                         </div>
                     </div>
                 ))
@@ -147,6 +152,10 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
 export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,setDavkhar}) {
     const [content,setContent] = useState('')
     const [msj,onTextChange] = useState('')
+    const [loading,setLoading] = useState(false)
+    const [songogdsonGereenuud,setSongogdsonGereenuud] = useState([])
+
+    const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useNekhemjlekh(ilgeekhTurul !== 'gantsaar' && token, undefined, davkhar)
     
     useEffect(()=>{
         setter = setContent
@@ -167,22 +176,48 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
     },[khariltsagch,msj])
 
     async function msgIlgeeye() {
-        uilchilgee(token).post(`/msg${ilgeekhTurul !== 'gantsaar' ? 'Olnoor' : ''}Ilgeeye`,{
-            davkhar,
-            turul:ilgeekhTurul,
-            msj,
-            "msgnuud": khariltsagch ? [
-                {
-                    "to": khariltsagch?.utas,
-                    "text": ingeekhmSms
+        if(loading)
+        {
+            message.warning('Хүсэлт илгээгдсэн байна')
+            return
+        }
+        var msgnuud = []
+        if(ilgeekhTurul !== 'gantsaar' && songogdsonGereenuud.length > 0)
+            msgnuud = songogdsonGereenuud.map(a=>{
+                var text = msj
+                for (const [key, value] of Object.entries(a)) {
+                    text = text?.replace(
+                    new RegExp(`<${key}>`, "g"),
+                    value
+                    );
                 }
-            ]
-            :   []
-        }).then(({data})=>{
+                return ({
+                    to:a.utas,
+                    text
+                })
+            })
+        else if(!!khariltsagch)
+            msgnuud = [
+                        {
+                            "to": khariltsagch?.utas,
+                            "text": ingeekhmSms
+                        }
+                    ]
+        else 
+        {
+            message.warning('Та СМС илгээх гэрээгээ сонгоно уу')
+            return
+        }
+        setLoading(true)
+        uilchilgee(token).post(`/msgIlgeeye`,{msgnuud}).then(({data})=>{
             if(data && data[0].Result === "SUCCESS")
                 {
                     notification.success({message:'СМС Амжилттай илгээлээ'})
+                    setLoading(false)
                 }
+        }).catch(e=>{
+            setLoading(false)
+            aldaaBarigch(e)
         })
     }
 
@@ -214,19 +249,75 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
                 </div>
             </div>
             <div className='w-full p-2'>
-                <div dangerouslySetInnerHTML={{ __html: ingeekhmSms }}/>
+                {ilgeekhTurul === 'gantsaar' && <div dangerouslySetInnerHTML={{ __html: ingeekhmSms }}/>}
+                {ilgeekhTurul !== 'gantsaar' && 
+                    <Table 
+                        rowKey={(row) => row._id}
+                        scroll={{ y: "calc(100vh - 32rem)" }}
+                        rowSelection={{
+                        type: "checkbox",
+                        onChange: (selectedRowKeys, selectedRows) => {
+                            setSongogdsonGereenuud(selectedRows)
+                        },
+                        }}
+                        size='small'
+                        loading={!nekhemjlel}
+                        dataSource={nekhemjlel?.jagsaalt}
+                        columns={[{
+                            title: "Гэрээний дугаар",
+                            dataIndex: "gereeniiDugaar",
+                            align: "center"
+                        },
+                        {
+                            title: "Нэр",
+                            dataIndex: "ner",
+                            align: "left"
+                        },
+                        {
+                            title: "Талбайн дугаар",
+                            dataIndex: "talbainDugaar",
+                            align: "center"
+                        },
+                        {
+                            title: "Утасны дугаар",
+                            dataIndex: "utas",
+                            align: "center"
+                        },
+                        {
+                            title: "Сарийн түрээс",
+                            dataIndex: "sariinTurees",
+                            align: "center",
+                            render: (sariinTurees) => {
+                              return formatNumber(sariinTurees || 0)
+                            },
+                          },
+                    ]}
+                    pagination={{
+                        showTotal:(total)=><div>Нийт: {total}</div>,
+                        current: nekhemjlel?.khuudasniiDugaar,
+                        pageSize: nekhemjlel?.khuudasniiKhemjee,
+                        total: nekhemjlel?.niitMur,
+                        showSizeChanger: true,
+                        onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                          setGereeniiKhuudaslalt((kh) => ({
+                            ...kh,
+                            khuudasniiDugaar,
+                            khuudasniiKhemjee,
+                          })),
+                      }}
+                    />
+                }
             </div>
             <div className='w-full p-2 mt-auto'>
-                {/* <Input.TextArea onChange={(e)=>onTextChange(e.target.value)} value={msj}/> */}
                 <ZagvarUusgekh change={setContent} value={content} onTextChange={onTextChange}/>
             </div>
             
             <div className='w-full flex justify-end items-center space-x-2 p-2'>
                 <label className='font-medium'>СМС Илгээх</label>
                 <div onClick={msgIlgeeye} className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 block bg-green-600 text-white rounded-full flex-none flex items-center justify-center"> 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                    {loading ? <Spin size='small'/> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                         <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg> 
+                    </svg> }
                 </div>
             </div>
         </div>

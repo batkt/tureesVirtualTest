@@ -109,7 +109,7 @@ function tulburTootsoo({ token }) {
                   <tr>
                     <td colSpan={6}>
                       <div>НЭХЭМЖЛЭГЧ БАЙГУУЛЛАГА</div>
-                      <div>КОМПАНИЙН НЭР: ИХ НАЯД ПЛАЗА ХХК</div>
+                      <div>НЭР: ИХ НАЯД ПЛАЗА ХХК</div>
                       <div>КОМПАНИЙН РД: 6481523</div>
                       <div>ДАНС: Хаан банк {songogdsonDans} (MNT)</div>
                       <div>
@@ -172,22 +172,10 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+                        a.eneSardTulukhDun
                       )}
                       ₮
                     </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={10} className="text-right">
-                      НӨАТ
-                    </td>
-                    <td className="border"></td>
-                  </tr>
-                  <tr>
-                    <td colSpan={10} className="text-right">
-                      ХЯМДРАЛ
-                    </td>
-                    <td className="border"></td>
                   </tr>
                   <tr>
                     <td colSpan={10} className="text-right">
@@ -195,7 +183,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun + (a.umnukhSariinUrTulbur || 0)
+                        a.eneSardTulukhDun
                       )}
                       ₮
                     </td>

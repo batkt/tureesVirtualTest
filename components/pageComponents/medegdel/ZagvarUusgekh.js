@@ -109,7 +109,6 @@ function ZaaltZasvar({ value, change,onTextChange }) {
         setContents={value}
         setOptions={{
           plugins: custom,
-          height: 200,
           buttonList: [
             ...buttonList.formatting,
             ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],

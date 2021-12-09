@@ -30,7 +30,7 @@ function useNekhemjlekh(token, ognoo,davkhar) {
     jagsaalt: [],
   });
   const { data, mutate } = useSWR(
-    !!token && !!ognoo
+    !!token
       ? ["/eneSardTulukhJagsaaltAvya", token, ognoo, khuudaslalt,davkhar,barilgiinId]
       : null,
     fetcher,
