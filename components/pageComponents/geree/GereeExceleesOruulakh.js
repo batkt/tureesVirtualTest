@@ -16,13 +16,14 @@ function GereeExceleesOruulakh(
     zagvariinZam,
     onFinish,
     baiguullaga,
+    barilgiinId
   },
   ref
 ) {
   const [zagvariinId, setGereeniiZagvar] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
-
+  
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
 
@@ -58,7 +59,7 @@ function GereeExceleesOruulakh(
           showUploadList={false}
           multiple={false}
           name="file"
-          data={{ zagvariinId,ognoo:moment(ognoo).format('YYYY-MM-01 00:00:00')}}
+          data={{ barilgiinId,zagvariinId,ognoo:moment(ognoo).format('YYYY-MM-01 00:00:00')}}
           action={`${url}/${zam}`}
           method="POST"
           headers={{ Authorization: `bearer ${token}` }}

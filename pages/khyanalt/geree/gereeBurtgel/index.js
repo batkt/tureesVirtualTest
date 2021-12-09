@@ -104,7 +104,7 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 
 function ZakhialgiinKhyanalt() {
   //#region const 
-  const { token, baiguullaga } = useAuth()
+  const { token, baiguullaga,barilgiinId } = useAuth()
   const [shuult, setShuult] = React.useState({
     query: {},
   })
@@ -555,6 +555,7 @@ function ZakhialgiinKhyanalt() {
         <GereeExceleesOruulakh
           ref={excelref}
           token={token}
+          barilgiinId={barilgiinId}
           baiguullaga={baiguullaga}
           onFinish={gereeniiMedeelelMutate}
           zam="gereeniiExcelTatya"
