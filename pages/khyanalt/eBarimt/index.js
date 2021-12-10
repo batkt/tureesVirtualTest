@@ -29,6 +29,7 @@ function EbarimtMedeelel({ token }) {
 
   const query = useMemo(() => {
     return {
+      $or:[{ustgasanOgnoo:null},{ustgasanOgnoo:{$exists:false}}],
       createdAt: {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
