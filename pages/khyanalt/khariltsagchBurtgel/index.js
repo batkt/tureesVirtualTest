@@ -19,11 +19,11 @@ import {
   SolutionOutlined,
   MailOutlined,
   BellOutlined,
-  FileTextOutlined,
   FileExcelOutlined,
   EyeOutlined,
   MoreOutlined,
   SettingOutlined,
+  MinusCircleOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
 
@@ -45,6 +45,18 @@ import { modal } from "components/ant/Modal"
 import formatNumber from "tools/function/formatNumber"
 
 const iconColor = { fontSize: "18px" }
+
+function checkUtas(form,fields,utga) {
+  const utguud = []
+  fields.map(a=>{
+    utguud.push(form.getFieldValue(['utas',a.name]))
+  })
+  if(!!utguud.find(a=>a === utga)){
+    message.warning('Энэ утасны дугаарыг бүртгэсэн байна')
+    return false
+  }
+  return true
+}
 
 function AjiltanBurtgel({ token }) {
   const formRef = useRef()
@@ -446,24 +458,51 @@ function AjiltanBurtgel({ token }) {
               prefix={<HomeOutlined style={iconColor} />}
             ></Input>
           </Form.Item>
-
-          <Form.Item
-            name="utas"
-            rules={[
-              {
-                required: true,
-                message: "Утас бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              allowClear
-              placeholder="утас"
-              value={khariltsagchState.utas}
-              onChange={(e) => onChange("utas", e.target.value)}
-              prefix={<PhoneOutlined style={iconColor} />}
-            ></Input>
-          </Form.Item>
+          <Form.List name="utas">
+                {(fields, { add, remove}, { errors }) => (
+                <>
+                    {fields?.length > 0 && <Form.Item label={'Утас'} >
+                        <div className='flex flex-wrap'>
+                        {fields.map((field) => (
+                            <div key={field.key} className='flex flex-row space-x-1 border rounded-md items-center px-1 bg-gray-50 m-1'>
+                                <label>{formRef.current.getFieldValue(['utas',field.name])}</label>
+                                <MinusCircleOutlined
+                                    style={{display:'flex'}}
+                                    onClick={() => {
+                                      remove(field.name)
+                                      khariltsagchState.utas.splice(field.name,1)
+                                      onChange("khayag", khariltsagchState.utas)
+                                    }}
+                                />
+                            </div>
+                        ))}
+                        </div>
+                    </Form.Item>}
+                    <Form.Item>
+                        <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }} >
+                            <Input allowClear placeholder="утас" onKeyUp={(e)=>{
+                                if(e.key === 'Enter' && checkUtas(formRef.current,fields,e.target.value)){
+                                    add(e.target.value,0)
+                                    khariltsagchState.utas.push(e.target.value)
+                                    onChange("khayag", khariltsagchState.utas)
+                                    e.target.value = ''
+                                }
+                            }}
+                            onBlur={(e)=>{
+                              if(e.target.value?.length === 8 && checkUtas(formRef.current,fields,e.target.value))
+                                {
+                                  add(e.target.value,0)
+                                  khariltsagchState.utas.push(e.target.value)
+                                  onChange("khayag", khariltsagchState.utas)
+                                    e.target.value = ''
+                                }
+                            }}
+                            prefix={<PhoneOutlined style={iconColor} />}/>
+                        </Form.Item>
+                    </Form.Item>
+                </>
+                )}
+            </Form.List>
           <Form.Item name="mail">
             <Input
               type="email"
@@ -607,7 +646,9 @@ function AjiltanBurtgel({ token }) {
               ellipsis: true,
               width: "5rem",
             },
-            { title: "Утас", dataIndex: "utas", ellipsis: true },
+            { title: "Утас", dataIndex: "utas", ellipsis: true,render(a){
+              return a?.join(',')
+            } },
             {
               title: "И-мэйл",
               dataIndex: "mail",
