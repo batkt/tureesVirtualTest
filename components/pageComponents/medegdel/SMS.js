@@ -155,7 +155,7 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
     const [loading,setLoading] = useState(false)
     const [songogdsonGereenuud,setSongogdsonGereenuud] = useState([])
 
-    const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useNekhemjlekh(ilgeekhTurul !== 'gantsaar' && token, undefined, davkhar)
+    const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useNekhemjlekh(ilgeekhTurul !== 'gantsaar' && token, undefined,davkhar,ilgeekhTurul)
     
     useEffect(()=>{
         setter = setContent

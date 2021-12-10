@@ -60,6 +60,7 @@ const tulburiinTalbaruud = [
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
+  { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
 ]
 
 function ZaaltZasvar({ value, change,onTextChange }) {
