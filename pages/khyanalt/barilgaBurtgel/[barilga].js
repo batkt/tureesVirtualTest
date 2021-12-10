@@ -64,11 +64,13 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   function khadgalya() {
+    const {_id} = _.get(baiguullaga,`barilguud.${barilga}`)
     const burtgekhBarilga = form.getFieldsValue()
     burtgekhBarilga.davkharuud = [...davkhar,...bdavkhar]
+    burtgekhBarilga._id = _id
     if(!baiguullaga?.barilguud) 
       baiguullaga.barilguud = []
-
+    
     if(barilga === 'new')
       baiguullaga?.barilguud.push(burtgekhBarilga)
     else
