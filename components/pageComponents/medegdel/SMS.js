@@ -118,7 +118,16 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             {
                 mailiinZagvarGaralt?.jagsaalt?.map(a=>(
                     <div key={a.ner} className="intro-x cursor-pointer box relative flex items-center p-2 mt-2" onClick={()=>setter && setter(a.mail)}>
-                        <div className='absolute right-2 flex flex-row space-x-2'>
+                        <div className="w-8 h-8 flex-none image-fit mr-1 ">
+                            <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
+                        </div>
+                        <div className="ml-2 overflow-hidden mr-1">
+                            <div className="flex items-center">
+                                <div className="font-medium">{a.ner}</div> 
+                            </div>
+                            <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.mail }}/>
+                        </div>
+                        <div className='flex flex-row space-x-2 ml-auto'>
                             <Popconfirm
                                 title="Загвар устгах уу?"
                                 okText="Тийм"
@@ -132,15 +141,6 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
                             <div className='p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full' onClick={()=>smsZagvarNemya(a)}>
                                 <EditOutlined/>
                             </div>
-                        </div>
-                        <div className="w-8 h-8 flex-none image-fit mr-1 ">
-                            <img alt="Rubick Tailwind HTML Admin Template" src="/email.png"/>
-                        </div>
-                        <div className="ml-2 overflow-hidden">
-                            <div className="flex items-center">
-                                <div className="font-medium">{a.ner}</div> 
-                            </div>
-                            <div className="w-full truncate text-gray-600 mt-0.5" dangerouslySetInnerHTML={{ __html: a.mail }}></div>
                         </div>
                     </div>
                 ))
