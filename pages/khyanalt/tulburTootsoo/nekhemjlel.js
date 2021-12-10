@@ -19,7 +19,7 @@ import { useAuth } from "services/auth"
 
 
 const Dun = (a) => {
-  const dun = (a.tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
+  const dun = (a.tuluvluguutEsekh ? a.niitUldegdel : (a.eneSardTulukhDun + a.umnukhSariinUrTulbur)) 
   if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
   return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
 }
@@ -211,7 +211,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        (tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
+                        (tuluvluguutEsekh ? a.niitUldegdel : (a.eneSardTulukhDun + a.umnukhSariinUrTulbur)) 
                       )}
                       ₮
                     </td>
@@ -222,7 +222,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        (tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
+                        (tuluvluguutEsekh ? a.niitUldegdel : (a.eneSardTulukhDun + a.umnukhSariinUrTulbur)) 
                       )}
                       ₮
                     </td>

@@ -189,6 +189,7 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch)
   }
+  
   function khariltsagchBurtgekh() {
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId
     khariltsagchState.barilgiinId = barilgiinId

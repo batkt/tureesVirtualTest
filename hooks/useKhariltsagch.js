@@ -23,11 +23,12 @@ const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgi
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-const fetcherToololt = (url, token) =>
+const fetcherToololt = (url, token,barilgiinId) =>
   axios(token)
-    .get(url)
+    .get(`${url}/${barilgiinId}`)
     .then((res) => res.data)
     .catch(aldaaBarigch)
+    
 function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setKhuudaslalt] = useState({
@@ -49,8 +50,9 @@ function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
   }
 }
 export function useKhariltsagchToololt(token) {
+  const {barilgiinId} = useAuth()
   const { data, mutate } = useSWR(
-    token ? ["/khariltsagchiinTooAvya", token] : null,
+    token ? ["/khariltsagchiinTooAvya", token,barilgiinId] : null,
     fetcherToololt,
     {
       revalidateOnFocus: false,
