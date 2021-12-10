@@ -19,7 +19,7 @@ import { useAuth } from "services/auth"
 
 
 const Dun = (a) => {
-  const dun = a.eneSardTulukhDun + a.umnukhSariinUrTulbur
+  const dun = (a.tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
   if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
   return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
 }
@@ -189,7 +189,7 @@ function tulburTootsoo({ token }) {
                       {formatNumber(a.talbainNegjUne)}₮
                     </td>
                     <td className="border" colSpan={2}>
-                      {formatNumber(a.eneSardTulukhDun)}₮
+                      {formatNumber(tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun)}₮
                     </td>
                   </tr>
                   <tr>
@@ -211,7 +211,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun + a.umnukhSariinUrTulbur
+                        (tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
                       )}
                       ₮
                     </td>
@@ -222,14 +222,14 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun + a.umnukhSariinUrTulbur
+                        (tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun) + a.umnukhSariinUrTulbur
                       )}
                       ₮
                     </td>
                   </tr>
                   <tr>
                     <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр) <Dun {...a} />
+                      Мөнгөн дүн: (үсгээр) <Dun tuluvluguutEsekh={tuluvluguutEsekh} {...a} />
                     </td>
                   </tr>
                   <tr>
@@ -291,7 +291,7 @@ function tulburTootsoo({ token }) {
             onChange={setOgnoo}
           />
           <div className="ml-auto space-x-2">
-            <Switch title="Төлөвлөөт эсэх"/>
+            <Switch title="Төлөвлөөт эсэх" onChange={setTuluvluguutEsekh} defaultChecked={tuluvluguutEsekh}/>
             <Select placeholder="Дансны төрөл" onChange={setDans}>
               {dans?.accounts
                 ?.filter((a) => a.type !== "L")
@@ -370,6 +370,16 @@ function tulburTootsoo({ token }) {
               title: "Энэ сард төлөх дүн",
               sorter: true,
               dataIndex: "eneSardTulukhDun",
+              render(a) {
+                return formatNumber(a)
+              },
+              ellipsis: true,
+              align: "center",
+            },
+            {
+              title: "Нийт үлдэгдэл",
+              sorter: true,
+              dataIndex: "niitUldegdel",
               render(a) {
                 return formatNumber(a)
               },
