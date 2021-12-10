@@ -65,7 +65,6 @@ function GereeBaiguulakh({ token, data }) {
   function khadgalya() {
     const burtgekhBarilga = form.getFieldsValue()
     burtgekhBarilga.davkharuud = [...davkhar,...bdavkhar]
-    burtgekhBarilga._id = _id
     if(!baiguullaga?.barilguud) 
       baiguullaga.barilguud = []
     
