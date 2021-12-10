@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Admin from "components/Admin";
-import readMethod from "tools/function/crud/readMethod";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import LocationPicker from "components/ant/LocationPicker";
@@ -64,7 +63,6 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   function khadgalya() {
-    const {_id} = _.get(baiguullaga,`barilguud.${barilga}`)
     const burtgekhBarilga = form.getFieldsValue()
     burtgekhBarilga.davkharuud = [...davkhar,...bdavkhar]
     burtgekhBarilga._id = _id
@@ -73,8 +71,11 @@ function GereeBaiguulakh({ token, data }) {
     
     if(barilga === 'new')
       baiguullaga?.barilguud.push(burtgekhBarilga)
-    else
-      baiguullaga?.barilguud[barilga] = burtgekhBarilga
+    else{
+      const {_id} = _.get(baiguullaga,`barilguud.${barilga}`) 
+      _.set(burtgekhBarilga,`_id`,_id)
+      _.set(baiguullaga,`barilguud.${barilga}`,burtgekhBarilga)
+    }
     
 
     updateMethod('baiguullaga',token,baiguullaga).then(({data})=>{
