@@ -1,7 +1,7 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React, { useEffect } from "react"
-import { Card, DatePicker, Table, Button, Select, message } from "antd"
+import { Card, DatePicker, Table, Button, Select, message, Switch } from "antd"
 import {
   EditOutlined, FileExcelOutlined,
 } from "@ant-design/icons"
@@ -19,7 +19,7 @@ import { useAuth } from "services/auth"
 
 
 const Dun = (a) => {
-  const dun = a.eneSardTulukhDun
+  const dun = a.eneSardTulukhDun + a.umnukhSariinUrTulbur
   if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
   return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
 }
@@ -34,6 +34,7 @@ function tulburTootsoo({ token }) {
   const dunZasvarRef = React.useRef(null)
   const {baiguullaga,barilgiinId} = useAuth()
 
+  const [tuluvluguutEsekh, setTuluvluguutEsekh] = React.useState(false)
   const [ognoo, setOgnoo] = React.useState(moment())
   const [barimt, setBarimt] = React.useState()
   const [davkhar, setDavkhar] = React.useState()
@@ -163,6 +164,7 @@ function tulburTootsoo({ token }) {
                         <div>РД: {a.register}</div>
                         <div>ХАЯГ: </div>
                         <div>УТАС: {a.utas}</div>
+                        <div>ТАЛБАЙ: {a.talbainDugaar}</div>
                       </div>
                     </td>
                   </tr>
@@ -209,7 +211,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun
+                        a.eneSardTulukhDun + a.umnukhSariinUrTulbur
                       )}
                       ₮
                     </td>
@@ -220,7 +222,7 @@ function tulburTootsoo({ token }) {
                     </td>
                     <td className="border">
                       {formatNumber(
-                        a.eneSardTulukhDun
+                        a.eneSardTulukhDun + a.umnukhSariinUrTulbur
                       )}
                       ₮
                     </td>
@@ -289,6 +291,7 @@ function tulburTootsoo({ token }) {
             onChange={setOgnoo}
           />
           <div className="ml-auto space-x-2">
+            <Switch title="Төлөвлөөт эсэх"/>
             <Select placeholder="Дансны төрөл" onChange={setDans}>
               {dans?.accounts
                 ?.filter((a) => a.type !== "L")
