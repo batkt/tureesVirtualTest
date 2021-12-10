@@ -31,7 +31,7 @@ const turul = [
 function tulburTootsoo() {
   const { token, baiguullaga, barilgiinId } = useAuth()
   const [shuult, setShuult] = React.useState({
-    query: {},
+    query: {tuluv:{$nin:-1}},
   })
   const [form] = Form.useForm()
   const [davkhar, setDavkhar] = React.useState()
@@ -73,7 +73,7 @@ function tulburTootsoo() {
     setDavkhar(value)
     if (value.length > 0) {
       setShuult({
-        query: { davkhar: value },
+        query: { davkhar: value,tuluv:{$nin:-1} },
       })
     } else {
       setShuult()

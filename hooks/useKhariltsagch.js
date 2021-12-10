@@ -28,7 +28,7 @@ const fetcherToololt = (url, token,barilgiinId) =>
     .get(`${url}/${barilgiinId}`)
     .then((res) => res.data)
     .catch(aldaaBarigch)
-    
+
 function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setKhuudaslalt] = useState({
@@ -37,7 +37,7 @@ function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
     search: "",
   })
   const { data, mutate } = useSWR(
-    !!token && !!baiguullagiinId
+    !!token && !!baiguullagiinId && !!barilgiinId
       ? ["khariltsagch", token, baiguullagiinId, khuudaslalt,barilgiinId]
       : null,
     fetcher,
