@@ -78,7 +78,7 @@ function GuilgeeKholbokh(
         });
       },
     }),
-    [geree, tulult]
+    [geree, tulult,olnoorKholbokhEsekh]
   );
 
   React.useEffect(() => {
