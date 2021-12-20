@@ -30,7 +30,7 @@ function GuilgeeKholbokh(
         destroy();
       },
       khadgalya() {
-        if (olnoorKholbokhEsekh && !tulult.filter((a) => !!a.gereeniiId) || !geree) {
+        if (olnoorKholbokhEsekh && !tulult.filter((a) => !!a.gereeniiId) || !olnoorKholbokhEsekh && !geree) {
           notification.warning({ message: "Та гэрээгээ сонгоно уу" });
           return;
         }
