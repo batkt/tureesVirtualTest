@@ -1,4 +1,4 @@
-import { InputNumber, Modal, notification, Select } from "antd";
+import { InputNumber, Modal, notification, Select, Switch, Tooltip } from "antd";
 import _ from "lodash";
 import React from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
@@ -12,6 +12,7 @@ function GuilgeeKholbokh(
   ref
 ) {
   const [geree, setGeree] = React.useState(null);
+  const [olnoorKholbokhEsekh, setOlnoorKholbokhEsekh] = React.useState(false);
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
   const [tulult, setTulult] = React.useState([{}]);
 
@@ -38,7 +39,19 @@ function GuilgeeKholbokh(
           okText: "Тийм",
           cancelText: "Үгүй",
           onOk: () => {
-            const guilgeenuud = tulult.filter((a) => !!a.gereeniiId);
+            let guilgeenuud = []
+            if(olnoorKholbokhEsekh)
+              guilgeenuud = tulult.filter((a) => !!a.gereeniiId);
+            else 
+              guilgeenuud = [{
+                turul:'bank',
+                tulsunDun:data.amount,
+                ognoo:moment(data.tranDate).set('hour',data.time.substring(0, 2)).set('minute',data.time.substring(2, 4)),
+                guilgeeniiId:data._id,
+                gereeniiId:geree,
+                dansniiDugaar:data.dansniiDugaar,
+                tulsunDans:data.relatedAccount
+              }]
             uilchilgee(token)
               .post("/tulultOlnoorKhadgalya", { guilgeenuud })
               .then(({ data }) => {
@@ -101,7 +114,6 @@ function GuilgeeKholbokh(
       });
       if (!!data?.kholbosonDun) sum += data?.kholbosonDun;
       _.set(a, `${index}.tulsunDun`, data.amount - sum);
-
       return [...a];
     });
   }
@@ -123,7 +135,7 @@ function GuilgeeKholbokh(
               <div className="col-span-3">{a?.ner}</div>
               <div className="col-span-2 font-medium">{a?.utas}</div>
               <div className="col-span-2">{a?.talbainDugaar}</div>
-              <div className="col-span-2">{formatNumber(a?.uldegdel)}₮</div>
+              <div className="col-span-2">{formatNumber(a?.uldegdel,2)}₮</div>
             </div>
           ))}
         </div>
@@ -136,7 +148,7 @@ function GuilgeeKholbokh(
         </div>
         <div className="space-x-2">
           <span className="font-medium">Гүйлгээний дүн:</span>
-          <span>{formatNumber(data?.amount)}₮</span>
+          <span>{formatNumber(data?.amount,2)}₮</span>
         </div>
         <div className="col-span-2 flex flex-row space-x-2 border-t">
           <div className="font-medium">Тайлбар:</div>
@@ -145,12 +157,42 @@ function GuilgeeKholbokh(
         {!!data?.kholbosonDun && (
           <div className="col-span-2 flex flex-row space-x-2 border-t">
             <div className="font-medium">Холбогдсон дүн:</div>
-            <div>{formatNumber(data?.kholbosonDun)}</div>
+            <div>{formatNumber(data?.kholbosonDun,2)}</div>
           </div>
         )}
       </div>
-      <label className="text-lg font-medium">Гүйлгээнд талбай холбох</label>
-      {tulult?.map((a, i) => (
+      <div className="flex flex-row justify-between items-center">
+        <label className="text-lg font-medium">Гүйлгээнд талбай холбох</label>
+        <Tooltip title='Олон гэрээнд холбох эсэх?'>
+          <Switch checked={olnoorKholbokhEsekh} onChange={setOlnoorKholbokhEsekh} title="Олон гэрээнд холбох эсэх?"/>
+        </Tooltip>          
+      </div>
+      {!olnoorKholbokhEsekh &&
+        <Select
+          placeholder="Талбай"
+          onSearch={(search) => setGereeniiKhuudaslalt((a) => ({ ...a, search ,khuudasniiDugaar:1}))}
+          onChange={setGeree}
+          filterOption={o=>o}
+          showSearch
+        >
+          {gereeniiMedeelel?.jagsaalt?.map((mur) => {
+            return (
+              <Select.Option key={mur._id} value={mur._id}>
+                <div className='flex flex-row justify-between'>
+                  <div className='flex flex-row space-x-2'>
+                    <label>Талбай:</label>
+                    <div>{mur.talbainDugaar}</div>
+                  </div>
+                  <div className='flex flex-row'>
+                    <div>{formatNumber(mur.uldegdel)}₮</div>
+                  </div>
+                </div>
+              </Select.Option>
+            );
+          })}
+        </Select>
+      }
+      {olnoorKholbokhEsekh && tulult?.map((a, i) => (
         <div className="grid grid-cols-3" key={`geree-${i}`}>
           <div className="col-span-2">
             <Select

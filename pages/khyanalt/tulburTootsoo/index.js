@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, DatePicker, Table, Select, Button, Tooltip } from "antd";
+import { Card, DatePicker, Table, Select, Button, Tooltip, message } from "antd";
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -101,10 +101,10 @@ function tulburTootsoo({ token }) {
   }
 
   function guilgeeKholbyo(data) {
-    // if (data?.kholbosonGereeniiId) {
-    //   message.info("Гүйлгээ гэрээнд холбогдсон байна.")
-    //   return
-    // }
+    if (data?.kholbosonGereeniiId && data?.kholbosonDun === data?.amount) {
+      message.info("Гүйлгээ гэрээнд холбогдсон байна.")
+      return
+    }
 
     const footer = [
       <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
