@@ -30,13 +30,13 @@ function GuilgeeKholbokh(
         destroy();
       },
       khadgalya() {
-        if (!tulult.filter((a) => !!a.gereeniiId)) {
+        if (olnoorKholbokhEsekh && !tulult.filter((a) => !!a.gereeniiId) || !geree) {
           notification.warning({ message: "Та гэрээгээ сонгоно уу" });
           return;
         }
         let niitDun = data?.kholbosonDun || 0
-        a.forEach((a, i) => {
-          i !== index && !!a.tulsunDun && (niitDun += a.tulsunDun);
+        tulult.forEach((a) => {
+          !!a.tulsunDun && (niitDun += a.tulsunDun);
         });
         if(niitDun > data?.amount)
         {
