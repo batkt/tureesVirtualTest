@@ -131,7 +131,7 @@ function GuilgeeKholbokh(
     <div className="flex flex-col space-y-4">
       {magadlaltaiGereenuud?.length > 0 && (
         <div>
-          <label>Санал болгох гэрээ сонгох</label>
+          <div className="text-lg font-medium py-2">Санал болгох гэрээ сонгох</div>
           {magadlaltaiGereenuud.map((a, i) => (
             <div
               className={`border-l border-r border-b p-2 grid grid-cols-12 gap-1 zoom-in ${
@@ -151,20 +151,20 @@ function GuilgeeKholbokh(
       )}
       <label className="text-lg font-medium">Гүйлгээний мэдээлэл</label>
       <div className="grid grid-cols-2">
-        <div className="space-x-2">
+        <div className="space-x-2 p-2">
           <span className="font-medium">Данс:</span>
           <span>{data?.dansniiDugaar}</span>
         </div>
-        <div className="space-x-2">
+        <div className="space-x-2 p-2">
           <span className="font-medium">Гүйлгээний дүн:</span>
           <span>{formatNumber(data?.amount,2)}₮</span>
         </div>
-        <div className="col-span-2 flex flex-row space-x-2 border-t">
+        <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
           <div className="font-medium">Тайлбар:</div>
           <div>{data?.description}</div>
         </div>
         {!!data?.kholbosonDun && (
-          <div className="col-span-2 flex flex-row space-x-2 border-t">
+          <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
             <div className="font-medium">Холбогдсон дүн:</div>
             <div>{formatNumber(data?.kholbosonDun,2)}</div>
           </div>
