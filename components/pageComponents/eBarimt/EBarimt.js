@@ -34,7 +34,7 @@ function EBarimt({
   }
 
   return (
-    <div className={`p-3 flex flex-row`}>
+    <div className=" flex flex-row">
       <div className="p-2 w-full">
         <div className="flex flex-row border-b-2 border-dashed py-2">
           <div>Баримт хэвлэх эсэх</div>

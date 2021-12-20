@@ -1,5 +1,5 @@
 import { Steps, Button, Spin, message } from "antd"
-import React from "react"
+import React, { useState } from "react"
 import formatNumber from "tools/function/formatNumber"
 import { useReactToPrint } from "react-to-print"
 import axios from "axios"
@@ -27,6 +27,7 @@ function Tulbur(
   const [register, setRegister] = React.useState("")
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState()
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false)
+  const [loading, setLoading] = useState(false)
 
   const eBarimtRef = React.useRef(null)
 
@@ -53,6 +54,7 @@ function Tulbur(
         message.warning("Байгууллагын регистр оруулна уу")
         return
       }
+      setLoading(true)
       const body = {
         id: id,
       }
@@ -68,33 +70,19 @@ function Tulbur(
           if (data.success === true) {
             setEBarimt(data)
             handlePrint()
-            zakhialgaMutate()
           }
         })
         .catch(aldaaBarigch)
+        .finally(() => setLoading(false))
     }
   }
 
   function khaaya() {
     destroy()
-    zakhialgaMutate()
   }
 
   return (
-    <div className="w-full h-full">
-      <div className="w-full table text-lg font-medium mt-5">
-        {tulbur.length > 0 && (
-          <div className="table-row">
-            <div className="table-cell p-2 border-dashed border-t-2">
-              Төлсөн дүн
-            </div>
-            <div className="table-cell p-2 text-right border-dashed border-t-2">
-              {formatNumber(data.tulsunDun)} ₮
-            </div>
-          </div>
-        )}
-      </div>
-
+    <div>
       <EBarimt
         eBarimtRef={eBarimtRef}
         eBarimt={eBarimt}
@@ -259,11 +247,12 @@ function Tulbur(
         <Button type="primary" danger onClick={khaaya}>
           Хаах
         </Button>
-
-        {barimtKhevlekhEsekh === true && (
-          <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
-            Хэвлэх
-          </Button>
+        {barimtKhevlekhEsekh === true && (irgenEsekh || baiguullagaEsekh) && (
+          <Spin spinning={loading}>
+            <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
+              Хэвлэх
+            </Button>
+          </Spin>
         )}
       </div>
     </div>
