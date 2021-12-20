@@ -227,7 +227,7 @@ function tulburTootsoo({ token }) {
           </div>
           {songogdsonDans && (
             <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
-              Үлдэгдэл: {formatNumber(songogdsonDans.balance)}{" "}
+              Үлдэгдэл: {formatNumber(songogdsonDans.balance,2)}{" "}
               {songogdsonDans.currency}
             </div>
           )}
@@ -289,7 +289,7 @@ function tulburTootsoo({ token }) {
               className: "text-right",
               showSorterTooltip: false,
               render(a) {
-                return `${formatNumber(a)}₮`;
+                return `${formatNumber(a,2)}₮`;
               },
               sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
             },

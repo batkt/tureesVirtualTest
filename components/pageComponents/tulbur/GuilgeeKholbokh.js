@@ -33,6 +33,15 @@ function GuilgeeKholbokh(
           notification.warning({ message: "Та гэрээгээ сонгоно уу" });
           return;
         }
+        let niitDun = data?.kholbosonDun || 0
+        a.forEach((a, i) => {
+          i !== index && !!a.tulsunDun && (niitDun += a.tulsunDun);
+        });
+        if(niitDun > data?.amount)
+        {
+          notification.warning({ message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна" });
+          return;
+        }
 
         Modal.confirm({
           content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
@@ -45,7 +54,7 @@ function GuilgeeKholbokh(
             else 
               guilgeenuud = [{
                 turul:'bank',
-                tulsunDun:data.amount,
+                tulsunDun:data.amount - (data?.kholbosonDun || 0),
                 ognoo:moment(data.tranDate).set('hour',data.time.substring(0, 2)).set('minute',data.time.substring(2, 4)),
                 guilgeeniiId:data._id,
                 gereeniiId:geree,
