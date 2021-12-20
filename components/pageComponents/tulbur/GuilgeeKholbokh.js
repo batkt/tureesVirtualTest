@@ -6,6 +6,7 @@ import formatNumber from "../../../tools/function/formatNumber";
 import getListMethod from "../../../tools/function/crud/getListMethod";
 import uilchilgee from "../../../services/uilchilgee";
 import moment from "moment";
+import { MinusCircleOutlined, MinusOutlined } from "@ant-design/icons";
 
 function GuilgeeKholbokh(
   { data, token, baiguullagiinId, onFinish, destroy },
@@ -127,6 +128,13 @@ function GuilgeeKholbokh(
     });
   }
 
+  function murKhasya(index) {
+    setTulult((a) => {
+      a.splice(index,1)
+      return [...a];
+    });
+  }
+
   return (
     <div className="flex flex-col space-y-4">
       {magadlaltaiGereenuud?.length > 0 && (
@@ -140,11 +148,11 @@ function GuilgeeKholbokh(
               key={a?._id}
               onClick={() => setGeree(a?._id)}
             >
-              <div className="col-span-3 font-medium">{a?.gereeniiDugaar}</div>
+              <div className="col-span-2 font-medium">{a?.gereeniiDugaar}</div>
               <div className="col-span-3">{a?.ner}</div>
               <div className="col-span-2 font-medium">{a?.utas}</div>
               <div className="col-span-2">{a?.talbainDugaar}</div>
-              <div className="col-span-2">{formatNumber(a?.uldegdel,2)}₮</div>
+              <div className="col-span-3 text-right">{formatNumber(a?.uldegdel,2)}₮</div>
             </div>
           ))}
         </div>
@@ -155,7 +163,7 @@ function GuilgeeKholbokh(
           <span className="font-medium">Данс:</span>
           <span>{data?.dansniiDugaar}</span>
         </div>
-        <div className="space-x-2 p-2">
+        <div className="space-x-2 p-2 text-right">
           <span className="font-medium">Гүйлгээний дүн:</span>
           <span>{formatNumber(data?.amount,2)}₮</span>
         </div>
@@ -236,7 +244,7 @@ function GuilgeeKholbokh(
               })}
             </Select>
           </div>
-          <div>
+          <div className="flex flex-row space-x-2">
             <InputNumber
               style={{ width: "100%" }}
               value={a.tulsunDun || 0}
@@ -247,6 +255,7 @@ function GuilgeeKholbokh(
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
               onDoubleClick={() => tooBugluyu(i)}
             />
+            <MinusCircleOutlined className={`p-1 rounded-full cursor-pointer `} style={{display:tulult.length > 1 ? 'flex' : 'none'}} onClick={()=>murKhasya(i)}/>
           </div>
         </div>
       ))}
