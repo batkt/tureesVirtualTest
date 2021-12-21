@@ -259,7 +259,6 @@ function guilgeeniiTuukh({ token }) {
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                     width="428.000000pt" height="438.000000pt" viewBox="0 0 428.000000 438.000000"
                     preserveAspectRatio="xMidYMid meet" className='fill-current text-green-500 w-6 h-6 p-1'>
-
                     <g transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)"
                     stroke="none">
                     <path d="M1104 4166 c-62 -19 -130 -73 -167 -130 l-32 -51 -3 -507 -3 -508

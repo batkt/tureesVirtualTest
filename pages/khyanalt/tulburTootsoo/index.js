@@ -49,7 +49,7 @@ function iconAvya(a) {
 
 function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null);
-  const { baiguullaga } = useAuth();
+  const { baiguullaga,barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
@@ -118,6 +118,7 @@ function tulburTootsoo({ token }) {
       content: (
         <GuilgeeKholbokh
           data={data}
+          barilgiinId={barilgiinId}
           ref={refGuilgee}
           token={token}
           baiguullagiinId={baiguullaga?._id}

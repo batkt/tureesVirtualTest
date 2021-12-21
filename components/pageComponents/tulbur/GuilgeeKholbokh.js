@@ -1,4 +1,4 @@
-import { InputNumber, Modal, notification, Select, Switch, Tooltip } from "antd";
+import { InputNumber, Modal, notification, Select, Spin, Switch, Tooltip } from "antd";
 import _ from "lodash";
 import React from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
@@ -6,10 +6,29 @@ import formatNumber from "../../../tools/function/formatNumber";
 import getListMethod from "../../../tools/function/crud/getListMethod";
 import uilchilgee from "../../../services/uilchilgee";
 import moment from "moment";
-import { MinusCircleOutlined, MinusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined } from "@ant-design/icons";
+import { useAuth } from "services/auth";
+import useSWR from "swr";
+
+function GereeniiUldegdel({ugugdul,token,barilgiinId}) {
+  
+  const {data} = useSWR(!!ugugdul?.gereeniiDugaar && !!barilgiinId ? ['/uldegdelBodyo',barilgiinId,ugugdul?.gereeniiDugaar] : null,(url,barilgiinId,gereeniiDugaar)=>uilchilgee(token).post(url,{barilgiinId,gereeniiDugaar}).then(({data})=>data),{
+    revalidateOnFocus: false,
+  })
+  
+  return (
+    <div
+      className={`font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
+    >
+      {!data ? <Spin size='small'/> : formatNumber(data?.uldegdel)}
+    </div>
+  )
+}
 
 function GuilgeeKholbokh(
-  { data, token, baiguullagiinId, onFinish, destroy },
+  { data, token, baiguullagiinId, barilgiinId,onFinish, destroy },
   ref
 ) {
   const [geree, setGeree] = React.useState(null);
@@ -201,7 +220,7 @@ function GuilgeeKholbokh(
                     <div>{mur.talbainDugaar}</div>
                   </div>
                   <div className='flex flex-row'>
-                    <div>{formatNumber(mur.uldegdel)}₮</div>
+                    <GereeniiUldegdel ugugdul={mur} token={token} barilgiinId={barilgiinId}/>
                   </div>
                 </div>
               </Select.Option>
