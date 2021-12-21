@@ -52,7 +52,7 @@ function tulburTootsoo({ token }) {
 
   const { dans } = useDans(token)
 
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState(null)
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([])
 
   useEffect(()=>{
     if(!!nekhemjlel)
@@ -329,6 +329,7 @@ function tulburTootsoo({ token }) {
           scroll={{ y: "calc(100vh - 25rem)" }}
           rowSelection={{
             type: "checkbox",
+            selectedRowKeys:songogdsonGereenuud?.map(a=>a._id),
             onChange: (selectedRowKeys, selectedRows) => {
               setSongogdsonGereenuud(selectedRows)
             },
