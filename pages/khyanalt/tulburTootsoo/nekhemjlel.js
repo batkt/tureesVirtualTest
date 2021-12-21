@@ -29,6 +29,8 @@ const turul = [
   { zurag: "/ikhNayadKhuns.png", ner: "Хүнсны нэхэмжлэх" },
 ]
 
+const ilgeekhTurul = 'davkharaar'
+
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null)
   const dunZasvarRef = React.useRef(null)
@@ -43,7 +45,7 @@ function tulburTootsoo({ token }) {
 
   const [nekhemjleliinJagsaalt,setNekhemjleliinJagsaalt] = React.useState([])
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useNekhemjlekh(token, ognoo, davkhar)
+    useNekhemjlekh(token, ognoo, davkhar,ilgeekhTurul)
 
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token)
@@ -303,7 +305,7 @@ function tulburTootsoo({ token }) {
             </Select>
             <Select placeholder="Давхар" onChange={(v)=>{
                 setDavkhar(v)
-                setSongogdsonGereenuud(null)
+                setSongogdsonGereenuud([])
               }} >
               {baiguullaga?.barilguud[0]?.davkharuud
                   .map((a)=><Select.Option key={a._id} value={a.davkhar}>{a.davkhar}</Select.Option>)
@@ -334,21 +336,20 @@ function tulburTootsoo({ token }) {
           columns={[
             {
               title: "Гэрээ №",
-              sorter: true,
               dataIndex: "gereeniiDugaar",
               width: "7rem",
               align: "center",
             },
             {
               title: "Талбай №",
-              sorter: true,
+              sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
               dataIndex: "talbainDugaar",
               width: "7rem",
               align: "center",
             },
             {
               title: "Дараагийн төлөх огноо",
-              sorter: true,
+              sorter: (a, b) => moment(a.talbainDugaar).diff(moment(b.talbainDugaar),'hour'),
               dataIndex: "daraagiinTulukhOgnoo",
               render(a) {
                 return moment(a).format("YYYY-MM-DD")
@@ -358,7 +359,7 @@ function tulburTootsoo({ token }) {
             },
             {
               title: "Өмнөх хуримтлагдсан өр төлбөр",
-              sorter: true,
+              sorter: (a, b) => a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
               dataIndex: "umnukhSariinUrTulbur",
               render(a) {
                 return formatNumber(a)
@@ -368,7 +369,7 @@ function tulburTootsoo({ token }) {
             },
             {
               title: "Энэ сард төлөх дүн",
-              sorter: true,
+              sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
               dataIndex: "eneSardTulukhDun",
               render(a) {
                 return formatNumber(a)
@@ -378,7 +379,7 @@ function tulburTootsoo({ token }) {
             },
             {
               title: "Нийт үлдэгдэл",
-              sorter: true,
+              sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
               dataIndex: "niitUldegdel",
               render(a) {
                 return formatNumber(a)
