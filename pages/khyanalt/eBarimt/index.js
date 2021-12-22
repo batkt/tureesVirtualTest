@@ -1,16 +1,7 @@
 import moment from "moment"
 import { useAuth } from "services/auth"
-import {
-  DeleteOutlined,
-} from "@ant-design/icons"
-import {
-  Table,
-  Button,
-  Card,
-  DatePicker,
-  message,
-  Popconfirm,
-} from "antd"
+import { DeleteOutlined } from "@ant-design/icons"
+import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd"
 
 import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
@@ -24,12 +15,12 @@ const { RangePicker } = DatePicker
 //#endregion
 
 function EbarimtMedeelel({ token }) {
-  const { ajiltan } = useAuth()
+  const { ajiltan, barilgiinId } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
 
   const query = useMemo(() => {
     return {
-      $or:[{ustgasanOgnoo:null},{ustgasanOgnoo:{$exists:false}}],
+      $or: [{ ustgasanOgnoo: null }, { ustgasanOgnoo: { $exists: false } }],
       createdAt: {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
@@ -77,7 +68,7 @@ function EbarimtMedeelel({ token }) {
 
   function ebarimtIlgeeye() {
     uilchilgee(token)
-      .post("/ebarimtIlgeeye")
+      .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
       .then(({ status }) => {
         status === 200 && message.success("Баримт амжилттай илгээлээ")
         eBarimtMedeelelMutate()
@@ -86,6 +77,7 @@ function EbarimtMedeelel({ token }) {
   }
 
   function ebarimtUstgaya(mur) {
+    mur.barilgiinId = barilgiinId
     uilchilgee(token)
       .post("/ebarimtButsaaya", mur)
       .then(({ data }) => {

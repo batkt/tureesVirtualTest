@@ -57,6 +57,7 @@ function Tulbur(
       setLoading(true)
       const body = {
         id: id,
+        barilgiinId: data.barilgiinId,
       }
       // if (baiguullagaEsekh || irgenEsekh) {
       //   body.register = register
