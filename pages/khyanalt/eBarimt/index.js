@@ -34,7 +34,10 @@ function EbarimtMedeelel({ token }) {
     query
   )
 
-  const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(token)
+  const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(
+    token,
+    barilgiinId
+  )
   const khyanaltiinDun = [
     {
       too: 100,

@@ -248,7 +248,7 @@ function Tulbur(
         <Button type="primary" danger onClick={khaaya}>
           Хаах
         </Button>
-        {barimtKhevlekhEsekh === true && (irgenEsekh || baiguullagaEsekh) && (
+        {barimtKhevlekhEsekh === true && (
           <Spin spinning={loading}>
             <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
               Хэвлэх
