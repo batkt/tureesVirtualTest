@@ -32,8 +32,23 @@ function Tulbur(
   const eBarimtRef = React.useRef(null)
   const pageStyle = `
   @page {
-    size: 80mm 60mm;
-  }
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body, html {
+        width: 80mm !important;
+        height: 60mm !important;
+        margin: 0;
+    }
+    .print-preview {
+        width: 100mm;
+        height: 80mm;
+        margin: 0;
+        
+    }
+}
 `
 
   const handlePrint = useReactToPrint({
