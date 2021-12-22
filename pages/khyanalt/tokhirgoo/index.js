@@ -11,6 +11,7 @@ import KhungulultiinTokhirgoo from "components/pageComponents/tokhirgoo/Khungulu
 import TalbainTokhirgoo from "components/pageComponents/tokhirgoo/TalbainTokhirgoo";
 import AshiglaltiinZardal from "components/pageComponents/tokhirgoo/AshiglaltiinZardal";
 import Medegdel from "components/pageComponents/tokhirgoo/Medegdel";
+import QPay from "components/pageComponents/tokhirgoo/QPay";
 
 import { useMemo, useState } from "react";
 
@@ -51,6 +52,12 @@ function AjiltanBurtgel({ token }) {
           icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings w-4 h-4 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
           text:'Мэдэгдэл',
           tsonkh:<Medegdel {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
+        }
+        ,
+        {
+          icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings w-4 h-4 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+          text:'QPay',
+          tsonkh:<QPay {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         }
     ]
     else return [
