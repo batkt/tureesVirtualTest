@@ -30,9 +30,14 @@ function Tulbur(
   const [loading, setLoading] = useState(false)
 
   const eBarimtRef = React.useRef(null)
+  const pageStyle = `
+  @page {
+    size: 80mm 60mm;
+  }
+`
 
   const handlePrint = useReactToPrint({
-    pageStyle: () => "@page { size: 80mm 60mm }",
+    pageStyle: () => pageStyle,
     content: () => eBarimtRef.current,
     onAfterPrint: () => khaaya(),
   })
