@@ -45,7 +45,7 @@ function EBarimt({
             />
           </div>
         </div>
-        {barimtKhevlekhEsekh && !irgenEsekh && (
+        {
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН эсэх</div>
             <div className="ml-auto">
@@ -55,15 +55,15 @@ function EBarimt({
               />
             </div>
           </div>
-        )}
-        {barimtKhevlekhEsekh && !baiguullagaEsekh && (
+        }
+        {
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Иргэнд эсэх</div>
             <div className="ml-auto">
               <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
             </div>
           </div>
-        )}
+        }
         {baiguullagaEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН регистр</div>
