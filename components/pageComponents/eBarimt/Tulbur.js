@@ -30,8 +30,29 @@ function Tulbur(
   const [loading, setLoading] = useState(false)
 
   const eBarimtRef = React.useRef(null)
+  const pageStyle = `
+  @page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body, html {
+        width: 80mm !important;
+        height: 60mm !important;
+        margin: 0;
+    }
+    .print-preview {
+        width: 100mm;
+        height: 80mm;
+        margin: 0;
+        
+    }
+}
+`
 
   const handlePrint = useReactToPrint({
+    pageStyle: () => pageStyle,
     content: () => eBarimtRef.current,
     onAfterPrint: () => khaaya(),
   })
@@ -57,6 +78,7 @@ function Tulbur(
       setLoading(true)
       const body = {
         id: id,
+        barilgiinId: data.barilgiinId,
       }
       // if (baiguullagaEsekh || irgenEsekh) {
       //   body.register = register
@@ -247,7 +269,7 @@ function Tulbur(
         <Button type="primary" danger onClick={khaaya}>
           Хаах
         </Button>
-        {barimtKhevlekhEsekh === true && (irgenEsekh || baiguullagaEsekh) && (
+        {barimtKhevlekhEsekh === true && (
           <Spin spinning={loading}>
             <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
               Хэвлэх
