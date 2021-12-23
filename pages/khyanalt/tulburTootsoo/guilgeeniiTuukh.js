@@ -123,7 +123,7 @@ function guilgeeniiTuukh({ token }) {
         }
       }
     return {};
-  }, [turul,ognoo,barilgiinId]);
+  }, [turul,ognoo]);
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
   useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query);
