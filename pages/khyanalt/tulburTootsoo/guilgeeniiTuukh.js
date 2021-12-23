@@ -23,7 +23,7 @@ function GereeniiUldegdel({ugugdul,token}) {
   const {data} = useSWR(!!ugugdul?.gereeniiDugaar && !!barilgiinId ? ['/uldegdelBodyo',barilgiinId,ugugdul?.gereeniiDugaar] : null,(url,barilgiinId,gereeniiDugaar)=>uilchilgee(token).post(url,{barilgiinId,gereeniiDugaar}).then(({data})=>data),{
     revalidateOnFocus: false,
   })
-  
+  ugugdul.uldegdel = data?.uldegdel
   return (
     <div
       className={`font-medium ${
@@ -151,7 +151,6 @@ function guilgeeniiTuukh({ token }) {
       width: "5rem",
       showSorterTooltip: false,
       defaultSortOrder: "descend",
-      sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
     },
     {
       title: "Түрээслэгч",
@@ -171,7 +170,6 @@ function guilgeeniiTuukh({ token }) {
           );
       },
       showSorterTooltip: false,
-      defaultSortOrder: "descend",
       sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
     },
     {
