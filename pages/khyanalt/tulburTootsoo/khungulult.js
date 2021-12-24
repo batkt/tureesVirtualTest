@@ -163,7 +163,8 @@ function tulburTootsoo() {
                       },
                     ]}
                   >
-                    <DatePicker.RangePicker
+                    <DatePicker
+                      style={{width:'100%'}}
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder="сар"
