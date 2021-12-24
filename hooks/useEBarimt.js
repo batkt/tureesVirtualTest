@@ -25,9 +25,14 @@ const fetcher = (
     })
     .then((res) => res.data)
     .catch(aldaaBarigch)
+const fetcherToololt = (url, token, query) =>
+  axios(token)
+    .post(url, query)
+    .then((res) => res.data)
+    .catch(aldaaBarigch)
 
 function useEBarimt(token, baiguullagiinId, query) {
-  const {barilgiinId} = useAuth()
+  const { barilgiinId } = useAuth()
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -36,7 +41,14 @@ function useEBarimt(token, baiguullagiinId, query) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/ebarimtJagsaaltAvya", token, khuudaslalt, query, baiguullagiinId,barilgiinId]
+      ? [
+          "/ebarimtJagsaaltAvya",
+          token,
+          khuudaslalt,
+          query,
+          baiguullagiinId,
+          barilgiinId,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
@@ -45,6 +57,19 @@ function useEBarimt(token, baiguullagiinId, query) {
     setEBarimtKhuudaslalt,
     eBarimtGaralt: data,
     eBarimtMutate: mutate,
+  }
+}
+export function useBarimtToollolt(token, query) {
+  const { data, mutate } = useSWR(
+    token ? ["/ebarimtToololtAvya", token, query] : null,
+    fetcherToololt,
+    {
+      revalidateOnFocus: false,
+    }
+  )
+  return {
+    ebarimtiinToololt: data,
+    ebarimtiinToololtMutate: mutate,
   }
 }
 

@@ -10,6 +10,7 @@ import formatNumber from "tools/function/formatNumber"
 import { useMemo, useState } from "react"
 import useEBarimt from "hooks/useEBarimt"
 import useEBarimtMedeelel from "hooks/useEBarimtMedeelel"
+import { useBarimtToollolt } from "hooks/useEBarimt"
 
 const { RangePicker } = DatePicker
 //#endregion
@@ -27,6 +28,13 @@ function EbarimtMedeelel({ token }) {
       },
     }
   }, [ekhlekhOgnoo])
+  const queryToololt = useMemo(() => {
+    return {
+      barilgiinId: barilgiinId,
+      ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+    }
+  }, [ekhlekhOgnoo])
 
   const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
     token,
@@ -38,14 +46,21 @@ function EbarimtMedeelel({ token }) {
     token,
     barilgiinId
   )
+  const { ebarimtiinToololt } = useBarimtToollolt(token, queryToololt)
   const khyanaltiinDun = [
     {
-      too: 100,
-      utga: "Баримт авах гүйлгээний тоо",
+      too:
+        ebarimtiinToololt !== undefined
+          ? formatNumber(ebarimtiinToololt.avakhToo)
+          : 0,
+      utga: "Баримт авах тоо",
     },
     {
-      too: 20,
-      utga: "Баримт авах гүйлгээний дүн",
+      too:
+        ebarimtiinToololt !== undefined
+          ? formatNumber(ebarimtiinToololt.avakhDun)
+          : 0,
+      utga: "Баримт авах дүн",
     },
 
     {
@@ -54,17 +69,24 @@ function EbarimtMedeelel({ token }) {
     },
 
     {
-      too: formatNumber(
-        eBarimtGaralt?.jagsaalt.reduce((a, b) => a + Number(b?.cashAmount), 0)
-      ),
-      utga: "Баримт авсан гүйлгээний дүн",
+      too:
+        ebarimtiinToololt !== undefined
+          ? formatNumber(ebarimtiinToololt.ilgeesenDun)
+          : 0,
+      utga: "Баримт авсан дүн",
     },
     {
-      too: 20,
+      too:
+        ebarimtiinToololt !== undefined
+          ? formatNumber(ebarimtiinToololt.butsaasanToo)
+          : 0,
       utga: "Буцаалт хийгдсэн тоо",
     },
     {
-      too: 20,
+      too:
+        ebarimtiinToololt !== undefined
+          ? formatNumber(ebarimtiinToololt.butsaasanDun)
+          : 0,
       utga: "Буцаалт хийгдсэн дүн",
     },
   ]
@@ -92,7 +114,6 @@ function EbarimtMedeelel({ token }) {
         }
       })
   }
-
   return (
     <Admin
       khuudasniiNer="eBarimt"
@@ -112,7 +133,7 @@ function EbarimtMedeelel({ token }) {
                   <div className="p-3 rounded-xl">
                     <div className="flex">
                       <div>
-                        <div className="text-3xl text-green-600 font-bold">
+                        <div className="text-2xl text-green-600 font-bold">
                           {mur.too}
                         </div>
                         <div className="text-sm text-gray-500">{mur.utga}</div>
