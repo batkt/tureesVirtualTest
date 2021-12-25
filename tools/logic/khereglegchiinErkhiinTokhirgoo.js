@@ -1,11 +1,11 @@
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 
 const khereglegchiinErkh = [
   {
     erkh: "Admin",
     tsonkhnuud: [
       "/khyanalt/geree",
-      "/khyanalt/ajiltan/ajiltanBurtgel",
+      "/khyanalt/ajiltan",
       "/khyanalt/barilgaBurtgel",
       "/khyanalt/khariltsagchBurtgel",
       "khyanalt/talbaiBurtgel",
@@ -42,17 +42,17 @@ const khereglegchiinErkh = [
       "khyanalt/eBarimt",
     ],
   },
-]
+];
 
 export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
   switch (erkh) {
     case "Admin":
     case "Sankhuu":
     case "ZokhionBaiguulagch":
-      window.location.href = "/khyanalt/geree/gereeBurtgel"
-      break
+      window.location.href = "/khyanalt/geree/gereeBurtgel";
+      break;
     default:
-      break
+      break;
   }
 }
 
@@ -447,19 +447,19 @@ const khuudasnuud = [
       </svg>
     ),
   },
-]
+];
 
 function useErkh(ajiltan) {
-  const router = useRouter()
-  if (!ajiltan) return []
-  const erkh = khereglegchiinErkh.find((x) => x.erkh === ajiltan.erkh)
+  const router = useRouter();
+  if (!ajiltan) return [];
+  const erkh = khereglegchiinErkh.find((x) => x.erkh === ajiltan.erkh);
   if (!erkh || !erkh.tsonkhnuud.find((x) => !!router.pathname.includes(x))) {
-    router.replace("/404")
-    return []
+    router.replace("/404");
+    return [];
   }
   return khuudasnuud.filter(
     (x) => !!erkh.tsonkhnuud.find((y) => x.href.includes(y))
-  )
+  );
 }
 
-export default useErkh
+export default useErkh;
