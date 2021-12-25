@@ -22,19 +22,15 @@ import { DeleteOutlined } from "@ant-design/icons"
 import _ from "lodash"
 import { useAuth } from "services/auth"
 
-const turul = [
-  { zurag: "/ikhNayad.png", ner: "Барааны нэхэмжлэх" },
-  { zurag: "/ikhNayadKhuns.png", ner: "Хүнсны нэхэмжлэх" },
-]
-
 function tulburTootsoo() {
   const { token, baiguullaga, barilgiinId } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
   const formRef = useRef()
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
   const [shuult, setShuult] = React.useState({
-    query: { tuluv: { $nin: -1 } },
+    query: { tuluv: { $ne: -1 } },
   })
+  
   const query = useMemo(() => {
     return {
       createdAt: {
@@ -46,7 +42,7 @@ function tulburTootsoo() {
   const [form] = Form.useForm()
   const [davkhar, setDavkhar] = React.useState()
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
+    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query,undefined,1000)
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
     useKhungulultTuukh(token, baiguullaga?._id, query)
 
@@ -56,10 +52,9 @@ function tulburTootsoo() {
     khunglugdsunDun: 0,
     niitTulukhDun: 0,
   })
+
   const { Option } = Select
-  useEffect(() => {
-    setGereeniiKhuudaslalt({ khuudasniiKhemjee: 1000 })
-  }, [])
+
   useEffect(() => {
     var khuvi = form?.getFieldValue("khungulukhKhuvi")
     tootsoolol.niitTalbai = songogdsonGereenuud?.length
@@ -137,7 +132,7 @@ function tulburTootsoo() {
       khuudasniiNer="khungulult"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setNekhemjlelKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
       <div className="col-span-12">
@@ -168,7 +163,8 @@ function tulburTootsoo() {
                       },
                     ]}
                   >
-                    <DatePicker.RangePicker
+                    <DatePicker
+                      style={{width:'100%'}}
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder="сар"

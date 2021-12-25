@@ -23,7 +23,7 @@ function GereeniiUldegdel({ugugdul,token}) {
   const {data} = useSWR(!!ugugdul?.gereeniiDugaar && !!barilgiinId ? ['/uldegdelBodyo',barilgiinId,ugugdul?.gereeniiDugaar] : null,(url,barilgiinId,gereeniiDugaar)=>uilchilgee(token).post(url,{barilgiinId,gereeniiDugaar}).then(({data})=>data),{
     revalidateOnFocus: false,
   })
-  
+  ugugdul.uldegdel = data?.uldegdel
   return (
     <div
       className={`font-medium ${
@@ -98,13 +98,17 @@ function guilgeeniiTuukh({ token }) {
       }
     else if(turul === 'eneSardTulsun')
       return {
-        'avlaga.guilgeenuud.ognoo': {
-          '$gte': moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
-          '$lte': moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
-        },
         'baiguullagiinId': baiguullaga?._id,
-        'avlaga.guilgeenuud.tulsunDun': {
-          '$gt': 0
+        "avlaga.guilgeenuud":{
+          $elemMatch:{
+            ognoo:{
+              '$gte': moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
+              '$lte': moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59")
+            },
+            tulsunDun:{
+              $gt: 0
+            }
+          }
         }
       }
     else if(turul === 'khungulult')
@@ -147,7 +151,6 @@ function guilgeeniiTuukh({ token }) {
       width: "5rem",
       showSorterTooltip: false,
       defaultSortOrder: "descend",
-      sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
     },
     {
       title: "Түрээслэгч",
@@ -167,7 +170,6 @@ function guilgeeniiTuukh({ token }) {
           );
       },
       showSorterTooltip: false,
-      defaultSortOrder: "descend",
       sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
     },
     {
