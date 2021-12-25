@@ -2,7 +2,15 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React from "react";
 import { useAuth } from "services/auth";
-import { Card, DatePicker, Table, Select, Button, Tooltip, message } from "antd";
+import {
+  Card,
+  DatePicker,
+  Table,
+  Select,
+  Button,
+  Tooltip,
+  message,
+} from "antd";
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -25,7 +33,11 @@ function iconAvya(a) {
   let color = "green";
   let tailbar = "Гүйлгээ холбогдсон байна";
 
-  if (a?.kholbosonDun < a?.amount || a?.magadlaltaiGereenuud?.length > 0) {
+  if (
+    a?.kholbosonDun < a?.amount ||
+    (a?.magadlaltaiGereenuud?.length > 0 &&
+      !(a?.kholbosonGereeniiId?.length > 0))
+  ) {
     Icon = QuestionOutlined;
     color = "yellow";
     tailbar =
@@ -49,7 +61,7 @@ function iconAvya(a) {
 
 function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null);
-  const { baiguullaga,barilgiinId } = useAuth();
+  const { baiguullaga, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()]);
   const { dans } = useDans(token);
   const [songogdsonDans, setSongogdsonDans] = React.useState(null);
@@ -102,8 +114,8 @@ function tulburTootsoo({ token }) {
 
   function guilgeeKholbyo(data) {
     if (data?.kholbosonGereeniiId && data?.kholbosonDun === data?.amount) {
-      message.info("Гүйлгээ гэрээнд холбогдсон байна.")
-      return
+      message.info("Гүйлгээ гэрээнд холбогдсон байна.");
+      return;
     }
 
     const footer = [
@@ -228,7 +240,7 @@ function tulburTootsoo({ token }) {
           </div>
           {songogdsonDans && (
             <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
-              Үлдэгдэл: {formatNumber(songogdsonDans.balance,2)}{" "}
+              Үлдэгдэл: {formatNumber(songogdsonDans.balance, 2)}{" "}
               {songogdsonDans.currency}
             </div>
           )}
@@ -290,7 +302,7 @@ function tulburTootsoo({ token }) {
               className: "text-right",
               showSorterTooltip: false,
               render(a) {
-                return `${formatNumber(a,2)}₮`;
+                return `${formatNumber(a, 2)}₮`;
               },
               sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
             },
