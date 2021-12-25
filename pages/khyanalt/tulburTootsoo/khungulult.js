@@ -1,26 +1,25 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import Admin from "components/Admin"
-import React, { useEffect, useRef, useState, useMemo } from "react"
+import { DeleteOutlined } from "@ant-design/icons"
 import {
-  DatePicker,
-  Table,
   Button,
-  Select,
+  DatePicker,
+  Form,
   Input,
   message,
-  Form,
-  Tabs,
   Popconfirm,
+  Select,
+  Table,
+  Tabs,
 } from "antd"
-import moment from "moment"
-import formatNumber from "tools/function/formatNumber"
+import Admin from "components/Admin"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import useKhungulultTuukh from "hooks/useKhungulultTuukh"
-import createMethod from "tools/function/crud/createMethod"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import { DeleteOutlined } from "@ant-design/icons"
-import _ from "lodash"
+import moment from "moment"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useAuth } from "services/auth"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
+import createMethod from "tools/function/crud/createMethod"
+import formatNumber from "tools/function/formatNumber"
 
 function tulburTootsoo() {
   const { token, baiguullaga, barilgiinId } = useAuth()
@@ -30,7 +29,6 @@ function tulburTootsoo() {
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $ne: -1 } },
   })
-  
   const query = useMemo(() => {
     return {
       createdAt: {
@@ -40,9 +38,15 @@ function tulburTootsoo() {
     }
   }, [ekhlekhOgnoo])
   const [form] = Form.useForm()
-  const [davkhar, setDavkhar] = React.useState()
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query,undefined,1000)
+    useGereeniiJagsaalt(
+      token,
+      baiguullaga?._id,
+      undefined,
+      shuult?.query,
+      undefined,
+      1000
+    )
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
     useKhungulultTuukh(token, baiguullaga?._id, query)
 
@@ -52,8 +56,13 @@ function tulburTootsoo() {
     khunglugdsunDun: 0,
     niitTulukhDun: 0,
   })
+  const [selectedRowKeys, setRowKeys] = useState([])
 
   const { Option } = Select
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  }
 
   useEffect(() => {
     var khuvi = form?.getFieldValue("khungulukhKhuvi")
@@ -73,14 +82,14 @@ function tulburTootsoo() {
     return current && current < moment().endOf("day")
   }
   function handleChange(value) {
-    setDavkhar(value)
     if (value.length > 0) {
       setShuult({
         query: { davkhar: value, tuluv: { $nin: -1 } },
       })
     } else {
-      setShuult()
     }
+    setRowKeys([])
+    setSongogdsonGereenuud([])
   }
   function khungulultKhadgalya() {
     if (songogdsonGereenuud.length > 0) {
@@ -106,7 +115,7 @@ function tulburTootsoo() {
         })
         .catch(aldaaBarigch)
     } else {
-      message.warning("Хөнгөлөх табай сонгоно уу")
+      message.warning("Хөнгөлөх талбай сонгоно уу")
     }
   }
   function ustgaya(mur) {
@@ -125,7 +134,10 @@ function tulburTootsoo() {
     formRef.current.resetFields()
     setShuult()
   }
-
+  function onSelectChange(selectedRowKeys, selectedRows) {
+    setRowKeys(selectedRowKeys)
+    setSongogdsonGereenuud(selectedRows)
+  }
   return (
     <Admin
       title="Хөнгөлөлт"
@@ -164,7 +176,7 @@ function tulburTootsoo() {
                     ]}
                   >
                     <DatePicker
-                      style={{width:'100%'}}
+                      style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder="сар"
@@ -185,11 +197,13 @@ function tulburTootsoo() {
                         form?.getFieldValue("turul") === "Бүгд" ? true : false
                       }
                     >
-                      {["B1", "1", "2", "3", "4", "5", "6"].map((a) => (
-                        <Select.Option key={a} value={a}>
-                          {a}
-                        </Select.Option>
-                      ))}
+                      {baiguullaga?.barilguud
+                        ?.find((b) => b._id === barilgiinId)
+                        ?.davkharuud.map((a) => (
+                          <Select.Option key={a.davkhar} value={a.davkhar}>
+                            {a.davkhar}
+                          </Select.Option>
+                        ))}
                     </Select>
                   </Form.Item>
 
@@ -246,12 +260,13 @@ function tulburTootsoo() {
               </div>
               <div className="col-span-9 md:col-span-3 xl:col-span-9 box p-5 overflow-auto">
                 <Table
-                  rowSelection={{
-                    type: "checkbox",
-                    onChange: (selectedRowKeys, selectedRows) => {
-                      setSongogdsonGereenuud(selectedRows)
-                    },
-                  }}
+                  // rowSelection={{
+                  //   type: "checkbox",
+                  //   onChange: (selectedRowKeys, selectedRows) => {
+                  //     setSongogdsonGereenuud(selectedRows)
+                  //   },
+                  // }}
+                  rowSelection={rowSelection}
                   bordered
                   scroll={{ y: "calc(100vh - 20rem)" }}
                   size="small"

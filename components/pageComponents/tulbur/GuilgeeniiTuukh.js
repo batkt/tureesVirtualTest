@@ -12,9 +12,22 @@ import Tulbur from "../eBarimt/Tulbur"
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
     .get(`${url}/${gereeniiId}`, {
-      params: { duusakhOgnoo: moment(ognoo[1]).endOf('month').format("YYYY-MM-DD 23:59:59") },
+      params: {
+        duusakhOgnoo: moment(ognoo[1])
+          .endOf("month")
+          .format("YYYY-MM-DD 23:59:59"),
+      },
     })
-    .then((res) => res.data)
+    .then((res) => {
+      var uldegdel = 0
+      res.data.forEach((x) => {
+        uldegdel =
+          uldegdel +
+          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0))
+        x.uldegdel = uldegdel
+      })
+      return res.data
+    })
     .catch(aldaaBarigch)
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
@@ -43,15 +56,10 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 })
 
 const turulAvya = (turul) => {
-  
-  if(turul === "avlaga")
-    return 'Авлага'
-  else if(turul === "voucher")
-    return 'Купон'
-  else if(turul === "bank")
-    return 'Банк'
-  else if(turul === "khyamdral")
-    return 'Хямдрал'
+  if (turul === "avlaga") return "Авлага"
+  else if (turul === "voucher") return "Купон"
+  else if (turul === "bank") return "Банк"
+  else if (turul === "khyamdral") return "Хямдрал"
 }
 
 function useGuilgee(token, gereeniiId, ognoo) {
@@ -164,25 +172,33 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="p-1 grid grid-cols-9 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
+        <div className="p-1 grid grid-cols-10 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
           <div>Төлөх дүн</div>
           <div>Хямдрал</div>
           <div>Төлсөн дүн</div>
+          <div>Үлдэгдэл</div>
           <div>Ажилтан</div>
           <div>Хэлбэр</div>
           <div>Тайлбар</div>
         </div>
         {guilgeeniiTuukh?.map((a, i) => (
-          <div className="grid grid-cols-9 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
+          <div className="grid grid-cols-10 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
             <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
             <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
             <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+            <div
+              className={`p-1 ${
+                a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+              }`}
+            >
+              {formatNumber(a.uldegdel, 0)}
+            </div>
             <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
             <div className="p-1">
               {a.turul === "bank" ? a.tulsunDans : turulAvya(a.turul)}
