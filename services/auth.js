@@ -64,6 +64,16 @@ export const AuthProvider = ({ children }) => {
   const auth = useMemo(
     () => ({
       newterya: async (khereglech) => {
+        if(!khereglech.nevtrekhNer)
+        {
+          message.warning('Нэвтрэх нэр талбарыг бөглөнө үү')
+          return
+        }
+        if(!khereglech.nuutsUg)
+        {
+          message.warning('Нууц үг талбарыг бөглөнө үү')
+          return
+        }
         if (khereglech.namaigsana)
           localStorage.setItem("newtrekhNerTurees", khereglech.nevtrekhNer);
 
@@ -79,7 +89,7 @@ export const AuthProvider = ({ children }) => {
                 setToken(data.token);
                 ajiltanMutate(data.result);
                 barilgaSoliyo(data.result.barilguud[0]);
-                ekhniiTsonkhruuOchyo(data.result.erkh, "/" + data._id);
+                ekhniiTsonkhruuOchyo(data.result);
                 message.success("Тавтай морил");
               } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");
             } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");

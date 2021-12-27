@@ -1,7 +1,9 @@
-import { Button, Switch, Tooltip, Transfer } from "antd";
+import { Button, Select, Switch, Tooltip, Transfer } from "antd";
 import Admin from "components/Admin";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee from "services/uilchilgee";
 import readMethod from "tools/function/crud/readMethod";
 
 const tsonknuud = [
@@ -170,8 +172,36 @@ const tsonknuud = [
   },
 ];
 
+const khereglegchiinErkhuud = [
+  {
+    erkh: "ZokhionBaiguulagch",
+    tailbar:'Зохион байгуулагч',
+    tsonkhnuud: [
+      "/khyanalt/geree/gereeBurtgel",
+      "/khyanalt/geree/gereeBaiguulakh",
+      "/khyanalt/geree/zagvar",
+      "/khyanalt/talbaiBurtgel/talbaiBurtgekh",
+      "/khyanalt/khariltsagchBurtgel",
+      "/khyanalt/medegdel"
+    ],
+  },
+  {
+    erkh: "Sankhuu",
+    tailbar:'Санхүү',
+    tsonkhnuud: [
+      "/khyanalt/tulburTootsoo",
+      '/khyanalt/eBarimt',
+      "/khyanalt/tulburTootsoo/khungulult",
+      "/khyanalt/medegdel",
+      "/khyanalt/tulburTootsoo/guilgeeniiTuukh"
+    ],
+  },
+];
+
+
 function index({ token, data }) {
-  const [targetKeys, setTargetKeys] = useState([]);
+  const router = useRouter()
+  const [targetKeys, setTargetKeys] = useState(data?.tsonkhniiErkhuud || []);
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [tokhirgoo, setTokhirgoo] = useState([]);
   const [khiikhTokhirgoo, setkhiikhTokhirgoo] = useState([]);
@@ -187,14 +217,45 @@ function index({ token, data }) {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
+  const khadgalya = () => {
+    uilchilgee(token).post(`/ajiltandErkhUgyu/${data?._id}`,{tsonkhniiErkhuud:targetKeys})
+    .then(({data})=>{
+      if(data === 'Amjilttai')
+        router.back()
+    })
+  }
+
+  const erkhSoliyo = (erkh) => {
+    const khereglegchiinErkh = khereglegchiinErkhuud.find(a=>a.erkh === erkh)
+    setTargetKeys([...khereglegchiinErkh.tsonkhnuud])
+  }
+
   return (
     <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5">
-      <div className="box col-span-12 p-2 flex flex-row">
-        {data?.ner}
-        {data?.ovog}
-        {data?.register}
-        <div className="ml-auto">
-          <Button type="primary">Хадгалах</Button>
+      <div className="box col-span-12 p-2 flex flex-row items-center">
+        <div className="font-medium space-y-2">
+          <div className="flex flex-row space-x-2">
+            <div>{data?.ner}</div>
+            <div>{data?.ovog}</div>
+          </div>
+          <div className="flex flex-row space-x-2">
+            <div>{data?.register}</div>
+            <div>{data?.albanTushaal}</div>
+          </div>
+        </div>
+        <div className="mx-3">
+            <Select onChange={erkhSoliyo} placeholder='Хэрэглэгчийн эрх'>
+              {
+                khereglegchiinErkhuud.map(a=>(
+                  <Select.Option key={a.erkh} value={a.erkh}>
+                    {a.tailbar}                    
+                  </Select.Option>
+                ))
+              }
+            </Select>
+          </div>
+        <div className="ml-auto mr-2">
+          <Button type="primary" onClick={khadgalya}>Хадгалах</Button>
         </div>
       </div>
       <div className="box col-span-6 p-2">

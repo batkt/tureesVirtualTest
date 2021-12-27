@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-
 const khereglegchiinErkh = [
   {
     erkh: "Admin",
@@ -44,16 +42,11 @@ const khereglegchiinErkh = [
   },
 ];
 
-export function ekhniiTsonkhruuOchyo(erkh, zam = "") {
-  switch (erkh) {
-    case "Admin":
-    case "Sankhuu":
-    case "ZokhionBaiguulagch":
-      window.location.href = "/khyanalt/geree/gereeBurtgel";
-      break;
-    default:
-      break;
-  }
+export function ekhniiTsonkhruuOchyo(ajiltan) {
+  if(ajiltan?.erkh === 'Admin')
+    window.location.href = "/khyanalt/geree/gereeBurtgel";
+  else
+    window.location.href = ajiltan.tsonkhniiErkhuud[0]
 }
 
 const khuudasnuud = [
@@ -450,16 +443,23 @@ const khuudasnuud = [
 ];
 
 function useErkh(ajiltan) {
-  const router = useRouter();
   if (!ajiltan) return [];
-  const erkh = khereglegchiinErkh.find((x) => x.erkh === ajiltan.erkh);
-  if (!erkh || !erkh.tsonkhnuud.find((x) => !!router.pathname.includes(x))) {
-    router.replace("/404");
-    return [];
-  }
-  return khuudasnuud.filter(
-    (x) => !!erkh.tsonkhnuud.find((y) => x.href.includes(y))
-  );
+  
+  return khuudasnuud.map(x=>{
+    if(x.href.includes("khyanalt/tokhirgoo"))
+      return x
+    if(ajiltan.erkh === 'Admin')
+      return x
+    else if(x.sub?.length > 0){
+      x.sub = x.sub.filter(g=>!!ajiltan?.tsonkhniiErkhuud.find(a=>g.href.includes(a)))
+      if(x.sub.length > 0)
+        return x
+    }
+    else if(!!ajiltan?.tsonkhniiErkhuud.find(a=>x.href.includes(a)))
+      return x
+  }).filter(
+    (x) => !!x
+  )
 }
 
 export default useErkh;
