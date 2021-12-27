@@ -10,18 +10,19 @@ const shalgaltKhiikh = async (ctx,ugudulAvchirya) => {
       data = await ugudulAvchirya(ctx,session)
     if(!!session?.tureestoken)
       erkh = await erkhteiEsekh(session?.tureestoken,ctx.resolvedUrl)
-
-    if (!session.tureestoken)
+    else
       throw new Error('aldaa')
     return {
       notFound: !erkh,
       props: { token: session.tureestoken ,data},
     };
   } catch (error) {
-    console.log(error)
-    // ctx.res.writeHead(302, { location: "/" })
-    // ctx.res.end()
-    return { props: {} }
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      }
+    }
   }
 };
 

@@ -43,6 +43,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN"
 import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExceleesOruulakh"
 import Sungakh from "components/pageComponents/geree/Sungakh"
 import { modal } from "components/ant/Modal"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
 //#endregion
 
 const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
@@ -690,5 +691,7 @@ function ZakhialgiinKhyanalt() {
     </Admin>
   )
 }
+
+export const getServerSideProps = shalgaltKhiikh;
 
 export default ZakhialgiinKhyanalt
