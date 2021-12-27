@@ -1,6 +1,8 @@
 import { parseCookies } from "nookies";
 import _ from "lodash";
 import erkhteiEsekh from 'tools/function/erkhteiEsekh'
+import {undsenKhuudasOlyo} from 'tools/logic/khereglegchiinErkhiinTokhirgoo'
+
 const shalgaltKhiikh = async (ctx,ugudulAvchirya) => {
   try {
     let session = await parseCookies(ctx)
@@ -9,11 +11,11 @@ const shalgaltKhiikh = async (ctx,ugudulAvchirya) => {
     if(_.isFunction(ugudulAvchirya))
       data = await ugudulAvchirya(ctx,session)
     if(!!session?.tureestoken)
-      erkh = await erkhteiEsekh(session?.tureestoken,ctx.resolvedUrl)
+      erkh = await erkhteiEsekh(session?.tureestoken,undsenKhuudasOlyo(ctx.resolvedUrl))
     else
       throw new Error('aldaa')
     return {
-      notFound: !erkh,
+      notFound: !erkh && '/khyanalt/tokhirgoo' !== ctx.resolvedUrl,
       props: { token: session.tureestoken ,data},
     };
   } catch (error) {
