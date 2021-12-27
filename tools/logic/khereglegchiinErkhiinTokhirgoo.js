@@ -1,6 +1,12 @@
 
 export const tsonknuud = [
   {
+    key: "/khyanalt/ajiltan/tokhirgoo",
+    ner: "Ажилтанд эрх олгох",
+    tailbar:"",
+    tokhirgoo: [],
+  },
+  {
     key: "/khyanalt/geree/gereeBurtgel",
     ner: "Гэрээний жагсаалт",
     tailbar:
@@ -190,8 +196,11 @@ export const khereglegchiinErkhuud = [
     ],
   },
 ];
+
 export function undsenKhuudasOlyo(url){
-  return tsonknuud.find(a=> url.includes(a.key)).key
+  if(url.includes("khyanalt/tokhirgoo"))
+    return 'khyanalt/tokhirgoo'
+  return tsonknuud.find(a=> url.includes(a.key))?.key
 }
 
 export function ekhniiTsonkhruuOchyo(ajiltan) {

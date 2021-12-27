@@ -20,8 +20,6 @@ const fetcher =async (token,id)=>{
       token,
       geree.gereeniiZagvariinId
     );
-
-   
   
     if (!!data) {
       if (geree.gereeniiOgnoo) {

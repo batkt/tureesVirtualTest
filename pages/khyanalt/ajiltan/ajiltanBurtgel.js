@@ -412,7 +412,7 @@ function AjiltanBurtgel({ token }) {
                             onClick={() => tokhiruulya(data)}
                           >
                             <SettingOutlined style={{ fontSize: "18px" }} />
-                            <label>Тохиргоо</label>
+                            <label>Эрх</label>
                           </a>
                           <Popconfirm
                             title="Ажилтан устгах уу?"
