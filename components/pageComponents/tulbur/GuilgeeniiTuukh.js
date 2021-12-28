@@ -24,7 +24,8 @@ const fetcher = (url, token, gereeniiId, ognoo) =>
         uldegdel =
           uldegdel +
           (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0))
-        x.uldegdel = uldegdel
+        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0
+        else x.uldegdel = uldegdel
       })
       return res.data
     })
