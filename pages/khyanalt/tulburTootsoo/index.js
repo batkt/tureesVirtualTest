@@ -29,9 +29,9 @@ import Tulbur from "components/pageComponents/eBarimt/Tulbur";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a) {
-  let Icon = CheckOutlined;
-  let color = "green";
-  let tailbar = "Гүйлгээ холбогдсон байна";
+  let Icon = ExclamationOutlined;
+  let color = "red";
+  let tailbar = "Гүйлгээ холбогдоогүй байна";
 
   if (
     a?.kholbosonDun < a?.amount ||
@@ -44,10 +44,10 @@ function iconAvya(a) {
       a?.kholbosonDun < a?.amount
         ? "Дүн дутуу холбогдсон байна"
         : "Холбох боломжтой гэрээнүүд байна";
-  } else if (!a?.kholbosonGereeniiId) {
-    Icon = ExclamationOutlined;
-    color = "red";
-    tailbar = "Гүйлгээ холбогдоогүй байна";
+  } else if (a?.kholbosonGereeniiId && a?.kholbosonDun === a?.amount) {
+    Icon = CheckOutlined;
+    color = "green";
+    tailbar = "Гүйлгээ холбогдсон байна";
   }
 
   return (
