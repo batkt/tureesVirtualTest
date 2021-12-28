@@ -5,6 +5,7 @@ export const tsonknuud = [
     ner: "Ажилтанд эрх олгох",
     tailbar:"",
     tokhirgoo: [],
+    nuuya:true
   },
   {
     key: "/khyanalt/geree/gereeBurtgel",

@@ -538,6 +538,18 @@ input:-webkit-autofill {
   -webkit-background-clip: text !important;
 }
 
+.iconbutton .anticon{
+  @apply flex !important
+}
+
+.ant-transfer-list-header .anticon {
+  @apply flex !important
+}
+
+.ant-transfer-operation > button > span{
+  @apply flex !important
+}
+
 .ant-picker-panel {
   @apply dark:bg-gray-700 !important;
 }

@@ -18,7 +18,7 @@ function index({ token, data }) {
   const handleChange = (nextTargetKeys, direction, moveKeys) => {
     setTargetKeys(nextTargetKeys);
     setkhiikhTokhirgoo(
-      tsonknuud.filter((a) => !!nextTargetKeys.find((b) => b === a.key))
+      tsonknuud.filter((a) => !a.nuuya && !!nextTargetKeys.find((b) => b === a.key))
     );
   };
 
@@ -74,8 +74,15 @@ function index({ token, data }) {
           </h2>
         </div>
         <Transfer
+          locale={{
+            itemsUnit: 'Боломжит эрх',
+            remove: 'Буцаах',
+            selectAll: 'Бүгдийг сонгох',
+            selectInvert: 'Эсэргээр нь сонгох',
+            removeAll: 'Бүгдийг буцаах',
+          }}
           listStyle={{ height: "100%", width: "45%", marginTop: 10 }}
-          dataSource={tsonknuud}
+          dataSource={tsonknuud.filter(a=>!a.nuuya)}
           titles={["Цонхнууд", "Цонхны эрх"]}
           targetKeys={targetKeys}
           selectedKeys={selectedKeys}
@@ -92,7 +99,7 @@ function index({ token, data }) {
       <div className="box col-span-6 p-2">
         <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
           <h2 className="font-medium text-base mr-auto dark:text-gray-200">
-            Шинэчлэлт хийх эрх
+            Цонхны эрхийн тохиргоо
           </h2>
         </div>
         {khiikhTokhirgoo

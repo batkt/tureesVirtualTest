@@ -94,7 +94,7 @@ function Admin({
             )}
             {dedKhuudas && (
               <button
-                className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 iconbutton"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
