@@ -200,6 +200,8 @@ export const khereglegchiinErkhuud = [
 export function undsenKhuudasOlyo(url){
   if(url.includes("khyanalt/tokhirgoo"))
     return 'khyanalt/tokhirgoo'
+  if(!!tsonknuud.find(a=> url === a.key))
+    return tsonknuud.find(a=> url === a.key)?.key
   return tsonknuud.find(a=> url.includes(a.key))?.key
 }
 
