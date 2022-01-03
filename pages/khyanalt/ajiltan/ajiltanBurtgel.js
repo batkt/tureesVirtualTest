@@ -240,7 +240,6 @@ function AjiltanBurtgel({ token }) {
               prefix={<HomeOutlined style={iconColor} />}
             ></Input>
           </Form.Item>
-
           <Form.Item
             name="utas"
             rules={[
@@ -282,16 +281,13 @@ function AjiltanBurtgel({ token }) {
               },
             ]}
           >
-            <Select
-              placeholder="албан тушаал"
+            <Input
+              allowClear
+              placeholder="Албан тушаал"
               value={ajiltanState.albanTushaal}
-              style={{ width: "100%" }}
-              onChange={(v) => onChange("albanTushaal", v)}
-            >
-              <Option value="Админ">Админ</Option>
-              <Option value="Зохион байгуулагч">Зохион байгуулагч</Option>
-              <Option value="Санхүү">Санхүү</Option>
-            </Select>
+              onChange={(e) => onChange("albanTushaal", e.target.value)}
+              prefix={<PhoneOutlined style={iconColor} />}
+            ></Input>
           </Form.Item>
 
           <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>

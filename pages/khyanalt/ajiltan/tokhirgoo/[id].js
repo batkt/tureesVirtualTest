@@ -1,4 +1,4 @@
-import { Button, Select, Switch, Tooltip, Transfer } from "antd";
+import { Button, message, Select, Switch, Tooltip, Transfer } from "antd";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -29,8 +29,11 @@ function index({ token, data }) {
   const khadgalya = () => {
     uilchilgee(token).post(`/ajiltandErkhUgyu/${data?._id}`,{tsonkhniiErkhuud:targetKeys})
     .then(({data})=>{
-      if(data === 'Amjilttai')
+      if(data === 'Amjilttai'){
+        message.success("Бүртгэл амжилттай хийгдлээ");
         router.back()
+      }
+
     })
   }
 
@@ -48,7 +51,6 @@ function index({ token, data }) {
             <div>{data?.ovog}</div>
           </div>
           <div className="flex flex-row space-x-2">
-            <div>{data?.register}</div>
             <div>{data?.albanTushaal}</div>
           </div>
         </div>
