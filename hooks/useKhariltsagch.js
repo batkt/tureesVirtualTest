@@ -3,7 +3,7 @@ import { useAuth } from "services/auth"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
-const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgiinId) =>
+const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgiinId,query) =>
   axios(token)
     .get(url, {
       params: {
@@ -16,6 +16,7 @@ const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgi
             { register: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },
           ],
+          ...query
         },
         ...khuudaslalt,
       },
@@ -29,7 +30,7 @@ const fetcherToololt = (url, token,barilgiinId) =>
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
+function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee,query) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -38,7 +39,7 @@ function useKhariltsagch(token, baiguullagiinId,khuudasniiKhemjee) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId && !!barilgiinId
-      ? ["khariltsagch", token, baiguullagiinId, khuudaslalt,barilgiinId]
+      ? ["khariltsagch", token, baiguullagiinId, khuudaslalt,barilgiinId,query]
       : null,
     fetcher,
     { revalidateOnFocus: false }
