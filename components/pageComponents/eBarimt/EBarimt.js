@@ -58,7 +58,7 @@ function EBarimt({
         }
         {
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>Иргэнд эсэх</div>
+            <div>Татвар төлөгч иргэнд эсэх</div>
             <div className="ml-auto">
               <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
             </div>
