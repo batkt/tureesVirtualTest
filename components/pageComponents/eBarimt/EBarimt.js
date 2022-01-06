@@ -1,12 +1,11 @@
-import React from "react"
-import moment from "moment"
-import QRCode from "react-qr-code"
-import formatNumber from "tools/function/formatNumber"
-import { InputNumber, Input, Switch } from "antd"
-import uilchilgee from "services/uilchilgee"
+import React from "react";
+import moment from "moment";
+import QRCode from "react-qr-code";
+import formatNumber from "tools/function/formatNumber";
+import { InputNumber, Input, Switch } from "antd";
+import axios from "axios";
 
 function EBarimt({
-  alkham,
   eBarimtRef,
   eBarimt,
   data,
@@ -25,12 +24,14 @@ function EBarimt({
   setBarimtKhevlekhEsekh,
 }) {
   function registerShalgaya(register) {
-    setRegister(register)
-    setBaiguullaga(null)
+    setRegister(register);
+    setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh)
-      uilchilgee()
-        .get(`/tatvaraasBaiguullagaAvya/${register}`)
-        .then(({ data }) => setBaiguullaga(data))
+      axios
+        .get(`http://103.50.205.33:8080/tatvaraasBaiguullagaAvya/${register}`)
+        .then(({ data }) => {
+          if (data?.found === true) setBaiguullaga(data);
+        });
   }
 
   return (
@@ -310,8 +311,8 @@ function EBarimt({
         </div>
       )}
     </div>
-  )
-  return <div></div>
+  );
+  return <div></div>;
 }
 
-export default EBarimt
+export default EBarimt;
