@@ -61,6 +61,7 @@ const turulAvya = (turul) => {
   else if (turul === "voucher") return "Купон"
   else if (turul === "bank") return "Банк"
   else if (turul === "khyamdral") return "Хямдрал"
+  else if (turul === "barter") return "Бартер"
 }
 
 function useGuilgee(token, gereeniiId, ognoo) {
@@ -208,6 +209,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
               {a.tailbar}
               {(a.turul === "avlaga" ||
                 a.turul === "voucher" ||
+                a.turul === "barter" ||
                 a.turul === "bank" ||
                 a.turul === "khyamdral") && (
                 <div className="contents justify-between">
