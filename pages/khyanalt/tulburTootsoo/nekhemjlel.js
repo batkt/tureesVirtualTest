@@ -154,7 +154,7 @@ function tulburTootsoo({ token }) {
                       <div>КОМПАНИЙН РД: 6481523</div>
                       <div>
                         ДАНС:{" "}
-                        {songogdsonDans.length === 9
+                        {songogdsonDans?.length === 9
                           ? "Худалдаа хөгжлийн банк"
                           : "Хаан банк"}{" "}
                         {songogdsonDans} (MNT)
@@ -204,19 +204,21 @@ function tulburTootsoo({ token }) {
                       ₮
                     </td>
                   </tr>
-                  <tr>
-                    <td className="border">{2}</td>
-                    <td className="border" colSpan={6}>
-                      Өмнөх хуримтлагдсан өр төлбөр
-                    </td>
-                    <td className="border">{a.talbainKhemjee}</td>
-                    <td className="border">
-                      {formatNumber(a.talbainNegjUne)}₮
-                    </td>
-                    <td className="border" colSpan={2}>
-                      {formatNumber(a.umnukhSariinUrTulbur)}₮
-                    </td>
-                  </tr>
+                  {!tuluvluguutEsekh && (
+                    <tr>
+                      <td className="border">{2}</td>
+                      <td className="border" colSpan={6}>
+                        Өмнөх хуримтлагдсан өр төлбөр
+                      </td>
+                      <td className="border">{a.talbainKhemjee}</td>
+                      <td className="border">
+                        {formatNumber(a.talbainNegjUne)}₮
+                      </td>
+                      <td className="border" colSpan={2}>
+                        {formatNumber(a.umnukhSariinUrTulbur)}₮
+                      </td>
+                    </tr>
+                  )}
                   <tr>
                     <td colSpan={10} className="text-right">
                       ДҮН
