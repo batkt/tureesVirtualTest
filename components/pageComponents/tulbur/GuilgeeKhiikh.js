@@ -1,25 +1,34 @@
-import { Divider, Input, InputNumber, notification, Radio } from "antd"
-import _ from "lodash"
-import React, { useState } from "react"
-import uilchilgee from "services/uilchilgee"
-import moment from "moment"
+import {
+  DatePicker,
+  Divider,
+  Input,
+  InputNumber,
+  notification,
+  Radio,
+} from "antd";
+import _ from "lodash";
+import React, { useState } from "react";
+import uilchilgee from "services/uilchilgee";
+import moment from "moment";
+import locale from "antd/lib/date-picker/locale/mn_MN";
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
-  const [dun, setDun] = useState(0)
-  const [turul, setTurul] = useState("voucher")
-  const [tailbar, setTailbar] = useState("")
+  const [dun, setDun] = useState(0);
+  const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
+  const [turul, setTurul] = useState("voucher");
+  const [tailbar, setTailbar] = useState("");
 
   React.useImperativeHandle(
     ref,
     () => ({
       khaaya() {
-        _.isFunction(onFinish) && onFinish()
-        destroy()
+        _.isFunction(onFinish) && onFinish();
+        destroy();
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та гэрээгээ сонгоно уу" })
-          return
+          notification.warning({ message: "Та гэрээгээ сонгоно уу" });
+          return;
         }
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
@@ -30,10 +39,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
               tulukhDun: turul === "avlaga" ? dun : 0,
               ognoo:
                 turul === "avlaga"
-                  ? moment()
-                      .add(1, "month")
-                      .startOf("month")
-                      .format("YYYY-MM-DD 00:00:00")
+                  ? moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")
                   : new Date(),
               gereeniiId: data?._id,
               tailbar,
@@ -43,30 +49,30 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             notification.success({
               placement: "bottomRight",
               message: "Амжилттай",
-            })
-            _.isFunction(onFinish) && onFinish()
-            destroy()
-          })
+            });
+            _.isFunction(onFinish) && onFinish();
+            destroy();
+          });
       },
     }),
     [dun, turul, tailbar]
-  )
+  );
   function labelTurul(guilgeeTurul) {
-    var text
+    var text;
     switch (guilgeeTurul) {
       case "avlaga":
-        text = "Авлага үүсгэх"
-        break
+        text = "Авлага үүсгэх";
+        break;
       case "voucher":
-        text = "Ваучераар тооцоо хийх"
-        break
+        text = "Ваучераар тооцоо хийх";
+        break;
       case "barter":
-        text = "Бартераар тооцоо хийх"
-        break
+        text = "Бартераар тооцоо хийх";
+        break;
       default:
-        break
+        break;
     }
-    return text
+    return text;
   }
 
   return (
@@ -80,6 +86,9 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       </div>
       <Divider />
       <label>{labelTurul(turul)}</label>
+      {turul === "avlaga" && (
+        <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
+      )}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -95,7 +104,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         />
       )}
     </div>
-  )
+  );
 }
 
-export default React.forwardRef(GuilgeeKhiikh)
+export default React.forwardRef(GuilgeeKhiikh);
