@@ -116,6 +116,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 khyamdral,
                 objectiinId: _id,
                 tailbar,
+                talbainDugaar:data?.talbainDugaar
               })
               .then(({ data }) => {
                 if (data) {
@@ -146,26 +147,6 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
     }),
     [printRef]
   )
-  function ebarimtUgukh(data) {
-    modal({
-      title: (
-        <div className="w-full flex flex-row justify-between">
-          <div>Түрээсийн төлбөрийн и-баримт</div>
-          <div className="mr-5">{data.mashiniiDugaar}</div>{" "}
-        </div>
-      ),
-      content: (
-        <Tulbur
-          data={data}
-          token={token}
-          // ajiltan={ajiltan}
-          // baiguullaga={baiguullaga}
-          //zakhialgaMutate={zakhialgaMutate}
-        />
-      ),
-      footer: false,
-    })
-  }
 
   return (
     <div className="ml-12">

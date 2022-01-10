@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import { InputNumber, Input, Switch } from "antd";
 import axios from "axios";
+import { isString } from "lodash";
 
 function EBarimt({
   eBarimtRef,
@@ -24,7 +25,9 @@ function EBarimt({
   setBarimtKhevlekhEsekh,
 }) {
   function registerShalgaya(register) {
-    setRegister(register?.toUpperCase());
+    if(isString(register) && irgenEsekh === true)
+      register = register?.toUpperCase()
+    setRegister(register);
     setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh || irgenEsekh && register?.toString().length === 10)
       axios

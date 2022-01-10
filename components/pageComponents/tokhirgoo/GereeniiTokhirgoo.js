@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, notification, Switch } from "antd";
+import { Button, InputNumber, notification, Switch } from "antd";
 import uilchilgee,{ url } from "services/uilchilgee";
 
 import {useAjiltniiJagsaalt} from "hooks/useAjiltan";
@@ -85,7 +85,7 @@ function KhuviinMedeelel({
         <div className='intro-y box mt-5 lg:mt-0'>
           <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
-              Нийтээр хөнгөлөх
+              Нийтээр тохируулах
             </h2>
           </div>
           <div className="box">
@@ -107,6 +107,17 @@ function KhuviinMedeelel({
               </div>
               <div className="ml-auto">
                 <Switch defaultChecked={baiguullaga?.tokhirgoo?.bukhAjiltanGereendZasvarOruulakhEsekh} onChange={(v)=>setGereeTokhirgoo(a=>({...(a || {}),'tokhirgoo.bukhAjiltanGereendZasvarOruulakhEsekh':v}))}/>
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Барьцаа авах /сараар/</div> 
+                  <div className="text-gray-600">Гэрээ байгуулсаны дараа сараар тооцож барьцаа авна</div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber min={0} defaultValue={baiguullaga?.tokhirgoo?.baritsaaAvakhSar} onChange={(v)=>setGereeTokhirgoo(a=>({...(a || {}),'tokhirgoo.baritsaaAvakhSar':v}))}/>
               </div>
             </div>
           </div>
