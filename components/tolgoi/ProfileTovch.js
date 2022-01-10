@@ -158,37 +158,38 @@ function ProfileTovch({ ajiltan, garya, token }) {
         </button>
       </Dropdown>
       <Dropdown
+        overlayClassName="profile"
         overlay={
-          <Menu>
-            <Menu.Item>
-              <div className="text-lg">
+          <Menu >
+            <Menu.Item className="profileMenuItem">
+              <div className="text-lg text-white">
                 
                 {`${ajiltan?.ovog[0] || ""}.${ajiltan?.ner}`}
               </div>
-              <div className="text-sm font-medium text-gray-500">
+              <div className="text-sm font-medium text-gray-200">
                 {ajiltan?.albanTushaal}
               </div>
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item key="0">
+            <Menu.Item key="0" className="profileMenuItem">
               <Link href="/khyanalt/tokhirgoo">
                 <a>
-                  <div className="flex items-center w-44 text-xl space-x-2 dark:text-gray-100">
+                  <div className="flex items-center w-44 text-white text-xl space-x-2 dark:text-gray-100">
                     <SettingOutlined />
                     <span>Тохиргоо</span>
                   </div>
                 </a>
               </Link>
             </Menu.Item>
-            <Menu.Item key="1">
-              <div className="flex items-center w-44 text-xl space-x-2">
+            <Menu.Item key="1" className="profileMenuItem">
+              <div className="flex items-center w-44 text-white text-xl space-x-2">
                 <QuestionOutlined />
                 <span>Тусламж</span>
               </div>
             </Menu.Item>
             <Menu.Divider />
-            <Menu.Item key="3" onClick={garya}>
-              <div className="flex items-center w-44 text-xl space-x-2">
+            <Menu.Item key="3" onClick={garya} className="profileMenuItem">
+              <div className="flex items-center w-44 text-xl space-x-2 text-white">
                 <LogoutOutlined />
                 <span>Гарах</span>
               </div>
