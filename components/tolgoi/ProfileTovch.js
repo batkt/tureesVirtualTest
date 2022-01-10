@@ -161,9 +161,13 @@ function ProfileTovch({ ajiltan, garya, token }) {
         overlay={
           <Menu>
             <Menu.Item>
-              <span className="text-lg">
-                {ajiltan?.ovog || "" + " " + ajiltan?.ner || ""}
-              </span>
+              <div className="text-lg">
+                
+                {`${ajiltan?.ovog[0] || ""}.${ajiltan?.ner}`}
+              </div>
+              <div className="text-sm font-medium text-gray-500">
+                {ajiltan?.albanTushaal}
+              </div>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="0">
