@@ -180,7 +180,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
               }`}
             >
-              {formatNumber(a.uldegdel, 0)}
+              {formatNumber(a.turul === 'khyamdral' && a.uldegdel < 0 ? 0 : a.uldegdel, 0)}
             </div>
             <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
             <div className="p-1">
