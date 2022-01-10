@@ -58,7 +58,7 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
 
 const turulAvya = (turul) => {
   if (turul === "avlaga") return "Авлага"
-  else if (turul === "voucher") return "Купон"
+  else if (turul === "voucher") return "Ваучер"
   else if (turul === "bank") return "Банк"
   else if (turul === "khyamdral") return "Хямдрал"
   else if (turul === "barter") return "Бартер"

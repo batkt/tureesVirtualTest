@@ -439,7 +439,7 @@ function guilgeeniiTuukh({ token }) {
             {
               too: formatNumber(_.get(guilgeeniiToololt, "uglug.0.dun") || 0),
               turul: "uglug",
-              utga: "Купон төлөлт",
+              utga: "Ваучер төлөлт",
             },
             {
               too: formatNumber(
