@@ -24,7 +24,7 @@ function EBarimt({
   setBarimtKhevlekhEsekh,
 }) {
   function registerShalgaya(register) {
-    setRegister(register);
+    setRegister(register?.toUpperCase());
     setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh || irgenEsekh && register?.toString().length === 10)
       axios
