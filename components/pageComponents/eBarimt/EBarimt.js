@@ -26,7 +26,7 @@ function EBarimt({
   function registerShalgaya(register) {
     setRegister(register);
     setBaiguullaga(null);
-    if (register?.toString().length === 7 && baiguullagaEsekh)
+    if (register?.toString().length === 7 && baiguullagaEsekh || irgenEsekh && register?.toString().length === 10)
       axios
         .get(`http://103.50.205.33:8080/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
