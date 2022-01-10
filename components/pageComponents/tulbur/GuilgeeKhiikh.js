@@ -87,7 +87,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       <Divider />
       <label>{labelTurul(turul)}</label>
       {turul === "avlaga" && (
-        <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
+        <DatePicker.MonthPicker locale={locale} value={ognoo} onChange={setOgnoo} />
       )}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

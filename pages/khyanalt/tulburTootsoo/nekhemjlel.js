@@ -328,6 +328,7 @@ function tulburTootsoo({ token }) {
                 ))}
             </Select>
             <Select
+              allowClear
               placeholder="Давхар"
               onChange={(v) => {
                 setDavkhar(v);
