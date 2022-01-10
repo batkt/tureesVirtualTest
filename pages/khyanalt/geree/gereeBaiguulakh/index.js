@@ -50,7 +50,8 @@ function GereeBaiguulakh({ token }) {
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
-    baritsaaAvakhKhugatsaa:1
+    baritsaaAvakhKhugatsaa:1,
+    baritsaaAvakhSar:_.get(baiguullaga,'tokhirgoo.baritsaaAvakhSar')
   });
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
@@ -71,6 +72,14 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinId = baiguullaga._id
       data.gereeniiZagvariinId = gereeniiZagvar._id
       data.barilgiinId = barilgiinId
+      _.set(data.avlaga,'guilgeenuud',[...(data.avlaga.guilgeenuud || []),{
+        turul: "baritsaa",
+        ognoo: data.gereeniiOgnoo,
+        khyamdral: 0,
+        undsenDun: data?.baritsaaAvakhDun,
+        tulukhDun: data?.baritsaaAvakhDun
+      }])
+      data.avlaga = barilgiinId
       
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");

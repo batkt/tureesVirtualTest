@@ -32,8 +32,9 @@ const YurunkhiiMedeele = ({
     var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
     talbai.talbainDugaar =
       (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") + talbai.kod;
+
     talbai.baritsaaAvakhDun =
-      (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+      ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) * (value.baritsaaAvakhSar || 1) ;
     talbai.sariinTurees = (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
     talbai.talbainNegjUne =
       (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
@@ -78,7 +79,7 @@ const YurunkhiiMedeele = ({
         });
         talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
         talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-        talbai.davkhar = talbai.davkhar.includes(",")
+        talbai.davkhar = talbai.davkhar?.includes(",")
           ? [...new Set(talbai.davkhar.split(","))].join(",")
           : talbai.davkhar;
         talbai.talbainDugaar = target.value;

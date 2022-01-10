@@ -51,7 +51,6 @@ function Table({data,updateMyData}) {
 }
 
 function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
-  const [isModalVisible,setIsModalVisible] = React.useState(false)
   const [jagsaalt,setJagsaalt] = React.useState(value?.guilgeenuud || [])
   const {gereeniiOgnoo,tulukhUdur=[],sariinTurees} = ugugdul
 
