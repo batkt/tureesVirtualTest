@@ -173,7 +173,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
             <Menu.Item key="0" className="profileMenuItem">
               <Link href="/khyanalt/tokhirgoo">
                 <a>
-                  <div className="flex items-center w-44 text-white text-xl space-x-2 dark:text-gray-100">
+                  <div className="flex items-center w-44 text-white space-x-2 dark:text-gray-100">
                     <SettingOutlined />
                     <span>Тохиргоо</span>
                   </div>
@@ -181,14 +181,14 @@ function ProfileTovch({ ajiltan, garya, token }) {
               </Link>
             </Menu.Item>
             <Menu.Item key="1" className="profileMenuItem">
-              <div className="flex items-center w-44 text-white text-xl space-x-2">
+              <div className="flex items-center w-44 text-white space-x-2">
                 <QuestionOutlined />
                 <span>Тусламж</span>
               </div>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="3" onClick={garya} className="profileMenuItem">
-              <div className="flex items-center w-44 text-xl space-x-2 text-white">
+              <div className="flex items-center w-44 space-x-2 text-white">
                 <LogoutOutlined />
                 <span>Гарах</span>
               </div>
