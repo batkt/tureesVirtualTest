@@ -23,7 +23,7 @@ const YurunkhiiMedeele = ({
   value,
 }) => {
   const [form] = Form.useForm();
-  const { talbainiiGaralt, settalbaiKhuudaslalt } = useTalbai(
+  const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
     token,
     baiguullaga?._id
   );
@@ -105,7 +105,7 @@ const YurunkhiiMedeele = ({
           size="large"
           value={null}
           filterOption={(o) => o}
-          onSearch={(search) => settalbaiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
+          onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
           onChange={onChangetalbai}
         >
           {talbainiiGaralt?.jagsaalt?.map((mur) => {

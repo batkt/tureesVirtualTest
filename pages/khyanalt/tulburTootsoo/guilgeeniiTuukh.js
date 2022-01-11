@@ -4,8 +4,8 @@ import uilchilgee from "services/uilchilgee"
 import Admin from "components/Admin"
 import React, {  useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, Table, Button, DatePicker, Spin, Tooltip, Rate } from "antd"
-import { FileExcelOutlined, HeartOutlined } from "@ant-design/icons"
+import { Card, Table, Button, DatePicker, Spin, Tooltip, Progress } from "antd"
+import { FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "../../../tools/function/formatNumber"
 import GuilgeeKhiikh from "../../../components/pageComponents/tulbur/GuilgeeKhiikh"
@@ -352,8 +352,10 @@ function guilgeeniiTuukh({ token }) {
               </a>
             )}
             <div className="px-2">
-              <Rate disabled allowClear character={<HeartOutlined />} style={{ color: 'rgba(16, 185, 129, 1)' }} allowHalf value={3} count={5} />
-             </div>
+              <Tooltip title={`Барьцаа `}>
+                <Progress type="circle" percent={30} width={25} strokeColor='rgba(16, 185, 129,1)' />
+              </Tooltip>
+            </div>
           </div>
         ),
       },
