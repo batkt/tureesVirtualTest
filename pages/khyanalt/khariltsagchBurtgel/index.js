@@ -557,18 +557,6 @@ function AjiltanBurtgel({ token }) {
         </div>
         <div className="flex flex-row mb-5">
           <div>
-            <Button
-              style={{
-                alignItems: "end",
-                backgroundColor: "#209669",
-                color: "#ffffff",
-                marginTop: "20px",
-                display: "flex",
-              }}
-              icon={<BellOutlined style={{ fontSize: "16px" }} />}
-            >
-              Мэдэгдэл илгээх
-            </Button>
           </div>
           <div className="ml-auto">
             <Button
