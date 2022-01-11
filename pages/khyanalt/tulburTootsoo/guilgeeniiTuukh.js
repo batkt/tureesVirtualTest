@@ -351,9 +351,9 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
             )}
-            <div className="px-2">
-              <Tooltip title={`Барьцаа `}>
-                <Progress type="circle" percent={30} width={25} strokeColor='rgba(16, 185, 129,1)' />
+            <div className="px-2 cursor-pointer">
+              <Tooltip title={`Барьцаа ${formatNumber((row.baritsaaAvakhDun || 0) - (row.baritsaaniiUldegdel || 0))} дутуу баьрцаа`}>
+                <Progress type="circle" percent={100 * (row.baritsaaniiUldegdel || 0) / (row.baritsaaAvakhDun || 0) } width={25} strokeColor='rgba(16, 185, 129,1)' />
               </Tooltip>
             </div>
           </div>
