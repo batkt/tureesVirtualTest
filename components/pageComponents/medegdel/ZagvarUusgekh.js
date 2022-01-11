@@ -122,4 +122,4 @@ function ZaaltZasvar({ value, change,onTextChange }) {
     )
 }
 
-export default React.forwardRef(ZaaltZasvar)
+export default ZaaltZasvar
