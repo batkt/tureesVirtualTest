@@ -34,8 +34,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: {
               turul: turul,
-              tulsunDun: turul === "voucher" ? dun : 0,
-              tulsunDun: turul === "barter" ? dun : 0,
+              tulsunDun: (turul === "voucher" || turul === "barter") ? dun : 0,
               tulukhDun: turul === "avlaga" ? dun : 0,
               ognoo:
                 turul === "avlaga"
