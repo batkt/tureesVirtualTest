@@ -14,7 +14,7 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import GereeKharakh from 'components/pageComponents/geree/Kharakh'
 
 function index({ token }) {
-  const { ajiltan,baiguullaga } = useAuth();
+  const { ajiltan,baiguullaga ,barilgiinId} = useAuth();
   const [kharuulakhGeree,setKharuulakhGeree] = React.useState()
   const ref = React.useRef();
   const excelref = React.useRef();
@@ -71,6 +71,7 @@ function index({ token }) {
         <ExceleesOruulakh
           ref={excelref}
           token={token}
+          barilgiinId={barilgiinId}
           zam="gereeniiZagvarTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"

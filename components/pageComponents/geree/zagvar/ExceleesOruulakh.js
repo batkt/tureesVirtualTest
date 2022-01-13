@@ -5,7 +5,7 @@ import { url } from "services/uilchilgee";
 import _ from "lodash";
 
 function index(
-  { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish },
+  { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish,barilgiinId },
   ref
 ) {
   React.useImperativeHandle(
@@ -28,6 +28,7 @@ function index(
         action={`${url}/${zam}`}
         method="POST"
         headers={{ Authorization: `bearer ${token}` }}
+        data={{barilgiinId}}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
             _.isFunction(onFinish) && onFinish();
