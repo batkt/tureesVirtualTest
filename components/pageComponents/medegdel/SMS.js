@@ -39,7 +39,7 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
 
     const ref = React.useRef(null)
 
-    const {gereeniiMedeelel,setGereeniiKhuudaslalt} = useGereeniiJagsaalt(ilgeekhTurul === 'gantsaar' && token,baiguullaga?._id)
+    const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useNekhemjlekh(ilgeekhTurul === 'gantsaar' && token, undefined,davkhar,ilgeekhTurul)
     
     const {mailiinZagvarGaralt,mailiinZagvarMutate,setMailiinZagvarKhuudaslalt} = useMailiinZagvar(token,'sms')
 
@@ -92,10 +92,10 @@ function SMS({token,baiguullaga,khariltsagch,setKhariltsagch,ilgeekhTurul, setIl
             </div>
             {ilgeekhTurul === 'gantsaar' && <div className="box p-5 mt-5">
                 <div className="text-gray-700 dark:text-gray-300">
-                    <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setGereeniiKhuudaslalt(a=>({...a,search}))}/>
+                    <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setNekhemjlelKhuudaslalt(a=>({...a,search}))}/>
                 </div>
                 <div className="overflow-y-auto scrollbar-hidden h-72 mt-5">
-                    {gereeniiMedeelel?.jagsaalt?.map((mur)=>
+                    {nekhemjlel?.jagsaalt?.map((mur)=>
                         <div className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${khariltsagch?._id === mur?._id ? 'bg-green-100' : ''} `} key={mur?._id} onClick={()=>setKhariltsagch(mur)}>
                             <div className="w-10 h-10 flex-none image-fit rounded-full relative">
                                 <img alt="Rubick" className="rounded-full" src="/profile.svg"/>
@@ -299,7 +299,7 @@ export function SMSContent({khariltsagch,token,ilgeekhTurul,baiguullaga,davkhar,
                         total: nekhemjlel?.niitMur,
                         showSizeChanger: true,
                         onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                          setGereeniiKhuudaslalt((kh) => ({
+                        setNekhemjlelKhuudaslalt((kh) => ({
                             ...kh,
                             khuudasniiDugaar,
                             khuudasniiKhemjee,
