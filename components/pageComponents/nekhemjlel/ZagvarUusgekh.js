@@ -63,12 +63,27 @@ const tulburiinTalbaruud = [
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
 ]
 
-function ZaaltZasvar({ value, change,onTextChange,buttonListCustom=[],otherProps }) {
+const nekhemjlekhiinTalbaruud = [
+  { ner: "Нэхэмжлэхийн сар", talbar: "sar" },
+  { ner: "Данс", talbar: "dans" },
+  { ner: "Мөнгөн дүн үсгээр", talbar: "" },
+  { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
+  { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
+]
+
+function ZaaltZasvar({
+  value,
+  change,
+  onTextChange,
+  buttonListCustom = [],
+  otherProps,
+}) {
   const editorRef = React.useRef()
 
-  useEffect(()=>{
+  useEffect(() => {
     onTextChange && onTextChange(editorRef.current.editor.getText())
-  },[value])
+    console.log(value)
+  }, [value])
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
@@ -101,26 +116,34 @@ function ZaaltZasvar({ value, change,onTextChange,buttonListCustom=[],otherProps
       title: "Төлбөр",
       button: renderToString(<DollarCircleOutlined />),
     })
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur]
+
+    const nekhemjlel = customPlugin({
+      songokhTalbaruud: nekhemjlekhiinTalbaruud,
+      name: "nekhemjlel",
+      title: "Нэхэмжлэл",
+      button: renderToString(<DollarCircleOutlined />),
+    })
+
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur, nekhemjlel]
   }, [])
 
-    return (
-      <SunEditor
-        onChange={change}
-        defaultValue={value}
-        setContents={value}
-        setOptions={{
-          plugins: custom,
-          buttonList: [
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
-            ...buttonListCustom
-          ],
-        }}
-        showToolbar={true}
-        ref={editorRef}
-        {...otherProps}
-      />
-    )
+  return (
+    <SunEditor
+      onChange={change}
+      defaultValue={value}
+      setContents={value}
+      setOptions={{
+        plugins: custom,
+        buttonList: [
+          ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur", "nekhemjlel"],
+          ...buttonListCustom,
+        ],
+      }}
+      showToolbar={true}
+      ref={editorRef}
+      {...otherProps}
+    />
+  )
 }
 
 export default ZaaltZasvar
