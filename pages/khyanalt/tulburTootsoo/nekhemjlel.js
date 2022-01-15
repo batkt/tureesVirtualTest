@@ -2,16 +2,19 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useEffect } from "react";
 import { Card, DatePicker, Table, Button, Select, message, Switch } from "antd";
-import { EditOutlined, FileExcelOutlined } from "@ant-design/icons";
+import { SnippetsOutlined,EditOutlined, FileExcelOutlined, DeleteOutlined } from "@ant-design/icons";
+
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/useNekhemjlekh";
+import useNekhemjlekhiinZagvar from "hooks/useNekhemjlekhiinZagvar";
 import useNekhemjlekhDugaarlalt from "hooks/useNekhemjlekhDugaarlalt";
 import useDans from "hooks/khuulga/useDans";
 import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 import { toWords } from "mon_num";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
+import NekhemjlelZagvarBurtgel from "components/pageComponents/nekhemjlel/ZagvarBurtgel";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 
@@ -33,6 +36,7 @@ const ilgeekhTurul = "davkharaar";
 function tulburTootsoo({ token }) {
   const printRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
+  const nekhemjlekhRef = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
 
   const [tuluvluguutEsekh, setTuluvluguutEsekh] = React.useState(false);
@@ -44,7 +48,7 @@ function tulburTootsoo({ token }) {
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul);
-
+  const {nekhemjlekhiinZagvar,nekhemjlekhiinZagvarMutate} = useNekhemjlekhiinZagvar(token)
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
 
@@ -80,6 +84,30 @@ function tulburTootsoo({ token }) {
       return;
     }
     handlePrint();
+  }
+
+  function nekhemjlelZagvarBurtgeye(mur, index) {
+    const footer = [
+      <Button onClick={() => nekhemjlekhRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => nekhemjlekhRef.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ];
+    modal({
+      title: "Нэхэмжлэл засвар",
+      icon: <FileExcelOutlined />,
+      style:{ top: 20 },
+      content: (
+        <NekhemjlelZagvarBurtgel
+          ref={nekhemjlekhRef}
+          data={mur}
+          barilgiinId={barilgiinId}
+          token={token}
+          afterShock={nekhemjlekhiinZagvarMutate}
+        />
+      ),
+      footer,
+    });
   }
 
   function nekhemjlelZasya(mur, index) {
@@ -353,101 +381,126 @@ function tulburTootsoo({ token }) {
             </Button>
           </div>
         </div>
-        <Table
-          bordered
-          size="small"
-          scroll={{ y: "calc(100vh - 25rem)" }}
-          rowSelection={{
-            type: "checkbox",
-            selectedRowKeys: songogdsonGereenuud?.map((a) => a._id),
-            onChange: (selectedRowKeys, selectedRows) => {
-              setSongogdsonGereenuud(selectedRows);
-            },
-          }}
-          columns={[
-            {
-              title: "Гэрээ №",
-              dataIndex: "gereeniiDugaar",
-              width: "7rem",
-              align: "center",
-            },
-            {
-              title: "Талбай №",
-              sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
-              dataIndex: "talbainDugaar",
-              width: "7rem",
-              align: "center",
-            },
-            {
-              title: "Дараагийн төлөх огноо",
-              sorter: (a, b) =>
-                moment(a.talbainDugaar).diff(moment(b.talbainDugaar), "hour"),
-              dataIndex: "daraagiinTulukhOgnoo",
-              render(a) {
-                return moment(a).format("YYYY-MM-DD");
+        <div className="grid grid-cols-8 gap-2">
+          <div className="box col-span-2 p-2">
+            <div className="w-full flex items-center justify-center">
+              <Button type="primary" onClick={()=>nekhemjlelZagvarBurtgeye()}>Нэхэмжлэхийн загвар үүсгэх</Button>
+            </div>
+            <div className="p-2 space-y-2">
+                {
+                  nekhemjlekhiinZagvar?.jagsaalt?.map((a,i)=><div key={`zagvar${i}`} className="box flex flex-row p-2 space-x-2 items-center">
+                    <div className="p-2 rounded-full">
+                      <SnippetsOutlined style={{display:'flex'}} />
+                    </div>
+                    <div className="font-medium">{a.ner}</div>
+                    <div className="p-2 rounded-full text-yellow-500" style={{marginLeft:'auto'}}>
+                      <EditOutlined style={{display:'flex'}} />
+                    </div>
+                    <div className="p-2 rounded-full text-red-500">
+                      <DeleteOutlined style={{display:'flex'}} />
+                    </div>
+                  </div>)
+                }
+            </div>
+          </div>
+          <div className="col-span-6">
+          <Table
+            bordered
+            size="small"
+            scroll={{ y: "calc(100vh - 25rem)" }}
+            rowSelection={{
+              type: "checkbox",
+              selectedRowKeys: songogdsonGereenuud?.map((a) => a._id),
+              onChange: (selectedRowKeys, selectedRows) => {
+                setSongogdsonGereenuud(selectedRows);
               },
-              ellipsis: true,
-              align: "center",
-            },
-            {
-              title: "Өмнөх хуримтлагдсан өр төлбөр",
-              sorter: (a, b) => a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
-              dataIndex: "umnukhSariinUrTulbur",
-              render(a) {
-                return formatNumber(a);
+            }}
+            columns={[
+              {
+                title: "Гэрээ №",
+                dataIndex: "gereeniiDugaar",
+                width: "7rem",
+                align: "center",
               },
-              ellipsis: true,
-              align: "center",
-            },
-            {
-              title: "Энэ сард төлөх дүн",
-              sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
-              dataIndex: "eneSardTulukhDun",
-              render(a) {
-                return formatNumber(a);
+              {
+                title: "Талбай №",
+                sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
+                dataIndex: "talbainDugaar",
+                width: "7rem",
+                align: "center",
               },
-              ellipsis: true,
-              align: "center",
-            },
-            {
-              title: "Нийт үлдэгдэл",
-              sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
-              dataIndex: "niitUldegdel",
-              render(a) {
-                return formatNumber(a);
+              {
+                title: "Дараагийн төлөх огноо",
+                sorter: (a, b) =>
+                  moment(a.talbainDugaar).diff(moment(b.talbainDugaar), "hour"),
+                dataIndex: "daraagiinTulukhOgnoo",
+                render(a) {
+                  return moment(a).format("YYYY-MM-DD");
+                },
+                ellipsis: true,
+                align: "center",
               },
-              ellipsis: true,
-              align: "center",
-            },
-            {
-              title: "Төлөв",
-              width: "4rem",
-              dataIndex: "tuluv",
-              align: "center",
-              render(a, record, index) {
-                return (
-                  <div className="flex items-center justify-center">
-                    <Button
-                      shape="circle"
-                      size="small"
-                      icon={
-                        <div
-                          className={`text-yellow-500 flex items-center justify-center`}
-                          onClick={() => nekhemjlelZasya(record, index)}
-                        >
-                          <EditOutlined style={{ fontSize: "18px" }} />
-                        </div>
-                      }
-                    />
-                  </div>
-                );
+              {
+                title: "Өмнөх хуримтлагдсан өр төлбөр",
+                sorter: (a, b) => a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
+                dataIndex: "umnukhSariinUrTulbur",
+                render(a) {
+                  return formatNumber(a);
+                },
+                ellipsis: true,
+                align: "center",
               },
-            },
-          ]}
-          dataSource={nekhemjleliinJagsaalt}
-          pagination={false}
-          rowKey={(a) => a._id}
-        />
+              {
+                title: "Энэ сард төлөх дүн",
+                sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
+                dataIndex: "eneSardTulukhDun",
+                render(a) {
+                  return formatNumber(a);
+                },
+                ellipsis: true,
+                align: "center",
+              },
+              {
+                title: "Нийт үлдэгдэл",
+                sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
+                dataIndex: "niitUldegdel",
+                render(a) {
+                  return formatNumber(a);
+                },
+                ellipsis: true,
+                align: "center",
+              },
+              {
+                title: "Төлөв",
+                width: "4rem",
+                dataIndex: "tuluv",
+                align: "center",
+                render(a, record, index) {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <Button
+                        shape="circle"
+                        size="small"
+                        icon={
+                          <div
+                            className={`text-yellow-500 flex items-center justify-center`}
+                            onClick={() => nekhemjlelZasya(record, index)}
+                          >
+                            <EditOutlined style={{ fontSize: "18px" }} />
+                          </div>
+                        }
+                      />
+                    </div>
+                  );
+                },
+              },
+            ]}
+            dataSource={nekhemjleliinJagsaalt}
+            pagination={false}
+            rowKey={(a) => a._id}
+          />
+          </div>
+        </div>
       </Card>
     </Admin>
   );

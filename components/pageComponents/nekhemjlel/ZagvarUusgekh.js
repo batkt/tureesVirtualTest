@@ -8,7 +8,6 @@ import {
   ClockCircleOutlined,
   DollarCircleOutlined,
   LockOutlined,
-  SnippetsOutlined,
   SolutionOutlined,
 } from "@ant-design/icons"
 
@@ -64,14 +63,6 @@ const tulburiinTalbaruud = [
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
 ]
 
-const nekhemjlekhiinTalbaruud = [
-  { ner: "Нэхэмжлэхийн сар", talbar: "sar" },
-  { ner: "Данс", talbar: "dans" },
-  { ner: "Мөнгөн дүн үсгээр", talbar: "" },
-  { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
-  { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
-]
-
 function ZaaltZasvar({ value, change,onTextChange,buttonListCustom=[],otherProps }) {
   const editorRef = React.useRef()
 
@@ -110,13 +101,7 @@ function ZaaltZasvar({ value, change,onTextChange,buttonListCustom=[],otherProps
       title: "Төлбөр",
       button: renderToString(<DollarCircleOutlined />),
     })
-    const nekhemjlel = customPlugin({
-      songokhTalbaruud: nekhemjlekhiinTalbaruud,
-      name: "nekhemjlel",
-      title: "Нэхэмжлэл",
-      button: renderToString(<SnippetsOutlined />),
-    })
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur,nekhemjlel]
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur]
   }, [])
 
     return (
@@ -127,7 +112,6 @@ function ZaaltZasvar({ value, change,onTextChange,buttonListCustom=[],otherProps
         setOptions={{
           plugins: custom,
           buttonList: [
-            ...buttonList.formatting,
             ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
             ...buttonListCustom
           ],
