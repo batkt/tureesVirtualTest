@@ -9,6 +9,8 @@ import { FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "../../../tools/function/formatNumber"
 import GuilgeeKhiikh from "../../../components/pageComponents/tulbur/GuilgeeKhiikh"
+import BaritsaaUdirdlaga from "../../../components/pageComponents/tulbur/BaritsaaUdirdlaga"
+
 import Khungulukh from "../../../components/pageComponents/tulbur/Khungulukh"
 import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh"
 import _ from "lodash"
@@ -48,6 +50,7 @@ function guilgeeniiTuukh({ token }) {
   //#region state
   const ref = React.useRef(null)
   const refTuukh = React.useRef(null)
+  const baritsaaref = React.useRef(null)
   const { baiguullaga } = useAuth()
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null)
   const [ognoo, setOgnoo] = React.useState([
@@ -205,8 +208,15 @@ function guilgeeniiTuukh({ token }) {
       {
         title: "Үйлдэл",
         ellipsis: true,
-        render: (row) => (
-          <div className="flex flex-row divide-x-2 ">
+        render: (row) => {
+          const khuvi = row.baritsaaAvakhDun > 0 ? (100 * row.baritsaaniiUldegdel / row.baritsaaAvakhDun) : 100
+
+          let strokeColor = 'rgba(16, 185, 129,1)'
+          if(khuvi < 0)
+            strokeColor = 'rgba(245, 158, 18,1)'
+
+            
+          return(<div className="flex flex-row divide-x-2 ">
             <a
               onClick={() => guilgeeKhiiya(row)}
               className="px-2 fill-current text-green-500"
@@ -351,13 +361,13 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
             )}
-            <div className="px-2 cursor-pointer">
-              <Tooltip title={`Барьцаа ${formatNumber((row.baritsaaAvakhDun || 0) - (row.baritsaaniiUldegdel || 0))} дутуу баьрцаа`}>
-                <Progress type="circle" percent={100 * (row.baritsaaniiUldegdel || 0) / (row.baritsaaAvakhDun || 0) } width={25} strokeColor='rgba(16, 185, 129,1)' />
+            <div className="px-2 cursor-pointer text-red-500" onClick={()=>baritsaaUdirdya(row)}>
+              <Tooltip title={khuvi < 100 ? `Барьцаа ${formatNumber((row.baritsaaAvakhDun || 0) - (row.baritsaaniiUldegdel || 0))} дутуу баьрцаа` : `${formatNumber(row.baritsaaniiUldegdel)} барьцаа төлөгдсөн байна`}>
+                <Progress type="circle" percent={khuvi} width={25} strokeColor={strokeColor} trailColor={khuvi === 0 && 'rgba(239, 68, 68,1)'} />
               </Tooltip>
             </div>
-          </div>
-        ),
+          </div>)
+        }
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
@@ -374,6 +384,29 @@ function guilgeeniiTuukh({ token }) {
   function refreshData() {
     gereeniiMedeelelMutate()
     refTuukh.current?.refreshData()
+  }
+
+  function baritsaaUdirdya(data) {
+    const footer = [
+      <Button onClick={() => baritsaaref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => baritsaaref.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ]
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <BaritsaaUdirdlaga
+          data={data}
+          ref={baritsaaref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    })
   }
 
   function guilgeeKhiiya(data) {
