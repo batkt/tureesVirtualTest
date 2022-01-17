@@ -8,16 +8,14 @@ import {
   Button,
   Select,
   message,
-  Switch,
   Popconfirm,
 } from "antd"
 import {
-  SnippetsOutlined,
   EditOutlined,
   FileExcelOutlined,
   DeleteOutlined,
 } from "@ant-design/icons"
-
+import Image from 'next/image'
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useNekhemjlekh from "hooks/useNekhemjlekh"
@@ -269,7 +267,7 @@ function tulburTootsoo({ token }) {
           </div>
         </div>
         <div className="grid grid-cols-8 gap-2">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-md col-span-2 p-2 ">
+          <div className="rounded-md col-span-2 p-2 ">
             <div className="w-full flex justify-between">
               <Button type="primary" className="ml-auto" onClick={() => nekhemjlelZagvarBurtgeye()}>
                 Загвар үүсгэх
@@ -279,11 +277,10 @@ function tulburTootsoo({ token }) {
               {nekhemjlekhiinZagvar?.jagsaalt?.map((a, i) => (
                 <div
                   key={`zagvar${i}`}
-                  className="box flex flex-row p-2 space-x-2 items-center shadow-lg"
+                  className="flex flex-row p-2 space-x-2 items-center shadow-md rounded-md border border-gray-200"
                 >
-                  <div className="p-2 rounded-full">
-                    <SnippetsOutlined style={{ display: "flex" }} />
-                  </div>
+                  
+                  <Image src='/invoice.png' width={32} height={32}/>
                   <div className="font-medium">{a.ner}</div>
                   <div style={{ marginLeft: "auto" }}>
                     <Popconfirm
