@@ -101,8 +101,8 @@ function tulburTootsoo({ token }) {
     handlePrint()
   }
 
-  function nekhemjlelZagvarBurtgeye(mur, index) {
-    if (!songogdsonDans) {
+  function nekhemjlelZagvarBurtgeye(mur) {
+    if (!songogdsonDans && !mur) {
       message.warning("Данс сонгоно уу")
       return
     }
@@ -113,7 +113,7 @@ function tulburTootsoo({ token }) {
       </Button>,
     ]
     modal({
-      title: "Нэхэмжлэл засвар",
+      title: "Нэхэмжлэл загвар",
       icon: <FileExcelOutlined />,
       style: { top: 20 },
       content: (
@@ -441,6 +441,7 @@ function tulburTootsoo({ token }) {
                   <div
                     className="p-2 rounded-full text-yellow-500"
                     style={{ marginLeft: "auto" }}
+                    onClick={()=>nekhemjlelZagvarBurtgeye(a)}
                   >
                     <EditOutlined style={{ display: "flex" }} />
                   </div>
