@@ -264,7 +264,7 @@ function tulburTootsoo({ token }) {
           </div>
         </div>
         <div className="grid grid-cols-8 gap-2">
-          <div className="box col-span-2 p-2">
+          <div className="box col-span-2 p-2 ">
             <div className="w-full flex justify-between">
               <Select placeholder="Дансны төрөл" onChange={setDans}>
                 {[
@@ -282,11 +282,11 @@ function tulburTootsoo({ token }) {
                 Загвар үүсгэх
               </Button>
             </div>
-            <div className="p-2 space-y-2">
+            <div className="mt-4 space-y-2">
               {nekhemjlekhiinZagvar?.jagsaalt?.map((a, i) => (
                 <div
                   key={`zagvar${i}`}
-                  className="box flex flex-row p-2 space-x-2 items-center"
+                  className="box flex flex-row p-2 space-x-2 items-center shadow-lg"
                 >
                   <div className="p-2 rounded-full">
                     <SnippetsOutlined style={{ display: "flex" }} />
