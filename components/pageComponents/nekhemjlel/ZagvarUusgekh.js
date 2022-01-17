@@ -65,7 +65,8 @@ const tulburiinTalbaruud = [
 
 const nekhemjlekhiinTalbaruud = [
   { ner: "Нэхэмжлэхийн сар", talbar: "sar" },
-  { ner: "Данс", talbar: "dans" }
+  { ner: "Данс", talbar: "dans" },
+  { ner: "Хэвлэсэн огноо", talbar: "khevlesenOgnoo" },
 ]
 
 function ZaaltZasvar({

@@ -177,6 +177,7 @@ function tulburTootsoo({ token }) {
               medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
               medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
               medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
+              medeelel.khevlesenOgnoo = moment().format('YYYY-MM-DD')
               for (const [key, value] of Object.entries(medeelel)) {
                 zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
               }

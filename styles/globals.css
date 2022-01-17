@@ -29,6 +29,10 @@
   height: 8.3in;
 }
 
+.a5 table {
+  width: 100%;
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
