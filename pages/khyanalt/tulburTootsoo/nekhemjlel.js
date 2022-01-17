@@ -183,6 +183,8 @@ function tulburTootsoo({ token }) {
               medeelel.bank = songogdsonDans?.length === 9 ? "Худалдаа хөгжлийн банк" : "Хаан банк"
               medeelel.dansniiNer = ''
 
+              medeelel.nekhemjlekhiinDugaar = moment().format("YY")+'/'+(dugaarlalt + i)
+                
               for (const [key, value] of Object.entries(medeelel)) {
                 zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
               }
