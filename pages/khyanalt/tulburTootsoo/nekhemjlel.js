@@ -31,19 +31,7 @@ import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar"
 import NekhemjlelZagvarBurtgel from "components/pageComponents/nekhemjlel/ZagvarBurtgel"
 import { modal } from "components/ant/Modal"
 import { useAuth } from "services/auth"
-
-const Dun = (a) => {
-  const dun = a.tuluvluguutEsekh
-    ? a.niitUldegdel
-    : a.eneSardTulukhDun + a.umnukhSariinUrTulbur
-  if (dun < 0) return <div>{toWords(dun * -1, { suffix: "n" })} төгрөг</div>
-  return <div>{toWords(dun, { suffix: "n" })} төгрөг</div>
-}
-
-const turul = [
-  { zurag: "/ikhNayad.png", ner: "Барааны нэхэмжлэх" },
-  { zurag: "/ikhNayadKhuns.png", ner: "Хүнсны нэхэмжлэх" },
-]
+import deleteMethod from 'tools/function/crud/deleteMethod'
 
 const ilgeekhTurul = "davkharaar"
 
@@ -155,10 +143,10 @@ function tulburTootsoo({ token }) {
     })
   }
   function zagvarUstgaya(mur) {
-    deleteMethod("mailiinZagvar", token, mur?._id).then(({ data }) => {
+    deleteMethod("nekhemjlekhiinZagvar", token, mur?._id).then(({ data }) => {
       if (data === "Amjilttai") {
         message.success("Устгагдлаа")
-        mailiinZagvarMutate()
+        nekhemjlekhiinZagvarMutate()
       }
     })
   }
@@ -178,152 +166,24 @@ function tulburTootsoo({ token }) {
     >
       <Card className="col-span-12 cardgrid">
         <div className="w-full grid grid-cols-2" ref={printRef}>
-          {songogdsonGereenuud?.map((a, i) => (
-            <div key={`print${a._id}`} className="print p-10 a5">
-              <table className="w-full text-xs">
-                <tbody>
-                  <tr>
-                    <td colSpan={6}>
-                      <img src={barimt} className="w-28" />
-                    </td>
-                    <td colSpan={6} className="text-right">
-                      Сангийн сайдын 2017 оны 12 дугаар сарын 5-ны өдрийн 347
-                      тоот тушаалын
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={12}>
-                      <div className="flex items-center justify-center">
-                        <div className="p-2 px-10 border">
-                          <div>НЭХЭМЖЛЭЛ</div>{" "}
-                          <div>
-                            №{moment().format("YY")}/{dugaarlalt + i}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={6}>
-                      <div>НЭХЭМЖЛЭГЧ БАЙГУУЛЛАГА</div>
-                      <div>НЭР: ИХ НАЯД ПЛАЗА ХХК</div>
-                      <div>КОМПАНИЙН РД: 6481523</div>
-                      <div>
-                        ДАНС:{" "}
-                        {songogdsonDans?.length === 9
-                          ? "Худалдаа хөгжлийн банк"
-                          : "Хаан банк"}{" "}
-                        {songogdsonDans} (MNT)
-                      </div>
-                      <div>
-                        ХАЯГ: Их Наяд Плаза 5-р давхар 15-р хороо, Хан-Уул
-                        дүүрэг
-                      </div>
-                      <div>Утас: 7709-1155, 8900-9090, 8810-9549</div>
-                    </td>
-                    <td colSpan={2}></td>
-                    <td colSpan={4}>
-                      <div className="w-full h-full flex flex-col">
-                        <div>ТӨЛӨГЧ БАЙГУУЛЛАГА:</div>
-                        <div>НЭР: {a.ner}</div>
-                        <div>РД: {a.register}</div>
-                        <div>ХАЯГ: </div>
-                        <div>УТАС: {a.utas}</div>
-                        <div>ТАЛБАЙ: {a.talbainDugaar}</div>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border">№</td>
-                    <td className="border" colSpan={6}>
-                      БАРАА, ҮЙЛЧИЛГЭЭНИЙ НЭР
-                    </td>
-                    <td className="border">ТОО ШИРХЭГ /М2/</td>
-                    <td className="border">НЭГЖ ҮНЭ</td>
-                    <td className="border" colSpan={2}>
-                      НИЙТ ҮНЭ
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border">{1}</td>
-                    <td className="border" colSpan={6}>
-                      {moment(ognoo).format("MM")}-р сарын түрээсийн төлбөр
-                    </td>
-                    <td className="border">{a.talbainKhemjee}</td>
-                    <td className="border">
-                      {formatNumber(a.talbainNegjUne)}₮
-                    </td>
-                    <td className="border" colSpan={2}>
-                      {formatNumber(
-                        tuluvluguutEsekh ? a.niitUldegdel : a.eneSardTulukhDun
-                      )}
-                      ₮
-                    </td>
-                  </tr>
-                  {!tuluvluguutEsekh && (
-                    <tr>
-                      <td className="border">{2}</td>
-                      <td className="border" colSpan={6}>
-                        Өмнөх хуримтлагдсан өр төлбөр
-                      </td>
-                      <td className="border">{a.talbainKhemjee}</td>
-                      <td className="border">
-                        {formatNumber(a.talbainNegjUne)}₮
-                      </td>
-                      <td className="border" colSpan={2}>
-                        {formatNumber(a.umnukhSariinUrTulbur)}₮
-                      </td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td colSpan={10} className="text-right">
-                      ДҮН
-                    </td>
-                    <td className="border">
-                      {formatNumber(
-                        tuluvluguutEsekh
-                          ? a.niitUldegdel
-                          : a.eneSardTulukhDun + a.umnukhSariinUrTulbur
-                      )}
-                      ₮
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={10} className="text-right">
-                      НИЙТ ДҮН
-                    </td>
-                    <td className="border">
-                      {formatNumber(
-                        tuluvluguutEsekh
-                          ? a.niitUldegdel
-                          : a.eneSardTulukhDun + a.umnukhSariinUrTulbur
-                      )}
-                      ₮
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={12}>
-                      Мөнгөн дүн: (үсгээр){" "}
-                      <Dun tuluvluguutEsekh={tuluvluguutEsekh} {...a} />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={6}>(Тамга)</td>
-                    <td colSpan={6}>
-                      <div>
-                        Дарга:................................/Б.Мөнхзул/
-                      </div>
-                      <div>
-                        Хүлээн
-                        авсан:................../........................./
-                      </div>
-                      <div>Нягтлан бодогч:................/Ц.Эрдэнэцэцэг/</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          ))}
+          {barimt && songogdsonGereenuud?.map((a, i) => {
+            var zagvar =  nekhemjlekhiinZagvar?.jagsaalt?.find(a=>a._id === barimt)?.nekhemjlekh
+            const medeelel = _.clone(a)
+            if(!!zagvar){
+              const dun = tuluvluguutEsekh ? medeelel.niitUldegdel : medeelel.eneSardTulukhDun
+              medeelel.mungunDunUsgeer = `${toWords(dun * (dun < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
+              medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
+              medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun)
+              medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
+              medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
+              medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
+              for (const [key, value] of Object.entries(medeelel)) {
+                zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+              }
+            }
+            return <div className="print p-10 a5" dangerouslySetInnerHTML={{__html: zagvar}}/>
+            })
+          }
         </div>
         <div className="w-full grid grid-cols-12 gap-4">
           {[
@@ -371,18 +231,6 @@ function tulburTootsoo({ token }) {
               onChange={setTuluvluguutEsekh}
               defaultChecked={tuluvluguutEsekh}
             />
-            {/* <Select placeholder="Дансны төрөл" onChange={setDans}>
-              {[
-                ...(dans?.accounts || []),
-                ...[{ number: "441000527" }, { number: "441000528" }],
-              ]
-                ?.filter((a) => a.type !== "L")
-                .map((a) => (
-                  <Select.Option key={a.number} value={a.number}>
-                    <div>{a.number}</div>
-                  </Select.Option>
-                ))}
-            </Select> */}
             <Select
               allowClear
               placeholder="Давхар"
@@ -399,7 +247,7 @@ function tulburTootsoo({ token }) {
             </Select>
             <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
               {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
-                <Select.Option key={a.ner} value={a.ner}>
+                <Select.Option key={a._id} value={a._id}>
                   {a.ner}
                 </Select.Option>
               ))}

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { renderToString } from "react-dom/server"
-import SunEditor, { buttonList } from "suneditor-react"
+import SunEditor from "suneditor-react"
 import _ from "lodash"
 import { customPlugin } from "../geree/zagvar/ZaaltOruulakh"
 import {
@@ -65,10 +65,7 @@ const tulburiinTalbaruud = [
 
 const nekhemjlekhiinTalbaruud = [
   { ner: "Нэхэмжлэхийн сар", talbar: "sar" },
-  { ner: "Данс", talbar: "dans" },
-  { ner: "Мөнгөн дүн үсгээр", talbar: "" },
-  { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
-  { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
+  { ner: "Данс", talbar: "dans" }
 ]
 
 function ZaaltZasvar({
