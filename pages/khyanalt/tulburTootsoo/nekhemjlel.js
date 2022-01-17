@@ -178,6 +178,11 @@ function tulburTootsoo({ token }) {
               medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
               medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
               medeelel.khevlesenOgnoo = moment().format('YYYY-MM-DD')
+
+              medeelel.dans = songogdsonDans
+              medeelel.bank = songogdsonDans?.length === 9 ? "Худалдаа хөгжлийн банк" : "Хаан банк"
+              medeelel.dansniiNer = ''
+
               for (const [key, value] of Object.entries(medeelel)) {
                 zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
               }
@@ -287,25 +292,25 @@ function tulburTootsoo({ token }) {
                     <SnippetsOutlined style={{ display: "flex" }} />
                   </div>
                   <div className="font-medium">{a.ner}</div>
-                  <div
-                    className="p-2 rounded-full text-yellow-500"
-                    style={{ marginLeft: "auto" }}
-                    onClick={()=>nekhemjlelZagvarBurtgeye(a)}
-                  >
-                    <EditOutlined style={{ display: "flex" }} />
-                  </div>
-                  <div className="p-2 rounded-full text-red-500">
+                  <div style={{ marginLeft: "auto" }}>
                     <Popconfirm
                       title="Загвар устгах уу?"
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => zagvarUstgaya(a)}
                     >
-                      <div className="p-2 rounded-full text-red-500">
+                      <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full">
                         <DeleteOutlined style={{ display: "flex" }} />
                       </div>
                     </Popconfirm>
                   </div>
+                  <div
+                    className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full"
+                    onClick={()=>nekhemjlelZagvarBurtgeye(a)}
+                  >
+                    <EditOutlined style={{ display: "flex" }} />
+                  </div>
+                  
                 </div>
               ))}
             </div>
