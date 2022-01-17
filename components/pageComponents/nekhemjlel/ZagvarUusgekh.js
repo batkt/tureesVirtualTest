@@ -70,6 +70,8 @@ const nekhemjlekhiinTalbaruud = [
   { ner: "Банк", talbar: "bank" },
   { ner: "Хэвлэсэн огноо", talbar: "khevlesenOgnoo" },
   { ner: "Нэхэмжлэхийн дугаар", talbar: "nekhemjlekhiinDugaar" },
+  { ner: "Энэ сард төлөх үсгээр",talbar:"eneSardTulukhUsgeer"},
+  { ner: "Нийт үлдэгдэл үсгээр",talbar:"niitUldegdelUsgeer"}
 ]
 
 function ZaaltZasvar({

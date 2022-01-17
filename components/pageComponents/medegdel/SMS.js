@@ -74,8 +74,7 @@ function SMS({
 
   const {
     mailiinZagvarGaralt,
-    mailiinZagvarMutate,
-    setMailiinZagvarKhuudaslalt,
+    mailiinZagvarMutate
   } = useMailiinZagvar(token, "sms")
 
   function smsZagvarNemya(data) {

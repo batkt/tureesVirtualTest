@@ -90,10 +90,6 @@ function tulburTootsoo({ token }) {
   }
 
   function nekhemjlelZagvarBurtgeye(mur) {
-    if (!songogdsonDans && !mur) {
-      message.warning("Данс сонгоно уу")
-      return
-    }
     const footer = [
       <Button onClick={() => nekhemjlekhRef.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => nekhemjlekhRef.current.khadgalya()}>
@@ -111,7 +107,6 @@ function tulburTootsoo({ token }) {
           barilgiinId={barilgiinId}
           token={token}
           afterShock={nekhemjlekhiinZagvarMutate}
-          dans={songogdsonDans}
         />
       ),
       footer,
@@ -170,8 +165,9 @@ function tulburTootsoo({ token }) {
             var zagvar =  nekhemjlekhiinZagvar?.jagsaalt?.find(a=>a._id === barimt)?.nekhemjlekh
             const medeelel = _.clone(a)
             if(!!zagvar){
-              const dun = tuluvluguutEsekh ? medeelel.niitUldegdel : medeelel.eneSardTulukhDun
-              medeelel.mungunDunUsgeer = `${toWords(dun * (dun < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
+              medeelel.eneSardTulukhUsgeer = `${toWords(medeelel.eneSardTulukhDun * (medeelel.eneSardTulukhDun < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
+              medeelel.niitUldegdelUsgeer = `${toWords(medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
+              medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees , { suffix: "n" })} төгрөг`
               medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
               medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun)
               medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
@@ -184,7 +180,7 @@ function tulburTootsoo({ token }) {
               medeelel.dansniiNer = ''
 
               medeelel.nekhemjlekhiinDugaar = moment().format("YY")+'/'+(dugaarlalt + i)
-                
+
               for (const [key, value] of Object.entries(medeelel)) {
                 zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
               }
@@ -234,11 +230,18 @@ function tulburTootsoo({ token }) {
             onChange={setOgnoo}
           />
           <div className="ml-auto space-x-2">
-            <Switch
-              title="Төлөвлөөт эсэх"
-              onChange={setTuluvluguutEsekh}
-              defaultChecked={tuluvluguutEsekh}
-            />
+            <Select placeholder="Дансны төрөл" onChange={setDans}>
+                {[
+                  ...(dans?.accounts || []),
+                  ...[{ number: "441000527" }, { number: "441000528" }],
+                ]
+                  ?.filter((a) => a.type !== "L")
+                  .map((a) => (
+                    <Select.Option key={a.number} value={a.number}>
+                      <div>{a.number}</div>
+                    </Select.Option>
+                  ))}
+            </Select>
             <Select
               allowClear
               placeholder="Давхар"
@@ -266,21 +269,9 @@ function tulburTootsoo({ token }) {
           </div>
         </div>
         <div className="grid grid-cols-8 gap-2">
-          <div className="box col-span-2 p-2 ">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-md col-span-2 p-2 ">
             <div className="w-full flex justify-between">
-              <Select placeholder="Дансны төрөл" onChange={setDans}>
-                {[
-                  ...(dans?.accounts || []),
-                  ...[{ number: "441000527" }, { number: "441000528" }],
-                ]
-                  ?.filter((a) => a.type !== "L")
-                  .map((a) => (
-                    <Select.Option key={a.number} value={a.number}>
-                      <div>{a.number}</div>
-                    </Select.Option>
-                  ))}
-              </Select>
-              <Button type="primary" onClick={() => nekhemjlelZagvarBurtgeye()}>
+              <Button type="primary" className="ml-auto" onClick={() => nekhemjlelZagvarBurtgeye()}>
                 Загвар үүсгэх
               </Button>
             </div>
