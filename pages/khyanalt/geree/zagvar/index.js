@@ -51,6 +51,7 @@ function index({ token }) {
         <ExceleesOruulakh
           ref={excelref}
           token={token}
+          barilgiinId={barilgiinId}
           zam="gereeniiZaaltTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Заалтын excel файл"

@@ -356,6 +356,7 @@ function talbaiBurtgekh({ token }) {
           ref={excelref}
           token={token}
           onFinish={onRefresh}
+          barilgiinId={barilgiinId}
           zam="talbaiTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Гэрээний загварын excel файл"

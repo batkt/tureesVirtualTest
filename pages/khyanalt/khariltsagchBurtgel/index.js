@@ -343,6 +343,7 @@ function AjiltanBurtgel({ token }) {
           onFinish={onRefresh}
           ref={excelref}
           token={token}
+          barilgiinId={barilgiinId}
           zam="khariltsagchTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Харилцагч загварын excel файл"
