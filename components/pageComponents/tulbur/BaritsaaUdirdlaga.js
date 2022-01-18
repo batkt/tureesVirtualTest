@@ -15,7 +15,7 @@ import formatNumber from "tools/function/formatNumber";
 
 function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState(0);
-  const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
+  const [ognoo, setOgnoo] = useState(moment());
   const [turul, setTurul] = useState("tululkh");
   const [tailbar, setTailbar] = useState("");
 
@@ -28,36 +28,37 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
       },
       khadgalya() {
         destroy();
-        // if (!dun) {
-        //   notification.warning({ message: "Та гэрээгээ сонгоно уу" });
-        //   return;
-        // }
-        // uilchilgee(token)
-        //   .post("/gereeniiGuilgeeKhadgalya", {
-        //     guilgee: {
-        //       turul: turul,
-        //       tulsunDun: (turul === "voucher" || turul === "barter") ? dun : 0,
-        //       tulukhDun: turul === "avlaga" ? dun : 0,
-        //       ognoo:
-        //         turul === "avlaga"
-        //           ? moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")
-        //           : new Date(),
-        //       gereeniiId: data?._id,
-        //       tailbar,
-        //     },
-        //   })
-        //   .then(() => {
-        //     notification.success({
-        //       placement: "bottomRight",
-        //       message: "Амжилттай",
-        //     });
-        //     _.isFunction(onFinish) && onFinish();
-        //     destroy();
-        //   });
+        if (!dun) {
+          notification.warning({ message: "Та гэрээгээ сонгоно уу" });
+          return;
+        }
+
+        const baritsaaniiGuilgee = {
+          "gereeniiId": data?._id,
+          ognoo,
+          orlogo:0,
+          zarlaga:0,
+          tailbar
+        }
+        if(turul === 'ashiglakh')
+          baritsaaniiGuilgee['zarlaga'] = dun
+        else baritsaaniiGuilgee['orlogo'] = dun
+
+        uilchilgee(token)
+          .post("/baritsaaniiGuilgeeKhiie", baritsaaniiGuilgee)
+          .then(() => {
+            notification.success({
+              placement: "bottomRight",
+              message: "Амжилттай",
+            });
+            _.isFunction(onFinish) && onFinish();
+            destroy();
+          });
       },
     }),
-    [dun, turul, tailbar]
+    [dun, turul, tailbar,ognoo]
   );
+
   function labelTurul(guilgeeTurul) {
     var text;
     switch (guilgeeTurul) {
@@ -82,7 +83,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
       <Divider />
       <div className="flex flex-row">
         <div>{labelTurul(turul)}</div>
-        <div className="ml-auto">{formatNumber((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))}</div>
+        <div className="ml-auto">{formatNumber(turul === 'ashiglakh' ? data.baritsaaniiUldegdel : ((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)))}</div>
       </div>
       {turul === "ashiglakh" && (
         <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
@@ -94,7 +95,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         placeholder="Дүн"
         style={{ width: "100%" }}
         onChange={setDun}
-        onDoubleClick={()=>setDun((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))}
+        onDoubleClick={()=>setDun(turul === 'ashiglakh' ? data.baritsaaniiUldegdel : ((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)))}
       />
       {(turul === "ashiglakh") && (
         <Input.TextArea

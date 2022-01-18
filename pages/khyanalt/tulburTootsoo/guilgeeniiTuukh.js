@@ -363,7 +363,7 @@ function guilgeeniiTuukh({ token }) {
             )}
             <div className="px-2 cursor-pointer text-red-500" onClick={()=>baritsaaUdirdya(row)}>
               <Tooltip title={khuvi < 100 ? `Барьцаа ${formatNumber((row.baritsaaAvakhDun || 0) - (row.baritsaaniiUldegdel || 0))} дутуу баьрцаа` : `${formatNumber(row.baritsaaniiUldegdel)} барьцаа төлөгдсөн байна`}>
-                <Progress type="circle" percent={khuvi} width={25} strokeColor={strokeColor} trailColor={khuvi === 0 && 'rgba(239, 68, 68,1)'} />
+                <Progress type="circle" percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)} width={25} strokeColor={strokeColor} trailColor={khuvi === 0 && 'rgba(239, 68, 68,1)'} />
               </Tooltip>
             </div>
           </div>)

@@ -62,6 +62,7 @@ const turulAvya = (turul) => {
   else if (turul === "bank") return "Банк"
   else if (turul === "khyamdral") return "Хямдрал"
   else if (turul === "barter") return "Бартер"
+  else if (turul === "baritsaa") return "Барьцаа"
 }
 
 function useGuilgee(token, gereeniiId, ognoo) {
@@ -192,7 +193,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 a.turul === "voucher" ||
                 a.turul === "barter" ||
                 a.turul === "bank" ||
-                a.turul === "khyamdral") && (
+                a.turul === "khyamdral"||
+                a.turul === "baritsaa") && (
                 <div className="contents justify-between">
                   <Popconfirm
                     title="Төлөлт устгах уу?"
