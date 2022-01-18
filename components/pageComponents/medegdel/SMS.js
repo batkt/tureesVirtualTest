@@ -25,6 +25,7 @@ import { useAuth } from "services/auth"
 import formatNumber from "tools/function/formatNumber"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import useSWR from "swr"
+import _ from "lodash"
 
 var setter = null
 
@@ -265,25 +266,41 @@ export function SMSContent({
     }
     var msgnuud = []
     if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0)
-      msgnuud = songogdsonGereenuud.map((a) => {
+      songogdsonGereenuud.map((a) => {
         var text = msj
         for (const [key, value] of Object.entries(a)) {
           text = text?.replace(new RegExp(`<${key}>`, "g"), value)
         }
-        return {
+        if(_.isArray(a.utas))
+          a.utas.map(to=>msgnuud.push({
+            to,
+            text,
+          }))
+        else
+        msgnuud.push({
           to: a.utas,
           text,
-        }
+        })
       })
-    else if (!!khariltsagch)
-      msgnuud = [
-        {
+    else if (!!khariltsagch){
+      if(_.isArray(khariltsagch?.utas))
+        khariltsagch?.utas.map(to=>msgnuud.push({
+            to,
+            text: ingeekhmSms,
+          }))
+        else
+        msgnuud.push({
           to: khariltsagch?.utas,
           text: ingeekhmSms,
-        },
-      ]
+        })
+    }
     else {
       message.warning("Та СМС илгээх гэрээгээ сонгоно уу")
+      return
+    }
+    if(!(msgnuud.length > 0))
+    {
+      message.warning("Илгээх мэдээлэл байхгүй байна")
       return
     }
     setLoading(true)
