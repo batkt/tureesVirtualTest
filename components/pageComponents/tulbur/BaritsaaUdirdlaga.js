@@ -85,7 +85,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         <div className="ml-auto">{formatNumber((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))}</div>
       </div>
       {turul === "ashiglakh" && (
-        <DatePicker.MonthPicker locale={locale} value={ognoo} onChange={setOgnoo} />
+        <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
       )}
       <InputNumber
         value={dun}

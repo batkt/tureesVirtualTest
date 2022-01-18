@@ -289,13 +289,13 @@ function tulburTootsoo({ token }) {
                       cancelText="Үгүй"
                       onConfirm={() => zagvarUstgaya(a)}
                     >
-                      <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full">
+                      <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">
                         <DeleteOutlined style={{ display: "flex" }} />
                       </div>
                     </Popconfirm>
                   </div>
                   <div
-                    className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full"
+                    className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
                     onClick={()=>nekhemjlelZagvarBurtgeye(a)}
                   >
                     <EditOutlined style={{ display: "flex" }} />
