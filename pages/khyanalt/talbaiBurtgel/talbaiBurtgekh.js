@@ -1065,7 +1065,6 @@ function talbaiBurtgekh({ token }) {
               width: "1rem",
               align: "center",
               render: (data) =>
-                ajiltan?.erkh === "Admin" && (
                   <div className="flex flex-row justify-center">
                     <Popover
                       placement="bottom"
@@ -1100,7 +1099,6 @@ function talbaiBurtgekh({ token }) {
                       </a>
                     </Popover>
                   </div>
-                ),
             },
           ]}
         />

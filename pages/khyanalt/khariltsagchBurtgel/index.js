@@ -758,7 +758,6 @@ function AjiltanBurtgel({ token }) {
               width: "1rem",
               ellipsis: true,
               render: (data) =>
-                ajiltan?.erkh === "Admin" && (
                   <div className="flex flex-row">
                     <Popover
                       placement="bottom"
@@ -793,7 +792,6 @@ function AjiltanBurtgel({ token }) {
                       </a>
                     </Popover>
                   </div>
-                ),
             },
           ]}
         />
