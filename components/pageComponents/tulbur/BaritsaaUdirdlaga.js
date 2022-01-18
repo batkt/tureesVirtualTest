@@ -33,6 +33,16 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
           return;
         }
 
+        if(turul === 'ashiglakh' && dun >  data?.baritsaaniiUldegdel){
+          notification.warning({ message: "Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!" });
+          return;
+        }
+
+        if(turul === 'tululkh' && dun > ((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))){
+          notification.warning({ message: "Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!" });
+          return;
+        }
+
         const baritsaaniiGuilgee = {
           "gereeniiId": data?._id,
           ognoo,
