@@ -44,7 +44,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
           return;
         }
 
-        if(!tailbar){
+        if(turul === 'ashiglakh' && !tailbar){
           notification.warning({ message: "Тайлбар оруулна уу!" });
           return;
         }
@@ -54,10 +54,11 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
           ognoo,
           orlogo:0,
           zarlaga:0,
-          tailbar
         }
-        if(turul === 'ashiglakh')
+        if(turul === 'ashiglakh'){
+          baritsaaniiGuilgee['tailbar'] = tailbar 
           baritsaaniiGuilgee['zarlaga'] = dun
+        }
         else baritsaaniiGuilgee['orlogo'] = dun
 
         uilchilgee(token)
