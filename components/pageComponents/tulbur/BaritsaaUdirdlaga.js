@@ -27,7 +27,6 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         destroy();
       },
       khadgalya() {
-        destroy();
         if (!dun) {
           notification.warning({ message: "Та гэрээгээ сонгоно уу" });
           return;
@@ -35,11 +34,18 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
 
         if(turul === 'ashiglakh' && dun >  data?.baritsaaniiUldegdel){
           notification.warning({ message: "Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!" });
+          setDun(data?.baritsaaniiUldegdel)
           return;
         }
 
         if(turul === 'tululkh' && dun > ((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))){
           notification.warning({ message: "Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!" });
+          setDun((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))
+          return;
+        }
+
+        if(!tailbar){
+          notification.warning({ message: "Тайлбар оруулна уу!" });
           return;
         }
 
