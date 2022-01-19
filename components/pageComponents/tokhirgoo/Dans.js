@@ -1,88 +1,92 @@
 import React from "react";
-import {  Input, Tooltip,Popconfirm } from "antd";
+import {  Tooltip,Popconfirm, Button } from "antd";
 import {
     DeleteOutlined,
-    SaveOutlined,
+    EditOutlined,
+    PlusOutlined,
   } from "@ant-design/icons"
-import updateMethod from "tools/function/crud/updateMethod";
-import createMethod from "tools/function/crud/createMethod";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import useDans from 'hooks/useDans'
 import { useAuth } from "services/auth"
+import { modal } from "components/ant/Modal"
+import DansBurtgel from "./DansBurtgel"
 
-function DansBurtgel({data,token,dansMutate,baiguullagiinId}) {
-    const [ugugdul,setUgugdul] = React.useState(data)
-    const {barilgiinId} = useAuth()
-    function khadgalya() {
-        const method = ugugdul?._id ? updateMethod : createMethod
-        ugugdul['barilgiinId'] = barilgiinId
-        ugugdul['baiguullagiinId'] = baiguullagiinId
-
-        method('dans',token,ugugdul).then(({data})=>{
-            if(data === 'Amjilttai')
-                {
-                    setUgugdul(a=>{
-                        a['dugaar'] = ''
-                        a['dansniiNer'] = ''
-                        a['bank'] = ''
-                        return a
-                    })
-                    dansMutate()
-                }
-        })
-    }
-
+function DansTile({data,dansMutate,zasya,token}) {
     function ustgaya() {
         deleteMethod('dans',token,data?._id).then(({data})=>(data === 'Amjilttai') && dansMutate())
     }
 
-    return (
-        <div className="box">
-            <div className="flex items-center p-5 space-x-2">
-                <div className="border-l-2 border-green-500 pl-4">
-                    <div className="font-medium">Данс</div> 
-                    <Input defaultValue={ugugdul.dugaar} onChange={({target})=>setUgugdul(a=>({...a,dugaar:target.value}))}/>
-                </div>
-                <div className="">
-                    <div className="font-medium">Дансны нэр</div>
-                    <Input defaultValue={ugugdul.dansniiNer} onChange={({target})=>setUgugdul(a=>({...a,dansniiNer:target.value}))}/>
-                </div>
-                <div className="">
-                    <div className="font-medium">Банкны нэр</div>
-                    <div className="flex flex-row" >
-                        <Input defaultValue={ugugdul.bank} onChange={({target})=>setUgugdul(a=>({...a,bank:target.value}))}/>
-                        {JSON.stringify(data) !== JSON.stringify(ugugdul) ? <div className="ml-2 text-green-500 font-medium" onClick={khadgalya}>
-                            <Tooltip title='Хадгалах'>
-                                <SaveOutlined size={20}/>          
-                            </Tooltip>          
-                        </div> 
-                        :
-                        <Popconfirm
-                            title="Данс= устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
-                            onConfirm={() => ustgaya()}
-                        >
-                            <div className="ml-2 text-red-500 font-medium" >
-                                <Tooltip title='Устгах'>
-                                    <DeleteOutlined size={20}/>          
-                                </Tooltip>          
-                            </div> 
-                        </Popconfirm>
-                        }
-                    </div>
+    return (<div className="box w-full">
+        <div className="grid grid-cols-4 items-center p-5 justify-between w-full">
+            <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Данс</div> 
+                <div>{data.dugaar}</div>
+            </div>
+            <div className="">
+                <div className="font-medium">Дансны нэр</div>
+                <div>{data.dansniiNer}</div>
+            </div>
+            <div className="">
+                <div className="font-medium">Банкны нэр</div>
+                <div>{data.bank}</div>
+            </div>
+            <div className="flex space-x-2 ml-auto">
+                <Popconfirm
+                    title="Данс= устгах уу?"
+                    okText="Тийм"
+                    cancelText="Үгүй"
+                    onConfirm={() => ustgaya()}
+                >
+                    <div className="p-2 cursor-pointer bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full" >
+                        <Tooltip title='Устгах'>
+                            <DeleteOutlined size={20}/>          
+                        </Tooltip>          
+                    </div> 
+                </Popconfirm>
+                <div
+                className="p-2 cursor-pointer bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full"
+                onClick={() => zasya(data)}
+                >
+                    <Tooltip title='Засах'>
+                        <EditOutlined />
+                    </Tooltip>
                 </div>
             </div>
         </div>
-    )
+    </div>)
 }
-
 
 function Dans({
   token,
   baiguullaga
 }) {
-  const {dansGaralt,dansMutate} = useDans(token,baiguullaga?._id)
+    const {barilgiinId} = useAuth()
+    const ref = React.useRef(null);
+    const {dansGaralt,dansMutate} = useDans(token,baiguullaga?._id)
+
+    function dansBurtgeye(data) {
+        const footer = [
+            <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+            <Button type="primary" onClick={() => ref.current.khadgalya()}>
+              Бүртгэл нэмэх
+            </Button>,
+          ]
+          modal({
+            title: "SMS Загвар үүсгэх",
+            icon: <PlusOutlined />,
+            content: (
+              <DansBurtgel
+                ref={ref}
+                data={data}
+                token={token}
+                barilgiinId={barilgiinId}
+                baiguullagiinId={baiguullaga?._id}
+                dansMutate={dansMutate}
+              />
+            ),
+            footer,
+          })
+    }
 
   return (
     <>
@@ -92,9 +96,13 @@ function Dans({
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
               Дансны бүртгэл
             </h2>
+            <div className="p-2 cursor-pointer bg-green-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full" onClick={() => dansBurtgeye()}>
+                <Tooltip title='Нэмэх'>
+                    <PlusOutlined />
+                </Tooltip>
+            </div>
           </div>
-          {dansGaralt?.jagsaalt?.map((mur)=><DansBurtgel className="box" key={mur._id} data={mur} dansMutate={dansMutate} token={token} baiguullagiinId={baiguullaga?._id}/>)}
-          <DansBurtgel data={{dugaar:'',dansniiNer:'',bank:''}} dansMutate={dansMutate} token={token} baiguullagiinId={baiguullaga?._id}/>
+          {dansGaralt?.jagsaalt?.map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
         </div>
       </div>
       <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
