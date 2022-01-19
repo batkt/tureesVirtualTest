@@ -48,7 +48,7 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
             <Form.Item label='Дансны нэр' name="dansniiNer">
                 <Input/>
             </Form.Item>
-            <Form.Item label='Валют' name="valiut">
+            <Form.Item label='Валют' name="valyut">
                 <Select>
                     <Select.Option key='MNT' value='MNT'>MNT</Select.Option>
                     <Select.Option key='USD' value='USD'>USD</Select.Option>

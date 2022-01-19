@@ -56,12 +56,60 @@ function AjiltanBurtgel({ token }) {
         }
         ,
         {
-          icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings w-4 h-4 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+          icon:
+          <svg version="1.0" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
+           width="20" height="20" viewBox="0 0 309.000000 297.000000"
+           preserveAspectRatio="xMidYMid meet">
+          <metadata>
+          Created by potrace 1.16, written by Peter Selinger 2001-2019
+          </metadata>
+          <g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
+          fill="currentColor" stroke="none">
+          <path d="M1290 2964 c-203 -38 -311 -71 -447 -136 -354 -168 -645 -498 -771
+          -874 -57 -171 -67 -239 -67 -469 0 -230 10 -300 66 -470 74 -223 188 -405 363
+          -581 207 -206 413 -324 701 -400 89 -24 124 -27 310 -31 209 -5 318 5 423 38
+          l32 11 0 294 c0 162 -1 294 -3 294 -2 0 -22 -9 -44 -20 -22 -10 -74 -29 -114
+          -41 -93 -26 -318 -37 -412 -20 -367 70 -650 330 -749 689 -32 115 -32 353 0
+          470 91 338 342 585 687 678 56 15 102 19 230 18 143 -1 169 -3 248 -27 175
+          -54 306 -135 433 -269 85 -90 152 -197 191 -306 57 -154 56 -148 62 -840 l6
+          -643 72 66 c197 180 355 444 423 709 107 420 36 852 -199 1202 -216 323 -517
+          532 -906 631 -88 22 -125 25 -305 28 -113 2 -216 1 -230 -1z"/>
+          <path d="M1363 1876 c-104 -34 -204 -123 -251 -224 -24 -51 -27 -69 -27 -167
+          0 -104 2 -114 32 -175 82 -167 265 -264 436 -232 241 45 394 279 332 507 -33
+          122 -108 212 -226 272 -46 23 -68 28 -154 30 -65 2 -115 -2 -142 -11z"/>
+          </g>
+          </svg>
+          ,
           text:'QPay',
           tsonkh:<QPay {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         },
         {
-          icon:<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-settings w-4 h-4 mr-2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>,
+          icon:<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+          width="18" height="18" viewBox="0 0 861.000000 1024.000000"
+          preserveAspectRatio="xMidYMid meet" stroke="currentColor">
+         <metadata>
+         Created by potrace 1.16, written by Peter Selinger 2001-2019
+         </metadata>
+         <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
+         fill="currentColor" stroke="none">
+         <path d="M116 10218 c-5 -25 -117 -2289 -116 -2350 l0 -38 144 0 c159 0 156
+         -1 156 68 0 72 41 319 76 462 129 521 383 868 779 1061 145 71 252 102 433
+         128 235 34 443 41 1215 41 l747 0 0 -1809 0 -1808 -727 -318 c-401 -174 -828
+         -360 -950 -413 l-223 -97 0 -312 c0 -238 3 -313 12 -313 10 0 1302 560 1791
+         776 l97 43 -2 -540 -3 -541 -945 -412 -945 -412 -3 -318 c-2 -253 0 -317 10
+         -313 7 3 426 185 931 405 505 221 927 404 938 407 20 7 20 5 16 -1127 -3 -769
+         -8 -1168 -16 -1243 -17 -158 -49 -348 -73 -424 -65 -212 -226 -379 -459 -474
+         -176 -72 -353 -97 -696 -97 l-213 0 0 -125 0 -125 2185 0 2185 0 0 125 0 125
+         -207 0 c-462 0 -693 52 -908 205 -195 138 -267 316 -316 785 -8 70 -13 595
+         -16 1561 l-4 1456 940 409 941 409 0 318 0 317 -32 -14 c-42 -17 -1726 -751
+         -1796 -782 l-52 -23 2 540 3 540 935 408 935 407 3 318 c2 253 0 317 -10 313
+         -7 -3 -422 -184 -923 -402 -500 -218 -918 -399 -927 -402 -17 -5 -18 70 -18
+         1486 l0 1491 803 0 c850 0 957 -5 1173 -50 451 -93 795 -314 1023 -655 147
+         -220 213 -415 287 -850 18 -110 34 -201 34 -202 0 -2 63 -3 140 -3 l140 0 0
+         163 c0 147 -82 2001 -96 2175 l-6 72 -4194 0 -4194 0 -4 -22z"/>
+         </g>
+         </svg>
+         ,
           text:'Данс',
           tsonkh:<Dans {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         }

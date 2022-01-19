@@ -17,7 +17,7 @@ function DansTile({data,dansMutate,zasya,token}) {
     }
 
     return (<div className="box w-full">
-        <div className="grid grid-cols-4 items-center p-5 justify-between w-full">
+        <div className="grid grid-cols-4 gap-2 items-center p-5 justify-between w-full">
             <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">Банкны нэр</div>
                 <div>{data.bank}</div>
