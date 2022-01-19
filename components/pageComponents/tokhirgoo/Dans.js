@@ -19,6 +19,10 @@ function DansTile({data,dansMutate,zasya,token}) {
     return (<div className="box w-full">
         <div className="grid grid-cols-4 items-center p-5 justify-between w-full">
             <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Банкны нэр</div>
+                <div>{data.bank}</div>
+            </div>
+            <div className="">
                 <div className="font-medium">Данс</div> 
                 <div>{data.dugaar}</div>
             </div>
@@ -26,13 +30,9 @@ function DansTile({data,dansMutate,zasya,token}) {
                 <div className="font-medium">Дансны нэр</div>
                 <div>{data.dansniiNer}</div>
             </div>
-            <div className="">
-                <div className="font-medium">Банкны нэр</div>
-                <div>{data.bank}</div>
-            </div>
             <div className="flex space-x-2 ml-auto">
                 <Popconfirm
-                    title="Данс= устгах уу?"
+                    title={`${data.dugaar} данс устгах уу?`}
                     okText="Тийм"
                     cancelText="Үгүй"
                     onConfirm={() => ustgaya()}
@@ -68,11 +68,11 @@ function Dans({
         const footer = [
             <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
             <Button type="primary" onClick={() => ref.current.khadgalya()}>
-              Бүртгэл нэмэх
+              Хадгалах
             </Button>,
           ]
           modal({
-            title: "SMS Загвар үүсгэх",
+            title: "Дансны бүртгэл",
             icon: <PlusOutlined />,
             content: (
               <DansBurtgel

@@ -1,10 +1,12 @@
-import React, { useImperativeHandle } from 'react'
+import React, { useImperativeHandle, useState } from 'react'
 import {Form,InputNumber, Select,Input, notification, Switch} from 'antd'
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 
 function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate},ref) {
     const [form] = Form.useForm();
+    const [corporateAshiglakhEsekh,setCorporateAshiglakhEsekh] = useState(data?.corporateAshiglakhEsekh || false)
+    const [bank,setBank] = useState(data?.bank)
 
     useImperativeHandle(
         ref,
@@ -18,12 +20,11 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
                 method('dans',token,ugugdul).then(({data})=>{
                     if(data === 'Amjilttai')
                         {
-                            notification.success()
+                            notification.success({message:'Амжилттай хадгаллаа'})
                             dansMutate()
                             destroy()
                         }
                 })
-                
             },
             khaaya() {
                 destroy()
@@ -32,12 +33,11 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
         [form],
     )
 
-
     return (
         <Form form={form} initialValues={data} labelCol= {{span: 10}} wrapperCol={{span: 14}}>
-            <Form.Item name="_id"></Form.Item>
+            <Form.Item hidden name="_id"></Form.Item>
             <Form.Item label='Дансны нэр' name="bank">
-                <Select>
+                <Select onSelect={setBank}>
                     <Select.Option key='khanbank' value='khanbank'>Хаан банк</Select.Option>
                     <Select.Option key='tdb' value='tdb'>Худалдаа хөгжилийн банк</Select.Option>
                 </Select>
@@ -55,16 +55,16 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
                 </Select>
             </Form.Item>
             <Form.Item label='Corporate ашиглах эсэх' name="corporateAshiglakhEsekh">
-                <Switch/>
+                <Switch defaultChecked={data?.corporateAshiglakhEsekh} onChange={setCorporateAshiglakhEsekh}/>
             </Form.Item>
-            <Form.Item label='Дансны нэр' name="corporateNevtrekhNer">
-                <Input/>
+            <Form.Item hidden={corporateAshiglakhEsekh !== true} label='Дансны нэр' name="corporateNevtrekhNer">
+                <Input placeholder='Нууцлагдсан мэдээлэл'/>
             </Form.Item>
-            <Form.Item label='Дансны нэр' name="corporateNuutsUg">
-                <Input.Password/>
+            <Form.Item hidden={corporateAshiglakhEsekh !== true} label='Нэвтрэх нууц үг' name="corporateNuutsUg">
+                <Input.Password placeholder='Нууцлагдсан мэдээлэл'/>
             </Form.Item>
-            <Form.Item label='Дансны нэр' name="corporateGuilgeeniiNuutsUg">
-                <Input.Password/>
+            <Form.Item hidden={bank === 'khanbank' || corporateAshiglakhEsekh !== true} label='Гүйлгээний нууц үг' name="corporateGuilgeeniiNuutsUg">
+                <Input.Password placeholder='Нууцлагдсан мэдээлэл'/>
             </Form.Item>
         </Form>
     )
