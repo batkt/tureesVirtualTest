@@ -21,7 +21,7 @@ import formatNumber from "tools/function/formatNumber"
 import useNekhemjlekh from "hooks/useNekhemjlekh"
 import useNekhemjlekhiinZagvar from "hooks/useNekhemjlekhiinZagvar"
 import useNekhemjlekhDugaarlalt from "hooks/useNekhemjlekhDugaarlalt"
-import useDans from "hooks/khuulga/useDans"
+import useDans from "hooks/useDans"
 import _ from "lodash"
 import { useReactToPrint } from "react-to-print"
 import { toWords } from "mon_num"
@@ -53,7 +53,7 @@ function tulburTootsoo({ token }) {
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token)
 
-  const { dans } = useDans(token)
+  const { dansGaralt } = useDans(token,baiguullaga?._id)
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([])
 
@@ -173,9 +173,10 @@ function tulburTootsoo({ token }) {
               medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
               medeelel.khevlesenOgnoo = moment().format('YYYY-MM-DD')
 
-              medeelel.dans = songogdsonDans
-              medeelel.bank = songogdsonDans?.length === 9 ? "Худалдаа хөгжлийн банк" : "Хаан банк"
-              medeelel.dansniiNer = ''
+              const dans = dansGaralt?.jagsaalt?.find(a=>a.dugaar === songogdsonDans)
+              medeelel.dans = dans?.dugaar
+              medeelel.bank = dans?.bank === 'tdb' ? "Худалдаа хөгжлийн банк" : "Хаан банк"
+              medeelel.dansniiNer = dans?.dansniiNer
 
               medeelel.nekhemjlekhiinDugaar = moment().format("YY")+'/'+(dugaarlalt + i)
 
@@ -229,14 +230,9 @@ function tulburTootsoo({ token }) {
           />
           <div className="ml-auto space-x-2">
             <Select placeholder="Дансны төрөл" onChange={setDans}>
-                {[
-                  ...(dans?.accounts || []),
-                  ...[{ number: "441000527" }, { number: "441000528" }],
-                ]
-                  ?.filter((a) => a.type !== "L")
-                  .map((a) => (
-                    <Select.Option key={a.number} value={a.number}>
-                      <div>{a.number}</div>
+                {dansGaralt?.jagsaalt?.map((a) => (
+                    <Select.Option key={a.dugaar} value={a.dugaar}>
+                      <div>{a.dugaar}</div>
                     </Select.Option>
                   ))}
             </Select>

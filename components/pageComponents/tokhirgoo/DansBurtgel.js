@@ -36,7 +36,7 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
     return (
         <Form form={form} initialValues={data} labelCol= {{span: 10}} wrapperCol={{span: 14}}>
             <Form.Item hidden name="_id"></Form.Item>
-            <Form.Item label='Дансны нэр' name="bank">
+            <Form.Item label='Банкны нэр' name="bank">
                 <Select onSelect={setBank}>
                     <Select.Option key='khanbank' value='khanbank'>Хаан банк</Select.Option>
                     <Select.Option key='tdb' value='tdb'>Худалдаа хөгжилийн банк</Select.Option>
