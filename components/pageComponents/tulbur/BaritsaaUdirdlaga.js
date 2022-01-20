@@ -1,4 +1,5 @@
 import {
+  Button,
   DatePicker,
   Divider,
   Input,
@@ -12,8 +13,25 @@ import uilchilgee from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
+import BaritsaaKhuulga from "./BaritsaaKhuulga"
+import { OrderedListOutlined } from "@ant-design/icons"
+import { modal } from "components/ant/Modal"
+
+function labelTurul(guilgeeTurul) {
+  var text;
+  switch (guilgeeTurul) {
+    case "ashiglakh":
+      text = "Барьцаа ашиглах";
+      break;
+    default:
+      text = "Барьцаа төлөх"
+      break;
+  }
+  return text;
+}
 
 function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
+  const khuulgaRef = React.useRef(null)
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
   const [turul, setTurul] = useState("tululkh");
@@ -75,17 +93,24 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
     [dun, turul, tailbar,ognoo]
   );
 
-  function labelTurul(guilgeeTurul) {
-    var text;
-    switch (guilgeeTurul) {
-      case "ashiglakh":
-        text = "Барьцаа ашиглах";
-        break;
-      default:
-        text = "Барьцаа төлөх"
-        break;
-    }
-    return text;
+  function tuukhKharya() {
+    const footer = [
+      <Button onClick={() => khuulgaRef.current.khaaya()}>Хаах</Button>,
+    ]
+    modal({
+      title: "Барьцаа төлбөрийн хуулга",
+      width: "40vw",
+      icon: <OrderedListOutlined />,
+      content: (
+        <BaritsaaKhuulga
+          data={data}
+          ref={khuulgaRef}
+          token={token}
+          onFinish={onFinish}
+        />
+      ),
+      footer,
+    })
   }
 
   return (
@@ -118,6 +143,9 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         value={tailbar}
         onChange={(e) => setTailbar(e.target.value)}
       />
+      <div onClick={tuukhKharya}>
+        <a>Барьцааны хуулга</a>
+      </div>
     </div>
   );
 }

@@ -260,6 +260,9 @@ function tulburTootsoo({ token }) {
             <Button type="primary" onClick={hevlekh}>
               Хэвлэх
             </Button>
+            <Button onClick={hevlekh}>
+              Нэхэмжлэл илгээх
+            </Button>
           </div>
         </div>
         <div className="grid grid-cols-8 gap-2">
