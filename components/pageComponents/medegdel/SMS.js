@@ -9,7 +9,6 @@ import {
   Table,
 } from "antd"
 import React, { useEffect, useMemo, useState } from "react"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import useNekhemjlekh from "hooks/useNekhemjlekh"
 import useMailiinZagvar from "hooks/useMailiinZagvar"
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
@@ -24,33 +23,10 @@ import {
 import { useAuth } from "services/auth"
 import formatNumber from "tools/function/formatNumber"
 import deleteMethod from "tools/function/crud/deleteMethod"
-import useSWR from "swr"
 import _ from "lodash"
+import { putSetter } from "pages/khyanalt/medegdel"
 
 var setter = null
-
-const smszagvar = [
-  {
-    ner: "Авлага",
-    content:
-      "Сайн байна уу. Таны &lt;gereeniiDugaar&gt; гэрээний дугаартай &lt;talbainDugaar&gt;​ тоот талбайн 8​,9,10​-р сарын төлбөрийн үлдэгдэл &lt;sariinTurees&gt;​₮ байна. Та төлбөрөө 12-р сарын 31-ны өдрөөс өмнө шилжүүлнэ үү! Их Наяд Плаза ",
-  },
-  {
-    ner: "Сарын түрээс",
-    content:
-      "Сайн байна уу. Таны &lt;gereeniiDugaar&gt; гэрээний дугаартай &lt;talbainDugaar&gt;​ тоот талбайн 11-сар түрээсийн төлбөр&lt;sariinTurees&gt;​₮ байна. Та төлбөрөө сардаа багтаан төлнө үү. Их Наяд Плаза ",
-  },
-  {
-    ner: "Мэдээлэл",
-    content:
-      'Бид үйлчилгээний чанарыг сайжруулан өвлийн жаварын үргээхээр автомат робот ашиглан "Дулаан уриаг" бий болгон угтах үйлчилгээг хэрэгжүүлж эхлэлээ. Их Наяд Плаза',
-  },
-  {
-    ner: "Амжилттай",
-    content:
-      "Таны 11-р сарын түрээсийн төлбөр амжилттай хийгдлээ. Төлөлтөө хугацаанд нь хийсэн түрээслэгч танд баярлалаа. Их Наяд Плаза",
-  },
-]
 
 function SMS({
   token,
@@ -59,7 +35,7 @@ function SMS({
   setKhariltsagch,
   ilgeekhTurul,
   setIlgeekhTurul,
-  davkhar,
+  davkhar
 }) {
   const { barilgiinId } = useAuth()
 
@@ -72,7 +48,7 @@ function SMS({
       davkhar,
       ilgeekhTurul
     )
-
+    
   const {
     mailiinZagvarGaralt,
     mailiinZagvarMutate
@@ -230,7 +206,7 @@ export function SMSContent({
   ilgeekhTurul,
   baiguullaga,
   davkhar,
-  setDavkhar,
+  setDavkhar
 }) {
   const [content, setContent] = useState("")
   const [msj, onTextChange] = useState("")
@@ -244,6 +220,9 @@ export function SMSContent({
       davkhar,
       ilgeekhTurul
     )
+  
+  if(ilgeekhTurul !== "gantsaar")
+    putSetter(setNekhemjlelKhuudaslalt)
 
   useEffect(() => {
     setter = setContent

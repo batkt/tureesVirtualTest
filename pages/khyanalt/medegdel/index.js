@@ -5,6 +5,11 @@ import App, { AppContent } from "components/pageComponents/medegdel/App"
 import Mail, { MailContent } from "components/pageComponents/medegdel/Mail"
 import SMS, { SMSContent } from "components/pageComponents/medegdel/SMS"
 import { useAuth } from "services/auth"
+
+var setKhuudaslalt = null
+export function putSetter(setter) {
+  setKhuudaslalt = setter
+}
 function Khyanalt({ token }) {
   const { baiguullaga } = useAuth()
   const [turul, setTurul] = useState("СМС")
@@ -36,7 +41,7 @@ function Khyanalt({ token }) {
   }, [turul])
 
   return (
-    <Admin title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4">
+    <Admin title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setKhuudaslalt && setKhuudaslalt(a=>({...a,search}))}>
       <div className="col-span-12 lg:col-span-4 xl:col-span-3">
         <div className="intro-y pr-1">
           <div className="box p-2">
