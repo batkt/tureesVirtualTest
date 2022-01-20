@@ -98,7 +98,9 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
       axios(token)
       .post("/baritsaaniiGuilgeeUstgaya", {
         "gereeniiId": data?._id,
-        "objectiinId" : _id
+        "objectiinId" : _id,
+        "zarlaga":tulsunDun||0,
+        "orlogo":tulukhDun||0
       })
       .then(({ data }) => {
         if (data) {
