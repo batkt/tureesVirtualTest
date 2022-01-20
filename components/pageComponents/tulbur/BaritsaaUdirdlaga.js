@@ -54,11 +54,10 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
           ognoo,
           orlogo:0,
           zarlaga:0,
+          tailbar 
         }
-        if(turul === 'ashiglakh'){
-          baritsaaniiGuilgee['tailbar'] = tailbar 
+        if(turul === 'ashiglakh')
           baritsaaniiGuilgee['zarlaga'] = dun
-        }
         else baritsaaniiGuilgee['orlogo'] = dun
 
         uilchilgee(token)
@@ -114,13 +113,11 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         onChange={setDun}
         onDoubleClick={()=>setDun(turul === 'ashiglakh' ? data.baritsaaniiUldegdel : ((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)))}
       />
-      {(turul === "ashiglakh") && (
-        <Input.TextArea
-          placeholder="Тайлбар"
-          value={tailbar}
-          onChange={(e) => setTailbar(e.target.value)}
-        />
-      )}
+      <Input.TextArea
+        placeholder="Тайлбар"
+        value={tailbar}
+        onChange={(e) => setTailbar(e.target.value)}
+      />
     </div>
   );
 }
