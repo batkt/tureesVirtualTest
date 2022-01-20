@@ -22,7 +22,7 @@ function ZakhialgaNemekh({ token }) {
   const { id } = router.query;
   const [form] = Form.useForm();
   const { baiguullaga,barilgiinId } = useAuth();
-  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({});
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({dedKhesguud:[{zaalt:'new'}]});
   const ref = React.useRef();
 
   React.useEffect(() => {
@@ -39,8 +39,7 @@ function ZakhialgaNemekh({ token }) {
     if (!gereeniiZagvar?._id) {
       values["baiguullagiinNer"] = baiguullaga.ner;
       values["baiguullagiinId"] = baiguullaga._id;
-      values["dedKhesguud"] = gereeniiZagvar.zaaltuud.map((a) => a._id);
-      
+      values["dedKhesguud"] = gereeniiZagvar.dedKhesguud
       values["barilgiinId"] = barilgiinId
       createMethod("gereeniiZagvar", token, values).then(({ data }) => {
         if (data === "Amjilttai") {
@@ -120,10 +119,10 @@ function ZakhialgaNemekh({ token }) {
           <div className="w-full flex flex-row justify-between">
             <div className="relative group">
               <div
-                className="p-2 border border-dashed border-gray-600 rounded-md"
+                className="border border-dashed border-gray-600 rounded-md sun-editor-editable p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    gereeniiZagvar.zuunTolgoi ||
+                    gereeniiZagvar.zuunTolgoi?.zaalt ||
                     "Гэрээний загварын баруун толгой",
                 }}
               />
@@ -138,10 +137,10 @@ function ZakhialgaNemekh({ token }) {
             </div>
             <div className="relative group">
               <div
-                className="p-2 border border-dashed border-gray-600 rounded-md"
+                className="border border-dashed border-gray-600 rounded-md sun-editor-editable p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    gereeniiZagvar.baruunTolgoi ||
+                    gereeniiZagvar.baruunTolgoi?.zaalt ||
                     "Гэрээний загварын зүүн толгой",
                 }}
               />
@@ -165,7 +164,7 @@ function ZakhialgaNemekh({ token }) {
                   <>
                     <div className="text-center">{mur.kharagdakhDugaar}</div>
                     <div
-                      className="ml-5"
+                      className="sun-editor-editable p-0 ml-5 w-full"
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </>

@@ -123,7 +123,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table"],
           ],
         }}
         showToolbar={true}
@@ -138,7 +138,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           <Input
             placeholder="Харагдах дугаар"
             value={utga?.kharagdakhDugaar}
-            onChange={(v) => setUtga((a) => ({ ...a, kharagdakhDugaar: v }))}
+            onChange={({target}) => setUtga((a) => ({ ...a, kharagdakhDugaar: target.value }))}
           />
         </div>
       </div>
@@ -170,7 +170,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table","align"],
           ],
         }}
         showToolbar={true}

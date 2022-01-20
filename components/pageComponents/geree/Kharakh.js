@@ -50,7 +50,7 @@ function Kharakh({data,print},ref) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="flex flex-row w-full p-1 relative group hover:bg-gray-100 rounded-md"
+                    className="flex flex-row w-full p-1 relative group hover:bg-gray-100 rounded-md "
                   >
                     {mur.kharagdakhDugaar ? (
                       <>
@@ -58,7 +58,7 @@ function Kharakh({data,print},ref) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className="ml-5"
+                          className="sun-editor-editable w-full ml-5 p-0"
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>
