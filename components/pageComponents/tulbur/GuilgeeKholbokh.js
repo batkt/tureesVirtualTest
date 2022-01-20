@@ -8,7 +8,7 @@ import {
   Tooltip,
 } from "antd"
 import _ from "lodash"
-import React from "react"
+import React, { useState } from "react"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import formatNumber from "../../../tools/function/formatNumber"
 import getListMethod from "../../../tools/function/crud/getListMethod"
@@ -56,7 +56,6 @@ function GuilgeeKholbokh(
     token,
     baiguullagiinId
   )
-
   React.useImperativeHandle(
     ref,
     () => ({
@@ -82,43 +81,118 @@ function GuilgeeKholbokh(
           })
           return
         }
+        if (!!geree && gereeniiMedeelel.jagsaalt.length > 0) {
+          var songogdson = gereeniiMedeelel.jagsaalt.find(
+            (x) => x._id === geree
+          )
 
-        Modal.confirm({
-          content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
-          okText: "Тийм",
-          cancelText: "Үгүй",
-          onOk: () => {
-            let guilgeenuud = []
-            if (olnoorKholbokhEsekh)
-              guilgeenuud = tulult.filter((a) => !!a.gereeniiId)
-            else
-              guilgeenuud = [
-                {
-                  turul: "bank",
-                  tulsunDun: data.amount - (data?.kholbosonDun || 0),
-                  ognoo: moment(data.tranDate)
-                    .set("hour", data.time.substring(0, 2))
-                    .set("minute", data.time.substring(2, 4)),
-                  guilgeeniiId: data._id,
-                  gereeniiId: geree,
-                  dansniiDugaar: data.dansniiDugaar,
-                  tulsunDans: data.relatedAccount,
-                },
-              ]
-            uilchilgee(token)
-              .post("/tulultOlnoorKhadgalya", { guilgeenuud })
-              .then(({ data }) => {
-                if (data === "Amjilttai") {
-                  notification.success({
-                    placement: "bottomRight",
-                    message: "Амжилттай",
+          if (songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel) {
+            Modal.confirm({
+              content: `${formatNumber(
+                songogdson.baritsaaAvakhDun
+              )}₮ барьцааг төлбөрт суутгах уу?`,
+              okText: "Тийм",
+              cancelText: "Үгүй",
+              onOk: () => {
+                uilchilgee(token)
+                  .post("/baritsaaniiGuilgeeKhiie", {
+                    gereeniiId: geree,
+                    guilgeeniiId: data._id,
+                    orlogo: songogdson.baritsaaAvakhDun,
+                    zarlaga: 0,
+                    ognoo: moment(data.tranDate)
+                      .set("hour", data.time.substring(0, 2))
+                      .set("minute", data.time.substring(2, 4)),
                   })
-                  _.isFunction(onFinish) && onFinish()
-                  destroy()
-                }
-              })
-          },
-        })
+                  .then(({ data }) => {
+                    if (data === "Amjilttai") {
+                      notification.success({
+                        placement: "bottomRight",
+                        message: "Амжилттай",
+                      })
+                      _.isFunction(onFinish) && onFinish()
+                      destroy()
+                    }
+                  })
+              },
+              onCancel: () => {
+                Modal.confirm({
+                  content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
+                  okText: "Тийм",
+                  cancelText: "Үгүй",
+                  onOk: () => {
+                    let guilgeenuud = []
+                    if (olnoorKholbokhEsekh)
+                      guilgeenuud = tulult.filter((a) => !!a.gereeniiId)
+                    else
+                      guilgeenuud = [
+                        {
+                          turul: "bank",
+                          tulsunDun: data.amount - (data?.kholbosonDun || 0),
+                          ognoo: moment(data.tranDate)
+                            .set("hour", data.time.substring(0, 2))
+                            .set("minute", data.time.substring(2, 4)),
+                          guilgeeniiId: data._id,
+                          gereeniiId: geree,
+                          dansniiDugaar: data.dansniiDugaar,
+                          tulsunDans: data.relatedAccount,
+                        },
+                      ]
+                    uilchilgee(token)
+                      .post("/tulultOlnoorKhadgalya", { guilgeenuud })
+                      .then(({ data }) => {
+                        if (data === "Amjilttai") {
+                          notification.success({
+                            placement: "bottomRight",
+                            message: "Амжилттай",
+                          })
+                          _.isFunction(onFinish) && onFinish()
+                          destroy()
+                        }
+                      })
+                  },
+                })
+              },
+            })
+          } else {
+            Modal.confirm({
+              content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
+              okText: "Тийм",
+              cancelText: "Үгүй",
+              onOk: () => {
+                let guilgeenuud = []
+                if (olnoorKholbokhEsekh)
+                  guilgeenuud = tulult.filter((a) => !!a.gereeniiId)
+                else
+                  guilgeenuud = [
+                    {
+                      turul: "bank",
+                      tulsunDun: data.amount - (data?.kholbosonDun || 0),
+                      ognoo: moment(data.tranDate)
+                        .set("hour", data.time.substring(0, 2))
+                        .set("minute", data.time.substring(2, 4)),
+                      guilgeeniiId: data._id,
+                      gereeniiId: geree,
+                      dansniiDugaar: data.dansniiDugaar,
+                      tulsunDans: data.relatedAccount,
+                    },
+                  ]
+                uilchilgee(token)
+                  .post("/tulultOlnoorKhadgalya", { guilgeenuud })
+                  .then(({ data }) => {
+                    if (data === "Amjilttai") {
+                      notification.success({
+                        placement: "bottomRight",
+                        message: "Амжилттай",
+                      })
+                      _.isFunction(onFinish) && onFinish()
+                      destroy()
+                    }
+                  })
+              },
+            })
+          }
+        }
       },
     }),
     [geree, tulult, olnoorKholbokhEsekh]
