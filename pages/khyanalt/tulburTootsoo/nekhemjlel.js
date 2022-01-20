@@ -260,7 +260,7 @@ function tulburTootsoo({ token }) {
             <Button type="primary" onClick={hevlekh}>
               Хэвлэх
             </Button>
-            <Button onClick={hevlekh}>
+            <Button>
               Нэхэмжлэл илгээх
             </Button>
           </div>
