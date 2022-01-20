@@ -309,6 +309,7 @@ export function SMSContent({
                   placeholder="Давхар"
                   value={davkhar}
                   onChange={setDavkhar}
+                  allowClear
                 >
                   {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
                     <Select.Option key={a._id} value={a.davkhar}>
