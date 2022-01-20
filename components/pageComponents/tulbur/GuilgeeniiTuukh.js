@@ -94,42 +94,56 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
     turul,
     khyamdral,
   }) {
-    const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        Устгах
-      </Button>,
-    ]
-    modal({
-      title: "Төлөлт устгах шалтгаан",
-      icon: <DeleteOutlined />,
-      content: (
-        <Tailbar
-          ref={tailbarRef}
-          confirm={(tailbar) =>
-            axios(token)
-              .post("/tulultUstgaya", {
-                turul,
-                guilgeeniiId,
-                gereeniiId: data?._id,
-                tulsunDun,
-                tulukhDun,
-                khyamdral,
-                objectiinId: _id,
-                tailbar,
-                talbainDugaar:data?.talbainDugaar
-              })
-              .then(({ data }) => {
-                if (data) {
-                  message.success("Төлөлт амжилттай устгагдлаа!")
-                  refreshData()
-                }
-              })
-          }
-        />
-      ),
-      footer,
-    })
+    if(turul === 'baritsaa')
+      axios(token)
+      .post("/baritsaaniiGuilgeeUstgaya", {
+        "gereeniiId": data?._id,
+        "objectiinId" : _id
+      })
+      .then(({ data }) => {
+        if (data) {
+          message.success("Төлөлт амжилттай устгагдлаа!")
+          refreshData()
+        }
+      })
+    else {
+      const footer = [
+        <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+        <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+          Устгах
+        </Button>,
+      ]
+      modal({
+        title: "Төлөлт устгах шалтгаан",
+        icon: <DeleteOutlined />,
+        content: (
+          <Tailbar
+            ref={tailbarRef}
+            confirm={(tailbar) =>
+              axios(token)
+                .post("/tulultUstgaya", {
+                  turul,
+                  guilgeeniiId,
+                  gereeniiId: data?._id,
+                  tulsunDun,
+                  tulukhDun,
+                  khyamdral,
+                  objectiinId: _id,
+                  tailbar,
+                  talbainDugaar:data?.talbainDugaar
+                })
+                .then(({ data }) => {
+                  if (data) {
+                    message.success("Төлөлт амжилттай устгагдлаа!")
+                    refreshData()
+                  }
+                })
+            }
+          />
+        ),
+        footer,
+      })
+    }
   }
 
   const handlePrint = useReactToPrint({
