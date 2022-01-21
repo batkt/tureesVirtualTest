@@ -119,7 +119,7 @@ function ZakhialgaNemekh({ token }) {
           <div className="w-full flex flex-row justify-between">
             <div className="relative group">
               <div
-                className="border border-dashed border-gray-600 rounded-md sun-editor-editable p-2"
+                className="border border-dashed border-gray-600 rounded-md p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi?.zaalt ||
@@ -137,7 +137,7 @@ function ZakhialgaNemekh({ token }) {
             </div>
             <div className="relative group">
               <div
-                className="border border-dashed border-gray-600 rounded-md sun-editor-editable p-2"
+                className="border border-dashed border-gray-600 rounded-md p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi?.zaalt ||
@@ -164,7 +164,7 @@ function ZakhialgaNemekh({ token }) {
                   <>
                     <div className="text-center">{mur.kharagdakhDugaar}</div>
                     <div
-                      className="sun-editor-editable p-0 ml-5 w-full"
+                      className={`${mur.zaalt?.includes('table') ? "sun-editor-editable" : ""} w-full ml-5 p-0`}
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </>

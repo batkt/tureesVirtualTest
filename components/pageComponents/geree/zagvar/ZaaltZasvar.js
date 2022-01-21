@@ -123,7 +123,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table","fontSize"],
           ],
         }}
         showToolbar={true}
@@ -170,7 +170,8 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table","align"],
+            ["table","align","fontSize"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
           ],
         }}
         showToolbar={true}
