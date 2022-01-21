@@ -48,9 +48,9 @@ const Tulbur = ({ value, onChange, next, prev,zasvar }) => {
           <Switch style={{marginLeft:'auto'}}/>
       </Form.Item>
       <Divider/>
-      {!!value?.khungulukhEsekh && <Form.Item name='avlaga' noStyle>
+     <Form.Item name='avlaga' noStyle>
         <AvlagiinKhuvaariUusgekh ugugdul={value}/>
-      </Form.Item>}
+      </Form.Item>
       <Form.Item wrapperCol={{span: 24}}>
         <div className="w-full flex flex-row justify-between mt-4">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">

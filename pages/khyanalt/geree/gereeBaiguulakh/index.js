@@ -79,7 +79,6 @@ function GereeBaiguulakh({ token }) {
         undsenDun: data?.baritsaaAvakhDun,
         tulukhDun: data?.baritsaaAvakhDun
       }])
-      data.avlaga = barilgiinId
       
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");

@@ -56,7 +56,7 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
 
   useEffect(()=>{
     var data = []
-    const ognoo = moment(gereeniiOgnoo)
+    const ognoo = moment(moment(gereeniiOgnoo).format('YYYY-MM-DD hh:mm:ss'))
     new Array(ugugdul?.khugatsaa || 0).fill('').map((mur,index)=>{
       tulukhUdur.forEach((udur)=>{
         data.push({
@@ -67,6 +67,7 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
       })
     })
     setJagsaalt([...data])
+    onChange({guilgeenuud:data})
   },[])
 
   const updateMyData = (rowIndex, columnId, value) => {
