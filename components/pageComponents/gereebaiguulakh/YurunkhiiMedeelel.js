@@ -3,6 +3,7 @@ import {
   UploadOutlined,
   SolutionOutlined,
   ArrowRightOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
 import React from "react";
 import { url } from "services/uilchilgee";
@@ -127,6 +128,9 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
       </Form.Item>
       <Form.Item name="utas" label="Утас">
         <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
+      </Form.Item>
+      <Form.Item name="mail" label="и-мэйл хаяг">
+        <Input type="email" placeholder="и-мэйл хаяг" allowClear prefix={<MailOutlined />} />
       </Form.Item>
       <Form.Item
         hidden={!baiguullagaEsekh}
