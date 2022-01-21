@@ -1,9 +1,11 @@
 import _ from "lodash"
-import React, { useState } from "react"
+import React from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useSWR from "swr"
+import { message, Popconfirm } from "antd"
+import { DeleteOutlined } from "@ant-design/icons"
 
 const fetcher = (url, token, gereeniiId) =>
   axios(token)
@@ -26,7 +28,6 @@ function useBaritsaa(token, gereeniiId) {
 }
 
 function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
-  console.log(data, token)
 
   const { baritsaaKhuulga, baritsaaKhuulgaMutate } = useBaritsaa(
     token,
@@ -43,6 +44,23 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
     }),
     []
   )
+
+  function baritsaaniiGuilgeeUstgaya({_id,orlogo,zarlaga}) {
+    axios(token)
+      .post("/baritsaaniiGuilgeeUstgaya", {
+        "gereeniiId": data?._id,
+        "objectiinId" : _id,
+        "zarlaga":zarlaga||0,
+        "orlogo":orlogo||0
+      })
+      .then(({ data }) => {
+        if (data) {
+          message.success("Төлөлт амжилттай устгагдлаа!")
+          baritsaaKhuulgaMutate()
+          onFinish()
+        }
+      })
+  }
 
   return (
     <div className="flex flex-col space-y-2">
@@ -61,18 +79,13 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
           <div className="p-1">{formatNumber(a.zarlaga, 0)}</div>
           <div className="flex justify-between p-1">
             {a.tailbar}
-            {(a.turul === "avlaga" ||
-              a.turul === "voucher" ||
-              a.turul === "barter" ||
-              a.turul === "bank" ||
-              a.turul === "khyamdral" ||
-              a.turul === "baritsaa") && (
+            {(
               <div className="contents justify-between">
                 <Popconfirm
                   title="Төлөлт устгах уу?"
                   okText="Тийм"
                   cancelText="Үгүй"
-                  onConfirm={() => tulultUstgaya(a)}
+                  onConfirm={() => baritsaaniiGuilgeeUstgaya(a)}
                 >
                   <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer hide-on-print">
                     <DeleteOutlined />
