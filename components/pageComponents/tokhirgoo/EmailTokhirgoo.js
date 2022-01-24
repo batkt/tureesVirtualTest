@@ -6,11 +6,9 @@ import { useAjiltniiJagsaalt } from "hooks/useAjiltan"
 
 function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
   const [form] = Form.useForm()
+  const [emailTokhirgoo, setEmailTokhirgoo] = useState(null)
 
   function tokhirgooKhadgalakh() {
-    const emailTokhirgoo = form.getFieldsValue()
-    debugger
-    console.log(baiguullaga)
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: emailTokhirgoo })
       .then(({ data }) => {
@@ -49,6 +47,12 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   label="И-мэйл хаяг"
                   name="gmailKhayag"
                   value={baiguullaga?.tokhirgoo?.gmailKhayag}
+                  onChange={(v) =>
+                    setEmailTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.gmailKhayag": v,
+                    }))
+                  }
                   rules={[
                     {
                       type: "email",
@@ -63,6 +67,12 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   label="Нэвтрэх нууц үг"
                   name="gmailPassword"
                   value={baiguullaga?.tokhirgoo?.gmailPassword}
+                  onChange={(v) =>
+                    setEmailTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.gmailPassword": v,
+                    }))
+                  }
                   rules={[
                     {
                       required: true,
