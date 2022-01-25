@@ -12,7 +12,8 @@ import TalbainTokhirgoo from "components/pageComponents/tokhirgoo/TalbainTokhirg
 import AshiglaltiinZardal from "components/pageComponents/tokhirgoo/AshiglaltiinZardal";
 import Medegdel from "components/pageComponents/tokhirgoo/Medegdel";
 import QPay from "components/pageComponents/tokhirgoo/QPay";
-import Dans from "components/pageComponents/tokhirgoo/Dans"
+import Dans from "components/pageComponents/tokhirgoo/Dans";
+import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo"
 
 import { useMemo, useState } from "react";
 
@@ -55,6 +56,34 @@ function AjiltanBurtgel({ token }) {
           tsonkh:<Medegdel {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         }
         ,
+        {
+          icon: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-settings w-4 h-4 mr-2"
+            >
+              {" "}
+              <path stroke="none" d="M0 0h24v24H0z" />{" "}
+              <rect x="3" y="5" width="18" height="14" rx="2" />{" "}
+              <polyline points="3 7 12 13 21 7" />
+            </svg>
+          ),
+          text: "И-мэйл тохиргоо",
+          tsonkh: (
+            <Email
+              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
+              token={token}
+            />
+          ),
+        },
         {
           icon:<svg version="1.0" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" width="20" height="20" viewBox="0 0 309.000000 297.000000" className="feather feather-settings w-4 h-4 mr-2" preserveAspectRatio="xMidYMid meet"><metadata>t</metadata><g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"fill="currentColor" stroke="none">
           <path d="M1290 2964 c-203 -38 -311 -71 -447 -136 -354 -168 -645 -498 -771
