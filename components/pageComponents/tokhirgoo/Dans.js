@@ -1,5 +1,5 @@
 import React from "react";
-import {  Tooltip,Popconfirm, Button } from "antd";
+import {  Tooltip,Popconfirm, Button, Switch } from "antd";
 import {
     DeleteOutlined,
     EditOutlined,
@@ -96,10 +96,29 @@ function Dans({
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
               Дансны бүртгэл
             </h2>
-            <div className="p-2 cursor-pointer bg-green-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full" onClick={() => dansBurtgeye()}>
+            <div className="p-2 cursor-pointer bg-green-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full" >
                 <Tooltip title='Нэмэх'>
                     <PlusOutlined />
                 </Tooltip>
+            </div>
+          </div>
+          <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
+            <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+              Хаан банк
+            </h2>
+            <div className="space-x-2">
+              <label className="font-semibold text-base mr-auto dark:text-gray-200">Corporate ашиглах эсэх</label>
+              <Switch defaultChecked={baiguullaga?.tokhirgoo?.khanbankCorporateAshiglakhEsekh || false} />
+            </div>
+          </div>
+          {dansGaralt?.jagsaalt?.map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
+          <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
+            <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+              Худалдаа хөгжлийн банк
+            </h2>
+            <div className="space-x-2">
+              <label className="font-semibold text-base mr-auto dark:text-gray-200">Corporate ашиглах эсэх</label>
+              <Switch defaultChecked={baiguullaga?.tokhirgoo?.khanbankCorporateAshiglakhEsekh || false} />
             </div>
           </div>
           {dansGaralt?.jagsaalt?.map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
