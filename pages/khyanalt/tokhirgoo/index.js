@@ -56,15 +56,7 @@ function AjiltanBurtgel({ token }) {
         }
         ,
         {
-          icon:
-          <svg version="1.0" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"
-           width="20" height="20" viewBox="0 0 309.000000 297.000000"
-           preserveAspectRatio="xMidYMid meet">
-          <metadata>
-          Created by potrace 1.16, written by Peter Selinger 2001-2019
-          </metadata>
-          <g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
-          fill="currentColor" stroke="none">
+          icon:<svg version="1.0" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" width="20" height="20" viewBox="0 0 309.000000 297.000000" className="feather feather-settings w-4 h-4 mr-2" preserveAspectRatio="xMidYMid meet"><metadata>t</metadata><g transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"fill="currentColor" stroke="none">
           <path d="M1290 2964 c-203 -38 -311 -71 -447 -136 -354 -168 -645 -498 -771
           -874 -57 -171 -67 -239 -67 -469 0 -230 10 -300 66 -470 74 -223 188 -405 363
           -581 207 -206 413 -324 701 -400 89 -24 124 -27 310 -31 209 -5 318 5 423 38
@@ -84,15 +76,8 @@ function AjiltanBurtgel({ token }) {
           tsonkh:<QPay {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         },
         {
-          icon:<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-          width="18" height="18" viewBox="0 0 861.000000 1024.000000"
-          preserveAspectRatio="xMidYMid meet" stroke="currentColor">
-         <metadata>
-         Created by potrace 1.16, written by Peter Selinger 2001-2019
-         </metadata>
-         <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
-         fill="currentColor" stroke="none">
-         <path d="M116 10218 c-5 -25 -117 -2289 -116 -2350 l0 -38 144 0 c159 0 156
+          icon:<svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 861.000000 1024.000000" className="feather feather-settings w-4 h-4 mr-2" preserveAspectRatio="xMidYMid meet" stroke="currentColor">
+         <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)" fill="currentColor" stroke="none"> <path d="M116 10218 c-5 -25 -117 -2289 -116 -2350 l0 -38 144 0 c159 0 156
          -1 156 68 0 72 41 319 76 462 129 521 383 868 779 1061 145 71 252 102 433
          128 235 34 443 41 1215 41 l747 0 0 -1809 0 -1808 -727 -318 c-401 -174 -828
          -360 -950 -413 l-223 -97 0 -312 c0 -238 3 -313 12 -313 10 0 1302 560 1791

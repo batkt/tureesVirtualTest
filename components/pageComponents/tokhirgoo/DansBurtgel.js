@@ -6,6 +6,7 @@ import createMethod from "tools/function/crud/createMethod";
 function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate},ref) {
     const [form] = Form.useForm();
     const [corporateAshiglakhEsekh,setCorporateAshiglakhEsekh] = useState(data?.corporateAshiglakhEsekh || false)
+    const [qpayAshiglakhEsekh,setQpayAshiglakhEsekh] = useState(data?.qpayAshiglakhEsekh || false)
     const [bank,setBank] = useState(data?.bank)
 
     useImperativeHandle(
@@ -53,6 +54,12 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
                     <Select.Option key='MNT' value='MNT'>MNT</Select.Option>
                     <Select.Option key='USD' value='USD'>USD</Select.Option>
                 </Select>
+            </Form.Item>
+            <Form.Item hidden={qpayAshiglakhEsekh !== true} label='QPay ашиглах эсэх' name="qpayAshiglakhEsekh">
+                <Switch defaultChecked={data?.qpayAshiglakhEsekh} onChange={setQpayAshiglakhEsekh}/>
+            </Form.Item>
+            <Form.Item label='Corporate ашиглах эсэх' name="corporateAshiglakhEsekh">
+                <Input placeholder='Нууцлагдсан мэдээлэл'/>
             </Form.Item>
             <Form.Item label='Corporate ашиглах эсэх' name="corporateAshiglakhEsekh">
                 <Switch defaultChecked={data?.corporateAshiglakhEsekh} onChange={setCorporateAshiglakhEsekh}/>
