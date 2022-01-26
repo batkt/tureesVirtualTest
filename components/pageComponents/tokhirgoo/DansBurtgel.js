@@ -55,24 +55,6 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
                     <Select.Option key='USD' value='USD'>USD</Select.Option>
                 </Select>
             </Form.Item>
-            <Form.Item hidden={qpayAshiglakhEsekh !== true} label='QPay ашиглах эсэх' name="qpayAshiglakhEsekh">
-                <Switch defaultChecked={data?.qpayAshiglakhEsekh} onChange={setQpayAshiglakhEsekh}/>
-            </Form.Item>
-            <Form.Item label='Corporate ашиглах эсэх' name="corporateAshiglakhEsekh">
-                <Input placeholder='Нууцлагдсан мэдээлэл'/>
-            </Form.Item>
-            <Form.Item label='Corporate ашиглах эсэх' name="corporateAshiglakhEsekh">
-                <Switch defaultChecked={data?.corporateAshiglakhEsekh} onChange={setCorporateAshiglakhEsekh}/>
-            </Form.Item>
-            <Form.Item hidden={corporateAshiglakhEsekh !== true} label='Дансны нэр' name="corporateNevtrekhNer">
-                <Input placeholder='Нууцлагдсан мэдээлэл'/>
-            </Form.Item>
-            <Form.Item hidden={corporateAshiglakhEsekh !== true} label='Нэвтрэх нууц үг' name="corporateNuutsUg">
-                <Input.Password placeholder='Нууцлагдсан мэдээлэл'/>
-            </Form.Item>
-            <Form.Item hidden={bank === 'khanbank' || corporateAshiglakhEsekh !== true} label='Гүйлгээний нууц үг' name="corporateGuilgeeniiNuutsUg">
-                <Input.Password placeholder='Нууцлагдсан мэдээлэл'/>
-            </Form.Item>
         </Form>
     )
 }
