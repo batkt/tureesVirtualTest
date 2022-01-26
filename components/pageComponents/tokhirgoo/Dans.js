@@ -18,10 +18,6 @@ function DansTile({data,dansMutate,zasya,token}) {
 
     return (<div className="box w-full">
         <div className="grid grid-cols-4 gap-2 items-center p-5 justify-between w-full">
-            <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Банкны нэр</div>
-                <div>{data.bank}</div>
-            </div>
             <div className="">
                 <div className="font-medium">Данс</div> 
                 <div>{data.dugaar}</div>
@@ -111,17 +107,17 @@ function Dans({
               <Switch defaultChecked={baiguullaga?.tokhirgoo?.khanbankCorporateAshiglakhEsekh || false} />
             </div>
           </div>
-          {dansGaralt?.jagsaalt?.map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
+          {dansGaralt?.jagsaalt?.filter(a=>a.bank === 'khanbank').map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
           <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
             <h2 className="font-medium text-base mr-auto dark:text-gray-200">
               Худалдаа хөгжлийн банк
             </h2>
             <div className="space-x-2">
               <label className="font-semibold text-base mr-auto dark:text-gray-200">Corporate ашиглах эсэх</label>
-              <Switch defaultChecked={baiguullaga?.tokhirgoo?.khanbankCorporateAshiglakhEsekh || false} />
+              <Switch defaultChecked={baiguullaga?.tokhirgoo?.tdbCorporateAshiglakhEsekh || false} />
             </div>
           </div>
-          {dansGaralt?.jagsaalt?.map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
+          {dansGaralt?.jagsaalt?.filter(a=>a.bank === 'tdb').map((mur)=><DansTile className="box" key={mur._id} data={mur} zasya={dansBurtgeye} dansMutate={dansMutate} token={token}/>)}
         </div>
       </div>
       <div className='col-span-12 lg:col-span-5 xxl:col-span-4 mt-5'>
