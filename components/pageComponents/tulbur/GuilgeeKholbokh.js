@@ -8,14 +8,13 @@ import {
   Tooltip,
 } from "antd"
 import _ from "lodash"
-import React, { useState } from "react"
+import React from "react"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import formatNumber from "../../../tools/function/formatNumber"
 import getListMethod from "../../../tools/function/crud/getListMethod"
 import uilchilgee from "../../../services/uilchilgee"
 import moment from "moment"
 import { MinusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons"
-import { useAuth } from "services/auth"
 import useSWR from "swr"
 
 function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
@@ -44,9 +43,10 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
 }
 
 function GuilgeeKholbokh(
-  { data, token, baiguullagiinId, barilgiinId, onFinish, destroy },
+  { data, token, baiguullagiinId, barilgiinId, onFinish, destroy ,dans},
   ref
 ) {
+
   const [geree, setGeree] = React.useState(null)
   const [olnoorKholbokhEsekh, setOlnoorKholbokhEsekh] = React.useState(false)
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([])
@@ -75,7 +75,7 @@ function GuilgeeKholbokh(
         tulult.forEach((a) => {
           !!a.tulsunDun && (niitDun += a.tulsunDun)
         })
-        if (niitDun > data?.amount) {
+        if (niitDun > data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`]) {
           notification.warning({
             message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна",
           })
@@ -128,14 +128,12 @@ function GuilgeeKholbokh(
                       guilgeenuud = [
                         {
                           turul: "bank",
-                          tulsunDun: data.amount - (data?.kholbosonDun || 0),
-                          ognoo: moment(data.tranDate)
-                            .set("hour", data.time.substring(0, 2))
-                            .set("minute", data.time.substring(2, 4)),
+                          tulsunDun: data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`] - (data?.kholbosonDun || 0),
+                          ognoo: moment(data[`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]),
                           guilgeeniiId: data._id,
                           gereeniiId: geree,
                           dansniiDugaar: data.dansniiDugaar,
-                          tulsunDans: data.relatedAccount,
+                          tulsunDans: data[`${dans?.bank === 'tdb' ? 'CtAcntOrg' : 'relatedAccount'}`],
                         },
                       ]
                     uilchilgee(token)
@@ -167,14 +165,12 @@ function GuilgeeKholbokh(
                   guilgeenuud = [
                     {
                       turul: "bank",
-                      tulsunDun: data.amount - (data?.kholbosonDun || 0),
-                      ognoo: moment(data.tranDate)
-                        .set("hour", data.time.substring(0, 2))
-                        .set("minute", data.time.substring(2, 4)),
+                      tulsunDun: data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`] - (data?.kholbosonDun || 0),
+                      ognoo: moment(data[`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]),
                       guilgeeniiId: data._id,
                       gereeniiId: geree,
                       dansniiDugaar: data.dansniiDugaar,
-                      tulsunDans: data.relatedAccount,
+                      tulsunDans: data[`${dans?.bank === 'tdb' ? 'CtAcntOrg' : 'relatedAccount'}`],
                     },
                   ]
                 uilchilgee(token)
@@ -199,6 +195,7 @@ function GuilgeeKholbokh(
   )
 
   React.useEffect(() => {
+    data?.magadlaltaiGereenuud  &&
     getListMethod("geree", token, {
       query: { _id: data?.magadlaltaiGereenuud },
     }).then(({ data }) => {
@@ -216,13 +213,11 @@ function GuilgeeKholbokh(
         _.set(
           a,
           `${index}.ognoo`,
-          moment(data.tranDate)
-            .set("hour", data.time.substring(0, 2))
-            .set("minute", data.time.substring(2, 4))
+          moment(data[`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`])
         )
         _.set(a, `${index}.guilgeeniiId`, data._id)
         _.set(a, `${index}.dansniiDugaar`, data.dansniiDugaar)
-        _.set(a, `${index}.tulsunDans`, data.relatedAccount)
+        _.set(a, `${index}.tulsunDans`, data[`${dans?.bank === 'tdb' ? 'CtAcntOrg' : 'relatedAccount'}`])
 
         return [...a]
       })
@@ -240,7 +235,7 @@ function GuilgeeKholbokh(
         i !== index && !!a.tulsunDun && (sum += a.tulsunDun)
       })
       if (!!data?.kholbosonDun) sum += data?.kholbosonDun
-      _.set(a, `${index}.tulsunDun`, data.amount - sum)
+      _.set(a, `${index}.tulsunDun`, data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`] - sum)
       return [...a]
     })
   }
@@ -436,11 +431,11 @@ function GuilgeeKholbokh(
         </div>
         <div className="space-x-2 p-2 text-right">
           <span className="font-medium">Гүйлгээний дүн:</span>
-          <span>{formatNumber(data?.amount, 2)}₮</span>
+          <span>{formatNumber(data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`], 2)}₮</span>
         </div>
         <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
           <div className="font-medium">Тайлбар:</div>
-          <div>{data?.description}</div>
+          <div>{data[`${dans?.bank === 'tdb' ? 'TxAddInf' : 'description'}`]}</div>
         </div>
         {!!data?.kholbosonDun && (
           <div className="col-span-2 flex flex-row space-x-2 border-t p-2">

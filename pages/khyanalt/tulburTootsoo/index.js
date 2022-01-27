@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React from "react"
+import React, { useMemo } from "react"
 import { useAuth } from "services/auth"
 import { Card, DatePicker, Table, Select, Button, Tooltip, message } from "antd"
 import {
@@ -10,7 +10,7 @@ import {
   QuestionOutlined,
 } from "@ant-design/icons"
 import moment from "moment"
-import useDans from "hooks/khuulga/useDans"
+import useDans from "hooks/useDans"
 import formatNumber from "tools/function/formatNumber"
 import useDansKhuulga from "hooks/khuulga/useDansKhuulga"
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt"
@@ -20,23 +20,23 @@ import { modal } from "components/ant/Modal"
 import Tulbur from "components/pageComponents/eBarimt/Tulbur"
 const { RangePicker } = DatePicker
 
-function iconAvya(a) {
+function iconAvya(a,bank) {
   let Icon = ExclamationOutlined
   let color = "red"
   let tailbar = "Гүйлгээ холбогдоогүй байна"
 
   if (
-    a?.kholbosonDun < a?.amount ||
+    a?.kholbosonDun < a[`${bank === 'tdb' ? 'Amt' : 'amount'}`] && a?.kholbosonDun > 0 ||
     (a?.magadlaltaiGereenuud?.length > 0 &&
       !(a?.kholbosonGereeniiId?.length > 0))
   ) {
     Icon = QuestionOutlined
     color = "yellow"
     tailbar =
-      a?.kholbosonDun < a?.amount
+      a?.kholbosonDun < a[`${bank === 'tdb' ? 'Amt' : 'amount'}`] && a?.kholbosonDun > 0
         ? "Дүн дутуу холбогдсон байна"
         : "Холбох боломжтой гэрээнүүд байна"
-  } else if (a?.kholbosonGereeniiId && a?.kholbosonDun === a?.amount) {
+  } else if (a?.kholbosonGereeniiId && a?.kholbosonDun === a[`${bank === 'tdb' ? 'Amt' : 'amount'}`]) {
     Icon = CheckOutlined
     color = "green"
     tailbar = "Гүйлгээ холбогдсон байна"
@@ -55,12 +55,13 @@ function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null)
   const { baiguullaga, barilgiinId } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
-  const { dans } = useDans(token)
+  const { dansGaralt } = useDans(token,baiguullaga?._id)
   const [songogdsonDans, setSongogdsonDans] = React.useState(null)
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null)
   const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } =
     useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
-  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
+
+  const [order, setOrder] = React.useState({tranDate: -1, time: 0})
 
   const query = React.useMemo(() => {
     if (songogdsonTurul === "Тодорхойгүй")
@@ -98,14 +99,14 @@ function tulburTootsoo({ token }) {
     bankniiGuilgeeToololtMutate()
   }
 
-  function dansSongoy(number) {
-    let songogdsonDans = dans?.accounts?.find((a) => a.number === number)
+  function dansSongoy(dugaar) {
+    let songogdsonDans = dansGaralt?.jagsaalt?.find((a) => a.dugaar === dugaar)
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
     setSongogdsonDans(songogdsonDans)
   }
 
   function guilgeeKholbyo(data) {
-    if (data?.kholbosonGereeniiId && data?.kholbosonDun === data?.amount) {
+    if (data?.kholbosonGereeniiId && data?.kholbosonDun === data[`${songogdsonDans?.bank === 'tdb' ? 'Amt' : 'amount'}`]) {
       message.info("Гүйлгээ гэрээнд холбогдсон байна.")
       return
     }
@@ -122,6 +123,7 @@ function tulburTootsoo({ token }) {
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKholbokh
+          dans={songogdsonDans}
           data={data}
           barilgiinId={barilgiinId}
           ref={refGuilgee}
@@ -138,6 +140,7 @@ function tulburTootsoo({ token }) {
     setSongogdsonTurul(utga)
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
   }
+
   function ebarimtUgukh(data) {
     modal({
       title: (
@@ -155,6 +158,249 @@ function tulburTootsoo({ token }) {
       footer: false,
     })
   }
+
+  const columns = useMemo(()=>{
+    if(songogdsonDans?.bank === 'tdb')
+      return [
+        {
+          title: "Огноо",
+          sorter: true,
+          dataIndex: "TxDt",
+          width: "7rem",
+          render(date) {
+            return moment(date).format("YYYY-MM-DD")
+          },
+          onHeaderCell: (cell, index) => {
+            return {
+              onClick: () =>
+                setOrder((o) => ({
+                  ...o,
+                  tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
+                })), // click header row
+            }
+          },
+        },
+        {
+          title: "Цаг",
+          sorter: true,
+          dataIndex: "TxTime",
+          ellipsis: true,
+          width: "4rem",
+          render(a) {
+            if (_.isString(a))
+              return `${a}`
+            return ""
+          }
+        },
+        {
+          title: "Гүйлгээний утга",
+          dataIndex: "TxAddInf",
+        },
+        {
+          title: "Гүйлгээний дүн",
+          sorter: true,
+          dataIndex: "Amt",
+          ellipsis: true,
+          width: "9rem",
+          className: "text-right",
+          showSorterTooltip: false,
+          render(a) {
+            return `${formatNumber(a, 2)}₮`
+          },
+          sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
+        },
+        {
+          title: "Шилжүүлсэн данс",
+          align: "center",
+          dataIndex: "CtAcntOrg",
+          ellipsis: true,
+          width: "10rem",
+        },
+        {
+          title: "Төлөв",
+          width: "4rem",
+          align: "center",
+          render(a) {
+            return (
+              <div className="flex items-center justify-center">
+                <Button
+                  shape="circle"
+                  size="small"
+                  onClick={() => guilgeeKholbyo(a)}
+                  icon={iconAvya(a,'tdb')}
+                />
+              </div>
+            )
+          },
+        },
+        {
+          title: "Талбай",
+          dataIndex: "kholbosonTalbainId",
+          ellipsis: true,
+          align: "center",
+          width: "5rem",
+        },
+        {
+          title: "НӨАТУС",
+          width: "4.5rem",
+          align: "center",
+          render(a) {
+            return (
+              <div className="flex items-center justify-center">
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={
+                    <div
+                      className={`text-500 flex items-center justify-center`}
+                    >
+                      {a?.kholbosonGereeniiId &&
+                      a?.ebarimtAvsanEsekh === true ? (
+                        <Tooltip title="И-баримт хэвлэсэн байна">
+                          <CheckOutlined
+                            style={{ fontSize: "16px", color: "green" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <ExclamationOutlined
+                          style={{ fontSize: "16px", color: "red" }}
+                          onClick={() => ebarimtUgukh(a)}
+                        />
+                      )}
+                    </div>
+                  }
+                />
+              </div>
+            )
+          },
+        },
+      ]
+    else if(songogdsonDans?.bank === 'khanbank')
+      return [
+        {
+          title: "Огноо",
+          sorter: true,
+          dataIndex: "tranDate",
+          width: "7rem",
+          render(date) {
+            return moment(date).format("YYYY-MM-DD")
+          },
+          onHeaderCell: (cell, index) => {
+            return {
+              onClick: () =>
+                setOrder((o) => ({
+                  ...o,
+                  tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
+                })), // click header row
+            }
+          },
+        },
+        {
+          title: "Цаг",
+          sorter: true,
+          dataIndex: "time",
+          ellipsis: true,
+          width: "4rem",
+          render(a) {
+            if (_.isString(a))
+              return `${a.substring(0, 2)}:${a.substring(2, 4)}`
+            return ""
+          },
+          onHeaderCell: (cell, index) => {
+            return {
+              onClick: () =>
+                setOrder((o) => ({
+                  ...o,
+                  time: o.time === -1 ? 1 : o.time - 1,
+                })), // click header row
+            }
+          },
+        },
+        {
+          title: "Гүйлгээний утга",
+          dataIndex: "description",
+        },
+        {
+          title: "Гүйлгээний дүн",
+          sorter: true,
+          dataIndex: "amount",
+          ellipsis: true,
+          width: "9rem",
+          className: "text-right",
+          showSorterTooltip: false,
+          render(a) {
+            return `${formatNumber(a, 2)}₮`
+          },
+          sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
+        },
+        {
+          title: "Шилжүүлсэн данс",
+          align: "center",
+          dataIndex: "relatedAccount",
+          ellipsis: true,
+          width: "10rem",
+        },
+        {
+          title: "Төлөв",
+          width: "4rem",
+          align: "center",
+          render(a) {
+            return (
+              <div className="flex items-center justify-center">
+                <Button
+                  shape="circle"
+                  size="small"
+                  onClick={() => guilgeeKholbyo(a)}
+                  icon={iconAvya(a)}
+                />
+              </div>
+            )
+          },
+        },
+        {
+          title: "Талбай",
+          dataIndex: "kholbosonTalbainId",
+          ellipsis: true,
+          align: "center",
+          width: "5rem",
+        },
+        {
+          title: "НӨАТУС",
+          width: "4.5rem",
+          align: "center",
+          render(a) {
+            return (
+              <div className="flex items-center justify-center">
+                <Button
+                  size="small"
+                  shape="circle"
+                  icon={
+                    <div
+                      className={`text-500 flex items-center justify-center`}
+                    >
+                      {a?.kholbosonGereeniiId &&
+                      a?.ebarimtAvsanEsekh === true ? (
+                        <Tooltip title="И-баримт хэвлэсэн байна">
+                          <CheckOutlined
+                            style={{ fontSize: "16px", color: "green" }}
+                          />
+                        </Tooltip>
+                      ) : (
+                        <ExclamationOutlined
+                          style={{ fontSize: "16px", color: "red" }}
+                          onClick={() => ebarimtUgukh(a)}
+                        />
+                      )}
+                    </div>
+                  }
+                />
+              </div>
+            )
+          },
+        },
+      ]
+    return []
+  },[songogdsonDans])
 
   return (
     <Admin
@@ -224,9 +470,9 @@ function tulburTootsoo({ token }) {
               style={{ width: "100%" }}
               onChange={dansSongoy}
             >
-              {dans?.accounts?.map((a) => (
-                <Select.Option key={a.number} value={a.number}>
-                  <div>{a.number}</div>
+              {dansGaralt?.jagsaalt?.map((a) => (
+                <Select.Option key={a.dugaar} value={a.dugaar}>
+                  <div>{a.dugaar}</div>
                 </Select.Option>
               ))}
             </Select>
@@ -242,129 +488,7 @@ function tulburTootsoo({ token }) {
           bordered
           size="small"
           scroll={{ y: "calc(100vh - 30rem)" }}
-          columns={[
-            {
-              title: "Огноо",
-              sorter: true,
-              dataIndex: "tranDate",
-              width: "7rem",
-              render(date) {
-                return moment(date).format("YYYY-MM-DD")
-              },
-              onHeaderCell: (cell, index) => {
-                return {
-                  onClick: () =>
-                    setOrder((o) => ({
-                      ...o,
-                      tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
-                    })), // click header row
-                }
-              },
-            },
-            {
-              title: "Цаг",
-              sorter: true,
-              dataIndex: "time",
-              ellipsis: true,
-              width: "4rem",
-              render(a) {
-                if (_.isString(a))
-                  return `${a.substring(0, 2)}:${a.substring(2, 4)}`
-                return ""
-              },
-              onHeaderCell: (cell, index) => {
-                return {
-                  onClick: () =>
-                    setOrder((o) => ({
-                      ...o,
-                      time: o.time === -1 ? 1 : o.time - 1,
-                    })), // click header row
-                }
-              },
-            },
-            {
-              title: "Гүйлгээний утга",
-              dataIndex: "description",
-            },
-            {
-              title: "Гүйлгээний дүн",
-              sorter: true,
-              dataIndex: "amount",
-              ellipsis: true,
-              width: "9rem",
-              className: "text-right",
-              showSorterTooltip: false,
-              render(a) {
-                return `${formatNumber(a, 2)}₮`
-              },
-              sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
-            },
-            {
-              title: "Шилжүүлсэн данс",
-              align: "center",
-              dataIndex: "relatedAccount",
-              ellipsis: true,
-              width: "10rem",
-            },
-            {
-              title: "Төлөв",
-              width: "4rem",
-              align: "center",
-              render(a) {
-                return (
-                  <div className="flex items-center justify-center">
-                    <Button
-                      shape="circle"
-                      size="small"
-                      onClick={() => guilgeeKholbyo(a)}
-                      icon={iconAvya(a)}
-                    />
-                  </div>
-                )
-              },
-            },
-            {
-              title: "Талбай",
-              dataIndex: "kholbosonTalbainId",
-              ellipsis: true,
-              align: "center",
-              width: "5rem",
-            },
-            {
-              title: "НӨАТУС",
-              width: "4.5rem",
-              align: "center",
-              render(a) {
-                return (
-                  <div className="flex items-center justify-center">
-                    <Button
-                      size="small"
-                      shape="circle"
-                      icon={
-                        <div
-                          className={`text-500 flex items-center justify-center`}
-                        >
-                          {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
-                            <Tooltip title="И-баримт хэвлэсэн байна">
-                              <CheckOutlined
-                                style={{ fontSize: "16px", color: "green" }}
-                              />
-                            </Tooltip>
-                          ) : (
-                            <ExclamationOutlined
-                              style={{ fontSize: "16px", color: "red" }}
-                              onClick={() => ebarimtUgukh(a)}
-                            />
-                          )}
-                        </div>
-                      }
-                    />
-                  </div>
-                )
-              },
-            },
-          ]}
+          columns={columns}
           dataSource={dansniiKhuulgaGaralt?.jagsaalt}
           pagination={{
             current: dansniiKhuulgaGaralt?.khuudasniiDugaar,

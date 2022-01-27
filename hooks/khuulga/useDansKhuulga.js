@@ -4,11 +4,11 @@ import useSWR from "swr";
 import moment from "moment";
 import _ from "lodash";
 import { useAuth } from "services/auth"
-function getSearch(search){
-  var fallback = [{ description: { $regex: search, $options: "i" } }]
-  fallback.push({ relatedAccount:{ $regex: search, $options: "i" }})
+function getSearch(search,bank){
+  var fallback = [{ [`${bank === 'tdb' ? 'TxAddInf' : 'description'}`]: { $regex: search, $options: "i" } }]
+  fallback.push({ [`${bank === 'tdb' ? 'CtAcntOrg' : 'relatedAccount'}`]:{ $regex: search, $options: "i" }})
   if(/^\d+$/.test(search)){
-    fallback.push({ amount: search})
+    fallback.push({ [`${bank === 'tdb' ? 'Amt' : 'amount'}`]: search})
   }
   return fallback
 }
@@ -20,20 +20,24 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   dans,
   ognoo,
-  order={},
+  {tranDate,time,...order}={},
   query,
   barilgiinId
 ) =>
   axios(token)
     .get(url,{params:{
-      order,
+      order:{
+        [`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]:tranDate,
+        [`${dans?.bank === 'tdb' ? 'TxTime' : 'time'}`]:time,
+        
+      },
       query:{
-        dansniiDugaar: dans.number,
+        dansniiDugaar: dans?.dugaar,
         barilgiinId,
         baiguullagiinId,
-        amount:{ $gt: 0 },
-        tranDate:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59'),},
-        $or: getSearch(search),
+        [`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`]:{ $gt: 0 },
+        [`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59'),},
+        $or: getSearch(search,dans?.bank),
         ...query
       },
       ...khuudaslalt
