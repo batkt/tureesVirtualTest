@@ -5,8 +5,6 @@ import createMethod from "tools/function/crud/createMethod";
 
 function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate},ref) {
     const [form] = Form.useForm();
-    const [corporateAshiglakhEsekh,setCorporateAshiglakhEsekh] = useState(data?.corporateAshiglakhEsekh || false)
-    const [qpayAshiglakhEsekh,setQpayAshiglakhEsekh] = useState(data?.qpayAshiglakhEsekh || false)
     const [bank,setBank] = useState(data?.bank)
 
     useImperativeHandle(
@@ -14,11 +12,12 @@ function DansBurtgel({data,destroy,baiguullagiinId,barilgiinId,token,dansMutate}
         () => ({
             khadgalya() {
                 const ugugdul = form.getFieldsValue()
+                
                 const method = ugugdul?._id ? updateMethod : createMethod
                 ugugdul['barilgiinId'] = barilgiinId
                 ugugdul['baiguullagiinId'] = baiguullagiinId
         
-                method('dans',token,ugugdul).then(({data})=>{
+                method('dans',token,{...data,...ugugdul}).then(({data})=>{
                     if(data === 'Amjilttai')
                         {
                             notification.success({message:'Амжилттай хадгаллаа'})

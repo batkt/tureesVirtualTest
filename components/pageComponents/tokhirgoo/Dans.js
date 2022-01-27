@@ -71,13 +71,13 @@ function Dans({
     useEffect(()=>{
       const tdb = dansGaralt?.jagsaalt?.find(a=>a.bank === 'tdb' && a.corporateAshiglakhEsekh === true)
       if(!!tdb){
-        const {corporateAshiglakhEsekh,bank} = tdb
-        setTdbCorporate({corporateAshiglakhEsekh,bank})
+        const {corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg} = tdb
+        setTdbCorporate({corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg})
       }
       const khanbank = dansGaralt?.jagsaalt?.find(a=>a.bank === 'khanbank' && a.corporateAshiglakhEsekh === true)
       if(!!khanbank){
-        const {corporateAshiglakhEsekh,bank} = khanbank
-        setKhanBankCorporate({corporateAshiglakhEsekh,bank})
+        const {corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg} = khanbank
+        setKhanBankCorporate({corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg})
       }
     },[dansGaralt])
 
@@ -107,13 +107,11 @@ function Dans({
     }
 
   function dansKhadgalya(turul) {
-      dansGaralt?.jagsaalt?.filter(a=>a.bank === turul).map((mur,index,array)=>updateMethod('dans',token,{...mur,...khanbankCoprporate}).then(({data})=>{
+
+      const corp = turul === 'tdb' ? tdbCoprporate : khanbankCoprporate
+      dansGaralt?.jagsaalt?.filter(a=>a.bank === turul).map((mur,index,array)=>updateMethod('dans',token,{...mur,...corp}).then(({data})=>{
         if(data === 'Amjilttai' && (array.length-1) === index){
           notification.success({message:'Амжилттай хадгаллаа'})
-          if(turul === 'tdb')
-            setTdbCorporate(a=>({corporateAshiglakhEsekh:true}))
-          else if(turul === 'tdb')
-            setKhanBankCorporate(a=>({corporateAshiglakhEsekh:true}))
         }
       }))
   }
