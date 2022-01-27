@@ -59,6 +59,7 @@ function ZakhialgaNemekh({ token }) {
   }
 
   function docZasya(key, value) {
+    console.log(value)
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button onClick={() => ref.current.khadgalya()}>Хадгалах</Button>,
@@ -122,14 +123,14 @@ function ZakhialgaNemekh({ token }) {
                 className="border border-dashed border-gray-600 rounded-md p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    gereeniiZagvar.zuunTolgoi?.zaalt ||
+                    gereeniiZagvar.zuunTolgoi ||
                     "Гэрээний загварын баруун толгой",
                 }}
               />
               <div
                 className="absolute hidden -top-2 -right-2 group-hover:block"
                 onClick={() =>
-                  docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi)
+                  docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi || '')
                 }
               >
                 <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
@@ -140,14 +141,14 @@ function ZakhialgaNemekh({ token }) {
                 className="border border-dashed border-gray-600 rounded-md p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    gereeniiZagvar.baruunTolgoi?.zaalt ||
+                    gereeniiZagvar.baruunTolgoi ||
                     "Гэрээний загварын зүүн толгой",
                 }}
               />
               <div
                 className="absolute hidden -top-2 -right-2 group-hover:block"
                 onClick={() =>
-                  docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi)
+                  docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi || '')
                 }
               >
                 <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
@@ -170,7 +171,7 @@ function ZakhialgaNemekh({ token }) {
                   </>
                 ) : (
                   <div
-                    className="w-full text-center font-medium"
+                    className="w-full text-center"
                     dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                   />
                 )}

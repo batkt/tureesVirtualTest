@@ -241,7 +241,7 @@ function GereeBaiguulakh({ token,data }) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className="ml-5"
+                          className={`${mur.zaalt?.includes('table') ? "sun-editor-editable" : ""} w-full ml-5 p-0`}
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>

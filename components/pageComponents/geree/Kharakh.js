@@ -64,7 +64,7 @@ function Kharakh({data,print},ref) {
                       </>
                     ) : (
                       <div
-                        className="w-full text-center font-medium"
+                        className="w-full text-center"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     )}

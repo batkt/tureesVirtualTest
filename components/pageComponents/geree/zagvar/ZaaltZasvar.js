@@ -65,7 +65,7 @@ const tulburiinTalbaruud = [
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef()
   const [utga, setUtga] = React.useState(value)
-
+  console.log('value',value)
   React.useImperativeHandle(
     ref,
     () => ({
@@ -113,6 +113,8 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
     })
     return [undsen, khugatsaa, baritsaa, talbai, tulbur]
   }, [])
+
+  
 
   if (_.isString(value))
     return (
