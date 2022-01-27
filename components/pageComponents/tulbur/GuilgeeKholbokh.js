@@ -322,7 +322,7 @@ function GuilgeeKholbokh(
           {gereeniiMedeelel?.jagsaalt?.map((mur) => {
             return (
               <Select.Option key={mur._id} value={mur._id}>
-                <div className="flex flex-row justify-between">
+                <div className="grid grid-cols-3">
                   <div className="flex flex-row space-x-2">
                     <label>Талбай:</label>
                     <div>{mur.talbainDugaar}</div>
@@ -334,7 +334,7 @@ function GuilgeeKholbokh(
                       barilgiinId={barilgiinId}
                     />
                   </div>
-                  <div>
+                  <div className="text-right">
                     {mur.baritsaaniiUldegdel === 0 ? (
                       <CheckCircleOutlined
                         style={{
