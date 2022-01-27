@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import {
   Card,
   DatePicker,
@@ -9,13 +9,14 @@ import {
   Select,
   message,
   Popconfirm,
+  Spin
 } from "antd"
 import {
   EditOutlined,
   FileExcelOutlined,
   DeleteOutlined,
 } from "@ant-design/icons"
-import Image from 'next/image'
+import Image from "next/image"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useNekhemjlekh from "hooks/useNekhemjlekh"
@@ -29,7 +30,8 @@ import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar"
 import NekhemjlelZagvarBurtgel from "components/pageComponents/nekhemjlel/ZagvarBurtgel"
 import { modal } from "components/ant/Modal"
 import { useAuth } from "services/auth"
-import deleteMethod from 'tools/function/crud/deleteMethod'
+import deleteMethod from "tools/function/crud/deleteMethod"
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 
 const ilgeekhTurul = "davkharaar"
 
@@ -45,6 +47,7 @@ function tulburTootsoo({ token }) {
   const [davkhar, setDavkhar] = React.useState()
   const [songogdsonDans, setDans] = React.useState()
 
+  const [loading, setLoading] = useState(false)
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([])
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul)
@@ -53,9 +56,10 @@ function tulburTootsoo({ token }) {
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token)
 
-  const { dansGaralt } = useDans(token,baiguullaga?._id)
+  const { dansGaralt } = useDans(token, baiguullaga?._id)
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([])
+  const [mailZagvar, setMailZagvar] = useState()
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt])
@@ -85,6 +89,99 @@ function tulburTootsoo({ token }) {
       return
     }
     handlePrint()
+  }
+
+  const nekhemjlekhuud = useMemo(()=>{
+    if(barimt && songogdsonGereenuud)
+      return songogdsonGereenuud?.map((a, i) => {
+          var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
+            (a) => a._id === barimt
+          )?.nekhemjlekh
+          const medeelel = _.clone(a)              
+          if (!!zagvar) {
+            medeelel.eneSardTulukhUsgeer = `${toWords(
+              medeelel.eneSardTulukhDun *
+                (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
+              { suffix: "n" }
+            )} төгрөг`
+            medeelel.niitUldegdelUsgeer = `${toWords(
+              medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1),
+              { suffix: "n" }
+            )} төгрөг`
+            medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
+              suffix: "n",
+            })} төгрөг`
+            medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
+            medeelel.eneSardTulukhDun = formatNumber(
+              medeelel.eneSardTulukhDun
+            )
+            medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
+            medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
+            medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
+            medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD")
+
+            const dans = dansGaralt?.jagsaalt?.find(
+              (a) => a.dugaar === songogdsonDans
+            )
+            medeelel.dans = dans?.dugaar
+            medeelel.bank =
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк"
+            medeelel.dansniiNer = dans?.dansniiNer
+
+            medeelel.nekhemjlekhiinDugaar =
+              moment().format("YY") + "/" + (dugaarlalt + i)
+
+            for (const [key, value] of Object.entries(medeelel)) {
+              zagvar = zagvar?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                value
+              )
+              
+            }
+          }
+          return {zagvar,mail:a.mail}
+        }
+      )
+    return []
+  },[barimt,songogdsonGereenuud])
+
+  async function maileerIlgeekh() { 
+    if (!barimt) {
+      message.warning("Нэхэмжлэхийн төрөл сонгоно уу")
+      return
+    }
+    if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
+      message.warning("Гэрээ сонгоно уу")
+      return
+    } 
+      if (loading) {
+        message.warning("И-мэйл илгээгдсэн байна")
+        return
+      }
+    var ilgeekhMailuud = nekhemjlekhuud.filter((x)=>x.mail !== undefined)
+    var mailuud = []
+    if(ilgeekhMailuud?.length > 0){
+      ilgeekhMailuud?.map((x)=>mailuud.push({
+        subject:"Түрээсийн төлбөрийн нэхэмжлэх",
+        mail : x.mail,
+        content: x.zagvar,
+      }))
+      setLoading(true)
+      uilchilgee(token)
+      .post(`/mailOlnoorIlgeeye`, { mailuud })
+      .then(({ data }) => {
+        if (data) {
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
+          setLoading(false)
+        }
+      })
+      .catch((e) => {
+        setLoading(false)
+        aldaaBarigch(e)
+      })
+    }
+       
+    
   }
 
   function nekhemjlelZagvarBurtgeye(mur) {
@@ -158,35 +255,18 @@ function tulburTootsoo({ token }) {
       }}
     >
       <Card className="col-span-12 cardgrid">
+        <Spin spinning={loading}>
         <div className="w-full grid grid-cols-2" ref={printRef}>
-          {barimt && songogdsonGereenuud?.map((a, i) => {
-            var zagvar =  nekhemjlekhiinZagvar?.jagsaalt?.find(a=>a._id === barimt)?.nekhemjlekh
-            const medeelel = _.clone(a)
-            if(!!zagvar){
-              medeelel.eneSardTulukhUsgeer = `${toWords(medeelel.eneSardTulukhDun * (medeelel.eneSardTulukhDun < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
-              medeelel.niitUldegdelUsgeer = `${toWords(medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? ( -1) : 1), { suffix: "n" })} төгрөг`
-              medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees , { suffix: "n" })} төгрөг`
-              medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
-              medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun)
-              medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
-              medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
-              medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
-              medeelel.khevlesenOgnoo = moment().format('YYYY-MM-DD')
-
-              const dans = dansGaralt?.jagsaalt?.find(a=>a.dugaar === songogdsonDans)
-              medeelel.dans = dans?.dugaar
-              medeelel.bank = dans?.bank === 'tdb' ? "Худалдаа хөгжлийн банк" : "Хаан банк"
-              medeelel.dansniiNer = dans?.dansniiNer
-
-              medeelel.nekhemjlekhiinDugaar = moment().format("YY")+'/'+(dugaarlalt + i)
-
-              for (const [key, value] of Object.entries(medeelel)) {
-                zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-              }
+          {nekhemjlekhuud?.map((nekhemjlekh, i) => {
+              return (
+                <div
+                  key={`khevlekhNekhemjlel${i}`}
+                  className="print p-10 a5"
+                  dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
+                />
+              )
             }
-            return <div className="print p-10 a5" dangerouslySetInnerHTML={{__html: zagvar}}/>
-            })
-          }
+            )}
         </div>
         <div className="w-full grid grid-cols-12 gap-4">
           {[
@@ -230,11 +310,11 @@ function tulburTootsoo({ token }) {
           />
           <div className="ml-auto space-x-2">
             <Select placeholder="Дансны төрөл" onChange={setDans}>
-                {dansGaralt?.jagsaalt?.map((a) => (
-                    <Select.Option key={a.dugaar} value={a.dugaar}>
-                      <div>{a.dugaar}</div>
-                    </Select.Option>
-                  ))}
+              {dansGaralt?.jagsaalt?.map((a) => (
+                <Select.Option key={a.dugaar} value={a.dugaar}>
+                  <div>{a.dugaar}</div>
+                </Select.Option>
+              ))}
             </Select>
             <Select
               allowClear
@@ -260,15 +340,17 @@ function tulburTootsoo({ token }) {
             <Button type="primary" onClick={hevlekh}>
               Хэвлэх
             </Button>
-            <Button>
-              Нэхэмжлэл илгээх
-            </Button>
+            <Button onClick={maileerIlgeekh}>Нэхэмжлэл илгээх</Button>
           </div>
         </div>
         <div className="grid grid-cols-8 gap-2">
           <div className="rounded-md col-span-2 p-2 ">
             <div className="w-full flex justify-between">
-              <Button type="primary" className="ml-auto" onClick={() => nekhemjlelZagvarBurtgeye()}>
+              <Button
+                type="primary"
+                className="ml-auto"
+                onClick={() => nekhemjlelZagvarBurtgeye()}
+              >
                 Загвар үүсгэх
               </Button>
             </div>
@@ -278,8 +360,7 @@ function tulburTootsoo({ token }) {
                   key={`zagvar${i}`}
                   className="flex flex-row p-2 space-x-2 items-center shadow-md rounded-md border border-gray-200"
                 >
-                  
-                  <Image src='/invoice.png' width={32} height={32}/>
+                  <Image src="/invoice.png" width={32} height={32} />
                   <div className="font-medium">{a.ner}</div>
                   <div style={{ marginLeft: "auto" }}>
                     <Popconfirm
@@ -295,11 +376,10 @@ function tulburTootsoo({ token }) {
                   </div>
                   <div
                     className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
-                    onClick={()=>nekhemjlelZagvarBurtgeye(a)}
+                    onClick={() => nekhemjlelZagvarBurtgeye(a)}
                   >
                     <EditOutlined style={{ display: "flex" }} />
                   </div>
-                  
                 </div>
               ))}
             </div>
@@ -405,7 +485,8 @@ function tulburTootsoo({ token }) {
               rowKey={(a) => a._id}
             />
           </div>
-        </div>
+        </div> 
+        </Spin>       
       </Card>
     </Admin>
   )

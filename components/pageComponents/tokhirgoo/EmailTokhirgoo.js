@@ -45,12 +45,12 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
               >
                 <Form.Item
                   label="И-мэйл хаяг"
-                  name="gmailKhayag"
-                  value={baiguullaga?.tokhirgoo?.gmailKhayag}
-                  onChange={(v) =>
+                  name="mailNevtrekhNer"
+                  value={baiguullaga?.tokhirgoo?.mailNevtrekhNer}
+                  onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.gmailKhayag": v,
+                      "tokhirgoo.mailNevtrekhNer": target.value,
                     }))
                   }
                   rules={[
@@ -65,12 +65,12 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                 </Form.Item>
                 <Form.Item
                   label="Нэвтрэх нууц үг"
-                  name="gmailPassword"
-                  value={baiguullaga?.tokhirgoo?.gmailPassword}
-                  onChange={(v) =>
+                  name="mailPassword"
+                  value={baiguullaga?.tokhirgoo?.mailPassword}
+                  onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.gmailPassword": v,
+                      "tokhirgoo.mailPassword": target.value,
                     }))
                   }
                   rules={[
