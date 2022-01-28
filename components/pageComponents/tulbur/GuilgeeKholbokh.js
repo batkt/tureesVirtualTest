@@ -79,24 +79,25 @@ function GuilgeeKholbokh(
         tulult.forEach((a) => {
           !!a.tulsunDun && (niitDun += (a.tulsunDun || 0))
         })
-        if(niitDun === 0){
+        if(olnoorKholbokhEsekh && (niitDun - (data?.kholbosonDun || 0)) === 0){
           notification.warning({
             message: "Төлөх дүн оруулна уу",
           })
           return
         }
+        console.log('niitDun',niitDun,data?.kholbosonDun)
         if (niitDun > data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`]) {
           notification.warning({
             message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна",
           })
           return
         }
-        if (!!geree && gereeniiMedeelel.jagsaalt.length > 0) {
+        if((!!geree || olnoorKholbokhEsekh) && gereeniiMedeelel.jagsaalt.length > 0) {
           var songogdson = gereeniiMedeelel.jagsaalt.find(
             (x) => x._id === geree
           )
 
-          if (songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel) {
+          if(songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel) {
             Modal.confirm({
               content: `${formatNumber(
                 songogdson.baritsaaAvakhDun
@@ -201,7 +202,7 @@ function GuilgeeKholbokh(
         }
       },
     }),
-    [geree, tulult, olnoorKholbokhEsekh]
+    [geree, tulult, olnoorKholbokhEsekh,gereeniiMedeelel]
   )
 
   React.useEffect(() => {
