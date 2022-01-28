@@ -24,8 +24,6 @@ function useSonorduulga(token) {
                         notification.close(key)
                     }
 
-                    alert(sonorduulga._id)
-
                     notification.open({
                         key: key,
                         message: <Sonorduulga {...sonorduulga} onClose={onClose} />,
