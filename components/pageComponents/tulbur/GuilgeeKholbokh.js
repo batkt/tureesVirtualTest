@@ -12,7 +12,7 @@ import React from "react"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import formatNumber from "../../../tools/function/formatNumber"
 import getListMethod from "../../../tools/function/crud/getListMethod"
-import uilchilgee from "../../../services/uilchilgee"
+import uilchilgee,{aldaaBarigch} from "../../../services/uilchilgee"
 import moment from "moment"
 import { MinusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons"
 import useSWR from "swr"
@@ -25,7 +25,7 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
     (url, barilgiinId, gereeniiDugaar) =>
       uilchilgee(token)
         .post(url, { barilgiinId, gereeniiDugaar })
-        .then(({ data }) => data),
+        .then(({ data }) => data).catch(aldaaBarigch),
     {
       revalidateOnFocus: false,
     }
@@ -77,8 +77,14 @@ function GuilgeeKholbokh(
         }
         let niitDun = data?.kholbosonDun || 0
         tulult.forEach((a) => {
-          !!a.tulsunDun && (niitDun += a.tulsunDun)
+          !!a.tulsunDun && (niitDun += (a.tulsunDun || 0))
         })
+        if(niitDun === 0){
+          notification.warning({
+            message: "Төлөх дүн оруулна уу",
+          })
+          return
+        }
         if (niitDun > data[`${dans?.bank === 'tdb' ? 'Amt' : 'amount'}`]) {
           notification.warning({
             message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна",
@@ -117,7 +123,7 @@ function GuilgeeKholbokh(
                       _.isFunction(onFinish) && onFinish()
                       destroy()
                     }
-                  })
+                  }).catch(aldaaBarigch)
               },
               onCancel: () => {
                 Modal.confirm({
@@ -151,7 +157,7 @@ function GuilgeeKholbokh(
                           _.isFunction(onFinish) && onFinish()
                           destroy()
                         }
-                      })
+                      }).catch(aldaaBarigch)
                   },
                 })
               },
@@ -188,7 +194,7 @@ function GuilgeeKholbokh(
                       _.isFunction(onFinish) && onFinish()
                       destroy()
                     }
-                  })
+                  }).catch(aldaaBarigch)
               },
             })
           }
@@ -309,6 +315,7 @@ function GuilgeeKholbokh(
           />
         </Tooltip>
       </div>
+      
       {!olnoorKholbokhEsekh && (
         <Select
           placeholder="Талбай"
@@ -357,76 +364,78 @@ function GuilgeeKholbokh(
           })}
         </Select>
       )}
-      {olnoorKholbokhEsekh &&
-        tulult?.map((a, i) => (
-          <div className="grid grid-cols-3" key={`geree-${i}`}>
-            <div className="col-span-2">
-              <Select
-                placeholder="Талбай"
-                onSearch={(search) =>
-                  setGereeniiKhuudaslalt((a) => ({
-                    ...a,
-                    search,
-                    khuudasniiDugaar: 1,
-                  }))
-                }
-                value={a.gereeniiId}
-                onChange={(v) => onChange(i, "gereeniiId", v)}
-                filterOption={(o) => o}
-                style={{ width: "100%" }}
-                showSearch
-              >
-                {gereeniiMedeelel?.jagsaalt?.map((mur) => {
-                  return (
-                    <Select.Option key={mur._id} value={mur._id}>
-                      <div className="flex flex-row justify-between">
-                        <div className="flex flex-row space-x-2">
-                          <label>Талбай:</label>
-                          <div>{mur.talbainDugaar}</div>
-                        </div>
-                        <div className="flex flex-row">
-                          <div>{formatNumber(mur.uldegdel)}₮</div>
-                        </div>
-                        <div className="flex flex-row">
-                          <div>
-                            {mur.baritsaaniiUldegdel === 0 ? (
-                              <CheckCircleOutlined
-                                style={{
-                                  fontSize: "16px",
-                                  color: "green",
-                                  marginRight: "20px",
-                                }}
-                              />
-                            ) : (
-                              formatNumber(mur.baritsaaniiUldegdel)
-                            )}
+      {olnoorKholbokhEsekh && <div className="space-y-1">
+        <div className="grid grid-cols-3 font-medium"><div className="col-span-2">Гэрээ</div><div>Төлөх дүн</div></div>
+        {tulult?.map((a, i) => (
+            <div className="grid grid-cols-3" key={`geree-${i}`}>
+              <div className="col-span-2">
+                <Select
+                  placeholder="Талбай"
+                  onSearch={(search) =>
+                    setGereeniiKhuudaslalt((a) => ({
+                      ...a,
+                      search,
+                      khuudasniiDugaar: 1,
+                    }))
+                  }
+                  value={a.gereeniiId}
+                  onChange={(v) => onChange(i, "gereeniiId", v)}
+                  filterOption={(o) => o}
+                  style={{ width: "100%" }}
+                  showSearch
+                >
+                  {gereeniiMedeelel?.jagsaalt?.map((mur) => {
+                    return (
+                      <Select.Option key={mur._id} value={mur._id}>
+                        <div className="flex flex-row justify-between">
+                          <div className="flex flex-row space-x-2">
+                            <label>Талбай:</label>
+                            <div>{mur.talbainDugaar}</div>
+                          </div>
+                          <div className="flex flex-row">
+                            <div>{formatNumber(mur.uldegdel)}₮</div>
+                          </div>
+                          <div className="flex flex-row">
+                            <div>
+                              {mur.baritsaaniiUldegdel === 0 ? (
+                                <CheckCircleOutlined
+                                  style={{
+                                    fontSize: "16px",
+                                    color: "green",
+                                    marginRight: "20px",
+                                  }}
+                                />
+                              ) : (
+                                formatNumber(mur.baritsaaniiUldegdel)
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Select.Option>
-                  )
-                })}
-              </Select>
+                      </Select.Option>
+                    )
+                  })}
+                </Select>
+              </div>
+              <div className="flex flex-row space-x-2">
+                <InputNumber
+                  style={{ width: "100%" }}
+                  value={a.tulsunDun || 0}
+                  onChange={(v) => onChange(i, "tulsunDun", v)}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onDoubleClick={() => tooBugluyu(i)}
+                />
+                <MinusCircleOutlined
+                  className={`p-1 rounded-full cursor-pointer `}
+                  style={{ display: tulult.length > 1 ? "flex" : "none" }}
+                  onClick={() => murKhasya(i)}
+                />
+              </div>
             </div>
-            <div className="flex flex-row space-x-2">
-              <InputNumber
-                style={{ width: "100%" }}
-                value={a.tulsunDun || 0}
-                onChange={(v) => onChange(i, "tulsunDun", v)}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onDoubleClick={() => tooBugluyu(i)}
-              />
-              <MinusCircleOutlined
-                className={`p-1 rounded-full cursor-pointer `}
-                style={{ display: tulult.length > 1 ? "flex" : "none" }}
-                onClick={() => murKhasya(i)}
-              />
-            </div>
-          </div>
-        ))}
+          ))}
+      </div>}
       <label className="text-lg font-medium">Гүйлгээний мэдээлэл</label>
       <div className="grid grid-cols-2">
         <div className="space-x-2 p-2">
