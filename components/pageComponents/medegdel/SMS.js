@@ -30,7 +30,6 @@ var setter = null
 
 function SMS({
   token,
-  baiguullaga,
   khariltsagch,
   setKhariltsagch,
   ilgeekhTurul,

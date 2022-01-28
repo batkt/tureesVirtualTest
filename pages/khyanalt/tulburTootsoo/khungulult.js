@@ -27,7 +27,7 @@ function tulburTootsoo() {
   const formRef = useRef()
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
   const [shuult, setShuult] = React.useState({
-    query: { tuluv: { $ne: -1 } },
+    query: { tuluv: { $ne: -1 }},
   })
   const query = useMemo(() => {
     return {

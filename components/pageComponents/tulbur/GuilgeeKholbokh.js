@@ -42,6 +42,8 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
   )
 }
 
+const query = {tuluv: { $nin: [-1] }}
+
 function GuilgeeKholbokh(
   { data, token, baiguullagiinId, barilgiinId, onFinish, destroy ,dans},
   ref
@@ -54,8 +56,10 @@ function GuilgeeKholbokh(
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
     token,
-    baiguullagiinId
+    baiguullagiinId,
+    undefined,query
   )
+  
   React.useImperativeHandle(
     ref,
     () => ({
