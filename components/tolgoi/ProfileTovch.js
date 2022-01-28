@@ -61,7 +61,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 khariltsagchiinNer,
                 zakhialguud = [],
                 mashiniiDugaar,
-              } = mur.object;
+              } = mur;
               return (
                 <Menu.Item key={i} onClick={() => sonorduulgaKharlaa(mur._id)}>
                   <Link

@@ -4,24 +4,18 @@ import moment from 'moment'
 import { url } from 'services/uilchilgee'
 
 function Zakhialga({ onClose, token, ...object }) {
-    const { mashiniiDugaar, ognoo, zakhialguud } = object
+    const { mashiniiDugaar, ognoo } = object || {}
 
 
     function sonorduulgaKharlaa() {
-        window.location.href = `/khyanalt/ajiltanKhyanalt/ajiltaniiZakhialguud/${object?.ajiltniiId}`
+        // window.location.href = `/khyanalt/ajiltanKhyanalt/ajiltaniiZakhialguud/${object?.ajiltniiId}`
         onClose()
     }
 
     return (
         <div id="notification-with-split-buttons-content" className="flex flex-row items-center" onClick={onClose}>
             <div className='mr-2 flex'>
-                {zakhialguud.map((mur, i) => {
-                    return (
-                        <Tooltip key={i} title={mur.ner}>
-                            <img alt={mur.zurgiinNer} className={`w-10 h-10 zoom-in rounded-full ${i !== 0 ? '-ml-5' : ''}`} src={mur.zurgiinNer ? `${url}/zuragAvya/${mur.zurgiinNer}` : '/car-repair.png'} />
-                        </Tooltip>
-                    )
-                })}
+               
             </div>
             <div className="md:mr-40">
                 <div className="font-medium">Хуваарилсан захиалга</div>
