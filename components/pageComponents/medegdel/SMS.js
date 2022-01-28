@@ -212,7 +212,7 @@ export function SMSContent({
   const [msj, onTextChange] = useState("")
   const [loading, setLoading] = useState(false)
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
-
+  const { barilgiinId } = useAuth()
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(
       ilgeekhTurul !== "gantsaar" && token,
@@ -284,7 +284,7 @@ export function SMSContent({
     }
     setLoading(true)
     uilchilgee(token)
-      .post(`/msgIlgeeye`, { msgnuud })
+      .post(`/msgIlgeeye`, {barilgiinId, msgnuud })
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
           notification.success({ message: "СМС Амжилттай илгээлээ" })
