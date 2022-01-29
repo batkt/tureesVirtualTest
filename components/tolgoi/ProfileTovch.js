@@ -16,13 +16,13 @@ function ProfileTovch({ ajiltan, garya, token }) {
     useSonorduulga(token, ajiltan?._id);
 
   function sonorduulgaKharlaa(id) {
-    uilchilgee(token)
-      .post("/sonorduulgaKharlaa", { id })
-      .then(({ data, status }) => {
-        if (status === 200 && data === "Amjilttai") {
-          sonorduulgaMutate((ug) => ({ ...ug, jagsaalt: [...ug.jagsaalt] }));
-        }
-      });
+    // uilchilgee(token)
+    //   .post("/sonorduulgaKharlaa", { id })
+    //   .then(({ data, status }) => {
+    //     if (status === 200 && data === "Amjilttai") {
+    //       sonorduulgaMutate((ug) => ({ ...ug, jagsaalt: [...ug.jagsaalt] }));
+    //     }
+    //   });
   }
 
   function onScroll(e) {
@@ -55,46 +55,21 @@ function ProfileTovch({ ajiltan, garya, token }) {
               </Menu.Item>
             )}
             {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur, i) => {
-              const {
-                ognoo,
-                khariltsagchiinUtas,
-                khariltsagchiinNer,
-                zakhialguud = [],
-                mashiniiDugaar,
-              } = mur;
+              const {turul,message,khariltsagchiinNer,createdAt,_id} = mur?.object || {}
               return (
                 <Menu.Item key={i} onClick={() => sonorduulgaKharlaa(mur._id)}>
                   <Link
-                    href={
-                      "/khyanalt/ajiltanKhyanalt/ajiltaniiZakhialguud" +
-                      "/" +
-                      ajiltan._id
-                    }
+                    href={`/khyanalt/medegdel/${turul}/${_id}`}
                   >
                     <div className="cursor-pointer relative flex items-center justify-between">
-                      <div
-                        className="flex"
-                        style={{
-                          maxWidth: `${2.5 + 1.25 * zakhialguud.length}rem`,
-                        }}
-                      >
-                        {zakhialguud.map((murj, ij) => {
-                          return (
-                            <Tooltip key={ij} title={murj.ner}>
-                              <img
-                                alt={murj.zurgiinNer}
-                                className={`w-10 h-10 zoom-in rounded-full bg-white ${
-                                  ij !== 0 ? "-ml-5" : ""
-                                }`}
-                                src={
-                                  mur.zurgiinNer
-                                    ? `${url}/zuragAvya/${mur.zurgiinNer}`
-                                    : "/car-repair.png"
-                                }
-                              />
-                            </Tooltip>
-                          );
-                        })}
+                    <div className="flex"style={{maxWidth: `2.5rem`}}>
+                        <Tooltip title={khariltsagchiinNer}>
+                          <img
+                            alt={khariltsagchiinNer}
+                            className={`w-10 h-10 zoom-in rounded-full bg-white`}
+                            src={"/profile.svg"}
+                          />
+                        </Tooltip>
                         {!mur.kharsanEsekh && (
                           <div className="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
                         )}
@@ -105,13 +80,12 @@ function ProfileTovch({ ajiltan, garya, token }) {
                             {khariltsagchiinNer}
                           </a>
                           <div className="text-xs text-gray-500 ml-auto whitespace-nowrap">
-                            {moment(ognoo).format("YYYY-MM-DD HH:mm")}
+                            {moment(createdAt).format("YYYY-MM-DD HH:mm")}
                           </div>
                         </div>
                         <div className="w-full text-gray-600 mt-0.5">
-                          {mashiniiDugaar}
+                          {message}
                         </div>
-                        <label>{khariltsagchiinUtas}</label>
                       </div>
                     </div>
                   </Link>

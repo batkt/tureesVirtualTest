@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { useAuth } from "services/auth"
 
 const fetcher = (url, token, baiguullagiinId, { jagsaalt, ...khuudaslalt }) => axios(token)
-    .get(url, {params:{ ...khuudaslalt, query: { baiguullagiinId }, order: { kharsanEsekh: 0 } }}).then(res => res.data).catch(aldaaBarigch)
+    .get(url, {params:{ ...khuudaslalt, query: { baiguullagiinId }, order: { createdAt:-1} }}).then(res => res.data).catch(aldaaBarigch)
 var sonorduulgaId = null
 
 function useSonorduulga(token) {

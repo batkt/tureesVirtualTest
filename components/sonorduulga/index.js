@@ -1,7 +1,7 @@
 import React from 'react'
-import Zakhilaga from './dedKheseg/zakhialga'
+import SanalaGomdol from './dedKheseg/SanalaGomdol'
 function index({ turul, ...busad }) {
-    return <Zakhilaga {...busad} />
+    return <SanalaGomdol {...busad} />
 }
 
 export default index
