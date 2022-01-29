@@ -48,7 +48,7 @@ export function AppContent({token,khariltsagch}) {
         }
 
         setLoading(true)
-        uilchilgee(token).post(`/sonorduulgaIlgeeye`,{token:khariltsagch.firebaseToken,medeelel:{title,body}}).then(({data})=>{
+        uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:khariltsagch.firebaseToken,khariltsagchiinId:khariltsagch._id,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body}}).then(({data})=>{
             if(!!data?.successCount)
             {
                 notification.success({message:'СМС Амжилттай илгээлээ'})
