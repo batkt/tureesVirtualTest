@@ -1,9 +1,10 @@
 import { Input, notification, Spin } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useKhariltsagch from 'hooks/useKhariltsagch'
+import useSanalGomdol from 'hooks/useSanalGomdol'
 import ZagvarUusgekh from './ZagvarUusgekh'
-import uilchilgee, { aldaaBarigch } from 'services/uilchilgee'
-
+import uilchilgee, { aldaaBarigch,socket } from 'services/uilchilgee'
+import moment from 'moment'
 const query = {firebaseToken:{$exists:true}}
 
 function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
@@ -15,7 +16,7 @@ function App({token,baiguullaga,khariltsagch,setKhariltsagch}) {
                 <div className="text-gray-700 dark:text-gray-300">
                     <Input.Search placeholder='Харилцагч хайх /Утас , Нэр, Регистр/' onSearch={search => setKhuudaslalt(a=>({...a,search}))}/>
                 </div>
-                <div className="overflow-y-auto scrollbar-hidden h-80 mt-5">
+                <div className="overflow-y-auto scrollbar-hidden mt-5" style={{height:'calc(100vh - 17.5rem)'}}>
                     {khariltsagchiinGaralt?.jagsaalt?.map((mur,index)=>
                         <div className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${khariltsagch?._id === mur?._id ? 'bg-green-100' : ''} `} key={mur?._id} onClick={()=>{
                                 setKhariltsagch(mur)
@@ -39,6 +40,7 @@ export function AppContent({token,khariltsagch}) {
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
     const [loading,setLoading] = useState(false)
+    const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(token,khariltsagch?._id)
 
     async function msgIlgeeye() {
         if(loading)
@@ -51,6 +53,8 @@ export function AppContent({token,khariltsagch}) {
         uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:khariltsagch.firebaseToken,khariltsagchiinId:khariltsagch._id,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body}}).then(({data})=>{
             if(!!data?.successCount)
             {
+                sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagch._id,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:body,turul:'medegdel'})
+                sonorduulgaMutate({...sonorduulga},false)
                 notification.success({message:'СМС Амжилттай илгээлээ'})
                 setLoading(false)
             }
@@ -77,6 +81,19 @@ export function AppContent({token,khariltsagch}) {
                    
                 </div>
             </div>
+            <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 25rem)'}}>
+                {
+                    sonorduulga?.jagsaalt?.map((a,i)=>{
+                        return(
+                            <div className={`relative w-1/3 p-3 bg-green-500 rounded-xl border border-green-200 flex flex-col mt-8 ${a.turul === 'medegdel' ? 'ml-auto rounded-br-none' : 'rounded-bl-none'}`}>
+                                <span className='text-white'>{a.message}</span>
+                                <span className='text-gray-500 font-medium text-xs absolute -bottom-5'>{moment(a.createdAt).format('YYYY-MM-DD hh:mm')}</span>
+                                <span className='text-gray-500 right-0 absolute -bottom-5'>{a.turul}</span>
+                            </div>
+                        )
+                    })
+                }
+            </div>
             <div className='w-full p-2 mt-auto'>
                 <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>
                 <ZagvarUusgekh change={setContent} value={content} onTextChange={onTextChange}/>
@@ -84,7 +101,7 @@ export function AppContent({token,khariltsagch}) {
             
             <div className='w-full flex justify-end items-center space-x-2 p-2'>
                 <label className='font-medium'>СМС Илгээх</label>
-                <div onClick={msgIlgeeye} className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 block bg-green-600 text-white rounded-full flex-none flex items-center justify-center"> 
+                <div onClick={msgIlgeeye} className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 bg-green-600 text-white rounded-full flex-none flex items-center justify-center"> 
                     {loading ? <Spin size='small'/> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                         <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                     </svg> }
