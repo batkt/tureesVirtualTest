@@ -1,5 +1,4 @@
 import {
-  BellOutlined,
   LogoutOutlined,
   QuestionOutlined,
   SettingOutlined,
@@ -8,22 +7,14 @@ import { Badge, Dropdown, Menu, Skeleton, Tooltip, Empty } from "antd";
 import Link from "next/link";
 import React from "react";
 import moment from "moment";
-import uilchilgee, { url } from "services/uilchilgee";
+import { url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
 function ProfileTovch({ ajiltan, garya, token }) {
-  const { sonorduulga, sonorduulgaMutate, jagsaalt, setKhuudaslalt } =
+  const { sonorduulga, jagsaalt, setKhuudaslalt } =
     useSonorduulga(token, ajiltan?._id);
 
-  function sonorduulgaKharlaa(id) {
-    // uilchilgee(token)
-    //   .post("/sonorduulgaKharlaa", { id })
-    //   .then(({ data, status }) => {
-    //     if (status === 200 && data === "Amjilttai") {
-    //       sonorduulgaMutate((ug) => ({ ...ug, jagsaalt: [...ug.jagsaalt] }));
-    //     }
-    //   });
-  }
+  function sonorduulgaKharlaa(id) {}
 
   function onScroll(e) {
     if (
@@ -127,7 +118,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
       >
         <button className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
           <Badge count={sonorduulga?.kharaaguiToo}>
-            <BellOutlined className="text-2xl dark:text-gray-50 flex items-center justify-center" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" 
+              strokeLinejoin="round" className="feather feather-bell block mx-auto w-5 h-5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
           </Badge>
         </button>
       </Dropdown>
