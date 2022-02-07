@@ -1,8 +1,9 @@
-import React, { useState } from "react"
+import React, { useState,useEffect } from "react"
 import { Button, Input, InputNumber, notification, Switch, Form } from "antd"
 import uilchilgee, { url } from "services/uilchilgee"
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan"
+
 
 function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
   const [form] = Form.useForm()
@@ -14,11 +15,23 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           notification.success({ message: "Амжилттай засагдлаа" })
-
           baiguullagaMutate()
         }
       })
   }
+
+  useEffect(() => {
+    if(baiguullaga !==undefined){
+      form.setFieldsValue({
+        mailNevtrekhNer: baiguullaga?.tokhirgoo?.mailNevtrekhNer,
+        mailPassword: baiguullaga?.tokhirgoo?.mailPassword,
+        mailHost:baiguullaga?.tokhirgoo?.mailHost,
+        mailPort:baiguullaga?.tokhirgoo?.mailPort
+      });
+    }
+  }, [baiguullaga])
+
+  console.log("baiguullaga",baiguullaga)
 
   return (
     <>
@@ -46,7 +59,6 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                 <Form.Item
                   label="И-мэйл хаяг"
                   name="mailNevtrekhNer"
-                  value={baiguullaga?.tokhirgoo?.mailNevtrekhNer}
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
@@ -66,7 +78,6 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                 <Form.Item
                   label="Нэвтрэх нууц үг"
                   name="mailPassword"
-                  value={baiguullaga?.tokhirgoo?.mailPassword}
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
@@ -81,6 +92,32 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   ]}
                 >
                   <Input.Password />
+                </Form.Item>
+                <Form.Item
+                  label="Хост"
+                  name="mailHost"               
+                  onChange={({ target }) =>
+                    setEmailTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.mailHost": target.value,
+                    }))
+                  }
+                  
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Порт"
+                  name="mailPort"               
+                  onChange={({ target }) =>
+                    setEmailTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.mailPort": target.value,
+                    }))
+                  }
+                  
+                >
+                  <Input />
                 </Form.Item>
                 <Button type="primary" htmlType="submit">
                   Хадгалах
