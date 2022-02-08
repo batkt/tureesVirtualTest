@@ -113,10 +113,6 @@ function Mail({
                 <div className="flex items-center">
                   <div className="font-medium">{a.ner}</div>
                 </div>
-                <div
-                  className="w-full truncate text-gray-600 mt-0.5"
-                  dangerouslySetInnerHTML={{ __html: a.mail }}
-                />
               </div>
               <div className="flex flex-row space-x-2 ml-auto">
                 <Popconfirm
