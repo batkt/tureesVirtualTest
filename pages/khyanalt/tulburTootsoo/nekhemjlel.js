@@ -154,10 +154,10 @@ function tulburTootsoo({ token }) {
     }
     var ilgeekhMailuud = nekhemjlekhuud.filter((x) => x.mail !== undefined)
     var mailuud = []
-    if (nekhemjlekhuud?.length > 0) {
-      nekhemjlekhuud?.map((x) =>
+    if (ilgeekhMailuud?.length > 0) {
+      ilgeekhMailuud?.map((x) =>
         mailuud.push({
-          mail: "sumkakh@gmail.com",
+          mail: x.mail,
           content: x.zagvar,
         })
       )
