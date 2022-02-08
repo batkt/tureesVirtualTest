@@ -8,9 +8,9 @@ import moment from 'moment'
 import { useAuth } from 'services/auth'
 import useMailiinZagvar from 'hooks/useMailiinZagvar'
 import { DeleteOutlined, EditOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { putSetter } from "pages/khyanalt/medegdel"
 import ZagvarBurtgel from './ZagvarBurtgel'
 import { modal } from 'components/ant/Modal'
+import _ from 'lodash'
 
 var setter = null
 const query = {firebaseToken:{$exists:true}}
@@ -179,8 +179,7 @@ function App({
     )
   }
 
-export function AppContent({token,khariltsagch,ilgeekhTurul}) {
-
+export function AppContent({token,khariltsagch}) {
     const [content,setContent] = useState('')
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
@@ -203,14 +202,16 @@ export function AppContent({token,khariltsagch,ilgeekhTurul}) {
                 notification.success({message:'СМС Амжилттай илгээлээ'})
                 setLoading(false)
             }
+            else if(!!data?.failureCount)
+            {
+                notification.warning({description:_.get(data,'results.0.error.message'),message:_.get(data,'results.0.error.code')})
+                setLoading(false)
+            }
         }).catch(e=>{
             setLoading(false)
             aldaaBarigch(e)
         })
     }
-
-    if(ilgeekhTurul !== "gantsaar")
-    putSetter(setNekhemjlelKhuudaslalt)
 
     useEffect(() => {
         setter = setContent
