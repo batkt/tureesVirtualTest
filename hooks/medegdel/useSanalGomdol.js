@@ -50,7 +50,7 @@ function useSanalGomdol(token, register) {
         mutate()
     }
 
-    return { setKhuudaslalt, sonorduulga: data, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt, resetSonorduulga, nextSonorduulga,sonorduulgaKharlaa }
+    return {khariltsagchiinId:khariltsagch?._id,firebaseToken:khariltsagch?.firebaseToken, setKhuudaslalt, sonorduulga: data, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt, resetSonorduulga, nextSonorduulga,sonorduulgaKharlaa }
 }
 
 export default useSanalGomdol

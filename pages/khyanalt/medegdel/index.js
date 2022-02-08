@@ -5,7 +5,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import { useAuth } from "services/auth"
 import useMedegdel from "hooks/medegdel/useMedegdel"
 import useMailiinZagvar from "hooks/useMailiinZagvar"
-import { Button, Input, Popconfirm, Select, Table } from "antd"
+import { Button, Input, notification, Popconfirm, Select, Spin, Table } from "antd"
 import { DeleteOutlined, EditOutlined, FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
 import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel"
@@ -14,6 +14,7 @@ import deleteMethod from "tools/function/crud/deleteMethod"
 import useSWR from "swr"
 import formatNumber from "tools/function/formatNumber"
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol"
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 //#endregion
 
 var timeout = null
@@ -52,7 +53,7 @@ function Khyanalt({ token }) {
     mailiinZagvarMutate
   } = useMailiinZagvar(token, "sms")
 
-  const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(turul === 'Апп' && token,khariltsagch?.register)
+  const {sonorduulga,sonorduulgaMutate,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'Апп' && token,khariltsagch?.register)
 
   useEffect(() => {
     setKhariltsagch(null)
@@ -84,10 +85,10 @@ function Khyanalt({ token }) {
     }
 
     setLoading(true)
-    uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:khariltsagch.firebaseToken,khariltsagchiinId:khariltsagch._id,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body}}).then(({data})=>{
+    uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:firebaseToken,khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body:ingeekhmSms}}).then(({data})=>{
         if(!!data?.successCount)
         {
-            sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagch._id,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:body,turul:'medegdel'})
+            sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:ingeekhmSms,turul:'medegdel'})
             sonorduulgaMutate({...sonorduulga},false)
             notification.success({message:'СМС Амжилттай илгээлээ'})
             setLoading(false)
@@ -380,7 +381,7 @@ function Khyanalt({ token }) {
           <div className="w-full">
             {ilgeekhTurul === "gantsaar" && (
               turul === 'Апп' ? 
-                <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 25rem)'}}>
+                <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 27rem)'}}>
                   {
                       sonorduulga?.jagsaalt?.map((a,i)=>{
                           return(
@@ -484,7 +485,7 @@ function Khyanalt({ token }) {
             <label className="font-medium">СМС Илгээх</label>
             <div
               onClick={send}
-              className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 bg-green-600 text-white rounded-full flex-none flex items-center justify-center"
+              className={`cursor-pointer w-8 h-8 sm:w-10 sm:h-10 bg-green-${loading ?  "200" : "600"} text-white rounded-full flex-none flex items-center justify-center`}
             >
               {loading ? (
                 <Spin size="small" />
