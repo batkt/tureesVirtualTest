@@ -1,7 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React from "react"
-import BarChart from "components/pageComponents/tailan/chart/BarChart"
 import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart"
 import PieChart from "components/pageComponents/tailan/chart/PieChart"
 import LineChart from "components/pageComponents/tailan/chart/LineChart"
@@ -17,12 +16,17 @@ const data = {
       label: "Орлого",
       data: labels.map(() => (Math.random() * 10).toFixed(2)),
       backgroundColor: "rgba(255, 99, 132, 0.5)",
+      borderColor: "rgba(255, 99, 132, 0.5)",
+      fill: false,
       lineWidth: 10,
     },
     {
       label: "Зарлага",
       data: labels.map(() => (Math.random() * 10).toFixed(2)),
+      fill: false,
+      borderColor: "rgba(53, 162, 235, 0.5)",
       backgroundColor: "rgba(53, 162, 235, 0.5)",
+      borderDash: [10,10]
     },
   ],
 }
@@ -61,7 +65,6 @@ function AjiltanBurtgel({ token }) {
       <div className="box col-span-12 p-2 md:col-span-6">
         <LineChart data={data} />
       </div>
-
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
         <VerticarlBarChart data={data} />
       </div>

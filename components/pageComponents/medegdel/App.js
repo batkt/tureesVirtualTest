@@ -1,5 +1,5 @@
-import { Button, Input, notification, Popconfirm, Spin } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Input, notification, Popconfirm, Select, Spin, Table } from 'antd'
+import React, { useEffect, useMemo, useState } from 'react'
 import useKhariltsagch from 'hooks/useKhariltsagch'
 import useSanalGomdol from 'hooks/useSanalGomdol'
 import ZagvarUusgekh from './ZagvarUusgekh'
@@ -11,6 +11,9 @@ import { DeleteOutlined, EditOutlined, FileExcelOutlined } from '@ant-design/ico
 import ZagvarBurtgel from './ZagvarBurtgel'
 import { modal } from 'components/ant/Modal'
 import _ from 'lodash'
+import { putSetter } from 'pages/khyanalt/medegdel'
+import formatNumber from 'tools/function/formatNumber'
+import useNekhemjlekh from 'hooks/useNekhemjlekh'
 
 var setter = null
 const query = {firebaseToken:{$exists:true}}
@@ -21,7 +24,9 @@ function App({
     setKhariltsagch,
     ilgeekhTurul,
     setTurul,
-    turul
+    turul,
+    setIlgeekhTurul,
+    ilgeekhTurul
   }) {
     const { barilgiinId,baiguullaga } = useAuth()
   
@@ -86,8 +91,26 @@ function App({
               </div>
             </div>
           </div>
-          <div className="box p-2 mt-5 flex flex-row">
+          <div className="box p-2 mt-5 flex flex-row items-center">
             Нийт илгээгдсэн sms : <span className="font-medium">1</span>
+            <div className="ml-auto">
+              <Select
+                placeholder="Илгээх төрөл"
+                value={ilgeekhTurul}
+                onChange={setIlgeekhTurul}
+              >
+                {[
+                  { key: "buunuur", v: "Бөөнөөр" },
+                  { key: "davkharaar", v: "Давхараар" },
+                  { key: "avlagaar", v: "Авлагаар" },
+                  { key: "gantsaar", v: "Ганцаар" },
+                ].map((a) => (
+                  <Select.Option key={a.key} value={a.key}>
+                    {a.v}
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
           </div>
           <div className="p-2 mt-5 font-medium flex flex-row">
             <div>СМС загвар</div>
@@ -179,12 +202,32 @@ function App({
     )
   }
 
-export function AppContent({token,khariltsagch}) {
+export function AppContent({token,khariltsagch,ilgeekhTurul,davkhar,setDavkhar}) {
+
+    const { barilgiinId,baiguullaga } = useAuth()
     const [content,setContent] = useState('')
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
     const [loading,setLoading] = useState(false)
+    const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
     const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(token,khariltsagch?._id)
+    const {khariltsagchiinGaralt,setKhuudaslalt} = useKhariltsagch(ilgeekhTurul !== "gantsaar" && token,baiguullaga?._id,undefined,query)
+
+    const khariltsagchQuery = useMemo(()=>{
+      const registeruud = khariltsagchiinGaralt?.jagsaalt?.map(a=>a.register)
+      if(!!registeruud)
+        return {register:{$in:registeruud}}
+      return {}
+    },khariltsagchiinGaralt)
+
+    const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
+    useNekhemjlekh(
+      ilgeekhTurul !== "gantsaar" && token,
+      undefined,
+      davkhar,
+      ilgeekhTurul,
+      khariltsagchQuery
+    )
 
     async function msgIlgeeye() {
         if(loading)
@@ -212,11 +255,130 @@ export function AppContent({token,khariltsagch}) {
             aldaaBarigch(e)
         })
     }
+    
+    if(ilgeekhTurul !== "gantsaar")
+      putSetter(setNekhemjlelKhuudaslalt)
 
     useEffect(() => {
         setter = setContent
         return () => (setter = null)
     }, [content])
+
+    if(ilgeekhTurul !== "gantsaar")
+      return (
+        <div className="h-full flex flex-col box">
+            <div className="flex flex-col sm:flex-row border-b border-gray-200 dark:border-dark-5 px-5 py-4">
+            {ilgeekhTurul === "davkharaar" && (
+            <div className="flex flex-row space-x-2 items-center">
+              <div>Давхар сонгох</div>
+              <div className="">
+                <Select
+                  placeholder="Давхар"
+                  value={davkhar}
+                  onChange={setDavkhar}
+                  allowClear
+                >
+                  {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                    <Select.Option key={a._id} value={a.davkhar}>
+                      {a.davkhar}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+          )}
+            </div>
+            <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 25rem)'}}>
+                {ilgeekhTurul !== "gantsaar" && (
+                  <Table
+                    rowKey={(row) => row._id}
+                    scroll={{ y: "calc(100vh - 32rem)" }}
+                    rowSelection={{
+                      type: "checkbox",
+                      onChange: (selectedRowKeys, selectedRows) => {
+                        setSongogdsonGereenuud(selectedRows)
+                      },
+                    }}
+                    size="small"
+                    loading={!nekhemjlel}
+                    dataSource={nekhemjlel?.jagsaalt}
+                    columns={[
+                      {
+                        title: "Гэрээний дугаар",
+                        dataIndex: "gereeniiDugaar",
+                        align: "center",
+                      },
+                      {
+                        title: "Нэр",
+                        dataIndex: "ner",
+                        align: "left",
+                      },
+                      {
+                        title: "Талбайн дугаар",
+                        dataIndex: "talbainDugaar",
+                        align: "center",
+                      },
+                      {
+                        title: "Утасны дугаар",
+                        dataIndex: "utas",
+                        align: "center",
+                      },
+                      {
+                        title: "Сарийн түрээс",
+                        dataIndex: "sariinTurees",
+                        align: "center",
+                        render: (sariinTurees) => {
+                          return formatNumber(sariinTurees || 0)
+                        },
+                      },
+                      {
+                        title: "Энэ сард төлөх дүн",
+                        dataIndex: "eneSardTulukhDun",
+                        align: "center",
+                        render: (eneSardTulukhDun) => {
+                          return formatNumber(eneSardTulukhDun || 0)
+                        },
+                      },
+                      {
+                        title: "Нийт үлдэгдэл",
+                        dataIndex: "niitUldegdel",
+                        align: "center",
+                        render: (niitUldegdel) => {
+                          return formatNumber(niitUldegdel || 0)
+                        },
+                      },
+                    ]}
+                    pagination={{
+                      showTotal: (total) => <div>Нийт: {total}</div>,
+                      current: nekhemjlel?.khuudasniiDugaar,
+                      pageSize: nekhemjlel?.khuudasniiKhemjee,
+                      total: nekhemjlel?.niitMur,
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      setNekhemjlelKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                  />
+                )}
+            </div>
+            <div className='w-full p-2 mt-auto'>
+                <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>
+                <ZagvarUusgekh change={setContent} value={content} onTextChange={onTextChange}/>
+            </div>
+            
+            <div className='w-full flex justify-end items-center space-x-2 p-2'>
+                <label className='font-medium'>СМС Илгээх</label>
+                <div onClick={msgIlgeeye} className="cursor-pointer w-8 h-8 sm:w-10 sm:h-10 bg-green-600 text-white rounded-full flex-none flex items-center justify-center"> 
+                    {loading ? <Spin size='small'/> : <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                        <line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg> }
+                </div>
+            </div>
+        </div>
+      )
 
     if(khariltsagch)
     return (
@@ -237,7 +399,7 @@ export function AppContent({token,khariltsagch}) {
             </div>
             <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 25rem)'}}>
                 {
-                    sonorduulga?.jagsaalt?.map((a,i)=>{
+                    ilgeekhTurul === "gantsaar" && sonorduulga?.jagsaalt?.map((a,i)=>{
                         return(
                             <div className={`relative w-1/3 p-3 bg-green-500 rounded-xl border border-green-200 flex flex-col mt-8  ${a.turul === 'medegdel' ? 'bg-blue-500 ml-auto rounded-br-none' : 'rounded-bl-none'}`}>
                                 <span className='text-white'>{a.message}</span>
@@ -247,6 +409,80 @@ export function AppContent({token,khariltsagch}) {
                         )
                     })
                 }
+                {ilgeekhTurul !== "gantsaar" && (
+                  <Table
+                    rowKey={(row) => row._id}
+                    scroll={{ y: "calc(100vh - 32rem)" }}
+                    rowSelection={{
+                      type: "checkbox",
+                      onChange: (selectedRowKeys, selectedRows) => {
+                        setSongogdsonGereenuud(selectedRows)
+                      },
+                    }}
+                    size="small"
+                    loading={!khariltsagchiinGaralt}
+                    dataSource={khariltsagchiinGaralt?.jagsaalt}
+                    columns={[
+                      {
+                        title: "Гэрээний дугаар",
+                        dataIndex: "gereeniiDugaar",
+                        align: "center",
+                      },
+                      {
+                        title: "Нэр",
+                        dataIndex: "ner",
+                        align: "left",
+                      },
+                      {
+                        title: "Талбайн дугаар",
+                        dataIndex: "talbainDugaar",
+                        align: "center",
+                      },
+                      {
+                        title: "Утасны дугаар",
+                        dataIndex: "utas",
+                        align: "center",
+                      },
+                      {
+                        title: "Сарийн түрээс",
+                        dataIndex: "sariinTurees",
+                        align: "center",
+                        render: (sariinTurees) => {
+                          return formatNumber(sariinTurees || 0)
+                        },
+                      },
+                      {
+                        title: "Энэ сард төлөх дүн",
+                        dataIndex: "eneSardTulukhDun",
+                        align: "center",
+                        render: (eneSardTulukhDun) => {
+                          return formatNumber(eneSardTulukhDun || 0)
+                        },
+                      },
+                      {
+                        title: "Нийт үлдэгдэл",
+                        dataIndex: "niitUldegdel",
+                        align: "center",
+                        render: (niitUldegdel) => {
+                          return formatNumber(niitUldegdel || 0)
+                        },
+                      },
+                    ]}
+                    pagination={{
+                      showTotal: (total) => <div>Нийт: {total}</div>,
+                      current: khariltsagchiinGaralt?.khuudasniiDugaar,
+                      pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
+                      total: khariltsagchiinGaralt?.niitMur,
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      setKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                  />
+                )}
             </div>
             <div className='w-full p-2 mt-auto'>
                 <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>
