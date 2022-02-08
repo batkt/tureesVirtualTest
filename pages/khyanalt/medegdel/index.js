@@ -167,7 +167,7 @@ function Khyanalt({ token }) {
   async function mailIlgeeye(){
     if(!khariltsagch?.mail)
     {
-      notification.warning({message:"И-мэйл бүртгэгдээгүй байна"})
+      notification.warning({message:"Гэрээнд и-мэйл бүртгэгдээгүй байна"})
       return
     }
     const mailuud = []
