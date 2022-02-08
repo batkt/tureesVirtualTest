@@ -34,7 +34,9 @@ function SMS({
   setKhariltsagch,
   ilgeekhTurul,
   setIlgeekhTurul,
-  davkhar
+  davkhar,
+  setTurul,
+  turul
 }) {
   const { barilgiinId } = useAuth()
 
@@ -88,29 +90,97 @@ function SMS({
 
   return (
     <>
-      <div className="box p-2 mt-5 flex flex-row">
-        Нийт илгээгдсэн sms : <span className="font-medium">1</span>
-        <div className="ml-auto">
-          <Select
-            placeholder="Илгээх төрөл"
-            value={ilgeekhTurul}
-            onChange={setIlgeekhTurul}
+      <div className="col-span-12 lg:col-span-3 xl:col-span-3">
+        <div className="intro-y pr-1">
+          <div className="box p-2">
+            <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
+              {["СМС", "Апп", "Мэйл"].map((mur) => (
+                <div
+                  className={`cursor-pointer flex-1 py-2 rounded-md text-center ${
+                    turul === mur ? "bg-green-500 text-white" : ""
+                  }`}
+                  onClick={() => setTurul(mur)}
+                >
+                  {mur}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="box p-2 mt-5 flex flex-row">
+          Нийт илгээгдсэн sms : <span className="font-medium">1</span>
+          <div className="ml-auto">
+            <Select
+              placeholder="Илгээх төрөл"
+              value={ilgeekhTurul}
+              onChange={setIlgeekhTurul}
+            >
+              {[
+                { key: "buunuur", v: "Бөөнөөр" },
+                { key: "davkharaar", v: "Давхараар" },
+                { key: "avlagaar", v: "Авлагаар" },
+                { key: "gantsaar", v: "Ганцаар" },
+              ].map((a) => (
+                <Select.Option key={a.key} value={a.key}>
+                  {a.v}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+        </div>
+        <div className="p-2 mt-5 font-medium flex flex-row">
+          <div>СМС загвар</div>
+          <button
+            className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`}
+            onClick={() => smsZagvarNemya()}
           >
-            {[
-              { key: "buunuur", v: "Бөөнөөр" },
-              { key: "davkharaar", v: "Давхараар" },
-              { key: "avlagaar", v: "Авлагаар" },
-              { key: "gantsaar", v: "Ганцаар" },
-            ].map((a) => (
-              <Select.Option key={a.key} value={a.key}>
-                {a.v}
-              </Select.Option>
-            ))}
-          </Select>
+            Загвар үүсгэх
+          </button>
+        </div>
+        <div className="overflow-y-auto scrollbar-hidden" style={{height:'calc(100vh - 25rem)'}}>
+        {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
+          <div
+            key={a.ner}
+            className="intro-x cursor-pointer box relative flex items-center p-2 mt-2"
+            onClick={() => setter && setter(a.mail)}
+          >
+            <div className="w-8 h-8 flex-none image-fit mr-1 ">
+              <img alt="Rubick Tailwind HTML Admin Template" src="/email.png" />
+            </div>
+            <div className="ml-2 overflow-hidden mr-1">
+              <div className="flex items-center">
+                <div className="font-medium">{a.ner}</div>
+              </div>
+              <div
+                className="w-full truncate text-gray-600 mt-0.5"
+                dangerouslySetInnerHTML={{ __html: a.mail }}
+              />
+            </div>
+            <div className="flex flex-row space-x-2 ml-auto">
+              <Popconfirm
+                title="Загвар устгах уу?"
+                okText="Тийм"
+                cancelText="Үгүй"
+                onConfirm={() => zagvarUstgaya(a)}
+              >
+                <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full">
+                  <DeleteOutlined />
+                </div>
+              </Popconfirm>
+              <div
+                className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full"
+                onClick={() => smsZagvarNemya(a)}
+              >
+                <EditOutlined />
+              </div>
+            </div>
+          </div>
+        ))}
         </div>
       </div>
+      <div className={`col-span-12 lg:col-span-3 xl:col-span-3 ${ilgeekhTurul === "gantsaar" ? '' : 'hidden'}`}>
       {ilgeekhTurul === "gantsaar" && (
-        <div className="box p-5 mt-5">
+        <div className="box p-5">
           <div className="text-gray-700 dark:text-gray-300">
             <Input.Search
               placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
@@ -119,7 +189,7 @@ function SMS({
               }
             />
           </div>
-          <div className="overflow-y-auto scrollbar-hidden h-72 mt-5">
+          <div className="overflow-y-auto scrollbar-hidden mt-5" style={{height:'calc(100vh - 13rem)'}}>
             {nekhemjlel?.jagsaalt?.map((mur) => (
               <div
                 className={`cursor-pointer flex flex-row space-x-2 items-center p-2 rounded-md ${
@@ -147,54 +217,7 @@ function SMS({
           </div>
         </div>
       )}
-
-      <div className="p-2 mt-5 font-medium flex flex-row">
-        <div>СМС загвар</div>
-        <button
-          className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`}
-          onClick={() => smsZagvarNemya()}
-        >
-          Загвар үүсгэх
-        </button>
       </div>
-      {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
-        <div
-          key={a.ner}
-          className="intro-x cursor-pointer box relative flex items-center p-2 mt-2"
-          onClick={() => setter && setter(a.mail)}
-        >
-          <div className="w-8 h-8 flex-none image-fit mr-1 ">
-            <img alt="Rubick Tailwind HTML Admin Template" src="/email.png" />
-          </div>
-          <div className="ml-2 overflow-hidden mr-1">
-            <div className="flex items-center">
-              <div className="font-medium">{a.ner}</div>
-            </div>
-            <div
-              className="w-full truncate text-gray-600 mt-0.5"
-              dangerouslySetInnerHTML={{ __html: a.mail }}
-            />
-          </div>
-          <div className="flex flex-row space-x-2 ml-auto">
-            <Popconfirm
-              title="Загвар устгах уу?"
-              okText="Тийм"
-              cancelText="Үгүй"
-              onConfirm={() => zagvarUstgaya(a)}
-            >
-              <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full">
-                <DeleteOutlined />
-              </div>
-            </Popconfirm>
-            <div
-              className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full"
-              onClick={() => smsZagvarNemya(a)}
-            >
-              <EditOutlined />
-            </div>
-          </div>
-        </div>
-      ))}
     </>
   )
 }

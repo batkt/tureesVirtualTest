@@ -21,12 +21,14 @@ function Khyanalt({ token }) {
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar")
 
   useEffect(() => {
+    setKhariltsagch(null)
     if (ilgeekhTurul !== "davkharaar") setDavkhar(null)
   }, [ilgeekhTurul])
 
   useEffect(() => {
     setKhariltsagch(null)
-  }, [ilgeekhTurul])
+    setDavkhar(null)
+  }, [turul])
 
   const Tab = useMemo(() => {
     if (turul === "Апп") return App
@@ -42,37 +44,19 @@ function Khyanalt({ token }) {
 
   return (
     <Admin title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setKhuudaslalt && setKhuudaslalt(a=>({...a,search}))}>
-      <div className="col-span-12 lg:col-span-4 xl:col-span-3">
-        <div className="intro-y pr-1">
-          <div className="box p-2">
-            <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
-              {["СМС", "Апп", "Мэйл"].map((mur) => (
-                <div
-                  className={`cursor-pointer flex-1 py-2 rounded-md text-center ${
-                    turul === mur ? "bg-green-500 text-white" : ""
-                  }`}
-                  onClick={() => setTurul(mur)}
-                >
-                  {mur}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div>
-          <Tab
-            token={token}
-            baiguullaga={baiguullaga}
-            setKhariltsagch={setKhariltsagch}
-            khariltsagch={khariltsagch}
-            ilgeekhTurul={ilgeekhTurul}
-            setIlgeekhTurul={setIlgeekhTurul}
-            davkhar={davkhar}
-          />
-        </div>
-      </div>
+      <Tab
+        token={token}
+        baiguullaga={baiguullaga}
+        setKhariltsagch={setKhariltsagch}
+        khariltsagch={khariltsagch}
+        ilgeekhTurul={ilgeekhTurul}
+        setIlgeekhTurul={setIlgeekhTurul}
+        davkhar={davkhar}
+        setTurul={setTurul}
+        turul={turul}
+      />
       <div
-        className="intro-y col-span-12 lg:col-span-8 xl:col-span-9"
+        className={`intro-y col-span-12 lg:col-span-6 xl:col-span-6 ${ilgeekhTurul === "gantsaar" ? 'lg:col-span-6 xl:col-span-6' : 'lg:col-span-9 xl:col-span-9'}`}
         style={{ height: "calc(100vh - 7rem)" }}
       >
         <Content
