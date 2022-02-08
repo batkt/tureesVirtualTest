@@ -9,7 +9,8 @@ import {
   Select,
   message,
   Popconfirm,
-  Spin
+  Spin,
+  notification,
 } from "antd"
 import {
   EditOutlined,
@@ -91,61 +92,54 @@ function tulburTootsoo({ token }) {
     handlePrint()
   }
 
-  const nekhemjlekhuud = useMemo(()=>{
-    if(barimt && songogdsonGereenuud)
+  const nekhemjlekhuud = useMemo(() => {
+    if (barimt && songogdsonGereenuud)
       return songogdsonGereenuud?.map((a, i) => {
-          var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
-            (a) => a._id === barimt
-          )?.nekhemjlekh
-          const medeelel = _.clone(a)              
-          if (!!zagvar) {
-            medeelel.eneSardTulukhUsgeer = `${toWords(
-              medeelel.eneSardTulukhDun *
-                (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
-              { suffix: "n" }
-            )} төгрөг`
-            medeelel.niitUldegdelUsgeer = `${toWords(
-              medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1),
-              { suffix: "n" }
-            )} төгрөг`
-            medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
-              suffix: "n",
-            })} төгрөг`
-            medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
-            medeelel.eneSardTulukhDun = formatNumber(
-              medeelel.eneSardTulukhDun
-            )
-            medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
-            medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
-            medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
-            medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD")
+        var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
+          (a) => a._id === barimt
+        )?.nekhemjlekh
+        const medeelel = _.clone(a)
+        if (!!zagvar) {
+          medeelel.eneSardTulukhUsgeer = `${toWords(
+            medeelel.eneSardTulukhDun *
+              (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
+            { suffix: "n" }
+          )} төгрөг`
+          medeelel.niitUldegdelUsgeer = `${toWords(
+            medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1),
+            { suffix: "n" }
+          )} төгрөг`
+          medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
+            suffix: "n",
+          })} төгрөг`
+          medeelel.sariinTurees = formatNumber(medeelel.sariinTurees)
+          medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun)
+          medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel)
+          medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
+          medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
+          medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD")
 
-            const dans = dansGaralt?.jagsaalt?.find(
-              (a) => a.dugaar === songogdsonDans
-            )
-            medeelel.dans = dans?.dugaar
-            medeelel.bank =
-              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк"
-            medeelel.dansniiNer = dans?.dansniiNer
+          const dans = dansGaralt?.jagsaalt?.find(
+            (a) => a.dugaar === songogdsonDans
+          )
+          medeelel.dans = dans?.dugaar
+          medeelel.bank =
+            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк"
+          medeelel.dansniiNer = dans?.dansniiNer
 
-            medeelel.nekhemjlekhiinDugaar =
-              moment().format("YY") + "/" + (dugaarlalt + i)
+          medeelel.nekhemjlekhiinDugaar =
+            moment().format("YY") + "/" + (dugaarlalt + i)
 
-            for (const [key, value] of Object.entries(medeelel)) {
-              zagvar = zagvar?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
-                value
-              )
-              
-            }
+          for (const [key, value] of Object.entries(medeelel)) {
+            zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
           }
-          return {zagvar,mail:a.mail}
         }
-      )
+        return { zagvar, mail: a.mail }
+      })
     return []
-  },[barimt,songogdsonGereenuud])
+  }, [barimt, songogdsonGereenuud])
 
-  async function maileerIlgeekh() { 
+  function maileerIlgeekh() {
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу")
       return
@@ -153,35 +147,35 @@ function tulburTootsoo({ token }) {
     if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
       message.warning("Гэрээ сонгоно уу")
       return
-    } 
-      if (loading) {
-        message.warning("И-мэйл илгээгдсэн байна")
-        return
-      }
-    var ilgeekhMailuud = nekhemjlekhuud.filter((x)=>x.mail !== undefined)
+    }
+    if (loading) {
+      message.warning("И-мэйл илгээгдсэн байна")
+      return
+    }
+    var ilgeekhMailuud = nekhemjlekhuud.filter((x) => x.mail !== undefined)
     var mailuud = []
-    if(ilgeekhMailuud?.length > 0){
-      ilgeekhMailuud?.map((x)=>mailuud.push({
-        subject:"Түрээсийн төлбөрийн нэхэмжлэх",
-        mail : x.mail,
-        content: x.zagvar,
-      }))
+    if (nekhemjlekhuud?.length > 0) {
+      nekhemjlekhuud?.map((x) =>
+        mailuud.push({
+          mail: "sumkakh@gmail.com",
+          content: x.zagvar,
+        })
+      )
       setLoading(true)
       uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud })
-      .then(({ data }) => {
-        if (data) {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+        .then(({ data }) => {
+          debugger
+          if (data === "Amjilttai") {
+            notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
+            setLoading(false)
+          }
+        })
+        .catch((e) => {
           setLoading(false)
-        }
-      })
-      .catch((e) => {
-        setLoading(false)
-        aldaaBarigch(e)
-      })
+          aldaaBarigch(e)
+        })
     }
-       
-    
   }
 
   function nekhemjlelZagvarBurtgeye(mur) {
@@ -254,239 +248,238 @@ function tulburTootsoo({ token }) {
         }))
       }}
     >
-      <Card className="col-span-12 cardgrid">
+      <Card className="cardgrid col-span-12">
         <Spin spinning={loading}>
-        <div className="w-full grid grid-cols-2" ref={printRef}>
-          {nekhemjlekhuud?.map((nekhemjlekh, i) => {
+          <div className="grid w-full grid-cols-2" ref={printRef}>
+            {nekhemjlekhuud?.map((nekhemjlekh, i) => {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className="print p-10 a5"
+                  className="print a5 p-10"
                   dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
                 />
               )
-            }
-            )}
-        </div>
-        <div className="w-full grid grid-cols-12 gap-4">
-          {[
-            { too: nekhemjlel?.niitMur || 0, utga: "Нийт" },
-            { too: 0, utga: "Тодорхойгүй" },
-            { too: 0, utga: "Холбогдсон" },
-          ].map((mur, index) => {
-            return (
-              <div
-                key={`${index}toololt`}
-                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-4 intro-y cursor-pointer zoom-in"
-              >
-                <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
-                    <div className="flex">
-                      <div>
-                        <div className="text-3xl text-green-600 font-bold">
-                          {mur.too}
+            })}
+          </div>
+          <div className="grid w-full grid-cols-12 gap-4">
+            {[
+              { too: nekhemjlel?.niitMur || 0, utga: "Нийт" },
+              { too: 0, utga: "Тодорхойгүй" },
+              { too: 0, utga: "Холбогдсон" },
+            ].map((mur, index) => {
+              return (
+                <div
+                  key={`${index}toololt`}
+                  className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-4"
+                >
+                  <div className="h-full rounded-xl">
+                    <div className="rounded-xl p-3">
+                      <div className="flex">
+                        <div>
+                          <div className="text-3xl font-bold text-green-600">
+                            {mur.too}
+                          </div>
+                          <div className="text-base text-gray-500">
+                            {mur.utga}
+                          </div>
                         </div>
-                        <div className="text-base text-gray-500">
-                          {mur.utga}
-                        </div>
-                      </div>
-                      <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
-                          {mur.icon}
+                        <div className="ml-auto">
+                          <div className="text-2xl text-green-600">
+                            {mur.icon}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
-        <div className="w-full flex flex-row mt-5">
-          <DatePicker
-            style={{ marginBottom: "20px" }}
-            value={ognoo}
-            onChange={setOgnoo}
-          />
-          <div className="ml-auto space-x-2">
-            <Select placeholder="Дансны төрөл" onChange={setDans}>
-              {dansGaralt?.jagsaalt?.map((a) => (
-                <Select.Option key={a.dugaar} value={a.dugaar}>
-                  <div>{a.dugaar}</div>
-                </Select.Option>
-              ))}
-            </Select>
-            <Select
-              allowClear
-              placeholder="Давхар"
-              onChange={(v) => {
-                setDavkhar(v)
-                setSongogdsonGereenuud([])
-              }}
-            >
-              {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
-                <Select.Option key={a._id} value={a.davkhar}>
-                  {a.davkhar}
-                </Select.Option>
-              ))}
-            </Select>
-            <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
-              {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
-                <Select.Option key={a._id} value={a._id}>
-                  {a.ner}
-                </Select.Option>
-              ))}
-            </Select>
-            <Button type="primary" onClick={hevlekh}>
-              Хэвлэх
-            </Button>
-            <Button onClick={maileerIlgeekh}>Нэхэмжлэл илгээх</Button>
+              )
+            })}
           </div>
-        </div>
-        <div className="grid grid-cols-8 gap-2">
-          <div className="rounded-md col-span-2 p-2 ">
-            <div className="w-full flex justify-between">
-              <Button
-                type="primary"
-                className="ml-auto"
-                onClick={() => nekhemjlelZagvarBurtgeye()}
-              >
-                Загвар үүсгэх
-              </Button>
-            </div>
-            <div className="mt-4 space-y-2">
-              {nekhemjlekhiinZagvar?.jagsaalt?.map((a, i) => (
-                <div
-                  key={`zagvar${i}`}
-                  className="flex flex-row p-2 space-x-2 items-center shadow-md rounded-md border border-gray-200"
-                >
-                  <Image src="/invoice.png" width={32} height={32} />
-                  <div className="font-medium">{a.ner}</div>
-                  <div style={{ marginLeft: "auto" }}>
-                    <Popconfirm
-                      title="Загвар устгах уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
-                      onConfirm={() => zagvarUstgaya(a)}
-                    >
-                      <div className="p-2 bg-red-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer">
-                        <DeleteOutlined style={{ display: "flex" }} />
-                      </div>
-                    </Popconfirm>
-                  </div>
-                  <div
-                    className="p-2 bg-yellow-500 fill-current text-white w-8 h-8 flex items-center justify-center rounded-full cursor-pointer"
-                    onClick={() => nekhemjlelZagvarBurtgeye(a)}
-                  >
-                    <EditOutlined style={{ display: "flex" }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="col-span-6">
-            <Table
-              bordered
-              size="small"
-              scroll={{ y: "calc(100vh - 25rem)" }}
-              rowSelection={{
-                type: "checkbox",
-                selectedRowKeys: songogdsonGereenuud?.map((a) => a._id),
-                onChange: (selectedRowKeys, selectedRows) => {
-                  setSongogdsonGereenuud(selectedRows)
-                },
-              }}
-              columns={[
-                {
-                  title: "Гэрээ №",
-                  dataIndex: "gereeniiDugaar",
-                  width: "7rem",
-                  align: "center",
-                },
-                {
-                  title: "Талбай №",
-                  sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
-                  dataIndex: "talbainDugaar",
-                  width: "7rem",
-                  align: "center",
-                },
-                {
-                  title: "Дараагийн төлөх огноо",
-                  sorter: (a, b) =>
-                    moment(a.talbainDugaar).diff(
-                      moment(b.talbainDugaar),
-                      "hour"
-                    ),
-                  dataIndex: "daraagiinTulukhOgnoo",
-                  render(a) {
-                    return moment(a).format("YYYY-MM-DD")
-                  },
-                  ellipsis: true,
-                  align: "center",
-                },
-                {
-                  title: "Өмнөх хуримтлагдсан өр төлбөр",
-                  sorter: (a, b) =>
-                    a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
-                  dataIndex: "umnukhSariinUrTulbur",
-                  render(a) {
-                    return formatNumber(a)
-                  },
-                  ellipsis: true,
-                  align: "center",
-                },
-                {
-                  title: "Энэ сард төлөх дүн",
-                  sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
-                  dataIndex: "eneSardTulukhDun",
-                  render(a) {
-                    return formatNumber(a)
-                  },
-                  ellipsis: true,
-                  align: "center",
-                },
-                {
-                  title: "Нийт үлдэгдэл",
-                  sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
-                  dataIndex: "niitUldegdel",
-                  render(a) {
-                    return formatNumber(a)
-                  },
-                  ellipsis: true,
-                  align: "center",
-                },
-                {
-                  title: "Төлөв",
-                  width: "4rem",
-                  dataIndex: "tuluv",
-                  align: "center",
-                  render(a, record, index) {
-                    return (
-                      <div className="flex items-center justify-center">
-                        <Button
-                          shape="circle"
-                          size="small"
-                          icon={
-                            <div
-                              className={`text-yellow-500 flex items-center justify-center`}
-                              onClick={() => nekhemjlelZasya(record, index)}
-                            >
-                              <EditOutlined style={{ fontSize: "18px" }} />
-                            </div>
-                          }
-                        />
-                      </div>
-                    )
-                  },
-                },
-              ]}
-              dataSource={nekhemjleliinJagsaalt}
-              pagination={false}
-              rowKey={(a) => a._id}
+          <div className="mt-5 flex w-full flex-row">
+            <DatePicker
+              style={{ marginBottom: "20px" }}
+              value={ognoo}
+              onChange={setOgnoo}
             />
+            <div className="ml-auto space-x-2">
+              <Select placeholder="Дансны төрөл" onChange={setDans}>
+                {dansGaralt?.jagsaalt?.map((a) => (
+                  <Select.Option key={a.dugaar} value={a.dugaar}>
+                    <div>{a.dugaar}</div>
+                  </Select.Option>
+                ))}
+              </Select>
+              <Select
+                allowClear
+                placeholder="Давхар"
+                onChange={(v) => {
+                  setDavkhar(v)
+                  setSongogdsonGereenuud([])
+                }}
+              >
+                {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                  <Select.Option key={a._id} value={a.davkhar}>
+                    {a.davkhar}
+                  </Select.Option>
+                ))}
+              </Select>
+              <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
+                {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
+                  <Select.Option key={a._id} value={a._id}>
+                    {a.ner}
+                  </Select.Option>
+                ))}
+              </Select>
+              <Button type="primary" onClick={hevlekh}>
+                Хэвлэх
+              </Button>
+              <Button onClick={maileerIlgeekh}>Нэхэмжлэл илгээх</Button>
+            </div>
           </div>
-        </div> 
-        </Spin>       
+          <div className="grid grid-cols-8 gap-2">
+            <div className="col-span-2 rounded-md p-2 ">
+              <div className="flex w-full justify-between">
+                <Button
+                  type="primary"
+                  className="ml-auto"
+                  onClick={() => nekhemjlelZagvarBurtgeye()}
+                >
+                  Загвар үүсгэх
+                </Button>
+              </div>
+              <div className="mt-4 space-y-2">
+                {nekhemjlekhiinZagvar?.jagsaalt?.map((a, i) => (
+                  <div
+                    key={`zagvar${i}`}
+                    className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md"
+                  >
+                    <Image src="/invoice.png" width={32} height={32} />
+                    <div className="font-medium">{a.ner}</div>
+                    <div style={{ marginLeft: "auto" }}>
+                      <Popconfirm
+                        title="Загвар устгах уу?"
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => zagvarUstgaya(a)}
+                      >
+                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
+                          <DeleteOutlined style={{ display: "flex" }} />
+                        </div>
+                      </Popconfirm>
+                    </div>
+                    <div
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
+                      onClick={() => nekhemjlelZagvarBurtgeye(a)}
+                    >
+                      <EditOutlined style={{ display: "flex" }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="col-span-6">
+              <Table
+                bordered
+                size="small"
+                scroll={{ y: "calc(100vh - 25rem)" }}
+                rowSelection={{
+                  type: "checkbox",
+                  selectedRowKeys: songogdsonGereenuud?.map((a) => a._id),
+                  onChange: (selectedRowKeys, selectedRows) => {
+                    setSongogdsonGereenuud(selectedRows)
+                  },
+                }}
+                columns={[
+                  {
+                    title: "Гэрээ №",
+                    dataIndex: "gereeniiDugaar",
+                    width: "7rem",
+                    align: "center",
+                  },
+                  {
+                    title: "Талбай №",
+                    sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
+                    dataIndex: "talbainDugaar",
+                    width: "7rem",
+                    align: "center",
+                  },
+                  {
+                    title: "Дараагийн төлөх огноо",
+                    sorter: (a, b) =>
+                      moment(a.talbainDugaar).diff(
+                        moment(b.talbainDugaar),
+                        "hour"
+                      ),
+                    dataIndex: "daraagiinTulukhOgnoo",
+                    render(a) {
+                      return moment(a).format("YYYY-MM-DD")
+                    },
+                    ellipsis: true,
+                    align: "center",
+                  },
+                  {
+                    title: "Өмнөх хуримтлагдсан өр төлбөр",
+                    sorter: (a, b) =>
+                      a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
+                    dataIndex: "umnukhSariinUrTulbur",
+                    render(a) {
+                      return formatNumber(a)
+                    },
+                    ellipsis: true,
+                    align: "center",
+                  },
+                  {
+                    title: "Энэ сард төлөх дүн",
+                    sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
+                    dataIndex: "eneSardTulukhDun",
+                    render(a) {
+                      return formatNumber(a)
+                    },
+                    ellipsis: true,
+                    align: "center",
+                  },
+                  {
+                    title: "Нийт үлдэгдэл",
+                    sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
+                    dataIndex: "niitUldegdel",
+                    render(a) {
+                      return formatNumber(a)
+                    },
+                    ellipsis: true,
+                    align: "center",
+                  },
+                  {
+                    title: "Төлөв",
+                    width: "4rem",
+                    dataIndex: "tuluv",
+                    align: "center",
+                    render(a, record, index) {
+                      return (
+                        <div className="flex items-center justify-center">
+                          <Button
+                            shape="circle"
+                            size="small"
+                            icon={
+                              <div
+                                className={`flex items-center justify-center text-yellow-500`}
+                                onClick={() => nekhemjlelZasya(record, index)}
+                              >
+                                <EditOutlined style={{ fontSize: "18px" }} />
+                              </div>
+                            }
+                          />
+                        </div>
+                      )
+                    },
+                  },
+                ]}
+                dataSource={nekhemjleliinJagsaalt}
+                pagination={false}
+                rowKey={(a) => a._id}
+              />
+            </div>
+          </div>
+        </Spin>
       </Card>
     </Admin>
   )
