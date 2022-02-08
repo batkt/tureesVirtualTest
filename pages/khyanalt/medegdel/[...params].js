@@ -3,7 +3,7 @@ import Admin from "components/Admin"
 import shalgaltKhiikh from 'services/shalgaltKhiikh';
 import readMethod from 'tools/function/crud/readMethod';
 import uilchilgee,{aldaaBarigch} from 'services/uilchilgee';
-import useSanalGomdol from 'hooks/useSanalGomdol'
+import useSanalGomdol from 'hooks/medegdel/useSanalGomdol'
 import ZagvarUusgekh from 'components/pageComponents/medegdel/ZagvarUusgekh'
 import { Input, Spin } from 'antd';
 import moment from 'moment'
