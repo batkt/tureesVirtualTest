@@ -25,8 +25,19 @@ import formatNumber from "tools/function/formatNumber"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import _ from "lodash"
 import { putSetter } from "pages/khyanalt/medegdel"
-
+import useSWR from "swr"
+import createMethod from "tools/function/crud/createMethod"
+import moment from 'moment'
 var setter = null
+
+function IlgeesenToo({barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo,token}) {
+  const {data} = useSWR(['msgIlgeesenTooAvya',barilgiinId,baiguullagiinId],(url,barilgiinId,baiguullagiinId)=>createMethod(url,token,{barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo}).then(a=>a.data))
+  return (
+    <>
+      Нийт илгээгдсэн sms : <span className="font-medium">{data}</span>
+    </>
+  )
+}
 
 function SMS({
   token,
@@ -38,7 +49,7 @@ function SMS({
   setTurul,
   turul
 }) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId,baiguullaga } = useAuth()
 
   const ref = React.useRef(null)
 
@@ -107,8 +118,8 @@ function SMS({
             </div>
           </div>
         </div>
-        <div className="box p-2 mt-5 flex flex-row">
-          Нийт илгээгдсэн sms : <span className="font-medium">1</span>
+        <div className="box p-2 mt-5 flex flex-row items-center">
+          <IlgeesenToo barilgiinId={barilgiinId} baiguullagiinId={baiguullaga?._id} ekhlekhOgnoo={moment().startOf('month')} duusakhOgnoo={moment().endOf('month')} token={token}/>
           <div className="ml-auto">
             <Select
               placeholder="Илгээх төрөл"
