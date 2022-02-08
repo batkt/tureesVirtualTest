@@ -15,6 +15,7 @@ import useSWR from "swr"
 import formatNumber from "tools/function/formatNumber"
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol"
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
+import { modal } from "components/ant/Modal"
 //#endregion
 
 var timeout = null
