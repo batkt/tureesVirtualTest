@@ -37,7 +37,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.uldegdel = data?.uldegdel
   return (
     <div
-      className={`font-medium ${
+      className={`font-medium text-right ${
         data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
@@ -180,7 +180,7 @@ function guilgeeniiTuukh({ token }) {
       {
         title: "Үлдэгдэл",
         dataIndex: "uldegdel",
-        align: "right",
+        align: "center",
         render(text, record, index) {
           return (
             <GereeniiUldegdel
