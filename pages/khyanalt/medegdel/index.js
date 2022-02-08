@@ -164,8 +164,49 @@ function Khyanalt({ token }) {
       })
   }
 
+  async function mailIlgeeye(){
+    if(!khariltsagch?.mail)
+    {
+      notification.warning({message:"И-мэйл бүртгэгдээгүй байна"})
+      return
+    }
+    const mailuud = []
+    var zagvar = content
+    for (const [key, value] of Object.entries(khariltsagch)) {
+      zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
+    }
+      mailuud.push({
+        mail: khariltsagch.mail,
+        content: zagvar,
+      })
+      setLoading(true)
+      uilchilgee(token)
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
+        .then(({ data }) => {
+          debugger
+          if (data === "Amjilttai") {
+            notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
+            setLoading(false)
+          }
+        })
+        .catch((e) => {
+          setLoading(false)
+          aldaaBarigch(e)
+        })
+  }
+
   function send(){
-    turul === 'Апп' ? appIlgeeye() : msgIlgeeye()
+    switch (turul) {
+      case 'Апп':
+        appIlgeeye()
+        break;
+      case 'Мэйл':
+        mailIlgeeye()
+        break;
+      default:
+        msgIlgeeye()
+        break;
+    }
   }
 
   function smsZagvarNemya(data) {
@@ -243,7 +284,7 @@ function Khyanalt({ token }) {
           </div>
         </div>
         <div className="p-2 mt-5 font-medium flex flex-row">
-          <div>СМС загвар</div>
+          <div>{turul} загвар</div>
           <button
             className={`cursor-pointer ml-auto py-2 px-4 rounded-md text-center bg-green-500 text-white`}
             onClick={() => smsZagvarNemya()}
@@ -372,7 +413,7 @@ function Khyanalt({ token }) {
                 <div className="ml-3 mr-auto">
                   <div className="font-medium text-base">{khariltsagch?.ner}</div>
                   <div className="text-gray-600 text-xs sm:text-sm">
-                    {khariltsagch?.utas} <span className="mx-1">•</span> SMS
+                    {turul === 'Мэйл' ? khariltsagch?.mail : khariltsagch?.utas} <span className="mx-1">•</span> {turul}
                   </div>
                 </div>
               </div>
@@ -396,7 +437,7 @@ function Khyanalt({ token }) {
                   }
               </div>
               :
-              <div dangerouslySetInnerHTML={{ __html: ingeekhmSms }} />
+              <div className="p-2" dangerouslySetInnerHTML={{ __html: ingeekhmSms }} />
             )}
             {ilgeekhTurul !== "gantsaar" && (
               <Table
@@ -474,7 +515,7 @@ function Khyanalt({ token }) {
             )}
           </div>
           <div className="w-full p-2 mt-auto">
-            {turul === 'Апп' && <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>}
+            {turul !== 'СМС' && <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>}
             <ZagvarUusgekh
               change={setContent}
               value={content}
@@ -483,7 +524,7 @@ function Khyanalt({ token }) {
           </div>
   
           <div className="w-full flex justify-end items-center space-x-2 p-2">
-            <label className="font-medium">СМС Илгээх</label>
+            <label className="font-medium">{turul} Илгээх</label>
             <div
               onClick={send}
               className={`cursor-pointer w-8 h-8 sm:w-10 sm:h-10 bg-green-${loading ?  "200" : "600"} text-white rounded-full flex-none flex items-center justify-center`}
@@ -519,7 +560,7 @@ function Khyanalt({ token }) {
             <div className="mt-3">
               <div className="font-medium">Өдрийн мэнд</div>
               <div className="text-gray-600 mt-1">
-                Та СМС илгээх харилцагчаа сонгоно уу.
+                Та {turul} илгээх харилцагчаа сонгоно уу.
               </div>
             </div>
           </div>
