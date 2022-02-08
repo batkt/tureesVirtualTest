@@ -4,8 +4,10 @@ import { useAuth } from "services/auth"
 import useSWR from "swr"
 import moment from "moment"
 
-const queryAvya=(davkhar,ilgeekhTurul)=>{
+const queryAvya=(davkhar,ilgeekhTurul,turul)=>{
   const query = {}
+  if(turul === 'Мэйл')
+    query.mail = {$exists:true}
   if(ilgeekhTurul === 'davkharaar' && davkhar)
     query.davkhar = davkhar
   return query
@@ -18,7 +20,8 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   davkhar,
   barilgiinId,
-  ilgeekhTurul
+  ilgeekhTurul,
+  turul
 ) =>
   axios(token)
     .post(url, {
@@ -30,7 +33,7 @@ const fetcher = (
       query: {
         query: {
           barilgiinId,
-          ...queryAvya(davkhar,ilgeekhTurul),
+          ...queryAvya(davkhar,ilgeekhTurul,turul),
           $or: [
             { register: { $regex: search, $options: "i" } },
             { talbainDugaar: { $regex: search, $options: "i" } },
@@ -48,7 +51,7 @@ const fetcher = (
       })
     .catch(aldaaBarigch)
 
-function useMedegdel(token, ognoo, davkhar,ilgeekhTurul) {
+function useMedegdel(token, ognoo, davkhar,ilgeekhTurul,turul) {
   const { barilgiinId } = useAuth()
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -58,7 +61,7 @@ function useMedegdel(token, ognoo, davkhar,ilgeekhTurul) {
   })
   const { data, mutate } = useSWR(
     !!token
-      ? ["/gereeTulukhDunteiAvya", token, ognoo, khuudaslalt,davkhar,barilgiinId,ilgeekhTurul]
+      ? ["/gereeTulukhDunteiAvya", token, ognoo, khuudaslalt,davkhar,barilgiinId,ilgeekhTurul,turul]
       : null,
     fetcher,
     { revalidateOnFocus: false }

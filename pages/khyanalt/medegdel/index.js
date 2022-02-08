@@ -47,7 +47,7 @@ function Khyanalt({ token }) {
 
   const ref = useRef(null)
 
-  const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useMedegdel(token,undefined,davkhar,ilgeekhTurul)
+  const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } = useMedegdel(token,undefined,davkhar,ilgeekhTurul,turul)
     
   const {
     mailiinZagvarGaralt,
@@ -165,34 +165,48 @@ function Khyanalt({ token }) {
   }
 
   async function mailIlgeeye(){
-    if(!khariltsagch?.mail)
+    if(ilgeekhTurul === 'gantsaar' && !khariltsagch?.mail)
     {
       notification.warning({message:"Гэрээнд и-мэйл бүртгэгдээгүй байна"})
       return
     }
     const mailuud = []
-    var zagvar = content
-    for (const [key, value] of Object.entries(khariltsagch)) {
-      zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
-    }
+
+    if(ilgeekhTurul === 'gantsaar'){
+      var zagvar = content
+      for (const [key, value] of Object.entries(khariltsagch)) {
+        zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
+      }
       mailuud.push({
         mail: khariltsagch.mail,
         content: zagvar,
       })
-      setLoading(true)
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-        .then(({ data }) => {
-          debugger
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
-            setLoading(false)
-          }
+    }
+    else if(songogdsonGereenuud?.length > 0){
+      songogdsonGereenuud.forEach(a=>{
+        var zagvar = content
+        for (const [key, value] of Object.entries(a)) {
+          zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
+        }
+        mailuud.push({
+          mail: a.mail,
+          content: zagvar,
         })
-        .catch((e) => {
-          setLoading(false)
-          aldaaBarigch(e)
-        })
+      })
+    }
+    setLoading(true)
+    uilchilgee(token)
+    .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
+    .then(({ data }) => {
+      if (data === "Amjilttai") {
+        notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
+        setLoading(false)
+      }
+    })
+    .catch((e) => {
+      setLoading(false)
+      aldaaBarigch(e)
+    })
   }
 
   function send(){
@@ -251,6 +265,7 @@ function Khyanalt({ token }) {
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
               {["СМС", "Апп", "Мэйл"].map((mur) => (
                 <div
+                  key={mur}
                   className={`cursor-pointer flex-1 py-2 rounded-md text-center ${
                     turul === mur ? "bg-green-500 text-white" : ""
                   }`}
@@ -469,8 +484,8 @@ function Khyanalt({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Утасны дугаар",
-                    dataIndex: "utas",
+                    title: turul,
+                    dataIndex: turul === 'Мэйл' ? 'mail' : "utas",
                     align: "center",
                   },
                   {
