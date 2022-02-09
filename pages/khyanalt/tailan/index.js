@@ -11,35 +11,16 @@ import local from "antd/lib/date-picker/locale/mn_MN"
 import { useAuth } from "services/auth"
 import moment from 'moment'
 
-const labels = ["1-сар", "2-сар", "3-сар", "4-сар", "5-сар", "6-сар", "7-сар"]
-
-const data = {
-  labels,
-  datasets: [
-    {
-      label: "Орлого",
-      data: labels.map(() => (Math.random() * 10).toFixed(2)),
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-      borderColor: "rgba(255, 99, 132, 0.5)",
-      fill: false,
-      lineWidth: 10,
-    },
-    {
-      label: "Зарлага",
-      data: labels.map(() => (Math.random() * 10).toFixed(2)),
-      fill: false,
-      borderColor: "rgba(53, 162, 235, 0.5)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
-      borderDash: [10,10]
-    },
-  ],
-}
-
-const query = {
-  "barilgiinId" :"61ab41b56e7f7d347c622472",
-  "ekhlekhOgnoo" : "2022-01-01 00:00:00",
-  "duusakhOgnoo" : "2022-06-31 23:59:59"
-}
+const tailanguud = [
+  {
+    ner:'Гүйцэтгэлийн тайлан',
+    service:'guitsetgeliinTailanAvya'
+  },
+  {
+    ner:'Авлагын тайлан',
+    service:'avlagiinTailanAvya'
+  },
+]
 
 function AjiltanBurtgel({ token }) {
   const {barilgiinId} = useAuth()
@@ -59,6 +40,9 @@ function AjiltanBurtgel({ token }) {
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
       <div className="box col-span-12 space-x-2 p-2">
+        <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
+          {tailanguud.map(a=><Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
+        </Select>
         <DatePicker.RangePicker locale={local} value={ognoo} onChange={setOgnoo}/>
         <Select placeholder="Борлуулалт">
           <Select.Option key="Хамгийн их" value="Хамгийн их">

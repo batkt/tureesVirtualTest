@@ -25,7 +25,14 @@ export const options = {
       {
         gridLines:{
           borderDash:[2]
-        }
+        },
+        ticks: {
+          callback: function(label, index, labels) {
+              if(_.isNumber(label))
+                return formatNumber(label)
+              return label
+          }
+        },
       }
     ]
   }
