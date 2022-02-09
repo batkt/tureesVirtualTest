@@ -27,14 +27,17 @@ export const options = {
         barThickness: 6, // number (pixels) or 'flex'
         maxBarThickness: 8, // number (pixels)
         ticks: {
-          callback: function(label, index, labels) {
-              if(_.isNumber(label))
-                return formatNumber(label)
-              return label
-          }
+          callback: function (label, index, labels) {
+            if (_.isNumber(label)) return formatNumber(label)
+            return label
+          },
         },
       },
     ],
+  },
+  animation: {
+    duration: 2500,
+    easing: "easeInQuad",
   },
 }
 
