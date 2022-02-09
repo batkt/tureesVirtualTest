@@ -479,11 +479,12 @@ function Khyanalt({ token }) {
                     align: "left",
                   },
                   {
-                    title: "Талбайн дугаар",
+                    title: "Талбай",
                     dataIndex: "talbainDugaar",
                     align: "center",
                   },
                   {
+                    width:'21rem',
                     title: turul,
                     dataIndex: turul === 'Мэйл' ? 'mail' : "utas",
                     align: "center",

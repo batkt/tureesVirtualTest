@@ -97,6 +97,11 @@ function index({token,data}) {
               notification.success({message:'СМС Амжилттай илгээлээ'})
               setLoading(false)
           }
+          else if(!!data?.failureCount)
+          {
+              notification.warning({description:_.get(data,'results.0.error.message'),message:_.get(data,'results.0.error.code')})
+              setLoading(false)
+          }
       }).catch(e=>{
           setLoading(false)
           aldaaBarigch(e)
