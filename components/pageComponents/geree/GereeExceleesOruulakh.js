@@ -24,8 +24,7 @@ function GereeExceleesOruulakh(
   const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
   
-  const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
-    useGereeniiZagvar(token, baiguullaga?._id);
+  const { gereeniiZagvarGaralt } = useGereeniiZagvar(token, baiguullaga?._id,barilgiinId);
 
   React.useImperativeHandle(
     ref,
@@ -48,7 +47,7 @@ function GereeExceleesOruulakh(
           style={{ width: "100%" }}
         >
           {gereeniiZagvarGaralt?.jagsaalt?.map((a) => (
-            <Select.Option value={a._id}>{a.ner}</Select.Option>
+            <Select.Option key={a._id} value={a._id}>{a.ner}</Select.Option>
           ))}
         </Select>
       </div>
