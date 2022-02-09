@@ -77,6 +77,11 @@
   margin: 0 !important;
 }
 
+.ant-badge-dot.ant-scroll-number{
+  right: 5px;
+  top: 2px;
+}
+
 .login-input {
   min-width: 100% !important;
   box-shadow: 0 3px 5px rgb(0 0 0 / 3%);
