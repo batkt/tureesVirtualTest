@@ -11,6 +11,7 @@ import moment from "moment"
 import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel"
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
 import deleteMethod from "tools/function/crud/deleteMethod"
+import createMethod from "tools/function/crud/createMethod"
 import useSWR from "swr"
 import formatNumber from "tools/function/formatNumber"
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol"
@@ -22,9 +23,10 @@ var timeout = null
 
 function IlgeesenToo({barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo,token}) {
   const {data} = useSWR(['msgIlgeesenTooAvya',barilgiinId,baiguullagiinId],(url,barilgiinId,baiguullagiinId)=>createMethod(url,token,{barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo}).then(a=>a.data))
+  console.log('data---->',data,['msgIlgeesenTooAvya',barilgiinId,baiguullagiinId])
   return (
     <>
-      Нийт илгээгдсэн sms : <span className="font-medium">{data}</span>
+      Нийт илгээгдсэн : <span className="font-medium">{data || 0}</span>
     </>
   )
 }
@@ -32,7 +34,7 @@ function IlgeesenToo({barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo,toke
 function Khyanalt({ token }) {
   //#region const
   const { baiguullaga,barilgiinId } = useAuth()
-  const [turul, setTurul] = useState("СМС")
+  const [turul, setTurul] = useState("SMS")
   const [khariltsagch, setKhariltsagch] = useState(null)
   const [davkhar, setDavkhar] = useState(null)
   const [content, setContent] = useState("")
@@ -54,7 +56,7 @@ function Khyanalt({ token }) {
     mailiinZagvarMutate
   } = useMailiinZagvar(token, "sms")
 
-  const {sonorduulga,sonorduulgaMutate,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'Апп' && token,khariltsagch?.register)
+  const {sonorduulga,sonorduulgaMutate,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'App' && token,khariltsagch?.register)
 
   useEffect(() => {
     setKhariltsagch(null)
@@ -91,7 +93,7 @@ function Khyanalt({ token }) {
         {
             sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:ingeekhmSms,turul:'medegdel'})
             sonorduulgaMutate({...sonorduulga},false)
-            notification.success({message:'СМС Амжилттай илгээлээ'})
+            notification.success({message:'SMS Амжилттай илгээлээ'})
             setLoading(false)
         }
         else if(!!data?.failureCount)
@@ -141,7 +143,7 @@ function Khyanalt({ token }) {
         })
     }
     else {
-      message.warning("Та СМС илгээх гэрээгээ сонгоно уу")
+      message.warning("Та SMS илгээх гэрээгээ сонгоно уу")
       return
     }
     if(!(msgnuud.length > 0))
@@ -154,7 +156,7 @@ function Khyanalt({ token }) {
       .post(`/msgIlgeeye`, {barilgiinId, msgnuud })
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
-          notification.success({ message: "СМС Амжилттай илгээлээ" })
+          notification.success({ message: "SMS Амжилттай илгээлээ" })
           setLoading(false)
         }
       })
@@ -211,10 +213,10 @@ function Khyanalt({ token }) {
 
   function send(){
     switch (turul) {
-      case 'Апп':
+      case 'App':
         appIlgeeye()
         break;
-      case 'Мэйл':
+      case 'Mail':
         mailIlgeeye()
         break;
       default:
@@ -263,7 +265,7 @@ function Khyanalt({ token }) {
         <div className="intro-y pr-1">
           <div className="box p-2">
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
-              {["СМС", "Апп", "Мэйл"].map((mur) => (
+              {["SMS", "App", "Mail"].map((mur) => (
                 <div
                   key={mur}
                   className={`cursor-pointer flex-1 py-2 rounded-md text-center ${
@@ -428,7 +430,7 @@ function Khyanalt({ token }) {
                 <div className="ml-3 mr-auto">
                   <div className="font-medium text-base">{khariltsagch?.ner}</div>
                   <div className="text-gray-600 text-xs sm:text-sm">
-                    {turul === 'Мэйл' ? khariltsagch?.mail : khariltsagch?.utas} <span className="mx-1">•</span> {turul}
+                    {turul === 'Mail' ? khariltsagch?.mail : khariltsagch?.utas} <span className="mx-1">•</span> {turul}
                   </div>
                 </div>
               </div>
@@ -437,7 +439,7 @@ function Khyanalt({ token }) {
           </div>
           <div className="w-full">
             {ilgeekhTurul === "gantsaar" && (
-              turul === 'Апп' ? 
+              turul === 'App' ? 
                 <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 27rem)'}}>
                   {
                       sonorduulga?.jagsaalt?.map((a,i)=>{
@@ -486,7 +488,7 @@ function Khyanalt({ token }) {
                   {
                     width:'21rem',
                     title: turul,
-                    dataIndex: turul === 'Мэйл' ? 'mail' : "utas",
+                    dataIndex: turul === 'Mail' ? 'mail' : "utas",
                     align: "center",
                   },
                   {
@@ -531,7 +533,7 @@ function Khyanalt({ token }) {
             )}
           </div>
           <div className="w-full p-2 mt-auto">
-            {turul !== 'СМС' && <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>}
+            {turul !== 'SMS' && <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>}
             <ZagvarUusgekh
               change={setContent}
               value={content}
