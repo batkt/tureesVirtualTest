@@ -43,7 +43,7 @@ const query = {
 
 function AjiltanBurtgel({ token }) {
   const {barilgiinId} = useAuth()
-  const [tailan,setTailan] = useState('/guitsetgeliinTailanAvya')
+  const [tailan,setTailan] = useState('guitsetgeliinTailanAvya')
   const [ognoo,setOgnoo] = useState([moment(),moment()])
   
   const query = useMemo(()=>{
