@@ -8,16 +8,18 @@ const fetcher = (url, token, khariltsagchiinId, { jagsaalt, ...khuudaslalt }) =>
 
 const fetcherKhariltsagch = (url, token, register) => axios(token).get(url, {params:{query: {register }}}).then(res => res.data).catch(aldaaBarigch)
 
-function useKhariltsagch (token, register){
-    const { data } = useSWR(!!token && !!register ? ['/khariltsagch', token, register] : null, fetcherKhariltsagch)
+function useKhariltsagch (token, value){
+    if(_.isObject(value))
+        return value.khariltsagch
+    const { data } = useSWR(!!token && !!value ? ['/khariltsagch', token, value] : null, fetcherKhariltsagch)
     const khariltsagch = useMemo(()=>{
         return _.get(data,'jagsaalt.0')
     },[data])
     return khariltsagch
 }
 
-function useSanalGomdol(token, register) {
-    const khariltsagch = useKhariltsagch(token, register)
+function useSanalGomdol(token, value) {
+    const khariltsagch = useKhariltsagch(token, value)
     const {baiguullaga} = useAuth()
     const [khuudaslalt, setKhuudaslalt] = useState({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, jagsaalt: [] })
     const { data, mutate } = useSWR(!!token && !!khariltsagch ? ['/sanalGomdol', token, khariltsagch?._id, khuudaslalt] : null, fetcher)

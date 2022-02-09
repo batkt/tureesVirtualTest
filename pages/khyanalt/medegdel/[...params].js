@@ -38,8 +38,6 @@ function GereeniiUldegdel({label='', ugugdul, token, barilgiinId }) {
 
 function Geree({data,token}){
 
-  console.log(data)
-
   return (
   <div key={data._id} className='border-2 border-green-400 rounded-md grid grid-cols-5'>
     <div className='p-2 text-center flex flex-col justify-center h-full bg-green-500 text-white'>
@@ -80,7 +78,7 @@ function index({token,data}) {
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
     const [loading,setLoading] = useState(false)
-    const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(token,data?.khariltsagchiinId)
+    const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(token,data)
     const {khariltsagch,gereenuud} = data || {}
 
     async function msgIlgeeye() {
