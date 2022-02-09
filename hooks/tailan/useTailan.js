@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
@@ -14,7 +13,7 @@ const fetcher = (
 
 function useTailan(ner, token, shuult) {
     const { data, mutate } = useSWR(
-        !!token
+        !!token && !!ner
             ? [ner, token, shuult]
             : null,
         fetcher,

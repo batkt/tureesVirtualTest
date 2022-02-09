@@ -1,12 +1,16 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React from "react"
+import React, { useMemo, useState } from "react"
 import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart"
 import PieChart from "components/pageComponents/tailan/chart/PieChart"
 import LineChart from "components/pageComponents/tailan/chart/LineChart"
 import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart"
+import useTailan from "hooks/tailan/useTailan"
 import { Button, DatePicker, Select } from "antd"
 import local from "antd/lib/date-picker/locale/mn_MN"
+import { useAuth } from "services/auth"
+import moment from 'moment'
+
 const labels = ["1-сар", "2-сар", "3-сар", "4-сар", "5-сар", "6-сар", "7-сар"]
 
 const data = {
@@ -31,11 +35,31 @@ const data = {
   ],
 }
 
+const query = {
+  "barilgiinId" :"61ab41b56e7f7d347c622472",
+  "ekhlekhOgnoo" : "2022-01-01 00:00:00",
+  "duusakhOgnoo" : "2022-06-31 23:59:59"
+}
+
 function AjiltanBurtgel({ token }) {
+  const {barilgiinId} = useAuth()
+  const [tailan,setTailan] = useState('/guitsetgeliinTailanAvya')
+  const [ognoo,setOgnoo] = useState([moment(),moment()])
+  
+  const query = useMemo(()=>{
+    return {
+      "barilgiinId" : barilgiinId,
+      "ekhlekhOgnoo" : ognoo[0].format("YYYY-MM-DD hh:mm:ss"),
+      "duusakhOgnoo" : ognoo[1].format("YYYY-MM-DD hh:mm:ss")
+    }
+  },[barilgiinId,ognoo])
+
+  const {tailanGaralt,tailanMutate} = useTailan(barilgiinId && tailan,token,query)
+
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
       <div className="box col-span-12 space-x-2 p-2">
-        <DatePicker.RangePicker locale={local} />
+        <DatePicker.RangePicker locale={local} value={ognoo} onChange={setOgnoo}/>
         <Select placeholder="Борлуулалт">
           <Select.Option key="Хамгийн их" value="Хамгийн их">
             Хамгийн их
@@ -63,16 +87,16 @@ function AjiltanBurtgel({ token }) {
         <Button type="primary">Харьцуулах</Button>
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
-        <LineChart data={data} />
+        <LineChart data={tailanGaralt || {}} />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-        <VerticarlBarChart data={data} />
+        <VerticarlBarChart data={tailanGaralt || {}} />
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
         <PieChart />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-        <HorizontalBarChart data={data} />
+        <HorizontalBarChart data={tailanGaralt || {}} />
       </div>
     </Admin>
   )
