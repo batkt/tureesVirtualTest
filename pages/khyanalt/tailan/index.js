@@ -10,7 +10,6 @@ import { Button, DatePicker, Select } from "antd"
 import local from "antd/lib/date-picker/locale/mn_MN"
 import { useAuth } from "services/auth"
 import moment from "moment"
-import { Line } from "react-chartjs-2"
 
 const tailanguud = [
   {
@@ -42,44 +41,9 @@ function AjiltanBurtgel({ token }) {
     token,
     query
   )
-  const config = {
-    options: {
-      animation: true,
-      animations: {
-        duration: 1000000,
-        tension: {
-          duration: 1000,
-          easing: "linear",
-          from: 1,
-          to: 0,
-          loop: true,
-        },
-      },
-    },
-  }
   function tailanTurulSongokh(turul) {
     setTailanTurul(turul)
   }
-  const labels = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ]
-
-  const data = {
-    labels: ["Jan", "Feb", "March"],
-    datasets: [
-      {
-        label: "Sales",
-        data: [86, 67, 91],
-      },
-    ],
-  }
-
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
       <div className="box col-span-12 space-x-2 p-2">
@@ -145,7 +109,7 @@ function AjiltanBurtgel({ token }) {
         <VerticarlBarChart data={tailanGaralt || {}} />
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
-        <Line data={data} />
+        <PieChart data={tailanGaralt || {}} />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
         <HorizontalBarChart data={tailanGaralt || {}} />
