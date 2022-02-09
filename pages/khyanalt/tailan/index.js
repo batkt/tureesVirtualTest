@@ -49,8 +49,8 @@ function AjiltanBurtgel({ token }) {
   const query = useMemo(()=>{
     return {
       "barilgiinId" : barilgiinId,
-      "ekhlekhOgnoo" : ognoo[0].format("YYYY-MM-DD hh:mm:ss"),
-      "duusakhOgnoo" : ognoo[1].format("YYYY-MM-DD hh:mm:ss")
+      "ekhlekhOgnoo" : ognoo[0].format("YYYY-MM-DD 00:00:00"),
+      "duusakhOgnoo" : ognoo[1].format("YYYY-MM-DD 23:59:59")
     }
   },[barilgiinId,ognoo])
 
