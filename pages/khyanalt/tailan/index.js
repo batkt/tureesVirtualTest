@@ -14,7 +14,7 @@ import moment from "moment"
 const tailanguud = [
   {
     ner: "Борлуулалтын тайлан",
-    service: "guitsetgeliinTailanAvya",
+    service: "borluulaltiinTailanAvya",
   },
   {
     ner: "Авлагын тайлан",
@@ -26,15 +26,16 @@ function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetge
   const [ognoo, setOgnoo] = useState([moment().startOf('month'), moment().endOf('month')])
   const [tailan, setTailan] = useState(defaultTailan)
   const [tailanTurul, setTailanTurul] = useState(defaultTurul)
-  const [kharakhTurul, setKharakhTurul] = useState('month')
+  const [nariivchlal, setNariivchlal] = useState('month')
 
   const query = useMemo(() => {
     return {
-      barilgiinId: barilgiinId,
+      barilgiinId,
+      nariivchlal,
       ekhlekhOgnoo: ognoo[0].format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: ognoo[1].format("YYYY-MM-DD 23:59:59"),
     }
-  }, [barilgiinId, ognoo])
+  }, [barilgiinId, ognoo,nariivchlal])
 
   const { tailanGaralt, tailanMutate } = useTailan(
     barilgiinId && tailan,
@@ -51,7 +52,7 @@ function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetge
         <Select placeholder="График төрөл сонгох" value={tailanTurul} onChange={setTailanTurul}>
           {[{val:'line',lab:'Шугаман'},{val:'bar',lab:'Багана/босоо/'},{val:'barHorizontal',lab:'Багана/хэвтээ/'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
         </Select>
-        <Select placeholder="График төрөл сонгох" value={kharakhTurul} onChange={setKharakhTurul}>
+        <Select placeholder="График төрөл сонгох" value={nariivchlal} onChange={setNariivchlal}>
           {[{val:'day',lab:'Өдөр'},{val:'month',lab:'Сар'},{val:'year',lab:'Жил'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
         </Select>
       </div>
