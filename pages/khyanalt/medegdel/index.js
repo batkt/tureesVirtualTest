@@ -23,7 +23,6 @@ var timeout = null
 
 function IlgeesenToo({barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo,token}) {
   const {data} = useSWR(['msgIlgeesenTooAvya',barilgiinId,baiguullagiinId],(url,barilgiinId,baiguullagiinId)=>createMethod(url,token,{barilgiinId,baiguullagiinId,ekhlekhOgnoo,duusakhOgnoo}).then(a=>a.data))
-  console.log('data---->',data,['msgIlgeesenTooAvya',barilgiinId,baiguullagiinId])
   return (
     <>
       Нийт илгээгдсэн : <span className="font-medium">{data || 0}</span>
