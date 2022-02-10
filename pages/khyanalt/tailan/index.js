@@ -75,7 +75,7 @@ function AjiltanBurtgel({ token }) {
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
       <div className="box col-span-12 p-2 md:col-span-6">
-        <Chart barilgiinId={barilgiinId} token={token} defaultTurul='line' defaultTailan='guitsetgeliinTailanAvya'/>
+        <Chart barilgiinId={barilgiinId} token={token} defaultTurul='line' defaultTailan='borluulaltiinTailanAvya'/>
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
         <Chart barilgiinId={barilgiinId} token={token} defaultTurul='bar' defaultTailan='avlagiinTailanAvya'/>
@@ -84,7 +84,7 @@ function AjiltanBurtgel({ token }) {
         <PieChart />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-      <Chart barilgiinId={barilgiinId} token={token} defaultTurul='barHorizontal' defaultTailan='guitsetgeliinTailanAvya'/>
+      <Chart barilgiinId={barilgiinId} token={token} defaultTurul='barHorizontal' defaultTailan='borluulaltiinTailanAvya'/>
       </div>
     </Admin>
   )
