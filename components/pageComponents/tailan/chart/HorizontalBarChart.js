@@ -35,6 +35,22 @@ export const options = {
       },
     ],
   },
+  tooltips: {
+    callbacks: {
+      label: function (tooltipItem, data) {
+        console.log(tooltipItem, data)
+        const { datasetIndex } = tooltipItem
+        const { datasets } = data
+        if (_.isNumber(tooltipItem?.xLabel))
+          return (
+            datasets[datasetIndex].label +
+            " " +
+            formatNumber(tooltipItem?.value)
+          )
+        return datasets[datasetIndex].label + " " + tooltipItem?.value
+      },
+    },
+  },
   animation: {
     duration: 1500,
     easing: "easeInQuad",
