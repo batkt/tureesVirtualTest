@@ -51,7 +51,8 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
         "gereeniiId": data?._id,
         "objectiinId" : _id,
         "zarlaga":zarlaga||0,
-        "orlogo":orlogo||0
+        "orlogo":orlogo||0,
+        "barilgiinId":data?.barilgiinId
       })
       .then(({ data }) => {
         if (data) {

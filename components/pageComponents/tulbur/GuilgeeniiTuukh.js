@@ -100,7 +100,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
         "gereeniiId": data?._id,
         "objectiinId" : _id,
         "zarlaga":tulsunDun||0,
-        "orlogo":tulukhDun||0
+        "orlogo":tulukhDun||0,
+        "barilgiinId":data?.barilgiinId,
       })
       .then(({ data }) => {
         if (data) {

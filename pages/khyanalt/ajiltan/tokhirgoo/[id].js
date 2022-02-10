@@ -124,6 +124,7 @@ function index({ token, data }) {
         {[{ner:'Гэрээ харах эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг харах эсэх',value:'gereeKharakhErkh'},
           {ner:'Гэрээ засах эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг засах эсэх',value:'gereeZasakhErkh'},
           {ner:'Хөнгөлөлт үзүүлэх эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг хөнгөлөх эсэх',value:'khungulultUzuulekhEsekh'},
+          {ner:'Гүйлгээ устгах эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг гүйлгээ устгах эсэх',value:'guilgeeUstgakhErkh'},
           ]
           .map((mur) => (
             <div className="box" key={mur.ner}>
