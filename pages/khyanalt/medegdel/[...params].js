@@ -78,10 +78,10 @@ function index({token,data}) {
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
     const [loading,setLoading] = useState(false)
-    const {sonorduulga,sonorduulgaMutate} = useSanalGomdol(token,data)
+    const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt} = useSanalGomdol(token,data)
     const {khariltsagch,gereenuud} = data || {}
 
-    async function msgIlgeeye() {
+  async function msgIlgeeye() {
       if(loading)
       {
           message.warning('Хүсэлт илгээгдсэн байна')
@@ -108,6 +108,29 @@ function index({token,data}) {
       })
   }
 
+  function onScroll(e) {
+    const seenList = [...jagsaalt,...(sonorduulga?.jagsaalt || [])].filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh !== true)
+    if(seenList.length > 0)
+    {
+      const seenIds = seenList.map(a=>a._id)
+      if(jagsaalt.filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh === false).length > 0)
+        setKhuudaslalt(a=>{
+          a.jagsaalt.forEach(b=>{
+            if(b.turul !== 'medegdel' && b.kharsanEsekh === false)
+              b.kharsanEsekh = true
+          })
+          return a
+        })
+      uilchilgee(token).post('/sanalKharlaa',{id:seenIds}).then(()=>{
+        if(sonorduulga?.jagsaalt?.filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh === false).length > 0)
+          sonorduulgaMutate()
+      }).catch(aldaaBarigch)
+    }
+    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
+      nextSonorduulga()
+    }
+  } 
+
   return (
     <Admin dedKhuudas title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setKhuudaslalt && setKhuudaslalt(a=>({...a,search}))}>
       <div className='col-span-3 p-5 box'>
@@ -129,12 +152,19 @@ function index({token,data}) {
                   
                 </div>
             </div>
-            <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 28rem)'}}>
+            <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 28rem)'}} onScroll={onScroll}>
                 {
-                    sonorduulga?.jagsaalt?.map((a,i)=>{
+                    [...jagsaalt,...(sonorduulga?.jagsaalt || [])]?.map((a)=>{
                         return(
-                            <div className={`relative w-1/3 p-3 bg-green-500 rounded-xl border border-green-200 flex flex-col mt-8 ${a.turul === 'medegdel' ? 'bg-blue-500 ml-auto rounded-br-none' : 'rounded-bl-none'}`}>
+                            <div key={a._id} className={`relative w-1/3 p-3 bg-green-500 rounded-xl border border-green-200 flex flex-col mt-8 ${a.turul === 'medegdel' ? 'bg-blue-500 ml-auto rounded-br-none' : 'rounded-bl-none'}`}>
                                 <span className='text-white'>{a.message}</span>
+                                <div className={`fill-current text-white w-5 h-5 absolute right-2 ${a.kharsanEsekh === true ? '' : 'hidden'}`}>
+                                  <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                    <path d="M16 7L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                    <path d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                  </svg>
+                                </div>
                                 <span className='text-gray-500 font-medium text-xs absolute -bottom-5'>{moment(a.createdAt).format('YYYY-MM-DD hh:mm')}</span>
                                 <span className='text-gray-500 right-0 absolute -bottom-5'>{a.turul}</span>
                             </div>
@@ -142,7 +172,7 @@ function index({token,data}) {
                     })
                 }
             </div>
-            {sonorduulga && <div className='w-full p-2 mt-auto'>
+            {(sonorduulga || jagsaalt.length > 0) && <div className='w-full p-2 mt-auto'>
                 <Input placeholder='Гарчиг' value={title} onChange={({target})=>setTitle(target.value)}/>
                 <ZagvarUusgekh change={setContent} value={content} onTextChange={onTextChange}/>
             </div>}

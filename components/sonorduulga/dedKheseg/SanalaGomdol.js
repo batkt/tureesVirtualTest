@@ -1,13 +1,13 @@
 import React from 'react'
 import moment from 'moment'
-import { url } from 'services/uilchilgee'
+import uilchilgee, { aldaaBarigch } from 'services/uilchilgee'
 
 function Zakhialga({ onClose, token, ...object }) {
     const { turul,message,khariltsagchiinNer,createdAt,_id } = object || {}
 
 
     function sonorduulgaKharlaa() {
-        // window.location.href = `/khyanalt/ajiltanKhyanalt/ajiltaniiZakhialguud/${object?.ajiltniiId}`
+        uilchilgee(token).post('/sanalKharlaa',{id:_id}).catch(aldaaBarigch)
         onClose()
     }
 

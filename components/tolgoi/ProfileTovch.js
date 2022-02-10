@@ -7,14 +7,16 @@ import { Badge, Dropdown, Menu, Skeleton, Tooltip, Empty } from "antd";
 import Link from "next/link";
 import React from "react";
 import moment from "moment";
-import { url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
 function ProfileTovch({ ajiltan, garya, token }) {
-  const { sonorduulga, jagsaalt, setKhuudaslalt } =
+  const { sonorduulga,sonorduulgaMutate, jagsaalt, setKhuudaslalt } =
     useSonorduulga(token, ajiltan?._id);
 
-  function sonorduulgaKharlaa(id) {}
+  function sonorduulgaKharlaa(id,sonorduulgaId) {
+    uilchilgee(token).post('/sanalKharlaa',{id,sonorduulgaId}).then(()=>sonorduulgaMutate()).catch(aldaaBarigch)
+  }
 
   function onScroll(e) {
     if (
@@ -48,7 +50,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
             {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur, i) => {
               const {turul,message,khariltsagchiinNer,createdAt,_id} = mur?.object || {}
               return (
-                <Menu.Item key={i} onClick={() => sonorduulgaKharlaa(mur._id)}>
+                <Menu.Item key={i} onClick={() => sonorduulgaKharlaa(_id,mur?._id)}>
                   <Link
                     href={`/khyanalt/medegdel/${turul}/${_id}`}
                   >
