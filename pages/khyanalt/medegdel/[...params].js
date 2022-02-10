@@ -73,6 +73,8 @@ function Geree({data,token}){
   </div>)
 }
 
+var timeout = false
+
 function index({token,data}) {
     const [content,setContent] = useState('')
     const [body,onTextChange] = useState('')
@@ -108,7 +110,7 @@ function index({token,data}) {
       })
   }
 
-  function onScroll(e) {
+  function seen() {
     const seenList = [...jagsaalt,...(sonorduulga?.jagsaalt || [])].filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh !== true)
     if(seenList.length > 0)
     {
@@ -126,6 +128,14 @@ function index({token,data}) {
           sonorduulgaMutate()
       }).catch(aldaaBarigch)
     }
+  }
+
+  function onScroll(e) {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      seen()
+    }, 300);
+    
     if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
       nextSonorduulga()
     }

@@ -33,6 +33,10 @@ function useSanalGomdol(token, value) {
             })
     }
 
+    useEffect(()=>{
+        setKhuudaslalt({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, search: "", jagsaalt: [] })
+    },[value])
+
     useEffect(() => {
         if (baiguullaga?._id) {
             socket().on(`baiguullaga${baiguullaga?._id}`, sonorduulga => {
