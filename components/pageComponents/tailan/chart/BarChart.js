@@ -38,7 +38,7 @@ export const options = {
     ],
   },
   animation: {
-    duration: 2500,
+    duration: 1500,
     easing: "easeInQuad",
   },
 }

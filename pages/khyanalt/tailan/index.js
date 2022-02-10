@@ -13,7 +13,7 @@ import moment from "moment"
 
 const tailanguud = [
   {
-    ner: "Гүйцэтгэлийн тайлан",
+    ner: "Борлуулалтын тайлан",
     service: "guitsetgeliinTailanAvya",
   },
   {
@@ -22,7 +22,8 @@ const tailanguud = [
   },
 ]
 
-function Chart({ognoo,barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetgeliinTailanAvya"}) {
+function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetgeliinTailanAvya"}) {
+  const [ognoo, setOgnoo] = useState([moment().startOf('month'), moment().endOf('month')])
   const [tailan, setTailan] = useState(defaultTailan)
   const [tailanTurul, setTailanTurul] = useState(defaultTurul)
 
@@ -42,12 +43,19 @@ function Chart({ognoo,barilgiinId,token,defaultTurul="line",defaultTailan = "gui
 
   return <div className="box col-span-12 p-2 md:col-span-6">
     <div className="w-full flex md:flex-row md:justify-between">
-      <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
-            {tailanguud.map((a) => <Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
-      </Select>
-      <Select placeholder="График төрөл сонгох" value={tailanTurul} onChange={setTailanTurul}>
-        {[{val:'line',lab:'Шугаман'},{val:'bar',lab:'Багана/босоо/'},{val:'barHorizontal',lab:'Багана/хэвтээ/'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
-      </Select>
+      <div className="flex md:flex-row md:space-x-2">
+        <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
+          {tailanguud.map((a) => <Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
+        </Select>
+        <Select placeholder="График төрөл сонгох" value={tailanTurul} onChange={setTailanTurul}>
+          {[{val:'line',lab:'Шугаман'},{val:'bar',lab:'Багана/босоо/'},{val:'barHorizontal',lab:'Багана/хэвтээ/'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
+        </Select>
+      </div>
+      <DatePicker.RangePicker
+        locale={local}
+        value={ognoo}
+        onChange={setOgnoo}
+      />
     </div>
     {tailanTurul === "line" && <LineChart data={tailanGaralt || {}} />}
     {tailanTurul === "bar" && <VerticarlBarChart data={tailanGaralt || {}} />}
@@ -57,28 +65,21 @@ function Chart({ognoo,barilgiinId,token,defaultTurul="line",defaultTailan = "gui
 
 function AjiltanBurtgel({ token }) {
   const { barilgiinId } = useAuth()
-  const [ognoo, setOgnoo] = useState([moment().startOf('month'), moment().endOf('month')])
+  
 
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
-      <div className="box col-span-12 space-x-2 p-2">
-        <DatePicker.RangePicker
-          locale={local}
-          value={ognoo}
-          onChange={setOgnoo}
-        />
-      </div>
       <div className="box col-span-12 p-2 md:col-span-6">
-        <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='line' defaultTailan='guitsetgeliinTailanAvya'/>
+        <Chart barilgiinId={barilgiinId} token={token} defaultTurul='line' defaultTailan='guitsetgeliinTailanAvya'/>
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-        <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='bar' defaultTailan='avlagiinTailanAvya'/>
+        <Chart barilgiinId={barilgiinId} token={token} defaultTurul='bar' defaultTailan='avlagiinTailanAvya'/>
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
         <PieChart />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-      <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='barHorizontal' defaultTailan='guitsetgeliinTailanAvya'/>
+      <Chart barilgiinId={barilgiinId} token={token} defaultTurul='barHorizontal' defaultTailan='guitsetgeliinTailanAvya'/>
       </div>
     </Admin>
   )
