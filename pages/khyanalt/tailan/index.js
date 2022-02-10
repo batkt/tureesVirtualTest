@@ -6,7 +6,7 @@ import PieChart from "components/pageComponents/tailan/chart/PieChart"
 import LineChart from "components/pageComponents/tailan/chart/LineChart"
 import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart"
 import useTailan from "hooks/tailan/useTailan"
-import { Button, DatePicker, Select } from "antd"
+import { DatePicker, Select } from "antd"
 import local from "antd/lib/date-picker/locale/mn_MN"
 import { useAuth } from "services/auth"
 import moment from "moment"
@@ -22,11 +22,9 @@ const tailanguud = [
   },
 ]
 
-function AjiltanBurtgel({ token }) {
-  const { barilgiinId } = useAuth()
-  const [tailan, setTailan] = useState("guitsetgeliinTailanAvya")
-  const [ognoo, setOgnoo] = useState([moment(), moment()])
-  const [tailanTurul, setTailanTurul] = useState("line")
+function Chart({ognoo,barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetgeliinTailanAvya"}) {
+  const [tailan, setTailan] = useState(defaultTailan)
+  const [tailanTurul, setTailanTurul] = useState(defaultTurul)
 
   const query = useMemo(() => {
     return {
@@ -41,78 +39,46 @@ function AjiltanBurtgel({ token }) {
     token,
     query
   )
-  function tailanTurulSongokh(turul) {
-    setTailanTurul(turul)
-  }
+
+  return <div className="box col-span-12 p-2 md:col-span-6">
+    <div className="w-full flex md:flex-row md:justify-between">
+      <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
+            {tailanguud.map((a) => <Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
+      </Select>
+      <Select placeholder="График төрөл сонгох" value={tailanTurul} onChange={setTailanTurul}>
+        {[{val:'line',lab:'Шугаман'},{val:'bar',lab:'Багана/босоо/'},{val:'barHorizontal',lab:'Багана/хэвтээ/'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
+      </Select>
+    </div>
+    {tailanTurul === "line" && <LineChart data={tailanGaralt || {}} />}
+    {tailanTurul === "bar" && <VerticarlBarChart data={tailanGaralt || {}} />}
+    {tailanTurul === "barHorizontal" && <HorizontalBarChart data={tailanGaralt || {}} />}
+  </div>
+}
+
+function AjiltanBurtgel({ token }) {
+  const { barilgiinId } = useAuth()
+  const [ognoo, setOgnoo] = useState([moment().startOf('month'), moment().endOf('month')])
+
   return (
     <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4">
       <div className="box col-span-12 space-x-2 p-2">
-        <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
-          {tailanguud.map((a) => (
-            <Select.Option key={a.service} value={a.service}>
-              {a.ner}
-            </Select.Option>
-          ))}
-        </Select>
         <DatePicker.RangePicker
           locale={local}
           value={ognoo}
           onChange={setOgnoo}
         />
-        <Select placeholder="Борлуулалт">
-          <Select.Option key="Хамгийн их" value="Хамгийн их">
-            Хамгийн их
-          </Select.Option>
-          <Select.Option key="Хамгийн бага" value="Хамгийн бага">
-            Хамгийн бага
-          </Select.Option>
-        </Select>
-        <Select placeholder="Зардал">
-          <Select.Option key="Хамгийн их" value="Хамгийн их">
-            Хамгийн их
-          </Select.Option>
-          <Select.Option key="Хамгийн бага" value="Хамгийн бага">
-            Хамгийн бага
-          </Select.Option>
-        </Select>
-        <Select placeholder="Ашиг">
-          <Select.Option key="Хамгийн их" value="Хамгийн их">
-            Хамгийн их
-          </Select.Option>
-          <Select.Option key="Хамгийн бага" value="Хамгийн бага">
-            Хамгийн бага
-          </Select.Option>
-        </Select>
-        <Button type="primary">Харьцуулах</Button>
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
-        <Select placeholder="График төрөл сонгох" onChange={tailanTurulSongokh}>
-          <Select.Option key="Хамгийн их" value="line">
-            Шугаман
-          </Select.Option>
-          <Select.Option key="Хамгийн бага" value="bar">
-            Багана/босоо/
-          </Select.Option>
-          <Select.Option key="Хамгийн бага" value="barHorizontal">
-            Багана/хэвтээ/
-          </Select.Option>
-        </Select>
-        {tailanTurul === "line" && <LineChart data={tailanGaralt || {}} />}
-        {tailanTurul === "bar" && (
-          <VerticarlBarChart data={tailanGaralt || {}} />
-        )}
-        {tailanTurul === "barHorizontal" && (
-          <HorizontalBarChart data={tailanGaralt || {}} />
-        )}
+        <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='line' defaultTailan='guitsetgeliinTailanAvya'/>
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-        <VerticarlBarChart data={tailanGaralt || {}} />
+        <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='bar' defaultTailan='avlagiinTailanAvya'/>
       </div>
       <div className="box col-span-12 p-2 md:col-span-6">
-        <PieChart data={tailanGaralt || {}} />
+        <PieChart />
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
-        <HorizontalBarChart data={tailanGaralt || {}} />
+      <Chart barilgiinId={barilgiinId} ognoo={ognoo} token={token} defaultTurul='barHorizontal' defaultTailan='guitsetgeliinTailanAvya'/>
       </div>
     </Admin>
   )
