@@ -17,7 +17,8 @@ const Sungakh = React.forwardRef(({token,destroy,confirm,data},ref)=> {
       () => ({
           khadgalya() {
             uilchilgee(token).post('/gereeSungaya',{
-              "gereeniiId" : data?._id,
+              gereeniiId : data?._id,
+              barilgiinId: data?.barilgiinId,
               duusakhOgnoo
           }).then(({data})=>{
               if(data === 'Amjilttai'){

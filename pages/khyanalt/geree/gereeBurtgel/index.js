@@ -28,6 +28,7 @@ import {
   Space,
   message,
   Input,
+  notification,
 } from "antd"
 import { toWords } from "mon_num"
 import Admin from "components/Admin"
@@ -55,6 +56,7 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
         uilchilgee(token)
           .post("/gereeTsutslaya", {
             gereeniiId: data?._id,
+            barilgiinId: data?.barilgiinId,
             shaltgaan,
           })
           .then(({ data }) => {
@@ -105,7 +107,7 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 
 function ZakhialgiinKhyanalt() {
   //#region const 
-  const { token, baiguullaga,barilgiinId } = useAuth()
+  const { token, baiguullaga,barilgiinId,ajiltan } = useAuth()
   const [shuult, setShuult] = React.useState({
     query: {},
   })
@@ -409,8 +411,11 @@ function ZakhialgiinKhyanalt() {
                   </a>
                   <a
                     className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
-                    onClick={() =>
-                      router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
+                    onClick={() =>{
+                        if(ajiltan?.erkh === 'Admin' || !!_.get(ajiltan,`tokhirgoo.gereeZasakhErkh`)?.find(a=>a === data.barilgiinId))
+                          router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
+                        else notification.warning({message:'Таньд гэрээ засах эрх байхгүй байна.'})
+                      }
                     }
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />

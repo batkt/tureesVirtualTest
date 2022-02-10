@@ -1,7 +1,7 @@
 import { Button, message, Select, Switch, Tooltip, Transfer } from "antd"
 import Admin from "components/Admin"
 import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import uilchilgee from "services/uilchilgee"
 import readMethod from "tools/function/crud/readMethod"
@@ -10,26 +10,16 @@ import {
   khereglegchiinErkhuud,
 } from "tools/logic/khereglegchiinErkhiinTokhirgoo"
 import { useAuth } from "services/auth"
-import useAjiltan from "hooks/useAjiltan"
+import _ from "lodash"
 
 function index({ token, data }) {
   const router = useRouter()
   const [targetKeys, setTargetKeys] = useState(data?.tsonkhniiErkhuud || [])
-  const { ajiltan, ajiltanMutate } = useAjiltan(token)
   const [selectedKeys, setSelectedKeys] = useState([])
-  const [tokhirgoo, setTokhirgoo] = useState([])
-  const [khiikhTokhirgoo, setkhiikhTokhirgoo] = useState([])
-  const { baiguullaga, barilgiinId } = useAuth()
-  const [ajiltanMedeelel, setAjiltanMedeelel] = useState()
+  const [tokhirgoo, setTokhirgoo] = useState(data?.tokhirgoo || {})
+  const { baiguullaga } = useAuth()
+  const [barilgiinErkh, setBarilgiinErkh] = useState(data?.barilguud || [])
   const barilguud = baiguullaga?.barilguud
-  const handleChange = (nextTargetKeys, direction, moveKeys) => {
-    setTargetKeys(nextTargetKeys)
-    setkhiikhTokhirgoo(
-      tsonknuud.filter(
-        (a) => !a.nuuya && !!nextTargetKeys.find((b) => b === a.key)
-      )
-    )
-  }
 
   const handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys])
@@ -37,7 +27,7 @@ function index({ token, data }) {
   
   const khadgalya = () => {
     uilchilgee(token)
-      .post(`/ajiltandErkhUgyu/${data?._id}`, { tsonkhniiErkhuud: targetKeys,barilguud:ajiltanMedeelel })
+      .post(`/ajiltandErkhUgyu/${data?._id}`, { tsonkhniiErkhuud: targetKeys,barilguud:barilgiinErkh,tokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           message.success("Бүртгэл амжилттай хийгдлээ")
@@ -52,10 +42,6 @@ function index({ token, data }) {
     )
     setTargetKeys([...khereglegchiinErkh.tsonkhnuud])
   }
-  useEffect(() => {
-    setAjiltanMedeelel(ajiltan?.barilguud)
-  }, [ajiltan])
-  
 
   return (
     <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5">
@@ -82,10 +68,10 @@ function index({ token, data }) {
           <div>Барилга тохируулах</div>
           <Select
             mode="multiple"            
-            onChange={(v) => setAjiltanMedeelel(v)}
+            onChange={setBarilgiinErkh}
             placeholder="Барилга тохируулах"
             style={{ width: "80%" }}
-            value={ajiltanMedeelel}
+            value={barilgiinErkh}
           >
             {barilguud?.map((a) => (
               <Select.Option key={a._id} value={a._id}>
@@ -119,7 +105,7 @@ function index({ token, data }) {
           titles={["Цонхнууд", "Цонхны эрх"]}
           targetKeys={targetKeys}
           selectedKeys={selectedKeys}
-          onChange={handleChange}
+          onChange={setTargetKeys}
           onSelectChange={handleSelectChange}
           render={(item) => (
             <Tooltip title={item.tailbar}>
@@ -135,9 +121,10 @@ function index({ token, data }) {
             Цонхны эрхийн тохиргоо
           </h2>
         </div>
-        {khiikhTokhirgoo
-          .map((a) => [...a.tokhirgoo])
-          .flat()
+        {[{ner:'Гэрээ харах эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг харах эсэх',value:'gereeKharakhErkh'},
+          {ner:'Гэрээ засах эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг засах эсэх',value:'gereeZasakhErkh'},
+          {ner:'Хөнгөлөлт үзүүлэх эсэх',tailbar:'Тухайн барилгын хувьд бүх гэрээг хөнгөлөх эсэх',value:'khungulultUzuulekhEsekh'},
+          ]
           .map((mur) => (
             <div className="box" key={mur.ner}>
               <div className="flex items-center p-5">
@@ -147,14 +134,13 @@ function index({ token, data }) {
                 </div>
                 <div className="ml-auto">
                   <Switch
-                    checked={!!tokhirgoo?.find((a) => mur.ner === a)}
+                    checked={!!_.get(tokhirgoo,`${mur?.value}`)?.find(a=>barilgiinErkh.find(b => a === b))}
                     onChange={(checked) => {
                       setTokhirgoo((a) => {
                         if (!checked) {
-                          const index = a.findIndex((b) => b === mur.ner)
-                          a.splice(index, 1)
-                        } else a.push(mur.ner)
-                        return [...a]
+                          _.set(a,`${mur?.value}`,undefined)
+                        } else _.set(a,`${mur?.value}`,barilgiinErkh)
+                        return {...a}
                       })
                     }}
                   />
