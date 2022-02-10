@@ -26,6 +26,7 @@ function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetge
   const [ognoo, setOgnoo] = useState([moment().startOf('month'), moment().endOf('month')])
   const [tailan, setTailan] = useState(defaultTailan)
   const [tailanTurul, setTailanTurul] = useState(defaultTurul)
+  const [kharakhTurul, setKharakhTurul] = useState('month')
 
   const query = useMemo(() => {
     return {
@@ -42,13 +43,16 @@ function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetge
   )
 
   return <div className="box col-span-12 p-2 md:col-span-6">
-    <div className="w-full flex md:flex-row md:justify-between">
-      <div className="flex md:flex-row md:space-x-2">
+    <div className="w-full space-y-1 md:space-y-0 flex flex-col md:flex-row md:justify-between">
+      <div className="flex md:flex-row space-x-1">
         <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
           {tailanguud.map((a) => <Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
         </Select>
         <Select placeholder="График төрөл сонгох" value={tailanTurul} onChange={setTailanTurul}>
           {[{val:'line',lab:'Шугаман'},{val:'bar',lab:'Багана/босоо/'},{val:'barHorizontal',lab:'Багана/хэвтээ/'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
+        </Select>
+        <Select placeholder="График төрөл сонгох" value={kharakhTurul} onChange={setKharakhTurul}>
+          {[{val:'day',lab:'Өдөр'},{val:'month',lab:'Сар'},{val:'year',lab:'Жил'}].map(a=><Select.Option key={a.val} value={a.val}>{a.lab}</Select.Option>)}
         </Select>
       </div>
       <DatePicker.RangePicker
