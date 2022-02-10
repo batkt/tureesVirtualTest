@@ -4,10 +4,9 @@ import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
-import { BankOutlined, DeleteOutlined } from "@ant-design/icons"
+import { DeleteOutlined } from "@ant-design/icons"
 import { modal } from "components/ant/Modal"
 import { useReactToPrint } from "react-to-print"
-import Tulbur from "../eBarimt/Tulbur"
 
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
@@ -108,7 +107,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           message.success("Төлөлт амжилттай устгагдлаа!")
           refreshData()
         }
-      })
+      }).catch(aldaaBarigch)
     else {
       const footer = [
         <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
@@ -140,7 +139,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                     message.success("Төлөлт амжилттай устгагдлаа!")
                     refreshData()
                   }
-                })
+                }).catch(aldaaBarigch)
             }
           />
         ),

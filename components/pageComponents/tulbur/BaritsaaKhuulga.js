@@ -60,7 +60,7 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
           baritsaaKhuulgaMutate()
           onFinish()
         }
-      })
+      }).catch(aldaaBarigch)
   }
 
   return (
