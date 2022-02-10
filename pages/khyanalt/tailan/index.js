@@ -44,7 +44,7 @@ function Chart({barilgiinId,token,defaultTurul="line",defaultTailan = "guitsetge
   )
 
   return <div className="box col-span-12 p-2 md:col-span-6">
-    <div className="w-full space-y-1 md:space-y-0 flex flex-col md:flex-row md:justify-between">
+    <div className="w-full space-y-1 md:space-y-0 flex flex-col md:flex-row md:justify-between pb-5">
       <div className="flex md:flex-row space-x-1">
         <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
           {tailanguud.map((a) => <Select.Option key={a.service} value={a.service}>{a.ner}</Select.Option>)}
@@ -79,12 +79,6 @@ function AjiltanBurtgel({ token }) {
       </div>
       <div className="box col-span-12 divide-y p-2 md:col-span-6">
         <Chart barilgiinId={barilgiinId} token={token} defaultTurul='bar' defaultTailan='avlagiinTailanAvya'/>
-      </div>
-      <div className="box col-span-12 p-2 md:col-span-6">
-        <PieChart />
-      </div>
-      <div className="box col-span-12 divide-y p-2 md:col-span-6">
-      <Chart barilgiinId={barilgiinId} token={token} defaultTurul='barHorizontal' defaultTailan='borluulaltiinTailanAvya'/>
       </div>
     </Admin>
   )
