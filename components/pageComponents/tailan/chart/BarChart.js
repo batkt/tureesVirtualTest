@@ -1,5 +1,6 @@
 import React from "react"
 import { Bar } from "react-chartjs-2"
+import formatNumberNershil from "tools/function/formatNumberNershil"
 
 export const options = {
   responsive: true,
@@ -30,7 +31,7 @@ export const options = {
         },
         ticks: {
           callback: function (label, index, labels) {
-            if (_.isNumber(label)) return formatNumber(label)
+            if (_.isNumber(label)) return formatNumberNershil(label)
             return label
           },
         },

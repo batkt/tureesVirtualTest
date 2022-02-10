@@ -2,7 +2,7 @@ import _ from "lodash"
 import React from "react"
 
 import { Bar } from "react-chartjs-2"
-import formatNumber from "tools/function/formatNumber"
+import formatNumberNershil from "tools/function/formatNumberNershil"
 
 export const options = {
   indexAxis: "y",
@@ -32,7 +32,7 @@ export const options = {
       {
         ticks: {
           callback: function (label, index, labels) {
-            if (_.isNumber(label)) return formatNumber(label)
+            if (_.isNumber(label)) return formatNumberNershil(label)
             return label
           },
         },
@@ -49,7 +49,7 @@ export const options = {
           return (
             datasets[datasetIndex].label +
             " " +
-            formatNumber(tooltipItem?.value)
+            formatNumberNershil(tooltipItem?.value)
           )
         return datasets[datasetIndex].label + " " + tooltipItem?.value
       },
