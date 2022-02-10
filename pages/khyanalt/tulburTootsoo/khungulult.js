@@ -5,6 +5,7 @@ import {
   Form,
   Input,
   message,
+  notification,
   Popconfirm,
   Select,
   Table,
@@ -13,6 +14,7 @@ import {
 import Admin from "components/Admin"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import useKhungulultTuukh from "hooks/useKhungulultTuukh"
+import _ from "lodash"
 import moment from "moment"
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { useAuth } from "services/auth"
@@ -22,7 +24,7 @@ import createMethod from "tools/function/crud/createMethod"
 import formatNumber from "tools/function/formatNumber"
 
 function tulburTootsoo() {
-  const { token, baiguullaga, barilgiinId } = useAuth()
+  const { token, baiguullaga, barilgiinId,ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
   const formRef = useRef()
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
@@ -92,6 +94,10 @@ function tulburTootsoo() {
     setSongogdsonGereenuud([])
   }
   function khungulultKhadgalya() {
+    if((ajiltan?.erkh !== 'Admin' || !_.get(ajiltan,`tokhirgoo.khungulultUzuulekhEsekh`)?.find(a=>a === barilgiinId))){
+      notification.warning({message:'Таньд гэрээ хөнгөлөх эрх байхгүй байна.'})
+      return
+    }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue()
       ugugdul.ognoonuud = [
