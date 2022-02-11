@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Input, notification } from "antd";
-import uilchilgee from "services/uilchilgee";
 import useDans from "hooks/useDans"
 import updateMethod from "tools/function/crud/updateMethod";
 
