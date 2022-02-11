@@ -14,7 +14,7 @@ function QPay({
   const {dansGaralt} = useDans(token,baiguullaga?._id)
 
   useEffect(()=>{
-    const qpay = dansGaralt?.jagsaalt?.find(a=>a.bank === 'tdb' && a.qpayAshiglakhEsekh === true && !!a.qpayUsername)
+    const qpay = dansGaralt?.jagsaalt?.find(a=> !!a.qpayUsername)
     if(!!qpay){
       const {qpayUsername,qpayPassword} = qpay
       setQpayTokhirgoo({qpayUsername,qpayPassword})
@@ -30,7 +30,7 @@ function QPay({
   }
 
   const undseneerKhadgalya = () => {
-    dansGaralt?.jagsaalt?.filter(a=>a.qpayAshiglakhEsekh === true).map((mur,index,array)=>updateMethod('dans',token,{...mur,...qpayTokhirgoo}).then(({data})=>{
+    dansGaralt?.jagsaalt?.map((mur,index,array)=>updateMethod('dans',token,{...mur,...qpayTokhirgoo}).then(({data})=>{
       if(data === 'Amjilttai' && (array.length-1) === index){
         notification.success({message:'Амжилттай хадгаллаа'})
       }

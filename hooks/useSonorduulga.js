@@ -7,18 +7,24 @@ import { useAuth } from "services/auth"
 
 const fetcher = (url, token, baiguullagiinId, { jagsaalt, ...khuudaslalt }) => axios(token)
     .get(url, {params:{ ...khuudaslalt, query: { baiguullagiinId }, order: { createdAt:-1} }}).then(res => res.data).catch(aldaaBarigch)
+
+const tooFetcher = (url, token, baiguullagiinId, { jagsaalt, ...khuudaslalt }) => axios(token)
+.get(url, {params:{ ...khuudaslalt, query: { baiguullagiinId,kharsanEsekh:{$ne:true} }, order: { createdAt:-1} }}).then(res => res.data).catch(aldaaBarigch)
+    
 var sonorduulgaId = null
 
 function useSonorduulga(token) {
     const {baiguullaga} = useAuth()
-    const [khuudaslalt, setKhuudaslalt] = useState({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, jagsaalt: [] })
+    const [khuudaslalt, setKhuudaslalt] = useState({ khuudasniiDugaar: 1, khuudasniiKhemjee: 20, jagsaalt: [] })
     const { data, mutate } = useSWR(!!token && !!baiguullaga?._id ? ['/sonorduulga', token, baiguullaga?._id, khuudaslalt] : null, fetcher, { revalidateOnFocus: false })
+    const too = useSWR(!!token && !!baiguullaga?._id ? ['/sonorduulga/tooAvya', token, baiguullaga?._id, khuudaslalt] : null, tooFetcher, { revalidateOnFocus: false })
 
     useEffect(() => {
         if (baiguullaga?._id) {
             socket().on(`baiguullaga${baiguullaga?._id}`, sonorduulga => {
                 const key = `${Math.floor(Math.random() * 100)}+${Date.now()}`
                 mutate()
+                too.mutate()
                 if (!!sonorduulga && sonorduulgaId !== sonorduulga?._id) {
                     function onClose() {
                         notification.close(key)
@@ -36,7 +42,7 @@ function useSonorduulga(token) {
         }
     }, [baiguullaga])
 
-    return { setKhuudaslalt, sonorduulga: data, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt }
+    return { setKhuudaslalt, sonorduulga: data,kharaaguiToo:too?.data?.niitMur, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt }
 }
 
 export default useSonorduulga
