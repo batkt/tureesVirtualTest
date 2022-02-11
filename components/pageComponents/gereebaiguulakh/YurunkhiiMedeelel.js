@@ -7,6 +7,7 @@ import {
 } from "@ant-design/icons";
 import React from "react";
 import { url } from "services/uilchilgee";
+import FormLavlakh from "components/FormLavlakh"
 
 const formItemLayout = {
   labelCol: {
@@ -131,6 +132,20 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
       </Form.Item>
       <Form.Item name="mail" label="и-мэйл хаяг">
         <Input type="email" placeholder="и-мэйл хаяг" allowClear prefix={<MailOutlined />} />
+      </Form.Item>
+      <Form.Item name="dans" label="Төлөлт хийх данс">
+        <FormLavlakh lavlakh='dans' token={token} valKey="dugaar" infoKey="dugaar" shuukhTalbaruud={['dugaar','dansniiNer']} InfoComponent={({data})=>{
+          if(data)
+          return (
+            <div className="flex flex-row items-center space-x-2 p-1 font-medium">
+              <img className="w-5 h-5" alt='logo' src={`/${data?.bank}.png`}/>
+              <div>{data?.dansniiNer}</div>
+              <div>{data?.dugaar}</div>
+              <div>{data?.valyut}</div>
+            </div>
+          )
+          return null
+        }}/>
       </Form.Item>
       <Form.Item
         hidden={!baiguullagaEsekh}
