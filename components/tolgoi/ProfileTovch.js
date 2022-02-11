@@ -22,10 +22,11 @@ function ProfileTovch({ ajiltan, garya, token }) {
     if (
       e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight &&
       !!sonorduulga &&
-      sonorduulga?.jagsaalt.length === 10
+      sonorduulga?.jagsaalt.length === 20
     ) {
       setKhuudaslalt((kh) => ({
         khuudasniiDugaar: kh.khuudasniiDugaar + 1,
+        khuudasniiKhemjee: 20,
         jagsaalt: [...kh.jagsaalt, ...sonorduulga?.jagsaalt],
       }));
     }
@@ -36,10 +37,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
       <Dropdown
         trigger="click"
         overlay={
-          <Menu
-            style={{ maxHeight: "70vh", overflow: "auto" }}
-            onScroll={onScroll}
-          >
+          <Menu>
             <Menu.Item>Сонордуулга</Menu.Item>
             <Menu.Divider />
             {!(sonorduulga?.jagsaalt?.length > 0) && (
@@ -47,6 +45,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 <Empty description="Хоосон байна" />
               </Menu.Item>
             )}
+            <div style={{ maxHeight: "70vh", overflow: "auto" }}
+            onScroll={onScroll}>
             {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur, i) => {
               const {turul,message,khariltsagchiinNer,createdAt,_id} = mur?.object || {}
               return (
@@ -115,6 +115,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 </div>
               </Menu.Item>
             )}
+            </div>
           </Menu>
         }
       >
