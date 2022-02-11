@@ -44,7 +44,7 @@ function useSanalGomdol(token, value) {
                     mutate()
             })
         }
-    }, [baiguullaga,khariltsagch,data])
+    }, [value])
 
     function nextSonorduulga() {
         if (data?.khuudasniiDugaar < data?.niitKhuudas)

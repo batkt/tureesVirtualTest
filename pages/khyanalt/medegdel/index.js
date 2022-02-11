@@ -55,7 +55,7 @@ function Khyanalt({ token }) {
     mailiinZagvarMutate
   } = useMailiinZagvar(token, "sms")
 
-  const {sonorduulga,sonorduulgaMutate,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'App' && token,khariltsagch?.register)
+  const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'App' && token,khariltsagch?.register)
 
   useEffect(() => {
     setKhariltsagch(null)
@@ -92,7 +92,7 @@ function Khyanalt({ token }) {
         {
             sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:ingeekhmSms,turul:'medegdel'})
             sonorduulgaMutate({...sonorduulga},false)
-            notification.success({message:'SMS Амжилттай илгээлээ'})
+            notification.success({message:'Notification Амжилттай илгээлээ'})
             setLoading(false)
         }
         else if(!!data?.failureCount)
@@ -256,6 +256,37 @@ function Khyanalt({ token }) {
       }
     })
   }
+
+  function seen() {
+    const seenList = [...jagsaalt,...(sonorduulga?.jagsaalt || [])].filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh !== true)
+    if(seenList.length > 0)
+    {
+      const seenIds = seenList.map(a=>a._id)
+      if(jagsaalt.filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh === false).length > 0)
+        setKhuudaslalt(a=>{
+          a.jagsaalt.forEach(b=>{
+            if(b.turul !== 'medegdel' && b.kharsanEsekh === false)
+              b.kharsanEsekh = true
+          })
+          return a
+        })
+      uilchilgee(token).post('/sanalKharlaa',{id:seenIds}).then(()=>{
+        if(sonorduulga?.jagsaalt?.filter(a=>a.turul !== 'medegdel' && a.kharsanEsekh === false).length > 0)
+          sonorduulgaMutate()
+      }).catch(aldaaBarigch)
+    }
+  }
+
+  function onScroll(e) {
+    clearTimeout(timeout);
+    timeout = setTimeout(function () {
+      seen()
+    }, 300);
+    
+    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
+      nextSonorduulga()
+    }
+  } 
   //#endregion
 
   return (
@@ -439,12 +470,19 @@ function Khyanalt({ token }) {
           <div className="w-full">
             {ilgeekhTurul === "gantsaar" && (
               turul === 'App' ? 
-                <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 27rem)'}}>
+                <div className='p-5 overflow-y-auto flex flex-col-reverse' style={{maxHeight:'calc(100vh - 27rem)'}} onScroll={onScroll}>
                   {
-                      sonorduulga?.jagsaalt?.map((a,i)=>{
+                      [...jagsaalt,...(sonorduulga?.jagsaalt || [])].map((a,i)=>{
                           return(
                               <div className={`relative w-1/3 p-3 bg-green-500 rounded-xl border border-green-200 flex flex-col mt-8  ${a.turul === 'medegdel' ? 'bg-blue-500 ml-auto rounded-br-none' : 'rounded-bl-none'}`}>
                                   <span className='text-white'>{a.message}</span>
+                                  <div className={`fill-current text-white w-5 h-5 absolute right-2 ${a.kharsanEsekh === true ? '' : 'hidden'}`}>
+                                    <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                      <path d="M16 7L12 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                      <path d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                                    </svg>
+                                  </div>
                                   <span className='text-gray-500 font-medium text-xs absolute -bottom-5'>{moment(a.createdAt).format('YYYY-MM-DD hh:mm')}</span>
                                   <span className='text-gray-500 right-0 absolute -bottom-5'>{a.turul}</span>
                               </div>
