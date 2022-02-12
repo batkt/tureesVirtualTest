@@ -255,7 +255,7 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className="print a5 p-10"
+                  className="print a5 p-10 sun-editor-editable"
                   dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
                 />
               )

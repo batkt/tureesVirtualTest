@@ -94,7 +94,7 @@ function tulburTootsoo() {
     setSongogdsonGereenuud([])
   }
   function khungulultKhadgalya() {
-    if((ajiltan?.erkh !== 'Admin' || !_.get(ajiltan,`tokhirgoo.khungulultUzuulekhEsekh`)?.find(a=>a === barilgiinId))){
+    if((ajiltan?.erkh !== 'Admin' && !_.get(ajiltan,`tokhirgoo.khungulultUzuulekhEsekh`)?.find(a=>a === barilgiinId))){
       notification.warning({message:'Таньд гэрээ хөнгөлөх эрх байхгүй байна.'})
       return
     }
