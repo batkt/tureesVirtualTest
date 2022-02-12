@@ -132,7 +132,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                   khyamdral,
                   objectiinId: _id,
                   tailbar,
-                  talbainDugaar:data?.talbainDugaar
+                  talbainDugaar:data?.talbainDugaar,
+                  barilgiinId:data?.barilgiinId,
                 })
                 .then(({ data }) => {
                   if (data) {
