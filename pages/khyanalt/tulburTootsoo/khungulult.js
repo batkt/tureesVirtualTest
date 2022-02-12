@@ -94,10 +94,6 @@ function tulburTootsoo() {
     setSongogdsonGereenuud([])
   }
   function khungulultKhadgalya() {
-    if((ajiltan?.erkh !== 'Admin' || !_.get(ajiltan,`tokhirgoo.khungulultUzuulekhEsekh`)?.find(a=>a === barilgiinId))){
-      notification.warning({message:'Таньд гэрээ хөнгөлөх эрх байхгүй байна.'})
-      return
-    }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue()
       ugugdul.ognoonuud = [
