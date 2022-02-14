@@ -67,6 +67,7 @@ function AvlagaiinKhuvaariUusgekh({value,onChange,ugugdul}) {
       })
     })
     setJagsaalt([...data])
+    if(!ugugdul?._id)
     onChange({guilgeenuud:data})
   },[])
 
