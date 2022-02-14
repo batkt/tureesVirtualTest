@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React, { useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, DatePicker, Table, Select, Button, Tooltip, message } from "antd"
+import { Card, DatePicker, Table, Select, Button, Tooltip, message, Spin } from "antd"
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -18,6 +18,7 @@ import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeKholbokh"
 import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import Tulbur from "components/pageComponents/eBarimt/Tulbur"
+import useUldegdel from "hooks/khuulga/useUldegdel"
 const { RangePicker } = DatePicker
 
 function iconAvya(a,bank) {
@@ -58,8 +59,8 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token,baiguullaga?._id)
   const [songogdsonDans, setSongogdsonDans] = React.useState(null)
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null)
-  const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } =
-    useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
+  const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } = useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
+  const {uldegdel} = useUldegdel(token,songogdsonDans?.dugaar)
 
   const [order, setOrder] = React.useState({tranDate: -1, time: 0})
 
@@ -479,7 +480,7 @@ function tulburTootsoo({ token }) {
           </div>
           {songogdsonDans && (
             <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
-              Үлдэгдэл: {formatNumber(songogdsonDans.balance, 2)}{" "}
+              Үлдэгдэл: {uldegdel ? (songogdsonDans?.bank === 'tdb' ? uldegdel : formatNumber(uldegdel)) : <Spin/>}{" "}
               {songogdsonDans.currency}
             </div>
           )}
