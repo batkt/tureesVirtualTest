@@ -1,6 +1,6 @@
-import { notification } from 'antd'
+import { notification,Modal } from 'antd'
 import socketIOClient from 'socket.io-client'
-import { useEffect } from 'react'
+import { useState,useEffect } from 'react'
 
 export const url = "http://103.50.205.33:8282"
 
@@ -12,10 +12,18 @@ const refreshPage = ()=>{
 
 function Updater() {
     useEffect(()=>{
-        socket().on("turees", medegdel => {
-          notification.info({message:'sda',description:'',onClick:refreshPage})  
+        socket().on("tureesFront", medegdel => {
+            Modal.info({
+                title: 'Мэдэгдэл',
+                content: <div>Системд шинэчлэлт хийгдсэн байна. Шинэчлэлт хийхийн тулд <b>сэргээх</b> товчийг дарна уу!</div>,
+                onOk:refreshPage,
+                okText:'Сэргээх',
+                cancelText:'Хаах',
+                okCancel:true
+            });
         })
     },[])
+
     return <div></div>
 }
 

@@ -12,6 +12,7 @@ import ProfileTovch from "./tolgoi/ProfileTovch"
 import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo"
 import { useThemeValue } from "pages"
 import MSearch from "./tolgoi/MSearch"
+import Updater from "./Updater"
 
 var timeout = null
 
@@ -66,6 +67,7 @@ function Admin({
         <title>{title}</title>
         <link rel="icon" href="/rent.png" />
       </Head>
+      <Updater/>
       {!dedKhuudas && (
         <NTses
           khuudasnuud={khuudasnuud}
