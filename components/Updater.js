@@ -13,6 +13,7 @@ const refreshPage = ()=>{
 function Updater() {
     useEffect(()=>{
         socket().on("tureesFront", medegdel => {
+            if(!medegdel?.err)
             Modal.info({
                 title: 'Мэдэгдэл',
                 content: <div>Системд шинэчлэлт хийгдсэн байна. Шинэчлэлт хийхийн тулд <b>сэргээх</b> товчийг дарна уу!</div>,
