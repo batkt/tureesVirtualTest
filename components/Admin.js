@@ -13,6 +13,7 @@ import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo"
 import { useThemeValue } from "pages"
 import MSearch from "./tolgoi/MSearch"
 import Updater from "./Updater"
+import Zaavar from "./Zaavar"
 
 var timeout = null
 
@@ -24,7 +25,8 @@ function Admin({
   className,
   dedKhuudas,
   hideSearch,
-  onBack
+  onBack,
+  tsonkhniiId
 }) {
   const [mSearch, setMSearch] = useState(false)
   const { themeValue, setTheme } = useThemeValue()
@@ -112,6 +114,9 @@ function Admin({
             </h2>
           </div>
           <div className="flex flex-row space-x-6">
+            {tsonkhniiId && <div className="h-8 hidden md:flex justify-center items-center ">
+              <Zaavar token={token} id={tsonkhniiId}/>
+            </div>}
             <div className="h-8 justify-center items-center hidden md:flex">
               <div className="mr-4 text-gray-700 dark:text-gray-300 whitespace-nowrap hidden md:flex">
                 Dark Mode

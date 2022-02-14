@@ -1,6 +1,6 @@
-import { notification,Modal } from 'antd'
+import { Modal } from 'antd'
 import socketIOClient from 'socket.io-client'
-import { useState,useEffect } from 'react'
+import { useEffect } from 'react'
 
 export const url = "http://103.50.205.33:8282"
 
