@@ -70,6 +70,7 @@ const nekhemjlekhiinTalbaruud = [
   { ner: "Банк", talbar: "bank" },
   { ner: "Хэвлэсэн огноо", talbar: "khevlesenOgnoo" },
   { ner: "Нэхэмжлэхийн дугаар", talbar: "nekhemjlekhiinDugaar" },
+  { ner: "Өмнөх хуримтлагдсан өр төлбөр",talbar:'umnukhSariinUrTulbur'},
   { ner: "Энэ сард төлөх үсгээр",talbar:"eneSardTulukhUsgeer"},
   { ner: "Нийт үлдэгдэл үсгээр",talbar:"niitUldegdelUsgeer"}
 ]
