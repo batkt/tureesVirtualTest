@@ -23,6 +23,9 @@ function Updater() {
                 okCancel:true
             });
         })
+        return ()=>{
+            socket().off("tureesFront")
+        }
     },[])
 
     return <div></div>

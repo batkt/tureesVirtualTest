@@ -44,6 +44,9 @@ function useSanalGomdol(token, value) {
                     mutate()
             })
         }
+        return ()=>{
+            socket().off(`baiguullaga${baiguullaga?._id}`)
+        }
     }, [value])
 
     function nextSonorduulga() {

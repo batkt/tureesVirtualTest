@@ -40,6 +40,9 @@ function useSonorduulga(token) {
                 }
             })
         }
+        return ()=>{
+            socket().off(`baiguullaga${baiguullaga?._id}`)
+        }
     }, [baiguullaga])
 
     return { setKhuudaslalt, sonorduulga: data,kharaaguiToo:too?.data?.niitMur, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt }
