@@ -43,16 +43,18 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import { useKhariltsagchToololt } from "hooks/useKhariltsagch"
 import { modal } from "components/ant/Modal"
 import formatNumber from "tools/function/formatNumber"
+import CardList from "components/cardList"
+import KhariltsagchTile from "./dedKheseg/KhariltsagchTile"
 
 const iconColor = { fontSize: "18px" }
 
-function checkUtas(form,fields,utga) {
+function checkUtas(form, fields, utga) {
   const utguud = []
-  fields.map(a=>{
-    utguud.push(form.getFieldValue(['utas',a.name]))
+  fields.map((a) => {
+    utguud.push(form.getFieldValue(["utas", a.name]))
   })
-  if(!!utguud.find(a=>a === utga)){
-    message.warning('Энэ утасны дугаарыг бүртгэсэн байна')
+  if (!!utguud.find((a) => a === utga)) {
+    message.warning("Энэ утасны дугаарыг бүртгэсэн байна")
     return false
   }
   return true
@@ -62,9 +64,9 @@ function AjiltanBurtgel({ token }) {
   const formRef = useRef()
   const excelref = useRef()
 
-  const { ajiltan ,barilgiinId} = useAuth()
+  const { ajiltan, barilgiinId } = useAuth()
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId,100)
+    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100)
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token)
   const [formNuukh, setFormNuukh] = useState(false)
@@ -153,7 +155,7 @@ function AjiltanBurtgel({ token }) {
       ),
 
       khuvi: -30,
-      utga: "Аж ахуй нэгж",
+      utga: "ААН",
     },
     {
       too: 0,
@@ -201,11 +203,11 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch)
   }
-  
+
   function khariltsagchBurtgekh() {
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId
     khariltsagchState.barilgiinId = barilgiinId
-    
+
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
@@ -363,7 +365,7 @@ function AjiltanBurtgel({ token }) {
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
     >
-      <div className="col-span-12 md:col-span-6 xl:col-span-3 box p-5">
+      <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
           <Form.Item
             name="turul"
@@ -460,50 +462,69 @@ function AjiltanBurtgel({ token }) {
             ></Input>
           </Form.Item>
           <Form.List name="utas">
-                {(fields, { add, remove}, { errors }) => (
-                <>
-                    {fields?.length > 0 && <Form.Item label={'Утас'} >
-                        <div className='flex flex-wrap'>
-                        {fields.map((field) => (
-                            <div key={field.key} className='flex flex-row space-x-1 border rounded-md items-center px-1 bg-gray-50 m-1'>
-                                <label>{formRef.current.getFieldValue(['utas',field.name])}</label>
-                                <MinusCircleOutlined
-                                    style={{display:'flex'}}
-                                    onClick={() => {
-                                      remove(field.name)
-                                      khariltsagchState.utas.splice(field.name,1)
-                                      onChange("khayag", khariltsagchState.utas)
-                                    }}
-                                />
-                            </div>
-                        ))}
+            {(fields, { add, remove }, { errors }) => (
+              <>
+                {fields?.length > 0 && (
+                  <Form.Item label={"Утас"}>
+                    <div className="flex flex-wrap">
+                      {fields.map((field) => (
+                        <div
+                          key={field.key}
+                          className="m-1 flex flex-row items-center space-x-1 rounded-md border bg-gray-50 px-1"
+                        >
+                          <label>
+                            {formRef.current.getFieldValue([
+                              "utas",
+                              field.name,
+                            ])}
+                          </label>
+                          <MinusCircleOutlined
+                            style={{ display: "flex" }}
+                            onClick={() => {
+                              remove(field.name)
+                              khariltsagchState.utas.splice(field.name, 1)
+                              onChange("khayag", khariltsagchState.utas)
+                            }}
+                          />
                         </div>
-                    </Form.Item>}
-                    <Form.Item>
-                        <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }} >
-                            <Input allowClear placeholder="утас" onKeyUp={(e)=>{
-                                if(e.key === 'Enter' && checkUtas(formRef.current,fields,e.target.value)){
-                                    add(e.target.value,0)
-                                    khariltsagchState.utas.push(e.target.value)
-                                    onChange("khayag", khariltsagchState.utas)
-                                    e.target.value = ''
-                                }
-                            }}
-                            onBlur={(e)=>{
-                              if(e.target.value?.length === 8 && checkUtas(formRef.current,fields,e.target.value))
-                                {
-                                  add(e.target.value,0)
-                                  khariltsagchState.utas.push(e.target.value)
-                                  onChange("khayag", khariltsagchState.utas)
-                                    e.target.value = ''
-                                }
-                            }}
-                            prefix={<PhoneOutlined style={iconColor} />}/>
-                        </Form.Item>
-                    </Form.Item>
-                </>
+                      ))}
+                    </div>
+                  </Form.Item>
                 )}
-            </Form.List>
+                <Form.Item>
+                  <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }}>
+                    <Input
+                      allowClear
+                      placeholder="утас"
+                      onKeyUp={(e) => {
+                        if (
+                          e.key === "Enter" &&
+                          checkUtas(formRef.current, fields, e.target.value)
+                        ) {
+                          add(e.target.value, 0)
+                          khariltsagchState.utas.push(e.target.value)
+                          onChange("khayag", khariltsagchState.utas)
+                          e.target.value = ""
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (
+                          e.target.value?.length === 8 &&
+                          checkUtas(formRef.current, fields, e.target.value)
+                        ) {
+                          add(e.target.value, 0)
+                          khariltsagchState.utas.push(e.target.value)
+                          onChange("khayag", khariltsagchState.utas)
+                          e.target.value = ""
+                        }
+                      }}
+                      prefix={<PhoneOutlined style={iconColor} />}
+                    />
+                  </Form.Item>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
           <Form.Item name="mail">
             <Input
               type="email"
@@ -525,19 +546,19 @@ function AjiltanBurtgel({ token }) {
           </Form.Item>
         </Form>
       </div>
-      <div className="col-span-12 md:col-span-6 xl:col-span-9 box p-5 overflow-auto">
-        <div className="w-full flex border-solid  grid-cols-12 gap-6">
+      <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+        <div className="flex w-full grid-cols-12  gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className="w-full block justify-between border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 block h-20 w-full cursor-pointer justify-between rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-2xl text-green-600 font-bold">
+                        <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -545,7 +566,7 @@ function AjiltanBurtgel({ token }) {
                         </div>
                       </div>
                       <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
+                        <div className="text-2xl text-green-600">
                           {mur.icon}
                         </div>
                       </div>
@@ -556,9 +577,8 @@ function AjiltanBurtgel({ token }) {
             )
           })}
         </div>
-        <div className="flex flex-row mb-5">
-          <div>
-          </div>
+        <div className="mb-5 flex flex-row">
+          <div></div>
           <div className="ml-auto">
             <Button
               style={{
@@ -575,14 +595,241 @@ function AjiltanBurtgel({ token }) {
             </Button>
           </div>
         </div>
-        <Table
-          bordered
-          tableLayout={
-            khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
-          }
-          scroll={{ y: "calc(100vh - 26rem)" }}
-          rowKey={(row) => row._id}
-          dataSource={khariltsagchiinGaralt?.jagsaalt}
+        <div className="mt-8 hidden overflow-auto md:block">
+          <Table
+            bordered
+            tableLayout={
+              khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
+            }
+            scroll={{ y: "calc(100vh - 26rem)" }}
+            rowKey={(row) => row._id}
+            dataSource={khariltsagchiinGaralt?.jagsaalt}
+            pagination={{
+              current: khariltsagchiinGaralt?.khuudasniiDugaar,
+              pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
+              total: khariltsagchiinGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+            loading={!khariltsagchiinGaralt}
+            size="small"
+            rowSelection={{
+              onSelect: (selectedRowKeys) => {
+                console.log("selectedRowKeys changed: ", selectedRowKeys)
+              },
+            }}
+            columns={[
+              {
+                title: "№",
+                key: "index",
+                className: "text-center",
+                render: (text, record, index) =>
+                  (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
+                  index +
+                  1,
+              },
+              {
+                title: "Төрөл",
+                dataIndex: "turul",
+                align: "center",
+                ellipsis: true,
+                render: (turul) => {
+                  return (
+                    <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
+                      {turul}
+                    </Tag>
+                  )
+                },
+              },
+              { title: "Регистр", dataIndex: "register", ellipsis: true },
+              { title: "Нэр", dataIndex: "ner", ellipsis: true },
+              {
+                title: "Хаяг",
+                dataIndex: "khayag",
+                ellipsis: true,
+                width: "5rem",
+              },
+              {
+                title: "Утас",
+                dataIndex: "utas",
+                ellipsis: true,
+                render(a) {
+                  return a?.join(",")
+                },
+              },
+              {
+                title: "И-мэйл",
+                dataIndex: "mail",
+                ellipsis: true,
+                width: "5rem",
+                align: "center",
+              },
+              {
+                title: "Төлөв",
+                dataIndex: "tuluv",
+                ellipsis: true,
+                align: "center",
+                render: () => {
+                  return <Tag color="green">Идэвхтэй</Tag>
+                },
+              },
+              {
+                title: "Түүх",
+                width: "4rem",
+                align: "center",
+                render: (data) => {
+                  return (
+                    <Popover
+                      trigger="click"
+                      content={
+                        <Table
+                          bordered
+                          style={{
+                            display: "flex",
+                            width: "800px",
+                          }}
+                          size="small"
+                          dataSource={jagsaaltTuukh?.jagsaalt}
+                          columns={[
+                            {
+                              title: "№",
+                              key: "index",
+                              className: "text-center",
+                              render: (text, record, index) =>
+                                (jagsaaltTuukh?.khuudasniiDugaar || 0) *
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
+                                index +
+                                1,
+                            },
+                            {
+                              title: "Талбай",
+                              dataIndex: "talbainDugaar",
+                              ellipsis: true,
+                            },
+                            {
+                              title: "Эхлэх",
+                              dataIndex: "gereeniiOgnoo",
+                              ellipsis: true,
+                              render: (gereeniiOgnoo) => {
+                                return moment(gereeniiOgnoo).format(
+                                  "YYYY-MM-DD"
+                                )
+                              },
+                            },
+                            {
+                              title: "Дуусах",
+                              dataIndex: "duusakhOgnoo",
+                              ellipsis: true,
+                              render: (duusakhOgnoo) => {
+                                return moment(duusakhOgnoo).format("YYYY-MM-DD")
+                              },
+                            },
+                            {
+                              title: "Хугацаа",
+                              dataIndex: "khugatsaa",
+                              ellipsis: true,
+                            },
+                            {
+                              title: "Хэмжээ/m2/",
+                              dataIndex: "talbainKhemjee",
+                              ellipsis: true,
+                            },
+                            {
+                              title: "Сарын түрээс",
+                              dataIndex: "sariinTurees",
+                              ellipsis: true,
+                              render: (sariinTurees) => {
+                                return formatNumber(sariinTurees)
+                              },
+                            },
+                            {
+                              title: "Нийт үнэ",
+                              dataIndex: "talbainNiitUne",
+                              ellipsis: true,
+                              render: (talbainNiitUne) => {
+                                return formatNumber(talbainNiitUne)
+                              },
+                            },
+                          ]}
+                        ></Table>
+                      }
+                    >
+                      <a
+                        className=" flex items-center justify-center hover:bg-gray-200"
+                        onClick={() => tuukh(data)}
+                      >
+                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  )
+                },
+              },
+              {
+                title: "Бүртгэгдсэн",
+                dataIndex: "createdAt",
+                ellipsis: true,
+                render: (data) => {
+                  return moment(data).format("YYYY-MM-DD")
+                },
+              },
+              {
+                title: () => <SettingOutlined />,
+                align: "center",
+                width: "1rem",
+                ellipsis: true,
+                render: (data) => (
+                  <div className="flex flex-row">
+                    <Popover
+                      placement="bottom"
+                      trigger="click"
+                      content={() => (
+                        <div className="flex w-24 flex-col space-y-2">
+                          <a
+                            className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                            onClick={() => zasya(data)}
+                          >
+                            <EditOutlined style={{ fontSize: "18px" }} />
+                            <label>Засах</label>
+                          </a>
+                          <Popconfirm
+                            title="Харилцагч устгах уу?"
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                            onConfirm={() => khariltsagchUstgay(data)}
+                          >
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                              <DeleteOutlined
+                                style={{ fontSize: "18px", color: "red" }}
+                              />
+                              <label>Устгах</label>
+                            </a>
+                          </Popconfirm>
+                        </div>
+                      )}
+                    >
+                      <a className="flex items-center justify-center hover:bg-gray-200">
+                        <MoreOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  </div>
+                ),
+              },
+            ]}
+          />
+        </div>
+        <CardList
+          keyValue="khariltsagch"
+          className="block overflow-auto md:hidden"
+          jagsaalt={khariltsagchiinGaralt?.jagsaalt}
+          Component={KhariltsagchTile}
           pagination={{
             current: khariltsagchiinGaralt?.khuudasniiDugaar,
             pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
@@ -595,205 +842,6 @@ function AjiltanBurtgel({ token }) {
                 khuudasniiKhemjee,
               })),
           }}
-          loading={!khariltsagchiinGaralt}
-          size="small"
-          rowSelection={{
-            onSelect: (selectedRowKeys) => {
-              console.log("selectedRowKeys changed: ", selectedRowKeys)
-            },
-          }}
-          columns={[
-            {
-              title: "№",
-              key: "index",
-              className: "text-center",
-              render: (text, record, index) =>
-                (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
-                (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
-                index +
-                1,
-            },
-            {
-              title: "Төрөл",
-              dataIndex: "turul",
-              align: "center",
-              ellipsis: true,
-              render: (turul) => {
-                return (
-                  <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
-                    {turul}
-                  </Tag>
-                )
-              },
-            },
-            { title: "Регистр", dataIndex: "register", ellipsis: true },
-            { title: "Нэр", dataIndex: "ner", ellipsis: true },
-            {
-              title: "Хаяг",
-              dataIndex: "khayag",
-              ellipsis: true,
-              width: "5rem",
-            },
-            { title: "Утас", dataIndex: "utas", ellipsis: true,render(a){
-              return a?.join(',')
-            } },
-            {
-              title: "И-мэйл",
-              dataIndex: "mail",
-              ellipsis: true,
-              width: "5rem",
-              align: "center",
-            },
-            {
-              title: "Төлөв",
-              dataIndex: "tuluv",
-              ellipsis: true,
-              align: "center",
-              render: () => {
-                return <Tag color="green">Идэвхтэй</Tag>
-              },
-            },
-            {
-              title: "Түүх",
-              width: "4rem",
-              align: "center",
-              render: (data) => {
-                return (
-                  <Popover
-                    trigger="click"
-                    content={
-                      <Table
-                        bordered
-                        style={{
-                          display: "flex",
-                          width: "800px",
-                        }}
-                        size="small"
-                        dataSource={jagsaaltTuukh?.jagsaalt}
-                        columns={[
-                          {
-                            title: "№",
-                            key: "index",
-                            className: "text-center",
-                            render: (text, record, index) =>
-                              (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
-                              (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
-                              index +
-                              1,
-                          },
-                          {
-                            title: "Талбай",
-                            dataIndex: "talbainDugaar",
-                            ellipsis: true,
-                          },
-                          {
-                            title: "Эхлэх",
-                            dataIndex: "gereeniiOgnoo",
-                            ellipsis: true,
-                            render: (gereeniiOgnoo) => {
-                              return moment(gereeniiOgnoo).format("YYYY-MM-DD")
-                            },
-                          },
-                          {
-                            title: "Дуусах",
-                            dataIndex: "duusakhOgnoo",
-                            ellipsis: true,
-                            render: (duusakhOgnoo) => {
-                              return moment(duusakhOgnoo).format("YYYY-MM-DD")
-                            },
-                          },
-                          {
-                            title: "Хугацаа",
-                            dataIndex: "khugatsaa",
-                            ellipsis: true,
-                          },
-                          {
-                            title: "Хэмжээ/m2/",
-                            dataIndex: "talbainKhemjee",
-                            ellipsis: true,
-                          },
-                          {
-                            title: "Сарын түрээс",
-                            dataIndex: "sariinTurees",
-                            ellipsis: true,
-                            render: (sariinTurees) => {
-                              return formatNumber(sariinTurees)
-                            },
-                          },
-                          {
-                            title: "Нийт үнэ",
-                            dataIndex: "talbainNiitUne",
-                            ellipsis: true,
-                            render: (talbainNiitUne) => {
-                              return formatNumber(talbainNiitUne)
-                            },
-                          },
-                        ]}
-                      ></Table>
-                    }
-                  >
-                    <a
-                      className=" hover:bg-gray-200 flex items-center justify-center"
-                      onClick={() => tuukh(data)}
-                    >
-                      <EyeOutlined style={{ fontSize: "18px" }} />
-                    </a>
-                  </Popover>
-                )
-              },
-            },
-            {
-              title: "Бүртгэгдсэн",
-              dataIndex: "createdAt",
-              ellipsis: true,
-              render: (data) => {
-                return moment(data).format("YYYY-MM-DD")
-              },
-            },
-            {
-              title: () => <SettingOutlined />,
-              align: "center",
-              width: "1rem",
-              ellipsis: true,
-              render: (data) =>
-                  <div className="flex flex-row">
-                    <Popover
-                      placement="bottom"
-                      trigger="click"
-                      content={() => (
-                        <div className="flex flex-col space-y-2 w-24">
-                          <a
-                            className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full"
-                            onClick={() => zasya(data)}
-                          >
-                            <EditOutlined style={{ fontSize: "18px" }} />
-                            <label>Засах</label>
-                          </a>
-                          <Popconfirm
-                            title="Харилцагч устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
-                            onConfirm={() => khariltsagchUstgay(data)}
-                          >
-                            <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full">
-                              <DeleteOutlined
-                                style={{ fontSize: "18px", color: "red" }}
-                              />
-                              <label>Устгах</label>
-                            </a>
-                          </Popconfirm>
-                        </div>
-                      )}
-                    >
-                      <a className="hover:bg-gray-200 flex items-center justify-center">
-                        <MoreOutlined style={{ fontSize: "18px" }} />
-                      </a>
-                    </Popover>
-                  </div>
-            },
-          ]}
         />
       </div>
     </Admin>

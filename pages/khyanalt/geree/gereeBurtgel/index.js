@@ -45,6 +45,8 @@ import GereeExceleesOruulakh from "components/pageComponents/geree/GereeExcelees
 import Sungakh from "components/pageComponents/geree/Sungakh"
 import { modal } from "components/ant/Modal"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
+import CardList from "components/cardList"
+import GereeTile from "./dedKheseg/GereeTile"
 //#endregion
 
 const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
@@ -75,23 +77,23 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   )
 
   return (
-    <div className="space-y-2 w-full">
-      <div className="space-y-1 w-full font-medium">
-        <div className="w-full flex flex-row justify-between">
+    <div className="w-full space-y-2">
+      <div className="w-full space-y-1 font-medium">
+        <div className="flex w-full flex-row justify-between">
           <div className="text-right">Эхлэх огноо:</div>
           <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
         </div>
-        <div className="w-full flex flex-row justify-between">
+        <div className="flex w-full flex-row justify-between">
           <div className="text-right">Дуусах огноо:</div>
           <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
         </div>
-        <div className="w-full flex flex-row justify-between">
+        <div className="flex w-full flex-row justify-between">
           <div className="text-right">Ашигласан хоног:</div>
           <div>
             {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
           </div>
         </div>
-        <div className="w-full flex flex-row justify-between">
+        <div className="flex w-full flex-row justify-between">
           <div className="text-right">Авлагын дүн:</div>
           <div>{formatNumber(data?.uldegdel)}</div>
         </div>
@@ -106,15 +108,14 @@ const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
 })
 
 function ZakhialgiinKhyanalt() {
-  //#region const 
-  const { token, baiguullaga,barilgiinId,ajiltan } = useAuth()
+  //#region const
+  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth()
   const [shuult, setShuult] = React.useState({
     query: {},
   })
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
-  const { gereeToollolt } =
-    useGereeniiJagsaaltToollolt(token)
+  const { gereeToollolt } = useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null)
   const componentRef = React.useRef()
@@ -378,7 +379,7 @@ function ZakhialgiinKhyanalt() {
                 }
                 trigger="click"
               >
-                <a className="hover:bg-gray-200 flex items-center justify-center">
+                <a className="flex items-center justify-center hover:bg-gray-200">
                   <Badge size="small" count={data.length}>
                     <EyeOutlined style={{ fontSize: "18px" }} />
                   </Badge>
@@ -401,28 +402,37 @@ function ZakhialgiinKhyanalt() {
               }
               visible={data?._id === gereeniiTokhirgoo}
               content={() => (
-                <div className="flex flex-col space-y-2 w-24">
+                <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full"
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
                     onClick={() => gereeKharya(data)}
                   >
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
                     <label> Харах</label>
                   </a>
                   <a
-                    className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
-                    onClick={() =>{
-                        if(ajiltan?.erkh === 'Admin' || !!_.get(ajiltan,`tokhirgoo.gereeZasakhErkh`)?.find(a=>a === data.barilgiinId))
-                          router.push(`/khyanalt/geree/gereeBaiguulakh/${data._id}`)
-                        else notification.warning({message:'Таньд гэрээ засах эрх байхгүй байна.'})
-                      }
-                    }
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={() => {
+                      if (
+                        ajiltan?.erkh === "Admin" ||
+                        !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
+                          (a) => a === data.barilgiinId
+                        )
+                      )
+                        router.push(
+                          `/khyanalt/geree/gereeBaiguulakh/${data._id}`
+                        )
+                      else
+                        notification.warning({
+                          message: "Таньд гэрээ засах эрх байхгүй байна.",
+                        })
+                    }}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
                     <label> Засах</label>
                   </a>
                   <a
-                    className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
                     onClick={() => gereeSungaya(data)}
                   >
                     <FieldTimeOutlined style={{ fontSize: "18px" }} />
@@ -434,7 +444,7 @@ function ZakhialgiinKhyanalt() {
                     cancelText="Үгүй"
                     onConfirm={() => gereeTsutsalya(data)}
                   >
-                    <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between">
+                    <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
                       <MinusCircleOutlined style={{ fontSize: "18px" }} />
                       <label> Цуцлах</label>
                     </a>
@@ -444,7 +454,7 @@ function ZakhialgiinKhyanalt() {
               placement="bottom"
               trigger="click"
             >
-              <a className="rounded-full hover:bg-gray-200 flex items-center justify-center">
+              <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
             </Popover>
@@ -604,21 +614,21 @@ function ZakhialgiinKhyanalt() {
           />
         )}
       </Drawer>
-      <Card className="col-span-12 p-5 cardgrid">
-        <div className="w-full border-solid grid grid-cols-12 gap-6">
+      <Card className="cardgrid col-span-12 p-5">
+        <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
                 className={`border-2 ${
                   mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in ${
+                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
                   mur?.utga === shuult?.utga ? mur.selectedColor : ""
                 }`}
                 onClick={() => setShuult(mur)}
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
                         <div
@@ -669,7 +679,7 @@ function ZakhialgiinKhyanalt() {
             </Button>
           </div>
         </div>
-        <div className="overflow-auto hidden md:block mt-8">
+        <div className="mt-8 hidden overflow-auto md:block">
           <Table
             bordered
             scroll={{ y: "calc(100vh - 32rem)" }}
@@ -692,11 +702,30 @@ function ZakhialgiinKhyanalt() {
             }}
           />
         </div>
+        <CardList
+          keyValue="geree"
+          className="block overflow-auto md:hidden"
+          jagsaalt={gereeniiMedeelel?.jagsaalt}
+          Component={GereeTile}
+          componentProps={{ router }}
+          pagination={{
+            current: gereeniiMedeelel?.khuudasniiDugaar,
+            pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+            total: gereeniiMedeelel?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
       </Card>
     </Admin>
   )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
 export default ZakhialgiinKhyanalt
