@@ -10,11 +10,13 @@ const refreshPage = ()=>{
     window.location.reload();
 }
 
+var modal = null
+
 function Updater() {
     useEffect(()=>{
         socket().on("tureesFront", medegdel => {
-            if(!medegdel?.err)
-            Modal.info({
+            if(!medegdel?.err && !modal)
+            modal = Modal.info({
                 title: 'Мэдэгдэл',
                 content: <div>Системд шинэчлэлт хийгдсэн байна. Шинэчлэлт хийхийн тулд <b>сэргээх</b> товчийг дарна уу!</div>,
                 onOk:refreshPage,
