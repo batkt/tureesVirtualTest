@@ -140,7 +140,6 @@ function ZakhialgiinKhyanalt() {
         0
       ),
       icon: <UserOutlined />,
-      khuvi: 100,
       utga: "Нийт",
       color: "text-green-500",
       selectedColor: "bg-green-100",
@@ -154,13 +153,12 @@ function ZakhialgiinKhyanalt() {
           : 0,
 
       icon: <FileDoneOutlined />,
-      khuvi: -30,
       utga: "Хэвийн",
       color: "text-green-500",
       selectedColor: "bg-green-100",
       border: "border-green-500",
       query: {
-        tuluv: { $nin: [-1] },
+        tuluv: { $nin: [-1]  },
         duusakhOgnoo: { $gte: new Date() },
       },
     },
@@ -170,25 +168,22 @@ function ZakhialgiinKhyanalt() {
           ? gereeToollolt?.reduce((a, b) => b.khugatsaaKhetersen, 0)
           : 0,
       icon: <HistoryOutlined />,
-      khuvi: 100,
       utga: "Хугацаа хэтэрсэн",
       color: "text-red-500",
       selectedColor: "bg-red-100",
       border: "border-red-500",
       query: {
-        duusakhOgnoo: { $lte: new Date() },
-        tuluv: { $nin: [-1] },
+        duusakhOgnoo: { $lte: new Date() }
       },
     },
     {
       too: 0,
       icon: <FileSyncOutlined />,
-      khuvi: 100,
       utga: "Хаагдсан",
       color: "text-blue-500",
       selectedColor: "bg-blue-100",
       border: "border-blue-500",
-      query: { tuluv: -1 },
+      query: { tuluv: 9 },
     },
     {
       too:
@@ -196,7 +191,6 @@ function ZakhialgiinKhyanalt() {
           ? gereeToollolt?.reduce((a, b) => b.sungakh, 0)
           : 0,
       icon: <WarningOutlined />,
-      khuvi: 100,
       utga: "Сунгах гэрээ",
       color: "text-yellow-500",
       selectedColor: "bg-yellow-100",
@@ -209,7 +203,6 @@ function ZakhialgiinKhyanalt() {
           ? gereeToollolt?.reduce((a, b) => b.tsutsalsan, 0)
           : 0,
       icon: <FileExcelOutlined />,
-      khuvi: 100,
       utga: "Цуцласан",
       color: "text-gray-800",
       selectedColor: "bg-gray-200",
