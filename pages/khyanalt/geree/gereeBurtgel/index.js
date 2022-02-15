@@ -591,6 +591,7 @@ function ZakhialgiinKhyanalt() {
       khuudasniiNer="gereeBurtgel"
       title="Гэрээний жагсаалт"
       className="p-0 md:p-5"
+      tsonkhniiId="61c2c5dc1c2830c4e6f90c6d"
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
