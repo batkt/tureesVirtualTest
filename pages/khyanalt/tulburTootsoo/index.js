@@ -68,16 +68,16 @@ function tulburTootsoo({ token }) {
     if (songogdsonTurul === "Тодорхойгүй")
       return {
         magadlaltaiGereenuud: { $eq: null },
-        kholbosonGereeniiId: { $eq: null },
+        kholbosonGereeniiId: { $size: 0 },
       }
     else if (songogdsonTurul === "Холбогдсон")
       return {
-        kholbosonGereeniiId: { $ne: null },
+        "kholbosonGereeniiId.0": { $exists: true },
       }
     else if (songogdsonTurul === "Магадлалтай")
       return {
         magadlaltaiGereenuud: { $exists: true, $ne: null },
-        kholbosonGereeniiId: { $eq: null },
+        kholbosonGereeniiId: { $size: 0 },
       }
     else return {}
   }, [songogdsonTurul])
