@@ -1,7 +1,7 @@
-import { Button, Menu, Modal, notification } from 'antd'
+import { Button, notification } from 'antd'
 import socketIOClient from 'socket.io-client'
 import { useEffect, useState } from 'react'
-import { InfoCircleOutlined, ReloadOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined } from '@ant-design/icons'
 
 export const url = "http://103.50.205.33:8282"
 
