@@ -173,6 +173,7 @@ function ZakhialgiinKhyanalt() {
       selectedColor: "bg-red-100",
       border: "border-red-500",
       query: {
+        tuluv:{$ne:-1},
         duusakhOgnoo: { $lte: new Date() }
       },
     },
@@ -195,7 +196,7 @@ function ZakhialgiinKhyanalt() {
       color: "text-yellow-500",
       selectedColor: "bg-yellow-100",
       border: "border-yellow-500",
-      query: { duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") } },
+      query: {tuluv:{$ne:-1}, duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") } },
     },
     {
       too:
