@@ -99,6 +99,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulukh")
       return {
+        tuluv: {$ne: -1},
         "avlaga.guilgeenuud.ognoo": {
           $gte: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
           $lte: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
@@ -110,6 +111,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulsun")
       return {
+        tuluv: {$ne: -1},
         baiguullagiinId: baiguullaga?._id,
         "avlaga.guilgeenuud": {
           $elemMatch: {
@@ -137,8 +139,9 @@ function guilgeeniiTuukh({ token }) {
         "avlaga.guilgeenuud.khyamdral": {
           $gt: 0,
         },
+        tuluv: {$ne: -1}
       }
-    return {}
+    return {tuluv: {$ne: -1}}
   }, [turul, ognoo])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
