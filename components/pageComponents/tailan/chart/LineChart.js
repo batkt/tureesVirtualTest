@@ -3,6 +3,7 @@ import React from "react"
 
 import { Line } from "react-chartjs-2"
 import formatNumberNershil from "tools/function/formatNumberNershil"
+import formatNumber from "tools/function/formatNumber"
 
 export const options = {
   responsive: true,
@@ -37,7 +38,7 @@ export const options = {
           return (
             datasets[datasetIndex].label +
             " " +
-            formatNumberNershil(tooltipItem?.value)
+            formatNumber(tooltipItem?.value)
           )
         return datasets[datasetIndex].label + " " + tooltipItem?.value
       },
