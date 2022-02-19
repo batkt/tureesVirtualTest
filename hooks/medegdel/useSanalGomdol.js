@@ -1,28 +1,15 @@
 import axios, { socket,aldaaBarigch } from 'services/uilchilgee'
 import useSWR from 'swr'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from 'services/auth'
 import _ from 'lodash'
 
 const fetcher = (url, token, khariltsagchiinId, { jagsaalt, ...khuudaslalt }) => axios(token).get(url, {params:{ ...khuudaslalt, query: {khariltsagchiinId }, order: {createdAt:-1, kharsanEsekh: 0 } }}).then(res => res.data).catch(aldaaBarigch)
 
-const fetcherKhariltsagch = (url, token, register) => axios(token).get(url, {params:{query: {register }}}).then(res => res.data).catch(aldaaBarigch)
-
-function useKhariltsagch (token, value){
-    if(_.isObject(value))
-        return value.khariltsagch
-    const { data } = useSWR(!!token && !!value ? ['/khariltsagch', token, value] : null, fetcherKhariltsagch)
-    const khariltsagch = useMemo(()=>{
-        return _.get(data,'jagsaalt.0')
-    },[data])
-    return khariltsagch
-}
-
-function useSanalGomdol(token, value) {
-    const khariltsagch = useKhariltsagch(token, value)
+function useSanalGomdol(token, khariltsagchiinId) {
     const {baiguullaga} = useAuth()
     const [khuudaslalt, setKhuudaslalt] = useState({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, jagsaalt: [] })
-    const { data, mutate } = useSWR(!!token && !!khariltsagch ? ['/sanalGomdol', token, khariltsagch?._id, khuudaslalt] : null, fetcher)
+    const { data, mutate } = useSWR(!!token && !!khariltsagchiinId ? ['/sanalGomdol', token, khariltsagchiinId, khuudaslalt] : null, fetcher)
 
     function sonorduulgaKharlaa(id) {
         axios(token).post('/sanalKharlaa', { id })
@@ -35,7 +22,7 @@ function useSanalGomdol(token, value) {
 
     useEffect(()=>{
         setKhuudaslalt({ khuudasniiDugaar: 1, khuudasniiKhemjee: 10, search: "", jagsaalt: [] })
-    },[value])
+    },[khariltsagchiinId])
 
     useEffect(() => {
         if (baiguullaga?._id) {
@@ -47,7 +34,7 @@ function useSanalGomdol(token, value) {
         return ()=>{
             socket().off(`baiguullaga${baiguullaga?._id}`)
         }
-    }, [value])
+    }, [khariltsagchiinId])
 
     function nextSonorduulga() {
         if (data?.khuudasniiDugaar < data?.niitKhuudas)
@@ -59,7 +46,7 @@ function useSanalGomdol(token, value) {
         mutate()
     }
 
-    return {khariltsagchiinId:khariltsagch?._id,firebaseToken:khariltsagch?.firebaseToken, setKhuudaslalt, sonorduulga: data, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt, resetSonorduulga, nextSonorduulga,sonorduulgaKharlaa }
+    return {setKhuudaslalt, sonorduulga: data, sonorduulgaMutate: mutate, jagsaalt: khuudaslalt.jagsaalt, resetSonorduulga, nextSonorduulga,sonorduulgaKharlaa }
 }
 
 export default useSanalGomdol
