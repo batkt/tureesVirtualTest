@@ -4,7 +4,7 @@ import uilchilgee from "services/uilchilgee"
 import Admin from "components/Admin"
 import React, {  useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, Table, Button, DatePicker, Spin, Tooltip, Progress } from "antd"
+import { Card, Table, Button, DatePicker, Spin, Tooltip, Progress,notification } from "antd"
 import { FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "../../../tools/function/formatNumber"
@@ -458,8 +458,19 @@ function guilgeeniiTuukh({ token }) {
     })
   }
   //#endregion
+  const openNotification = () => {
+    notification.open({
+      message: 'Notification Title',
+      description:
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+  };
 
   return (
+    
     <Admin
       title="Гүйлгээний түүх"
       khuudasniiNer="guilgeeniiTuukh"
@@ -469,7 +480,9 @@ function guilgeeniiTuukh({ token }) {
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
-      <Card className="col-span-12 p-5 cardgrid">
+      
+      <Card className="col-span-12 p-5 cardgrid">    
+      {gereeniiMedeelel?.niitMur && notification.error({message:`Гүйлгээ хийгдээгүй ${gereeniiMedeelel?.niitMur} гэрээ байна`})}
         <div className="w-full grid grid-cols-12 gap-4">
           {[
             {
@@ -551,6 +564,7 @@ function guilgeeniiTuukh({ token }) {
           />
         </div>
         <div className="overflow-auto hidden md:block mt-5">
+       
           <Table
             scroll={{ y: "calc(100vh - 26rem)" }}
             size="small"

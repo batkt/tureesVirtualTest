@@ -28,6 +28,7 @@ import {
   SettingOutlined,
   MoreOutlined,
 } from "@ant-design/icons"
+import CardList from "components/cardList"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import moment from "moment"
 import Admin from "components/Admin"
@@ -42,6 +43,7 @@ import formatNumber from "tools/function/formatNumber"
 import { modal } from "components/ant/Modal"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
+import TalbaiTile from "./dedKheseg/TalbaiTile"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -381,7 +383,7 @@ function talbaiBurtgekh({ token }) {
       }
     >
       <div
-        className="col-span-12 md:col-span-12 w-full xl:col-span-4 box p-5 overflow-y-scroll"
+        className="box col-span-12 p-5 md:col-span-6 xl:col-span-3  overflow-y-scroll"
         style={{ maxHeight: "calc(100vh - 7rem)" }}
       >
         <Form
@@ -720,7 +722,7 @@ function talbaiBurtgekh({ token }) {
           </div>
         </Form>
       </div>
-      <Card size="small" className="col-span-8 p-5 cardgrid">
+      <Card size="small" className="col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
         <div className="w-full border-solid grid grid-cols-12 gap-6">
           {khyanaltiinDun.map((mur, index) => {
             return (
@@ -785,7 +787,7 @@ function talbaiBurtgekh({ token }) {
         </div>
 
         <Table
-          className={"mt-6"}
+          className={"mt-6 hidden md:block"}
           bordered
           size="small"
           tableLayout={"fixed"}
@@ -1101,6 +1103,24 @@ function talbaiBurtgekh({ token }) {
                   </div>
             },
           ]}
+        />
+        <CardList
+          keyValue="talbai"
+          className="block overflow-auto md:hidden"
+          jagsaalt={talbainiiGaralt?.jagsaalt}
+          Component={TalbaiTile}          
+          pagination={{
+            current: talbainiiGaralt?.khuudasniiDugaar,
+            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+            total: talbainiiGaralt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
         />
       </Card>
     </Admin>

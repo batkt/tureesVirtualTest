@@ -1,83 +1,286 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh";
-import Admin from "components/Admin";
-import React from "react";
-import { useAuth } from "services/auth";
-import { Table, Tabs } from "antd";
-import { FileDoneOutlined } from "@ant-design/icons";
-
-const toololt = [{name:'Нийт машины тоо',too:0},{name:'Нийт авах дүн'},{name:'Орсон дүн',too:0},	{name:'Худалдан авагчийн машины тоо',too:0},{name:'Түрээслэгчийн машины тоо',too:0},{name:'30 минутаас доош үнэгүй зогссон машин',too:0}]
-
+import shalgaltKhiikh from "services/shalgaltKhiikh"
+import Admin from "components/Admin"
+import React from "react"
+import { useAuth } from "services/auth"
+import { Card, Table, Tabs } from "antd"
+import { FileDoneOutlined } from "@ant-design/icons"
+import CardList from "components/cardList"
+import UilchluulegchTile from "./dedKheseg/UilchluulegchTile"
+import TureeslegchTile from "./dedKheseg/TureeslegchTile"
+const toololt = [
+  { name: "Нийт машины тоо", too: 0 },
+  { name: "Нийт авах дүн" },
+  { name: "Орсон дүн", too: 0 },
+  { name: "Худалдан авагчийн машины тоо", too: 0 },
+  { name: "Түрээслэгчийн машины тоо", too: 0 },
+  { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
+]
+const tureeslegchMashin = [
+  {
+    dugaar: "1",
+    talbai: "M-201",
+    mashinDugaar: "2014УБУ",
+    orsonOgnoo: "2022-02-19 09:00:10",
+    garsanOgnoo: "2022-02-19 21:00:40",
+    khugatsaa: "12",
+    limit: "240",
+    iluuZogsson: "5",
+    iluuTsagiinUnelgee: "500",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+    sanuulga: "Илүү цаг",
+  },
+  {
+    dugaar: "2",
+    talbai: "M-201",
+    mashinDugaar: "2014УБУ",
+    orsonOgnoo: "2022-02-19 09:00:10",
+    garsanOgnoo: "2022-02-19 21:00:40",
+    khugatsaa: "12",
+    limit: "240",
+    iluuZogsson: "5",
+    iluuTsagiinUnelgee: "500",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+    sanuulga: "Илүү цаг",
+  },
+  {
+    dugaar: "3",
+    talbai: "M-201",
+    mashinDugaar: "2014УБУ",
+    orsonOgnoo: "2022-02-19 09:00:10",
+    garsanOgnoo: "2022-02-19 21:00:40",
+    khugatsaa: "12",
+    limit: "240",
+    iluuZogsson: "5",
+    iluuTsagiinUnelgee: "500",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+    sanuulga: "Илүү цаг",
+  },
+]
+const uilchluulegchMashin = [
+  {
+    dugaar: "1",
+    mashinDugaar: "1469УБҮ",
+    orsonOgnoo: "2022-02-19 18:00:50",
+    garsanOgnoo: "2022-02-19 18:30:40",
+    khugatsaa: "30мин",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+  },
+  {
+    dugaar: "2",
+    mashinDugaar: "1469УБҮ",
+    orsonOgnoo: "2022-02-19 18:00:50",
+    garsanOgnoo: "2022-02-19 18:30:40",
+    khugatsaa: "30мин",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+  },
+  {
+    dugaar: "3",
+    mashinDugaar: "1469УБҮ",
+    orsonOgnoo: "2022-02-19 18:00:50",
+    garsanOgnoo: "2022-02-19 18:30:40",
+    khugatsaa: "30мин",
+    tsagiinUnelgee: "1000",
+    tulukhDun: "2000",
+    utas: "99118811",
+  },
+]
 function Zogsool({ token }) {
-  const { baiguullaga } = useAuth();
+  const { baiguullaga } = useAuth()
 
   return (
-    <Admin
-      title="Төлбөр тооцоо"
-      khuudasniiNer="zogsool"
-      className="p-0 md:p-4"
-    >
-      
-    {toololt.map((a,i)=>
-      <div
-      key={i}
-      className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
-    >
-      <div className="h-full rounded-xl">
-        <div className="p-3 rounded-xl">
-          <div className="flex">
-            <div>
-              <div className="text-3xl text-green-600 font-bold">
-                {a.too || 0}
-              </div>
-              <div className="text-base text-gray-500">
-                {a.name}
+    <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4">
+      <Card
+        size="small"
+        className="col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-12"
+      >
+        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+          {toololt.map((a, i) => (
+            <div
+              key={i}
+              className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
+            >
+              <div className="h-full rounded-xl">
+                <div className="rounded-xl p-3">
+                  <div className="flex">
+                    <div>
+                      <div className="text-3xl font-bold text-green-600">
+                        {a.too || 0}
+                      </div>
+                      <div className="text-base text-gray-500">{a.name}</div>
+                    </div>
+                    <div className="ml-auto">
+                      <div className="text-2xl text-green-600">{a.icon}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="ml-auto">
-              <div className="text-green-600 text-2xl">
-                {a.icon}
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
-    </div>)}
-    <div className='col-span-12'>
-      <Tabs size="large">
-        <Tabs.TabPane
-          key="1"
-          tab={
-            <span>
-              <FileDoneOutlined style={{ fontSize: "32px" }} />
-              Худалдан авагч
-            </span>
-          }
-        >
-          <Table 
-            columns={[{title:'№',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},{title:'Цагийн үнэлгээ',align:'center'},{title:'Төлөх дүн',align:'center'},{title:'Утасны дугаар',align:'center'}]}
-          />
-        </Tabs.TabPane>
-        <Tabs.TabPane
-          key="2"
-          tab={
-            <span>
-              <FileDoneOutlined style={{ fontSize: "32px" }} />
-              Түрээслэгч
-            </span>
-          }
-        >
-          <Table 
-            columns={[{title:'№',align:'center'},{title:'Талбай',align:'center',align:'center'},{title:'Машины дугаар',align:'center'},{title:'Орсон огноо',align:'center'},{title:'Гарсан огноо',align:'center'},{title:'Зарцуулсан хугацаа',align:'center'},
-            {title:'Сарын зогссолын лимит цаг',align:'center'},{title:'Зогсох үлдсэн цаг',align:'center'},{title:'Илүү зогссон цаг',align:'center'},
-            {title:'Энгийн цагийн үнэлгээ',align:'center'},{title:'Илүү цагийн үнэлгээ',align:'center'},{title:'Төлөх дүн',align:'center'},{title:'Утасны дугаар',align:'center'},{title:'Сануулга',align:'center'}]}
-          />
-        </Tabs.TabPane>
-      </Tabs>
-    </div>
+      </Card>
+      <Card className="col-span-12">
+        <div>
+          <Tabs size="large">
+            <Tabs.TabPane
+              key="1"
+              tab={
+                <span>
+                  <FileDoneOutlined style={{ fontSize: "32px" }} />
+                  Худалдан авагч
+                </span>
+              }
+            >
+              <Table
+                className="mt-8 hidden overflow-auto md:block"
+                dataSource={uilchluulegchMashin}
+                columns={[
+                  { title: "№", align: "center", dataIndex: "dugaar" },
+                  {
+                    title: "Машины дугаар",
+                    align: "center",
+                    dataIndex: "mashinDugaar",
+                  },
+                  {
+                    title: "Орсон огноо",
+                    align: "center",
+                    dataIndex: "orsonOgnoo",
+                  },
+                  {
+                    title: "Гарсан огноо",
+                    align: "center",
+                    dataIndex: "garsanOgnoo",
+                  },
+                  {
+                    title: "Зарцуулсан хугацаа",
+                    align: "center",
+                    dataIndex: "khugatsaa",
+                  },
+                  {
+                    title: "Цагийн үнэлгээ",
+                    align: "center",
+                    dataIndex: "tsagiinUnelgee",
+                  },
+                  {
+                    title: "Төлөх дүн",
+                    align: "center",
+                    dataIndex: "tulukhDun",
+                  },
+                  {
+                    title: "Утасны дугаар",
+                    align: "center",
+                    dataIndex: "utas",
+                  },
+                ]}
+              />
+              <CardList
+                keyValue="uilchluulegch"
+                className="block overflow-auto md:hidden"
+                jagsaalt={uilchluulegchMashin}
+                Component={UilchluulegchTile}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              key="2"
+              tab={
+                <span>
+                  <FileDoneOutlined style={{ fontSize: "32px" }} />
+                  Түрээслэгч
+                </span>
+              }
+            >
+              <Table
+                className="mt-8 hidden overflow-auto md:block"
+                dataSource={tureeslegchMashin}
+                columns={[
+                  { title: "№", align: "center", dataIndex: "dugaar" },
+                  {
+                    title: "Талбай",
+                    align: "center",
+                    align: "center",
+                    dataIndex: "talbai",
+                  },
+                  {
+                    title: "Машины дугаар",
+                    align: "center",
+                    dataIndex: "mashinDugaar",
+                  },
+                  {
+                    title: "Орсон огноо",
+                    align: "center",
+                    dataIndex: "orsonOgnoo",
+                  },
+                  {
+                    title: "Гарсан огноо",
+                    align: "center",
+                    dataIndex: "garsanOgnoo",
+                  },
+                  {
+                    title: "Зарцуулсан хугацаа",
+                    align: "center",
+                    dataIndex: "khugatsaa",
+                  },
+                  {
+                    title: "Сарын зогссолын лимит цаг",
+                    align: "center",
+                    dataIndex: "limit",
+                  },
+                  {
+                    title: "Зогсох үлдсэн цаг",
+                    align: "center",
+                    dataIndex: "iluuZogsson",
+                  },
+                  {
+                    title: "Илүү зогссон цаг",
+                    align: "center",
+                    dataIndex: "iluuZogsson",
+                  },
+                  {
+                    title: "Энгийн цагийн үнэлгээ",
+                    align: "center",
+                    dataIndex: "tsagiinUnelgee",
+                  },
+                  {
+                    title: "Илүү цагийн үнэлгээ",
+                    align: "center",
+                    dataIndex: "iluutsagiinUnelgee",
+                  },
+                  {
+                    title: "Төлөх дүн",
+                    align: "center",
+                    dataIndex: "tulukhDun",
+                  },
+                  {
+                    title: "Утасны дугаар",
+                    align: "center",
+                    dataIndex: "utas",
+                  },
+                  { title: "Сануулга", align: "center", dataIndex: "sanuulga" },
+                ]}
+              />
+              <CardList
+                keyValue="uilchluulegch"
+                className="block overflow-auto md:hidden"
+                jagsaalt={tureeslegchMashin}
+                Component={TureeslegchTile}
+              />
+            </Tabs.TabPane>
+          </Tabs>
+        </div>
+      </Card>
     </Admin>
-  );
+  )
 }
 
-export const getServerSideProps = shalgaltKhiikh;
+export const getServerSideProps = shalgaltKhiikh
 
-export default Zogsool;
+export default Zogsool

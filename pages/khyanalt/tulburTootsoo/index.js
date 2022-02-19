@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React, { useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, DatePicker, Table, Select, Button, Tooltip, message, Spin } from "antd"
+import { Card, DatePicker, Table, Select, Button, Tooltip, message, Spin,notification } from "antd"
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -416,7 +416,8 @@ function tulburTootsoo({ token }) {
         }))
       }}
     >
-      <Card className="col-span-12 p-5 cardgrid">
+      {dansniiKhuulgaGaralt?.jagsaalt.length > 0 && Number(bankniiGuilgeeToololt?.niit || 0)-Number(bankniiGuilgeeToololt?.kholboson || 0) >0  && notification.error({message:`Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0)-Number(bankniiGuilgeeToololt?.kholboson || 0)} гэрээ байна`})}
+      <Card className="col-span-12 p-5 cardgrid">      
         <div className="w-full grid grid-cols-12 gap-4">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },

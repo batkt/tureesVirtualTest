@@ -8,6 +8,8 @@ import { Button, Form, Input, InputNumber, notification, Table } from "antd";
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
+import BarilgaTile from "./dedKheseg/BarilgaTile"
+import CardList from "components/cardList";
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -156,7 +158,7 @@ function GereeBaiguulakh({ token, data }) {
           </Form.Item>
         </Form>
       </div>
-      <div className="col-span-12 md:col-span-6 xl:col-span-8 p-5 box">
+      <div className="col-span-12 md:col-span-6 hidden md:block xl:col-span-8 p-5 box">
         <Table
           size='small'
           pagination={{ pageSize:100}}
@@ -184,6 +186,13 @@ function GereeBaiguulakh({ token, data }) {
           dataSource={[...davkhar, ...bdavkhar]}
         />
       </div>
+      <CardList
+          keyValue="barilga"
+          className="block overflow-auto md:hidden"
+          jagsaalt={[...davkhar, ...bdavkhar]}
+          Component={BarilgaTile}          
+          pagination={{ pageSize:100}}
+        />
     </Admin>
   );
 }

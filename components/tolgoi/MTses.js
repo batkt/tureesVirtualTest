@@ -13,8 +13,7 @@ function MTses({ khuudasnuud, khuudasniiNer, baiguullaga, themeValue, setTheme }
             >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="feather feather-align-justify block mx-auto h-8 w-8 dark:text-gray-100"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
             </button>
-            <Drawer
-                title="Hi Car"
+            <Drawer                
                 placement={"left"}
                 closable={false}
                 onClose={() => setVisible(false)}

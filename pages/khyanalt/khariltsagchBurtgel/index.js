@@ -547,12 +547,12 @@ function AjiltanBurtgel({ token }) {
         </Form>
       </div>
       <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-        <div className="flex w-full grid-cols-12  gap-6 border-solid">
+        <div className="w-full border-solid grid grid-cols-12 gap-6">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className="intro-y zoom-in col-span-12 block h-20 w-full cursor-pointer justify-between rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                className="border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-3 intro-y cursor-pointer zoom-in"
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
