@@ -55,7 +55,7 @@ function Khyanalt({ token }) {
     mailiinZagvarMutate
   } = useMailiinZagvar(token, "sms")
 
-  const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt,khariltsagchiinId,firebaseToken} = useSanalGomdol(turul === 'App' && token,khariltsagch?.register)
+  const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt} = useSanalGomdol(turul === 'App' && token,khariltsagch?.khariltsagchiinId)
 
   useEffect(() => {
     setKhariltsagch(null)
@@ -80,6 +80,31 @@ function Khyanalt({ token }) {
   //#region method
 
   async function appIlgeeye() {
+    if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0)
+    {
+      var khariu = {successCount:0,failureCount:0}
+      songogdsonGereenuud.filter(a=>!!a.khariltsagchiinId).map((a,index,array)=>{
+        let body = msj
+        for (const [key, value] of Object.entries(a)) {
+          body = body?.replace(new RegExp(`<${key}>`, "g"), value)
+        }
+        
+        uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:a?.firebaseToken,khariltsagchiinId:a?.khariltsagchiinId,barilgiinId:a.barilgiinId,khariltsagchiinNer:a.ner,medeelel:{title,body}}).then(({data})=>{
+          if(!!data?.successCount)
+              khariu.successCount += 1
+              
+          else if(!!data?.failureCount)
+            khariu.failureCount += 1
+          if(index === (array.length - 1)){
+            notification.success({message:`Notification Амжилттай ${khariu.successCount} ${khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ''} илгээлээ`})
+            setLoading(false)
+          }
+        })
+        return 
+      })
+      return
+    }  
+    
     if(loading)
     {
         message.warning('Хүсэлт илгээгдсэн байна')
@@ -87,10 +112,10 @@ function Khyanalt({ token }) {
     }
 
     setLoading(true)
-    uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:firebaseToken,khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body:ingeekhmSms}}).then(({data})=>{
+    uilchilgee(token).post(`/sonorduulgaIlgeeye`,{firebaseToken:khariltsagch?.firebaseToken,khariltsagchiinId:khariltsagch?.khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,medeelel:{title,body:ingeekhmSms}}).then(({data})=>{
         if(!!data?.successCount)
         {
-            sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:ingeekhmSms,turul:'medegdel'})
+            sonorduulga.jagsaalt.unshift({khariltsagchiinId:khariltsagch?.khariltsagchiinId,barilgiinId:khariltsagch.barilgiinId,khariltsagchiinNer:khariltsagch.ner,title,message:ingeekhmSms,turul:'medegdel'})
             sonorduulgaMutate({...sonorduulga},false)
             notification.success({message:'Notification Амжилттай илгээлээ'})
             setLoading(false)
