@@ -148,7 +148,7 @@ function Admin({
                   {mSearch ? (
                     <CloseOutlined
                       onClick={onClickSearch}
-                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"
+                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 mt-2 right-0"
                     />
                   ) : (
                     <svg
@@ -161,7 +161,7 @@ function Admin({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0"
+                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 mt-2 right-0"
                     >
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

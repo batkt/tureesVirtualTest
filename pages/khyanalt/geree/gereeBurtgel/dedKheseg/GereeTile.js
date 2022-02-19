@@ -58,34 +58,24 @@ function GereeTile({
   return (
     <div className="mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 shadow-2xl dark:bg-gray-900">
       <div className="flex w-full flex-row">
-        <div className="font-bold dark:text-gray-100">{gereeniiDugaar}</div>
-        <div className="space-x-2 font-bold dark:text-gray-100">
-          {"-" + ner}
-        </div>
-        <div className="space-x-2 font-bold dark:text-gray-100">
-          {"-" + utas}
-        </div>
+        <div className="font-bold dark:text-gray-100">{ner}</div>
         <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-200">
-          {moment(gereeniiOgnoo).format("YYYY-MM-DD")}
+          {gereeniiDugaar}
         </div>
       </div>
       <div className="flex w-full flex-row dark:text-gray-100">
-        <div>{talbainDugaar}</div>
+        <div>{utas}</div>
+        <div className="ml-auto font-medium">{talbainDugaar}</div>
+      </div>
+      <div className="flex w-full flex-row dark:text-gray-100">
+        <div>{moment(gereeniiOgnoo).format("YYYY-MM-DD")}</div>
         <div className="ml-auto font-medium">
           {moment(duusakhOgnoo).format("YYYY-MM-DD")}
         </div>
       </div>
-      <div className="mt-1 flex flex-row justify-between border-t-2">
-        <div className="flex flex-col">
-          <div className="font-medium text-green-500 dark:text-green-400">
-            {formatNumber(sariinTurees)}₮
-          </div>
-        </div>
-        <div className="flex flex-col">
-          <div className="text-sm font-medium text-blue-700 dark:text-blue-400">
-            {burtgesenAjiltaniiNer}
-          </div>
-        </div>
+      <div className="flex w-full flex-row dark:text-gray-100">
+        <div>{talbainKhemjee + "м2"}</div>
+        <div className="ml-auto font-medium">{formatNumber(sariinTurees)}₮</div>
       </div>
     </div>
   )
