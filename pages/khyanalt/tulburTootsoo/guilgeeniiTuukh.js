@@ -2,9 +2,18 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import uilchilgee from "services/uilchilgee"
 import Admin from "components/Admin"
-import React, {  useMemo } from "react"
+import React, { useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, Table, Button, DatePicker, Spin, Tooltip, Progress,notification } from "antd"
+import {
+  Card,
+  Table,
+  Button,
+  DatePicker,
+  Spin,
+  Tooltip,
+  Progress,
+  notification,
+} from "antd"
 import { FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "../../../tools/function/formatNumber"
@@ -17,7 +26,10 @@ import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya"
+import { useTuluugiiGereeniiToololtAvya } from "hooks/useGuilgeeniiToololtAvya"
 import useSWR from "swr"
+import GuilgeenTuukhTile from "./dedKheseg/GuilgeeTuukhTile"
+import CardList from "components/cardList"
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -37,7 +49,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.uldegdel = data?.uldegdel
   return (
     <div
-      className={`font-medium text-right ${
+      className={`text-right font-medium ${
         data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
@@ -61,6 +73,8 @@ function guilgeeniiTuukh({ token }) {
   const [loadingIndex, setLoadingIndex] = React.useState(0)
 
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo)
+  const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
+    useTuluugiiGereeniiToololtAvya(token, ognoo)
 
   const query = React.useMemo(() => {
     if (turul === "uglug")
@@ -99,7 +113,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulukh")
       return {
-        tuluv: {$ne: -1},
+        tuluv: { $ne: -1 },
         "avlaga.guilgeenuud.ognoo": {
           $gte: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
           $lte: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
@@ -111,7 +125,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulsun")
       return {
-        tuluv: {$ne: -1},
+        tuluv: { $ne: -1 },
         baiguullagiinId: baiguullaga?._id,
         "avlaga.guilgeenuud": {
           $elemMatch: {
@@ -139,9 +153,9 @@ function guilgeeniiTuukh({ token }) {
         "avlaga.guilgeenuud.khyamdral": {
           $gt: 0,
         },
-        tuluv: {$ne: -1}
+        tuluv: { $ne: -1 },
       }
-    return {tuluv: {$ne: -1}}
+    return { tuluv: { $ne: -1 } }
   }, [turul, ognoo])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
@@ -212,34 +226,36 @@ function guilgeeniiTuukh({ token }) {
         title: "Үйлдэл",
         ellipsis: true,
         render: (row) => {
-          const khuvi = row.baritsaaAvakhDun > 0 ? (100 * row.baritsaaniiUldegdel / row.baritsaaAvakhDun) : 100
+          const khuvi =
+            row.baritsaaAvakhDun > 0
+              ? (100 * row.baritsaaniiUldegdel) / row.baritsaaAvakhDun
+              : 100
 
-          let strokeColor = 'rgba(16, 185, 129,1)'
-          if(khuvi < 0)
-            strokeColor = 'rgba(245, 158, 18,1)'
+          let strokeColor = "rgba(16, 185, 129,1)"
+          if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)"
 
-            
-          return(<div className="flex flex-row divide-x-2 ">
-            <a
-              onClick={() => guilgeeKhiiya(row)}
-              className="px-2 fill-current text-green-500"
-            >
-              <Tooltip title="Гүйлгээ хийх">
-                <svg
-                  version="1.0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="440.000000pt"
-                  height="377.000000pt"
-                  viewBox="0 0 440.000000 377.000000"
-                  preserveAspectRatio="xMidYMid meet"
-                  className="fill-current text-green-500 w-8 h-6 p-1"
-                >
-                  <g
-                    transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)"
-                    stroke="none"
+          return (
+            <div className="flex flex-row divide-x-2 ">
+              <a
+                onClick={() => guilgeeKhiiya(row)}
+                className="fill-current px-2 text-green-500"
+              >
+                <Tooltip title="Гүйлгээ хийх">
+                  <svg
+                    version="1.0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="440.000000pt"
+                    height="377.000000pt"
+                    viewBox="0 0 440.000000 377.000000"
+                    preserveAspectRatio="xMidYMid meet"
+                    className="h-6 w-8 fill-current p-1 text-green-500"
                   >
-                    <path
-                      d="M3080 3510 c-52 -14 -88 -40 -106 -77 -17 -34 -19 -67 -22 -285 l-3
+                    <g
+                      transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)"
+                      stroke="none"
+                    >
+                      <path
+                        d="M3080 3510 c-52 -14 -88 -40 -106 -77 -17 -34 -19 -67 -22 -285 l-3
                       -248 -549 0 c-418 0 -556 -3 -577 -12 -45 -21 -71 -48 -89 -94 -14 -36 -14
                       -48 -4 -81 20 -58 37 -80 86 -102 43 -21 56 -21 674 -21 545 0 636 2 667 15
                       87 37 103 75 103 246 0 71 3 129 7 129 10 0 693 -683 693 -693 0 -12 -678
@@ -254,28 +270,28 @@ function guilgeeniiTuukh({ token }) {
                       -69 42 -24 109 -29 144 -11 28 14 1089 1071 1128 1123 23 31 29 50 29 88 0 27
                       -6 61 -14 76 -8 15 -266 277 -573 583 -488 486 -563 558 -598 566 -22 5 -51 6
                       -65 3z"
-                    />
-                  </g>
-                </svg>
-              </Tooltip>
-            </a>
-            <a onClick={() => khungulultKhiiya(row)} className="px-2">
-              <Tooltip title="Хөнгөлөх">
-                <svg
-                  version="1.0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="575.000000pt"
-                  height="376.000000pt"
-                  viewBox="0 0 575.000000 376.000000"
-                  preserveAspectRatio="xMidYMid meet"
-                  className="fill-current text-green-500 w-8 h-6 p-1"
-                >
-                  <g
-                    transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)"
-                    stroke="none"
+                      />
+                    </g>
+                  </svg>
+                </Tooltip>
+              </a>
+              <a onClick={() => khungulultKhiiya(row)} className="px-2">
+                <Tooltip title="Хөнгөлөх">
+                  <svg
+                    version="1.0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="575.000000pt"
+                    height="376.000000pt"
+                    viewBox="0 0 575.000000 376.000000"
+                    preserveAspectRatio="xMidYMid meet"
+                    className="h-6 w-8 fill-current p-1 text-green-500"
                   >
-                    <path
-                      d="M715 3630 c-109 -22 -224 -88 -300 -172 -55 -62 -110 -172 -124 -252
+                    <g
+                      transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)"
+                      stroke="none"
+                    >
+                      <path
+                        d="M715 3630 c-109 -22 -224 -88 -300 -172 -55 -62 -110 -172 -124 -252
               -15 -83 -15 -2529 0 -2612 17 -93 71 -196 142 -268 76 -76 154 -121 255 -146
               75 -19 133 -20 2123 -20 1990 0 2048 1 2121 19 110 28 174 65 254 145 73 74
               115 145 140 241 21 77 20 2596 -1 2674 -23 87 -64 159 -131 230 -65 69 -121
@@ -288,9 +304,9 @@ function guilgeeniiTuukh({ token }) {
               30 -132 95 -159 156 l-24 52 -3 617 -3 618 267 2 267 3 -41 47 c-22 26 -55 72
               -74 102 l-33 55 -193 1 -193 0 3 563 3 562 23 50 c38 82 115 149 202 176 14 4
               274 8 578 8 l552 1 0 -193z"
-                    />
-                    <path
-                      d="M1430 2889 c-79 -15 -188 -76 -254 -143 -288 -289 -157 -775 239
+                      />
+                      <path
+                        d="M1430 2889 c-79 -15 -188 -76 -254 -143 -288 -289 -157 -775 239
               -885 22 -6 98 -11 170 -11 l130 0 -228 -228 -227 -227 73 -73 c40 -39 77 -72
               82 -72 6 0 132 123 282 272 l273 273 273 -273 c150 -149 277 -272 282 -272 5
               0 42 33 82 72 l73 73 -227 227 -228 228 130 0 c72 0 148 5 170 11 234 65 395
@@ -300,54 +316,54 @@ function guilgeeniiTuukh({ token }) {
               474 30 40 99 88 145 102 58 18 188 8 238 -18z m836 4 c63 -30 129 -103 154
               -168 58 -156 -8 -321 -157 -394 -55 -27 -62 -28 -249 -32 l-193 -3 0 179 c0
               197 9 247 58 318 30 44 106 99 156 115 50 15 185 6 231 -15z"
-                    />
-                    <path
-                      d="M3474 976 c-38 -38 -44 -77 -19 -126 20 -38 43 -50 97 -50 100 0 143
-              120 67 184 -46 39 -101 36 -145 -8z"
-                    />
-                    <path
-                      d="M3811 996 c-58 -32 -69 -119 -22 -167 24 -23 38 -29 73 -29 52 0 85
-              21 104 66 12 29 12 39 -2 74 -25 63 -95 88 -153 56z"
-                    />
-                    <path
-                      d="M4110 981 c-50 -49 -52 -105 -6 -154 21 -22 34 -27 73 -27 56 0 85
-              17 103 59 44 106 -90 202 -170 122z"
-                    />
-                    <path
-                      d="M4438 993 c-32 -20 -48 -52 -48 -99 0 -84 110 -126 178 -69 99 83
-              -20 236 -130 168z"
-                    />
-                  </g>
-                </svg>
-              </Tooltip>
-            </a>
-            {row?._id === delgegdsenGeree && (
-              <a className="px-2" onClick={() => refTuukh.current.khevlekh()}>
-                <Tooltip title="Хэвлэх">
-                  <svg
-                    version="1.0"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="428.000000pt"
-                    height="438.000000pt"
-                    viewBox="0 0 428.000000 438.000000"
-                    preserveAspectRatio="xMidYMid meet"
-                    className="fill-current text-green-500 w-6 h-6 p-1"
-                  >
-                    <g
-                      transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)"
-                      stroke="none"
-                    >
+                      />
                       <path
-                        d="M1104 4166 c-62 -19 -130 -73 -167 -130 l-32 -51 -3 -507 -3 -508
+                        d="M3474 976 c-38 -38 -44 -77 -19 -126 20 -38 43 -50 97 -50 100 0 143
+              120 67 184 -46 39 -101 36 -145 -8z"
+                      />
+                      <path
+                        d="M3811 996 c-58 -32 -69 -119 -22 -167 24 -23 38 -29 73 -29 52 0 85
+              21 104 66 12 29 12 39 -2 74 -25 63 -95 88 -153 56z"
+                      />
+                      <path
+                        d="M4110 981 c-50 -49 -52 -105 -6 -154 21 -22 34 -27 73 -27 56 0 85
+              17 103 59 44 106 -90 202 -170 122z"
+                      />
+                      <path
+                        d="M4438 993 c-32 -20 -48 -52 -48 -99 0 -84 110 -126 178 -69 99 83
+              -20 236 -130 168z"
+                      />
+                    </g>
+                  </svg>
+                </Tooltip>
+              </a>
+              {row?._id === delgegdsenGeree && (
+                <a className="px-2" onClick={() => refTuukh.current.khevlekh()}>
+                  <Tooltip title="Хэвлэх">
+                    <svg
+                      version="1.0"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="428.000000pt"
+                      height="438.000000pt"
+                      viewBox="0 0 428.000000 438.000000"
+                      preserveAspectRatio="xMidYMid meet"
+                      className="h-6 w-6 fill-current p-1 text-green-500"
+                    >
+                      <g
+                        transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)"
+                        stroke="none"
+                      >
+                        <path
+                          d="M1104 4166 c-62 -19 -130 -73 -167 -130 l-32 -51 -3 -507 -3 -508
                     -74 0 -75 0 0 -445 0 -445 1365 0 1365 0 0 445 0 445 -79 0 -80 0 -3 278 -3
                     277 -27 58 c-19 39 -58 90 -125 159 -54 56 -111 116 -128 133 -113 120 -222
                     230 -249 250 -73 55 -75 55 -890 54 -586 0 -760 -3 -792 -13z m1500 -157 c51
                     -40 56 -64 56 -251 0 -195 8 -224 69 -265 32 -21 45 -23 185 -23 173 0 209
                     -10 238 -70 16 -31 18 -69 18 -322 l0 -288 -1060 0 -1060 0 0 563 c0 638 -3
                     610 80 654 l43 23 702 0 c697 0 703 0 729 -21z"
-                      />
-                      <path
-                        d="M346 2909 c-54 -13 -91 -42 -115 -92 -21 -43 -21 -53 -21 -830 l0
+                        />
+                        <path
+                          d="M346 2909 c-54 -13 -91 -42 -115 -92 -21 -43 -21 -53 -21 -830 l0
                     -787 345 0 345 0 0 -320 c0 -176 0 -322 0 -325 0 -3 11 -26 24 -53 39 -75 91
                     -123 161 -146 40 -14 166 -16 1029 -16 666 -1 992 3 1012 10 50 18 76 34 108
                     66 80 81 86 116 86 482 l0 302 350 0 350 0 0 788 c0 502 -4 800 -10 822 -27
@@ -356,21 +372,42 @@ function guilgeeniiTuukh({ token }) {
                     0 70 0 0 -70z m-630 -412 c0 -285 -4 -477 -10 -500 -6 -20 -24 -48 -41 -62
                     l-31 -26 -971 0 c-757 0 -977 3 -997 13 -13 7 -35 28 -47 46 l-23 34 0 478 0
                     479 1060 0 1060 0 0 -462z"
-                      />
-                      <path d="M1330 1255 l0 -75 785 0 785 0 0 75 0 75 -785 0 -785 0 0 -75z" />
-                      <path d="M1332 898 l3 -73 780 0 780 1 3 72 3 72 -786 0 -786 0 3 -72z" />
-                    </g>
-                  </svg>
+                        />
+                        <path d="M1330 1255 l0 -75 785 0 785 0 0 75 0 75 -785 0 -785 0 0 -75z" />
+                        <path d="M1332 898 l3 -73 780 0 780 1 3 72 3 72 -786 0 -786 0 3 -72z" />
+                      </g>
+                    </svg>
+                  </Tooltip>
+                </a>
+              )}
+              <div
+                className="cursor-pointer px-2 text-red-500"
+                onClick={() => baritsaaUdirdya(row)}
+              >
+                <Tooltip
+                  title={
+                    khuvi < 100
+                      ? `Барьцаа ${formatNumber(
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу баьрцаа`
+                      : `${formatNumber(
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
+                  }
+                >
+                  <Progress
+                    type="circle"
+                    percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)}
+                    width={25}
+                    strokeColor={strokeColor}
+                    trailColor={khuvi === 0 && "rgba(239, 68, 68,1)"}
+                  />
                 </Tooltip>
-              </a>
-            )}
-            <div className="px-2 cursor-pointer text-red-500" onClick={()=>baritsaaUdirdya(row)}>
-              <Tooltip title={khuvi < 100 ? `Барьцаа ${formatNumber((row.baritsaaAvakhDun || 0) - (row.baritsaaniiUldegdel || 0))} дутуу баьрцаа` : `${formatNumber(row.baritsaaniiUldegdel)} барьцаа төлөгдсөн байна`}>
-                <Progress type="circle" percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)} width={25} strokeColor={strokeColor} trailColor={khuvi === 0 && 'rgba(239, 68, 68,1)'} />
-              </Tooltip>
+              </div>
             </div>
-          </div>)
-        }
+          )
+        },
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
@@ -386,6 +423,7 @@ function guilgeeniiTuukh({ token }) {
 
   function refreshData() {
     gereeniiMedeelelMutate()
+    tolooguiGereeniiTooMutate()
     refTuukh.current?.refreshData()
   }
 
@@ -457,20 +495,8 @@ function guilgeeniiTuukh({ token }) {
       footer,
     })
   }
-  //#endregion
-  const openNotification = () => {
-    notification.open({
-      message: 'Notification Title',
-      description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      onClick: () => {
-        console.log('Notification Clicked!');
-      },
-    });
-  };
 
   return (
-    
     <Admin
       title="Гүйлгээний түүх"
       khuudasniiNer="guilgeeniiTuukh"
@@ -480,10 +506,13 @@ function guilgeeniiTuukh({ token }) {
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
-      
-      <Card className="col-span-12 p-5 cardgrid">    
-      {gereeniiMedeelel?.niitMur && notification.error({message:`Гүйлгээ хийгдээгүй ${gereeniiMedeelel?.niitMur} гэрээ байна`})}
-        <div className="w-full grid grid-cols-12 gap-4">
+      <Card className="cardgrid col-span-12 p-5">
+        {gereeniiMedeelel?.niitMur &&
+          tolooguiGereeniiToo?.too &&
+          notification.error({
+            message: `Гүйлгээ хийгдээгүй ${tolooguiGereeniiToo?.too} гэрээ байна`,
+          })}
+        <div className="grid w-full grid-cols-12 gap-4">
           {[
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
@@ -527,14 +556,14 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className="border-2 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
                 onClick={() => onChangeTurul(mur?.turul)}
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-2xl text-green-600 font-bold">
+                        <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -542,7 +571,7 @@ function guilgeeniiTuukh({ token }) {
                         </div>
                       </div>
                       <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
+                        <div className="text-2xl text-green-600">
                           {mur.icon}
                         </div>
                       </div>
@@ -553,7 +582,7 @@ function guilgeeniiTuukh({ token }) {
             )
           })}
         </div>
-        <div className="flex flex-row mt-5">
+        <div className="mt-5 flex flex-row">
           <DatePicker.RangePicker
             picker="month"
             value={ognoo}
@@ -563,8 +592,7 @@ function guilgeeniiTuukh({ token }) {
             }}
           />
         </div>
-        <div className="overflow-auto hidden md:block mt-5">
-       
+        <div className="mt-5 hidden overflow-auto md:block">
           <Table
             scroll={{ y: "calc(100vh - 26rem)" }}
             size="small"
@@ -614,6 +642,24 @@ function guilgeeniiTuukh({ token }) {
             }}
           />
         </div>
+        <CardList
+          keyValue="guilgeeTuukh"
+          className="block overflow-auto md:hidden"
+          jagsaalt={gereeniiMedeelel?.jagsaalt}
+          Component={GuilgeenTuukhTile}
+          pagination={{
+            current: gereeniiMedeelel?.jagsaalt?.khuudasniiDugaar,
+            pageSize: gereeniiMedeelel?.jagsaalt?.khuudasniiKhemjee,
+            total: gereeniiMedeelel?.jagsaalt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
       </Card>
     </Admin>
   )

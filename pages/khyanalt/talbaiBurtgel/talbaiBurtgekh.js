@@ -57,7 +57,7 @@ function Head({ title, sort }) {
   if (sort === -1) icon = <ArrowDownOutlined />
 
   return (
-    <div className="w-full flex flex-row justify-between items-center">
+    <div className="flex w-full flex-row items-center justify-between">
       {title}
       {icon}
     </div>
@@ -68,7 +68,7 @@ function talbaiBurtgekh({ token }) {
   const formRef = useRef()
   const excelref = useRef()
   const { TextArea } = Input
-  const { ajiltan, baiguullaga,barilgiinId } = useAuth()
+  const { ajiltan, baiguullaga, barilgiinId } = useAuth()
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   })
@@ -262,7 +262,7 @@ function talbaiBurtgekh({ token }) {
     const khurunguud = formRef.current.getFieldsValue(khurunguud)
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId
     talbaiState.barilgiinId = barilgiinId
-    
+
     if (khurunguud.length > 0) {
       talbaiState.khurunguud = khurunguud.khurunguud
       talbaiState.khurunguud.map(
@@ -383,7 +383,7 @@ function talbaiBurtgekh({ token }) {
       }
     >
       <div
-        className="box col-span-12 p-5 md:col-span-6 xl:col-span-3  overflow-y-scroll"
+        className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  xl:col-span-3"
         style={{ maxHeight: "calc(100vh - 7rem)" }}
       >
         <Form
@@ -722,19 +722,22 @@ function talbaiBurtgekh({ token }) {
           </div>
         </Form>
       </div>
-      <Card size="small" className="col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-        <div className="w-full border-solid grid grid-cols-12 gap-6">
+      <Card
+        size="small"
+        className="col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9"
+      >
+        <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className="border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-3xl text-green-600 font-bold">
+                        <div className="text-3xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -761,11 +764,11 @@ function talbaiBurtgekh({ token }) {
               display: "flex",
               justifyContent: "end",
             }}
-            className="dropdown-toggle btn px-2 box bg-green-500 text-white  focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 w-full md:w-auto mt-8 md:mt-0 ml-auto"
+            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={talbaiOruulakhExcel}
           >
-            <span className="w-5 h-5 flex items-center justify-center">
+            <span className="flex h-5 w-5 items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -776,7 +779,7 @@ function talbaiBurtgekh({ token }) {
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="feather feather-plus w-4 h-4"
+                className="feather feather-plus h-4 w-4"
               >
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -785,6 +788,24 @@ function talbaiBurtgekh({ token }) {
             <span>Excel -ээс Талбай татах</span>
           </button>
         </div>
+        <CardList
+          keyValue="talbai"
+          className="block overflow-auto md:hidden"
+          jagsaalt={talbainiiGaralt?.jagsaalt}
+          Component={TalbaiTile}
+          pagination={{
+            current: talbainiiGaralt?.khuudasniiDugaar,
+            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+            total: talbainiiGaralt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
 
         <Table
           className={"mt-6 hidden md:block"}
@@ -963,7 +984,7 @@ function talbaiBurtgekh({ token }) {
                         }
                         trigger="click"
                       >
-                        <a className="hover:bg-gray-200 flex items-center justify-center">
+                        <a className="flex items-center justify-center hover:bg-gray-200">
                           <Badge count={data?.khurunguud?.length}>
                             <EyeOutlined
                               style={{ color: "#1890ff", fontSize: "18px" }}
@@ -1045,7 +1066,7 @@ function talbaiBurtgekh({ token }) {
                       }
                       trigger="click"
                     >
-                      <a className="hover:bg-gray-200 flex items-center justify-center">
+                      <a className="flex items-center justify-center hover:bg-gray-200">
                         <EyeOutlined
                           style={{ fontSize: "18px" }}
                           onClick={() =>
@@ -1066,61 +1087,44 @@ function talbaiBurtgekh({ token }) {
               ellipsis: true,
               width: "1rem",
               align: "center",
-              render: (data) =>
-                  <div className="flex flex-row justify-center">
-                    <Popover
-                      placement="bottom"
-                      trigger="click"
-                      content={() => (
-                        <div className="flex flex-col space-y-2 w-24">
-                          <a
-                            className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full"
-                            onClick={() => zasya(data)}
-                          >
-                            <EditOutlined style={{ fontSize: "18px" }} />
-                            <label>Засах</label>
+              render: (data) => (
+                <div className="flex flex-row justify-center">
+                  <Popover
+                    placement="bottom"
+                    trigger="click"
+                    content={() => (
+                      <div className="flex w-24 flex-col space-y-2">
+                        <a
+                          className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                          onClick={() => zasya(data)}
+                        >
+                          <EditOutlined style={{ fontSize: "18px" }} />
+                          <label>Засах</label>
+                        </a>
+                        <Popconfirm
+                          title="Талбай устгах уу?"
+                          okText="Тийм"
+                          cancelText="Үгүй"
+                          onConfirm={() => talbaiUstgay(data)}
+                        >
+                          <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                            <DeleteOutlined
+                              style={{ fontSize: "18px", color: "red" }}
+                            />
+                            <label>Устгах</label>
                           </a>
-                          <Popconfirm
-                            title="Талбай устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
-                            onConfirm={() => talbaiUstgay(data)}
-                          >
-                            <a className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between w-full">
-                              <DeleteOutlined
-                                style={{ fontSize: "18px", color: "red" }}
-                              />
-                              <label>Устгах</label>
-                            </a>
-                          </Popconfirm>
-                        </div>
-                      )}
-                    >
-                      <a className=" hover:bg-gray-200 flex items-center justify-center">
-                        <MoreOutlined style={{ fontSize: "18px" }} />
-                      </a>
-                    </Popover>
-                  </div>
+                        </Popconfirm>
+                      </div>
+                    )}
+                  >
+                    <a className=" flex items-center justify-center hover:bg-gray-200">
+                      <MoreOutlined style={{ fontSize: "18px" }} />
+                    </a>
+                  </Popover>
+                </div>
+              ),
             },
           ]}
-        />
-        <CardList
-          keyValue="talbai"
-          className="block overflow-auto md:hidden"
-          jagsaalt={talbainiiGaralt?.jagsaalt}
-          Component={TalbaiTile}          
-          pagination={{
-            current: talbainiiGaralt?.khuudasniiDugaar,
-            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
-            total: talbainiiGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
         />
       </Card>
     </Admin>

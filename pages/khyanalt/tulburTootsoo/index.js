@@ -2,7 +2,17 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React, { useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, DatePicker, Table, Select, Button, Tooltip, message, Spin,notification } from "antd"
+import {
+  Card,
+  DatePicker,
+  Table,
+  Select,
+  Button,
+  Tooltip,
+  message,
+  Spin,
+  notification,
+} from "antd"
 import {
   CheckOutlined,
   ExclamationOutlined,
@@ -19,25 +29,32 @@ import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import Tulbur from "components/pageComponents/eBarimt/Tulbur"
 import useUldegdel from "hooks/khuulga/useUldegdel"
+import DansniiKhuulgaTile from "./dedKheseg/DansniiKhuulgaTile"
+import CardList from "components/cardList"
 const { RangePicker } = DatePicker
 
-function iconAvya(a,bank) {
+function iconAvya(a, bank) {
   let Icon = ExclamationOutlined
   let color = "red"
   let tailbar = "Гүйлгээ холбогдоогүй байна"
 
   if (
-    a?.kholbosonDun < a[`${bank === 'tdb' ? 'Amt' : 'amount'}`] && a?.kholbosonDun > 0 ||
+    (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
+      a?.kholbosonDun > 0) ||
     (a?.magadlaltaiGereenuud?.length > 0 &&
       !(a?.kholbosonGereeniiId?.length > 0))
   ) {
     Icon = QuestionOutlined
     color = "yellow"
     tailbar =
-      a?.kholbosonDun < a[`${bank === 'tdb' ? 'Amt' : 'amount'}`] && a?.kholbosonDun > 0
+      a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
+      a?.kholbosonDun > 0
         ? "Дүн дутуу холбогдсон байна"
         : "Холбох боломжтой гэрээнүүд байна"
-  } else if (a?.kholbosonGereeniiId && a?.kholbosonDun === a[`${bank === 'tdb' ? 'Amt' : 'amount'}`]) {
+  } else if (
+    a?.kholbosonGereeniiId &&
+    a?.kholbosonDun === a[`${bank === "tdb" ? "Amt" : "amount"}`]
+  ) {
     Icon = CheckOutlined
     color = "green"
     tailbar = "Гүйлгээ холбогдсон байна"
@@ -56,13 +73,14 @@ function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null)
   const { baiguullaga, barilgiinId } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
-  const { dansGaralt } = useDans(token,baiguullaga?._id)
+  const { dansGaralt } = useDans(token, baiguullaga?._id)
   const [songogdsonDans, setSongogdsonDans] = React.useState(null)
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null)
-  const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } = useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
-  const {uldegdel} = useUldegdel(token,songogdsonDans?.dugaar)
+  const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } =
+    useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
+  const { uldegdel } = useUldegdel(token, songogdsonDans?.dugaar)
 
-  const [order, setOrder] = React.useState({tranDate: -1, time: 0})
+  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
 
   const query = React.useMemo(() => {
     if (songogdsonTurul === "Тодорхойгүй")
@@ -107,7 +125,11 @@ function tulburTootsoo({ token }) {
   }
 
   function guilgeeKholbyo(data) {
-    if (data?.kholbosonGereeniiId && data?.kholbosonDun === data[`${songogdsonDans?.bank === 'tdb' ? 'Amt' : 'amount'}`]) {
+    if (
+      data?.kholbosonGereeniiId &&
+      data?.kholbosonDun ===
+        data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
+    ) {
       message.info("Гүйлгээ гэрээнд холбогдсон байна.")
       return
     }
@@ -145,7 +167,7 @@ function tulburTootsoo({ token }) {
   function ebarimtUgukh(data) {
     modal({
       title: (
-        <div className="w-full flex flex-row justify-between">
+        <div className="flex w-full flex-row justify-between">
           <div>Түрээсийн төлбөрийн и-баримт</div>
         </div>
       ),
@@ -160,8 +182,8 @@ function tulburTootsoo({ token }) {
     })
   }
 
-  const columns = useMemo(()=>{
-    if(songogdsonDans?.bank === 'tdb')
+  const columns = useMemo(() => {
+    if (songogdsonDans?.bank === "tdb")
       return [
         {
           title: "Огноо",
@@ -188,10 +210,9 @@ function tulburTootsoo({ token }) {
           ellipsis: true,
           width: "4rem",
           render(a) {
-            if (_.isString(a))
-              return `${a}`
+            if (_.isString(a)) return `${a}`
             return ""
-          }
+          },
         },
         {
           title: "Гүйлгээний утга",
@@ -228,7 +249,7 @@ function tulburTootsoo({ token }) {
                   shape="circle"
                   size="small"
                   onClick={() => guilgeeKholbyo(a)}
-                  icon={iconAvya(a,'tdb')}
+                  icon={iconAvya(a, "tdb")}
                 />
               </div>
             )
@@ -276,7 +297,7 @@ function tulburTootsoo({ token }) {
           },
         },
       ]
-    else if(songogdsonDans?.bank === 'khanbank')
+    else if (songogdsonDans?.bank === "khanbank")
       return [
         {
           title: "Огноо",
@@ -401,7 +422,7 @@ function tulburTootsoo({ token }) {
         },
       ]
     return []
-  },[songogdsonDans])
+  }, [songogdsonDans])
 
   return (
     <Admin
@@ -416,9 +437,18 @@ function tulburTootsoo({ token }) {
         }))
       }}
     >
-      {dansniiKhuulgaGaralt?.jagsaalt.length > 0 && Number(bankniiGuilgeeToololt?.niit || 0)-Number(bankniiGuilgeeToololt?.kholboson || 0) >0  && notification.error({message:`Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0)-Number(bankniiGuilgeeToololt?.kholboson || 0)} гэрээ байна`})}
-      <Card className="col-span-12 p-5 cardgrid">      
-        <div className="w-full grid grid-cols-12 gap-4">
+      {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
+        Number(bankniiGuilgeeToololt?.niit || 0) -
+          Number(bankniiGuilgeeToololt?.kholboson || 0) >
+          0 &&
+        notification.error({
+          message: `Холболт хийгдээгүй ${
+            Number(bankniiGuilgeeToololt?.niit || 0) -
+            Number(bankniiGuilgeeToololt?.kholboson || 0)
+          } гэрээ байна`,
+        })}
+      <Card className="cardgrid col-span-12 p-5">
+        <div className="grid w-full grid-cols-12 gap-4">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
             {
@@ -434,14 +464,14 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className="border-2 border-green-600 rounded-xl col-span-12 md:col-span-6 lg:col-span-3 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3"
                 onClick={() => turulSongyo(mur.utga)}
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-3xl text-green-600 font-bold">
+                        <div className="text-3xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -449,7 +479,7 @@ function tulburTootsoo({ token }) {
                         </div>
                       </div>
                       <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
+                        <div className="text-2xl text-green-600">
                           {mur.icon}
                         </div>
                       </div>
@@ -460,13 +490,13 @@ function tulburTootsoo({ token }) {
             )
           })}
         </div>
-        <div className="w-full flex flex-row mt-5">
+        <div className="mt-5 flex w-full flex-row">
           <RangePicker
             style={{ marginBottom: "20px" }}
             value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
           />
-          <div className="w-40 ml-4">
+          <div className="ml-4 w-40">
             <Select
               placeholder="Данс"
               style={{ width: "100%" }}
@@ -480,31 +510,60 @@ function tulburTootsoo({ token }) {
             </Select>
           </div>
           {songogdsonDans && (
-            <div className="p-1 flex flex-row space-x-2 ml-auto font-medium">
-              Үлдэгдэл: {uldegdel ? (songogdsonDans?.bank === 'tdb' ? uldegdel : formatNumber(uldegdel)) : <Spin/>}{" "}
+            <div className="ml-auto flex flex-row space-x-2 p-1 font-medium">
+              Үлдэгдэл:{" "}
+              {uldegdel ? (
+                songogdsonDans?.bank === "tdb" ? (
+                  uldegdel
+                ) : (
+                  formatNumber(uldegdel)
+                )
+              ) : (
+                <Spin />
+              )}{" "}
               {songogdsonDans.currency}
             </div>
           )}
         </div>
-        <Table
-          bordered
-          size="small"
-          scroll={{ y: "calc(100vh - 30rem)" }}
-          columns={columns}
-          dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+        <div className="mt-5 hidden overflow-auto md:block">
+          <Table
+            bordered
+            size="small"
+            scroll={{ y: "calc(100vh - 30rem)" }}
+            columns={columns}
+            dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+            pagination={{
+              current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
+              pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
+              total: dansniiKhuulgaGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setDansniiKhuulgaKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+            rowKey={(a) => a.record}
+          />
+        </div>
+        <CardList
+          keyValue="guilgeeTuukh"
+          className="block overflow-auto md:hidden"
+          jagsaalt={dansniiKhuulgaGaralt?.jagsaalt}
+          Component={DansniiKhuulgaTile}
           pagination={{
-            current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
-            pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
-            total: dansniiKhuulgaGaralt?.niitMur,
+            current: dansniiKhuulgaGaralt?.jagsaalt?.khuudasniiDugaar,
+            pageSize: dansniiKhuulgaGaralt?.jagsaalt?.khuudasniiKhemjee,
+            total: dansniiKhuulgaGaralt?.jagsaalt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setDansniiKhuulgaKhuudaslalt((kh) => ({
+              setKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,
               })),
           }}
-          rowKey={(a) => a.record}
         />
       </Card>
     </Admin>

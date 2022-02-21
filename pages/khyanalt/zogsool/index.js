@@ -8,8 +8,7 @@ import CardList from "components/cardList"
 import UilchluulegchTile from "./dedKheseg/UilchluulegchTile"
 import TureeslegchTile from "./dedKheseg/TureeslegchTile"
 import useZogsool from "hooks/useZogsool"
-import moment from 'moment'
-
+import moment from "moment"
 
 const tureeslegchMashin = [
   {
@@ -92,23 +91,23 @@ const uilchluulegchMashin = [
 ]
 function Zogsool({ token }) {
   const { baiguullaga } = useAuth()
-  const {zogsoolGaralt,setZogsoolKhuudaslalt} = useZogsool(token,baiguullaga?._id)
+  const { zogsoolGaralt, setZogsoolKhuudaslalt } = useZogsool(
+    token,
+    baiguullaga?._id
+  )
 
   const toololt = [
-    { name: "Нийт машины тоо", too: zogsoolGaralt?.niitMur || 0 },
+    { name: "Нийт машин", too: zogsoolGaralt?.niitMur || 0 },
     { name: "Нийт авах дүн" },
     { name: "Орсон дүн", too: 0 },
-    { name: "Худалдан авагчийн машины тоо", too: 0 },
-    { name: "Түрээслэгчийн машины тоо", too: 0 },
+    { name: "Худалдан авагчийн машин", too: 0 },
+    { name: "Түрээслэгчийн машин", too: 0 },
     { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
   ]
 
   return (
     <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4">
-      <Card
-        size="small"
-        className="col-span-12 overflow-auto p-5"
-      >
+      <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {toololt.map((a, i) => (
             <div
@@ -117,7 +116,7 @@ function Zogsool({ token }) {
             >
               <div className="h-full rounded-xl">
                 <div className="rounded-xl p-3">
-                  <div className="flex flex-row space-x-2 items-center">
+                  <div className="flex flex-row items-center space-x-2">
                     <div className="text-3xl font-bold text-green-600">
                       {a.too || 0}
                     </div>
@@ -131,7 +130,7 @@ function Zogsool({ token }) {
       </Card>
       <Card className="col-span-12">
         <div>
-          <Tabs size="large">
+          <Tabs size="small">
             <Tabs.TabPane
               key="1"
               tab={
@@ -143,41 +142,50 @@ function Zogsool({ token }) {
             >
               <Table
                 className="mt-8 hidden overflow-auto md:block"
+                tableLayout="auto"
                 dataSource={zogsoolGaralt?.jagsaalt}
                 scroll={{ y: "calc(100vh - 32rem)" }}
+                size="small"
+                bordered
                 columns={[
-                  { title: "№", align: "center", dataIndex: "dugaar" ,render: (text, record, index) =>
-                  (zogsoolGaralt?.khuudasniiDugaar || 0) *
-                    (zogsoolGaralt?.khuudasniiKhemjee || 0) -
-                  (zogsoolGaralt?.khuudasniiKhemjee || 0) +
-                  index +
-                  1},
                   {
-                    title: "Машины дугаар",
+                    title: "№",
+                    align: "center",
+                    dataIndex: "dugaar",
+                    width: "2rem",
+                    render: (text, record, index) =>
+                      (zogsoolGaralt?.khuudasniiDugaar || 0) *
+                        (zogsoolGaralt?.khuudasniiKhemjee || 0) -
+                      (zogsoolGaralt?.khuudasniiKhemjee || 0) +
+                      index +
+                      1,
+                  },
+                  {
+                    title: "Машин",
                     align: "center",
                     dataIndex: "car_number",
                   },
                   {
-                    title: "Орсон огноо",
+                    title: "Орсон",
                     align: "center",
                     dataIndex: "check_in_time",
-                    render(v){
-                      return moment(v).format('YYYY-MM-DD hh:mm')
-                    }
+                    render(v) {
+                      return moment(v).format("YYYY-MM-DD hh:mm")
+                    },
                   },
                   {
-                    title: "Гарсан огноо",
+                    title: "Гарсан",
                     align: "center",
                     dataIndex: "check_out_time",
-                    render(v){
-                      return moment(v).format('YYYY-MM-DD hh:mm')
-                    }
+                    render(v) {
+                      return moment(v).format("YYYY-MM-DD hh:mm")
+                    },
                   },
                   {
-                    title: "Зарцуулсан хугацаа",
+                    title: "Хугацаа",
                     align: "center",
                     dataIndex: "khugatsaa",
-                  }
+                  },
                 ]}
                 pagination={{
                   current: zogsoolGaralt?.khuudasniiDugaar,
@@ -185,7 +193,7 @@ function Zogsool({ token }) {
                   total: zogsoolGaralt?.niitMur,
                   showSizeChanger: true,
                   onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                  setZogsoolKhuudaslalt((kh) => ({
+                    setZogsoolKhuudaslalt((kh) => ({
                       ...kh,
                       khuudasniiDugaar,
                       khuudasniiKhemjee,
@@ -195,7 +203,7 @@ function Zogsool({ token }) {
               <CardList
                 keyValue="uilchluulegch"
                 className="block overflow-auto md:hidden"
-                jagsaalt={uilchluulegchMashin}
+                jagsaalt={zogsoolGaralt?.jagsaalt}
                 Component={UilchluulegchTile}
               />
             </Tabs.TabPane>
@@ -210,9 +218,11 @@ function Zogsool({ token }) {
             >
               <Table
                 className="mt-8 hidden overflow-auto md:block"
+                tableLayout="auto"
                 dataSource={tureeslegchMashin}
+                size="small"
+                bordered
                 columns={[
-                  { title: "№", align: "center", dataIndex: "dugaar" },
                   {
                     title: "Талбай",
                     align: "center",
@@ -220,29 +230,32 @@ function Zogsool({ token }) {
                     dataIndex: "talbai",
                   },
                   {
-                    title: "Машины дугаар",
+                    title: "Машин",
                     align: "center",
                     dataIndex: "mashinDugaar",
                   },
                   {
-                    title: "Орсон огноо",
+                    title: "Орсон",
                     align: "center",
                     dataIndex: "orsonOgnoo",
+                    ellipsis: true,
                   },
                   {
-                    title: "Гарсан огноо",
+                    title: "Гарсан",
                     align: "center",
                     dataIndex: "garsanOgnoo",
+                    ellipsis: true,
                   },
                   {
-                    title: "Зарцуулсан хугацаа",
+                    title: "Хугацаа",
                     align: "center",
                     dataIndex: "khugatsaa",
                   },
                   {
-                    title: "Сарын зогссолын лимит цаг",
+                    title: "Сарын лимит",
                     align: "center",
                     dataIndex: "limit",
+                    ellipsis: true,
                   },
                   {
                     title: "Зогсох үлдсэн цаг",
@@ -253,24 +266,27 @@ function Zogsool({ token }) {
                     title: "Илүү зогссон цаг",
                     align: "center",
                     dataIndex: "iluuZogsson",
+                    ellipsis: true,
                   },
                   {
                     title: "Энгийн цагийн үнэлгээ",
                     align: "center",
                     dataIndex: "tsagiinUnelgee",
+                    ellipsis: true,
                   },
                   {
                     title: "Илүү цагийн үнэлгээ",
                     align: "center",
                     dataIndex: "iluutsagiinUnelgee",
+                    ellipsis: true,
                   },
                   {
-                    title: "Төлөх дүн",
+                    title: "Дүн",
                     align: "center",
                     dataIndex: "tulukhDun",
                   },
                   {
-                    title: "Утасны дугаар",
+                    title: "Утас",
                     align: "center",
                     dataIndex: "utas",
                   },
@@ -280,7 +296,7 @@ function Zogsool({ token }) {
               <CardList
                 keyValue="uilchluulegch"
                 className="block overflow-auto md:hidden"
-                jagsaalt={tureeslegchMashin}
+                jagsaalt={zogsoolGaralt?.jagsaalt}
                 Component={TureeslegchTile}
               />
             </Tabs.TabPane>
