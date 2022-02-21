@@ -10,14 +10,7 @@ import TureeslegchTile from "./dedKheseg/TureeslegchTile"
 import useZogsool from "hooks/useZogsool"
 import moment from 'moment'
 
-const toololt = [
-  { name: "Нийт машины тоо", too: 0 },
-  { name: "Нийт авах дүн" },
-  { name: "Орсон дүн", too: 0 },
-  { name: "Худалдан авагчийн машины тоо", too: 0 },
-  { name: "Түрээслэгчийн машины тоо", too: 0 },
-  { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
-]
+
 const tureeslegchMashin = [
   {
     dugaar: "1",
@@ -100,6 +93,15 @@ const uilchluulegchMashin = [
 function Zogsool({ token }) {
   const { baiguullaga } = useAuth()
   const {zogsoolGaralt,setZogsoolKhuudaslalt} = useZogsool(token,baiguullaga?._id)
+
+  const toololt = [
+    { name: "Нийт машины тоо", too: zogsoolGaralt?.niitMur || 0 },
+    { name: "Нийт авах дүн" },
+    { name: "Орсон дүн", too: 0 },
+    { name: "Худалдан авагчийн машины тоо", too: 0 },
+    { name: "Түрээслэгчийн машины тоо", too: 0 },
+    { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
+  ]
 
   return (
     <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4">
