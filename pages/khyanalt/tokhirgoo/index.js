@@ -14,6 +14,7 @@ import Medegdel from "components/pageComponents/tokhirgoo/Medegdel";
 import QPay from "components/pageComponents/tokhirgoo/QPay";
 import Dans from "components/pageComponents/tokhirgoo/Dans";
 import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo"
+import Zogsool from "components/pageComponents/tokhirgoo/Zogsool"
 
 import { useMemo, useState } from "react";
 
@@ -126,6 +127,27 @@ function AjiltanBurtgel({ token }) {
          ,
           text:'Данс',
           tsonkh:<Dans {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
+        },
+        {
+          icon:<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-settings w-4 h-4 mr-2"
+        >
+          <rect x="1" y="3" width="15" height="13"></rect>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+          <circle cx="5.5" cy="18.5" r="2.5"></circle>
+          <circle cx="18.5" cy="18.5" r="2.5"></circle>
+        </svg>,
+        text:'Зогсоол',
+        tsonkh:<Zogsool {...{ajiltan, ajiltanMutate,baiguullaga,baiguullagaMutate}} token={token}/>
         }
     ]
     else return [
