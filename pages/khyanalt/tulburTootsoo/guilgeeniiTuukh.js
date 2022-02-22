@@ -30,6 +30,7 @@ import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeni
 import useSWR from "swr"
 import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile"
 import CardList from "components/cardList"
+import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya"
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -55,6 +56,60 @@ function GereeniiUldegdel({ ugugdul, token }) {
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
+  )
+}
+
+
+function TableGuilgee({columns,garalt, setKhuudaslalt,delgegdsenGeree,setDelgegdsenGeree,refTuukh,token,ognoo,refreshData,setLoadingIndex}) {
+  return (
+    <Table
+            scroll={{ y: "calc(100vh - 26rem)" }}
+            size="small"
+            bordered
+            columns={columns}
+            loading={!garalt}
+            dataSource={garalt?.jagsaalt}
+            rowKey={(a) => a._id}
+            className="t-head"
+            rowClassName={(record, index) =>
+              index % 2 === 0
+                ? "bg-white dark:bg-gray-600"
+                : "bg-gray-200 dark:bg-gray-800"
+            }
+            pagination={{
+              current: garalt?.khuudasniiDugaar,
+              pageSize: garalt?.khuudasniiKhemjee,
+              total: garalt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
+                setLoadingIndex(0)
+                setKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                }))
+              },
+            }}
+            expandable={{
+              expandedRowRender: (mur) =>
+                mur?._id === delgegdsenGeree && (
+                  <GuilgeeniiTuukh
+                    ref={refTuukh}
+                    mur={mur}
+                    token={token}
+                    ognoo={ognoo}
+                    data={mur}
+                    refreshData={refreshData}
+                  />
+                ),
+              expandedRowKeys: [delgegdsenGeree],
+              expandedRowClassName: (a, index) =>
+                index % 2 === 0
+                  ? "bg-white dark:bg-gray-600"
+                  : "bg-gray-200 dark:bg-gray-800",
+              onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
+            }}
+          />
   )
 }
 
@@ -159,8 +214,8 @@ function guilgeeniiTuukh({ token }) {
   }, [turul, ognoo])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, query)
-
+    useGereeniiJagsaalt(turul !== 'eneSardTulukh' && token, baiguullaga?._id, undefined, query)
+  const {eneSardTuluuguiGereenuud,setEneSardTuluuguiGereenuud} = useEneSardTuluuguiGereenuudAvya(turul === 'eneSardTulukh' && token, ognoo)
   const columns = useMemo(
     () => [
       {
@@ -495,6 +550,7 @@ function guilgeeniiTuukh({ token }) {
       footer,
     })
   }
+  //#endregion
 
   return (
     <Admin
@@ -593,64 +649,28 @@ function guilgeeniiTuukh({ token }) {
           />
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
-          <Table
-            scroll={{ y: "calc(100vh - 26rem)" }}
-            size="small"
-            bordered
+          <TableGuilgee 
             columns={columns}
-            loading={!gereeniiMedeelel}
-            dataSource={gereeniiMedeelel?.jagsaalt}
-            rowKey={(a) => a._id}
-            className="t-head"
-            rowClassName={(record, index) =>
-              index % 2 === 0
-                ? "bg-white dark:bg-gray-600"
-                : "bg-gray-200 dark:bg-gray-800"
-            }
-            pagination={{
-              current: gereeniiMedeelel?.khuudasniiDugaar,
-              pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
-              total: gereeniiMedeelel?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
-                setLoadingIndex(0)
-                setGereeniiKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                }))
-              },
-            }}
-            expandable={{
-              expandedRowRender: (mur) =>
-                mur?._id === delgegdsenGeree && (
-                  <GuilgeeniiTuukh
-                    ref={refTuukh}
-                    mur={mur}
-                    token={token}
-                    ognoo={ognoo}
-                    data={mur}
-                    refreshData={refreshData}
-                  />
-                ),
-              expandedRowKeys: [delgegdsenGeree],
-              expandedRowClassName: (a, index) =>
-                index % 2 === 0
-                  ? "bg-white dark:bg-gray-600"
-                  : "bg-gray-200 dark:bg-gray-800",
-              onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
-            }}
+            garalt={turul === 'eneSardTulukh' ? eneSardTuluuguiGereenuud : gereeniiMedeelel} 
+            setKhuudaslalt={turul === 'eneSardTulukh' ? setEneSardTuluuguiGereenuud : setGereeniiKhuudaslalt} 
+            setLoadingIndex={setLoadingIndex}
+            refTuukh={refTuukh}
+            token={token}
+            ognoo={ognoo}
+            refreshData={refreshData}
+            delgegdsenGeree={delgegdsenGeree}
+            setDelgegdsenGeree={setDelgegdsenGeree}
           />
         </div>
         <CardList
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"
-          jagsaalt={gereeniiMedeelel?.jagsaalt}
+          jagsaalt={turul === 'eneSardTulukh' ? eneSardTuluuguiGereenuud?.jagsaalt : gereeniiMedeelel?.jagsaalt}
           Component={GuilgeenTuukhTile}
           pagination={{
-            current: gereeniiMedeelel?.jagsaalt?.khuudasniiDugaar,
-            pageSize: gereeniiMedeelel?.jagsaalt?.khuudasniiKhemjee,
-            total: gereeniiMedeelel?.jagsaalt?.niitMur,
+            current: gereeniiMedeelel?.khuudasniiDugaar,
+            pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
+            total: gereeniiMedeelel?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
               setKhuudaslalt((kh) => ({
