@@ -8,9 +8,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 import formatNumber from "tools/function/formatNumber"
 import { useMemo, useState } from "react"
-import useKhungulultTuukh from "hooks/useKhungulultTuukh"
-
-import deleteMethod from "tools/function/crud/deleteMethod"
+import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh"
 
 const { RangePicker } = DatePicker
 //#endregion

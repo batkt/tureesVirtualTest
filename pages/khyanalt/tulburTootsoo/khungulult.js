@@ -13,7 +13,7 @@ import {
 } from "antd"
 import Admin from "components/Admin"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import useKhungulultTuukh from "hooks/useKhungulultTuukh"
+import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh"
 import _ from "lodash"
 import moment from "moment"
 import React, { useEffect, useMemo, useRef, useState } from "react"
