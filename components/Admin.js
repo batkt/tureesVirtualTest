@@ -26,7 +26,7 @@ function Admin({
   dedKhuudas,
   hideSearch,
   onBack,
-  tsonkhniiId
+  tsonkhniiId,
 }) {
   const [mSearch, setMSearch] = useState(false)
   const { themeValue, setTheme } = useThemeValue()
@@ -42,7 +42,7 @@ function Admin({
     setToken,
     ajiltanKhasya,
     barilgaSoliyo,
-    barilgiinId
+    barilgiinId,
   } = useAuth()
   const khuudasnuud = useErkh(ajiltan)
 
@@ -64,12 +64,12 @@ function Admin({
   }
 
   return (
-    <div className="w-screen min-h-screen bg-green-600 dark:bg-gray-900 flex flex-row md:px-6 md:py-4">
+    <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/rent.png" />
       </Head>
-      <Updater/>
+      <Updater />
       {!dedKhuudas && (
         <NTses
           khuudasnuud={khuudasnuud}
@@ -84,8 +84,12 @@ function Admin({
           barilgiinId={barilgiinId}
         />
       )}
-      <div className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"}`}>
-        <div className="h-12 border-b p-2 flex flex-row justify-between">
+      <div
+        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
+          dedKhuudas ? "w-full" : "main"
+        }`}
+      >
+        <div className="flex h-12 flex-row justify-between border-b p-2">
           <div className="flex flex-row">
             {!dedKhuudas && (
               <MTses
@@ -94,31 +98,36 @@ function Admin({
                 khuudasniiNer={khuudasniiNer}
                 themeValue={themeValue}
                 setTheme={setTheme}
+                ajiltan={ajiltan}
+                barilgaSoliyo={barilgaSoliyo}
+                barilgiinId={barilgiinId}
               />
             )}
             {dedKhuudas && (
               <button
-                className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 iconbutton"
+                className="iconbutton flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
               >
-                <LeftOutlined className="text-2xl dark:text-gray-50 flex items-center justify-center" />
+                <LeftOutlined className="flex items-center justify-center text-2xl dark:text-gray-50" />
               </button>
             )}
             <h2
               id="garchig"
-              className="text-lg font-medium mr-5 dark:text-gray-300 whitespace-normal md:whitespace-nowrap"
+              className="mr-5 whitespace-normal text-lg font-medium dark:text-gray-300 md:whitespace-nowrap"
             >
               {title}
             </h2>
           </div>
           <div className="flex flex-row space-x-6">
-            {tsonkhniiId && <div className="h-8 hidden md:flex justify-center items-center ">
-              <Zaavar token={token} id={tsonkhniiId}/>
-            </div>}
-            <div className="h-8 justify-center items-center hidden md:flex">
-              <div className="mr-4 text-gray-700 dark:text-gray-300 whitespace-nowrap hidden md:flex">
+            {tsonkhniiId && (
+              <div className="hidden h-8 items-center justify-center md:flex ">
+                <Zaavar token={token} id={tsonkhniiId} />
+              </div>
+            )}
+            <div className="hidden h-8 items-center justify-center md:flex">
+              <div className="mr-4 hidden whitespace-nowrap text-gray-700 dark:text-gray-300 md:flex">
                 Dark Mode
               </div>
               <Switch
@@ -130,25 +139,25 @@ function Admin({
               <>
                 <div
                   id="search"
-                  className="w-40 md:w-56 relative text-gray-700 dark:text-gray-300 hidden md:block"
+                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block md:w-56"
                 >
                   <input
-                    onChange={({ target }) =>{
-                      if(!!onSearch){
-                        clearTimeout(timeout);
+                    onChange={({ target }) => {
+                      if (!!onSearch) {
+                        clearTimeout(timeout)
                         timeout = setTimeout(function () {
                           onSearch(target.value)
-                        }, 300);
+                        }, 300)
                       }
                     }}
                     type="text"
-                    className="px-3 py-1 shadow-xl w-40 md:w-56 box pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                    className="box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:w-56"
                     placeholder="Хайлт..."
                   />
                   {mSearch ? (
                     <CloseOutlined
                       onClick={onClickSearch}
-                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 mt-2 right-0"
+                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
                     />
                   ) : (
                     <svg
@@ -161,7 +170,7 @@ function Admin({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-search w-4 h-4 absolute my-auto inset-y-0 mr-3 mt-2 right-0"
+                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
                     >
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -169,7 +178,7 @@ function Admin({
                   )}
                 </div>
                 <MSearch
-                  className="block md:hidden relative text-gray-700 dark:text-gray-300"
+                  className="relative block text-gray-700 dark:text-gray-300 md:hidden"
                   onClick={onClickSearch}
                 />
               </>
