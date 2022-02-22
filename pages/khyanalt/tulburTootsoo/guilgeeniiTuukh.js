@@ -559,7 +559,10 @@ function guilgeeniiTuukh({ token }) {
       className="p-0 md:p-4"
       onSearch={(search) => {
         if (loadingIndex !== 0) setLoadingIndex(0)
-        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        if(turul !== 'eneSardTulukh')
+          setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        else
+          setEneSardTuluuguiGereenuud((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
     >
       <Card className="cardgrid col-span-12 p-5">
