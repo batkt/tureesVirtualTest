@@ -22,21 +22,20 @@ import {
   MoreOutlined,
   SettingOutlined,
 } from "@ant-design/icons"
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin"
-import uilchilgee, { aldaaBarigch, url } from "../../../services/uilchilgee"
-import { useAuth } from "../../../services/auth"
+import Admin from "components/Admin"
+import { aldaaBarigch, url } from "services/uilchilgee"
+import { useAuth } from "services/auth"
 import React, { useState, useRef } from "react"
 import moment from "moment"
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan"
-import getBase64 from "tools/function/getBase64"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
 import { useRouter } from "next/router"
 import CardList from "components/cardList"
-import AjiltanTile from "./dedKheseg/AjiltanTile"
+import AjiltanTile from "components/pageComponents/ajiltan/AjiltanTile"
 
 const iconColor = { fontSize: "18px" }
 

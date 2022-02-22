@@ -46,7 +46,7 @@ import Sungakh from "components/pageComponents/geree/Sungakh"
 import { modal } from "components/ant/Modal"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import CardList from "components/cardList"
-import GereeTile from "./dedKheseg/GereeTile"
+import GereeTile from "components/pageComponents/geree/GereeTile"
 //#endregion
 
 const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {

@@ -1,4 +1,3 @@
-import { Tag } from "antd"
 import moment from "moment"
 import React from "react"
 import formatNumber from "tools/function/formatNumber"

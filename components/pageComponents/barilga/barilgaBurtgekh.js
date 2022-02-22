@@ -11,7 +11,7 @@ import {
 } from "antd"
 import moment from "moment"
 import getBase64 from "tools/function/getBase64"
-import uilchilgee, { url } from "../../../../services/uilchilgee"
+import uilchilgee, { url } from "../../../services/uilchilgee"
 import otoFormData from "tools/function/otoFormData"
 const { TextArea } = Input
 const { Option } = Select

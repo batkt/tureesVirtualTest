@@ -8,7 +8,7 @@ import { Button, Form, Input, InputNumber, notification, Table } from "antd";
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
-import BarilgaTile from "./dedKheseg/BarilgaTile"
+import BarilgaTile from "components/pageComponents/barilga/BarilgaTile"
 import CardList from "components/cardList";
 const formItemLayout = {
   labelCol: {

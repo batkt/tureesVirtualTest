@@ -18,19 +18,17 @@ import {
   DeleteOutlined,
   SolutionOutlined,
   MailOutlined,
-  BellOutlined,
   FileExcelOutlined,
   EyeOutlined,
   MoreOutlined,
   SettingOutlined,
   MinusCircleOutlined,
 } from "@ant-design/icons"
-import shalgaltKhiikh from "../../../services/shalgaltKhiikh"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
 
-import Admin from "../../../components/Admin"
-import Tuukh from "components/pageComponents/khariltsagch/Tuukh"
-import { aldaaBarigch } from "../../../services/uilchilgee"
-import { useAuth } from "../../../services/auth"
+import Admin from "components/Admin"
+import { aldaaBarigch } from "services/uilchilgee"
+import { useAuth } from "services/auth"
 import React, { useState, useRef } from "react"
 import moment from "moment"
 import useKhariltsagch from "hooks/useKhariltsagch"
@@ -44,7 +42,7 @@ import { useKhariltsagchToololt } from "hooks/useKhariltsagch"
 import { modal } from "components/ant/Modal"
 import formatNumber from "tools/function/formatNumber"
 import CardList from "components/cardList"
-import KhariltsagchTile from "./dedKheseg/KhariltsagchTile"
+import KhariltsagchTile from "components/pageComponents/khariltsagch/KhariltsagchTile"
 
 const iconColor = { fontSize: "18px" }
 

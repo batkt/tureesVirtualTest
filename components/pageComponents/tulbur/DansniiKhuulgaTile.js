@@ -1,4 +1,3 @@
-import { Tag } from "antd"
 import moment from "moment"
 import React from "react"
 import formatNumber from "tools/function/formatNumber"
@@ -6,15 +5,8 @@ import formatNumber from "tools/function/formatNumber"
 function DansniiKhuulgaTile({
   Amt,
   CtAcntOrg,
-  TxAddInf,
   TxTime,
-  kholbosonTalbainId,
-  amount,
   tranDate,
-  relatedAccount,
-  CtAcntOrg,
-  burtgesenAjiltaniiNer,
-  ...ugugdul
 }) {
   return (
     <div className="mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 shadow-2xl dark:bg-gray-900">

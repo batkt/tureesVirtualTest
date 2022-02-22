@@ -16,19 +16,19 @@ import {
 } from "antd"
 import { FileExcelOutlined } from "@ant-design/icons"
 import moment from "moment"
-import formatNumber from "../../../tools/function/formatNumber"
-import GuilgeeKhiikh from "../../../components/pageComponents/tulbur/GuilgeeKhiikh"
-import BaritsaaUdirdlaga from "../../../components/pageComponents/tulbur/BaritsaaUdirdlaga"
+import formatNumber from "tools/function/formatNumber"
+import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh"
+import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga"
 
-import Khungulukh from "../../../components/pageComponents/tulbur/Khungulukh"
-import GuilgeeniiTuukh from "../../../components/pageComponents/tulbur/GuilgeeniiTuukh"
+import Khungulukh from "components/pageComponents/tulbur/Khungulukh"
+import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh"
 import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import useGuilgeeniiToololtAvya from "hooks/useGuilgeeniiToololtAvya"
 import { useTuluugiiGereeniiToololtAvya } from "hooks/useGuilgeeniiToololtAvya"
 import useSWR from "swr"
-import GuilgeenTuukhTile from "./dedKheseg/GuilgeeTuukhTile"
+import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile"
 import CardList from "components/cardList"
 //#endregion
 
@@ -507,11 +507,11 @@ function guilgeeniiTuukh({ token }) {
       }}
     >
       <Card className="cardgrid col-span-12 p-5">
-        {gereeniiMedeelel?.niitMur &&
+        {/* {gereeniiMedeelel?.niitMur &&
           tolooguiGereeniiToo?.too &&
           notification.error({
             message: `Гүйлгээ хийгдээгүй ${tolooguiGereeniiToo?.too} гэрээ байна`,
-          })}
+          })} */}
         <div className="grid w-full grid-cols-12 gap-4">
           {[
             {

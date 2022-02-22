@@ -43,7 +43,7 @@ import formatNumber from "tools/function/formatNumber"
 import { modal } from "components/ant/Modal"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import TalbaiTile from "./dedKheseg/TalbaiTile"
+import TalbaiTile from "components/pageComponents/talbai/TalbaiTile"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {

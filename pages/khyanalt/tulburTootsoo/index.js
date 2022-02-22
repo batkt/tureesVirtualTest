@@ -29,7 +29,7 @@ import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import Tulbur from "components/pageComponents/eBarimt/Tulbur"
 import useUldegdel from "hooks/khuulga/useUldegdel"
-import DansniiKhuulgaTile from "./dedKheseg/DansniiKhuulgaTile"
+import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile"
 import CardList from "components/cardList"
 const { RangePicker } = DatePicker
 
