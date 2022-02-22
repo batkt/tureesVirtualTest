@@ -232,13 +232,15 @@ function talbaiBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(2)
+      // talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
+      //   2
+      // )
       formRef.current.setFieldsValue({
         talbainNiitUne: talbaiState.talbainNiitUne,
       })
-      if(talbaiState.niitAshiglaltiinZardal !== undefined){
+      if (talbaiState.niitAshiglaltiinZardal !== undefined) {
         talbaiState.tureesiinTulbur =
-        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
+          talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
         formRef.current.setFieldsValue({
           tureesiinTulbur: talbaiState.tureesiinTulbur,
         })
@@ -251,30 +253,33 @@ function talbaiBurtgekh({ token }) {
       })
       talbaiState.tureesiinTulbur =
         talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
-        formRef.current.setFieldsValue({
-          tureesiinTulbur: talbaiState.tureesiinTulbur,
-        })
+      formRef.current.setFieldsValue({
+        tureesiinTulbur: talbaiState.tureesiinTulbur,
+      })
     }
     if (talbar === "talbainNiitUne") {
+      debugger
       let value = Number(utga) / Number(talbaiState.talbainKhemjee)
-      if(_.isNumber(Number(talbaiState.talbainNegjUne)) && _.isNumber(utga)){
+      if (_.isNumber(Number(talbaiState.talbainNegjUne)) && _.isNumber(utga)) {
         talbaiState.talbainNegjUne = value.toFixed(2)
         formRef.current.setFieldsValue({
-          talbainNegjUne: talbaiState.talbainNegjUne.toFixed(2),
+          talbainNegjUne: talbaiState.talbainNegjUne,
         })
       }
     }
     if (talbar === "talbainKhemjee") {
-        let value = Number(utga) * Number(talbaiState.talbainNegjUne)
-        if(_.isNumber(value) && !_.isNaN(value)){
-          talbaiState.talbainNiitUne = value.toFixed(2)
-          formRef.current.setFieldsValue({
-            talbainNiitUne: value.toFixed(2),
-          })
-        }
+      let value = Number(utga) * Number(talbaiState.talbainNegjUne)
+      if (_.isNumber(value) && !_.isNaN(value)) {
+        talbaiState.talbainNiitUne = value.toFixed(2)
+        formRef.current.setFieldsValue({
+          talbainNiitUne: value.toFixed(2),
+        })
+      }
     }
     if (talbar === "khurunguUne") {
-      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(2)
+      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
+        2
+      )
       formRef.current.setFieldsValue({})
     }
     settalbaiState((a) => ({ ...a, [talbar]: utga }))
@@ -436,7 +441,7 @@ function talbaiBurtgekh({ token }) {
               ></Input>
             </Form.Item>
             <Form.Item
-              label="Талбайн хэмжээ"
+              label="Хэмжээ"
               name="talbainKhemjee"
               rules={[
                 {

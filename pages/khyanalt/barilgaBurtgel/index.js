@@ -13,6 +13,8 @@ import {
 import _ from "lodash"
 import updateMethod from "tools/function/crud/updateMethod"
 import router from "next/router"
+import CardList from "components/cardList"
+import BarilgaTile from "components/pageComponents/barilga/BarilgaTile"
 
 export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
   if (id)
@@ -82,9 +84,9 @@ function BarilgaBurtgel({ token }) {
           <div className="flex flex-row justify-center">
             <Popover
               content={() => (
-                <div className="flex flex-col space-y-2 w-24">
+                <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link p-2 rounded-lg hover:bg-green-100 flex items-center justify-between"
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
                     onClick={() => barilgaBurtgel(index)}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
@@ -95,7 +97,7 @@ function BarilgaBurtgel({ token }) {
               placement="bottom"
               trigger="click"
             >
-              <a className="rounded-full hover:bg-gray-200 flex items-center justify-center">
+              <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
             </Popover>
@@ -112,7 +114,7 @@ function BarilgaBurtgel({ token }) {
         too: _.get(toololt, "0.baraa") || 15,
         icon: (
           <svg
-            className="w-8 h-8 text-green-500"
+            className="h-8 w-8 text-green-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -132,7 +134,7 @@ function BarilgaBurtgel({ token }) {
         too: "10.2сая",
         icon: (
           <svg
-            className="w-8 h-8 text-green-500"
+            className="h-8 w-8 text-green-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -216,18 +218,15 @@ function BarilgaBurtgel({ token }) {
   }
 
   return (
-    <Admin
-      khuudasniiNer="barilgaBurtgel"
-      className="px-4"
-    >
+    <Admin khuudasniiNer="barilgaBurtgel" className="px-4">
       <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
-          <div className="grid grid-cols-12 gap-6 mt-5">
+          <div className="mt-5 grid grid-cols-12 gap-6">
             {khyanaltiinDun.map((mur, index) => {
               return (
                 <div
                   key={index}
-                  className="col-span-12 sm:col-span-6 xl:col-span-3 intro-y"
+                  className="intro-y col-span-12 sm:col-span-6 xl:col-span-3"
                 >
                   <div className="report-box zoom-in">
                     <div className="box p-5">
@@ -251,17 +250,17 @@ function BarilgaBurtgel({ token }) {
                               strokeWidth="1.5"
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              className="feather feather-chevron-up w-4 h-4 ml-0.5"
+                              className="feather feather-chevron-up ml-0.5 h-4 w-4"
                             >
                               <polyline points="18 15 12 9 6 15"></polyline>
                             </svg>{" "}
                           </div>
                         </div>
                       </div>
-                      <div className="text-3xl font-bold leading-8 mt-6 dark:text-gray-200">
+                      <div className="mt-6 text-3xl font-bold leading-8 dark:text-gray-200">
                         {mur.too}
                       </div>
-                      <div className="text-base text-gray-600 mt-1 dark:text-gray-200">
+                      <div className="mt-1 text-base text-gray-600 dark:text-gray-200">
                         {mur.utga}
                       </div>
                     </div>
@@ -270,11 +269,11 @@ function BarilgaBurtgel({ token }) {
               )
             })}
             <div className="col-span-12">
-              <div className="intro-y flex items-center h-10 mt-8">
-                <h2 className="text-lg font-medium mr-5 dark:text-gray-300">
+              <div className="intro-y mt-8 flex h-10 items-center">
+                <h2 className="mr-5 text-lg font-medium dark:text-gray-300">
                   Барилга жагсаалт
                 </h2>
-                <div className="ml-auto flex items-center text-theme-1 dark:text-theme-10 text-blue-400 dark:text-gray-400">
+                <div className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400">
                   <Button
                     style={{
                       display: "flex",
@@ -289,27 +288,35 @@ function BarilgaBurtgel({ token }) {
                   </Button>
                 </div>
               </div>
-              <Table
-                tableLayout={
-                  baiguullaga?.barilguud?.length > 0 ? "auto" : "fixed"
-                }
-                size="small"
-                bordered
-                scroll={{ y: "calc(100vh - 31rem)" }}
-                rowKey={(row) => row._id}
-                columns={columns}
-                loading={!baiguullaga}
-                dataSource={baiguullaga?.barilguud}
-                
+              <div className="hidden md:block">
+                <Table
+                  tableLayout={
+                    baiguullaga?.barilguud?.length > 0 ? "auto" : "fixed"
+                  }
+                  size="small"
+                  bordered
+                  scroll={{ y: "calc(100vh - 31rem)" }}
+                  rowKey={(row) => row._id}
+                  columns={columns}
+                  loading={!baiguullaga}
+                  dataSource={baiguullaga?.barilguud}
+                />
+              </div>
+              <CardList
+                keyValue="barilga"
+                className="block overflow-auto md:hidden"
+                jagsaalt={baiguullaga?.barilguud}
+                Component={BarilgaTile}
+                pagination={{ pageSize: 100 }}
               />
             </div>
           </div>
         </div>
       </div>
       <div className="col-span-12 xl:col-span-3">
-        <div className="col-span-12 mt-5 md:col-span-12 xl:col-span-4 xxl:col-span-12">
-          <div className="bg-white dark:bg-gray-900 p-2 h-0md:mt-5">
-            <div className="flex flex-row p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+        <div className="xxl:col-span-12 col-span-12 mt-5 md:col-span-12 xl:col-span-4">
+          <div className="h-0md:mt-5 bg-white p-2 dark:bg-gray-900">
+            <div className="flex cursor-pointer flex-row rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <img
                 className="h-14 w-14"
                 alt={baiguullaga?.ner}
@@ -319,20 +326,20 @@ function BarilgaBurtgel({ token }) {
                     : "/rent.png"
                 }
               />
-              <div className="flex flex-col ml-3">
+              <div className="ml-3 flex flex-col">
                 <label>Барилгын нэр</label>
-                <span className="text-gray-600 font-medium mt-1">
+                <span className="mt-1 font-medium text-gray-600">
                   {baiguullaga?.ner}
                 </span>
               </div>
             </div>
             <div
-              className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md"
+              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               onDoubleClick={() => onDBLClick("register")}
             >
               <div className="flex flex-row items-center">
                 <span>Регистр:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {barilga?.uurchlukhTalbar === "register" ? (
                     <Input
                       placeholder="Регистр"
@@ -346,12 +353,12 @@ function BarilgaBurtgel({ token }) {
               </div>
             </div>
             <div
-              className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md"
+              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               onDoubleClick={() => onDBLClick("khayag")}
             >
               <div className="flex flex-row items-center">
                 <span>Хаяг:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {barilga?.uurchlukhTalbar === "khayag" ? (
                     <Input
                       placeholder="Хаяг"
@@ -365,12 +372,12 @@ function BarilgaBurtgel({ token }) {
               </div>
             </div>
             <div
-              className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md"
+              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               onDoubleClick={() => onDBLClick("davkhar")}
             >
               <div className="flex flex-row items-center">
                 <span>Давхар:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {barilga?.uurchlukhTalbar === "davkhar" ? (
                     <Input
                       placeholder="Давхар"
@@ -384,12 +391,12 @@ function BarilgaBurtgel({ token }) {
               </div>
             </div>
             <div
-              className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md"
+              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               onDoubleClick={() => onDBLClick("talbai")}
             >
               <div className="flex flex-row items-center">
                 <span>Талбай:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {barilga?.uurchlukhTalbar === "talbai" ? (
                     <Input
                       placeholder="Талбай"
@@ -403,12 +410,12 @@ function BarilgaBurtgel({ token }) {
               </div>
             </div>
             <div
-              className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md"
+              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
               onDoubleClick={() => onDBLClick("utas")}
             >
               <div className="flex flex-row items-center">
                 <span>Утас:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {barilga?.uurchlukhTalbar === "utas" ? (
                     <Input
                       placeholder="Утас"
@@ -421,10 +428,10 @@ function BarilgaBurtgel({ token }) {
                 </span>
               </div>
             </div>
-            <div className="flex items-center p-3 cursor-pointer transition duration-300 ease-in-out bg-white dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800 dark:text-gray-400 rounded-md">
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span>Сул Талбай тоо:</span>
-                <span className="text-gray-600 font-medium">
+                <span className="font-medium text-gray-600">
                   {baiguullaga?.utas}
                 </span>
               </div>

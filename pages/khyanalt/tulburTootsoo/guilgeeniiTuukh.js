@@ -14,7 +14,7 @@ import {
   Progress,
   notification,
 } from "antd"
-import { FileExcelOutlined } from "@ant-design/icons"
+import { FileExcelOutlined, ExclamationCircleOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh"
@@ -59,57 +59,67 @@ function GereeniiUldegdel({ ugugdul, token }) {
   )
 }
 
-
-function TableGuilgee({columns,garalt, setKhuudaslalt,delgegdsenGeree,setDelgegdsenGeree,refTuukh,token,ognoo,refreshData,setLoadingIndex}) {
+function TableGuilgee({
+  columns,
+  garalt,
+  setKhuudaslalt,
+  delgegdsenGeree,
+  setDelgegdsenGeree,
+  refTuukh,
+  token,
+  ognoo,
+  refreshData,
+  setLoadingIndex,
+}) {
   return (
     <Table
-            scroll={{ y: "calc(100vh - 26rem)" }}
-            size="small"
-            bordered
-            columns={columns}
-            loading={!garalt}
-            dataSource={garalt?.jagsaalt}
-            rowKey={(a) => a._id}
-            className="t-head"
-            rowClassName={(record, index) =>
-              index % 2 === 0
-                ? "bg-white dark:bg-gray-600"
-                : "bg-gray-200 dark:bg-gray-800"
-            }
-            pagination={{
-              current: garalt?.khuudasniiDugaar,
-              pageSize: garalt?.khuudasniiKhemjee,
-              total: garalt?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
-                setLoadingIndex(0)
-                setKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                }))
-              },
-            }}
-            expandable={{
-              expandedRowRender: (mur) =>
-                mur?._id === delgegdsenGeree && (
-                  <GuilgeeniiTuukh
-                    ref={refTuukh}
-                    mur={mur}
-                    token={token}
-                    ognoo={ognoo}
-                    data={mur}
-                    refreshData={refreshData}
-                  />
-                ),
-              expandedRowKeys: [delgegdsenGeree],
-              expandedRowClassName: (a, index) =>
-                index % 2 === 0
-                  ? "bg-white dark:bg-gray-600"
-                  : "bg-gray-200 dark:bg-gray-800",
-              onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
-            }}
-          />
+      scroll={{ y: "calc(100vh - 26rem)" }}
+      size="small"
+      bordered
+      columns={columns}
+      loading={!garalt}
+      dataSource={garalt?.jagsaalt}
+      rowKey={(a) => a._id}
+      className="t-head"
+      rowClassName={(record, index) =>
+        index % 2 === 0
+          ? "bg-white dark:bg-gray-600"
+          : "bg-gray-200 dark:bg-gray-800"
+      }
+      pagination={{
+        current: garalt?.khuudasniiDugaar,
+        pageSize: garalt?.khuudasniiKhemjee,
+        total: garalt?.niitMur,
+        showSizeChanger: true,
+        onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
+          setLoadingIndex(0)
+          setKhuudaslalt((kh) => ({
+            ...kh,
+            khuudasniiDugaar,
+            khuudasniiKhemjee,
+          }))
+        },
+      }}
+      expandable={{
+        expandedRowRender: (mur) =>
+          mur?._id === delgegdsenGeree && (
+            <GuilgeeniiTuukh
+              ref={refTuukh}
+              mur={mur}
+              token={token}
+              ognoo={ognoo}
+              data={mur}
+              refreshData={refreshData}
+            />
+          ),
+        expandedRowKeys: [delgegdsenGeree],
+        expandedRowClassName: (a, index) =>
+          index % 2 === 0
+            ? "bg-white dark:bg-gray-600"
+            : "bg-gray-200 dark:bg-gray-800",
+        onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
+      }}
+    />
   )
 }
 
@@ -214,8 +224,14 @@ function guilgeeniiTuukh({ token }) {
   }, [turul, ognoo])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
-    useGereeniiJagsaalt(turul !== 'eneSardTulukh' && token, baiguullaga?._id, undefined, query)
-  const {eneSardTuluuguiGereenuud,setEneSardTuluuguiGereenuud} = useEneSardTuluuguiGereenuudAvya(turul === 'eneSardTulukh' && token, ognoo)
+    useGereeniiJagsaalt(
+      turul !== "eneSardTulukh" && token,
+      baiguullaga?._id,
+      undefined,
+      query
+    )
+  const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
+    useEneSardTuluuguiGereenuudAvya(turul === "eneSardTulukh" && token, ognoo)
   const columns = useMemo(
     () => [
       {
@@ -559,18 +575,17 @@ function guilgeeniiTuukh({ token }) {
       className="p-0 md:p-4"
       onSearch={(search) => {
         if (loadingIndex !== 0) setLoadingIndex(0)
-        if(turul !== 'eneSardTulukh')
+        if (turul !== "eneSardTulukh")
           setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
         else
-          setEneSardTuluuguiGereenuud((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+          setEneSardTuluuguiGereenuud((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }))
       }}
     >
       <Card className="cardgrid col-span-12 p-5">
-        {gereeniiMedeelel?.niitMur &&
-          tolooguiGereeniiToo?.too &&
-          notification.error({
-            message: `Гүйлгээ хийгдээгүй ${tolooguiGereeniiToo?.too} гэрээ байна`,
-          })}
         <div className="grid w-full grid-cols-12 gap-4">
           {[
             {
@@ -622,17 +637,30 @@ function guilgeeniiTuukh({ token }) {
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-2xl font-bold text-green-600">
+                        <div className="text-xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
                           {mur.utga}
                         </div>
                       </div>
-                      <div className="ml-auto">
-                        <div className="text-2xl text-green-600">
-                          {mur.icon}
+                      {mur.turul === "eneSardTulukh" && (
+                        <div className="ml-8 grid">
+                          <div className="text-xl">
+                            <ExclamationCircleOutlined
+                              style={{
+                                fontSize: "24px",
+                                color: "red",
+                              }}
+                            />
+                          </div>
+                          <div className="text-base font-bold text-red-500">
+                            {tolooguiGereeniiToo?.too}
+                          </div>
                         </div>
+                      )}
+                      <div className="ml-auto">
+                        <div className="text-xl text-green-600">{mur.icon}</div>
                       </div>
                     </div>
                   </div>
@@ -652,10 +680,18 @@ function guilgeeniiTuukh({ token }) {
           />
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
-          <TableGuilgee 
+          <TableGuilgee
             columns={columns}
-            garalt={turul === 'eneSardTulukh' ? eneSardTuluuguiGereenuud : gereeniiMedeelel} 
-            setKhuudaslalt={turul === 'eneSardTulukh' ? setEneSardTuluuguiGereenuud : setGereeniiKhuudaslalt} 
+            garalt={
+              turul === "eneSardTulukh"
+                ? eneSardTuluuguiGereenuud
+                : gereeniiMedeelel
+            }
+            setKhuudaslalt={
+              turul === "eneSardTulukh"
+                ? setEneSardTuluuguiGereenuud
+                : setGereeniiKhuudaslalt
+            }
             setLoadingIndex={setLoadingIndex}
             refTuukh={refTuukh}
             token={token}
@@ -668,7 +704,11 @@ function guilgeeniiTuukh({ token }) {
         <CardList
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"
-          jagsaalt={turul === 'eneSardTulukh' ? eneSardTuluuguiGereenuud?.jagsaalt : gereeniiMedeelel?.jagsaalt}
+          jagsaalt={
+            turul === "eneSardTulukh"
+              ? eneSardTuluuguiGereenuud?.jagsaalt
+              : gereeniiMedeelel?.jagsaalt
+          }
           Component={GuilgeenTuukhTile}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,

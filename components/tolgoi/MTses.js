@@ -2,6 +2,7 @@ import { Drawer, Menu, Switch } from "antd"
 import Link from "next/link"
 import React, { useState } from "react"
 import { url } from "services/uilchilgee"
+import _ from "lodash"
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
   const [open, setOpen] = React.useState(
@@ -37,7 +38,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             return (
               <Link href={a.href} key={a.href}>
                 <li
-                  className={`relative cursor-pointer rounded-l-lg p-2 text-white ${
+                  className={`relative cursor-pointer rounded-l-lg p-2 text-white  ${
                     a.khuudasniiNer === khuudasniiNer
                       ? "bg-white dark:bg-gray-800"
                       : ""
@@ -62,8 +63,17 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   }
   return (
     <Link href={mur.href}>
-      <li className={selected ? "selected-menu" : ""}>
-        <div className="flex flex-row p-1">{mur.ner}</div>
+      <li className={selected ? "selected-menu dark:bg-gray-400" : ""}>
+        <div className="flex flex-row p-1">
+          <div
+            className={`mr-2 ${
+              selected ? "text-green-600 dark:text-white" : ""
+            }`}
+          >
+            {" "}
+            {mur.ner}
+          </div>
+        </div>
       </li>
     </Link>
   )
@@ -75,9 +85,16 @@ function MTses({
   baiguullaga,
   themeValue,
   setTheme,
+  ajiltan,
+  barilgiinId,
+  barilgaSoliyo,
 }) {
   const [visible, setVisible] = useState(false)
-
+  const barilguud = baiguullaga?.barilguud?.filter(
+    (a) =>
+      !!ajiltan?.barilguud?.find((b) => b === a._id) ||
+      ajiltan?.erkh === "Admin"
+  )
   return (
     <div className="mr-2 flex md:hidden">
       <button
@@ -121,9 +138,9 @@ function MTses({
           </div>
         }
       >
-        <ul>
-          <li className="mb-10 px-2">
-            <div className="border-b px-2 pb-2">
+        <ul className="bg-green-400 text-white dark:bg-gray-800">
+          <li className="t mb-10 px-2 ">
+            <div className="border-b  px-2 pb-2">
               <div className="flex flex-col items-center">
                 <img
                   className="h-20 w-20 "
@@ -134,6 +151,32 @@ function MTses({
                       : "/rent.png"
                   }
                 />
+                {barilguud?.length > 0 ? (
+                  <div className="relative mt-2 inline-block">
+                    <select
+                      defaultValue={barilgiinId}
+                      onChange={({ target }) => barilgaSoliyo(target.value)}
+                      className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-white"
+                    >
+                      {barilguud?.map((a) => (
+                        <option key={a?._id} className="" value={a?._id}>
+                          {a?.ner}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <svg
+                        className="h-4 w-4 fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                ) : (
+                  _.get(barilguud, "0.ner")
+                )}
               </div>
             </div>
           </li>
