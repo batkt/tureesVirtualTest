@@ -38,7 +38,7 @@ function useEneSardTuluuguiGereenuudAvya(token, ognoo) {
     
     const [khuudaslalt, setEneSardTuluuguiGereenuud] = useState({
         khuudasniiDugaar: 1,
-        khuudasniiKhemjee: 10,
+        khuudasniiKhemjee: 100,
         search: "",
     })
 
