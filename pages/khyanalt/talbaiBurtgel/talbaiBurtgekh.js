@@ -44,6 +44,7 @@ import { modal } from "components/ant/Modal"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import TalbaiTile from "components/pageComponents/talbai/TalbaiTile"
+import _ from "lodash"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -231,15 +232,17 @@ function talbaiBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
+      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(2)
       formRef.current.setFieldsValue({
         talbainNiitUne: talbaiState.talbainNiitUne,
       })
-      talbaiState.tureesiinTulbur =
+      if(talbaiState.niitAshiglaltiinZardal !== undefined){
+        talbaiState.tureesiinTulbur =
         talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
-      formRef.current.setFieldsValue({
-        tureesiinTulbur: talbaiState.tureesiinTulbur,
-      })
+        formRef.current.setFieldsValue({
+          tureesiinTulbur: talbaiState.tureesiinTulbur,
+        })
+      }
     }
     if (talbar === "ashiglaltiinZardal") {
       talbaiState.niitAshiglaltiinZardal = utga * talbaiState.talbainKhemjee
@@ -248,12 +251,29 @@ function talbaiBurtgekh({ token }) {
       })
       talbaiState.tureesiinTulbur =
         talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne
+        formRef.current.setFieldsValue({
+          tureesiinTulbur: talbaiState.tureesiinTulbur,
+        })
+    }
+    if (talbar === "talbainNiitUne") {
+      talbaiState.talbainNegjUne = (utga / talbaiState.talbainKhemjee).toFixed(2)
       formRef.current.setFieldsValue({
-        tureesiinTulbur: talbaiState.tureesiinTulbur,
+        talbainNegjUne: talbaiState.talbainNegjUne,
       })
     }
+    if (talbar === "talbainKhemjee") {
+      if(_.isNumber(Number(talbaiState.talbainNegjUne)) && _.isNumber(utga)){
+        let value = Number(utga) * Number(talbaiState.talbainNegjUne)
+        if(_.isNumber(value) && !_.isNaN(value)){
+          talbaiState.talbainNiitUne = value.toFixed(2)
+          formRef.current.setFieldsValue({
+            talbainNiitUne: value.toFixed(2),
+          })
+        }
+      }
+    }
     if (talbar === "khurunguUne") {
-      talbaiState.talbainNiitUne = utga * talbaiState.talbainKhemjee
+      talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(2)
       formRef.current.setFieldsValue({})
     }
     settalbaiState((a) => ({ ...a, [talbar]: utga }))
@@ -424,14 +444,13 @@ function talbaiBurtgekh({ token }) {
                 },
               ]}
             >
-              <Input
-                style={{ width: "50%" }}
-                type="text"
+              <InputNumber
+                style={{ width: "100%" }}
                 allowClear
                 placeholder="талбайн хэмжээ/м2/"
                 value={talbaiState.talbainKhemjee}
-                onChange={(e) => onChange("talbainKhemjee", e.target.value)}
-              ></Input>
+                onChange={(v) => onChange("talbainKhemjee", v)}
+              ></InputNumber>
             </Form.Item>
             <Form.Item
               name="talbainNegjUne"
@@ -444,7 +463,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <InputNumber
-                style={{ width: "50%" }}
+                style={{ width: "100%" }}
                 placeholder="нэгж үнэ"
                 value={talbaiState.talbainNegjUne}
                 formatter={(value) =>
@@ -465,8 +484,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <InputNumber
-                readOnly={true}
-                style={{ width: "50%" }}
+                style={{ width: "100%" }}
                 placeholder="нийт үнэ"
                 value={talbaiState.talbainNiitUne}
                 formatter={(value) =>
@@ -487,7 +505,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <InputNumber
-                style={{ width: "50%" }}
+                style={{ width: "100%" }}
                 placeholder="Ашиглалтын зардал"
                 value={talbaiState.ashiglaltiinZardal}
                 formatter={(value) =>
@@ -508,7 +526,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <InputNumber
-                style={{ width: "50%" }}
+                style={{ width: "100%" }}
                 readOnly={true}
                 placeholder="Нийт зардал"
                 value={talbaiState.niitAshiglaltiinZardal}
@@ -516,9 +534,6 @@ function talbaiBurtgekh({ token }) {
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                // onChange={(target) =>
-                //   onChange("niitAshiglaltiinZardal", target)
-                // }
               />
             </Form.Item>
             <Form.Item
@@ -532,7 +547,7 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <InputNumber
-                style={{ width: "50%" }}
+                style={{ width: "100%" }}
                 readOnly={true}
                 placeholder="Түрээсийн төлбөр"
                 value={talbaiState.tureesiinTulbur}
@@ -540,9 +555,6 @@ function talbaiBurtgekh({ token }) {
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                // onChange={(target) =>
-                //   onChange("niitAshiglaltiinZardal", target)
-                // }
               />
             </Form.Item>
             <Form.Item
@@ -556,7 +568,6 @@ function talbaiBurtgekh({ token }) {
               ]}
             >
               <Input
-                style={{ width: "50%" }}
                 placeholder="Давхар"
                 value={talbaiState.davkhar}
                 onChange={(e) => onChange("davkhar", e.target.value)}
