@@ -256,13 +256,15 @@ function talbaiBurtgekh({ token }) {
         })
     }
     if (talbar === "talbainNiitUne") {
-      talbaiState.talbainNegjUne = (utga / talbaiState.talbainKhemjee).toFixed(2)
-      formRef.current.setFieldsValue({
-        talbainNegjUne: talbaiState.talbainNegjUne,
-      })
+      let value = Number(utga) / Number(talbaiState.talbainKhemjee)
+      if(_.isNumber(Number(talbaiState.talbainNegjUne)) && _.isNumber(utga)){
+        talbaiState.talbainNegjUne = value.toFixed(2)
+        formRef.current.setFieldsValue({
+          talbainNegjUne: talbaiState.talbainNegjUne.toFixed(2),
+        })
+      }
     }
     if (talbar === "talbainKhemjee") {
-      if(_.isNumber(Number(talbaiState.talbainNegjUne)) && _.isNumber(utga)){
         let value = Number(utga) * Number(talbaiState.talbainNegjUne)
         if(_.isNumber(value) && !_.isNaN(value)){
           talbaiState.talbainNiitUne = value.toFixed(2)
@@ -270,7 +272,6 @@ function talbaiBurtgekh({ token }) {
             talbainNiitUne: value.toFixed(2),
           })
         }
-      }
     }
     if (talbar === "khurunguUne") {
       talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(2)
