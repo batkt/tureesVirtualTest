@@ -507,11 +507,11 @@ function guilgeeniiTuukh({ token }) {
       }}
     >
       <Card className="cardgrid col-span-12 p-5">
-        {/* {gereeniiMedeelel?.niitMur &&
+        {gereeniiMedeelel?.niitMur &&
           tolooguiGereeniiToo?.too &&
           notification.error({
             message: `Гүйлгээ хийгдээгүй ${tolooguiGereeniiToo?.too} гэрээ байна`,
-          })} */}
+          })}
         <div className="grid w-full grid-cols-12 gap-4">
           {[
             {
