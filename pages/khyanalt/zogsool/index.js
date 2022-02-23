@@ -9,6 +9,7 @@ import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTi
 import TureeslegchTile from "components/pageComponents/zogsool/TureeslegchTile"
 import useZogsool from "hooks/useZogsool"
 import moment from "moment"
+import formatNumber from "tools/function/formatNumber"
 
 const tureeslegchMashin = [
   {
@@ -97,7 +98,7 @@ function Zogsool({ token }) {
   )
 
   const toololt = [
-    { name: "Нийт машин", too: zogsoolGaralt?.niitMur || 0 },
+    { name: "Нийт машин", too: formatNumber(zogsoolGaralt?.niitMur) || 0 },
     { name: "Нийт авах дүн" },
     { name: "Орсон дүн", too: 0 },
     { name: "Худалдан авагчийн машин", too: 0 },
@@ -170,7 +171,7 @@ function Zogsool({ token }) {
                     align: "center",
                     dataIndex: "check_in_time",
                     render(v) {
-                      return moment(v).format("YYYY-MM-DD hh:mm")
+                      return moment(v).format("YYYY-MM-DD HH:mm")
                     },
                   },
                   {
@@ -178,7 +179,7 @@ function Zogsool({ token }) {
                     align: "center",
                     dataIndex: "check_out_time",
                     render(v) {
-                      return moment(v).format("YYYY-MM-DD hh:mm")
+                      return moment(v).format("YYYY-MM-DD HH:mm")
                     },
                   },
                   {
