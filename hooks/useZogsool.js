@@ -16,6 +16,7 @@ const fetcher = (
       params: {
         ...khuudaslalt,
         query:{
+          $or:[ { car_number: { $regex: search, $options: "i" } }],
           ...query
         },
         order:{check_in_time:-1}

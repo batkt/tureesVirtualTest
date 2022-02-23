@@ -84,7 +84,7 @@ function Zogsool({ token }) {
   ]
 
   return (
-    <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4">
+    <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4" onSearch={(search) => setZogsoolKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {toololt.map((a, i) => (
