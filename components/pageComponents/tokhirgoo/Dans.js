@@ -71,7 +71,7 @@ function Dans({
     useEffect(()=>{
       const tdb = dansGaralt?.jagsaalt?.find(a=>a.bank === 'tdb' && a.corporateAshiglakhEsekh === true)
       if(!!tdb){
-        const {corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg} = tdb
+        const {corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg,AnyBIC,RoleID,} = tdb
         setTdbCorporate({corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg})
       }
       const khanbank = dansGaralt?.jagsaalt?.find(a=>a.bank === 'khanbank' && a.corporateAshiglakhEsekh === true)
@@ -186,6 +186,12 @@ function Dans({
                 </Form.Item>
                 <Form.Item hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true} label='Гүйлгээний нууц үг' name="corporateGuilgeeniiNuutsUg">
                     <Input.Password placeholder='Нууцлагдсан мэдээлэл' onChange={({target})=>setTdbCorporate(a=>({...a,corporateGuilgeeniiNuutsUg:target.value}))}/>
+                </Form.Item>
+                <Form.Item hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true} label='AnyBIC' name="AnyBIC">
+                    <Input onChange={({target})=>setTdbCorporate(a=>({...a,AnyBIC:target.value}))}/>
+                </Form.Item>
+                <Form.Item hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true} label='RoleID' name="RoleID">
+                    <Input onChange={({target})=>setTdbCorporate(a=>({...a,RoleID:target.value}))}/>
                 </Form.Item>
               </Form>
             </div>
