@@ -1,8 +1,8 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React from "react"
+import React, { useState,useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, Table, Tabs } from "antd"
+import { Card, DatePicker, Table, Tabs } from "antd"
 import { FileDoneOutlined } from "@ant-design/icons"
 import CardList from "components/cardList"
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile"
@@ -58,43 +58,20 @@ const tureeslegchMashin = [
     sanuulga: "Илүү цаг",
   },
 ]
-const uilchluulegchMashin = [
-  {
-    dugaar: "1",
-    mashinDugaar: "1469УБҮ",
-    orsonOgnoo: "2022-02-19 18:00:50",
-    garsanOgnoo: "2022-02-19 18:30:40",
-    khugatsaa: "30мин",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-  },
-  {
-    dugaar: "2",
-    mashinDugaar: "1469УБҮ",
-    orsonOgnoo: "2022-02-19 18:00:50",
-    garsanOgnoo: "2022-02-19 18:30:40",
-    khugatsaa: "30мин",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-  },
-  {
-    dugaar: "3",
-    mashinDugaar: "1469УБҮ",
-    orsonOgnoo: "2022-02-19 18:00:50",
-    garsanOgnoo: "2022-02-19 18:30:40",
-    khugatsaa: "30мин",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-  },
-]
+
 function Zogsool({ token }) {
   const { baiguullaga } = useAuth()
+
+  const [ognoo,setOgnoo] = useState([moment().startOf('month'),moment().endOf('month')])
+  const query = useMemo(()=>{
+    return {
+      check_in_time:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}
+    }
+  },[ognoo])
   const { zogsoolGaralt, setZogsoolKhuudaslalt } = useZogsool(
     token,
-    baiguullaga?._id
+    baiguullaga?._id,
+    query
   )
 
   const toololt = [
@@ -107,7 +84,7 @@ function Zogsool({ token }) {
   ]
 
   return (
-    <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4">
+    <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4" onSearch={(search) => setZogsoolKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {toololt.map((a, i) => (
@@ -141,6 +118,9 @@ function Zogsool({ token }) {
                 </span>
               }
             >
+              <div>
+                <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
+              </div>
               <Table
                 className="mt-8 hidden overflow-auto md:block"
                 tableLayout="auto"
