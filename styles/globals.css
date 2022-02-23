@@ -724,3 +724,7 @@ input:-webkit-autofill {
 .profileMenuItem{
   @apply rounded-md hover:bg-green-600 !important;
 }
+
+.ant-select-clear .anticon {
+  display: flex !important;
+}

@@ -13,6 +13,7 @@ import {
   Tooltip,
   Progress,
   notification,
+  Select,
 } from "antd"
 import { FileExcelOutlined, ExclamationCircleOutlined } from "@ant-design/icons"
 import moment from "moment"
@@ -128,7 +129,7 @@ function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null)
   const refTuukh = React.useRef(null)
   const baritsaaref = React.useRef(null)
-  const { baiguullaga } = useAuth()
+  const { baiguullaga,barilgiinId } = useAuth()
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null)
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
@@ -136,6 +137,7 @@ function guilgeeniiTuukh({ token }) {
   ])
   const [turul, setTurul] = React.useState("")
   const [loadingIndex, setLoadingIndex] = React.useState(0)
+  const [davkhar, setDavkhar] = React.useState(undefined)
 
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo)
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
@@ -147,6 +149,7 @@ function guilgeeniiTuukh({ token }) {
         "avlaga.guilgeenuud.ognoo": {
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
         },
+        davkhar,
         baiguullagiinId: baiguullaga._id,
         tuluv: {
           $ne: -1,
@@ -160,6 +163,7 @@ function guilgeeniiTuukh({ token }) {
         "avlaga.guilgeenuud.ognoo": {
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
         },
+        davkhar,
         baiguullagiinId: baiguullaga._id,
         tuluv: {
           $ne: -1,
@@ -171,6 +175,7 @@ function guilgeeniiTuukh({ token }) {
     else if (turul === "tsutslagdsanAvlaga")
       return {
         baiguullagiinId: baiguullaga._id,
+        davkhar,
         tuluv: -1,
         uldegdel: {
           $gte: 0,
@@ -178,18 +183,11 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulukh")
       return {
-        tuluv: { $ne: -1 },
-        "avlaga.guilgeenuud.ognoo": {
-          $gte: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
-        },
-        baiguullagiinId: baiguullaga?._id,
-        "avlaga.guilgeenuud.tulukhDun": {
-          $gt: 0,
-        },
+        davkhar
       }
     else if (turul === "eneSardTulsun")
       return {
+        davkhar,
         tuluv: { $ne: -1 },
         baiguullagiinId: baiguullaga?._id,
         "avlaga.guilgeenuud": {
@@ -210,6 +208,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "khungulult")
       return {
+        davkhar,
         "avlaga.guilgeenuud.ognoo": {
           $gte: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
           $lte: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
@@ -220,8 +219,8 @@ function guilgeeniiTuukh({ token }) {
         },
         tuluv: { $ne: -1 },
       }
-    return { tuluv: { $ne: -1 } }
-  }, [turul, ognoo])
+    return {davkhar, tuluv: { $ne: -1 } }
+  }, [turul, ognoo,davkhar])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
     useGereeniiJagsaalt(
@@ -231,7 +230,7 @@ function guilgeeniiTuukh({ token }) {
       query
     )
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
-    useEneSardTuluuguiGereenuudAvya(turul === "eneSardTulukh" && token, ognoo)
+    useEneSardTuluuguiGereenuudAvya(turul === "eneSardTulukh" && token, ognoo,query)
   const columns = useMemo(
     () => [
       {
@@ -644,9 +643,9 @@ function guilgeeniiTuukh({ token }) {
                           {mur.utga}
                         </div>
                       </div>
-                      {mur.turul === "eneSardTulukh" && (
-                        <div className="ml-8 grid">
-                          <div className="text-xl">
+                      <div className="ml-auto flex text-center flex-col">
+                        {mur.turul === "eneSardTulukh" && <>
+                          <div className="text-xl flex justify-center">
                             <ExclamationCircleOutlined
                               style={{
                                 fontSize: "24px",
@@ -654,12 +653,10 @@ function guilgeeniiTuukh({ token }) {
                               }}
                             />
                           </div>
-                          <div className="text-base font-bold text-red-500">
-                            {tolooguiGereeniiToo?.too}
+                          <div className="text-xl font-bold text-red-500">
+                            {eneSardTuluuguiGereenuud?.niitMur || tolooguiGereeniiToo?.too}
                           </div>
-                        </div>
-                      )}
-                      <div className="ml-auto">
+                        </>}
                         <div className="text-xl text-green-600">{mur.icon}</div>
                       </div>
                     </div>
@@ -669,7 +666,7 @@ function guilgeeniiTuukh({ token }) {
             )
           })}
         </div>
-        <div className="mt-5 flex flex-row">
+        <div className="mt-5 flex flex-row space-x-5">
           <DatePicker.RangePicker
             picker="month"
             value={ognoo}
@@ -678,6 +675,9 @@ function guilgeeniiTuukh({ token }) {
               setLoadingIndex(0)
             }}
           />
+          <Select placeholder='Давхар' onChange={setDavkhar} allowClear>
+            {baiguullaga?.barilguud?.find(a=>a._id === barilgiinId).davkharuud.map((a) =><Select.Option key={a._id} value={a.davkhar}>{a.davkhar}</Select.Option>)}
+          </Select>
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
           <TableGuilgee

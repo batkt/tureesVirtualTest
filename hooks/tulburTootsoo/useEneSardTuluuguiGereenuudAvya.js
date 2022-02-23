@@ -4,7 +4,7 @@ import moment from "moment"
 import { useAuth } from "services/auth"
 import { useState } from "react"
 
-const fetcher = (url, token, ognoo, barilgiinId,{search,...khuudaslalt}) => {
+const fetcher = (url, token, ognoo, barilgiinId,{search,...khuudaslalt},query={}) => {
   return axios(token)
     .post(url, {
         barilgiinId,
@@ -25,7 +25,8 @@ const fetcher = (url, token, ognoo, barilgiinId,{search,...khuudaslalt}) => {
                     { utas: { $regex: search, $options: "i" } },
                     { ovog: { $regex: search, $options: "i" } },
                     { ner: { $regex: search, $options: "i" } },
-                ]
+                ],
+                ...query
             }
         }
     })
@@ -33,7 +34,7 @@ const fetcher = (url, token, ognoo, barilgiinId,{search,...khuudaslalt}) => {
     .catch(aldaaBarigch)
 }
 
-function useEneSardTuluuguiGereenuudAvya(token, ognoo) {
+function useEneSardTuluuguiGereenuudAvya(token, ognoo,query) {
     const { barilgiinId } = useAuth()
     
     const [khuudaslalt, setEneSardTuluuguiGereenuud] = useState({
@@ -43,7 +44,7 @@ function useEneSardTuluuguiGereenuudAvya(token, ognoo) {
     })
 
     const { data, mutate } = useSWR(
-        !!token && !!barilgiinId ? ["/eneSardTuluuguiGereenuudAvya", token, ognoo, barilgiinId,khuudaslalt] : null,
+        !!token && !!barilgiinId ? ["/eneSardTuluuguiGereenuudAvya", token, ognoo, barilgiinId,khuudaslalt,query] : null,
         fetcher,
         { revalidateOnFocus: false }
     )
