@@ -42,8 +42,6 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
   )
 }
 
-const query = {tuluv: { $nin: [-1] }}
-
 function GuilgeeKholbokh(
   { data, token, baiguullagiinId, barilgiinId, onFinish, destroy ,dans},
   ref
@@ -53,7 +51,9 @@ function GuilgeeKholbokh(
   const [olnoorKholbokhEsekh, setOlnoorKholbokhEsekh] = React.useState(false)
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([])
   const [tulult, setTulult] = React.useState([{}])
-
+  const query = React.useMemo(()=>{
+    return {tuluv: { $nin: [-1] },barilgiinId}
+  },[])
   const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
     token,
     baiguullagiinId,
@@ -208,7 +208,7 @@ function GuilgeeKholbokh(
   React.useEffect(() => {
     data?.magadlaltaiGereenuud  &&
     getListMethod("geree", token, {
-      query: { _id: data?.magadlaltaiGereenuud },
+      query: { _id: data?.magadlaltaiGereenuud ,barilgiinId},
     }).then(({ data }) => {
       setMagadlaltaiGereenuud(data?.jagsaalt)
     })
