@@ -72,7 +72,7 @@ function Dans({
       const tdb = dansGaralt?.jagsaalt?.find(a=>a.bank === 'tdb' && a.corporateAshiglakhEsekh === true)
       if(!!tdb){
         const {corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg,AnyBIC,RoleID,} = tdb
-        setTdbCorporate({corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg})
+        setTdbCorporate({corporateAshiglakhEsekh,bank,corporateNevtrekhNer,corporateNuutsUg,corporateGuilgeeniiNuutsUg,AnyBIC,RoleID})
       }
       const khanbank = dansGaralt?.jagsaalt?.find(a=>a.bank === 'khanbank' && a.corporateAshiglakhEsekh === true)
       if(!!khanbank){
@@ -107,7 +107,6 @@ function Dans({
     }
 
   function dansKhadgalya(turul) {
-
       const corp = turul === 'tdb' ? tdbCoprporate : khanbankCoprporate
       dansGaralt?.jagsaalt?.filter(a=>a.bank === turul).map((mur,index,array)=>updateMethod('dans',token,{...mur,...corp}).then(({data})=>{
         if(data === 'Amjilttai' && (array.length-1) === index){
