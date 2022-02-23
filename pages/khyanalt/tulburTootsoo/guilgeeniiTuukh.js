@@ -36,7 +36,7 @@ import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluu
 
 function GereeniiUldegdel({ ugugdul, token }) {
   const { barilgiinId } = useAuth()
-  const { data } = useSWR(
+  const { data,mutate } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
@@ -49,6 +49,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
     }
   )
   ugugdul.uldegdel = data?.uldegdel
+  ugugdul.mutate = mutate
   return (
     <div
       className={`text-right font-medium ${

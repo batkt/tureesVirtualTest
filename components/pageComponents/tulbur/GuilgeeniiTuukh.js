@@ -7,6 +7,7 @@ import formatNumber from "tools/function/formatNumber"
 import { DeleteOutlined } from "@ant-design/icons"
 import { modal } from "components/ant/Modal"
 import { useReactToPrint } from "react-to-print"
+import _ from "lodash"
 
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
@@ -85,6 +86,11 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
   const tailbarRef = React.useRef(null)
   const printRef = React.useRef(null)
 
+
+  function uldegdelMutate() {
+    _.isFunction(data.mutate) && data.mutate()
+  }
+
   function tulultUstgaya({
     guilgeeniiId,
     tulsunDun,
@@ -138,6 +144,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 .then(({ data }) => {
                   if (data) {
                     message.success("Төлөлт амжилттай устгагдлаа!")
+                    uldegdelMutate()
                     refreshData()
                   }
                 }).catch(aldaaBarigch)
