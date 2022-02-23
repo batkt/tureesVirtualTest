@@ -8,18 +8,23 @@ const fetcher = (
   token,
   baiguullagiinId,
   { search, jagsaalt, ...khuudaslalt },
-  barilgiinId
+  barilgiinId,
+  query={}
 ) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
+        query:{
+          ...query
+        },
+        order:{check_in_time:-1}
       },
     })
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useZogsool(token, baiguullagiinId) {
+function useZogsool(token, baiguullagiinId,query) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setZogsoolKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -29,7 +34,7 @@ function useZogsool(token, baiguullagiinId) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/zogsool", token, baiguullagiinId, khuudaslalt,barilgiinId]
+      ? ["/zogsool", token, baiguullagiinId, khuudaslalt,barilgiinId,query]
       : null,
     fetcher,
     { revalidateOnFocus: false }
