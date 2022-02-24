@@ -317,7 +317,7 @@ function tulburTootsoo({ token }) {
                   setSongogdsonGereenuud([])
                 }}
               >
-                {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                {baiguullaga?.barilguud?.find(a=>a._id === barilgiinId)?.davkharuud.map((a) => (
                   <Select.Option key={a._id} value={a.davkhar}>
                     {a.davkhar}
                   </Select.Option>
