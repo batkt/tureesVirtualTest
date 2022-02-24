@@ -159,7 +159,7 @@ function Zogsool({ token }) {
                     align: "center",
                     dataIndex: "check_out_time",
                     render(v) {
-                      return moment(v).format("YYYY-MM-DD HH:mm")
+                      return v && moment(v).format("YYYY-MM-DD HH:mm")
                     },
                   },
                   {
