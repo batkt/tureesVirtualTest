@@ -64,7 +64,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   return (
     <Link href={mur.href}>
       <li className={selected ? "selected-menu dark:bg-gray-400" : ""}>
-        <div className="flex flex-row p-1">
+        <div className="flex flex-row p-1 leading-8">
           <div
             className={`mr-2 ${
               selected ? "text-green-600 dark:text-white" : ""
