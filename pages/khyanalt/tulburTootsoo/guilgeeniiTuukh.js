@@ -145,19 +145,11 @@ function guilgeeniiTuukh({ token }) {
     useTuluugiiGereeniiToololtAvya(token, ognoo)
 
   const query = React.useMemo(() => {
-    if (turul === "uglug")
+    if (turul === "voucher")
       return {
-        "avlaga.guilgeenuud.ognoo": {
-          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        },
         davkhar,
         baiguullagiinId: baiguullaga._id,
-        tuluv: {
-          $ne: -1,
-        },
-        uldegdel: {
-          $lt: 0,
-        },
+        "avlaga.guilgeenuud" : {$elemMatch: { "ognoo" : {$gte :moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"), $lte : moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")}, "tulsunDun" : {$gte : 0}, "turul" : "voucher" }}
       }
     else if (turul === "avlaga")
       return {
@@ -594,8 +586,8 @@ function guilgeeniiTuukh({ token }) {
               utga: "Хуримтлагдсан авлага",
             },
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "uglug.0.dun") || 0),
-              turul: "uglug",
+              too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0),
+              turul: "voucher",
               utga: "Ваучер төлөлт",
             },
             {
