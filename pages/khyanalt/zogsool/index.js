@@ -124,6 +124,7 @@ function Zogsool({ token }) {
               <Table
                 className="mt-8 hidden overflow-auto md:block"
                 tableLayout="auto"
+                loading={!zogsoolGaralt}
                 dataSource={zogsoolGaralt?.jagsaalt}
                 scroll={{ y: "calc(100vh - 32rem)" }}
                 size="small"
