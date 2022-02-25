@@ -29,7 +29,7 @@ function useZogsool(token, baiguullagiinId,query) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setZogsoolKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: 500,
     search: "",
     jagsaalt: [],
   })
