@@ -117,7 +117,7 @@ function Zogsool({ token }) {
               tab={
                 <span>
                   <FileDoneOutlined style={{ fontSize: "32px" }} />
-                  Худалдан авагч
+                  Үйлчлүүлэгч
                 </span>
               }
             >
