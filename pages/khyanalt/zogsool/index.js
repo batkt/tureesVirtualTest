@@ -15,6 +15,7 @@ const tureeslegchMashin = [
   {
     dugaar: "1",
     talbai: "M-201",
+    ner:"Болд",
     mashinDugaar: "2014УБУ",
     orsonOgnoo: "2022-02-19 09:00:10",
     garsanOgnoo: "2022-02-19 21:00:40",
@@ -30,6 +31,7 @@ const tureeslegchMashin = [
   {
     dugaar: "2",
     talbai: "M-201",
+    ner:"Болд",
     mashinDugaar: "2014УБУ",
     orsonOgnoo: "2022-02-19 09:00:10",
     garsanOgnoo: "2022-02-19 21:00:40",
@@ -44,6 +46,7 @@ const tureeslegchMashin = [
   },
   {
     dugaar: "3",
+    ner:"Болд",
     talbai: "M-201",
     mashinDugaar: "2014УБУ",
     orsonOgnoo: "2022-02-19 09:00:10",
@@ -273,6 +276,110 @@ function Zogsool({ token }) {
                     dataIndex: "utas",
                   },
                   { title: "Сануулга", align: "center", dataIndex: "sanuulga" },
+                ]}
+              />
+              <CardList
+                keyValue="uilchluulegch"
+                className="block overflow-auto md:hidden"
+                jagsaalt={zogsoolGaralt?.jagsaalt}
+                Component={TureeslegchTile}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              key="3"
+              tab={
+                <span>
+                  <FileDoneOutlined style={{ fontSize: "32px" }} />
+                  Гэрээт
+                </span>
+              }
+            >
+              <Table
+                className="mt-8 hidden overflow-auto md:block"
+                tableLayout="auto"
+                dataSource={tureeslegchMashin}
+                size="small"
+                bordered
+                columns={[
+                  {
+                    title: "Машин",
+                    align: "center",
+                    dataIndex: "mashinDugaar",
+                  },
+                  {
+                    title: "Гэрээ эхлэх",
+                    align: "center",
+                    dataIndex: "orsonOgnoo",
+                    ellipsis: true,
+                  },
+                  {
+                    title: "Гэрээ дуусах",
+                    align: "center",
+                    dataIndex: "garsanOgnoo",
+                    ellipsis: true,
+                  },
+                  {
+                    title: "Төлбөр",
+                    align: "center",
+                    dataIndex: "tulukhDun",
+                  },
+                  {
+                    title: "Төлсөн",
+                    align: "center",
+                    dataIndex: "tulukhDun",
+                    ellipsis: true,
+                  },
+                  {
+                    title: "Авлага",
+                    align: "center",
+                    dataIndex: "tulukhDun",
+                  },
+                  {
+                    title: "Утас",
+                    align: "center",
+                    dataIndex: "utas",
+                  },
+                ]}
+              />
+              <CardList
+                keyValue="uilchluulegch"
+                className="block overflow-auto md:hidden"
+                jagsaalt={zogsoolGaralt?.jagsaalt}
+                Component={TureeslegchTile}
+              />
+            </Tabs.TabPane>
+            <Tabs.TabPane
+              key="4"
+              tab={
+                <span>
+                  <FileDoneOutlined style={{ fontSize: "32px" }} />
+                  Дотоод
+                </span>
+              }
+            >
+              <Table
+                className="mt-8 hidden overflow-auto md:block"
+                tableLayout="auto"
+                dataSource={tureeslegchMashin}
+                size="small"
+                bordered
+                columns={[
+                  {
+                    title: "Машин",
+                    align: "center",
+                    dataIndex: "mashinDugaar",
+                  },
+                  {
+                    title: "Нэр",
+                    align: "center",
+                    dataIndex: "ner",
+                    ellipsis: true,
+                  },
+                  {
+                    title: "Утас",
+                    align: "center",
+                    dataIndex: "utas",
+                  },
                 ]}
               />
               <CardList
