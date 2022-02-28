@@ -1,26 +1,26 @@
-import { Button, Spin, message } from "antd";
-import React, { useState } from "react";
-import { useReactToPrint } from "react-to-print";
+import { Button, Spin, message } from "antd"
+import React, { useState } from "react"
+import { useReactToPrint } from "react-to-print"
 
-import EBarimt from "./EBarimt";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import EBarimt from "./EBarimt"
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 //#endregion
 
 function Tulbur(
   { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga },
   ref
 ) {
-  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
-  const [eBarimt, setEBarimt] = React.useState(null);
+  const [tulbur, setTulbur] = React.useState(data?.tulbur || [])
+  const [eBarimt, setEBarimt] = React.useState(null)
 
-  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
-  const [irgenEsekh, setIrgenEsekh] = React.useState(false);
-  const [register, setRegister] = React.useState("");
-  const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
-  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
-  const [loading, setLoading] = useState(false);
+  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false)
+  const [irgenEsekh, setIrgenEsekh] = React.useState(false)
+  const [register, setRegister] = React.useState("")
+  const [baiguullagiinMedeelel, setBaiguullaga] = React.useState()
+  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const eBarimtRef = React.useRef(null);
+  const eBarimtRef = React.useRef(null)
   const pageStyle = `
   @page {
     size: A4;
@@ -40,52 +40,53 @@ function Tulbur(
         
     }
 }
-`;
+`
 
   const handlePrint = useReactToPrint({
     pageStyle: () => pageStyle,
     content: () => eBarimtRef.current,
     onAfterPrint: () => khaaya(),
-  });
+  })
 
   React.useImperativeHandle(
     ref,
     () => ({
       khaaya() {
-        eBarimtMutate();
-        destroy();
+        eBarimtMutate()
+        dansniiKhuulgaMutate()
+        destroy()
       },
     }),
     []
-  );
+  )
 
   function ebarimtAvya(id) {
-    if (!!eBarimt) handlePrint();
+    if (!!eBarimt) handlePrint()
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-        message.warning("Байгууллагын регистр оруулна уу");
-        return;
+        message.warning("Байгууллагын регистр оруулна уу")
+        return
       }
-      setLoading(true);
+      setLoading(true)
       const body = {
         id: id,
         barilgiinId: data.barilgiinId,
-      };
+      }
       uilchilgee(token)
         .post("/ebarimtShivye", body)
         .then(({ data }) => {
           if (data.success === true) {
-            setEBarimt(data);
-            handlePrint();
+            setEBarimt(data)
+            handlePrint()
           }
         })
         .catch(aldaaBarigch)
-        .finally(() => setLoading(false));
+        .finally(() => setLoading(false))
     }
   }
 
   function khaaya() {
-    destroy();
+    destroy()
   }
 
   return (
@@ -109,7 +110,7 @@ function Tulbur(
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
       />
-      <div className="flex flex-row justify-between mt-5">
+      <div className="mt-5 flex flex-row justify-between">
         <Button type="primary" danger onClick={khaaya}>
           Хаах
         </Button>
@@ -124,7 +125,7 @@ function Tulbur(
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default React.forwardRef(Tulbur);
+export default React.forwardRef(Tulbur)
