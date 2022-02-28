@@ -2,14 +2,17 @@ import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
 import React, { useState,useMemo } from "react"
 import { useAuth } from "services/auth"
-import { Card, DatePicker, Table, Tabs } from "antd"
-import { FileDoneOutlined } from "@ant-design/icons"
+import { Button, Card, DatePicker, Space, Table, Tabs } from "antd"
+import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons"
 import CardList from "components/cardList"
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile"
 import TureeslegchTile from "components/pageComponents/zogsool/TureeslegchTile"
 import useZogsool from "hooks/useZogsool"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
+import { useRef } from "react"
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
+import { modal } from "components/ant/Modal"
 
 const tureeslegchMashin = [
   {
@@ -63,8 +66,8 @@ const tureeslegchMashin = [
 ]
 
 function Zogsool({ token }) {
-  const { baiguullaga } = useAuth()
-
+  const { baiguullaga ,barilgiinId} = useAuth()
+  const excelref = useRef(null)
   const [ognoo,setOgnoo] = useState([moment().startOf('month'),moment().endOf('month')])
   const query = useMemo(()=>{
     return {
@@ -85,6 +88,36 @@ function Zogsool({ token }) {
     { name: "Түрээслэгчийн машин", too: 0 },
     { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
   ]
+
+  function onRefresh() {
+    
+  }
+
+  function mashinOruulakhExcel() {
+      const footer = [
+        <Space>
+          <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+          <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>адгалах</Button>
+        </Space>
+      ]
+      modal({
+        title: "",
+        icon: <FileExcelOutlined />,
+        content: (
+          <ExceleesOruulakh
+            ref={excelref}
+            token={token}
+            onFinish={onRefresh}
+            barilgiinId={barilgiinId}
+            zam="mashiniiExcelTatya"
+            garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+            tailbar="Машины мэдээлэл оруулах excel файл"
+            zagvariinZam="mashiniiExcelAvya"
+          />
+        ),
+        footer,
+      })
+  }
 
   return (
     <Admin title="Төлбөр тооцоо" khuudasniiNer="zogsool" className="p-0 md:p-4" onSearch={(search) => setZogsoolKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
@@ -121,8 +154,37 @@ function Zogsool({ token }) {
                 </span>
               }
             >
-              <div>
+              <div className="flex flex-row">
                 <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
+                <button
+                  style={{
+                    backgroundColor: "#209669",
+                    display: "flex",
+                    justifyContent: "end",
+                  }}
+                  className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+                  aria-expanded="false"
+                  onClick={mashinOruulakhExcel}
+                >
+                  <span className="flex h-5 w-5 items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-plus h-4 w-4"
+                    >
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </span>
+                  <span>Excel -ээс Машин татах</span>
+                </button>
               </div>
               <Table
                 className="mt-8 hidden overflow-auto md:block"
