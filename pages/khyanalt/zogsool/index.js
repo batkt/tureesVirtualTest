@@ -3,10 +3,9 @@ import Admin from "components/Admin"
 import React, { useState,useMemo } from "react"
 import { useAuth } from "services/auth"
 import { Button, Card, DatePicker, Space, Table, Tabs } from "antd"
-import { FileDoneOutlined, FileExcelOutlined } from "@ant-design/icons"
+import { FileExcelOutlined } from "@ant-design/icons"
 import CardList from "components/cardList"
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile"
-import TureeslegchTile from "components/pageComponents/zogsool/TureeslegchTile"
 import useZogsool from "hooks/useZogsool"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
@@ -14,61 +13,11 @@ import { useRef } from "react"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import { modal } from "components/ant/Modal"
 
-const tureeslegchMashin = [
-  {
-    dugaar: "1",
-    talbai: "M-201",
-    ner:"Болд",
-    mashinDugaar: "2014УБУ",
-    orsonOgnoo: "2022-02-19 09:00:10",
-    garsanOgnoo: "2022-02-19 21:00:40",
-    khugatsaa: "12",
-    limit: "240",
-    iluuZogsson: "5",
-    iluuTsagiinUnelgee: "500",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-    sanuulga: "Илүү цаг",
-  },
-  {
-    dugaar: "2",
-    talbai: "M-201",
-    ner:"Болд",
-    mashinDugaar: "2014УБУ",
-    orsonOgnoo: "2022-02-19 09:00:10",
-    garsanOgnoo: "2022-02-19 21:00:40",
-    khugatsaa: "12",
-    limit: "240",
-    iluuZogsson: "5",
-    iluuTsagiinUnelgee: "500",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-    sanuulga: "Илүү цаг",
-  },
-  {
-    dugaar: "3",
-    ner:"Болд",
-    talbai: "M-201",
-    mashinDugaar: "2014УБУ",
-    orsonOgnoo: "2022-02-19 09:00:10",
-    garsanOgnoo: "2022-02-19 21:00:40",
-    khugatsaa: "12",
-    limit: "240",
-    iluuZogsson: "5",
-    iluuTsagiinUnelgee: "500",
-    tsagiinUnelgee: "1000",
-    tulukhDun: "2000",
-    utas: "99118811",
-    sanuulga: "Илүү цаг",
-  },
-]
-
 function Zogsool({ token }) {
   const { baiguullaga ,barilgiinId} = useAuth()
   const excelref = useRef(null)
   const [ognoo,setOgnoo] = useState([moment().startOf('month'),moment().endOf('month')])
+  const [turul,setTurul] = useState("")
   const query = useMemo(()=>{
     return {
       check_in_time:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}
@@ -81,12 +30,10 @@ function Zogsool({ token }) {
   )
 
   const toololt = [
-    { name: "Нийт машин", too: formatNumber(zogsoolGaralt?.niitMur) || 0 },
-    { name: "Нийт авах дүн" },
-    { name: "Орсон дүн", too: 0 },
-    { name: "Худалдан авагчийн машин", too: 0 },
-    { name: "Түрээслэгчийн машин", too: 0 },
-    { name: "30 минутаас доош үнэгүй зогссон машин", too: 0 },
+    { name: "Үйлчлүүлэгч", too: formatNumber(zogsoolGaralt?.niitMur) || 0 },
+    { name: "Түрээслэгч",too: 0 },
+    { name: "Гэрээт", too: 0 },
+    { name: "Дотоод", too: 0 }
   ]
 
   function onRefresh() {
@@ -97,7 +44,7 @@ function Zogsool({ token }) {
       const footer = [
         <Space>
           <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
-          <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>адгалах</Button>
+          <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>Хадгалах</Button>
         </Space>
       ]
       modal({
@@ -126,7 +73,8 @@ function Zogsool({ token }) {
           {toololt.map((a, i) => (
             <div
               key={i}
-              className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-2"
+              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${a.name === turul ? 'bg-green-100' : ''}`}
+              onClick={()=>setTurul(a.name)}
             >
               <div className="h-full rounded-xl">
                 <div className="rounded-xl p-3">
@@ -143,316 +91,105 @@ function Zogsool({ token }) {
         </div>
       </Card>
       <Card className="col-span-12">
-        <div>
-          <Tabs size="small">
-            <Tabs.TabPane
-              key="1"
-              tab={
-                <span>
-                  <FileDoneOutlined style={{ fontSize: "32px" }} />
-                  Үйлчлүүлэгч
-                </span>
-              }
-            >
-              <div className="flex flex-row">
-                <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
-                <button
-                  style={{
-                    backgroundColor: "#209669",
-                    display: "flex",
-                    justifyContent: "end",
-                  }}
-                  className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
-                  aria-expanded="false"
-                  onClick={mashinOruulakhExcel}
-                >
-                  <span className="flex h-5 w-5 items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-plus h-4 w-4"
-                    >
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </span>
-                  <span>Excel -ээс Машин татах</span>
-                </button>
-              </div>
-              <Table
-                className="mt-8 hidden overflow-auto md:block"
-                tableLayout="auto"
-                loading={!zogsoolGaralt}
-                dataSource={zogsoolGaralt?.jagsaalt}
-                scroll={{ y: "calc(100vh - 32rem)" }}
-                size="small"
-                bordered
-                columns={[
-                  {
-                    title: "№",
-                    align: "center",
-                    dataIndex: "dugaar",
-                    width: "2rem",
-                    render: (text, record, index) =>
-                      (zogsoolGaralt?.khuudasniiDugaar || 0) *
-                        (zogsoolGaralt?.khuudasniiKhemjee || 0) -
-                      (zogsoolGaralt?.khuudasniiKhemjee || 0) +
-                      index +
-                      1,
-                  },
-                  {
-                    title: "Машин",
-                    align: "center",
-                    dataIndex: "car_number",
-                  },
-                  {
-                    title: "Орсон",
-                    align: "center",
-                    dataIndex: "check_in_time",
-                    render(v) {
-                      return moment(v).format("YYYY-MM-DD HH:mm")
-                    },
-                  },
-                  {
-                    title: "Гарсан",
-                    align: "center",
-                    dataIndex: "check_out_time",
-                    render(v) {
-                      return v && moment(v).format("YYYY-MM-DD HH:mm")
-                    },
-                  },
-                  {
-                    title: "Хугацаа",
-                    align: "center",
-                    dataIndex: "khugatsaa",
-                  },
-                ]}
-                pagination={{
-                  current: zogsoolGaralt?.khuudasniiDugaar,
-                  pageSize: zogsoolGaralt?.khuudasniiKhemjee,
-                  total: zogsoolGaralt?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setZogsoolKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-              />
-              <CardList
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={zogsoolGaralt?.jagsaalt}
-                Component={UilchluulegchTile}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              key="2"
-              tab={
-                <span>
-                  <FileDoneOutlined style={{ fontSize: "32px" }} />
-                  Түрээслэгч
-                </span>
-              }
-            >
-              <Table
-                className="mt-8 hidden overflow-auto md:block"
-                tableLayout="auto"
-                dataSource={tureeslegchMashin}
-                size="small"
-                bordered
-                columns={[
-                  {
-                    title: "Талбай",
-                    align: "center",
-                    align: "center",
-                    dataIndex: "talbai",
-                  },
-                  {
-                    title: "Машин",
-                    align: "center",
-                    dataIndex: "mashinDugaar",
-                  },
-                  {
-                    title: "Орсон",
-                    align: "center",
-                    dataIndex: "orsonOgnoo",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Гарсан",
-                    align: "center",
-                    dataIndex: "garsanOgnoo",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Хугацаа",
-                    align: "center",
-                    dataIndex: "khugatsaa",
-                  },
-                  {
-                    title: "Сарын лимит",
-                    align: "center",
-                    dataIndex: "limit",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Зогсох үлдсэн цаг",
-                    align: "center",
-                    dataIndex: "iluuZogsson",
-                  },
-                  {
-                    title: "Илүү зогссон цаг",
-                    align: "center",
-                    dataIndex: "iluuZogsson",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Энгийн цагийн үнэлгээ",
-                    align: "center",
-                    dataIndex: "tsagiinUnelgee",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Илүү цагийн үнэлгээ",
-                    align: "center",
-                    dataIndex: "iluutsagiinUnelgee",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Дүн",
-                    align: "center",
-                    dataIndex: "tulukhDun",
-                  },
-                  {
-                    title: "Утас",
-                    align: "center",
-                    dataIndex: "utas",
-                  },
-                  { title: "Сануулга", align: "center", dataIndex: "sanuulga" },
-                ]}
-              />
-              <CardList
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={zogsoolGaralt?.jagsaalt}
-                Component={TureeslegchTile}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              key="3"
-              tab={
-                <span>
-                  <FileDoneOutlined style={{ fontSize: "32px" }} />
-                  Гэрээт
-                </span>
-              }
-            >
-              <Table
-                className="mt-8 hidden overflow-auto md:block"
-                tableLayout="auto"
-                dataSource={tureeslegchMashin}
-                size="small"
-                bordered
-                columns={[
-                  {
-                    title: "Машин",
-                    align: "center",
-                    dataIndex: "mashinDugaar",
-                  },
-                  {
-                    title: "Гэрээ эхлэх",
-                    align: "center",
-                    dataIndex: "orsonOgnoo",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Гэрээ дуусах",
-                    align: "center",
-                    dataIndex: "garsanOgnoo",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Төлбөр",
-                    align: "center",
-                    dataIndex: "tulukhDun",
-                  },
-                  {
-                    title: "Төлсөн",
-                    align: "center",
-                    dataIndex: "tulukhDun",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Авлага",
-                    align: "center",
-                    dataIndex: "tulukhDun",
-                  },
-                  {
-                    title: "Утас",
-                    align: "center",
-                    dataIndex: "utas",
-                  },
-                ]}
-              />
-              <CardList
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={zogsoolGaralt?.jagsaalt}
-                Component={TureeslegchTile}
-              />
-            </Tabs.TabPane>
-            <Tabs.TabPane
-              key="4"
-              tab={
-                <span>
-                  <FileDoneOutlined style={{ fontSize: "32px" }} />
-                  Дотоод
-                </span>
-              }
-            >
-              <Table
-                className="mt-8 hidden overflow-auto md:block"
-                tableLayout="auto"
-                dataSource={tureeslegchMashin}
-                size="small"
-                bordered
-                columns={[
-                  {
-                    title: "Машин",
-                    align: "center",
-                    dataIndex: "mashinDugaar",
-                  },
-                  {
-                    title: "Нэр",
-                    align: "center",
-                    dataIndex: "ner",
-                    ellipsis: true,
-                  },
-                  {
-                    title: "Утас",
-                    align: "center",
-                    dataIndex: "utas",
-                  },
-                ]}
-              />
-              <CardList
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={zogsoolGaralt?.jagsaalt}
-                Component={TureeslegchTile}
-              />
-            </Tabs.TabPane>
-          </Tabs>
+        <div className="flex flex-row">
+          <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
+          <button
+            style={{
+              backgroundColor: "#209669",
+              display: "flex",
+              justifyContent: "end",
+            }}
+            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+            aria-expanded="false"
+            onClick={mashinOruulakhExcel}
+          >
+            <span className="flex h-5 w-5 items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-plus h-4 w-4"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </span>
+            <span>Excel -ээс Машин татах</span>
+          </button>
         </div>
+        <Table
+          className="mt-8 hidden overflow-auto md:block"
+          tableLayout="auto"
+          loading={!zogsoolGaralt}
+          dataSource={zogsoolGaralt?.jagsaalt}
+          scroll={{ y: "calc(100vh - 30rem)" }}
+          size="small"
+          bordered
+          columns={[
+            {
+              title: "№",
+              align: "center",
+              dataIndex: "dugaar",
+              width: "2rem",
+              render: (text, record, index) =>
+                (zogsoolGaralt?.khuudasniiDugaar || 0) *
+                  (zogsoolGaralt?.khuudasniiKhemjee || 0) -
+                (zogsoolGaralt?.khuudasniiKhemjee || 0) +
+                index +
+                1,
+            },
+            {
+              title: "Машин",
+              align: "center",
+              dataIndex: "car_number",
+            },
+            {
+              title: "Орсон",
+              align: "center",
+              dataIndex: "check_in_time",
+              render(v) {
+                return moment(v).format("YYYY-MM-DD HH:mm")
+              },
+            },
+            {
+              title: "Гарсан",
+              align: "center",
+              dataIndex: "check_out_time",
+              render(v) {
+                return v && moment(v).format("YYYY-MM-DD HH:mm")
+              },
+            },
+            {
+              title: "Хугацаа",
+              align: "center",
+              dataIndex: "khugatsaa",
+            },
+          ]}
+          pagination={{
+            current: zogsoolGaralt?.khuudasniiDugaar,
+            pageSize: zogsoolGaralt?.khuudasniiKhemjee,
+            total: zogsoolGaralt?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              setZogsoolKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
+        <CardList
+          keyValue="uilchluulegch"
+          className="block overflow-auto md:hidden"
+          jagsaalt={zogsoolGaralt?.jagsaalt}
+          Component={UilchluulegchTile}
+        />
       </Card>
     </Admin>
   )
