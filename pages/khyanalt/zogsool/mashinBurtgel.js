@@ -200,16 +200,6 @@ function mashinBurtgel({ token }) {
                 1,
             },
             {
-              title: "Төрөл",
-              align: "center",
-              dataIndex: "turul",
-            },
-            {
-              title: "Дугаар",
-              align: "center",
-              dataIndex: "dugaar"
-            },
-            {
               title: "Нэр",
               align: "center",
               dataIndex: "ezemshigchiinNer"
@@ -223,6 +213,16 @@ function mashinBurtgel({ token }) {
                 title: "Утас",
                 align: "center",
                 dataIndex: "ezemshigchiinUtas",
+            },
+            {
+              title: "Дугаар",
+              align: "center",
+              dataIndex: "dugaar"
+            },
+            {
+              title: "Төрөл",
+              align: "center",
+              dataIndex: "turul",
             },
           ]}
           pagination={{
