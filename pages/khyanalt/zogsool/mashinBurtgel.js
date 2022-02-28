@@ -1,48 +1,46 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import Admin from "components/Admin"
-import React, { useState,useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import { useAuth } from "services/auth"
-import { Button, Card, DatePicker, Space, Table, Tabs } from "antd"
+import { Button, Card, Space, Table } from "antd"
 import { FileExcelOutlined } from "@ant-design/icons"
 import CardList from "components/cardList"
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile"
-import useZogsool,{useZogsoolToololt} from "hooks/useZogsool"
-import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import { useRef } from "react"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import { modal } from "components/ant/Modal"
+import useMashin,{useMashinToololt} from "hooks/useMashin"
+import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel"
 
-function Zogsool({ token }) {
+function mashinBurtgel({ token }) {
   const { baiguullaga ,barilgiinId} = useAuth()
   const excelref = useRef(null)
-  const [ognoo,setOgnoo] = useState([moment().startOf('month'),moment().endOf('month')])
-  const [turul,setTurul] = useState("")
-
-  const {zogsoolToololt,zogsoolToololtMutate} = useZogsoolToololt(token,ognoo)
+  const mashinref = useRef(null)
+  const [turul,setTurul] = useState("Нийт")
 
   const query = useMemo(()=>{
-    return {
-      check_in_time:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}
-    }
-  },[ognoo])
-  
-  const { zogsoolGaralt, setZogsoolKhuudaslalt ,zogsoolMutate} = useZogsool(
-    token,
-    baiguullaga?._id,
-    query
-  )
+    if(turul === 'Нийт')
+      return {}
+    return {turul}
+  },[turul])
 
-  const toololt = useMemo(()=>[
-    { name: "Үйлчлүүлэгч", too: formatNumber(zogsoolGaralt?.niitMur,0)},
-    { name: "Түрээслэгч",too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Түрээслэгч')?.too,0) },
-    { name: "Гэрээт", too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Гэрээт')?.too,0) },
-    { name: "Дотоод", too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Дотоод')?.too,0) }
-  ],[zogsoolToololt,zogsoolGaralt])
-  
+  const {mashinToololt,mashinToololtMutate} = useMashinToololt(token)
+
+  const { mashinGaralt, setMashinKhuudaslalt,mashinMutate } = useMashin(token,baiguullaga?._id,query)
+
+  const toololt = useMemo(()=>{
+    return [
+      { name: "Нийт", too: formatNumber(mashinGaralt?.niitMur) },
+      { name: "Гэрээт",too: formatNumber(mashinToololt?.find(a=>a._id === 'Гэрээт')?.too) },
+      { name: "Түрээслэгч", too: formatNumber(mashinToololt?.find(a=>a._id === 'Түрээслэгч')?.too) },
+      { name: "Дотоод", too: formatNumber(mashinToololt?.find(a=>a._id === 'Дотоод')?.too) }
+    ]
+  },[mashinToololt,mashinGaralt])
+
   function onRefresh() {
-    zogsoolToololtMutate()
-    zogsoolMutate()
+    mashinMutate()
+    mashinToololtMutate()
   }
 
   function mashinOruulakhExcel() {
@@ -71,8 +69,31 @@ function Zogsool({ token }) {
       })
   }
 
+  function mashinBurtgekh(data) {
+    const footer = [
+      <Space>
+        <Button onClick={() => mashinref.current.khaaya()}>Хаах</Button>
+        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }} onClick={() => mashinref.current.khadgalya()}>Хадгалах</Button>
+      </Space>
+    ]
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <MashinBurtgel
+          ref={mashinref}
+          token={token}
+          onRefresh={onRefresh}
+          barilgiinId={barilgiinId}
+          data={data}
+        />
+      ),
+      footer,
+    })
+}
+
   return (
-    <Admin title="Зогсоол" khuudasniiNer="zogsool" className="p-0 md:p-4" onSearch={(search) => setZogsoolKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
+    <Admin title="Машин бүртгэл" khuudasniiNer="mashinBurtgel" className="p-0 md:p-4" onSearch={(search) => setMashinKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {toololt.map((a, i) => (
@@ -97,7 +118,6 @@ function Zogsool({ token }) {
       </Card>
       <Card className="col-span-12">
         <div className="flex flex-row">
-          <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
           <button
             style={{
               backgroundColor: "#209669",
@@ -105,6 +125,35 @@ function Zogsool({ token }) {
               justifyContent: "end",
             }}
             className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+            aria-expanded="false"
+            onClick={()=>mashinBurtgekh()}
+          >
+            <span className="flex h-5 w-5 items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-plus h-4 w-4"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </span>
+            <span>Машин нэмэх</span>
+          </button>
+          <button
+            style={{
+              backgroundColor: "#209669",
+              display: "flex",
+              justifyContent: "end",
+            }}
+            className="dropdown-toggle btn box mt-8 ml-5 w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={mashinOruulakhExcel}
           >
@@ -125,14 +174,15 @@ function Zogsool({ token }) {
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </span>
-            <span>Excel -ээс Машин татах</span>
+            <span>Excel -ээс татах</span>
           </button>
+          
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
           tableLayout="auto"
-          loading={!zogsoolGaralt}
-          dataSource={zogsoolGaralt?.jagsaalt}
+          loading={!mashinGaralt}
+          dataSource={mashinGaralt?.jagsaalt}
           scroll={{ y: "calc(100vh - 30rem)" }}
           size="small"
           bordered
@@ -143,46 +193,45 @@ function Zogsool({ token }) {
               dataIndex: "dugaar",
               width: "2rem",
               render: (text, record, index) =>
-                (zogsoolGaralt?.khuudasniiDugaar || 0) *
-                  (zogsoolGaralt?.khuudasniiKhemjee || 0) -
-                (zogsoolGaralt?.khuudasniiKhemjee || 0) +
+                (mashinGaralt?.khuudasniiDugaar || 0) *
+                  (mashinGaralt?.khuudasniiKhemjee || 0) -
+                (mashinGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,
             },
             {
-              title: "Машин",
+              title: "Төрөл",
               align: "center",
-              dataIndex: "car_number",
+              dataIndex: "turul",
             },
             {
-              title: "Орсон",
+              title: "Дугаар",
               align: "center",
-              dataIndex: "check_in_time",
-              render(v) {
-                return moment(v).format("YYYY-MM-DD HH:mm")
-              },
+              dataIndex: "dugaar"
             },
             {
-              title: "Гарсан",
+              title: "Нэр",
               align: "center",
-              dataIndex: "check_out_time",
-              render(v) {
-                return v && moment(v).format("YYYY-MM-DD HH:mm")
-              },
+              dataIndex: "ezemshigchiinNer"
             },
             {
-              title: "Хугацаа",
+              title: "Регистр",
               align: "center",
-              dataIndex: "khugatsaa",
+              dataIndex: "ezemshigchiinRegister",
+            },
+            {
+                title: "Утас",
+                align: "center",
+                dataIndex: "ezemshigchiinUtas",
             },
           ]}
           pagination={{
-            current: zogsoolGaralt?.khuudasniiDugaar,
-            pageSize: zogsoolGaralt?.khuudasniiKhemjee,
-            total: zogsoolGaralt?.niitMur,
+            current: mashinGaralt?.khuudasniiDugaar,
+            pageSize: mashinGaralt?.khuudasniiKhemjee,
+            total: mashinGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setZogsoolKhuudaslalt((kh) => ({
+              setMashinKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,
@@ -192,7 +241,7 @@ function Zogsool({ token }) {
         <CardList
           keyValue="uilchluulegch"
           className="block overflow-auto md:hidden"
-          jagsaalt={zogsoolGaralt?.jagsaalt}
+          jagsaalt={mashinGaralt?.jagsaalt}
           Component={UilchluulegchTile}
         />
       </Card>
@@ -202,4 +251,4 @@ function Zogsool({ token }) {
 
 export const getServerSideProps = shalgaltKhiikh
 
-export default Zogsool
+export default mashinBurtgel
