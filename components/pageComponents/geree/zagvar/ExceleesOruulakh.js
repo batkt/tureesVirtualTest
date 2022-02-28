@@ -8,6 +8,8 @@ function index(
   { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish,barilgiinId },
   ref
 ) {
+
+  const [aldaa, setAldaa] = React.useState(null);
   React.useImperativeHandle(
     ref,
     () => ({
@@ -34,7 +36,7 @@ function index(
             _.isFunction(onFinish) && onFinish();
             message.success("Excel -ээс мэдээлэл амжилттай орууллаа");
             destroy();
-          }
+          } else if (!!file.response?.aldaa) setAldaa(file.response?.aldaa);
         }}
       >
         <p className="ant-upload-drag-icon">
@@ -43,6 +45,15 @@ function index(
         <p className="ant-upload-text">{garchig}</p>
         <p className="ant-upload-hint">{tailbar}</p>
       </Upload>
+      {aldaa && (
+        <div
+          className="max-h-52 overflow-auto text-red-600"
+          dangerouslySetInnerHTML={{
+            __html: aldaa,
+          }}
+        />
+      )}
+      <div className="mt-5" />
       {zagvariinZam && (
         <a
           className="cursor-pointer text-blue-600 font-medium"
