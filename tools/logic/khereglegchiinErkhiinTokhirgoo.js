@@ -536,6 +536,26 @@ const khuudasnuud = [
           </svg>
         ),
       },
+      {
+        ner: "Зардал",
+        khuudasniiNer: "zardal",
+        href: "/khyanalt/tulburTootsoo/zardal",
+        icon: (
+          <svg xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round">
+            <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line>
+          </svg>
+          
+        ),
+      },
     ],
   },
   {
@@ -575,18 +595,27 @@ const khuudasnuud = [
     ),
     sub: [
       {
-        ner: "Зогсоол",
+        ner: "Жагсаалт",
         khuudasniiNer: "zogsool",
         href: "/khyanalt/zogsool",
         icon: (
-          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round">
-          <g>
-            <path stroke="null" id="svg_1" d="m10.2904,11.95549l0,-3.38007l2.51312,0c0.92671,0 1.67541,0.75523 1.67541,1.69003c0,0.9348 -0.7487,1.69003 -1.67541,1.69003l-2.51312,0zm10.05247,-11.83023c1.84819,0 3.35082,1.51311 3.35082,3.38007l0,16.90033c0,1.86432 -1.50263,3.38007 -3.35082,3.38007l-16.75412,0c-1.85081,0 -3.35082,-1.51575 -3.35082,-3.38007l0,-16.90033c0,-1.86696 1.50002,-3.38007 3.35082,-3.38007l16.75412,0zm-2.51312,10.1402c0,-2.84665 -2.25133,-5.0701 -5.02624,-5.0701l-3.76968,0c-1.15708,0 -2.09426,0.94536 -2.09426,2.11254l0,9.71769c0,0.9348 0.7487,1.69003 1.67541,1.69003c0.92671,0 1.67541,-0.75523 1.67541,-1.69003l0,-1.69003l2.51312,0c2.7749,0 5.02624,-2.27098 5.02624,-5.0701z"/>
-          </g>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
           </svg>
         ),
       },

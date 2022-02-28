@@ -11,7 +11,7 @@ import {
   Tooltip,
   message,
   Spin,
-  notification,
+  notification
 } from "antd"
 import {
   CheckOutlined,
@@ -71,11 +71,14 @@ function iconAvya(a, bank) {
 
 function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null)
-  const { baiguullaga, barilgiinId } = useAuth()
+  const { baiguullaga, barilgiinId,ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
   const { dansGaralt } = useDans(token, baiguullaga?._id)
   const [songogdsonDans, setSongogdsonDans] = React.useState(null)
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null)
+
+  const [khuulgaTurul, setKhuulgaTurul] = React.useState('orlogo')
+
   const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } =
     useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
   const { uldegdel } = useUldegdel(token, songogdsonDans?.dugaar)
@@ -83,22 +86,22 @@ function tulburTootsoo({ token }) {
   const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
 
   const query = React.useMemo(() => {
-    if (songogdsonTurul === "Тодорхойгүй")
-      return {
-        magadlaltaiGereenuud: { $eq: null },
-        kholbosonGereeniiId: { $size: 0 },
-      }
+    let query = {}
+    if (songogdsonTurul === "Тодорхойгүй"){
+      query.magadlaltaiGereenuud = { $eq: null }
+      query.kholbosonGereeniiId = { $size: 0 }
+    }
     else if (songogdsonTurul === "Холбогдсон")
-      return {
-        "kholbosonGereeniiId.0": { $exists: true },
-      }
-    else if (songogdsonTurul === "Магадлалтай")
-      return {
-        magadlaltaiGereenuud: { $exists: true, $ne: null },
-        kholbosonGereeniiId: { $size: 0 },
-      }
-    else return {}
-  }, [songogdsonTurul])
+      query["kholbosonGereeniiId.0"] = { $exists: true }
+    else if (songogdsonTurul === "Магадлалтай"){
+      query.magadlaltaiGereenuud = { $exists: true, $ne: null }
+      query.kholbosonGereeniiId = { $size: 0 }
+    }
+
+    query[`${songogdsonDans?.bank === 'tdb' ? 'Amt' : 'amount'}`] = { [khuulgaTurul === 'orlogo' ? '$gt' : '$lt']: 0 }
+        
+    return query
+  }, [songogdsonTurul,khuulgaTurul,songogdsonDans])
 
   const {
     dansniiKhuulgaGaralt,
@@ -183,8 +186,9 @@ function tulburTootsoo({ token }) {
   }
 
   const columns = useMemo(() => {
-    if (songogdsonDans?.bank === "tdb")
-      return [
+    let baganuud = []
+    if (songogdsonDans?.bank === "tdb"){
+      baganuud = [
         {
           title: "Огноо",
           sorter: true,
@@ -237,68 +241,72 @@ function tulburTootsoo({ token }) {
           dataIndex: "CtAcntOrg",
           ellipsis: true,
           width: "10rem",
-        },
-        {
-          title: "Төлөв",
-          width: "4rem",
-          align: "center",
-          render(a) {
-            return (
-              <div className="flex items-center justify-center">
-                <Button
-                  shape="circle"
-                  size="small"
-                  onClick={() => guilgeeKholbyo(a)}
-                  icon={iconAvya(a, "tdb")}
-                />
-              </div>
-            )
-          },
-        },
-        {
-          title: "Талбай",
-          dataIndex: "kholbosonTalbainId",
-          ellipsis: true,
-          align: "center",
-          width: "5rem",
-        },
-        {
-          title: "НӨАТУС",
-          width: "4.5rem",
-          align: "center",
-          render(a) {
-            return (
-              <div className="flex items-center justify-center">
-                <Button
-                  size="small"
-                  shape="circle"
-                  icon={
-                    <div
-                      className={`text-500 flex items-center justify-center`}
-                    >
-                      {a?.kholbosonGereeniiId &&
-                      a?.ebarimtAvsanEsekh === true ? (
-                        <Tooltip title="И-баримт хэвлэсэн байна">
-                          <CheckOutlined
-                            style={{ fontSize: "16px", color: "green" }}
-                          />
-                        </Tooltip>
-                      ) : (
-                        <ExclamationOutlined
-                          style={{ fontSize: "16px", color: "red" }}
-                          onClick={() => ebarimtUgukh(a)}
-                        />
-                      )}
-                    </div>
-                  }
-                />
-              </div>
-            )
-          },
-        },
+        }
       ]
-    else if (songogdsonDans?.bank === "khanbank")
-      return [
+      if(khuulgaTurul === 'orlogo')
+        baganuud = [...baganuud,
+          {
+            title: "Төлөв",
+            width: "4rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    shape="circle"
+                    size="small"
+                    onClick={() => guilgeeKholbyo(a)}
+                    icon={iconAvya(a, "tdb")}
+                  />
+                </div>
+              )
+            },
+          },
+          {
+            title: "Талбай",
+            dataIndex: "kholbosonTalbainId",
+            ellipsis: true,
+            align: "center",
+            width: "5rem",
+          },
+          {
+            title: "НӨАТУС",
+            width: "4.5rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={
+                      <div
+                        className={`text-500 flex items-center justify-center`}
+                      >
+                        {a?.kholbosonGereeniiId &&
+                        a?.ebarimtAvsanEsekh === true ? (
+                          <Tooltip title="И-баримт хэвлэсэн байна">
+                            <CheckOutlined
+                              style={{ fontSize: "16px", color: "green" }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <ExclamationOutlined
+                            style={{ fontSize: "16px", color: "red" }}
+                            onClick={() => ebarimtUgukh(a)}
+                          />
+                        )}
+                      </div>
+                    }
+                  />
+                </div>
+              )
+            },
+          },
+        ] 
+    }
+    else if (songogdsonDans?.bank === "khanbank"){
+      baganuud = [
         {
           title: "Огноо",
           sorter: true,
@@ -361,68 +369,71 @@ function tulburTootsoo({ token }) {
           dataIndex: "relatedAccount",
           ellipsis: true,
           width: "10rem",
-        },
-        {
-          title: "Төлөв",
-          width: "4rem",
-          align: "center",
-          render(a) {
-            return (
-              <div className="flex items-center justify-center">
-                <Button
-                  shape="circle"
-                  size="small"
-                  onClick={() => guilgeeKholbyo(a)}
-                  icon={iconAvya(a)}
-                />
-              </div>
-            )
-          },
-        },
-        {
-          title: "Талбай",
-          dataIndex: "kholbosonTalbainId",
-          ellipsis: true,
-          align: "center",
-          width: "5rem",
-        },
-        {
-          title: "НӨАТУС",
-          width: "4.5rem",
-          align: "center",
-          render(a) {
-            return (
-              <div className="flex items-center justify-center">
-                <Button
-                  size="small"
-                  shape="circle"
-                  icon={
-                    <div
-                      className={`text-500 flex items-center justify-center`}
-                    >
-                      {a?.kholbosonGereeniiId &&
-                      a?.ebarimtAvsanEsekh === true ? (
-                        <Tooltip title="И-баримт хэвлэсэн байна">
-                          <CheckOutlined
-                            style={{ fontSize: "16px", color: "green" }}
-                          />
-                        </Tooltip>
-                      ) : (
-                        <ExclamationOutlined
-                          style={{ fontSize: "16px", color: "red" }}
-                          onClick={() => ebarimtUgukh(a)}
-                        />
-                      )}
-                    </div>
-                  }
-                />
-              </div>
-            )
-          },
-        },
+        }
       ]
-    return []
-  }, [songogdsonDans])
+      if(khuulgaTurul === 'orlogo')
+      baganuud = [...baganuud,{
+        title: "Төлөв",
+        width: "4rem",
+        align: "center",
+        render(a) {
+          return (
+            <div className="flex items-center justify-center">
+              <Button
+                shape="circle"
+                size="small"
+                onClick={() => guilgeeKholbyo(a)}
+                icon={iconAvya(a)}
+              />
+            </div>
+          )
+        },
+      },
+      {
+        title: "Талбай",
+        dataIndex: "kholbosonTalbainId",
+        ellipsis: true,
+        align: "center",
+        width: "5rem",
+      },
+      {
+        title: "НӨАТУС",
+        width: "4.5rem",
+        align: "center",
+        render(a) {
+          return (
+            <div className="flex items-center justify-center">
+              <Button
+                size="small"
+                shape="circle"
+                icon={
+                  <div
+                    className={`text-500 flex items-center justify-center`}
+                  >
+                    {a?.kholbosonGereeniiId &&
+                    a?.ebarimtAvsanEsekh === true ? (
+                      <Tooltip title="И-баримт хэвлэсэн байна">
+                        <CheckOutlined
+                          style={{ fontSize: "16px", color: "green" }}
+                        />
+                      </Tooltip>
+                    ) : (
+                      <ExclamationOutlined
+                        style={{ fontSize: "16px", color: "red" }}
+                        onClick={() => ebarimtUgukh(a)}
+                      />
+                    )}
+                  </div>
+                }
+              />
+            </div>
+          )
+        },
+      }]
+    }
+      
+    return baganuud
+  }, [songogdsonDans,khuulgaTurul])
 
   return (
     <Admin
@@ -496,6 +507,9 @@ function tulburTootsoo({ token }) {
             value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
           />
+          {ajiltan?.erkh === 'Admin' && <div className="ml-4 flex flex-row space-x-2 mb-5 rounded-md bg-gray-200">
+            {['orlogo','zarlaga'].map(text=><div className={`p-2 rounded-md cursor-pointer ${khuulgaTurul === text ? 'bg-green-500 text-gray-50':''}`} onClick={()=>setKhuulgaTurul(text)}>{text === 'orlogo' ? 'Орлого' : 'Зарлага'}</div>)}
+          </div>}
           <div className="ml-4 w-40">
             <Select
               placeholder="Данс"
