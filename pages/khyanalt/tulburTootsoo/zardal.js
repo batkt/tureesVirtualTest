@@ -1,18 +1,27 @@
 import React, { useRef } from 'react'
 import Admin from 'components/Admin'
-import formatNumber from "tools/function/formatNumber"
 import _ from "lodash"
-import { Button, Space, Table } from 'antd'
-import { FileExcelOutlined } from '@ant-design/icons'
+import { Badge, Button, Dropdown, Menu, Space, Table } from 'antd'
+import { DownOutlined, FileExcelOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
 import { modal } from "components/ant/Modal"
+import shalgaltKhiikh from 'services/shalgaltKhiikh'
+import useZardal from 'hooks/useZardal'
 
-const guilgeeniiToololt = {}
+const menu = (
+  <Menu>
+    <Menu.Item>Action 1</Menu.Item>
+    <Menu.Item>Action 2</Menu.Item>
+  </Menu>
+);
+
 
 function zardal({token}) {
-  const {barilgiinId} = useAuth()
+  const {barilgiinId,baiguullaga} = useAuth()
   const zardalRef = useRef(null)
+
+  const {zardalGaralt,setZardalKhuudaslalt} = useZardal(token,baiguullaga?._id)
 
   function onRefresh() {
     
@@ -40,6 +49,51 @@ function zardal({token}) {
       footer,
     })
   }
+
+  const expandedRowRender = () => {
+    const columns = [
+      { title: 'Date', dataIndex: 'date', key: 'date' },
+      { title: 'Name', dataIndex: 'name', key: 'name' },
+      {
+        title: 'Status',
+        key: 'state',
+        render: () => (
+          <span>
+            <Badge status="success" />
+            Finished
+          </span>
+        ),
+      },
+      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
+      {
+        title: 'Action',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: () => (
+          <Space size="middle">
+            <a>Pause</a>
+            <a>Stop</a>
+            <Dropdown overlay={menu}>
+              <a>
+                More <DownOutlined />
+              </a>
+            </Dropdown>
+          </Space>
+        ),
+      },
+    ];
+
+    const data = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i,
+        date: '2014-12-24 23:12:00',
+        name: 'This is production name',
+        upgradeNum: 'Upgraded: 56',
+      });
+    }
+    return <Table columns={columns} dataSource={data} pagination={false} expandable={{ expandedRowRender }}/>;
+  };
 
   return (
     <Admin
@@ -125,24 +179,44 @@ function zardal({token}) {
         columns={[
           {
             title: "№",
-            key: "index",
             width: "3rem",
             align: "center",
             render: (text, record, index) => index + 1
-          }
+          },
+          {
+            title: "Нэр",
+            width: "3rem",
+            align: "center",
+            dataIndex:'ner'
+          },
+          
         ]}
-        dataSource={[]}
+        dataSource={zardalGaralt?.jagsaalt}
         rowKey={(a) => a._id}
-        className="t-head"
+        pagination={{
+          current: zardalGaralt?.khuudasniiDugaar,
+          pageSize: zardalGaralt?.khuudasniiKhemjee,
+          total: zardalGaralt?.niitMur,
+          showSizeChanger: true,
+          onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+            setZardalKhuudaslalt((kh) => ({
+              ...kh,
+              khuudasniiDugaar,
+              khuudasniiKhemjee,
+            })),
+        }}
         rowClassName={(record, index) =>
           index % 2 === 0
             ? "bg-white dark:bg-gray-600"
             : "bg-gray-200 dark:bg-gray-800"
         }
+        expandable={{ expandedRowRender }}
       />
       </div>
     </Admin>
   )
 }
+
+export const getServerSideProps = shalgaltKhiikh
 
 export default zardal
