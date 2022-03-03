@@ -25,6 +25,8 @@ import formatNumber from "tools/function/formatNumber"
 import useDansKhuulga from "hooks/khuulga/useDansKhuulga"
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt"
 import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeKholbokh"
+import ZardalKholbokh from "components/pageComponents/tulbur/ZardalKholbokh"
+
 import _ from "lodash"
 import { modal } from "components/ant/Modal"
 import Tulbur from "components/pageComponents/eBarimt/Tulbur"
@@ -69,8 +71,29 @@ function iconAvya(a, bank) {
   )
 }
 
+function iconAvyaZardal(a,bank) {
+  let Icon = ExclamationOutlined
+  let color = "red"
+  let tailbar = "Гүйлгээ холбогдоогүй байна"
+
+  if(!!a.zardliinBulgiinId){
+    Icon = CheckOutlined
+    color = "green"
+    tailbar = "Гүйлгээ холбогдсон байна"
+  }
+
+  return (
+    <Tooltip title={tailbar}>
+      <div className={`text-${color}-500 flex items-center justify-center`}>
+        <Icon style={{ fontSize: "16px" }} />
+      </div>
+    </Tooltip>
+  )
+}
+
 function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null)
+  const zardalRef = React.useRef(null)
   const { baiguullaga, barilgiinId,ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
   const { dansGaralt } = useDans(token, baiguullaga?._id)
@@ -153,6 +176,37 @@ function tulburTootsoo({ token }) {
           data={data}
           barilgiinId={barilgiinId}
           ref={refGuilgee}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    })
+  }
+
+  function zardalKholbyo(data) {
+    if (!!data?.zardliinBulgiinId) {
+      message.info("Зардал холбогдсон байна.")
+      return
+    }
+
+    const footer = [
+      <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ]
+    modal({
+      title: "",
+      width: "50%",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ZardalKholbokh
+          dans={songogdsonDans}
+          data={data}
+          barilgiinId={barilgiinId}
+          ref={zardalRef}
           token={token}
           baiguullagiinId={baiguullaga?._id}
           onFinish={refreshData}
@@ -431,6 +485,24 @@ function tulburTootsoo({ token }) {
         },
       }]
     }
+    if(khuulgaTurul === 'zarlaga')
+    baganuud.push({
+      title: "Төлөв",
+      width: "4rem",
+      align: "center",
+      render(a) {
+        return (
+          <div className="flex items-center justify-center">
+            <Button
+              shape="circle"
+              size="small"
+              onClick={() => zardalKholbyo(a)}
+              icon={iconAvyaZardal(a)}
+            />
+          </div>
+        )
+      },
+    })
       
     return baganuud
   }, [songogdsonDans,khuulgaTurul])

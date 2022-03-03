@@ -50,49 +50,19 @@ function zardal({token}) {
     })
   }
 
-  const expandedRowRender = () => {
+  const expandedRowRender = (record) => {
     const columns = [
-      { title: 'Date', dataIndex: 'date', key: 'date' },
-      { title: 'Name', dataIndex: 'name', key: 'name' },
       {
-        title: 'Status',
-        key: 'state',
-        render: () => (
-          <span>
-            <Badge status="success" />
-            Finished
-          </span>
-        ),
+        title: "№",
+        width: "3rem",
+        align: "center",
+        render: (text, record, index) => index + 1
       },
-      { title: 'Upgrade Status', dataIndex: 'upgradeNum', key: 'upgradeNum' },
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: () => (
-          <Space size="middle">
-            <a>Pause</a>
-            <a>Stop</a>
-            <Dropdown overlay={menu}>
-              <a>
-                More <DownOutlined />
-              </a>
-            </Dropdown>
-          </Space>
-        ),
-      },
+      { title: 'Нэр', dataIndex: 'ner', key: 'Нэр' }
     ];
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        date: '2014-12-24 23:12:00',
-        name: 'This is production name',
-        upgradeNum: 'Upgraded: 56',
-      });
-    }
-    return <Table columns={columns} dataSource={data} pagination={false} expandable={{ expandedRowRender }}/>;
+    if(!record?.dedKhesguud)
+    return undefined
+    return <Table columns={columns} dataSource={record?.dedKhesguud} pagination={false} expandable={{ expandedRowRender }}/>;
   };
 
   return (
@@ -173,6 +143,7 @@ function zardal({token}) {
           <span>Зардал бүртгэх</span>
         </button>
       <Table
+        tableLayout='auto'
         scroll={{ y: "calc(100vh - 26rem)" }}
         size="small"
         bordered
