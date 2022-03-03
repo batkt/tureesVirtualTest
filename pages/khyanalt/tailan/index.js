@@ -19,6 +19,10 @@ const tailanguud = [
     ner: "Авлагын тайлан",
     service: "avlagiinTailanAvya",
   },
+  {
+    ner: "Зардалын тайлан",
+    service: "zardaliinTailanAvya",
+  }
 ]
 
 function Chart({
@@ -126,6 +130,14 @@ function AjiltanBurtgel({ token }) {
           token={token}
           defaultTurul="bar"
           defaultTailan="avlagiinTailanAvya"
+        />
+      </div>
+      <div className="box col-span-12 divide-y p-2 md:col-span-6">
+        <Chart
+          barilgiinId={barilgiinId}
+          token={token}
+          defaultTurul="bar"
+          defaultTailan="zardaliinTailanAvya"
         />
       </div>
     </Admin>
