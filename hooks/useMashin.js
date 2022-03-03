@@ -28,7 +28,8 @@ const fetcher = (
           $or:[ { turul: { $regex: search, $options: "i" } },
                 { ezemshigchiinNer: { $regex: search, $options: "i" } },
                 { ezemshigchiinRegister: { $regex: search, $options: "i" } },
-                { ezemshigchiinUtas: { $regex: search, $options: "i" } }
+                { ezemshigchiinUtas: { $regex: search, $options: "i" } },
+                { dugaar: { $regex: search, $options: "i" } },
               ],
           ...query
         },

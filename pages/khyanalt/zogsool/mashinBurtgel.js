@@ -31,7 +31,7 @@ function mashinBurtgel({ token }) {
 
   const toololt = useMemo(()=>{
     return [
-      { name: "Нийт", too: formatNumber(mashinGaralt?.niitMur) },
+      { name: "Нийт", too: formatNumber(mashinToololt?.reduce((a, b) => a + b.too, 0)) },
       { name: "Гэрээт",too: formatNumber(mashinToololt?.find(a=>a._id === 'Гэрээт')?.too) },
       { name: "Түрээслэгч", too: formatNumber(mashinToololt?.find(a=>a._id === 'Түрээслэгч')?.too) },
       { name: "Дотоод", too: formatNumber(mashinToololt?.find(a=>a._id === 'Дотоод')?.too) }
