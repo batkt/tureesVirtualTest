@@ -1,50 +1,50 @@
 import {
-  Button,
-  Input,
-  message,
-  Popover,
-  Table,
-  Space,
-  Form,
-  Popconfirm,
-  Card,
-  InputNumber,
-  Divider,
-  Upload,
-  Row,
-  Col,
-  Badge,
-} from "antd"
-import {
-  EditOutlined,
-  DeleteOutlined,
-  FileExcelOutlined,
-  PlusOutlined,
-  MinusCircleOutlined,
-  EyeOutlined,
-  UploadOutlined,
-  ArrowUpOutlined,
   ArrowDownOutlined,
-  SettingOutlined,
+  ArrowUpOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  FileExcelOutlined,
+  MinusCircleOutlined,
   MoreOutlined,
+  PlusOutlined,
+  SettingOutlined,
+  UploadOutlined,
 } from "@ant-design/icons"
-import CardList from "components/cardList"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import moment from "moment"
+import {
+  Badge,
+  Button,
+  Card,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Popconfirm,
+  Popover,
+  Row,
+  Select,
+  Space,
+  Table,
+  Upload,
+} from "antd"
 import Admin from "components/Admin"
-import { aldaaBarigch, url } from "services/uilchilgee"
-import { useAuth } from "services/auth"
-import React, { useState, useRef, useMemo } from "react"
+import { modal } from "components/ant/Modal"
+import CardList from "components/cardList"
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
+import TalbaiTile from "components/pageComponents/talbai/TalbaiTile"
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
 import { useTalbai } from "hooks/useTalbai"
-import deleteMethod from "tools/function/crud/deleteMethod"
+import _ from "lodash"
+import moment from "moment"
+import React, { useRef, useState } from "react"
+import { useAuth } from "services/auth"
+import shalgaltKhiikh from "services/shalgaltKhiikh"
+import { aldaaBarigch, url } from "services/uilchilgee"
 import createMethod from "tools/function/crud/createMethod"
+import deleteMethod from "tools/function/crud/deleteMethod"
 import updateMethod from "tools/function/crud/updateMethod"
 import formatNumber from "tools/function/formatNumber"
-import { modal } from "components/ant/Modal"
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import TalbaiTile from "components/pageComponents/talbai/TalbaiTile"
-import _ from "lodash"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -592,11 +592,18 @@ function talbaiBurtgekh({ token }) {
                 },
               ]}
             >
-              <Input
+              <Select
                 placeholder="Давхар"
                 value={talbaiState.davkhar}
-                onChange={(e) => onChange("davkhar", e.target.value)}
-              />
+                onChange={(e) => onChange("davkhar", e)}
+                allowClear
+              >
+                {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                  <Select.Option key={a._id} value={a.davkhar}>
+                    {a.davkhar}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item name="tailbar" label="Тайлбар">
               <TextArea
