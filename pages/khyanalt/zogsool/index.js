@@ -17,15 +17,16 @@ function Zogsool({ token }) {
   const { baiguullaga ,barilgiinId} = useAuth()
   const excelref = useRef(null)
   const [ognoo,setOgnoo] = useState([moment().startOf('month'),moment().endOf('month')])
-  const [turul,setTurul] = useState("")
+  const [turul,setTurul] = useState(undefined)
 
   const {zogsoolToololt,zogsoolToololtMutate} = useZogsoolToololt(token,ognoo)
 
   const query = useMemo(()=>{
     return {
-      check_in_time:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}
+      check_in_time:{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')},
+      turul:turul === 'Үйлчлүүлэгч' ? null : turul
     }
-  },[ognoo])
+  },[ognoo,turul])
   
   const { zogsoolGaralt, setZogsoolKhuudaslalt ,zogsoolMutate} = useZogsool(
     token,
@@ -34,7 +35,7 @@ function Zogsool({ token }) {
   )
 
   const toololt = useMemo(()=>[
-    { name: "Үйлчлүүлэгч", too: formatNumber(zogsoolGaralt?.niitMur,0)},
+    { name: "Үйлчлүүлэгч", too: formatNumber(zogsoolToololt?.find(a=>a._id === null)?.too,0)},
     { name: "Түрээслэгч",too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Түрээслэгч')?.too,0) },
     { name: "Гэрээт", too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Гэрээт')?.too,0) },
     { name: "Дотоод", too: formatNumber(zogsoolToololt?.find(a=>a._id === 'Дотоод')?.too,0) }
