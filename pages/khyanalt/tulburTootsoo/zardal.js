@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react'
 import Admin from 'components/Admin'
 import _ from "lodash"
-import { Badge, Button, DatePicker, Dropdown, Menu, Space, Table } from 'antd'
-import { DownOutlined, FileExcelOutlined } from '@ant-design/icons'
+import { Button, DatePicker, Space, Table } from 'antd'
+import { FileExcelOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
 import { modal } from "components/ant/Modal"
@@ -10,48 +10,97 @@ import shalgaltKhiikh from 'services/shalgaltKhiikh'
 import useZardal from 'hooks/useZardal'
 import useSWR from 'swr'
 import createMethod from 'tools/function/crud/createMethod'
+import getListMethod from 'tools/function/crud/getListMethod'
+import formatNumber from 'tools/function/formatNumber'
 import moment from 'moment'
 
 const useZardaliinDun = (token,barilgiinId,idnuud,ognoo) =>{
-  const {data} = useSWR(['zardliinDunAvya',ognoo],(url,ognoo)=>createMethod(url,token,{barilgiinId,idnuud,ekhlekhOgnoo:moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'), duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}).then(a=>a.data))
-  return data
+  const {data} = useSWR(['zardliinDunAvya',ognoo,idnuud],(url,ognoo,idnuud)=>createMethod(url,token,{barilgiinId,idnuud,ekhlekhOgnoo:moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'), duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}).then(a=>a.data),{revalidateOnFocus:false})
+  return {zardaliinDun:data}
+}
+
+const useDansniiKhuulga = (token,barilgiinId,zardliinBulgiinId,ognoo) =>{
+  
+  const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
+    khuudasniiDugaar: 1,
+    khuudasniiKhemjee: 100,
+    search:''
+  });
+
+  const {data,mutate} = useSWR(['bankniiGuilgee',ognoo,zardliinBulgiinId,khuudaslalt],(url,ognoo,zardliinBulgiinId,{search,...khuudaslalt})=>getListMethod(url,token,{
+    ...khuudaslalt,
+    query:{
+      barilgiinId,
+      zardliinBulgiinId,
+      $or:[
+        {'TxDt':{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}},
+        {'tranDate':{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}}
+      ]
+    }}).then(a=>a.data),{revalidateOnFocus:false})
+
+  return {
+    dansniiKhuulgaGaralt:data,
+    setDansniiKhuulgaKhuudaslalt,
+    dansniiKhuulgaMutate:mutate
+  }
 }
 
 function pusher(list,zardal) {
   if(!!zardal?.dedKhesguud && zardal?.dedKhesguud.length > 0)
     zardal?.dedKhesguud.forEach(a=>pusher(list,a))
-  else list.push(zardal?._id)
+  list.push(zardal?._id)
 }
 
-function ZardalMur({zardal,index,parent,token,barilgiinId,ekhlekhOgnoo,duusakhOgnoo,ognoo}) {
+function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}) {
+
   const [showDed,setShowDed] = useState(false)
 
-  const idnuud=useMemo(()=>{
+  const Idnuud=useMemo(()=>{
     let idnuud = []
     pusher(idnuud,zardal)
     return idnuud
   },[zardal])
 
-  const zardaliinDun = useZardaliinDun(token,barilgiinId,idnuud,ognoo)
+  const {zardaliinDun} = useZardaliinDun(token,barilgiinId,Idnuud,ognoo)
 
+  const {
+    dansniiKhuulgaGaralt,
+    setDansniiKhuulgaKhuudaslalt,
+    dansniiKhuulgaMutate,
+  } = useDansniiKhuulga(
+    token,
+    barilgiinId,
+    zardal?._id,
+    ognoo
+  )
+  
   return (
     <div className='w-full space-y-4'>
       <div className='w-full flex flex-row space-x-4'>
-        <div className='w-5 h-5 text-center bg-white cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud && (zardal.dedKhesguud?.length > 0) ? (showDed ? '-' : '+') : ''}</div>
-        {!parent && <div className='w-5 bg-white text-center rounded-sm' >{index+1}</div>}
-        <div className='bg-white rounded-sm px-2 w-full'>{zardal.ner}</div>
-        <div className='bg-white rounded-sm px-2 w-80'>{zardaliinDun}</div>
+        <div className='w-5 h-5 text-center bg-white cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
+        <div className='bg-white rounded-sm px-2' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
+        <div className='bg-white rounded-sm px-2 w-80'>{zardaliinDun || 0}</div>
       </div>
-      {showDed && zardal.dedKhesguud && (zardal.dedKhesguud?.length > 0) && <div className='w-full pl-9'>
-        <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ekhlekhOgnoo={ekhlekhOgnoo} duusakhOgnoo={duusakhOgnoo} />
+      {showDed && zardal.dedKhesguud && <div className='w-full pl-9'>
+        <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId}/>
       </div>}
+      {showDed &&  dansniiKhuulgaGaralt && dansniiKhuulgaGaralt?.jagsaalt?.map((a)=>(
+          <div className='w-full pl-9 flex flex-row space-x-4' key={a?._id}>
+              <div className='w-5 bg-white text-center rounded-sm'>{index+1}</div>
+              <div className='bg-white rounded-sm px-2' style={{width:'calc(100% - 63.25rem)'}}>{a.dansniiDugaar}</div>
+              <div className='bg-white rounded-sm px-2 w-80'>{a.CtActnName}</div>
+              <div className='bg-white rounded-sm px-2 w-80'>{moment(a.TxDt).format('YYYY-MM-DD')}</div>
+              <div className='bg-white rounded-sm px-2 w-80'>{formatNumber(a.Amt || 0)}</div>
+          </div>
+        ))
+      }
     </div>
   )
 }
 
-function Zardal({zardaluud,parent,token,barilgiinId,ekhlekhOgnoo,duusakhOgnoo,ognoo}) {
+function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId}) {
   return <div className='w-full space-y-4'>
-    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} barilgiinId={barilgiinId} ekhlekhOgnoo={ekhlekhOgnoo} duusakhOgnoo={duusakhOgnoo}/>))}
+    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId}/>))}
   </div>
 }
 
@@ -183,7 +232,7 @@ function zardal({token}) {
           </span>
           <span>Зардал бүртгэх</span>
         </button>
-        <Zardal parent={true} zardaluud={zardalGaralt?.jagsaalt || []} token={token} barilgiinId={barilgiinId} ognoo={ognoo} ekhlekhOgnoo={moment(ognoo[0]).format('YYYY-MM-DD 00:00:00')} duusakhOgnoo={moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}/>
+        <Zardal parent={true} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
       </div>
     </Admin>
   )
