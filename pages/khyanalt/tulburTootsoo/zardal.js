@@ -1,30 +1,70 @@
-import React, { useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import Admin from 'components/Admin'
 import _ from "lodash"
-import { Badge, Button, Dropdown, Menu, Space, Table } from 'antd'
+import { Badge, Button, DatePicker, Dropdown, Menu, Space, Table } from 'antd'
 import { DownOutlined, FileExcelOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
 import { modal } from "components/ant/Modal"
 import shalgaltKhiikh from 'services/shalgaltKhiikh'
 import useZardal from 'hooks/useZardal'
+import useSWR from 'swr'
+import createMethod from 'tools/function/crud/createMethod'
+import moment from 'moment'
 
-const menu = (
-  <Menu>
-    <Menu.Item>Action 1</Menu.Item>
-    <Menu.Item>Action 2</Menu.Item>
-  </Menu>
-);
+const useZardaliinDun = (token,barilgiinId,idnuud,ognoo) =>{
+  const {data} = useSWR(['zardliinDunAvya',ognoo],(url,ognoo)=>createMethod(url,token,{barilgiinId,idnuud,ekhlekhOgnoo:moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'), duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}).then(a=>a.data))
+  return data
+}
+
+function pusher(list,zardal) {
+  if(!!zardal?.dedKhesguud && zardal?.dedKhesguud.length > 0)
+    zardal?.dedKhesguud.forEach(a=>pusher(list,a))
+  else list.push(zardal?._id)
+}
+
+function ZardalMur({zardal,index,parent,token,barilgiinId,ekhlekhOgnoo,duusakhOgnoo,ognoo}) {
+  const [showDed,setShowDed] = useState(false)
+
+  const idnuud=useMemo(()=>{
+    let idnuud = []
+    pusher(idnuud,zardal)
+    return idnuud
+  },[zardal])
+
+  const zardaliinDun = useZardaliinDun(token,barilgiinId,idnuud,ognoo)
+
+  return (
+    <div className='w-full space-y-4'>
+      <div className='w-full flex flex-row space-x-4'>
+        <div className='w-5 h-5 text-center bg-white cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud && (zardal.dedKhesguud?.length > 0) ? (showDed ? '-' : '+') : ''}</div>
+        {!parent && <div className='w-5 bg-white text-center rounded-sm' >{index+1}</div>}
+        <div className='bg-white rounded-sm px-2 w-full'>{zardal.ner}</div>
+        <div className='bg-white rounded-sm px-2 w-80'>{zardaliinDun}</div>
+      </div>
+      {showDed && zardal.dedKhesguud && (zardal.dedKhesguud?.length > 0) && <div className='w-full pl-9'>
+        <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ekhlekhOgnoo={ekhlekhOgnoo} duusakhOgnoo={duusakhOgnoo} />
+      </div>}
+    </div>
+  )
+}
+
+function Zardal({zardaluud,parent,token,barilgiinId,ekhlekhOgnoo,duusakhOgnoo,ognoo}) {
+  return <div className='w-full space-y-4'>
+    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} barilgiinId={barilgiinId} ekhlekhOgnoo={ekhlekhOgnoo} duusakhOgnoo={duusakhOgnoo}/>))}
+  </div>
+}
 
 
 function zardal({token}) {
   const {barilgiinId,baiguullaga} = useAuth()
   const zardalRef = useRef(null)
+  const [ognoo,setOgnoo] = useState([moment(),moment()])
 
-  const {zardalGaralt,setZardalKhuudaslalt} = useZardal(token,baiguullaga?._id)
+  const {zardalGaralt,setZardalKhuudaslalt,zardalMutate} = useZardal(token,baiguullaga?._id)
 
   function onRefresh() {
-    
+    zardalMutate()
   }
 
   function zardalBurtgekh(data) {
@@ -72,7 +112,7 @@ function zardal({token}) {
       className="p-0 md:p-4"
     >
       <div className="col-span-12 grid w-full grid-cols-12 gap-4">
-      {[
+        {[
             { too: 0, utga: "Нийт" },
             {
               too:  0,
@@ -109,10 +149,11 @@ function zardal({token}) {
                   </div>
                 </div>
               </div>
-            )
-          })}
+          )
+        })}
       </div>
       <div className="col-span-12 space-y-5">
+        <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
         <button
           style={{
             backgroundColor: "#209669",
@@ -142,47 +183,7 @@ function zardal({token}) {
           </span>
           <span>Зардал бүртгэх</span>
         </button>
-      <Table
-        tableLayout='auto'
-        scroll={{ y: "calc(100vh - 26rem)" }}
-        size="small"
-        bordered
-        columns={[
-          {
-            title: "№",
-            width: "3rem",
-            align: "center",
-            render: (text, record, index) => index + 1
-          },
-          {
-            title: "Нэр",
-            width: "3rem",
-            align: "center",
-            dataIndex:'ner'
-          },
-          
-        ]}
-        dataSource={zardalGaralt?.jagsaalt}
-        rowKey={(a) => a._id}
-        pagination={{
-          current: zardalGaralt?.khuudasniiDugaar,
-          pageSize: zardalGaralt?.khuudasniiKhemjee,
-          total: zardalGaralt?.niitMur,
-          showSizeChanger: true,
-          onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-            setZardalKhuudaslalt((kh) => ({
-              ...kh,
-              khuudasniiDugaar,
-              khuudasniiKhemjee,
-            })),
-        }}
-        rowClassName={(record, index) =>
-          index % 2 === 0
-            ? "bg-white dark:bg-gray-600"
-            : "bg-gray-200 dark:bg-gray-800"
-        }
-        expandable={{ expandedRowRender }}
-      />
+        <Zardal parent={true} zardaluud={zardalGaralt?.jagsaalt || []} token={token} barilgiinId={barilgiinId} ognoo={ognoo} ekhlekhOgnoo={moment(ognoo[0]).format('YYYY-MM-DD 00:00:00')} duusakhOgnoo={moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}/>
       </div>
     </Admin>
   )
