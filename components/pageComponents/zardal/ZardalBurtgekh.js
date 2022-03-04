@@ -1,17 +1,53 @@
 import React, { useImperativeHandle,useMemo,useState } from "react"
-import { Breadcrumb, Button, Input, message } from "antd"
+import { Input, message } from "antd"
 import createMethod from "tools/function/crud/createMethod"
 import updateMethod from "tools/function/crud/updateMethod"
-import BreadcrumbItem from "antd/lib/breadcrumb/BreadcrumbItem"
 import _ from 'lodash'
-import { ArrowRightOutlined, CloseOutlined } from "@ant-design/icons"
+
+function ZardalMur({zardal,token,barilgiinId,ognoo,baiguullagiinId,dedBulegNemekh, zardalNemekh, murUstgaya,  onChangeZardal,defaultZam='',index,realZam}) {
+  const zam = defaultZam || ''
+  const [showDed,setShowDed] = useState(true)
+
+  const utga = useMemo(()=>{
+    return _.get(zardal,zam)
+  },[zardal,zam])
+
+  return (
+    <div className='w-full space-y-4'>
+      <div className='w-full flex flex-row space-x-4'>
+        <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
+        <div className='box rounded-sm px-2 flex items-center' style={{width:`calc(100% - ${zam !== '' ? '6' : '3'}rem)`}}>
+          <Input placeholder="Нэр" value={utga?.ner} style={{width:'100%'}} onChange={(e)=>onChangeZardal(e,zam)}/>
+        </div>
+        <div className="ml-5 w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm" onClick={()=>{
+          if(zardal?.dedKhesguud?.length > 0)
+            zardalNemekh(zam)
+          else
+            dedBulegNemekh(zam)
+        }}>+</div>
+        {zam !== '' && <div className="ml-5 w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm" onClick={()=>murUstgaya(index,realZam)}>-</div>}
+      </div>
+      {showDed && zardal.dedKhesguud && <div className='w-full pl-12'>
+        <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId} zam={zam+(zam === '' ? '' : '.')+'dedKhesguud'}
+           zardalNemekh={zardalNemekh} murUstgaya={murUstgaya} dedBulegNemekh={dedBulegNemekh} onChangeZardal={onChangeZardal}
+        />
+      </div>}
+    </div>
+  )
+}
+
+function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId,dedBulegNemekh, zardalNemekh, murUstgaya, onChangeZardal,zam}) {
+  return <div className='w-full space-y-4'>
+    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId}
+      dedBulegNemekh={dedBulegNemekh} zardalNemekh={zardalNemekh} murUstgaya={murUstgaya} onChangeZardal={onChangeZardal} realZam={zam} defaultZam={zam+`.${i}`}
+    />))}
+  </div>
+}
 
 function ZardalBurtgekh({ data={}, barilgiinId, token, destroy, onRefresh }, ref) {
 
     const [zardal,setZardal] = useState(data)
-    const [zam,setZam] = useState('')
-    const [tuukh,setTuukh] = useState([])
-
+  
     useImperativeHandle(
       ref,
       () => ({
@@ -33,47 +69,25 @@ function ZardalBurtgekh({ data={}, barilgiinId, token, destroy, onRefresh }, ref
       [zardal]
     )
 
-    const zardalData = useMemo(()=>{
-      if(zam === '')
-        return zardal
-      return _.get(zardal,zam)
-    },[zardal,zam])
-
-    function onChangeZardal({target}) {
+    function onChangeZardal({target},zam) {
       _.set(zardal,zam + (zam === '' ? '' : '.') +'ner',target.value)
       setZardal({...zardal})
     }
 
-    function onClickSub(index) {
-      tuukh.push({zam,ner:zardalData?.ner})
-      setTuukh([...tuukh])
-      let zamiinUtga = zam + (zam !== '' ? '.' : '') + 'dedKhesguud.'+index
-      setZam(zamiinUtga)
-    }
-
-    function tuukhButsaaya(v) {
-      setZam(v.zam)
-      const index = tuukh.findIndex(a=>a.zam === v.zam)
-      if(index !== -1){
-        tuukh.splice(index,100)
-        setTuukh([...tuukh])
-      }
-    }
-
-    function dedBulegNemekh() {
+    function dedBulegNemekh(zam) {
       _.set(zardal,zam+(zam === '' ? '' : '.')+'dedKhesguud',[{ner:'Зардалын төрөл'}])
       setZardal({...zardal})
     }
 
-    function murUstgaya(e,index) {
-      e.stopPropagation()
-      const jagsaalt = _.get(zardal,zam+(zam === '' ? '' : '.')+'dedKhesguud')
+    function murUstgaya(index,zam) {
+      console.log(index,zam)
+      const jagsaalt = _.get(zardal,zam)
       jagsaalt.splice(index,1)
-      _.set(zardal,zam+(zam === '' ? '' : '.')+'dedKhesguud',jagsaalt)
+      _.set(zardal,zam,jagsaalt)
       setZardal({...zardal})
     }
 
-    function zardalNemekh() {
+    function zardalNemekh(zam) {
       const jagsaalt = _.get(zardal,zam+(zam === '' ? '' : '.')+'dedKhesguud')
       jagsaalt.push({ner:'Зардалын төрөл'})
       _.set(zardal,zam+(zam === '' ? '' : '.')+'dedKhesguud',jagsaalt)
@@ -81,33 +95,7 @@ function ZardalBurtgekh({ data={}, barilgiinId, token, destroy, onRefresh }, ref
     }
   
     return (
-      <div className={`grid grid-cols-2 gap-5`}>
-        <div className="col-span-2">
-          <Breadcrumb separator="/">
-            {tuukh.map((a)=><BreadcrumbItem className="cursor-pointer" key={a.zam} onClick={()=>tuukhButsaaya(a)}><a>{a.ner}</a></BreadcrumbItem>)}
-          </Breadcrumb>
-        </div>
-        <div className={`space-y-2 ${!!zardalData?.dedKhesguud ? '' : 'col-span-2'}`}>
-            <div>Зардал</div>
-            <Input placeholder="Нэр" value={zardalData?.ner || ''} onChange={onChangeZardal}/>
-            {!zardalData?.dedKhesguud && <Button onClick={dedBulegNemekh}>Дэд зардал бүртгэх</Button>}
-        </div>
-        <div className={`${!!zardalData?.dedKhesguud ? 'space-y-2' : 'hidden'}`}>
-            <div>Дэд</div>
-            {zardalData?.dedKhesguud?.map((a,i)=>
-              <div key={`${a.ner}-${i}`} className='w-full p-1 border border-gray-200 cursor-pointer flex justify-between items-center' onClick={()=>onClickSub(i)}>
-                <span>{a.ner}</span>
-                {
-                  !!a.dedKhesguud ? 
-                    <ArrowRightOutlined style={{display:'flex'}}/>
-                    :
-                    <CloseOutlined style={{display:'flex'}} onClick={(e)=>murUstgaya(e,i)}/>
-                }
-              </div>
-            )}
-            <Button onClick={zardalNemekh}>Зардал нэмэх</Button>
-        </div>
-      </div>
+      <ZardalMur zardal={zardal} token={token} barilgiinId={barilgiinId} dedBulegNemekh={dedBulegNemekh} zardalNemekh={zardalNemekh} murUstgaya={murUstgaya} onChangeZardal={onChangeZardal}/>
     )
 }
 

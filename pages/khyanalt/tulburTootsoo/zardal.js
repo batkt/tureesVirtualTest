@@ -79,20 +79,20 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}
   return (
     <div className='w-full space-y-4'>
       <div className='w-full flex flex-row space-x-4'>
-        <div className='w-5 h-5 text-center bg-white cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
-        <div className='bg-white rounded-sm px-2' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
-        <div className='bg-white rounded-sm px-2 w-80'>{formatNumber(zardaliinDun || 0)}</div>
+        <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
+        <div className='box rounded-sm px-2 flex items-center' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
+        <div className='box rounded-sm px-2 flex items-center w-80'>{formatNumber(zardaliinDun || 0)}₮</div>
       </div>
-      {showDed && zardal.dedKhesguud && <div className='w-full pl-9'>
+      {showDed && zardal.dedKhesguud && <div className='w-full pl-12'>
         <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId}/>
       </div>}
       {showDed &&  dansniiKhuulgaGaralt && dansniiKhuulgaGaralt?.jagsaalt?.map((a)=>(
-          <div className='w-full pl-9 flex flex-row space-x-4' key={a?._id}>
-              <div className='w-5 bg-white text-center rounded-sm'>{index+1}</div>
-              <div className='bg-white rounded-sm px-2' style={{width:'calc(100% - 63.25rem)'}}>{a.dansniiDugaar}</div>
-              <div className='bg-white rounded-sm px-2 w-80'>{a.CtActnName}</div>
-              <div className='bg-white rounded-sm px-2 w-80'>{moment(a.TxDt).format('YYYY-MM-DD')}</div>
-              <div className='bg-white rounded-sm px-2 w-80'>{formatNumber(a.Amt || 0)}</div>
+          <div className='w-full pl-12 flex flex-row space-x-4' key={a?._id}>
+              <div className='w-8 h-8 box text-center rounded-sm flex items-center justify-center'>{index+1}</div>
+              <div className='box rounded-sm px-2 flex items-center' style={{width:'calc(100% - 63.25rem)'}}>{a.dansniiDugaar}</div>
+              <div className='box rounded-sm px-2 flex items-center w-80'>{a.CtActnName}</div>
+              <div className='box rounded-sm px-2 flex items-center w-80'>{moment(a.TxDt).format('YYYY-MM-DD')}</div>
+              <div className='box rounded-sm px-2 flex items-center w-80'>{formatNumber(a.Amt || 0)}₮</div>
           </div>
         ))
       }
@@ -178,7 +178,7 @@ function zardal({token}) {
             return (
               <div
                 key={`${index}toololt`}
-                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3"
+                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 box"
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
