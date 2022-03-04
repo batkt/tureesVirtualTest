@@ -287,7 +287,7 @@ function tulburTootsoo({ token }) {
           render(a) {
             return `${formatNumber(a, 2)}₮`
           },
-          sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
+          sorter: (a, b) => Number(a.Amt || 0) - Number(b.Amt || 0),
         },
         {
           title: "Шилжүүлсэн данс",
