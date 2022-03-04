@@ -36,7 +36,9 @@ const useDansniiKhuulga = (token,barilgiinId,zardliinBulgiinId,ognoo) =>{
         {'TxDt':{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}},
         {'tranDate':{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}}
       ]
-    }}).then(a=>a.data),{revalidateOnFocus:false})
+    },
+    select:{TxDt:1,dansniiDugaar:1,Amt:1,CtActnName:1}
+  }).then(a=>a.data),{revalidateOnFocus:false})
 
   return {
     dansniiKhuulgaGaralt:data,
@@ -79,7 +81,7 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}
       <div className='w-full flex flex-row space-x-4'>
         <div className='w-5 h-5 text-center bg-white cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
         <div className='bg-white rounded-sm px-2' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
-        <div className='bg-white rounded-sm px-2 w-80'>{zardaliinDun || 0}</div>
+        <div className='bg-white rounded-sm px-2 w-80'>{formatNumber(zardaliinDun || 0)}</div>
       </div>
       {showDed && zardal.dedKhesguud && <div className='w-full pl-9'>
         <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId}/>
