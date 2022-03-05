@@ -233,6 +233,7 @@ function tulburTootsoo({ token }) {
           data={data}
           token={token}
           dansniiKhuulgaMutate={dansniiKhuulgaMutate}
+          onRefresh={refreshData}
         />
       ),
       footer: false,
@@ -257,7 +258,7 @@ function tulburTootsoo({ token }) {
                 setOrder((o) => ({
                   ...o,
                   tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
-                })), // click header row
+                })), 
             }
           },
         },

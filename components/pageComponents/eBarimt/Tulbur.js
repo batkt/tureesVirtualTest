@@ -7,7 +7,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 //#endregion
 
 function Tulbur(
-  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga },
+  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga,onRefresh },
   ref
 ) {
   const [tulbur, setTulbur] = React.useState(data?.tulbur || [])
@@ -86,6 +86,7 @@ function Tulbur(
   }
 
   function khaaya() {
+    onRefresh()
     destroy()
   }
 
