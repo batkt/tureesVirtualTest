@@ -1,7 +1,7 @@
 import moment from "moment"
 import { useAuth } from "services/auth"
 import { DeleteOutlined } from "@ant-design/icons"
-import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd"
+import { Table, Button, Card, DatePicker, message, Popconfirm, Spin } from "antd"
 
 import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
@@ -19,6 +19,8 @@ function EbarimtMedeelel({ token }) {
   const { ajiltan, barilgiinId } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
 
+  const [loading, setLoading] = useState(false)
+
   const query = useMemo(() => {
     return {
       $or: [{ ustgasanOgnoo: null }, { ustgasanOgnoo: { $exists: false } }],
@@ -28,6 +30,7 @@ function EbarimtMedeelel({ token }) {
       },
     }
   }, [ekhlekhOgnoo])
+
   const queryToololt = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
@@ -92,11 +95,13 @@ function EbarimtMedeelel({ token }) {
   ]
 
   function ebarimtIlgeeye() {
+    setLoading(true)
     uilchilgee(token)
       .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
       .then(({ status }) => {
         status === 200 && message.success("Баримт амжилттай илгээлээ")
         eBarimtMedeelelMutate()
+        setLoading(false)
       })
       .catch(aldaaBarigch)
   }
@@ -157,9 +162,13 @@ function EbarimtMedeelel({ token }) {
             <Button title="Сүүлд илгээгдсэн огноо">
               {moment(new Date()).format("YYYY-MM-DD")}
             </Button>
-            <Button danger onClick={ebarimtIlgeeye}>
-              Татварт илгээх
-            </Button>
+            
+              <Button danger onClick={ebarimtIlgeeye}>
+                <Spin spinning={loading}>
+                  {loading ? '' : 'Татварт илгээх'}
+                </Spin>
+              </Button>
+            
           </div>
         </div>
 
