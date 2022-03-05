@@ -95,6 +95,8 @@ function EbarimtMedeelel({ token }) {
   ]
 
   function ebarimtIlgeeye() {
+    if(loading === true)
+      return
     setLoading(true)
     uilchilgee(token)
       .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
