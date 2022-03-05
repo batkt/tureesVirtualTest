@@ -239,6 +239,7 @@ function zardal({token}) {
         })}
       </div>
       <div className="col-span-12 space-y-5">
+        <div className='w-full flex flex-row'>
         <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
         <button
           style={{
@@ -269,6 +270,7 @@ function zardal({token}) {
           </span>
           <span>Зардал бүртгэх</span>
         </button>
+        </div>
         <Zardal parent={true} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
       </div>
     </Admin>
