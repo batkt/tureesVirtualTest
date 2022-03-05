@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react'
 import Admin from 'components/Admin'
 import _ from "lodash"
-import { Button, DatePicker, Space, Table } from 'antd'
-import { FileExcelOutlined } from '@ant-design/icons'
+import { Button, DatePicker, Dropdown, Menu, Modal, notification, Space, Table } from 'antd'
+import { DeleteOutlined, EditOutlined, FileExcelOutlined, MoreOutlined, SettingOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
 import { modal } from "components/ant/Modal"
@@ -11,8 +11,11 @@ import useZardal from 'hooks/useZardal'
 import useSWR from 'swr'
 import createMethod from 'tools/function/crud/createMethod'
 import getListMethod from 'tools/function/crud/getListMethod'
+import deleteMethod from 'tools/function/crud/deleteMethod'
+
 import formatNumber from 'tools/function/formatNumber'
 import moment from 'moment'
+import { aldaaBarigch } from 'services/uilchilgee'
 
 const useZardaliinDun = (token,barilgiinId,idnuud,ognoo) =>{
   const {data} = useSWR(['zardliinDunAvya',ognoo,idnuud],(url,ognoo,idnuud)=>createMethod(url,token,{barilgiinId,idnuud,ekhlekhOgnoo:moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'), duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}).then(a=>a.data),{revalidateOnFocus:false})
@@ -53,7 +56,7 @@ function pusher(list,zardal) {
   list.push(zardal?._id)
 }
 
-function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}) {
+function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,zardalBurtgekh,zardalUstgaya}) {
 
   const [showDed,setShowDed] = useState(false)
 
@@ -82,6 +85,35 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}
         <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
         <div className='box rounded-sm px-2 flex items-center' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
         <div className='box rounded-sm px-2 flex items-center w-80'>{formatNumber(zardaliinDun || 0)}₮</div>
+        {parent && 
+          <Dropdown
+          overlayClassName='p-2'
+          overlay={
+            <Menu className="p-2">
+              <Menu.Item
+                key="Заалт нэмэх"
+                className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                onClick={()=>zardalUstgaya(zardal)}
+              >
+                <DeleteOutlined />
+                <span>Устгах</span>
+              </Menu.Item>
+              <Menu.Item
+                key="Заалт Excel-ээс оруулах"
+                className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                onClick={()=>zardalBurtgekh(zardal)}
+              >
+                <EditOutlined />
+                <span>Засах</span>
+              </Menu.Item>
+            </Menu>
+          }
+          trigger="click"
+          className="cursor-pointer"
+        >
+          <div className='box flex items-center justify-center w-8 transform rotate-90 cursor-pointer'><MoreOutlined style={{display:'flex'}}/></div>
+          </Dropdown>
+        }
       </div>
       {showDed && zardal.dedKhesguud && <div className='w-full pl-12'>
         <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId}/>
@@ -100,9 +132,9 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId}
   )
 }
 
-function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId}) {
+function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId,zardalBurtgekh,zardalUstgaya}) {
   return <div className='w-full space-y-4'>
-    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId}/>))}
+    {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya}/>))}
   </div>
 }
 
@@ -134,33 +166,36 @@ function zardal({token}) {
           token={token}
           onRefresh={onRefresh}
           barilgiinId={barilgiinId}
-          data={data}
+          data={_.cloneDeep(data)}
         />
       ),
       footer,
     })
   }
 
-  const expandedRowRender = (record) => {
-    const columns = [
-      {
-        title: "№",
-        width: "3rem",
-        align: "center",
-        render: (text, record, index) => index + 1
-      },
-      { title: 'Нэр', dataIndex: 'ner', key: 'Нэр' }
-    ];
-    if(!record?.dedKhesguud)
-    return undefined
-    return <Table columns={columns} dataSource={record?.dedKhesguud} pagination={false} expandable={{ expandedRowRender }}/>;
-  };
+  function zardalUstgaya(data) {
+    function ustgaya() {
+      deleteMethod('zardal',token,data._id).then(({data})=>{
+        if(data === 'Amjilttai')
+          {
+            notification.success({message:'Амжилттай устгагдлаа'})
+            onRefresh()
+          }
+      }).catch(aldaaBarigch)
+    }
+    Modal.confirm({onOk:ustgaya,content:<div><strong>{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?</div>,okText:'Тийм',cancelText:'Үгүй'})
+  }
 
   return (
     <Admin
       title="Дансны хуулга"
       khuudasniiNer="zardal"
       className="p-0 md:p-4"
+      onSearch={search=>setZardalKhuudaslalt((a) => ({
+        ...a,
+        search,
+        khuudasniiDugaar: 1,
+      }))}
     >
       <div className="col-span-12 grid w-full grid-cols-12 gap-4">
         {[
@@ -234,7 +269,7 @@ function zardal({token}) {
           </span>
           <span>Зардал бүртгэх</span>
         </button>
-        <Zardal parent={true} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
+        <Zardal parent={true} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
       </div>
     </Admin>
   )

@@ -7,17 +7,12 @@ import _ from 'lodash'
 function ZardalMur({zardal,token,barilgiinId,ognoo,baiguullagiinId,dedBulegNemekh, zardalNemekh, murUstgaya,  onChangeZardal,defaultZam='',index,realZam}) {
   const zam = defaultZam || ''
   const [showDed,setShowDed] = useState(true)
-
-  const utga = useMemo(()=>{
-    return _.get(zardal,zam)
-  },[zardal,zam])
-
   return (
     <div className='w-full space-y-4'>
       <div className='w-full flex flex-row space-x-4'>
         <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
         <div className='box rounded-sm px-2 flex items-center' style={{width:`calc(100% - ${zam !== '' ? '6' : '3'}rem)`}}>
-          <Input placeholder="Нэр" value={utga?.ner} style={{width:'100%'}} onChange={(e)=>onChangeZardal(e,zam)}/>
+          <Input placeholder="Нэр" value={zardal.ner} style={{width:'100%'}} onChange={(e)=>onChangeZardal(e,zam)}/>
         </div>
         <div className="ml-5 w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm" onClick={()=>{
           if(zardal?.dedKhesguud?.length > 0)
