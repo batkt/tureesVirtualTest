@@ -247,7 +247,7 @@ function tulburTootsoo() {
                         onClick={khungulultKhadgalya}
                         style={{ backgroundColor: "#209669", color: "#ffffff" }}
                       >
-                        хадгалах
+                        Хадгалах
                       </Button>
                     </Form.Item>
                     <Form.Item>
@@ -258,7 +258,7 @@ function tulburTootsoo() {
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
                       >
-                        цэвэрлэх
+                        Цэвэрлэх
                       </Button>
                     </Form.Item>
                   </div>
