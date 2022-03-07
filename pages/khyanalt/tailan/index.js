@@ -9,6 +9,7 @@ import { DatePicker, Select } from "antd"
 import local from "antd/lib/date-picker/locale/mn_MN"
 import { useAuth } from "services/auth"
 import moment from "moment"
+import formatNumber from "tools/function/formatNumber"
 
 const tailanguud = [
   {
@@ -107,6 +108,19 @@ function Chart({
       {tailanTurul === "barHorizontal" && (
         <HorizontalBarChart data={tailanGaralt || {}} />
       )}
+      <div className="flex flex-col space-y-2 items-center">
+        <div className="table ">
+        {tailanGaralt?.jagsaalt?.map((a)=><div key={`${defaultTailan}${a.ner}`} className='rounded-md font-normal table-row'>
+            <div className="table-cell p-1">
+              <div className="flex items-center flex-row space-x-2">
+                <div style={{background:a.ungu}} className='rounded-full w-3 h-3'/>
+                <div>{a.ner}</div>
+              </div>
+            </div>
+            <div className="table-cell p-1"><div className="w-full flex items-center text-right">{formatNumber(a.dun)} ₮</div></div>
+          </div>)}
+        </div>
+      </div>
     </div>
   )
 }
