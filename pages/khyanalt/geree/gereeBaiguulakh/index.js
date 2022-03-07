@@ -186,6 +186,7 @@ function GereeBaiguulakh({ token }) {
               value={khadgalakhGeree}
               token={token}
               baiguullaga={baiguullaga}
+              barilgiinId={barilgiinId}
             />
           </div>
           <div

@@ -1,4 +1,4 @@
-import { Form, Select, Button, Input, InputNumber } from "antd";
+import { Form, Select, Button, Input, InputNumber, notification } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React from "react";
 import { toWords } from "mon_num";
@@ -21,6 +21,7 @@ const YurunkhiiMedeele = ({
   prev,
   onChange,
   value,
+  barilgiinId
 }) => {
   const [form] = Form.useForm();
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
@@ -29,22 +30,38 @@ const YurunkhiiMedeele = ({
   );
 
   const onChangetalbai = (v) => {
-    var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
-    talbai.talbainDugaar =
-      (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") + talbai.kod;
 
-    talbai.baritsaaAvakhDun =
-      ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) * (value.baritsaaAvakhSar || 1) ;
-    talbai.sariinTurees = (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-    talbai.talbainNegjUne =
-      (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
-    talbai.talbainNiitUne =
-      (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-    talbai.zardliinDun = talbai.ashiglaltiinZardal
-    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
-    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-    form.setFieldsValue(talbai);
-    onChange({ ...value, ...talbai });
+    
+
+    var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
+
+    uilchilgee(token).get('/talbainSulEskhiigShalgay',{params:{
+      talbainDugaar: talbai.kod, 
+      barilgiinId: barilgiinId
+    }}).then(({data})=>{
+      if(data === 'OK' || data === value.gereeniiDugaar)
+      {
+        talbai.talbainDugaar =
+        (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") + talbai.kod;
+  
+        talbai.baritsaaAvakhDun =
+          ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) * (value.baritsaaAvakhSar || 1) ;
+        talbai.sariinTurees = (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+        talbai.talbainNegjUne =
+          (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
+        talbai.talbainNiitUne =
+          (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+        talbai.zardliinDun = talbai.ashiglaltiinZardal
+        talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
+        talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
+        form.setFieldsValue(talbai);
+        onChange({ ...value, ...talbai });
+      }
+      else notification.warning({message:<div><b>{talbai.kod}</b> талбай нь <b>{data}</b> гэрээн дээр холбогдсон байна.</div>})
+      console.log("data--->",data)
+    })
+
+    
   };
 
   function talbainDugaarUurchilyu({ target }) {
