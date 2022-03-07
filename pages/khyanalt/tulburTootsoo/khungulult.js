@@ -185,11 +185,11 @@ function tulburTootsoo() {
                       style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
-                      placeholder="сар"
+                      placeholder="Сар"
                     />
                   </Form.Item>
                   <Form.Item name="turul" label="Нөхцөл">
-                    <Select placeholder="нөхцөл">
+                    <Select placeholder="Нөхцөл">
                       <Option value="Давхараар">Давхараар</Option>
                       <Option value="Бүгд">Бүгд</Option>
                     </Select>
@@ -214,10 +214,10 @@ function tulburTootsoo() {
                   </Form.Item>
 
                   <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
-                    <Input placeholder="хөнгөлөх хувь" />
+                    <Input placeholder="Хөнгөлөх хувь" />
                   </Form.Item>
                   <Form.Item label="Шалтгаан" name="shaltgaan">
-                    <Input.TextArea placeholder="шалтгаан" />
+                    <Input.TextArea placeholder="Шалтгаан" />
                   </Form.Item>
                   <div className="flex-column grid mt-12 text-base">
                     <div className="flex justify-between">
