@@ -5,7 +5,7 @@ import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlB
 import LineChart from "components/pageComponents/tailan/chart/LineChart"
 import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart"
 import useTailan from "hooks/tailan/useTailan"
-import { DatePicker, Select } from "antd"
+import { DatePicker, Progress, Select } from "antd"
 import local from "antd/lib/date-picker/locale/mn_MN"
 import { useAuth } from "services/auth"
 import moment from "moment"
@@ -109,15 +109,17 @@ function Chart({
         <HorizontalBarChart data={tailanGaralt || {}} />
       )}
       <div className="flex flex-col space-y-2 items-center">
-        <div className="table ">
+        <div className="table w-full">
         {tailanGaralt?.jagsaalt?.map((a)=><div key={`${defaultTailan}${a.ner}`} className='rounded-md font-normal table-row'>
-            <div className="table-cell p-1">
-              <div className="flex items-center flex-row space-x-2">
-                <div style={{background:a.ungu}} className='rounded-full w-3 h-3'/>
-                <div>{a.ner}</div>
+            <div className="table-cell p-1 w-1/12">{a.ner}</div>
+            <div className="table-cell p-1 w-9/12">
+              <div className="flex items-center flex-row space-x-2 w-full">
+                <div className="w-full">
+                  <Progress size="small" strokeColor={a.ungu} percent={(a.dun * 100 / tailanGaralt?.jagsaalt.reduce((a,b)=>a + b.dun,0)).toFixed(0)} />
+                </div>
               </div>
             </div>
-            <div className="table-cell p-1"><div className="w-full flex items-center text-right">{formatNumber(a.dun)} ₮</div></div>
+            <div className="table-cell p-1 w-2/12 text-right">{formatNumber(a.dun)} ₮</div>
           </div>)}
         </div>
       </div>
