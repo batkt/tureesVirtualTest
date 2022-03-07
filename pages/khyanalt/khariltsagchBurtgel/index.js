@@ -330,7 +330,7 @@ function AjiltanBurtgel({ token }) {
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() => excelref.current.khaaya()}
         >
-          хадгалах
+          Хадгалах
         </Button>
         ,
       </Space>,
@@ -539,7 +539,7 @@ function AjiltanBurtgel({ token }) {
               onClick={khariltsagchBurtgekh}
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
             >
-              хадгалах
+              Хадгалах
             </Button>
           </Form.Item>
         </Form>

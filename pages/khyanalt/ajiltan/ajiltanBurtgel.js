@@ -21,6 +21,7 @@ import {
   SecurityScanOutlined,
   MoreOutlined,
   SettingOutlined,
+  ContactsOutlined
 } from "@ant-design/icons"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 
@@ -287,7 +288,7 @@ function AjiltanBurtgel({ token }) {
               placeholder="Албан тушаал"
               value={ajiltanState.albanTushaal}
               onChange={(e) => onChange("albanTushaal", e.target.value)}
-              prefix={<PhoneOutlined style={iconColor} />}
+              prefix={<ContactsOutlined style={iconColor} />}
             ></Input>
           </Form.Item>
 
@@ -327,10 +328,9 @@ function AjiltanBurtgel({ token }) {
           <Form.Item>
             <Button
               htmlType="submit"
-              //onClick={ajiltanBurtgekh}
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
             >
-              хадгалах
+              Хадгалах
             </Button>
           </Form.Item>
         </Form>

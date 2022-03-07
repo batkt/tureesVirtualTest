@@ -754,7 +754,7 @@ function talbaiBurtgekh({ token }) {
                             color: "#ffffff",
                           }}
                         >
-                          хадгалах
+                          Хадгалах
                         </Button>
                       </Space>
                     </Form.Item>

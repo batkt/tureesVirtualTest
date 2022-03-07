@@ -40,6 +40,7 @@ const YurunkhiiMedeele = ({
       (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
     talbai.talbainNiitUne =
       (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+    talbai.zardliinDun = talbai.ashiglaltiinZardal
     talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
     talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
     form.setFieldsValue(talbai);
@@ -101,7 +102,6 @@ const YurunkhiiMedeele = ({
           showSearch
           placeholder="Талбай сонгох"
           className="w-full"
-          placeholder="Талбай сонгох"
           size="large"
           value={null}
           filterOption={(o) => o}
