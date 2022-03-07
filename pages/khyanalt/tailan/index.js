@@ -119,7 +119,7 @@ function Chart({
                 </div>
               </div>
             </div>
-            <div className="table-cell p-1 w-2/12 text-right">{formatNumber(a.dun)} ₮</div>
+            <div className="table-cell p-1 w-2/12 text-right">{formatNumber(a.dun)}₮</div>
           </div>)}
         </div>
       </div>
