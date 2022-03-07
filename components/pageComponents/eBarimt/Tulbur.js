@@ -63,7 +63,7 @@ function Tulbur(
   function ebarimtAvya(id) {
     if (!!eBarimt) handlePrint()
     else {
-      if (baiguullagaEsekh === true && register?.toString().length !== 7) {
+      if (baiguullagaEsekh === true && register?.toString().length !== 7 || irgenEsekh === true && register?.toString().length !== 10) {
         message.warning("Байгууллагын регистр оруулна уу")
         return
       }
@@ -72,6 +72,13 @@ function Tulbur(
         id: id,
         barilgiinId: data.barilgiinId,
       }
+
+      if(baiguullagaEsekh === true || irgenEsekh === true)
+      {
+        body.turul = '3'
+        body.register = register
+      }
+
       uilchilgee(token)
         .post("/ebarimtShivye", body)
         .then(({ data }) => {

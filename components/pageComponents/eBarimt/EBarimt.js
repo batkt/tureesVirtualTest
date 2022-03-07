@@ -289,7 +289,7 @@ function EBarimt({
                     {formatNumber(eBarimt?.amount)}
                   </td>
                 </tr>
-                {!baiguullagaEsekh && (
+                {(!baiguullagaEsekh || !irgenEsekh) && (
                   <tr>
                     <td colSpan={4} className="border">
                       Сугалааны дугаар
