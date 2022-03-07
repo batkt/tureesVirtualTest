@@ -181,7 +181,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               type="text"
               allowClear
-              placeholder="овог"
+              placeholder="Овог"
               value={ajiltanState.ovog}
               prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("ovog", e.target.value)}
@@ -199,7 +199,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               type="text"
               allowClear
-              placeholder="нэр"
+              placeholder="Нэр"
               value={ajiltanState.ner}
               prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("ner", e.target.value)}
@@ -219,7 +219,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               allowClear
               maxLength={10}
-              placeholder="регистр"
+              placeholder="Регистр"
               value={ajiltanState.register}
               onChange={(e) => onChange("register", e.target.value)}
               prefix={<SolutionOutlined style={iconColor} />}
@@ -236,7 +236,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Input
               allowClear
-              placeholder="хаяг"
+              placeholder="Хаяг"
               value={ajiltanState.khayag}
               onChange={(e) => onChange("khayag", e.target.value)}
               prefix={<HomeOutlined style={iconColor} />}
@@ -253,7 +253,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Input
               allowClear
-              placeholder="утас"
+              placeholder="Утас"
               value={ajiltanState.utas}
               onChange={(e) => onChange("utas", e.target.value)}
               prefix={<PhoneOutlined style={iconColor} />}
@@ -270,7 +270,7 @@ function AjiltanBurtgel({ token }) {
           >
             <DatePicker
               style={{ width: "100%" }}
-              placeholder="ажилд орсон огноо"
+              placeholder="Ажилд орсон огноо"
               onChange={({}, v) => onChange("ajildOrsonOgnoo", v)}
             ></DatePicker>
           </Form.Item>

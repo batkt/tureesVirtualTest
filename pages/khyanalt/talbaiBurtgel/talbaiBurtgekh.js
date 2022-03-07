@@ -454,7 +454,7 @@ function talbaiBurtgekh({ token }) {
               <Input
                 type="text"
                 allowClear
-                placeholder="дугаар"
+                placeholder="Дугаар"
                 value={talbaiState.kod}
                 onChange={(e) => onChange("kod", e.target.value)}
               ></Input>
@@ -472,7 +472,7 @@ function talbaiBurtgekh({ token }) {
               <InputNumber
                 style={{ width: "100%" }}
                 allowClear
-                placeholder="талбайн хэмжээ/м2/"
+                placeholder="Талбайн хэмжээ/м2/"
                 value={talbaiState.talbainKhemjee}
                 onChange={(v) => onChange("talbainKhemjee", v)}
               ></InputNumber>
@@ -489,7 +489,7 @@ function talbaiBurtgekh({ token }) {
             >
               <InputNumber
                 style={{ width: "100%" }}
-                placeholder="нэгж үнэ"
+                placeholder="Нэгж үнэ"
                 value={talbaiState.talbainNegjUne}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -510,7 +510,7 @@ function talbaiBurtgekh({ token }) {
             >
               <InputNumber
                 style={{ width: "100%" }}
-                placeholder="нийт үнэ"
+                placeholder="Нийт үнэ"
                 value={talbaiState.talbainNiitUne}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -609,7 +609,7 @@ function talbaiBurtgekh({ token }) {
               <TextArea
                 rows={4}
                 allowClear
-                placeholder="тайлбар"
+                placeholder="Тайлбар"
                 value={talbaiState.tailbar}
                 onChange={(e) => onChange("tailbar", e.target.value)}
               ></TextArea>

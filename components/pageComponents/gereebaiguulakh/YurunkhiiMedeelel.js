@@ -130,8 +130,8 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
       <Form.Item name="utas" label="Утас">
         <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
       </Form.Item>
-      <Form.Item name="mail" label="и-мэйл хаяг">
-        <Input type="email" placeholder="и-мэйл хаяг" allowClear prefix={<MailOutlined />} />
+      <Form.Item name="mail" label="И-мэйл хаяг">
+        <Input type="email" placeholder="И-мэйл хаяг" allowClear prefix={<MailOutlined />} />
       </Form.Item>
       <Form.Item name="dans" label="Төлөлт хийх данс">
         <FormLavlakh lavlakh='dans' token={token} valKey="dugaar" infoKey="dugaar" shuukhTalbaruud={['dugaar','dansniiNer']} InfoComponent={({data})=>{

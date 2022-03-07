@@ -397,7 +397,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               type="text"
               allowClear
-              placeholder="овог"
+              placeholder="Овог"
               value={khariltsagchState.ovog}
               prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("ovog", e.target.value)}
@@ -415,7 +415,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               type="text"
               allowClear
-              placeholder="нэр"
+              placeholder="Нэр"
               value={khariltsagchState.ner}
               prefix={<UserOutlined style={iconColor} />}
               onChange={(e) => onChange("ner", e.target.value)}
@@ -435,7 +435,7 @@ function AjiltanBurtgel({ token }) {
             <Input
               allowClear
               maxLength={10}
-              placeholder="регистр"
+              placeholder="Регистр"
               value={khariltsagchState.register}
               onChange={(e) => onChange("register", e.target.value)}
               prefix={<SolutionOutlined style={iconColor} />}
@@ -453,7 +453,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Input
               allowClear
-              placeholder="хаяг"
+              placeholder="Хаяг"
               value={khariltsagchState.khayag}
               onChange={(e) => onChange("khayag", e.target.value)}
               prefix={<HomeOutlined style={iconColor} />}
@@ -493,7 +493,7 @@ function AjiltanBurtgel({ token }) {
                   <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }}>
                     <Input
                       allowClear
-                      placeholder="утас"
+                      placeholder="Утас"
                       onKeyUp={(e) => {
                         if (
                           e.key === "Enter" &&
@@ -526,7 +526,7 @@ function AjiltanBurtgel({ token }) {
           <Form.Item name="mail">
             <Input
               type="email"
-              placeholder="и-мэйл хаяг"
+              placeholder="И-мэйл хаяг"
               value={khariltsagchState.email}
               onChange={(e) => onChange("mail", e.target.value)}
               prefix={<MailOutlined style={iconColor} />}
