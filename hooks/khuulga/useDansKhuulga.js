@@ -20,17 +20,13 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   dans,
   ognoo,
-  {tranDate,time,...order}={},
+  order={},
   query,
   barilgiinId
 ) =>
   axios(token)
     .get(url,{params:{
-      order:{
-        [`${dans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]:tranDate,
-        [`${dans?.bank === 'tdb' ? 'TxTime' : 'time'}`]:time,
-        
-      },
+      order:order,
       query:{
         dansniiDugaar: dans?.dugaar,
         barilgiinId,

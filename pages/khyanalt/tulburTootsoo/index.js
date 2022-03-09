@@ -22,6 +22,7 @@ import {
 import moment from "moment"
 import useDans from "hooks/useDans"
 import formatNumber from "tools/function/formatNumber"
+import sorterCompare from "tools/function/sorterCompare"
 import useDansKhuulga from "hooks/khuulga/useDansKhuulga"
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt"
 import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeKholbokh"
@@ -34,6 +35,8 @@ import useUldegdel from "hooks/khuulga/useUldegdel"
 import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile"
 import CardList from "components/cardList"
 const { RangePicker } = DatePicker
+
+
 
 function iconAvya(a, bank) {
   let Icon = ExclamationOutlined
@@ -246,25 +249,22 @@ function tulburTootsoo({ token }) {
       baganuud = [
         {
           title: "Огноо",
-          sorter: true,
           dataIndex: "TxDt",
           width: "7rem",
           render(date) {
             return moment(date).format("YYYY-MM-DD")
           },
-          onHeaderCell: (cell, index) => {
-            return {
-              onClick: () =>
-                setOrder((o) => ({
-                  ...o,
-                  tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
-                })), 
-            }
-          },
+          sorter:{
+            compare: () => 0,
+            multiple: 1,
+          }
         },
         {
           title: "Цаг",
-          sorter: true,
+          sorter:{
+            compare: () => 0,
+            multiple: 2,
+          },
           dataIndex: "TxTime",
           ellipsis: true,
           width: "4rem",
@@ -279,7 +279,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний дүн",
-          sorter: true,
+          sorter:() => 0,
           dataIndex: "Amt",
           ellipsis: true,
           width: "9rem",
@@ -287,8 +287,7 @@ function tulburTootsoo({ token }) {
           showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`
-          },
-          sorter: (a, b) => Number(a.Amt || 0) - Number(b.Amt || 0),
+          }
         },
         {
           title: "Шилжүүлсэн данс",
@@ -364,25 +363,22 @@ function tulburTootsoo({ token }) {
       baganuud = [
         {
           title: "Огноо",
-          sorter: true,
+          sorter:{
+            compare: () => 0,
+            multiple: 1,
+          },
           dataIndex: "tranDate",
           width: "7rem",
           render(date) {
             return moment(date).format("YYYY-MM-DD")
-          },
-          onHeaderCell: (cell, index) => {
-            return {
-              onClick: () =>
-                setOrder((o) => ({
-                  ...o,
-                  tranDate: o.tranDate === -1 ? 1 : o.tranDate - 1,
-                })), // click header row
-            }
-          },
+          }
         },
         {
           title: "Цаг",
-          sorter: true,
+          sorter:{
+            compare: () => 0,
+            multiple: 2,
+          },
           dataIndex: "time",
           ellipsis: true,
           width: "4rem",
@@ -390,16 +386,7 @@ function tulburTootsoo({ token }) {
             if (_.isString(a))
               return `${a.substring(0, 2)}:${a.substring(2, 4)}`
             return ""
-          },
-          onHeaderCell: (cell, index) => {
-            return {
-              onClick: () =>
-                setOrder((o) => ({
-                  ...o,
-                  time: o.time === -1 ? 1 : o.time - 1,
-                })), // click header row
-            }
-          },
+          }
         },
         {
           title: "Гүйлгээний утга",
@@ -407,7 +394,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний дүн",
-          sorter: true,
+          sorter:() => 0,
           dataIndex: "amount",
           ellipsis: true,
           width: "9rem",
@@ -415,8 +402,7 @@ function tulburTootsoo({ token }) {
           showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`
-          },
-          sorter: (a, b) => Number(a.amount || 0) - Number(b.amount || 0),
+          }
         },
         {
           title: "Шилжүүлсэн данс",
@@ -619,6 +605,7 @@ function tulburTootsoo({ token }) {
             scroll={{ y: "calc(100vh - 30rem)" }}
             columns={columns}
             dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+            onChange={(p,f,s)=>sorterCompare(s,setOrder)}
             pagination={{
               current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
               pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,
@@ -631,7 +618,7 @@ function tulburTootsoo({ token }) {
                   khuudasniiKhemjee,
                 })),
             }}
-            rowKey={(a) => a.record}
+            rowKey={(a) => a._id}
           />
         </div>
         <CardList
