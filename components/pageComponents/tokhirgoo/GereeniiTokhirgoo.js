@@ -121,6 +121,28 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Барьцаа хөрөнгө авах эсэх</div> 
+                  <div className="text-gray-600">Гэрээ байгууллахад барьцаа хөрөнгө авах эсэх</div>
+              </div>
+                  <div className="ml-auto">
+                  <Switch defaultChecked={baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh} onChange={(v)=>setGereeTokhirgoo(a=>({...(a || {}),'tokhirgoo.baritsaaAvakhEsekh':v}))}/>
+                  </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">Барьцаа хөрөнгө байршуулах хугацаа</div> 
+                  <div className="text-gray-600">Гэрээнд суутгагдсан барьцаа хөрөнгийг байршуулах хугацаа</div>
+              </div>
+                  <div className="ml-auto">
+                  <InputNumber min={0} defaultValue={baiguullaga?.tokhirgoo?.baritsaaBairshuulakhKhugatsaa} onChange={(v)=>setGereeTokhirgoo(a=>({...(a || {}),'tokhirgoo.baritsaaBairshuulakhKhugatsaa':v}))}/>
+                  </div>
+            </div>
+          </div>
           <div className={`flex items-center pt-2 px-5 pb-2 border-b justify-end border-gray-200 dark:border-dark-5 ${!!gereeTokhirgoo ? 'flex' : 'hidden'}`}>
             <Button type='primary' onClick={gereeTokhirgooKhadgalya}>Хадгалах</Button>
           </div>
