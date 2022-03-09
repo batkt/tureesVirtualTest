@@ -729,6 +729,10 @@ input:-webkit-autofill {
   display: flex !important;
 }
 
-.zardalkhusnegt > div:nth-child(even) > div .box {
-  @apply bg-green-50 dark:bg-gray-900;
+.zardalkhusnegt > div > div:hover .box {
+  @apply bg-green-100 dark:bg-gray-500;
+}
+
+.ant-switch-checked {
+  @apply bg-green-500 !important;
 }

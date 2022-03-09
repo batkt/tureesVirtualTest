@@ -580,8 +580,8 @@ function tulburTootsoo({ token }) {
             value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
           />
-          {ajiltan?.erkh === 'Admin' && <div className="ml-4 flex flex-row space-x-2 mb-5 rounded-md bg-gray-200">
-            {['orlogo','zarlaga'].map(text=><div className={`p-2 rounded-md cursor-pointer ${khuulgaTurul === text ? 'bg-green-500 text-gray-50':''}`} onClick={()=>setKhuulgaTurul(text)}>{text === 'orlogo' ? 'Орлого' : 'Зарлага'}</div>)}
+          {ajiltan?.erkh === 'Admin' && <div className="ml-4 flex flex-row space-x-2 mb-5 rounded-md bg-gray-200 dark:bg-gray-700">
+            {['orlogo','zarlaga'].map(text=><div className={`p-2 rounded-md cursor-pointer ${khuulgaTurul === text ? 'bg-green-500 text-gray-50 dark':''}`} onClick={()=>setKhuulgaTurul(text)}>{text === 'orlogo' ? 'Орлого' : 'Зарлага'}</div>)}
           </div>}
           <div className="ml-4 w-40">
             <Select
