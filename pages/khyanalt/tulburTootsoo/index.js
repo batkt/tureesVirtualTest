@@ -109,7 +109,7 @@ function tulburTootsoo({ token }) {
     useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
   const { uldegdel } = useUldegdel(token, songogdsonDans?.dugaar)
 
-  const [order, setOrder] = React.useState({ tranDate: -1, time: 0 })
+  const [order, setOrder] = React.useState({ })
 
   const query = React.useMemo(() => {
     let query = {}
@@ -150,6 +150,8 @@ function tulburTootsoo({ token }) {
   function dansSongoy(dugaar) {
     let songogdsonDans = dansGaralt?.jagsaalt?.find((a) => a.dugaar === dugaar)
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
+    setOrder(()=>({...{},[`${songogdsonDans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]:-1,
+    [`${songogdsonDans?.bank === 'tdb' ? 'TxTime' : 'time'}`]:undefined,}))
     setSongogdsonDans(songogdsonDans)
   }
 
