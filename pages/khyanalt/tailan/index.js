@@ -21,11 +21,11 @@ const tailanguud = [
     service: "avlagiinTailanAvya",
   },
   {
-    ner: "Зардалын тайлан",
+    ner: "Зардлын тайлан",
     service: "zardaliinTailanAvya",
   },
   {
-    ner: "Ашигийн тайлан",
+    ner: "Ашгийн тайлан",
     service: "ashigiinTailanAvya",
   }
 ]
