@@ -25,7 +25,7 @@ const tailanguud = [
     service: "zardaliinTailanAvya",
   },
   {
-    ner: "Ашиглалтын тайлан",
+    ner: "Ашигийн тайлан",
     service: "ashigiinTailanAvya",
   }
 ]
