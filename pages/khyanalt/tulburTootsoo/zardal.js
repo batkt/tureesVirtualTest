@@ -89,8 +89,8 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,
   }
   
   return (
-    <div className='w-full space-y-4'>
-      <div className='w-full flex flex-row space-x-4'>
+    <div className='w-full space-y-2'>
+      <div className='w-full flex flex-row space-x-2'>
         <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
         <div className='box rounded-sm px-2 flex items-center' style={{width:`calc(100% - ${parent ? "21.25rem" : "23.5rem"})`}}>{zardal.ner}</div>
         <div className='box rounded-sm px-2 flex items-center w-80' style={{width:!parent && '22.5rem'}}>{formatNumber(zardaliinDun || 0)}₮</div>
