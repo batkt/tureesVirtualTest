@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from 'react'
 import Admin from 'components/Admin'
 import _ from "lodash"
-import { Button, DatePicker, Dropdown, Menu, Modal, notification, Space, Table } from 'antd'
-import { DeleteOutlined, EditOutlined, FileExcelOutlined, MoreOutlined, SettingOutlined } from '@ant-design/icons'
+import { Button, DatePicker, Dropdown, Menu, Modal, notification, Popconfirm, Space, Table } from 'antd'
+import { CloseOutlined, DeleteOutlined, EditOutlined, FileExcelOutlined, MoreOutlined, SettingOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
 import { modal } from "components/ant/Modal"
@@ -15,7 +15,7 @@ import deleteMethod from 'tools/function/crud/deleteMethod'
 
 import formatNumber from 'tools/function/formatNumber'
 import moment from 'moment'
-import { aldaaBarigch } from 'services/uilchilgee'
+import uilchilgee, { aldaaBarigch } from 'services/uilchilgee'
 
 const useZardaliinDun = (token,barilgiinId,idnuud,ognoo) =>{
   const {data} = useSWR(['zardliinDunAvya',ognoo,idnuud],(url,ognoo,idnuud)=>createMethod(url,token,{barilgiinId,idnuud,ekhlekhOgnoo:moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'), duusakhOgnoo:moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}).then(a=>a.data),{revalidateOnFocus:false})
@@ -78,13 +78,22 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,
     zardal?._id,
     ognoo
   )
+
+  function guilgeeUstgaya(guilgeeniiId) {
+    uilchilgee(token).post('/zardalTsutslaya',{guilgeeniiId}).then(({data})=>{
+      if(data === 'Amjilttai'){
+        notification.success({message:'Амжилттай устгалаа.'})
+        dansniiKhuulgaMutate()
+      }
+    })
+  }
   
   return (
     <div className='w-full space-y-4'>
       <div className='w-full flex flex-row space-x-4'>
         <div className='w-8 h-8 text-center flex items-center justify-center box cursor-pointer rounded-sm' onClick={()=>setShowDed(!showDed)}>{zardal.dedKhesguud ? (showDed ? '-' : '+') : ''}</div>
-        <div className='box rounded-sm px-2 flex items-center' style={{width:'calc(100% - 21.25rem)'}}>{zardal.ner}</div>
-        <div className='box rounded-sm px-2 flex items-center w-80'>{formatNumber(zardaliinDun || 0)}₮</div>
+        <div className='box rounded-sm px-2 flex items-center' style={{width:`calc(100% - ${parent ? "21.25rem" : "23.5rem"})`}}>{zardal.ner}</div>
+        <div className='box rounded-sm px-2 flex items-center w-80' style={{width:!parent && '22.5rem'}}>{formatNumber(zardaliinDun || 0)}₮</div>
         {parent && 
           <Dropdown
           overlayClassName='p-2'
@@ -125,6 +134,14 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,
               <div className='box rounded-sm px-2 flex items-center w-80'>{a.CtActnName}</div>
               <div className='box rounded-sm px-2 flex items-center w-80'>{moment(a.TxDt).format('YYYY-MM-DD')}</div>
               <div className='box rounded-sm px-2 flex items-center w-80'>{formatNumber(a.Amt || 0)}₮</div>
+              <Popconfirm
+                  title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
+                  okText="Тийм"
+                  cancelText="Үгүй"
+                  onConfirm={() => guilgeeUstgaya(a._id)}
+                >
+                <div className='box flex items-center justify-center w-8 cursor-pointer'><CloseOutlined style={{display:'flex'}}/></div>
+              </Popconfirm>
           </div>
         ))
       }
@@ -133,7 +150,7 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,
 }
 
 function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId,zardalBurtgekh,zardalUstgaya}) {
-  return <div className='w-full space-y-4'>
+  return <div className={`w-full space-y-4 ${parent ? "zardalkhusnegt" : ''}`}>
     {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya}/>))}
   </div>
 }
@@ -271,7 +288,7 @@ function zardal({token}) {
           <span>Зардал бүртгэх</span>
         </button>
         </div>
-        <Zardal parent={true} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
+        <Zardal parent zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
       </div>
     </Admin>
   )

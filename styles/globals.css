@@ -728,3 +728,7 @@ input:-webkit-autofill {
 .ant-select-clear .anticon {
   display: flex !important;
 }
+
+.zardalkhusnegt > div:nth-child(even) > div .box {
+  @apply bg-green-50 dark:bg-gray-900;
+}
