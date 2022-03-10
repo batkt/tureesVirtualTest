@@ -157,7 +157,7 @@ function tulburTootsoo() {
         <Tabs size="large">
           <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
             <div className="w-full grid grid-cols-12 gap-6">
-              <div className="col-span-3 md:col-span-8 xl:col-span-3 border-solid border border-green-300 bg-white p-5">
+              <div className="col-span-3 md:col-span-8 xl:col-span-3 border-solid border border-green-300 bg-white dark:bg-gray-900 p-5">
                 <Form
                   form={form}
                   ref={formRef}
@@ -219,7 +219,7 @@ function tulburTootsoo() {
                   <Form.Item label="Шалтгаан" name="shaltgaan">
                     <Input.TextArea placeholder="Шалтгаан" />
                   </Form.Item>
-                  <div className="flex-column grid mt-12 text-base">
+                  <div className="flex-column grid mt-12 text-base dark:text-gray-50">
                     <div className="flex justify-between">
                       Нийт талбайн тоо :<a>{tootsoolol.niitTalbai}</a>
                     </div>
