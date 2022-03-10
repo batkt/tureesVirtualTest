@@ -19,7 +19,8 @@ const fetcher = (
   token,
   baiguullagiinId,
   { search, jagsaalt, ...khuudaslalt },
-  barilgiinId
+  barilgiinId,
+  order
 ) =>
   axios(token)
     .get(url, {
@@ -30,12 +31,13 @@ const fetcher = (
           $or: getSearch(search),
         },
         ...khuudaslalt,
+        order
       },
     })
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-export function useTalbai(token, baiguullagiinId) {
+export function useTalbai(token, baiguullagiinId,order) {
   const {barilgiinId} = useAuth()
   const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -45,7 +47,7 @@ export function useTalbai(token, baiguullagiinId) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/talbai", token, baiguullagiinId, khuudaslalt,barilgiinId]
+      ? ["/talbai", token, baiguullagiinId, khuudaslalt,barilgiinId,order]
       : null,
     fetcher,
     { revalidateOnFocus: false }

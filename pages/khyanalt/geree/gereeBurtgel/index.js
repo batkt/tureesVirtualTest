@@ -47,6 +47,7 @@ import { modal } from "components/ant/Modal"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 import CardList from "components/cardList"
 import GereeTile from "components/pageComponents/geree/GereeTile"
+import useOrder from "tools/function/useOrder"
 //#endregion
 
 const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
@@ -113,11 +114,14 @@ function ZakhialgiinKhyanalt() {
   const [shuult, setShuult] = React.useState({
     query: {},
   })
+  const {order, onChangeTable} = useOrder({createdAt: -1})
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
-    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
+    useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query,undefined,undefined,order)
   const { gereeToollolt } = useGereeniiJagsaaltToollolt(token)
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null)
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null)
+  
+
   const componentRef = React.useRef()
   const excelref = React.useRef()
   const tailbarRef = React.useRef()
@@ -260,9 +264,7 @@ function ZakhialgiinKhyanalt() {
           return `${talbainKhemjee} м2`
         },
         showSorterTooltip: false,
-
-        sorter: (a, b) =>
-          Number(a.talbainKhemjee || 0) - Number(b.talbainKhemjee || 0),
+        sorter: () => 0,
       },
       {
         title: "Төлбөр",
@@ -274,8 +276,7 @@ function ZakhialgiinKhyanalt() {
           return formatNumber(sariinTurees || 0)
         },
         showSorterTooltip: false,
-        sorter: (a, b) =>
-          Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
+        sorter: () => 0,
       },
       {
         title: "Эхлэх",
@@ -308,8 +309,7 @@ function ZakhialgiinKhyanalt() {
         },
         showSorterTooltip: false,
         defaultSortOrder: "descend",
-        sorter: (a, b) =>
-          moment(a.duusakhOgnoo).unix() - moment(b.duusakhOgnoo).unix(),
+        sorter: () => 0,
       },
       {
         title: "Ажилтан",
@@ -805,6 +805,7 @@ function ZakhialgiinKhyanalt() {
             size="small"
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
+            onChange={onChangeTable}
             columns={columns}
             dataSource={gereeniiMedeelel?.jagsaalt}
             pagination={{

@@ -11,41 +11,45 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
     return (
       <div className=''>
         <li
-          className={"menu-item flex flex-row"}
+          className={"menu-item"}
           onClick={() => setOpen(!open)}
         >
-          <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
-            {mur.icon}
-          </div>
-          {mur.ner}
-          <div
-            className={`transform ${open ? "rotate-180" : ""} ml-auto`}
-            style={{ transitionDuration: ".1s" }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="feather feather-chevron-down"
+          <div className={"flex flex-row p-1"}>
+            <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+              {mur.icon}
+            </div>
+            {mur.ner}
+            <div
+              className={`transform ${open ? "rotate-180" : ""} ml-auto`}
+              style={{ transitionDuration: ".1s" }}
             >
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-chevron-down"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
           </div>
         </li>
         <ul className="sub-menu " style={{ display: open ? "block" : "none" }}>
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
+                <a>
                 <li className={`rounded-l-lg relative cursor-pointer text-white p-2 ${
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""}`}>
+                        <div className={"flex flex-row px-1"}>
                   <div
                     className={`${
                       a.khuudasniiNer === khuudasniiNer
@@ -58,7 +62,9 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
                     </div>
                     {a.ner}
                   </div>
+                  </div>
                 </li>
+                </a>
               </Link>
             );
           })}
@@ -68,14 +74,16 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   }
   return (
     <Link href={mur.href}>
-      <li className={selected ? "selected-menu" : "menu-item"}>
-        <div className="flex flex-row p-1">
-          <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
-            {mur.icon}
+      <a>
+        <li className={selected ? "selected-menu" : "menu-item"}>
+          <div className="flex flex-row p-1">
+            <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+              {mur.icon}
+            </div>
+            {mur.ner}
           </div>
-          {mur.ner}
-        </div>
-      </li>
+        </li>
+      </a>
     </Link>
   );
 }

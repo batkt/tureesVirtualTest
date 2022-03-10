@@ -45,6 +45,7 @@ import createMethod from "tools/function/crud/createMethod"
 import deleteMethod from "tools/function/crud/deleteMethod"
 import updateMethod from "tools/function/crud/updateMethod"
 import formatNumber from "tools/function/formatNumber"
+import useOrder from "tools/function/useOrder"
 
 const normFile = (e) => {
   if (Array.isArray(e)) {
@@ -73,8 +74,10 @@ function talbaiBurtgekh({ token }) {
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   })
+  const {order,onChangeTable} = useOrder({createAt:-1})
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
-    useTalbai(token, baiguullaga?._id)
+    useTalbai(token, baiguullaga?._id,order)
+
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
 
@@ -374,11 +377,6 @@ function talbaiBurtgekh({ token }) {
         ["niit"]: khurunguud.une * khurunguud.too,
       },
     })
-    // formRef.current.setFieldsValue({
-    //   niit: khurunguud.une * khurunguud.too,
-    // })
-
-    console.log("data", khurunguud)
   }
   const [form] = Form.useForm()
 
@@ -787,11 +785,6 @@ function talbaiBurtgekh({ token }) {
                           {mur.utga}
                         </div>
                       </div>
-                      {/* <div className="ml-auto">
-                        <div className="text-green-600 text-2xl">
-                          {mur.icon}
-                        </div>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -943,6 +936,7 @@ function talbaiBurtgekh({ token }) {
           rowKey={(row) => row._id}
           scroll={{ y: "calc(100vh - 25rem)" }}
           dataSource={talbainiiGaralt?.jagsaalt}
+          onChange={onChangeTable}
           pagination={{
             current: talbainiiGaralt?.khuudasniiDugaar,
             pageSize: talbainiiGaralt?.khuudasniiKhemjee,
@@ -984,7 +978,7 @@ function talbaiBurtgekh({ token }) {
               align: "center",
               showSorterTooltip: false,
               defaultSortOrder: "descend",
-              sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
+              sorter: () => 0,
             },
             {
               title: "Талбай/м2/",
@@ -994,18 +988,8 @@ function talbaiBurtgekh({ token }) {
               width: "2.1rem",
               showSorterTooltip: false,
               defaultSortOrder: "descend",
-              sorter: (a, b) =>
-                Number(a.talbainKhemjee) - Number(b.talbainKhemjee),
+              sorter: () => 0,
             },
-            // {
-            //   title: "Нэгж үнэ/₮/",
-            //   dataIndex: "talbainNegjUne",
-            //   ellipsis: true,
-            //   align: "center",
-            //   render: (talbainNegjUne) => {
-            //     return formatNumber(talbainNegjUne || 0)
-            //   },
-            // },
             {
               title: "Нийт үнэ/₮/",
               dataIndex: "talbainNiitUne",
@@ -1016,22 +1000,9 @@ function talbaiBurtgekh({ token }) {
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
-              sorter: (a, b) =>
-                Number(a.talbainNiitUne || 0) - Number(b.talbainNiitUne || 0),
+              sorter: () => 0,
               width: "2.5rem",
             },
-            // {
-            //   title: "Зардал",
-            //   dataIndex: "ashiglaltiinZardal",
-            //   align: "center",
-            //   render: (data) => {
-            //     return formatNumber(data) + "₮"
-            //   },
-            //   defaultSortOrder: "descend",
-            //   showSorterTooltip: false,
-            //   sorter: (a, b) =>
-            //     Number(a.ashiglaltiinZardal) - Number(b.ashiglaltiinZardal),
-            // },
             {
               title: "Зардал",
               dataIndex: "niitAshiglaltiinZardal",
@@ -1041,9 +1012,7 @@ function talbaiBurtgekh({ token }) {
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
-              sorter: (a, b) =>
-                Number(a.niitAshiglaltiinZardal || 0) -
-                Number(b.niitAshiglaltiinZardal || 0),
+              sorter: () => 0,
               width: "2rem",
             },
             {
@@ -1055,8 +1024,7 @@ function talbaiBurtgekh({ token }) {
               },
               showSorterTooltip: false,
               defaultSortOrder: "descend",
-              sorter: (a, b) =>
-                Number(a.tureesiinTulbur || 0) - Number(b.tureesiinTulbur || 0),
+              sorter: () => 0,
               width: "2.5rem",
             },
             {
@@ -1070,7 +1038,6 @@ function talbaiBurtgekh({ token }) {
               align: "center",
               ellipsis: true,
               width: "1.5rem",
-
               render: (data) => {
                 return (
                   data?.khurunguud !== undefined && (
