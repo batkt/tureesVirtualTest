@@ -13,12 +13,17 @@ function getSortValue(v) {
     return response
   }
 
-export default function sorterCompare(s,setOrder) {
+export default function sorterCompare(s,setOrder,defaultValue) {
     let sort = {}
     if(_.isArray(s))
     s.map(r=>{
         sort[r.field] = getSortValue(r.order)
     })
-    else if(_.isObject(s)) sort[s.field] = getSortValue(s.order) 
+    else if(_.isObject(s)) {
+      sort[s.field] = getSortValue(s.order) 
+      if(s.order === undefined)
+        sort = _.clone(defaultValue)
+    }
+    console.log(sort)
     setOrder({...sort})
 }

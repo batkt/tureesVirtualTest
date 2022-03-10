@@ -11,7 +11,8 @@ const fetcher = (
   register,
   query,
   tooAvakhEsekh,
-  barilgiinId
+  barilgiinId,
+  order
 ) =>
   axios(token)
     .get(url + `${tooAvakhEsekh ? "/tooAvya" : ""}`, {
@@ -30,7 +31,7 @@ const fetcher = (
           ],
           ...query,
         },
-        order: { createdAt: -1 },
+        order: order,
         ...khuudaslalt,
       },
     })
@@ -49,7 +50,8 @@ function useGereeniiJagsaalt(
   register,
   query,
   tooAvakhEsekh,
-  khuudasniiKhemjee
+  khuudasniiKhemjee,
+  order
 ) {
   const { barilgiinId } = useAuth()
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
@@ -69,6 +71,7 @@ function useGereeniiJagsaalt(
           query,
           tooAvakhEsekh,
           barilgiinId,
+          order
         ]
       : null,
     fetcher,
