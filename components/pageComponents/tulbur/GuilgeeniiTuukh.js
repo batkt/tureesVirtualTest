@@ -1,4 +1,4 @@
-import { Button, Input, message, Popconfirm } from "antd"
+import { Badge, Button, Input, message, Popconfirm } from "antd"
 import React, { useImperativeHandle, useState } from "react"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
@@ -209,7 +209,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
             </div>
             <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
             <div className="p-1">
-              {a.turul === "bank" ? a.tulsunDans : turulAvya(a.turul)}
+              {a.turul === "bank" ? (a.tulsunDans !== " " ? a.tulsunDans : "Банк") : turulAvya(a.turul)}
             </div>
             <div className="flex justify-between p-1">
               {a.tailbar}
