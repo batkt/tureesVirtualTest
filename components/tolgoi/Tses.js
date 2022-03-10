@@ -44,7 +44,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
-                
+                <a>
                 <li className={`rounded-l-lg relative cursor-pointer text-white p-2 ${
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
@@ -64,7 +64,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
                   </div>
                   </div>
                 </li>
-                
+                </a>
               </Link>
             );
           })}
@@ -74,14 +74,16 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   }
   return (
     <Link href={mur.href}>
-      <li className={selected ? "selected-menu" : "menu-item"}>
-        <div className="flex flex-row p-1">
-          <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
-            {mur.icon}
+      <a>
+        <li className={selected ? "selected-menu" : "menu-item"}>
+          <div className="flex flex-row p-1">
+            <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+              {mur.icon}
+            </div>
+            {mur.ner}
           </div>
-          {mur.ner}
-        </div>
-      </li>
+        </li>
+      </a>
     </Link>
   );
 }
