@@ -799,37 +799,122 @@ function talbaiBurtgekh({ token }) {
             )
           })}
         </div>
-        <div className="col-span-12 w-full">
-          <button
+        <div className="ml-auto flex place-content-end">
+          <Button
             style={{
+              alignItems: "end",
               backgroundColor: "#209669",
-              marginTop: "12px",
+              color: "#ffffff",
               display: "flex",
-              justifyContent: "end",
+              marginTop: "10px",
             }}
-            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={talbaiOruulakhExcel}
+            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
           >
-            <span className="flex h-5 w-5 items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-plus h-4 w-4"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </span>
             <span>Excel -ээс Талбай татах</span>
-          </button>
+          </Button>
+          <Button
+            style={{
+              alignItems: "end",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+              display: "flex",
+              marginTop: "10px",
+            }}
+            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+            onClick={() => {
+              const { Excel } = require("antd-table-saveas-excel")
+              const excel = new Excel()
+              excel
+                .addSheet("гэрээний жагсаалт")
+                .addColumns([
+                  {
+                    title: "Дугаар",
+                    dataIndex: "kod",
+                    ellipsis: true,
+                    width: "1.75rem",
+                    align: "center",
+                  },
+                  {
+                    title: "Давхар",
+                    dataIndex: "davkhar",
+                    ellipsis: true,
+                    width: "1.2rem",
+                    align: "center",
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: (a, b) =>
+                      Number(a.davkhar || 0) - Number(b.davkhar || 0),
+                  },
+                  {
+                    title: "Талбай/м2/",
+                    dataIndex: "talbainKhemjee",
+                    align: "center",
+                    ellipsis: true,
+                    width: "2.1rem",
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: (a, b) =>
+                      Number(a.talbainKhemjee) - Number(b.talbainKhemjee),
+                  },
+
+                  {
+                    title: "Нийт үнэ/₮/",
+                    dataIndex: "talbainNiitUne",
+                    ellipsis: true,
+                    align: "center",
+                    render: (talbainNiitUne) => {
+                      return formatNumber(talbainNiitUne || 0)
+                    },
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: (a, b) =>
+                      Number(a.talbainNiitUne || 0) -
+                      Number(b.talbainNiitUne || 0),
+                    width: "2.5rem",
+                  },
+                  {
+                    title: "Зардал",
+                    dataIndex: "niitAshiglaltiinZardal",
+                    align: "center",
+                    render: (data) => {
+                      return formatNumber(data) + "₮"
+                    },
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: (a, b) =>
+                      Number(a.niitAshiglaltiinZardal || 0) -
+                      Number(b.niitAshiglaltiinZardal || 0),
+                    width: "2rem",
+                  },
+                  {
+                    title: "Төлбөр",
+                    dataIndex: "tureesiinTulbur",
+                    align: "center",
+                    render: (data) => {
+                      return formatNumber(data) + "₮"
+                    },
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: (a, b) =>
+                      Number(a.tureesiinTulbur || 0) -
+                      Number(b.tureesiinTulbur || 0),
+                    width: "2.5rem",
+                  },
+                  {
+                    title: "Тайлбар",
+                    dataIndex: "tailbar",
+                    ellipsis: true,
+                    width: "4.5rem",
+                  },
+                ])
+                .addDataSource(talbainiiGaralt?.jagsaalt)
+                .saveAs("түрээсийн талбайн жагсаалт.xlsx")
+            }}
+          >
+            Excel - рүү гаргах
+          </Button>
         </div>
         <CardList
           keyValue="talbai"
