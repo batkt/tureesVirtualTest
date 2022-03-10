@@ -80,7 +80,7 @@ function index({token,data}) {
     const [body,onTextChange] = useState('')
     const [title,setTitle] = useState('')
     const [loading,setLoading] = useState(false)
-    const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt} = useSanalGomdol(token,data)
+    const {sonorduulga,sonorduulgaMutate,jagsaalt,nextSonorduulga,setKhuudaslalt} = useSanalGomdol(token,data?.khariltsagch?._id)
     const {khariltsagch,gereenuud} = data || {}
 
   async function msgIlgeeye() {
@@ -143,7 +143,7 @@ function index({token,data}) {
 
   return (
     <Admin dedKhuudas title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setKhuudaslalt && setKhuudaslalt(a=>({...a,search}))}>
-      <div className='col-span-3 p-5 box'>
+      <div className='col-span-3 p-5 box space-y-5'>
         {gereenuud?.map(a=><Geree data={a} token={token} key={a._id} className='p-2 border-2 border-green-400 rounded-md '/>)}
       </div>
       <div className='col-span-9'>
