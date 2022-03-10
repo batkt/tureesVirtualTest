@@ -591,7 +591,7 @@ function AjiltanBurtgel({ token }) {
                 const { Excel } = require("antd-table-saveas-excel")
                 const excel = new Excel()
                 excel
-                  .addSheet("гэрээний жагсаалт")
+                  .addSheet("харилцагч")
                   .addColumns([
                     {
                       title: "Төрөл",

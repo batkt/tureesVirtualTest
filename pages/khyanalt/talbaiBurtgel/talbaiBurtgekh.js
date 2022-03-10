@@ -74,9 +74,9 @@ function talbaiBurtgekh({ token }) {
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   })
-  const {order,onChangeTable} = useOrder({createAt:-1})
+  const { order, onChangeTable } = useOrder({ createAt: -1 })
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
-    useTalbai(token, baiguullaga?._id,order)
+    useTalbai(token, baiguullaga?._id, order)
 
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query)
@@ -820,7 +820,7 @@ function talbaiBurtgekh({ token }) {
               const { Excel } = require("antd-table-saveas-excel")
               const excel = new Excel()
               excel
-                .addSheet("гэрээний жагсаалт")
+                .addSheet("түрээсийн талбайн жагсаалт")
                 .addColumns([
                   {
                     title: "Дугаар",
