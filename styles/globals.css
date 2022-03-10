@@ -736,3 +736,6 @@ input:-webkit-autofill {
 .ant-switch-checked {
   @apply bg-green-500 !important;
 }
+.ant-progress-text {
+  @apply dark:text-gray-50 !important;
+}
