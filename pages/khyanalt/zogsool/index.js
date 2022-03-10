@@ -137,6 +137,7 @@ function Zogsool({ token }) {
           scroll={{ y: "calc(100vh - 30rem)" }}
           size="small"
           bordered
+          rowKey={(row) => row._id}
           columns={[
             {
               title: "№",

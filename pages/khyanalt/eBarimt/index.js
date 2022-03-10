@@ -193,7 +193,7 @@ function EbarimtMedeelel({ token }) {
               })),
           }}
           scroll={{ y: "calc(100vh - 26rem)" }}
-          rowKey={(row) => row.id}
+          rowKey={(row) => row._id}
           className="t-head"
           columns={[
             {
