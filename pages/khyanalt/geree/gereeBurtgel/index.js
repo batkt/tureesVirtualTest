@@ -162,7 +162,7 @@ function ZakhialgiinKhyanalt() {
       selectedColor: "bg-green-100",
       border: "border-green-500",
       query: {
-        tuluv: { $nin: [-1]  },
+        tuluv: { $nin: [-1] },
         duusakhOgnoo: { $gte: new Date() },
       },
     },
@@ -177,8 +177,8 @@ function ZakhialgiinKhyanalt() {
       selectedColor: "bg-red-100",
       border: "border-red-500",
       query: {
-        tuluv:{$ne:-1},
-        duusakhOgnoo: { $lte: new Date() }
+        tuluv: { $ne: -1 },
+        duusakhOgnoo: { $lte: new Date() },
       },
     },
     {
@@ -200,7 +200,10 @@ function ZakhialgiinKhyanalt() {
       color: "text-yellow-500",
       selectedColor: "bg-yellow-100",
       border: "border-yellow-500",
-      query: {tuluv:{$ne:-1}, duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") } },
+      query: {
+        tuluv: { $ne: -1 },
+        duusakhOgnoo: { $lte: moment(new Date()).add(1, "month") },
+      },
     },
     {
       too:
@@ -659,7 +662,128 @@ function ZakhialgiinKhyanalt() {
         </div>
         <div className="mt-5 flex flex-row">
           <DatePicker.RangePicker locale={locale} />
-          <div className="ml-auto">
+          <div className="ml-auto flex place-content-end">
+            <Button
+              style={{
+                alignItems: "end",
+                backgroundColor: "#209669",
+                color: "#ffffff",
+                display: "flex",
+              }}
+              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              onClick={() => {
+                const { Excel } = require("antd-table-saveas-excel")
+                const excel = new Excel()
+                excel
+                  .addSheet("гэрээний жагсаалт")
+                  .addColumns([
+                    {
+                      title: "Бүртгэсэн",
+                      dataIndex: "createdAt",
+                      ellipsis: true,
+                      className: "text-center",
+                      align: "center",
+                      render(date) {
+                        return moment(date).format("YYYY-MM-DD HH:mm")
+                      },
+                    },
+                    {
+                      title: "Гэрээ",
+                      dataIndex: "gereeniiDugaar",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                    },
+                    {
+                      title: "Талбай",
+                      dataIndex: "talbainDugaar",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                    },
+
+                    {
+                      title: "Төрөл",
+                      dataIndex: "turul",
+                      align: "center",
+                      className: "text-center",
+                      ellipsis: true,
+                    },
+
+                    {
+                      title: "Талбай /м2/",
+                      dataIndex: "talbainKhemjee",
+                      align: "center",
+                      className: "text-center",
+                      ellipsis: true,
+                      render: (talbainKhemjee) => {
+                        return `${talbainKhemjee} м2`
+                      },
+                      showSorterTooltip: false,
+                    },
+                    {
+                      title: "Төлбөр",
+                      dataIndex: "sariinTurees",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                      render: (sariinTurees) => {
+                        return formatNumber(sariinTurees || 0)
+                      },
+                      showSorterTooltip: false,
+                    },
+                    {
+                      title: "Эхлэх",
+                      dataIndex: "gereeniiOgnoo",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                      render: (data) => {
+                        return moment(data).format("YYYY-MM-DD")
+                      },
+                    },
+                    {
+                      title: "Дуусах хоног",
+                      dataIndex: "duusakhOgnoo",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                      render: (duusakhOgnoo) => {
+                        return moment(duusakhOgnoo).diff(
+                          moment(new Date()),
+                          "days"
+                        )
+                      },
+                    },
+                    {
+                      title: "Дуусах",
+                      dataIndex: "duusakhOgnoo",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                      render: (data) => {
+                        return moment(data).format("YYYY-MM-DD")
+                      },
+                      showSorterTooltip: false,
+                      defaultSortOrder: "descend",
+                    },
+                    {
+                      title: "Ажилтан",
+                      dataIndex: "burtgesenAjiltaniiNer",
+                      className: "text-center",
+                      align: "center",
+                      ellipsis: true,
+                      render: () => {
+                        return "Админ"
+                      },
+                    },
+                  ])
+                  .addDataSource(gereeniiMedeelel?.jagsaalt)
+                  .saveAs("гэрээний жагсаалт.xlsx")
+              }}
+            >
+              Excel - рүү гаргах
+            </Button>
             <Button
               style={{
                 alignItems: "end",

@@ -545,12 +545,12 @@ function AjiltanBurtgel({ token }) {
         </Form>
       </div>
       <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-        <div className="w-full border-solid grid grid-cols-12 gap-6">
+        <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className="border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-3 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -577,7 +577,82 @@ function AjiltanBurtgel({ token }) {
         </div>
         <div className="mb-5 flex flex-row">
           <div></div>
-          <div className="ml-auto">
+          <div className="ml-auto flex">
+            <Button
+              style={{
+                alignItems: "end",
+                backgroundColor: "#209669",
+                color: "#ffffff",
+                display: "flex",
+                marginTop: "20px",
+              }}
+              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              onClick={() => {
+                const { Excel } = require("antd-table-saveas-excel")
+                const excel = new Excel()
+                excel
+                  .addSheet("харилцагч")
+                  .addColumns([
+                    {
+                      title: "Төрөл",
+                      dataIndex: "turul",
+                      align: "center",
+                      ellipsis: true,
+                      render: (turul) => {
+                        return (
+                          <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
+                            {turul}
+                          </Tag>
+                        )
+                      },
+                    },
+                    { title: "Регистр", dataIndex: "register", ellipsis: true },
+                    { title: "Нэр", dataIndex: "ner", ellipsis: true },
+                    {
+                      title: "Хаяг",
+                      dataIndex: "khayag",
+                      ellipsis: true,
+                      width: "5rem",
+                    },
+                    {
+                      title: "Утас",
+                      dataIndex: "utas",
+                      ellipsis: true,
+                      render(a) {
+                        return a?.join(",")
+                      },
+                    },
+                    {
+                      title: "И-мэйл",
+                      dataIndex: "mail",
+                      ellipsis: true,
+                      width: "5rem",
+                      align: "center",
+                    },
+                    {
+                      title: "Төлөв",
+                      dataIndex: "tuluv",
+                      ellipsis: true,
+                      align: "center",
+                      render: () => {
+                        return <Tag color="green">Идэвхтэй</Tag>
+                      },
+                    },
+                    {
+                      title: "Бүртгэгдсэн",
+                      dataIndex: "createdAt",
+                      ellipsis: true,
+                      render: (data) => {
+                        return moment(data).format("YYYY-MM-DD")
+                      },
+                    },
+                  ])
+                  .addDataSource(khariltsagchiinGaralt?.jagsaalt)
+                  .saveAs("харилцагчийн жагсаалт.xlsx")
+              }}
+            >
+              Excel - рүү гаргах
+            </Button>
             <Button
               style={{
                 alignItems: "end",
