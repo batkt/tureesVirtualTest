@@ -12,7 +12,7 @@ const fetcher = (
   query,
   tooAvakhEsekh,
   barilgiinId,
-  order={createAt:-1}
+  {uldegdel,...order}={createAt:-1}
 ) =>
   axios(token)
     .get(url + `${tooAvakhEsekh ? "/tooAvya" : ""}`, {

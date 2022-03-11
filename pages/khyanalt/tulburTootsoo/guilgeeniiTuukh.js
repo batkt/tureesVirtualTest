@@ -17,6 +17,8 @@ import {
 import { FileExcelOutlined, ExclamationCircleOutlined } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
+import useOrder from "tools/function/useOrder"
+
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh"
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga"
 
@@ -71,6 +73,7 @@ function TableGuilgee({
   ognoo,
   refreshData,
   setLoadingIndex,
+  onChange
 }) {
   return (
     <Table
@@ -82,6 +85,7 @@ function TableGuilgee({
       dataSource={garalt?.jagsaalt}
       rowKey={(a) => a._id}
       className="t-head"
+      onChange={onChange}
       rowClassName={(record, index) =>
         index % 2 === 0
           ? "bg-white dark:bg-gray-600"
@@ -142,6 +146,8 @@ function guilgeeniiTuukh({ token }) {
   const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo)
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo)
+
+  const {order,onChangeTable} = useOrder()
 
   const query = React.useMemo(() => {
     if (turul === "voucher")
@@ -219,10 +225,15 @@ function guilgeeniiTuukh({ token }) {
       turul !== "eneSardTulukh" && token,
       baiguullaga?._id,
       undefined,
-      query
+      query,
+      undefined,
+      undefined,
+      order
     )
+    
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(turul === "eneSardTulukh" && token, ognoo,query)
+
   const columns = useMemo(
     () => [
       {
@@ -238,6 +249,7 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         align: "center",
         width: "5rem",
+        sorter:()=>0
       },
       {
         title: "Давхар",
@@ -247,6 +259,7 @@ function guilgeeniiTuukh({ token }) {
         width: "5rem",
         showSorterTooltip: false,
         defaultSortOrder: "descend",
+        sorter:()=>0
       },
       {
         title: "Түрээслэгч",
@@ -286,6 +299,7 @@ function guilgeeniiTuukh({ token }) {
       },
       {
         title: "Үйлдэл",
+        dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (row) => {
           const khuvi =
@@ -470,6 +484,7 @@ function guilgeeniiTuukh({ token }) {
             </div>
           )
         },
+        sorter:()=>0
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
@@ -691,6 +706,7 @@ function guilgeeniiTuukh({ token }) {
             refreshData={refreshData}
             delgegdsenGeree={delgegdsenGeree}
             setDelgegdsenGeree={setDelgegdsenGeree}
+            onChange={onChangeTable}
           />
         </div>
         <CardList
