@@ -12,6 +12,7 @@ import formatNumber from "tools/function/formatNumber"
 import { useRef } from "react"
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
 import { modal } from "components/ant/Modal"
+import _ from "lodash"
 
 function Zogsool({ token }) {
   const { baiguullaga ,barilgiinId} = useAuth()
@@ -71,6 +72,69 @@ function Zogsool({ token }) {
         footer,
       })
   }
+
+  const columns = useMemo(()=>{
+    const col = [{
+      title: "№",
+      align: "center",
+      dataIndex: "dugaar",
+      width: "2rem",
+      render: (text, record, index) =>
+        (zogsoolGaralt?.khuudasniiDugaar || 0) *
+          (zogsoolGaralt?.khuudasniiKhemjee || 0) -
+        (zogsoolGaralt?.khuudasniiKhemjee || 0) +
+        index +
+        1,
+    },
+    {
+      title: "Машин",
+      align: "center",
+      dataIndex: "car_number",
+    }]
+    if(turul === 'Түрээслэгч')
+    {
+      col.push({
+          title: "Талбай",
+          align: "center",
+          dataIndex: "mashin",
+          render(m){
+            return m?.ezemshigchiinTalbainDugaar
+          }
+      })
+      col.push({
+        title: "Гэрээ",
+        align: "center",
+        dataIndex: "mashin",
+        render(m){
+          return m?.gereeniiDugaar
+        }
+      })
+    }
+    return [
+      ...col,
+      {
+        title: "Орсон",
+        align: "center",
+        dataIndex: "check_in_time",
+        render(v) {
+          return moment(v).format("YYYY-MM-DD HH:mm")
+        },
+      },
+      {
+        title: "Гарсан",
+        align: "center",
+        dataIndex: "check_out_time",
+        render(v) {
+          return v && moment(v).format("YYYY-MM-DD HH:mm")
+        },
+      },
+      {
+        title: "Хугацаа",
+        align: "center",
+        dataIndex: "khugatsaa",
+      },
+    ]
+  },[turul])
 
   return (
     <Admin title="Зогсоол" khuudasniiNer="zogsool" className="p-0 md:p-4" onSearch={(search) => setZogsoolKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
@@ -138,46 +202,7 @@ function Zogsool({ token }) {
           size="small"
           bordered
           rowKey={(row) => row._id}
-          columns={[
-            {
-              title: "№",
-              align: "center",
-              dataIndex: "dugaar",
-              width: "2rem",
-              render: (text, record, index) =>
-                (zogsoolGaralt?.khuudasniiDugaar || 0) *
-                  (zogsoolGaralt?.khuudasniiKhemjee || 0) -
-                (zogsoolGaralt?.khuudasniiKhemjee || 0) +
-                index +
-                1,
-            },
-            {
-              title: "Машин",
-              align: "center",
-              dataIndex: "car_number",
-            },
-            {
-              title: "Орсон",
-              align: "center",
-              dataIndex: "check_in_time",
-              render(v) {
-                return moment(v).format("YYYY-MM-DD HH:mm")
-              },
-            },
-            {
-              title: "Гарсан",
-              align: "center",
-              dataIndex: "check_out_time",
-              render(v) {
-                return v && moment(v).format("YYYY-MM-DD HH:mm")
-              },
-            },
-            {
-              title: "Хугацаа",
-              align: "center",
-              dataIndex: "khugatsaa",
-            },
-          ]}
+          columns={columns}
           pagination={{
             current: zogsoolGaralt?.khuudasniiDugaar,
             pageSize: zogsoolGaralt?.khuudasniiKhemjee,
