@@ -11,7 +11,7 @@ import {
   Tooltip,
   message,
   Spin,
-  notification
+  notification,
 } from "antd"
 import {
   CheckOutlined,
@@ -35,8 +35,6 @@ import useUldegdel from "hooks/khuulga/useUldegdel"
 import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile"
 import CardList from "components/cardList"
 const { RangePicker } = DatePicker
-
-
 
 function iconAvya(a, bank) {
   let Icon = ExclamationOutlined
@@ -74,12 +72,12 @@ function iconAvya(a, bank) {
   )
 }
 
-function iconAvyaZardal(a,bank) {
+function iconAvyaZardal(a, bank) {
   let Icon = ExclamationOutlined
   let color = "red"
   let tailbar = "Гүйлгээ холбогдоогүй байна"
 
-  if(!!a.zardliinBulgiinId){
+  if (!!a.zardliinBulgiinId) {
     Icon = CheckOutlined
     color = "green"
     tailbar = "Гүйлгээ холбогдсон байна"
@@ -97,37 +95,38 @@ function iconAvyaZardal(a,bank) {
 function tulburTootsoo({ token }) {
   const refGuilgee = React.useRef(null)
   const zardalRef = React.useRef(null)
-  const { baiguullaga, barilgiinId,ajiltan } = useAuth()
+  const { baiguullaga, barilgiinId, ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = React.useState([moment(), moment()])
   const { dansGaralt } = useDans(token, baiguullaga?._id)
   const [songogdsonDans, setSongogdsonDans] = React.useState(null)
   const [songogdsonTurul, setSongogdsonTurul] = React.useState(null)
 
-  const [khuulgaTurul, setKhuulgaTurul] = React.useState('orlogo')
+  const [khuulgaTurul, setKhuulgaTurul] = React.useState("orlogo")
 
   const { bankniiGuilgeeToololt, bankniiGuilgeeToololtMutate } =
     useBankniiGuilgeeToololt(token, ekhlekhOgnoo, songogdsonDans)
   const { uldegdel } = useUldegdel(token, songogdsonDans?.dugaar)
 
-  const [order, setOrder] = React.useState({ })
+  const [order, setOrder] = React.useState({})
 
   const query = React.useMemo(() => {
     let query = {}
-    if (songogdsonTurul === "Тодорхойгүй"){
+    if (songogdsonTurul === "Тодорхойгүй") {
       query.magadlaltaiGereenuud = { $eq: null }
       query.kholbosonGereeniiId = { $size: 0 }
-    }
-    else if (songogdsonTurul === "Холбогдсон")
+    } else if (songogdsonTurul === "Холбогдсон")
       query["kholbosonGereeniiId.0"] = { $exists: true }
-    else if (songogdsonTurul === "Магадлалтай"){
+    else if (songogdsonTurul === "Магадлалтай") {
       query.magadlaltaiGereenuud = { $exists: true, $ne: null }
       query.kholbosonGereeniiId = { $size: 0 }
     }
 
-    query[`${songogdsonDans?.bank === 'tdb' ? 'Amt' : 'amount'}`] = { [khuulgaTurul === 'orlogo' ? '$gt' : '$lt']: 0 }
-        
+    query[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`] = {
+      [khuulgaTurul === "orlogo" ? "$gt" : "$lt"]: 0,
+    }
+
     return query
-  }, [songogdsonTurul,khuulgaTurul,songogdsonDans])
+  }, [songogdsonTurul, khuulgaTurul, songogdsonDans])
 
   const {
     dansniiKhuulgaGaralt,
@@ -150,8 +149,11 @@ function tulburTootsoo({ token }) {
   function dansSongoy(dugaar) {
     let songogdsonDans = dansGaralt?.jagsaalt?.find((a) => a.dugaar === dugaar)
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
-    setOrder(()=>({...{},[`${songogdsonDans?.bank === 'tdb' ? 'TxDt' : 'tranDate'}`]:-1,
-    [`${songogdsonDans?.bank === 'tdb' ? 'TxTime' : 'time'}`]:undefined,}))
+    setOrder(() => ({
+      ...{},
+      [`${songogdsonDans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: -1,
+      [`${songogdsonDans?.bank === "tdb" ? "TxTime" : "time"}`]: undefined,
+    }))
     setSongogdsonDans(songogdsonDans)
   }
 
@@ -247,7 +249,7 @@ function tulburTootsoo({ token }) {
 
   const columns = useMemo(() => {
     let baganuud = []
-    if (songogdsonDans?.bank === "tdb"){
+    if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
           title: "Огноо",
@@ -256,14 +258,14 @@ function tulburTootsoo({ token }) {
           render(date) {
             return moment(date).format("YYYY-MM-DD")
           },
-          sorter:{
+          sorter: {
             compare: () => 0,
             multiple: 1,
-          }
+          },
         },
         {
           title: "Цаг",
-          sorter:{
+          sorter: {
             compare: () => 0,
             multiple: 2,
           },
@@ -281,7 +283,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний дүн",
-          sorter:() => 0,
+          sorter: () => 0,
           dataIndex: "Amt",
           ellipsis: true,
           width: "9rem",
@@ -289,7 +291,7 @@ function tulburTootsoo({ token }) {
           showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`
-          }
+          },
         },
         {
           title: "Шилжүүлсэн данс",
@@ -297,10 +299,11 @@ function tulburTootsoo({ token }) {
           dataIndex: "CtAcntOrg",
           ellipsis: true,
           width: "10rem",
-        }
+        },
       ]
-      if(khuulgaTurul === 'orlogo')
-        baganuud = [...baganuud,
+      if (khuulgaTurul === "orlogo")
+        baganuud = [
+          ...baganuud,
           {
             title: "Төлөв",
             width: "4rem",
@@ -359,13 +362,12 @@ function tulburTootsoo({ token }) {
               )
             },
           },
-        ] 
-    }
-    else if (songogdsonDans?.bank === "khanbank"){
+        ]
+    } else if (songogdsonDans?.bank === "khanbank") {
       baganuud = [
         {
           title: "Огноо",
-          sorter:{
+          sorter: {
             compare: () => 0,
             multiple: 1,
           },
@@ -373,11 +375,11 @@ function tulburTootsoo({ token }) {
           width: "7rem",
           render(date) {
             return moment(date).format("YYYY-MM-DD")
-          }
+          },
         },
         {
           title: "Цаг",
-          sorter:{
+          sorter: {
             compare: () => 0,
             multiple: 2,
           },
@@ -388,7 +390,7 @@ function tulburTootsoo({ token }) {
             if (_.isString(a))
               return `${a.substring(0, 2)}:${a.substring(2, 4)}`
             return ""
-          }
+          },
         },
         {
           title: "Гүйлгээний утга",
@@ -396,7 +398,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний дүн",
-          sorter:() => 0,
+          sorter: () => 0,
           dataIndex: "amount",
           ellipsis: true,
           width: "9rem",
@@ -404,7 +406,7 @@ function tulburTootsoo({ token }) {
           showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`
-          }
+          },
         },
         {
           title: "Шилжүүлсэн данс",
@@ -412,10 +414,73 @@ function tulburTootsoo({ token }) {
           dataIndex: "relatedAccount",
           ellipsis: true,
           width: "10rem",
-        }
+        },
       ]
-      if(khuulgaTurul === 'orlogo')
-      baganuud = [...baganuud,{
+      if (khuulgaTurul === "orlogo")
+        baganuud = [
+          ...baganuud,
+          {
+            title: "Төлөв",
+            width: "4rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    shape="circle"
+                    size="small"
+                    onClick={() => guilgeeKholbyo(a)}
+                    icon={iconAvya(a)}
+                  />
+                </div>
+              )
+            },
+          },
+          {
+            title: "Талбай",
+            dataIndex: "kholbosonTalbainId",
+            ellipsis: true,
+            align: "center",
+            width: "5rem",
+          },
+          {
+            title: "НӨАТУС",
+            width: "4.5rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={
+                      <div
+                        className={`text-500 flex items-center justify-center`}
+                      >
+                        {a?.kholbosonGereeniiId &&
+                        a?.ebarimtAvsanEsekh === true ? (
+                          <Tooltip title="И-баримт хэвлэсэн байна">
+                            <CheckOutlined
+                              style={{ fontSize: "16px", color: "green" }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <ExclamationOutlined
+                            style={{ fontSize: "16px", color: "red" }}
+                            onClick={() => ebarimtUgukh(a)}
+                          />
+                        )}
+                      </div>
+                    }
+                  />
+                </div>
+              )
+            },
+          },
+        ]
+    }
+    if (khuulgaTurul === "zarlaga")
+      baganuud.push({
         title: "Төлөв",
         width: "4rem",
         align: "center",
@@ -425,76 +490,16 @@ function tulburTootsoo({ token }) {
               <Button
                 shape="circle"
                 size="small"
-                onClick={() => guilgeeKholbyo(a)}
-                icon={iconAvya(a)}
+                onClick={() => zardalKholbyo(a)}
+                icon={iconAvyaZardal(a)}
               />
             </div>
           )
         },
-      },
-      {
-        title: "Талбай",
-        dataIndex: "kholbosonTalbainId",
-        ellipsis: true,
-        align: "center",
-        width: "5rem",
-      },
-      {
-        title: "НӨАТУС",
-        width: "4.5rem",
-        align: "center",
-        render(a) {
-          return (
-            <div className="flex items-center justify-center">
-              <Button
-                size="small"
-                shape="circle"
-                icon={
-                  <div
-                    className={`text-500 flex items-center justify-center`}
-                  >
-                    {a?.kholbosonGereeniiId &&
-                    a?.ebarimtAvsanEsekh === true ? (
-                      <Tooltip title="И-баримт хэвлэсэн байна">
-                        <CheckOutlined
-                          style={{ fontSize: "16px", color: "green" }}
-                        />
-                      </Tooltip>
-                    ) : (
-                      <ExclamationOutlined
-                        style={{ fontSize: "16px", color: "red" }}
-                        onClick={() => ebarimtUgukh(a)}
-                      />
-                    )}
-                  </div>
-                }
-              />
-            </div>
-          )
-        },
-      }]
-    }
-    if(khuulgaTurul === 'zarlaga')
-    baganuud.push({
-      title: "Төлөв",
-      width: "4rem",
-      align: "center",
-      render(a) {
-        return (
-          <div className="flex items-center justify-center">
-            <Button
-              shape="circle"
-              size="small"
-              onClick={() => zardalKholbyo(a)}
-              icon={iconAvyaZardal(a)}
-            />
-          </div>
-        )
-      },
-    })
-      
+      })
+
     return baganuud
-  }, [songogdsonDans,khuulgaTurul])
+  }, [songogdsonDans, khuulgaTurul])
 
   return (
     <Admin
@@ -568,9 +573,22 @@ function tulburTootsoo({ token }) {
             value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
           />
-          {ajiltan?.erkh === 'Admin' && <div className="ml-4 flex flex-row space-x-2 mb-5 rounded-md bg-gray-200 dark:bg-gray-700">
-            {['orlogo','zarlaga'].map(text=><div className={`p-2 rounded-md cursor-pointer ${khuulgaTurul === text ? 'bg-green-500 text-gray-50 dark':''}`} onClick={()=>setKhuulgaTurul(text)}>{text === 'orlogo' ? 'Орлого' : 'Зарлага'}</div>)}
-          </div>}
+          {ajiltan?.erkh === "Admin" && (
+            <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
+              {["orlogo", "zarlaga"].map((text) => (
+                <div
+                  className={`cursor-pointer rounded-md p-2 ${
+                    khuulgaTurul === text
+                      ? "dark bg-green-500 text-gray-50"
+                      : ""
+                  }`}
+                  onClick={() => setKhuulgaTurul(text)}
+                >
+                  {text === "orlogo" ? "Орлого" : "Зарлага"}
+                </div>
+              ))}
+            </div>
+          )}
           <div className="ml-4 w-40">
             <Select
               placeholder="Данс"
@@ -584,6 +602,63 @@ function tulburTootsoo({ token }) {
               ))}
             </Select>
           </div>
+          <Button
+            style={{
+              alignItems: "end",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+              display: "flex",
+              marginLeft: "10px",
+            }}
+            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+            onClick={() => {
+              const { Excel } = require("antd-table-saveas-excel")
+              const excelExport = new Excel()
+              excelExport
+                .addSheet("Дансны хуулга")
+                .addColumns([
+                  {
+                    title: "Огноо",
+                    dataIndex: "TxDt",
+                    render(date) {
+                      return moment(date).format("YYYY-MM-DD")
+                    },
+                  },
+                  {
+                    title: "Цаг",
+                    dataIndex: "TxTime",
+                    render(a) {
+                      if (_.isString(a)) return `${a}`
+                      return ""
+                    },
+                  },
+                  {
+                    title: "Гүйлгээний утга",
+                    dataIndex: "TxAddInf",
+                  },
+                  {
+                    title: "Гүйлгээний дүн",
+                    sorter: () => 0,
+                    dataIndex: "Amt",
+                    render(a) {
+                      return formatNumber(a)
+                    },
+                  },
+                  {
+                    title: "Шилжүүлсэн данс",
+                    dataIndex: "CtAcntOrg",
+                  },
+                  {
+                    title: "Талбай",
+                    dataIndex: "kholbosonTalbainId",
+                  },
+                ])
+                .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
+                .saveAs("Дансны хуулга.xlsx")
+            }}
+          >
+            Excel - рүү гаргах
+          </Button>
           {songogdsonDans && (
             <div className="ml-auto flex flex-row space-x-2 p-1 font-medium">
               Үлдэгдэл:{" "}
@@ -607,7 +682,7 @@ function tulburTootsoo({ token }) {
             scroll={{ y: "calc(100vh - 30rem)" }}
             columns={columns}
             dataSource={dansniiKhuulgaGaralt?.jagsaalt}
-            onChange={(p,f,s)=>sorterCompare(s,setOrder)}
+            onChange={(p, f, s) => sorterCompare(s, setOrder)}
             pagination={{
               current: dansniiKhuulgaGaralt?.khuudasniiDugaar,
               pageSize: dansniiKhuulgaGaralt?.khuudasniiKhemjee,

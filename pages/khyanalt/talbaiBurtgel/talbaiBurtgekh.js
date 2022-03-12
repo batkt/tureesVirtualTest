@@ -415,7 +415,6 @@ function talbaiBurtgekh({ token }) {
     message.success("Амжилттай бүртгэгдлээ")
     setTimeout(excelref.current.khaaya(), 2500)
   }
-
   return (
     <Admin
       title="Талбай бүртгэл"
@@ -818,92 +817,46 @@ function talbaiBurtgekh({ token }) {
             icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
             onClick={() => {
               const { Excel } = require("antd-table-saveas-excel")
-              const excel = new Excel()
-              excel
-                .addSheet("түрээсийн талбайн жагсаалт")
+              const excelExport = new Excel()
+              excelExport
+                .addSheet("түрээсийн талбай")
                 .addColumns([
                   {
                     title: "Дугаар",
                     dataIndex: "kod",
-                    ellipsis: true,
-                    width: "1.75rem",
-                    align: "center",
                   },
                   {
                     title: "Давхар",
                     dataIndex: "davkhar",
-                    ellipsis: true,
-                    width: "1.2rem",
-                    align: "center",
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: (a, b) =>
-                      Number(a.davkhar || 0) - Number(b.davkhar || 0),
                   },
                   {
                     title: "Талбай/м2/",
                     dataIndex: "talbainKhemjee",
-                    align: "center",
-                    ellipsis: true,
-                    width: "2.1rem",
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: (a, b) =>
-                      Number(a.talbainKhemjee) - Number(b.talbainKhemjee),
                   },
 
                   {
                     title: "Нийт үнэ/₮/",
                     dataIndex: "talbainNiitUne",
-                    ellipsis: true,
-                    align: "center",
+
                     render: (talbainNiitUne) => {
                       return formatNumber(talbainNiitUne || 0)
                     },
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: (a, b) =>
-                      Number(a.talbainNiitUne || 0) -
-                      Number(b.talbainNiitUne || 0),
-                    width: "2.5rem",
                   },
                   {
                     title: "Зардал",
                     dataIndex: "niitAshiglaltiinZardal",
-                    align: "center",
-                    render: (data) => {
-                      return formatNumber(data) + "₮"
-                    },
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: (a, b) =>
-                      Number(a.niitAshiglaltiinZardal || 0) -
-                      Number(b.niitAshiglaltiinZardal || 0),
-                    width: "2rem",
                   },
                   {
                     title: "Төлбөр",
                     dataIndex: "tureesiinTulbur",
-                    align: "center",
-                    render: (data) => {
-                      return formatNumber(data) + "₮"
-                    },
-                    showSorterTooltip: false,
-                    defaultSortOrder: "descend",
-                    sorter: (a, b) =>
-                      Number(a.tureesiinTulbur || 0) -
-                      Number(b.tureesiinTulbur || 0),
-                    width: "2.5rem",
                   },
                   {
                     title: "Тайлбар",
                     dataIndex: "tailbar",
-                    ellipsis: true,
-                    width: "4.5rem",
                   },
                 ])
                 .addDataSource(talbainiiGaralt?.jagsaalt)
-                .saveAs("түрээсийн талбайн жагсаалт.xlsx")
+                .saveAs("түрээсийн талбай.xlsx")
             }}
           >
             Excel - рүү гаргах

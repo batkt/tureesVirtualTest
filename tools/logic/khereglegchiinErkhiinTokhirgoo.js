@@ -1,11 +1,10 @@
-
 export const tsonknuud = [
   {
     key: "/khyanalt/ajiltan/tokhirgoo",
     ner: "Ажилтанд эрх олгох",
-    tailbar:"",
+    tailbar: "",
     tokhirgoo: [],
-    nuuya:true
+    nuuya: true,
   },
   {
     key: "/khyanalt/geree/gereeBurtgel",
@@ -164,53 +163,57 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
+    key: "/khyanalt/anket",
+    ner: "Анкет",
+    tokhirgoo: [],
+  },
+  {
     key: "/khyanalt/tailan",
     ner: "Тайлан",
     tailbar:
       "Борлуулалтын\nАшигийн тооцоо\nЗардлын тооцоо\nАвлагын насжилтаар\n",
     tokhirgoo: [],
   },
-];
+]
 
 export const khereglegchiinErkhuud = [
   {
     erkh: "ZokhionBaiguulagch",
-    tailbar:'Зохион байгуулагч',
+    tailbar: "Зохион байгуулагч",
     tsonkhnuud: [
       "/khyanalt/geree/gereeBurtgel",
       "/khyanalt/geree/gereeBaiguulakh",
       "/khyanalt/geree/zagvar",
       "/khyanalt/talbaiBurtgel/talbaiBurtgekh",
       "/khyanalt/khariltsagchBurtgel",
-      "/khyanalt/medegdel"
+      "/khyanalt/medegdel",
+      "khyanalt/anket",
     ],
   },
   {
     erkh: "Sankhuu",
-    tailbar:'Санхүү',
+    tailbar: "Санхүү",
     tsonkhnuud: [
       "/khyanalt/tulburTootsoo",
-      '/khyanalt/eBarimt',
+      "/khyanalt/eBarimt",
       "/khyanalt/tulburTootsoo/khungulult",
       "/khyanalt/medegdel",
-      "/khyanalt/tulburTootsoo/guilgeeniiTuukh"
+      "/khyanalt/tulburTootsoo/guilgeeniiTuukh",
     ],
   },
-];
+]
 
-export function undsenKhuudasOlyo(url){
-  if(url.includes("khyanalt/tokhirgoo"))
-    return 'khyanalt/tokhirgoo'
-  if(!!tsonknuud.find(a=> url === a.key))
-    return tsonknuud.find(a=> url === a.key)?.key
-  return tsonknuud.find(a=> url.includes(a.key))?.key
+export function undsenKhuudasOlyo(url) {
+  if (url.includes("khyanalt/tokhirgoo")) return "khyanalt/tokhirgoo"
+  if (!!tsonknuud.find((a) => url === a.key))
+    return tsonknuud.find((a) => url === a.key)?.key
+  return tsonknuud.find((a) => url.includes(a.key))?.key
 }
 
 export function ekhniiTsonkhruuOchyo(ajiltan) {
-  if(ajiltan?.erkh === 'Admin')
-    window.location.href = "/khyanalt/geree/gereeBurtgel";
-  else
-    window.location.href = ajiltan.tsonkhniiErkhuud[0]
+  if (ajiltan?.erkh === "Admin")
+    window.location.href = "/khyanalt/geree/gereeBurtgel"
+  else window.location.href = ajiltan.tsonkhniiErkhuud[0]
 }
 
 const khuudasnuud = [
@@ -541,7 +544,8 @@ const khuudasnuud = [
         khuudasniiNer: "zardal",
         href: "/khyanalt/tulburTootsoo/zardal",
         icon: (
-          <svg xmlns="http://www.w3.org/2000/svg"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
             viewBox="0 0 24 24"
@@ -549,11 +553,12 @@ const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="9" y1="15" x2="15" y2="15"></line>
           </svg>
-          
         ),
       },
     ],
@@ -583,15 +588,23 @@ const khuudasnuud = [
     ner: "Зогсоол",
     href: "/khyanalt/zogsool",
     icon: (
-      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"
+      <svg
+        width="24"
+        height="24"
+        xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
         stroke="currentColor"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <g>
-          <path stroke="null" id="svg_1" d="m10.2904,11.95549l0,-3.38007l2.51312,0c0.92671,0 1.67541,0.75523 1.67541,1.69003c0,0.9348 -0.7487,1.69003 -1.67541,1.69003l-2.51312,0zm10.05247,-11.83023c1.84819,0 3.35082,1.51311 3.35082,3.38007l0,16.90033c0,1.86432 -1.50263,3.38007 -3.35082,3.38007l-16.75412,0c-1.85081,0 -3.35082,-1.51575 -3.35082,-3.38007l0,-16.90033c0,-1.86696 1.50002,-3.38007 3.35082,-3.38007l16.75412,0zm-2.51312,10.1402c0,-2.84665 -2.25133,-5.0701 -5.02624,-5.0701l-3.76968,0c-1.15708,0 -2.09426,0.94536 -2.09426,2.11254l0,9.71769c0,0.9348 0.7487,1.69003 1.67541,1.69003c0.92671,0 1.67541,-0.75523 1.67541,-1.69003l0,-1.69003l2.51312,0c2.7749,0 5.02624,-2.27098 5.02624,-5.0701z"/>
+          <path
+            stroke="null"
+            id="svg_1"
+            d="m10.2904,11.95549l0,-3.38007l2.51312,0c0.92671,0 1.67541,0.75523 1.67541,1.69003c0,0.9348 -0.7487,1.69003 -1.67541,1.69003l-2.51312,0zm10.05247,-11.83023c1.84819,0 3.35082,1.51311 3.35082,3.38007l0,16.90033c0,1.86432 -1.50263,3.38007 -3.35082,3.38007l-16.75412,0c-1.85081,0 -3.35082,-1.51575 -3.35082,-3.38007l0,-16.90033c0,-1.86696 1.50002,-3.38007 3.35082,-3.38007l16.75412,0zm-2.51312,10.1402c0,-2.84665 -2.25133,-5.0701 -5.02624,-5.0701l-3.76968,0c-1.15708,0 -2.09426,0.94536 -2.09426,2.11254l0,9.71769c0,0.9348 0.7487,1.69003 1.67541,1.69003c0.92671,0 1.67541,-0.75523 1.67541,-1.69003l0,-1.69003l2.51312,0c2.7749,0 5.02624,-2.27098 5.02624,-5.0701z"
+          />
         </g>
-        </svg>
+      </svg>
     ),
     sub: [
       {
@@ -624,18 +637,51 @@ const khuudasnuud = [
         khuudasniiNer: "mashinBurtgel",
         href: "/khyanalt/zogsool/mashinBurtgel",
         icon: (
-          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" 
-          fill="currentColor"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round">
-          <g>
-            <path stroke="null" id="svg_1" d="m8.83312,11.91732c1.41155,0 2.55556,-1.21507 2.55556,-2.71429c0,-1.49922 -1.14401,-2.71429 -2.55556,-2.71429s-2.55556,1.21507 -2.55556,2.71429c0,1.4971 1.14601,2.71429 2.55556,2.71429zm10.22222,-1.01786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm-8.94445,2.375l-2.55556,0c-1.76493,0 -3.19444,1.5183 -3.19444,3.39286c0,0.37321 0.2875,0.67857 0.63889,0.67857l7.66667,0c0.35283,0 0.63889,-0.30383 0.63889,-0.67857c0,-1.87455 -1.42951,-3.39286 -3.19444,-3.39286zm8.94445,-5.76786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm1.91667,-5.08929l-17.88889,0c-1.41155,0 -2.55556,1.21507 -2.55556,2.71429l0,13.57143c0,1.49922 1.14401,2.71429 2.55556,2.71429l17.88889,0c1.41155,0 2.55556,-1.21507 2.55556,-2.71429l0,-13.57143c0,-1.49922 -1.14601,-2.71429 -2.55556,-2.71429zm0.63889,16.28571c0,0.37415 -0.28662,0.67857 -0.63889,0.67857l-17.88889,0c-0.35227,0 -0.63889,-0.30442 -0.63889,-0.67857l0,-13.57143c0,-0.37415 0.28662,-0.67857 0.63889,-0.67857l17.88889,0c0.35227,0 0.63889,0.30442 0.63889,0.67857l0,13.57143z"/>
-          </g>
+          <svg
+            width="24"
+            height="24"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <g>
+              <path
+                stroke="null"
+                id="svg_1"
+                d="m8.83312,11.91732c1.41155,0 2.55556,-1.21507 2.55556,-2.71429c0,-1.49922 -1.14401,-2.71429 -2.55556,-2.71429s-2.55556,1.21507 -2.55556,2.71429c0,1.4971 1.14601,2.71429 2.55556,2.71429zm10.22222,-1.01786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm-8.94445,2.375l-2.55556,0c-1.76493,0 -3.19444,1.5183 -3.19444,3.39286c0,0.37321 0.2875,0.67857 0.63889,0.67857l7.66667,0c0.35283,0 0.63889,-0.30383 0.63889,-0.67857c0,-1.87455 -1.42951,-3.39286 -3.19444,-3.39286zm8.94445,-5.76786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm1.91667,-5.08929l-17.88889,0c-1.41155,0 -2.55556,1.21507 -2.55556,2.71429l0,13.57143c0,1.49922 1.14401,2.71429 2.55556,2.71429l17.88889,0c1.41155,0 2.55556,-1.21507 2.55556,-2.71429l0,-13.57143c0,-1.49922 -1.14601,-2.71429 -2.55556,-2.71429zm0.63889,16.28571c0,0.37415 -0.28662,0.67857 -0.63889,0.67857l-17.88889,0c-0.35227,0 -0.63889,-0.30442 -0.63889,-0.67857l0,-13.57143c0,-0.37415 0.28662,-0.67857 0.63889,-0.67857l17.88889,0c0.35227,0 0.63889,0.30442 0.63889,0.67857l0,13.57143z"
+              />
+            </g>
           </svg>
         ),
       },
-    ]
+    ],
+  },
+  {
+    ner: "Анкет",
+    khuudasniiNer: "anket",
+    href: "/khyanalt/anket",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="feather feather-file-text"
+      >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+    ),
   },
   {
     ner: "Тайлан",
@@ -659,26 +705,24 @@ const khuudasnuud = [
       </svg>
     ),
   },
-];
+]
 
 function useErkh(ajiltan) {
-  if (!ajiltan) return [];
-  
-  return khuudasnuud.map(x=>{
-    if(x.href.includes("khyanalt/tokhirgoo"))
-      return x
-    if(ajiltan.erkh === 'Admin')
-      return x
-    else if(x.sub?.length > 0){
-      x.sub = x.sub.filter(g=>!!ajiltan?.tsonkhniiErkhuud.find(a=>g.href.includes(a)))
-      if(x.sub.length > 0)
+  if (!ajiltan) return []
+
+  return khuudasnuud
+    .map((x) => {
+      if (x.href.includes("khyanalt/tokhirgoo")) return x
+      if (ajiltan.erkh === "Admin") return x
+      else if (x.sub?.length > 0) {
+        x.sub = x.sub.filter(
+          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
+        )
+        if (x.sub.length > 0) return x
+      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
         return x
-    }
-    else if(!!ajiltan?.tsonkhniiErkhuud.find(a=>x.href.includes(a)))
-      return x
-  }).filter(
-    (x) => !!x
-  )
+    })
+    .filter((x) => !!x)
 }
 
-export default useErkh;
+export default useErkh

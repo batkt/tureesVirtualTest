@@ -37,7 +37,7 @@ import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluu
 
 function GereeniiUldegdel({ ugugdul, token }) {
   const { barilgiinId } = useAuth()
-  const { data,mutate } = useSWR(
+  const { data, mutate } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
@@ -73,7 +73,7 @@ function TableGuilgee({
   ognoo,
   refreshData,
   setLoadingIndex,
-  onChange
+  onChange,
 }) {
   return (
     <Table
@@ -133,7 +133,7 @@ function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null)
   const refTuukh = React.useRef(null)
   const baritsaaref = React.useRef(null)
-  const { baiguullaga,barilgiinId } = useAuth()
+  const { baiguullaga, barilgiinId } = useAuth()
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null)
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
@@ -147,14 +147,23 @@ function guilgeeniiTuukh({ token }) {
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo)
 
-  const {order,onChangeTable} = useOrder()
+  const { order, onChangeTable } = useOrder()
 
   const query = React.useMemo(() => {
     if (turul === "voucher")
       return {
         davkhar,
         baiguullagiinId: baiguullaga._id,
-        "avlaga.guilgeenuud" : {$elemMatch: { "ognoo" : {$gte :moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"), $lte : moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")}, "tulsunDun" : {$gte : 0}, "turul" : "voucher" }}
+        "avlaga.guilgeenuud": {
+          $elemMatch: {
+            ognoo: {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+            tulsunDun: { $gte: 0 },
+            turul: "voucher",
+          },
+        },
       }
     else if (turul === "avlaga")
       return {
@@ -181,7 +190,7 @@ function guilgeeniiTuukh({ token }) {
       }
     else if (turul === "eneSardTulukh")
       return {
-        davkhar
+        davkhar,
       }
     else if (turul === "eneSardTulsun")
       return {
@@ -217,8 +226,8 @@ function guilgeeniiTuukh({ token }) {
         },
         tuluv: { $ne: -1 },
       }
-    return {davkhar, tuluv: { $ne: -1 } }
-  }, [turul, ognoo,davkhar])
+    return { davkhar, tuluv: { $ne: -1 } }
+  }, [turul, ognoo, davkhar])
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
     useGereeniiJagsaalt(
@@ -230,9 +239,13 @@ function guilgeeniiTuukh({ token }) {
       undefined,
       order
     )
-    
+
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
-    useEneSardTuluuguiGereenuudAvya(turul === "eneSardTulukh" && token, ognoo,query)
+    useEneSardTuluuguiGereenuudAvya(
+      turul === "eneSardTulukh" && token,
+      ognoo,
+      query
+    )
 
   const columns = useMemo(
     () => [
@@ -249,7 +262,7 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         align: "center",
         width: "5rem",
-        sorter:()=>0
+        sorter: () => 0,
       },
       {
         title: "Давхар",
@@ -259,7 +272,7 @@ function guilgeeniiTuukh({ token }) {
         width: "5rem",
         showSorterTooltip: false,
         defaultSortOrder: "descend",
-        sorter:()=>0
+        sorter: () => 0,
       },
       {
         title: "Түрээслэгч",
@@ -484,7 +497,7 @@ function guilgeeniiTuukh({ token }) {
             </div>
           )
         },
-        sorter:()=>0
+        sorter: () => 0,
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
@@ -650,20 +663,23 @@ function guilgeeniiTuukh({ token }) {
                           {mur.utga}
                         </div>
                       </div>
-                      <div className="ml-auto flex text-center flex-col">
-                        {mur.turul === "eneSardTulukh" && <>
-                          <div className="text-xl flex justify-center">
-                            <ExclamationCircleOutlined
-                              style={{
-                                fontSize: "24px",
-                                color: "red",
-                              }}
-                            />
-                          </div>
-                          <div className="text-xl font-bold text-red-500">
-                            {eneSardTuluuguiGereenuud?.niitMur || tolooguiGereeniiToo?.too}
-                          </div>
-                        </>}
+                      <div className="ml-auto flex flex-col text-center">
+                        {mur.turul === "eneSardTulukh" && (
+                          <>
+                            <div className="flex justify-center text-xl">
+                              <ExclamationCircleOutlined
+                                style={{
+                                  fontSize: "24px",
+                                  color: "red",
+                                }}
+                              />
+                            </div>
+                            <div className="text-xl font-bold text-red-500">
+                              {eneSardTuluuguiGereenuud?.niitMur ||
+                                tolooguiGereeniiToo?.too}
+                            </div>
+                          </>
+                        )}
                         <div className="text-xl text-green-600">{mur.icon}</div>
                       </div>
                     </div>
@@ -682,9 +698,79 @@ function guilgeeniiTuukh({ token }) {
               setLoadingIndex(0)
             }}
           />
-          <Select placeholder='Давхар' onChange={setDavkhar} allowClear>
-            {baiguullaga?.barilguud?.find(a=>a._id === barilgiinId).davkharuud.map((a) =><Select.Option key={a._id} value={a.davkhar}>{a.davkhar}</Select.Option>)}
+          <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+            {baiguullaga?.barilguud
+              ?.find((a) => a._id === barilgiinId)
+              .davkharuud.map((a) => (
+                <Select.Option key={a._id} value={a.davkhar}>
+                  {a.davkhar}
+                </Select.Option>
+              ))}
           </Select>
+          <Button
+            style={{
+              alignItems: "end",
+              backgroundColor: "#209669",
+              color: "#ffffff",
+              display: "flex",
+            }}
+            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+            onClick={() => {
+              const { Excel } = require("antd-table-saveas-excel")
+              const excelExport = new Excel()
+              excelExport
+                .addSheet("Гүйлгээний түүх")
+                .addColumns([
+                  {
+                    title: "Гэрээний дугаар",
+                    dataIndex: "gereeniiDugaar",
+                  },
+                  {
+                    title: "Талбай",
+                    dataIndex: "talbainDugaar",
+                  },
+                  {
+                    title: "Давхар",
+                    dataIndex: "davkhar",
+                  },
+                  {
+                    title: "Түрээслэгч",
+                    dataIndex: "ner",
+                  },
+                  {
+                    title: "Утас",
+                    dataIndex: "utas",
+                  },
+                  {
+                    title: "Үлдэгдэл",
+                    dataIndex: "uldegdel",
+                    render(a) {
+                      return formatNumber(a)
+                    },
+                  },
+                  {
+                    title: "Гэрээний огноо",
+                    dataIndex: "gereeniiOgnoo",
+
+                    render(a) {
+                      return moment(a).format("YYYY-MM-DD")
+                    },
+                  },
+                  {
+                    title: "Дуусах огноо",
+                    dataIndex: "duusakhOgnoo",
+
+                    render(a) {
+                      return moment(a).format("YYYY-MM-DD")
+                    },
+                  },
+                ])
+                .addDataSource(gereeniiMedeelel?.jagsaalt)
+                .saveAs("Гүйлгээний түүх.xlsx")
+            }}
+          >
+            Excel - рүү гаргах
+          </Button>
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
           <TableGuilgee
