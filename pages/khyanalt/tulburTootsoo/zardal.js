@@ -30,7 +30,7 @@ const useDansniiKhuulga = (token,barilgiinId,zardliinBulgiinId,ognoo) =>{
     search:''
   });
 
-  const {data,mutate} = useSWR(['bankniiGuilgee',ognoo,zardliinBulgiinId,khuudaslalt],(url,ognoo,zardliinBulgiinId,{search,...khuudaslalt})=>getListMethod(url,token,{
+  const {data,mutate} = useSWR(token ? ['bankniiGuilgee',ognoo,zardliinBulgiinId,khuudaslalt,token] : null,(url,ognoo,zardliinBulgiinId,{search,...khuudaslalt},token)=>getListMethod(url,token,{
     ...khuudaslalt,
     query:{
       barilgiinId,
@@ -54,6 +54,17 @@ function pusher(list,zardal) {
   if(!!zardal?.dedKhesguud && zardal?.dedKhesguud.length > 0)
     zardal?.dedKhesguud.forEach(a=>pusher(list,a))
   list.push(zardal?._id)
+}
+
+function Dun({token,barilgiinId,ognoo,zardal}) {
+  const Idnuud=useMemo(()=>{
+    let idnuud = []
+    pusher(idnuud,zardal)
+    return idnuud
+  },[zardal])
+
+  const {zardaliinDun} = useZardaliinDun(token,barilgiinId,Idnuud,ognoo)
+  return <div>{formatNumber(zardaliinDun)}</div>
 }
 
 function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,zardalBurtgekh,zardalUstgaya}) {
@@ -153,6 +164,149 @@ function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId,zardal
   return <div className={`w-full space-y-4 ${parent ? "zardalkhusnegt" : ''}`}>
     {zardaluud?.map((a,i)=>(<ZardalMur key={a?._id} zardal={a} index={i} parent={parent} ognoo={ognoo} token={token} baiguullagiinId={baiguullagiinId} barilgiinId={barilgiinId} zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya}/>))}
   </div>
+}
+
+
+function KholbosonZardalTable({columns,garalt,pagination}) {
+  return <Table
+    size='small'
+    dataSource={garalt?.jagsaalt}
+    columns={columns}
+    rowKey={(row) => row._id}
+    pagination={pagination}
+    bordered
+  />
+}
+
+function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
+  const {
+    dansniiKhuulgaGaralt,
+    setDansniiKhuulgaKhuudaslalt,
+    dansniiKhuulgaMutate,
+  } = useDansniiKhuulga(
+    mur && token,
+    barilgiinId,
+    mur?._id,
+    ognoo
+  )
+
+  function guilgeeUstgaya(guilgeeniiId) {
+    uilchilgee(token).post('/zardalTsutslaya',{guilgeeniiId}).then(({data})=>{
+      if(data === 'Amjilttai'){
+        notification.success({message:'Амжилттай устгалаа.'})
+        dansniiKhuulgaMutate()
+      }
+    })
+  }
+
+  return(<div className='pl-5'>
+  {mur.dedKhesguud && mur.dedKhesguud?.length > 0 && <ZardalTable zardal={mur} barilgiinId={barilgiinId} token={token} columns={[{
+            title: "№",
+            key: "index",
+            width: "3rem",
+            align: "center",
+            render: (text, record, index) => index + 1,
+          },{
+            title: "Нэр",
+            dataIndex: "ner",
+            ellipsis: true,
+            align: "center",
+          },
+          {
+            title: "Дүн",
+            dataIndex: "davkhar",
+            ellipsis: true,
+            align: "center",
+            width: "13rem",
+            render(text,row){
+              return <Dun token={token} zardal={row} barilgiinId={barilgiinId} ognoo={ognoo}/>
+            }
+          }]} garalt={{jagsaalt:mur.dedKhesguud}} pagination={false} ognoo={ognoo}/>}
+  {dansniiKhuulgaGaralt?.jagsaalt?.length > 0 && <KholbosonZardalTable  columns={[
+   {
+    title: "№",
+    key: "index",
+    width: "3rem",
+    align: "center",
+    render: (text, record, index) => index + 1,
+  },{
+      title: "Нэр",
+      dataIndex: "dansniiDugaar",
+      ellipsis: true,
+      align: "center",
+    },
+    {
+      title: "Дүн",
+      dataIndex: "CtActnName",
+      ellipsis: true,
+      align: "center",
+      width: "10rem",
+    },
+    {
+      title: "Дүн",
+      dataIndex: "TxDt",
+      ellipsis: true,
+      align: "center",
+      width: "10rem",
+      render(TxDt){return moment(TxDt).format('YYYY-MM-DD')}
+    },
+    {
+      title: "Дүн",
+      dataIndex: "Amt",
+      ellipsis: true,
+      align: "center",
+      width: "10rem",
+      render(Amt){return formatNumber(Amt || 0)}
+    },
+    {
+      title: <SettingOutlined/>,
+      ellipsis: true,
+      align: "center",
+      width: "3rem",
+      render(a){
+        return <Popconfirm
+        title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
+        okText="Тийм"
+        cancelText="Үгүй"
+        onConfirm={() => guilgeeUstgaya(a._id)}
+      >
+      <div className='box flex items-center justify-center w-8 h-8 cursor-pointer'><CloseOutlined style={{display:'flex'}}/></div>
+    </Popconfirm>
+      }
+    }
+  ]} garalt={dansniiKhuulgaGaralt} />}
+</div>)
+}
+
+function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,zardal}) {
+  const [expandedKeys,setExpandedKeys] = useState([])
+  
+  return <Table
+    bordered
+    size='small'
+    dataSource={garalt?.jagsaalt}
+    columns={columns}
+    expandable={{
+      expandedRowRender: (mur) => expandedKeys.includes(mur._id) && <ZardalExpander mur={mur} barilgiinId={barilgiinId} columns={columns} ognoo={ognoo} token={token} />,
+      expandedRowKeys: expandedKeys,
+      expandedRowClassName: (a, index) =>
+         index % 2 === 0
+           ? "bg-white dark:bg-gray-600"
+           : "bg-gray-200 dark:bg-gray-800",
+      onExpand: (a, b) => {
+        if(true === a)
+          expandedKeys.push(b._id)
+        else 
+          {
+            const index = expandedKeys.indexOf(b._id)
+            expandedKeys.splice(index,1)
+          }
+        setExpandedKeys([...expandedKeys])
+      },
+    }}
+    rowKey={(row) => row._id}
+    pagination={pagination}
+  />
 }
 
 
@@ -288,7 +442,74 @@ function zardal({token}) {
           <span>Зардал бүртгэх</span>
         </button>
         </div>
-        <Zardal parent zardalBurtgekh={zardalBurtgekh} zardalUstgaya={zardalUstgaya} zardaluud={zardalGaralt?.jagsaalt || []} baiguullagiinId={baiguullaga?._id} token={token} barilgiinId={barilgiinId} ognoo={ognoo}/>
+      </div>
+      <div className='box col-span-12'>
+        <ZardalTable
+          token={token}
+          barilgiinId={barilgiinId}
+         garalt={zardalGaralt}
+         ognoo={ognoo}
+         columns={[{
+            title: "№",
+            key: "index",
+            width: "3rem",
+            align: "center",
+            render: (text, record, index) => index + 1,
+          },{
+            title: "Нэр",
+            dataIndex: "ner",
+            ellipsis: true,
+            align: "center",
+          },
+          {
+            title: "Дүн",
+            dataIndex: "davkhar",
+            ellipsis: true,
+            align: "center",
+            width: "10rem",
+            render(text,row){
+              return <Dun token={token} zardal={row} barilgiinId={barilgiinId} ognoo={ognoo}/>
+            }
+          },
+          {
+            title: <SettingOutlined/>,
+            dataIndex: "davkhar",
+            ellipsis: true,
+            align: "center",
+            width: "3rem",
+            render(z,mur){
+              return(
+                <Dropdown
+                overlayClassName='p-2'
+                overlay={
+                  <Menu className="p-2">
+                    <Menu.Item
+                      key="Заалт нэмэх"
+                      className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                      onClick={()=>zardalUstgaya(mur)}
+                    >
+                      <DeleteOutlined />
+                      <span>Устгах</span>
+                    </Menu.Item>
+                    <Menu.Item
+                      key="Заалт Excel-ээс оруулах"
+                      className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
+                      onClick={()=>zardalBurtgekh(mur)}
+                    >
+                      <EditOutlined />
+                      <span>Засах</span>
+                    </Menu.Item>
+                  </Menu>
+                }
+                trigger="click"
+                className="cursor-pointer w-8 h-8"
+              >
+                <div className='box flex items-center justify-center w-8 transform rotate-90 cursor-pointer'><MoreOutlined style={{display:'flex'}}/></div>
+                </Dropdown>
+              )
+            }
+          }]}
+        />
       </div>
     </Admin>
   )
