@@ -4,7 +4,7 @@ import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 import moment from 'moment'
 
-const zogsoolTooAvya = (url,token,ognoo) => axios(token).post(url,{ekhlekhOgnoo: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),duusakhOgnoo: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),}).then((res) => res.data).catch(aldaaBarigch)
+const zogsoolTooAvya = (url,token,ognoo) => axios(token).post(url,{ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),}).then((res) => res.data).catch(aldaaBarigch)
 
 export function useZogsoolToololt(token,ognoo) {
   const { data, mutate } = useSWR(!!token ? ["/zogsooliinTooAvya", token,ognoo]: null,zogsoolTooAvya,{ revalidateOnFocus: false })
