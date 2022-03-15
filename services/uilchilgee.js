@@ -1,4 +1,4 @@
-import { message } from "antd"
+import { notification } from "antd"
 import axios from "axios"
 import socketIOClient from "socket.io-client"
 import _ from "lodash"
@@ -17,10 +17,10 @@ export const socket = () => socketIOClient(url, { transports: ["websocket"] })
 export const aldaaBarigch = (e) => {
   if (e?.response?.data?.aldaa === "jwt expired") {
     window.location.href = "/"
-  } else if (!!e?.response?.data?.aldaa) message.error(e?.response?.data?.aldaa)
+  } else if (!!e?.response?.data?.aldaa) notification.error({description:e?.response?.data?.aldaa,message:'Алдаа'})
   else if (!!e?.response?.errors)
-    message.error(JSON.stringify(e?.response?.errors))
-  else message.error(JSON.stringify(e))
+    notification.error({description:JSON.stringify(e?.response?.errors),message:'Алдаа'})
+  else notification.error({description:JSON.stringify(e),message:'Алдаа'})
 }
 
 /*axios.interceptors.response.use(function (response) {
