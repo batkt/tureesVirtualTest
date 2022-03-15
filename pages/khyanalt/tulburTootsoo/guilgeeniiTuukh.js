@@ -314,7 +314,7 @@ function guilgeeniiTuukh({ token }) {
         title: "Үйлдэл",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
-        render: (row) => {
+        render: (text,row) => {
           const khuvi =
             row.baritsaaAvakhDun > 0
               ? (100 * row.baritsaaniiUldegdel) / row.baritsaaAvakhDun
