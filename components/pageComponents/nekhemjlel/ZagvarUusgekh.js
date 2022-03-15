@@ -61,6 +61,7 @@ const tulburiinTalbaruud = [
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
+  { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
 ]
 
 const nekhemjlekhiinTalbaruud = [
@@ -70,9 +71,9 @@ const nekhemjlekhiinTalbaruud = [
   { ner: "Банк", talbar: "bank" },
   { ner: "Хэвлэсэн огноо", talbar: "khevlesenOgnoo" },
   { ner: "Нэхэмжлэхийн дугаар", talbar: "nekhemjlekhiinDugaar" },
-  { ner: "Өмнөх хуримтлагдсан өр төлбөр",talbar:'umnukhSariinUrTulbur'},
-  { ner: "Энэ сард төлөх үсгээр",talbar:"eneSardTulukhUsgeer"},
-  { ner: "Нийт үлдэгдэл үсгээр",talbar:"niitUldegdelUsgeer"}
+  { ner: "Өмнөх хуримтлагдсан өр төлбөр", talbar: "umnukhSariinUrTulbur" },
+  { ner: "Энэ сард төлөх үсгээр", talbar: "eneSardTulukhUsgeer" },
+  { ner: "Нийт үлдэгдэл үсгээр", talbar: "niitUldegdelUsgeer" },
 ]
 
 function ZaaltZasvar({

@@ -314,7 +314,7 @@ function guilgeeniiTuukh({ token }) {
         title: "Үйлдэл",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
-        render: (text,row) => {
+        render: (text, row) => {
           const khuvi =
             row.baritsaaAvakhDun > 0
               ? (100 * row.baritsaaniiUldegdel) / row.baritsaaAvakhDun
@@ -498,6 +498,7 @@ function guilgeeniiTuukh({ token }) {
           )
         },
         sorter: () => 0,
+        showSorterTooltip: false,
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
