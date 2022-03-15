@@ -8,7 +8,7 @@ import {
 } from "antd";
 import _ from "lodash";
 import React, { useState } from "react";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 
@@ -51,7 +51,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             });
             _.isFunction(onFinish) && onFinish();
             destroy();
-          });
+          }).catch(aldaaBarigch);
       },
     }),
     [dun, turul, tailbar]
