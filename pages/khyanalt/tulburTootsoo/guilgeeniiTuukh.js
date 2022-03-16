@@ -604,6 +604,7 @@ function guilgeeniiTuukh({ token }) {
             khuudasniiDugaar: 1,
           }))
       }}
+      tsonkhniiId='61c2c6bc1c2830c4e6f90cb5'
     >
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-4">

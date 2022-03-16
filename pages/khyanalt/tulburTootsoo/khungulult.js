@@ -152,6 +152,7 @@ function tulburTootsoo() {
       onSearch={(search) => {
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }}
+      tsonkhniiId='61c2c6eb1c2830c4e6f90cc5'
     >
       <div className="col-span-12">
         <Tabs size="large">

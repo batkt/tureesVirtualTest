@@ -1,9 +1,9 @@
 import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
-import { useMemo, useState } from "react"
-import uilchilgee, { url } from "services/uilchilgee"
+import { useMemo } from "react"
+import { url } from "services/uilchilgee"
 import { useAuth } from "services/auth"
-import { Button, Space, Table, Input, Popover } from "antd"
+import { Button, Table, Popover } from "antd"
 import {
   PlusOutlined,
   SettingOutlined,
@@ -11,29 +11,15 @@ import {
   EditOutlined,
 } from "@ant-design/icons"
 import _ from "lodash"
-import updateMethod from "tools/function/crud/updateMethod"
 import router from "next/router"
 import CardList from "components/cardList"
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile"
 
-export function khariltsagchiinJagsaaltAvya(set, id, setLoadData, token) {
-  if (id)
-    uilchilgee(token)
-      .post("/baiguullagiinJagsaaltAvya", {
-        query: { $or: [{ tolgoinId: id }, { _id: id }] },
-      })
-      .then(({ data }) => {
-        data.jagsaalt.forEach((x) => (x.ley = x._id))
-        set([...data.jagsaalt])
-        setLoadData(false)
-      })
-}
-
 const toololt = {}
 
 function BarilgaBurtgel({ }) {
-  const { baiguullaga } = useAuth()
-
+  const { baiguullaga ,barilgiinId} = useAuth()
+  const barilga = baiguullaga?.barilguud?.find(a=> a._id === barilgiinId)
   const columns = useMemo(
     () => [
       {
@@ -199,14 +185,14 @@ function BarilgaBurtgel({ }) {
   }
 
   return (
-    <Admin khuudasniiNer="barilgaBurtgel" className="px-4">
+    <Admin khuudasniiNer="barilgaBurtgel" className="px-4" tsonkhniiId={'61c2c6271c2830c4e6f90c85'}>
       <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
           <div className="mt-5 grid grid-cols-12 gap-6">
             {khyanaltiinDun.map((mur, index) => {
               return (
                 <div
-                  key={index}
+                  key={'index'+index}
                   className="intro-y col-span-12 sm:col-span-6 xl:col-span-3"
                 >
                   <div className="report-box zoom-in">
@@ -304,13 +290,13 @@ function BarilgaBurtgel({ }) {
                 src={
                   baiguullaga?.zurgiinNer
                     ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                    : "/rent.png"
+                    : "/favicon.ico"
                 }
               />
               <div className="ml-3 flex flex-col">
-                <label>Барилгын нэр</label>
+                <span className="w-20">Барилгын нэр</span>
                 <span className="mt-1 font-medium text-gray-600">
-                  {baiguullaga?.ner}
+                  {barilga?.ner}
                 </span>
               </div>
             </div>
@@ -318,9 +304,9 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span>Регистр:</span>
+                <span className="w-20">Регистр:</span>
                 <span className="font-medium text-gray-600">
-                  {baiguullaga?.register}
+                  {barilga?.register}
                 </span>
               </div>
             </div>
@@ -328,9 +314,9 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span>Хаяг:</span>
+                <span className="w-20">Хаяг:</span>
                 <span className="font-medium text-gray-600">
-                  {baiguullaga?.khayag}
+                  {barilga?.khayag}
                 </span>
               </div>
             </div>
@@ -338,9 +324,9 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span>Давхар:</span>
+                <span className="w-20">Давхар:</span>
                 <span className="font-medium text-gray-600">
-                  {baiguullaga?.davkhar}
+                  {barilga?.davkhar}
                 </span>
               </div>
             </div>
@@ -348,9 +334,9 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span>Талбай:</span>
+                <span className="w-20">Талбай:</span>
                 <span className="font-medium text-gray-600">
-                  {baiguullaga?.talbai}
+                  {barilga?.talbai}
                 </span>
               </div>
             </div>
@@ -358,9 +344,9 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span>Утас:</span>
+                <span className="w-20">Утас:</span>
                 <span className="font-medium text-gray-600">
-                  {baiguullaga?.utas}
+                  {barilga?.utas}
                 </span>
               </div>
             </div>

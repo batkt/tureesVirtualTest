@@ -127,6 +127,7 @@ function EbarimtMedeelel({ token }) {
       title="И-баримтын бүртгэл"
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
+      tsonkhniiId='61c2c70a1c2830c4e6f90ccf'
     >
       <Card className="col-span-12 p-5 cardgrid">
         <div className="w-full border-solid grid grid-cols-12 gap-6">

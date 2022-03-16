@@ -84,7 +84,7 @@ function index({ token }) {
   }
 
   return (
-    <Admin khuudasniiNer="gereeniiZagvar" title='Гэрээний загвар' className="p-4">
+    <Admin khuudasniiNer="gereeniiZagvar" title='Гэрээний загвар' className="p-4" tsonkhniiId={'61c2c6101c2830c4e6f90c7d'}>
       <div className="col-span-12">
         <div className="intro-y flex flex-col-reverse sm:flex-row items-center">
           <Drawer

@@ -161,6 +161,7 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) =>
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
+      tsonkhniiId={'61c2c6571c2830c4e6f90c95'}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form

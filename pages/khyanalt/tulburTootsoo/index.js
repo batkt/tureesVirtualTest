@@ -513,6 +513,7 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }))
       }}
+      tsonkhniiId='61c2c6a51c2830c4e6f90cad'
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -

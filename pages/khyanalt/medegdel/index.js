@@ -315,7 +315,7 @@ function Khyanalt({ token }) {
   //#endregion
 
   return (
-    <Admin title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setNekhemjlelKhuudaslalt(a=>({...a,search}))}>
+    <Admin title="Мэдэгдэл" khuudasniiNer="medegdel" className="p-0 md:p-4" onSearch={(search) => setNekhemjlelKhuudaslalt(a=>({...a,search}))} tsonkhniiId='61c2c68d1c2830c4e6f90ca5'>
       <div className="col-span-12 lg:col-span-3 xl:col-span-3">
         <div className="intro-y pr-1">
           <div className="box p-2">

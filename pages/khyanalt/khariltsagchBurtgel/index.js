@@ -362,6 +362,7 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) =>
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
+      tsonkhniiId='61c2c6731c2830c4e6f90c9d'
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>

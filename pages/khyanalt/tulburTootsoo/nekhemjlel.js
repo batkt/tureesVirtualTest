@@ -249,6 +249,7 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }))
       }}
+      tsonkhniiId='61c2c6d91c2830c4e6f90cbd'
     >
       <Card className="cardgrid col-span-12">
         <Spin spinning={loading}>
