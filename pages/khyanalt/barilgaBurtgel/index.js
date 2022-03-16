@@ -294,7 +294,7 @@ function BarilgaBurtgel({ }) {
                 }
               />
               <div className="ml-3 flex flex-col">
-                <span className="w-20">Барилгын нэр</span>
+                <span className="md:w-20">Барилгын нэр</span>
                 <span className="mt-1 font-medium text-gray-600">
                   {barilga?.ner}
                 </span>
@@ -304,7 +304,7 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span className="w-20">Регистр:</span>
+                <span className="md:w-20">Регистр:</span>
                 <span className="font-medium text-gray-600">
                   {barilga?.register}
                 </span>
@@ -314,7 +314,7 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span className="w-20">Хаяг:</span>
+                <span className="md:w-20">Хаяг:</span>
                 <span className="font-medium text-gray-600">
                   {barilga?.khayag}
                 </span>
@@ -324,7 +324,7 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span className="w-20">Давхар:</span>
+                <span className="md:w-20">Давхар:</span>
                 <span className="font-medium text-gray-600">
                   {barilga?.davkhar}
                 </span>
@@ -334,7 +334,7 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span className="w-20">Талбай:</span>
+                <span className="md:w-20">Талбай:</span>
                 <span className="font-medium text-gray-600">
                   {barilga?.talbai}
                 </span>
@@ -344,7 +344,7 @@ function BarilgaBurtgel({ }) {
               className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             >
               <div className="flex flex-row items-center">
-                <span className="w-20">Утас:</span>
+                <span className="md:w-20">Утас:</span>
                 <span className="font-medium text-gray-600">
                   {barilga?.utas}
                 </span>
