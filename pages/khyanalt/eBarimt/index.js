@@ -162,7 +162,7 @@ function EbarimtMedeelel({ token }) {
           />
           <div className="flex flex-row space-x-2">
             <Button title="Сүүлд илгээгдсэн огноо">
-              {moment(new Date()).format("YYYY-MM-DD")}
+              {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format("YYYY-MM-DD")}
             </Button>
             
               <Button danger onClick={ebarimtIlgeeye}>
