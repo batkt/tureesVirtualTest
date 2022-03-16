@@ -268,17 +268,21 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
       align: "center",
       width: "3rem",
       render(a){
-        return <Popconfirm
-        title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
-        okText="Тийм"
-        cancelText="Үгүй"
-        onConfirm={() => guilgeeUstgaya(a._id)}
-        className='w-5 h-5'
-      >
-      <div className='box flex items-center justify-center w-5 h-5 cursor-pointer'><DeleteOutlined
-                            style={{ fontSize: "18px", color: "red" }}
-                          /></div>
-    </Popconfirm>
+        return (
+        <div className='flex items-center justify-center'>
+          <Popconfirm
+            title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
+            okText="Тийм"
+            cancelText="Үгүй"
+            onConfirm={() => guilgeeUstgaya(a._id)}
+            className='w-5 h-5'
+          >
+          
+            <div className="flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer hide-on-print">
+              <DeleteOutlined />
+            </div>
+          </Popconfirm>
+        </div>)
       }
     }
   ]} garalt={dansniiKhuulgaGaralt} />}
