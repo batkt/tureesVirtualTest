@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react'
 import Admin from 'components/Admin'
 import _ from "lodash"
-import { Button, DatePicker, Dropdown, Menu, Modal, notification, Popconfirm, Space, Table } from 'antd'
+import { Button, DatePicker, Dropdown, Menu, Modal, notification, Popconfirm, Popover, Space, Table } from 'antd'
 import { CloseOutlined, DeleteOutlined, EditOutlined, FileExcelOutlined, MoreOutlined, SettingOutlined } from '@ant-design/icons'
 import ZardalBurtgekh from 'components/pageComponents/zardal/ZardalBurtgekh'
 import { useAuth } from "services/auth"
@@ -275,7 +275,9 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
         onConfirm={() => guilgeeUstgaya(a._id)}
         className='w-5 h-5'
       >
-      <div className='box flex items-center justify-center w-5 h-5 cursor-pointer'><CloseOutlined style={{display:'flex'}}/></div>
+      <div className='box flex items-center justify-center w-5 h-5 cursor-pointer'><DeleteOutlined
+                            style={{ fontSize: "18px", color: "red" }}
+                          /></div>
     </Popconfirm>
       }
     }
@@ -450,33 +452,40 @@ function zardal({token}) {
             width: "3rem",
             render(z,mur){
               return(
-                <Dropdown
-                overlayClassName='p-2'
-                overlay={
-                  <Menu className="p-2">
-                    <Menu.Item
-                      key="Заалт нэмэх"
-                      className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
-                      onClick={()=>zardalUstgaya(mur)}
-                    >
-                      <DeleteOutlined />
-                      <span>Устгах</span>
-                    </Menu.Item>
-                    <Menu.Item
-                      key="Заалт Excel-ээс оруулах"
-                      className="flex items-center block p-2 transition duration-300 ease-in-out bg-white dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-dark-2 rounded-md space-x-2"
-                      onClick={()=>zardalBurtgekh(mur)}
-                    >
-                      <EditOutlined />
-                      <span>Засах</span>
-                    </Menu.Item>
-                  </Menu>
-                }
-                trigger="click"
-                className="cursor-pointer w-5 h-5"
-              >
-                <div className='box flex items-center justify-center transform rotate-90 cursor-pointer w-5 h-5'><MoreOutlined style={{display:'flex'}}/></div>
-                </Dropdown>
+              <div className="flex flex-row justify-center">
+                <Popover
+                  placement="bottom"
+                  trigger="click"
+                  content={() => (
+                    <div className="flex w-24 flex-col space-y-2">
+                      <a
+                        className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                        onClick={()=>zardalBurtgekh(mur)}
+                      >
+                        <EditOutlined style={{ fontSize: "18px" }} />
+                        <label>Засах</label>
+                      </a>
+                      <Popconfirm
+                        title="Талбай устгах уу?"
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => zardalUstgaya(mur)}
+                      >
+                        <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                          <DeleteOutlined
+                            style={{ fontSize: "18px", color: "red" }}
+                          />
+                          <label>Устгах</label>
+                        </a>
+                      </Popconfirm>
+                    </div>
+                  )}
+                >
+                  <a className=" flex items-center justify-center hover:bg-gray-200">
+                    <MoreOutlined style={{ fontSize: "18px" }} />
+                  </a>
+                </Popover>
+              </div>
               )
             }
           }]}
