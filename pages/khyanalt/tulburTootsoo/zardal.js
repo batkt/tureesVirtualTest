@@ -40,7 +40,7 @@ const useDansniiKhuulga = (token,barilgiinId,zardliinBulgiinId,ognoo) =>{
         {'tranDate':{$gte: moment(ognoo[0]).format('YYYY-MM-DD 00:00:00'),$lte: moment(ognoo[1]).format('YYYY-MM-DD 23:59:59')}}
       ]
     },
-    select:{TxDt:1,dansniiDugaar:1,Amt:1,CtActnName:1}
+    select:{TxDt:1,dansniiDugaar:1,Amt:1,CtActnName:1,}
   }).then(a=>a.data),{revalidateOnFocus:false})
 
   return {
@@ -139,7 +139,7 @@ function ZardalMur({zardal,index,parent,token,barilgiinId,ognoo,baiguullagiinId,
         <Zardal zardaluud={zardal.dedKhesguud} token={token} barilgiinId={barilgiinId} ognoo={ognoo} baiguullagiinId={baiguullagiinId}/>
       </div>}
       {showDed &&  dansniiKhuulgaGaralt && dansniiKhuulgaGaralt?.jagsaalt?.map((a)=>(
-          <div className='w-full pl-12 flex flex-row space-x-4' key={a?._id}>
+          <div className='w-full pl-12 flex flex-row space-x-4 ' key={a?._id}>
               <div className='w-8 h-8 box text-center rounded-sm flex items-center justify-center'>{index+1}</div>
               <div className='box rounded-sm px-2 flex items-center' style={{width:'calc(100% - 63.25rem)'}}>{a.dansniiDugaar}</div>
               <div className='box rounded-sm px-2 flex items-center w-80'>{a.CtActnName}</div>
@@ -168,14 +168,18 @@ function Zardal({zardaluud,parent,token,barilgiinId,ognoo,baiguullagiinId,zardal
 
 
 function KholbosonZardalTable({columns,garalt,pagination}) {
-  return <Table
-    size='small'
-    dataSource={garalt?.jagsaalt}
-    columns={columns}
-    rowKey={(row) => row._id}
-    pagination={pagination}
-    bordered
-  />
+  return (
+    <div className="pl-4 py-2">
+      <Table
+        size='small'
+        dataSource={garalt?.jagsaalt}
+        columns={columns}
+        rowKey={(row) => row._id}
+        pagination={pagination}
+        bordered
+      />
+    </div>
+  )
 }
 
 function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
@@ -199,15 +203,15 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
     })
   }
 
-  return(<div className='pl-5'>
-  {mur.dedKhesguud && mur.dedKhesguud?.length > 0 && <ZardalTable zardal={mur} barilgiinId={barilgiinId} token={token} columns={[{
+  return(<div className=''>
+  {mur.dedKhesguud && mur.dedKhesguud?.length > 0 && (<div className="pl-4 py-2"><ZardalTable zardal={mur} barilgiinId={barilgiinId} token={token} columns={[{
             title: "№",
             key: "index",
             width: "3rem",
             align: "center",
             render: (text, record, index) => index + 1,
           },{
-            title: "Нэр",
+            title: "Дэд бүлэг",
             dataIndex: "ner",
             ellipsis: true,
             align: "center",
@@ -221,7 +225,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
             render(text,row){
               return <Dun token={token} zardal={row} barilgiinId={barilgiinId} ognoo={ognoo}/>
             }
-          }]} garalt={{jagsaalt:mur.dedKhesguud}} pagination={false} ognoo={ognoo}/>}
+          }]} garalt={{jagsaalt:mur.dedKhesguud}} pagination={false} ognoo={ognoo}/></div>)}
   {dansniiKhuulgaGaralt?.jagsaalt?.length > 0 && <KholbosonZardalTable  columns={[
    {
     title: "№",
@@ -236,14 +240,14 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
       align: "center",
     },
     {
-      title: "Дүн",
+      title: "Дансны нэр",
       dataIndex: "CtActnName",
       ellipsis: true,
       align: "center",
       width: "10rem",
     },
     {
-      title: "Дүн",
+      title: "Огноо",
       dataIndex: "TxDt",
       ellipsis: true,
       align: "center",
@@ -269,8 +273,9 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
         okText="Тийм"
         cancelText="Үгүй"
         onConfirm={() => guilgeeUstgaya(a._id)}
+        className='w-5 h-5'
       >
-      <div className='box flex items-center justify-center w-8 h-8 cursor-pointer'><CloseOutlined style={{display:'flex'}}/></div>
+      <div className='box flex items-center justify-center w-5 h-5 cursor-pointer'><CloseOutlined style={{display:'flex'}}/></div>
     </Popconfirm>
       }
     }
@@ -286,13 +291,18 @@ function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,zardal})
     size='small'
     dataSource={garalt?.jagsaalt}
     columns={columns}
+    rowClassName={(record, index) =>
+      index % 2 === 0
+        ? "bg-white dark:bg-gray-600"
+        : "bg-gray-200 dark:bg-gray-800"
+    }
     expandable={{
       expandedRowRender: (mur) => expandedKeys.includes(mur._id) && <ZardalExpander mur={mur} barilgiinId={barilgiinId} columns={columns} ognoo={ognoo} token={token} />,
       expandedRowKeys: expandedKeys,
       expandedRowClassName: (a, index) =>
-         index % 2 === 0
-           ? "bg-white dark:bg-gray-600"
-           : "bg-gray-200 dark:bg-gray-800",
+          index % 2 === 0
+            ? "bg-white dark:bg-gray-600"
+            : "bg-gray-200 dark:bg-gray-800",
       onExpand: (a, b) => {
         if(true === a)
           expandedKeys.push(b._id)
@@ -502,9 +512,9 @@ function zardal({token}) {
                   </Menu>
                 }
                 trigger="click"
-                className="cursor-pointer w-8 h-8"
+                className="cursor-pointer w-5 h-5"
               >
-                <div className='box flex items-center justify-center w-8 transform rotate-90 cursor-pointer'><MoreOutlined style={{display:'flex'}}/></div>
+                <div className='box flex items-center justify-center transform rotate-90 cursor-pointer w-5 h-5'><MoreOutlined style={{display:'flex'}}/></div>
                 </Dropdown>
               )
             }
