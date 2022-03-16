@@ -283,7 +283,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
 </div>)
 }
 
-function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,zardal}) {
+function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClassName}) {
   const [expandedKeys,setExpandedKeys] = useState([])
   
   return <Table
@@ -291,11 +291,7 @@ function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,zardal})
     size='small'
     dataSource={garalt?.jagsaalt}
     columns={columns}
-    rowClassName={(record, index) =>
-      index % 2 === 0
-        ? "bg-white dark:bg-gray-600"
-        : "bg-gray-200 dark:bg-gray-800"
-    }
+    rowClassName={rowClassName}
     expandable={{
       expandedRowRender: (mur) => expandedKeys.includes(mur._id) && <ZardalExpander mur={mur} barilgiinId={barilgiinId} columns={columns} ognoo={ognoo} token={token} />,
       expandedRowKeys: expandedKeys,
@@ -459,6 +455,10 @@ function zardal({token}) {
           barilgiinId={barilgiinId}
          garalt={zardalGaralt}
          ognoo={ognoo}
+         rowClassName={(record, index) =>
+          index % 2 === 0
+            ? "bg-white dark:bg-gray-600"
+            : "bg-gray-200 dark:bg-gray-800"}
          columns={[{
             title: "№",
             key: "index",
