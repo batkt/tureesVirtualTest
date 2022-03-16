@@ -283,7 +283,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
 </div>)
 }
 
-function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClassName,showHeader}) {
+function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClassName,showHeader,expandedRowClassName}) {
   const [expandedKeys,setExpandedKeys] = useState([])
   
   return <Table
@@ -296,10 +296,7 @@ function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClass
     expandable={{
       expandedRowRender: (mur) => expandedKeys.includes(mur._id) && <ZardalExpander mur={mur} barilgiinId={barilgiinId} columns={columns} ognoo={ognoo} token={token} />,
       expandedRowKeys: expandedKeys,
-      expandedRowClassName: (a, index) =>
-          index % 2 === 0
-            ? "bg-white dark:bg-gray-600"
-            : "bg-gray-200 dark:bg-gray-800",
+      expandedRowClassName:expandedRowClassName,
       onExpand: (a, b) => {
         if(true === a)
           expandedKeys.push(b._id)
@@ -366,7 +363,7 @@ function zardal({token}) {
 
   return (
     <Admin
-      title="Дансны хуулга"
+      title="Зардлын жагсаалт"
       khuudasniiNer="zardal"
       className="p-0 md:p-4"
       onSearch={search=>setZardalKhuudaslalt((a) => ({
@@ -375,47 +372,6 @@ function zardal({token}) {
         khuudasniiDugaar: 1,
       }))}
     >
-      <div className="col-span-12 grid w-full grid-cols-12 gap-4">
-        {[
-            { too: 0, utga: "Нийт" },
-            {
-              too:  0,
-              utga: "Тодорхойгүй",
-            },
-            { too: 0, utga: "Холбогдсон" },
-            {
-              too:  0,
-              utga: "Магадлалтай",
-            },
-          ].map((mur, index) => {
-            return (
-              <div
-                key={`${index}toololt`}
-                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 box"
-              >
-                <div className="h-full rounded-xl">
-                  <div className="rounded-xl p-3">
-                    <div className="flex">
-                      <div>
-                        <div className="text-3xl font-bold text-green-600">
-                          {mur.too}
-                        </div>
-                        <div className="text-base text-gray-500">
-                          {mur.utga}
-                        </div>
-                      </div>
-                      <div className="ml-auto">
-                        <div className="text-2xl text-green-600">
-                          {mur.icon}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          )
-        })}
-      </div>
       <div className="col-span-12 space-y-5">
         <div className='w-full flex flex-row'>
         <DatePicker.RangePicker value={ognoo} onChange={setOgnoo}/>
@@ -460,6 +416,10 @@ function zardal({token}) {
           index % 2 === 0
             ? "bg-white dark:bg-gray-600"
             : "bg-gray-200 dark:bg-gray-800"}
+          expandedRowClassName={(a, index) =>
+            index % 2 === 0
+              ? "bg-white dark:bg-gray-600"
+              : "bg-gray-200 dark:bg-gray-800"}
          columns={[{
             title: "№",
             key: "index",
@@ -467,7 +427,7 @@ function zardal({token}) {
             align: "center",
             render: (text, record, index) => index + 1,
           },{
-            title: "Нэр",
+            title: "Зардлын бүлэг",
             dataIndex: "ner",
             ellipsis: true,
             align: "center",
