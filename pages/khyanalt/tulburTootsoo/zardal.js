@@ -204,7 +204,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
   }
 
   return(<div className=''>
-  {mur.dedKhesguud && mur.dedKhesguud?.length > 0 && (<div className="pl-4 py-2"><ZardalTable zardal={mur} barilgiinId={barilgiinId} token={token} columns={[{
+  {mur.dedKhesguud && mur.dedKhesguud?.length > 0 && (<div className="pl-4 py-2"><ZardalTable showHeader={false} zardal={mur} barilgiinId={barilgiinId} token={token} columns={[{
             title: "№",
             key: "index",
             width: "3rem",
@@ -220,7 +220,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
             title: "Дүн",
             dataIndex: "davkhar",
             ellipsis: true,
-            align: "center",
+            align: "left",
             width: "13rem",
             render(text,row){
               return <Dun token={token} zardal={row} barilgiinId={barilgiinId} ognoo={ognoo}/>
@@ -258,7 +258,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
       title: "Дүн",
       dataIndex: "Amt",
       ellipsis: true,
-      align: "center",
+      align: "left",
       width: "10rem",
       render(Amt){return formatNumber(Amt || 0)}
     },
@@ -283,7 +283,7 @@ function ZardalExpander({mur,token,barilgiinId,ognoo,columns}) {
 </div>)
 }
 
-function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClassName}) {
+function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClassName,showHeader}) {
   const [expandedKeys,setExpandedKeys] = useState([])
   
   return <Table
@@ -292,6 +292,7 @@ function ZardalTable({columns,garalt,pagination,token,barilgiinId,ognoo,rowClass
     dataSource={garalt?.jagsaalt}
     columns={columns}
     rowClassName={rowClassName}
+    showHeader={showHeader}
     expandable={{
       expandedRowRender: (mur) => expandedKeys.includes(mur._id) && <ZardalExpander mur={mur} barilgiinId={barilgiinId} columns={columns} ognoo={ognoo} token={token} />,
       expandedRowKeys: expandedKeys,
@@ -475,7 +476,7 @@ function zardal({token}) {
             title: "Дүн",
             dataIndex: "davkhar",
             ellipsis: true,
-            align: "center",
+            align: "left",
             width: "10rem",
             render(text,row){
               return <Dun token={token} zardal={row} barilgiinId={barilgiinId} ognoo={ognoo}/>
