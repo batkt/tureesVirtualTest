@@ -118,7 +118,9 @@ function tulburTootsoo({ token }) {
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne)
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne)
           medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD")
-
+          medeelel.niitAshiglaltiinZardal = formatNumber(
+            medeelel.niitAshiglaltiinZardal
+          )
           const dans = dansGaralt?.jagsaalt?.find(
             (a) => a.dugaar === songogdsonDans
           )
@@ -255,7 +257,7 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className="print a5 p-10 sun-editor-editable"
+                  className="print a5 sun-editor-editable p-10"
                   dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
                 />
               )
@@ -317,11 +319,13 @@ function tulburTootsoo({ token }) {
                   setSongogdsonGereenuud([])
                 }}
               >
-                {baiguullaga?.barilguud?.find(a=>a._id === barilgiinId)?.davkharuud.map((a) => (
-                  <Select.Option key={a._id} value={a.davkhar}>
-                    {a.davkhar}
-                  </Select.Option>
-                ))}
+                {baiguullaga?.barilguud
+                  ?.find((a) => a._id === barilgiinId)
+                  ?.davkharuud.map((a) => (
+                    <Select.Option key={a._id} value={a.davkhar}>
+                      {a.davkhar}
+                    </Select.Option>
+                  ))}
               </Select>
               <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
                 {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
