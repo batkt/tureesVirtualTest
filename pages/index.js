@@ -33,7 +33,7 @@ function Ajiltan() {
     <div className="login flex justify-center dark:bg-gray-800">
       <Head>
         <title>Нэвтрэх хуудас</title>
-        <link rel="icon" href="/rent.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container sm:px-10">
         <div className="block xl:grid grid-cols-2 gap-4">

@@ -67,7 +67,7 @@ function Admin({
     <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
-        <link rel="icon" href="/rent.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Updater />
       {!dedKhuudas && (
