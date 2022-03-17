@@ -210,7 +210,10 @@ function tulburTootsoo({ token }) {
   function nekhemjlelZasya(mur, index) {
     const footer = [
       <Button onClick={() => dunZasvarRef.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => dunZasvarRef.current.khadgalya()}>
+      <Button
+        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        onClick={() => dunZasvarRef.current.khadgalya()}
+      >
         Хадгалах
       </Button>,
     ]
@@ -473,10 +476,12 @@ function tulburTootsoo({ token }) {
                             size="small"
                             icon={
                               <div
-                                className={`flex items-center justify-center text-yellow-500`}
+                                className={`flex items-center justify-center`}
                                 onClick={() => nekhemjlelZasya(record, index)}
                               >
-                                <EditOutlined style={{ fontSize: "18px" }} />
+                                <EditOutlined
+                                  style={{ fontSize: "18px", color: "#85C1E9" }}
+                                />
                               </div>
                             }
                           />
