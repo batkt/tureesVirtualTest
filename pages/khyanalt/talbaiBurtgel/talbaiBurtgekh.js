@@ -27,6 +27,7 @@ import {
   Space,
   Table,
   Upload,
+  Tooltip,
 } from "antd"
 import Admin from "components/Admin"
 import { modal } from "components/ant/Modal"
@@ -806,61 +807,62 @@ function talbaiBurtgekh({ token }) {
           >
             <span>Excel -ээс Талбай татах</span>
           </Button>
-          <Button
-            style={{
-              alignItems: "end",
-              backgroundColor: "#209669",
-              color: "#ffffff",
-              display: "flex",
-              marginTop: "10px",
-            }}
-            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-            onClick={() => {
-              const { Excel } = require("antd-table-saveas-excel")
-              const excelExport = new Excel()
-              excelExport
-                .addSheet("түрээсийн талбай")
-                .addColumns([
-                  {
-                    title: "Дугаар",
-                    dataIndex: "kod",
-                  },
-                  {
-                    title: "Давхар",
-                    dataIndex: "davkhar",
-                  },
-                  {
-                    title: "Талбай/м2/",
-                    dataIndex: "talbainKhemjee",
-                  },
+          <Tooltip title="Жагсаалт эксэл рүү гаргах">
+            <Button
+              style={{
+                backgroundColor: "#209669",
+                color: "#ffffff",
 
-                  {
-                    title: "Нийт үнэ/₮/",
-                    dataIndex: "talbainNiitUne",
-
-                    render: (talbainNiitUne) => {
-                      return formatNumber(talbainNiitUne || 0)
+                marginTop: "10px",
+              }}
+              icon={
+                <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
+              }
+              onClick={() => {
+                const { Excel } = require("antd-table-saveas-excel")
+                const excelExport = new Excel()
+                excelExport
+                  .addSheet("түрээсийн талбай")
+                  .addColumns([
+                    {
+                      title: "Дугаар",
+                      dataIndex: "kod",
                     },
-                  },
-                  {
-                    title: "Зардал",
-                    dataIndex: "niitAshiglaltiinZardal",
-                  },
-                  {
-                    title: "Төлбөр",
-                    dataIndex: "tureesiinTulbur",
-                  },
-                  {
-                    title: "Тайлбар",
-                    dataIndex: "tailbar",
-                  },
-                ])
-                .addDataSource(talbainiiGaralt?.jagsaalt)
-                .saveAs("түрээсийн талбай.xlsx")
-            }}
-          >
-            Excel - рүү гаргах
-          </Button>
+                    {
+                      title: "Давхар",
+                      dataIndex: "davkhar",
+                    },
+                    {
+                      title: "Талбай/м2/",
+                      dataIndex: "talbainKhemjee",
+                    },
+
+                    {
+                      title: "Нийт үнэ/₮/",
+                      dataIndex: "talbainNiitUne",
+
+                      render: (talbainNiitUne) => {
+                        return formatNumber(talbainNiitUne || 0)
+                      },
+                    },
+                    {
+                      title: "Зардал",
+                      dataIndex: "niitAshiglaltiinZardal",
+                    },
+                    {
+                      title: "Төлбөр",
+                      dataIndex: "tureesiinTulbur",
+                    },
+                    {
+                      title: "Тайлбар",
+                      dataIndex: "tailbar",
+                    },
+                  ])
+                  .addDataSource(talbainiiGaralt?.jagsaalt)
+                  .saveAs("түрээсийн талбай.xlsx")
+              }}
+            ></Button>
+          </Tooltip>
         </div>
         <CardList
           keyValue="talbai"

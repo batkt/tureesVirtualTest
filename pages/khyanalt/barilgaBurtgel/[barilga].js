@@ -150,9 +150,9 @@ function GereeBaiguulakh({ token, data }) {
             }}
           >
             <Button
-              type="primary"
               htmlType="submit"
               onClick={() => khadgalya()}
+              style={{ backgroundColor: "#209669", color: "#ffffff" }}
             >
               Хадгалах
             </Button>

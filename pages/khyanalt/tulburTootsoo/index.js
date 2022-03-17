@@ -18,6 +18,7 @@ import {
   ExclamationOutlined,
   FileExcelOutlined,
   QuestionOutlined,
+  UploadOutlined,
 } from "@ant-design/icons"
 import moment from "moment"
 import useDans from "hooks/useDans"
@@ -513,7 +514,7 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }))
       }}
-      tsonkhniiId='61c2c6a51c2830c4e6f90cad'
+      tsonkhniiId="61c2c6a51c2830c4e6f90cad"
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
@@ -603,63 +604,64 @@ function tulburTootsoo({ token }) {
               ))}
             </Select>
           </div>
-          <Button
-            style={{
-              alignItems: "end",
-              backgroundColor: "#209669",
-              color: "#ffffff",
-              display: "flex",
-              marginLeft: "10px",
-            }}
-            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-            onClick={() => {
-              const { Excel } = require("antd-table-saveas-excel")
-              const excelExport = new Excel()
-              excelExport
-                .addSheet("Дансны хуулга")
-                .addColumns([
-                  {
-                    title: "Огноо",
-                    dataIndex: "TxDt",
-                    render(date) {
-                      return moment(date).format("YYYY-MM-DD")
+          <Tooltip title="Жагсаалт эксэл рүү гаргах">
+            <Button
+              style={{
+                backgroundColor: "#209669",
+                color: "#ffffff",
+
+                marginLeft: "10px",
+              }}
+              icon={
+                <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
+              }
+              onClick={() => {
+                const { Excel } = require("antd-table-saveas-excel")
+                const excelExport = new Excel()
+                excelExport
+                  .addSheet("Дансны хуулга")
+                  .addColumns([
+                    {
+                      title: "Огноо",
+                      dataIndex: "TxDt",
+                      render(date) {
+                        return moment(date).format("YYYY-MM-DD")
+                      },
                     },
-                  },
-                  {
-                    title: "Цаг",
-                    dataIndex: "TxTime",
-                    render(a) {
-                      if (_.isString(a)) return `${a}`
-                      return ""
+                    {
+                      title: "Цаг",
+                      dataIndex: "TxTime",
+                      render(a) {
+                        if (_.isString(a)) return `${a}`
+                        return ""
+                      },
                     },
-                  },
-                  {
-                    title: "Гүйлгээний утга",
-                    dataIndex: "TxAddInf",
-                  },
-                  {
-                    title: "Гүйлгээний дүн",
-                    sorter: () => 0,
-                    dataIndex: "Amt",
-                    render(a) {
-                      return formatNumber(a)
+                    {
+                      title: "Гүйлгээний утга",
+                      dataIndex: "TxAddInf",
                     },
-                  },
-                  {
-                    title: "Шилжүүлсэн данс",
-                    dataIndex: "CtAcntOrg",
-                  },
-                  {
-                    title: "Талбай",
-                    dataIndex: "kholbosonTalbainId",
-                  },
-                ])
-                .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
-                .saveAs("Дансны хуулга.xlsx")
-            }}
-          >
-            Excel - рүү гаргах
-          </Button>
+                    {
+                      title: "Гүйлгээний дүн",
+                      sorter: () => 0,
+                      dataIndex: "Amt",
+                      render(a) {
+                        return formatNumber(a)
+                      },
+                    },
+                    {
+                      title: "Шилжүүлсэн данс",
+                      dataIndex: "CtAcntOrg",
+                    },
+                    {
+                      title: "Талбай",
+                      dataIndex: "kholbosonTalbainId",
+                    },
+                  ])
+                  .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
+                  .saveAs("Дансны хуулга.xlsx")
+              }}
+            ></Button>
+          </Tooltip>
           {songogdsonDans && (
             <div className="ml-auto flex flex-row space-x-2 p-1 font-medium">
               Үлдэгдэл:{" "}

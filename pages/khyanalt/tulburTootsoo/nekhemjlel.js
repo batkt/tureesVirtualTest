@@ -183,7 +183,10 @@ function tulburTootsoo({ token }) {
   function nekhemjlelZagvarBurtgeye(mur) {
     const footer = [
       <Button onClick={() => nekhemjlekhRef.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => nekhemjlekhRef.current.khadgalya()}>
+      <Button
+        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        onClick={() => nekhemjlekhRef.current.khadgalya()}
+      >
         Хадгалах
       </Button>,
     ]
@@ -249,7 +252,7 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }))
       }}
-      tsonkhniiId='61c2c6d91c2830c4e6f90cbd'
+      tsonkhniiId="61c2c6d91c2830c4e6f90cbd"
     >
       <Card className="cardgrid col-span-12">
         <Spin spinning={loading}>
@@ -345,7 +348,7 @@ function tulburTootsoo({ token }) {
             <div className="col-span-2 rounded-md p-2 ">
               <div className="flex w-full justify-between">
                 <Button
-                  type="primary"
+                  style={{ backgroundColor: "#209669", color: "#ffffff" }}
                   className="ml-auto"
                   onClick={() => nekhemjlelZagvarBurtgeye()}
                 >
@@ -367,16 +370,20 @@ function tulburTootsoo({ token }) {
                         cancelText="Үгүй"
                         onConfirm={() => zagvarUstgaya(a)}
                       >
-                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
-                          <DeleteOutlined style={{ display: "flex" }} />
+                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white">
+                          <DeleteOutlined
+                            style={{ color: "red", display: "flex" }}
+                          />
                         </div>
                       </Popconfirm>
                     </div>
                     <div
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white"
                       onClick={() => nekhemjlelZagvarBurtgeye(a)}
                     >
-                      <EditOutlined style={{ display: "flex" }} />
+                      <EditOutlined
+                        style={{ display: "flex", color: "#85C1E9" }}
+                      />
                     </div>
                   </div>
                 ))}

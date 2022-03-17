@@ -14,7 +14,11 @@ import {
   Progress,
   Select,
 } from "antd"
-import { FileExcelOutlined, ExclamationCircleOutlined } from "@ant-design/icons"
+import {
+  FileExcelOutlined,
+  ExclamationCircleOutlined,
+  UploadOutlined,
+} from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
 import useOrder from "tools/function/useOrder"
@@ -604,7 +608,7 @@ function guilgeeniiTuukh({ token }) {
             khuudasniiDugaar: 1,
           }))
       }}
-      tsonkhniiId='61c2c6bc1c2830c4e6f90cb5'
+      tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
     >
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-4">
@@ -709,70 +713,70 @@ function guilgeeniiTuukh({ token }) {
                 </Select.Option>
               ))}
           </Select>
-          <Button
-            style={{
-              alignItems: "end",
-              backgroundColor: "#209669",
-              color: "#ffffff",
-              display: "flex",
-            }}
-            icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-            onClick={() => {
-              const { Excel } = require("antd-table-saveas-excel")
-              const excelExport = new Excel()
-              excelExport
-                .addSheet("Гүйлгээний түүх")
-                .addColumns([
-                  {
-                    title: "Гэрээний дугаар",
-                    dataIndex: "gereeniiDugaar",
-                  },
-                  {
-                    title: "Талбай",
-                    dataIndex: "talbainDugaar",
-                  },
-                  {
-                    title: "Давхар",
-                    dataIndex: "davkhar",
-                  },
-                  {
-                    title: "Түрээслэгч",
-                    dataIndex: "ner",
-                  },
-                  {
-                    title: "Утас",
-                    dataIndex: "utas",
-                  },
-                  {
-                    title: "Үлдэгдэл",
-                    dataIndex: "uldegdel",
-                    render(a) {
-                      return formatNumber(a)
+          <Tooltip title="Жагсаалт эксэл рүү гаргах">
+            <Button
+              style={{
+                backgroundColor: "#209669",
+                color: "#ffffff",
+              }}
+              icon={
+                <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
+              }
+              onClick={() => {
+                const { Excel } = require("antd-table-saveas-excel")
+                const excelExport = new Excel()
+                excelExport
+                  .addSheet("Гүйлгээний түүх")
+                  .addColumns([
+                    {
+                      title: "Гэрээний дугаар",
+                      dataIndex: "gereeniiDugaar",
                     },
-                  },
-                  {
-                    title: "Гэрээний огноо",
-                    dataIndex: "gereeniiOgnoo",
+                    {
+                      title: "Талбай",
+                      dataIndex: "talbainDugaar",
+                    },
+                    {
+                      title: "Давхар",
+                      dataIndex: "davkhar",
+                    },
+                    {
+                      title: "Түрээслэгч",
+                      dataIndex: "ner",
+                    },
+                    {
+                      title: "Утас",
+                      dataIndex: "utas",
+                    },
+                    {
+                      title: "Үлдэгдэл",
+                      dataIndex: "uldegdel",
+                      render(a) {
+                        return formatNumber(a)
+                      },
+                    },
+                    {
+                      title: "Гэрээний огноо",
+                      dataIndex: "gereeniiOgnoo",
 
-                    render(a) {
-                      return moment(a).format("YYYY-MM-DD")
+                      render(a) {
+                        return moment(a).format("YYYY-MM-DD")
+                      },
                     },
-                  },
-                  {
-                    title: "Дуусах огноо",
-                    dataIndex: "duusakhOgnoo",
+                    {
+                      title: "Дуусах огноо",
+                      dataIndex: "duusakhOgnoo",
 
-                    render(a) {
-                      return moment(a).format("YYYY-MM-DD")
+                      render(a) {
+                        return moment(a).format("YYYY-MM-DD")
+                      },
                     },
-                  },
-                ])
-                .addDataSource(gereeniiMedeelel?.jagsaalt)
-                .saveAs("Гүйлгээний түүх.xlsx")
-            }}
-          >
-            Excel - рүү гаргах
-          </Button>
+                  ])
+                  .addDataSource(gereeniiMedeelel?.jagsaalt)
+                  .saveAs("Гүйлгээний түүх.xlsx")
+              }}
+            ></Button>
+          </Tooltip>
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
           <TableGuilgee

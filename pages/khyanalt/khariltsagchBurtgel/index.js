@@ -9,6 +9,7 @@ import {
   Popconfirm,
   Tag,
   Popover,
+  Tooltip,
 } from "antd"
 import {
   UserOutlined,
@@ -23,6 +24,7 @@ import {
   MoreOutlined,
   SettingOutlined,
   MinusCircleOutlined,
+  UploadOutlined,
 } from "@ant-design/icons"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 
@@ -362,7 +364,7 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) =>
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      tsonkhniiId='61c2c6731c2830c4e6f90c9d'
+      tsonkhniiId="61c2c6731c2830c4e6f90c9d"
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
@@ -579,81 +581,87 @@ function AjiltanBurtgel({ token }) {
         <div className="mb-5 flex flex-row">
           <div></div>
           <div className="ml-auto flex">
-            <Button
-              style={{
-                alignItems: "end",
-                backgroundColor: "#209669",
-                color: "#ffffff",
-                display: "flex",
-                marginTop: "20px",
-              }}
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-              onClick={() => {
-                const { Excel } = require("antd-table-saveas-excel")
-                const excel = new Excel()
-                excel
-                  .addSheet("харилцагч")
-                  .addColumns([
-                    {
-                      title: "Төрөл",
-                      dataIndex: "turul",
-                      align: "center",
-                      ellipsis: true,
-                      render: (turul) => {
-                        return (
-                          <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
-                            {turul}
-                          </Tag>
-                        )
+            <Tooltip title="Жагсаалт эксэл рүү гаргах">
+              <Button
+                style={{
+                  backgroundColor: "#209669",
+                  color: "#ffffff",
+                  marginTop: "20px",
+                }}
+                icon={
+                  <UploadOutlined
+                    style={{ fontSize: "18px", display: "flex" }}
+                  />
+                }
+                onClick={() => {
+                  const { Excel } = require("antd-table-saveas-excel")
+                  const excel = new Excel()
+                  excel
+                    .addSheet("харилцагч")
+                    .addColumns([
+                      {
+                        title: "Төрөл",
+                        dataIndex: "turul",
+                        align: "center",
+                        ellipsis: true,
+                        render: (turul) => {
+                          return (
+                            <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
+                              {turul}
+                            </Tag>
+                          )
+                        },
                       },
-                    },
-                    { title: "Регистр", dataIndex: "register", ellipsis: true },
-                    { title: "Нэр", dataIndex: "ner", ellipsis: true },
-                    {
-                      title: "Хаяг",
-                      dataIndex: "khayag",
-                      ellipsis: true,
-                      width: "5rem",
-                    },
-                    {
-                      title: "Утас",
-                      dataIndex: "utas",
-                      ellipsis: true,
-                      render(a) {
-                        return a?.join(",")
+                      {
+                        title: "Регистр",
+                        dataIndex: "register",
+                        ellipsis: true,
                       },
-                    },
-                    {
-                      title: "И-мэйл",
-                      dataIndex: "mail",
-                      ellipsis: true,
-                      width: "5rem",
-                      align: "center",
-                    },
-                    {
-                      title: "Төлөв",
-                      dataIndex: "tuluv",
-                      ellipsis: true,
-                      align: "center",
-                      render: () => {
-                        return <Tag color="green">Идэвхтэй</Tag>
+                      { title: "Нэр", dataIndex: "ner", ellipsis: true },
+                      {
+                        title: "Хаяг",
+                        dataIndex: "khayag",
+                        ellipsis: true,
+                        width: "5rem",
                       },
-                    },
-                    {
-                      title: "Бүртгэгдсэн",
-                      dataIndex: "createdAt",
-                      ellipsis: true,
-                      render: (data) => {
-                        return moment(data).format("YYYY-MM-DD")
+                      {
+                        title: "Утас",
+                        dataIndex: "utas",
+                        ellipsis: true,
+                        render(a) {
+                          return a?.join(",")
+                        },
                       },
-                    },
-                  ])
-                  .addDataSource(khariltsagchiinGaralt?.jagsaalt)
-                  .saveAs("харилцагчийн жагсаалт.xlsx")
-              }}
-            >
-              Excel - рүү гаргах
-            </Button>
+                      {
+                        title: "И-мэйл",
+                        dataIndex: "mail",
+                        ellipsis: true,
+                        width: "5rem",
+                        align: "center",
+                      },
+                      {
+                        title: "Төлөв",
+                        dataIndex: "tuluv",
+                        ellipsis: true,
+                        align: "center",
+                        render: () => {
+                          return <Tag color="green">Идэвхтэй</Tag>
+                        },
+                      },
+                      {
+                        title: "Бүртгэгдсэн",
+                        dataIndex: "createdAt",
+                        ellipsis: true,
+                        render: (data) => {
+                          return moment(data).format("YYYY-MM-DD")
+                        },
+                      },
+                    ])
+                    .addDataSource(khariltsagchiinGaralt?.jagsaalt)
+                    .saveAs("харилцагчийн жагсаалт.xlsx")
+                }}
+              ></Button>
+            </Tooltip>
             <Button
               style={{
                 alignItems: "end",
