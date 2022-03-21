@@ -51,7 +51,7 @@
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #0d0d0d;
+  @apply bg-gray-900 dark:bg-gray-300;
 }
 
 .btn {
@@ -73,11 +73,11 @@
   transition-duration: 0.2s;
 }
 
-.sun-editor-editable p{
+.sun-editor-editable p {
   margin: 0 !important;
 }
 
-.ant-badge-dot.ant-scroll-number{
+.ant-badge-dot.ant-scroll-number {
   right: 5px;
   top: 2px;
 }
@@ -147,7 +147,7 @@
 }
 
 .zurag .ant-empty-image svg {
-  @apply w-full h-full !important;
+  @apply h-full w-full !important;
 }
 
 .ant-picker-cell {
@@ -164,24 +164,24 @@
 
 .main {
   min-height: calc(100vh - 2rem);
-  @apply w-full md:large-size;
+  @apply md:large-size w-full;
 }
 
 .menu-item {
-  @apply text-white whitespace-nowrap p-2 rounded-3xl rounded-r-none relative cursor-pointer;
+  @apply relative cursor-pointer whitespace-nowrap rounded-3xl rounded-r-none p-2 text-white;
 }
 
 .selected-menu {
-  @apply text-green-600 bg-gray-100 dark:bg-gray-800 dark:text-green-600 whitespace-nowrap p-2 rounded-3xl rounded-r-none relative cursor-pointer;
+  @apply relative cursor-pointer whitespace-nowrap rounded-3xl rounded-r-none bg-gray-100 p-2 text-green-600 dark:bg-gray-800 dark:text-green-600;
 }
 
 .selected-menu-top {
-  @apply h-10 w-10 bg-gray-100 dark:bg-gray-800 absolute top-0 right-0;
+  @apply absolute top-0 right-0 h-10 w-10 bg-gray-100 dark:bg-gray-800;
   transform: translateY(-100%);
 }
 
 .selected-menu-bottom {
-  @apply h-10 w-10 bg-gray-100 dark:bg-gray-800 absolute bottom-0 right-0;
+  @apply absolute bottom-0 right-0 h-10 w-10 bg-gray-100 dark:bg-gray-800;
   transform: translateY(100%);
 }
 
@@ -358,60 +358,60 @@
 }
 
 .bg-theme-green {
-  @apply bg-green-500  shadow-lg text-gray-50 !important;
+  @apply bg-green-500  text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-yellow {
-  @apply bg-yellow-500 shadow-lg text-gray-50 !important;
+  @apply bg-yellow-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-red {
-  @apply bg-red-500 shadow-lg text-gray-50 !important;
+  @apply bg-red-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-blue {
-  @apply bg-blue-500 shadow-lg text-gray-50 !important;
+  @apply bg-blue-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-pink {
-  @apply bg-pink-500 shadow-lg text-gray-50 !important;
+  @apply bg-pink-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-gray {
-  @apply bg-gray-500 shadow-lg text-gray-50 !important;
+  @apply bg-gray-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-indigo {
-  @apply bg-indigo-500 shadow-lg text-gray-50 !important;
+  @apply bg-indigo-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-purple {
-  @apply bg-purple-500 shadow-lg text-gray-50 !important;
+  @apply bg-purple-500 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-2c3e50 {
-  @apply bg-gray-700 shadow-lg text-gray-50 !important;
+  @apply bg-gray-700 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-FFAF7B {
-  @apply bg-yellow-600 shadow-lg text-gray-50 !important;
+  @apply bg-yellow-600 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-6D6027 {
-  @apply bg-yellow-900 shadow-lg text-gray-50 !important;
+  @apply bg-yellow-900 text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-03001e {
-  @apply bg-black shadow-lg text-gray-50 !important;
+  @apply bg-black text-gray-50 shadow-lg !important;
 }
 
 .bg-theme-C6426E {
-  @apply bg-red-800 shadow-lg text-gray-50 !important;
+  @apply bg-red-800 text-gray-50 shadow-lg !important;
 }
 
 .ant-notification-notice {
   border-width: 1px;
-  @apply shadow-lg rounded-lg border-white bg-white p-5 w-auto !important;
+  @apply w-auto rounded-lg border-white bg-white p-5 shadow-lg !important;
 }
 
 .ant-table {
@@ -423,11 +423,11 @@
 }
 
 .ant-table-row > tr > td {
-  @apply dark:bg-gray-700 dark:text-gray-300 mt-1 rounded-md shadow-lg !important;
+  @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300 !important;
 }
 
 .ant-table-cell {
-  @apply dark:text-gray-300 bg-transparent !important;
+  @apply bg-transparent dark:text-gray-300 !important;
 }
 
 .ant-notification-notice-message {
@@ -473,11 +473,11 @@
 }
 
 .read-more-button {
-  @apply text-blue-500 font-medium !important;
+  @apply font-medium text-blue-500 !important;
 }
 
 .ant-dropdown-menu {
-  @apply dark:bg-gray-900 dark:text-gray-100 shadow-lg !important;
+  @apply shadow-lg dark:bg-gray-900 dark:text-gray-100 !important;
 }
 
 .ant-dropdown-menu-item {
@@ -551,16 +551,16 @@ input:-webkit-autofill {
   -webkit-background-clip: text !important;
 }
 
-.iconbutton .anticon{
-  @apply flex !important
+.iconbutton .anticon {
+  @apply flex !important;
 }
 
 .ant-transfer-list-header .anticon {
-  @apply flex !important
+  @apply flex !important;
 }
 
-.ant-transfer-operation > button > span{
-  @apply flex !important
+.ant-transfer-operation > button > span {
+  @apply flex !important;
 }
 
 .ant-picker-panel {
@@ -577,12 +577,12 @@ input:-webkit-autofill {
 
 .event-active:before {
   content: "";
-  @apply bg-yellow-500 w-3 h-3 rounded-full mr-1;
+  @apply mr-1 h-3 w-3 rounded-full bg-yellow-500;
 }
 
 .event-selected:before {
   content: "";
-  @apply bg-green-500 w-3 h-3 rounded-full mr-1;
+  @apply mr-1 h-3 w-3 rounded-full bg-green-500;
 }
 
 .ant-picker {
@@ -658,7 +658,7 @@ input:-webkit-autofill {
 }
 
 .cardgrid {
-  @apply bg-white dark:bg-gray-800 rounded-none md:rounded-3xl min-w-full !important;
+  @apply min-w-full rounded-none bg-white dark:bg-gray-800 md:rounded-3xl !important;
 }
 
 .ant-hidden {
@@ -676,7 +676,7 @@ input:-webkit-autofill {
   height: 100%;
 }
 
-.anticon-search{
+.anticon-search {
   display: flex !important;
 }
 
@@ -709,7 +709,7 @@ input:-webkit-autofill {
   @apply dark:text-gray-100;
 }
 
-.break-word{
+.break-word {
   word-break: break-word;
 }
 
@@ -718,10 +718,10 @@ input:-webkit-autofill {
 }
 
 .profile > .ant-dropdown-menu {
-  @apply p-2 transition duration-300 ease-in-out rounded-md !important;
+  @apply rounded-md p-2 transition duration-300 ease-in-out !important;
 }
 
-.profileMenuItem{
+.profileMenuItem {
   @apply rounded-md hover:bg-green-600 !important;
 }
 

@@ -1,10 +1,10 @@
 //#region import
-import Admin from "components/Admin"
-import { useEffect, useState, useRef, useMemo } from "react"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import { useAuth } from "services/auth"
-import useMedegdel from "hooks/medegdel/useMedegdel"
-import useMailiinZagvar from "hooks/useMailiinZagvar"
+import Admin from "components/Admin";
+import { useEffect, useState, useRef, useMemo } from "react";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import { useAuth } from "services/auth";
+import useMedegdel from "hooks/medegdel/useMedegdel";
+import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Input,
@@ -13,25 +13,25 @@ import {
   Select,
   Spin,
   Table,
-} from "antd"
+} from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   FileExcelOutlined,
-} from "@ant-design/icons"
-import moment from "moment"
-import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel"
-import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
-import deleteMethod from "tools/function/crud/deleteMethod"
-import createMethod from "tools/function/crud/createMethod"
-import useSWR from "swr"
-import formatNumber from "tools/function/formatNumber"
-import useSanalGomdol from "hooks/medegdel/useSanalGomdol"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import { modal } from "components/ant/Modal"
+} from "@ant-design/icons";
+import moment from "moment";
+import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
+import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
+import deleteMethod from "tools/function/crud/deleteMethod";
+import createMethod from "tools/function/crud/createMethod";
+import useSWR from "swr";
+import formatNumber from "tools/function/formatNumber";
+import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { modal } from "components/ant/Modal";
 //#endregion
 
-var timeout = null
+var timeout = null;
 
 function IlgeesenToo({
   barilgiinId,
@@ -49,39 +49,39 @@ function IlgeesenToo({
         ekhlekhOgnoo,
         duusakhOgnoo,
       }).then((a) => a.data)
-  )
+  );
   return (
     <>
       Нийт илгээгдсэн : <span className="font-medium">{data || 0}</span>
     </>
-  )
+  );
 }
 
 function Khyanalt({ token }) {
   //#region const
-  const { baiguullaga, barilgiinId } = useAuth()
-  const [turul, setTurul] = useState("SMS")
-  const [khariltsagch, setKhariltsagch] = useState(null)
-  const [davkhar, setDavkhar] = useState(null)
-  const [content, setContent] = useState("")
-  const [msj, onTextChange] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [title, setTitle] = useState("")
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
+  const { baiguullaga, barilgiinId } = useAuth();
+  const [turul, setTurul] = useState("SMS");
+  const [khariltsagch, setKhariltsagch] = useState(null);
+  const [davkhar, setDavkhar] = useState(null);
+  const [content, setContent] = useState("");
+  const [msj, onTextChange] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [title, setTitle] = useState("");
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
-  const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar")
+  const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
 
-  const ref = useRef(null)
+  const ref = useRef(null);
 
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useMedegdel(token, undefined, davkhar, ilgeekhTurul, turul)
+    useMedegdel(token, undefined, davkhar, ilgeekhTurul, turul);
 
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
     "sms"
-  )
+  );
 
   const {
     sonorduulga,
@@ -89,39 +89,39 @@ function Khyanalt({ token }) {
     jagsaalt,
     nextSonorduulga,
     setKhuudaslalt,
-  } = useSanalGomdol(turul === "App" && token, khariltsagch?.khariltsagchiinId)
+  } = useSanalGomdol(turul === "App" && token, khariltsagch?.khariltsagchiinId);
 
   useEffect(() => {
-    setKhariltsagch(null)
-    if (ilgeekhTurul !== "davkharaar") setDavkhar(null)
-  }, [ilgeekhTurul])
+    setKhariltsagch(null);
+    if (ilgeekhTurul !== "davkharaar") setDavkhar(null);
+  }, [ilgeekhTurul]);
 
   useEffect(() => {
-    setKhariltsagch(null)
-    setDavkhar(null)
-  }, [turul])
+    setKhariltsagch(null);
+    setDavkhar(null);
+  }, [turul]);
 
   const ingeekhmSms = useMemo(() => {
-    if (!khariltsagch) return msj
-    var utga = msj
+    if (!khariltsagch) return msj;
+    var utga = msj;
     for (const [key, value] of Object.entries(khariltsagch)) {
-      utga = utga?.replace(new RegExp(`<${key}>`, "g"), value)
+      utga = utga?.replace(new RegExp(`<${key}>`, "g"), value);
     }
-    return utga
-  }, [khariltsagch, msj])
+    return utga;
+  }, [khariltsagch, msj]);
   //#endregion
 
   //#region method
 
   async function appIlgeeye() {
     if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0) {
-      var khariu = { successCount: 0, failureCount: 0 }
+      var khariu = { successCount: 0, failureCount: 0 };
       songogdsonGereenuud
         .filter((a) => !!a.khariltsagchiinId)
         .map((a, index, array) => {
-          let body = msj
+          let body = msj;
           for (const [key, value] of Object.entries(a)) {
-            body = body?.replace(new RegExp(`<${key}>`, "g"), value)
+            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
           }
 
           uilchilgee(token)
@@ -133,28 +133,28 @@ function Khyanalt({ token }) {
               medeelel: { title, body },
             })
             .then(({ data }) => {
-              if (!!data?.successCount) khariu.successCount += 1
-              else if (!!data?.failureCount) khariu.failureCount += 1
+              if (!!data?.successCount) khariu.successCount += 1;
+              else if (!!data?.failureCount) khariu.failureCount += 1;
               if (index === array.length - 1) {
                 notification.success({
                   message: `Notification Амжилттай ${khariu.successCount} ${
                     khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
                   } илгээлээ`,
-                })
-                setLoading(false)
+                });
+                setLoading(false);
               }
-            })
-          return
-        })
-      return
+            });
+          return;
+        });
+      return;
     }
 
     if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна")
-      return
+      message.warning("Хүсэлт илгээгдсэн байна");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     uilchilgee(token)
       .post(`/sonorduulgaIlgeeye`, {
         firebaseToken: khariltsagch?.firebaseToken,
@@ -172,35 +172,35 @@ function Khyanalt({ token }) {
             title,
             message: ingeekhmSms,
             turul: "medegdel",
-          })
-          sonorduulgaMutate({ ...sonorduulga }, false)
-          notification.success({ message: "Notification Амжилттай илгээлээ" })
-          setLoading(false)
+          });
+          sonorduulgaMutate({ ...sonorduulga }, false);
+          notification.success({ message: "Notification Амжилттай илгээлээ" });
+          setLoading(false);
         } else if (!!data?.failureCount) {
           notification.warning({
             description: _.get(data, "results.0.error.message"),
             message: _.get(data, "results.0.error.code"),
-          })
-          setLoading(false)
+          });
+          setLoading(false);
         }
       })
       .catch((e) => {
-        setLoading(false)
-        aldaaBarigch(e)
-      })
+        setLoading(false);
+        aldaaBarigch(e);
+      });
   }
 
   async function msgIlgeeye() {
     if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна")
-      return
+      message.warning("Хүсэлт илгээгдсэн байна");
+      return;
     }
-    var msgnuud = []
+    var msgnuud = [];
     if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0)
       songogdsonGereenuud.map((a) => {
-        var text = msj
+        var text = msj;
         for (const [key, value] of Object.entries(a)) {
-          text = text?.replace(new RegExp(`<${key}>`, "g"), value)
+          text = text?.replace(new RegExp(`<${key}>`, "g"), value);
         }
         if (_.isArray(a.utas))
           a.utas.map((to) =>
@@ -208,13 +208,13 @@ function Khyanalt({ token }) {
               to,
               text,
             })
-          )
+          );
         else
           msgnuud.push({
             to: a.utas,
             text,
-          })
-      })
+          });
+      });
     else if (!!khariltsagch) {
       if (_.isArray(khariltsagch?.utas))
         khariltsagch?.utas.map((to) =>
@@ -222,89 +222,89 @@ function Khyanalt({ token }) {
             to,
             text: ingeekhmSms,
           })
-        )
+        );
       else
         msgnuud.push({
           to: khariltsagch?.utas,
           text: ingeekhmSms,
-        })
+        });
     } else {
-      message.warning("Та SMS илгээх гэрээгээ сонгоно уу")
-      return
+      message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
+      return;
     }
     if (!(msgnuud.length > 0)) {
-      message.warning("Илгээх мэдээлэл байхгүй байна")
-      return
+      message.warning("Илгээх мэдээлэл байхгүй байна");
+      return;
     }
-    setLoading(true)
+    setLoading(true);
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
-          notification.success({ message: "SMS Амжилттай илгээлээ" })
-          setLoading(false)
+          notification.success({ message: "SMS Амжилттай илгээлээ" });
+          setLoading(false);
         }
       })
       .catch((e) => {
-        setLoading(false)
-        aldaaBarigch(e)
-      })
+        setLoading(false);
+        aldaaBarigch(e);
+      });
   }
 
   async function mailIlgeeye() {
     if (ilgeekhTurul === "gantsaar" && !khariltsagch?.mail) {
-      notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" })
-      return
+      notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
+      return;
     }
-    const mailuud = []
+    const mailuud = [];
 
     if (ilgeekhTurul === "gantsaar") {
-      var zagvar = content
+      var zagvar = content;
       for (const [key, value] of Object.entries(khariltsagch)) {
-        zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
+        zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
       }
       mailuud.push({
         mail: khariltsagch.mail,
         content: zagvar,
-      })
+      });
     } else if (songogdsonGereenuud?.length > 0) {
       songogdsonGereenuud.forEach((a) => {
-        var zagvar = content
+        var zagvar = content;
         for (const [key, value] of Object.entries(a)) {
-          zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
+          zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         }
         mailuud.push({
           mail: a.mail,
           content: zagvar,
-        })
-      })
+        });
+      });
     }
-    setLoading(true)
+    setLoading(true);
     uilchilgee(token)
       .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" })
-          setLoading(false)
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          setLoading(false);
         }
       })
       .catch((e) => {
-        setLoading(false)
-        aldaaBarigch(e)
-      })
+        setLoading(false);
+        aldaaBarigch(e);
+      });
   }
 
   function send() {
     switch (turul) {
       case "App":
-        appIlgeeye()
-        break
+        appIlgeeye();
+        break;
       case "Mail":
-        mailIlgeeye()
-        break
+        mailIlgeeye();
+        break;
       default:
-        msgIlgeeye()
-        break
+        msgIlgeeye();
+        break;
     }
   }
 
@@ -317,7 +317,7 @@ function Khyanalt({ token }) {
       >
         Бүртгэл нэмэх
       </Button>,
-    ]
+    ];
     modal({
       title: "SMS Загвар үүсгэх",
       icon: <FileExcelOutlined />,
@@ -332,24 +332,24 @@ function Khyanalt({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   function zagvarUstgaya(mur) {
     deleteMethod("mailiinZagvar", token, mur?._id).then(({ data }) => {
       if (data === "Amjilttai") {
-        message.success("Устгагдлаа")
-        mailiinZagvarMutate()
+        message.success("Устгагдлаа");
+        mailiinZagvarMutate();
       }
-    })
+    });
   }
 
   function seen() {
     const seenList = [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].filter(
       (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
-    )
+    );
     if (seenList.length > 0) {
-      const seenIds = seenList.map((a) => a._id)
+      const seenIds = seenList.map((a) => a._id);
       if (
         jagsaalt.filter(
           (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
@@ -358,10 +358,10 @@ function Khyanalt({ token }) {
         setKhuudaslalt((a) => {
           a.jagsaalt.forEach((b) => {
             if (b.turul !== "medegdel" && b.kharsanEsekh === false)
-              b.kharsanEsekh = true
-          })
-          return a
-        })
+              b.kharsanEsekh = true;
+          });
+          return a;
+        });
       uilchilgee(token)
         .post("/sanalKharlaa", { id: seenIds })
         .then(() => {
@@ -370,20 +370,20 @@ function Khyanalt({ token }) {
               (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
             ).length > 0
           )
-            sonorduulgaMutate()
+            sonorduulgaMutate();
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     }
   }
 
   function onScroll(e) {
-    clearTimeout(timeout)
+    clearTimeout(timeout);
     timeout = setTimeout(function () {
-      seen()
-    }, 300)
+      seen();
+    }, 300);
 
     if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga()
+      nextSonorduulga();
     }
   }
   //#endregion
@@ -451,7 +451,7 @@ function Khyanalt({ token }) {
           </button>
         </div>
         <div
-          className="scrollbar-hidden overflow-y-auto"
+          className="scrollbar-hidden overflow-y-auto "
           style={{ height: "calc(100vh - 25rem)" }}
         >
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
@@ -507,13 +507,13 @@ function Khyanalt({ token }) {
                   setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
                 }
                 onChange={({ target }) => {
-                  clearTimeout(timeout)
+                  clearTimeout(timeout);
                   timeout = setTimeout(function () {
                     setNekhemjlelKhuudaslalt((a) => ({
                       ...a,
                       search: target.value,
-                    }))
-                  }, 300)
+                    }));
+                  }, 300);
                 }}
               />
             </div>
@@ -524,7 +524,9 @@ function Khyanalt({ token }) {
               {nekhemjlel?.jagsaalt?.map((mur) => (
                 <div
                   className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
-                    khariltsagch?._id === mur?._id ? "bg-green-100" : ""
+                    khariltsagch?._id === mur?._id
+                      ? "bg-green-100 dark:bg-green-500"
+                      : ""
                   } `}
                   key={mur?._id}
                   onClick={() => setKhariltsagch(mur)}
@@ -537,10 +539,22 @@ function Khyanalt({ token }) {
                     />
                     <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                   </div>
-                  <div className="truncate text-center text-xs text-gray-600">
+                  <div
+                    className={`truncate text-center text-xs text-gray-600  ${
+                      khariltsagch?._id === mur?._id
+                        ? "dark:text-gray-50"
+                        : "dark:text-gray-400"
+                    }`}
+                  >
                     {mur?.ner}
                   </div>
-                  <div className="truncate text-center text-xs text-gray-600">
+                  <div
+                    className={`truncate text-center text-xs text-gray-600 ${
+                      khariltsagch?._id === mur?._id
+                        ? "dark:text-gray-50"
+                        : "dark:text-gray-400"
+                    }`}
+                  >
                     {mur?.gereeniiDugaar}
                   </div>
                 </div>
@@ -592,7 +606,7 @@ function Khyanalt({ token }) {
                     <div className="text-base font-medium">
                       {khariltsagch?.ner}
                     </div>
-                    <div className="text-xs text-gray-600 sm:text-sm">
+                    <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                       {turul === "Mail"
                         ? khariltsagch?.mail
                         : khariltsagch?.utas}{" "}
@@ -661,7 +675,7 @@ function Khyanalt({ token }) {
                               {a.turul}
                             </span>
                           </div>
-                        )
+                        );
                       }
                     )}
                   </div>
@@ -678,7 +692,7 @@ function Khyanalt({ token }) {
                   rowSelection={{
                     type: "checkbox",
                     onChange: (selectedRowKeys, selectedRows) => {
-                      setSongogdsonGereenuud(selectedRows)
+                      setSongogdsonGereenuud(selectedRows);
                     },
                   }}
                   size="small"
@@ -711,7 +725,7 @@ function Khyanalt({ token }) {
                       dataIndex: "sariinTurees",
                       align: "center",
                       render: (sariinTurees) => {
-                        return formatNumber(sariinTurees || 0)
+                        return formatNumber(sariinTurees || 0);
                       },
                     },
                     {
@@ -719,7 +733,7 @@ function Khyanalt({ token }) {
                       dataIndex: "eneSardTulukhDun",
                       align: "center",
                       render: (eneSardTulukhDun) => {
-                        return formatNumber(eneSardTulukhDun || 0)
+                        return formatNumber(eneSardTulukhDun || 0);
                       },
                     },
                     {
@@ -727,7 +741,7 @@ function Khyanalt({ token }) {
                       dataIndex: "niitUldegdel",
                       align: "center",
                       render: (niitUldegdel) => {
-                        return formatNumber(niitUldegdel || 0)
+                        return formatNumber(niitUldegdel || 0);
                       },
                     },
                   ]}
@@ -803,7 +817,7 @@ function Khyanalt({ token }) {
               </div>
               <div className="mt-3">
                 <div className="font-medium">Өдрийн мэнд</div>
-                <div className="mt-1 text-gray-600">
+                <div className="mt-1 text-gray-600 dark:text-gray-300">
                   Та {turul} илгээх харилцагчаа сонгоно уу.
                 </div>
               </div>
@@ -812,9 +826,9 @@ function Khyanalt({ token }) {
         )}
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default Khyanalt
+export default Khyanalt;
