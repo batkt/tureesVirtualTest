@@ -270,6 +270,7 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         align: "center",
         width: "5rem",
+        showSorterTooltip: false,
         sorter: () => 0,
       },
       {
