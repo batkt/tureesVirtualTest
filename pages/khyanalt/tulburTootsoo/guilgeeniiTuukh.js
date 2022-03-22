@@ -1,9 +1,9 @@
 //#region imports
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee from "services/uilchilgee"
-import Admin from "components/Admin"
-import React, { useMemo } from "react"
-import { useAuth } from "services/auth"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee from "services/uilchilgee";
+import Admin from "components/Admin";
+import React, { useMemo } from "react";
+import { useAuth } from "services/auth";
 import {
   Card,
   Table,
@@ -13,34 +13,34 @@ import {
   Tooltip,
   Progress,
   Select,
-} from "antd"
+} from "antd";
 import {
   FileExcelOutlined,
   ExclamationCircleOutlined,
   UploadOutlined,
-} from "@ant-design/icons"
-import moment from "moment"
-import formatNumber from "tools/function/formatNumber"
-import useOrder from "tools/function/useOrder"
+} from "@ant-design/icons";
+import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
+import useOrder from "tools/function/useOrder";
 
-import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh"
-import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga"
+import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
+import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 
-import Khungulukh from "components/pageComponents/tulbur/Khungulukh"
-import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh"
-import _ from "lodash"
-import { modal } from "components/ant/Modal"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya"
-import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya"
-import useSWR from "swr"
-import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile"
-import CardList from "components/cardList"
-import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya"
+import Khungulukh from "components/pageComponents/tulbur/Khungulukh";
+import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh";
+import _ from "lodash";
+import { modal } from "components/ant/Modal";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
+import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
+import useSWR from "swr";
+import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile";
+import CardList from "components/cardList";
+import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
   const { data, mutate } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
@@ -52,9 +52,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
     {
       revalidateOnFocus: false,
     }
-  )
-  ugugdul.uldegdel = data?.uldegdel
-  ugugdul.mutate = mutate
+  );
+  ugugdul.uldegdel = data?.uldegdel;
+  ugugdul.mutate = mutate;
   return (
     <div
       className={`text-right font-medium ${
@@ -63,7 +63,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
-  )
+  );
 }
 
 function TableGuilgee({
@@ -101,12 +101,12 @@ function TableGuilgee({
         total: garalt?.niitMur,
         showSizeChanger: true,
         onChange: (khuudasniiDugaar, khuudasniiKhemjee) => {
-          setLoadingIndex(0)
+          setLoadingIndex(0);
           setKhuudaslalt((kh) => ({
             ...kh,
             khuudasniiDugaar,
             khuudasniiKhemjee,
-          }))
+          }));
         },
       }}
       expandable={{
@@ -129,29 +129,33 @@ function TableGuilgee({
         onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
       }}
     />
-  )
+  );
 }
 
 function guilgeeniiTuukh({ token }) {
   //#region state
-  const ref = React.useRef(null)
-  const refTuukh = React.useRef(null)
-  const baritsaaref = React.useRef(null)
-  const { baiguullaga, barilgiinId } = useAuth()
-  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null)
+  const ref = React.useRef(null);
+  const refTuukh = React.useRef(null);
+  const baritsaaref = React.useRef(null);
+  const { baiguullaga, barilgiinId } = useAuth();
+  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
-  ])
-  const [turul, setTurul] = React.useState("")
-  const [loadingIndex, setLoadingIndex] = React.useState(0)
-  const [davkhar, setDavkhar] = React.useState(undefined)
+  ]);
+  const [turul, setTurul] = React.useState("");
+  const [loadingIndex, setLoadingIndex] = React.useState(0);
+  const [davkhar, setDavkhar] = React.useState(undefined);
 
-  const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo)
+  const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
-    useTuluugiiGereeniiToololtAvya(token, ognoo)
+    useTuluugiiGereeniiToololtAvya(token, ognoo);
 
-  const { order, onChangeTable } = useOrder()
+  const { order, onChangeTable } = useOrder();
+
+  function khusnegtOrderChange(r, o, s) {
+    if (!JSON.stringify(s).includes("uldegdel")) onChangeTable(r, o, s);
+  }
 
   const query = React.useMemo(() => {
     if (turul === "voucher")
@@ -168,7 +172,7 @@ function guilgeeniiTuukh({ token }) {
             turul: "voucher",
           },
         },
-      }
+      };
     else if (turul === "avlaga")
       return {
         "avlaga.guilgeenuud.ognoo": {
@@ -182,7 +186,7 @@ function guilgeeniiTuukh({ token }) {
         uldegdel: {
           $gte: 0,
         },
-      }
+      };
     else if (turul === "tsutslagdsanAvlaga")
       return {
         baiguullagiinId: baiguullaga._id,
@@ -191,11 +195,11 @@ function guilgeeniiTuukh({ token }) {
         uldegdel: {
           $gte: 0,
         },
-      }
+      };
     else if (turul === "eneSardTulukh")
       return {
         davkhar,
-      }
+      };
     else if (turul === "eneSardTulsun")
       return {
         davkhar,
@@ -216,7 +220,7 @@ function guilgeeniiTuukh({ token }) {
             },
           },
         },
-      }
+      };
     else if (turul === "khungulult")
       return {
         davkhar,
@@ -229,9 +233,9 @@ function guilgeeniiTuukh({ token }) {
           $gt: 0,
         },
         tuluv: { $ne: -1 },
-      }
-    return { davkhar, tuluv: { $ne: -1 } }
-  }, [turul, ognoo, davkhar])
+      };
+    return { davkhar, tuluv: { $ne: -1 } };
+  }, [turul, ognoo, davkhar]);
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
     useGereeniiJagsaalt(
@@ -242,14 +246,14 @@ function guilgeeniiTuukh({ token }) {
       undefined,
       undefined,
       order
-    )
+    );
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(
       turul === "eneSardTulukh" && token,
       ognoo,
       query
-    )
+    );
 
   const columns = useMemo(
     () => [
@@ -300,7 +304,7 @@ function guilgeeniiTuukh({ token }) {
               setLoadingIndex={setLoadingIndex}
               urt={gereeniiMedeelel?.jagsaalt?.length}
             />
-          )
+          );
         },
         showSorterTooltip: false,
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
@@ -311,7 +315,7 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         align: "center",
         render(a) {
-          return moment(a).format("YYYY-MM-DD")
+          return moment(a).format("YYYY-MM-DD");
         },
       },
       {
@@ -322,10 +326,10 @@ function guilgeeniiTuukh({ token }) {
           const khuvi =
             row.baritsaaAvakhDun > 0
               ? (100 * row.baritsaaniiUldegdel) / row.baritsaaAvakhDun
-              : 100
+              : 100;
 
-          let strokeColor = "rgba(16, 185, 129,1)"
-          if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)"
+          let strokeColor = "rgba(16, 185, 129,1)";
+          if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
 
           return (
             <div className="flex flex-row divide-x-2 ">
@@ -343,10 +347,7 @@ function guilgeeniiTuukh({ token }) {
                     preserveAspectRatio="xMidYMid meet"
                     className="h-6 w-8 fill-current p-1 text-green-500"
                   >
-                    <g
-                      transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)"
-                      stroke="none"
-                    >
+                    <g transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)">
                       <path
                         d="M3080 3510 c-52 -14 -88 -40 -106 -77 -17 -34 -19 -67 -22 -285 l-3
                       -248 -549 0 c-418 0 -556 -3 -577 -12 -45 -21 -71 -48 -89 -94 -14 -36 -14
@@ -379,10 +380,7 @@ function guilgeeniiTuukh({ token }) {
                     preserveAspectRatio="xMidYMid meet"
                     className="h-6 w-8 fill-current p-1 text-green-500"
                   >
-                    <g
-                      transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)"
-                      stroke="none"
-                    >
+                    <g transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)">
                       <path
                         d="M715 3630 c-109 -22 -224 -88 -300 -172 -55 -62 -110 -172 -124 -252
               -15 -83 -15 -2529 0 -2612 17 -93 71 -196 142 -268 76 -76 154 -121 255 -146
@@ -442,10 +440,7 @@ function guilgeeniiTuukh({ token }) {
                       preserveAspectRatio="xMidYMid meet"
                       className="h-6 w-6 fill-current p-1 text-green-500"
                     >
-                      <g
-                        transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)"
-                        stroke="none"
-                      >
+                      <g transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)">
                         <path
                           d="M1104 4166 c-62 -19 -130 -73 -167 -130 l-32 -51 -3 -507 -3 -508
                     -74 0 -75 0 0 -445 0 -445 1365 0 1365 0 0 445 0 445 -79 0 -80 0 -3 278 -3
@@ -499,27 +494,27 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </div>
             </div>
-          )
+          );
         },
         sorter: () => 0,
         showSorterTooltip: false,
       },
     ],
     [gereeniiMedeelel, loadingIndex, delgegdsenGeree]
-  )
+  );
 
   //#endregion
 
   //#region handlers
   function onChangeTurul(turul) {
-    setTurul(turul)
-    setGereeniiKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }))
+    setTurul(turul);
+    setGereeniiKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
   }
 
   function refreshData() {
-    gereeniiMedeelelMutate()
-    tolooguiGereeniiTooMutate()
-    refTuukh.current?.refreshData()
+    gereeniiMedeelelMutate();
+    tolooguiGereeniiTooMutate();
+    refTuukh.current?.refreshData();
   }
 
   function baritsaaUdirdya(data) {
@@ -528,7 +523,7 @@ function guilgeeniiTuukh({ token }) {
       <Button type="primary" onClick={() => baritsaaref.current.khadgalya()}>
         Хадгалах
       </Button>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -542,7 +537,7 @@ function guilgeeniiTuukh({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   function guilgeeKhiiya(data) {
@@ -551,7 +546,7 @@ function guilgeeniiTuukh({ token }) {
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         Хадгалах
       </Button>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -565,7 +560,7 @@ function guilgeeniiTuukh({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
 
   function khungulultKhiiya(data) {
@@ -574,7 +569,7 @@ function guilgeeniiTuukh({ token }) {
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         Хадгалах
       </Button>,
-    ]
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -588,7 +583,7 @@ function guilgeeniiTuukh({ token }) {
         />
       ),
       footer,
-    })
+    });
   }
   //#endregion
 
@@ -598,15 +593,19 @@ function guilgeeniiTuukh({ token }) {
       khuudasniiNer="guilgeeniiTuukh"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        if (loadingIndex !== 0) setLoadingIndex(0)
+        if (loadingIndex !== 0) setLoadingIndex(0);
         if (turul !== "eneSardTulukh")
-          setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+          setGereeniiKhuudaslalt((a) => ({
+            ...a,
+            search,
+            khuudasniiDugaar: 1,
+          }));
         else
           setEneSardTuluuguiGereenuud((a) => ({
             ...a,
             search,
             khuudasniiDugaar: 1,
-          }))
+          }));
       }}
       tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
     >
@@ -692,7 +691,7 @@ function guilgeeniiTuukh({ token }) {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
         <div className="mt-5 flex flex-row space-x-5">
@@ -700,8 +699,8 @@ function guilgeeniiTuukh({ token }) {
             picker="month"
             value={ognoo}
             onChange={(v) => {
-              setOgnoo(v)
-              setLoadingIndex(0)
+              setOgnoo(v);
+              setLoadingIndex(0);
             }}
           />
           <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
@@ -723,8 +722,8 @@ function guilgeeniiTuukh({ token }) {
                 <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
               }
               onClick={() => {
-                const { Excel } = require("antd-table-saveas-excel")
-                const excelExport = new Excel()
+                const { Excel } = require("antd-table-saveas-excel");
+                const excelExport = new Excel();
                 excelExport
                   .addSheet("Гүйлгээний түүх")
                   .addColumns([
@@ -752,7 +751,7 @@ function guilgeeniiTuukh({ token }) {
                       title: "Үлдэгдэл",
                       dataIndex: "uldegdel",
                       render(a) {
-                        return formatNumber(a)
+                        return formatNumber(a);
                       },
                     },
                     {
@@ -760,7 +759,7 @@ function guilgeeniiTuukh({ token }) {
                       dataIndex: "gereeniiOgnoo",
 
                       render(a) {
-                        return moment(a).format("YYYY-MM-DD")
+                        return moment(a).format("YYYY-MM-DD");
                       },
                     },
                     {
@@ -768,12 +767,12 @@ function guilgeeniiTuukh({ token }) {
                       dataIndex: "duusakhOgnoo",
 
                       render(a) {
-                        return moment(a).format("YYYY-MM-DD")
+                        return moment(a).format("YYYY-MM-DD");
                       },
                     },
                   ])
                   .addDataSource(gereeniiMedeelel?.jagsaalt)
-                  .saveAs("Гүйлгээний түүх.xlsx")
+                  .saveAs("Гүйлгээний түүх.xlsx");
               }}
             ></Button>
           </Tooltip>
@@ -798,7 +797,7 @@ function guilgeeniiTuukh({ token }) {
             refreshData={refreshData}
             delgegdsenGeree={delgegdsenGeree}
             setDelgegdsenGeree={setDelgegdsenGeree}
-            onChange={onChangeTable}
+            onChange={khusnegtOrderChange}
           />
         </div>
         <CardList
@@ -825,9 +824,9 @@ function guilgeeniiTuukh({ token }) {
         />
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default guilgeeniiTuukh
+export default guilgeeniiTuukh;
