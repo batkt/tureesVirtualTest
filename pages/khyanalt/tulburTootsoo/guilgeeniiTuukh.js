@@ -369,7 +369,7 @@ function guilgeeniiTuukh({ token }) {
                   </svg>
                 </Tooltip>
               </a>
-              <a onClick={() => khungulultKhiiya(row)} className="px-2">
+              {/* <a onClick={() => khungulultKhiiya(row)} className="px-2">
                 <Tooltip title="Хөнгөлөх">
                   <svg
                     version="1.0"
@@ -427,7 +427,7 @@ function guilgeeniiTuukh({ token }) {
                     </g>
                   </svg>
                 </Tooltip>
-              </a>
+              </a> */}
               {row?._id === delgegdsenGeree && (
                 <a className="px-2" onClick={() => refTuukh.current.khevlekh()}>
                   <Tooltip title="Хэвлэх">

@@ -417,6 +417,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Талбай №",
+                    showSorterTooltip: false,
                     sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
                     dataIndex: "talbainDugaar",
                     width: "7rem",
@@ -424,6 +425,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Дараагийн төлөх огноо",
+                    showSorterTooltip: false,
                     sorter: (a, b) =>
                       moment(a.talbainDugaar).diff(
                         moment(b.talbainDugaar),
@@ -438,6 +440,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Өмнөх хуримтлагдсан өр төлбөр",
+                    showSorterTooltip: false,
                     sorter: (a, b) =>
                       a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
                     dataIndex: "umnukhSariinUrTulbur",
@@ -449,6 +452,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Энэ сард төлөх дүн",
+                    showSorterTooltip: false,
                     sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
                     dataIndex: "eneSardTulukhDun",
                     render(a) {
@@ -459,6 +463,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Нийт үлдэгдэл",
+                    showSorterTooltip: false,
                     sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
                     dataIndex: "niitUldegdel",
                     render(a) {
