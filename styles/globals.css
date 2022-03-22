@@ -789,3 +789,10 @@ input:-webkit-autofill {
 .anticon svg {
   display: flex !important;
 }
+
+.ant-upload-text {
+  @apply dark:text-gray-200 !important;
+}
+.ant-upload-hint {
+  @apply dark:text-gray-300 !important;
+}

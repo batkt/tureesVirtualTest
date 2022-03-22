@@ -12,9 +12,11 @@ import {
   message,
   Spin,
   notification,
+  Popover,
 } from "antd";
 import {
   CheckOutlined,
+  DownloadOutlined,
   ExclamationOutlined,
   FileExcelOutlined,
   QuestionOutlined,
@@ -609,67 +611,9 @@ function tulburTootsoo({ token }) {
               ))}
             </Select>
           </div>
-          <Tooltip title="Жагсаалт эксэл рүү гаргах">
-            <Button
-              style={{
-                backgroundColor: "#209669",
-                color: "#ffffff",
 
-                marginLeft: "10px",
-              }}
-              icon={
-                <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
-              }
-              onClick={() => {
-                const { Excel } = require("antd-table-saveas-excel");
-                const excelExport = new Excel();
-                excelExport
-                  .addSheet("Дансны хуулга")
-                  .addColumns([
-                    {
-                      title: "Огноо",
-                      dataIndex: "TxDt",
-                      render(date) {
-                        return moment(date).format("YYYY-MM-DD");
-                      },
-                    },
-                    {
-                      title: "Цаг",
-                      dataIndex: "TxTime",
-                      render(a) {
-                        if (_.isString(a)) return `${a}`;
-                        return "";
-                      },
-                    },
-                    {
-                      title: "Гүйлгээний утга",
-                      dataIndex: "TxAddInf",
-                    },
-                    {
-                      title: "Гүйлгээний дүн",
-                      showSorterTooltip: false,
-                      sorter: () => 0,
-                      dataIndex: "Amt",
-                      render(a) {
-                        return formatNumber(a);
-                      },
-                    },
-                    {
-                      title: "Шилжүүлсэн данс",
-                      dataIndex: "CtAcntOrg",
-                    },
-                    {
-                      title: "Талбай",
-                      dataIndex: "kholbosonTalbainId",
-                    },
-                  ])
-                  .addDataSource(dansniiKhuulgaGaralt?.jagsaalt)
-                  .saveAs("Дансны хуулга.xlsx");
-              }}
-            ></Button>
-          </Tooltip>
           {songogdsonDans && (
-            <div className="ml-auto flex flex-row space-x-2 p-1 font-medium">
+            <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
               Үлдэгдэл:{" "}
               {uldegdel ? (
                 songogdsonDans?.bank === "tdb" ? (
@@ -683,6 +627,75 @@ function tulburTootsoo({ token }) {
               {songogdsonDans.currency}
             </div>
           )}
+          <div className="ml-auto">
+            <Popover
+              content={() => (
+                <div className="flex w-24 flex-col space-y-2">
+                  <a
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={() => {
+                      const { Excel } = require("antd-table-saveas-excel");
+                      const excelExport = new Excel();
+                      excelExport
+                        .addSheet("Дансны хуулга")
+                        .addColumns([
+                          {
+                            title: "Огноо",
+                            dataIndex: "TxDt",
+                            render(date) {
+                              return moment(date).format("YYYY-MM-DD");
+                            },
+                          },
+                          {
+                            title: "Цаг",
+                            dataIndex: "TxTime",
+                            render(a) {
+                              if (_.isString(a)) return `${a}`;
+                              return "";
+                            },
+                          },
+                          {
+                            title: "Гүйлгээний утга",
+                            dataIndex: "TxAddInf",
+                          },
+                          {
+                            title: "Гүйлгээний дүн",
+                            showSorterTooltip: false,
+                            sorter: () => 0,
+                            dataIndex: "Amt",
+                            render(a) {
+                              return formatNumber(a);
+                            },
+                          },
+                          {
+                            title: "Шилжүүлсэн данс",
+                            dataIndex: "CtAcntOrg",
+                          },
+                          {
+                            title: "Талбай",
+                            dataIndex: "kholbosonTalbainId",
+                          },
+                        ])
+                        .addDataSource(dansniiKhuulgaGaralt?.jagsaalt || [])
+                        .saveAs("Дансны хуулга.xlsx");
+                    }}
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                Excel
+              </Button>
+            </Popover>
+          </div>
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
           <Table

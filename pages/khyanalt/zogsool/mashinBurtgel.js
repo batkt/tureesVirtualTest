@@ -1,81 +1,109 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import Admin from "components/Admin"
-import React, { useMemo, useState } from "react"
-import { useAuth } from "services/auth"
-import { Button, Card, Space, Table } from "antd"
-import { FileExcelOutlined } from "@ant-design/icons"
-import CardList from "components/cardList"
-import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile"
-import formatNumber from "tools/function/formatNumber"
-import { useRef } from "react"
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh"
-import { modal } from "components/ant/Modal"
-import useMashin,{useMashinToololt} from "hooks/useMashin"
-import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import React, { useMemo, useState } from "react";
+import { useAuth } from "services/auth";
+import { Button, Card, Popover, Space, Table } from "antd";
+import {
+  FileExcelOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
+import CardList from "components/cardList";
+import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
+import formatNumber from "tools/function/formatNumber";
+import { useRef } from "react";
+import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
+import { modal } from "components/ant/Modal";
+import useMashin, { useMashinToololt } from "hooks/useMashin";
+import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
 
 function mashinBurtgel({ token }) {
-  const { baiguullaga ,barilgiinId} = useAuth()
-  const excelref = useRef(null)
-  const mashinref = useRef(null)
-  const [turul,setTurul] = useState("Нийт")
+  const { baiguullaga, barilgiinId } = useAuth();
+  const excelref = useRef(null);
+  const mashinref = useRef(null);
+  const [turul, setTurul] = useState("Нийт");
 
-  const query = useMemo(()=>{
-    if(turul === 'Нийт')
-      return {}
-    return {turul}
-  },[turul])
+  const query = useMemo(() => {
+    if (turul === "Нийт") return {};
+    return { turul };
+  }, [turul]);
 
-  const {mashinToololt,mashinToololtMutate} = useMashinToololt(token)
+  const { mashinToololt, mashinToololtMutate } = useMashinToololt(token);
 
-  const { mashinGaralt, setMashinKhuudaslalt,mashinMutate } = useMashin(token,baiguullaga?._id,query)
+  const { mashinGaralt, setMashinKhuudaslalt, mashinMutate } = useMashin(
+    token,
+    baiguullaga?._id,
+    query
+  );
 
-  const toololt = useMemo(()=>{
+  const toololt = useMemo(() => {
     return [
-      { name: "Нийт", too: formatNumber(mashinToololt?.reduce((a, b) => a + b.too, 0)) },
-      { name: "Гэрээт",too: formatNumber(mashinToololt?.find(a=>a._id === 'Гэрээт')?.too) },
-      { name: "Түрээслэгч", too: formatNumber(mashinToololt?.find(a=>a._id === 'Түрээслэгч')?.too) },
-      { name: "Дотоод", too: formatNumber(mashinToololt?.find(a=>a._id === 'Дотоод')?.too) }
-    ]
-  },[mashinToololt,mashinGaralt])
+      {
+        name: "Нийт",
+        too: formatNumber(mashinToololt?.reduce((a, b) => a + b.too, 0)),
+      },
+      {
+        name: "Гэрээт",
+        too: formatNumber(mashinToololt?.find((a) => a._id === "Гэрээт")?.too),
+      },
+      {
+        name: "Түрээслэгч",
+        too: formatNumber(
+          mashinToololt?.find((a) => a._id === "Түрээслэгч")?.too
+        ),
+      },
+      {
+        name: "Дотоод",
+        too: formatNumber(mashinToololt?.find((a) => a._id === "Дотоод")?.too),
+      },
+    ];
+  }, [mashinToololt, mashinGaralt]);
 
   function onRefresh() {
-    mashinMutate()
-    mashinToololtMutate()
+    mashinMutate();
+    mashinToololtMutate();
   }
 
   function mashinOruulakhExcel() {
-      const footer = [
-        <Space>
-          <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
-          <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>Хадгалах</Button>
-        </Space>
-      ]
-      modal({
-        title: "",
-        icon: <FileExcelOutlined />,
-        content: (
-          <ExceleesOruulakh
-            ref={excelref}
-            token={token}
-            onFinish={onRefresh}
-            barilgiinId={barilgiinId}
-            zam="mashiniiExcelTatya"
-            garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
-            tailbar="Машины мэдээлэл оруулах excel файл"
-            zagvariinZam="mashiniiExcelAvya"
-          />
-        ),
-        footer,
-      })
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
+          Хадгалах
+        </Button>
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ExceleesOruulakh
+          ref={excelref}
+          token={token}
+          onFinish={onRefresh}
+          barilgiinId={barilgiinId}
+          zam="mashiniiExcelTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Машины мэдээлэл оруулах excel файл"
+          zagvariinZam="mashiniiExcelAvya"
+        />
+      ),
+      footer,
+    });
   }
 
   function mashinBurtgekh(data) {
     const footer = [
       <Space>
         <Button onClick={() => mashinref.current.khaaya()}>Хаах</Button>
-        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }} onClick={() => mashinref.current.khadgalya()}>Хадгалах</Button>
-      </Space>
-    ]
+        <Button
+          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          onClick={() => mashinref.current.khadgalya()}
+        >
+          Хадгалах
+        </Button>
+      </Space>,
+    ];
     modal({
       title: "",
       icon: <FileExcelOutlined />,
@@ -89,18 +117,27 @@ function mashinBurtgel({ token }) {
         />
       ),
       footer,
-    })
-}
+    });
+  }
 
   return (
-    <Admin title="Машин бүртгэл" khuudasniiNer="mashinBurtgel" className="p-0 md:p-4" onSearch={(search) => setMashinKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}>
+    <Admin
+      title="Машин бүртгэл"
+      khuudasniiNer="mashinBurtgel"
+      className="p-0 md:p-4"
+      onSearch={(search) =>
+        setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+      }
+    >
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${a.name === turul ? 'bg-green-100' : ''}`}
-              onClick={()=>setTurul(a.name)}
+              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
+                a.name === turul ? "bg-green-100" : ""
+              }`}
+              onClick={() => setTurul(a.name)}
             >
               <div className="h-full rounded-xl">
                 <div className="rounded-xl p-3">
@@ -118,65 +155,39 @@ function mashinBurtgel({ token }) {
       </Card>
       <Card className="col-span-12">
         <div className="flex flex-row">
-          <button
-            style={{
-              backgroundColor: "#209669",
-              display: "flex",
-              justifyContent: "end",
-            }}
-            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
-            aria-expanded="false"
-            onClick={()=>mashinBurtgekh()}
-          >
-            <span className="flex h-5 w-5 items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-plus h-4 w-4"
+          <div></div>
+          <div className="ml-auto space-x-5">
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => mashinBurtgekh()}
+            >
+              Машин нэмэх
+            </Button>
+
+            <Popover
+              content={() => (
+                <div className="flex w-24 flex-col space-y-2">
+                  <a
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={mashinOruulakhExcel}
+                  >
+                    <UploadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </span>
-            <span>Машин нэмэх</span>
-          </button>
-          <button
-            style={{
-              backgroundColor: "#209669",
-              display: "flex",
-              justifyContent: "end",
-            }}
-            className="dropdown-toggle btn box mt-8 ml-5 w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
-            aria-expanded="false"
-            onClick={mashinOruulakhExcel}
-          >
-            <span className="flex h-5 w-5 items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-plus h-4 w-4"
-              >
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </span>
-            <span>Excel -ээс татах</span>
-          </button>
-          
+                Excel
+              </Button>
+            </Popover>
+          </div>
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
@@ -202,7 +213,7 @@ function mashinBurtgel({ token }) {
             {
               title: "Нэр",
               align: "center",
-              dataIndex: "ezemshigchiinNer"
+              dataIndex: "ezemshigchiinNer",
             },
             {
               title: "Регистр",
@@ -210,14 +221,14 @@ function mashinBurtgel({ token }) {
               dataIndex: "ezemshigchiinRegister",
             },
             {
-                title: "Утас",
-                align: "center",
-                dataIndex: "ezemshigchiinUtas",
+              title: "Утас",
+              align: "center",
+              dataIndex: "ezemshigchiinUtas",
             },
             {
               title: "Дугаар",
               align: "center",
-              dataIndex: "dugaar"
+              dataIndex: "dugaar",
             },
             {
               title: "Төрөл",
@@ -246,9 +257,9 @@ function mashinBurtgel({ token }) {
         />
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default mashinBurtgel
+export default mashinBurtgel;

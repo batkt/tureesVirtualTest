@@ -16,6 +16,7 @@ import {
   FieldTimeOutlined,
   MinusCircleOutlined,
   UploadOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 import {
   Table,
@@ -653,136 +654,144 @@ function ZakhialgiinKhyanalt() {
         <div className="mt-5 flex flex-row">
           <DatePicker.RangePicker locale={locale} />
           <div className="ml-auto flex place-content-end">
-            <Tooltip title="Жагсаалт эксэл рүү гаргах">
-              <Button
-                style={{
-                  backgroundColor: "#209669",
-                  color: "#ffffff",
-                }}
-                icon={
-                  <UploadOutlined
-                    style={{ fontSize: "18px", display: "flex" }}
-                  />
-                }
-                onClick={() => {
-                  const { Excel } = require("antd-table-saveas-excel");
-                  const excel = new Excel();
-                  excel
-                    .addSheet("гэрээний жагсаалт")
-                    .addColumns([
-                      {
-                        title: "Бүртгэсэн",
-                        dataIndex: "createdAt",
-                        ellipsis: true,
-                        className: "text-center",
-                        align: "center",
-                        render(date) {
-                          return moment(date).format("YYYY-MM-DD HH:mm");
-                        },
-                      },
-                      {
-                        title: "Гэрээ",
-                        dataIndex: "gereeniiDugaar",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                      },
-                      {
-                        title: "Талбай",
-                        dataIndex: "talbainDugaar",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                      },
+            <Popover
+              content={() => (
+                <div className="flex w-24 flex-col space-y-2">
+                  <a
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={gereeOruulakhExcel}
+                  >
+                    <UploadOutlined style={{ fontSize: "18px" }} />
+                    <label>Оруулах</label>
+                  </a>
+                  <a
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={() => {
+                      const { Excel } = require("antd-table-saveas-excel");
+                      const excel = new Excel();
+                      excel
+                        .addSheet("гэрээний жагсаалт")
+                        .addColumns([
+                          {
+                            title: "Бүртгэсэн",
+                            dataIndex: "createdAt",
+                            ellipsis: true,
+                            className: "text-center",
+                            align: "center",
+                            render(date) {
+                              return moment(date).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: "Гэрээ",
+                            dataIndex: "gereeniiDugaar",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                          },
+                          {
+                            title: "Талбай",
+                            dataIndex: "talbainDugaar",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                          },
 
-                      {
-                        title: "Төрөл",
-                        dataIndex: "turul",
-                        align: "center",
-                        className: "text-center",
-                        ellipsis: true,
-                      },
+                          {
+                            title: "Төрөл",
+                            dataIndex: "turul",
+                            align: "center",
+                            className: "text-center",
+                            ellipsis: true,
+                          },
 
-                      {
-                        title: "Талбай /м2/",
-                        dataIndex: "talbainKhemjee",
-                        align: "center",
-                        className: "text-center",
-                        ellipsis: true,
-                        render: (talbainKhemjee) => {
-                          return `${talbainKhemjee} м2`;
-                        },
-                        showSorterTooltip: false,
-                      },
-                      {
-                        title: "Төлбөр",
-                        dataIndex: "sariinTurees",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                        render: (sariinTurees) => {
-                          return formatNumber(sariinTurees || 0);
-                        },
-                        showSorterTooltip: false,
-                      },
-                      {
-                        title: "Эхлэх",
-                        dataIndex: "gereeniiOgnoo",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                        render: (data) => {
-                          return moment(data).format("YYYY-MM-DD");
-                        },
-                      },
-                      {
-                        title: "Дуусах хоног",
-                        dataIndex: "duusakhOgnoo",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                        render: (duusakhOgnoo) => {
-                          return moment(duusakhOgnoo).diff(
-                            moment(new Date()),
-                            "days"
-                          );
-                        },
-                      },
-                      {
-                        title: "Дуусах",
-                        dataIndex: "duusakhOgnoo",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                        render: (data) => {
-                          return moment(data).format("YYYY-MM-DD");
-                        },
-                        showSorterTooltip: false,
-                        defaultSortOrder: "descend",
-                      },
-                      {
-                        title: "Ажилтан",
-                        dataIndex: "burtgesenAjiltaniiNer",
-                        className: "text-center",
-                        align: "center",
-                        ellipsis: true,
-                        render: () => {
-                          return "Админ";
-                        },
-                      },
-                    ])
-                    .addDataSource(gereeniiMedeelel?.jagsaalt)
-                    .saveAs("гэрээний жагсаалт.xlsx");
-                }}
-              ></Button>
-            </Tooltip>
-            <Button
-              type="primary"
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-              onClick={gereeOruulakhExcel}
+                          {
+                            title: "Талбай /м2/",
+                            dataIndex: "talbainKhemjee",
+                            align: "center",
+                            className: "text-center",
+                            ellipsis: true,
+                            render: (talbainKhemjee) => {
+                              return `${talbainKhemjee} м2`;
+                            },
+                            showSorterTooltip: false,
+                          },
+                          {
+                            title: "Төлбөр",
+                            dataIndex: "sariinTurees",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                            render: (sariinTurees) => {
+                              return formatNumber(sariinTurees || 0);
+                            },
+                            showSorterTooltip: false,
+                          },
+                          {
+                            title: "Эхлэх",
+                            dataIndex: "gereeniiOgnoo",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD");
+                            },
+                          },
+                          {
+                            title: "Дуусах хоног",
+                            dataIndex: "duusakhOgnoo",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                            render: (duusakhOgnoo) => {
+                              return moment(duusakhOgnoo).diff(
+                                moment(new Date()),
+                                "days"
+                              );
+                            },
+                          },
+                          {
+                            title: "Дуусах",
+                            dataIndex: "duusakhOgnoo",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD");
+                            },
+                            showSorterTooltip: false,
+                            defaultSortOrder: "descend",
+                          },
+                          {
+                            title: "Ажилтан",
+                            dataIndex: "burtgesenAjiltaniiNer",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                            render: () => {
+                              return "Админ";
+                            },
+                          },
+                        ])
+                        .addDataSource(gereeniiMedeelel?.jagsaalt)
+                        .saveAs("гэрээний жагсаалт.xlsx");
+                    }}
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
             >
-              Excel -ээс Гэрээ татах
-            </Button>
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                Excel
+              </Button>
+            </Popover>
           </div>
         </div>
         <div className="mt-8 hidden overflow-auto md:block">

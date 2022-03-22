@@ -13,11 +13,13 @@ import {
   Tooltip,
   Progress,
   Select,
+  Popover,
 } from "antd";
 import {
   FileExcelOutlined,
   ExclamationCircleOutlined,
   UploadOutlined,
+  DownloadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -695,7 +697,7 @@ function guilgeeniiTuukh({ token }) {
             );
           })}
         </div>
-        <div className="mt-5 flex flex-row space-x-5">
+        <div className="mt-5 flex w-full flex-row">
           <DatePicker.RangePicker
             picker="month"
             value={ognoo}
@@ -704,79 +706,93 @@ function guilgeeniiTuukh({ token }) {
               setLoadingIndex(0);
             }}
           />
-          <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
-            {baiguullaga?.barilguud
-              ?.find((a) => a._id === barilgiinId)
-              .davkharuud.map((a) => (
-                <Select.Option key={a._id} value={a.davkhar}>
-                  {a.davkhar}
-                </Select.Option>
-              ))}
-          </Select>
-          <Tooltip title="Жагсаалт эксэл рүү гаргах">
-            <Button
-              style={{
-                backgroundColor: "#209669",
-                color: "#ffffff",
-              }}
-              icon={
-                <UploadOutlined style={{ fontSize: "18px", display: "flex" }} />
-              }
-              onClick={() => {
-                const { Excel } = require("antd-table-saveas-excel");
-                const excelExport = new Excel();
-                excelExport
-                  .addSheet("Гүйлгээний түүх")
-                  .addColumns([
-                    {
-                      title: "Гэрээний дугаар",
-                      dataIndex: "gereeniiDugaar",
-                    },
-                    {
-                      title: "Талбай",
-                      dataIndex: "talbainDugaar",
-                    },
-                    {
-                      title: "Давхар",
-                      dataIndex: "davkhar",
-                    },
-                    {
-                      title: "Түрээслэгч",
-                      dataIndex: "ner",
-                    },
-                    {
-                      title: "Утас",
-                      dataIndex: "utas",
-                    },
-                    {
-                      title: "Үлдэгдэл",
-                      dataIndex: "uldegdel",
-                      render(a) {
-                        return formatNumber(a);
-                      },
-                    },
-                    {
-                      title: "Гэрээний огноо",
-                      dataIndex: "gereeniiOgnoo",
+          <div className="ml-5">
+            <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+              {baiguullaga?.barilguud
+                ?.find((a) => a._id === barilgiinId)
+                .davkharuud.map((a) => (
+                  <Select.Option key={a._id} value={a.davkhar}>
+                    {a.davkhar}
+                  </Select.Option>
+                ))}
+            </Select>
+          </div>
+          <div className="ml-auto">
+            <Popover
+              content={() => (
+                <div className="flex w-24 flex-col space-y-2">
+                  <a
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={() => {
+                      const { Excel } = require("antd-table-saveas-excel");
+                      const excelExport = new Excel();
+                      excelExport
+                        .addSheet("Гүйлгээний түүх")
+                        .addColumns([
+                          {
+                            title: "Гэрээний дугаар",
+                            dataIndex: "gereeniiDugaar",
+                          },
+                          {
+                            title: "Талбай",
+                            dataIndex: "talbainDugaar",
+                          },
+                          {
+                            title: "Давхар",
+                            dataIndex: "davkhar",
+                          },
+                          {
+                            title: "Түрээслэгч",
+                            dataIndex: "ner",
+                          },
+                          {
+                            title: "Утас",
+                            dataIndex: "utas",
+                          },
+                          {
+                            title: "Үлдэгдэл",
+                            dataIndex: "uldegdel",
+                            render(a) {
+                              return formatNumber(a);
+                            },
+                          },
+                          {
+                            title: "Гэрээний огноо",
+                            dataIndex: "gereeniiOgnoo",
 
-                      render(a) {
-                        return moment(a).format("YYYY-MM-DD");
-                      },
-                    },
-                    {
-                      title: "Дуусах огноо",
-                      dataIndex: "duusakhOgnoo",
+                            render(a) {
+                              return moment(a).format("YYYY-MM-DD");
+                            },
+                          },
+                          {
+                            title: "Дуусах огноо",
+                            dataIndex: "duusakhOgnoo",
 
-                      render(a) {
-                        return moment(a).format("YYYY-MM-DD");
-                      },
-                    },
-                  ])
-                  .addDataSource(gereeniiMedeelel?.jagsaalt)
-                  .saveAs("Гүйлгээний түүх.xlsx");
-              }}
-            ></Button>
-          </Tooltip>
+                            render(a) {
+                              return moment(a).format("YYYY-MM-DD");
+                            },
+                          },
+                        ])
+                        .addDataSource(gereeniiMedeelel?.jagsaalt)
+                        .saveAs("Гүйлгээний түүх.xlsx");
+                    }}
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                Excel
+              </Button>
+            </Popover>
+          </div>
         </div>
         <div className="mt-5 hidden overflow-auto md:block">
           <TableGuilgee
