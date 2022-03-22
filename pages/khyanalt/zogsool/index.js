@@ -3,7 +3,11 @@ import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import { Button, Card, DatePicker, Popover, Space, Table } from "antd";
-import { FileExcelOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  FileExcelOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import useZogsool, { useZogsoolToololt } from "hooks/useZogsool";
@@ -215,9 +219,9 @@ function Zogsool({ token }) {
           />
           <Popover
             content={() => (
-              <div className="flex w-24 flex-col space-y-2">
+              <div className="flex w-32 flex-col">
                 <a
-                  className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                   onClick={mashinOruulakhExcel}
                 >
                   <UploadOutlined style={{ fontSize: "18px" }} />
@@ -232,7 +236,8 @@ function Zogsool({ token }) {
               type="primary"
               icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
             >
-              Excel
+              <span>Excel</span>
+              <DownOutlined width={5} />
             </Button>
           </Popover>
         </div>

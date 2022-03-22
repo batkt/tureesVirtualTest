@@ -17,6 +17,7 @@ import {
   MinusCircleOutlined,
   UploadOutlined,
   DownloadOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import {
   Table,
@@ -656,16 +657,16 @@ function ZakhialgiinKhyanalt() {
           <div className="ml-auto flex place-content-end">
             <Popover
               content={() => (
-                <div className="flex w-24 flex-col space-y-2">
+                <div className="flex w-32 flex-col">
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                     onClick={gereeOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>Оруулах</label>
                   </a>
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excel = new Excel();
@@ -782,6 +783,7 @@ function ZakhialgiinKhyanalt() {
                   </a>
                 </div>
               )}
+              style={{ padding: 0 }}
               placement="bottom"
               trigger="click"
             >
@@ -789,7 +791,8 @@ function ZakhialgiinKhyanalt() {
                 type="primary"
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                Excel
+                <span>Excel</span>
+                <DownOutlined width={5} />
               </Button>
             </Popover>
           </div>

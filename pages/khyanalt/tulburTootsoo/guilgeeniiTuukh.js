@@ -20,6 +20,7 @@ import {
   ExclamationCircleOutlined,
   UploadOutlined,
   DownloadOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -720,9 +721,9 @@ function guilgeeniiTuukh({ token }) {
           <div className="ml-auto">
             <Popover
               content={() => (
-                <div className="flex w-24 flex-col space-y-2">
+                <div className="flex w-32 flex-col">
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();
@@ -789,7 +790,8 @@ function guilgeeniiTuukh({ token }) {
                 type="primary"
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
-                Excel
+                <span>Excel</span>
+                <DownOutlined width={5} />
               </Button>
             </Popover>
           </div>
