@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react"
-import Admin from "components/Admin"
-import { useAuth } from "services/auth"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import LocationPicker from "components/ant/LocationPicker"
-import _ from "lodash"
-import { Button, Form, Input, InputNumber, notification, Table } from "antd"
-import axios from "axios"
-import updateMethod from "tools/function/crud/updateMethod"
-import { useRouter } from "next/router"
-import BarilgaTile from "components/pageComponents/barilga/BarilgaTile"
-import CardList from "components/cardList"
+import React, { useEffect, useState } from "react";
+import Admin from "components/Admin";
+import { useAuth } from "services/auth";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import LocationPicker from "components/ant/LocationPicker";
+import _ from "lodash";
+import { Button, Form, Input, InputNumber, notification, Table } from "antd";
+import axios from "axios";
+import updateMethod from "tools/function/crud/updateMethod";
+import { useRouter } from "next/router";
+import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
+import CardList from "components/cardList";
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -17,24 +17,24 @@ const formItemLayout = {
   wrapperCol: {
     span: 16,
   },
-}
+};
 
 function GereeBaiguulakh({ token, data }) {
-  const { baiguullaga } = useAuth()
-  const router = useRouter()
-  const { barilga } = router.query
+  const { baiguullaga } = useAuth();
+  const router = useRouter();
+  const { barilga } = router.query;
   const [davkhar, setDavkhar] = useState(
     _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
       (a) => !a.davkhar.includes("B")
     ) || []
-  )
+  );
   const [bdavkhar, setBDavkhar] = useState(
     _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
       (a) => !!a.davkhar.includes("B")
     ) || []
-  )
+  );
 
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   const onChange = (v) => {
     if (!!v?.davkhar) {
@@ -44,15 +44,15 @@ function GereeBaiguulakh({ token, data }) {
           davkhar: i + 1,
           tariff: 0,
         }))
-        .reverse()
-      setDavkhar([...davkhar])
+        .reverse();
+      setDavkhar([...davkhar]);
     }
     if (!!v?.bdavkhar) {
       const bdavkhar = new Array(v?.bdavkhar).fill("").map((a, i) => ({
         davkhar: `B${i + 1}`,
         tariff: 0,
-      }))
-      setBDavkhar([...bdavkhar])
+      }));
+      setBDavkhar([...bdavkhar]);
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
@@ -66,39 +66,39 @@ function GereeBaiguulakh({ token, data }) {
           }
         )
         .then(({ data }) => {
-          if (data?.found === true) form.setFieldsValue({ ner: data?.name })
-        })
-  }
+          if (data?.found === true) form.setFieldsValue({ ner: data?.name });
+        });
+  };
 
   function khadgalya() {
-    const burtgekhBarilga = form.getFieldsValue()
-    burtgekhBarilga.davkharuud = [...davkhar, ...bdavkhar]
-    if (!baiguullaga?.barilguud) baiguullaga.barilguud = []
+    const burtgekhBarilga = form.getFieldsValue();
+    burtgekhBarilga.davkharuud = [...davkhar, ...bdavkhar];
+    if (!baiguullaga?.barilguud) baiguullaga.barilguud = [];
 
-    if (barilga === "new") baiguullaga?.barilguud.push(burtgekhBarilga)
+    if (barilga === "new") baiguullaga?.barilguud.push(burtgekhBarilga);
     else {
-      const { _id } = _.get(baiguullaga, `barilguud.${barilga}`)
-      _.set(burtgekhBarilga, `_id`, _id)
-      _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga)
+      const { _id } = _.get(baiguullaga, `barilguud.${barilga}`);
+      _.set(burtgekhBarilga, `_id`, _id);
+      _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga);
     }
 
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
       if (data === "Amjilttai") {
-        notification.success({ message: "Амжилттай хадгаллаа" })
-        router.back()
-      } else notification.warning({ message: "Алдаа гарлаа" })
-    })
+        notification.success({ message: "Амжилттай хадгаллаа" });
+        router.back();
+      } else notification.warning({ message: "Алдаа гарлаа" });
+    });
   }
 
   function m2Uurchilyu(v, mur) {
     if (_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")) {
-      const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar)
-      bdavkhar[index].tariff = v
-      setBDavkhar(bdavkhar)
+      const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar);
+      bdavkhar[index].tariff = v;
+      setBDavkhar(bdavkhar);
     } else {
-      const index = davkhar.findIndex((a) => a.davkhar === mur?.davkhar)
-      davkhar[index].tariff = v
-      setDavkhar(davkhar)
+      const index = davkhar.findIndex((a) => a.davkhar === mur?.davkhar);
+      davkhar[index].tariff = v;
+      setDavkhar(davkhar);
     }
   }
 
@@ -152,7 +152,7 @@ function GereeBaiguulakh({ token, data }) {
             <Button
               htmlType="submit"
               onClick={() => khadgalya()}
-              style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              type="primary"
             >
               Хадгалах
             </Button>
@@ -179,7 +179,7 @@ function GereeBaiguulakh({ token, data }) {
                     defaultValue={utga}
                     onChange={(v) => m2Uurchilyu(v, mur)}
                   />
-                )
+                );
               },
             },
             { title: "План зураг" },
@@ -188,9 +188,9 @@ function GereeBaiguulakh({ token, data }) {
         />
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx)
+export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx);
 
-export default GereeBaiguulakh
+export default GereeBaiguulakh;

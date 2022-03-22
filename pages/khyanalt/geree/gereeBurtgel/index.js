@@ -227,7 +227,6 @@ function ZakhialgiinKhyanalt() {
         title: "Бүртгэсэн",
         dataIndex: "createdAt",
         ellipsis: true,
-        className: "text-center",
         align: "center",
         render(date) {
           return moment(date).format("YYYY-MM-DD HH:mm");
@@ -236,31 +235,26 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
-        className: "text-center",
         align: "center",
         ellipsis: true,
       },
       {
         title: "Талбай",
         dataIndex: "talbainDugaar",
-        className: "text-center",
         align: "center",
         ellipsis: true,
       },
-
       {
-        title: "Төрөл",
-        dataIndex: "turul",
-        align: "center",
-        className: "text-center",
+        title: "Нэр",
+        dataIndex: "ner",
+        align: "left",
         ellipsis: true,
+        maxWidth: "15rem",
       },
-
       {
         title: "Талбай /м2/",
         dataIndex: "talbainKhemjee",
         align: "center",
-        className: "text-center",
         ellipsis: true,
         render: (talbainKhemjee) => {
           return `${talbainKhemjee} м2`;
@@ -271,8 +265,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Төлбөр",
         dataIndex: "sariinTurees",
-        className: "text-center",
-        align: "center",
+        align: "right",
         ellipsis: true,
         render: (sariinTurees) => {
           return formatNumber(sariinTurees || 0);
@@ -283,7 +276,6 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Эхлэх",
         dataIndex: "gereeniiOgnoo",
-        className: "text-center",
         align: "center",
         ellipsis: true,
         render: (data) => {
@@ -293,7 +285,6 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Дуусах хоног",
         dataIndex: "duusakhOgnoo",
-        className: "text-center",
         align: "center",
         ellipsis: true,
         render: (duusakhOgnoo) => {
@@ -301,9 +292,8 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Дуусах",
-        dataIndex: "duusakhOgnoo",
-        className: "text-center",
+        title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
+        dataIndex: shuult.utga === "Цуцласан" ? "" : "duusakhOgnoo",
         align: "center",
         ellipsis: true,
         render: (data) => {
@@ -316,7 +306,6 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
-        className: "text-center",
         align: "center",
         ellipsis: true,
         render: () => {
@@ -326,8 +315,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Хавсралт",
         ellipsis: true,
-        className: "text-center",
-        align: "center",
+        align: "left",
         width: "5rem",
         render: (mur) => {
           const data = [];
@@ -463,7 +451,7 @@ function ZakhialgiinKhyanalt() {
     ];
 
     return jagsaalt;
-  }, [baiguullaga, token, gereeniiTokhirgoo]);
+  }, [baiguullaga, token, gereeniiTokhirgoo, shuult]);
 
   //#region dialogs
   function gereeTsutsalya(data) {
@@ -789,12 +777,7 @@ function ZakhialgiinKhyanalt() {
               ></Button>
             </Tooltip>
             <Button
-              style={{
-                alignItems: "end",
-                backgroundColor: "#209669",
-                color: "#ffffff",
-                display: "flex",
-              }}
+              type="primary"
               icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               onClick={gereeOruulakhExcel}
             >
@@ -805,6 +788,7 @@ function ZakhialgiinKhyanalt() {
         <div className="mt-8 hidden overflow-auto md:block">
           <Table
             bordered
+            tableLayout="auto"
             scroll={{ y: "calc(100vh - 32rem)" }}
             size="small"
             loading={!gereeniiMedeelel}

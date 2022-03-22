@@ -9,7 +9,7 @@ import {
   Form,
   Popconfirm,
   Popover,
-} from "antd"
+} from "antd";
 import {
   UserOutlined,
   PhoneOutlined,
@@ -21,34 +21,34 @@ import {
   SecurityScanOutlined,
   MoreOutlined,
   SettingOutlined,
-  ContactsOutlined
-} from "@ant-design/icons"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
+  ContactsOutlined,
+} from "@ant-design/icons";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
 
-import Admin from "components/Admin"
-import { aldaaBarigch, url } from "services/uilchilgee"
-import { useAuth } from "services/auth"
-import React, { useState, useRef } from "react"
-import moment from "moment"
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan"
-import deleteMethod from "tools/function/crud/deleteMethod"
-import createMethod from "tools/function/crud/createMethod"
-import updateMethod from "tools/function/crud/updateMethod"
-import { useRouter } from "next/router"
-import CardList from "components/cardList"
-import AjiltanTile from "components/pageComponents/ajiltan/AjiltanTile"
+import Admin from "components/Admin";
+import { aldaaBarigch, url } from "services/uilchilgee";
+import { useAuth } from "services/auth";
+import React, { useState, useRef } from "react";
+import moment from "moment";
+import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import deleteMethod from "tools/function/crud/deleteMethod";
+import createMethod from "tools/function/crud/createMethod";
+import updateMethod from "tools/function/crud/updateMethod";
+import { useRouter } from "next/router";
+import CardList from "components/cardList";
+import AjiltanTile from "components/pageComponents/ajiltan/AjiltanTile";
 
-const iconColor = { fontSize: "18px" }
+const iconColor = { fontSize: "18px" };
 
 function AjiltanBurtgel({ token }) {
-  const formRef = useRef()
-  const zurag = useRef()
-  const empty = useRef()
+  const formRef = useRef();
+  const zurag = useRef();
+  const empty = useRef();
 
-  const router = useRouter()
-  const { ajiltan, barilgiinId } = useAuth()
+  const router = useRouter();
+  const { ajiltan, barilgiinId } = useAuth();
   const { ajilchdiinGaralt, setAjiltniiKhuudaslalt, ajiltniiJagsaaltMutate } =
-    useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId)
+    useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId);
 
   const [ajiltanState, setAjiltanState] = useState({
     ner: undefined,
@@ -58,99 +58,99 @@ function AjiltanBurtgel({ token }) {
     utas: undefined,
     albanTushaal: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
-  })
+  });
 
-  const { Option } = Select
+  const { Option } = Select;
 
   function onChange(talbar, utga) {
-    setAjiltanState((a) => ({ ...a, [talbar]: utga }))
+    setAjiltanState((a) => ({ ...a, [talbar]: utga }));
   }
   function ajiltanBurtgekh() {
     if (ajiltanState.nuutsUg && ajiltanState.nuutsUg.length < 2) {
-      message.warning("Нууц үг буруу оруулсан байна.")
-      return
+      message.warning("Нууц үг буруу оруулсан байна.");
+      return;
     }
 
-    var form_data = new FormData()
-    ajiltanState.baiguullagiinId = ajiltan?.baiguullagiinId
-    ajiltanState.barilguud = [barilgiinId]
+    var form_data = new FormData();
+    ajiltanState.baiguullagiinId = ajiltan?.baiguullagiinId;
+    ajiltanState.barilguud = [barilgiinId];
 
     switch (ajiltanState.albanTushaal) {
       case "Админ":
-        ajiltanState.erkh = "Admin"
-        break
+        ajiltanState.erkh = "Admin";
+        break;
       case "Зохион байгуулагч":
-        ajiltanState.erkh = "ZokhionBaiguulagch"
-        break
+        ajiltanState.erkh = "ZokhionBaiguulagch";
+        break;
       case "Санхүү":
-        ajiltanState.erkh = "Sankhuu"
-        break
+        ajiltanState.erkh = "Sankhuu";
+        break;
       default:
-        break
+        break;
     }
     for (var key in ajiltanState) {
-      form_data.append(key, ajiltanState[key])
+      form_data.append(key, ajiltanState[key]);
     }
     if (ajiltanState.zasakhEsekh === true) {
       updateMethod("ajiltan", token, ajiltanState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай хийгдлээ")
-            formRef.current.resetFields()
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            )
+            );
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     } else {
       createMethod("ajiltan", token, ajiltanState)
         .then(({ data }) => {
           if (data !== undefined) {
-            message.success("Бүртгэл амжилттай хийгдлээ")
-            formRef.current.resetFields()
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
               true
-            )
+            );
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     }
   }
 
   function zasya(data) {
-    data.zasakhEsekh = true
+    data.zasakhEsekh = true;
     if (!!data.zurgiinNer) {
-      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`
-      zurag.current.classList.remove("hidden")
-      empty.current.classList.add("hidden")
+      zurag.current.src = `${url}/ajiltniiZuragAvya/${data.baiguullagiinId}/${data.zurgiinNer}`;
+      zurag.current.classList.remove("hidden");
+      empty.current.classList.add("hidden");
     }
-    data.ajildOrsonOgnoo = moment(data.ajildOrsonOgnoo)
-    formRef.current.setFieldsValue({ ...data })
-    setAjiltanState(data)
+    data.ajildOrsonOgnoo = moment(data.ajildOrsonOgnoo);
+    formRef.current.setFieldsValue({ ...data });
+    setAjiltanState(data);
   }
 
   function ajiltanUstgay(mur) {
     if (ajiltan._id === mur._id) {
-      message.warning("Та өөрийгөө устгаж болохгүй!")
-      return
+      message.warning("Та өөрийгөө устгаж болохгүй!");
+      return;
     }
     deleteMethod("ajiltan", token, mur._id).then(({ data }) => {
       if (data !== undefined || data !== null) {
-        ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-        message.success("Устгагдлаа")
+        ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+        message.success("Устгагдлаа");
       }
-    })
+    });
   }
 
   function onFinish() {
-    ajiltanBurtgekh()
+    ajiltanBurtgekh();
   }
 
   function tokhiruulya(data) {
-    router.push(`/khyanalt/ajiltan/tokhirgoo/${data?._id}`)
+    router.push(`/khyanalt/ajiltan/tokhirgoo/${data?._id}`);
   }
 
   return (
@@ -161,7 +161,7 @@ function AjiltanBurtgel({ token }) {
       onSearch={(search) =>
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      tsonkhniiId={'61c2c6571c2830c4e6f90c95'}
+      tsonkhniiId={"61c2c6571c2830c4e6f90c95"}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form
@@ -327,10 +327,7 @@ function AjiltanBurtgel({ token }) {
             />
           </Form.Item>
           <Form.Item>
-            <Button
-              htmlType="submit"
-              style={{ backgroundColor: "#209669", color: "#ffffff" }}
-            >
+            <Button htmlType="submit" type="primary">
               Хадгалах
             </Button>
           </Form.Item>
@@ -459,9 +456,9 @@ function AjiltanBurtgel({ token }) {
         />
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel
+export default AjiltanBurtgel;

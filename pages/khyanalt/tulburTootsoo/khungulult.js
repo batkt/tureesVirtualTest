@@ -1,4 +1,4 @@
-import { DeleteOutlined } from "@ant-design/icons"
+import { DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -10,36 +10,36 @@ import {
   Select,
   Table,
   Tabs,
-} from "antd"
-import Admin from "components/Admin"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh"
-import _ from "lodash"
-import moment from "moment"
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { useAuth } from "services/auth"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import createMethod from "tools/function/crud/createMethod"
-import formatNumber from "tools/function/formatNumber"
+} from "antd";
+import Admin from "components/Admin";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
+import _ from "lodash";
+import moment from "moment";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "services/auth";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import createMethod from "tools/function/crud/createMethod";
+import formatNumber from "tools/function/formatNumber";
 
 function tulburTootsoo() {
-  const { token, baiguullaga, barilgiinId,ajiltan } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
-  const formRef = useRef()
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
+  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
+  const formRef = useRef();
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   const [shuult, setShuult] = React.useState({
-    query: { tuluv: { $ne: -1 }},
-  })
+    query: { tuluv: { $ne: -1 } },
+  });
   const query = useMemo(() => {
     return {
       createdAt: {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
-    }
-  }, [ekhlekhOgnoo])
-  const [form] = Form.useForm()
+    };
+  }, [ekhlekhOgnoo]);
+  const [form] = Form.useForm();
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(
       token,
@@ -48,80 +48,87 @@ function tulburTootsoo() {
       shuult?.query,
       undefined,
       1000
-    )
+    );
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
-    useKhungulultTuukh(token, baiguullaga?._id, query)
+    useKhungulultTuukh(token, baiguullaga?._id, query);
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
     niitSariinTurees: 0,
     khunglugdsunDun: 0,
     niitTulukhDun: 0,
-  })
-  const [selectedRowKeys, setRowKeys] = useState([])
+  });
+  const [selectedRowKeys, setRowKeys] = useState([]);
 
-  const { Option } = Select
+  const { Option } = Select;
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
-  }
+  };
 
   useEffect(() => {
-    var khuvi = form?.getFieldValue("khungulukhKhuvi")
-    tootsoolol.niitTalbai = songogdsonGereenuud?.length
+    var khuvi = form?.getFieldValue("khungulukhKhuvi");
+    tootsoolol.niitTalbai = songogdsonGereenuud?.length;
     tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
       (a, b) => a + Number(b?.sariinTurees),
       0
-    )
+    );
     tootsoolol.khunglugdsunDun =
-      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100
+      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100;
     tootsoolol.niitTulukhDun =
-      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun)
-    setTootsoolol({ ...tootsoolol })
-  }, [songogdsonGereenuud])
+      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+    setTootsoolol({ ...tootsoolol });
+  }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return current && current < moment().endOf("day")
+    return current && current < moment().endOf("day");
   }
   function handleChange(value) {
     if (value.length > 0) {
       setShuult({
         query: { davkhar: value, tuluv: { $nin: -1 } },
-      })
+      });
     } else {
     }
-    setRowKeys([])
-    setSongogdsonGereenuud([])
+    setRowKeys([]);
+    setSongogdsonGereenuud([]);
   }
   function khungulultKhadgalya() {
-    if((ajiltan?.erkh !== 'Admin' && !_.get(ajiltan,`tokhirgoo.khungulultUzuulekhEsekh`)?.find(a=>a === barilgiinId))){
-      notification.warning({message:'Таньд гэрээ хөнгөлөх эрх байхгүй байна.'})
-      return
+    if (
+      ajiltan?.erkh !== "Admin" &&
+      !_.get(ajiltan, `tokhirgoo.khungulultUzuulekhEsekh`)?.find(
+        (a) => a === barilgiinId
+      )
+    ) {
+      notification.warning({
+        message: "Таньд гэрээ хөнгөлөх эрх байхгүй байна.",
+      });
+      return;
     }
     if (songogdsonGereenuud.length > 0) {
-      var ugugdul = form.getFieldsValue()
+      var ugugdul = form.getFieldsValue();
       ugugdul.ognoonuud = [
         moment(ugugdul.ognoonuud).format("YYYY-MM-01 00:00:00"),
-      ]
-      ugugdul.barilgiinId = barilgiinId
-      ugugdul.tulukhDun = tootsoolol.niitSariinTurees
-      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun
-      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun
+      ];
+      ugugdul.barilgiinId = barilgiinId;
+      ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
+      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
+      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
         (x) => (x._id = x._id)
-      )
+      );
 
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Хөнгөлөлт амжилттай хийгдлээ")
-            formRef.current.resetFields()
-            setTootsoolol({})
+            message.success("Хөнгөлөлт амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            setTootsoolol({});
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     } else {
-      message.warning("Хөнгөлөх талбай сонгоно уу")
+      message.warning("Хөнгөлөх талбай сонгоно уу");
     }
   }
   function ustgaya(mur) {
@@ -131,18 +138,18 @@ function tulburTootsoo() {
       })
       .then(({ data }) => {
         if (data !== undefined) {
-          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-          message.success("Устгагдлаа")
+          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          message.success("Устгагдлаа");
         }
-      })
+      });
   }
   function tseverlekh() {
-    formRef.current.resetFields()
-    setShuult()
+    formRef.current.resetFields();
+    setShuult();
   }
   function onSelectChange(selectedRowKeys, selectedRows) {
-    setRowKeys(selectedRowKeys)
-    setSongogdsonGereenuud(selectedRows)
+    setRowKeys(selectedRowKeys);
+    setSongogdsonGereenuud(selectedRows);
   }
   return (
     <Admin
@@ -150,15 +157,15 @@ function tulburTootsoo() {
       khuudasniiNer="khungulult"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
       }}
-      tsonkhniiId='61c2c6eb1c2830c4e6f90cc5'
+      tsonkhniiId="61c2c6eb1c2830c4e6f90cc5"
     >
       <div className="col-span-12">
         <Tabs size="large">
           <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
-            <div className="w-full grid grid-cols-12 gap-6">
-              <div className="col-span-3 md:col-span-8 xl:col-span-3 border-solid border border-green-300 bg-white dark:bg-gray-900 p-5">
+            <div className="grid w-full grid-cols-12 gap-6">
+              <div className="col-span-3 border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3">
                 <Form
                   form={form}
                   ref={formRef}
@@ -220,7 +227,7 @@ function tulburTootsoo() {
                   <Form.Item label="Шалтгаан" name="shaltgaan">
                     <Input.TextArea placeholder="Шалтгаан" />
                   </Form.Item>
-                  <div className="flex-column grid mt-12 text-base dark:text-gray-50">
+                  <div className="flex-column mt-12 grid text-base dark:text-gray-50">
                     <div className="flex justify-between">
                       Нийт талбайн тоо :<a>{tootsoolol.niitTalbai}</a>
                     </div>
@@ -241,7 +248,7 @@ function tulburTootsoo() {
                       </a>
                     </div>
                   </div>
-                  <div className="flex flex-row justify-between mt-10">
+                  <div className="mt-10 flex flex-row justify-between">
                     <Form.Item>
                       <Button
                         htmlType="submit"
@@ -255,7 +262,6 @@ function tulburTootsoo() {
                       <Button
                         htmlType="submit"
                         danger
-                        type="primary"
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
                       >
@@ -265,7 +271,7 @@ function tulburTootsoo() {
                   </div>
                 </Form>
               </div>
-              <div className="col-span-9 md:col-span-3 xl:col-span-9 box p-5 overflow-auto">
+              <div className="box col-span-9 overflow-auto p-5 md:col-span-3 xl:col-span-9">
                 <Table
                   // rowSelection={{
                   //   type: "checkbox",
@@ -310,7 +316,7 @@ function tulburTootsoo() {
                       className: "text-center",
                       ellipsis: true,
                       render: (talbainKhemjee) => {
-                        return `${talbainKhemjee} м2`
+                        return `${talbainKhemjee} м2`;
                       },
                       showSorterTooltip: false,
 
@@ -325,7 +331,7 @@ function tulburTootsoo() {
                       align: "center",
                       ellipsis: true,
                       render: (sariinTurees) => {
-                        return formatNumber(sariinTurees || 0)
+                        return formatNumber(sariinTurees || 0);
                       },
                       showSorterTooltip: false,
                       sorter: (a, b) =>
@@ -339,7 +345,7 @@ function tulburTootsoo() {
                       align: "center",
                       ellipsis: true,
                       render: () => {
-                        return "Админ"
+                        return "Админ";
                       },
                     },
                   ]}
@@ -350,9 +356,9 @@ function tulburTootsoo() {
             </div>
           </Tabs.TabPane>
           <Tabs.TabPane tab="Хөнгөлөлт түүх" key="2">
-            <div className="w-full grid grid-cols-12 gap-6">
-              <div className="col-span-12 md:col-span-8 xl:col-span-12 box p-5">
-                <div className="w-full flex flex-row justify-between mt-5">
+            <div className="grid w-full grid-cols-12 gap-6">
+              <div className="box col-span-12 p-5 md:col-span-8 xl:col-span-12">
+                <div className="mt-5 flex w-full flex-row justify-between">
                   <DatePicker.RangePicker
                     style={{ marginBottom: "20px" }}
                     size="middle"
@@ -389,7 +395,7 @@ function tulburTootsoo() {
                       ellipsis: true,
                       align: "center",
                       render: (data) => {
-                        return moment(data).format("YYYY-MM-DD hh:mm:ss")
+                        return moment(data).format("YYYY-MM-DD hh:mm:ss");
                       },
                     },
                     {
@@ -404,7 +410,7 @@ function tulburTootsoo() {
                       ellipsis: true,
                       align: "center",
                       render: (data) => {
-                        return moment(data).format("YYYY-MM-DD")
+                        return moment(data).format("YYYY-MM-DD");
                       },
                     },
                     {
@@ -412,7 +418,7 @@ function tulburTootsoo() {
                       dataIndex: "tulukhDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -420,7 +426,7 @@ function tulburTootsoo() {
                       dataIndex: "khungulultiinDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -428,7 +434,7 @@ function tulburTootsoo() {
                       dataIndex: "khungulsunDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -467,7 +473,7 @@ function tulburTootsoo() {
                               icon={<DeleteOutlined />}
                             />
                           </Popconfirm>
-                        )
+                        );
                       },
                     },
                   ]}
@@ -478,9 +484,9 @@ function tulburTootsoo() {
         </Tabs>
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default tulburTootsoo
+export default tulburTootsoo;

@@ -1,25 +1,25 @@
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import { useMemo } from "react"
-import { url } from "services/uilchilgee"
-import { useAuth } from "services/auth"
-import { Button, Table, Popover } from "antd"
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import { useMemo } from "react";
+import { url } from "services/uilchilgee";
+import { useAuth } from "services/auth";
+import { Button, Table, Popover } from "antd";
 import {
   PlusOutlined,
   SettingOutlined,
   MoreOutlined,
   EditOutlined,
-} from "@ant-design/icons"
-import _ from "lodash"
-import router from "next/router"
-import CardList from "components/cardList"
-import BarilgaTile from "components/pageComponents/barilga/BarilgaTile"
+} from "@ant-design/icons";
+import _ from "lodash";
+import router from "next/router";
+import CardList from "components/cardList";
+import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
 
-const toololt = {}
+const toololt = {};
 
-function BarilgaBurtgel({ }) {
-  const { baiguullaga ,barilgiinId} = useAuth()
-  const barilga = baiguullaga?.barilguud?.find(a=> a._id === barilgiinId)
+function BarilgaBurtgel({}) {
+  const { baiguullaga, barilgiinId } = useAuth();
+  const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   const columns = useMemo(
     () => [
       {
@@ -91,7 +91,7 @@ function BarilgaBurtgel({ }) {
       },
     ],
     []
-  )
+  );
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -177,22 +177,26 @@ function BarilgaBurtgel({ }) {
         khuvi: 100,
         utga: "Түрээслэгч",
       },
-    ]
-  }, [toololt])
+    ];
+  }, [toololt]);
 
   function barilgaBurtgel(id) {
-    router.push(`/khyanalt/barilgaBurtgel/${id}`)
+    router.push(`/khyanalt/barilgaBurtgel/${id}`);
   }
 
   return (
-    <Admin khuudasniiNer="barilgaBurtgel" className="px-4" tsonkhniiId={'61c2c6271c2830c4e6f90c85'}>
+    <Admin
+      khuudasniiNer="barilgaBurtgel"
+      className="px-4"
+      tsonkhniiId={"61c2c6271c2830c4e6f90c85"}
+    >
       <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
           <div className="mt-5 grid grid-cols-12 gap-6">
             {khyanaltiinDun.map((mur, index) => {
               return (
                 <div
-                  key={'index'+index}
+                  key={"index" + index}
                   className="intro-y col-span-12 sm:col-span-6 xl:col-span-3"
                 >
                   <div className="report-box zoom-in">
@@ -233,7 +237,7 @@ function BarilgaBurtgel({ }) {
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
             <div className="col-span-12">
               <div className="intro-y mt-8 flex h-10 items-center">
@@ -242,12 +246,7 @@ function BarilgaBurtgel({ }) {
                 </h2>
                 <div className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400">
                   <Button
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      backgroundColor: "#209669",
-                      color: "#ffffff",
-                    }}
+                    type="primary"
                     onClick={() => barilgaBurtgel("new")}
                     icon={<PlusOutlined />}
                   >
@@ -300,9 +299,7 @@ function BarilgaBurtgel({ }) {
                 </span>
               </div>
             </div>
-            <div
-              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Регистр:</span>
                 <span className="font-medium text-gray-600">
@@ -310,9 +307,7 @@ function BarilgaBurtgel({ }) {
                 </span>
               </div>
             </div>
-            <div
-              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Хаяг:</span>
                 <span className="font-medium text-gray-600">
@@ -320,9 +315,7 @@ function BarilgaBurtgel({ }) {
                 </span>
               </div>
             </div>
-            <div
-              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Давхар:</span>
                 <span className="font-medium text-gray-600">
@@ -330,9 +323,7 @@ function BarilgaBurtgel({ }) {
                 </span>
               </div>
             </div>
-            <div
-              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Талбай:</span>
                 <span className="font-medium text-gray-600">
@@ -340,9 +331,7 @@ function BarilgaBurtgel({ }) {
                 </span>
               </div>
             </div>
-            <div
-              className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
+            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Утас:</span>
                 <span className="font-medium text-gray-600">
@@ -354,9 +343,9 @@ function BarilgaBurtgel({ }) {
         </div>
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default BarilgaBurtgel
+export default BarilgaBurtgel;
