@@ -1,15 +1,15 @@
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import Admin from "components/Admin"
-import React, { useMemo, useState } from "react"
-import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart"
-import LineChart from "components/pageComponents/tailan/chart/LineChart"
-import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart"
-import useTailan from "hooks/tailan/useTailan"
-import { DatePicker, Progress, Select } from "antd"
-import local from "antd/lib/date-picker/locale/mn_MN"
-import { useAuth } from "services/auth"
-import moment from "moment"
-import formatNumber from "tools/function/formatNumber"
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
+import React, { useMemo, useState } from "react";
+import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart";
+import LineChart from "components/pageComponents/tailan/chart/LineChart";
+import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart";
+import useTailan from "hooks/tailan/useTailan";
+import { DatePicker, Progress, Select } from "antd";
+import local from "antd/lib/date-picker/locale/mn_MN";
+import { useAuth } from "services/auth";
+import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
 
 const tailanguud = [
   {
@@ -27,8 +27,8 @@ const tailanguud = [
   {
     ner: "Ашгийн тайлан",
     service: "ashigiinTailanAvya",
-  }
-]
+  },
+];
 
 function Chart({
   barilgiinId,
@@ -39,10 +39,10 @@ function Chart({
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
-  ])
-  const [tailan, setTailan] = useState(defaultTailan)
-  const [tailanTurul, setTailanTurul] = useState(defaultTurul)
-  const [nariivchlal, setNariivchlal] = useState("month")
+  ]);
+  const [tailan, setTailan] = useState(defaultTailan);
+  const [tailanTurul, setTailanTurul] = useState(defaultTurul);
+  const [nariivchlal, setNariivchlal] = useState("month");
 
   const query = useMemo(() => {
     return {
@@ -50,14 +50,14 @@ function Chart({
       nariivchlal,
       ekhlekhOgnoo: ognoo[0].format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: ognoo[1].format("YYYY-MM-DD 23:59:59"),
-    }
-  }, [barilgiinId, ognoo, nariivchlal])
+    };
+  }, [barilgiinId, ognoo, nariivchlal]);
 
   const { tailanGaralt, tailanMutate } = useTailan(
     barilgiinId && tailan,
     token,
     query
-  )
+  );
 
   return (
     <div className="box col-span-12 p-2 md:col-span-6">
@@ -112,30 +112,50 @@ function Chart({
       {tailanTurul === "barHorizontal" && (
         <HorizontalBarChart data={tailanGaralt || {}} />
       )}
-      <div className="flex flex-col space-y-2 items-center">
+      <div className="flex flex-col items-center space-y-2">
         <div className="table w-full">
-        {tailanGaralt?.jagsaalt?.map((a)=><div key={`${defaultTailan}${a.ner}`} className='rounded-md font-normal table-row'>
-            <div className="table-cell p-1 w-1/12">{a.ner}</div>
-            <div className="table-cell p-1 w-9/12">
-              <div className="flex items-center flex-row space-x-2 w-full">
-                <div className="w-full">
-                  <Progress size="small" strokeColor={a.ungu} percent={(a.dun * 100 / tailanGaralt?.jagsaalt.reduce((a,b)=>a + b.dun,0)).toFixed(0)} />
+          {tailanGaralt?.jagsaalt?.map((a) => (
+            <div
+              key={`${defaultTailan}${a.ner}`}
+              className="table-row rounded-md font-normal"
+            >
+              <div className="table-cell w-1/12 p-1">{a.ner}</div>
+              <div className="table-cell w-9/12 p-1">
+                <div className="flex w-full flex-row items-center space-x-2">
+                  <div className="w-full">
+                    <Progress
+                      size="small"
+                      trailColor={a.ungu}
+                      strokeColor={a.ungu}
+                      percent={(
+                        (a.dun * 100) /
+                        tailanGaralt?.jagsaalt.reduce((a, b) => a + b.dun, 0)
+                      ).toFixed(0)}
+                    />
+                  </div>
                 </div>
               </div>
+              <div className="table-cell w-2/12 p-1 text-right">
+                {formatNumber(a.dun)}₮
+              </div>
             </div>
-            <div className="table-cell p-1 w-2/12 text-right">{formatNumber(a.dun)}₮</div>
-          </div>)}
+          ))}
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function AjiltanBurtgel({ token }) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
 
   return (
-    <Admin title="Тайлан" khuudasniiNer="tailan" className="p-0 md:p-4" tsonkhniiId={'61c2c75d1c2830c4e6f90ce9'}>
+    <Admin
+      title="Тайлан"
+      khuudasniiNer="tailan"
+      className="p-0 md:p-4"
+      tsonkhniiId={"61c2c75d1c2830c4e6f90ce9"}
+    >
       <div className="box col-span-12 p-2 md:col-span-6">
         <Chart
           barilgiinId={barilgiinId}
@@ -169,9 +189,9 @@ function AjiltanBurtgel({ token }) {
         />
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default AjiltanBurtgel
+export default AjiltanBurtgel;
