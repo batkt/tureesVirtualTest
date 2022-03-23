@@ -17,6 +17,7 @@ import { useRef } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
+import useOrder from "tools/function/useOrder";
 
 function Zogsool({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -32,6 +33,8 @@ function Zogsool({ token }) {
     ognoo
   );
 
+  const { order, onChangeTable } = useOrder({ check_in_time: -1 });
+
   const query = useMemo(() => {
     return {
       check_in_time: {
@@ -45,7 +48,8 @@ function Zogsool({ token }) {
   const { zogsoolGaralt, setZogsoolKhuudaslalt, zogsoolMutate } = useZogsool(
     token,
     baiguullaga?._id,
-    query
+    query,
+    order
   );
 
   const toololt = useMemo(
@@ -130,6 +134,8 @@ function Zogsool({ token }) {
         title: "Машин",
         align: "center",
         dataIndex: "car_number",
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
     ];
     if (turul === "Түрээслэгч") {
@@ -137,6 +143,8 @@ function Zogsool({ token }) {
         title: "Талбай",
         align: "center",
         dataIndex: "mashin",
+        showSorterTooltip: false,
+        sorter: () => 0,
         render(m) {
           return m?.ezemshigchiinTalbainDugaar;
         },
@@ -145,6 +153,8 @@ function Zogsool({ token }) {
         title: "Гэрээ",
         align: "center",
         dataIndex: "mashin",
+        showSorterTooltip: false,
+        sorter: () => 0,
         render(m) {
           return m?.gereeniiDugaar;
         },
@@ -156,6 +166,8 @@ function Zogsool({ token }) {
         title: "Орсон",
         align: "center",
         dataIndex: "check_in_time",
+        showSorterTooltip: false,
+        sorter: () => 0,
         render(v) {
           return moment(v).format("YYYY-MM-DD HH:mm");
         },
@@ -164,6 +176,8 @@ function Zogsool({ token }) {
         title: "Гарсан",
         align: "center",
         dataIndex: "check_out_time",
+        showSorterTooltip: false,
+        sorter: () => 0,
         render(v) {
           return v && moment(v).format("YYYY-MM-DD HH:mm");
         },
@@ -171,6 +185,8 @@ function Zogsool({ token }) {
       {
         title: "Хугацаа",
         align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
         dataIndex: "khugatsaa",
       },
     ];
@@ -251,6 +267,7 @@ function Zogsool({ token }) {
           bordered
           rowKey={(row) => row._id}
           columns={columns}
+          onChange={onChangeTable}
           pagination={{
             current: zogsoolGaralt?.khuudasniiDugaar,
             pageSize: zogsoolGaralt?.khuudasniiKhemjee,

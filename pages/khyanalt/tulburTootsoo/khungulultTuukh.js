@@ -1,21 +1,21 @@
-import moment from "moment"
-import { useAuth } from "services/auth"
-import { DeleteOutlined } from "@ant-design/icons"
-import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd"
+import moment from "moment";
+import { useAuth } from "services/auth";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd";
 
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import formatNumber from "tools/function/formatNumber"
-import { useMemo, useState } from "react"
-import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh"
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import formatNumber from "tools/function/formatNumber";
+import { useMemo, useState } from "react";
+import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
 
-const { RangePicker } = DatePicker
+const { RangePicker } = DatePicker;
 //#endregion
 
 function EbarimtMedeelel({ token }) {
-  const { ajiltan } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
+  const { ajiltan } = useAuth();
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
   const query = useMemo(() => {
     return {
@@ -23,11 +23,11 @@ function EbarimtMedeelel({ token }) {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
-    }
-  }, [ekhlekhOgnoo])
+    };
+  }, [ekhlekhOgnoo]);
 
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
-    useKhungulultTuukh(token, ajiltan?.baiguullagiinId, query)
+    useKhungulultTuukh(token, ajiltan?.baiguullagiinId, query);
 
   function ustgaya(mur) {
     uilchilgee(token)
@@ -36,10 +36,10 @@ function EbarimtMedeelel({ token }) {
       })
       .then(({ data }) => {
         if (data !== undefined) {
-          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-          message.success("Устгагдлаа")
+          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          message.success("Устгагдлаа");
         }
-      })
+      });
   }
 
   return (
@@ -49,8 +49,8 @@ function EbarimtMedeelel({ token }) {
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
     >
-      <Card className="col-span-12 p-5 cardgrid">
-        <div className="w-full flex flex-row justify-between mt-5">
+      <Card className="cardgrid col-span-12 p-5">
+        <div className="mt-5 flex w-full flex-row justify-between">
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -87,7 +87,7 @@ function EbarimtMedeelel({ token }) {
               ellipsis: true,
               align: "center",
               render: (data) => {
-                return moment(data).format("YYYY-MM-DD hh:mm:ss")
+                return moment(data).format("YYYY-MM-DD hh:mm:ss");
               },
             },
             {
@@ -102,7 +102,7 @@ function EbarimtMedeelel({ token }) {
               ellipsis: true,
               align: "center",
               render: (data) => {
-                return moment(data).format("YYYY-MM-DD")
+                return moment(data).format("YYYY-MM-DD");
               },
             },
             {
@@ -110,7 +110,7 @@ function EbarimtMedeelel({ token }) {
               dataIndex: "tulukhDun",
               align: "center",
               render: (data) => {
-                return formatNumber(data) + "₮"
+                return formatNumber(data) + "₮";
               },
             },
             {
@@ -118,7 +118,7 @@ function EbarimtMedeelel({ token }) {
               dataIndex: "khungulultiinDun",
               align: "center",
               render: (data) => {
-                return formatNumber(data) + "₮"
+                return formatNumber(data) + "₮";
               },
             },
             {
@@ -126,7 +126,7 @@ function EbarimtMedeelel({ token }) {
               dataIndex: "khungulsunDun",
               align: "center",
               render: (data) => {
-                return formatNumber(data) + "₮"
+                return formatNumber(data) + "₮";
               },
             },
             {
@@ -153,28 +153,18 @@ function EbarimtMedeelel({ token }) {
                     cancelText="Үгүй"
                     onConfirm={() => ustgaya(data)}
                   >
-                    <Button
-                      danger
-                      size="small"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                      shape="circle"
-                      icon={<DeleteOutlined />}
-                    />
+                    <Button danger icon={<DeleteOutlined />} />
                   </Popconfirm>
-                )
+                );
               },
             },
           ]}
         />
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default EbarimtMedeelel
+export default EbarimtMedeelel;

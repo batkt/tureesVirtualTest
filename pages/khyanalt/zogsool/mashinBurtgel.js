@@ -17,6 +17,7 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import { modal } from "components/ant/Modal";
 import useMashin, { useMashinToololt } from "hooks/useMashin";
 import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
+import useOrder from "tools/function/useOrder";
 
 function mashinBurtgel({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -31,10 +32,13 @@ function mashinBurtgel({ token }) {
 
   const { mashinToololt, mashinToololtMutate } = useMashinToololt(token);
 
+  const { order, onChangeTable } = useOrder({});
+
   const { mashinGaralt, setMashinKhuudaslalt, mashinMutate } = useMashin(
     token,
     baiguullaga?._id,
-    query
+    query,
+    order
   );
 
   const toololt = useMemo(() => {
@@ -199,6 +203,7 @@ function mashinBurtgel({ token }) {
           scroll={{ y: "calc(100vh - 30rem)" }}
           size="small"
           bordered
+          onChange={onChangeTable}
           columns={[
             {
               title: "№",
@@ -216,11 +221,15 @@ function mashinBurtgel({ token }) {
               title: "Нэр",
               align: "center",
               dataIndex: "ezemshigchiinNer",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Регистр",
               align: "center",
               dataIndex: "ezemshigchiinRegister",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Утас",
@@ -231,11 +240,15 @@ function mashinBurtgel({ token }) {
               title: "Дугаар",
               align: "center",
               dataIndex: "dugaar",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Төрөл",
               align: "center",
               dataIndex: "turul",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
           ]}
           pagination={{

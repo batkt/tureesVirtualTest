@@ -1,8 +1,8 @@
-import { useState } from "react"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
-import moment from "moment"
-import { useAuth } from "services/auth"
+import { useState } from "react";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
+import moment from "moment";
+import { useAuth } from "services/auth";
 
 const fetcher = (
   url,
@@ -10,7 +10,8 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   query,
   baiguullagiinId,
-  barilgiinId
+  barilgiinId,
+  order
 ) =>
   axios(token)
     .get(url, {
@@ -20,25 +21,26 @@ const fetcher = (
           barilgiinId,
           ...query,
         },
+        order,
         ...khuudaslalt,
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 const fetcherToololt = (url, token, query) =>
   axios(token)
     .post(url, query)
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-function useEBarimt(token, baiguullagiinId, query) {
-  const { barilgiinId } = useAuth()
+function useEBarimt(token, baiguullagiinId, query, order) {
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
     search: "",
     jagsaalt: [],
-  })
+  });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
       ? [
@@ -48,16 +50,17 @@ function useEBarimt(token, baiguullagiinId, query) {
           query,
           baiguullagiinId,
           barilgiinId,
+          order,
         ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setEBarimtKhuudaslalt,
     eBarimtGaralt: data,
     eBarimtMutate: mutate,
-  }
+  };
 }
 export function useBarimtToollolt(token, query) {
   const { data, mutate } = useSWR(
@@ -66,11 +69,11 @@ export function useBarimtToollolt(token, query) {
     {
       revalidateOnFocus: false,
     }
-  )
+  );
   return {
     ebarimtiinToololt: data,
     ebarimtiinToololtMutate: mutate,
-  }
+  };
 }
 
-export default useEBarimt
+export default useEBarimt;

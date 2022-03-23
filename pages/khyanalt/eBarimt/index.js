@@ -1,25 +1,34 @@
-import moment from "moment"
-import { useAuth } from "services/auth"
-import { DeleteOutlined } from "@ant-design/icons"
-import { Table, Button, Card, DatePicker, message, Popconfirm, Spin } from "antd"
+import moment from "moment";
+import { useAuth } from "services/auth";
+import { DeleteOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Button,
+  Card,
+  DatePicker,
+  message,
+  Popconfirm,
+  Spin,
+} from "antd";
 
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import formatNumber from "tools/function/formatNumber"
-import { useMemo, useState } from "react"
-import useEBarimt from "hooks/useEBarimt"
-import useEBarimtMedeelel from "hooks/useEBarimtMedeelel"
-import { useBarimtToollolt } from "hooks/useEBarimt"
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import formatNumber from "tools/function/formatNumber";
+import { useMemo, useState } from "react";
+import useEBarimt from "hooks/useEBarimt";
+import useEBarimtMedeelel from "hooks/useEBarimtMedeelel";
+import { useBarimtToollolt } from "hooks/useEBarimt";
+import useOrder from "tools/function/useOrder";
 
-const { RangePicker } = DatePicker
+const { RangePicker } = DatePicker;
 //#endregion
 
 function EbarimtMedeelel({ token }) {
-  const { ajiltan, barilgiinId } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
+  const { ajiltan, barilgiinId } = useAuth();
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const query = useMemo(() => {
     return {
@@ -28,28 +37,31 @@ function EbarimtMedeelel({ token }) {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
-    }
-  }, [ekhlekhOgnoo])
+    };
+  }, [ekhlekhOgnoo]);
 
   const queryToololt = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
       ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-    }
-  }, [ekhlekhOgnoo])
+    };
+  }, [ekhlekhOgnoo]);
+
+  const { order, onChangeTable } = useOrder({ createAt: -1 });
 
   const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
     token,
     ajiltan?.baiguullagiinId,
-    query
-  )
+    query,
+    order
+  );
 
   const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(
     token,
     barilgiinId
-  )
-  const { ebarimtiinToololt } = useBarimtToollolt(token, queryToololt)
+  );
+  const { ebarimtiinToololt } = useBarimtToollolt(token, queryToololt);
   const khyanaltiinDun = [
     {
       too:
@@ -92,34 +104,33 @@ function EbarimtMedeelel({ token }) {
           : 0,
       utga: "Буцаалт хийгдсэн дүн",
     },
-  ]
+  ];
 
   function ebarimtIlgeeye() {
-    if(loading === true)
-      return
-    setLoading(true)
+    if (loading === true) return;
+    setLoading(true);
     uilchilgee(token)
       .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
       .then(({ status }) => {
-        status === 200 && message.success("Баримт амжилттай илгээлээ")
-        eBarimtMedeelelMutate()
-        setLoading(false)
+        status === 200 && message.success("Баримт амжилттай илгээлээ");
+        eBarimtMedeelelMutate();
+        setLoading(false);
       })
-      .catch(aldaaBarigch)
+      .catch(aldaaBarigch);
   }
 
   function ebarimtUstgaya(mur) {
-    mur.barilgiinId = barilgiinId
+    mur.barilgiinId = barilgiinId;
     uilchilgee(token)
       .post("/ebarimtButsaaya", mur)
       .then(({ data }) => {
         if (!!data) {
-          eBarimtMutate()
+          eBarimtMutate();
           message.success(
             `${mur.billId} дугаартай баримт амжилттай ebarimt -с устгагдлаа`
-          )
+          );
         }
-      })
+      });
   }
   return (
     <Admin
@@ -127,21 +138,21 @@ function EbarimtMedeelel({ token }) {
       title="И-баримтын бүртгэл"
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
-      tsonkhniiId='61c2c70a1c2830c4e6f90ccf'
+      tsonkhniiId="61c2c70a1c2830c4e6f90ccf"
     >
-      <Card className="col-span-12 p-5 cardgrid">
-        <div className="w-full border-solid grid grid-cols-12 gap-6">
+      <Card className="cardgrid col-span-12 p-5">
+        <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className="border-2 h-20 border-green-600 rounded-xl col-span-12 sm:col-span-12 lg:col-span-2 intro-y cursor-pointer zoom-in"
+                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
               >
                 <div className="h-full rounded-xl">
-                  <div className="p-3 rounded-xl">
+                  <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
-                        <div className="text-2xl text-green-600 font-bold">
+                        <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-sm text-gray-500">{mur.utga}</div>
@@ -150,11 +161,11 @@ function EbarimtMedeelel({ token }) {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
-        <div className="w-full flex flex-row justify-between mt-5">
+        <div className="mt-5 flex w-full flex-row justify-between">
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -163,15 +174,14 @@ function EbarimtMedeelel({ token }) {
           />
           <div className="flex flex-row space-x-2">
             <Button title="Сүүлд илгээгдсэн огноо">
-              {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format("YYYY-MM-DD")}
+              {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(
+                "YYYY-MM-DD"
+              )}
             </Button>
-            
-              <Button danger onClick={ebarimtIlgeeye}>
-                <Spin spinning={loading}>
-                  {loading ? '' : 'Татварт илгээх'}
-                </Spin>
-              </Button>
-            
+
+            <Button danger onClick={ebarimtIlgeeye}>
+              <Spin spinning={loading}>{loading ? "" : "Татварт илгээх"}</Spin>
+            </Button>
           </div>
         </div>
 
@@ -193,6 +203,7 @@ function EbarimtMedeelel({ token }) {
                 khuudasniiKhemjee,
               })),
           }}
+          onChange={onChangeTable}
           scroll={{ y: "calc(100vh - 26rem)" }}
           rowKey={(row) => row._id}
           className="t-head"
@@ -203,14 +214,18 @@ function EbarimtMedeelel({ token }) {
               ellipsis: true,
               align: "center",
               render: (data) => {
-                return moment(data).format("YYYY-MM-DD hh:mm:ss")
+                return moment(data).format("YYYY-MM-DD hh:mm:ss");
               },
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Гэрээний дугаар",
               dataIndex: "gereeniiDugaar",
               ellipsis: true,
               align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Утас",
@@ -223,29 +238,25 @@ function EbarimtMedeelel({ token }) {
               dataIndex: "talbainDugaar",
               ellipsis: true,
               align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "ДДТД",
               dataIndex: "billId",
-              //ellipsis: true,
               width: "300px",
             },
-            // {
-            //   title: "Гэрээний дугаар",
-            //   dataIndex: "gereeniiDugaar",
-            //   ellipsis: true,
-            // },
-
             {
               title: "Дүн",
               dataIndex: "cashAmount",
               ellipsis: true,
               align: "center",
               render: (data) => {
-                return formatNumber(data)
+                return formatNumber(data);
               },
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
-
             {
               width: "60px",
               align: "center",
@@ -269,16 +280,16 @@ function EbarimtMedeelel({ token }) {
                       icon={<DeleteOutlined />}
                     />
                   </Popconfirm>
-                )
+                );
               },
             },
           ]}
         />
       </Card>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default EbarimtMedeelel
+export default EbarimtMedeelel;
