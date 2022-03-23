@@ -126,7 +126,7 @@ function ZakhialgiinKhyanalt() {
       undefined,
       shuult?.query,
       undefined,
-      undefined,
+      1000,
       order
     );
   const { gereeToollolt } = useGereeniiJagsaaltToollolt(token);
@@ -262,6 +262,15 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
+        title: "Регистр",
+        dataIndex: "register",
+        align: "center",
+        ellipsis: true,
+        maxWidth: "15rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
         title: "Талбай /м2/",
         dataIndex: "talbainKhemjee",
         align: "center",
@@ -320,69 +329,6 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         render: () => {
           return "Админ";
-        },
-      },
-      {
-        title: "Хавсралт",
-        ellipsis: true,
-        align: "left",
-        width: "5rem",
-        render: (mur) => {
-          const data = [];
-          if (!!mur?.gerchilgeeniiZurag)
-            data.push({
-              label: "Гэрчилгээний зураг",
-              turul: "gerchilgeeniiZurag",
-              zurgiinId: mur?.gerchilgeeniiZurag,
-            });
-          if (!!mur?.unemlekhniiZurag)
-            data.push({
-              label: "Үнэмлэхний зураг",
-              turul: "unemlekhniiZurag",
-              zurgiinId: mur?.unemlekhniiZurag,
-            });
-          if (!!mur?.zuvshuurliinZurag)
-            data.push({
-              label: "Зөвшөөрлийн зураг",
-              turul: "zuvshuurliinZurag",
-              zurgiinId: mur?.zuvshuurliinZurag,
-            });
-
-          if (data.length > 0)
-            return (
-              <Popover
-                content={
-                  <Table
-                    pagination={false}
-                    size="small"
-                    dataSource={data}
-                    columns={[
-                      {
-                        title: "Хавсралт",
-                        dataIndex: "label",
-                      },
-                      {
-                        render: (data) => {
-                          return (
-                            <img
-                              className="h-36 w-36"
-                              src={`${url}/zuragAvya/${data?.turul}/${baiguullaga?._id}/${data?.zurgiinId}`}
-                            />
-                          );
-                        },
-                      },
-                    ]}
-                  ></Table>
-                }
-                trigger="click"
-              >
-                <a className="flex items-center justify-center hover:bg-gray-200">
-                  <Badge size="small" count={data.length}>
-                    <EyeOutlined style={{ fontSize: "18px" }} />
-                  </Badge>
-                </a>
-              </Popover>
-            );
         },
       },
       {
@@ -694,6 +640,20 @@ function ZakhialgiinKhyanalt() {
                           {
                             title: "Гэрээ",
                             dataIndex: "gereeniiDugaar",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                          },
+                          {
+                            title: "Нэр",
+                            dataIndex: "ner",
+                            className: "text-center",
+                            align: "center",
+                            ellipsis: true,
+                          },
+                          {
+                            title: "Регистр",
+                            dataIndex: "register",
                             className: "text-center",
                             align: "center",
                             ellipsis: true,

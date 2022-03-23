@@ -891,6 +891,7 @@ function talbaiBurtgekh({ token }) {
           className={"mt-6 hidden md:block"}
           bordered
           size="small"
+          loading={!talbainiiGaralt}
           tableLayout={"fixed"}
           rowKey={(row) => row._id}
           scroll={{ y: "calc(100vh - 25rem)" }}

@@ -3,7 +3,13 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgiinId) =>
+const fetcher = (
+  url,
+  token,
+  baiguullagiinId,
+  { search, ...khuudaslalt },
+  barilgiinId
+) =>
   axios(token)
     .get(url, {
       params: {
@@ -22,7 +28,7 @@ const fetcher = (url, token, baiguullagiinId, { search, ...khuudaslalt },barilgi
     .catch(aldaaBarigch);
 
 function useGereeniiZaalt(token, baiguullagiinId) {
-  const {barilgiinId} = useAuth()
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setGereeniiZaaltKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -30,7 +36,7 @@ function useGereeniiZaalt(token, baiguullagiinId) {
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/gereeniiZaalt", token, baiguullagiinId, khuudaslalt,barilgiinId]
+      ? ["/gereeniiZaalt", token, baiguullagiinId, khuudaslalt, barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }

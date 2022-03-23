@@ -70,7 +70,7 @@ function AjiltanBurtgel({ token }) {
   const { ajiltan, barilgiinId } = useAuth();
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, undefined, order);
+    useKhariltsagch(token, ajiltan?.baiguullagiinId, 1000, undefined, order);
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);

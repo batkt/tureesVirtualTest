@@ -42,7 +42,7 @@ export function useTalbai(token, baiguullagiinId, order) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: 1000,
     search: "",
     jagsaalt: [],
   });
