@@ -303,12 +303,16 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Өдөр",
-        dataIndex: "duusakhOgnoo",
+        dataIndex: "udur",
         align: "center",
         ellipsis: true,
-        render: (duusakhOgnoo) => {
-          return moment(duusakhOgnoo).diff(moment(new Date()), "days");
+        render: (t, row) => {
+          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
         },
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
+          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
       },
       {
         title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
@@ -773,7 +777,9 @@ function ZakhialgiinKhyanalt() {
             size="small"
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
-            onChange={onChangeTable}
+            onChange={(a, b, c) =>
+              !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c)
+            }
             columns={columns}
             dataSource={gereeniiMedeelel?.jagsaalt}
             pagination={{
