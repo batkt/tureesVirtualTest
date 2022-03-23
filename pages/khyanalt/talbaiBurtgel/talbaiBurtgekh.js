@@ -29,7 +29,6 @@ import {
   Space,
   Table,
   Upload,
-  Tooltip,
 } from "antd";
 import Admin from "components/Admin";
 import { modal } from "components/ant/Modal";

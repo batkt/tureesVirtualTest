@@ -18,6 +18,8 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useOrder from "tools/function/useOrder";
+import useSWR from "swr";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function Zogsool({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -31,6 +33,18 @@ function Zogsool({ token }) {
   const { zogsoolToololt, zogsoolToololtMutate } = useZogsoolToololt(
     token,
     ognoo
+  );
+
+  const zogsooliinMedeelel = useSWR(
+    ["/zogsooliinDunAvya", token, ognoo],
+    (url, token, ognoo) =>
+      uilchilgee(token)
+        .post(url, {
+          ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        })
+        .then((a) => a.data)
+        .catch(aldaaBarigch)
   );
 
   const { order, onChangeTable } = useOrder({ check_in_time: -1 });
@@ -234,35 +248,40 @@ function Zogsool({ token }) {
         </div>
       </Card>
       <Card className="col-span-12">
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row">
           <DatePicker.RangePicker
             size="small"
             value={ognoo}
             onChange={setOgnoo}
           />
-          <Popover
-            content={() => (
-              <div className="flex w-32 flex-col">
-                <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
-                  onClick={mashinOruulakhExcel}
-                >
-                  <UploadOutlined style={{ fontSize: "18px" }} />
-                  <label>Татах</label>
-                </a>
-              </div>
-            )}
-            placement="bottom"
-            trigger="click"
-          >
-            <Button
-              type="primary"
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+          <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
+            Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
+          </div>
+          <div className="ml-auto">
+            <Popover
+              content={() => (
+                <div className="flex w-32 flex-col">
+                  <a
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    onClick={mashinOruulakhExcel}
+                  >
+                    <UploadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
             >
-              <span>Excel</span>
-              <DownOutlined width={5} />
-            </Button>
-          </Popover>
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Excel</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>
+          </div>
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
