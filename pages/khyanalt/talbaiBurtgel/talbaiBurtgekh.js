@@ -238,18 +238,22 @@ function talbaiBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
     if (talbar === "talbainNegjUne") {
-      // talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
-      //   2
-      // )
-      formRef.current.setFieldsValue({
-        talbainNiitUne: talbaiState.talbainNiitUne,
-      });
-      if (talbaiState.niitAshiglaltiinZardal !== undefined) {
-        talbaiState.tureesiinTulbur =
-          talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne;
+      let value = Number(utga) * Number(talbaiState.talbainKhemjee);
+      if (
+        (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
+          _.isNumber(utga) &&
+          value) ||
+        0
+      ) {
+        talbaiState.talbainNiitUne = value.toFixed(2);
         formRef.current.setFieldsValue({
-          tureesiinTulbur: talbaiState.tureesiinTulbur,
+          talbainNiitUne: talbaiState.talbainNiitUne,
         });
+        if (talbaiState.ashiglaltiinZardal === 0) {
+          formRef.current.setFieldsValue({
+            tureesiinTulbur: utga.toFixed(2),
+          });
+        }
       }
     }
     if (talbar === "ashiglaltiinZardal") {
