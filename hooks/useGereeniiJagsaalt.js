@@ -32,7 +32,7 @@ const fetcher = (
           ...query,
         },
         order: order,
-        collation: { locale: "mn", numericOrdering: true },
+        collation: { locale: "en", numericOrdering: true },
         ...khuudaslalt,
       },
     })

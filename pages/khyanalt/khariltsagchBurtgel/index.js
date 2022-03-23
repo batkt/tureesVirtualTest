@@ -47,6 +47,7 @@ import { modal } from "components/ant/Modal";
 import formatNumber from "tools/function/formatNumber";
 import CardList from "components/cardList";
 import KhariltsagchTile from "components/pageComponents/khariltsagch/KhariltsagchTile";
+import useOrder from "tools/function/useOrder";
 
 const iconColor = { fontSize: "18px" };
 
@@ -67,8 +68,9 @@ function AjiltanBurtgel({ token }) {
   const excelref = useRef();
 
   const { ajiltan, barilgiinId } = useAuth();
+  const { order, onChangeTable } = useOrder({ createAt: -1 });
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100);
+    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, undefined, order);
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
@@ -712,6 +714,7 @@ function AjiltanBurtgel({ token }) {
                 console.log("selectedRowKeys changed: ", selectedRowKeys);
               },
             }}
+            onChange={onChangeTable}
             columns={[
               {
                 title: "№",
@@ -737,8 +740,20 @@ function AjiltanBurtgel({ token }) {
                   );
                 },
               },
-              { title: "Регистр", dataIndex: "register", ellipsis: true },
-              { title: "Нэр", dataIndex: "ner", ellipsis: true },
+              {
+                title: "Регистр",
+                dataIndex: "register",
+                ellipsis: true,
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
+              {
+                title: "Нэр",
+                dataIndex: "ner",
+                ellipsis: true,
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
               {
                 title: "Хаяг",
                 dataIndex: "khayag",
@@ -768,6 +783,8 @@ function AjiltanBurtgel({ token }) {
                 render: () => {
                   return <Tag color="green">Идэвхтэй</Tag>;
                 },
+                showSorterTooltip: false,
+                sorter: () => 0,
               },
               {
                 title: "Түүх",

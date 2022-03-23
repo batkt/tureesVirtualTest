@@ -233,18 +233,24 @@ function ZakhialgiinKhyanalt() {
         render(date) {
           return moment(date).format("YYYY-MM-DD HH:mm");
         },
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
         align: "center",
         ellipsis: true,
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
       {
         title: "Талбай",
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
       {
         title: "Нэр",
@@ -252,6 +258,8 @@ function ZakhialgiinKhyanalt() {
         align: "left",
         ellipsis: true,
         maxWidth: "15rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
       {
         title: "Талбай /м2/",
@@ -285,7 +293,7 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Дуусах хоног",
+        title: "Өдөр",
         dataIndex: "duusakhOgnoo",
         align: "center",
         ellipsis: true,

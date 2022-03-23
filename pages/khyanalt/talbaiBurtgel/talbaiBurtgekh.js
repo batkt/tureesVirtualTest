@@ -928,6 +928,8 @@ function talbaiBurtgekh({ token }) {
               ellipsis: true,
               width: "1.75rem",
               align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
             },
             {
               title: "Давхар",
@@ -936,8 +938,8 @@ function talbaiBurtgekh({ token }) {
               width: "1.2rem",
               align: "center",
               showSorterTooltip: false,
-              defaultSortOrder: "descend",
               sorter: () => 0,
+              defaultSortOrder: "descend",
             },
             {
               title: "Талбай/м2/",
