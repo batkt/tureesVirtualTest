@@ -31,6 +31,13 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 //#endregion
 
+var dateCount = {
+  yearStart: moment().startOf("year"),
+  yearEnd: moment().endOf("year"),
+  monthStart: moment().startOf("month"),
+  monthEnd: moment().endOf("month"),
+};
+
 var timeout = null;
 
 function IlgeesenToo({
@@ -39,9 +46,19 @@ function IlgeesenToo({
   ekhlekhOgnoo,
   duusakhOgnoo,
   token,
+  text,
+  turul,
 }) {
   const { data } = useSWR(
-    ["msgIlgeesenTooAvya", barilgiinId, baiguullagiinId],
+    turul === "SMS"
+      ? [
+          "msgIlgeesenTooAvya",
+          barilgiinId,
+          baiguullagiinId,
+          ekhlekhOgnoo,
+          duusakhOgnoo,
+        ]
+      : null,
     (url, barilgiinId, baiguullagiinId) =>
       createMethod(url, token, {
         barilgiinId,
@@ -51,9 +68,9 @@ function IlgeesenToo({
       }).then((a) => a.data)
   );
   return (
-    <>
-      Нийт илгээгдсэн : <span className="font-medium">{data || 0}</span>
-    </>
+    <div className="mr-5">
+      {text} : <span className="font-medium">{data || 0}</span>
+    </div>
   );
 }
 
@@ -418,9 +435,20 @@ function Khyanalt({ token }) {
           <IlgeesenToo
             barilgiinId={barilgiinId}
             baiguullagiinId={baiguullaga?._id}
-            ekhlekhOgnoo={moment().startOf("month")}
-            duusakhOgnoo={moment().endOf("month")}
+            ekhlekhOgnoo={dateCount.yearStart}
+            duusakhOgnoo={dateCount.yearEnd}
             token={token}
+            text="Нийт"
+            turul={turul}
+          />
+          <IlgeesenToo
+            barilgiinId={barilgiinId}
+            baiguullagiinId={baiguullaga?._id}
+            ekhlekhOgnoo={dateCount.monthStart}
+            duusakhOgnoo={dateCount.monthEnd}
+            token={token}
+            text="Сард"
+            turul={turul}
           />
           <div className="ml-auto">
             <Select
