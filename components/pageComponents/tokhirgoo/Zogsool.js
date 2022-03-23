@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Button, Input } from "antd";
-import updateMethod from "tools/function/crud/updateMethod";
+import React, { useState, useEffect, useMemo } from "react";
+import { Button, Input, notification } from "antd";
+import uilchilgee from "services/uilchilgee";
 
 function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
   const [zogsoolTokhirgoo, setZogsoolTokhirgoo] = useState(null);
@@ -24,6 +24,16 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
         }
       });
   }
+
+  const isChanged = useMemo(() => {
+    if (!zogsoolTokhirgoo) return false;
+    return (
+      baiguullaga?.tokhirgoo?.zogsooliinMinut !==
+        zogsoolTokhirgoo["tokhirgoo.zogsooliinMinut"] ||
+      baiguullaga?.tokhirgoo?.zogsooliinDun !==
+        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"]
+    );
+  }, [zogsoolTokhirgoo, baiguullaga]);
 
   return (
     <>
@@ -72,13 +82,15 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
               </div>
             </div>
           </div>
-          <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2`}
-          >
-            <Button type="primary" onClick={tokhirgooKhadgalakh}>
-              Хадгалах
-            </Button>
-          </div>
+          {isChanged && (
+            <div
+              className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2`}
+            >
+              <Button type="primary" onClick={tokhirgooKhadgalakh}>
+                Хадгалах
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5"></div>
