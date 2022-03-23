@@ -666,9 +666,13 @@ input:-webkit-autofill {
 
 .anticon {
   align-items: center;
-  display: flex;
+  display: flex !important;
   justify-content: center;
   height: 100%;
+}
+
+.ant-notification-notice-icon {
+  display: inline-block !important;
 }
 
 .anticon-search {

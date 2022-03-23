@@ -1,19 +1,19 @@
-import React from "react"
-import Admin from "components/Admin"
-import useGereeniiZagvar from "hooks/useGereeniiZagvar"
-import createMethod from "tools/function/crud/createMethod"
-import { message, Select, Steps } from "antd"
-import { useAuth } from "services/auth"
-import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel"
-import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa"
-import KhurungiinBurtgel from "components/pageComponents/gereebaiguulakh/KhurungiinBurtgel"
-import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel"
-import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo"
-import moment from "moment"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import _ from "lodash"
+import React from "react";
+import Admin from "components/Admin";
+import useGereeniiZagvar from "hooks/useGereeniiZagvar";
+import createMethod from "tools/function/crud/createMethod";
+import { message, Select, Steps } from "antd";
+import { useAuth } from "services/auth";
+import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
+import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa";
+import KhurungiinBurtgel from "components/pageComponents/gereebaiguulakh/KhurungiinBurtgel";
+import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel";
+import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
+import moment from "moment";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import _ from "lodash";
 
-const { Step } = Steps
+const { Step } = Steps;
 
 const steps = [
   {
@@ -41,37 +41,37 @@ const steps = [
     content: TulburTootsoo,
     zaaltiinTolgoi: "ТАВ.ТӨЛБӨР ТООЦОО",
   },
-]
+];
 
 function GereeBaiguulakh({ token }) {
-  const { baiguullaga, barilgiinId } = useAuth()
-  const zagvarRef = React.useRef()
-  const [current, setCurrent] = React.useState(0)
+  const { baiguullaga, barilgiinId } = useAuth();
+  const zagvarRef = React.useRef();
+  const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
     baritsaaAvakhKhugatsaa: 1,
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
-  })
+  });
 
-  const [gereeniiZagvar, setGereeniiZagvar] = React.useState()
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
-    useGereeniiZagvar(token, baiguullaga?._id)
+    useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
     if (current === 0 && !gereeniiZagvar) {
-      message.warning("Гэрээний загвар сонгоно уу!")
-      zagvarRef.current.focus()
-      return
+      message.warning("Гэрээний загвар сонгоно уу!");
+      zagvarRef.current.focus();
+      return;
     }
 
-    if (current < 4) setCurrent(current + 1)
+    if (current < 4) setCurrent(current + 1);
     if (!!data) {
-      data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн"
-      data.baiguullagiinNer = baiguullaga.ner
-      data.baiguullagiinId = baiguullaga._id
-      data.gereeniiZagvariinId = gereeniiZagvar._id
-      data.barilgiinId = barilgiinId
+      data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
+      data.baiguullagiinNer = baiguullaga.ner;
+      data.baiguullagiinId = baiguullaga._id;
+      data.gereeniiZagvariinId = gereeniiZagvar._id;
+      data.barilgiinId = barilgiinId;
       _.set(data.avlaga, "guilgeenuud", [
         ...(data.avlaga.guilgeenuud || []),
         {
@@ -81,60 +81,60 @@ function GereeBaiguulakh({ token }) {
           undsenDun: data?.baritsaaAvakhDun,
           tulukhDun: data?.baritsaaAvakhDun,
         },
-      ])
+      ]);
 
       if (!!data?.unemlekhniiZurag)
-        data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id")
+        data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
 
       if (!!data?.gerchilgeeniiZurag)
         data.gerchilgeeniiZurag = _.get(
           data,
           "gerchilgeeniiZurag.0.response.id"
-        )
+        );
 
       if (!!data?.zuvshuurliinZurag)
-        data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id")
+        data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
 
       createMethod("geree", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
-          setKhagalakhGeree({})
-          setCurrent(0)
-          message.success("Амжилттай хадгаллаа")
+          setKhagalakhGeree({});
+          setCurrent(0);
+          message.success("Амжилттай хадгаллаа");
         }
-      })
+      });
     }
-  }
+  };
 
   const onChangeGereeniiZagvar = (_id) => {
     let gereeniiZagvar =
-      gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {}
-    setGereeniiZagvar({ ...gereeniiZagvar })
-  }
+      gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
+    setGereeniiZagvar({ ...gereeniiZagvar });
+  };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
-    let butsaakhUtga = _.cloneDeep(gereeniiZagvar)
-    if (!butsaakhUtga?.dedKhesguud) return {}
+    let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
+    if (!butsaakhUtga?.dedKhesguud) return {};
     butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
       (a) => a.khamaarakhKheseg === steps[current].title
-    )
+    );
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
-      )
+      );
       khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "MM"
-      )
+      );
       khadgalakhGeree.ekhlekhUdur = moment(
         khadgalakhGeree.gereeniiOgnoo
-      ).format("DD")
+      ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
         let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
           khadgalakhGeree.khugatsaa,
           "M"
-        )
-        khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY")
-        khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM")
-        khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD")
+        );
+        khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
+        khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
+        khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
       }
     }
 
@@ -142,29 +142,29 @@ function GereeBaiguulakh({ token }) {
       butsaakhUtga.dedKhesguud
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
         .map((b) => {
-          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value)
-        })
+          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+        });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
         value
-      )
+      );
     }
 
-    return butsaakhUtga
-  }, [gereeniiZagvar, khadgalakhGeree, current])
+    return butsaakhUtga;
+  }, [gereeniiZagvar, khadgalakhGeree, current]);
 
   const prev = () => {
-    if (current > 0) setCurrent(current - 1)
-  }
+    if (current > 0) setCurrent(current - 1);
+  };
 
-  const currentItem = steps[current]
+  const currentItem = steps[current];
 
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
-      tsonkhniiId={'61c2c5f91c2830c4e6f90c75'}
+      tsonkhniiId={"61c2c5f91c2830c4e6f90c75"}
     >
       <div className="box col-span-12 p-5">
         <div className="contents px-10">
@@ -217,7 +217,7 @@ function GereeBaiguulakh({ token }) {
                     <Select.Option key={mur._id}>
                       <div dangerouslySetInnerHTML={{ __html: mur.ner }} />
                     </Select.Option>
-                  )
+                  );
                 })}
               </Select>
             )}
@@ -277,16 +277,16 @@ function GereeBaiguulakh({ token }) {
                       />
                     )}
                   </div>
-                )
+                );
               })}
             </div>
           </div>
         </div>
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default GereeBaiguulakh
+export default GereeBaiguulakh;

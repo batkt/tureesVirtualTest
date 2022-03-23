@@ -87,6 +87,7 @@ const YurunkhiiMedeele = ({
           callback(data);
         } else
           notification.warning({
+            duration: 1000,
             message: (
               <div>
                 <b>{talbainDugaar}</b> талбай нь <b>{data}</b> гэрээн дээр
