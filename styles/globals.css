@@ -550,6 +550,14 @@ input:-webkit-autofill {
   @apply flex !important;
 }
 
+.ant-dropdown-menu-title-content > .anticon {
+  display: inline-block !important;
+}
+
+.ant-message-custom-content > .anticon {
+  display: inline-block !important;
+}
+
 .ant-transfer-list-header .anticon {
   @apply flex !important;
 }
