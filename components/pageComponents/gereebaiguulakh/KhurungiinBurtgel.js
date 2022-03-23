@@ -5,6 +5,8 @@ import { toWords } from "mon_num";
 import useTalbai from "hooks/useTalbai";
 import uilchilgee from "services/uilchilgee";
 
+var timeout = null;
+
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -21,7 +23,7 @@ const YurunkhiiMedeele = ({
   prev,
   onChange,
   value,
-  barilgiinId
+  barilgiinId,
 }) => {
   const [form] = Form.useForm();
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
@@ -30,42 +32,125 @@ const YurunkhiiMedeele = ({
   );
 
   const onChangetalbai = (v) => {
-
-    
-
     var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
 
-    uilchilgee(token).get('/talbainSulEskhiigShalgay',{params:{
-      talbainDugaar: talbai.kod, 
-      barilgiinId: barilgiinId
-    }}).then(({data})=>{
-      if(data === 'OK' || data === value.gereeniiDugaar)
-      {
-        talbai.talbainDugaar =
-        (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") + talbai.kod;
-  
-        talbai.baritsaaAvakhDun =
-          ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) * (value.baritsaaAvakhSar || 1) ;
-        talbai.sariinTurees = (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-        talbai.talbainNegjUne =
-          (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
-        talbai.talbainNiitUne =
-          (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-        talbai.zardliinDun = talbai.ashiglaltiinZardal
-        talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
-        talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-        form.setFieldsValue(talbai);
-        onChange({ ...value, ...talbai });
-      }
-      else notification.warning({message:<div><b>{talbai.kod}</b> талбай нь <b>{data}</b> гэрээн дээр холбогдсон байна.</div>})
-      console.log("data--->",data)
-    })
+    uilchilgee(token)
+      .get("/talbainSulEskhiigShalgay", {
+        params: {
+          talbainDugaar: talbai.kod,
+          barilgiinId: barilgiinId,
+        },
+      })
+      .then(({ data }) => {
+        if (data === "OK" || data === value.gereeniiDugaar) {
+          talbai.talbainDugaar =
+            (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") +
+            talbai.kod;
 
-    
+          talbai.baritsaaAvakhDun =
+            ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) *
+            (value.baritsaaAvakhSar || 1);
+          talbai.sariinTurees =
+            (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+          talbai.talbainNegjUne =
+            (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
+          talbai.talbainNiitUne =
+            (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
+          talbai.zardliinDun = talbai.ashiglaltiinZardal;
+          talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
+          talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
+          form.setFieldsValue(talbai);
+          onChange({ ...value, ...talbai });
+        } else
+          notification.warning({
+            message: (
+              <div>
+                <b>{talbai.kod}</b> талбай нь <b>{data}</b> гэрээн дээр
+                холбогдсон байна.
+              </div>
+            ),
+          });
+        console.log("data--->", data);
+      });
   };
 
+  const sulEsekh = (talbainDugaar, callback) => {
+    uilchilgee(token)
+      .get("/talbainSulEskhiigShalgay", {
+        params: {
+          talbainDugaar: talbainDugaar,
+          barilgiinId: barilgiinId,
+        },
+      })
+      .then(({ data }) => {
+        if (data === "OK" || data === value.gereeniiDugaar) {
+          callback(data);
+        } else
+          notification.warning({
+            message: (
+              <div>
+                <b>{talbainDugaar}</b> талбай нь <b>{data}</b> гэрээн дээр
+                холбогдсон байна.
+              </div>
+            ),
+          });
+      });
+  };
+
+  function talbainuudShalgaya(talbainuud) {
+    let sultalbainuud = [];
+    talbainuud.forEach((mur, index) => {
+      if (talbainuud.length > index)
+        sulEsekh(mur.kod, () => {
+          sultalbainuud.push(mur);
+          if (talbainuud.length - 1 === index)
+            talbainBurtgelBugulyu(sultalbainuud);
+        });
+    });
+  }
+
+  function talbainBurtgelBugulyu(talbainuud) {
+    var talbai = {};
+    talbainuud?.forEach((a) => {
+      talbai.baritsaaAvakhDun =
+        (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+      talbai.sariinTurees = (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+      talbai.talbainNegjUne = (talbai?.talbainNegjUne || 0) + a.talbainNegjUne;
+      talbai.talbainNiitUne = (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
+      talbai.talbainKhemjee = (talbai?.talbainKhemjee || 0) + a.talbainKhemjee;
+      talbai.davkhar =
+        (!!talbai?.davkhar ? `${talbai?.davkhar},` : "") + a.davkhar;
+    });
+    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
+    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
+    talbai.davkhar = talbai.davkhar?.includes(",")
+      ? [...new Set(talbai.davkhar.split(","))].join(",")
+      : talbai.davkhar;
+    if (talbainuud.length > 1)
+      talbai.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
+    form.setFieldsValue(talbai);
+    onChange({ ...value, ...talbai });
+  }
+
+  function utgaTseverleye() {
+    var talbai = {};
+    talbai.baritsaaAvakhDun = 0;
+    talbai.sariinTurees = 0;
+    talbai.talbainNegjUne = 0;
+    talbai.talbainNiitUne = 0;
+    talbai.talbainKhemjee = 0;
+    talbai.talbainNegjUneUsgeer = toWords(0);
+    talbai.talbainNiitUneUsgeer = toWords(0);
+    talbai.davkhar = 0;
+    form.setFieldsValue(talbai);
+    onChange({ ...value, ...talbai });
+  }
+
   function talbainDugaarUurchilyu({ target }) {
-    if (typeof target.value !== "string") return;
+    if (typeof target.value !== "string") {
+      utgaTseverleye();
+      return;
+    }
     const talbainDugaaruud = target.value?.includes(",")
       ? [...new Set(target.value.split(","))]
       : target.value;
@@ -80,29 +165,8 @@ const YurunkhiiMedeele = ({
       })
       .then((a) => a.data)
       .then((talbainuud) => {
-        var talbai = {};
-        talbainuud?.jagsaalt?.forEach((a) => {
-          talbai.baritsaaAvakhDun =
-            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-          talbai.sariinTurees =
-            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-          talbai.talbainNegjUne =
-            (talbai?.talbainNegjUne || 0) + a.talbainNegjUne;
-          talbai.talbainNiitUne =
-            (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-          talbai.talbainKhemjee =
-            (talbai?.talbainKhemjee || 0) + a.talbainKhemjee;
-          talbai.davkhar =
-            (!!talbai?.davkhar ? `${talbai?.davkhar},` : "") + a.davkhar;
-        });
-        talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
-        talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-        talbai.davkhar = talbai.davkhar?.includes(",")
-          ? [...new Set(talbai.davkhar.split(","))].join(",")
-          : talbai.davkhar;
-        talbai.talbainDugaar = target.value;
-        form.setFieldsValue(talbai);
-        onChange({ ...value, ...talbai });
+        if (talbainuud?.jagsaalt?.length === 0) utgaTseverleye();
+        talbainuudShalgaya(talbainuud?.jagsaalt);
       });
   }
 
@@ -122,7 +186,9 @@ const YurunkhiiMedeele = ({
           size="large"
           value={null}
           filterOption={(o) => o}
-          onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search,khuudasniiDugaar:1 }))}
+          onSearch={(search) =>
+            setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+          }
           onChange={onChangetalbai}
         >
           {talbainiiGaralt?.jagsaalt?.map((mur) => {
@@ -131,7 +197,15 @@ const YurunkhiiMedeele = ({
         </Select>
       </Form.Item>
       <Form.Item label="Талбайн дугаар" name="talbainDugaar">
-        <Input placeholder="Талбайн дугаар" onChange={talbainDugaarUurchilyu} />
+        <Input
+          placeholder="Талбайн дугаар"
+          onChange={(e) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+              talbainDugaarUurchilyu(e);
+            }, 300);
+          }}
+        />
       </Form.Item>
       <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
         <InputNumber
@@ -187,7 +261,7 @@ const YurunkhiiMedeele = ({
         <Input placeholder="Зориулалт" />
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
-        <div className="w-full flex flex-row justify-between">
+        <div className="flex w-full flex-row justify-between">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Гэрээний хугацаа
           </Button>

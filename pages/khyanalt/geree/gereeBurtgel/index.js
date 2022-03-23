@@ -117,7 +117,11 @@ function ZakhialgiinKhyanalt() {
   //#region const
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [shuult, setShuult] = React.useState({
-    query: {},
+    utga: "Хэвийн",
+    query: {
+      tuluv: { $nin: [-1] },
+      duusakhOgnoo: { $gte: new Date() },
+    },
   });
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
@@ -244,23 +248,6 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         showSorterTooltip: false,
         sorter: () => 0,
-        render(dugaar) {
-          let strokeColor = "rgba(16, 185, 129,1)";
-          return (
-            <div className="flex flex-row justify-between">
-              <span>{dugaar}</span>
-              <div className="cursor-pointer px-2 text-red-500">
-                <Progress
-                  type="circle"
-                  percent={25}
-                  width={25}
-                  strokeColor={strokeColor}
-                  trailColor={"rgba(239, 68, 68,1)"}
-                />
-              </div>
-            </div>
-          );
-        },
       },
       {
         title: "Талбай",
