@@ -790,6 +790,9 @@ input:-webkit-autofill {
   display: flex !important;
 }
 
+.ant-btn > span {
+  display: flex !important;
+}
 .ant-upload-text {
   @apply dark:text-gray-200 !important;
 }

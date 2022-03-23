@@ -149,6 +149,7 @@ function EbarimtMedeelel({ token }) {
               sorter: true,
             },
             {
+              title: () => <SettingOutlined />,
               width: "60px",
               align: "center",
               render(data) {

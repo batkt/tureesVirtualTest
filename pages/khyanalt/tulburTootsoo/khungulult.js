@@ -444,6 +444,7 @@ function tulburTootsoo() {
                       sorter: true,
                     },
                     {
+                      title: () => <SettingOutlined />,
                       width: "60px",
                       align: "center",
                       render(data) {
