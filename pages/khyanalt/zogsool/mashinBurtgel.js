@@ -18,6 +18,7 @@ import { modal } from "components/ant/Modal";
 import useMashin, { useMashinToololt } from "hooks/useMashin";
 import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
 import useOrder from "tools/function/useOrder";
+import moment from "moment";
 
 function mashinBurtgel({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -218,8 +219,19 @@ function mashinBurtgel({ token }) {
                 1,
             },
             {
-              title: "Нэр",
+              title: "Бүртгэсэн",
+              dataIndex: "createdAt",
+              ellipsis: true,
               align: "center",
+              render(date) {
+                return moment(date).format("YYYY-MM-DD HH:mm");
+              },
+              showSorterTooltip: false,
+              sorter: () => 0,
+            },
+            {
+              title: "Нэр",
+              align: "left",
               dataIndex: "ezemshigchiinNer",
               showSorterTooltip: false,
               sorter: () => 0,

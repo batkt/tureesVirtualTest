@@ -189,6 +189,13 @@ function Zogsool({ token }) {
         sorter: () => 0,
         dataIndex: "khugatsaa",
       },
+      {
+        title: "Төлбөр",
+        align: "right",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        dataIndex: "tulbur",
+      },
     ];
   }, [turul]);
 
