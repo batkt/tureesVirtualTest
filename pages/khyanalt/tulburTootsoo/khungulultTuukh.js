@@ -1,6 +1,6 @@
 import moment from "moment";
 import { useAuth } from "services/auth";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import { Table, Button, Card, DatePicker, message, Popconfirm } from "antd";
 
 import Admin from "components/Admin";
