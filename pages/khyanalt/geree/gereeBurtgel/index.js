@@ -33,6 +33,7 @@ import {
   Input,
   notification,
   Tooltip,
+  Progress,
 } from "antd";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
@@ -243,6 +244,23 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         showSorterTooltip: false,
         sorter: () => 0,
+        render(dugaar) {
+          let strokeColor = "rgba(16, 185, 129,1)";
+          return (
+            <div className="flex flex-row justify-between">
+              <span>{dugaar}</span>
+              <div className="cursor-pointer px-2 text-red-500">
+                <Progress
+                  type="circle"
+                  percent={25}
+                  width={25}
+                  strokeColor={strokeColor}
+                  trailColor={"rgba(239, 68, 68,1)"}
+                />
+              </div>
+            </div>
+          );
+        },
       },
       {
         title: "Талбай",
