@@ -209,6 +209,9 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "tulbur",
+        render(v) {
+          return formatNumber(v);
+        },
       },
     ];
   }, [turul]);

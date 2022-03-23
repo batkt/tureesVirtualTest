@@ -1,44 +1,41 @@
-import React, { useState,useEffect } from "react"
-import { Button, Input, InputNumber, notification, Switch, Form } from "antd"
-import uilchilgee, { url } from "services/uilchilgee"
+import React, { useState, useEffect } from "react";
+import { Button, Input, InputNumber, notification, Switch, Form } from "antd";
+import uilchilgee, { url } from "services/uilchilgee";
 
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan"
-
+import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 
 function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
-  const [form] = Form.useForm()
-  const [emailTokhirgoo, setEmailTokhirgoo] = useState(null)
+  const [form] = Form.useForm();
+  const [emailTokhirgoo, setEmailTokhirgoo] = useState(null);
 
   function tokhirgooKhadgalakh() {
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: emailTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" })
-          baiguullagaMutate()
+          notification.success({ message: "Амжилттай засагдлаа" });
+          baiguullagaMutate();
         }
-      })
+      });
   }
 
   useEffect(() => {
-    if(baiguullaga !==undefined){
+    if (baiguullaga !== undefined) {
       form.setFieldsValue({
         mailNevtrekhNer: baiguullaga?.tokhirgoo?.mailNevtrekhNer,
         mailPassword: baiguullaga?.tokhirgoo?.mailPassword,
-        mailHost:baiguullaga?.tokhirgoo?.mailHost,
-        mailPort:baiguullaga?.tokhirgoo?.mailPort
+        mailHost: baiguullaga?.tokhirgoo?.mailHost,
+        mailPort: baiguullaga?.tokhirgoo?.mailPort,
       });
     }
-  }, [baiguullaga])
-
-  console.log("baiguullaga",baiguullaga)
+  }, [baiguullaga]);
 
   return (
     <>
-      <div className="col-span-12 lg:col-span-4 xxl:col-span-4 mt-5">
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-4">
         <div className="intro-y box mt-5 lg:mt-0">
-          <div className="flex items-center pt-5 px-5 pb-2 border-b border-gray-200 dark:border-dark-5">
-            <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               Нэхэмжлэл и-мэйлээр илгээх тохиргоо
             </h2>
           </div>
@@ -95,27 +92,25 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                 </Form.Item>
                 <Form.Item
                   label="Хост"
-                  name="mailHost"               
+                  name="mailHost"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
                       "tokhirgoo.mailHost": target.value,
                     }))
                   }
-                  
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   label="Порт"
-                  name="mailPort"               
+                  name="mailPort"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
                       "tokhirgoo.mailPort": target.value,
                     }))
                   }
-                  
                 >
                   <Input />
                 </Form.Item>
@@ -127,9 +122,9 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
           </div>
         </div>
       </div>
-      <div className="col-span-12 lg:col-span-5 xxl:col-span-4 mt-5"></div>
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5"></div>
     </>
-  )
+  );
 }
 
-export default EmailTokhirgoo
+export default EmailTokhirgoo;
