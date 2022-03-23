@@ -273,12 +273,6 @@ function tulburTootsoo() {
               </div>
               <div className="box col-span-9 overflow-auto p-5 md:col-span-3 xl:col-span-9">
                 <Table
-                  // rowSelection={{
-                  //   type: "checkbox",
-                  //   onChange: (selectedRowKeys, selectedRows) => {
-                  //     setSongogdsonGereenuud(selectedRows)
-                  //   },
-                  // }}
                   rowSelection={rowSelection}
                   bordered
                   scroll={{ y: "calc(100vh - 20rem)" }}
@@ -291,30 +285,34 @@ function tulburTootsoo() {
                       dataIndex: "gereeniiDugaar",
                       className: "text-center",
                       align: "center",
-                      ellipsis: true,
+                      showSorterTooltip: false,
+                      sorter: (a, b) =>
+                        a.gereeniiDugaar?.localeCompare(b.gereeniiDugaar),
                     },
                     {
                       title: "Талбай",
                       dataIndex: "talbainDugaar",
                       className: "text-center",
                       align: "center",
-                      ellipsis: true,
+                      showSorterTooltip: false,
+                      sorter: (a, b) =>
+                        a.talbainDugaar?.localeCompare(b.talbainDugaar),
                     },
-
                     {
                       title: "Давхар",
                       dataIndex: "davkhar",
                       align: "center",
-                      width: "4rem",
+                      width: "5rem",
                       className: "text-center",
-                      ellipsis: true,
+                      showSorterTooltip: false,
+                      sorter: (a, b) =>
+                        Number(a.davkhar || 0) - Number(b.davkhar || 0),
                     },
                     {
                       title: "Талбай /м2/",
                       dataIndex: "talbainKhemjee",
                       align: "center",
                       className: "text-center",
-                      ellipsis: true,
                       render: (talbainKhemjee) => {
                         return `${talbainKhemjee} м2`;
                       },
@@ -329,7 +327,6 @@ function tulburTootsoo() {
                       dataIndex: "sariinTurees",
                       className: "text-center",
                       align: "center",
-                      ellipsis: true,
                       render: (sariinTurees) => {
                         return formatNumber(sariinTurees || 0);
                       },
@@ -343,10 +340,11 @@ function tulburTootsoo() {
                       dataIndex: "burtgesenAjiltaniiNer",
                       className: "text-center",
                       align: "center",
-                      ellipsis: true,
                       render: () => {
                         return "Админ";
                       },
+                      showSorterTooltip: false,
+                      sorter: true,
                     },
                   ]}
                   dataSource={gereeniiMedeelel?.jagsaalt}
