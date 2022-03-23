@@ -126,8 +126,6 @@ const YurunkhiiMedeele = ({
     talbai.davkhar = talbai.davkhar?.includes(",")
       ? [...new Set(talbai.davkhar.split(","))].join(",")
       : talbai.davkhar;
-    if (talbainuud.length > 1)
-      talbai.talbainDugaar = talbainuud.map((a) => a.kod).join(",");
     form.setFieldsValue(talbai);
     onChange({ ...value, ...talbai });
   }
@@ -178,24 +176,6 @@ const YurunkhiiMedeele = ({
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
-      <Form.Item label="Түрээсийн талбай" name="tureesiinTalbainId">
-        <Select
-          showSearch
-          placeholder="Талбай сонгох"
-          className="w-full"
-          size="large"
-          value={null}
-          filterOption={(o) => o}
-          onSearch={(search) =>
-            setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
-          }
-          onChange={onChangetalbai}
-        >
-          {talbainiiGaralt?.jagsaalt?.map((mur) => {
-            return <Select.Option key={mur._id}>{mur.kod}</Select.Option>;
-          })}
-        </Select>
-      </Form.Item>
       <Form.Item label="Талбайн дугаар" name="talbainDugaar">
         <Input
           placeholder="Талбайн дугаар"

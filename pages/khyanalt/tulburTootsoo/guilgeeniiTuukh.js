@@ -186,18 +186,12 @@ function guilgeeniiTuukh({ token }) {
         tuluv: {
           $ne: -1,
         },
-        uldegdel: {
-          $gte: 0,
-        },
       };
     else if (turul === "tsutslagdsanAvlaga")
       return {
         baiguullagiinId: baiguullaga._id,
         davkhar,
         tuluv: -1,
-        uldegdel: {
-          $gte: 0,
-        },
       };
     else if (turul === "eneSardTulukh")
       return {
