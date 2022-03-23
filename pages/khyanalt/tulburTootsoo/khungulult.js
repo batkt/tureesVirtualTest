@@ -335,17 +335,6 @@ function tulburTootsoo() {
                         Number(a.sariinTurees || 0) -
                         Number(b.sariinTurees || 0),
                     },
-                    {
-                      title: "Ажилтан",
-                      dataIndex: "burtgesenAjiltaniiNer",
-                      className: "text-center",
-                      align: "center",
-                      render: () => {
-                        return "Админ";
-                      },
-                      showSorterTooltip: false,
-                      sorter: true,
-                    },
                   ]}
                   dataSource={gereeniiMedeelel?.jagsaalt}
                   pagination={false}
@@ -447,7 +436,13 @@ function tulburTootsoo() {
                       ellipsis: true,
                       align: "center",
                     },
-
+                    {
+                      title: "Ажилтан",
+                      dataIndex: "burtgesenAjiltaniiNer",
+                      align: "center",
+                      showSorterTooltip: false,
+                      sorter: true,
+                    },
                     {
                       width: "60px",
                       align: "center",

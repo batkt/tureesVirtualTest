@@ -141,7 +141,13 @@ function EbarimtMedeelel({ token }) {
               ellipsis: true,
               align: "center",
             },
-
+            {
+              title: "Ажилтан",
+              dataIndex: "burtgesenAjiltaniiNer",
+              align: "center",
+              showSorterTooltip: false,
+              sorter: true,
+            },
             {
               width: "60px",
               align: "center",
