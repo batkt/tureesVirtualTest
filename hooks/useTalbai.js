@@ -1,17 +1,17 @@
-import { useState } from "react"
-import { useAuth } from "services/auth"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import { useState } from "react";
+import { useAuth } from "services/auth";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
 function getSearch(search) {
   var fallback = [
     { kod: { $regex: search, $options: "i" } },
     { tailbar: { $regex: search, $options: "i" } },
-  ]
+  ];
   if (/^\d+$/.test(search)) {
-    fallback.push({ talbainKhemjee: search })
+    fallback.push({ talbainKhemjee: search });
   }
-  return fallback
+  return fallback;
 }
 
 const fetcher = (
@@ -31,32 +31,33 @@ const fetcher = (
           $or: getSearch(search),
         },
         ...khuudaslalt,
-        order
+        order,
+        collation: { locale: "mn", numericOrdering: true },
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-export function useTalbai(token, baiguullagiinId,order) {
-  const {barilgiinId} = useAuth()
+export function useTalbai(token, baiguullagiinId, order) {
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setTalbaiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
     search: "",
     jagsaalt: [],
-  })
+  });
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/talbai", token, baiguullagiinId, khuudaslalt,barilgiinId,order]
+      ? ["/talbai", token, baiguullagiinId, khuudaslalt, barilgiinId, order]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setTalbaiKhuudaslalt,
     talbainiiGaralt: data,
     talbainiiJagsaaltMutate: mutate,
-  }
+  };
 }
 
-export default useTalbai
+export default useTalbai;
