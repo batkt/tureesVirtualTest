@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { useAuth } from "services/auth"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import { useState } from "react";
+import { useAuth } from "services/auth";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
 const fetcher = (
   url,
@@ -12,7 +12,7 @@ const fetcher = (
   query,
   tooAvakhEsekh,
   barilgiinId,
-  {uldegdel,...order}={createAt:-1}
+  { uldegdel, ...order } = { createAt: -1 }
 ) =>
   axios(token)
     .get(url + `${tooAvakhEsekh ? "/tooAvya" : ""}`, {
@@ -32,17 +32,18 @@ const fetcher = (
           ...query,
         },
         order: order,
+        collation: { locale: "mn", numericOrdering: true },
         ...khuudaslalt,
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
 const fetcherToololt = (url, token, barilgiinId) =>
   axios(token)
     .post(url, { barilgiinId })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
 function useGereeniiJagsaalt(
   token,
@@ -53,12 +54,12 @@ function useGereeniiJagsaalt(
   khuudasniiKhemjee,
   order
 ) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setGereeniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: khuudasniiKhemjee || 100,
     search: "",
-  })
+  });
 
   const { data, mutate } = useSWR(
     token && baiguullagiinId
@@ -71,33 +72,33 @@ function useGereeniiJagsaalt(
           query,
           tooAvakhEsekh,
           barilgiinId,
-          order
+          order,
         ]
       : null,
     fetcher,
     {
       revalidateOnFocus: false,
     }
-  )
+  );
   return {
     gereeniiMedeelel: data,
     gereeniiMedeelelMutate: mutate,
     setGereeniiKhuudaslalt,
-  }
+  };
 }
 export function useGereeniiJagsaaltToollolt(token) {
-  const { barilgiinId } = useAuth()
+  const { barilgiinId } = useAuth();
   const { data, mutate } = useSWR(
     token ? ["/gereeniiToololtAvya", token, barilgiinId] : null,
     fetcherToololt,
     {
       revalidateOnFocus: false,
     }
-  )
+  );
   return {
     gereeToollolt: data,
     gereeToolloltMutate: mutate,
-  }
+  };
 }
 
-export default useGereeniiJagsaalt
+export default useGereeniiJagsaalt;
