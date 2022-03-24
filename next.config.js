@@ -1,3 +1,5 @@
 module.exports = {
-    distDir: "build"
+  experimental: {
+    outputStandalone: true,
+  },
 };
