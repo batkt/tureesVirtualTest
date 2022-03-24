@@ -5,6 +5,7 @@ import {
   InputNumber,
   notification,
   Radio,
+  Switch,
 } from "antd";
 import _ from "lodash";
 import React, { useState } from "react";
@@ -17,6 +18,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
+  const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
+    useState(false);
 
   React.useImperativeHandle(
     ref,
@@ -34,7 +37,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: {
               turul: turul,
-              tulsunDun: (turul === "voucher" || turul === "barter") ? dun : 0,
+              tulsunDun: turul === "voucher" || turul === "barter" ? dun : 0,
               tulukhDun: turul === "avlaga" ? dun : 0,
               ognoo:
                 turul === "avlaga"
@@ -42,6 +45,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
                   : new Date(),
               gereeniiId: data?._id,
               tailbar,
+              nekhemjlekhDeerKharagdakh:
+                turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
             },
           })
           .then(() => {
@@ -51,10 +56,11 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             });
             _.isFunction(onFinish) && onFinish();
             destroy();
-          }).catch(aldaaBarigch);
+          })
+          .catch(aldaaBarigch);
       },
     }),
-    [dun, turul, tailbar]
+    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh]
   );
   function labelTurul(guilgeeTurul) {
     var text;
@@ -86,8 +92,13 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       <Divider />
       <label>{labelTurul(turul)}</label>
       {turul === "avlaga" && (
-        <DatePicker.MonthPicker locale={locale} value={ognoo} onChange={setOgnoo} />
+        <DatePicker.MonthPicker
+          locale={locale}
+          value={ognoo}
+          onChange={setOgnoo}
+        />
       )}
+
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -101,6 +112,18 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           value={tailbar}
           onChange={(e) => setTailbar(e.target.value)}
         />
+      )}
+      {turul === "avlaga" && (
+        <div className="flex flex-row justify-between">
+          <div />
+          <div className="space-x-2">
+            <label>Нэхэмжлэх дээр харах эсэх:</label>
+            <Switch
+              checked={nekhemjlekhDeerKharagdakh}
+              onChange={setNekhemjlekhDeerKharagdakh}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
