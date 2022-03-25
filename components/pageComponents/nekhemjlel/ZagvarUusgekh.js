@@ -1,15 +1,15 @@
-import React, { useEffect } from "react"
-import { renderToString } from "react-dom/server"
-import SunEditor from "suneditor-react"
-import _ from "lodash"
-import { customPlugin } from "../geree/zagvar/ZaaltOruulakh"
+import React, { useEffect } from "react";
+import { renderToString } from "react-dom/server";
+import SunEditor from "suneditor-react";
+import _ from "lodash";
+import { customPlugin } from "../geree/zagvar/ZaaltOruulakh";
 import {
   BankOutlined,
   ClockCircleOutlined,
   DollarCircleOutlined,
   LockOutlined,
   SolutionOutlined,
-} from "@ant-design/icons"
+} from "@ant-design/icons";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -23,7 +23,7 @@ const undsenTalbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
-]
+];
 
 const khugatsaaniiTalbaruud = [
   { ner: "Хугацаа", talbar: "khugatsaa" },
@@ -33,7 +33,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-]
+];
 
 const talbainiiTalbaruud = [
   { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
@@ -45,7 +45,7 @@ const talbainiiTalbaruud = [
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
-]
+];
 
 const baritsaaniiTalbaruud = [
   { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
@@ -53,7 +53,7 @@ const baritsaaniiTalbaruud = [
     ner: "Барьцаа байршуулах хугацаа",
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
-]
+];
 
 const tulburiinTalbaruud = [
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
@@ -62,7 +62,7 @@ const tulburiinTalbaruud = [
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
   { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
-]
+];
 
 const nekhemjlekhiinTalbaruud = [
   { ner: "Нэхэмжлэхийн сар", talbar: "sar" },
@@ -74,21 +74,29 @@ const nekhemjlekhiinTalbaruud = [
   { ner: "Өмнөх хуримтлагдсан өр төлбөр", talbar: "umnukhSariinUrTulbur" },
   { ner: "Энэ сард төлөх үсгээр", talbar: "eneSardTulukhUsgeer" },
   { ner: "Нийт үлдэгдэл үсгээр", talbar: "niitUldegdelUsgeer" },
-]
+];
 
-function ZaaltZasvar({
+const nekhemjlekhiinNemelt = [
+  { ner: "Дугаар", talbar: "№" },
+  { ner: "Тайлбар", talbar: "nemeltNekhemjlekh.tailbar" },
+  { ner: "Төлөх дүн", talbar: "nemeltNekhemjlekh.tulukhDun" },
+  { ner: "Огноо", talbar: "nemeltNekhemjlekh.ognoo" },
+  { ner: "Бусад авлагын мөр", talbar: "nemeltNekhemjlekh" },
+];
+
+function NekhemjlekhZasvar({
   value,
   change,
   onTextChange,
   buttonListCustom = [],
   otherProps,
 }) {
-  const editorRef = React.useRef()
+  const editorRef = React.useRef();
 
   useEffect(() => {
-    onTextChange && onTextChange(editorRef.current.editor.getText())
-    console.log(value)
-  }, [value])
+    onTextChange && onTextChange(editorRef.current.editor.getText());
+    console.log(value);
+  }, [value]);
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
@@ -96,41 +104,56 @@ function ZaaltZasvar({
       name: "undsen",
       title: "Үндсэн мэдээлэл",
       button: renderToString(<SolutionOutlined />),
-    })
+    });
     const khugatsaa = customPlugin({
       songokhTalbaruud: khugatsaaniiTalbaruud,
       name: "khugatsaa",
       title: "Хугацаа",
       button: renderToString(<ClockCircleOutlined />),
-    })
+    });
     const baritsaa = customPlugin({
       songokhTalbaruud: talbainiiTalbaruud,
       name: "talbai",
       title: "Түрээсийн талбай",
       button: renderToString(<BankOutlined />),
-    })
+    });
     const talbai = customPlugin({
       songokhTalbaruud: baritsaaniiTalbaruud,
       name: "baritsaa",
       title: "Барьцаа",
       button: renderToString(<LockOutlined />),
-    })
+    });
     const tulbur = customPlugin({
       songokhTalbaruud: tulburiinTalbaruud,
       name: "tulbur",
       title: "Төлбөр",
       button: renderToString(<DollarCircleOutlined />),
-    })
+    });
 
     const nekhemjlel = customPlugin({
       songokhTalbaruud: nekhemjlekhiinTalbaruud,
       name: "nekhemjlel",
       title: "Нэхэмжлэл",
       button: renderToString(<DollarCircleOutlined />),
-    })
+    });
 
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur, nekhemjlel]
-  }, [])
+    const nekhemjlelNemelt = customPlugin({
+      songokhTalbaruud: nekhemjlekhiinNemelt,
+      name: "nekhemjlekhiinNemelt",
+      title: "Нэхэмжлэхийн бусад авлага",
+      button: renderToString(<DollarCircleOutlined />),
+    });
+
+    return [
+      undsen,
+      khugatsaa,
+      baritsaa,
+      talbai,
+      tulbur,
+      nekhemjlel,
+      nekhemjlelNemelt,
+    ];
+  }, []);
 
   return (
     <SunEditor
@@ -140,7 +163,15 @@ function ZaaltZasvar({
       setOptions={{
         plugins: custom,
         buttonList: [
-          ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur", "nekhemjlel"],
+          [
+            "undsen",
+            "khugatsaa",
+            "talbai",
+            "baritsaa",
+            "tulbur",
+            "nekhemjlel",
+            "nekhemjlekhiinNemelt",
+          ],
           ...buttonListCustom,
         ],
       }}
@@ -148,7 +179,7 @@ function ZaaltZasvar({
       ref={editorRef}
       {...otherProps}
     />
-  )
+  );
 }
 
-export default ZaaltZasvar
+export default NekhemjlekhZasvar;

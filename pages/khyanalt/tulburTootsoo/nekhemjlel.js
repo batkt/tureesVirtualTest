@@ -137,8 +137,35 @@ function tulburTootsoo({ token }) {
             moment().format("YY") + "/" + (dugaarlalt + i);
 
           for (const [key, value] of Object.entries(medeelel)) {
-            zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            if (key !== "nemeltNekhemjlekh")
+              zagvar = zagvar?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                value
+              );
           }
+          let nemeltNekhemjlekh = "";
+          if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
+            medeelel.nemeltNekhemjlekh.forEach((a, index) => {
+              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${
+                2 + (index + 1)
+              }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
+              a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
+              a.tulukhDun = formatNumber(a.tulukhDun);
+              for (const [key, value] of Object.entries(a)) {
+                mur = mur?.replace(
+                  new RegExp(`&lt;nemeltNekhemjlekh.${key}&gt;`, "g"),
+                  value
+                );
+              }
+              nemeltNekhemjlekh += mur;
+            });
+          }
+          zagvar = zagvar?.replace(
+            new RegExp(
+              `<tr><td colspan="12" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh&gt;</span>​​<br></div></td></tr>`
+            ),
+            nemeltNekhemjlekh
+          );
         }
         return { zagvar, mail: a.mail };
       });
@@ -352,7 +379,7 @@ function tulburTootsoo({ token }) {
             </div>
           </div>
           <div className="grid grid-cols-8 gap-2">
-            <div className="col-span-2 rounded-md p-2 ">
+            <div className="col-span-2 rounded-md px-2 ">
               <div className="flex w-full justify-between">
                 <Button
                   style={{ backgroundColor: "#209669", color: "#ffffff" }}
