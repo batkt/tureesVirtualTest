@@ -134,7 +134,8 @@ function ZakhialgiinKhyanalt() {
       1000,
       order
     );
-  const { gereeToollolt } = useGereeniiJagsaaltToollolt(token);
+  const { gereeToollolt, gereeToolloltMutate } =
+    useGereeniiJagsaaltToollolt(token);
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null);
   const [gereeniiTokhirgoo, setGereeniiTokhirgoo] = React.useState(null);
 
@@ -418,6 +419,11 @@ function ZakhialgiinKhyanalt() {
     return jagsaalt;
   }, [baiguullaga, token, gereeniiTokhirgoo, shuult]);
 
+  function refresh() {
+    gereeniiMedeelelMutate();
+    gereeToolloltMutate();
+  }
+
   //#region dialogs
   function gereeTsutsalya(data) {
     setGereeniiTokhirgoo(null);
@@ -436,7 +442,7 @@ function ZakhialgiinKhyanalt() {
           ref={tailbarRef}
           data={data}
           token={token}
-          confirm={() => gereeniiMedeelelMutate()}
+          confirm={() => refresh()}
         />
       ),
       footer,
@@ -460,7 +466,7 @@ function ZakhialgiinKhyanalt() {
           ref={sungaltRef}
           data={data}
           token={token}
-          confirm={() => gereeniiMedeelelMutate()}
+          confirm={() => refresh()}
         />
       ),
       footer,
@@ -525,7 +531,7 @@ function ZakhialgiinKhyanalt() {
           token={token}
           barilgiinId={barilgiinId}
           baiguullaga={baiguullaga}
-          onFinish={gereeniiMedeelelMutate}
+          onFinish={refresh}
           zam="gereeniiExcelTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Харилцагч загварын excel файл"
