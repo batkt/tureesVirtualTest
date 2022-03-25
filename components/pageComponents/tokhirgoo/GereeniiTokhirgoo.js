@@ -92,7 +92,7 @@ function KhuviinMedeelel({
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">Гэрээ автоматаар сунгах</div> 
-                  <div className="text-gray-600">Менежер бүрт хөнгөлөлт оруулах боломжийг бий болгох</div>
+                  <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto">
                 <Switch defaultChecked={baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh} onChange={(v)=>setGereeTokhirgoo(a=>({...(a || {}),'tokhirgoo.gereeAvtomataarSungakhEsekh':v}))}/>
