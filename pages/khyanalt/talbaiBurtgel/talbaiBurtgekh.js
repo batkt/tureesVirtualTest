@@ -28,6 +28,7 @@ import {
   Select,
   Space,
   Table,
+  Tag,
   Upload,
 } from "antd";
 import Admin from "components/Admin";
@@ -56,17 +57,6 @@ const normFile = (e) => {
 
   return e && e.fileList;
 };
-function Head({ title, sort }) {
-  var icon = <ArrowUpOutlined />;
-  if (sort === -1) icon = <ArrowDownOutlined />;
-
-  return (
-    <div className="flex w-full flex-row items-center justify-between">
-      {title}
-      {icon}
-    </div>
-  );
-}
 
 function talbaiBurtgekh({ token }) {
   const formRef = useRef();
@@ -930,10 +920,20 @@ function talbaiBurtgekh({ token }) {
               title: "Дугаар",
               dataIndex: "kod",
               ellipsis: true,
-              width: "1.75rem",
+              width: "3rem",
               align: "center",
               showSorterTooltip: false,
               sorter: () => 0,
+              render(dugaar, mur) {
+                return (
+                  <div className="flex flex-row justify-between space-x-2">
+                    <div>{dugaar}</div>
+                    <Tag color={mur.idevkhiteiEsekh === true ? "green" : "red"}>
+                      {mur.idevkhiteiEsekh === true ? "Идэвхитэй" : "Идэвхигүй"}
+                    </Tag>
+                  </div>
+                );
+              },
             },
             {
               title: "Давхар",
