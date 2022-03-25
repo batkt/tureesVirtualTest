@@ -920,20 +920,10 @@ function talbaiBurtgekh({ token }) {
               title: "Дугаар",
               dataIndex: "kod",
               ellipsis: true,
-              width: "3rem",
+              width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
               sorter: () => 0,
-              render(dugaar, mur) {
-                return (
-                  <div className="flex flex-row justify-between space-x-2">
-                    <div>{dugaar}</div>
-                    <Tag color={mur.idevkhiteiEsekh === true ? "green" : "red"}>
-                      {mur.idevkhiteiEsekh === true ? "Идэвхитэй" : "Идэвхигүй"}
-                    </Tag>
-                  </div>
-                );
-              },
             },
             {
               title: "Давхар",
@@ -997,6 +987,22 @@ function talbaiBurtgekh({ token }) {
               dataIndex: "tailbar",
               ellipsis: true,
               width: "4.5rem",
+            },
+            {
+              title: "Төлөв",
+              dataIndex: "idevkhiteiEsekh",
+              ellipsis: true,
+              width: "2rem",
+              align: "center",
+              showSorterTooltip: false,
+              sorter: () => 0,
+              render(idevkhiteiEsekh) {
+                return (
+                  <Tag color={idevkhiteiEsekh === true ? "green" : "red"}>
+                    {idevkhiteiEsekh === true ? "Идэвхитэй" : "Идэвхигүй"}
+                  </Tag>
+                );
+              },
             },
             {
               title: "Хөрөнгө",

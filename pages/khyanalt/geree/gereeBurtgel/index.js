@@ -18,12 +18,12 @@ import {
   UploadOutlined,
   DownloadOutlined,
   DownOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import {
   Table,
   Card,
   Popover,
-  Badge,
   Popconfirm,
   Drawer,
   DatePicker,
@@ -32,8 +32,6 @@ import {
   message,
   Input,
   notification,
-  Tooltip,
-  Progress,
 } from "antd";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
@@ -55,63 +53,71 @@ import GereeTile from "components/pageComponents/geree/GereeTile";
 import useOrder from "tools/function/useOrder";
 //#endregion
 
-const Tailbar = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
-  const [shaltgaan, setTailbar] = React.useState("");
-  React.useImperativeHandle(
-    ref,
-    () => ({
-      khadgalya() {
-        uilchilgee(token)
-          .post("/gereeTsutslaya", {
-            gereeniiId: data?._id,
-            barilgiinId: data?.barilgiinId,
-            shaltgaan,
-          })
-          .then(({ data }) => {
-            if (data === "Amjilttai") {
-              message.success("Гэрээ амжилттай цуцаллаа");
-              confirm(shaltgaan);
-              destroy();
-            }
-          });
-      },
-      khaaya() {
-        destroy();
-      },
-    }),
-    [shaltgaan]
-  );
+const Tailbar = React.forwardRef(
+  ({ token, destroy, confirm, data, service }, ref) => {
+    const [shaltgaan, setTailbar] = React.useState("");
+    const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        khadgalya() {
+          uilchilgee(token)
+            .post(service, {
+              gereeniiId: data?._id,
+              barilgiinId: data?.barilgiinId,
+              shaltgaan,
+              duusakhOgnoo,
+            })
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                message.success("Гэрээ амжилттай цуцаллаа");
+                confirm(shaltgaan);
+                destroy();
+              }
+            });
+        },
+        khaaya() {
+          destroy();
+        },
+      }),
+      [shaltgaan]
+    );
 
-  return (
-    <div className="w-full space-y-2">
-      <div className="w-full space-y-1 font-medium">
-        <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Эхлэх огноо:</div>
-          <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
-        </div>
-        <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Дуусах огноо:</div>
-          <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
-        </div>
-        <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Ашигласан хоног:</div>
-          <div>
-            {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+    return (
+      <div className="w-full space-y-2">
+        <div className="w-full space-y-1 font-medium">
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">Эхлэх огноо:</div>
+            <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+          </div>
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">Дуусах огноо:</div>
+            {service === "/gereeSergeeye" ? (
+              <DatePicker value={duusakhOgnoo} onChange={setDuusakhOgnoo} />
+            ) : (
+              <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
+            )}
+          </div>
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">Ашигласан хоног:</div>
+            <div>
+              {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+            </div>
+          </div>
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">Авлагын дүн:</div>
+            <div>{formatNumber(data?.uldegdel)}</div>
           </div>
         </div>
-        <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Авлагын дүн:</div>
-          <div>{formatNumber(data?.uldegdel)}</div>
-        </div>
-      </div>
 
-      <Input.TextArea
-        value={shaltgaan}
-        onChange={({ target }) => setTailbar(target?.value)}
-      />
-    </div>
-  );
-});
+        <Input.TextArea
+          value={shaltgaan}
+          onChange={({ target }) => setTailbar(target?.value)}
+        />
+      </div>
+    );
+  }
+);
 
 function ZakhialgiinKhyanalt() {
   //#region const
@@ -363,45 +369,64 @@ function ZakhialgiinKhyanalt() {
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
                     <label> Харах</label>
                   </a>
-                  <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                    onClick={() => {
-                      if (
-                        ajiltan?.erkh === "Admin" ||
-                        !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
-                          (a) => a === data.barilgiinId
+                  {shuult.utga !== "Цуцласан" && (
+                    <a
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      onClick={() => {
+                        if (
+                          ajiltan?.erkh === "Admin" ||
+                          !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
+                            (a) => a === data.barilgiinId
+                          )
                         )
-                      )
-                        router.push(
-                          `/khyanalt/geree/gereeBaiguulakh/${data._id}`
-                        );
-                      else
-                        notification.warning({
-                          message: "Таньд гэрээ засах эрх байхгүй байна.",
-                        });
-                    }}
-                  >
-                    <EditOutlined style={{ fontSize: "18px" }} />
-                    <label> Засах</label>
-                  </a>
-                  <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                    onClick={() => gereeSungaya(data)}
-                  >
-                    <FieldTimeOutlined style={{ fontSize: "18px" }} />
-                    <label> Сунгах</label>
-                  </a>
-                  <Popconfirm
-                    title="Цуцлахдаа итгэлтэй байна уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => gereeTsutsalya(data)}
-                  >
-                    <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
-                      <MinusCircleOutlined style={{ fontSize: "18px" }} />
-                      <label> Цуцлах</label>
+                          router.push(
+                            `/khyanalt/geree/gereeBaiguulakh/${data._id}`
+                          );
+                        else
+                          notification.warning({
+                            message: "Таньд гэрээ засах эрх байхгүй байна.",
+                          });
+                      }}
+                    >
+                      <EditOutlined style={{ fontSize: "18px" }} />
+                      <label> Засах</label>
                     </a>
-                  </Popconfirm>
+                  )}
+                  {shuult.utga !== "Цуцласан" && (
+                    <a
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      onClick={() => gereeSungaya(data)}
+                    >
+                      <FieldTimeOutlined style={{ fontSize: "18px" }} />
+                      <label> Сунгах</label>
+                    </a>
+                  )}
+                  {shuult.utga !== "Цуцласан" && (
+                    <Popconfirm
+                      title="Цуцлахдаа итгэлтэй байна уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => gereeTsutsalya(data)}
+                    >
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                        <MinusCircleOutlined style={{ fontSize: "18px" }} />
+                        <label> Цуцлах</label>
+                      </a>
+                    </Popconfirm>
+                  )}
+                  {shuult.utga === "Цуцласан" && (
+                    <Popconfirm
+                      title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => gereeSergeeye(data)}
+                    >
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                        <RedoOutlined style={{ fontSize: "18px" }} />
+                        <label> Сэргээх</label>
+                      </a>
+                    </Popconfirm>
+                  )}
                 </div>
               )}
               placement="bottom"
@@ -439,6 +464,32 @@ function ZakhialgiinKhyanalt() {
       icon: <MinusCircleOutlined />,
       content: (
         <Tailbar
+          service="/gereeTsutslaya"
+          ref={tailbarRef}
+          data={data}
+          token={token}
+          confirm={() => refresh()}
+        />
+      ),
+      footer,
+    });
+  }
+
+  function gereeSergeeye(data) {
+    setGereeniiTokhirgoo(null);
+    const footer = [
+      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+        Сэргээх
+      </Button>,
+    ];
+    modal({
+      width: "20vw",
+      title: "Сэргээх шалтгаан",
+      icon: <MinusCircleOutlined />,
+      content: (
+        <Tailbar
+          service="/gereeSergeeye"
           ref={tailbarRef}
           data={data}
           token={token}
