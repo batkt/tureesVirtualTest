@@ -119,6 +119,41 @@ const Tailbar = React.forwardRef(
   }
 );
 
+const select = {
+  _id: 1,
+  gereeniiDugaar: 1,
+  gereeniiOgnoo: 1,
+  turul: 1,
+  ovog: 1,
+  ner: 1,
+  register: 1,
+  albanTushaal: 1,
+  zakhirliinOvog: 1,
+  zakhirliinNer: 1,
+  utas: 1,
+  mail: 1,
+  khayag: 1,
+  khugatsaa: 1,
+  duusakhOgnoo: 1,
+  sariinTurees: 1,
+  zuvshuurliinZurag: 1,
+  talbainDugaar: 1,
+  talbainNegjUne: 1,
+  talbainNiitUne: 1,
+  talbainKhemjee: 1,
+  davkhar: 1,
+  baritsaaBairshuulakhKhugatsaa: 1,
+  baritsaaAvakhKhugatsaa: 1,
+  baiguullagiinId: 1,
+  baiguullagiinNer: 1,
+  barilgiinId: 1,
+  gereeniiZagvariinId: 1,
+  tulukhUdur: 1,
+  tuluv: 1,
+  dans: 1,
+  gereeniiTuukhuud: 1,
+};
+
 function ZakhialgiinKhyanalt() {
   //#region const
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -138,7 +173,8 @@ function ZakhialgiinKhyanalt() {
       shuult?.query,
       undefined,
       1000,
-      order
+      order,
+      select
     );
   const { gereeToollolt, gereeToolloltMutate } =
     useGereeniiJagsaaltToollolt(token);
@@ -328,11 +364,16 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
-        dataIndex: shuult.utga === "Цуцласан" ? "" : "duusakhOgnoo",
+        dataIndex:
+          shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         align: "center",
         ellipsis: true,
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          let ognoo =
+            shuult.utga === "Цуцласан"
+              ? data?.find((a) => a.turul === "Tsutslakh")?.khiisenOgnoo
+              : data;
+          return moment(ognoo).format("YYYY-MM-DD");
         },
         showSorterTooltip: false,
         defaultSortOrder: "descend",
