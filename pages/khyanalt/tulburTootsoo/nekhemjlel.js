@@ -42,7 +42,6 @@ function tulburTootsoo({ token }) {
   const nekhemjlekhRef = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
 
-  const [tuluvluguutEsekh, setTuluvluguutEsekh] = React.useState(false);
   const [ognoo, setOgnoo] = React.useState(moment());
   const [barimt, setBarimt] = React.useState();
   const [davkhar, setDavkhar] = React.useState();
@@ -60,7 +59,6 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token, baiguullaga?._id);
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
-  const [mailZagvar, setMailZagvar] = useState();
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
@@ -98,7 +96,7 @@ function tulburTootsoo({ token }) {
         var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
         )?.nekhemjlekh;
-        const medeelel = _.clone(a);
+        const medeelel = _.cloneDeep(nekhemjleliinJagsaalt.find(n=>n._id === a));
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
             medeelel.eneSardTulukhDun *
@@ -170,7 +168,7 @@ function tulburTootsoo({ token }) {
         return { zagvar, mail: a.mail };
       });
     return [];
-  }, [barimt, songogdsonGereenuud]);
+  }, [barimt, songogdsonGereenuud,nekhemjleliinJagsaalt]);
 
   function maileerIlgeekh() {
     if (!barimt) {
@@ -430,9 +428,9 @@ function tulburTootsoo({ token }) {
                 scroll={{ y: "calc(100vh - 25rem)" }}
                 rowSelection={{
                   type: "checkbox",
-                  selectedRowKeys: songogdsonGereenuud?.map((a) => a._id),
-                  onChange: (selectedRowKeys, selectedRows) => {
-                    setSongogdsonGereenuud(selectedRows);
+                  selectedRowKeys: songogdsonGereenuud,
+                  onChange: (selectedRowKeys) => {
+                    setSongogdsonGereenuud(selectedRowKeys);
                   },
                 }}
                 columns={[

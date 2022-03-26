@@ -31,7 +31,9 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
       baiguullaga?.tokhirgoo?.zogsooliinMinut !==
         zogsoolTokhirgoo["tokhirgoo.zogsooliinMinut"] ||
       baiguullaga?.tokhirgoo?.zogsooliinDun !==
-        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"]
+        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"] ||
+        baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
+          zogsoolTokhirgoo["tokhirgoo.zogsooliinKhungulukhMinut"]
     );
   }, [zogsoolTokhirgoo, baiguullaga]);
 
@@ -76,6 +78,25 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
                     setZogsoolTokhirgoo((a) => ({
                       ...(a || {}),
                       "tokhirgoo.zogsooliinDun": target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Хөнгөлөх минут</div>
+                <div className="text-gray-600"></div>
+              </div>
+              <div className="ml-auto">
+                <Input
+                  value={zogsoolTokhirgoo?.["tokhirgoo.zogsooliinKhungulukhMinut"]}
+                  onChange={({ target }) =>
+                    setZogsoolTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.zogsooliinKhungulukhMinut": target.value,
                     }))
                   }
                 />

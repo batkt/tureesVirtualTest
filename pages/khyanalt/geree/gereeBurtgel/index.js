@@ -190,6 +190,8 @@ const Tailbar = React.forwardRef(
   ({ token, destroy, confirm, data, service }, ref) => {
     const [shaltgaan, setTailbar] = React.useState("")
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment())
+    const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment())
+    
     React.useImperativeHandle(
       ref,
       () => ({
@@ -200,6 +202,7 @@ const Tailbar = React.forwardRef(
               barilgiinId: data?.barilgiinId,
               shaltgaan,
               duusakhOgnoo,
+              sergeekhOgnoo
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -213,15 +216,19 @@ const Tailbar = React.forwardRef(
           destroy()
         },
       }),
-      [shaltgaan]
+      [shaltgaan,duusakhOgnoo,sergeekhOgnoo]
     )
 
     return (
       <div className="w-full space-y-2">
         <div className="w-full space-y-1 font-medium">
           <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Эхлэх огноо:</div>
-            <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+            <div className="text-right">{service === "/gereeSergeeye" ? 'Дуусах огноо:' : 'Эхлэх огноо:'}</div>
+            {service === "/gereeSergeeye" ? (
+              <DatePicker value={setSergeekhOgnoo} onChange={setSergeekhOgnoo} />
+            ) : (
+              <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
+            )}
           </div>
           <div className="flex w-full flex-row justify-between">
             <div className="text-right">Дуусах огноо:</div>
@@ -231,16 +238,16 @@ const Tailbar = React.forwardRef(
               <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
-          <div className="flex w-full flex-row justify-between">
+          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
             <div className="text-right">Ашигласан хоног:</div>
             <div>
               {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
             </div>
-          </div>
-          <div className="flex w-full flex-row justify-between">
+          </div>}
+          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
             <div className="text-right">Авлагын дүн:</div>
             <div>{formatNumber(data?.uldegdel)}</div>
-          </div>
+          </div>}
         </div>
 
         <Input.TextArea
