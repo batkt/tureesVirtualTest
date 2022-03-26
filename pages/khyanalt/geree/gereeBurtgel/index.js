@@ -638,7 +638,6 @@ function ZakhialgiinKhyanalt() {
     })
   }
   function baganaNemekh(e, ner, utga) {
-    debugger
     if (e.target.checked === true) {
       var nemekhBagana = {
         title: ner,
@@ -648,11 +647,10 @@ function ZakhialgiinKhyanalt() {
       shineBagana.push(nemekhBagana)
       setShineBagana([...shineBagana])
     } else {
-      var test = shineBagana.filter(function (item) {
+      var khasakh = shineBagana.filter(function (item) {
         return item.dataIndex !== utga
       })
-      debugger
-      setShineBagana([...test])
+      setShineBagana([...khasakh])
     }
   }
   const menu = (
