@@ -211,7 +211,7 @@ function Zogsool({ token }) {
         dataIndex: "tulbur",
         render(v) {
           return formatNumber(v);
-        },
+        }
       },
     ];
   }, [turul]);

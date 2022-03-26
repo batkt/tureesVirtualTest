@@ -811,3 +811,7 @@ input:-webkit-autofill {
 .ant-upload-hint {
   @apply dark:text-gray-300 !important;
 }
+
+.ant-table-column-title{
+  text-align: center !important;
+}

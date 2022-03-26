@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
@@ -23,7 +23,9 @@ function EBarimt({
   setIrgenEsekh,
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
+  eBarimtAutomataarShivikh
 }) {
+
   function registerShalgaya(register) {
     if(isString(register) && irgenEsekh === true)
       register = register?.toUpperCase()
@@ -37,10 +39,15 @@ function EBarimt({
         });
   }
 
+  useEffect(()=>{
+    if(eBarimtAutomataarShivikh === true && register.length > 6)
+    registerShalgaya(register)
+  },[eBarimtAutomataarShivikh,register])
+
   return (
     <div className="flex flex-row">
       <div className="p-2 w-full">
-        <div className="flex flex-row border-b-2 border-dashed py-2">
+        {eBarimtAutomataarShivikh !== true  && <div className="flex flex-row border-b-2 border-dashed py-2">
           <div>Хувь хүн</div>
           <div className="ml-auto">
             <Switch
@@ -48,8 +55,8 @@ function EBarimt({
               onChange={setBarimtKhevlekhEsekh}
             />
           </div>
-        </div>
-        {
+        </div>}
+        {eBarimtAutomataarShivikh !== true  &&
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН эсэх</div>
             <div className="ml-auto">
@@ -60,7 +67,7 @@ function EBarimt({
             </div>
           </div>
         }
-        {
+        {eBarimtAutomataarShivikh !== true  &&
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Татвар төлөгч иргэнд эсэх</div>
             <div className="ml-auto">
@@ -68,7 +75,7 @@ function EBarimt({
             </div>
           </div>
         }
-        {baiguullagaEsekh && (
+        {eBarimtAutomataarShivikh !== true  && baiguullagaEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН регистр</div>
             <div className="ml-auto">
@@ -82,7 +89,7 @@ function EBarimt({
             </div>
           </div>
         )}
-        {irgenEsekh && (
+        {eBarimtAutomataarShivikh !== true  && irgenEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Иргэний регистр</div>
             <div className="ml-auto">
@@ -96,9 +103,13 @@ function EBarimt({
             </div>
           </div>
         )}
+        {eBarimtAutomataarShivikh === true && <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
+            <div>{irgenEsekh ? 'Татвар төлөгч иргэн' : 'ААН'} регистр</div>
+            <div className="font-medium text-base">{register}</div>
+          </div>}
         {baiguullagiinMedeelel?.name && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>ААН нэр</div>
+            <div>{irgenEsekh ? 'Татвар төлөгч иргэн' : 'ААН'} нэр</div>
             <div className="ml-auto text-lg font-medium">
               {baiguullagiinMedeelel?.name}
             </div>

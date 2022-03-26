@@ -10,6 +10,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
       setZogsoolTokhirgoo({
         "tokhirgoo.zogsooliinMinut": baiguullaga?.tokhirgoo?.zogsooliinMinut,
         "tokhirgoo.zogsooliinDun": baiguullaga?.tokhirgoo?.zogsooliinDun,
+        "tokhirgoo.zogsooliinKhungulukhMinut": baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut,
       });
     }
   }, [baiguullaga]);

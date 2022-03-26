@@ -7,15 +7,15 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
 //#endregion
 
 function Tulbur(
-  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga,onRefresh },
+  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga,onRefresh ,defaultRegister,eBarimtAutomataarShivikh,defaultTurul},
   ref
 ) {
   const [tulbur, setTulbur] = React.useState(data?.tulbur || [])
   const [eBarimt, setEBarimt] = React.useState(null)
 
-  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false)
-  const [irgenEsekh, setIrgenEsekh] = React.useState(false)
-  const [register, setRegister] = React.useState("")
+  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(defaultTurul === 'ААН' ? true : false)
+  const [irgenEsekh, setIrgenEsekh] = React.useState(defaultTurul === 'Иргэн' ? true : false)
+  const [register, setRegister] = React.useState(defaultRegister || "")
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState()
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false)
   const [loading, setLoading] = useState(false)
@@ -117,6 +117,7 @@ function Tulbur(
         setIrgenEsekh={setIrgenEsekh}
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
+        eBarimtAutomataarShivikh={eBarimtAutomataarShivikh}
       />
       <div className="mt-5 flex flex-row justify-between">
         <Button type="primary" danger onClick={khaaya}>

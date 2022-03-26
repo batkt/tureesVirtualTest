@@ -20,8 +20,7 @@ import {
   DownOutlined,
   ExclamationOutlined,
   FileExcelOutlined,
-  QuestionOutlined,
-  UploadOutlined,
+  QuestionOutlined
 } from "@ant-design/icons";
 import moment from "moment";
 import useDans from "hooks/useDans";
@@ -38,6 +37,7 @@ import Tulbur from "components/pageComponents/eBarimt/Tulbur";
 import useUldegdel from "hooks/khuulga/useUldegdel";
 import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile";
 import CardList from "components/cardList";
+import uilchilgee from "services/uilchilgee";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
@@ -233,22 +233,39 @@ function tulburTootsoo({ token }) {
   }
 
   function ebarimtUgukh(data) {
-    modal({
-      title: (
-        <div className="flex w-full flex-row justify-between">
-          <div>Түрээсийн төлбөрийн и-баримт</div>
-        </div>
-      ),
-      content: (
-        <Tulbur
-          data={data}
-          token={token}
-          dansniiKhuulgaMutate={dansniiKhuulgaMutate}
-          onRefresh={refreshData}
-        />
-      ),
-      footer: false,
-    });
+
+    function barimtShivya(register,turul) {
+      modal({
+        title: (
+          <div className="flex w-full flex-row justify-between">
+            <div>Түрээсийн төлбөрийн и-баримт</div>
+          </div>
+        ),
+        content: (
+          <Tulbur
+            data={data}
+            token={token}
+            defaultRegister={register}
+            defaultTurul={turul}
+            eBarimtAutomataarShivikh={baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh}
+            dansniiKhuulgaMutate={dansniiKhuulgaMutate}
+            onRefresh={refreshData}
+          />
+        ),
+        footer: false,
+      });
+    }
+    if(baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh === true)
+    {
+      uilchilgee(token).get('/geree',{params:{query:{_id:data.kholbosonGereeniiId},select:{register:1,turul:1}}})
+      .then(({data})=>{
+        if(data.jagsaalt.length > 0){
+          barimtShivya(data.jagsaalt[0].register,data.jagsaalt[0].turul)
+        }
+      })
+    }
+    else barimtShivya()
+    
   }
 
   const columns = useMemo(() => {
