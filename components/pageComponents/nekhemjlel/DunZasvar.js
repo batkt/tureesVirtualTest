@@ -1,6 +1,6 @@
 import React, { useImperativeHandle } from 'react'
 import {Form,InputNumber} from 'antd'
-function DunZasvar({data,index,setNekhemjleliinJagsaalt,destroy,nekhemjleliinJagsaalt,songogdsonGereenuud,setSongogdsonGereenuud},ref) {
+function DunZasvar({data,index,setNekhemjleliinJagsaalt,destroy,nekhemjleliinJagsaalt},ref) {
     const [form] = Form.useForm();
 
     useImperativeHandle(
@@ -10,15 +10,6 @@ function DunZasvar({data,index,setNekhemjleliinJagsaalt,destroy,nekhemjleliinJag
                 const nekhemjlelChanged = form.getFieldsValue()
                 nekhemjleliinJagsaalt[index] = {...nekhemjleliinJagsaalt[index],...nekhemjlelChanged}
                 setNekhemjleliinJagsaalt([...nekhemjleliinJagsaalt])
-                if(!!songogdsonGereenuud)
-                    {
-                        const i = songogdsonGereenuud.findIndex(a=>a._id === nekhemjleliinJagsaalt[index]._id)
-                        if(i !== -1){
-                            songogdsonGereenuud[i] = {...nekhemjleliinJagsaalt[index],...nekhemjlelChanged}
-                            setSongogdsonGereenuud([...songogdsonGereenuud])
-                        }
-                            
-                    }
                 destroy()
             },
             khaaya() {
