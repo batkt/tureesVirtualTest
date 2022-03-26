@@ -391,7 +391,7 @@ function tulburTootsoo({ token }) {
               <Table
                 bordered
                 size="small"
-                scroll={{ y: "calc(100vh - 25rem)" }}
+                scroll={{ y: "calc(100vh - 18rem)" }}
                 rowSelection={{
                   type: "checkbox",
                   selectedRowKeys: songogdsonGereenuud,
