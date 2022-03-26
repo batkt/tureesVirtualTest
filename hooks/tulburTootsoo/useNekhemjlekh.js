@@ -27,6 +27,7 @@ const fetcher = (
         .startOf("month")
         .format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ognoo).endOf("month").format("YYYY-MM-DD 23:59:59"),
+      nekhemjlekhAvakhOgnoo:ognoo.format("YYYY-MM-DD 23:59:59"),
       query: {
         query: {
           ...queryAvya(davkhar,ilgeekhTurul),
