@@ -41,7 +41,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value,baiguullaga,barilgiinId
       .then(({data})=>{
         if(data?.jagsaalt.length > 0){
           const {ner,utas,ovog,mail} = data?.jagsaalt[0]
-          var onookhKhariltsagch = {ner,utas,ovog,mail};
+          var onookhKhariltsagch = {ner,utas,ovog,mail,register:target.value};
           form.setFieldsValue(onookhKhariltsagch);
           onChange({ ...value, ...onookhKhariltsagch });
         }
