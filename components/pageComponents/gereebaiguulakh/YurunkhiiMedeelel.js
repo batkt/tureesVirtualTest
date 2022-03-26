@@ -39,7 +39,6 @@ const YurunkhiiMedeele = ({ token, next, onChange, value,baiguullaga,barilgiinId
     timeout = setTimeout(function () {
       uilchilgee(token).get('/khariltsagch',{params:{query:{barilgiinId,baiguullagiinId:baiguullaga._id,register:target.value},select:{ner:1,utas:1,ovog:1,mail:1}}})
       .then(({data})=>{
-        console.log(data)
         if(data?.jagsaalt.length > 0){
           const {ner,utas,ovog,mail} = data?.jagsaalt[0]
           var onookhKhariltsagch = {ner,utas,ovog,mail};
