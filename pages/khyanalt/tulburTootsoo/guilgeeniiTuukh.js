@@ -620,7 +620,7 @@ function guilgeeniiTuukh({ token }) {
           value={"register"}
           onClick={(e) => baganaNemekh(e, "Регистер", "register")}
         >
-          Регистер
+          Регистр
         </Checkbox>
       </Menu.Item>
     </Menu>
