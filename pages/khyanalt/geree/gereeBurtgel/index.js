@@ -20,6 +20,7 @@ import {
   DownOutlined,
   RedoOutlined,
   PlusOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons"
 import {
   Table,
@@ -191,7 +192,7 @@ const Tailbar = React.forwardRef(
     const [shaltgaan, setTailbar] = React.useState("")
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment())
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment())
-    
+
     React.useImperativeHandle(
       ref,
       () => ({
@@ -202,7 +203,7 @@ const Tailbar = React.forwardRef(
               barilgiinId: data?.barilgiinId,
               shaltgaan,
               duusakhOgnoo,
-              sergeekhOgnoo
+              sergeekhOgnoo,
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -216,7 +217,7 @@ const Tailbar = React.forwardRef(
           destroy()
         },
       }),
-      [shaltgaan,duusakhOgnoo,sergeekhOgnoo]
+      [shaltgaan, duusakhOgnoo, sergeekhOgnoo]
     )
 
     return (
@@ -238,16 +239,20 @@ const Tailbar = React.forwardRef(
               <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
-          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Ашигласан хоног:</div>
-            <div>
-              {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+          {service !== "/gereeSergeeye" && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">Ашигласан хоног:</div>
+              <div>
+                {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+              </div>
             </div>
-          </div>}
-          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Авлагын дүн:</div>
-            <div>{formatNumber(data?.uldegdel)}</div>
-          </div>}
+          )}
+          {service !== "/gereeSergeeye" && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">Авлагын дүн:</div>
+              <div>{formatNumber(data?.uldegdel)}</div>
+            </div>
+          )}
         </div>
 
         <Input.TextArea
@@ -420,6 +425,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "createdAt",
         ellipsis: true,
         align: "center",
+        width: "8rem",
         render(date) {
           return moment(date).format("YYYY-MM-DD HH:mm")
         },
@@ -439,6 +445,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
+        width: "5rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -447,7 +454,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
-        maxWidth: "15rem",
+        maxWidth: "12rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -781,6 +788,9 @@ function ZakhialgiinKhyanalt() {
         title: ner,
         dataIndex: utga,
         ellipsis: true,
+        width: "5rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       }
       shineBagana.push(nemekhBagana)
       setShineBagana([...shineBagana])
@@ -923,6 +933,20 @@ function ZakhialgiinKhyanalt() {
           <DatePicker.RangePicker locale={locale} />
           <div className="ml-auto flex place-content-end">
             <Popover
+              content={() => <div className="flex w-32 flex-col">{menu}</div>}
+              style={{ padding: 0 }}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                style={{ marginRight: "10px" }}
+                type="primary"
+                icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Багана</span>
+              </Button>
+            </Popover>
+            <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
@@ -950,37 +974,6 @@ function ZakhialgiinKhyanalt() {
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Excel</span>
-                <DownOutlined width={5} />
-              </Button>
-            </Popover>
-            <Popover
-              content={() => (
-                <div className="flex w-32 flex-col">
-                  {menu}
-                  {/* <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
-                    onClick={() => baganaNemekh("машин", "mashin")}
-                  >
-                    <label>Машин</label>
-                  </a>
-                  <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
-                    onClick={() => baganaNemekh("хаяг", "khayag")}
-                  >
-                    <label>Хаяг</label>
-                  </a> */}
-                </div>
-              )}
-              style={{ padding: 0 }}
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                style={{ marginLeft: "10px" }}
-                type="primary"
-                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
-              >
-                <span>Багана</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
