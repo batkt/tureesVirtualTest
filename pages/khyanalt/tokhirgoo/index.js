@@ -212,40 +212,7 @@ function AjiltanBurtgel({ token }) {
         },
         {
           icon: (
-            <svg
-              version="1.0"
-              xmlns="http://www.w3.org/2000/svg"
-              stroke="currentColor"
-              width="20"
-              height="20"
-              viewBox="0 0 309.000000 297.000000"
-              className="feather feather-settings mr-2 h-4 w-4"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <metadata>t</metadata>
-              <g
-                transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
-                fill="currentColor"
-                stroke="none"
-              >
-                <path
-                  d="M1290 2964 c-203 -38 -311 -71 -447 -136 -354 -168 -645 -498 -771
-          -874 -57 -171 -67 -239 -67 -469 0 -230 10 -300 66 -470 74 -223 188 -405 363
-          -581 207 -206 413 -324 701 -400 89 -24 124 -27 310 -31 209 -5 318 5 423 38
-          l32 11 0 294 c0 162 -1 294 -3 294 -2 0 -22 -9 -44 -20 -22 -10 -74 -29 -114
-          -41 -93 -26 -318 -37 -412 -20 -367 70 -650 330 -749 689 -32 115 -32 353 0
-          470 91 338 342 585 687 678 56 15 102 19 230 18 143 -1 169 -3 248 -27 175
-          -54 306 -135 433 -269 85 -90 152 -197 191 -306 57 -154 56 -148 62 -840 l6
-          -643 72 66 c197 180 355 444 423 709 107 420 36 852 -199 1202 -216 323 -517
-          532 -906 631 -88 22 -125 25 -305 28 -113 2 -216 1 -230 -1z"
-                />
-                <path
-                  d="M1363 1876 c-104 -34 -204 -123 -251 -224 -24 -51 -27 -69 -27 -167
-          0 -104 2 -114 32 -175 82 -167 265 -264 436 -232 241 45 394 279 332 507 -33
-          122 -108 212 -226 272 -46 23 -68 28 -154 30 -65 2 -115 -2 -142 -11z"
-                />
-              </g>
-            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" className="feather feather-settings mr-2 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" dataLucide="stop-circle"><circle cx="12" cy="12" r="10"></circle><rect x="9" y="9" width="6" height="6"></rect></svg>
           ),
           text: "И-Баримт",
           tsonkh: (

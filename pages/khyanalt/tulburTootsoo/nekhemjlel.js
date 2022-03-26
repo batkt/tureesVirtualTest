@@ -299,40 +299,6 @@ function tulburTootsoo({ token }) {
               );
             })}
           </div>
-          <div className="grid w-full grid-cols-12 gap-4">
-            {[
-              { too: nekhemjlel?.niitMur || 0, utga: "Нийт" },
-              { too: 0, utga: "Тодорхойгүй" },
-              { too: 0, utga: "Холбогдсон" },
-            ].map((mur, index) => {
-              return (
-                <div
-                  key={`${index}toololt`}
-                  className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-4"
-                >
-                  <div className="h-full rounded-xl">
-                    <div className="rounded-xl p-3">
-                      <div className="flex">
-                        <div>
-                          <div className="text-3xl font-bold text-green-600">
-                            {mur.too}
-                          </div>
-                          <div className="text-base text-gray-500">
-                            {mur.utga}
-                          </div>
-                        </div>
-                        <div className="ml-auto">
-                          <div className="text-2xl text-green-600">
-                            {mur.icon}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
           <div className="mt-5 flex w-full flex-row">
             <DatePicker
               style={{ marginBottom: "20px" }}
