@@ -31,49 +31,6 @@ const YurunkhiiMedeele = ({
     baiguullaga?._id
   );
 
-  const onChangetalbai = (v) => {
-    var { _id, ...talbai } = talbainiiGaralt.jagsaalt.find((a) => a._id === v);
-
-    uilchilgee(token)
-      .get("/talbainSulEskhiigShalgay", {
-        params: {
-          talbainDugaar: talbai.kod,
-          barilgiinId: barilgiinId,
-        },
-      })
-      .then(({ data }) => {
-        if (data === "OK" || data === value.gereeniiDugaar) {
-          talbai.talbainDugaar =
-            (!!value?.talbainDugaar ? `${value?.talbainDugaar},` : "") +
-            talbai.kod;
-
-          talbai.baritsaaAvakhDun =
-            ((value?.talbainNiitUne || 0) + talbai.talbainNiitUne) *
-            (value.baritsaaAvakhSar || 1);
-          talbai.sariinTurees =
-            (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-          talbai.talbainNegjUne =
-            (value?.talbainNegjUne || 0) + talbai.talbainNegjUne;
-          talbai.talbainNiitUne =
-            (value?.talbainNiitUne || 0) + talbai.talbainNiitUne;
-          talbai.zardliinDun = talbai.ashiglaltiinZardal;
-          talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
-          talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-          form.setFieldsValue(talbai);
-          onChange({ ...value, ...talbai });
-        } else
-          notification.warning({
-            message: (
-              <div>
-                <b>{talbai.kod}</b> талбай нь <b>{data}</b> гэрээн дээр
-                холбогдсон байна.
-              </div>
-            ),
-          });
-        console.log("data--->", data);
-      });
-  };
-
   const sulEsekh = (talbainDugaar, callback) => {
     uilchilgee(token)
       .get("/talbainSulEskhiigShalgay", {
@@ -87,7 +44,6 @@ const YurunkhiiMedeele = ({
           callback(data);
         } else
           notification.warning({
-            duration: 1000,
             message: (
               <div>
                 <b>{talbainDugaar}</b> талбай нь <b>{data}</b> гэрээн дээр
@@ -158,6 +114,7 @@ const YurunkhiiMedeele = ({
         params: {
           query: {
             kod: talbainDugaaruud,
+            barilgiinId,
             baiguullagiinId: baiguullaga._id,
           },
         },

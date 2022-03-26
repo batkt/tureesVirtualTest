@@ -43,7 +43,8 @@ function useLavlakh(lavlakh, token, query, fields) {
   });
   const { data, mutate } = useSWR(
     !!token && !!barilgiinId ? [`/${lavlakh}`, token, khuudaslalt, query, fields,barilgiinId] : null,
-    fetcherJagsaalt
+    fetcherJagsaalt,
+    {revalidateOnFocus: false,}
   );
   return {
     lavlakhGaralt: data,

@@ -6,8 +6,10 @@ import {
   MailOutlined,
 } from "@ant-design/icons";
 import React from "react";
-import { url } from "services/uilchilgee";
+import uilchilgee,{ url,aldaaBarigch} from "services/uilchilgee";
 import FormLavlakh from "components/FormLavlakh"
+
+var timeout = null;
 
 const formItemLayout = {
   labelCol: {
@@ -26,13 +28,31 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
+const YurunkhiiMedeele = ({ token, next, onChange, value,baiguullaga,barilgiinId }) => {
+  const [form] = Form.useForm();
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
+  
+  function onChangeRegister({target}){
+    clearTimeout(timeout)
+    timeout = setTimeout(function () {
+      uilchilgee(token).get('/khariltsagch',{params:{query:{barilgiinId,baiguullagiinId:baiguullaga._id,register:target.value},select:{ner:1,utas:1,ovog:1,mail:1}}})
+      .then(({data})=>{
+        console.log(data)
+        if(data?.jagsaalt.length > 0){
+          const {ner,utas,ovog,mail} = data?.jagsaalt[0]
+          var onookhKhariltsagch = {ner,utas,ovog,mail};
+          form.setFieldsValue(onookhKhariltsagch);
+          onChange({ ...value, ...onookhKhariltsagch });
+        }
+      }).catch(aldaaBarigch)
+    }, 300)
+  }
 
   return (
     <Form
+      form={form}
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
@@ -82,6 +102,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
             maxLength={10}
             placeholder="Регистр"
             prefix={<SolutionOutlined />}
+            onChange={onChangeRegister}
           />
         </Form.Item>
       )}
@@ -104,6 +125,7 @@ const YurunkhiiMedeele = ({ token, next, onChange, value }) => {
             maxLength={7}
             placeholder="Регистр"
             prefix={<SolutionOutlined />}
+            onChange={onChangeRegister}
           />
         </Form.Item>
       )}
