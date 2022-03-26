@@ -85,7 +85,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Хугацааны үнэ</div>
+                <div className="font-medium">Хөнгөлөх минут</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto">
