@@ -46,6 +46,7 @@ export function useTalbai(token, baiguullagiinId, order) {
     search: "",
     jagsaalt: [],
   });
+
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
       ? ["/talbai", token, baiguullagiinId, khuudaslalt, barilgiinId, order]

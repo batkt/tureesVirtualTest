@@ -43,7 +43,8 @@ import moment from "moment";
 import React, { useRef, useState } from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { aldaaBarigch, url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import updateMethod from "tools/function/crud/updateMethod";
@@ -86,6 +87,7 @@ function talbaiBurtgekh({ token }) {
     baiguullagiinId: ajiltan?.baiguullagiinId,
     zasakhEsekh: false,
   });
+
   const khyanaltiinDun = [
     {
       too: talbainiiGaralt?.niitMur,
@@ -112,28 +114,7 @@ function talbaiBurtgekh({ token }) {
       utga: "Нийт",
     },
     {
-      too: 20,
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-          />
-        </svg>
-      ),
-      khuvi: 100,
-      utga: "VIP",
-    },
-    {
-      too: 100,
+      too: 0,
       icon: (
         <svg
           width="24"
@@ -155,7 +136,7 @@ function talbaiBurtgekh({ token }) {
       utga: "Идэвхтэй",
     },
     {
-      too: 5,
+      too: 0,
       icon: (
         <svg
           width="24"
@@ -177,9 +158,8 @@ function talbaiBurtgekh({ token }) {
       khuvi: 100,
       utga: "Идэвхгүй",
     },
-
     {
-      too: 15,
+      too: 0,
       icon: (
         <svg
           width="24"
@@ -200,29 +180,8 @@ function talbaiBurtgekh({ token }) {
         </svg>
       ),
       khuvi: 100,
-      utga: "Анхаарах",
-    },
-    {
-      too: 20,
-      icon: (
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          strokeWidth="2"
-          stroke="currentColor"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {" "}
-          <path stroke="none" d="M0 0h24v24H0z" />{" "}
-          <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6-6a6 6 0 0 1 -8 -8l3.5 3.5" />
-        </svg>
-      ),
-      khuvi: 100,
-      utga: "Засвартай",
-    },
+      utga: "Түр",
+    }
   ];
 
   function onChange(talbar, utga) {
@@ -766,7 +725,7 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
