@@ -958,7 +958,7 @@ function talbaiBurtgekh({ token }) {
               render(idevkhiteiEsekh) {
                 return (
                   <Tag color={idevkhiteiEsekh === true ? "green" : "red"}>
-                    {idevkhiteiEsekh === true ? "Идэвхитэй" : "Идэвхигүй"}
+                    {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
                   </Tag>
                 );
               },

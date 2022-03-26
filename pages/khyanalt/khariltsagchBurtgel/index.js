@@ -110,7 +110,6 @@ function AjiltanBurtgel({ token }) {
           <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
         </svg>
       ),
-
       khuvi: 100,
       utga: "Нийт",
     },
@@ -180,7 +179,7 @@ function AjiltanBurtgel({ token }) {
         </svg>
       ),
       khuvi: 100,
-      utga: "VIP",
+      utga: "Идэвхгүй",
     },
   ];
 
