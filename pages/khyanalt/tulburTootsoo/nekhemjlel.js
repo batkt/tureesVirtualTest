@@ -42,7 +42,6 @@ function tulburTootsoo({ token }) {
   const nekhemjlekhRef = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
 
-  const [tuluvluguutEsekh, setTuluvluguutEsekh] = React.useState(false);
   const [ognoo, setOgnoo] = React.useState(moment());
   const [barimt, setBarimt] = React.useState();
   const [davkhar, setDavkhar] = React.useState();
@@ -60,7 +59,6 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token, baiguullaga?._id);
 
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
-  const [mailZagvar, setMailZagvar] = useState();
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
