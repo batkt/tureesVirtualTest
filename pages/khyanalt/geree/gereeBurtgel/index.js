@@ -20,6 +20,7 @@ import {
   DownOutlined,
   RedoOutlined,
   PlusOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons"
 import {
   Table,
@@ -191,7 +192,7 @@ const Tailbar = React.forwardRef(
     const [shaltgaan, setTailbar] = React.useState("")
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment())
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment())
-    
+
     React.useImperativeHandle(
       ref,
       () => ({
@@ -202,7 +203,7 @@ const Tailbar = React.forwardRef(
               barilgiinId: data?.barilgiinId,
               shaltgaan,
               duusakhOgnoo,
-              sergeekhOgnoo
+              sergeekhOgnoo,
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
@@ -216,16 +217,21 @@ const Tailbar = React.forwardRef(
           destroy()
         },
       }),
-      [shaltgaan,duusakhOgnoo,sergeekhOgnoo]
+      [shaltgaan, duusakhOgnoo, sergeekhOgnoo]
     )
 
     return (
       <div className="w-full space-y-2">
         <div className="w-full space-y-1 font-medium">
           <div className="flex w-full flex-row justify-between">
-            <div className="text-right">{service === "/gereeSergeeye" ? 'Дуусах огноо:' : 'Эхлэх огноо:'}</div>
+            <div className="text-right">
+              {service === "/gereeSergeeye" ? "Дуусах огноо:" : "Эхлэх огноо:"}
+            </div>
             {service === "/gereeSergeeye" ? (
-              <DatePicker value={setSergeekhOgnoo} onChange={setSergeekhOgnoo} />
+              <DatePicker
+                value={setSergeekhOgnoo}
+                onChange={setSergeekhOgnoo}
+              />
             ) : (
               <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
             )}
@@ -238,16 +244,20 @@ const Tailbar = React.forwardRef(
               <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
-          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Ашигласан хоног:</div>
-            <div>
-              {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+          {service !== "/gereeSergeeye" && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">Ашигласан хоног:</div>
+              <div>
+                {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
+              </div>
             </div>
-          </div>}
-          {service !== "/gereeSergeeye" && <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Авлагын дүн:</div>
-            <div>{formatNumber(data?.uldegdel)}</div>
-          </div>}
+          )}
+          {service !== "/gereeSergeeye" && (
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">Авлагын дүн:</div>
+              <div>{formatNumber(data?.uldegdel)}</div>
+            </div>
+          )}
         </div>
 
         <Input.TextArea
@@ -935,7 +945,7 @@ function ZakhialgiinKhyanalt() {
               <Button
                 style={{ marginRight: "10px" }}
                 type="primary"
-                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+                icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Багана</span>
               </Button>

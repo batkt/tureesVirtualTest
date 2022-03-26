@@ -24,6 +24,7 @@ import {
   DownloadOutlined,
   DownOutlined,
   PlusOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons"
 import moment from "moment"
 import formatNumber from "tools/function/formatNumber"
@@ -818,7 +819,7 @@ function guilgeeniiTuukh({ token }) {
               <Button
                 style={{ marginRight: "10px" }}
                 type="primary"
-                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+                icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Багана</span>
               </Button>
