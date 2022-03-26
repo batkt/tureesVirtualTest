@@ -101,7 +101,7 @@ function GereeBaiguulakh({ token }) {
       if (!!data?.zuvshuurliinZurag)
         data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
 
-      createMethod("geree", token, data).then(({ data }) => {
+      createMethod("gereeKhadgalya", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
           setCurrent(0);
