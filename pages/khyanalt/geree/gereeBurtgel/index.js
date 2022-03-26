@@ -413,6 +413,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "createdAt",
         ellipsis: true,
         align: "center",
+        width: "8rem",
         render(date) {
           return moment(date).format("YYYY-MM-DD HH:mm")
         },
@@ -432,6 +433,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
+        width: "5rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -440,7 +442,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
-        maxWidth: "15rem",
+        maxWidth: "12rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -773,6 +775,9 @@ function ZakhialgiinKhyanalt() {
         title: ner,
         dataIndex: utga,
         ellipsis: true,
+        width: "5rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       }
       shineBagana.push(nemekhBagana)
       setShineBagana([...shineBagana])
@@ -915,6 +920,20 @@ function ZakhialgiinKhyanalt() {
           <DatePicker.RangePicker locale={locale} />
           <div className="ml-auto flex place-content-end">
             <Popover
+              content={() => <div className="flex w-32 flex-col">{menu}</div>}
+              style={{ padding: 0 }}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                style={{ marginRight: "10px" }}
+                type="primary"
+                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Багана</span>
+              </Button>
+            </Popover>
+            <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
@@ -942,37 +961,6 @@ function ZakhialgiinKhyanalt() {
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Excel</span>
-                <DownOutlined width={5} />
-              </Button>
-            </Popover>
-            <Popover
-              content={() => (
-                <div className="flex w-32 flex-col">
-                  {menu}
-                  {/* <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
-                    onClick={() => baganaNemekh("машин", "mashin")}
-                  >
-                    <label>Машин</label>
-                  </a>
-                  <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
-                    onClick={() => baganaNemekh("хаяг", "khayag")}
-                  >
-                    <label>Хаяг</label>
-                  </a> */}
-                </div>
-              )}
-              style={{ padding: 0 }}
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                style={{ marginLeft: "10px" }}
-                type="primary"
-                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
-              >
-                <span>Багана</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
