@@ -1,4 +1,4 @@
-import { Form, Input, Button, DatePicker, InputNumber, Select } from "antd";
+import { Form, Input, Button, DatePicker, InputNumber, Select, notification } from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
@@ -39,6 +39,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
 
   value.gereeniiOgnoo = moment(value.gereeniiOgnoo)
   value.duusakhOgnoo = moment(value.duusakhOgnoo)
+  
   return (
     <Form
       form={form}

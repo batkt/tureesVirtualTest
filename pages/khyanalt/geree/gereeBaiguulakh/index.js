@@ -2,7 +2,7 @@ import React from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
-import { message, Select, Steps } from "antd";
+import { message, notification, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
 import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa";
@@ -64,6 +64,12 @@ function GereeBaiguulakh({ token }) {
       zagvarRef.current.focus();
       return;
     }
+    if(current === 1){
+      if(!data?.tulukhUdur){
+        notification.warning({description:'Төлөлт хийх өдөр заавал оруулна уу!'})
+        return
+      }
+    }
 
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
@@ -104,6 +110,21 @@ function GereeBaiguulakh({ token }) {
       });
     }
   };
+
+  function alkhamSoliyo(index) {
+    if (current === 0 && !gereeniiZagvar) {
+      message.warning("Гэрээний загвар сонгоно уу!");
+      zagvarRef.current.focus();
+      return;
+    }
+    if(current === 1 && index > current){
+      if(!khadgalakhGeree?.tulukhUdur){
+        notification.warning({message:'Төлөлт хийх өдөр заавал оруулна уу!'})
+        return
+      }
+    }
+    setCurrent(index)
+  }
 
   const onChangeGereeniiZagvar = (_id) => {
     let gereeniiZagvar =
@@ -173,7 +194,7 @@ function GereeBaiguulakh({ token }) {
               <Step
                 key={item.title}
                 title={item.title}
-                onStepClick={() => setCurrent(index)}
+                onStepClick={() => alkhamSoliyo(index)}
               />
             ))}
           </Steps>
