@@ -31,7 +31,9 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
       baiguullaga?.tokhirgoo?.zogsooliinMinut !==
         zogsoolTokhirgoo["tokhirgoo.zogsooliinMinut"] ||
       baiguullaga?.tokhirgoo?.zogsooliinDun !==
-        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"]
+        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"] ||
+        baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
+          zogsoolTokhirgoo["tokhirgoo.zogsooliinKhungulukhMinut"]
     );
   }, [zogsoolTokhirgoo, baiguullaga]);
 
