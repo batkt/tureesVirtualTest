@@ -65,7 +65,7 @@ function GereeBaiguulakh({ token }) {
       return;
     }
     if(current === 1){
-      if(!data?.tulukhUdur){
+      if(!khadgalakhGeree?.tulukhUdur){
         notification.warning({message:'Төлөлт хийх өдөр заавал оруулна уу!'})
         return
       }
