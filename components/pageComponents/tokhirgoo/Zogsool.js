@@ -82,6 +82,25 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Хугацааны үнэ</div>
+                <div className="text-gray-600"></div>
+              </div>
+              <div className="ml-auto">
+                <Input
+                  value={zogsoolTokhirgoo?.["tokhirgoo.zogsooliinKhungulukhMinut"]}
+                  onChange={({ target }) =>
+                    setZogsoolTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.zogsooliinKhungulukhMinut": target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           {isChanged && (
             <div
               className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2`}
