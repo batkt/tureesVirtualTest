@@ -38,6 +38,7 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import TalbaiTile from "components/pageComponents/talbai/TalbaiTile";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { useTalbai } from "hooks/useTalbai";
+import useTalbainToololt from "hooks/useTalbainToololt";
 import _ from "lodash";
 import moment from "moment";
 import React, { useRef, useState } from "react";
@@ -88,6 +89,10 @@ function talbaiBurtgekh({ token }) {
     zasakhEsekh: false,
   });
 
+  const { talbainToololt } = useTalbainToololt(token);
+
+  console.log(talbainToololt);
+
   const khyanaltiinDun = [
     {
       too: talbainiiGaralt?.niitMur,
@@ -114,7 +119,7 @@ function talbaiBurtgekh({ token }) {
       utga: "Нийт",
     },
     {
-      too: 0,
+      too: talbainToololt?.find((a) => a._id === true).too,
       icon: (
         <svg
           width="24"
@@ -136,7 +141,7 @@ function talbaiBurtgekh({ token }) {
       utga: "Идэвхтэй",
     },
     {
-      too: 0,
+      too: talbainToololt?.find((a) => a._id === false).too,
       icon: (
         <svg
           width="24"
@@ -181,7 +186,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: 100,
       utga: "Түр",
-    }
+    },
   ];
 
   function onChange(talbar, utga) {

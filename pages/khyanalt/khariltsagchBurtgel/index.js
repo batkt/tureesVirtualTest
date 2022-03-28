@@ -776,11 +776,15 @@ function AjiltanBurtgel({ token }) {
               },
               {
                 title: "Төлөв",
-                dataIndex: "tuluv",
+                dataIndex: "idevkhiteiEsekh",
                 ellipsis: true,
                 align: "center",
-                render: () => {
-                  return <Tag color="green">Идэвхтэй</Tag>;
+                render: (idevkhiteiEsekh) => {
+                  return (
+                    <Tag color="green">
+                      {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
+                    </Tag>
+                  );
                 },
                 showSorterTooltip: false,
                 sorter: () => 0,
