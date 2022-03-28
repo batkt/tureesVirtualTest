@@ -224,7 +224,9 @@ const Tailbar = React.forwardRef(
       <div className="w-full space-y-2">
         <div className="w-full space-y-1 font-medium">
           <div className="flex w-full flex-row justify-between">
-            <div className="text-right">{service === "/gereeSergeeye" ? 'Сэргээх огноо:' : 'Эхлэх огноо:'}</div>
+            <div className="text-right">
+              {service === "/gereeSergeeye" ? "Сэргээх огноо:" : "Эхлэх огноо:"}
+            </div>
             {service === "/gereeSergeeye" ? (
               <DatePicker value={sergeekhOgnoo} onChange={setSergeekhOgnoo} />
             ) : (
@@ -537,101 +539,104 @@ function ZakhialgiinKhyanalt() {
           return "Админ"
         },
       },
-      
     ]
-    
-    return [...jagsaalt, ...shineBagana,{
-      title: () => <SettingOutlined />,
-      fixed: "right",
-      className: "text-center",
-      align: "center",
-      width: "3rem",
-      render: (data) => (
-        <div className="flex flex-row justify-center">
-          <Popover
-            onVisibleChange={(visible) =>
-              setGereeniiTokhirgoo(visible === true ? data?._id : null)
-            }
-            visible={data?._id === gereeniiTokhirgoo}
-            content={() => (
-              <div className="flex w-24 flex-col space-y-2">
-                <a
-                  className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                  onClick={() => gereeKharya(data)}
-                >
-                  <EyeOutlined style={{ fontSize: "18px" }} />{" "}
-                  <label> Харах</label>
-                </a>
-                {shuult.utga !== "Цуцласан" && (
+
+    return [
+      ...jagsaalt,
+      ...shineBagana,
+      {
+        title: () => <SettingOutlined />,
+        fixed: "right",
+        className: "text-center",
+        align: "center",
+        width: "3rem",
+        render: (data) => (
+          <div className="flex flex-row justify-center">
+            <Popover
+              onVisibleChange={(visible) =>
+                setGereeniiTokhirgoo(visible === true ? data?._id : null)
+              }
+              visible={data?._id === gereeniiTokhirgoo}
+              content={() => (
+                <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                    onClick={() => {
-                      if (
-                        ajiltan?.erkh === "Admin" ||
-                        !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
-                          (a) => a === data.barilgiinId
-                        )
-                      )
-                        router.push(
-                          `/khyanalt/geree/gereeBaiguulakh/${data._id}`
-                        )
-                      else
-                        notification.warning({
-                          message: "Таньд гэрээ засах эрх байхгүй байна.",
-                        })
-                    }}
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    onClick={() => gereeKharya(data)}
                   >
-                    <EditOutlined style={{ fontSize: "18px" }} />
-                    <label> Засах</label>
+                    <EyeOutlined style={{ fontSize: "18px" }} />{" "}
+                    <label> Харах</label>
                   </a>
-                )}
-                {shuult.utga !== "Цуцласан" && (
-                  <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                    onClick={() => gereeSungaya(data)}
-                  >
-                    <FieldTimeOutlined style={{ fontSize: "18px" }} />
-                    <label> Сунгах</label>
-                  </a>
-                )}
-                {shuult.utga !== "Цуцласан" && (
-                  <Popconfirm
-                    title="Цуцлахдаа итгэлтэй байна уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => gereeTsutsalya(data)}
-                  >
-                    <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
-                      <MinusCircleOutlined style={{ fontSize: "18px" }} />
-                      <label> Цуцлах</label>
+                  {shuult.utga !== "Цуцласан" && (
+                    <a
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      onClick={() => {
+                        if (
+                          ajiltan?.erkh === "Admin" ||
+                          !!_.get(ajiltan, `tokhirgoo.gereeZasakhErkh`)?.find(
+                            (a) => a === data.barilgiinId
+                          )
+                        )
+                          router.push(
+                            `/khyanalt/geree/gereeBaiguulakh/${data._id}`
+                          )
+                        else
+                          notification.warning({
+                            message: "Таньд гэрээ засах эрх байхгүй байна.",
+                          })
+                      }}
+                    >
+                      <EditOutlined style={{ fontSize: "18px" }} />
+                      <label> Засах</label>
                     </a>
-                  </Popconfirm>
-                )}
-                {shuult.utga === "Цуцласан" && (
-                  <Popconfirm
-                    title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => gereeSergeeye(data)}
-                  >
-                    <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
-                      <RedoOutlined style={{ fontSize: "18px" }} />
-                      <label> Сэргээх</label>
+                  )}
+                  {shuult.utga !== "Цуцласан" && (
+                    <a
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      onClick={() => gereeSungaya(data)}
+                    >
+                      <FieldTimeOutlined style={{ fontSize: "18px" }} />
+                      <label> Сунгах</label>
                     </a>
-                  </Popconfirm>
-                )}
-              </div>
-            )}
-            placement="bottom"
-            trigger="click"
-          >
-            <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
-              <MoreOutlined style={{ fontSize: "18px" }} />
-            </a>
-          </Popover>
-        </div>
-      ),
-    },]
+                  )}
+                  {shuult.utga !== "Цуцласан" && (
+                    <Popconfirm
+                      title="Цуцлахдаа итгэлтэй байна уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => gereeTsutsalya(data)}
+                    >
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                        <MinusCircleOutlined style={{ fontSize: "18px" }} />
+                        <label> Цуцлах</label>
+                      </a>
+                    </Popconfirm>
+                  )}
+                  {shuult.utga === "Цуцласан" && (
+                    <Popconfirm
+                      title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => gereeSergeeye(data)}
+                    >
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                        <RedoOutlined style={{ fontSize: "18px" }} />
+                        <label> Сэргээх</label>
+                      </a>
+                    </Popconfirm>
+                  )}
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
+            >
+              <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
+                <MoreOutlined style={{ fontSize: "18px" }} />
+              </a>
+            </Popover>
+          </div>
+        ),
+      },
+    ]
   }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana])
 
   function refresh() {
@@ -802,7 +807,7 @@ function ZakhialgiinKhyanalt() {
     }
   }
   const menu = (
-    <Menu>
+    <Menu className="contents self-center">
       <Menu.Item key="1">
         <Checkbox
           value={"khugatsaa"}
@@ -933,7 +938,9 @@ function ZakhialgiinKhyanalt() {
           <DatePicker.RangePicker locale={locale} />
           <div className="ml-auto flex place-content-end">
             <Popover
-              content={() => <div className="flex w-32 flex-col">{menu}</div>}
+              content={() => (
+                <div className="contents w-32 flex-col">{menu}</div>
+              )}
               style={{ padding: 0 }}
               placement="bottom"
               trigger="click"
