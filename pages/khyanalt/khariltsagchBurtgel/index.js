@@ -781,7 +781,7 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (idevkhiteiEsekh) => {
                   return (
-                    <Tag color="green">
+                    <Tag color={idevkhiteiEsekh === true ? "green" : "red"}>
                       {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
                     </Tag>
                   );
