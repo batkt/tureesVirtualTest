@@ -21,10 +21,12 @@ import {
   Tag,
   Select,
 } from "antd"
-import React, { useMemo, useState, useRef } from "react"
+import React, { useMemo, useState, useRef, useEffect } from "react"
 import { useAuth } from "services/auth"
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee"
+import useSurveyJagsaalt from "hooks/useSurvey"
 import moment from "moment"
+import useOrder from "tools/function/useOrder"
 import _ from "lodash"
 const garalt = {
   khuudasniiDugaar: 1,
@@ -35,12 +37,19 @@ import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 
 function Khabea({ token }) {
+  useEffect(() => {
+    anketJagsaalt()
+  }, [])
+
   const { ajiltan, baiguullaga, barilgiinId } = useAuth()
 
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
   ])
+
+  const { order, onChangeTable } = useOrder({ createdAt: -1 })
+  const [surveyJagsaalt, setSurveyJagsaalt] = useState([])
   const [queryGaraasUgsun, setQueryGaraasUgsun] = useState({
     ognoo:
       ekhlekhOgnoo !== undefined
@@ -50,231 +59,98 @@ function Khabea({ token }) {
           }
         : undefined,
   })
-
   const formRef = useRef()
   const [asuulgaTurul, setAsuulgaTurul] = useState("text")
-
-  const [expand, setExpand] = useState([])
-
   const { TabPane } = Tabs
   const { RangePicker } = DatePicker
 
-  const delgerenguiColumns = useMemo(
-    () => [
-      {
-        title: "Асуумж",
-        ellipsis: true,
-        key: "asuulga",
-        dataIndex: "asuulga",
-      },
-      {
-        title: "Хариулт",
-        key: "khariult",
-        dataIndex: "khariult",
-        ellipsis: true,
-        render: (khariult) => {
-          return (
-            <Tag color={khariult === true ? "green" : "red"}>
-              {khariult === true ? "Тийм" : "Үгүй"}
-            </Tag>
-          )
-        },
-      },
-      {
-        title: "Тайлбар",
-        ellipsis: true,
-        key: "tailbar",
-        dataIndex: "tailbar",
-      },
-    ],
-    []
-  )
   const columns = useMemo(
     () => [
       {
         title: "№",
         key: "index",
         className: "text-center",
-        width: "3rem",
+        width: "2rem",
         render: (text, record, index) => index + 1,
       },
       {
         title: "Огноо",
-        key: "ognoo",
-        dataIndex: "ognoo",
-        ellipsis: true,
-        render: (ognoo) => {
-          return moment(ognoo).format("YYYY-MM-DD")
-        },
-      },
-      {
-        title: "Ажилтан",
-        key: "ajiltniiNer",
-        dataIndex: "ajiltniiNer",
-        ellipsis: true,
-      },
-      {
-        title: "Хариулт",
-        key: "khariult",
-        dataIndex: "",
-        ellipsis: true,
-        render: (data) => {
-          return (
-            <Tag color="green">
-              <span className="text-sm">
-                {data.niitAsuult + "/" + data.bugulsun}
-              </span>
-            </Tag>
-          )
-        },
-      },
-      {
-        title: "Дэлгэрэнгүй",
-        key: "tokhirgoo",
+        key: "createdAt",
+        dataIndex: "createdAt",
         align: "center",
         render: (data) => {
-          return (
-            <Popover
-              trigger="click"
-              content={
-                <Table
-                  style={{ display: "flex", width: "800px" }}
-                  size="small"
-                  rowClassName="hover:bg-blue-100"
-                  dataSource={data?.asuulguud}
-                  columns={delgerenguiColumns}
-                ></Table>
-              }
-            >
-              <a className="ant-dropdown-link flex items-center justify-center rounded-full p-2 hover:bg-gray-200">
-                <EyeOutlined style={{ fontSize: "18px" }} />
-              </a>
-            </Popover>
-          )
+          return moment(data).format("YYYY-MM-DD")
         },
       },
       {
-        title: "Гарын үсэг",
+        title: "Нэр",
+        key: "ner",
+        dataIndex: "ner",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Утас",
+        key: "utas",
+        dataIndex: "utas",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "И-мэйл",
+        key: "mail",
+        dataIndex: "mail",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Чиглэл",
+        key: "chiglel",
+        dataIndex: "chiglel",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Хугацаа",
+        key: "uilAjillagaa",
+        dataIndex: "uilAjillagaa",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Ажилтан тоо",
+        key: "ajiltniiToo",
+        dataIndex: "ajiltniiToo",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Талбайн хэмжээ",
+        key: "talbainKhemjee",
+        dataIndex: "talbainKhemjee",
+        align: "center",
+        ellipsis: true,
+      },
+      {
+        title: "Давхар",
+        align: "center",
         dataIndex: "",
         ellipsis: true,
-        key: "gariinUseg",
-        render: (record) => {
-          var zuragcomp = (
-            <img src={`${url}/gariinUsegAvya/${record?.ajiltniiId}`} />
-          )
-          if (record.niitAsuult === record.bugulsun) {
-            return (
-              <Popover
-                content={<div className="flex h-40 w-40">{zuragcomp}</div>}
-              >
-                <div className="inline-flex h-9 w-24 justify-center p-1 ">
-                  {zuragcomp}
-                </div>
-              </Popover>
-            )
-          }
+        render: (data) => {
+          var turul = Array.from(new Set(data?.davkhar)).toString()
+          return turul
         },
+      },
+      {
+        title: "Нэмэлт",
+        key: "nemeltMedeelel",
+        dataIndex: "nemeltMedeelel",
+        ellipsis: true,
+        align: "center",
       },
     ],
     []
   )
-  const columnsOgnoo = useMemo(() => [
-    {
-      title: "№",
-      key: "index",
-      className: "text-center",
-      width: "3rem",
-      render: (text, record, index) =>
-        (asuulgiinTuukhGaralt?.khuudasniiDugaar || 0) *
-          (asuulgiinTuukhGaralt?.khuudasniiKhemjee || 0) -
-        (asuulgiinTuukhGaralt?.khuudasniiKhemjee || 0) +
-        index +
-        1,
-    },
-    {
-      title: "Огноо",
-      key: "ognoo",
-      dataIndex: "ognoo",
-    },
-    {
-      title: "Гүйцэтгэл",
-      key: "guitsetgel",
-      render: (data) => {
-        return (
-          <Tag color="green">
-            {asuulgiinTuukhGaralt?.jagsaalt.filter(
-              (x) =>
-                moment(x.ognoo).format("YYYY-MM-DD") ===
-                moment(data?.ognoo).format("YYYY-MM-DD")
-            ).length +
-              " / " +
-              asuulgiinTuukhGaralt?.jagsaalt.filter(
-                (x) =>
-                  (moment(x.ognoo).format("YYYY-MM-DD") ===
-                    moment(data?.ognoo).format("YYYY-MM-DD") &&
-                    x.bugulsun === x.niitAsuult) ||
-                  0
-              ).length}
-          </Tag>
-        )
-      },
-    },
-  ])
-  // const asuumjColumns = useMemo(
-  //   () => [
-  //     {
-  //       title: "№",
-  //       key: "index",
-  //       className: "text-center",
-  //       width: "3rem",
-  //       render: (text, record, index) =>
-  //         (asuulgiinGaralt?.khuudasniiDugaar || 0) *
-  //           (asuulgiinGaralt?.khuudasniiKhemjee || 0) -
-  //         (asuulgiinGaralt?.khuudasniiKhemjee || 0) +
-  //         index +
-  //         1,
-  //     },
-  //     {
-  //       title: "Огноо",
-  //       key: "ognoo",
-  //       dataIndex: "ognoo",
-  //       width: "8rem",
-  //       ellipsis: true,
-  //       render: (data) => {
-  //         return moment(data?.ognoo).format("YYYY-MM-DD")
-  //       },
-  //     },
-  //     {
-  //       title: "Асуулт",
-  //       ellipsis: true,
-  //       dataIndex: "asuult",
-  //       key: "asuult",
-  //     },
-  //     {
-  //       title: () => <SettingOutlined />,
-  //       key: "tokhirgoo",
-  //       width: "3rem",
-  //       align: "center",
-  //       render: (data) =>
-  //         ajiltan?.erkh === "Admin" && (
-  //           <Space size="small">
-  //             <Popconfirm
-  //               title="Асуумж устгах уу?"
-  //               okText="Тийм"
-  //               cancelText="Үгүй"
-  //               onConfirm={() => asuulgaUstgay(data._id)}
-  //             >
-  //               <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
-  //                 <DeleteOutlined style={{ fontSize: "16px", color: "red" }} />
-  //               </a>
-  //             </Popconfirm>
-  //           </Space>
-  //         ),
-  //       ellipsis: true,
-  //     },
-  //   ],
-  //   [ajiltan, asuulgiinGaralt]
-  // )
 
   function ognoogoorShuukh(orolt, ognoo) {
     queryGaraasUgsun.ognoo = {
@@ -321,10 +197,22 @@ function Khabea({ token }) {
       })
       .catch(aldaaBarigch)
   }
-  function test() {
-    console.log("test", formRef.current.getFieldValue("turul"))
+  function anketJagsaalt() {
+    uilchilgee(token)
+      .get("/survey", {
+        params: {
+          queryGaraasUgsun,
+          order,
+          khuudasniiKhemjee: 100,
+          khuudasniiDugaar: 1,
+        },
+      })
+      .then(({ data }) => {
+        if (data !== undefined) {
+          setSurveyJagsaalt(data?.jagsaalt)
+        }
+      })
   }
-
   return (
     <Admin
       title="Анкетын асуулга бэлдэх"
@@ -339,7 +227,7 @@ function Khabea({ token }) {
     >
       <div className="col-span-12 p-0 md:p-5">
         <Tabs>
-          <TabPane
+          {/* <TabPane
             key="1"
             tab={
               <span>
@@ -371,7 +259,7 @@ function Khabea({ token }) {
                               style={{
                                 display: "flex",
                                 marginBottom: 8,
-                                width: "600px",
+                                width: "80%",
                               }}
                             >
                               <Form.Item
@@ -541,7 +429,7 @@ function Khabea({ token }) {
                 />
               </div>
             </div>
-          </TabPane>
+          </TabPane> */}
           <TabPane
             key="2"
             tab={
@@ -569,46 +457,15 @@ function Khabea({ token }) {
               <Table
                 bordered
                 size="small"
+                tableLayout="fixed"
                 scroll={{ y: "calc(100vh - 20rem)" }}
                 rowClassName={(record, index) =>
                   index % 2 === 0
                     ? "bg-white dark:bg-gray-600 h-0.5"
                     : "bg-gray-200 dark:bg-gray-800 h-0.5"
                 }
-                rowKey={(x) => x.ognoo}
-                //pagination={false}
-                // dataSource={_(
-                //   asuulgiinTuukhGaralt?.jagsaalt
-                //     .filter((x) => x.asuulguud.length > 0)
-                //     .map((a) => {
-                //       a.ognoo = moment(a.ognoo).format("YYYY-MM-DD")
-                //       return a
-                //     })
-                // )
-                //   .groupBy("ognoo")
-                //   .map((items, ognoo) => ({ ognoo: ognoo, jagsaalt: items }))
-                //   .value()}
-                // columns={columnsOgnoo}
-                // expandable={{
-                //   expandedRowRender: (mur) => (
-                //     <Table
-                //       bordered
-                //       columns={columns}
-                //       dataSource={asuulgiinTuukhGaralt?.jagsaalt.filter(
-                //         (x) =>
-                //           moment(x.ognoo).format("YYYY-MM-DD") ===
-                //           moment(mur?.ognoo).format("YYYY-MM-DD")
-                //       )}
-                //       pagination={false}
-                //     />
-                //   ),
-                //   expandedRowClassName: (a, index) =>
-                //     index % 2 === 0
-                //       ? "bg-white dark:bg-gray-600"
-                //       : "bg-gray-200 dark:bg-gray-800",
-                //   expandedRowKeys: [expand],
-                //   onExpand: (a, b) => setExpand(a === true && b.ognoo),
-                // }}
+                dataSource={surveyJagsaalt}
+                columns={columns}
               />
             </div>
           </TabPane>
