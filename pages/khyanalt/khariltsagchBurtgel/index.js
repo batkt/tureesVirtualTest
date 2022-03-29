@@ -91,7 +91,9 @@ function AjiltanBurtgel({ token }) {
 
   const khyanaltiinDun = [
     {
-      too: khariltsagchToololt?.reduce((a, b) => a + b.too, 0),
+      too: khariltsagchToololt
+        ?.filter((a) => a._id !== true && a._id !== false)
+        ?.reduce((a, b) => a + b.too, 0),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -165,7 +167,7 @@ function AjiltanBurtgel({ token }) {
       query: { turul: "ААН" },
     },
     {
-      too: 0,
+      too: khariltsagchToololt?.find((x) => x._id === false)?.too || 0,
       icon: (
         <svg
           width="24"
@@ -561,7 +563,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
               >
                 <div className="h-full rounded-xl">
