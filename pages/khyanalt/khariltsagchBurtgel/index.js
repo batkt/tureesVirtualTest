@@ -69,8 +69,9 @@ function AjiltanBurtgel({ token }) {
 
   const { ajiltan, barilgiinId } = useAuth();
   const { order, onChangeTable } = useOrder({ createAt: -1 });
+  const [query, setQuery] = useState({});
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId, 1000, undefined, order);
+    useKhariltsagch(token, ajiltan?.baiguullagiinId, 1000, query, order);
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
@@ -90,7 +91,7 @@ function AjiltanBurtgel({ token }) {
 
   const khyanaltiinDun = [
     {
-      too: khariltsagchiinGaralt?.niitMur,
+      too: khariltsagchToololt?.reduce((a, b) => a + b.too, 0),
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +113,7 @@ function AjiltanBurtgel({ token }) {
       ),
       khuvi: 100,
       utga: "Нийт",
+      query: {},
     },
     {
       too: khariltsagchToololt?.find((x) => x._id === "Иргэн")?.too || 0,
@@ -134,6 +136,7 @@ function AjiltanBurtgel({ token }) {
       ),
       khuvi: 100,
       utga: "Иргэн",
+      query: { turul: "Иргэн" },
     },
     {
       too: khariltsagchToololt?.find((x) => x._id === "ААН")?.too || 0,
@@ -159,6 +162,7 @@ function AjiltanBurtgel({ token }) {
 
       khuvi: -30,
       utga: "ААН",
+      query: { turul: "ААН" },
     },
     {
       too: 0,
@@ -180,6 +184,7 @@ function AjiltanBurtgel({ token }) {
       ),
       khuvi: 100,
       utga: "Идэвхгүй",
+      query: { idevkhiteiEsekh: false },
     },
   ];
 
@@ -557,6 +562,7 @@ function AjiltanBurtgel({ token }) {
               <div
                 key={index}
                 className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
+                onClick={() => setQuery(mur.query)}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">

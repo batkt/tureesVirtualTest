@@ -68,9 +68,10 @@ function talbaiBurtgekh({ token }) {
   const [shuult, setShuult] = useState({
     query: { talbainDugaar: "105" },
   });
+  const [query, setQuery] = useState({});
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
-    useTalbai(token, baiguullaga?._id, order);
+    useTalbai(token, baiguullaga?._id, query, order);
 
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query);
@@ -91,11 +92,9 @@ function talbaiBurtgekh({ token }) {
 
   const { talbainToololt } = useTalbainToololt(token);
 
-  console.log(talbainToololt);
-
   const khyanaltiinDun = [
     {
-      too: talbainiiGaralt?.niitMur,
+      too: talbainToololt?.reduce((a, b) => a + b.too, 0),
       icon: (
         <svg
           width="24"
@@ -117,6 +116,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: 100,
       utga: "Нийт",
+      query: {},
     },
     {
       too: talbainToololt?.find((a) => a._id === true).too,
@@ -139,6 +139,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: -30,
       utga: "Идэвхтэй",
+      query: { idevkhiteiEsekh: true },
     },
     {
       too: talbainToololt?.find((a) => a._id === false).too,
@@ -162,6 +163,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: 100,
       utga: "Идэвхгүй",
+      query: { idevkhiteiEsekh: false },
     },
     {
       too: 0,
@@ -186,6 +188,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: 100,
       utga: "Түр",
+      query: { turEsekh: true },
     },
   ];
 
@@ -731,6 +734,7 @@ function talbaiBurtgekh({ token }) {
               <div
                 key={index}
                 className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3"
+                onClick={() => setQuery(mur.query)}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
