@@ -37,10 +37,6 @@ import Admin from "components/Admin"
 import shalgaltKhiikh from "services/shalgaltKhiikh"
 
 function Khabea({ token }) {
-  useEffect(() => {
-    anketJagsaalt()
-  }, [])
-
   const { ajiltan, baiguullaga, barilgiinId } = useAuth()
 
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
@@ -151,6 +147,9 @@ function Khabea({ token }) {
     ],
     []
   )
+  useEffect(() => {
+    anketJagsaalt()
+  }, [ekhlekhOgnoo])
 
   function ognoogoorShuukh(orolt, ognoo) {
     queryGaraasUgsun.ognoo = {
@@ -198,6 +197,7 @@ function Khabea({ token }) {
       .catch(aldaaBarigch)
   }
   function anketJagsaalt() {
+    debugger
     uilchilgee(token)
       .get("/survey", {
         params: {
@@ -226,250 +226,35 @@ function Khabea({ token }) {
       }
     >
       <div className="col-span-12 p-0 md:p-5">
-        <Tabs>
-          {/* <TabPane
-            key="1"
-            tab={
-              <span>
-                <FileDoneOutlined style={{ fontSize: "32px" }} />
-                Асуулга үүсгэх
-              </span>
+        <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+          <div className="flex justify-between">
+            <RangePicker
+              style={{ marginBottom: "15px" }}
+              size="large"
+              disabledTime
+              defaultValue={[
+                moment(new Date(), "YYYY-MM-DD"),
+                moment(new Date(), "YYYY-MM-DD"),
+              ]}
+              format={"YYYY-MM-DD"}
+              onChange={onChangeOgnoo}
+            />
+          </div>
+
+          <Table
+            bordered
+            size="small"
+            tableLayout="fixed"
+            scroll={{ y: "calc(100vh - 20rem)" }}
+            rowClassName={(record, index) =>
+              index % 2 === 0
+                ? "bg-white dark:bg-gray-600 h-0.5"
+                : "bg-gray-200 dark:bg-gray-800 h-0.5"
             }
-          >
-            <div className="grid w-full grid-cols-12 gap-6">
-              <div className="box col-span-5 p-5 md:col-span-8 xl:col-span-5">
-                <Form
-                  ref={formRef}
-                  name="dynamic_form_nest_item"
-                  onFinish={khadgalakh}
-                  labelCol={{
-                    span: 12,
-                  }}
-                  wrapperCol={{
-                    span: 24,
-                  }}
-                  layout="horizontal"
-                >
-                  <Form.List name="asuulga">
-                    {(fields, { add, remove }, { errors }) => (
-                      <>
-                        {fields.map((key, name, fieldKey, ...restField) => (
-                          <Form.Item key={fieldKey.key}>
-                            <div
-                              style={{
-                                display: "flex",
-                                marginBottom: 8,
-                                width: "80%",
-                              }}
-                            >
-                              <Form.Item
-                                name={[name, "asuult"]}
-                                fieldKey={[fieldKey, "asuult"]}
-                                {...restField}
-                                //validateTrigger={["onChange", "onBlur"]}
-                                rules={[
-                                  {
-                                    //required: true,
-                                    whitespace: true,
-                                    message: "",
-                                  },
-                                ]}
-                                noStyle
-                              >
-                                <Input
-                                  placeholder="асуулга бүртгэнэ үү"
-                                  style={{ width: "80%" }}
-                                />
-                              </Form.Item>
-                              <Form.Item
-                                name={[name, "turul"]}
-                                fieldKey={[fieldKey, "turul"]}
-                                {...restField}
-                                //validateTrigger={["onChange", "onBlur"]}
-                                rules={[
-                                  {
-                                    //required: true,
-                                    whitespace: true,
-                                    message: "",
-                                  },
-                                ]}
-                                noStyle
-                              >
-                                <Select
-                                  value={asuulgaTurul}
-                                  defaultValue={"text"}
-                                  onChange={setAsuulgaTurul}
-                                  style={{ width: "40%" }}
-                                >
-                                  <Option value="songolt">Сонголттой</Option>
-                                  <Option value="text">Тэкст</Option>
-                                </Select>
-                              </Form.Item>
-                              {fields.length > 1 ? (
-                                <MinusCircleOutlined
-                                  className="dynamic-delete-button ml-2 mt-2 flex"
-                                  onClick={() => remove(name)}
-                                />
-                              ) : null}
-                            </div>
-                            {asuulgaTurul === "songolt" && (
-                              <div>
-                                <Form.List name="songoltuud">
-                                  {(fields, { add, remove }, { errors }) => (
-                                    <>
-                                      {fields.map(
-                                        (key, name, fieldKey, ...restField) => (
-                                          <Form.Item key={fieldKey.key}>
-                                            <Form.Item
-                                              name={[name, "songoltuud"]}
-                                              fieldKey={[
-                                                fieldKey,
-                                                "songoltuud",
-                                              ]}
-                                              {...restField}
-                                              //validateTrigger={["onChange", "onBlur"]}
-                                              rules={[
-                                                {
-                                                  //required: true,
-                                                  whitespace: true,
-                                                  message: "",
-                                                },
-                                              ]}
-                                              noStyle
-                                            >
-                                              <Input
-                                                placeholder="сонголт бүртгэнэ үү"
-                                                style={{ width: "90%" }}
-                                              />
-                                            </Form.Item>
-
-                                            {fields.length > 1 ? (
-                                              <MinusCircleOutlined
-                                                className="dynamic-delete-button ml-4"
-                                                onClick={() => remove(name)}
-                                              />
-                                            ) : null}
-                                          </Form.Item>
-                                        )
-                                      )}
-                                      <Form.Item>
-                                        <Button
-                                          type="dashed"
-                                          htmlType="submit"
-                                          onClick={() => add()}
-                                          style={{ width: "30%" }}
-                                          icon={<PlusOutlined />}
-                                        >
-                                          сонголт нэмэх
-                                        </Button>
-                                        <Button
-                                          style={{ marginLeft: "10px" }}
-                                          type="primary"
-                                          htmlType="submit"
-                                        >
-                                          сонголт хадгалах
-                                        </Button>
-
-                                        <Form.ErrorList errors={errors} />
-                                      </Form.Item>
-                                    </>
-                                  )}
-                                </Form.List>
-                              </div>
-                            )}
-                          </Form.Item>
-                        ))}
-                        <Form.Item>
-                          <Button
-                            type="dashed"
-                            htmlType="submit"
-                            onClick={() => add()}
-                            style={{ width: "60%" }}
-                            icon={<PlusOutlined />}
-                          >
-                            Асуулга нэмэх
-                          </Button>
-                          <Button
-                            style={{ marginLeft: "10px" }}
-                            type="primary"
-                            htmlType="submit"
-                          >
-                            Хадгалах
-                          </Button>
-
-                          <Form.ErrorList errors={errors} />
-                        </Form.Item>
-                      </>
-                    )}
-                  </Form.List>
-                </Form>
-              </div>
-
-              <div className="box col-span-7 overflow-auto p-5 md:col-span-4 xl:col-span-7">
-                <Table
-                  bordered
-                  size="small"
-                  rowClassName="hover:bg-blue-100"
-                  scroll={{ y: "calc(100vh - 20rem)" }}
-                  rowKey={(row) => row._id}
-                  // pagination={{
-                  //   current: asuulgiinGaralt?.khuudasniiDugaar,
-                  //   pageSize: asuulgiinGaralt?.khuudasniiKhemjee,
-                  //   total: asuulgiinGaralt?.niitMur,
-                  //   showSizeChanger: true,
-                  //   onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                  //     setAsuulgiinKhuudaslalt((kh) => ({
-                  //       ...kh,
-                  //       khuudasniiDugaar,
-                  //       khuudasniiKhemjee,
-                  //     })),
-                  // }}
-                  // dataSource={asuulgiinGaralt?.jagsaalt}
-                  //columns={asuumjColumns}
-                />
-              </div>
-            </div>
-          </TabPane> */}
-          <TabPane
-            key="2"
-            tab={
-              <span>
-                <HistoryOutlined style={{ fontSize: "32px" }} />
-                Асуулгын түүх
-              </span>
-            }
-          >
-            <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-              <div className="flex justify-between">
-                <RangePicker
-                  style={{ marginBottom: "15px" }}
-                  size="large"
-                  disabledTime
-                  defaultValue={[
-                    moment(new Date(), "YYYY-MM-DD"),
-                    moment(new Date(), "YYYY-MM-DD"),
-                  ]}
-                  format={"YYYY-MM-DD"}
-                  onChange={onChangeOgnoo}
-                />
-              </div>
-
-              <Table
-                bordered
-                size="small"
-                tableLayout="fixed"
-                scroll={{ y: "calc(100vh - 20rem)" }}
-                rowClassName={(record, index) =>
-                  index % 2 === 0
-                    ? "bg-white dark:bg-gray-600 h-0.5"
-                    : "bg-gray-200 dark:bg-gray-800 h-0.5"
-                }
-                dataSource={surveyJagsaalt}
-                columns={columns}
-              />
-            </div>
-          </TabPane>
-        </Tabs>
+            dataSource={surveyJagsaalt}
+            columns={columns}
+          />
+        </div>
       </div>
     </Admin>
   )
