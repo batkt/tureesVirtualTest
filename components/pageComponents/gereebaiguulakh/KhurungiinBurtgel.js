@@ -4,6 +4,7 @@ import React from "react";
 import { toWords } from "mon_num";
 import useTalbai from "hooks/useTalbai";
 import uilchilgee from "services/uilchilgee";
+import _ from "lodash";
 
 var timeout = null;
 
@@ -54,19 +55,19 @@ const YurunkhiiMedeele = ({
       });
   };
 
-  function talbainuudShalgaya(talbainuud) {
+  function talbainuudShalgaya(talbainuud, talbainDugaar) {
     let sultalbainuud = [];
     talbainuud.forEach((mur, index) => {
       if (talbainuud.length > index)
         sulEsekh(mur.kod, () => {
           sultalbainuud.push(mur);
           if (talbainuud.length - 1 === index)
-            talbainBurtgelBugulyu(sultalbainuud);
+            talbainBurtgelBugulyu(sultalbainuud, talbainDugaar);
         });
     });
   }
 
-  function talbainBurtgelBugulyu(talbainuud) {
+  function talbainBurtgelBugulyu(talbainuud, talbainDugaar) {
     var talbai = {};
     talbainuud?.forEach((a) => {
       talbai.baritsaaAvakhDun =
@@ -83,6 +84,7 @@ const YurunkhiiMedeele = ({
     talbai.davkhar = talbai.davkhar?.includes(",")
       ? [...new Set(talbai.davkhar.split(","))].join(",")
       : talbai.davkhar;
+    talbai.talbainDugaar = talbainDugaar;
     form.setFieldsValue(talbai);
     onChange({ ...value, ...talbai });
   }
@@ -122,7 +124,7 @@ const YurunkhiiMedeele = ({
       .then((a) => a.data)
       .then((talbainuud) => {
         if (talbainuud?.jagsaalt?.length === 0) utgaTseverleye();
-        talbainuudShalgaya(talbainuud?.jagsaalt);
+        talbainuudShalgaya(talbainuud?.jagsaalt, target.value);
       });
   }
 

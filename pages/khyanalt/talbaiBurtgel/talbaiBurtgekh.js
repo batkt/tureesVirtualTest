@@ -282,9 +282,10 @@ function talbaiBurtgekh({ token }) {
     }
 
     if (talbaiState.zasakhEsekh === true) {
-      updateMethod("talbai", token, talbaiState)
+      uilchilgee(token)
+        .post("/talbaiZasya", talbaiState)
         .then(({ data }) => {
-          if (data !== undefined) {
+          if (data === "Amjilttai") {
             message.success("Бүртгэл амжилттай засагдлаа");
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(

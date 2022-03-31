@@ -12,7 +12,7 @@ import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/Khugatsa
 import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { url } from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
 import { useRouter } from "next/router";
 
@@ -89,14 +89,16 @@ function GereeBaiguulakh({ token, data }) {
       data.zuvshuurliinZurag =
         _.get(data, "zuvshuurliinZurag.0.response.id") || null;
 
-    updateMethod("geree", token, data).then(({ data }) => {
-      if (data === "Amjilttai") {
-        setKhagalakhGeree({});
-        setCurrent(0);
-        router.back();
-        message.success("Амжилттай хадгаллаа");
-      }
-    });
+    uilchilgee(token)
+      .post("/gereeZasya", data)
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          setKhagalakhGeree({});
+          setCurrent(0);
+          router.back();
+          message.success("Амжилттай хадгаллаа");
+        }
+      });
   }
 
   const onChangeGereeniiZagvar = (_id) => {
