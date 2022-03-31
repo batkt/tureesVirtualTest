@@ -9,7 +9,6 @@ import {
   Popconfirm,
   Tag,
   Popover,
-  Tooltip,
 } from "antd";
 import {
   UserOutlined,
@@ -31,12 +30,11 @@ import {
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
 import Admin from "components/Admin";
-import { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import React, { useState, useRef } from "react";
 import moment from "moment";
 import useKhariltsagch from "hooks/useKhariltsagch";
-import getBase64 from "tools/function/getBase64";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
@@ -248,12 +246,15 @@ function AjiltanBurtgel({ token }) {
   }
 
   function khariltsagchUstgay(mur) {
-    deleteMethod("khariltsagch", token, mur._id).then(({ data }) => {
-      if (data !== undefined) {
-        khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        message.success("Устгагдлаа");
-      }
-    });
+    uilchilgee(token)
+      .post("/khariltsagchUstgaya", { id: mur._id })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          message.success("Устгагдлаа");
+        }
+      })
+      .catch(aldaaBarigch);
   }
 
   function onFinish() {
