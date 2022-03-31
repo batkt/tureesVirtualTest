@@ -20,7 +20,7 @@ import {
   DownOutlined,
   ExclamationOutlined,
   FileExcelOutlined,
-  QuestionOutlined
+  QuestionOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import useDans from "hooks/useDans";
@@ -37,7 +37,8 @@ import Tulbur from "components/pageComponents/eBarimt/Tulbur";
 import useUldegdel from "hooks/khuulga/useUldegdel";
 import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile";
 import CardList from "components/cardList";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
@@ -93,6 +94,30 @@ function iconAvyaZardal(a, bank) {
         <Icon style={{ fontSize: "16px" }} />
       </div>
     </Tooltip>
+  );
+}
+
+function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
+  const { data } = useSWR(
+    !!token && !!dansniiDugaar && !!barilgiinId
+      ? [token, dansniiDugaar, barilgiinId, ognoo, turul]
+      : null,
+    (token, dansniiDugaar, barilgiinId, ognoo, turul) =>
+      uilchilgee(token)
+        .post("/dansniiKhuulgaDunAvya", {
+          dansniiDugaar,
+          barilgiinId,
+          turul,
+          ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        })
+        .then((a) => a.data)
+        .catch(aldaaBarigch)
+  );
+  return (
+    <div className="font-medium">
+      Гүйлгээний нийт дүн: {formatNumber(_.get(data, "0.dun"))}
+    </div>
   );
 }
 
@@ -233,8 +258,7 @@ function tulburTootsoo({ token }) {
   }
 
   function ebarimtUgukh(data) {
-
-    function barimtShivya(register,turul) {
+    function barimtShivya(register, turul) {
       modal({
         title: (
           <div className="flex w-full flex-row justify-between">
@@ -247,7 +271,9 @@ function tulburTootsoo({ token }) {
             token={token}
             defaultRegister={register}
             defaultTurul={turul}
-            eBarimtAutomataarShivikh={baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh}
+            eBarimtAutomataarShivikh={
+              baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
+            }
             dansniiKhuulgaMutate={dansniiKhuulgaMutate}
             onRefresh={refreshData}
           />
@@ -255,17 +281,20 @@ function tulburTootsoo({ token }) {
         footer: false,
       });
     }
-    if(baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh === true)
-    {
-      uilchilgee(token).get('/geree',{params:{query:{_id:data.kholbosonGereeniiId},select:{register:1,turul:1}}})
-      .then(({data})=>{
-        if(data.jagsaalt.length > 0){
-          barimtShivya(data.jagsaalt[0].register,data.jagsaalt[0].turul)
-        }
-      })
-    }
-    else barimtShivya()
-    
+    if (baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh === true) {
+      uilchilgee(token)
+        .get("/geree", {
+          params: {
+            query: { _id: data.kholbosonGereeniiId },
+            select: { register: 1, turul: 1 },
+          },
+        })
+        .then(({ data }) => {
+          if (data.jagsaalt.length > 0) {
+            barimtShivya(data.jagsaalt[0].register, data.jagsaalt[0].turul);
+          }
+        });
+    } else barimtShivya();
   }
 
   const columns = useMemo(() => {
@@ -737,6 +766,15 @@ function tulburTootsoo({ token }) {
                 })),
             }}
             rowKey={(a) => a._id}
+            footer={() => (
+              <GuilgeeniiDun
+                token={token}
+                barilgiinId={barilgiinId}
+                dansniiDugaar={songogdsonDans?.dugaar}
+                ognoo={ekhlekhOgnoo}
+                turul={khuulgaTurul}
+              />
+            )}
           />
         </div>
         <CardList
