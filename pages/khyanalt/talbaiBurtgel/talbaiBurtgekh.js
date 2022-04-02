@@ -119,7 +119,7 @@ function talbaiBurtgekh({ token }) {
       query: {},
     },
     {
-      too: talbainToololt?.find((a) => a._id === true).too,
+      too: talbainToololt?.find((a) => a._id === true)?.too || 0,
       icon: (
         <svg
           width="24"
@@ -142,7 +142,7 @@ function talbaiBurtgekh({ token }) {
       query: { idevkhiteiEsekh: true },
     },
     {
-      too: talbainToololt?.find((a) => a._id === false).too,
+      too: talbainToololt?.find((a) => a._id === false)?.too || 0,
       icon: (
         <svg
           width="24"
