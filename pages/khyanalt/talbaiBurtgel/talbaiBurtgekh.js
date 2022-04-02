@@ -213,12 +213,15 @@ function talbaiBurtgekh({ token }) {
       }
     }
     if (talbar === "ashiglaltiinZardal") {
-      talbaiState.niitAshiglaltiinZardal = utga * talbaiState.talbainKhemjee;
+      talbaiState.niitAshiglaltiinZardal = (
+        utga * talbaiState.talbainKhemjee
+      ).toFixed(2);
       formRef.current.setFieldsValue({
         niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
       });
       talbaiState.tureesiinTulbur =
-        talbaiState.niitAshiglaltiinZardal + talbaiState.talbainNiitUne;
+        Number(talbaiState.niitAshiglaltiinZardal) +
+        Number(talbaiState.talbainNiitUne);
       formRef.current.setFieldsValue({
         tureesiinTulbur: talbaiState.tureesiinTulbur,
       });
