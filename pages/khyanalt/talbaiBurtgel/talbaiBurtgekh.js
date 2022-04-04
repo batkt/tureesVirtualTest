@@ -320,12 +320,15 @@ function talbaiBurtgekh({ token }) {
   }
 
   function talbaiUstgay(mur) {
-    deleteMethod("talbai", token, mur._id).then(({ data }) => {
-      if (data === "Amjilttai") {
-        talbainiiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        message.success("Устгагдлаа");
-      }
-    });
+    uilchilgee(token)
+      .post("/talbaiUstgaya", { id: mur._id })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          talbainiiJagsaaltMutate();
+          message.success("Устгагдлаа");
+        }
+      })
+      .catch(aldaaBarigch);
   }
 
   function onFinish() {
