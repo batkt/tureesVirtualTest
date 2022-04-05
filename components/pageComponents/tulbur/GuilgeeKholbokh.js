@@ -124,14 +124,11 @@ function GuilgeeKholbokh(
                     guilgeeniiId: data._id,
                     orlogo: baritsaaAvakhDun,
                     zarlaga: 0,
-                    ognoo: moment(data.tranDate)
-                      .set("hour", data.time.substring(0, 2))
-                      .set("minute", data.time.substring(2, 4)),
+                    ognoo: moment(data.tranDate),
                   })
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        placement: "bottomRight",
                         message: "Амжилттай",
                       });
                       _.isFunction(onFinish) && onFinish();
@@ -179,7 +176,6 @@ function GuilgeeKholbokh(
                       .then(({ data }) => {
                         if (data === "Amjilttai") {
                           notification.success({
-                            placement: "bottomRight",
                             message: "Амжилттай",
                           });
                           _.isFunction(onFinish) && onFinish();
@@ -228,7 +224,6 @@ function GuilgeeKholbokh(
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        placement: "bottomRight",
                         message: "Амжилттай",
                       });
                       _.isFunction(onFinish) && onFinish();
