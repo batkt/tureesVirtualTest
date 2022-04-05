@@ -100,12 +100,17 @@ function GuilgeeKholbokh(
           var songogdson = gereeniiMedeelel.jagsaalt.find(
             (x) => x._id === geree
           );
-
-          if (songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel) {
+          let kholbokhDun =
+            data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`] - niitDun;
+          if (
+            songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel &&
+            kholbokhDun > 0
+          ) {
             let baritsaaAvakhDun =
-              songogdson.baritsaaAvakhDun > niitDun
-                ? niitDun
+              songogdson.baritsaaAvakhDun > kholbokhDun
+                ? kholbokhDun
                 : songogdson.baritsaaAvakhDun;
+
             Modal.confirm({
               content: `${formatNumber(
                 baritsaaAvakhDun
