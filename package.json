@@ -17,6 +17,7 @@
     "@react-google-maps/api": "^2.1.1",
     "antd": "^4.15.1",
     "antd-table-saveas-excel": "^2.1.4",
+    "aos": "^2.3.4",
     "autoprefixer": "^10.2.5",
     "axios": "^0.21.1",
     "chart.js": "^2.9.4",
