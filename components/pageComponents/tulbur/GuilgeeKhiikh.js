@@ -51,7 +51,6 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           })
           .then(() => {
             notification.success({
-              placement: "bottomRight",
               message: "Амжилттай",
             });
             _.isFunction(onFinish) && onFinish();

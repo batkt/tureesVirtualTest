@@ -100,12 +100,17 @@ function GuilgeeKholbokh(
           var songogdson = gereeniiMedeelel.jagsaalt.find(
             (x) => x._id === geree
           );
-
-          if (songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel) {
+          let kholbokhDun =
+            data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`] - niitDun;
+          if (
+            songogdson?.baritsaaAvakhDun > songogdson?.baritsaaniiUldegdel &&
+            kholbokhDun > 0
+          ) {
             let baritsaaAvakhDun =
-              songogdson.baritsaaAvakhDun > niitDun
-                ? niitDun
+              songogdson.baritsaaAvakhDun > kholbokhDun
+                ? kholbokhDun
                 : songogdson.baritsaaAvakhDun;
+
             Modal.confirm({
               content: `${formatNumber(
                 baritsaaAvakhDun
@@ -119,14 +124,11 @@ function GuilgeeKholbokh(
                     guilgeeniiId: data._id,
                     orlogo: baritsaaAvakhDun,
                     zarlaga: 0,
-                    ognoo: moment(data.tranDate)
-                      .set("hour", data.time.substring(0, 2))
-                      .set("minute", data.time.substring(2, 4)),
+                    ognoo: moment(data.tranDate),
                   })
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        placement: "bottomRight",
                         message: "Амжилттай",
                       });
                       _.isFunction(onFinish) && onFinish();
@@ -174,7 +176,6 @@ function GuilgeeKholbokh(
                       .then(({ data }) => {
                         if (data === "Amjilttai") {
                           notification.success({
-                            placement: "bottomRight",
                             message: "Амжилттай",
                           });
                           _.isFunction(onFinish) && onFinish();
@@ -223,7 +224,6 @@ function GuilgeeKholbokh(
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        placement: "bottomRight",
                         message: "Амжилттай",
                       });
                       _.isFunction(onFinish) && onFinish();
