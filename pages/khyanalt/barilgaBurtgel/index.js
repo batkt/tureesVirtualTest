@@ -1,6 +1,6 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import { Button, Table, Popover } from "antd";
@@ -14,10 +14,14 @@ import _ from "lodash";
 import router from "next/router";
 import CardList from "components/cardList";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
+import Aos from "aos";
 
 const toololt = {};
 
 function BarilgaBurtgel({}) {
+  useEffect(() => {
+    Aos.init();
+  });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   const columns = useMemo(
@@ -197,6 +201,9 @@ function BarilgaBurtgel({}) {
               return (
                 <div
                   key={"index" + index}
+                  data-aos="zoom-in-up"
+                  data-aos-duration="1000"
+                  data-aos-delay={1 + index + "00"}
                   className="intro-y col-span-12 sm:col-span-6 xl:col-span-3"
                 >
                   <div className="report-box zoom-in">
@@ -241,10 +248,20 @@ function BarilgaBurtgel({}) {
             })}
             <div className="col-span-12">
               <div className="intro-y mt-8 flex h-10 items-center">
-                <h2 className="mr-5 text-lg font-medium dark:text-gray-300">
+                <h2
+                  className="mr-5 text-lg font-medium dark:text-gray-300"
+                  data-aos="zoom-in-right"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                >
                   Барилга жагсаалт
                 </h2>
-                <div className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400">
+                <div
+                  className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400"
+                  data-aos="zoom-in-left"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                >
                   <Button
                     type="primary"
                     onClick={() => barilgaBurtgel("new")}
@@ -254,7 +271,12 @@ function BarilgaBurtgel({}) {
                   </Button>
                 </div>
               </div>
-              <div className="hidden md:block">
+              <div
+                className="hidden md:block"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="400"
+              >
                 <Table
                   tableLayout={
                     baiguullaga?.barilguud?.length > 0 ? "auto" : "fixed"
@@ -279,7 +301,12 @@ function BarilgaBurtgel({}) {
           </div>
         </div>
       </div>
-      <div className="col-span-12 xl:col-span-3">
+      <div
+        className="col-span-12 xl:col-span-3"
+        data-aos="fade-left"
+        data-aos-duration="1000"
+        data-aos-delay="300"
+      >
         <div className="xxl:col-span-12 col-span-12 mt-5 md:col-span-12 xl:col-span-4">
           <div className="h-0md:mt-5 bg-white p-2 dark:bg-gray-900">
             <div className="flex cursor-pointer flex-row rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">

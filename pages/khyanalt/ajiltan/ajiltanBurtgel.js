@@ -28,7 +28,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -37,10 +37,14 @@ import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import CardList from "components/cardList";
 import AjiltanTile from "components/pageComponents/ajiltan/AjiltanTile";
+import Aos from "aos";
 
 const iconColor = { fontSize: "18px" };
 
 function AjiltanBurtgel({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
@@ -178,6 +182,8 @@ function AjiltanBurtgel({ token }) {
                 message: "Овог бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
           >
             <Input
               type="text"
@@ -196,6 +202,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Нэр бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="100"
           >
             <Input
               type="text"
@@ -216,6 +225,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Регистр бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="200"
           >
             <Input
               allowClear
@@ -234,6 +246,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Хаяг бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="300"
           >
             <Input
               allowClear
@@ -251,6 +266,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Утас бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="400"
           >
             <Input
               allowClear
@@ -268,6 +286,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Ажилд орсон огноо бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="500"
           >
             <DatePicker
               style={{ width: "100%" }}
@@ -283,6 +304,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Албан тушаал бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="600"
           >
             <Input
               allowClear
@@ -293,7 +317,14 @@ function AjiltanBurtgel({ token }) {
             ></Input>
           </Form.Item>
 
-          <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
+          <Divider
+            orientation="left"
+            data-aos="fade-up"
+            data-aos-duration="800"
+            data-aos-delay="900"
+          >
+            Нэвтрэх нэр нууц үг
+          </Divider>
           <Form.Item
             name="nevtrekhNer"
             rules={[
@@ -302,6 +333,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Нэвтрэх нэр бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="700"
           >
             <Input
               placeholder="Нэвтрэх нэр"
@@ -318,6 +352,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Нууц үг бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="800"
           >
             <Input.Password
               placeholder="Нууц үг"
@@ -327,14 +364,25 @@ function AjiltanBurtgel({ token }) {
             />
           </Form.Item>
           <Form.Item>
-            <Button htmlType="submit" type="primary">
+            <Button
+              htmlType="submit"
+              type="primary"
+              data-aos="zoom-in-up"
+              data-aos-duration="1000"
+              data-aos-delay="1100"
+            >
               Хадгалах
             </Button>
           </Form.Item>
         </Form>
       </div>
       <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-        <div className="hidden overflow-auto md:block">
+        <div
+          className="hidden overflow-auto md:block"
+          data-aos="fade-down-left"
+          data-aos-duration="1500"
+          data-aos-delay="100"
+        >
           <Table
             bordered
             tableLayout={

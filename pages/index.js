@@ -66,7 +66,7 @@ function Ajiltan() {
           <div className="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
             <div className="my-auto mx-auto w-full rounded-md bg-white px-5 py-8 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
               <h2 className="intro-x text-center text-2xl font-bold dark:text-gray-300 xl:text-left xl:text-3xl"></h2>
-              <div data-aos="flip-right" data-aos-duration="3000">
+              <div data-aos="flip-right">
                 <Form
                   form={form}
                   initialValues={{}}
@@ -80,24 +80,22 @@ function Ajiltan() {
                       placeholder="Нэвтрэх нэр"
                       className="login-input"
                       data-aos="fade-up"
-                      data-aos-duration="2000"
-                      data-aos-delay="900"
+                      data-aos-delay="500"
                     />
                   </Form.Item>
-                  <Form.Item
-                    name="nuutsUg"
-                    data-aos="fade-up"
-                    data-aos-delay="600"
-                    data-aos-duration="2000"
-                  >
-                    <Password placeholder="Нууц үг" className="login-input" />
+                  <Form.Item name="nuutsUg">
+                    <Password
+                      placeholder="Нууц үг"
+                      className="login-input"
+                      data-aos="fade"
+                      data-aos-delay="300"
+                    />
                   </Form.Item>
                 </Form>
                 <div
                   className="intro-x mt-4 flex text-xs text-gray-700 dark:text-gray-600 sm:text-sm"
-                  data-aos="fade-up"
-                  data-aos-duration="2000"
-                  data-aos-delay="300"
+                  data-aos="fade-down"
+                  data-aos-delay="400"
                 >
                   <div className="mr-auto flex items-center">
                     <input
@@ -121,8 +119,8 @@ function Ajiltan() {
                     newterya({ ...form.getFieldsValue(), namaigsana })
                   }
                   className="focus:outline-none group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
-                  data-aos="fade-up"
-                  data-aos-duration="2000"
+                  data-aos="fade-down"
+                  data-aos-delay="500"
                 >
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                     <svg

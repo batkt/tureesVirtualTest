@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useAuth } from "services/auth";
 import {
   Card,
@@ -39,6 +39,7 @@ import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaT
 import CardList from "components/cardList";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
+import Aos from "aos";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
@@ -122,6 +123,9 @@ function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
 }
 
 function tulburTootsoo({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const refGuilgee = React.useRef(null);
   const zardalRef = React.useRef(null);
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -599,6 +603,9 @@ function tulburTootsoo({ token }) {
                 key={`${index}toololt`}
                 className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3"
                 onClick={() => turulSongyo(mur.utga)}
+                data-aos="zoom-out-up"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -623,7 +630,12 @@ function tulburTootsoo({ token }) {
             );
           })}
         </div>
-        <div className="mt-5 flex w-full flex-row">
+        <div
+          className="mt-5 flex w-full flex-row"
+          data-aos="zoom-out-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
           <RangePicker
             style={{ marginBottom: "20px" }}
             value={ekhlekhOgnoo}
@@ -745,7 +757,12 @@ function tulburTootsoo({ token }) {
             </Popover>
           </div>
         </div>
-        <div className="mt-5 hidden overflow-auto md:block">
+        <div
+          className="mt-5 hidden overflow-auto md:block"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="500"
+        >
           <Table
             bordered
             size="small"

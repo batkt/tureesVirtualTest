@@ -1,6 +1,7 @@
 import { Form, Select, Button, InputNumber } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect } from "react";
+import Aos from "aos";
 
 const formItemLayout = {
   labelCol: {
@@ -12,7 +13,9 @@ const formItemLayout = {
 };
 
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
- 
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Form
@@ -21,9 +24,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
     >
-      <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+      <Form.Item
+        name="baritsaaAvakhDun"
+        label="Барьцаа дүн"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
         <InputNumber
-        placeholder="Барьцаа дүн"
+          placeholder="Барьцаа дүн"
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -35,6 +43,9 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         name="baritsaaBairshuulakhKhugatsaa"
         label="Хугацаа"
         extra="Барьцаа байршуулалтын хугацаа"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="100"
       >
         <InputNumber
           placeholder="Барьцаа байршуулалтын хугацаа"
@@ -45,14 +56,24 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item wrapperCol={{span: 24}}>
-      <div className="w-full flex flex-row justify-between">
-        <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-          Түрээсийн талбай
-        </Button>
-        <Button type="primary" htmlType="submit" icon={<ArrowRightOutlined />} onClick={()=>next()}>
-          Төлбөр тооцоо
-        </Button>
+      <Form.Item
+        wrapperCol={{ span: 24 }}
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="100"
+      >
+        <div className="flex w-full flex-row justify-between">
+          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
+            Түрээсийн талбай
+          </Button>
+          <Button
+            type="primary"
+            htmlType="submit"
+            icon={<ArrowRightOutlined />}
+            onClick={() => next()}
+          >
+            Төлбөр тооцоо
+          </Button>
         </div>
       </Form.Item>
     </Form>

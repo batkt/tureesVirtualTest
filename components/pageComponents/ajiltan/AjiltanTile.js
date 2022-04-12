@@ -1,5 +1,5 @@
-import { Tag } from "antd"
-import React from "react"
+import { Tag } from "antd";
+import React from "react";
 
 function AjiltanTile({ ovog, ner, utas, register, albanTushaal, mail }) {
   return (
@@ -25,7 +25,7 @@ function AjiltanTile({ ovog, ner, utas, register, albanTushaal, mail }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AjiltanTile
+export default AjiltanTile;

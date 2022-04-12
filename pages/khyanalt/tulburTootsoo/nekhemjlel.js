@@ -33,10 +33,14 @@ import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import Aos from "aos";
 
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const printRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
   const nekhemjlekhRef = React.useRef(null);
@@ -96,7 +100,9 @@ function tulburTootsoo({ token }) {
         var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
         )?.nekhemjlekh;
-        const medeelel = _.cloneDeep(nekhemjleliinJagsaalt.find(n=>n._id === a));
+        const medeelel = _.cloneDeep(
+          nekhemjleliinJagsaalt.find((n) => n._id === a)
+        );
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
             medeelel.eneSardTulukhDun *
@@ -168,7 +174,7 @@ function tulburTootsoo({ token }) {
         return { zagvar, mail: a.mail };
       });
     return [];
-  }, [barimt, songogdsonGereenuud,nekhemjleliinJagsaalt]);
+  }, [barimt, songogdsonGereenuud, nekhemjleliinJagsaalt]);
 
   function maileerIlgeekh() {
     if (!barimt) {
@@ -299,7 +305,11 @@ function tulburTootsoo({ token }) {
               );
             })}
           </div>
-          <div className="mt-5 flex w-full flex-row">
+          <div
+            className="mt-5 flex w-full flex-row"
+            data-aos="zoom-in-left"
+            data-aos-duration="1000"
+          >
             <DatePicker
               style={{ marginBottom: "20px" }}
               value={ognoo}
@@ -343,7 +353,12 @@ function tulburTootsoo({ token }) {
             </div>
           </div>
           <div className="grid grid-cols-8 gap-2">
-            <div className="col-span-2 rounded-md px-2 ">
+            <div
+              className="col-span-2 rounded-md px-2 "
+              data-aos="fade-left"
+              data-aos-duration="1000"
+              data-aos-delay="500"
+            >
               <div className="flex w-full justify-between">
                 <Button
                   style={{ backgroundColor: "#209669", color: "#ffffff" }}
@@ -387,7 +402,11 @@ function tulburTootsoo({ token }) {
                 ))}
               </div>
             </div>
-            <div className="col-span-6">
+            <div
+              className="col-span-6"
+              data-aos="fade-up"
+              data-aos-duration="1000"
+            >
               <Table
                 bordered
                 size="small"

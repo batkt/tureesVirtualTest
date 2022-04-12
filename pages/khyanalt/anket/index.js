@@ -6,7 +6,7 @@ import {
   FileDoneOutlined,
   HistoryOutlined,
   SettingOutlined,
-} from "@ant-design/icons"
+} from "@ant-design/icons";
 import {
   DatePicker,
   Button,
@@ -20,32 +20,33 @@ import {
   Tabs,
   Tag,
   Select,
-} from "antd"
-import React, { useMemo, useState, useRef, useEffect } from "react"
-import { useAuth } from "services/auth"
-import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee"
-import useSurveyJagsaalt from "hooks/useSurvey"
-import moment from "moment"
-import useOrder from "tools/function/useOrder"
-import _ from "lodash"
+} from "antd";
+import React, { useMemo, useState, useRef, useEffect } from "react";
+import { useAuth } from "services/auth";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import useSurveyJagsaalt from "hooks/useSurvey";
+import moment from "moment";
+import useOrder from "tools/function/useOrder";
+import _ from "lodash";
 const garalt = {
   khuudasniiDugaar: 1,
   khuudasniiKhemjee: 10,
-}
+};
 
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Aos from "aos";
 
 function Khabea({ token }) {
-  const { ajiltan, baiguullaga, barilgiinId } = useAuth()
+  const { ajiltan, baiguullaga, barilgiinId } = useAuth();
 
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
-  ])
+  ]);
 
-  const { order, onChangeTable } = useOrder({ createdAt: -1 })
-  const [surveyJagsaalt, setSurveyJagsaalt] = useState([])
+  const { order, onChangeTable } = useOrder({ createdAt: -1 });
+  const [surveyJagsaalt, setSurveyJagsaalt] = useState([]);
   const [queryGaraasUgsun, setQueryGaraasUgsun] = useState({
     ognoo:
       ekhlekhOgnoo !== undefined
@@ -54,11 +55,11 @@ function Khabea({ token }) {
             $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
-  })
-  const formRef = useRef()
-  const [asuulgaTurul, setAsuulgaTurul] = useState("text")
-  const { TabPane } = Tabs
-  const { RangePicker } = DatePicker
+  });
+  const formRef = useRef();
+  const [asuulgaTurul, setAsuulgaTurul] = useState("text");
+  const { TabPane } = Tabs;
+  const { RangePicker } = DatePicker;
 
   const columns = useMemo(
     () => [
@@ -75,7 +76,7 @@ function Khabea({ token }) {
         dataIndex: "createdAt",
         align: "center",
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD")
+          return moment(data).format("YYYY-MM-DD");
         },
       },
       {
@@ -133,8 +134,8 @@ function Khabea({ token }) {
         dataIndex: "",
         ellipsis: true,
         render: (data) => {
-          var turul = Array.from(new Set(data?.davkhar)).toString()
-          return turul
+          var turul = Array.from(new Set(data?.davkhar)).toString();
+          return turul;
         },
       },
       {
@@ -146,23 +147,23 @@ function Khabea({ token }) {
       },
     ],
     []
-  )
+  );
   useEffect(() => {
-    anketJagsaalt()
-  }, [ekhlekhOgnoo])
+    anketJagsaalt();
+  }, [ekhlekhOgnoo]);
 
   function ognoogoorShuukh(orolt, ognoo) {
     queryGaraasUgsun.ognoo = {
       $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
       $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-    }
+    };
     setQueryGaraasUgsun({
       ...queryGaraasUgsun,
-    })
+    });
   }
   function onChangeOgnoo(date, dateString) {
-    setEkhlekhOgnoo(dateString)
-    ognoogoorShuukh(garalt, dateString)
+    setEkhlekhOgnoo(dateString);
+    ognoogoorShuukh(garalt, dateString);
   }
   function khadgalakh() {
     // const asuulga = formRef.current.getFieldsValue(asuulga)
@@ -190,14 +191,14 @@ function Khabea({ token }) {
       .post("/asuulgaUstgay", { id: id })
       .then(({ data }) => {
         if (data !== undefined) {
-          message.success("Устгагдлаа")
-          asuulgiinMutate()
+          message.success("Устгагдлаа");
+          asuulgiinMutate();
         }
       })
-      .catch(aldaaBarigch)
+      .catch(aldaaBarigch);
   }
   function anketJagsaalt() {
-    debugger
+    debugger;
     uilchilgee(token)
       .get("/survey", {
         params: {
@@ -209,10 +210,13 @@ function Khabea({ token }) {
       })
       .then(({ data }) => {
         if (data !== undefined) {
-          setSurveyJagsaalt(data?.jagsaalt)
+          setSurveyJagsaalt(data?.jagsaalt);
         }
-      })
+      });
   }
+  useEffect(() => {
+    Aos.init();
+  });
   return (
     <Admin
       title="Анкетын асуулга бэлдэх"
@@ -227,7 +231,11 @@ function Khabea({ token }) {
     >
       <div className="col-span-12 p-0 md:p-5">
         <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-          <div className="flex justify-between">
+          <div
+            className="flex justify-between"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+          >
             <RangePicker
               style={{ marginBottom: "15px" }}
               size="large"
@@ -253,12 +261,15 @@ function Khabea({ token }) {
             }
             dataSource={surveyJagsaalt}
             columns={columns}
+            data-aos="fade-up"
+            data-aos-duration="1000"
+            data-aos-delay="200"
           />
         </div>
       </div>
     </Admin>
-  )
+  );
 }
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default Khabea
+export default Khabea;

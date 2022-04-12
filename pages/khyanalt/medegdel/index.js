@@ -29,6 +29,7 @@ import formatNumber from "tools/function/formatNumber";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
+import Aos from "aos";
 //#endregion
 
 var dateCount = {
@@ -75,6 +76,9 @@ function IlgeesenToo({
 }
 
 function Khyanalt({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
   const [turul, setTurul] = useState("SMS");
@@ -414,7 +418,11 @@ function Khyanalt({ token }) {
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
     >
       <div className="col-span-12 lg:col-span-3 xl:col-span-3">
-        <div className="intro-y pr-1">
+        <div
+          className="intro-y pr-1"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+        >
           <div className="box p-2">
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
               {["SMS", "App", "Mail"].map((mur) => (
@@ -431,7 +439,12 @@ function Khyanalt({ token }) {
             </div>
           </div>
         </div>
-        <div className="box mt-5 flex flex-row items-center p-2">
+        <div
+          className="box mt-5 flex flex-row items-center p-2"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
           <IlgeesenToo
             barilgiinId={barilgiinId}
             baiguullagiinId={baiguullaga?._id}
@@ -469,7 +482,12 @@ function Khyanalt({ token }) {
             </Select>
           </div>
         </div>
-        <div className="mt-5 flex flex-row p-2 font-medium">
+        <div
+          className="mt-5 flex flex-row p-2 font-medium"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
           <div>{turul} загвар</div>
           <button
             className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
@@ -486,6 +504,9 @@ function Khyanalt({ token }) {
             <div
               key={a.ner}
               className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+              data-aos-delay="100"
               onClick={() => setContent(a.mail)}
             >
               <div className="image-fit mr-1 h-8 w-8 flex-none ">
@@ -525,6 +546,8 @@ function Khyanalt({ token }) {
         className={`col-span-12 lg:col-span-3 xl:col-span-3 ${
           ilgeekhTurul === "gantsaar" ? "" : "hidden"
         }`}
+        data-aos="fade-up"
+        data-aos-duration="1000"
       >
         {ilgeekhTurul === "gantsaar" && (
           <div className="box p-5">
@@ -645,7 +668,11 @@ function Khyanalt({ token }) {
               )}
               <div className="ml-auto flex items-center space-x-2 font-medium"></div>
             </div>
-            <div className="w-full">
+            <div
+              className="w-full"
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
               {ilgeekhTurul === "gantsaar" &&
                 (turul === "App" ? (
                   <div
@@ -789,7 +816,11 @@ function Khyanalt({ token }) {
                 />
               )}
             </div>
-            <div className="mt-auto w-full p-2">
+            <div
+              className="mt-auto w-full p-2"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+            >
               {turul !== "SMS" && (
                 <Input
                   placeholder="Гарчиг"
@@ -835,7 +866,11 @@ function Khyanalt({ token }) {
             </div>
           </div>
         ) : (
-          <div className="box flex h-full items-center">
+          <div
+            className="box flex h-full items-center"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+          >
             <div className="mx-auto text-center">
               <div className="image-fit mx-auto h-16 w-16 flex-none overflow-hidden rounded-full">
                 <img

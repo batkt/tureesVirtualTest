@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart";
 import LineChart from "components/pageComponents/tailan/chart/LineChart";
 import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart";
@@ -10,6 +10,7 @@ import local from "antd/lib/date-picker/locale/mn_MN";
 import { useAuth } from "services/auth";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
+import Aos from "aos";
 
 const tailanguud = [
   {
@@ -148,6 +149,9 @@ function Chart({
 
 function AjiltanBurtgel({ token }) {
   const { barilgiinId } = useAuth();
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Admin
@@ -156,7 +160,11 @@ function AjiltanBurtgel({ token }) {
       className="p-0 md:p-4"
       tsonkhniiId={"61c2c75d1c2830c4e6f90ce9"}
     >
-      <div className="box col-span-12 p-2 md:col-span-6">
+      <div
+        className="box col-span-12 p-2 md:col-span-6"
+        data-aos="fade-down-right"
+        data-aos-duration="1000"
+      >
         <Chart
           barilgiinId={barilgiinId}
           token={token}
@@ -164,7 +172,11 @@ function AjiltanBurtgel({ token }) {
           defaultTailan="borluulaltiinTailanAvya"
         />
       </div>
-      <div className="box col-span-12 divide-y p-2 md:col-span-6">
+      <div
+        className="box col-span-12 divide-y p-2 md:col-span-6"
+        data-aos="fade-down-left"
+        data-aos-duration="1000"
+      >
         <Chart
           barilgiinId={barilgiinId}
           token={token}
@@ -172,7 +184,11 @@ function AjiltanBurtgel({ token }) {
           defaultTailan="avlagiinTailanAvya"
         />
       </div>
-      <div className="box col-span-12 divide-y p-2 md:col-span-6">
+      <div
+        className="box col-span-12 divide-y p-2 md:col-span-6"
+        data-aos="fade-up-right"
+        data-aos-duration="1000"
+      >
         <Chart
           barilgiinId={barilgiinId}
           token={token}
@@ -180,7 +196,11 @@ function AjiltanBurtgel({ token }) {
           defaultTailan="zardaliinTailanAvya"
         />
       </div>
-      <div className="box col-span-12 divide-y p-2 md:col-span-6">
+      <div
+        className="box col-span-12 divide-y p-2 md:col-span-6"
+        data-aos="fade-down-right"
+        data-aos-duration="1000"
+      >
         <Chart
           barilgiinId={barilgiinId}
           token={token}

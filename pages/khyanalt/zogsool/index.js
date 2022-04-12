@@ -13,13 +13,14 @@ import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTi
 import useZogsool, { useZogsoolToololt } from "hooks/useZogsool";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useOrder from "tools/function/useOrder";
 import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import Aos from "aos";
 
 function Zogsool({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -211,10 +212,13 @@ function Zogsool({ token }) {
         dataIndex: "tulbur",
         render(v) {
           return formatNumber(v);
-        }
+        },
       },
     ];
   }, [turul]);
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Admin
@@ -235,6 +239,9 @@ function Zogsool({ token }) {
                 a.name === turul ? "bg-green-100" : ""
               }`}
               onClick={() => setTurul(a.name)}
+              data-aos="zoom-out-down"
+              data-aos-duration="1000"
+              data-aos-delay={1 + i + "00"}
             >
               <div className="h-full rounded-xl">
                 <div className="rounded-xl p-3">
@@ -256,11 +263,19 @@ function Zogsool({ token }) {
             size="small"
             value={ognoo}
             onChange={setOgnoo}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
           />
           <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
             Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
           </div>
-          <div className="ml-auto">
+          <div
+            className="ml-auto"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="300"
+          >
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
@@ -288,6 +303,9 @@ function Zogsool({ token }) {
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
           tableLayout="auto"
           loading={!zogsoolGaralt}
           dataSource={zogsoolGaralt?.jagsaalt}

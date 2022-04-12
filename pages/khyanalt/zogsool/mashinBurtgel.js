@@ -12,13 +12,14 @@ import {
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import formatNumber from "tools/function/formatNumber";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";
 import useMashin, { useMashinToololt } from "hooks/useMashin";
 import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
 import useOrder from "tools/function/useOrder";
 import moment from "moment";
+import Aos from "aos";
 
 function mashinBurtgel({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -125,6 +126,9 @@ function mashinBurtgel({ token }) {
       footer,
     });
   }
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Admin
@@ -144,6 +148,9 @@ function mashinBurtgel({ token }) {
                 a.name === turul ? "bg-green-100" : ""
               }`}
               onClick={() => setTurul(a.name)}
+              data-aos="zoom-out-down"
+              data-aos-duration="1000"
+              data-aos-delay={4 - i + "00"}
             >
               <div className="h-full rounded-xl">
                 <div className="rounded-xl p-3">
@@ -160,7 +167,12 @@ function mashinBurtgel({ token }) {
         </div>
       </Card>
       <Card className="col-span-12">
-        <div className="flex flex-row">
+        <div
+          className="flex flex-row"
+          data-aos="zoom-out-up"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
           <div></div>
           <div className="ml-auto space-x-5">
             <Button
@@ -198,6 +210,9 @@ function mashinBurtgel({ token }) {
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="300"
           tableLayout="auto"
           loading={!mashinGaralt}
           dataSource={mashinGaralt?.jagsaalt}

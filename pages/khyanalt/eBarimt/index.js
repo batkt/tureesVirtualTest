@@ -15,16 +15,20 @@ import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import formatNumber from "tools/function/formatNumber";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import useEBarimt from "hooks/useEBarimt";
 import useEBarimtMedeelel from "hooks/useEBarimtMedeelel";
 import { useBarimtToollolt } from "hooks/useEBarimt";
 import useOrder from "tools/function/useOrder";
+import Aos from "aos";
 
 const { RangePicker } = DatePicker;
 //#endregion
 
 function EbarimtMedeelel({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const { ajiltan, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
@@ -147,6 +151,9 @@ function EbarimtMedeelel({ token }) {
               <div
                 key={index}
                 className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                data-aos="zoom-out-down"
+                data-aos-duration="1000"
+                data-aos-delay={6 - index + "00"}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -171,8 +178,16 @@ function EbarimtMedeelel({ token }) {
             size="middle"
             value={ekhlekhOgnoo}
             onChange={setEkhlekhOgnoo}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
           />
-          <div className="flex flex-row space-x-2">
+          <div
+            className="flex flex-row space-x-2"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="300"
+          >
             <Button title="Сүүлд илгээгдсэн огноо">
               {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(
                 "YYYY-MM-DD"
@@ -188,6 +203,9 @@ function EbarimtMedeelel({ token }) {
         <Table
           bordered
           tableLayout={"fixed"}
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
           size="small"
           rowClassName="hover:bg-blue-100"
           dataSource={eBarimtGaralt?.jagsaalt}

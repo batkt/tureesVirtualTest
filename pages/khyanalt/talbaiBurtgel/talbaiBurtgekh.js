@@ -41,7 +41,7 @@ import { useTalbai } from "hooks/useTalbai";
 import useTalbainToololt from "hooks/useTalbainToololt";
 import _ from "lodash";
 import moment from "moment";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
@@ -51,7 +51,7 @@ import deleteMethod from "tools/function/crud/deleteMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
-
+import Aos from "aos";
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -61,6 +61,9 @@ const normFile = (e) => {
 };
 
 function talbaiBurtgekh({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const formRef = useRef();
   const excelref = useRef();
   const { TextArea } = Input;
@@ -416,6 +419,8 @@ function talbaiBurtgekh({ token }) {
                   message: "Дугаар бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
             >
               <Input
                 type="text"
@@ -434,6 +439,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Талбайн хэмжээ бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -452,6 +460,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Нэгж үнэ бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="200"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -473,6 +484,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Нийт үнэ бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="300"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -494,6 +508,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Зардал бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="400"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -515,6 +532,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Зардал бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="500"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -536,6 +556,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Түрээсийн бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="600"
             >
               <InputNumber
                 style={{ width: "100%" }}
@@ -557,6 +580,9 @@ function talbaiBurtgekh({ token }) {
                   message: "Давхар бүртгэнэ үү!",
                 },
               ]}
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="700"
             >
               <Select
                 placeholder="Давхар"
@@ -571,7 +597,13 @@ function talbaiBurtgekh({ token }) {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name="tailbar" label="Тайлбар">
+            <Form.Item
+              name="tailbar"
+              label="Тайлбар"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="800"
+            >
               <TextArea
                 rows={4}
                 allowClear
@@ -581,8 +613,14 @@ function talbaiBurtgekh({ token }) {
               ></TextArea>
             </Form.Item>
           </div>
-          <Divider>Хөрөнгийн бүртгэл</Divider>
-          <div className="w-full">
+          <Divider
+            data-aos="fade-up"
+            data-aos-duration="1000"
+            data-aos-delay="1000"
+          >
+            Хөрөнгийн бүртгэл
+          </Divider>
+          <div>
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
                 <>
@@ -746,6 +784,9 @@ function talbaiBurtgekh({ token }) {
                     : ""
                 }`}
                 onClick={() => setQuery(mur.query)}
+                data-aos="fade-left"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -765,7 +806,12 @@ function talbaiBurtgekh({ token }) {
             );
           })}
         </div>
-        <div className="ml-auto flex place-content-end">
+        <div
+          className="ml-auto flex place-content-end"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
           <Popover
             content={() => (
               <div className="flex w-32 flex-col">
@@ -861,6 +907,9 @@ function talbaiBurtgekh({ token }) {
 
         <Table
           className={"mt-6 hidden md:block"}
+          data-aos="fade-up-left"
+          data-aos-duration="1000"
+          data-aos-delay="200"
           bordered
           size="small"
           loading={!talbainiiGaralt}

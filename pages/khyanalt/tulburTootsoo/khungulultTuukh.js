@@ -7,13 +7,17 @@ import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import formatNumber from "tools/function/formatNumber";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
+import Aos from "aos";
 
 const { RangePicker } = DatePicker;
 //#endregion
 
 function EbarimtMedeelel({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const { ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
@@ -50,7 +54,11 @@ function EbarimtMedeelel({ token }) {
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
     >
       <Card className="cardgrid col-span-12 p-5">
-        <div className="mt-5 flex w-full flex-row justify-between">
+        <div
+          className="mt-5 flex w-full flex-row justify-between"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+        >
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -62,6 +70,9 @@ function EbarimtMedeelel({ token }) {
         <Table
           bordered
           tableLayout={"fixed"}
+          data-aos="fade-right"
+          data-aos-duration="1100"
+          data-aos-delay="100"
           size="small"
           rowClassName="hover:bg-blue-100"
           dataSource={khungulultTuukh?.jagsaalt}

@@ -2,7 +2,7 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee from "services/uilchilgee";
 import Admin from "components/Admin";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useAuth } from "services/auth";
 import {
   Card,
@@ -44,6 +44,7 @@ import useSWR from "swr";
 import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile";
 import CardList from "components/cardList";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
+import Aos from "aos";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -140,6 +141,9 @@ function TableGuilgee({
 }
 
 function guilgeeniiTuukh({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   //#region state
   const ref = React.useRef(null);
   const refTuukh = React.useRef(null);
@@ -754,6 +758,9 @@ function guilgeeniiTuukh({ token }) {
                 key={`${index}toololt`}
                 className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
                 onClick={() => onChangeTurul(mur?.turul)}
+                data-aos="zoom-out-up"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -792,7 +799,12 @@ function guilgeeniiTuukh({ token }) {
             );
           })}
         </div>
-        <div className="mt-5 flex w-full flex-row">
+        <div
+          className="mt-5 flex w-full flex-row"
+          data-aos="zoom-in-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
           <DatePicker.RangePicker
             picker="month"
             value={ognoo}
@@ -906,7 +918,12 @@ function guilgeeniiTuukh({ token }) {
             </Popover>
           </div>
         </div>
-        <div className="mt-5 hidden overflow-auto md:block">
+        <div
+          className="mt-5 hidden overflow-auto md:block"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+        >
           <TableGuilgee
             columns={columns}
             garalt={

@@ -32,7 +32,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import useKhariltsagch from "hooks/useKhariltsagch";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -46,9 +46,9 @@ import formatNumber from "tools/function/formatNumber";
 import CardList from "components/cardList";
 import KhariltsagchTile from "components/pageComponents/khariltsagch/KhariltsagchTile";
 import useOrder from "tools/function/useOrder";
+import Aos from "aos";
 
 const iconColor = { fontSize: "18px" };
-
 function checkUtas(form, fields, utga) {
   const utguud = [];
   fields.map((a) => {
@@ -62,6 +62,9 @@ function checkUtas(form, fields, utga) {
 }
 
 function AjiltanBurtgel({ token }) {
+  useEffect(() => {
+    Aos.init();
+  });
   const formRef = useRef();
   const excelref = useRef();
 
@@ -387,6 +390,8 @@ function AjiltanBurtgel({ token }) {
                 message: "Төрөл сонгоно уу!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="1000"
           >
             <Select
               style={{ width: "100%" }}
@@ -407,6 +412,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Овог бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
           >
             <Input
               type="text"
@@ -425,6 +433,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Нэр бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="200"
           >
             <Input
               type="text"
@@ -445,6 +456,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Регистр бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="300"
           >
             <Input
               allowClear
@@ -464,6 +478,9 @@ function AjiltanBurtgel({ token }) {
                 message: "Хаяг бүртгэнэ үү!",
               },
             ]}
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="400"
           >
             <Input
               allowClear
@@ -503,7 +520,11 @@ function AjiltanBurtgel({ token }) {
                     </div>
                   </Form.Item>
                 )}
-                <Form.Item>
+                <Form.Item
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                  data-aos-delay="500"
+                >
                   <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }}>
                     <Input
                       allowClear
@@ -537,7 +558,12 @@ function AjiltanBurtgel({ token }) {
               </>
             )}
           </Form.List>
-          <Form.Item name="mail">
+          <Form.Item
+            name="mail"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="600"
+          >
             <Input
               type="email"
               placeholder="И-мэйл хаяг"
@@ -547,7 +573,11 @@ function AjiltanBurtgel({ token }) {
             />
           </Form.Item>
 
-          <Form.Item>
+          <Form.Item
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="700"
+          >
             <Button
               //htmlType="submit"
               onClick={khariltsagchBurtgekh}
@@ -570,6 +600,9 @@ function AjiltanBurtgel({ token }) {
                     : ""
                 }`}
                 onClick={() => setQuery(mur.query)}
+                data-aos="zoom-out-left"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
@@ -594,7 +627,12 @@ function AjiltanBurtgel({ token }) {
             );
           })}
         </div>
-        <div className="mb-5 flex flex-row">
+        <div
+          className="mb-5 flex flex-row"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
+        >
           <div></div>
           <div className="ml-auto flex">
             <Popover
@@ -698,7 +736,12 @@ function AjiltanBurtgel({ token }) {
             </Popover>
           </div>
         </div>
-        <div className="mt-8 hidden overflow-auto md:block">
+        <div
+          className="mt-8 hidden overflow-auto md:block"
+          data-aos="fade-up-left"
+          data-aos-duration="1000"
+          data-aos-delay="400"
+        >
           <Table
             bordered
             tableLayout={

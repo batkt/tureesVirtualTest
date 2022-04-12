@@ -22,8 +22,12 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import createMethod from "tools/function/crud/createMethod";
 import formatNumber from "tools/function/formatNumber";
+import Aos from "aos";
 
 function tulburTootsoo() {
+  useEffect(() => {
+    Aos.init();
+  });
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
   const formRef = useRef();
@@ -165,7 +169,11 @@ function tulburTootsoo() {
         <Tabs size="large">
           <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
             <div className="grid w-full grid-cols-12 gap-6">
-              <div className="col-span-3 border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3">
+              <div
+                className="col-span-3 border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3"
+                data-aos="fade-right"
+                data-aos-duration="1000"
+              >
                 <Form
                   form={form}
                   ref={formRef}
@@ -271,7 +279,12 @@ function tulburTootsoo() {
                   </div>
                 </Form>
               </div>
-              <div className="box col-span-9 overflow-auto p-5 md:col-span-3 xl:col-span-9">
+              <div
+                className="box col-span-9 overflow-auto p-5 md:col-span-3 xl:col-span-9"
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="300"
+              >
                 <Table
                   rowSelection={rowSelection}
                   bordered

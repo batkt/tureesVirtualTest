@@ -1,10 +1,11 @@
 import { Form, Select, Button, Input, InputNumber, notification } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
-import React from "react";
+import React, { useEffect } from "react";
 import { toWords } from "mon_num";
 import useTalbai from "hooks/useTalbai";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
+import Aos from "aos";
 
 var timeout = null;
 
@@ -127,6 +128,9 @@ const YurunkhiiMedeele = ({
         talbainuudShalgaya(talbainuud?.jagsaalt, target.value);
       });
   }
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Form
@@ -136,7 +140,12 @@ const YurunkhiiMedeele = ({
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
-      <Form.Item label="Талбайн дугаар" name="talbainDugaar">
+      <Form.Item
+        label="Талбайн дугаар"
+        name="talbainDugaar"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
         <Input
           placeholder="Талбайн дугаар"
           onChange={(e) => {
@@ -147,7 +156,13 @@ const YurunkhiiMedeele = ({
           }}
         />
       </Form.Item>
-      <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
+      <Form.Item
+        label="Талбайн нэгж үнэ"
+        name="talbainNegjUne"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="100"
+      >
         <InputNumber
           placeholder="Талбайн нэгж үнэ"
           style={{ width: "100%" }}
@@ -157,7 +172,13 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Талбайн нийт үнэ" name="talbainNiitUne">
+      <Form.Item
+        label="Талбайн нийт үнэ"
+        name="talbainNiitUne"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="200"
+      >
         <InputNumber
           placeholder="Талбайн нийт үнэ"
           style={{ width: "100%" }}
@@ -167,7 +188,13 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
+      <Form.Item
+        label="Талбайн хэмжээ"
+        name="talbainKhemjee"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="300"
+      >
         <InputNumber
           placeholder="Талбайн хэмжээ"
           style={{ width: "100%" }}
@@ -177,7 +204,13 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Давхар" name="davkhar">
+      <Form.Item
+        label="Давхар"
+        name="davkhar"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="400"
+      >
         <InputNumber
           placeholder="Давхар"
           style={{ width: "100%" }}
@@ -187,7 +220,13 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
+      <Form.Item
+        label="Ашиглалтын зардал"
+        name="zardliinDun"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="500"
+      >
         <InputNumber
           placeholder="Ашиглалтын зардал"
           style={{ width: "100%" }}
@@ -197,11 +236,22 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Зориулалт" name="zoriulalt">
+      <Form.Item
+        label="Зориулалт"
+        name="zoriulalt"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="600"
+      >
         <Input placeholder="Зориулалт" />
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
-        <div className="flex w-full flex-row justify-between">
+        <div
+          className="flex w-full flex-row justify-between"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="700"
+        >
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Гэрээний хугацаа
           </Button>

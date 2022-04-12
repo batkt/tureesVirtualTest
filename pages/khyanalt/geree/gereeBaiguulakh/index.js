@@ -12,6 +12,8 @@ import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburToots
 import moment from "moment";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import _ from "lodash";
+import Aos from "aos";
+import { useEffect } from "react";
 
 const { Step } = Steps;
 
@@ -45,6 +47,10 @@ const steps = [
 
 function GereeBaiguulakh({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
+  useEffect(() => {
+    Aos.init();
+  });
+
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
@@ -64,10 +70,12 @@ function GereeBaiguulakh({ token }) {
       zagvarRef.current.focus();
       return;
     }
-    if(current === 1){
-      if(!khadgalakhGeree?.tulukhUdur){
-        notification.warning({message:'Төлөлт хийх өдөр заавал оруулна уу!'})
-        return
+    if (current === 1) {
+      if (!khadgalakhGeree?.tulukhUdur) {
+        notification.warning({
+          message: "Төлөлт хийх өдөр заавал оруулна уу!",
+        });
+        return;
       }
     }
 
@@ -117,13 +125,15 @@ function GereeBaiguulakh({ token }) {
       zagvarRef.current.focus();
       return;
     }
-    if(current === 1 && index > current){
-      if(!khadgalakhGeree?.tulukhUdur){
-        notification.warning({message:'Төлөлт хийх өдөр заавал оруулна уу!'})
-        return
+    if (current === 1 && index > current) {
+      if (!khadgalakhGeree?.tulukhUdur) {
+        notification.warning({
+          message: "Төлөлт хийх өдөр заавал оруулна уу!",
+        });
+        return;
       }
     }
-    setCurrent(index)
+    setCurrent(index);
   }
 
   const onChangeGereeniiZagvar = (_id) => {
@@ -195,6 +205,9 @@ function GereeBaiguulakh({ token }) {
                 key={item.title}
                 title={item.title}
                 onStepClick={() => alkhamSoliyo(index)}
+                data-aos="zoom-in-up"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               />
             ))}
           </Steps>
@@ -214,6 +227,9 @@ function GereeBaiguulakh({ token }) {
           <div
             className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 md:col-span-6 xl:col-span-8"
             style={{ maxHeight: "calc(100vh - 15rem)", overflow: "auto" }}
+            data-aos="fade-right"
+            data-aos-delay="300"
+            data-aos-duration="1000"
           >
             {current === 0 && (
               <Select

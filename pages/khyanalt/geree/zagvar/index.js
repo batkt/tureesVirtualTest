@@ -12,6 +12,8 @@ import { modal } from "components/ant/Modal";
 import ZaaltOruulakh from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import GereeKharakh from "components/pageComponents/geree/Kharakh";
+import Aos from "aos";
+import { useEffect } from "react";
 
 function index({ token }) {
   const { ajiltan, baiguullaga, barilgiinId } = useAuth();
@@ -82,6 +84,9 @@ function index({ token }) {
       footer,
     });
   }
+  useEffect(() => {
+    Aos.init();
+  });
 
   return (
     <Admin
@@ -107,7 +112,11 @@ function index({ token }) {
               <GereeKharakh data={{ ...kharuulakhGeree, geree: {} }} />
             )}
           </Drawer>
-          <div className="flex w-full sm:w-auto">
+          <div
+            className="flex w-full sm:w-auto"
+            data-aos="fade-right"
+            data-aos-delay="300"
+          >
             <Button
               className="mr-2 font-medium text-white"
               onClick={() => router.push("/khyanalt/geree/zagvar/new")}
@@ -147,7 +156,7 @@ function index({ token }) {
               className="cursor-pointer"
             >
               <Button
-                className="dropdown-toggle btn box mt-4 w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
+                className="dropdown-toggle btn box focus:outline-none mt-4 w-full px-2 text-gray-700 focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
                 aria-expanded="false"
                 icon={
                   <span className="flex h-5 w-5 items-center justify-center">
@@ -179,6 +188,9 @@ function index({ token }) {
                 key={a._id}
                 className="intro-y col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2"
                 onClick={() => setKharuulakhGeree(a)}
+                data-aos="zoom-in-up"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
               >
                 <div className="file box zoom-in relative rounded-md px-5 px-3 pt-8 pb-5 sm:px-5">
                   <div className="absolute left-0 top-0 mt-3 ml-3">
