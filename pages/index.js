@@ -75,22 +75,25 @@ function Ajiltan() {
                       newterya({ ...form.getFieldsValue(), namaigsana });
                   }}
                 >
+                  <div  data-aos="fade-up"
+                      data-aos-delay="500">
                   <Form.Item name="nevtrekhNer">
                     <Input
                       placeholder="Нэвтрэх нэр"
                       className="login-input"
-                      data-aos="fade-up"
-                      data-aos-delay="500"
                     />
                   </Form.Item>
+                  </div>
+                  <div
+                  data-aos="fade"
+                  data-aos-delay="300">
                   <Form.Item name="nuutsUg">
                     <Password
                       placeholder="Нууц үг"
                       className="login-input"
-                      data-aos="fade"
-                      data-aos-delay="300"
                     />
                   </Form.Item>
+                  </div>
                 </Form>
                 <div
                   className="intro-x mt-4 flex text-xs text-gray-700 dark:text-gray-600 sm:text-sm"

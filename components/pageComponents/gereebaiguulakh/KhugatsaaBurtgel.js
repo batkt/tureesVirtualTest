@@ -60,22 +60,25 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       initialValues={value}
       onValuesChange={onValuesChange}
     >
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000">
       <Form.Item name="gereeniiOgnoo" label="Гэрээ хийх огноо">
         <DatePicker
           style={{ width: "100%" }}
           allowClear
           placeholder="Гэрээ хийх огноо"
           prefix={<SolutionOutlined />}
-          data-aos="fade-right"
-          data-aos-duration="1000"
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="100">
       <Form.Item
         name="khugatsaa"
         label="Гэрээний хугацаа"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="100"
       >
         <InputNumber
           style={{ width: "100%" }}
@@ -86,14 +89,16 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           placeholder="Гэрээний хугацаа"
         />
       </Form.Item>
+      </div>
+      <div
+         data-aos="fade-right"
+         data-aos-duration="1000"
+         data-aos-delay="200">
       <Form.Item
         label="Төлөлт хийх өдөр"
         extra="Төлөлт хийх огноо сар бүрийн / өдөр"
         name="tulukhUdur"
         required
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="200"
       >
         <Select
           mode="multiple"
@@ -107,13 +112,15 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           ))}
         </Select>
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="300">
       <Form.Item
         name="duusakhOgnoo"
         label="Гэрээ дуусах хугацаа"
         extra="Төлөлт хийх огноо сар бүрийн / өдөр"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="300"
       >
         <DatePicker
           style={{ width: "100%" }}
@@ -122,12 +129,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="400">
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
           className="flex w-full flex-row justify-between"
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="400"
         >
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
             Ерөнхий мэдээлэл
@@ -142,6 +151,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           </Button>
         </div>
       </Form.Item>
+      </div>
     </Form>
   );
 };

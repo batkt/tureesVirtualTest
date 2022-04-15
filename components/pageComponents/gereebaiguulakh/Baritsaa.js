@@ -24,11 +24,12 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
     >
+      <div 
+      data-aos="fade-right"
+      data-aos-duration="1000">
       <Form.Item
         name="baritsaaAvakhDun"
         label="Барьцаа дүн"
-        data-aos="fade-right"
-        data-aos-duration="1000"
       >
         <InputNumber
           placeholder="Барьцаа дүн"
@@ -39,13 +40,15 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000"
+       data-aos-delay="100">
       <Form.Item
         name="baritsaaBairshuulakhKhugatsaa"
         label="Хугацаа"
         extra="Барьцаа байршуулалтын хугацаа"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="100"
       >
         <InputNumber
           placeholder="Барьцаа байршуулалтын хугацаа"
@@ -56,11 +59,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="100">
       <Form.Item
         wrapperCol={{ span: 24 }}
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="100"
+        
       >
         <div className="flex w-full flex-row justify-between">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
@@ -76,6 +82,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           </Button>
         </div>
       </Form.Item>
+      </div>
     </Form>
   );
 };

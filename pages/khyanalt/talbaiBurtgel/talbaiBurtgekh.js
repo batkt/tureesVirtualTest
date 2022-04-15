@@ -410,199 +410,211 @@ function talbaiBurtgekh({ token }) {
           initialValues={{ remember: true }}
         >
           <div>
-            <Form.Item
-              name="kod"
-              label="Дугаар"
-              rules={[
-                {
-                  required: true,
-                  message: "Дугаар бүртгэнэ үү!",
-                },
-              ]}
+            <div
               data-aos="fade-right"
-              data-aos-duration="1000"
-            >
-              <Input
-                type="text"
-                allowClear
-                placeholder="Дугаар"
-                value={talbaiState.kod}
-                onChange={(e) => onChange("kod", e.target.value)}
-              ></Input>
-            </Form.Item>
-            <Form.Item
-              label="Хэмжээ"
-              name="talbainKhemjee"
-              rules={[
-                {
-                  required: true,
-                  message: "Талбайн хэмжээ бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                allowClear
-                placeholder="Талбайн хэмжээ/м2/"
-                value={talbaiState.talbainKhemjee}
-                onChange={(v) => onChange("talbainKhemjee", v)}
-              ></InputNumber>
-            </Form.Item>
-            <Form.Item
-              name="talbainNegjUne"
-              label="Нэгж үнэ"
-              rules={[
-                {
-                  required: true,
-                  message: "Нэгж үнэ бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="200"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Нэгж үнэ"
-                value={talbaiState.talbainNegjUne}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onChange={(target) => onChange("talbainNegjUne", target)}
-              />
-            </Form.Item>
-            <Form.Item
-              name="talbainNiitUne"
-              label="Нийт үнэ"
-              rules={[
-                {
-                  required: true,
-                  message: "Нийт үнэ бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Нийт үнэ"
-                value={talbaiState.talbainNiitUne}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onChange={(target) => onChange("talbainNiitUne", target)}
-              />
-            </Form.Item>
-            <Form.Item
-              name="ashiglaltiinZardal"
-              label="Ашиглалтын зардал"
-              rules={[
-                {
-                  required: true,
-                  message: "Зардал бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="400"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                placeholder="Ашиглалтын зардал"
-                value={talbaiState.ashiglaltiinZardal}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onChange={(target) => onChange("ashiglaltiinZardal", target)}
-              />
-            </Form.Item>
-            <Form.Item
-              name="niitAshiglaltiinZardal"
-              label="Нийт зардал"
-              rules={[
-                {
-                  required: true,
-                  message: "Зардал бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="500"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                readOnly={true}
-                placeholder="Нийт зардал"
-                value={talbaiState.niitAshiglaltiinZardal}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              />
-            </Form.Item>
-            <Form.Item
-              name="tureesiinTulbur"
-              label="Түрээсийн төлбөр"
-              rules={[
-                {
-                  required: true,
-                  message: "Түрээсийн бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="600"
-            >
-              <InputNumber
-                style={{ width: "100%" }}
-                readOnly={true}
-                placeholder="Түрээсийн төлбөр"
-                value={talbaiState.tureesiinTulbur}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              />
-            </Form.Item>
-            <Form.Item
-              name="davkhar"
-              label="Давхар"
-              rules={[
-                {
-                  required: true,
-                  message: "Давхар бүртгэнэ үү!",
-                },
-              ]}
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="700"
-            >
-              <Select
-                placeholder="Давхар"
-                value={talbaiState.davkhar}
-                onChange={(e) => onChange("davkhar", e)}
-                allowClear
+              data-aos-duration="1000">
+              <Form.Item
+                name="kod"
+                label="Дугаар"
+                rules={[
+                  {
+                    required: true,
+                    message: "Дугаар бүртгэнэ үү!",
+                  },
+                ]}
               >
-                {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
-                  <Select.Option key={a._id} value={a.davkhar}>
-                    {a.davkhar}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
+                <Input
+                  type="text"
+                  allowClear
+                  placeholder="Дугаар"
+                  value={talbaiState.kod}
+                  onChange={(e) => onChange("kod", e.target.value)}
+                ></Input>
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100">
+              <Form.Item
+                label="Хэмжээ"
+                name="talbainKhemjee"
+                rules={[
+                  {
+                    required: true,
+                    message: "Талбайн хэмжээ бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  allowClear
+                  placeholder="Талбайн хэмжээ/м2/"
+                  value={talbaiState.talbainKhemjee}
+                  onChange={(v) => onChange("talbainKhemjee", v)}
+                ></InputNumber>
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="200">
+              <Form.Item
+                name="talbainNegjUne"
+                label="Нэгж үнэ"
+                rules={[
+                  {
+                    required: true,
+                    message: "Нэгж үнэ бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Нэгж үнэ"
+                  value={talbaiState.talbainNegjUne}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(target) => onChange("talbainNegjUne", target)}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="300">
+              <Form.Item
+                name="talbainNiitUne"
+                label="Нийт үнэ"
+                rules={[
+                  {
+                    required: true,
+                    message: "Нийт үнэ бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Нийт үнэ"
+                  value={talbaiState.talbainNiitUne}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(target) => onChange("talbainNiitUne", target)}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="400">
+              <Form.Item
+                name="ashiglaltiinZardal"
+                label="Ашиглалтын зардал"
+                rules={[
+                  {
+                    required: true,
+                    message: "Зардал бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Ашиглалтын зардал"
+                  value={talbaiState.ashiglaltiinZardal}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  onChange={(target) => onChange("ashiglaltiinZardal", target)}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="500">
+              <Form.Item
+                name="niitAshiglaltiinZardal"
+                label="Нийт зардал"
+                rules={[
+                  {
+                    required: true,
+                    message: "Зардал бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  readOnly={true}
+                  placeholder="Нийт зардал"
+                  value={talbaiState.niitAshiglaltiinZardal}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="600">
+              <Form.Item
+                name="tureesiinTulbur"
+                label="Түрээсийн төлбөр"
+                rules={[
+                  {
+                    required: true,
+                    message: "Түрээсийн бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  readOnly={true}
+                  placeholder="Түрээсийн төлбөр"
+                  value={talbaiState.tureesiinTulbur}
+                  formatter={(value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  }
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                />
+              </Form.Item>
+            </div>
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="700">
+              <Form.Item
+                name="davkhar"
+                label="Давхар"
+                rules={[
+                  {
+                    required: true,
+                    message: "Давхар бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Давхар"
+                  value={talbaiState.davkhar}
+                  onChange={(e) => onChange("davkhar", e)}
+                  allowClear
+                >
+                  {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                    <Select.Option key={a._id} value={a.davkhar}>
+                      {a.davkhar}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
             <Form.Item
               name="tailbar"
               label="Тайлбар"
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="800"
             >
               <TextArea
                 rows={4}
@@ -612,11 +624,9 @@ function talbaiBurtgekh({ token }) {
                 onChange={(e) => onChange("tailbar", e.target.value)}
               ></TextArea>
             </Form.Item>
+            </div>
           </div>
           <Divider
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-delay="1000"
           >
             Хөрөнгийн бүртгэл
           </Divider>
@@ -778,11 +788,10 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
                     ? "bg-green-50"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -938,7 +947,7 @@ function talbaiBurtgekh({ token }) {
               className: "text-center",
               render: (text, record, index) =>
                 (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                 (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,

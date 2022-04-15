@@ -174,154 +174,168 @@ function AjiltanBurtgel({ token }) {
           onFinish={onFinish}
           initialValues={{ remember: true }}
         >
-          <Form.Item
-            name="ovog"
-            rules={[
-              {
-                required: true,
-                message: "Овог бүртгэнэ үү!",
-              },
-            ]}
+          <div
+            data-aos="fade-right"
+            data-aos-duration="800">
+            <Form.Item
+              name="ovog"
+              rules={[
+                {
+                  required: true,
+                  message: "Овог бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                allowClear
+                placeholder="Овог"
+                value={ajiltanState.ovog}
+                prefix={<UserOutlined style={iconColor} />}
+                onChange={(e) => onChange("ovog", e.target.value)}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-          >
-            <Input
-              type="text"
-              allowClear
-              placeholder="Овог"
-              value={ajiltanState.ovog}
-              prefix={<UserOutlined style={iconColor} />}
-              onChange={(e) => onChange("ovog", e.target.value)}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="ner"
-            rules={[
-              {
-                required: true,
-                message: "Нэр бүртгэнэ үү!",
-              },
-            ]}
+            data-aos-delay="100">
+            <Form.Item
+              name="ner"
+              rules={[
+                {
+                  required: true,
+                  message: "Нэр бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                type="text"
+                allowClear
+                placeholder="Нэр"
+                value={ajiltanState.ner}
+                prefix={<UserOutlined style={iconColor} />}
+                onChange={(e) => onChange("ner", e.target.value)}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="100"
-          >
-            <Input
-              type="text"
-              allowClear
-              placeholder="Нэр"
-              value={ajiltanState.ner}
-              prefix={<UserOutlined style={iconColor} />}
-              onChange={(e) => onChange("ner", e.target.value)}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="register"
-            rules={[
-              {
-                required: true,
-                len: 10,
-                pattern: new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
+            data-aos-delay="200">
+            <Form.Item
+              name="register"
+              rules={[
+                {
+                  required: true,
+                  len: 10,
+                  pattern: new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+                  message: "Регистр бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                allowClear
+                maxLength={10}
+                placeholder="Регистр"
+                value={ajiltanState.register}
+                onChange={(e) => onChange("register", e.target.value)}
+                prefix={<SolutionOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="200"
-          >
-            <Input
-              allowClear
-              maxLength={10}
-              placeholder="Регистр"
-              value={ajiltanState.register}
-              onChange={(e) => onChange("register", e.target.value)}
-              prefix={<SolutionOutlined style={iconColor} />}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="khayag"
-            rules={[
-              {
-                required: true,
-                message: "Хаяг бүртгэнэ үү!",
-              },
-            ]}
+            data-aos-delay="300">
+            <Form.Item
+              name="khayag"
+              rules={[
+                {
+                  required: true,
+                  message: "Хаяг бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                allowClear
+                placeholder="Хаяг"
+                value={ajiltanState.khayag}
+                onChange={(e) => onChange("khayag", e.target.value)}
+                prefix={<HomeOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="300"
-          >
-            <Input
-              allowClear
-              placeholder="Хаяг"
-              value={ajiltanState.khayag}
-              onChange={(e) => onChange("khayag", e.target.value)}
-              prefix={<HomeOutlined style={iconColor} />}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="utas"
-            rules={[
-              {
-                required: true,
-                message: "Утас бүртгэнэ үү!",
-              },
-            ]}
+            data-aos-delay="400">
+            <Form.Item
+              name="utas"
+              rules={[
+                {
+                  required: true,
+                  message: "Утас бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                allowClear
+                placeholder="Утас"
+                value={ajiltanState.utas}
+                onChange={(e) => onChange("utas", e.target.value)}
+                prefix={<PhoneOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="400"
-          >
-            <Input
-              allowClear
-              placeholder="Утас"
-              value={ajiltanState.utas}
-              onChange={(e) => onChange("utas", e.target.value)}
-              prefix={<PhoneOutlined style={iconColor} />}
-            ></Input>
-          </Form.Item>
-          <Form.Item
-            name="ajildOrsonOgnoo"
-            rules={[
-              {
-                required: true,
-                message: "Ажилд орсон огноо бүртгэнэ үү!",
-              },
-            ]}
+            data-aos-delay="500">
+            <Form.Item
+              name="ajildOrsonOgnoo"
+              rules={[
+                {
+                  required: true,
+                  message: "Ажилд орсон огноо бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                placeholder="Ажилд орсон огноо"
+                onChange={({ }, v) => onChange("ajildOrsonOgnoo", v)}
+              ></DatePicker>
+            </Form.Item>
+          </div>
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="500"
-          >
-            <DatePicker
-              style={{ width: "100%" }}
-              placeholder="Ажилд орсон огноо"
-              onChange={({}, v) => onChange("ajildOrsonOgnoo", v)}
-            ></DatePicker>
-          </Form.Item>
-          <Form.Item
-            name="albanTushaal"
-            rules={[
-              {
-                required: true,
-                message: "Албан тушаал бүртгэнэ үү!",
-              },
-            ]}
-            data-aos="fade-right"
-            data-aos-duration="800"
-            data-aos-delay="600"
-          >
-            <Input
-              allowClear
-              placeholder="Албан тушаал"
-              value={ajiltanState.albanTushaal}
-              onChange={(e) => onChange("albanTushaal", e.target.value)}
-              prefix={<ContactsOutlined style={iconColor} />}
-            ></Input>
-          </Form.Item>
-
+            data-aos-delay="600">
+            <Form.Item
+              name="albanTushaal"
+              rules={[
+                {
+                  required: true,
+                  message: "Албан тушаал бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input
+                allowClear
+                placeholder="Албан тушаал"
+                value={ajiltanState.albanTushaal}
+                onChange={(e) => onChange("albanTushaal", e.target.value)}
+                prefix={<ContactsOutlined style={iconColor} />}
+              ></Input>
+            </Form.Item>
+          </div>
+          <div
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="900">
           <Divider
-            orientation="left"
-            data-aos="fade-up"
-            data-aos-duration="800"
-            data-aos-delay="900"
+            orientation="left"            
           >
             Нэвтрэх нэр нууц үг
           </Divider>
@@ -333,9 +347,6 @@ function AjiltanBurtgel({ token }) {
                 message: "Нэвтрэх нэр бүртгэнэ үү!",
               },
             ]}
-            data-aos="fade-right"
-            data-aos-duration="800"
-            data-aos-delay="700"
           >
             <Input
               placeholder="Нэвтрэх нэр"
@@ -352,9 +363,6 @@ function AjiltanBurtgel({ token }) {
                 message: "Нууц үг бүртгэнэ үү!",
               },
             ]}
-            data-aos="fade-right"
-            data-aos-duration="800"
-            data-aos-delay="800"
           >
             <Input.Password
               placeholder="Нууц үг"
@@ -367,13 +375,11 @@ function AjiltanBurtgel({ token }) {
             <Button
               htmlType="submit"
               type="primary"
-              data-aos="zoom-in-up"
-              data-aos-duration="1000"
-              data-aos-delay="1100"
             >
               Хадгалах
             </Button>
           </Form.Item>
+          </div>
         </Form>
       </div>
       <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
@@ -410,7 +416,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,

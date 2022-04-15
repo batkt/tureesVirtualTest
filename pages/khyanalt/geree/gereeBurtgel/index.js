@@ -942,12 +942,14 @@ function ZakhialgiinKhyanalt() {
           })}
         </div>
         <div className="mt-5 flex flex-row">
+          <div
+           data-aos="zoom-in-right"
+           data-aos-duration="1000"
+           data-aos-delay="300">
           <DatePicker.RangePicker
             locale={locale}
-            data-aos="zoom-in-right"
-            data-aos-duration="1000"
-            data-aos-delay="300"
           />
+          </div>
           <div
             className="ml-auto flex place-content-end"
             data-aos="zoom-in-left"

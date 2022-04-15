@@ -568,12 +568,14 @@ function zardal({ token }) {
     >
       <div className="col-span-12 space-y-5">
         <div className="flex w-full flex-row">
+          <div
+          data-aos="fade-right"
+          data-aos-duration="1000">
           <DatePicker.RangePicker
             value={ognoo}
-            onChange={setOgnoo}
-            data-aos="fade-right"
-            data-aos-duration="1000"
+            onChange={setOgnoo}            
           />
+          </div>
           <button
             style={{
               backgroundColor: "#209669",

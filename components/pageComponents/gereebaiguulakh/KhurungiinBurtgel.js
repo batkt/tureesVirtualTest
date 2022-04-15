@@ -140,11 +140,12 @@ const YurunkhiiMedeele = ({
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000">
       <Form.Item
         label="Талбайн дугаар"
         name="talbainDugaar"
-        data-aos="fade-right"
-        data-aos-duration="1000"
       >
         <Input
           placeholder="Талбайн дугаар"
@@ -156,12 +157,14 @@ const YurunkhiiMedeele = ({
           }}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="100">
       <Form.Item
         label="Талбайн нэгж үнэ"
         name="talbainNegjUne"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="100"
       >
         <InputNumber
           placeholder="Талбайн нэгж үнэ"
@@ -172,12 +175,14 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000"
+       data-aos-delay="200">
       <Form.Item
         label="Талбайн нийт үнэ"
         name="talbainNiitUne"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="200"
       >
         <InputNumber
           placeholder="Талбайн нийт үнэ"
@@ -188,12 +193,14 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="300">
       <Form.Item
         label="Талбайн хэмжээ"
         name="talbainKhemjee"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="300"
       >
         <InputNumber
           placeholder="Талбайн хэмжээ"
@@ -204,12 +211,14 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="400">
       <Form.Item
         label="Давхар"
         name="davkhar"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="400"
       >
         <InputNumber
           placeholder="Давхар"
@@ -220,12 +229,14 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000"
+       data-aos-delay="500">
       <Form.Item
         label="Ашиглалтын зардал"
         name="zardliinDun"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="500"
       >
         <InputNumber
           placeholder="Ашиглалтын зардал"
@@ -236,15 +247,18 @@ const YurunkhiiMedeele = ({
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="600">
       <Form.Item
         label="Зориулалт"
         name="zoriulalt"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="600"
       >
         <Input placeholder="Зориулалт" />
       </Form.Item>
+      </div>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
           className="flex w-full flex-row justify-between"

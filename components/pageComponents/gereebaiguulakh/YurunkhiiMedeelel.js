@@ -86,11 +86,12 @@ const YurunkhiiMedeele = ({
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
+      <div
+      data-aos="fade-right"
+      data-aos-delay="200">
       <Form.Item
         name="gereeniiDugaar"
         label="Гэрээний дугаар"
-        data-aos="fade-right"
-        data-aos-delay="200"
       >
         <Input
           allowClear
@@ -98,20 +99,24 @@ const YurunkhiiMedeele = ({
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-delay="300">
       <Form.Item
         name="baiguullagaEsekh"
         label="Байгууллага эсэх"
         valuePropName="checked"
-        data-aos="fade-right"
-        data-aos-delay="300"
       >
         <Switch onChange={setBaiguullagaEsekh} />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right">
       <Form.Item
         name="ner"
         hidden={!baiguullagaEsekh}
         label="Байгууллага нэр"
-        data-aos="fade-right"
       >
         <Input
           allowClear
@@ -119,6 +124,7 @@ const YurunkhiiMedeele = ({
           prefix={<SolutionOutlined />}
         />
       </Form.Item>
+      </div>
       {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="100">
           <Form.Item
@@ -145,6 +151,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {baiguullagaEsekh && (
+        <div
+        data-aos="fade-right"
+          data-aos-delay="200">
         <Form.Item
           hidden={!baiguullagaEsekh}
           name="register"
@@ -157,8 +166,7 @@ const YurunkhiiMedeele = ({
               message: "Регистр бүртгэнэ үү!",
             },
           ]}
-          data-aos="fade-right"
-          data-aos-delay="200"
+          
         >
           <Input
             allowClear
@@ -168,67 +176,81 @@ const YurunkhiiMedeele = ({
             onChange={onChangeRegister}
           />
         </Form.Item>
+        </div>
       )}
+      <div
+       data-aos="fade-right"
+       data-aos-delay="500">
       <Form.Item
         hidden={baiguullagaEsekh}
         name="ovog"
         label="Овог"
-        data-aos="fade-right"
-        data-aos-delay="500"
       >
         <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="600">
       <Form.Item
         hidden={baiguullagaEsekh}
         name="ner"
         label="Нэр"
-        data-aos="fade-right"
-        data-aos-delay="600"
       >
         <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-delay="300">
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="zakhirliinOvog"
         label="Захирлын овог"
-        data-aos="fade-right"
-        data-aos-delay="300"
       >
         <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="400">
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="zakhirliinNer"
         label="Захирлын нэр"
-        data-aos="fade-right"
-        data-aos-delay="400"
       >
         <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+        data-aos="fade-right"
+        data-aos-delay="700">
       <Form.Item
         name="utas"
         hidden={baiguullagaEsekh}
         label="Утас"
-        data-aos="fade-right"
-        data-aos-delay="700"
       >
         <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="700">
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="utas"
         label="Утас"
-        data-aos="fade-right"
-        data-aos-delay="700"
       >
         <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="800">
       <Form.Item
         name="mail"
         hidden={baiguullagaEsekh}
         label="И-мэйл хаяг"
-        data-aos="fade-right"
-        data-aos-delay="800"
       >
         <Input
           type="email"
@@ -237,12 +259,14 @@ const YurunkhiiMedeele = ({
           prefix={<MailOutlined />}
         />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="800">
       <Form.Item
         name="mail"
         hidden={!baiguullagaEsekh}
         label="И-мэйл хаяг"
-        data-aos="fade-right"
-        data-aos-delay="800"
       >
         <Input
           type="email"
@@ -251,12 +275,14 @@ const YurunkhiiMedeele = ({
           prefix={<MailOutlined />}
         />
       </Form.Item>
+      </div>
+      <div
+        data-aos="fade-right"
+        data-aos-delay="900">
       <Form.Item
         name="dans"
         hidden={baiguullagaEsekh}
         label="Төлөлт хийх данс"
-        data-aos="fade-right"
-        data-aos-delay="900"
       >
         <FormLavlakh
           lavlakh="dans"
@@ -282,12 +308,14 @@ const YurunkhiiMedeele = ({
           }}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-delay="900">
       <Form.Item
         name="dans"
         hidden={!baiguullagaEsekh}
         label="Төлөлт хийх данс"
-        data-aos="fade-right"
-        data-aos-delay="900"
       >
         <FormLavlakh
           lavlakh="dans"
@@ -313,6 +341,10 @@ const YurunkhiiMedeele = ({
           }}
         />
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-delay="500">
       <Form.Item
         hidden={!baiguullagaEsekh}
         name="gerchilgeeniiZurag"
@@ -320,8 +352,6 @@ const YurunkhiiMedeele = ({
         valuePropName="fileList"
         getValueFromEvent={normFile}
         extra="Гэрчилгээний хуулбар"
-        data-aos="fade-right"
-        data-aos-delay="500"
       >
         <Upload
           multiple={false}
@@ -335,12 +365,14 @@ const YurunkhiiMedeele = ({
           <Button icon={<UploadOutlined />}>Файл сонгох</Button>
         </Upload>
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-delay="1000">
       <Form.Item
         label="Хавсаргал"
         hidden={baiguullagaEsekh}
         className="w-full"
-        data-aos="fade-right"
-        data-aos-delay="1000"
       >
         <Form.Item
           name="zuvshuurliinZurag"
@@ -379,6 +411,7 @@ const YurunkhiiMedeele = ({
           </Upload>
         </Form.Item>
       </Form.Item>
+      </div>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div className="flex w-full justify-end">
           <Button

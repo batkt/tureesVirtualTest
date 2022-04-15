@@ -25,22 +25,25 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000">
       <Form.Item
         label="Түрээсийн төлбөр"
         style={{ marginBottom: 10 }}
-        data-aos="fade-right"
-        data-aos-duration="1000"
       >
         <div className="text-right text-lg font-medium dark:text-gray-100">
           {formatNumber(value.sariinTurees)}
         </div>
       </Form.Item>
+      </div>
+      <div
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="100">
       <Form.Item
         label="Барьцаа төлбөр"
         style={{ marginBottom: 10 }}
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="100"
       >
         <div className="text-right text-lg font-medium dark:text-gray-100">
           {`${formatNumber(
@@ -48,12 +51,14 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           )}`}
         </div>
       </Form.Item>
+      </div>
+      <div 
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="200">
       <Form.Item
         label="Нийт дүн"
         style={{ marginBottom: 10 }}
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="200"
       >
         <div className="text-right text-lg font-medium dark:text-gray-100">
           {formatNumber(
@@ -66,32 +71,38 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           )}
         </div>
       </Form.Item>
+      </div>
+      <div 
+       data-aos="fade-right"
+       data-aos-duration="1000"
+       data-aos-delay="300">
       <Form.Item
         label="Төлбөрийн хуваарь"
         name="khungulukhEsekh"
         style={{ marginBottom: 10 }}
         className="flex w-full justify-end dark:text-gray-100"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="300"
       >
         <Switch style={{ marginLeft: "auto" }} />
       </Form.Item>
+      </div>
       <Divider />
+      <div
+         data-aos="fade-right"
+         data-aos-duration="1000"
+         data-aos-delay="400">
       <Form.Item
         name="avlaga"
         noStyle
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="400"
       >
         <AvlagiinKhuvaariUusgekh ugugdul={value} />
       </Form.Item>
+      </div>
+      <div
+       data-aos="fade-right"
+       data-aos-duration="1000"
+       data-aos-delay="500">
       <Form.Item
         wrapperCol={{ span: 24 }}
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="500"
       >
         <div className="mt-4 flex w-full flex-row justify-between">
           <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
@@ -109,6 +120,7 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           )}
         </div>
       </Form.Item>
+      </div>
     </Form>
   );
 };

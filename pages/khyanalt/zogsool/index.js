@@ -259,14 +259,16 @@ function Zogsool({ token }) {
       </Card>
       <Card className="col-span-12">
         <div className="flex flex-row">
+          <div
+           data-aos="fade-right"
+           data-aos-duration="1000"
+           data-aos-delay="100">
           <DatePicker.RangePicker
             size="small"
             value={ognoo}
-            onChange={setOgnoo}
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
+            onChange={setOgnoo}           
           />
+          </div>
           <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
             Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
           </div>

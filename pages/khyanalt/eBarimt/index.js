@@ -173,15 +173,17 @@ function EbarimtMedeelel({ token }) {
         </div>
 
         <div className="mt-5 flex w-full flex-row justify-between">
+          <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="100">
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
             value={ekhlekhOgnoo}
-            onChange={setEkhlekhOgnoo}
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
+            onChange={setEkhlekhOgnoo}            
           />
+          </div>
           <div
             className="flex flex-row space-x-2"
             data-aos="fade-left"
