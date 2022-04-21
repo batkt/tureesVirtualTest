@@ -4,6 +4,7 @@ import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import { Button, Card, DatePicker, Popover, Space, Table } from "antd";
 import {
+  DownloadOutlined,
   DownOutlined,
   FileExcelOutlined,
   UploadOutlined,
@@ -21,6 +22,22 @@ import useOrder from "tools/function/useOrder";
 import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
+
+function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+  uilchilgee(token)
+    .get(service, {
+      params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
+    })
+    .then(({ data }) => {
+      const { Excel } = require("antd-table-saveas-excel");
+      const excel = new Excel();
+      excel
+        .addSheet(sheetName)
+        .addColumns(sheet)
+        .addDataSource(data?.jagsaalt)
+        .saveAs(sheetName + ".xlsx");
+    });
+}
 
 function Zogsool({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
@@ -216,9 +233,22 @@ function Zogsool({ token }) {
       },
     ];
   }, [turul]);
+
   useEffect(() => {
     Aos.init();
   });
+
+  function excelTatakh() {
+    excelTatajAvya(
+      token,
+      "/zogsool",
+      zogsoolGaralt.niitMur,
+      columns,
+      query,
+      order,
+      "Зогсоол"
+    );
+  }
 
   return (
     <Admin
@@ -260,14 +290,15 @@ function Zogsool({ token }) {
       <Card className="col-span-12">
         <div className="flex flex-row">
           <div
-           data-aos="fade-right"
-           data-aos-duration="1000"
-           data-aos-delay="100">
-          <DatePicker.RangePicker
-            size="small"
-            value={ognoo}
-            onChange={setOgnoo}           
-          />
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
+          >
+            <DatePicker.RangePicker
+              size="small"
+              value={ognoo}
+              onChange={setOgnoo}
+            />
           </div>
           <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
             Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
@@ -280,13 +311,20 @@ function Zogsool({ token }) {
           >
             <Popover
               content={() => (
-                <div className="flex w-32 flex-col">
+                <div className="flex w-32 flex-col space-y-2">
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                     onClick={mashinOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>Татах</label>
+                  </a>
+                  <a
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    onClick={excelTatakh}
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>Гаргах</label>
                   </a>
                 </div>
               )}
