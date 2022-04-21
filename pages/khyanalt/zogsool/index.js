@@ -320,14 +320,14 @@ function Zogsool({ token }) {
                     onClick={mashinOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>Оруулах</label>
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
                     onClick={excelTatakh}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Гаргах</label>
+                    <label>Татах</label>
                   </a>
                 </div>
               )}
