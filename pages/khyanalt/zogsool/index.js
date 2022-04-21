@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, Popover, Space, Table } from "antd";
+import { Button, Card, DatePicker, message, Popover, Space, Table } from "antd";
 import {
   DownloadOutlined,
   DownOutlined,
@@ -24,6 +24,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 
 function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+  message.loading("Өгөгдөл боловсруулж байна та түр хүлээнэ!", 100000);
   uilchilgee(token)
     .get(service, {
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
@@ -36,7 +37,9 @@ function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
         .addColumns(sheet)
         .addDataSource(data?.jagsaalt)
         .saveAs(sheetName + ".xlsx");
-    });
+    })
+    .catch(aldaaBarigch)
+    .finally(() => message.destroy());
 }
 
 function Zogsool({ token }) {
