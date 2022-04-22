@@ -421,10 +421,6 @@
   @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300 !important;
 }
 
-.ant-table-cell {
-  @apply bg-white dark:bg-gray-700 dark:text-gray-300 !important;
-}
-
 .ant-notification-notice-message {
   margin-bottom: 0 !important;
 }
@@ -708,8 +704,16 @@ input:-webkit-autofill {
   @apply flex items-center justify-center !important;
 }
 
-.ant-table-row:hover {
-  @apply bg-green-100 dark:bg-gray-600;
+.ant-table-cell {
+  @apply bg-white dark:bg-gray-700 dark:text-gray-300 !important;
+}
+
+.ant-table-row:nth-child(even) > .ant-table-cell {
+  @apply bg-green-50 dark:bg-gray-600 !important;
+}
+
+.ant-table-row:hover > .ant-table-cell {
+  @apply bg-green-200 dark:bg-gray-600 !important;
 }
 
 .ant-form-item-extra {
@@ -812,6 +816,6 @@ input:-webkit-autofill {
   @apply dark:text-gray-300 !important;
 }
 
-.ant-table-column-title{
+.ant-table-column-title {
   text-align: center !important;
 }
