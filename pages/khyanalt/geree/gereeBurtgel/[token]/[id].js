@@ -2,26 +2,22 @@ import readMethod from "tools/function/crud/readMethod";
 import { toWords } from "mon_num";
 import moment from "moment";
 import _ from "lodash";
-import {useRouter} from "next/router";
-import React from 'react'
+import { useRouter } from "next/router";
+import React from "react";
 import useSWR from "swr";
 
-const fetcher =async (token,id)=>{
-    if(!token || !id)
-      return {}
-    const { data: geree } = await readMethod(
-      "geree",
-      token,
-      id
-    );
+const fetcher = async (token, id, turul) => {
+  if (!token || !id) return {};
+  const { data: geree } = await readMethod("geree", token, id);
 
-    const { data } = await readMethod(
-      "gereeniiZagvar",
-      token,
-      geree.gereeniiZagvariinId
-    );
-  
-    if (!!data) {
+  const { data } = await readMethod(
+    "gereeniiZagvar",
+    token,
+    turul === "gereeniiZagvar" ? id : geree.gereeniiZagvariinId
+  );
+
+  if (!!data) {
+    if (turul !== "gereeniiZagvar") {
       if (geree.gereeniiOgnoo) {
         geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
         geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
@@ -38,7 +34,7 @@ const fetcher =async (token,id)=>{
       }
       geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
       geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
-  
+
       for (const [key, value] of Object.entries(geree)) {
         data.dedKhesguud
           .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
@@ -51,26 +47,26 @@ const fetcher =async (token,id)=>{
             value
           );
       }
-      data.geree = geree;
     }
+    data.geree = geree || {};
+  }
 
-    return data;
-}
+  return data;
+};
 
 function GereeBaiguulakh() {
-  const {query} = useRouter()
+  const { query } = useRouter();
 
-  const { token,id} = query
+  const { token, id, turul } = query;
+  console.log(token, id, turul);
 
   const { data } = useSWR(
-    !!token && !!id
-      ? [token, id]
-      : null,
-      fetcher,
+    !!token && !!id ? [token, id, turul] : null,
+    fetcher,
     { revalidateOnFocus: false }
-  )
+  );
 
-  const {geree,...gereeniiZagvar} = data || {}
+  const { geree, ...gereeniiZagvar } = data || {};
 
   return (
     <div className="w-full space-y-2 p-5">
@@ -106,19 +102,19 @@ function GereeBaiguulakh() {
         return (
           <div
             key={`alkhamiinGereeniiZagvar${index}`}
-            className="flex flex-row w-full p-1 relative group hover:bg-gray-100 rounded-md"
+            className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             {mur.kharagdakhDugaar ? (
               <>
                 <div className="text-center">{mur.kharagdakhDugaar}</div>
                 <div
-                  className="ml-5 text-justify break-word"
+                  className="break-word ml-5 text-justify"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
               </>
             ) : (
               <div
-                className="w-full text-center font-medium break-word"
+                className="break-word w-full text-center font-medium"
                 dangerouslySetInnerHTML={{ __html: mur.zaalt }}
               />
             )}
