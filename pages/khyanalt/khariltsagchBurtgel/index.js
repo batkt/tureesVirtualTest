@@ -72,7 +72,7 @@ function AjiltanBurtgel({ token }) {
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const [query, setQuery] = useState({});
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId, 1000, query, order);
+    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, query, order);
   const { khariltsagchToololt, khariltsagchToololtMutate } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
@@ -382,9 +382,7 @@ function AjiltanBurtgel({ token }) {
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000">
+          <div data-aos="fade-right" data-aos-duration="1000">
             <Form.Item
               name="turul"
               rules={[
@@ -408,7 +406,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="100">
+            data-aos-delay="100"
+          >
             <Form.Item
               hidden={formNuukh === "ААН" ? true : false}
               name="ovog"
@@ -432,7 +431,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="200">
+            data-aos-delay="200"
+          >
             <Form.Item
               name="ner"
               rules={[
@@ -455,7 +455,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <Form.Item
               name="register"
               rules={[
@@ -481,7 +482,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="400">
+            data-aos-delay="400"
+          >
             <Form.Item
               name="khayag"
               rules={[
@@ -533,9 +535,9 @@ function AjiltanBurtgel({ token }) {
                 <div
                   data-aos="fade-right"
                   data-aos-duration="1000"
-                  data-aos-delay="500">
-                  <Form.Item
-                  >
+                  data-aos-delay="500"
+                >
+                  <Form.Item>
                     <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }}>
                       <Input
                         allowClear
@@ -571,35 +573,34 @@ function AjiltanBurtgel({ token }) {
             )}
           </Form.List>
           <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="600">
-          <Form.Item
-            name="mail"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="600"
           >
-            <Input
-              type="email"
-              placeholder="И-мэйл хаяг"
-              value={khariltsagchState.email}
-              onChange={(e) => onChange("mail", e.target.value)}
-              prefix={<MailOutlined style={iconColor} />}
-            />
-          </Form.Item>
+            <Form.Item name="mail">
+              <Input
+                type="email"
+                placeholder="И-мэйл хаяг"
+                value={khariltsagchState.email}
+                onChange={(e) => onChange("mail", e.target.value)}
+                prefix={<MailOutlined style={iconColor} />}
+              />
+            </Form.Item>
           </div>
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="700">
-          <Form.Item          
+            data-aos-delay="700"
           >
-            <Button
-              //htmlType="submit"
-              onClick={khariltsagchBurtgekh}
-              style={{ backgroundColor: "#209669", color: "#ffffff" }}
-            >
-              Хадгалах
-            </Button>
-          </Form.Item>
+            <Form.Item>
+              <Button
+                //htmlType="submit"
+                onClick={khariltsagchBurtgekh}
+                style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              >
+                Хадгалах
+              </Button>
+            </Form.Item>
           </div>
         </Form>
       </div>
@@ -609,10 +610,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -791,7 +793,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -883,7 +885,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
