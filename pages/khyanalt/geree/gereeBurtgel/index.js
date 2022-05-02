@@ -199,7 +199,7 @@ const Tailbar = React.forwardRef(
       ref,
       () => ({
         khadgalya() {
-          if (shaltgaan !== "") {
+          if (shaltgaan === "") {
             notification.warning({
               message: "Анхаар",
               description: "Шалтгаан аа бичнэ үү",
