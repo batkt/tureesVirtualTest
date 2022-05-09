@@ -28,10 +28,6 @@ const YurunkhiiMedeele = ({
   barilgiinId,
 }) => {
   const [form] = Form.useForm();
-  const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
-    token,
-    baiguullaga?._id
-  );
 
   const sulEsekh = (talbainDugaar, callback) => {
     uilchilgee(token)
@@ -140,124 +136,84 @@ const YurunkhiiMedeele = ({
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
-      <div
-       data-aos="fade-right"
-       data-aos-duration="1000">
-      <Form.Item
-        label="Талбайн дугаар"
-        name="talbainDugaar"
-      >
-        <Input
-          placeholder="Талбайн дугаар"
-          onChange={(e) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(function () {
-              talbainDugaarUurchilyu(e);
-            }, 300);
-          }}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000">
+        <Form.Item label="Талбайн дугаар" name="talbainDugaar">
+          <Input
+            placeholder="Талбайн дугаар"
+            onChange={(e) => {
+              clearTimeout(timeout);
+              timeout = setTimeout(function () {
+                talbainDugaarUurchilyu(e);
+              }, 300);
+            }}
+          />
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="100">
-      <Form.Item
-        label="Талбайн нэгж үнэ"
-        name="talbainNegjUne"
-      >
-        <InputNumber
-          placeholder="Талбайн нэгж үнэ"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+        <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
+          <InputNumber
+            placeholder="Талбайн нэгж үнэ"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-       data-aos="fade-right"
-       data-aos-duration="1000"
-       data-aos-delay="200">
-      <Form.Item
-        label="Талбайн нийт үнэ"
-        name="talbainNiitUne"
-      >
-        <InputNumber
-          placeholder="Талбайн нийт үнэ"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
+        <Form.Item label="Талбайн нийт үнэ" name="talbainNiitUne">
+          <InputNumber
+            disabled
+            placeholder="Талбайн нийт үнэ"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="300">
-      <Form.Item
-        label="Талбайн хэмжээ"
-        name="talbainKhemjee"
-      >
-        <InputNumber
-          placeholder="Талбайн хэмжээ"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
+        <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
+          <InputNumber
+            placeholder="Талбайн хэмжээ"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="400">
-      <Form.Item
-        label="Давхар"
-        name="davkhar"
-      >
-        <InputNumber
-          placeholder="Давхар"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+        <Form.Item label="Давхар" name="davkhar">
+          <InputNumber
+            placeholder="Давхар"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-       data-aos="fade-right"
-       data-aos-duration="1000"
-       data-aos-delay="500">
-      <Form.Item
-        label="Ашиглалтын зардал"
-        name="zardliinDun"
-      >
-        <InputNumber
-          placeholder="Ашиглалтын зардал"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
+        <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
+          <InputNumber
+            placeholder="Ашиглалтын зардал"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="600">
-      <Form.Item
-        label="Зориулалт"
-        name="zoriulalt"
-      >
-        <Input placeholder="Зориулалт" />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="600">
+        <Form.Item label="Зориулалт" name="zoriulalt">
+          <Input placeholder="Зориулалт" />
+        </Form.Item>
       </div>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
