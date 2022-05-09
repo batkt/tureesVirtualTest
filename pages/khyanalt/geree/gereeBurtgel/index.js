@@ -199,6 +199,14 @@ const Tailbar = React.forwardRef(
       ref,
       () => ({
         khadgalya() {
+          if (shaltgaan === "") {
+            notification.warning({
+              message: "Анхаар",
+              description: "Шалтгаан аа бичнэ үү",
+            });
+            return;
+          }
+
           uilchilgee(token)
             .post(service, {
               gereeniiId: data?._id,

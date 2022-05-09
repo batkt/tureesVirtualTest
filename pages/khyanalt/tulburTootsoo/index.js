@@ -723,7 +723,7 @@ function tulburTootsoo({ token }) {
                             sorter: () => 0,
                             dataIndex: "Amt",
                             render(a) {
-                              return formatNumber(a);
+                              return a;
                             },
                           },
                           {
