@@ -171,7 +171,7 @@ function tulburTootsoo({ token }) {
             nemeltNekhemjlekh
           );
         }
-        return { zagvar, mail: a.mail };
+        return { zagvar, mail: medeelel.mail };
       });
     return [];
   }, [barimt, songogdsonGereenuud, nekhemjleliinJagsaalt]);
