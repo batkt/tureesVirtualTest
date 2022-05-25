@@ -11,11 +11,19 @@ import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
 function ProfileTovch({ ajiltan, garya, token }) {
-  const { sonorduulga,sonorduulgaMutate, jagsaalt, setKhuudaslalt,kharaaguiToo } =
-    useSonorduulga(token, ajiltan?._id);
+  const {
+    sonorduulga,
+    sonorduulgaMutate,
+    jagsaalt,
+    setKhuudaslalt,
+    kharaaguiToo,
+  } = useSonorduulga(token, ajiltan?._id);
 
-  function sonorduulgaKharlaa(id,sonorduulgaId) {
-    uilchilgee(token).post('/sanalKharlaa',{id,sonorduulgaId}).then(()=>sonorduulgaMutate()).catch(aldaaBarigch)
+  function sonorduulgaKharlaa(id, sonorduulgaId) {
+    uilchilgee(token)
+      .post("/sanalKharlaa", { id, sonorduulgaId })
+      .then(() => sonorduulgaMutate())
+      .catch(aldaaBarigch);
   }
 
   function onScroll(e) {
@@ -33,7 +41,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
   }
 
   return (
-    <div className="h-8 flex justify-end items-center gap-3">
+    <div className="flex h-8 items-center justify-end gap-3">
       <Dropdown
         trigger="click"
         overlay={
@@ -45,93 +53,125 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 <Empty description="Хоосон байна" />
               </Menu.Item>
             )}
-            <div style={{ maxHeight: "70vh", overflow: "auto" }}
-            onScroll={onScroll}>
-            {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur, i) => {
-              const {turul,message,khariltsagchiinNer,createdAt,_id} = mur?.object || {}
-              return (
-                <Menu.Item key={i} onClick={() => sonorduulgaKharlaa(_id,mur?._id)}>
-                  <Link
-                    href={`/khyanalt/medegdel/${turul}/${_id}`}
+            <div
+              style={{ maxHeight: "70vh", overflow: "auto" }}
+              onScroll={onScroll}
+            >
+              {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map((mur, i) => {
+                const {
+                  turul,
+                  message,
+                  khariltsagchiinNer,
+                  createdAt,
+                  _id,
+                  tailbar,
+                  duusakhOgnoo,
+                  ajiltniiNer,
+                } = mur?.object || {};
+                return (
+                  <Menu.Item
+                    key={i}
+                    onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
                   >
-                    <div className="cursor-pointer relative flex items-center justify-between">
-                    <div className="flex"style={{maxWidth: `2.5rem`}}>
-                        <Tooltip title={khariltsagchiinNer}>
-                          <img
-                            alt={khariltsagchiinNer}
-                            className={`w-10 h-10 zoom-in rounded-full bg-white`}
-                            src={"/profile.svg"}
-                          />
-                        </Tooltip>
-                        {!mur.kharsanEsekh && (
-                          <div className="w-3 h-3 bg-theme-9 absolute right-0 bottom-0 rounded-full border-2 border-white"></div>
-                        )}
-                      </div>
-                      <div className="ml-2 overflow-hidden w-60">
-                        <div className="w-full flex items-center">
-                          <a className="font-medium mr-5">
-                            {khariltsagchiinNer}
-                          </a>
-                          <div className="text-xs text-gray-500 ml-auto whitespace-nowrap">
-                            {moment(createdAt).format("YYYY-MM-DD HH:mm")}
+                    <Link href={`/khyanalt/medegdel/${turul}/${_id}`}>
+                      <div className="relative flex cursor-pointer items-center justify-between">
+                        <div className="flex" style={{ maxWidth: `2.5rem` }}>
+                          <Tooltip title={khariltsagchiinNer}>
+                            <img
+                              alt={khariltsagchiinNer}
+                              className={`zoom-in h-10 w-10 rounded-full bg-white`}
+                              src={"/profile.svg"}
+                            />
+                          </Tooltip>
+                          {!mur.kharsanEsekh && (
+                            <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                          )}
+                        </div>
+                        <div className="ml-2 w-60 overflow-hidden">
+                          <div className="flex w-full items-center">
+                            <a className="mr-5 font-medium">
+                              {khariltsagchiinNer || ajiltniiNer}
+                            </a>
+                            <div className="ml-auto whitespace-nowrap text-xs text-gray-500">
+                              {moment(duusakhOgnoo || createdAt).format(
+                                "YYYY-MM-DD HH:mm"
+                              )}
+                            </div>
+                          </div>
+                          <div className="mt-0.5 flex w-full flex-row text-gray-600">
+                            <div>{message || tailbar}</div>
+                            {mur.turul === "daalgavar" && (
+                              <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
+                                Даалгавар
+                              </div>
+                            )}
                           </div>
                         </div>
-                        <div className="w-full text-gray-600 mt-0.5">
-                          {message}
-                        </div>
                       </div>
+                    </Link>
+                  </Menu.Item>
+                );
+              })}
+              {!sonorduulga && (
+                <Menu.Item>
+                  <div className="relative flex cursor-pointer items-center justify-between">
+                    <div className="flex" style={{ width: `3.5rem` }}>
+                      <Skeleton.Avatar active />
                     </div>
-                  </Link>
+                    <div className="ml-2 w-60 overflow-hidden">
+                      <div className="flex w-full items-center">
+                        <Skeleton.Input
+                          active
+                          size="small"
+                          style={{ width: "5rem" }}
+                        />
+                        <Skeleton.Input
+                          active
+                          size="small"
+                          className="ml-auto"
+                          style={{ width: "5rem" }}
+                        />
+                      </div>
+                      <Skeleton.Input
+                        active
+                        size="small"
+                        className="mt-2"
+                        style={{ width: "15rem" }}
+                      />
+                    </div>
+                  </div>
                 </Menu.Item>
-              );
-            })}
-            {!sonorduulga && (
-              <Menu.Item>
-                <div className="cursor-pointer relative flex items-center justify-between">
-                  <div className="flex" style={{ width: `3.5rem` }}>
-                    <Skeleton.Avatar active />
-                  </div>
-                  <div className="ml-2 overflow-hidden w-60">
-                    <div className="w-full flex items-center">
-                      <Skeleton.Input
-                        active
-                        size="small"
-                        style={{ width: "5rem" }}
-                      />
-                      <Skeleton.Input
-                        active
-                        size="small"
-                        className="ml-auto"
-                        style={{ width: "5rem" }}
-                      />
-                    </div>
-                    <Skeleton.Input
-                      active
-                      size="small"
-                      className="mt-2"
-                      style={{ width: "15rem" }}
-                    />
-                  </div>
-                </div>
-              </Menu.Item>
-            )}
+              )}
             </div>
           </Menu>
         }
       >
-        <button className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 dark:text-white focus:ring-blue-600 focus:ring-opacity-50">
+        <button className="focus:outline-none flex h-8 w-8 items-center justify-center rounded-full focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white">
           <Badge count={kharaaguiToo} dot>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" 
-              strokeLinejoin="round" className="feather feather-bell block mx-auto w-5 h-5 dark:text-white"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-bell mx-auto block h-5 w-5 dark:text-white"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
           </Badge>
         </button>
       </Dropdown>
       <Dropdown
         overlayClassName="profile"
         overlay={
-          <Menu >
+          <Menu>
             <Menu.Item className="profileMenuItem">
-              <div className="text-lg text-white font-medium">
+              <div className="text-lg font-medium text-white">
                 {`${ajiltan?.ovog[0] || ""}.${ajiltan?.ner}`}
               </div>
               <div className="text-sm font-medium text-gray-200">
@@ -142,7 +182,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
             <Menu.Item key="0" className="profileMenuItem">
               <Link href="/khyanalt/tokhirgoo">
                 <a>
-                  <div className="flex items-center w-44 text-white space-x-2 dark:text-gray-100">
+                  <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
                     <SettingOutlined />
                     <span>Тохиргоо</span>
                   </div>
@@ -150,14 +190,14 @@ function ProfileTovch({ ajiltan, garya, token }) {
               </Link>
             </Menu.Item>
             <Menu.Item key="1" className="profileMenuItem">
-              <div className="flex items-center w-44 text-white space-x-2">
+              <div className="flex w-44 items-center space-x-2 text-white">
                 <QuestionOutlined />
                 <span>Тусламж</span>
               </div>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="3" onClick={garya} className="profileMenuItem">
-              <div className="flex items-center w-44 space-x-2 text-white">
+              <div className="flex w-44 items-center space-x-2 text-white">
                 <LogoutOutlined />
                 <span>Гарах</span>
               </div>
@@ -167,7 +207,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
         trigger="click"
         className="cursor-pointer"
       >
-        <button className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+        <button className="focus:outline-none flex h-8 w-8 items-center justify-center rounded-full focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
           <img
             alt={ajiltan?.ner}
             src={
@@ -175,7 +215,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                 : "/profile.svg"
             }
-            className="h-8 w-8 rounded-full p-1 shadow-xl bg-gray-200"
+            className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"
           />
         </button>
       </Dropdown>
