@@ -25,7 +25,12 @@ function Daalgavar({ onClose, token, ...object }) {
         <div className="mt-1 text-gray-600">
           {moment(duusakhOgnoo).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1 text-gray-600">{tailbar}</div>
+        <div className="mt-1 flex flex-row space-x-10 text-gray-600">
+          <div>{tailbar}</div>
+          <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
+            Даалгавар
+          </div>
+        </div>
       </div>
       <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">
         <a
