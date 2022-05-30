@@ -1,4 +1,5 @@
 import {
+  AudioOutlined,
   CheckOutlined,
   ClockCircleOutlined,
   DotChartOutlined,
@@ -147,7 +148,27 @@ function index() {
             </div>
           ))}
         </div>
-        <div className="w-full "></div>
+        <div className="w-full">
+          <div className="flex h-auto w-full flex-row py-2">
+            <div className="w-full px-2">
+              <input
+                className="h-10 w-full border border-gray-300 p-2"
+                placeholder="Тайлбар"
+              />
+            </div>
+            <div className="flex flex-row space-x-3">
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                <AudioOutlined />
+              </div>
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                <PictureOutlined />
+              </div>
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                <SendOutlined />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Admin>
   );
