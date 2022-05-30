@@ -174,7 +174,7 @@ export const tsonknuud = [
       "Борлуулалтын\nАшигийн тооцоо\nЗардлын тооцоо\nАвлагын насжилтаар\n",
     tokhirgoo: [],
   },
-]
+];
 
 export const khereglegchiinErkhuud = [
   {
@@ -201,19 +201,19 @@ export const khereglegchiinErkhuud = [
       "/khyanalt/tulburTootsoo/guilgeeniiTuukh",
     ],
   },
-]
+];
 
 export function undsenKhuudasOlyo(url) {
-  if (url.includes("khyanalt/tokhirgoo")) return "khyanalt/tokhirgoo"
+  if (url.includes("khyanalt/tokhirgoo")) return "khyanalt/tokhirgoo";
   if (!!tsonknuud.find((a) => url === a.key))
-    return tsonknuud.find((a) => url === a.key)?.key
-  return tsonknuud.find((a) => url.includes(a.key))?.key
+    return tsonknuud.find((a) => url === a.key)?.key;
+  return tsonknuud.find((a) => url.includes(a.key))?.key;
 }
 
 export function ekhniiTsonkhruuOchyo(ajiltan) {
   if (ajiltan?.erkh === "Admin")
-    window.location.href = "/khyanalt/geree/gereeBurtgel"
-  else window.location.href = ajiltan.tsonkhniiErkhuud[0]
+    window.location.href = "/khyanalt/geree/gereeBurtgel";
+  else window.location.href = ajiltan.tsonkhniiErkhuud[0];
 }
 
 const khuudasnuud = [
@@ -705,24 +705,50 @@ const khuudasnuud = [
       </svg>
     ),
   },
-]
+  {
+    ner: "Даалгавар",
+    khuudasniiNer: "daalgavar",
+    href: "/khyanalt/daalgavar",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        iconName="file-text"
+        dataLucide="file-text"
+      >
+        <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <line x1="10" y1="9" x2="8" y2="9"></line>
+      </svg>
+    ),
+  },
+];
 
 function useErkh(ajiltan) {
-  if (!ajiltan) return []
+  if (!ajiltan) return [];
 
   return khuudasnuud
     .map((x) => {
-      if (x.href.includes("khyanalt/tokhirgoo")) return x
-      if (ajiltan.erkh === "Admin") return x
+      if (x.href.includes("khyanalt/tokhirgoo")) return x;
+      if (ajiltan.erkh === "Admin") return x;
       else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
           (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
-        )
-        if (x.sub.length > 0) return x
+        );
+        if (x.sub.length > 0) return x;
       } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
-        return x
+        return x;
     })
-    .filter((x) => !!x)
+    .filter((x) => !!x);
 }
 
-export default useErkh
+export default useErkh;
