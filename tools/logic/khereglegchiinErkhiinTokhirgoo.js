@@ -174,6 +174,10 @@ export const tsonknuud = [
       "Борлуулалтын\nАшигийн тооцоо\nЗардлын тооцоо\nАвлагын насжилтаар\n",
     tokhirgoo: [],
   },
+  {
+    ner: "Даалгавар",
+    key: "/khyanalt/daalgavar",
+  },
 ];
 
 export const khereglegchiinErkhuud = [

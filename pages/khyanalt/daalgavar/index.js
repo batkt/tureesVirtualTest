@@ -2,35 +2,62 @@ import {
   AudioOutlined,
   CheckOutlined,
   ClockCircleOutlined,
-  DotChartOutlined,
   FlagOutlined,
-  GifOutlined,
   HistoryOutlined,
-  LoadingOutlined,
-  PaperClipOutlined,
   PictureOutlined,
   SendOutlined,
-  SmileOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Input } from "antd";
 import moment from "moment";
 import Admin from "components/Admin";
 import React from "react";
+import useJagsaalt from "hooks/useJagsaalt";
+import { useAuth } from "services/auth";
+import uilchilgee from "services/uilchilgee";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import { Popconfirm } from "antd";
 
 const tasks = [{ started: true }, {}, {}];
 
-const { TextArea } = Input;
-function index() {
+function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
+  const [daalgavar, setDaalgavar] = React.useState();
+  const { ajiltan } = useAuth();
+
+  const query = React.useMemo(() => ({ ajiltniiId: ajiltan?._id }), [ajiltan]);
+
+  const task = useJagsaalt("/daalgavar", query);
+
+  function daalgavarKhuleejAvlaa() {
+    uilchilgee(token)
+      .post("/daalgavarKhuleejAvlaa", { id: daalgavar._id })
+      .then(({ data }) => {
+        if (data === "Amjilttai") setDaalgavar((v) => ({ ...v, tuluv: 1 }));
+      })
+      .finally(() => task.mutate());
+  }
+  function daalgavarDuusgalaa() {
+    uilchilgee(token)
+      .post("/daalgavarDuusgalaa", { id: daalgavar._id })
+      .then(({ data }) => {
+        if (data === "Amjilttai") setDaalgavar((v) => ({ ...v, tuluv: 2 }));
+      })
+      .finally(() => task.mutate());
+  }
+
+  function batlakh() {
+    if (daalgavar.tuluv === 0) daalgavarKhuleejAvlaa();
+    else if (daalgavar.tuluv === 1) daalgavarDuusgalaa();
+  }
+
   return (
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
       className={"h-5/6 gap-5 p-6"}
     >
-      <div className="col-span-4 flex flex-col space-y-5 bg-white p-8">
-        <div className="grid grid-cols-3 gap-5 rounded-xl bg-indigo-300 p-2 text-xl font-medium">
+      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 lg:col-span-6 xl:col-span-4">
+        <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 text-xl font-medium">
           {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
             <div
               onClick={() => setTuluv(status)}
@@ -43,43 +70,51 @@ function index() {
           ))}
         </div>
         <div className="w-full divide-y">
-          {tasks.map((mur, index) => (
+          {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className="flex w-full flex-row space-x-2 p-2"
+              className={`flex w-full cursor-pointer flex-row space-x-2 p-2 ${
+                daalgavar?._id === mur._id ? "bg-green-100" : ""
+              }`}
               key={`${index}-daalgavar`}
+              onClick={() => setDaalgavar(mur)}
             >
               <div
                 className={`h-10 w-10 rounded-lg bg-${
-                  mur.started ? "green" : "indigo"
-                }-300 text-2xl text-white`}
+                  mur.started ? "green" : "green"
+                }-500 text-2xl text-white`}
               >
-                {mur.started ? <HistoryOutlined /> : <ClockCircleOutlined />}
+                {mur.tuluv === 1 ? (
+                  <HistoryOutlined />
+                ) : (
+                  <ClockCircleOutlined />
+                )}
               </div>
               <div className="w-full">
                 <div className="flex w-full flex-row justify-between">
                   <span className="font-medium text-gray-700">Захирал</span>
-                  <span className="ml-auto">{moment().format("MM/DD")}</span>
+                  <span className="ml-auto">
+                    {moment(mur.ognoo).format("MM/DD")}
+                  </span>
                 </div>
                 <div className="grid grid-cols-12">
                   <div className="col-span-11">
-                    <div className="text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium">
-                      Where does it come from?
+                    <div
+                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${
+                        mur.tuluv === 1
+                          ? "yellow"
+                          : mur.tuluv === 2
+                          ? "green"
+                          : "red"
+                      }-500`}
+                    >
+                      {mur.tuluv === 1
+                        ? "Хүлээн авсан"
+                        : mur.tuluv === 2
+                        ? "Дууссан"
+                        : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words">
-                      Contrary to popular belief, Lorem Ipsum is not simply
-                      random text. It has roots in a piece of classical Latin
-                      literature from 45 BC, making it over 2000 years old.
-                      Richard McClintock, a Latin professor at Hampden-Sydney
-                      College in Virginia, looked up one of the more obscure
-                      Latin words, consectetur, from a Lorem Ipsum passage, and
-                      going through the cites of the word in classical
-                      literature, discovered the undoubtable source. Lorem Ipsum
-                      comes from sections 1.10.32 and 1.10.33 of "de Finibus
-                      Bonorum et Malorum" (The Extremes of Good and Evil) by
-                      Cicero, written in 45 BC. This book is a treatise on the
-                      theory of ethics, very popular during the Renaissance. The
-                      first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..",
-                      comes from a line in section 1.10.32.
+                      {mur.tailbar}
                     </div>
                   </div>
                   <div className="col-span-1 flex cursor-pointer flex-col items-end text-yellow-500">
@@ -92,27 +127,58 @@ function index() {
         </div>
       </div>
       {/* chat */}
-      <div className="col-span-8 flex flex-col gap-5 divide-y bg-white p-1">
-        <div className="w-full">
-          <div className="px-5 py-2 text-2xl font-bold">Lorem Ipsum</div>
-          <div className="flex flex-row items-center px-5">
-            <div className="flex flex-row items-center space-x-2">
-              <FlagOutlined />
-              <div>Lorem Ipsum</div>
+      {daalgavar && (
+        <div className="col-span-12 flex flex-col gap-5 divide-y bg-white p-1 lg:col-span-6 xl:col-span-8">
+          <div className="w-full">
+            <div className="px-5 py-2 text-2xl font-bold">Lorem Ipsum</div>
+            <div className="flex flex-row items-center px-5">
+              <div className="flex flex-row items-center space-x-2">
+                <FlagOutlined />
+                <div>Lorem Ipsum</div>
+              </div>
+              <div className="ml-auto flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
+                <CheckOutlined />
+                <span>Marked as Closed</span>
+              </div>
+              <div className="ml-5 flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
+                ...
+              </div>
+              <div></div>
             </div>
-            <div className="ml-auto flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
-              <CheckOutlined />
-              <span>Marked as Closed</span>
-            </div>
-            <div className="ml-5 flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
-              ...
-            </div>
-            <div></div>
           </div>
-        </div>
-        <div className="w-full space-y-5 divide-y p-5">
-          {tasks.map((mur, index) => (
-            <div key={`${index}-daalgavar`} className="flex flex-row p-2">
+          <div className="w-full space-y-5 divide-y p-5">
+            <div className="flex w-full justify-center pt-5">
+              <Popconfirm
+                disabled={daalgavar.tuluv === 2}
+                title={`Та даалгавар ${
+                  0 === daalgavar.tuluv
+                    ? "Хүлээж авах "
+                    : 1 === daalgavar.tuluv
+                    ? "дуусгах"
+                    : ""
+                } уу?`}
+                okText="Тийм"
+                cancelText="Үгүй"
+                onConfirm={() => batlakh()}
+              >
+                <div
+                  className={`text-md cursor-pointer rounded-full bg-${
+                    0 === daalgavar.tuluv
+                      ? "red"
+                      : 1 === daalgavar.tuluv
+                      ? "yellow"
+                      : "green"
+                  }-400 py-2 px-5 font-medium text-gray-50`}
+                >
+                  {0 === daalgavar.tuluv
+                    ? "Хүлээж авах"
+                    : 1 === daalgavar.tuluv
+                    ? "Хийгдэж байна"
+                    : "Дууссан"}
+                </div>
+              </Popconfirm>
+            </div>
+            <div className="flex flex-row p-2">
               <div className="h-10 w-10 rounded-full bg-gray-300"></div>
               <div className="w-full p-2">
                 <div className="flex flex-row">
@@ -121,19 +187,8 @@ function index() {
                     {moment().format("YYYY/MM/DD HH:mm")}
                   </div>
                 </div>
-                <div>
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s, when an unknown
-                  printer took a galley of type and scrambled it to make a type
-                  specimen book. It has survived not only five centuries, but
-                  also the leap into electronic typesetting, remaining
-                  essentially unchanged. It was popularised in the 1960s with
-                  the release of Letraset sheets containing Lorem Ipsum
-                  passages, and more recently with desktop publishing software
-                  like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-                {mur.started && (
+                <div>{daalgavar?.tailbar}.</div>
+                {!!daalgavar?.file && daalgavar?.file?.length > 0 && (
                   <div className="w-full border border-gray-600">
                     <div className="flex flex-row items-center space-x-2 p-2">
                       <PictureOutlined />
@@ -146,32 +201,34 @@ function index() {
                 )}
               </div>
             </div>
-          ))}
-        </div>
-        <div className="w-full">
-          <div className="flex h-auto w-full flex-row py-2">
-            <div className="w-full px-2">
-              <input
-                className="h-10 w-full border border-gray-300 p-2"
-                placeholder="Тайлбар"
-              />
-            </div>
-            <div className="flex flex-row space-x-3">
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
-                <AudioOutlined />
+          </div>
+          <div className="w-full">
+            <div className="flex h-auto w-full flex-row py-2">
+              <div className="w-full px-2">
+                <input
+                  className="h-10 w-full border border-gray-300 p-2"
+                  placeholder="Тайлбар"
+                />
               </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
-                <PictureOutlined />
-              </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
-                <SendOutlined />
+              <div className="flex flex-row space-x-3">
+                <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                  <AudioOutlined />
+                </div>
+                <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                  <PictureOutlined />
+                </div>
+                <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl">
+                  <SendOutlined />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </Admin>
   );
 }
+
+export const getServerSideProps = shalgaltKhiikh;
 
 export default index;
