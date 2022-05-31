@@ -32,7 +32,7 @@ function index({ token }) {
     [ajiltan, tuluv]
   );
 
-  const task = useJagsaalt("/daalgavar", query, order);
+  const task = useJagsaalt(ajiltan && "/daalgavar", query, order);
 
   function daalgavarKhuleejAvlaa() {
     uilchilgee(token)
