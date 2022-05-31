@@ -17,16 +17,22 @@ import uilchilgee from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Popconfirm } from "antd";
 
-const tasks = [{ started: true }, {}, {}];
+const order = { createdAt: -1 };
 
 function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
   const [daalgavar, setDaalgavar] = React.useState();
   const { ajiltan } = useAuth();
 
-  const query = React.useMemo(() => ({ ajiltniiId: ajiltan?._id }), [ajiltan]);
+  const query = React.useMemo(
+    () => ({
+      ajiltniiId: ajiltan?._id,
+      tuluv: tuluv === "Идэвхитэй" ? [0, 1] : tuluv === "Дууссан" ? 2 : 3,
+    }),
+    [ajiltan, tuluv]
+  );
 
-  const task = useJagsaalt("/daalgavar", query);
+  const task = useJagsaalt("/daalgavar", query, order);
 
   function daalgavarKhuleejAvlaa() {
     uilchilgee(token)
@@ -55,6 +61,7 @@ function index({ token }) {
       khuudasniiNer="daalgavar"
       title="Даалгавар"
       className={"h-5/6 gap-5 p-6"}
+      onSearch={task.onSearch}
     >
       <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 lg:col-span-6 xl:col-span-4">
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 text-xl font-medium">
@@ -93,7 +100,7 @@ function index({ token }) {
                 <div className="flex w-full flex-row justify-between">
                   <span className="font-medium text-gray-700">Захирал</span>
                   <span className="ml-auto">
-                    {moment(mur.ognoo).format("MM/DD")}
+                    {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                   </span>
                 </div>
                 <div className="grid grid-cols-12">
