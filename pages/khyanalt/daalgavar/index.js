@@ -10,12 +10,13 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import Admin from "components/Admin";
-import React from "react";
+import React, { useEffect } from "react";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useAuth } from "services/auth";
 import uilchilgee from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Popconfirm } from "antd";
+import Aos from "aos";
 
 const order = { createdAt: -1 };
 
@@ -23,6 +24,7 @@ function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
   const [daalgavar, setDaalgavar] = React.useState();
   const { ajiltan } = useAuth();
+  const inputRef = React.useRef()
 
   const query = React.useMemo(
     () => ({
@@ -55,6 +57,13 @@ function index({ token }) {
     if (daalgavar.tuluv === 0) daalgavarKhuleejAvlaa();
     else if (daalgavar.tuluv === 1) daalgavarDuusgalaa();
   }
+  useEffect(() => {
+    Aos.init({duration:1000})
+  })
+
+  function myFunction() {
+    inputRef.current.focus();
+  }
 
   return (
     <Admin
@@ -63,11 +72,13 @@ function index({ token }) {
       className={"h-5/6 gap-5 p-6"}
       onSearch={task.onSearch}
     >
-      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 lg:col-span-6 xl:col-span-4">
-        <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 text-xl font-medium">
+      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 lg:col-span-6 xl:col-span-5">
+        <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 2xl:text-xl font-medium lg:text-sm xl:text-base sm:text-lg">
           {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
             <div
               onClick={() => setTuluv(status)}
+              data-aos="fade-down"
+              data-aos-delay={1 + status + "00"}
               className={`cursor-pointer rounded-lg p-1 text-center ${
                 tuluv === status ? "bg-white text-gray-800 " : "text-gray-50"
               }`}
@@ -83,7 +94,13 @@ function index({ token }) {
                 daalgavar?._id === mur._id ? "bg-green-100" : ""
               }`}
               key={`${index}-daalgavar`}
-              onClick={() => setDaalgavar(mur)}
+              onClick={() =>{
+                myFunction() 
+                setDaalgavar(mur) 
+              }}
+              data-aos="fade-right"
+              data-aos-delay={1 + index + "00"}
+              data-aos-anchor-placement="top-bottom"
             >
               <div
                 className={`h-10 w-10 rounded-lg bg-${
@@ -134,33 +151,25 @@ function index({ token }) {
         </div>
       </div>
       {/* chat */}
-      {daalgavar && (
-        <div className="col-span-12 flex flex-col gap-5 divide-y bg-white p-1 lg:col-span-6 xl:col-span-8">
+      
+        <div className={`col-span-12 ${daalgavar ? 'flex' : 'hidden'} flex-col gap-5 divide-y bg-white p-1 lg:col-span-6 xl:col-span-7`} data-aos="flip-left" data-aos-delay="200" data-aos-anchor-placement="top-bottom">
           <div className="w-full">
-            <div className="px-5 py-2 text-2xl font-bold">Lorem Ipsum</div>
+            <div className="px-5 py-2 text-2xl font-bold">Даалгавар</div>
             <div className="flex flex-row items-center px-5">
               <div className="flex flex-row items-center space-x-2">
                 <FlagOutlined />
-                <div>Lorem Ipsum</div>
+                <div>Долоо, найман давхарын засвар</div>
               </div>
-              <div className="ml-auto flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
-                <CheckOutlined />
-                <span>Marked as Closed</span>
-              </div>
-              <div className="ml-5 flex flex-row items-center space-x-2 border border-gray-400 bg-gray-100 py-1 px-2">
-                ...
-              </div>
-              <div></div>
             </div>
           </div>
-          <div className="w-full space-y-5 divide-y p-5">
+          <div className="w-full space-y-5 divide-y p-5" data-aos="flip-right" data-aos-delay="300">
             <div className="flex w-full justify-center pt-5">
               <Popconfirm
-                disabled={daalgavar.tuluv === 2}
+                disabled={daalgavar?.tuluv === 2}
                 title={`Та даалгавар ${
-                  0 === daalgavar.tuluv
+                  0 === daalgavar?.tuluv
                     ? "Хүлээж авах "
-                    : 1 === daalgavar.tuluv
+                    : 1 === daalgavar?.tuluv
                     ? "дуусгах"
                     : ""
                 } уу?`}
@@ -170,26 +179,26 @@ function index({ token }) {
               >
                 <div
                   className={`text-md cursor-pointer rounded-full bg-${
-                    0 === daalgavar.tuluv
+                    0 === daalgavar?.tuluv
                       ? "red"
-                      : 1 === daalgavar.tuluv
+                      : 1 === daalgavar?.tuluv
                       ? "yellow"
                       : "green"
                   }-400 py-2 px-5 font-medium text-gray-50`}
                 >
-                  {0 === daalgavar.tuluv
+                  {0 === daalgavar?.tuluv
                     ? "Хүлээж авах"
-                    : 1 === daalgavar.tuluv
+                    : 1 === daalgavar?.tuluv
                     ? "Хийгдэж байна"
                     : "Дууссан"}
                 </div>
               </Popconfirm>
             </div>
             <div className="flex flex-row p-2">
-              <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+              <div className="h-11 w-11 rounded-full bg-gray-300 "><img src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png" className="h-10 w-10 rounded-full"/></div>
               <div className="w-full p-2">
                 <div className="flex flex-row">
-                  <div className="py-2 font-medium">Lorem Ipsum</div>
+                  <div className="py-2 font-medium">Захирал</div>
                   <div className="ml-auto py-2 text-xs font-medium text-gray-700">
                     {moment().format("YYYY/MM/DD HH:mm")}
                   </div>
@@ -215,6 +224,8 @@ function index({ token }) {
                 <input
                   className="h-10 w-full border border-gray-300 p-2"
                   placeholder="Тайлбар"
+                  autoFocus
+                  ref={inputRef}
                 />
               </div>
               <div className="flex flex-row space-x-3">
@@ -231,7 +242,7 @@ function index({ token }) {
             </div>
           </div>
         </div>
-      )}
+      
     </Admin>
   );
 }
