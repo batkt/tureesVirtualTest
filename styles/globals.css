@@ -819,3 +819,8 @@ input:-webkit-autofill {
 .ant-table-column-title {
   text-align: center !important;
 }
+
+.ant-image-preview-img-wrapper {
+  display: flex;
+  justify-content: center;
+}
