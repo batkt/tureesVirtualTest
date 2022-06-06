@@ -232,19 +232,22 @@ function index({ token }) {
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
                 <div className="w-full border border-gray-600">
                   <div className="flex flex-row items-center space-x-2 p-2">
-                    {daalgavar.zurguud?.map((mur) => (
-                      <div key={mur}>
+                    <Image.PreviewGroup>
+                      {daalgavar.zurguud?.map((mur) => (
                         <Image
+                          key={mur}
                           alt={mur}
                           width="10rem"
                           src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
                         />
-                        <span>Зураг</span>
-                      </div>
-                    ))}
+                      ))}
+                    </Image.PreviewGroup>
                     {daalgavar.file?.map((mur) => (
-                      <audio controls>
-                        <source src="horse.ogg" type="audio/ogg" />
+                      <audio controls key={mur}>
+                        <source
+                          src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                          type="audio/ogg"
+                        />
                         <source
                           src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
                           type="audio/mpeg"
