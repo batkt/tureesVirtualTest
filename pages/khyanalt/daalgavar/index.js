@@ -13,9 +13,9 @@ import Admin from "components/Admin";
 import React, { useEffect } from "react";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useAuth } from "services/auth";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Popconfirm } from "antd";
+import { Image, Popconfirm } from "antd";
 import Aos from "aos";
 
 const order = { createdAt: -1 };
@@ -24,7 +24,7 @@ function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
   const [daalgavar, setDaalgavar] = React.useState();
   const { ajiltan } = useAuth();
-  const inputRef = React.useRef()
+  const inputRef = React.useRef();
 
   const query = React.useMemo(
     () => ({
@@ -58,8 +58,8 @@ function index({ token }) {
     else if (daalgavar.tuluv === 1) daalgavarDuusgalaa();
   }
   useEffect(() => {
-    Aos.init({ duration: 1000 })
-  })
+    Aos.init({ duration: 1000 });
+  });
 
   function myFunction() {
     inputRef.current.focus();
@@ -72,15 +72,16 @@ function index({ token }) {
       className={"h-5/6 gap-5 p-6"}
       onSearch={task.onSearch}
     >
-      <div className="col-span-12 flex flex-col space-y-5 dark:bg-green-900 bg-white p-8 lg:col-span-6 xl:col-span-5">
-        <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 2xl:text-xl font-medium lg:text-sm xl:text-base sm:text-lg">
+      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-green-900 lg:col-span-6 xl:col-span-5">
+        <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 font-medium sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
           {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
             <div
               onClick={() => setTuluv(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
-              className={`cursor-pointer rounded-lg p-1 text-center ${tuluv === status ? "bg-white text-gray-800 " : "text-gray-50"
-                }`}
+              className={`cursor-pointer rounded-lg p-1 text-center ${
+                tuluv === status ? "bg-white text-gray-800 " : "text-gray-50"
+              }`}
             >
               {status}
             </div>
@@ -89,20 +90,24 @@ function index({ token }) {
         <div className="w-full divide-y">
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`flex w-full cursor-pointer flex-row space-x-2 p-2 ${daalgavar?._id === mur._id ? "bg-green-100 dark:bg-green-700" : ""
-                }`}
+              className={`flex w-full cursor-pointer flex-row space-x-2 p-2 ${
+                daalgavar?._id === mur._id
+                  ? "bg-green-100 dark:bg-green-700"
+                  : ""
+              }`}
               key={`${index}-daalgavar`}
               onClick={() => {
-                myFunction()
-                setDaalgavar(mur)
+                myFunction();
+                setDaalgavar(mur);
               }}
               data-aos="fade-right"
               data-aos-delay={1 + index + "00"}
               data-aos-anchor-placement="top-bottom"
             >
               <div
-                className={`h-10 w-10 rounded-lg bg-${mur.started ? "green" : "green"
-                  }-500 text-2xl text-white`}
+                className={`h-10 w-10 rounded-lg bg-${
+                  mur.started ? "green" : "green"
+                }-500 text-2xl text-white`}
               >
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
@@ -112,7 +117,9 @@ function index({ token }) {
               </div>
               <div className="w-full">
                 <div className="flex w-full flex-row justify-between">
-                  <span className="font-medium text-gray-700 dark:text-gray-100">Захирал</span>
+                  <span className="font-medium text-gray-700 dark:text-gray-100">
+                    Захирал
+                  </span>
                   <span className="ml-auto">
                     {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                   </span>
@@ -120,18 +127,19 @@ function index({ token }) {
                 <div className="grid grid-cols-12">
                   <div className="col-span-11">
                     <div
-                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${mur.tuluv === 1
-                        ? "yellow"
-                        : mur.tuluv === 2
+                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${
+                        mur.tuluv === 1
+                          ? "yellow"
+                          : mur.tuluv === 2
                           ? "green"
                           : "red"
-                        }-500`}
+                      }-500`}
                     >
                       {mur.tuluv === 1
                         ? "Хүлээн авсан"
                         : mur.tuluv === 2
-                          ? "Дууссан"
-                          : "Эхлээгүй"}
+                        ? "Дууссан"
+                        : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words">
                       {mur.tailbar}
@@ -148,68 +156,108 @@ function index({ token }) {
       </div>
       {/* chat */}
 
-      <div className={`col-span-12 ${daalgavar ? 'flex' : 'hidden'} flex-col gap-5 dark:bg-green-900 bg-white p-1 lg:col-span-6 xl:col-span-7`} data-aos="flip-left" data-aos-delay="200" data-aos-anchor-placement="top-bottom">
-        <div className="w-full space-y-5 p-5" data-aos="flip-right" data-aos-delay="300">
+      <div
+        className={`col-span-12 ${
+          daalgavar ? "flex" : "hidden"
+        } flex-col gap-5 bg-white p-1 dark:bg-green-900 lg:col-span-6 xl:col-span-7`}
+        data-aos="flip-left"
+        data-aos-delay="200"
+        data-aos-anchor-placement="top-bottom"
+      >
+        <div
+          className="w-full space-y-5 p-5"
+          data-aos="flip-right"
+          data-aos-delay="300"
+        >
           <div className="flex flex-row p-2">
-            <div className="h-11 w-11 rounded-full  bg-gray-300 dark:bg-gray-800"><img src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png" className="h-10 w-10 rounded-full" /></div>
+            <div className="h-11 w-11 rounded-full  bg-gray-300 dark:bg-gray-800">
+              <img
+                src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
+                className="h-10 w-10 rounded-full"
+              />
+            </div>
             <div className="w-full p-2">
               <div className="flex flex-row justify-between">
                 <div className="font-medium">Захирал</div>
                 <div className="flex">
-                  <div className="ml-auto text-xs flex w-40 items-center justify-center font-medium text-gray-700 dark:text-gray-200">
+                  <div className="ml-auto flex w-40 items-center justify-center text-xs font-medium text-gray-700 dark:text-gray-200">
                     {moment().format("YYYY/MM/DD HH:mm")}
                   </div>
                   <div className="flex w-full">
                     <Popconfirm
                       disabled={daalgavar?.tuluv === 2}
-                      title={`Та даалгавар ${0 === daalgavar?.tuluv
-                        ? "Хүлээж авах "
-                        : 1 === daalgavar?.tuluv
+                      title={`Та даалгавар ${
+                        0 === daalgavar?.tuluv
+                          ? "Хүлээж авах "
+                          : 1 === daalgavar?.tuluv
                           ? "дуусгах"
                           : ""
-                        } уу?`}
+                      } уу?`}
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => batlakh()}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
-                          ? "red"
-                          : 1 === daalgavar?.tuluv
+                        className={`text-md cursor-pointer rounded-full bg-${
+                          0 === daalgavar?.tuluv
+                            ? "red"
+                            : 1 === daalgavar?.tuluv
                             ? "yellow"
                             : "green"
-                          }-400 py-2 px-5 font-medium text-gray-50`}
+                        }-400 py-2 px-5 font-medium text-gray-50`}
                       >
                         {0 === daalgavar?.tuluv
                           ? "Хүлээж авах"
                           : 1 === daalgavar?.tuluv
-                            ? "Хийгдэж байна"
-                            : "Дууссан"}
+                          ? "Хийгдэж байна"
+                          : "Дууссан"}
                       </div>
                     </Popconfirm>
                   </div>
                 </div>
               </div>
               <div className="w-1/2">
-                <div className="border-2 border-l-0 rounded-r-2xl py-2 justify-center flex">{daalgavar?.tailbar}.</div>
-                <div className="flex justify-end flex-row">
-                  <div className="flex cursor-pointer px-1 border-r-2">reply</div>
+                <div className="flex justify-center rounded-r-2xl border-2 border-l-0 py-2">
+                  {daalgavar?.tailbar}.
+                </div>
+                <div className="flex flex-row justify-end">
+                  <div className="flex cursor-pointer border-r-2 px-1">
+                    reply
+                  </div>
                   <div className="flex cursor-pointer px-1">comment</div>
                 </div>
               </div>
-              <div className="border-2 w-3/4">
-                <img src="https://www.w3schools.com/w3css/img_lights.jpg"/>
-              </div>
               <div></div>
-              {!!daalgavar?.file && daalgavar?.file?.length > 0 && (
+              {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
+                (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
                 <div className="w-full border border-gray-600">
                   <div className="flex flex-row items-center space-x-2 p-2">
-                    <PictureOutlined />
-                    <span>Зураг</span>
-                    <PictureOutlined />
-                    <span>Зураг</span>
+                    {daalgavar.zurguud?.map((mur) => (
+                      <div key={mur}>
+                        <Image
+                          alt={mur}
+                          width="10rem"
+                          src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                        />
+                        <span>Зураг</span>
+                      </div>
+                    ))}
+                    {daalgavar.file?.map((mur) => (
+                      <audio controls>
+                        <source src="horse.ogg" type="audio/ogg" />
+                        <source
+                          src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                          type="audio/mpeg"
+                        />
+                        Your browser does not support the audio element.
+                      </audio>
+                    ))}
                   </div>
-                  <div className="bg-gray-500 p-2">2 хавсралт</div>
+                  <div className="bg-gray-500 p-2">
+                    {(daalgavar?.zurguud?.length || 0) +
+                      (daalgavar?.file?.length || 0)}{" "}
+                    хавсралт
+                  </div>
                 </div>
               )}
             </div>
@@ -226,20 +274,19 @@ function index({ token }) {
               />
             </div>
             <div className="flex flex-row space-x-3">
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 dark:bg-gray-800 p-2 text-xl">
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
                 <AudioOutlined />
               </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 dark:bg-gray-800 p-2 text-xl">
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
                 <PictureOutlined />
               </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 dark:bg-gray-800 p-2 text-xl">
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
                 <SendOutlined />
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </Admin>
   );
 }
