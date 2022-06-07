@@ -203,7 +203,7 @@ function index({ token }) {
                             : 1 === daalgavar?.tuluv
                             ? "yellow"
                             : "green"
-                        }-400 py-2 px-5 font-medium text-gray-50`}
+                        }-500 py-2 px-5 font-medium text-gray-50`}
                       >
                         {0 === daalgavar?.tuluv
                           ? "Хүлээж авах"
