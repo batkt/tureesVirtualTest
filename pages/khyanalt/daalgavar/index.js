@@ -29,7 +29,7 @@ function index({ token }) {
   const query = React.useMemo(
     () => ({
       ajiltniiId: ajiltan?._id,
-      tuluv: tuluv === "Идэвхитэй" ? [0, 1] : tuluv === "Дууссан" ? 2 : 3,
+      tuluv: tuluv === "Идэвхитэй" ? [0, 1] : tuluv === "Дууссан" ? 2 : -1,
     }),
     [ajiltan, tuluv]
   );
@@ -97,7 +97,6 @@ function index({ token }) {
               }`}
               key={`${index}-daalgavar`}
               onClick={() => {
-                myFunction();
                 setDaalgavar(mur);
               }}
               data-aos="fade-right"
@@ -183,7 +182,7 @@ function index({ token }) {
                   <div className="ml-auto flex w-40 items-center justify-center text-xs font-medium text-gray-700 dark:text-gray-200">
                     {moment().format("YYYY/MM/DD HH:mm")}
                   </div>
-                  <div className="flex w-full">
+                  <div className="ml-5 flex">
                     <Popconfirm
                       disabled={daalgavar?.tuluv === 2}
                       title={`Та даалгавар ${
@@ -217,15 +216,7 @@ function index({ token }) {
                 </div>
               </div>
               <div className="w-1/2">
-                <div className="flex justify-center rounded-r-2xl border-2 border-l-0 py-2">
-                  {daalgavar?.tailbar}.
-                </div>
-                <div className="flex flex-row justify-end">
-                  <div className="flex cursor-pointer border-r-2 px-1">
-                    reply
-                  </div>
-                  <div className="flex cursor-pointer px-1">comment</div>
-                </div>
+                <div className="flex py-2">{daalgavar?.tailbar}</div>
               </div>
               <div></div>
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
@@ -266,7 +257,7 @@ function index({ token }) {
             </div>
           </div>
         </div>
-        <div className="w-full">
+        {/* <div className="w-full">
           <div className="flex h-auto w-full flex-row px-5 py-2">
             <div className="w-full px-2">
               <input
@@ -288,7 +279,7 @@ function index({ token }) {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </Admin>
   );
