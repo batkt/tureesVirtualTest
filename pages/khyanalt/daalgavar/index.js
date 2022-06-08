@@ -15,7 +15,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { useAuth } from "services/auth";
 import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Image, Popconfirm } from "antd";
+import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
 
 const order = { createdAt: -1 };
@@ -23,7 +23,8 @@ const order = { createdAt: -1 };
 function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
   const [daalgavar, setDaalgavar] = React.useState();
-  const { ajiltan } = useAuth();
+  const [setgegdel, setSetgegdel] = React.useState();
+  const { ajiltan, barilgiinId } = useAuth();
   const inputRef = React.useRef();
 
   const query = React.useMemo(
@@ -35,6 +36,19 @@ function index({ token }) {
   );
 
   const task = useJagsaalt(ajiltan && "/daalgavar", query, order);
+
+  const setgegdeliinQuery = React.useMemo(
+    () => ({
+      daalgavriinId: daalgavar?._id,
+    }),
+    [daalgavar]
+  );
+  
+  
+
+  const daalgavriinSetgegdel = useJagsaalt(daalgavar && "/setgegdel", setgegdeliinQuery);
+
+  console.log('daalgavriinSetgegdel',daalgavriinSetgegdel) 
 
   function daalgavarKhuleejAvlaa() {
     uilchilgee(token)
@@ -61,9 +75,18 @@ function index({ token }) {
     Aos.init({ duration: 1000 });
   });
 
-  function myFunction() {
-    inputRef.current.focus();
+  function setgegdelBichie() {
+    if(!setgegdel){
+      notification.warning({message:'Анхаар',description:'Сэтгэгдэлээ бичиж оруулна уу'})
+      return
+    }
+    
+    uilchilgee(token).post("/setgegdelBichie",{barilgiinId: barilgiinId,
+      daalgavriinId: daalgavar._id,
+      message: setgegdel})
+
   }
+
 
   return (
     <Admin
@@ -254,32 +277,29 @@ function index({ token }) {
                   </div>
                 </div>
               )}
+              <div className="relative w-2/3">
+              {daalgavriinSetgegdel?.jagsaalt?.map((mur)=><div key={mur._id+'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-min bg-green-800 dark:bg-green-600 text-white flex flex-row p-3 rounded-3xl">{mur.message}</div>)}
+              </div>
             </div>
           </div>
         </div>
-        {/* <div className="w-full">
+         <div className="w-full">
           <div className="flex h-auto w-full flex-row px-5 py-2">
             <div className="w-full px-2">
               <input
                 className="h-10 w-full border border-gray-300 p-2"
                 placeholder="Тайлбар"
-                autoFocus
-                ref={inputRef}
+
+                onChange={({target})=>setSetgegdel(target.value)}
               />
             </div>
-            <div className="flex flex-row space-x-3">
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
-                <AudioOutlined />
-              </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
-                <PictureOutlined />
-              </div>
-              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800">
+            <div className="flex flex-row space-x-3">              
+              <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800" onClick={setgegdelBichie}>
                 <SendOutlined />
               </div>
             </div>
           </div>
-        </div> */}
+        </div> 
       </div>
     </Admin>
   );
