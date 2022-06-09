@@ -196,8 +196,9 @@ function index({ token }) {
 
       <div
         className={`col-span-12 ${daalgavar ? "block" : "hidden"
-          } gap-5 bg-white p-1 dark:bg-green-900 lg:col-span-6 xl:col-span-7`}
+          } gap-5 bg-white relative p-1 dark:bg-green-900 lg:col-span-6 xl:col-span-7`}
         data-aos="flip-left"
+        style={{height:"90vh"}}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
@@ -257,13 +258,14 @@ function index({ token }) {
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
                   <div className="w-full border border-gray-600">
-                    <div className="flex flex-row items-center space-x-2 p-2">
+                    <div className="flex justify-between flex-row items-center space-x-2 p-2">
                       <Image.PreviewGroup>
                         {daalgavar.zurguud?.map((mur) => (
                           <Image
                             key={mur}
                             alt={mur}
-                            width="10rem"
+                            height="5rem"
+                            width="5rem"
                             src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
                           />
                         ))}
@@ -289,13 +291,13 @@ function index({ token }) {
                     </div>
                   </div>
                 )}
-              <div className="w-full overflow-y-scroll" style={{height:"20rem"}}>
+              <div className="w-full flex flex-col overflow-y-scroll" style={{height:"55vh"}}>
                 {daalgavriinSetgegdel?.jagsaalt?.map((mur) => <div key={mur._id + 'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-min bg-green-800 dark:bg-green-600 text-white flex flex-row p-3 rounded-3xl">{mur.message}</div>)}
               </div>
             </div>
           </div>
         </div>
-        <div className="w-full">
+        <div className="w-full bottom-3 fixed">
           <div className="flex w-full flex-row px-5 py-2">
             <div className="w-full px-2">
               <input
