@@ -26,6 +26,7 @@ function index({ token }) {
   const [setgegdel, setSetgegdel] = React.useState();
   const { ajiltan, barilgiinId } = useAuth();
   const inputRef = React.useRef();
+  const ChatRef = React.useRef();
 
   const query = React.useMemo(
     () => ({
@@ -43,12 +44,12 @@ function index({ token }) {
     }),
     [daalgavar]
   );
-  
-  
+
+
 
   const daalgavriinSetgegdel = useJagsaalt(daalgavar && "/setgegdel", setgegdeliinQuery);
 
-  console.log('daalgavriinSetgegdel',daalgavriinSetgegdel) 
+  console.log('daalgavriinSetgegdel', daalgavriinSetgegdel)
 
   function daalgavarKhuleejAvlaa() {
     uilchilgee(token)
@@ -75,15 +76,32 @@ function index({ token }) {
     Aos.init({ duration: 1000 });
   });
 
+  useEffect(() => {
+    setSetgegdel('');
+    inputRef.current.focus();
+    //document.getElementById('').setAttribute('data-aos','')
+   
+  }, [daalgavar?._id]);
+
+
   function setgegdelBichie() {
-    if(!setgegdel){
-      notification.warning({message:'Анхаар',description:'Сэтгэгдэлээ бичиж оруулна уу'})
+    if (!setgegdel) {
+      notification.warning({ message: 'Анхаар', description: 'Сэтгэгдэлээ бичиж оруулна уу' })
       return
     }
-    
-    uilchilgee(token).post("/setgegdelBichie",{barilgiinId: barilgiinId,
+
+    inputRef.current.focus();
+    uilchilgee(token).post("/setgegdelBichie", {
+      barilgiinId: barilgiinId,
       daalgavriinId: daalgavar._id,
-      message: setgegdel})
+      message: setgegdel
+    }).then((response) => {
+      if (response.data === 'Amjilttai') {
+        task.mutate()
+        daalgavriinSetgegdel.mutate()
+        setSetgegdel('')
+      }
+    })
 
   }
 
@@ -92,7 +110,7 @@ function index({ token }) {
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
-      className={"h-5/6 gap-5 p-6"}
+      className={"gap-5 p-6"}
       onSearch={task.onSearch}
     >
       <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-green-900 lg:col-span-6 xl:col-span-5">
@@ -102,22 +120,20 @@ function index({ token }) {
               onClick={() => setTuluv(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
-              className={`cursor-pointer rounded-lg p-1 text-center ${
-                tuluv === status ? "bg-white text-gray-800 " : "text-gray-50"
-              }`}
+              className={`cursor-pointer rounded-lg p-1 text-center ${tuluv === status ? "bg-white text-gray-800 " : "text-gray-50"
+                }`}
             >
               {status}
             </div>
           ))}
         </div>
-        <div className="w-full divide-y">
+        <div className="w-full overflow-y-scroll" style={{height:"70vh"}}>
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`flex w-full cursor-pointer flex-row space-x-2 p-2 ${
-                daalgavar?._id === mur._id
+              className={`flex w-full cursor-pointer flex-row space-x-2 p-2 ${daalgavar?._id === mur._id
                   ? "bg-green-100 dark:bg-green-700"
                   : ""
-              }`}
+                }`}
               key={`${index}-daalgavar`}
               onClick={() => {
                 setDaalgavar(mur);
@@ -125,12 +141,13 @@ function index({ token }) {
               data-aos="fade-right"
               data-aos-delay={1 + index + "00"}
               data-aos-anchor-placement="top-bottom"
-            >
+            >  
+            <div className="text-xl w-10 text-left justify-end flex items-center">{1 + index}.</div>            
               <div
-                className={`h-10 w-10 rounded-lg bg-${
-                  mur.started ? "green" : "green"
-                }-500 text-2xl text-white`}
+                className={`h-10 w-10 rounded-lg bg-${mur.started ? "green" : "green"
+                  }-500 text-2xl text-white`}
               >
+                {/* <div className="absolute text-base -bottom-0.5 left-0.5">{1 + index}.</div> */}
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
                 ) : (
@@ -140,7 +157,7 @@ function index({ token }) {
               <div className="w-full">
                 <div className="flex w-full flex-row justify-between">
                   <span className="font-medium text-gray-700 dark:text-gray-100">
-                    Захирал
+                    {moment(mur.duusakhOgnoo).diff(moment(),'h')} цаг
                   </span>
                   <span className="ml-auto">
                     {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
@@ -149,22 +166,21 @@ function index({ token }) {
                 <div className="grid grid-cols-12">
                   <div className="col-span-11">
                     <div
-                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${
-                        mur.tuluv === 1
+                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${mur.tuluv === 1
                           ? "yellow"
                           : mur.tuluv === 2
-                          ? "green"
-                          : "red"
-                      }-500`}
+                            ? "green"
+                            : "red"
+                        }-500`}
                     >
                       {mur.tuluv === 1
                         ? "Хүлээн авсан"
                         : mur.tuluv === 2
-                        ? "Дууссан"
-                        : "Эхлээгүй"}
+                          ? "Дууссан"
+                          : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words">
-                      {mur.tailbar}
+                      
                     </div>
                   </div>
                   <div className="col-span-1 flex cursor-pointer flex-col items-end text-yellow-500">
@@ -179,20 +195,18 @@ function index({ token }) {
       {/* chat */}
 
       <div
-        className={`col-span-12 ${
-          daalgavar ? "flex" : "hidden"
-        } flex-col gap-5 bg-white p-1 dark:bg-green-900 lg:col-span-6 xl:col-span-7`}
+        className={`col-span-12 ${daalgavar ? "block" : "hidden"
+          } gap-5 bg-white p-1 dark:bg-green-900 lg:col-span-6 xl:col-span-7`}
         data-aos="flip-left"
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
+        ref={ChatRef}
       >
         <div
           className="w-full space-y-5 p-5"
-          data-aos="flip-right"
-          data-aos-delay="300"
         >
           <div className="flex flex-row p-2">
-            <div className="h-11 w-11 rounded-full  bg-gray-300 dark:bg-gray-800">
+            <div className="h-11 w-11 rounded-full bg-gray-300 dark:bg-gray-800">
               <img
                 src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
                 className="h-10 w-10 rounded-full"
@@ -208,31 +222,29 @@ function index({ token }) {
                   <div className="ml-5 flex">
                     <Popconfirm
                       disabled={daalgavar?.tuluv === 2}
-                      title={`Та даалгавар ${
-                        0 === daalgavar?.tuluv
+                      title={`Та даалгавар ${0 === daalgavar?.tuluv
                           ? "Хүлээж авах "
                           : 1 === daalgavar?.tuluv
-                          ? "дуусгах"
-                          : ""
-                      } уу?`}
+                            ? "дуусгах"
+                            : ""
+                        } уу?`}
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => batlakh()}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full bg-${
-                          0 === daalgavar?.tuluv
+                        className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
                             ? "red"
                             : 1 === daalgavar?.tuluv
-                            ? "yellow"
-                            : "green"
-                        }-500 py-2 px-5 font-medium text-gray-50`}
+                              ? "yellow"
+                              : "green"
+                          }-500 py-2 px-5 font-medium text-gray-50`}
                       >
                         {0 === daalgavar?.tuluv
                           ? "Хүлээж авах"
                           : 1 === daalgavar?.tuluv
-                          ? "Хийгдэж байна"
-                          : "Дууссан"}
+                            ? "Хийгдэж байна"
+                            : "Дууссан"}
                       </div>
                     </Popconfirm>
                   </div>
@@ -244,62 +256,68 @@ function index({ token }) {
               <div></div>
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
-                <div className="w-full border border-gray-600">
-                  <div className="flex flex-row items-center space-x-2 p-2">
-                    <Image.PreviewGroup>
-                      {daalgavar.zurguud?.map((mur) => (
-                        <Image
-                          key={mur}
-                          alt={mur}
-                          width="10rem"
-                          src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
-                        />
+                  <div className="w-full border border-gray-600">
+                    <div className="flex flex-row items-center space-x-2 p-2">
+                      <Image.PreviewGroup>
+                        {daalgavar.zurguud?.map((mur) => (
+                          <Image
+                            key={mur}
+                            alt={mur}
+                            width="10rem"
+                            src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                          />
+                        ))}
+                      </Image.PreviewGroup>
+                      {daalgavar.file?.map((mur) => (
+                        <audio controls key={mur}>
+                          <source
+                            src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                            type="audio/ogg"
+                          />
+                          <source
+                            src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                            type="audio/mpeg"
+                          />
+                          Your browser does not support the audio element.
+                        </audio>
                       ))}
-                    </Image.PreviewGroup>
-                    {daalgavar.file?.map((mur) => (
-                      <audio controls key={mur}>
-                        <source
-                          src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                          type="audio/ogg"
-                        />
-                        <source
-                          src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                          type="audio/mpeg"
-                        />
-                        Your browser does not support the audio element.
-                      </audio>
-                    ))}
+                    </div>
+                    <div className="bg-gray-500 p-2">
+                      {(daalgavar?.zurguud?.length || 0) +
+                        (daalgavar?.file?.length || 0)}{" "}
+                      хавсралт
+                    </div>
                   </div>
-                  <div className="bg-gray-500 p-2">
-                    {(daalgavar?.zurguud?.length || 0) +
-                      (daalgavar?.file?.length || 0)}{" "}
-                    хавсралт
-                  </div>
-                </div>
-              )}
-              <div className="relative w-2/3">
-              {daalgavriinSetgegdel?.jagsaalt?.map((mur)=><div key={mur._id+'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-min bg-green-800 dark:bg-green-600 text-white flex flex-row p-3 rounded-3xl">{mur.message}</div>)}
+                )}
+              <div className="w-full overflow-y-scroll" style={{height:"20rem"}}>
+                {daalgavriinSetgegdel?.jagsaalt?.map((mur) => <div key={mur._id + 'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-min bg-green-800 dark:bg-green-600 text-white flex flex-row p-3 rounded-3xl">{mur.message}</div>)}
               </div>
             </div>
           </div>
         </div>
-         <div className="w-full">
-          <div className="flex h-auto w-full flex-row px-5 py-2">
+        <div className="w-full">
+          <div className="flex w-full flex-row px-5 py-2">
             <div className="w-full px-2">
               <input
                 className="h-10 w-full border border-gray-300 p-2"
                 placeholder="Тайлбар"
-
-                onChange={({target})=>setSetgegdel(target.value)}
+                ref={inputRef}
+                value={setgegdel}
+                onChange={({ target }) => setSetgegdel(target.value)}
+                onKeyUp={(event)=> {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    setgegdelBichie()
+                  }}}
               />
             </div>
-            <div className="flex flex-row space-x-3">              
+            <div className="flex flex-row space-x-3">
               <div className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800" onClick={setgegdelBichie}>
                 <SendOutlined />
               </div>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </Admin>
   );
