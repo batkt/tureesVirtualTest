@@ -27,6 +27,7 @@ function index({ token }) {
   const { ajiltan, barilgiinId } = useAuth();
   const inputRef = React.useRef();
   const ChatRef = React.useRef();
+  const messageEl = React.useRef(null);
 
   const query = React.useMemo(
     () => ({
@@ -82,6 +83,15 @@ function index({ token }) {
     //document.getElementById('').setAttribute('data-aos','')
    
   }, [daalgavar?._id]);
+
+  useEffect(() => {
+    if (messageEl) {
+      messageEl.current.addEventListener('DOMNodeInserted', event => {
+        const { currentTarget: target } = event;
+        target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
+      });
+    }
+  }, [])
 
 
   function setgegdelBichie() {
@@ -146,8 +156,7 @@ function index({ token }) {
               <div
                 className={`h-10 w-10 rounded-lg bg-${mur.started ? "green" : "green"
                   }-500 text-2xl text-white`}
-              >
-                {/* <div className="absolute text-base -bottom-0.5 left-0.5">{1 + index}.</div> */}
+              >            
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
                 ) : (
@@ -204,7 +213,7 @@ function index({ token }) {
         ref={ChatRef}
       >
         <div
-          className="w-full space-y-5 p-5"
+          className="w-full space-y-5 p-5 relative"
         >
           <div className="flex flex-row p-2">
             <div className="h-11 w-11 rounded-full bg-gray-300 dark:bg-gray-800">
@@ -257,10 +266,11 @@ function index({ token }) {
               <div></div>
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
-                  <div className="w-full border border-gray-600">
+                  <div className="w-full border border-gray-600">              
                     <div className="flex justify-between flex-row items-center space-x-2 p-2">
+                      <div className="grid gap-1 grid-cols-4 overflow-y-scroll" style={{height:"6rem"}}>
                       <Image.PreviewGroup>
-                        {daalgavar.zurguud?.map((mur) => (
+                        {daalgavar.zurguud?.map((mur) => (                          
                           <Image
                             key={mur}
                             alt={mur}
@@ -270,12 +280,14 @@ function index({ token }) {
                           />
                         ))}
                       </Image.PreviewGroup>
+                      </div>
+                      <div className="overflow-y-scroll w-1/2" style={{height:"6rem"}}>
                       {daalgavar.file?.map((mur) => (
-                        <audio controls key={mur}>
+                        <audio className="mt-5" controls key={mur}>
                           <source
                             src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
                             type="audio/ogg"
-                          />
+                          />                          
                           <source
                             src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
                             type="audio/mpeg"
@@ -283,15 +295,16 @@ function index({ token }) {
                           Your browser does not support the audio element.
                         </audio>
                       ))}
+                      </div>
                     </div>
                     <div className="bg-gray-500 p-2">
                       {(daalgavar?.zurguud?.length || 0) +
                         (daalgavar?.file?.length || 0)}{" "}
-                      хавсралт
+                      хавсралт: {(daalgavar?.zurguud?.length || 0)} зураг, {(daalgavar?.file?.length || 0)} дуу байна
                     </div>
                   </div>
                 )}
-              <div className="w-full flex flex-col overflow-y-scroll" style={{height:"55vh"}}>
+              <div className="w-full flex flex-col overflow-y-scroll" style={{height:"55vh"}} ref={messageEl}>
                 {daalgavriinSetgegdel?.jagsaalt?.map((mur) => <div key={mur._id + 'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-min bg-green-800 dark:bg-green-600 text-white flex flex-row p-3 rounded-3xl">{mur.message}</div>)}
               </div>
             </div>
