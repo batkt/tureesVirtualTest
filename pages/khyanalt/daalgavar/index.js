@@ -305,7 +305,7 @@ function index({ token }) {
                   </div>
                 )}
               <div className="w-full flex flex-col overflow-y-scroll" style={{height:"55vh"}} ref={messageEl}>
-                {daalgavriinSetgegdel?.jagsaalt?.map((mur) => <div key={mur._id + 'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-2/3 bg-green-500 dark:bg-green-600 text-white flex flex-row p-3 rounded-xl">{mur.message}</div>)}
+                {daalgavriinSetgegdel?.jagsaalt?.map((mur) => <div key={mur._id + 'daalgavriinSetgegdel'} className=" my-3 rounded-tl-none w-2/3 bg-green-500 dark:bg-green-600 text-white flex flex-row p-5 relative rounded-xl">{mur.message}<div className="absolute bottom-1 right-3 text-gray-300">{moment(mur.ognoo).format("HH:mm")}</div></div>)}
               </div>
             </div>
           </div>
