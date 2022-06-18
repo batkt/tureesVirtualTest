@@ -73,7 +73,13 @@ function ProfileTovch({ ajiltan, garya, token }) {
                     key={i}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
                   >
-                    <Link href={`/khyanalt/medegdel/${turul}/${_id}`}>
+                    <Link
+                      href={
+                        mur.turul === "daalgavar"
+                          ? `/khyanalt/daalgavar`
+                          : `/khyanalt/medegdel/${turul}/${_id}`
+                      }
+                    >
                       <div className="relative flex cursor-pointer items-center justify-between">
                         <div className="flex" style={{ maxWidth: `2.5rem` }}>
                           <Tooltip title={khariltsagchiinNer}>

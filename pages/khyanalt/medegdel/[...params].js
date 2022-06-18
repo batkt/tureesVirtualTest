@@ -1,15 +1,15 @@
-import React, { useState } from "react"
-import Admin from "components/Admin"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import readMethod from "tools/function/crud/readMethod"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import useSanalGomdol from "hooks/medegdel/useSanalGomdol"
-import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh"
-import { Input, Spin } from "antd"
-import moment from "moment"
-import getListMethod from "tools/function/crud/getListMethod"
-import formatNumber from "tools/function/formatNumber"
-import useSWR from "swr"
+import React, { useState } from "react";
+import Admin from "components/Admin";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import readMethod from "tools/function/crud/readMethod";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
+import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
+import { Input, Spin } from "antd";
+import moment from "moment";
+import getListMethod from "tools/function/crud/getListMethod";
+import formatNumber from "tools/function/formatNumber";
+import useSWR from "swr";
 
 function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
   const { data } = useSWR(
@@ -24,7 +24,7 @@ function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
     {
       revalidateOnFocus: false,
     }
-  )
+  );
 
   return (
     <div
@@ -38,7 +38,7 @@ function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
         `${label}:${formatNumber(data?.uldegdel)}`
       )}
     </div>
-  )
+  );
 }
 
 function Geree({ data, token }) {
@@ -83,32 +83,32 @@ function Geree({ data, token }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-var timeout = false
+var timeout = false;
 
 function index({ token, data }) {
-  const [content, setContent] = useState("")
-  const [body, onTextChange] = useState("")
-  const [title, setTitle] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [content, setContent] = useState("");
+  const [body, onTextChange] = useState("");
+  const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
   const {
     sonorduulga,
     sonorduulgaMutate,
     jagsaalt,
     nextSonorduulga,
     setKhuudaslalt,
-  } = useSanalGomdol(token, data?.khariltsagch?._id)
-  const { khariltsagch, gereenuud } = data || {}
+  } = useSanalGomdol(token, data?.khariltsagch?._id);
+  const { khariltsagch, gereenuud } = data || {};
 
   async function msgIlgeeye() {
     if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна")
-      return
+      message.warning("Хүсэлт илгээгдсэн байна");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
     uilchilgee(token)
       .post(`/sonorduulgaIlgeeye`, {
         firebaseToken: khariltsagch.firebaseToken,
@@ -126,30 +126,30 @@ function index({ token, data }) {
             title,
             message: body,
             turul: "medegdel",
-          })
-          sonorduulgaMutate({ ...sonorduulga }, false)
-          notification.success({ message: "СМС Амжилттай илгээлээ" })
-          setLoading(false)
+          });
+          sonorduulgaMutate({ ...sonorduulga }, false);
+          notification.success({ message: "СМС Амжилттай илгээлээ" });
+          setLoading(false);
         } else if (!!data?.failureCount) {
           notification.warning({
             description: _.get(data, "results.0.error.message"),
             message: _.get(data, "results.0.error.code"),
-          })
-          setLoading(false)
+          });
+          setLoading(false);
         }
       })
       .catch((e) => {
-        setLoading(false)
-        aldaaBarigch(e)
-      })
+        setLoading(false);
+        aldaaBarigch(e);
+      });
   }
 
   function seen() {
     const seenList = [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].filter(
       (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
-    )
+    );
     if (seenList.length > 0) {
-      const seenIds = seenList.map((a) => a._id)
+      const seenIds = seenList.map((a) => a._id);
       if (
         jagsaalt.filter(
           (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
@@ -158,10 +158,10 @@ function index({ token, data }) {
         setKhuudaslalt((a) => {
           a.jagsaalt.forEach((b) => {
             if (b.turul !== "medegdel" && b.kharsanEsekh === false)
-              b.kharsanEsekh = true
-          })
-          return a
-        })
+              b.kharsanEsekh = true;
+          });
+          return a;
+        });
       uilchilgee(token)
         .post("/sanalKharlaa", { id: seenIds })
         .then(() => {
@@ -170,20 +170,20 @@ function index({ token, data }) {
               (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
             ).length > 0
           )
-            sonorduulgaMutate()
+            sonorduulgaMutate();
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     }
   }
 
   function onScroll(e) {
-    clearTimeout(timeout)
+    clearTimeout(timeout);
     timeout = setTimeout(function () {
-      seen()
-    }, 300)
+      seen();
+    }, 300);
 
     if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga()
+      nextSonorduulga();
     }
   }
 
@@ -286,7 +286,7 @@ function index({ token, data }) {
                     {a.turul}
                   </span>
                 </div>
-              )
+              );
             })}
           </div>
           {(sonorduulga || jagsaalt.length > 0) && (
@@ -334,7 +334,7 @@ function index({ token, data }) {
         </div>
       </div>
     </Admin>
-  )
+  );
 }
 
 const ugudulAvchirya = async (ctx, session) => {
@@ -342,20 +342,22 @@ const ugudulAvchirya = async (ctx, session) => {
     "sanalGomdol",
     session?.tureestoken,
     ctx.query.params[1]
-  )
+  );
+
+  console.log("data", data);
   const khariltsagch = await readMethod(
     "khariltsagch",
     session?.tureestoken,
     data?.khariltsagchiinId
-  )
+  );
   const gereenuud = await getListMethod("geree", session?.tureestoken, {
     query: { register: khariltsagch?.data?.register || "" },
-  })
-  data.khariltsagch = khariltsagch?.data || {}
-  data.gereenuud = gereenuud?.data?.jagsaalt
-  return data
-}
+  });
+  data.khariltsagch = khariltsagch?.data || {};
+  data.gereenuud = gereenuud?.data?.jagsaalt;
+  return data;
+};
 
-export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya)
+export const getServerSideProps = (ctx) => shalgaltKhiikh(ctx, ugudulAvchirya);
 
-export default index
+export default index;
