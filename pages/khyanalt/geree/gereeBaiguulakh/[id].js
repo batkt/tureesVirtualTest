@@ -1,7 +1,6 @@
 import React from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
-import updateMethod from "tools/function/crud/updateMethod";
 import readMethod from "tools/function/crud/readMethod";
 import { Button, message, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
