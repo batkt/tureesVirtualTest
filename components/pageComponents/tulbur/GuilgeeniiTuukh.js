@@ -1,13 +1,13 @@
-import { Badge, Button, Input, message, Popconfirm } from "antd"
-import React, { useImperativeHandle, useState } from "react"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
-import moment from "moment"
-import formatNumber from "tools/function/formatNumber"
-import { DeleteOutlined } from "@ant-design/icons"
-import { modal } from "components/ant/Modal"
-import { useReactToPrint } from "react-to-print"
-import _ from "lodash"
+import { Badge, Button, Input, message, Popconfirm } from "antd";
+import React, { useImperativeHandle, useState } from "react";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
+import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
+import { DeleteOutlined } from "@ant-design/icons";
+import { modal } from "components/ant/Modal";
+import { useReactToPrint } from "react-to-print";
+import _ from "lodash";
 
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
@@ -19,33 +19,33 @@ const fetcher = (url, token, gereeniiId, ognoo) =>
       },
     })
     .then((res) => {
-      var uldegdel = 0
+      var uldegdel = 0;
       res.data.forEach((x) => {
         uldegdel =
           uldegdel +
-          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0))
-        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0
-        else x.uldegdel = uldegdel
-      })
-      return res.data
+          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
+        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
+        else x.uldegdel = uldegdel;
+      });
+      return res.data;
     })
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
-  const [tailbar, setTailbar] = useState("")
+  const [tailbar, setTailbar] = useState("");
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        confirm(tailbar)
-        destroy()
+        confirm(tailbar);
+        destroy();
       },
       khaaya() {
-        destroy()
+        destroy();
       },
     }),
     [tailbar]
-  )
+  );
   return (
     <div>
       <Input.TextArea
@@ -53,28 +53,28 @@ const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
         onChange={({ target }) => setTailbar(target?.value)}
       />
     </div>
-  )
-})
+  );
+});
 
 const turulAvya = (turul) => {
-  if (turul === "avlaga") return "Авлага"
-  else if (turul === "voucher") return "Ваучер"
-  else if (turul === "bank") return "Банк"
-  else if (turul === "khyamdral") return "Хямдрал"
-  else if (turul === "barter") return "Бартер"
-  else if (turul === "baritsaa") return "Барьцаа"
-}
+  if (turul === "avlaga") return "Авлага";
+  else if (turul === "voucher") return "Ваучер";
+  else if (turul === "bank") return "Банк";
+  else if (turul === "khyamdral") return "Хямдрал";
+  else if (turul === "barter") return "Бартер";
+  else if (turul === "baritsaa") return "Барьцаа";
+};
 
 function useGuilgee(token, gereeniiId, ognoo) {
   const { data, mutate } = useSWR(
     !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     guilgeeniiTuukh: data,
     guilgeeniiTuukhMutate: mutate,
-  }
+  };
 }
 
 function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
@@ -82,13 +82,12 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
     token,
     data?._id,
     ognoo
-  )
-  const tailbarRef = React.useRef(null)
-  const printRef = React.useRef(null)
-
+  );
+  const tailbarRef = React.useRef(null);
+  const printRef = React.useRef(null);
 
   function uldegdelMutate() {
-    _.isFunction(data.mutate) && data.mutate()
+    _.isFunction(data.mutate) && data.mutate();
   }
 
   function tulultUstgaya({
@@ -99,28 +98,29 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
     turul,
     khyamdral,
   }) {
-    if(turul === 'baritsaa')
+    if (turul === "baritsaa")
       axios(token)
-      .post("/baritsaaniiGuilgeeUstgaya", {
-        "gereeniiId": data?._id,
-        "objectiinId" : _id,
-        "zarlaga":tulsunDun||0,
-        "orlogo":tulukhDun||0,
-        "barilgiinId":data?.barilgiinId,
-      })
-      .then(({ data }) => {
-        if (data) {
-          message.success("Төлөлт амжилттай устгагдлаа!")
-          refreshData()
-        }
-      }).catch(aldaaBarigch)
+        .post("/baritsaaniiGuilgeeUstgaya", {
+          gereeniiId: data?._id,
+          objectiinId: _id,
+          zarlaga: tulsunDun || 0,
+          orlogo: tulukhDun || 0,
+          barilgiinId: data?.barilgiinId,
+        })
+        .then(({ data }) => {
+          if (data) {
+            message.success("Төлөлт амжилттай устгагдлаа!");
+            refreshData();
+          }
+        })
+        .catch(aldaaBarigch);
     else {
       const footer = [
         <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
         <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
           Устгах
         </Button>,
-      ]
+      ];
       modal({
         title: "Төлөлт устгах шалтгаан",
         icon: <DeleteOutlined />,
@@ -138,40 +138,41 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                   khyamdral,
                   objectiinId: _id,
                   tailbar,
-                  talbainDugaar:data?.talbainDugaar,
-                  barilgiinId:data?.barilgiinId,
+                  talbainDugaar: data?.talbainDugaar,
+                  barilgiinId: data?.barilgiinId,
                 })
                 .then(({ data }) => {
                   if (data) {
-                    message.success("Төлөлт амжилттай устгагдлаа!")
-                    uldegdelMutate()
-                    refreshData()
+                    message.success("Төлөлт амжилттай устгагдлаа!");
+                    uldegdelMutate();
+                    refreshData();
                   }
-                }).catch(aldaaBarigch)
+                })
+                .catch(aldaaBarigch)
             }
           />
         ),
         footer,
-      })
+      });
     }
   }
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
-  })
+  });
 
   useImperativeHandle(
     ref,
     () => ({
       khevlekh() {
-        handlePrint()
+        handlePrint();
       },
       refreshData() {
-        guilgeeniiTuukhMutate()
+        guilgeeniiTuukhMutate();
       },
     }),
     [printRef]
-  )
+  );
 
   return (
     <div className="ml-12">
@@ -180,7 +181,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="p-1 grid grid-cols-10 text-gray-700 dark:text-gray-400 bg-gray-200 dark:bg-gray-800  border-b border-gray-200">
+        <div className="grid grid-cols-10 border-b border-gray-200 bg-gray-200 p-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
@@ -192,52 +193,61 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Хэлбэр</div>
           <div>Тайлбар</div>
         </div>
-        {guilgeeniiTuukh?.map((a, i) => (
-          <div className="grid grid-cols-10 text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 hover:bg-green-100">
-            <div className="p-1">{i + 1}</div>
-            <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
-            <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
-            <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
-            <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
-            <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
-            <div
-              className={`p-1 ${
-                a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-              }`}
-            >
-              {formatNumber(a.turul === 'khyamdral' && a.uldegdel < 0 ? 0 : a.uldegdel, 0)}
+        <div className="overflow-y-auto" style={{ height: "calc(40vh)" }}>
+          {guilgeeniiTuukh?.map((a, i) => (
+            <div className="grid grid-cols-10 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+              <div className="p-1">{i + 1}</div>
+              <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
+              <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
+              <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
+              <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
+              <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+              <div
+                className={`p-1 ${
+                  a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                }`}
+              >
+                {formatNumber(
+                  a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
+                  0
+                )}
+              </div>
+              <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
+              <div className="p-1">
+                {a.turul === "bank"
+                  ? a.tulsunDans !== " "
+                    ? a.tulsunDans
+                    : "Банк"
+                  : turulAvya(a.turul)}
+              </div>
+              <div className="flex justify-between p-1">
+                {a.tailbar}
+                {(a.turul === "avlaga" ||
+                  a.turul === "voucher" ||
+                  a.turul === "barter" ||
+                  a.turul === "bank" ||
+                  a.turul === "khyamdral" ||
+                  a.turul === "baritsaa") && (
+                  <div className="contents justify-between">
+                    <Popconfirm
+                      title="Төлөлт устгах уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => tulultUstgaya(a)}
+                    >
+                      <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                        <DeleteOutlined />
+                      </div>
+                    </Popconfirm>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
-            <div className="p-1">
-              {a.turul === "bank" ? (a.tulsunDans !== " " ? a.tulsunDans : "Банк") : turulAvya(a.turul)}
-            </div>
-            <div className="flex justify-between p-1">
-              {a.tailbar}
-              {(a.turul === "avlaga" ||
-                a.turul === "voucher" ||
-                a.turul === "barter" ||
-                a.turul === "bank" ||
-                a.turul === "khyamdral"||
-                a.turul === "baritsaa") && (
-                <div className="contents justify-between">
-                  <Popconfirm
-                    title="Төлөлт устгах уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => tulultUstgaya(a)}
-                  >
-                    <div className="ml-auto flex items-center justify-center rounded-full p-1 border text-red-500 w-6 h-6 cursor-pointer hide-on-print">
-                      <DeleteOutlined />
-                    </div>
-                  </Popconfirm>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default React.forwardRef(GuilgeeniiTuukh)
+export default React.forwardRef(GuilgeeniiTuukh);
