@@ -118,7 +118,7 @@ function index({ token }) {
             data-aos-delay="300"
           >
             <Button
-              className="mr-2 font-medium text-white"
+              className="mr-2 font-medium"
               onClick={() => router.push("/khyanalt/geree/zagvar/new")}
             >
               Шинэ гэрээний загвар үүсгэх

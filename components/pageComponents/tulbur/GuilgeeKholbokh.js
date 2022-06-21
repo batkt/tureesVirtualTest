@@ -34,7 +34,7 @@ function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
 
   return (
     <div
-      className={`font-medium ${
+      className={`text-right font-medium ${
         data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
       }`}
     >
@@ -49,11 +49,14 @@ function GuilgeeKholbokh(
 ) {
   const [geree, setGeree] = React.useState(null);
   const [olnoorKholbokhEsekh, setOlnoorKholbokhEsekh] = React.useState(false);
+  const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = React.useState(false);
   const [magadlaltaiGereenuud, setMagadlaltaiGereenuud] = React.useState([]);
   const [tulult, setTulult] = React.useState([{}]);
+
   const query = React.useMemo(() => {
-    return { tuluv: { $nin: [-1] }, barilgiinId };
-  }, []);
+    return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
+  }, [khaagdsanGereeEsekh]);
+
   const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
     token,
     baiguullagiinId,
@@ -377,18 +380,24 @@ function GuilgeeKholbokh(
           {gereeniiMedeelel?.jagsaalt?.map((mur) => {
             return (
               <Select.Option key={mur._id} value={mur._id}>
-                <div className="grid grid-cols-3">
+                <div className="grid grid-cols-5">
+                  <div className="flex flex-row space-x-2">
+                    <label>Нэр:</label>
+                    <div>{mur.ner}</div>
+                  </div>
+                  <div className="flex flex-row space-x-2">
+                    <label>Регистр:</label>
+                    <div>{mur.register}</div>
+                  </div>
                   <div className="flex flex-row space-x-2">
                     <label>Талбай:</label>
                     <div>{mur.talbainDugaar}</div>
                   </div>
-                  <div className="ml-auto mr-40 flex flex-row">
-                    <GereeniiUldegdel
-                      ugugdul={mur}
-                      token={token}
-                      barilgiinId={barilgiinId}
-                    />
-                  </div>
+                  <GereeniiUldegdel
+                    ugugdul={mur}
+                    token={token}
+                    barilgiinId={barilgiinId}
+                  />
                   <div className="text-right">
                     {mur.baritsaaniiUldegdel === 0 ? (
                       <CheckCircleOutlined
@@ -513,6 +522,21 @@ function GuilgeeKholbokh(
             <div>{formatNumber(data?.kholbosonDun, 2)}</div>
           </div>
         )}
+        <div>
+          <label className="text-sm font-bold text-gray-600">
+            Хаагдсан гэрээ холбох эсэх{" "}
+          </label>
+          <Tooltip title="Хаагдсан гэрээ холбох эсэх">
+            <Switch
+              checked={khaagdsanGereeEsekh}
+              onChange={(v) => {
+                setKhaagdsanGereeEsekh(v);
+                setGeree(null);
+              }}
+              title="Хаагдсан гэрээ холбох эсэх"
+            />
+          </Tooltip>
+        </div>
       </div>
     </div>
   );
