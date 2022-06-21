@@ -77,7 +77,9 @@ function ProfileTovch({ ajiltan, garya, token }) {
                       href={
                         mur.turul === "daalgavar"
                           ? `/khyanalt/daalgavar`
-                          : `/khyanalt/medegdel/${turul}/${_id}`
+                          : mur.turul === "sanal" || mur.turul === "gomdol"
+                          ? `/khyanalt/medegdel/${turul}/${_id}`
+                          : `/khyanalt/daalgavar`
                       }
                     >
                       <div className="relative flex cursor-pointer items-center justify-between">
