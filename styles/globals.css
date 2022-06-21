@@ -15,6 +15,29 @@
   display: none;
 }
 
+
+audio {
+  /*border-radius: 90px;*/
+  height: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  }
+  
+  audio::-webkit-media-controls-mute-button {
+  display: none !important;
+  }
+  
+  audio::-webkit-media-controls-volume-slider {
+  display: none !important;
+  }
+  
+  audio::-webkit-media-controls-volume-control-container.closed {
+  display: none !important;
+  }
+  audio::-webkit-media-controls-volume-control-container{
+  display: none !important;
+  }
+
 @media print {
   .hide-on-print {
     display: none;
