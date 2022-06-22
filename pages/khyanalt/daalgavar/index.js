@@ -120,7 +120,7 @@ function index({ token }) {
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
-      className={"gap-5 p-6"}
+      className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >
       <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 lg:col-span-6 xl:col-span-5">
@@ -213,29 +213,27 @@ function index({ token }) {
         ref={ChatRef}
       >
         <div
-          className="w-full max-w-6xl space-y-5 p-5 overflow-y-scroll"
+          className="w-full max-w-6xl min-w-0 space-y-5 p-0 sm:p-5 overflow-y-scroll"
           style={{ height: "90%" }}
           ref={messageEl}
         >
           <div className="flex flex-row">
 
-            <div className="w-full p-2">
+            <div className="w-full p-0 sm:p-2">
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
                   <div className="w-full gap-3 items-center flex">
-                    <div className="h-11 w-11 rounded-full bg-gray-300 dark:bg-gray-800">
+                    <div className="h-11 w-11 rounded-full min-w-max  bg-gray-300 dark:bg-gray-800">
                       <img
                         src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
                         className="h-10 w-10 rounded-full"
                       />
                     </div>
-                    <div className="rounded-lg p-5 pt-3 bg-gray-300 dark:bg-gray-800 w-full">
+                    <div className="rounded-lg p-3 pb-8 pt-3 relative bg-gray-300 dark:bg-gray-800 w-10/12 sm:w-full">
                       <div className="flex flex-wrap flex-row items-center justify-between">
                         <div className="font-medium">Захирал</div>
-                        <div className="flex">
-                          <div className="ml-auto flex w-40 items-center justify-center text-xs font-medium text-gray-700 dark:text-gray-200">
-                            {moment().format("YYYY/MM/DD HH:mm")}
-                          </div>
+                        <div className="flex">                          
+                          <div className="absolute bottom-1 text-white opacity-30 right-2">{moment().format("YYYY/MM/DD HH:mm")}</div>
                           <div className="ml-5 flex">
                             <Popconfirm
                               disabled={daalgavar?.tuluv === 2}
@@ -255,7 +253,7 @@ function index({ token }) {
                                   : 1 === daalgavar?.tuluv
                                     ? "yellow"
                                     : "green"
-                                  }-500 py-2 px-5 font-medium text-gray-50`}
+                                  }-500 py-1 px-3 font-medium text-gray-50`}
                               >
                                 {0 === daalgavar?.tuluv
                                   ? "Хүлээж авах"
@@ -268,20 +266,7 @@ function index({ token }) {
                         </div>
                       </div>
                       <div className="flex w-full py-2">{daalgavar?.tailbar}</div>                      
-                      <div  className="flex justify-between">
-                        <div className="gap-2 w-1/2 flex items-center">
-                        <Image.PreviewGroup>
-                          {daalgavar.zurguud?.map((mur) => (
-                            <Image
-                              key={mur}
-                              alt={mur}
-                              height="2rem"
-                              width="2rem"
-                              src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
-                            />
-                          ))}
-                        </Image.PreviewGroup>
-                        </div>
+                      <div  className="flex justify-between">                       
                         <div className="w-1/2">
                         {daalgavar.file?.map((mur) => (
                           <div className=" flex">
@@ -298,6 +283,19 @@ function index({ token }) {
                           </audio>
                           </div>
                         ))}
+                        </div>
+                        <div className="gap-2 w-1/2 flex justify-end items-center">
+                        <Image.PreviewGroup>
+                          {daalgavar.zurguud?.map((mur) => (
+                            <Image
+                              key={mur}
+                              alt={mur}
+                              height="2rem"
+                              width="2rem"
+                              src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                            />
+                          ))}
+                        </Image.PreviewGroup>
                         </div>
                       </div>
                     </div>

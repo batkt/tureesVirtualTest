@@ -467,7 +467,7 @@ function Khyanalt({ token }) {
             <Select
               placeholder="Илгээх төрөл"
               value={ilgeekhTurul}
-              onChange={setIlgeekhTurul}
+              onChange={setIlgeekhTurul}              
             >
               {[
                 { key: "buunuur", v: "Бөөнөөр" },
@@ -527,12 +527,12 @@ function Khyanalt({ token }) {
                   cancelText="Үгүй"
                   onConfirm={() => zagvarUstgaya(a)}
                 >
-                  <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white">
+                  <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 fill-current p-2 text-white">
                     <DeleteOutlined style={{ color: "red" }} />
                   </div>
                 </Popconfirm>
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 fill-current p-2 text-white"
                   onClick={() => smsZagvarNemya(a)}
                 >
                   <EditOutlined style={{ color: "#85C1E9" }} />
@@ -552,7 +552,7 @@ function Khyanalt({ token }) {
         {ilgeekhTurul === "gantsaar" && (
           <div className="box p-5">
             <div className="text-gray-700 dark:text-gray-300">
-              <Input.Search
+              <Input.Search              
                 placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
                 onSearch={(search) =>
                   setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
