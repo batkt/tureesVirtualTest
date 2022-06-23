@@ -33,7 +33,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             </svg>
           </div>
         </li>
-        <ul className="sub-menu " style={{ display: open ? "block" : "none" }}>
+        <ul className="sub-menu" style={{ display: open ? "block " : "none" }}>
           {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>

@@ -719,7 +719,7 @@ input:-webkit-autofill {
 }
 
 .sub-menu {
-  display: none;
+  overflow: hidden;
   --tw-bg-opacity: 1;
   @apply rounded-l-lg bg-green-500 dark:bg-gray-600 !important;
 }

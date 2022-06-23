@@ -90,7 +90,7 @@ function Admin({
         }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2">
-          <div className="flex flex-row">
+          <div className="flex flex-row transition-all">
             {!dedKhuudas && (
               <MTses
                 khuudasnuud={khuudasnuud}

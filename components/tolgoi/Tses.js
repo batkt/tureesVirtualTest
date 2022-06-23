@@ -1,12 +1,14 @@
+import Aos from "aos";
 import _ from "lodash";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { url } from "services/uilchilgee";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
   );
+  
   if (mur.sub) {
     return (
       <div className=''>
@@ -40,8 +42,11 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             </div>
           </div>
         </li>
-        <ul className="sub-menu " style={{ display: open ? "block" : "none" }}>
-          {mur.sub.map((a) => {
+        <ul className={`sub-menu duration-500 flex flex-col transition-all ${open ? "h-52" : "h-0"} `}>
+          {mur.sub.map((a, index) => {
+            useEffect(() => {
+              Aos.init();
+            },[]);
             return (
               <Link href={a.href} key={a.href}>
                 <a>
@@ -49,8 +54,13 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""}`}>
-                        <div className={"flex flex-row px-1"}>
+                        <div
+                        data-aos="fade-left"
+                        data-aos-anchor-placement="top-bottom"                        
+                        data-aos-duration="500"
+                        className={"flex flex-row px-1"}>
                   <div
+                  
                     className={`${
                       a.khuudasniiNer === khuudasniiNer
                         ? "text-green-500 font-medium"
