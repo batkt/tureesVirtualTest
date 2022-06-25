@@ -43,21 +43,15 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           </div>
         </li>
         <ul className={`sub-menu duration-500 flex flex-col transition-all ${open ? "h-52" : "h-0"} `}>
-          {mur.sub.map((a, index) => {
-            useEffect(() => {
-              Aos.init();
-            },[]);
+          {mur.sub.map((a) => {           
             return (
               <Link href={a.href} key={a.href}>
                 <a>
-                <li className={`rounded-l-lg relative cursor-pointer text-white p-2 ${
+                <li className={`rounded-l-lg transition-all duration-300 relative cursor-pointer ${open ? "ml-0" : "ml-56"} text-white p-2 ${
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
-                        : ""}`}>
-                        <div
-                        data-aos="fade-left"
-                        data-aos-anchor-placement="top-bottom"                        
-                        data-aos-duration="500"
+                        : ""}`} >
+                        <div                                             
                         className={"flex flex-row px-1"}>
                   <div
                   
