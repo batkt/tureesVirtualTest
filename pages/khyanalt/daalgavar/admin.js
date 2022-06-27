@@ -2,11 +2,14 @@ import {
   AudioOutlined,
   CheckOutlined,
   ClockCircleOutlined,
+  FileImageOutlined,
   FlagOutlined,
   HistoryOutlined,
   PictureOutlined,
+  RightOutlined,
   SendOutlined,
   StarOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Admin from "components/Admin";
@@ -17,6 +20,8 @@ import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
+import Kharakh from "components/pageComponents/geree/Kharakh";
+
 
 const order = { createdAt: -1 };
 
@@ -95,7 +100,7 @@ function index({ token }) {
     }
   }, [])
 
-
+  
   function setgegdelBichie() {
     if (!setgegdel) {
       notification.warning({ message: 'Анхаар', description: 'Сэтгэгдэлээ бичиж оруулна уу' })
@@ -116,7 +121,14 @@ function index({ token }) {
     })
 
   }
-
+  const [showResults, setShowResults] = React.useState(false)
+  const Nemekh = () => {setDaalgavar(false), setShowResults(true)}
+  const khaakh = () => setShowResults(false)
+  useEffect(() => {
+    if(daalgavar){
+      setShowResults(false);
+    }
+  },[])
 
   return (
     <Admin
@@ -126,6 +138,24 @@ function index({ token }) {
       onSearch={task.onSearch}
     >
       <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 lg:col-span-6 xl:col-span-5">
+        <div className="flex w-full justify-between items-center text-white font-medium bg-green-500 dark:bg-green-700 py-1 px-3">
+          <div>
+            <div className=" text-2xl ">Өнөөдөр</div>
+            <div>7 даалгавар</div>
+          </div>
+          <div onClick={Nemekh} className="h-full px-5 rounded-xl cursor-pointer font-bold items-center flex bg-white text-green-500 dark:text-green-700">Нэмэх</div>
+        </div>
+        <div className="flex justify-between px-20 py-2 items-center font-medium gap-10">
+          <div className="text-center py-2 bg-green-500 w-28 text-white rounded-2xl">
+            <div className="text-xl">27</div>
+            <div>06 сар</div>
+          </div>
+          <div className="text-justify">Ажлын цаг дуусхад 10 цаг 28 минут дутуу байна</div>
+          <div className="text-center py-2 w-28 bg-green-500 text-white rounded-2xl">
+            <div className="text-xl">27</div>
+            <div>06 сар</div>
+          </div>
+        </div>
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 dark:bg-green-700 p-2 font-medium sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
           {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
             <div
@@ -147,7 +177,7 @@ function index({ token }) {
                 : ""
                 }`}
               key={`${index}-daalgavar`}
-              onClick={() => {
+              onClick={() => { khaakh(),
                 setDaalgavar(mur);
               }}
               data-aos="fade-right"
@@ -203,6 +233,69 @@ function index({ token }) {
           ))}
         </div>
       </div>
+      {/* Nemekh */}
+      <div data-aos="flip-right"
+data-aos-delay="200"
+data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 py-5 px-28 ${showResults ? "block" : "hidden" } bg-white relative p-1 dark:bg-gray-900 lg:col-span-6 xl:col-span-7`}>
+        <div className="text-xl text-center font-medium">Даалгавар бүртгэх</div>
+        <div className="flex justify-between px-10">
+        <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">27</div>
+            <div>06 сар</div>
+          </div>
+          <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">28</div>
+            <div>06 сар</div>
+          </div>
+          <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">29</div>
+            <div>06 сар</div>
+          </div>
+          <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">30</div>
+            <div>06 сар</div>
+          </div>
+          <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">1</div>
+            <div>07 сар</div>
+          </div>
+          <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
+            <div className="text-xl">2</div>
+            <div>07 сар</div>
+          </div>
+        </div>
+        <div className="text-2xl font-medium">Ажилтан сонгоно уу</div>
+        <div className="gap-5 flex flex-col">
+          <div  className="bg-gray-200 w-2/3 flex rounded-xl p-5 justify-between">
+            <div className="flex gap-5"><UserOutlined className="text-xl"/>
+            <div>
+              <div className="text-lg font-medium">Ажилтан</div>
+              <div>Та ажилтангаа сонгоно уу</div>
+            </div>
+            </div>
+            <div>
+            <RightOutlined className="self-center items-end"/>
+            </div>
+          </div>
+          <div  className="bg-gray-200 w-2/3 flex rounded-xl p-5 justify-between">
+            <div className="flex gap-5"><FileImageOutlined className="text-xl"/>
+            <div>
+              <div className="text-lg font-medium">Зураг</div>
+              <div>Та зураг сонгоно уу</div>
+            </div>
+            </div>
+            <div>
+            <RightOutlined className="self-center items-end"/>
+            </div>
+          </div>
+          <div  className="bg-gray-200 w-2/3 flex rounded-xl p-5 justify-between">
+            <audio controls autoplay muted type="audio"/>
+          </div>
+        </div>
+        <div><input className="border-2 h-24 p-5 w-full" placeholder="Даалгавар" type={"text"}></input></div>
+        <div className="w-full flex justify-center"><button className="bg-green-500 text-lg rounded-xl py-1 px-24 font-medium text-white">Хадгалах</button></div>
+      </div>
+
       {/* chat */}
 
       <div
