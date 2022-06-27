@@ -8,14 +8,11 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
   );
-  
+
   if (mur.sub) {
     return (
-      <div className=''>
-        <li
-          className={"menu-item"}
-          onClick={() => setOpen(!open)}
-        >
+      <div className="">
+        <li className={"menu-item"} onClick={() => setOpen(!open)}>
           <div className={"flex flex-row p-1"}>
             <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
@@ -42,32 +39,36 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             </div>
           </div>
         </li>
-        <ul className={`sub-menu duration-500 flex flex-col transition-all ${open ? "h-52" : "h-0"} `}>
-          {mur.sub.map((a) => {           
+        <ul
+          style={{ height: open ? `${2.5 * mur.sub.length}rem` : "0rem" }}
+          className={`sub-menu flex flex-col transition-all duration-500`}
+        >
+          {mur.sub.map((a) => {
             return (
               <Link href={a.href} key={a.href}>
                 <a>
-                <li className={`rounded-l-lg transition-all duration-300 relative cursor-pointer ${open ? "ml-0" : "ml-56"} text-white p-2 ${
+                  <li
+                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
+                      open ? "ml-0" : "ml-56"
+                    } p-2 text-white ${
                       a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
-                        : ""}`} >
-                        <div                                             
-                        className={"flex flex-row px-1"}>
-                  <div
-                  
-                    className={`${
-                      a.khuudasniiNer === khuudasniiNer
-                        ? "text-green-500 font-medium"
-                        : ""} flex flex-row`
-                    }
+                        : ""
+                    }`}
                   >
-                    <div className={`mr-2`}>
-                      {a.icon}
+                    <div className={"flex flex-row px-1"}>
+                      <div
+                        className={`${
+                          a.khuudasniiNer === khuudasniiNer
+                            ? "font-medium text-green-500"
+                            : ""
+                        } flex flex-row whitespace-nowrap`}
+                      >
+                        <div className={`mr-2`}>{a.icon}</div>
+                        {a.ner}
+                      </div>
                     </div>
-                    {a.ner}
-                  </div>
-                  </div>
-                </li>
+                  </li>
                 </a>
               </Link>
             );
@@ -98,15 +99,18 @@ function NTses({
   baiguullaga,
   ajiltan,
   barilgaSoliyo,
-  barilgiinId
+  barilgiinId,
 }) {
+  const barilguud = baiguullaga?.barilguud?.filter(
+    (a) =>
+      !!ajiltan?.barilguud?.find((b) => b === a._id) ||
+      ajiltan?.erkh === "Admin"
+  );
 
-  const barilguud = baiguullaga?.barilguud?.filter(a=> !!ajiltan?.barilguud?.find(b=>b === a._id) || ajiltan?.erkh === 'Admin')
-  
   return (
-    <nav className="h-full w-44 hidden md:block">
+    <nav className="hidden h-full w-44 md:block">
       <ul>
-        <li className="px-2 mb-10">
+        <li className="mb-10 px-2">
           <div className="border-b px-2 pb-2">
             <div className="flex flex-col items-center">
               <img
@@ -118,20 +122,32 @@ function NTses({
                     : "/rent.png"
                 }
               />
-              {barilguud?.length > 0 ? <div className="inline-block relative mt-2">
-                <select defaultValue={barilgiinId} onChange={({target})=>barilgaSoliyo(target.value)} className="block appearance-none w-full bg-white dark:bg-gray-800 border border-gray-400 hover:border-gray-500 px-4 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                  {
-                    barilguud?.map(a=>(
-                      <option key={a?._id} className='' value={a?._id}>{a?.ner}</option>
-                    ))
-                  }
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              {barilguud?.length > 0 ? (
+                <div className="relative mt-2 inline-block">
+                  <select
+                    defaultValue={barilgiinId}
+                    onChange={({ target }) => barilgaSoliyo(target.value)}
+                    className="focus:outline-none focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 dark:bg-gray-800"
+                  >
+                    {barilguud?.map((a) => (
+                      <option key={a?._id} className="" value={a?._id}>
+                        {a?.ner}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg
+                      className="h-4 w-4 fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
                 </div>
-              </div> : 
-                _.get(barilguud,'0.ner')
-              }
+              ) : (
+                _.get(barilguud, "0.ner")
+              )}
             </div>
           </div>
         </li>
