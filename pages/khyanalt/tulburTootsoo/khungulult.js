@@ -1,4 +1,4 @@
-import { DeleteOutlined, SettingOutlined } from "@ant-design/icons"
+import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -10,40 +10,40 @@ import {
   Select,
   Table,
   Tabs,
-} from "antd"
-import Admin from "components/Admin"
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt"
-import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh"
-import _ from "lodash"
-import moment from "moment"
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { useAuth } from "services/auth"
-import shalgaltKhiikh from "services/shalgaltKhiikh"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
-import createMethod from "tools/function/crud/createMethod"
-import formatNumber from "tools/function/formatNumber"
-import Aos from "aos"
+} from "antd";
+import Admin from "components/Admin";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
+import _ from "lodash";
+import moment from "moment";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "services/auth";
+import shalgaltKhiikh from "services/shalgaltKhiikh";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import createMethod from "tools/function/crud/createMethod";
+import formatNumber from "tools/function/formatNumber";
+import Aos from "aos";
 
 function tulburTootsoo() {
   useEffect(() => {
-    Aos.init()
-  })
-  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth()
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])
-  const formRef = useRef()
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([])
+    Aos.init();
+  });
+  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
+  const formRef = useRef();
+  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $ne: -1 } },
-  })
+  });
   const query = useMemo(() => {
     return {
       createdAt: {
         $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
-    }
-  }, [ekhlekhOgnoo])
-  const [form] = Form.useForm()
+    };
+  }, [ekhlekhOgnoo]);
+  const [form] = Form.useForm();
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(
       token,
@@ -52,64 +52,64 @@ function tulburTootsoo() {
       shuult?.query,
       undefined,
       1000
-    )
+    );
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
-    useKhungulultTuukh(token, baiguullaga?._id, query)
+    useKhungulultTuukh(token, baiguullaga?._id, query);
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
     niitSariinTurees: 0,
     khunglugdsunDun: 0,
     niitTulukhDun: 0,
-  })
-  const [selectedRowKeys, setRowKeys] = useState([])
+  });
+  const [selectedRowKeys, setRowKeys] = useState([]);
 
-  const { Option } = Select
+  const { Option } = Select;
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
-  }
+  };
   function bugdiigSongokh() {
     setRowKeys((keys) =>
       keys.length === gereeniiMedeelel?.jagsaalt.length
         ? []
         : gereeniiMedeelel?.jagsaalt.map((r) => r._id)
-    )
+    );
   }
 
   useEffect(() => {
-    var khuvi = form?.getFieldValue("khungulukhKhuvi")
-    tootsoolol.niitTalbai = songogdsonGereenuud?.length
+    var khuvi = form?.getFieldValue("khungulukhKhuvi");
+    tootsoolol.niitTalbai = songogdsonGereenuud?.length;
     tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
       (a, b) => a + Number(b?.sariinTurees),
       0
-    )
+    );
     tootsoolol.khunglugdsunDun =
-      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100
+      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100;
     tootsoolol.niitTulukhDun =
-      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun)
-    setTootsoolol({ ...tootsoolol })
-  }, [songogdsonGereenuud])
+      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+    setTootsoolol({ ...tootsoolol });
+  }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return current && current < moment().endOf("day")
+    return current && current < moment().endOf("day");
   }
   function handleChange(value) {
     if (value.length > 0) {
       setShuult({
         query: { davkhar: value, tuluv: { $nin: -1 } },
-      })
+      });
     } else {
     }
-    setRowKeys([])
-    setSongogdsonGereenuud([])
+    setRowKeys([]);
+    setSongogdsonGereenuud([]);
   }
   function nukhtulSongokh(value) {
     if (value === "Бүгд") {
-      bugdiigSongokh()
+      bugdiigSongokh();
     } else {
-      setRowKeys([])
-      setSongogdsonGereenuud([])
+      setRowKeys([]);
+      setSongogdsonGereenuud([]);
     }
   }
   function khungulultKhadgalya() {
@@ -121,33 +121,33 @@ function tulburTootsoo() {
     ) {
       notification.warning({
         message: "Таньд гэрээ хөнгөлөх эрх байхгүй байна.",
-      })
-      return
+      });
+      return;
     }
     if (songogdsonGereenuud.length > 0) {
-      var ugugdul = form.getFieldsValue()
+      var ugugdul = form.getFieldsValue();
       ugugdul.ognoonuud = [
         moment(ugugdul.ognoonuud).format("YYYY-MM-01 00:00:00"),
-      ]
-      ugugdul.barilgiinId = barilgiinId
-      ugugdul.tulukhDun = tootsoolol.niitSariinTurees
-      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun
-      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun
+      ];
+      ugugdul.barilgiinId = barilgiinId;
+      ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
+      ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
+      ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
         (x) => (x._id = x._id)
-      )
+      );
 
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Хөнгөлөлт амжилттай хийгдлээ")
-            formRef.current.resetFields()
-            setTootsoolol({})
+            message.success("Хөнгөлөлт амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            setTootsoolol({});
           }
         })
-        .catch(aldaaBarigch)
+        .catch(aldaaBarigch);
     } else {
-      message.warning("Хөнгөлөх талбай сонгоно уу")
+      message.warning("Хөнгөлөх талбай сонгоно уу");
     }
   }
   function ustgaya(mur) {
@@ -157,18 +157,18 @@ function tulburTootsoo() {
       })
       .then(({ data }) => {
         if (data !== undefined) {
-          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true)
-          message.success("Устгагдлаа")
+          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          message.success("Устгагдлаа");
         }
-      })
+      });
   }
   function tseverlekh() {
-    formRef.current.resetFields()
-    setShuult()
+    formRef.current.resetFields();
+    setShuult();
   }
   function onSelectChange(selectedRowKeys, selectedRows) {
-    setRowKeys(selectedRowKeys)
-    setSongogdsonGereenuud(selectedRows)
+    setRowKeys(selectedRowKeys);
+    setSongogdsonGereenuud(selectedRows);
   }
   return (
     <Admin
@@ -176,7 +176,7 @@ function tulburTootsoo() {
       khuudasniiNer="khungulult"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
       }}
       tsonkhniiId="61c2c6eb1c2830c4e6f90cc5"
     >
@@ -344,7 +344,7 @@ function tulburTootsoo() {
                       align: "center",
                       className: "text-center",
                       render: (talbainKhemjee) => {
-                        return `${talbainKhemjee} м2`
+                        return `${talbainKhemjee} м2`;
                       },
                       showSorterTooltip: false,
 
@@ -358,7 +358,7 @@ function tulburTootsoo() {
                       className: "text-center",
                       align: "center",
                       render: (sariinTurees) => {
-                        return formatNumber(sariinTurees || 0)
+                        return formatNumber(sariinTurees || 0);
                       },
                       showSorterTooltip: false,
                       sorter: (a, b) =>
@@ -407,11 +407,11 @@ function tulburTootsoo() {
                   columns={[
                     {
                       title: "Огноо",
-                      dataIndex: "date",
+                      dataIndex: "createdAt",
                       ellipsis: true,
                       align: "center",
                       render: (data) => {
-                        return moment(data).format("YYYY-MM-DD hh:mm:ss")
+                        return moment(data).format("YYYY-MM-DD hh:mm:ss");
                       },
                     },
                     {
@@ -426,7 +426,9 @@ function tulburTootsoo() {
                       ellipsis: true,
                       align: "center",
                       render: (data) => {
-                        return moment(data).format("YYYY-MM-DD")
+                        return moment(data && data[0])
+                          .add(-1, "d")
+                          .format("YYYY-MM-DD");
                       },
                     },
                     {
@@ -434,7 +436,7 @@ function tulburTootsoo() {
                       dataIndex: "tulukhDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -442,7 +444,7 @@ function tulburTootsoo() {
                       dataIndex: "khungulultiinDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -450,7 +452,7 @@ function tulburTootsoo() {
                       dataIndex: "khungulsunDun",
                       align: "center",
                       render: (data) => {
-                        return formatNumber(data) + "₮"
+                        return formatNumber(data) + "₮";
                       },
                     },
                     {
@@ -496,7 +498,7 @@ function tulburTootsoo() {
                               icon={<DeleteOutlined />}
                             />
                           </Popconfirm>
-                        )
+                        );
                       },
                     },
                   ]}
@@ -507,9 +509,9 @@ function tulburTootsoo() {
         </Tabs>
       </div>
     </Admin>
-  )
+  );
 }
 
-export const getServerSideProps = shalgaltKhiikh
+export const getServerSideProps = shalgaltKhiikh;
 
-export default tulburTootsoo
+export default tulburTootsoo;
