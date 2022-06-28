@@ -130,6 +130,7 @@ function index({ token }) {
     }
   },[])
 
+  
   return (
     <Admin
       khuudasniiNer="daalgavar"
@@ -137,7 +138,7 @@ function index({ token }) {
       className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >
-      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 lg:col-span-6 xl:col-span-5">
+      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 xl:col-span-5">
         <div className="flex w-full justify-between items-center text-white rounded-xl font-medium bg-green-500 dark:bg-green-700 py-1 px-3">
           <div>
             <div className=" text-2xl ">Өнөөдөр</div>
@@ -172,7 +173,7 @@ function index({ token }) {
         <div className="w-full overflow-y-scroll" style={{ height: "70vh" }}>
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`flex w-full cursor-pointer rounded-lg flex-row space-x-2 p-2 bg-gray-50 my-1 pl-0 ${daalgavar?._id === mur._id
+              className={`flex w-full cursor-pointer rounded-lg flex-row space-x-2 p-2 bg-gray-50 dark:bg-gray-800 my-1 pl-0 ${daalgavar?._id === mur._id
                 ? "bg-green-100 dark:bg-green-700"
                 : ""
                 }`}
@@ -236,7 +237,7 @@ function index({ token }) {
       {/* Nemekh */}
       <div data-aos="flip-right"
 data-aos-delay="200"
-data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 p-8 xl:px-12 2xl:px-28 ${showResults ? "block" : "hidden" } bg-white relative p-1 dark:bg-gray-900 lg:col-span-6 xl:col-span-7`}>
+data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 p-8 xl:px-12 2xl:px-28 ${showResults ? "block" : "hidden" } bg-white relative p-1 dark:bg-gray-900 xl:col-span-7`}>
         <div className="text-xl text-center font-medium">Даалгавар бүртгэх</div>
         <div className="flex justify-between lg:justify-center xl:justify-between flex-wrap gap-2">
         <div className="text-center py-2 bg-gray-200 w-16 font-bold rounded-2xl">
@@ -300,7 +301,7 @@ data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 p-8 xl
 
       <div
         className={`col-span-12 ${daalgavar ? "block" : "hidden"
-          } gap-5 bg-white relative p-1 dark:bg-gray-900 lg:col-span-6 xl:col-span-7`}
+          } gap-5 bg-green-50 relative p-1 dark:bg-gray-900 xl:col-span-7`}
         data-aos="flip-left"
         style={{ height: "90vh" }}
         data-aos-delay="200"
@@ -308,7 +309,7 @@ data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 p-8 xl
         ref={ChatRef}
       >
         <div
-          className="w-full max-w-6xl min-w-0 space-y-5 p-0 sm:p-5 overflow-y-scroll"
+          className="w-full max-w-6xl min-w-0 space-y-5 p-8 overflow-y-scroll"
           style={{ height: "90%" }}
           ref={messageEl}
         >
@@ -324,7 +325,7 @@ data-aos-anchor-placement="top-bottom" className={`col-span-12 space-y-10 p-8 xl
                         className="h-10 w-10 rounded-full"
                       />
                     </div>
-                    <div className="rounded-lg p-3 pb-8 pt-3 relative bg-gray-300 dark:bg-gray-800 w-10/12 sm:w-full">
+                    <div className="rounded-lg p-3 pb-8 pt-3 relative bg-white dark:bg-gray-800 w-10/12 sm:w-full">
                       <div className="flex flex-wrap flex-row items-center justify-between">
                         <div className="font-medium">Захирал</div>
                         <div className="flex">                          

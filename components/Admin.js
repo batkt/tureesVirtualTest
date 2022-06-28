@@ -167,7 +167,7 @@ function Admin({
                   {mSearch ? (
                     <CloseOutlined
                       onClick={onClickSearch}
-                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-2 h-4 w-4"
                     />
                   ) : (
                     <svg

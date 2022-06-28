@@ -34,7 +34,7 @@ function Ajiltan() {
   });
 
   return (
-    <div className="login flex justify-center dark:bg-gray-800">
+    <div className="login flex justify-center bg-green-600 xl:bg-white dark:bg-gray-800 ">
       <Head>
         <title>Нэвтрэх хуудас</title>
         <link rel="icon" href="/favicon.ico" />
@@ -64,7 +64,7 @@ function Ajiltan() {
             </div>
           </div>
           <div className="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
-            <div className="my-auto mx-auto w-full rounded-md bg-white px-5 py-8 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
+            <div className="my-auto mx-auto w-full rounded-md bg-white px-5 py-14 pb-5 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
               <h2 className="intro-x text-center text-2xl font-bold dark:text-gray-300 xl:text-left xl:text-3xl"></h2>
               <div data-aos="flip-right">
                 <Form
@@ -141,8 +141,13 @@ function Ajiltan() {
                   </span>
                   Нэвтрэх
                 </button>
+                <div className="mt-24 text-center xl:hidden">
+                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
+                хуулиар баталгаажсан.
+                
               </div>
-              <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 hidden h-12 w-40 cursor-pointer items-center justify-center rounded-full border shadow-md md:flex">
+              </div>
+              <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 h-12 w-40 cursor-pointer items-center justify-center bg-white dark:bg-gray-900 rounded-full border shadow-md flex">
                 <div className="mr-4 text-gray-700 dark:text-gray-300">
                   Dark Mode
                 </div>
@@ -151,19 +156,12 @@ function Ajiltan() {
                   onClick={() => setTheme(themeValue ? "light" : "dark")}
                 />
               </div>
-              <div className="fixed bottom-0">
+              <div className="fixed bottom-0 hidden xl:block">
                 © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
                 хуулиар баталгаажсан.
-                <div className=" flex flex-row md:hidden">
-                  <div className="mr-4 text-gray-700 dark:text-gray-300">
-                    Dark Mode
-                  </div>
-                  <Switch
-                    checked={themeValue}
-                    onClick={() => setTheme(themeValue ? "light" : "dark")}
-                  />
-                </div>
+                
               </div>
+              
             </div>
           </div>
         </div>

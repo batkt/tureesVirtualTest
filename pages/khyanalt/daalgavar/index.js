@@ -125,7 +125,7 @@ function index({ token }) {
       className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >
-      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 lg:col-span-6 xl:col-span-5">
+      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 xl:col-span-5">
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 dark:bg-green-700 p-2 font-medium sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
           {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
             <div
@@ -142,7 +142,7 @@ function index({ token }) {
         <div className="w-full overflow-y-scroll" style={{ height: "70vh" }}>
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`flex w-full cursor-pointer rounded-lg flex-row space-x-2 p-2 pl-0 ${daalgavar?._id === mur._id
+              className={`flex w-full cursor-pointer rounded-lg flex-row bg-gray-50 dark:bg-gray-800 my-1 space-x-2 p-2 pl-0 ${daalgavar?._id === mur._id
                 ? "bg-green-100 dark:bg-green-700"
                 : ""
                 }`}
@@ -207,7 +207,7 @@ function index({ token }) {
 
       <div
         className={`col-span-12 ${daalgavar ? "block" : "hidden"
-          } gap-5 bg-white relative p-1 dark:bg-gray-900 lg:col-span-6 xl:col-span-7`}
+          } gap-5 bg-green-50 relative p-1 dark:bg-gray-900 xl:col-span-7`}
         data-aos="flip-left"
         style={{ height: "90vh" }}
         data-aos-delay="200"
@@ -215,7 +215,7 @@ function index({ token }) {
         ref={ChatRef}
       >
         <div
-          className="w-full max-w-6xl min-w-0 space-y-5 p-0 sm:p-5 overflow-y-scroll"
+          className="w-full max-w-6xl min-w-0 space-y-5 p-8 overflow-y-scroll"
           style={{ height: "90%" }}
           ref={messageEl}
         >
@@ -231,7 +231,7 @@ function index({ token }) {
                         className="h-10 w-10 rounded-full"
                       />
                     </div>
-                    <div className="rounded-lg p-3 pb-8 pt-3 relative bg-gray-300 dark:bg-gray-800 w-10/12 sm:w-full">
+                    <div className="rounded-lg p-3 pb-8 pt-3 relative bg-white dark:bg-gray-800 w-10/12 sm:w-full">
                       <div className="flex flex-wrap flex-row items-center justify-between">
                         <div className="font-medium">Захирал</div>
                         <div className="flex">                          
