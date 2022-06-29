@@ -52,8 +52,6 @@ function index({ token }) {
     setgegdeliinQuery
   );
 
-  console.log("daalgavriinSetgegdel", daalgavriinSetgegdel);
-
   function daalgavarKhuleejAvlaa() {
     uilchilgee(token)
       .post("/daalgavarKhuleejAvlaa", { id: daalgavar._id })
@@ -62,6 +60,7 @@ function index({ token }) {
       })
       .finally(() => task.mutate());
   }
+
   function daalgavarDuusgalaa() {
     uilchilgee(token)
       .post("/daalgavarDuusgalaa", { id: daalgavar._id })
@@ -75,9 +74,15 @@ function index({ token }) {
     if (daalgavar.tuluv === 0) daalgavarKhuleejAvlaa();
     else if (daalgavar.tuluv === 1) daalgavarDuusgalaa();
   }
+
   useEffect(() => {
     Aos.init({ duration: 1000 });
   });
+
+  useEffect(() => {
+    if (ajiltan?.erkh === "Admin")
+      window.location.href = "/khyanalt/daalgavar/admin";
+  }, [ajiltan]);
 
   useEffect(() => {
     setSetgegdel("");
