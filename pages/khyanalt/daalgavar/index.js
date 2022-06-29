@@ -79,10 +79,10 @@ function index({ token }) {
     Aos.init({ duration: 1000 });
   });
 
-  useEffect(() => {
-    if (ajiltan?.erkh === "Admin")
-      window.location.href = "/khyanalt/daalgavar/admin";
-  }, [ajiltan]);
+  // useEffect(() => {
+  //   if (ajiltan?.erkh === "Admin")
+  //     window.location.href = "/khyanalt/daalgavar/admin";
+  // }, [ajiltan]);
 
   useEffect(() => {
     setSetgegdel("");
