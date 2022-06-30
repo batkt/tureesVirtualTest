@@ -184,7 +184,7 @@ function AjiltanBurtgel({ token }) {
       ),
       khuvi: 100,
       utga: "Идэвхгүй",
-      query: { idevkhiteiEsekh: false },
+      query: { idevkhiteiEsekh: [false,null] },
     },
   ];
 
@@ -462,7 +462,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  len: formNuukh === "ААН"?  7 : 10,
+                  len: formNuukh === "ААН" ?  7 : 10,
                   pattern: formNuukh === "ААН" ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
                   message: "Регистр бүртгэнэ үү!",
                 },
