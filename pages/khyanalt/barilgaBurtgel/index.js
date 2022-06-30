@@ -19,7 +19,6 @@ import formatNumber from "tools/function/formatNumber";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import moment from "moment";
-const toololt = {};
 
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
@@ -119,7 +118,7 @@ function BarilgaBurtgel({ token }) {
   const khyanaltiinDun = useMemo(() => {
     return [
       {
-        too: baiguullaga?.barilguud?.length,
+        too: baiguullaga?.barilguud?.length || 0,
         icon: (
           <svg
             className="h-8 w-8 text-green-500"
