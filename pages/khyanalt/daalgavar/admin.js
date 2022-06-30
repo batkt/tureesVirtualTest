@@ -21,6 +21,8 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
 import Kharakh from "components/pageComponents/geree/Kharakh";
+import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh";
+
 
 const order = { createdAt: -1 };
 
@@ -141,12 +143,12 @@ function index({ token }) {
       <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 xl:col-span-5">
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
-            <div className=" text-2xl ">Өнөөдөр</div>
-            <div>7 даалгавар</div>
+            <div className="text-2xl ">Өнөөдөр</div>
+            <div>{daalgavar?.length? + 0 : "0"} даалгавар</div>
           </div>
           <div
             onClick={Nemekh}
-            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white px-5 font-bold text-green-500 dark:text-green-700"
+            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white hover:bg-gray-200 hover:text-black  duration-500 transition-colors px-5 font-bold text-green-500 dark:text-green-700"
           >
             Нэмэх
           </div>
@@ -248,84 +250,9 @@ function index({ token }) {
         </div>
       </div>
       {/* Nemekh */}
-      <div
-        data-aos="flip-right"
-        data-aos-delay="200"
-        data-aos-anchor-placement="top-bottom"
-        className={`col-span-12 space-y-10 p-8 xl:px-12 2xl:px-28 ${
+      <DaalgavarNemekh className={` ${
           showResults ? "block" : "hidden"
-        } relative bg-white p-1 dark:bg-gray-900 xl:col-span-7`}
-      >
-        <div className="text-center text-xl font-medium">Даалгавар бүртгэх</div>
-        <div className="flex flex-wrap justify-between gap-2 lg:justify-center xl:justify-between">
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">{moment().format("DD")}</div>
-            <div>{moment().format("MM")} сар</div>
-          </div>
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">{moment().format("DD")}</div>
-            <div>06 сар</div>
-          </div>
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">29</div>
-            <div>06 сар</div>
-          </div>
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">30</div>
-            <div>06 сар</div>
-          </div>
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">1</div>
-            <div>07 сар</div>
-          </div>
-          <div className="w-16 rounded-2xl bg-gray-200 py-2 text-center font-bold">
-            <div className="text-xl">2</div>
-            <div>07 сар</div>
-          </div>
-        </div>
-        <div className="text-2xl font-medium">Ажилтан сонгоно уу</div>
-        <div className="flex flex-col gap-5">
-          <div className="flex justify-between rounded-xl bg-gray-200 p-5 xl:w-2/3">
-            <div className="flex gap-5">
-              <UserOutlined className="text-xl" />
-              <div>
-                <div className="text-lg font-medium">Ажилтан</div>
-                <div>Та ажилтангаа сонгоно уу</div>
-              </div>
-            </div>
-            <div>
-              <RightOutlined className="items-end self-center" />
-            </div>
-          </div>
-          <div className="flex justify-between rounded-xl bg-gray-200 p-5 xl:w-2/3">
-            <div className="flex gap-5">
-              <FileImageOutlined className="text-xl" />
-              <div>
-                <div className="text-lg font-medium">Зураг</div>
-                <div>Та зураг сонгоно уу</div>
-              </div>
-            </div>
-            <div>
-              <RightOutlined className="items-end self-center" />
-            </div>
-          </div>
-          <div className="flex justify-between rounded-xl bg-gray-200 p-5 xl:w-2/3">
-            <audio controls autoplay muted type="audio" />
-          </div>
-        </div>
-        <div>
-          <input
-            className="h-24 w-full border-2 p-5"
-            placeholder="Даалгавар"
-            type={"text"}
-          ></input>
-        </div>
-        <div className="flex w-full justify-center">
-          <button className="rounded-xl bg-green-500 py-1 px-24 text-lg font-medium text-white">
-            Хадгалах
-          </button>
-        </div>
-      </div>
+        }`}/>
 
       {/* chat */}
 
