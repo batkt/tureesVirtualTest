@@ -36,6 +36,7 @@ const fetcher = (
       params: {
         ...khuudaslalt,
         query: {
+          baiguullagiinId,
           $or: [{ car_number: { $regex: search, $options: "i" } }],
           ...query,
         },

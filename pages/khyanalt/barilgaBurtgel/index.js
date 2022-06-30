@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useEffect } from "react";
-import { url } from "services/uilchilgee";
+import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import { Button, Table, Popover } from "antd";
 import {
@@ -15,15 +15,30 @@ import router from "next/router";
 import CardList from "components/cardList";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
 import Aos from "aos";
-
+import formatNumber from "tools/function/formatNumber";
+import useSWR from "swr";
+import createMethod from "tools/function/crud/createMethod";
+import moment from "moment";
 const toololt = {};
 
-function BarilgaBurtgel({}) {
+function BarilgaBurtgel({ token }) {
   useEffect(() => {
     Aos.init();
   });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
+
+  const barilgaToololt = useSWR(
+    !!token ? ["khyanakhSambariinUgugdul", token] : null,
+    (url, token) =>
+      createMethod(url, token, {
+        ekhlekhOgnoo: moment().startOf().format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: moment().endOf().format("YYYY-MM-DD 23:59:59"),
+      })
+        .then(({ data }) => data)
+        .catch(aldaaBarigch),
+    { revalidateOnFocus: false }
+  );
   const columns = useMemo(
     () => [
       {
@@ -48,10 +63,14 @@ function BarilgaBurtgel({}) {
         align: "center",
       },
       {
-        title: "Талбай /м2/",
+        title: (
+          <label>
+            Талбай м <sup> 2</sup>
+          </label>
+        ),
         key: "burtgesen",
-        dataIndex: "burtgesen",
-        render: () => <>{"500"}</>,
+        dataIndex: "niitTalbai",
+        render: (niitTalbai) => formatNumber(niitTalbai),
         width: "7rem",
         align: "center",
       },
@@ -100,7 +119,7 @@ function BarilgaBurtgel({}) {
   const khyanaltiinDun = useMemo(() => {
     return [
       {
-        too: _.get(toololt, "0.baraa") || 15,
+        too: baiguullaga?.barilguud?.length,
         icon: (
           <svg
             className="h-8 w-8 text-green-500"
@@ -120,7 +139,7 @@ function BarilgaBurtgel({}) {
         utga: "Нийт байгууллага",
       },
       {
-        too: "10.2сая",
+        too: formatNumber(barilgaToololt?.data?.tulsunDun),
         icon: (
           <svg
             className="h-8 w-8 text-green-500"
@@ -140,7 +159,7 @@ function BarilgaBurtgel({}) {
         utga: "Түрээсийн орлого",
       },
       {
-        too: "1.5сая",
+        too: formatNumber(barilgaToololt?.data?.dutuu),
         icon: (
           <svg
             className="h-8 w-8 text-red-500"
@@ -160,7 +179,10 @@ function BarilgaBurtgel({}) {
         utga: "Төлбөр дутуу",
       },
       {
-        too: _.get(toololt, "0.khariltsagchiinToo") || 500,
+        too:
+          barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0) +
+          "/" +
+          barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too,
         icon: (
           <svg
             className="h-8 w-8 text-green-500"
@@ -178,11 +200,15 @@ function BarilgaBurtgel({}) {
             <path d="M16 3.13a4 4 0 0 1 0 7.75" />
           </svg>
         ),
-        khuvi: 100,
+        khuvi: (
+          (100 *
+            barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too) /
+          barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
+        ).toFixed(0),
         utga: "Түрээслэгч",
       },
     ];
-  }, [toololt]);
+  }, [barilgaToololt]);
 
   function barilgaBurtgel(id) {
     router.push(`/khyanalt/barilgaBurtgel/${id}`);

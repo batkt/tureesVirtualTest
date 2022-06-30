@@ -137,6 +137,9 @@ function GereeBaiguulakh({ token, data }) {
           <Form.Item name="bdavkhar" label="B Давхар">
             <InputNumber style={{ width: "100%" }} />
           </Form.Item>
+          <Form.Item name="niitTalbai" label={<label>Нийт м<sup>2</sup></label>}>
+            <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
           <Form.Item name="khayag" label="Хаяг">
             <Input.TextArea />
           </Form.Item>
@@ -166,7 +169,8 @@ function GereeBaiguulakh({ token, data }) {
           columns={[
             { title: "Давхар", dataIndex: "davkhar" },
             {
-              title: "m2 Үнэ",
+              title: <label>м<sup>2</sup>Үнэ</label>,
+
               dataIndex: "tariff",
               render(utga, mur, index) {
                 return (

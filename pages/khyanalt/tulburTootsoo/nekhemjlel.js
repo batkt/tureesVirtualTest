@@ -202,7 +202,6 @@ function tulburTootsoo({ token }) {
       uilchilgee(token)
         .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
         .then(({ data }) => {
-          debugger;
           if (data === "Amjilttai") {
             notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
             setLoading(false);

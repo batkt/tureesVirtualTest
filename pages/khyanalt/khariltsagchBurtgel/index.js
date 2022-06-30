@@ -191,7 +191,6 @@ function AjiltanBurtgel({ token }) {
   const { Option } = Select;
 
   function onChange(talbar, utga) {
-    debugger;
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
   function tuukh(data) {
