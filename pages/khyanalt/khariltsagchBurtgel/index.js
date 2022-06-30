@@ -224,6 +224,7 @@ function AjiltanBurtgel({ token }) {
             message.success("Бүртгэл амжилттай засагдлаа");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+            khariltsagchToololtMutate()
           }
         })
         .catch(aldaaBarigch);
@@ -234,6 +235,7 @@ function AjiltanBurtgel({ token }) {
             message.success("Бүртгэл амжилттай хийгдлээ");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+            khariltsagchToololtMutate()
           }
         })
         .catch(aldaaBarigch);
@@ -460,8 +462,8 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  len: 10,
-                  pattern: new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+                  len: formNuukh === "ААН"?  7 : 10,
+                  pattern: formNuukh === "ААН" ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
                   message: "Регистр бүртгэнэ үү!",
                 },
               ]}
