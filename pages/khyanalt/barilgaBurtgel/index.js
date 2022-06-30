@@ -15,10 +15,11 @@ import router from "next/router";
 import CardList from "components/cardList";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
 import Aos from "aos";
+import formatNumber from "tools/function/formatNumber";
 
 const toololt = {};
 
-function BarilgaBurtgel({}) {
+function BarilgaBurtgel({ }) {
   useEffect(() => {
     Aos.init();
   });
@@ -48,10 +49,10 @@ function BarilgaBurtgel({}) {
         align: "center",
       },
       {
-        title: "Талбай /м2/",
+        title: < label > Талбай  м < sup > 2</sup ></label >,
         key: "burtgesen",
-        dataIndex: "burtgesen",
-        render: () => <>{"500"}</>,
+        dataIndex: "niitTalbai",
+        render: (niitTalbai) => formatNumber(niitTalbai),
         width: "7rem",
         align: "center",
       },
@@ -212,9 +213,8 @@ function BarilgaBurtgel({}) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${
-                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                            } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                              } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
