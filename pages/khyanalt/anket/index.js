@@ -198,7 +198,6 @@ function Khabea({ token }) {
       .catch(aldaaBarigch);
   }
   function anketJagsaalt() {
-    debugger;
     uilchilgee(token)
       .get("/survey", {
         params: {

@@ -633,7 +633,6 @@ function guilgeeniiTuukh({ token }) {
     </Menu>
   );
   function baganaTurulKhorvuulekh(turul, utga) {
-    debugger;
     var butsakhUtga = "";
     switch (turul) {
       case "daraagiinTulukhOgnoo":

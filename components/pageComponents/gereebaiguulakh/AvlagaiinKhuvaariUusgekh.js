@@ -84,14 +84,31 @@ function AvlagaiinKhuvaariUusgekh({ value, onChange, ugugdul }) {
   useEffect(() => {
     var data = [];
     const ognoo = moment(moment(gereeniiOgnoo).format("YYYY-MM-DD hh:mm:ss"));
+    var lastDate = moment(moment(ognoo).format("YYYY-MM-DD 00:00:00"));
     new Array(ugugdul?.khugatsaa || 0).fill("").map((mur, index) => {
       tulukhUdur.forEach((udur) => {
+        let niitKhonog = lastDate.daysInMonth();
+        let currentDate = moment(`${ognoo}`)
+          .add(index + 1, "month")
+          .set("date", udur);
+
+        console.log(
+          lastDate.format("YYYY-MM-DD"),
+          currentDate.format("YYYY-MM-DD")
+        );
+
+        let khonog = currentDate.diff(lastDate, "d");
+
+        lastDate = currentDate;
+
+        let tulukhDun = (ugugdul.talbainNiitUne * khonog) / niitKhonog;
+
         data.push({
           ognoo: moment(`${ognoo}`)
             .add(index + 1, "month")
             .set("date", udur),
           khyamdral: 0,
-          tulukhDun: ugugdul.talbainNiitUne,
+          tulukhDun: tulukhDun.toFixed(2),
         });
       });
     });
