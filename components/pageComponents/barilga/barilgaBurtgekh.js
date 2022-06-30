@@ -1,49 +1,37 @@
-import React, { forwardRef, useImperativeHandle } from "react"
-import {
-  Divider,
-  Form,
-  Input,
-  Select,
-  TimePicker,
-  Upload,
-  Modal,
-  message,
-} from "antd"
-import moment from "moment"
-import getBase64 from "tools/function/getBase64"
-import uilchilgee, { url } from "../../../services/uilchilgee"
-import otoFormData from "tools/function/otoFormData"
-const { TextArea } = Input
-const { Option } = Select
-const { RangePicker } = TimePicker
-const { confirm } = Modal
+import React, { forwardRef, useImperativeHandle } from "react";
+import { Form, Input, Upload, Modal, message } from "antd";
+import getBase64 from "tools/function/getBase64";
+import uilchilgee, { url } from "../../../services/uilchilgee";
+import otoFormData from "tools/function/otoFormData";
+const { TextArea } = Input;
+const { confirm } = Modal;
 
 const BarilgaBurtgekh = forwardRef(
   ({ ugugdul, readonly, tuvEsekh, destroy, token, salbarMutate }, ref) => {
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
 
     useImperativeHandle(
       ref,
       () => ({
         khadgalya() {
-          var { ...baiguullagaData } = form.getFieldsValue()
-          let formData = otoFormData(baiguullagaData)
+          var { ...baiguullagaData } = form.getFieldsValue();
+          let formData = otoFormData(baiguullagaData);
           uilchilgee(token)
             .post("/baiguullaga", baiguullagaData)
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                message.destroy()
-                message.success("Амжилттай хадгаллаа")
-                salbarMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }))
-                destroy()
+                message.destroy();
+                message.success("Амжилттай хадгаллаа");
+                salbarMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }));
+                destroy();
               } else {
-                message.destroy()
-                message.warning("Алдаа гарлаа")
+                message.destroy();
+                message.warning("Алдаа гарлаа");
               }
-            })
+            });
         },
         khaaya() {
-          if (readonly) destroy()
+          if (readonly) destroy();
           else
             confirm({
               title: "Анхаар",
@@ -51,23 +39,23 @@ const BarilgaBurtgekh = forwardRef(
               cancelText: "Үгүй",
               content: "Та хадгалахгүй гарахдаа итгэлтэй байна уу",
               onOk: destroy,
-            })
+            });
         },
       }),
       [form]
-    )
+    );
 
     function beforeUpload(file) {
-      document.getElementById("zurag").classList.add("visible")
+      document.getElementById("zurag").classList.add("visible");
       function after(base64) {
-        let image = document.getElementById("zurag")
-        let stringutga = document.getElementById("string-utga")
-        image.classList.remove("hidden")
-        stringutga.classList.add("hidden")
-        image.src = base64
+        let image = document.getElementById("zurag");
+        let stringutga = document.getElementById("string-utga");
+        image.classList.remove("hidden");
+        stringutga.classList.add("hidden");
+        image.src = base64;
       }
-      getBase64(file, after)
-      return false
+      getBase64(file, after);
+      return false;
     }
 
     return (
@@ -138,8 +126,8 @@ const BarilgaBurtgekh = forwardRef(
           <TextArea disabled={readonly} />
         </Form.Item>
       </Form>
-    )
+    );
   }
-)
+);
 
-export default BarilgaBurtgekh
+export default BarilgaBurtgekh;
