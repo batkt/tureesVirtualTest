@@ -174,7 +174,7 @@ function index({ token }) {
         </div>
         <div
           className="w-full overflow-y-scroll"
-          style={{ height: "60vh" }}
+          style={{ height: "50vh" }}
           onScroll={(e) => {
             if (
               e.target.scrollHeight - e.target.scrollTop ===
@@ -195,9 +195,6 @@ function index({ token }) {
               onClick={() => {
                 khaakh(), setDaalgavar(mur);
               }}
-              data-aos="fade-right"
-              data-aos-delay={1 + index + "00"}
-              data-aos-anchor-placement="top-bottom"
             >
               <div className="-ml-1 flex w-10 items-center justify-end text-left text-base">
                 {1 + index}.
