@@ -6,17 +6,18 @@ import {
   RightOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Upload } from "antd";
+import { Button, notification, Upload } from "antd";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import AjiltanNemekh from "./ajiltanNemekh";
 import uilchilgee, { url } from "services/uilchilgee";
+import { mutate } from "swr";
 
 const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD"));
 
-function DaalgavarNemekh({ className, token, onRefresh }) {
+function DaalgavarNemekh({ className, token, onRefresh, data }) {
   const ajitanRef = React.useRef(null);
   const { barilgiinId, baiguullaga } = useAuth();
   const [daalgavar, setDaalgavar] = React.useState({});
@@ -54,7 +55,25 @@ function DaalgavarNemekh({ className, token, onRefresh }) {
   }
 
   function khadgalakh() {
-    uilchilgee(token).post("/daalgavarOruulya", daalgavar);
+    if(!daalgavar.duusakhOgnoo){
+      notification.warn({description:'Дуусах Огноо сонгоно уу !',message:'Анхаар'})
+      return
+    } 
+    if(!daalgavar.ajiltniiNer){
+      notification.warn({description:'Ажилтан сонгоно уу !',message:'Анхаар'})
+      return
+    } 
+    if(!daalgavar.tailbar){
+      notification.warn({description:'Даалгавар хэсэгт сэтгэгдэлээ оруулна уу !',message:'Анхаар'})
+      return
+    }
+    uilchilgee(token).post("/daalgavarOruulya", daalgavar).then(res=>{
+      if (data === "Amjilttai") {
+        onRefresh()
+        notification.info({message: 'Даалгавар амжилттай бүртгэгдлээ'})
+      }
+    });
+
   }
 
   return (
