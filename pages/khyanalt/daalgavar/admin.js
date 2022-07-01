@@ -134,7 +134,7 @@ function index({ token }) {
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
             <div className="text-2xl ">Өнөөдөр</div>
-            <div>{daalgavar?.length + 0 } даалгавар</div>
+            <div>{daalgavar?.length + 0} даалгавар</div>
           </div>
           <div
             onClick={Nemekh}
@@ -172,8 +172,19 @@ function index({ token }) {
             </div>
           ))}
         </div>
-        <div className="w-full overflow-y-scroll" style={{ height: "70vh" }}>
-          {task?.data?.jagsaalt?.map((mur, index) => (
+        <div
+          className="w-full overflow-y-scroll"
+          style={{ height: "60vh" }}
+          onScroll={(e) => {
+            if (
+              e.target.scrollHeight - e.target.scrollTop ===
+                e.target.clientHeight &&
+              !!task.data
+            )
+              task.next();
+          }}
+        >
+          {task?.jagsaalt?.map((mur, index) => (
             <div
               className={`my-1 flex w-full cursor-pointer flex-row space-x-2 rounded-lg bg-gray-50 p-2 pl-0 dark:bg-gray-800 ${
                 daalgavar?._id === mur._id

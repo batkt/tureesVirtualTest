@@ -11,11 +11,10 @@ import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import AjiltanNemekh from "./ajiltanNemekh";
 import uilchilgee, { url } from "services/uilchilgee";
-import { mutate } from "swr";
 
 const ognoonuud = new Array(30)
   .fill("")
-  .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD"));
+  .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
 
 function DaalgavarNemekh({ className, token, onRefresh, data }) {
   const ajitanRef = React.useRef(null);
@@ -55,25 +54,39 @@ function DaalgavarNemekh({ className, token, onRefresh, data }) {
   }
 
   function khadgalakh() {
-    if(!daalgavar.duusakhOgnoo){
-      notification.warn({description:'Дуусах Огноо сонгоно уу !',message:'Анхаар'})
-      return
-    } 
-    if(!daalgavar.ajiltniiNer){
-      notification.warn({description:'Ажилтан сонгоно уу !',message:'Анхаар'})
-      return
-    } 
-    if(!daalgavar.tailbar){
-      notification.warn({description:'Даалгавар хэсэгт сэтгэгдэлээ оруулна уу !',message:'Анхаар'})
-      return
+    if (!daalgavar.duusakhOgnoo) {
+      notification.warn({
+        description: "Дуусах Огноо сонгоно уу !",
+        message: "Анхаар",
+      });
+      return;
     }
-    uilchilgee(token).post("/daalgavarOruulya", daalgavar).then(res=>{
-      if (data === "Amjilttai") {
-        onRefresh()
-        notification.info({message: 'Даалгавар амжилттай бүртгэгдлээ'})
-      }
-    });
+    if (!daalgavar.ajiltniiNer) {
+      notification.warn({
+        description: "Ажилтан сонгоно уу !",
+        message: "Анхаар",
+      });
+      return;
+    }
+    if (!daalgavar.tailbar) {
+      notification.warn({
+        description: "Даалгавар хэсэгт сэтгэгдэлээ оруулна уу !",
+        message: "Анхаар",
+      });
+      return;
+    }
 
+    daalgavar.baiguullagiinId = baiguullaga?._id;
+    daalgavar.tuluv = 0;
+    uilchilgee(token)
+      .post("/daalgavarOruulya", daalgavar)
+      .then((res) => {
+        if (data === "Amjilttai") {
+          onRefresh();
+          setDaalgavar({});
+          notification.info({ message: "Даалгавар амжилттай бүртгэгдлээ" });
+        }
+      });
   }
 
   return (
@@ -123,7 +136,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data }) {
           listType="picture"
           action={`${url}/zuragKhadgalya`}
           method="POST"
-          data={{ turul: "daalgavriinZurag" }}
+          data={{ turul: "jpg" }}
           headers={{ Authorization: `bearer ${token}` }}
           onChange={(v) =>
             onChange(
