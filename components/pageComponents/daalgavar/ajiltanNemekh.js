@@ -1,20 +1,21 @@
 import React from "react";
-import { message, Upload } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
-import { url } from "services/uilchilgee";
 import _ from "lodash";
+import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import { Select } from "antd";
 
 function ajiltanNemekh(
-  { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish,barilgiinId },
+  { token, destroy, onChange, baiguullaga, setDaalgavar },
   ref
 ) {
+  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullaga?._id);
 
-  const [aldaa, setAldaa] = React.useState(null);
   React.useImperativeHandle(
     ref,
     () => ({
       khaaya() {
-        _.isFunction(onFinish) && onFinish();
+        destroy();
+      },
+      khadgalya() {
         destroy();
       },
     }),
@@ -22,9 +23,27 @@ function ajiltanNemekh(
   );
 
   return (
-    <div>
-        ajiltan nemekh
-      </div>
+    <Select placeholder="Ажилтан" style={{ width: "100%" }}>
+      {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
+        <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
+          <div
+            className="flex flex-row justify-between"
+            onClick={() =>
+              setDaalgavar((v) => ({
+                ...v,
+                ["ajiltniiId"]: mur._id,
+                ["ajiltniiNer"]: mur.ner,
+              }))
+            }
+          >
+            <span>
+              {mur.ovog[0]}.{mur.ner}
+            </span>
+            <span>{mur.register}</span>
+          </div>
+        </Select.Option>
+      ))}
+    </Select>
   );
 }
 

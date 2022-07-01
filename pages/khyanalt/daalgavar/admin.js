@@ -1,15 +1,8 @@
 import {
-  AudioOutlined,
-  CheckOutlined,
   ClockCircleOutlined,
-  FileImageOutlined,
-  FlagOutlined,
   HistoryOutlined,
-  PictureOutlined,
-  RightOutlined,
   SendOutlined,
   StarOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Admin from "components/Admin";
@@ -20,9 +13,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
-import Kharakh from "components/pageComponents/geree/Kharakh";
 import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh";
-
 
 const order = { createdAt: -1 };
 
@@ -86,7 +77,6 @@ function index({ token }) {
   useEffect(() => {
     setSetgegdel("");
     inputRef.current.focus();
-    //document.getElementById('').setAttribute('data-aos','')
   }, [daalgavar?._id]);
 
   useEffect(() => {
@@ -144,11 +134,11 @@ function index({ token }) {
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
             <div className="text-2xl ">Өнөөдөр</div>
-            <div>{daalgavar?.length? + 0 : "0"} даалгавар</div>
+            <div>{daalgavar?.length ? +0 : "0"} даалгавар</div>
           </div>
           <div
             onClick={Nemekh}
-            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white hover:bg-gray-200 hover:text-black  duration-500 transition-colors px-5 font-bold text-green-500 dark:text-green-700"
+            className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white px-5 font-bold  text-green-500 transition-colors duration-500 hover:bg-gray-200 hover:text-black dark:text-green-700"
           >
             Нэмэх
           </div>
@@ -250,9 +240,11 @@ function index({ token }) {
         </div>
       </div>
       {/* Nemekh */}
-      <DaalgavarNemekh className={` ${
-          showResults ? "block" : "hidden"
-        }`}/>
+      <DaalgavarNemekh
+        className={` ${showResults ? "block" : "hidden"}`}
+        token={token}
+        onRefresh={task.mutate}
+      />
 
       {/* chat */}
 
