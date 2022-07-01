@@ -298,13 +298,22 @@ const khuudasnuud = [
         khuudasniiNer: "gereeniiZagvar",
         href: "/khyanalt/geree/zagvar",
         icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-          viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
-          icon-name="paperclip" data-lucide="paperclip" 
-          class="lucide lucide-paperclip block mx-auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            icon-name="paperclip"
+            data-lucide="paperclip"
+            class="lucide lucide-paperclip mx-auto block"
+          >
             <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"></path>
-            </svg>
+          </svg>
         ),
       },
     ],
@@ -703,14 +712,24 @@ const khuudasnuud = [
     khuudasniiNer: "daalgavar",
     href: "/khyanalt/daalgavar",
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" 
-      width="24" height="24" viewBox="0 0 24 24" 
-      fill="none" stroke="currentColor" stroke-width="2" 
-      stroke-linecap="round" stroke-linejoin="round" icon-name="plus-square" 
-      data-lucide="plus-square" class="lucide lucide-plus-square block mx-auto">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        icon-name="plus-square"
+        data-lucide="plus-square"
+        class="lucide lucide-plus-square mx-auto block"
+      >
         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="12" y1="8" x2="12" y2="16"></line>
-          <line x1="8" y1="12" x2="16" y2="12"></line></svg>
+        <line x1="12" y1="8" x2="12" y2="16"></line>
+        <line x1="8" y1="12" x2="16" y2="12"></line>
+      </svg>
     ),
   },
 ];
@@ -721,8 +740,11 @@ function useErkh(ajiltan) {
   return khuudasnuud
     .map((x) => {
       if (x.href.includes("khyanalt/tokhirgoo")) return x;
-      if (ajiltan.erkh === "Admin") return x;
-      else if (x.sub?.length > 0) {
+      if (ajiltan.erkh === "Admin") {
+        if (x.href === "/khyanalt/daalgavar")
+          x.href = "/khyanalt/daalgavar/admin";
+        return x;
+      } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
           (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
         );
