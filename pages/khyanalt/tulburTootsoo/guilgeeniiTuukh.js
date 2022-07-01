@@ -816,7 +816,7 @@ function guilgeeniiTuukh({ token }) {
             <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
               {baiguullaga?.barilguud
                 ?.find((a) => a._id === barilgiinId)
-                .davkharuud.map((a) => (
+                ?.davkharuud.map((a) => (
                   <Select.Option key={a._id} value={a.davkhar}>
                     {a.davkhar}
                   </Select.Option>
