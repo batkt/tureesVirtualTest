@@ -350,7 +350,7 @@ function index({ token }) {
                       key={mur._id + "daalgavriinSetgegdel"}
                       className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
                     >
-                      <div className="pb-1 font-medium">Ажилчин</div>
+                      <div className="pb-1 font-medium">{mur.ajiltniiNer}</div>
                       {mur.message}
                       <div className="absolute bottom-1 right-3 text-gray-300">
                         {moment(mur.ognoo).format("HH:mm")}
