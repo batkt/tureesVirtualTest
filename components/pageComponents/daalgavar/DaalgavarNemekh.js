@@ -16,7 +16,7 @@ const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
 
-function DaalgavarNemekh({ className, token, onRefresh, data }) {
+function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
   const ajitanRef = React.useRef(null);
   const { barilgiinId, baiguullaga } = useAuth();
   const [daalgavar, setDaalgavar] = React.useState({});
@@ -84,6 +84,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data }) {
         if (data === "Amjilttai") {
           onRefresh();
           setDaalgavar({});
+          onClose();
           notification.info({ message: "Даалгавар амжилттай бүртгэгдлээ" });
         }
       });

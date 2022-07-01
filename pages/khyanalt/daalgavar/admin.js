@@ -49,27 +49,15 @@ function index({ token }) {
     setgegdeliinQuery
   );
 
-  function daalgavarKhuleejAvlaa() {
+  function daalgavarTsutslakh() {
     uilchilgee(token)
-      .post("/daalgavarKhuleejAvlaa", { id: daalgavar._id })
+      .post("/daalgavarTsutsalya", { id: daalgavar._id })
       .then(({ data }) => {
-        if (data === "Amjilttai") setDaalgavar((v) => ({ ...v, tuluv: 1 }));
-      })
-      .finally(() => task.mutate());
-  }
-  function daalgavarDuusgalaa() {
-    uilchilgee(token)
-      .post("/daalgavarDuusgalaa", { id: daalgavar._id })
-      .then(({ data }) => {
-        if (data === "Amjilttai") setDaalgavar((v) => ({ ...v, tuluv: 2 }));
+        if (data === "Amjilttai") setDaalgavar(undefined);
       })
       .finally(() => task.mutate());
   }
 
-  function batlakh() {
-    if (daalgavar.tuluv === 0) daalgavarKhuleejAvlaa();
-    else if (daalgavar.tuluv === 1) daalgavarDuusgalaa();
-  }
   useEffect(() => {
     Aos.init({ duration: 1000 });
   });
@@ -251,7 +239,8 @@ function index({ token }) {
       <DaalgavarNemekh
         className={` ${showResults ? "block" : "hidden"}`}
         token={token}
-        onRefresh={task.mutate}
+        onRefresh={task.refresh}
+        onClose={() => setShowResults(false)}
       />
 
       {/* chat */}
@@ -292,16 +281,10 @@ function index({ token }) {
                         <div className="ml-5 flex">
                           <Popconfirm
                             disabled={daalgavar?.tuluv === 2}
-                            title={`Та даалгавар ${
-                              0 === daalgavar?.tuluv
-                                ? "Хүлээж авах "
-                                : 1 === daalgavar?.tuluv
-                                ? "дуусгах"
-                                : ""
-                            } уу?`}
+                            title={`Та даалгавар цуцлах уу?`}
                             okText="Тийм"
                             cancelText="Үгүй"
-                            onConfirm={() => batlakh()}
+                            onConfirm={() => daalgavarTsutslakh()}
                           >
                             <div
                               className={`text-md cursor-pointer rounded-full bg-${
@@ -312,11 +295,7 @@ function index({ token }) {
                                   : "green"
                               }-500 py-1 px-3 font-medium text-gray-50`}
                             >
-                              {0 === daalgavar?.tuluv
-                                ? "Хүлээж авах"
-                                : 1 === daalgavar?.tuluv
-                                ? "Хийгдэж байна"
-                                : "Дууссан"}
+                              {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
                             </div>
                           </Popconfirm>
                         </div>
