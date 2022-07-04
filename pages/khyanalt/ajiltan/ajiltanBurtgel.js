@@ -429,10 +429,10 @@ function AjiltanBurtgel({ token }) {
                 title: "Ажилд орсон огноо",
                 dataIndex: "ajildOrsonOgnoo",
                 ellipsis: true,
-                render: (data) => (
+                render: (ajildOrsonOgnoo) => (
                   <span>
-                    {data?.ajildOrsonOgnoo !== null
-                      ? moment(data?.ajildOrsonOgnoo).format("YYYY-MM-DD")
+                    {ajildOrsonOgnoo !== null
+                      ? moment(ajildOrsonOgnoo).format("YYYY-MM-DD")
                       : ""}
                   </span>
                 ),
