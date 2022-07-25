@@ -39,7 +39,7 @@ const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const printRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);

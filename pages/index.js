@@ -30,8 +30,8 @@ function Ajiltan() {
     form.setFieldsValue({ nevtrekhNer });
   }, []);
   useEffect(() => {
-    Aos.init();
-  });
+    Aos.init({once: true});
+  },[]);
 
   return (
     <div className="login flex justify-center bg-green-600 xl:bg-white dark:bg-gray-800 ">

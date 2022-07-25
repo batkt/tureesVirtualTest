@@ -60,7 +60,7 @@ function checkUtas(utasnuud, utga) {
 
 function AjiltanBurtgel({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const formRef = useRef();
   const excelref = useRef();

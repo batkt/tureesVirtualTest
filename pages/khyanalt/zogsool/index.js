@@ -238,7 +238,7 @@ function Zogsool({ token }) {
   }, [turul]);
 
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   function excelTatakh() {

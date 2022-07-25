@@ -6,7 +6,7 @@ import Aos from "aos";
 
 function Table({ data, updateMyData }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   return (
     <div

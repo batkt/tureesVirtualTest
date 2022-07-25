@@ -26,7 +26,7 @@ import Aos from "aos";
 
 function tulburTootsoo() {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);

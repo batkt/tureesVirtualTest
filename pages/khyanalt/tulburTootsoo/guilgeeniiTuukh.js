@@ -142,7 +142,7 @@ function TableGuilgee({
 
 function guilgeeniiTuukh({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   //#region state
   const ref = React.useRef(null);

@@ -346,7 +346,7 @@ function ZakhialgiinKhyanalt() {
 
   const [shineBagana, setShineBagana] = React.useState([]);
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   //#endregion
 

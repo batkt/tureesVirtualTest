@@ -85,7 +85,7 @@ function index({ token }) {
     });
   }
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

@@ -77,7 +77,7 @@ function IlgeesenToo({
 
 function Khyanalt({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();

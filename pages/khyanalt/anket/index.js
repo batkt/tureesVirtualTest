@@ -214,7 +214,7 @@ function Khabea({ token }) {
       });
   }
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   return (
     <Admin

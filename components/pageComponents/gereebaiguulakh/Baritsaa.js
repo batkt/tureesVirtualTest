@@ -14,7 +14,7 @@ const formItemLayout = {
 
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

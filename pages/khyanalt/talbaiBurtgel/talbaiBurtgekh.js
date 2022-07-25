@@ -62,7 +62,7 @@ const normFile = (e) => {
 
 function talbaiBurtgekh({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const formRef = useRef();
   const excelref = useRef();

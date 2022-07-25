@@ -127,7 +127,7 @@ function mashinBurtgel({ token }) {
     });
   }
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

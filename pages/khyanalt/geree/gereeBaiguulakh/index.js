@@ -48,7 +48,7 @@ const steps = [
 function GereeBaiguulakh({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   const zagvarRef = React.useRef();

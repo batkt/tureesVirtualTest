@@ -124,7 +124,7 @@ function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
 
 function tulburTootsoo({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const refGuilgee = React.useRef(null);
   const zardalRef = React.useRef(null);

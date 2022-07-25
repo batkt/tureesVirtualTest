@@ -16,7 +16,7 @@ const formItemLayout = {
 
 const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

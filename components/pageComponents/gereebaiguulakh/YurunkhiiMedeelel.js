@@ -75,7 +75,7 @@ const YurunkhiiMedeele = ({
     }, 300);
   }
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

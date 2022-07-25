@@ -57,7 +57,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   value.duusakhOgnoo = moment(value.duusakhOgnoo)
 
   useEffect(() => {
-    Aos.init()
+    Aos.init({once: true})
   })
 
   return (

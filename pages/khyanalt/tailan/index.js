@@ -150,7 +150,7 @@ function Chart({
 function AjiltanBurtgel({ token }) {
   const { barilgiinId } = useAuth();
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (

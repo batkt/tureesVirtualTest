@@ -16,7 +16,7 @@ const { RangePicker } = DatePicker
 
 function EbarimtMedeelel({ token }) {
   useEffect(() => {
-    Aos.init()
+    Aos.init({once: true})
   })
   const { ajiltan } = useAuth()
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()])

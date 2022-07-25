@@ -22,7 +22,7 @@ import moment from "moment";
 
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);

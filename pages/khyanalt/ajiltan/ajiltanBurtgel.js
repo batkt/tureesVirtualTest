@@ -43,7 +43,7 @@ const iconColor = { fontSize: "18px" };
 
 function AjiltanBurtgel({ token }) {
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
   const formRef = useRef();
   const zurag = useRef();

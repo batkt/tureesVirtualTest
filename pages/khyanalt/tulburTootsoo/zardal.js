@@ -550,7 +550,7 @@ function zardal({ token }) {
     });
   }
   useEffect(() => {
-    Aos.init();
+    Aos.init({once: true});
   });
 
   return (
