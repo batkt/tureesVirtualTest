@@ -371,7 +371,7 @@ function BarilgaBurtgel({ token }) {
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Давхар:</span>
                 <span className="font-medium text-gray-600">
-                  {barilga?.davkhar}
+                  {barilga?.davkharuud?.length}
                 </span>
               </div>
             </div>
@@ -379,15 +379,7 @@ function BarilgaBurtgel({ token }) {
               <div className="flex flex-row items-center">
                 <span className="md:w-20">Талбай:</span>
                 <span className="font-medium text-gray-600">
-                  {barilga?.talbai}
-                </span>
-              </div>
-            </div>
-            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <div className="flex flex-row items-center">
-                <span className="md:w-20">Утас:</span>
-                <span className="font-medium text-gray-600">
-                  {barilga?.utas}
+                  {formatNumber(barilga?.niitTalbai)}м<sup> 2</sup>
                 </span>
               </div>
             </div>
