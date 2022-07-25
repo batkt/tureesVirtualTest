@@ -15,28 +15,27 @@
   display: none;
 }
 
-
 audio {
   /*border-radius: 90px;*/
   height: 30px;
   margin-top: 5px;
   margin-bottom: 5px;
-  }
-  
-  audio::-webkit-media-controls-mute-button {
+}
+
+audio::-webkit-media-controls-mute-button {
   display: none !important;
-  }
-  
-  audio::-webkit-media-controls-volume-slider {
+}
+
+audio::-webkit-media-controls-volume-slider {
   display: none !important;
-  }
-  
-  audio::-webkit-media-controls-volume-control-container.closed {
+}
+
+audio::-webkit-media-controls-volume-control-container.closed {
   display: none !important;
-  }
-  audio::-webkit-media-controls-volume-control-container{
+}
+audio::-webkit-media-controls-volume-control-container {
   display: none !important;
-  }
+}
 
 @media print {
   .hide-on-print {
@@ -131,7 +130,6 @@ audio {
 .login {
   position: relative;
   --tw-bg-opacity: 1;
-
 }
 
 .login:before {
@@ -506,8 +504,8 @@ audio {
   @apply dark:text-gray-200 !important;
 }
 
-.ant-pagination-item-active > a {
-  @apply dark:text-black !important;
+.ant-pagination-item-active {
+  @apply dark:bg-gray-900 dark:text-gray-100 !important;
 }
 
 .ant-table-pagination > li > button {
@@ -706,7 +704,6 @@ input:-webkit-autofill {
   display: flex !important;
 }
 
-
 .ant-pagination-item-link > .anticon {
   align-items: center;
   display: flex !important;
@@ -729,11 +726,11 @@ input:-webkit-autofill {
 }
 
 .ant-table-cell {
-  @apply bg-white dark:bg-gray-700 dark:text-gray-300 !important;
+  @apply bg-white dark:bg-gray-800 dark:text-gray-300 !important;
 }
 
 .ant-table-row:nth-child(even) > .ant-table-cell {
-  @apply bg-green-50 dark:bg-gray-600 !important;
+  @apply bg-green-50 dark:bg-gray-700 !important;
 }
 
 .ant-table-row:hover > .ant-table-cell {
