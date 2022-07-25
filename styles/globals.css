@@ -792,7 +792,7 @@ input:-webkit-autofill {
 }
 
 .ant-btn-primary {
-  @apply bg-green-500 text-white !important;
+  @apply border-none bg-green-500 text-white !important;
 }
 
 .ant-btn:hover {
