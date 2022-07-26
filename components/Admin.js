@@ -1,7 +1,7 @@
 import { Switch } from "antd"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons"
 import { useAuth } from "../services/auth"
 import NTses from "./tolgoi/Tses"
@@ -14,6 +14,7 @@ import { useThemeValue } from "pages"
 import MSearch from "./tolgoi/MSearch"
 import Updater from "./Updater"
 import Zaavar from "./Zaavar"
+import Loader from "./loader"
 
 var timeout = null
 
@@ -27,6 +28,7 @@ function Admin({
   hideSearch,
   onBack,
   tsonkhniiId,
+  loading
 }) {
   const [mSearch, setMSearch] = useState(false)
   const { themeValue, setTheme } = useThemeValue()
@@ -62,6 +64,9 @@ function Admin({
 
     setMSearch(!mSearch)
   }
+  useEffect(()=>{
+    
+  })
 
   return (
     <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
@@ -196,7 +201,11 @@ function Admin({
             <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
           </div>
         </div>
-        <div className={`grid grid-cols-12 gap-6 ${className}`}>{children}</div>
+        
+        <div className={`grid grid-cols-12 gap-6 ${className} relative`}>
+          {loading && <Loader/> }
+          {children}
+        </div>
       </div>
     </div>
   )

@@ -79,12 +79,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
-        <Form.Item name="khugatsaa" label="Гэрээний хугацаа">
+        <Form.Item name="khugatsaa" label="Гэрээний хугацаа"  required>
           <InputNumber
             style={{ width: "100%" }}
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
+            max={100}
+            min={1}           
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             placeholder="Гэрээний хугацаа"
           />

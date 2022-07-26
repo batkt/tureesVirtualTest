@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
@@ -14,6 +14,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import _ from "lodash";
 import Aos from "aos";
 import { useEffect } from "react";
+import { aldaaBarigch } from "services/uilchilgee";
 
 const { Step } = Steps;
 
@@ -59,6 +60,7 @@ function GereeBaiguulakh({ token }) {
     baritsaaAvakhKhugatsaa: 1,
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
   });
+  const [waiting, setWaiting] = useState(false);
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
@@ -74,6 +76,12 @@ function GereeBaiguulakh({ token }) {
       if (!khadgalakhGeree?.tulukhUdur) {
         notification.warning({
           message: "Төлөлт хийх өдөр заавал оруулна уу!",
+        });
+        return;
+      }
+      if (!khadgalakhGeree?.khugatsaa) {
+        notification.warning({
+          message: "Гэрээний хугацаа заавал оруулна уу!",
         });
         return;
       }
@@ -108,13 +116,17 @@ function GereeBaiguulakh({ token }) {
 
       if (!!data?.zuvshuurliinZurag)
         data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
-
+      setWaiting(true);
       createMethod("gereeKhadgalya", token, data).then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
           setCurrent(0);
           message.success("Амжилттай хадгаллаа");
+          setWaiting(false)
         }
+      }).catch(e=>{
+        aldaaBarigch(e)
+        setWaiting(false)
       });
     }
   };
@@ -198,6 +210,7 @@ function GereeBaiguulakh({ token }) {
       title="Гэрээ байгуулах"
       className="grid grid-cols-12 gap-6 p-5"
       tsonkhniiId={"61c2c5f91c2830c4e6f90c75"}
+      loading={waiting}
     >
       <div className="box col-span-12 p-5">
         <div className="contents px-10">
