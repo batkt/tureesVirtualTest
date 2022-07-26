@@ -15,6 +15,10 @@
   display: none;
 }
 
+.ant-checkbox-input{
+  @apply dark:bg-gray-800 opacity-100; 
+}
+
 audio {
   /*border-radius: 90px;*/
   height: 30px;
