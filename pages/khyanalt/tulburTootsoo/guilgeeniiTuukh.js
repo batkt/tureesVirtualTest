@@ -141,7 +141,7 @@ function TableGuilgee({
 
 function guilgeeniiTuukh({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   //#region state
   const ref = React.useRef(null);
@@ -341,12 +341,14 @@ function guilgeeniiTuukh({ token }) {
           if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
 
           return (
-            <div className="flex flex-row divide-x-2 ">
+            <div className="flex flex-row divide-x-2 justify-center items-center w-full ">
               <a
                 onClick={() => guilgeeKhiiya(row)}
                 className="fill-current px-2 text-green-500"
               >
-                <Tooltip title="Гүйлгээ хийх">
+                <Tooltip title="Гүйлгээ хийх"
+                  className="flex justify-center items-center w-full "
+                >
                   <svg
                     version="1.0"
                     xmlns="http://www.w3.org/2000/svg"
@@ -478,7 +480,7 @@ function guilgeeniiTuukh({ token }) {
                 </a>
               )}
               <div
-                className="cursor-pointer px-2 text-red-500"
+                className="px-2 text-red-500"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
@@ -492,6 +494,7 @@ function guilgeeniiTuukh({ token }) {
                         row.baritsaaniiUldegdel
                       )} барьцаа төлөгдсөн байна`
                   }
+
                 >
                   <Progress
                     type="circle"
