@@ -26,7 +26,7 @@ import Aos from "aos";
 
 function tulburTootsoo() {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
@@ -280,24 +280,26 @@ function tulburTootsoo() {
                       </a>
                     </div>
                   </div>
-                  <div className="mt-10 flex flex-row justify-between">
-                    <Form.Item>
+                  <div className="mt-10 flex flex-row justify-between  ">
+                    <Form.Item >
                       <Button
                         htmlType="submit"
                         onClick={khungulultKhadgalya}
-                        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+
+                        className="dark:bg-green-500 bg-green-500  dark:border-current"
                       >
-                        Хадгалах
+                        <span className="text-white" >Хадгалах</span>
                       </Button>
                     </Form.Item>
                     <Form.Item>
                       <Button
                         htmlType="submit"
-                        danger
+
                         onClick={tseverlekh}
-                      //style={{ backgroundColor: "#209669", color: "#ffffff" }}
+                        //style={{ backgroundColor: "#209669", color: "#ffffff" }}
+                        className="dark:bg-green-500 dark:border-current  border-red-500"
                       >
-                        Цэвэрлэх
+                        <span className="dark:text-white text-red-500" >Цэвэрлэх</span>
                       </Button>
                     </Form.Item>
                   </div>
