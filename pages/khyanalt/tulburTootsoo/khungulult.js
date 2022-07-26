@@ -294,12 +294,12 @@ function tulburTootsoo() {
                     <Form.Item>
                       <Button
                         htmlType="submit"
-
+                        danger
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
-                        className="dark:bg-green-500 dark:border-current  border-red-500"
+                        className="dark:bg-gray-900"
                       >
-                        <span className="dark:text-white text-red-500" >Цэвэрлэх</span>
+                        <span className="dark:text-red-700" >Цэвэрлэх</span>
                       </Button>
                     </Form.Item>
                   </div>
