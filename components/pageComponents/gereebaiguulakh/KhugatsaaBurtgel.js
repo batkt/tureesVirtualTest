@@ -1,20 +1,12 @@
-import {
-  Form,
-  Input,
-  Button,
-  DatePicker,
-  InputNumber,
-  Select,
-  notification,
-} from "antd"
+import { Form, Button, DatePicker, InputNumber, Select } from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
   ArrowLeftOutlined,
-} from "@ant-design/icons"
-import React, { useEffect } from "react"
-import moment from "moment"
-import Aos from "aos"
+} from "@ant-design/icons";
+import React, { useEffect } from "react";
+import moment from "moment";
+import Aos from "aos";
 
 const formItemLayout = {
   labelCol: {
@@ -23,42 +15,42 @@ const formItemLayout = {
   wrapperCol: {
     span: 14,
   },
-}
+};
 
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
       value.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
         value.khugatsaa,
         "M"
-      )
-      form.setFieldsValue({ ...value, ...values })
+      );
+      form.setFieldsValue({ ...value, ...values });
     }
     if (!!value?.gereeniiOgnoo && !!values?.khugatsaa) {
       value.duusakhOgnoo = moment(value.gereeniiOgnoo).add(
         values.khugatsaa,
         "M"
-      )
-      form.setFieldsValue({ ...value, ...values })
+      );
+      form.setFieldsValue({ ...value, ...values });
     }
     if (!!values?.duusakhOgnoo) {
       var sar = moment(values?.duusakhOgnoo)
         .diff(moment(v?.gereeniiOgnoo), "month", true)
-        .toFixed()
-      form.setFieldsValue({ khugatsaa: sar })
-      value.khugatsaa = sar
+        .toFixed();
+      form.setFieldsValue({ khugatsaa: sar });
+      value.khugatsaa = sar;
     }
-    onChange({ ...value, ...values })
-  }
+    onChange({ ...value, ...values });
+  };
 
-  value.gereeniiOgnoo = moment(value.gereeniiOgnoo)
-  value.duusakhOgnoo = moment(value.duusakhOgnoo)
+  value.gereeniiOgnoo = moment(value.gereeniiOgnoo);
+  value.duusakhOgnoo = moment(value.duusakhOgnoo);
 
   useEffect(() => {
-    Aos.init({once: true})
-  })
+    Aos.init({ once: true });
+  });
 
   return (
     <Form
@@ -79,14 +71,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
-        <Form.Item name="khugatsaa" label="Гэрээний хугацаа"  required>
+        <Form.Item name="khugatsaa" label="Гэрээний хугацаа" required>
           <InputNumber
             style={{ width: "100%" }}
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             max={100}
-            min={1}           
+            min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             placeholder="Гэрээний хугацаа"
           />
@@ -100,7 +92,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           required
         >
           <Select
-            mode="multiple"
             placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
             prefix={<SolutionOutlined />}
           >
@@ -148,7 +139,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         </Form.Item>
       </div>
     </Form>
-  )
-}
+  );
+};
 
-export default YurunkhiiMedeele
+export default YurunkhiiMedeele;

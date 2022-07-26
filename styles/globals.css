@@ -722,7 +722,15 @@ input:-webkit-autofill {
 }
 
 .ant-steps-item-icon {
-  @apply flex items-center justify-center !important;
+  @apply flex items-center justify-center dark:bg-gray-800 !important;
+}
+
+.ant-steps-icon {
+  @apply dark:text-gray-200 !important;
+}
+
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+  background-color: #1890ff !important;
 }
 
 .ant-table-cell {
