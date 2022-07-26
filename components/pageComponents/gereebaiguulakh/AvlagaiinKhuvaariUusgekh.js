@@ -6,7 +6,7 @@ import Aos from "aos";
 
 function Table({ data, updateMyData }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   return (
     <div
@@ -30,8 +30,10 @@ function Table({ data, updateMyData }) {
       </div>
       {data?.map((mur, index) => (
         <div className="mt-2 table-row" key={index + "khyamdral"}>
-          <div className="table-cell p-1 text-center">{index + 1}.</div>
-          <div className="table-cell w-20">
+          <div className="table-cell p-1 text-center dark:text-gray-200">
+            {index + 1}.
+          </div>
+          <div className="table-cell w-20 dark:text-gray-200">
             {moment(mur.ognoo).format("YYYY-MM-DD")}
           </div>
           <div className="table-cell w-14">
