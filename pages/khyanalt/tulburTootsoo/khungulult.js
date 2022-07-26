@@ -14,7 +14,7 @@ import {
 import Admin from "components/Admin";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
-import _ from "lodash";
+import _, { set } from "lodash";
 import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAuth } from "services/auth";
@@ -78,17 +78,7 @@ function tulburTootsoo() {
   }
 
   useEffect(() => {
-    var khuvi = form?.getFieldValue("khungulukhKhuvi");
-    tootsoolol.niitTalbai = songogdsonGereenuud?.length;
-    tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
-      (a, b) => a + Number(b?.sariinTurees),
-      0
-    );
-    tootsoolol.khunglugdsunDun =
-      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100;
-    tootsoolol.niitTulukhDun =
-      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
-    setTootsoolol({ ...tootsoolol });
+    khungulukhDunTootsoolyo()
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
@@ -166,10 +156,29 @@ function tulburTootsoo() {
     formRef.current.resetFields();
     setShuult();
   }
-  function onSelectChange(selectedRowKeys, selectedRows) {
+  function onSelectChange(selectedRowKeys, selectedRows,) {
     setRowKeys(selectedRowKeys);
     setSongogdsonGereenuud(selectedRows);
   }
+
+  function khungulukhDunTootsoolyo() {
+    var khuvi = form?.getFieldValue("khungulukhKhuvi");
+    if (khuvi > 100) {
+      form.setFieldsValue({ 'khungulukhKhuvi': 100 })
+      khuvi = 100
+    }
+    tootsoolol.niitTalbai = songogdsonGereenuud?.length;
+    tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
+      (a, b) => a + Number(b?.sariinTurees || 0),
+      0
+    );
+    tootsoolol.khunglugdsunDun =
+      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100;
+    tootsoolol.niitTulukhDun =
+      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+    setTootsoolol({ ...tootsoolol });
+  }
+
   return (
     <Admin
       title="Хөнгөлөлт"
@@ -245,7 +254,7 @@ function tulburTootsoo() {
                   </Form.Item>
 
                   <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
-                    <Input placeholder="Хөнгөлөх хувь" />
+                    <Input type={'number'} placeholder="Хөнгөлөх хувь" onChange={khungulukhDunTootsoolyo} />
                   </Form.Item>
                   <Form.Item label="Шалтгаан" name="shaltgaan">
                     <Input.TextArea placeholder="Шалтгаан" />
@@ -286,7 +295,7 @@ function tulburTootsoo() {
                         htmlType="submit"
                         danger
                         onClick={tseverlekh}
-                        //style={{ backgroundColor: "#209669", color: "#ffffff" }}
+                      //style={{ backgroundColor: "#209669", color: "#ffffff" }}
                       >
                         Цэвэрлэх
                       </Button>

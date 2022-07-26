@@ -181,7 +181,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="grid grid-cols-10 border-b border-gray-200 bg-gray-200 p-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+        <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-200 p-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
           <div>№</div>
           <div>Огноо</div>
           <div>Түрээс</div>
@@ -191,11 +191,13 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Үлдэгдэл</div>
           <div>Ажилтан</div>
           <div>Хэлбэр</div>
+          <div>Бүртгсэн огноо</div>
           <div>Тайлбар</div>
+
         </div>
         <div className="overflow-y-auto" style={{ height: "calc(40vh)" }}>
           {guilgeeniiTuukh?.map((a, i) => (
-            <div className="grid grid-cols-10 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+            <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
               <div className="p-1">{i + 1}</div>
               <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
               <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
@@ -203,9 +205,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
               <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
               <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
               <div
-                className={`p-1 ${
-                  a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                }`}
+                className={`p-1 ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                  }`}
               >
                 {formatNumber(
                   a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
@@ -221,6 +222,9 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                   : turulAvya(a.turul)}
               </div>
               <div className="flex justify-between p-1">
+                {a.guilgeeKhiisenOgnoo && moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
+              </div>
+              <div className="flex justify-between p-1">
                 {a.tailbar}
                 {(a.turul === "avlaga" ||
                   a.turul === "voucher" ||
@@ -228,20 +232,21 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                   a.turul === "bank" ||
                   a.turul === "khyamdral" ||
                   a.turul === "baritsaa") && (
-                  <div className="contents justify-between">
-                    <Popconfirm
-                      title="Төлөлт устгах уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
-                      onConfirm={() => tulultUstgaya(a)}
-                    >
-                      <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                        <DeleteOutlined />
-                      </div>
-                    </Popconfirm>
-                  </div>
-                )}
+                    <div className="contents justify-between">
+                      <Popconfirm
+                        title="Төлөлт устгах уу?"
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
+                        <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                          <DeleteOutlined />
+                        </div>
+                      </Popconfirm>
+                    </div>
+                  )}
               </div>
+
             </div>
           ))}
         </div>
