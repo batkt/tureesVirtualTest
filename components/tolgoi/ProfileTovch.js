@@ -3,7 +3,7 @@ import {
   QuestionOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Skeleton, Tooltip, Empty } from "antd";
+import { Badge, Dropdown, Menu, Tooltip, Empty } from "antd";
 import Link from "next/link";
 import React from "react";
 import moment from "moment";
