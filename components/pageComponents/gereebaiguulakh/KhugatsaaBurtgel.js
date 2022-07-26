@@ -7,6 +7,7 @@ import {
 import React, { useEffect } from "react";
 import moment from "moment";
 import Aos from "aos";
+import _ from "lodash";
 
 const formItemLayout = {
   labelCol: {
@@ -42,6 +43,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       form.setFieldsValue({ khugatsaa: sar });
       value.khugatsaa = sar;
     }
+    if (!!values?.tulukhUdur) values.tulukhUdur = [values?.tulukhUdur];
     onChange({ ...value, ...values });
   };
 
@@ -92,6 +94,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           required
         >
           <Select
+            defaultValue={_.get(value, "tulukhUdur.0")}
             placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
             prefix={<SolutionOutlined />}
           >

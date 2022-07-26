@@ -5,12 +5,18 @@ import Sonorduulga from "components/sonorduulga";
 import { useEffect, useState } from "react";
 import { useAuth } from "services/auth";
 
-const fetcher = (url, token, baiguullagiinId, { jagsaalt, ...khuudaslalt }) =>
+const fetcher = (
+  url,
+  token,
+  baiguullagiinId,
+  barilgiinId,
+  { jagsaalt, ...khuudaslalt }
+) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: { baiguullagiinId },
+        query: { baiguullagiinId, barilgiinId },
         order: { createdAt: -1 },
       },
     })
@@ -21,13 +27,14 @@ const tooFetcher = (
   url,
   token,
   baiguullagiinId,
+  barilgiinId,
   { jagsaalt, ...khuudaslalt }
 ) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: { baiguullagiinId, kharsanEsekh: { $ne: true } },
+        query: { baiguullagiinId, barilgiinId, kharsanEsekh: { $ne: true } },
         order: { createdAt: -1 },
       },
     })
@@ -37,7 +44,7 @@ const tooFetcher = (
 var sonorduulgaId = null;
 
 function useSonorduulga(token) {
-  const { baiguullaga } = useAuth();
+  const { baiguullaga, barilgiinId } = useAuth();
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 20,
@@ -45,14 +52,20 @@ function useSonorduulga(token) {
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullaga?._id
-      ? ["/sonorduulga", token, baiguullaga?._id, khuudaslalt]
+      ? ["/sonorduulga", token, baiguullaga?._id, barilgiinId, khuudaslalt]
       : null,
     fetcher,
     { revalidateOnFocus: false }
   );
   const too = useSWR(
     !!token && !!baiguullaga?._id
-      ? ["/sonorduulga/tooAvya", token, baiguullaga?._id, khuudaslalt]
+      ? [
+          "/sonorduulga/tooAvya",
+          token,
+          baiguullaga?._id,
+          barilgiinId,
+          khuudaslalt,
+        ]
       : null,
     tooFetcher,
     { revalidateOnFocus: false }

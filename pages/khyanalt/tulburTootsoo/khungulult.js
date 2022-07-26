@@ -297,9 +297,9 @@ function tulburTootsoo() {
 
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
-                        className="dark:bg-green-500 dark:border-current  border-red-500"
+                        className="dark:bg-gray-900 dark:border-red-400 border-red-400 "
                       >
-                        <span className="dark:text-white text-red-500" >Цэвэрлэх</span>
+                        <span className="dark:text-red-400 text-red-400" >Цэвэрлэх</span>
                       </Button>
                     </Form.Item>
                   </div>

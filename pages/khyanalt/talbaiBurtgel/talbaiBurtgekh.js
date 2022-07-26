@@ -62,7 +62,7 @@ const normFile = (e) => {
 
 function talbaiBurtgekh({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const formRef = useRef();
   const excelref = useRef();
@@ -305,28 +305,28 @@ function talbaiBurtgekh({ token }) {
             );
           }
         })
-        .catch(e=>{
+        .catch(e => {
           aldaaBarigch(e)
           setWaiting(false);
         });
     } else
-    setWaiting(true);
-      createMethod("talbai", token, talbaiState)
-        .then(({ data }) => {
-          if (data !== undefined) {
-            setWaiting(false);
-            message.success("Бүртгэл амжилттай хийгдлээ");
-            formRef.current.resetFields();
-            talbainiiJagsaaltMutate(
-              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-              true
-            );
-          }
-        })
-        .catch(e=>{
-          aldaaBarigch(e)
+      setWaiting(true);
+    createMethod("talbai", token, talbaiState)
+      .then(({ data }) => {
+        if (data !== undefined) {
           setWaiting(false);
-        });
+          message.success("Бүртгэл амжилттай хийгдлээ");
+          formRef.current.resetFields();
+          talbainiiJagsaaltMutate(
+            (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+            true
+          );
+        }
+      })
+      .catch(e => {
+        aldaaBarigch(e)
+        setWaiting(false);
+      });
   }
 
   function zasya(data) {
@@ -828,14 +828,14 @@ function talbaiBurtgekh({ token }) {
             content={() => (
               <div className="flex w-32 flex-col">
                 <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white  "
                   onClick={talbaiOruulakhExcel}
                 >
                   <UploadOutlined style={{ fontSize: "18px" }} />
                   <label>Оруулах</label>
                 </a>
                 <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
                   onClick={() => {
                     const { Excel } = require("antd-table-saveas-excel");
                     const excelExport = new Excel();
