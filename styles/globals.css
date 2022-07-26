@@ -853,3 +853,15 @@ input:-webkit-autofill {
   display: flex;
   justify-content: center;
 }
+
+.ant-popover-inner{
+  @apply dark:bg-gray-800 !important;
+}
+
+.ant-checkbox-wrapper > span{
+  @apply dark:text-white !important;
+}
+
+.ant-popover-arrow-content::before{
+  @apply dark:bg-gray-800 !important;
+}
