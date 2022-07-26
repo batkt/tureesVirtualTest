@@ -125,7 +125,7 @@ const YurunkhiiMedeele = ({
       });
   }
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   return (
@@ -153,6 +153,7 @@ const YurunkhiiMedeele = ({
         <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
           <InputNumber
             placeholder="Талбайн нэгж үнэ"
+            disabled
             style={{ width: "100%" }}
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -177,6 +178,7 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
         <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
           <InputNumber
+            disabled
             placeholder="Талбайн хэмжээ"
             style={{ width: "100%" }}
             formatter={(value) =>
@@ -189,6 +191,7 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item label="Давхар" name="davkhar">
           <InputNumber
+            disabled
             placeholder="Давхар"
             style={{ width: "100%" }}
             formatter={(value) =>
@@ -201,6 +204,7 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
           <InputNumber
+            disabled
             placeholder="Ашиглалтын зардал"
             style={{ width: "100%" }}
             formatter={(value) =>

@@ -344,7 +344,6 @@ const ugudulAvchirya = async (ctx, session) => {
     ctx.query.params[1]
   );
 
-  console.log("data", data);
   const khariltsagch = await readMethod(
     "khariltsagch",
     session?.tureestoken,

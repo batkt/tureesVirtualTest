@@ -1201,7 +1201,7 @@ function talbaiBurtgekh({ token }) {
                     content={() => (
                       <div className="flex w-24 flex-col space-y-2">
                         <a
-                          className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                          className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
                           onClick={() => zasya(data)}
                         >
                           <EditOutlined style={{ fontSize: "18px" }} />
@@ -1213,7 +1213,7 @@ function talbaiBurtgekh({ token }) {
                           cancelText="Үгүй"
                           onConfirm={() => talbaiUstgay(data)}
                         >
-                          <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                          <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white ">
                             <DeleteOutlined
                               style={{ fontSize: "18px", color: "red" }}
                             />

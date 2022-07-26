@@ -37,8 +37,8 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
                     <div className="contents w-32 flex-col">
                         <Menu className="contents self-center">
 
-                            {columns.map((mur) => (
-                                <Menu.Item key="1">
+                            {columns.map((mur, i) => (
+                                <Menu.Item key={'bagana-' + i}>
                                     <Checkbox
                                         checked={!!shineBagana.find(a => a.dataIndex === mur.dataIndex)}
                                         onClick={(e) => baganaNemekh(e, mur)}
