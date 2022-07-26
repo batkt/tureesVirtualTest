@@ -249,8 +249,8 @@ function index({ token }) {
         className={`col-span-12 ${
           daalgavar ? "block" : "hidden"
         } relative gap-5 bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
-        data-aos="flip-left"
-        style={{ height: "90vh" }}
+        data-aos="flip-right"
+        style={{ height: "80vh" }}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}

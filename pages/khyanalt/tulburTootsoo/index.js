@@ -116,7 +116,7 @@ function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
         .catch(aldaaBarigch)
   );
   return (
-    <div className="font-medium">
+    <div className="font-medium dark:bg-gray-900 dark:text-white">
       Гүйлгээний нийт дүн: {formatNumber(_.get(data, "0.dun"))}
     </div>
   );

@@ -23,6 +23,10 @@
   @apply dark:text-white !important;
 }
 
+.ant-table-footer{
+  @apply dark:bg-gray-900 !important;
+}
+
 audio {
   /*border-radius: 90px;*/
   height: 30px;
@@ -159,6 +163,14 @@ audio::-webkit-media-controls-volume-control-container {
   left: 0;
   width: 100%;
   @apply hidden xl:flex;
+}
+
+.kharaaguiSonorduulga{
+  @apply dark:bg-black bg-white !important;
+}
+
+.kharsanSonorduulga{
+  @apply dark:bg-gray-500 !important;
 }
 
 .ant-drawer-header {
