@@ -104,8 +104,8 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             key={ognoo}
             onClick={() => onChange("duusakhOgnoo", ognoo)}
             className={`w-16 cursor-pointer rounded-2xl ${
-              ognoo === daalgavar.duusakhOgnoo ? "bg-green-400 text-white" : ""
-            } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 hover:text-white`}
+              ognoo === daalgavar.duusakhOgnoo ? "bg-green-400 dark:bg-green-400 text-white dark:text-opacity-95" : ""
+            } bg-gray-200 dark:text-opacity-40 dark:bg-gray-800 py-2 text-center dark:hover:bg-green-800 font-bold transition-colors duration-500 hover:bg-green-400 dark:text-white dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
             <div className="w-16">{moment(ognoo).format("MM")} сар</div>
@@ -116,7 +116,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       <div className="flex flex-col gap-5">
         <div
           onClick={ajiltanSongokh}
-          className="flex cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white xl:w-2/3"
+          className="flex cursor-pointer justify-between rounded-xl bg-gray-200 dark:bg-gray-800 dark:hover:bg-green-600 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white xl:w-2/3"
         >
           <div className="flex gap-5">
             <UserOutlined className="text-xl" />
@@ -145,9 +145,9 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               v.fileList.map((v) => v.response?.id)
             )
           }
-          className="flex flex-col"
+          className="flex flex-col xl:w-2/3 cursor-pointer group rounded-xl bg-gray-200 dark:bg-gray-800 dark:hover:bg-green-600 p-5 transition-colors duration-500 hover:bg-green-500 hover:text-white "
         >
-          <div className="flex cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-500 hover:text-white xl:w-2/3">
+          <div className="flex justify-between group-hover:bg-green-600 transition-colors duration-500">
             <div className="flex gap-5">
               <FileImageOutlined className="text-xl" />
               <div>

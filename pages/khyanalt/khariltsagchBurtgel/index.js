@@ -804,7 +804,7 @@ function AjiltanBurtgel({ token }) {
                 ellipsis: true,
                 render: (turul) => {
                   return (
-                    <Tag color={turul === "Иргэн" ? "blue" : "orange"}>
+                    <Tag className={turul === "Иргэн" ? "dark:bg-blue-600 dark:text-white" : "dark:bg-yellow-600 dark:text-white"} color={turul === "Иргэн" ? "blue" : "orange"}>
                       {turul}
                     </Tag>
                   );
@@ -852,7 +852,7 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (idevkhiteiEsekh) => {
                   return (
-                    <Tag color={idevkhiteiEsekh === true ? "green" : "red"}>
+                    <Tag className={idevkhiteiEsekh === true ? "dark:bg-green-600 dark:text-white" : "dark:bg-red-700 dark:text-white"} color={idevkhiteiEsekh === true ? "green" : "red"}>
                       {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
                     </Tag>
                   );

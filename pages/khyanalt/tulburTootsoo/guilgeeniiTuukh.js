@@ -707,7 +707,7 @@ function guilgeeniiTuukh({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();
