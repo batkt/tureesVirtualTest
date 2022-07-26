@@ -550,6 +550,7 @@ function Khyanalt({ token }) {
           <div className="box p-5">
             <div className="text-gray-700 dark:text-gray-300">
               <Input.Search
+
                 placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
                 onSearch={(search) =>
                   setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
@@ -572,8 +573,8 @@ function Khyanalt({ token }) {
               {nekhemjlel?.jagsaalt?.map((mur) => (
                 <div
                   className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${khariltsagch?._id === mur?._id
-                      ? "bg-green-100 dark:bg-green-500"
-                      : ""
+                    ? "bg-green-100 dark:bg-green-500"
+                    : ""
                     } `}
                   key={mur?._id}
                   onClick={() => setKhariltsagch(mur)}
@@ -588,16 +589,16 @@ function Khyanalt({ token }) {
                   </div>
                   <div
                     className={`truncate text-center text-xs text-gray-600  ${khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
+                      ? "dark:text-gray-50"
+                      : "dark:text-gray-400"
                       }`}
                   >
                     {mur?.ner}
                   </div>
                   <div
                     className={`truncate text-center text-xs text-gray-600 ${khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
+                      ? "dark:text-gray-50"
+                      : "dark:text-gray-400"
                       }`}
                   >
                     {mur?.gereeniiDugaar}
@@ -610,8 +611,8 @@ function Khyanalt({ token }) {
       </div>
       <div
         className={`intro-y col-span-12 lg:col-span-6 xl:col-span-6 ${ilgeekhTurul === "gantsaar"
-            ? "lg:col-span-6 xl:col-span-6"
-            : "lg:col-span-9 xl:col-span-9"
+          ? "lg:col-span-6 xl:col-span-6"
+          : "lg:col-span-9 xl:col-span-9"
           }`}
         style={{ height: "calc(100vh - 7rem)" }}
       >
@@ -678,8 +679,8 @@ function Khyanalt({ token }) {
                         return (
                           <div
                             className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
-                                ? "ml-auto rounded-br-none bg-blue-500"
-                                : "rounded-bl-none"
+                              ? "ml-auto rounded-br-none bg-blue-500"
+                              : "rounded-bl-none"
                               }`}
                           >
                             <span className="text-white">{a.message}</span>
