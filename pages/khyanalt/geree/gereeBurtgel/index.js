@@ -19,8 +19,7 @@ import {
   DownloadOutlined,
   DownOutlined,
   RedoOutlined,
-  PlusOutlined,
-  UnorderedListOutlined,
+
 } from "@ant-design/icons";
 import {
   Table,
@@ -55,6 +54,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import CardList from "components/cardList";
 import GereeTile from "components/pageComponents/geree/GereeTile";
 import useOrder from "tools/function/useOrder";
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 import Aos from "aos";
 
 //#endregion
@@ -346,7 +346,7 @@ function ZakhialgiinKhyanalt() {
 
   const [shineBagana, setShineBagana] = React.useState([]);
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   //#endregion
 
@@ -800,61 +800,6 @@ function ZakhialgiinKhyanalt() {
       footer,
     });
   }
-  function baganaNemekh(e, ner, utga) {
-    if (e.target.checked === true) {
-      var nemekhBagana = {
-        title: ner,
-        dataIndex: utga,
-        ellipsis: true,
-        width: "5rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      };
-      shineBagana.push(nemekhBagana);
-      setShineBagana([...shineBagana]);
-    } else {
-      var khasakh = shineBagana.filter(function (item) {
-        return item.dataIndex !== utga;
-      });
-      setShineBagana([...khasakh]);
-    }
-  }
-  const menu = (
-    <Menu className="contents self-center">
-      <Menu.Item key="1">
-        <Checkbox
-          value={"khugatsaa"}
-          onClick={(e) => baganaNemekh(e, "Хугацаа", "khugatsaa")}
-        >
-          Хугацаа
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <Checkbox
-          value={"davkhar"}
-          onClick={(e) => baganaNemekh(e, "Давхар", "davkhar")}
-        >
-          Давхар
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <Checkbox
-          value={"utas"}
-          onClick={(e) => baganaNemekh(e, "Утас", "utas")}
-        >
-          Утас
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="4">
-        <Checkbox
-          value={"turul"}
-          onClick={(e) => baganaNemekh(e, "Төрөл", "turul")}
-        >
-          Төрөл
-        </Checkbox>
-      </Menu.Item>
-    </Menu>
-  );
 
   function excelTatakh() {
     excelTatajAvya(
@@ -905,11 +850,9 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                }`}
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                  } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -920,11 +863,10 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
+                          className={`text-3xl ${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -934,11 +876,10 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                          className={`${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -964,22 +905,29 @@ function ZakhialgiinKhyanalt() {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <Popover
-              content={() => (
-                <div className="contents w-32 flex-col">{menu}</div>
-              )}
-              style={{ padding: 0 }}
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                style={{ marginRight: "10px" }}
-                type="primary"
-                icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
-              >
-                <span>Багана</span>
-              </Button>
-            </Popover>
+            <BaganiinSongolt
+              shineBagana={shineBagana}
+              setShineBagana={setShineBagana}
+              columns={[
+
+                {
+                  title: "Хугацаа",
+                  dataIndex: 'khugatsaa'
+                },
+                {
+                  title: "Давхар",
+                  dataIndex: 'davkhar'
+                },
+                {
+                  title: "Утас",
+                  dataIndex: 'utas'
+                },
+                {
+                  title: "Төрөл",
+                  dataIndex: 'turul'
+                },
+              ]}
+            />
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
