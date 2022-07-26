@@ -30,6 +30,8 @@ import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
+import { SearchOutlined } from '@ant-design/icons'
+
 //#endregion
 
 var dateCount = {
@@ -548,9 +550,10 @@ function Khyanalt({ token }) {
       >
         {ilgeekhTurul === "gantsaar" && (
           <div className="box p-5">
-            <div className="text-gray-700 dark:text-gray-300">
-              <Input.Search
-
+            <div className="relative text-gray-700 dark:text-gray-300   w-full">
+              <input
+                type="text"
+                className="w-full px-2 py-1 bg-gray-100  dark:bg-gray-700   rounded-md"
                 placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
                 onSearch={(search) =>
                   setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
@@ -564,7 +567,23 @@ function Khyanalt({ token }) {
                     }));
                   }, 300);
                 }}
+
               />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
             </div>
             <div
               className="scrollbar-hidden mt-5 overflow-y-auto"
