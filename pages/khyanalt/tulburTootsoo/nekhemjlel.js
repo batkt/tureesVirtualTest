@@ -39,7 +39,7 @@ const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const printRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
@@ -106,7 +106,7 @@ function tulburTootsoo({ token }) {
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
             medeelel.eneSardTulukhDun *
-              (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
+            (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
             { suffix: "n" }
           )} төгрөг`;
           medeelel.niitUldegdelUsgeer = `${toWords(
@@ -150,9 +150,8 @@ function tulburTootsoo({ token }) {
           let nemeltNekhemjlekh = "";
           if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
             medeelel.nemeltNekhemjlekh.forEach((a, index) => {
-              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${
-                2 + (index + 1)
-              }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
+              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${2 + (index + 1)
+                }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
               a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
               a.tulukhDun = formatNumber(a.tulukhDun);
               for (const [key, value] of Object.entries(a)) {
@@ -382,7 +381,7 @@ function tulburTootsoo({ token }) {
                         cancelText="Үгүй"
                         onConfirm={() => zagvarUstgaya(a)}
                       >
-                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white">
+                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  dark:bg-gray-700  p-2 text-white">
                           <DeleteOutlined
                             style={{ color: "red", display: "flex" }}
                           />
@@ -390,7 +389,7 @@ function tulburTootsoo({ token }) {
                       </Popconfirm>
                     </div>
                     <div
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white"
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   dark:bg-gray-700  fill-current p-2 text-white"
                       onClick={() => nekhemjlelZagvarBurtgeye(a)}
                     >
                       <EditOutlined
@@ -490,15 +489,17 @@ function tulburTootsoo({ token }) {
                       return (
                         <div className="flex items-center justify-center">
                           <Button
+                            className=" dark:bg-gray-700 "
                             shape="circle"
                             size="small"
                             icon={
                               <div
-                                className={`flex items-center justify-center`}
+                                className={`flex items-center justify-center  dark:bg-gray-700 `}
                                 onClick={() => nekhemjlelZasya(record, index)}
                               >
                                 <EditOutlined
                                   style={{ fontSize: "18px", color: "#85C1E9" }}
+                                  className=" dark:bg-gray-700 "
                                 />
                               </div>
                             }

@@ -64,8 +64,8 @@ function Admin({
 
     setMSearch(!mSearch);
   }
-  useEffect(()=>{
-    
+  useEffect(() => {
+
   })
 
   return (
@@ -90,9 +90,8 @@ function Admin({
         />
       )}
       <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
-          dedKhuudas ? "w-full" : "main"
-        }`}
+        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
+          }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2">
           <div className="flex flex-row transition-all">
@@ -202,9 +201,9 @@ function Admin({
             <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
           </div>
         </div>
-        
+
         <div className={`grid grid-cols-12 gap-6 ${className} relative`}>
-          {loading && <Loader/> }
+          {loading && <Loader />}
           {children}
         </div>
       </div>

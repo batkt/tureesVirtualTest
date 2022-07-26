@@ -85,7 +85,7 @@ function index({ token }) {
     });
   }
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   return (
@@ -220,7 +220,7 @@ function index({ token }) {
                                 e.stopPropagation();
                                 router.push(`/khyanalt/geree/zagvar/${a._id}`);
                               }}
-                              className="dark:bg-dark-1 dark:hover:bg-dark-2 block flex items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200"
+                              className="dark:bg-dark-1 dark:hover:bg-dark-2 block flex items-center rounded-md dark:bg-gray-900 dark:text-white bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -251,7 +251,7 @@ function index({ token }) {
                                   a._id
                                 ).then(() => gereeniiZagvarMutate());
                               }}
-                              className="dark:bg-dark-1 dark:hover:bg-dark-2 block flex items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200"
+                              className="dark:bg-dark-1 dark:hover:bg-dark-2 block flex items-center rounded-md dark:bg-gray-900 dark:text-white bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"

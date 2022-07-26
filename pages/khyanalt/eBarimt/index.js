@@ -190,10 +190,11 @@ function EbarimtMedeelel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <Button title="Сүүлд илгээгдсэн огноо">
+            <Button title="Сүүлд илгээгдсэн огноо" className="dark:bg-gray-800 dark:text-white  " >
               {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(
                 "YYYY-MM-DD"
               )}
+
             </Button>
 
             <Button danger onClick={ebarimtIlgeeye}
