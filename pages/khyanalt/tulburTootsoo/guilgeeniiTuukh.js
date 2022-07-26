@@ -45,6 +45,7 @@ import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile
 import CardList from "components/cardList";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Aos from "aos";
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -380,65 +381,7 @@ function guilgeeniiTuukh({ token }) {
                   </svg>
                 </Tooltip>
               </a>
-              {/* <a onClick={() => khungulultKhiiya(row)} className="px-2">
-              <Tooltip title="Хөнгөлөх">
-                <svg
-                  version="1.0"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="575.000000pt"
-                  height="376.000000pt"
-                  viewBox="0 0 575.000000 376.000000"
-                  preserveAspectRatio="xMidYMid meet"
-                  className="h-6 w-8 fill-current p-1 text-green-500"
-                >
-                  <g transform="translate(0.000000,376.000000) scale(0.100000,-0.100000)">
-                    <path
-                      d="M715 3630 c-109 -22 -224 -88 -300 -172 -55 -62 -110 -172 -124 -252
-            -15 -83 -15 -2529 0 -2612 17 -93 71 -196 142 -268 76 -76 154 -121 255 -146
-            75 -19 133 -20 2123 -20 1990 0 2048 1 2121 19 110 28 174 65 254 145 73 74
-            115 145 140 241 21 77 20 2596 -1 2674 -23 87 -64 159 -131 230 -65 69 -121
-            106 -221 144 l-58 22 -2080 1 c-1144 1 -2098 -2 -2120 -6z m1145 -403 l0 -193
-            55 -29 55 -30 55 30 55 29 0 193 0 193 1408 -2 1407 -3 51 -27 c73 -38 106
-            -69 139 -130 l30 -53 3 -572 3 -573 -1033 0 -1033 0 -22 -39 c-12 -21 -45 -68
-            -73 -102 l-51 -64 1105 -3 1106 -2 0 -613 c-1 -489 -4 -620 -14 -650 -32 -89
-            -106 -159 -200 -190 -45 -16 -173 -17 -1438 -17 l-1388 0 -1 513 -1 512 -54
-            49 -55 50 -54 -54 -55 -54 0 -508 0 -509 -562 3 c-553 3 -564 3 -610 25 -66
-            30 -132 95 -159 156 l-24 52 -3 617 -3 618 267 2 267 3 -41 47 c-22 26 -55 72
-            -74 102 l-33 55 -193 1 -193 0 3 563 3 562 23 50 c38 82 115 149 202 176 14 4
-            274 8 578 8 l552 1 0 -193z"
-                    />
-                    <path
-                      d="M1430 2889 c-79 -15 -188 -76 -254 -143 -288 -289 -157 -775 239
-            -885 22 -6 98 -11 170 -11 l130 0 -228 -228 -227 -227 73 -73 c40 -39 77 -72
-            82 -72 6 0 132 123 282 272 l273 273 273 -273 c150 -149 277 -272 282 -272 5
-            0 42 33 82 72 l73 73 -227 227 -228 228 130 0 c72 0 148 5 170 11 234 65 395
-            277 395 518 -1 284 -240 521 -525 521 -135 0 -268 -53 -367 -147 l-58 -56 -61
-            57 c-131 121 -302 169 -479 135z m259 -238 c60 -31 104 -77 138 -141 28 -54
-            28 -58 31 -254 l4 -198 -194 3 c-188 4 -195 5 -250 32 -181 89 -234 314 -112
-            474 30 40 99 88 145 102 58 18 188 8 238 -18z m836 4 c63 -30 129 -103 154
-            -168 58 -156 -8 -321 -157 -394 -55 -27 -62 -28 -249 -32 l-193 -3 0 179 c0
-            197 9 247 58 318 30 44 106 99 156 115 50 15 185 6 231 -15z"
-                    />
-                    <path
-                      d="M3474 976 c-38 -38 -44 -77 -19 -126 20 -38 43 -50 97 -50 100 0 143
-            120 67 184 -46 39 -101 36 -145 -8z"
-                    />
-                    <path
-                      d="M3811 996 c-58 -32 -69 -119 -22 -167 24 -23 38 -29 73 -29 52 0 85
-            21 104 66 12 29 12 39 -2 74 -25 63 -95 88 -153 56z"
-                    />
-                    <path
-                      d="M4110 981 c-50 -49 -52 -105 -6 -154 21 -22 34 -27 73 -27 56 0 85
-            17 103 59 44 106 -90 202 -170 122z"
-                    />
-                    <path
-                      d="M4438 993 c-32 -20 -48 -52 -48 -99 0 -84 110 -126 178 -69 99 83
-            -20 236 -130 168z"
-                    />
-                  </g>
-                </svg>
-              </Tooltip>
-            </a> */}
+
               {row?._id === delgegdsenGeree && (
                 <a className="px-2" onClick={() => refTuukh.current.khevlekh()}>
                   <Tooltip title="Хэвлэх">
@@ -596,98 +539,8 @@ function guilgeeniiTuukh({ token }) {
       footer,
     });
   }
-  const menu = (
-    <Menu className="contents self-center">
-      <Menu.Item key="1">
-        <Checkbox
-          value={"daraagiinTulukhOgnoo"}
-          onClick={(e) =>
-            baganaNemekh(e, "Төлөх огноо", "daraagiinTulukhOgnoo")
-          }
-        >
-          Төлөх огноо
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <Checkbox
-          value={"sariinTurees"}
-          onClick={(e) => baganaNemekh(e, "Сарын түрээс", "sariinTurees")}
-        >
-          Сарын түрээс
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <Checkbox
-          value={"talbainNiitUne"}
-          onClick={(e) => baganaNemekh(e, "Талбайн үнэ", "talbainNiitUne")}
-        >
-          Талбайн үнэ
-        </Checkbox>
-      </Menu.Item>
-      <Menu.Item key="4">
-        <Checkbox
-          value={"register"}
-          onClick={(e) => baganaNemekh(e, "Регистер", "register")}
-        >
-          Регистр
-        </Checkbox>
-      </Menu.Item>
-    </Menu>
-  );
-  function baganaTurulKhorvuulekh(turul, utga) {
-    var butsakhUtga = "";
-    switch (turul) {
-      case "daraagiinTulukhOgnoo":
-        butsakhUtga = moment(utga).format("YYYY-MM-DD");
-        break;
-      case "sariinTurees":
-        butsakhUtga = formatNumber(utga);
-        break;
-      case "register":
-        butsakhUtga = utga;
-        break;
-      case "talbainNiitUne":
-        butsakhUtga = formatNumber(utga);
-        break;
 
-      default:
-        break;
-    }
-    return butsakhUtga;
-  }
-  function baganaNemekh(e, ner, utga) {
-    if (e.target.checked === true) {
-      var nemekhBagana = {
-        title: ner,
-        dataIndex: utga,
-        ellipsis: true,
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render: (data) => {
-          return baganaTurulKhorvuulekh(utga, data);
-        },
-      };
-      shineBagana.push(nemekhBagana);
-      setShineBagana([...shineBagana]);
-    } else {
-      var khasakh = shineBagana.filter(function (item) {
-        return item.dataIndex !== utga;
-      });
-      setShineBagana([...khasakh]);
-    }
-  }
 
-  function excelTatakh() {
-    excelTatajAvya(
-      token,
-      "/geree",
-      gereeniiMedeelel.niitMur,
-      sheet,
-      shuult.query,
-      order,
-      "гэрээний жагсаалт"
-    );
-  }
   //#endregion
 
   return (
@@ -825,28 +678,36 @@ function guilgeeniiTuukh({ token }) {
                 ))}
             </Select>
           </div>
-          <div className="ml-auto">
-            <Popover
-              content={() => (
-                <div className="contents w-32 flex-col">{menu}</div>
-              )}
-              style={{ padding: 0 }}
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                style={{ marginRight: "10px" }}
-                type="primary"
-                icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
-              >
-                <span>Багана</span>
-              </Button>
-            </Popover>
+          <div className="ml-auto flex place-content-end" >
+
+            <BaganiinSongolt
+              shineBagana={shineBagana}
+              setShineBagana={setShineBagana}
+              columns={[
+
+                {
+                  title: " Төлөх огноо",
+                  dataIndex: 'daraagiinTulukhOgnoo'
+                },
+                {
+                  title: "Сарын түрээс",
+                  dataIndex: 'sariinTurees'
+                },
+                {
+                  title: "Талбайн үнэ",
+                  dataIndex: 'talbainNiitUne'
+                },
+                {
+                  title: "Регистр",
+                  dataIndex: 'register'
+                },
+              ]} />
+
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();

@@ -726,7 +726,15 @@ input:-webkit-autofill {
 }
 
 .ant-steps-item-icon {
-  @apply flex items-center justify-center !important;
+  @apply flex items-center justify-center dark:bg-gray-800 !important;
+}
+
+.ant-steps-icon {
+  @apply dark:text-gray-200 !important;
+}
+
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+  background-color: #1890ff !important;
 }
 
 .ant-table-cell {
@@ -848,4 +856,16 @@ input:-webkit-autofill {
 .ant-image-preview-img-wrapper {
   display: flex;
   justify-content: center;
+}
+
+.ant-popover-inner{
+  @apply dark:bg-gray-800 !important;
+}
+
+.ant-checkbox-wrapper > span{
+  @apply dark:text-white !important;
+}
+
+.ant-popover-arrow-content::before{
+  @apply dark:bg-gray-800 !important;
 }

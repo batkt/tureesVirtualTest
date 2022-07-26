@@ -3,7 +3,7 @@ import {
   QuestionOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Skeleton, Tooltip, Empty } from "antd";
+import { Badge, Dropdown, Menu, Tooltip, Empty } from "antd";
 import Link from "next/link";
 import React from "react";
 import moment from "moment";
@@ -48,11 +48,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
           <Menu>
             <Menu.Item>Сонордуулга</Menu.Item>
             <Menu.Divider />
-            {!(sonorduulga?.jagsaalt?.length > 0) && (
-              <Menu.Item>
-                <Empty description="Хоосон байна" />
-              </Menu.Item>
-            )}
+
             <div
               style={{ maxHeight: "70vh", overflow: "auto" }}
               onScroll={onScroll}
@@ -120,34 +116,9 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   </Menu.Item>
                 );
               })}
-              {!sonorduulga && (
+              {!!sonorduulga && !(sonorduulga?.jagsaalt?.length > 0) && (
                 <Menu.Item>
-                  <div className="relative flex cursor-pointer items-center justify-between">
-                    <div className="flex" style={{ width: `3.5rem` }}>
-                      <Skeleton.Avatar active />
-                    </div>
-                    <div className="ml-2 w-60 overflow-hidden">
-                      <div className="flex w-full items-center">
-                        <Skeleton.Input
-                          active
-                          size="small"
-                          style={{ width: "5rem" }}
-                        />
-                        <Skeleton.Input
-                          active
-                          size="small"
-                          className="ml-auto"
-                          style={{ width: "5rem" }}
-                        />
-                      </div>
-                      <Skeleton.Input
-                        active
-                        size="small"
-                        className="mt-2"
-                        style={{ width: "15rem" }}
-                      />
-                    </div>
-                  </div>
+                  <Empty description="Хоосон байна" />
                 </Menu.Item>
               )}
             </div>
