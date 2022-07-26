@@ -27,7 +27,7 @@ const { RangePicker } = DatePicker;
 
 function EbarimtMedeelel({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const { ajiltan, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
@@ -174,15 +174,15 @@ function EbarimtMedeelel({ token }) {
 
         <div className="mt-5 flex w-full flex-row justify-between">
           <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="100">
-          <RangePicker
-            style={{ marginBottom: "20px" }}
-            size="middle"
-            value={ekhlekhOgnoo}
-            onChange={setEkhlekhOgnoo}            
-          />
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100">
+            <RangePicker
+              style={{ marginBottom: "20px" }}
+              size="middle"
+              value={ekhlekhOgnoo}
+              onChange={setEkhlekhOgnoo}
+            />
           </div>
           <div
             className="flex flex-row space-x-2"
@@ -196,8 +196,10 @@ function EbarimtMedeelel({ token }) {
               )}
             </Button>
 
-            <Button danger onClick={ebarimtIlgeeye}>
-              <Spin spinning={loading}>{loading ? "" : "Татварт илгээх"}</Spin>
+            <Button danger onClick={ebarimtIlgeeye}
+              className="dark:bg-gray-900 dark:border-red-400 border-red-400 "
+            >
+              <Spin spinning={loading}>{loading ? "" : "Татварт илгээх"} </Spin>
             </Button>
           </div>
         </div>
