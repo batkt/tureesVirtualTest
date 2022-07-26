@@ -308,7 +308,6 @@ function talbaiBurtgekh({ token }) {
       createMethod("talbai", token, talbaiState)
         .then(({ data }) => {
           if (data !== undefined) {
-            setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
             formRef.current.resetFields();
             talbainiiJagsaaltMutate(
@@ -339,7 +338,6 @@ function talbaiBurtgekh({ token }) {
   }
 
   function onFinish() {
-    setWaiting(true);
     talbaiBurtgekh();
   }
 
@@ -357,8 +355,6 @@ function talbaiBurtgekh({ token }) {
     });
   }
   const [form] = Form.useForm();
-
-  const [waiting, setWaiting] = useState(false);
 
   function talbaiOruulakhExcel() {
     const footer = [
@@ -402,7 +398,6 @@ function talbaiBurtgekh({ token }) {
       onSearch={(search) =>
         setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      loading={waiting}
     >
       <div
         className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  xl:col-span-3"
@@ -757,7 +752,7 @@ function talbaiBurtgekh({ token }) {
                         </Button>
                         <Button
                           htmlType="submit"
-                          onClick={onFinish}
+                          //onClick={onFinish}
                           style={{
                             backgroundColor: "#209669",
                             color: "#ffffff",
