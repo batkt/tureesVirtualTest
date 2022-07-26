@@ -573,7 +573,7 @@ function ZakhialgiinKhyanalt() {
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => gereeKharya(data)}
                   >
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
@@ -581,7 +581,7 @@ function ZakhialgiinKhyanalt() {
                   </a>
                   {shuult.utga !== "Цуцласан" && (
                     <a
-                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         if (
                           ajiltan?.erkh === "Admin" ||
@@ -604,7 +604,7 @@ function ZakhialgiinKhyanalt() {
                   )}
                   {shuult.utga !== "Цуцласан" && (
                     <a
-                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                      className="ant-dropdown-link flex dark:text-white items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => gereeSungaya(data)}
                     >
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
@@ -618,7 +618,7 @@ function ZakhialgiinKhyanalt() {
                       cancelText="Үгүй"
                       onConfirm={() => gereeTsutsalya(data)}
                     >
-                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                      <a className="ant-dropdown-link dark:text-white flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
                         <label> Цуцлах</label>
                       </a>
@@ -631,7 +631,7 @@ function ZakhialgiinKhyanalt() {
                       cancelText="Үгүй"
                       onConfirm={() => gereeSergeeye(data)}
                     >
-                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                      <a className="ant-dropdown-link dark:text-white flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                         <RedoOutlined style={{ fontSize: "18px" }} />
                         <label> Сэргээх</label>
                       </a>

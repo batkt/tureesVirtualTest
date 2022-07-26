@@ -22,7 +22,7 @@ import moment from "moment";
 
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
@@ -93,7 +93,7 @@ function BarilgaBurtgel({ token }) {
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100  dark:hover:bg-gray-700 dark:text-white  "
                     onClick={() => barilgaBurtgel(index)}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
@@ -237,9 +237,8 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${
-                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                            } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                              } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
