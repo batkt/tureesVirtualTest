@@ -1,24 +1,8 @@
-import { Switch } from "antd"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React, { useEffect, useState } from "react"
-import { CloseOutlined, LeftOutlined } from "@ant-design/icons"
-import { useAuth } from "../services/auth"
-import NTses from "./tolgoi/Tses"
-import MTses from "./tolgoi/MTses"
-import _ from "lodash"
-
-import ProfileTovch from "./tolgoi/ProfileTovch"
-import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo"
-import { useThemeValue } from "pages"
-import MSearch from "./tolgoi/MSearch"
-import Updater from "./Updater"
-import Zaavar from "./Zaavar"
 import Loader from "./loader"
 import { Switch } from "antd";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
 import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
 import { useAuth } from "../services/auth";
 import NTses from "./tolgoi/Tses";
