@@ -60,7 +60,7 @@ function checkUtas(utasnuud, utga) {
 
 function AjiltanBurtgel({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const formRef = useRef();
   const excelref = useRef();
@@ -184,7 +184,7 @@ function AjiltanBurtgel({ token }) {
       ),
       khuvi: 100,
       utga: "Идэвхгүй",
-      query: { idevkhiteiEsekh: [false,null] },
+      query: { idevkhiteiEsekh: [false, null] },
     },
   ];
 
@@ -461,7 +461,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  len: formNuukh === "ААН" ?  7 : 10,
+                  len: formNuukh === "ААН" ? 7 : 10,
                   pattern: formNuukh === "ААН" ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
                   message: "Регистр бүртгэнэ үү!",
                 },
@@ -609,11 +609,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
                     ? "bg-green-50"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -654,14 +653,14 @@ function AjiltanBurtgel({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white  "
                     onClick={talbaiOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>Оруулах</label>
                   </a>
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excel = new Excel();
@@ -792,7 +791,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -884,7 +883,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
