@@ -14,7 +14,7 @@ const formItemLayout = {
 
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   return (
@@ -24,64 +24,55 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
     >
-      <div 
-      data-aos="fade-right"
-      data-aos-duration="1000">
-      <Form.Item
-        name="baritsaaAvakhDun"
-        label="Барьцаа дүн"
-      >
-        <InputNumber
-          placeholder="Барьцаа дүн"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000">
+        <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+          <InputNumber
+            disabled
+            placeholder="Барьцаа дүн"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-       data-aos="fade-right"
-       data-aos-duration="1000"
-       data-aos-delay="100">
-      <Form.Item
-        name="baritsaaBairshuulakhKhugatsaa"
-        label="Хугацаа"
-        extra="Барьцаа байршуулалтын хугацаа"
-      >
-        <InputNumber
-          placeholder="Барьцаа байршуулалтын хугацаа"
-          style={{ width: "100%" }}
-          formatter={(value) =>
-            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+        <Form.Item
+          name="baritsaaBairshuulakhKhugatsaa"
+          label="Хугацаа"
+          extra="Барьцаа байршуулалтын хугацаа"
+        >
+          <InputNumber
+            placeholder="Барьцаа байршуулалтын хугацаа"
+            style={{ width: "100%" }}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="100">
-      <Form.Item
-        wrapperCol={{ span: 24 }}
-        
-      >
-        <div className="flex w-full flex-row justify-between">
-          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-            Түрээсийн талбай
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            icon={<ArrowRightOutlined />}
-            onClick={() => next()}
-          >
-            Төлбөр тооцоо
-          </Button>
-        </div>
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+        <Form.Item wrapperCol={{ span: 24 }}>
+          <div className="flex w-full flex-row justify-between">
+            <Button
+              onClick={prev}
+              icon={<ArrowLeftOutlined />}
+              className="mr-4"
+            >
+              Түрээсийн талбай
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              icon={<ArrowRightOutlined />}
+              onClick={() => next()}
+            >
+              Төлбөр тооцоо
+            </Button>
+          </div>
+        </Form.Item>
       </div>
     </Form>
   );
