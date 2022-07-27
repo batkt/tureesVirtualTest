@@ -1,6 +1,8 @@
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
+  CloseCircleFilled,
+  CloseCircleOutlined,
   DeleteOutlined,
   DownloadOutlined,
   DownOutlined,
@@ -632,21 +634,25 @@ function talbaiBurtgekh({ token }) {
               </Form.Item>
             </div>
           </div>
-          <Divider>Хөрөнгийн бүртгэл</Divider>
+          <Divider className="pb-5">Хөрөнгийн бүртгэл</Divider>
           <div>
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Card>
-                      <Space
-                        key={key}
+                      <div
+                        key={key}                        
                         style={{ display: "flex", marginBottom: 8 }}
-                        align="baseline"
+                       
+                        className="flex-col items-end w-full"
                       >
-                        <Row gutter={24}>
-                          <Space>
+                        <div  className="absolute -top-2 bg-white dark:bg-red-600 text-black dark:text-white text-3xl -right-3 rounded-full">
+                        <CloseCircleOutlined onClick={() => remove(name)} />
+                        </div>
+            
                             <Form.Item
+                            className="w-full"                      
                               {...restField}
                               label="Нэр"
                               name={[name, "ner"]}
@@ -655,9 +661,10 @@ function talbaiBurtgekh({ token }) {
                                 { required: true, message: "Нэр бүртгэнэ үү" },
                               ]}
                             >
-                              <Input placeholder="нэр" />
+                              <Input   style={{ width: "100%" }}  placeholder="Нэр" />
                             </Form.Item>
                             <Form.Item
+                            className="w-full" 
                               {...restField}
                               label="Тоо"
                               name={[name, "too"]}
@@ -669,11 +676,11 @@ function talbaiBurtgekh({ token }) {
                                 },
                               ]}
                             >
-                              <Input placeholder="Тоо" />
+                              <Input  placeholder="Тоо ширхэг" />
                             </Form.Item>
-                          </Space>
-                          <Space>
+    
                             <Form.Item
+                            className="w-full" 
                               {...restField}
                               label="Үнэ"
                               name={[name, "une"]}
@@ -698,6 +705,7 @@ function talbaiBurtgekh({ token }) {
                               />
                             </Form.Item>
                             <Form.Item
+                            className="w-full" 
                               {...restField}
                               label="Нийт"
                               name={[name, "niit"]}
@@ -723,10 +731,10 @@ function talbaiBurtgekh({ token }) {
                                 }
                               />
                             </Form.Item>
-                          </Space>
                           <Space></Space>
                           <Form.Item
-                            style={{ marginLeft: "10px" }}
+                          className="w-full flex justify-start" 
+                            style={{ marginRight: "10px" }}
                             {...restField}
                             name={[name, "zurgiinId"]}
                             fieldKey={[fieldKey, "zurgiinId"]}
@@ -746,15 +754,13 @@ function talbaiBurtgekh({ token }) {
                               </Button>
                             </Upload>
                           </Form.Item>
-                        </Row>
+                        
 
-                        <MinusCircleOutlined onClick={() => remove(name)} />
-                      </Space>
+                        
+                      </div>
                     </Card>
                   ))}
-                  <div className="flex justify-center">
-                    <Form.Item>
-                      <Space>
+                  <div className="flex gap-5 -mt-4 px-2 justify-center">                    
                         <Button
                           type="dashed"
                           onClick={() => add()}
@@ -772,9 +778,7 @@ function talbaiBurtgekh({ token }) {
                           }}
                         >
                           Хадгалах
-                        </Button>
-                      </Space>
-                    </Form.Item>
+                        </Button>                     
                   </div>
                 </>
               )}
