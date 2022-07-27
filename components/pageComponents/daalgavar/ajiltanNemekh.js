@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import _ from "lodash";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
-import { Select } from "antd";
+import { Select, notification } from "antd";
 
 function ajiltanNemekh(
   { token, destroy, onChange, baiguullaga, setDaalgavar },
   ref
 ) {
   const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullaga?._id);
+
+ const [songogdsonAjiltan, setSongogdsonAjiltan] = useState()
 
   React.useImperativeHandle(
     ref,
@@ -16,10 +18,22 @@ function ajiltanNemekh(
         destroy();
       },
       khadgalya() {
+        if (!songogdsonAjiltan){
+          notification.warn({
+            description: "Ажилтан сонгоно уу !",
+            message: "Анхаар",
+          });
+          return;
+        }
+        setDaalgavar((v) => ({
+          ...v,
+          ["ajiltniiId"]: songogdsonAjiltan._id,
+          ["ajiltniiNer"]: songogdsonAjiltan.ner,
+        }))
         destroy();
       },
     }),
-    []
+    [songogdsonAjiltan]
   );
 
   return (
@@ -29,11 +43,7 @@ function ajiltanNemekh(
           <div
             className="flex flex-row justify-between"
             onClick={() =>
-              setDaalgavar((v) => ({
-                ...v,
-                ["ajiltniiId"]: mur._id,
-                ["ajiltniiNer"]: mur.ner,
-              }))
+              setSongogdsonAjiltan(mur)
             }
           >
             <span>

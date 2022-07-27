@@ -125,7 +125,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <UserOutlined className="text-xl" />
             <div>
               <div className="text-lg font-medium">
-                {daalgavar?.ajiltniiNer && `${daalgavar?.ajiltniiNer}:`}Ажилтан
+              Ажилтан{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
               </div>
               <div>Та ажилтангаа сонгоно уу</div>
             </div>
