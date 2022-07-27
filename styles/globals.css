@@ -177,6 +177,10 @@ audio::-webkit-media-controls-volume-control-container {
   @apply bg-gray-100 dark:bg-gray-800;
 }
 
+.ant-table-row-expand-icon{
+  @apply dark:bg-gray-800 !important;
+}
+
 .ant-input {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
 }
