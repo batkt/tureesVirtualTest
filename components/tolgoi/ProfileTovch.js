@@ -68,7 +68,11 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   <Menu.Item
                     key={i}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
-                    className={`${mur.kharsanEsekh? "opacity-70 kharsanSonorduulga" : "kharaaguiSonorduulga"}`}
+                    className={`${
+                      mur.kharsanEsekh
+                        ? "kharsanSonorduulga opacity-70"
+                        : "kharaaguiSonorduulga"
+                    }`}
                   >
                     <Link
                       href={
@@ -97,13 +101,13 @@ function ProfileTovch({ ajiltan, garya, token }) {
                             <a className="mr-5 font-medium">
                               {khariltsagchiinNer || ajiltniiNer}
                             </a>
-                            <div className="ml-auto whitespace-nowrap text-xs dark:text-gray-300 text-gray-500">
-                              {moment(duusakhOgnoo || createdAt).format(
-                                "YYYY-MM-DD HH:mm"
+                            <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
+                              {moment(mur.createdAt).format(
+                                "YYYY-MM-DD HH:mm:ss"
                               )}
                             </div>
                           </div>
-                          <div className="mt-0.5 flex w-full flex-row dark:text-gray-300 text-gray-600">
+                          <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
                             <div>{message || tailbar}</div>
                             {mur.turul === "daalgavar" && (
                               <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
