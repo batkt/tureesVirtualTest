@@ -282,18 +282,19 @@ function talbaiBurtgekh({ token }) {
     const khurunguud = formRef.current.getFieldsValue(khurunguud);
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
     talbaiState.barilgiinId = barilgiinId;
+    console.log(">>>>>>>>>",khurunguud);
 
     if (khurunguud?.khurunguud?.length > 0) {
       talbaiState.khurunguud = khurunguud.khurunguud;
       if (talbaiState.khurunguud[0].zurgiinId !== undefined) {
         talbaiState.khurunguud.map(
-          (x) => (x.zurgiinId = x.zurgiinId[0].response.id)
+          (x) => (x.zurgiinId[0]?.response?.id && (x.zurgiinId = x.zurgiinId[0].response.id))
         );
       }
     }
-
-    if (talbaiState.zasakhEsekh === true) {
-      setWaiting(true);
+   
+    setWaiting(true);
+    if (talbaiState.zasakhEsekh === true) {      
       uilchilgee(token)
         .post("/talbaiZasya", talbaiState)
         .then(({ data }) => {
@@ -312,7 +313,6 @@ function talbaiBurtgekh({ token }) {
           setWaiting(false);
         });
     } else
-      setWaiting(true);
     createMethod("talbai", token, talbaiState)
       .then(({ data }) => {
         if (data !== undefined) {
@@ -626,7 +626,7 @@ function talbaiBurtgekh({ token }) {
               <Form.Item name="tailbar" label="Тайлбар">
                 <TextArea
                   rows={4}
-                  allowClear
+                  
                   placeholder="Тайлбар"
                   value={talbaiState.tailbar}
                   onChange={(e) => onChange("tailbar", e.target.value)}
@@ -753,11 +753,8 @@ function talbaiBurtgekh({ token }) {
                                 Зураг оруулах
                               </Button>
                             </Upload>
-                          </Form.Item>
-                        
-
-                        
-                      </div>
+                          </Form.Item>                        
+                        </div>
                     </Card>
                   ))}
                   <div className="flex gap-5 -mt-4 px-2 justify-center">                    
