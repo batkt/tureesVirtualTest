@@ -93,7 +93,7 @@ function BarilgaBurtgel({ token }) {
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100  dark:hover:bg-gray-700 dark:text-white  "
+                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100  dark:text-white dark:hover:bg-gray-700  "
                     onClick={() => barilgaBurtgel(index)}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
@@ -237,8 +237,9 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                              } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${
+                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                            } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
@@ -334,52 +335,45 @@ function BarilgaBurtgel({ token }) {
         <div className="xxl:col-span-12 col-span-12 mt-5 md:col-span-12 xl:col-span-4">
           <div className="h-0md:mt-5 bg-white p-2 dark:bg-gray-900">
             <div className="flex cursor-pointer flex-row rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <img
-                className="h-14 w-14"
-                alt={baiguullaga?.ner}
-                src={
-                  baiguullaga?.zurgiinNer
-                    ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                    : "/favicon.ico"
-                }
-              />
-              <div className="ml-3 flex flex-col">
-                <span className="md:w-20">Барилгын нэр</span>
+              <div className="md:w-1/5">
+                <img
+                  className="h-14 w-14"
+                  alt={baiguullaga?.ner}
+                  src={
+                    baiguullaga?.zurgiinNer
+                      ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
+                      : "/favicon.ico"
+                  }
+                />
+              </div>
+              <div className="flex flex-col">
                 <span className="mt-1 font-medium text-gray-600">
                   {barilga?.ner}
                 </span>
               </div>
             </div>
-            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <div className="flex flex-row items-center">
-                <span className="md:w-20">Регистр:</span>
-                <span className="font-medium text-gray-600">
-                  {barilga?.register}
-                </span>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Регистр:</div>
+              <div className="font-medium text-gray-600 md:w-4/5">
+                {barilga?.register}
               </div>
             </div>
-            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <div className="flex flex-row items-center">
-                <span className="md:w-20">Хаяг:</span>
-                <span className="font-medium text-gray-600">
-                  {barilga?.khayag}
-                </span>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Хаяг:</div>
+              <div className="w-full font-medium text-gray-600 md:w-4/5">
+                {barilga?.khayag}
               </div>
             </div>
-            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <div className="flex flex-row items-center">
-                <span className="md:w-20">Давхар:</span>
-                <span className="font-medium text-gray-600">
-                  {barilga?.davkharuud?.length}
-                </span>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Давхар:</div>
+              <div className="font-medium text-gray-600">
+                {barilga?.davkharuud?.length}
               </div>
             </div>
-            <div className="flex cursor-pointer items-center rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
-              <div className="flex flex-row items-center">
-                <span className="md:w-20">Талбай:</span>
-                <span className="font-medium text-gray-600">
-                  {formatNumber(barilga?.niitTalbai)}м<sup> 2</sup>
-                </span>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Талбай:</div>
+              <div className="font-medium text-gray-600">
+                {formatNumber(barilga?.niitTalbai)}м<sup> 2</sup>
               </div>
             </div>
           </div>
