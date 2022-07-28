@@ -1,4 +1,4 @@
-import { Button, message, Select, Switch, Tooltip, Transfer } from "antd"
+import { Button, Checkbox, message, Select, Switch, Tooltip, Transfer } from "antd"
 import Admin from "components/Admin"
 import { useRouter } from "next/router"
 import React, { useState } from "react"
@@ -36,50 +36,36 @@ function index({ token, data }) {
       })
   }
 
-  const erkhSoliyo = (erkh) => {
-    const khereglegchiinErkh = khereglegchiinErkhuud.find(
-      (a) => a.erkh === erkh
-    )
-    setTargetKeys([...khereglegchiinErkh.tsonkhnuud])
-  }
-
   return (
     <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5">
       <div className="box col-span-12 p-2 flex flex-row items-center">
-        <div className="font-medium flex space-x-2">
-          <div className="flex flex-row space-x-2">
-            <div>{data?.ner}</div>
-            <div>{data?.ovog}</div>
-          </div>
-          <div className="flex flex-row space-x-2">
-            <div>/{data?.albanTushaal}/</div>
-          </div>
-        </div>
-        <div className="mx-3">
-          <Select style={{ width: "165px" }} onChange={erkhSoliyo} placeholder="Хэрэглэгчийн эрх">
-            {khereglegchiinErkhuud.map((a) => (
-              <Select.Option key={a.erkh} value={a.erkh}>
-                {a.tailbar}
-              </Select.Option>
+        <div className="font-medium flex">
+          <div className="flex flex-col">            
+            <div className="flex">Овог <p className="uppercase">: {data?.ovog}</p></div> 
+            <div className="flex">Нэр <p className="uppercase">: {data?.ner}</p></div>   
+            <div className="flex flex-row items-center font-medium space-x-3">
+          <div>Барилга сонгох:</div>
+          <div className="flex flex-wrap gap-5">
+          {barilguud?.map((a) => (
+              <div className= {`border-2 cursor-pointer gap-2 py-1 px-2 rounded-md`} key={a._id}>
+                <Checkbox onChange={() => {
+                  setBarilgiinErkh(value=>{
+                    const index = value.findIndex(row=>row === a._id)
+                    if (index !== -1)
+                      value.splice(index, 1)
+                    else 
+                      value.push(a._id)
+                    return [...value]
+                  })
+                }} checked={!!barilgiinErkh.find(b => b === a._id )}/> {a.ner}
+              </div>
             ))}
-          </Select>
+          </div>
+        </div>        
+          </div>
         </div>
-        <div className="flex flex-row items-center font-medium space-x-3 ml-4">
-          <div>Барилга тохируулах:</div>
-          <Select
-            mode="multiple"            
-            onChange={setBarilgiinErkh}
-            placeholder="Барилга тохируулах"    
-            value={barilgiinErkh}
-            style={{ width: "165px" }}
-          >
-            {barilguud?.map((a) => (
-              <Select.Option key={a._id} value={a._id}>
-                {a.ner}
-              </Select.Option>
-            ))}
-          </Select>
-        </div>
+        
+        
         <div className="ml-auto mr-2">
           <Button type="primary" onClick={khadgalya}>
             Хадгалах
