@@ -181,6 +181,10 @@ audio::-webkit-media-controls-volume-control-container {
   @apply dark:bg-gray-800 !important;
 }
 
+.ant-transfer-list-header{
+  @apply dark:bg-gray-800 dark:text-gray-200 font-medium !important;
+}
+
 .ant-input {
   @apply dark:bg-gray-800 dark:text-gray-300 !important;
 }

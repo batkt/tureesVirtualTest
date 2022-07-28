@@ -432,7 +432,7 @@ function AjiltanBurtgel({ token }) {
                 render: (ajildOrsonOgnoo) => (
                   <span>
                     {ajildOrsonOgnoo !== null
-                      ? moment(ajildOrsonOgnoo).format("YYYY-MM-DD")
+                      ? moment(ajildOrsonOgnoo).format("YYYY-MM-DD HH:mm")
                       : ""}
                   </span>
                 ),

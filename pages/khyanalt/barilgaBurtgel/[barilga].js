@@ -169,7 +169,7 @@ function GereeBaiguulakh({ token, data }) {
           columns={[
             { title: "Давхар", dataIndex: "davkhar" },
             {
-              title: <label>м<sup>2</sup>Үнэ</label>,
+              title: <label>Нэгж үнэ</label>,
 
               dataIndex: "tariff",
               render(utga, mur, index) {

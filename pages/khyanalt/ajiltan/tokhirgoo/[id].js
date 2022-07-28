@@ -46,17 +46,17 @@ function index({ token, data }) {
   return (
     <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5">
       <div className="box col-span-12 p-2 flex flex-row items-center">
-        <div className="font-medium space-y-2">
+        <div className="font-medium flex space-x-2">
           <div className="flex flex-row space-x-2">
             <div>{data?.ner}</div>
             <div>{data?.ovog}</div>
           </div>
           <div className="flex flex-row space-x-2">
-            <div>{data?.albanTushaal}</div>
+            <div>/{data?.albanTushaal}/</div>
           </div>
         </div>
         <div className="mx-3">
-          <Select onChange={erkhSoliyo} placeholder="Хэрэглэгчийн эрх">
+          <Select style={{ width: "165px" }} onChange={erkhSoliyo} placeholder="Хэрэглэгчийн эрх">
             {khereglegchiinErkhuud.map((a) => (
               <Select.Option key={a.erkh} value={a.erkh}>
                 {a.tailbar}
@@ -64,14 +64,14 @@ function index({ token, data }) {
             ))}
           </Select>
         </div>
-        <div className="flex flex-row space-x-3 ml-4">
-          <div>Барилга тохируулах</div>
+        <div className="flex flex-row items-center font-medium space-x-3 ml-4">
+          <div>Барилга тохируулах:</div>
           <Select
             mode="multiple"            
             onChange={setBarilgiinErkh}
-            placeholder="Барилга тохируулах"
-            style={{ width: "80%" }}
+            placeholder="Барилга тохируулах"    
             value={barilgiinErkh}
+            style={{ width: "165px" }}
           >
             {barilguud?.map((a) => (
               <Select.Option key={a._id} value={a._id}>
@@ -100,7 +100,8 @@ function index({ token, data }) {
             selectInvert: "Эсэргээр нь сонгох",
             removeAll: "Бүгдийг буцаах",
           }}
-          listStyle={{ height: "100%", width: "45%", marginTop: 10 }}
+          listStyle={{ height: "100%", width: "45%", marginTop: 10}}
+          className="dark:text-gray-200"
           dataSource={tsonknuud.filter((a) => !a.nuuya)}
           titles={["Цонхнууд", "Цонхны эрх"]}
           targetKeys={targetKeys}
@@ -131,7 +132,7 @@ function index({ token, data }) {
               <div className="flex items-center p-5">
                 <div className="border-l-2 border-green-500 pl-4">
                   <div className="font-medium">{mur.ner}</div>
-                  <div className="text-gray-600">{mur.tailbar}</div>
+                  <div className="text-gray-600 dark:text-gray-300">{mur.tailbar}</div>
                 </div>
                 <div className="ml-auto">
                   <Switch

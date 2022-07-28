@@ -76,7 +76,7 @@ function Khabea({ token }) {
         dataIndex: "createdAt",
         align: "center",
         render: (data) => {
-          return moment(data).format("YYYY-MM-DD");
+          return moment(data).format("YYYY-MM-DD HH:mm");
         },
       },
       {
