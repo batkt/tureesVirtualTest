@@ -37,10 +37,12 @@ function tulburTootsoo() {
   });
   const query = useMemo(() => {
     return {
-      createdAt: {
-        $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-      },
+      createdAt: ekhlekhOgnoo
+        ? {
+            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
+        : undefined,
     };
   }, [ekhlekhOgnoo]);
   const [form] = Form.useForm();
@@ -78,7 +80,7 @@ function tulburTootsoo() {
   }
 
   useEffect(() => {
-    khungulukhDunTootsoolyo()
+    khungulukhDunTootsoolyo();
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
@@ -156,7 +158,7 @@ function tulburTootsoo() {
     formRef.current.resetFields();
     setShuult();
   }
-  function onSelectChange(selectedRowKeys, selectedRows,) {
+  function onSelectChange(selectedRowKeys, selectedRows) {
     setRowKeys(selectedRowKeys);
     setSongogdsonGereenuud(selectedRows);
   }
@@ -164,8 +166,8 @@ function tulburTootsoo() {
   function khungulukhDunTootsoolyo() {
     var khuvi = form?.getFieldValue("khungulukhKhuvi");
     if (khuvi > 100) {
-      form.setFieldsValue({ 'khungulukhKhuvi': 100 })
-      khuvi = 100
+      form.setFieldsValue({ khungulukhKhuvi: 100 });
+      khuvi = 100;
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
     tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
@@ -254,7 +256,11 @@ function tulburTootsoo() {
                   </Form.Item>
 
                   <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
-                    <Input type={'number'} placeholder="Хөнгөлөх хувь" onChange={khungulukhDunTootsoolyo} />
+                    <Input
+                      type={"number"}
+                      placeholder="Хөнгөлөх хувь"
+                      onChange={khungulukhDunTootsoolyo}
+                    />
                   </Form.Item>
                   <Form.Item label="Шалтгаан" name="shaltgaan">
                     <Input.TextArea placeholder="Шалтгаан" />
@@ -281,25 +287,25 @@ function tulburTootsoo() {
                     </div>
                   </div>
                   <div className="mt-10 flex flex-row justify-between  ">
-                    <Form.Item >
+                    <Form.Item>
                       <Button
                         htmlType="submit"
                         onClick={khungulultKhadgalya}
-
-                        className="dark:bg-green-500 bg-green-500  dark:border-current"
+                        className="bg-green-500 dark:border-current  dark:bg-green-500"
                       >
-                        <span className="text-white" >Хадгалах</span>
+                        <span className="text-white">Хадгалах</span>
                       </Button>
                     </Form.Item>
                     <Form.Item>
                       <Button
                         htmlType="submit"
-
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
-                        className="dark:bg-gray-900 dark:border-red-400 border-red-400 "
+                        className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
                       >
-                        <span className="dark:text-red-400 text-red-400" >Цэвэрлэх</span>
+                        <span className="text-red-400 dark:text-red-400">
+                          Цэвэрлэх
+                        </span>
                       </Button>
                     </Form.Item>
                   </div>

@@ -37,18 +37,24 @@ function EbarimtMedeelel({ token }) {
   const query = useMemo(() => {
     return {
       $or: [{ ustgasanOgnoo: null }, { ustgasanOgnoo: { $exists: false } }],
-      createdAt: {
-        $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-      },
+      createdAt: ekhlekhOgnoo
+        ? {
+            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
+        : undefined,
     };
   }, [ekhlekhOgnoo]);
 
   const queryToololt = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
-      ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+      ekhlekhOgnoo: ekhlekhOgnoo
+        ? {
+            ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
+        : undefined,
     };
   }, [ekhlekhOgnoo]);
 
@@ -176,7 +182,8 @@ function EbarimtMedeelel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="100">
+            data-aos-delay="100"
+          >
             <RangePicker
               style={{ marginBottom: "20px" }}
               size="middle"
@@ -190,15 +197,19 @@ function EbarimtMedeelel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <Button title="Сүүлд илгээгдсэн огноо" className="dark:bg-gray-800 dark:text-white  " >
+            <Button
+              title="Сүүлд илгээгдсэн огноо"
+              className="dark:bg-gray-800 dark:text-white  "
+            >
               {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(
                 "YYYY-MM-DD"
               )}
-
             </Button>
 
-            <Button danger onClick={ebarimtIlgeeye}
-              className="dark:bg-gray-900 dark:border-red-400 border-red-400 "
+            <Button
+              danger
+              onClick={ebarimtIlgeeye}
+              className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
             >
               <Spin spinning={loading}>{loading ? "" : "Татварт илгээх"} </Spin>
             </Button>

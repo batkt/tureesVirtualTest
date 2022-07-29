@@ -1,30 +1,6 @@
-import {
-  DeleteOutlined,
-  PlusOutlined,
-  MinusCircleOutlined,
-  EyeOutlined,
-  FileDoneOutlined,
-  HistoryOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import {
-  DatePicker,
-  Button,
-  Form,
-  Input,
-  message,
-  Popconfirm,
-  Popover,
-  Space,
-  Table,
-  Tabs,
-  Tag,
-  Select,
-} from "antd";
-import React, { useMemo, useState, useRef, useEffect } from "react";
-import { useAuth } from "services/auth";
-import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
-import useSurveyJagsaalt from "hooks/useSurvey";
+import { DatePicker, message, Table } from "antd";
+import React, { useMemo, useState, useEffect } from "react";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import useOrder from "tools/function/useOrder";
 import _ from "lodash";
@@ -38,8 +14,6 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
 
 function Khabea({ token }) {
-  const { ajiltan, baiguullaga, barilgiinId } = useAuth();
-
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
@@ -56,9 +30,6 @@ function Khabea({ token }) {
           }
         : undefined,
   });
-  const formRef = useRef();
-  const [asuulgaTurul, setAsuulgaTurul] = useState("text");
-  const { TabPane } = Tabs;
   const { RangePicker } = DatePicker;
 
   const columns = useMemo(
@@ -214,7 +185,7 @@ function Khabea({ token }) {
       });
   }
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   return (
     <Admin
