@@ -65,6 +65,7 @@ function tulburTootsoo() {
     niitTulukhDun: 0,
   });
   const [selectedRowKeys, setRowKeys] = useState([]);
+  const [waiting, setWaiting] = useState(false);
 
   const { Option } = Select;
   const rowSelection = {
@@ -105,12 +106,14 @@ function tulburTootsoo() {
     }
   }
   function khungulultKhadgalya() {
+    setWaiting(true);
     if (
       ajiltan?.erkh !== "Admin" &&
       !_.get(ajiltan, `tokhirgoo.khungulultUzuulekhEsekh`)?.find(
         (a) => a === barilgiinId
       )
     ) {
+      setWaiting(false);
       notification.warning({
         message: "Таньд гэрээ хөнгөлөх эрх байхгүй байна.",
       });
@@ -132,13 +135,18 @@ function tulburTootsoo() {
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
+            setWaiting(false);
             message.success("Хөнгөлөлт амжилттай хийгдлээ");
             formRef.current.resetFields();
             setTootsoolol({});
           }
         })
-        .catch(aldaaBarigch);
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     } else {
+      setWaiting(false);
       message.warning("Хөнгөлөх талбай сонгоно уу");
     }
   }
@@ -189,6 +197,7 @@ function tulburTootsoo() {
       onSearch={(search) => {
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
       }}
+      loading={waiting}
       tsonkhniiId="61c2c6eb1c2830c4e6f90cc5"
     >
       <div className="col-span-12">

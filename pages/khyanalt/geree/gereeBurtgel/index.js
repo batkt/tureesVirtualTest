@@ -19,7 +19,6 @@ import {
   DownloadOutlined,
   DownOutlined,
   RedoOutlined,
-
 } from "@ant-design/icons";
 import {
   Table,
@@ -604,7 +603,7 @@ function ZakhialgiinKhyanalt() {
                   )}
                   {shuult.utga !== "Цуцласан" && (
                     <a
-                      className="ant-dropdown-link flex dark:text-white items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                       onClick={() => gereeSungaya(data)}
                     >
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
@@ -618,7 +617,7 @@ function ZakhialgiinKhyanalt() {
                       cancelText="Үгүй"
                       onConfirm={() => gereeTsutsalya(data)}
                     >
-                      <a className="ant-dropdown-link dark:text-white flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
                         <label> Цуцлах</label>
                       </a>
@@ -631,7 +630,7 @@ function ZakhialgiinKhyanalt() {
                       cancelText="Үгүй"
                       onConfirm={() => gereeSergeeye(data)}
                     >
-                      <a className="ant-dropdown-link dark:text-white flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <RedoOutlined style={{ fontSize: "18px" }} />
                         <label> Сэргээх</label>
                       </a>
@@ -850,9 +849,11 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                  } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                  }`}
+                className={`border-2 ${
+                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
+                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -863,10 +864,11 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } font-bold`}
+                          className={`text-3xl ${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -876,10 +878,11 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } text-2xl`}
+                          className={`${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -909,22 +912,21 @@ function ZakhialgiinKhyanalt() {
               shineBagana={shineBagana}
               setShineBagana={setShineBagana}
               columns={[
-
                 {
                   title: "Хугацаа",
-                  dataIndex: 'khugatsaa'
+                  dataIndex: "khugatsaa",
                 },
                 {
                   title: "Давхар",
-                  dataIndex: 'davkhar'
+                  dataIndex: "davkhar",
                 },
                 {
                   title: "Утас",
-                  dataIndex: 'utas'
+                  dataIndex: "utas",
                 },
                 {
                   title: "Төрөл",
-                  dataIndex: 'turul'
+                  dataIndex: "turul",
                 },
               ]}
             />
@@ -932,14 +934,14 @@ function ZakhialgiinKhyanalt() {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={gereeOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>Оруулах</label>
                   </a>
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={excelTatakh}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
@@ -961,13 +963,16 @@ function ZakhialgiinKhyanalt() {
             </Popover>
           </div>
         </div>
-        <div className="mt-8 hidden overflow-auto md:block">
+        <div
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
+          data-aos-anchor-placement="top-bottom"
+          className="mt-8 hidden overflow-auto md:block"
+        >
           <Table
             bordered
             tableLayout="auto"
-            data-aos="fade-left"
-            data-aos-duration="1000"
-            data-aos-delay="300"
             scroll={{ y: "calc(100vh - 32rem)" }}
             size="small"
             loading={!gereeniiMedeelel}

@@ -33,6 +33,7 @@ function EbarimtMedeelel({ token }) {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
   const [loading, setLoading] = useState(false);
+  const [waiting, setWaiting] = useState(false);
 
   const query = useMemo(() => {
     return {
@@ -119,27 +120,39 @@ function EbarimtMedeelel({ token }) {
   function ebarimtIlgeeye() {
     if (loading === true) return;
     setLoading(true);
+    setWaiting(true);
     uilchilgee(token)
       .post("/ebarimtIlgeeye", { barilgiinId: barilgiinId })
       .then(({ status }) => {
         status === 200 && message.success("Баримт амжилттай илгээлээ");
         eBarimtMedeelelMutate();
+        setWaiting(false);
         setLoading(false);
       })
-      .catch(aldaaBarigch);
+      .catch((e) => {
+        aldaaBarigch(e);
+        setWaiting(false);
+        setLoading(false);
+      });
   }
 
   function ebarimtUstgaya(mur) {
+    setWaiting(true);
     mur.barilgiinId = barilgiinId;
     uilchilgee(token)
       .post("/ebarimtButsaaya", mur)
       .then(({ data }) => {
         if (!!data) {
+          setWaiting(false);
           eBarimtMutate();
           message.success(
             `${mur.billId} дугаартай баримт амжилттай ebarimt -с устгагдлаа`
           );
         }
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+        setWaiting(false);
       });
   }
   return (
@@ -149,6 +162,7 @@ function EbarimtMedeelel({ token }) {
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
       tsonkhniiId="61c2c70a1c2830c4e6f90ccf"
+      loading={waiting}
     >
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
@@ -215,110 +229,113 @@ function EbarimtMedeelel({ token }) {
             </Button>
           </div>
         </div>
-
-        <Table
-          bordered
-          tableLayout={"fixed"}
+        <div
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="300"
-          size="small"
-          rowClassName="hover:bg-blue-100"
-          dataSource={eBarimtGaralt?.jagsaalt}
-          pagination={{
-            current: eBarimtGaralt?.khuudasniiDugaar,
-            pageSize: 100,
-            total: eBarimtGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setEBarimtKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-          onChange={onChangeTable}
-          scroll={{ y: "calc(100vh - 26rem)" }}
-          rowKey={(row) => row._id}
-          className="t-head"
-          columns={[
-            {
-              title: "Огноо",
-              dataIndex: "date",
-              ellipsis: true,
-              align: "center",
-              render: (data) => {
-                return moment(data).format("YYYY-MM-DD hh:mm:ss");
+          data-aos-anchor-placement="top-bottom"
+        >
+          <Table
+            bordered
+            tableLayout={"fixed"}
+            size="small"
+            rowClassName="hover:bg-blue-100"
+            dataSource={eBarimtGaralt?.jagsaalt}
+            pagination={{
+              current: eBarimtGaralt?.khuudasniiDugaar,
+              pageSize: 100,
+              total: eBarimtGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setEBarimtKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+            onChange={onChangeTable}
+            scroll={{ y: "calc(100vh - 26rem)" }}
+            rowKey={(row) => row._id}
+            className="t-head"
+            columns={[
+              {
+                title: "Огноо",
+                dataIndex: "date",
+                ellipsis: true,
+                align: "center",
+                render: (data) => {
+                  return moment(data).format("YYYY-MM-DD hh:mm:ss");
+                },
+                showSorterTooltip: false,
+                sorter: () => 0,
               },
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: "Гэрээний дугаар",
-              dataIndex: "gereeniiDugaar",
-              ellipsis: true,
-              align: "center",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: "Утас",
-              dataIndex: "utas",
-              ellipsis: true,
-              align: "center",
-            },
-            {
-              title: "Талбайн дугаар",
-              dataIndex: "talbainDugaar",
-              ellipsis: true,
-              align: "center",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: "ДДТД",
-              dataIndex: "billId",
-              width: "300px",
-            },
-            {
-              title: "Дүн",
-              dataIndex: "cashAmount",
-              ellipsis: true,
-              align: "center",
-              render: (data) => {
-                return formatNumber(data);
+              {
+                title: "Гэрээний дугаар",
+                dataIndex: "gereeniiDugaar",
+                ellipsis: true,
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
               },
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              width: "60px",
-              align: "center",
-              render(data) {
-                return (
-                  <Popconfirm
-                    title="ebarimt устгах уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => ebarimtUstgaya(data)}
-                  >
-                    <Button
-                      danger
-                      size="small"
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                      shape="circle"
-                      icon={<DeleteOutlined />}
-                    />
-                  </Popconfirm>
-                );
+              {
+                title: "Утас",
+                dataIndex: "utas",
+                ellipsis: true,
+                align: "center",
               },
-            },
-          ]}
-        />
+              {
+                title: "Талбайн дугаар",
+                dataIndex: "talbainDugaar",
+                ellipsis: true,
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
+              {
+                title: "ДДТД",
+                dataIndex: "billId",
+                width: "300px",
+              },
+              {
+                title: "Дүн",
+                dataIndex: "cashAmount",
+                ellipsis: true,
+                align: "center",
+                render: (data) => {
+                  return formatNumber(data);
+                },
+                showSorterTooltip: false,
+                sorter: () => 0,
+              },
+              {
+                width: "60px",
+                align: "center",
+                render(data) {
+                  return (
+                    <Popconfirm
+                      title="ebarimt устгах уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => ebarimtUstgaya(data)}
+                    >
+                      <Button
+                        danger
+                        size="small"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        shape="circle"
+                        icon={<DeleteOutlined />}
+                      />
+                    </Popconfirm>
+                  );
+                },
+              },
+            ]}
+          />
+        </div>
       </Card>
     </Admin>
   );

@@ -282,19 +282,20 @@ function talbaiBurtgekh({ token }) {
     const khurunguud = formRef.current.getFieldsValue(khurunguud);
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
     talbaiState.barilgiinId = barilgiinId;
-    console.log(">>>>>>>>>",khurunguud);
 
     if (khurunguud?.khurunguud?.length > 0) {
       talbaiState.khurunguud = khurunguud.khurunguud;
       if (talbaiState.khurunguud[0].zurgiinId !== undefined) {
         talbaiState.khurunguud.map(
-          (x) => (x.zurgiinId[0]?.response?.id && (x.zurgiinId = x.zurgiinId[0].response.id))
+          (x) =>
+            x.zurgiinId[0]?.response?.id &&
+            (x.zurgiinId = x.zurgiinId[0].response.id)
         );
       }
     }
-   
+
     setWaiting(true);
-    if (talbaiState.zasakhEsekh === true) {      
+    if (talbaiState.zasakhEsekh === true) {
       uilchilgee(token)
         .post("/talbaiZasya", talbaiState)
         .then(({ data }) => {
@@ -308,27 +309,27 @@ function talbaiBurtgekh({ token }) {
             );
           }
         })
-        .catch(e => {
-          aldaaBarigch(e)
+        .catch((e) => {
+          aldaaBarigch(e);
           setWaiting(false);
         });
     } else
-    createMethod("talbai", token, talbaiState)
-      .then(({ data }) => {
-        if (data !== undefined) {
+      createMethod("talbai", token, talbaiState)
+        .then(({ data }) => {
+          if (data !== undefined) {
+            setWaiting(false);
+            message.success("Бүртгэл амжилттай хийгдлээ");
+            formRef.current.resetFields();
+            talbainiiJagsaaltMutate(
+              (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+              true
+            );
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
           setWaiting(false);
-          message.success("Бүртгэл амжилттай хийгдлээ");
-          formRef.current.resetFields();
-          talbainiiJagsaaltMutate(
-            (s) => ({ ...s, jagsaalt: s.jagsaalt }),
-            true
-          );
-        }
-      })
-      .catch(e => {
-        aldaaBarigch(e)
-        setWaiting(false);
-      });
+        });
   }
 
   function zasya(data) {
@@ -338,15 +339,20 @@ function talbaiBurtgekh({ token }) {
   }
 
   function talbaiUstgay(mur) {
+    setWaiting(true);
     uilchilgee(token)
       .post("/talbaiUstgaya", { id: mur._id })
       .then(({ data }) => {
         if (data === "Amjilttai") {
+          setWaiting(false);
           talbainiiJagsaaltMutate();
           message.success("Устгагдлаа");
         }
       })
-      .catch(aldaaBarigch);
+      .catch((e) => {
+        aldaaBarigch(e);
+        setWaiting(false);
+      });
   }
 
   function onFinish() {
@@ -531,10 +537,7 @@ function talbaiBurtgekh({ token }) {
               data-aos-duration="1000"
               data-aos-delay="400"
             >
-              <Form.Item
-                name="ashiglaltiinZardal"
-                label="Ашиглалтын зардал"
-              >
+              <Form.Item name="ashiglaltiinZardal" label="Ашиглалтын зардал">
                 <InputNumber
                   style={{ width: "100%" }}
                   placeholder="Ашиглалтын зардал"
@@ -552,10 +555,7 @@ function talbaiBurtgekh({ token }) {
               data-aos-duration="1000"
               data-aos-delay="500"
             >
-              <Form.Item
-                name="niitAshiglaltiinZardal"
-                label="Нийт зардал"
-              >
+              <Form.Item name="niitAshiglaltiinZardal" label="Нийт зардал">
                 <InputNumber
                   style={{ width: "100%" }}
                   readOnly={true}
@@ -626,7 +626,6 @@ function talbaiBurtgekh({ token }) {
               <Form.Item name="tailbar" label="Тайлбар">
                 <TextArea
                   rows={4}
-                  
                   placeholder="Тайлбар"
                   value={talbaiState.tailbar}
                   onChange={(e) => onChange("tailbar", e.target.value)}
@@ -642,140 +641,129 @@ function talbaiBurtgekh({ token }) {
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Card>
                       <div
-                        key={key}                        
+                        key={key}
                         style={{ display: "flex", marginBottom: 8 }}
-                       
-                        className="flex-col items-end w-full"
+                        className="w-full flex-col items-end"
                       >
-                        <div  className="absolute -top-2 bg-white dark:bg-red-600 text-black dark:text-white text-3xl -right-3 rounded-full">
-                        <CloseCircleOutlined onClick={() => remove(name)} />
+                        <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
+                          <CloseCircleOutlined onClick={() => remove(name)} />
                         </div>
-            
-                            <Form.Item
-                            className="w-full"                      
-                              {...restField}
-                              label="Нэр"
-                              name={[name, "ner"]}
-                              fieldKey={[fieldKey, "ner"]}
-                              rules={[
-                                { required: true, message: "Нэр бүртгэнэ үү" },
-                              ]}
-                            >
-                              <Input   style={{ width: "100%" }}  placeholder="Нэр" />
-                            </Form.Item>
-                            <Form.Item
-                            className="w-full" 
-                              {...restField}
-                              label="Тоо"
-                              name={[name, "too"]}
-                              fieldKey={[fieldKey, "too"]}
-                              rules={[
-                                {
-                                  required: false,
-                                  message: "Тоо ширхэг бүртгэнэ үү",
-                                },
-                              ]}
-                            >
-                              <Input  placeholder="Тоо ширхэг" />
-                            </Form.Item>
-    
-                            <Form.Item
-                            className="w-full" 
-                              {...restField}
-                              label="Үнэ"
-                              name={[name, "une"]}
-                              fieldKey={[fieldKey, "une"]}
-                              rules={[
-                                { required: false, message: "Үнэ бүртгэнэ үү" },
-                              ]}
-                            >
-                              <InputNumber
-                                style={{ width: "100%" }}
-                                placeholder="Нэгж үнэ"
-                                formatter={(value) =>
-                                  `${value}`.replace(
-                                    /\B(?=(\d{3})+(?!\d))/g,
-                                    ","
-                                  )
-                                }
-                                parser={(value) =>
-                                  value.replace(/\$\s?|(,*)/g, "")
-                                }
-                                onChange={() => test({ ...fields })}
-                              />
-                            </Form.Item>
-                            <Form.Item
-                            className="w-full" 
-                              {...restField}
-                              label="Нийт"
-                              name={[name, "niit"]}
-                              fieldKey={[fieldKey, "niit"]}
-                              rules={[
-                                {
-                                  required: false,
-                                  message: "Нийт бүртгэнэ үү",
-                                },
-                              ]}
-                            >
-                              <InputNumber
-                                style={{ width: "100%" }}
-                                placeholder="Нийт үнэ"
-                                formatter={(value) =>
-                                  `${value}`.replace(
-                                    /\B(?=(\d{3})+(?!\d))/g,
-                                    ","
-                                  )
-                                }
-                                parser={(value) =>
-                                  value.replace(/\$\s?|(,*)/g, "")
-                                }
-                              />
-                            </Form.Item>
-                          <Space></Space>
-                          <Form.Item
-                          className="w-full flex justify-start" 
-                            style={{ marginRight: "10px" }}
-                            {...restField}
-                            name={[name, "zurgiinId"]}
-                            fieldKey={[fieldKey, "zurgiinId"]}
-                            getValueFromEvent={normFile}
+
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          label="Нэр"
+                          name={[name, "ner"]}
+                          fieldKey={[fieldKey, "ner"]}
+                          rules={[
+                            { required: true, message: "Нэр бүртгэнэ үү" },
+                          ]}
+                        >
+                          <Input style={{ width: "100%" }} placeholder="Нэр" />
+                        </Form.Item>
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          label="Тоо"
+                          name={[name, "too"]}
+                          fieldKey={[fieldKey, "too"]}
+                          rules={[
+                            {
+                              required: false,
+                              message: "Тоо ширхэг бүртгэнэ үү",
+                            },
+                          ]}
+                        >
+                          <Input placeholder="Тоо ширхэг" />
+                        </Form.Item>
+
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          label="Үнэ"
+                          name={[name, "une"]}
+                          fieldKey={[fieldKey, "une"]}
+                          rules={[
+                            { required: false, message: "Үнэ бүртгэнэ үү" },
+                          ]}
+                        >
+                          <InputNumber
+                            style={{ width: "100%" }}
+                            placeholder="Нэгж үнэ"
+                            formatter={(value) =>
+                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            onChange={() => test({ ...fields })}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          label="Нийт"
+                          name={[name, "niit"]}
+                          fieldKey={[fieldKey, "niit"]}
+                          rules={[
+                            {
+                              required: false,
+                              message: "Нийт бүртгэнэ үү",
+                            },
+                          ]}
+                        >
+                          <InputNumber
+                            style={{ width: "100%" }}
+                            placeholder="Нийт үнэ"
+                            formatter={(value) =>
+                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            }
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                          />
+                        </Form.Item>
+                        <Space></Space>
+                        <Form.Item
+                          className="flex w-full justify-start"
+                          style={{ marginRight: "10px" }}
+                          {...restField}
+                          name={[name, "zurgiinId"]}
+                          fieldKey={[fieldKey, "zurgiinId"]}
+                          getValueFromEvent={normFile}
+                        >
+                          <Upload
+                            multiple={false}
+                            listType="picture"
+                            name="file"
+                            action={`${url}/zuragKhadgalya`}
+                            method="POST"
+                            data={{ turul: "khurungu" }}
+                            headers={{ Authorization: `bearer ${token}` }}
                           >
-                            <Upload
-                              multiple={false}
-                              listType="picture"
-                              name="file"
-                              action={`${url}/zuragKhadgalya`}
-                              method="POST"
-                              data={{ turul: "khurungu" }}
-                              headers={{ Authorization: `bearer ${token}` }}
-                            >
-                              <Button icon={<UploadOutlined />}>
-                                Зураг оруулах
-                              </Button>
-                            </Upload>
-                          </Form.Item>                        
-                        </div>
+                            <Button icon={<UploadOutlined />}>
+                              Зураг оруулах
+                            </Button>
+                          </Upload>
+                        </Form.Item>
+                      </div>
                     </Card>
                   ))}
-                  <div className="flex gap-5 -mt-4 px-2 justify-center">                    
-                        <Button
-                          type="dashed"
-                          onClick={() => add()}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Хөрөнгө бүртгэх
-                        </Button>
-                        <Button
-                          htmlType="submit"
-                          //onClick={onFinish}
-                          style={{
-                            backgroundColor: "#209669",
-                            color: "#ffffff",
-                          }}
-                        >
-                          Хадгалах
-                        </Button>                     
+                  <div className="-mt-4 flex justify-center gap-5 px-2">
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Хөрөнгө бүртгэх
+                    </Button>
+                    <Button
+                      htmlType="submit"
+                      //onClick={onFinish}
+                      style={{
+                        backgroundColor: "#209669",
+                        color: "#ffffff",
+                      }}
+                    >
+                      Хадгалах
+                    </Button>
                   </div>
                 </>
               )}
@@ -792,10 +780,11 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -829,14 +818,14 @@ function talbaiBurtgekh({ token }) {
             content={() => (
               <div className="flex w-32 flex-col">
                 <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white  "
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
                   onClick={talbaiOruulakhExcel}
                 >
                   <UploadOutlined style={{ fontSize: "18px" }} />
                   <label>Оруулах</label>
                 </a>
                 <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
+                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                   onClick={() => {
                     const { Excel } = require("antd-table-saveas-excel");
                     const excelExport = new Excel();
@@ -899,188 +888,280 @@ function talbaiBurtgekh({ token }) {
             </Button>
           </Popover>
         </div>
-        <CardList
-          keyValue="talbai"
-          className="block overflow-auto md:hidden"
-          jagsaalt={talbainiiGaralt?.jagsaalt}
-          Component={TalbaiTile}
-          pagination={{
-            current: talbainiiGaralt?.khuudasniiDugaar,
-            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
-            total: talbainiiGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        />
-
-        <Table
-          className={"mt-6 hidden md:block"}
+        <div
           data-aos="fade-up-left"
           data-aos-duration="1000"
           data-aos-delay="200"
-          bordered
-          size="small"
-          loading={!talbainiiGaralt}
-          tableLayout={"fixed"}
-          rowKey={(row) => row._id}
-          scroll={{ y: "calc(100vh - 25rem)" }}
-          dataSource={talbainiiGaralt?.jagsaalt}
-          onChange={onChangeTable}
-          pagination={{
-            current: talbainiiGaralt?.khuudasniiDugaar,
-            pageSize: talbainiiGaralt?.khuudasniiKhemjee,
-            total: talbainiiGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setTalbaiKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-          columns={[
-            {
-              title: "№",
-              key: "index",
-              align: "center",
-              className: "text-center",
-              render: (text, record, index) =>
-                (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                (talbainiiGaralt?.khuudasniiKhemjee || 0) -
-                (talbainiiGaralt?.khuudasniiKhemjee || 0) +
-                index +
-                1,
-              width: "1rem",
-            },
-            {
-              title: "Дугаар",
-              dataIndex: "kod",
-              ellipsis: true,
-              width: "1.5rem",
-              align: "center",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: "Давхар",
-              dataIndex: "davkhar",
-              ellipsis: true,
-              width: "1.2rem",
-              align: "center",
-              showSorterTooltip: false,
-              sorter: () => 0,
-              defaultSortOrder: "descend",
-            },
-            {
-              title: "Талбай/м2/",
-              dataIndex: "talbainKhemjee",
-              align: "center",
-              ellipsis: true,
-              width: "2.1rem",
-              showSorterTooltip: false,
-              defaultSortOrder: "descend",
-              sorter: () => 0,
-            },
-            {
-              title: "Нийт үнэ/₮/",
-              dataIndex: "talbainNiitUne",
-              ellipsis: true,
-              align: "center",
-              render: (talbainNiitUne) => {
-                return formatNumber(talbainNiitUne || 0);
+          data-aos-anchor-placement="top-bottom"
+        >
+          <CardList
+            keyValue="talbai"
+            className="block overflow-auto md:hidden"
+            jagsaalt={talbainiiGaralt?.jagsaalt}
+            Component={TalbaiTile}
+            pagination={{
+              current: talbainiiGaralt?.khuudasniiDugaar,
+              pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+              total: talbainiiGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+          />
+
+          <Table
+            className={"mt-6 hidden md:block"}
+            bordered
+            size="small"
+            loading={!talbainiiGaralt}
+            tableLayout={"fixed"}
+            rowKey={(row) => row._id}
+            scroll={{ y: "calc(100vh - 25rem)" }}
+            dataSource={talbainiiGaralt?.jagsaalt}
+            onChange={onChangeTable}
+            pagination={{
+              current: talbainiiGaralt?.khuudasniiDugaar,
+              pageSize: talbainiiGaralt?.khuudasniiKhemjee,
+              total: talbainiiGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setTalbaiKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+            columns={[
+              {
+                title: "№",
+                key: "index",
+                align: "center",
+                className: "text-center",
+                render: (text, record, index) =>
+                  (talbainiiGaralt?.khuudasniiDugaar || 0) *
+                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) +
+                  index +
+                  1,
+                width: "1rem",
               },
-              showSorterTooltip: false,
-              defaultSortOrder: "descend",
-              sorter: () => 0,
-              width: "2.5rem",
-            },
-            {
-              title: "Зардал",
-              dataIndex: "niitAshiglaltiinZardal",
-              align: "center",
-              render: (data) => {
-                return formatNumber(data) + "₮";
+              {
+                title: "Дугаар",
+                dataIndex: "kod",
+                ellipsis: true,
+                width: "1.5rem",
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
               },
-              showSorterTooltip: false,
-              defaultSortOrder: "descend",
-              sorter: () => 0,
-              width: "2rem",
-            },
-            {
-              title: "Төлбөр",
-              dataIndex: "tureesiinTulbur",
-              align: "center",
-              render: (data) => {
-                return formatNumber(data) + "₮";
+              {
+                title: "Давхар",
+                dataIndex: "davkhar",
+                ellipsis: true,
+                width: "1.2rem",
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                defaultSortOrder: "descend",
               },
-              showSorterTooltip: false,
-              defaultSortOrder: "descend",
-              sorter: () => 0,
-              width: "2.5rem",
-            },
-            {
-              title: "Тайлбар",
-              dataIndex: "tailbar",
-              ellipsis: true,
-              width: "4.5rem",
-            },
-            {
-              title: "Төлөв",
-              dataIndex: "idevkhiteiEsekh",
-              ellipsis: true,
-              width: "2rem",
-              align: "center",
-              showSorterTooltip: false,
-              sorter: () => 0,
-              render(idevkhiteiEsekh) {
-                return (
-                  <Tag className={idevkhiteiEsekh === true ? "dark:bg-green-600 dark:text-white" : "dark:bg-red-700 dark:text-white"} color={idevkhiteiEsekh === true ? "green" : "red"}>
-                    {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
-                  </Tag>
-                );
+              {
+                title: "Талбай/м2/",
+                dataIndex: "talbainKhemjee",
+                align: "center",
+                ellipsis: true,
+                width: "2.1rem",
+                showSorterTooltip: false,
+                defaultSortOrder: "descend",
+                sorter: () => 0,
               },
-            },
-            {
-              title: "Хөрөнгө",
-              align: "center",
-              ellipsis: true,
-              width: "1.5rem",
-              render: (data) => {
-                return (
-                  data?.khurunguud !== undefined && (
+              {
+                title: "Нийт үнэ/₮/",
+                dataIndex: "talbainNiitUne",
+                ellipsis: true,
+                align: "center",
+                render: (talbainNiitUne) => {
+                  return formatNumber(talbainNiitUne || 0);
+                },
+                showSorterTooltip: false,
+                defaultSortOrder: "descend",
+                sorter: () => 0,
+                width: "2.5rem",
+              },
+              {
+                title: "Зардал",
+                dataIndex: "niitAshiglaltiinZardal",
+                align: "center",
+                render: (data) => {
+                  return formatNumber(data) + "₮";
+                },
+                showSorterTooltip: false,
+                defaultSortOrder: "descend",
+                sorter: () => 0,
+                width: "2rem",
+              },
+              {
+                title: "Төлбөр",
+                dataIndex: "tureesiinTulbur",
+                align: "center",
+                render: (data) => {
+                  return formatNumber(data) + "₮";
+                },
+                showSorterTooltip: false,
+                defaultSortOrder: "descend",
+                sorter: () => 0,
+                width: "2.5rem",
+              },
+              {
+                title: "Тайлбар",
+                dataIndex: "tailbar",
+                ellipsis: true,
+                width: "4.5rem",
+              },
+              {
+                title: "Төлөв",
+                dataIndex: "idevkhiteiEsekh",
+                ellipsis: true,
+                width: "2rem",
+                align: "center",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                render(idevkhiteiEsekh) {
+                  return (
+                    <Tag
+                      className={
+                        idevkhiteiEsekh === true
+                          ? "dark:bg-green-600 dark:text-white"
+                          : "dark:bg-red-700 dark:text-white"
+                      }
+                      color={idevkhiteiEsekh === true ? "green" : "red"}
+                    >
+                      {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
+                    </Tag>
+                  );
+                },
+              },
+              {
+                title: "Хөрөнгө",
+                align: "center",
+                ellipsis: true,
+                width: "1.5rem",
+                render: (data) => {
+                  return (
+                    data?.khurunguud !== undefined && (
+                      <div className="flex flex-row justify-center">
+                        <Popover
+                          content={
+                            <Table
+                              pagination={false}
+                              size="small"
+                              dataSource={data?.khurunguud}
+                              columns={[
+                                {
+                                  title: "Нэр",
+                                  dataIndex: "ner",
+                                },
+                                {
+                                  title: "Тоо",
+                                  dataIndex: "too",
+                                  align: "center",
+                                },
+                                {
+                                  title: "Үнэ",
+                                  dataIndex: "une",
+                                  align: "center",
+                                  render: (data) => {
+                                    return formatNumber(data) + "₮";
+                                  },
+                                },
+                                {
+                                  title: "Нийт",
+                                  dataIndex: "niit",
+                                  align: "center",
+                                  render: (data) => {
+                                    return formatNumber(data) + "₮";
+                                  },
+                                },
+                              ]}
+                            ></Table>
+                          }
+                          trigger="click"
+                        >
+                          <a className="flex items-center justify-center hover:bg-gray-200">
+                            <Badge count={data?.khurunguud?.length}>
+                              <EyeOutlined
+                                style={{ color: "#1890ff", fontSize: "18px" }}
+                              />
+                            </Badge>
+                          </a>
+                        </Popover>
+                      </div>
+                    )
+                  );
+                },
+              },
+              {
+                title: "Түүх",
+                width: "1rem",
+                align: "center",
+                render: (data) => {
+                  return (
                     <div className="flex flex-row justify-center">
                       <Popover
                         content={
                           <Table
+                            style={{
+                              display: "flex",
+                              width: "900px",
+                            }}
                             pagination={false}
                             size="small"
-                            dataSource={data?.khurunguud}
+                            dataSource={gereeniiMedeelel?.jagsaalt}
                             columns={[
+                              {
+                                title: "Гэрээ №",
+                                dataIndex: "gereeniiDugaar",
+                              },
+                              {
+                                title: "Овог",
+                                dataIndex: "ovog",
+                              },
                               {
                                 title: "Нэр",
                                 dataIndex: "ner",
                               },
                               {
-                                title: "Тоо",
-                                dataIndex: "too",
-                                align: "center",
+                                title: "Регистр",
+                                dataIndex: "register",
                               },
                               {
-                                title: "Үнэ",
-                                dataIndex: "une",
-                                align: "center",
+                                title: "Төрөл",
+                                dataIndex: "turul",
+                              },
+                              {
+                                title: "Гэрээний огноо",
+                                dataIndex: "gereeniiOgnoo",
                                 render: (data) => {
-                                  return formatNumber(data) + "₮";
+                                  return moment(data).format("YYYY-MM-DD");
                                 },
                               },
                               {
-                                title: "Нийт",
-                                dataIndex: "niit",
+                                title: "Дуусах огноо",
+                                dataIndex: "duusakhOgnoo",
+                                render: (data) => {
+                                  return moment(data).format("YYYY-MM-DD");
+                                },
+                              },
+                              {
+                                title: "Хугацаа",
+                                dataIndex: "khugatsaa",
+                              },
+                              {
+                                title: "Сарын түрээс",
+                                dataIndex: "sariinTurees",
                                 align: "center",
                                 render: (data) => {
                                   return formatNumber(data) + "₮";
@@ -1092,147 +1173,66 @@ function talbaiBurtgekh({ token }) {
                         trigger="click"
                       >
                         <a className="flex items-center justify-center hover:bg-gray-200">
-                          <Badge count={data?.khurunguud?.length}>
-                            <EyeOutlined
-                              style={{ color: "#1890ff", fontSize: "18px" }}
-                            />
-                          </Badge>
+                          <EyeOutlined
+                            style={{ fontSize: "18px" }}
+                            onClick={() =>
+                              setShuult((a) => ({
+                                ...a,
+                                query: { talbainDugaar: data.kod },
+                              }))
+                            }
+                          />
                         </a>
                       </Popover>
                     </div>
-                  )
-                );
+                  );
+                },
               },
-            },
-            {
-              title: "Түүх",
-              width: "1rem",
-              align: "center",
-              render: (data) => {
-                return (
+              {
+                title: () => <SettingOutlined />,
+                ellipsis: true,
+                width: "1rem",
+                align: "center",
+                render: (data) => (
                   <div className="flex flex-row justify-center">
                     <Popover
-                      content={
-                        <Table
-                          style={{
-                            display: "flex",
-                            width: "900px",
-                          }}
-                          pagination={false}
-                          size="small"
-                          dataSource={gereeniiMedeelel?.jagsaalt}
-                          columns={[
-                            {
-                              title: "Гэрээ №",
-                              dataIndex: "gereeniiDugaar",
-                            },
-                            {
-                              title: "Овог",
-                              dataIndex: "ovog",
-                            },
-                            {
-                              title: "Нэр",
-                              dataIndex: "ner",
-                            },
-                            {
-                              title: "Регистр",
-                              dataIndex: "register",
-                            },
-                            {
-                              title: "Төрөл",
-                              dataIndex: "turul",
-                            },
-                            {
-                              title: "Гэрээний огноо",
-                              dataIndex: "gereeniiOgnoo",
-                              render: (data) => {
-                                return moment(data).format("YYYY-MM-DD");
-                              },
-                            },
-                            {
-                              title: "Дуусах огноо",
-                              dataIndex: "duusakhOgnoo",
-                              render: (data) => {
-                                return moment(data).format("YYYY-MM-DD");
-                              },
-                            },
-                            {
-                              title: "Хугацаа",
-                              dataIndex: "khugatsaa",
-                            },
-                            {
-                              title: "Сарын түрээс",
-                              dataIndex: "sariinTurees",
-                              align: "center",
-                              render: (data) => {
-                                return formatNumber(data) + "₮";
-                              },
-                            },
-                          ]}
-                        ></Table>
-                      }
+                      placement="bottom"
                       trigger="click"
+                      content={() => (
+                        <div className="flex w-24 flex-col space-y-2">
+                          <a
+                            className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                            onClick={() => zasya(data)}
+                          >
+                            <EditOutlined style={{ fontSize: "18px" }} />
+                            <label>Засах</label>
+                          </a>
+                          <Popconfirm
+                            title="Талбай устгах уу?"
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                            onConfirm={() => talbaiUstgay(data)}
+                          >
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
+                              <DeleteOutlined
+                                style={{ fontSize: "18px", color: "red" }}
+                              />
+                              <label>Устгах</label>
+                            </a>
+                          </Popconfirm>
+                        </div>
+                      )}
                     >
-                      <a className="flex items-center justify-center hover:bg-gray-200">
-                        <EyeOutlined
-                          style={{ fontSize: "18px" }}
-                          onClick={() =>
-                            setShuult((a) => ({
-                              ...a,
-                              query: { talbainDugaar: data.kod },
-                            }))
-                          }
-                        />
+                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                        <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
                   </div>
-                );
+                ),
               },
-            },
-            {
-              title: () => <SettingOutlined />,
-              ellipsis: true,
-              width: "1rem",
-              align: "center",
-              render: (data) => (
-                <div className="flex flex-row justify-center">
-                  <Popover
-                    placement="bottom"
-                    trigger="click"
-                    content={() => (
-                      <div className="flex w-24 flex-col space-y-2">
-                        <a
-                          className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
-                          onClick={() => zasya(data)}
-                        >
-                          <EditOutlined style={{ fontSize: "18px" }} />
-                          <label>Засах</label>
-                        </a>
-                        <Popconfirm
-                          title="Талбай устгах уу?"
-                          okText="Тийм"
-                          cancelText="Үгүй"
-                          onConfirm={() => talbaiUstgay(data)}
-                        >
-                          <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white ">
-                            <DeleteOutlined
-                              style={{ fontSize: "18px", color: "red" }}
-                            />
-                            <label>Устгах</label>
-                          </a>
-                        </Popconfirm>
-                      </div>
-                    )}
-                  >
-                    <a className=" flex items-center justify-center hover:bg-gray-200">
-                      <MoreOutlined style={{ fontSize: "18px" }} />
-                    </a>
-                  </Popover>
-                </div>
-              ),
-            },
-          ]}
-        />
+            ]}
+          />
+        </div>
       </Card>
     </Admin>
   );

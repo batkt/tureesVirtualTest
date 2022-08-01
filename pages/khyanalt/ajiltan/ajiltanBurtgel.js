@@ -43,7 +43,7 @@ const iconColor = { fontSize: "18px" };
 
 function AjiltanBurtgel({ token }) {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
   const formRef = useRef();
   const zurag = useRef();
@@ -63,6 +63,7 @@ function AjiltanBurtgel({ token }) {
     albanTushaal: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
+  const [waiting, setWaiting] = useState(false);
 
   const { Option } = Select;
 
@@ -74,6 +75,7 @@ function AjiltanBurtgel({ token }) {
       message.warning("Нууц үг буруу оруулсан байна.");
       return;
     }
+    setWaiting(true);
 
     var form_data = new FormData();
     ajiltanState.baiguullagiinId = ajiltan?.baiguullagiinId;
@@ -99,6 +101,7 @@ function AjiltanBurtgel({ token }) {
       updateMethod("ajiltan", token, ajiltanState)
         .then(({ data }) => {
           if (data !== undefined) {
+            setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
             formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
@@ -107,11 +110,15 @@ function AjiltanBurtgel({ token }) {
             );
           }
         })
-        .catch(aldaaBarigch);
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     } else {
       createMethod("ajiltan", token, ajiltanState)
         .then(({ data }) => {
           if (data !== undefined) {
+            setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
             formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
@@ -120,7 +127,10 @@ function AjiltanBurtgel({ token }) {
             );
           }
         })
-        .catch(aldaaBarigch);
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     }
   }
 
@@ -141,12 +151,19 @@ function AjiltanBurtgel({ token }) {
       message.warning("Та өөрийгөө устгаж болохгүй!");
       return;
     }
-    deleteMethod("ajiltan", token, mur._id).then(({ data }) => {
-      if (data !== undefined || data !== null) {
-        ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-        message.success("Устгагдлаа");
-      }
-    });
+    setWaiting(true);
+    deleteMethod("ajiltan", token, mur._id)
+      .then(({ data }) => {
+        if (data !== undefined || data !== null) {
+          setWaiting(false);
+          ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          message.success("Устгагдлаа");
+        }
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+        setWaiting(false);
+      });
   }
 
   function onFinish() {
@@ -166,6 +183,7 @@ function AjiltanBurtgel({ token }) {
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
       tsonkhniiId={"61c2c6571c2830c4e6f90c95"}
+      loading={waiting}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form
@@ -174,9 +192,7 @@ function AjiltanBurtgel({ token }) {
           onFinish={onFinish}
           initialValues={{ remember: true }}
         >
-          <div
-            data-aos="fade-right"
-            data-aos-duration="800">
+          <div data-aos="fade-right" data-aos-duration="800">
             <Form.Item
               name="ovog"
               rules={[
@@ -199,7 +215,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="100">
+            data-aos-delay="100"
+          >
             <Form.Item
               name="ner"
               rules={[
@@ -222,7 +239,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="200">
+            data-aos-delay="200"
+          >
             <Form.Item
               name="register"
               rules={[
@@ -247,7 +265,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <Form.Item
               name="khayag"
               rules={[
@@ -269,7 +288,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="400">
+            data-aos-delay="400"
+          >
             <Form.Item
               name="utas"
               rules={[
@@ -291,7 +311,8 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="500">
+            data-aos-delay="500"
+          >
             <Form.Item
               name="ajildOrsonOgnoo"
               rules={[
@@ -304,14 +325,15 @@ function AjiltanBurtgel({ token }) {
               <DatePicker
                 style={{ width: "100%" }}
                 placeholder="Ажилд орсон огноо"
-                onChange={({ }, v) => onChange("ajildOrsonOgnoo", v)}
+                onChange={({}, v) => onChange("ajildOrsonOgnoo", v)}
               ></DatePicker>
             </Form.Item>
           </div>
           <div
             data-aos="fade-right"
             data-aos-duration="800"
-            data-aos-delay="600">
+            data-aos-delay="600"
+          >
             <Form.Item
               name="albanTushaal"
               rules={[
@@ -330,55 +352,45 @@ function AjiltanBurtgel({ token }) {
               ></Input>
             </Form.Item>
           </div>
-          <div
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-delay="900">
-          <Divider
-            orientation="left"            
-          >
-            Нэвтрэх нэр нууц үг
-          </Divider>
-          <Form.Item
-            name="nevtrekhNer"
-            rules={[
-              {
-                required: true,
-                message: "Нэвтрэх нэр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Нэвтрэх нэр"
-              value={ajiltanState.nevtrekhNer}
-              onChange={(e) => onChange("nevtrekhNer", e.target.value)}
-              prefix={<MailOutlined style={iconColor} />}
-            />
-          </Form.Item>
-          <Form.Item
-            name="nuutsUg"
-            rules={[
-              {
-                required: true,
-                message: "Нууц үг бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input.Password
-              placeholder="Нууц үг"
-              value={ajiltanState.nuutsUg}
-              onChange={(e) => onChange("nuutsUg", e.target.value)}
-              prefix={<SecurityScanOutlined style={iconColor} />}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              htmlType="submit"
-              type="primary"
+          <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="900">
+            <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
+            <Form.Item
+              name="nevtrekhNer"
+              rules={[
+                {
+                  required: true,
+                  message: "Нэвтрэх нэр бүртгэнэ үү!",
+                },
+              ]}
             >
-              Хадгалах
-            </Button>
-          </Form.Item>
+              <Input
+                placeholder="Нэвтрэх нэр"
+                value={ajiltanState.nevtrekhNer}
+                onChange={(e) => onChange("nevtrekhNer", e.target.value)}
+                prefix={<MailOutlined style={iconColor} />}
+              />
+            </Form.Item>
+            <Form.Item
+              name="nuutsUg"
+              rules={[
+                {
+                  required: true,
+                  message: "Нууц үг бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <Input.Password
+                placeholder="Нууц үг"
+                value={ajiltanState.nuutsUg}
+                onChange={(e) => onChange("nuutsUg", e.target.value)}
+                prefix={<SecurityScanOutlined style={iconColor} />}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button htmlType="submit" type="primary">
+                Хадгалах
+              </Button>
+            </Form.Item>
           </div>
         </Form>
       </div>
@@ -416,7 +428,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,

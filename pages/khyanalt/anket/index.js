@@ -218,23 +218,26 @@ function Khabea({ token }) {
               onChange={onChangeOgnoo}
             />
           </div>
-
-          <Table
-            bordered
-            size="small"
-            tableLayout="fixed"
-            scroll={{ y: "calc(100vh - 20rem)" }}
-            rowClassName={(record, index) =>
-              index % 2 === 0
-                ? "bg-white dark:bg-gray-600 h-0.5"
-                : "bg-gray-200 dark:bg-gray-800 h-0.5"
-            }
-            dataSource={surveyJagsaalt}
-            columns={columns}
+          <div
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-delay="200"
-          />
+            data-aos-anchor-placement="top-bottom"
+          >
+            <Table
+              bordered
+              size="small"
+              tableLayout="fixed"
+              scroll={{ y: "calc(100vh - 20rem)" }}
+              rowClassName={(record, index) =>
+                index % 2 === 0
+                  ? "bg-white dark:bg-gray-600 h-0.5"
+                  : "bg-gray-200 dark:bg-gray-800 h-0.5"
+              }
+              dataSource={surveyJagsaalt}
+              columns={columns}
+            />
+          </div>
         </div>
       </div>
     </Admin>

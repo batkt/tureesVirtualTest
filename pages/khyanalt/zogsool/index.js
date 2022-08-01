@@ -346,39 +346,43 @@ function Zogsool({ token }) {
             </Popover>
           </div>
         </div>
-        <Table
-          className="mt-8 hidden overflow-auto md:block"
+        <div
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="300"
-          tableLayout="auto"
-          loading={!zogsoolGaralt}
-          dataSource={zogsoolGaralt?.jagsaalt}
-          scroll={{ y: "calc(100vh - 30rem)" }}
-          size="small"
-          bordered
-          rowKey={(row) => row._id}
-          columns={columns}
-          onChange={onChangeTable}
-          pagination={{
-            current: zogsoolGaralt?.khuudasniiDugaar,
-            pageSize: zogsoolGaralt?.khuudasniiKhemjee,
-            total: zogsoolGaralt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setZogsoolKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        />
-        <CardList
-          keyValue="uilchluulegch"
-          className="block overflow-auto md:hidden"
-          jagsaalt={zogsoolGaralt?.jagsaalt}
-          Component={UilchluulegchTile}
-        />
+          data-aos-anchor-placement="top-bottom"
+        >
+          <Table
+            className="mt-8 hidden overflow-auto md:block"
+            tableLayout="auto"
+            loading={!zogsoolGaralt}
+            dataSource={zogsoolGaralt?.jagsaalt}
+            scroll={{ y: "calc(100vh - 30rem)" }}
+            size="small"
+            bordered
+            rowKey={(row) => row._id}
+            columns={columns}
+            onChange={onChangeTable}
+            pagination={{
+              current: zogsoolGaralt?.khuudasniiDugaar,
+              pageSize: zogsoolGaralt?.khuudasniiKhemjee,
+              total: zogsoolGaralt?.niitMur,
+              showSizeChanger: true,
+              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                setZogsoolKhuudaslalt((kh) => ({
+                  ...kh,
+                  khuudasniiDugaar,
+                  khuudasniiKhemjee,
+                })),
+            }}
+          />
+          <CardList
+            keyValue="uilchluulegch"
+            className="block overflow-auto md:hidden"
+            jagsaalt={zogsoolGaralt?.jagsaalt}
+            Component={UilchluulegchTile}
+          />
+        </div>
       </Card>
     </Admin>
   );

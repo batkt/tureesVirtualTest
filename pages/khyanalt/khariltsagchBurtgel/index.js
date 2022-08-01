@@ -74,6 +74,7 @@ function AjiltanBurtgel({ token }) {
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
   const [jagsaaltTuukh, setJagsaaltTuukh] = useState([]);
+  const [waiting, setWaiting] = useState(false);
 
   const [khariltsagchState, setkhariltsagchState] = useState({
     ner: undefined,
@@ -213,6 +214,7 @@ function AjiltanBurtgel({ token }) {
   }
 
   function khariltsagchBurtgekh() {
+    setWaiting(true);
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId;
     khariltsagchState.barilgiinId = barilgiinId;
 
@@ -220,24 +222,32 @@ function AjiltanBurtgel({ token }) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
+            setWaiting(false);
             message.success("Бүртгэл амжилттай засагдлаа");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-            khariltsagchToololtMutate()
+            khariltsagchToololtMutate();
           }
         })
-        .catch(aldaaBarigch);
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     } else {
       createMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
+            setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-            khariltsagchToololtMutate()
+            khariltsagchToololtMutate();
           }
         })
-        .catch(aldaaBarigch);
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     }
   }
 
@@ -248,15 +258,20 @@ function AjiltanBurtgel({ token }) {
   }
 
   function khariltsagchUstgay(mur) {
+    setWaiting(true);
     uilchilgee(token)
       .post("/khariltsagchUstgaya", { id: mur._id })
       .then(({ data }) => {
         if (data === "Amjilttai") {
+          setWaiting(false);
           khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
           message.success("Устгагдлаа");
         }
       })
-      .catch(aldaaBarigch);
+      .catch((e) => {
+        aldaaBarigch(e);
+        setWaiting(false);
+      });
   }
 
   function onFinish() {
@@ -378,6 +393,7 @@ function AjiltanBurtgel({ token }) {
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
+      loading={waiting}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
@@ -462,7 +478,10 @@ function AjiltanBurtgel({ token }) {
                 {
                   required: true,
                   len: formNuukh === "ААН" ? 7 : 10,
-                  pattern: formNuukh === "ААН" ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+                  pattern:
+                    formNuukh === "ААН"
+                      ? new RegExp("(\\d{7})")
+                      : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
                   message: "Регистр бүртгэнэ үү!",
                 },
               ]}
@@ -609,10 +628,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
                     ? "bg-green-50"
                     : ""
-                  }`}
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -653,14 +673,14 @@ function AjiltanBurtgel({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white  "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
                     onClick={talbaiOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>Оруулах</label>
                   </a>
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excel = new Excel();
@@ -791,7 +811,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -803,7 +823,14 @@ function AjiltanBurtgel({ token }) {
                 ellipsis: true,
                 render: (turul) => {
                   return (
-                    <Tag className={turul === "Иргэн" ? "dark:bg-blue-600 dark:text-white" : "dark:bg-yellow-600 dark:text-white"} color={turul === "Иргэн" ? "blue" : "orange"}>
+                    <Tag
+                      className={
+                        turul === "Иргэн"
+                          ? "dark:bg-blue-600 dark:text-white"
+                          : "dark:bg-yellow-600 dark:text-white"
+                      }
+                      color={turul === "Иргэн" ? "blue" : "orange"}
+                    >
                       {turul}
                     </Tag>
                   );
@@ -851,7 +878,14 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (idevkhiteiEsekh) => {
                   return (
-                    <Tag className={idevkhiteiEsekh === true ? "dark:bg-green-600 dark:text-white" : "dark:bg-red-700 dark:text-white"} color={idevkhiteiEsekh === true ? "green" : "red"}>
+                    <Tag
+                      className={
+                        idevkhiteiEsekh === true
+                          ? "dark:bg-green-600 dark:text-white"
+                          : "dark:bg-red-700 dark:text-white"
+                      }
+                      color={idevkhiteiEsekh === true ? "green" : "red"}
+                    >
                       {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
                     </Tag>
                   );
@@ -883,7 +917,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
