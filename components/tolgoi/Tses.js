@@ -48,21 +48,18 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
               <Link href={a.href} key={a.href}>
                 <a>
                   <li
-                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
-                      open ? "ml-0" : "ml-56"
-                    } p-2 text-white ${
-                      a.khuudasniiNer === khuudasniiNer
+                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${open ? "ml-0" : "ml-56"
+                      } p-2 text-white ${a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""
-                    }`}
+                      }`}
                   >
                     <div className={"flex flex-row px-1"}>
                       <div
-                        className={`${
-                          a.khuudasniiNer === khuudasniiNer
-                            ? "font-medium text-green-500"
-                            : ""
-                        } flex flex-row whitespace-nowrap`}
+                        className={`${a.khuudasniiNer === khuudasniiNer
+                          ? "font-medium text-green-500"
+                          : ""
+                          } flex flex-row whitespace-nowrap`}
                       >
                         <div className={`mr-2`}>{a.icon}</div>
                         {a.ner}
@@ -114,7 +111,7 @@ function NTses({
           <div className="border-b px-2 pb-2">
             <div className="flex flex-col items-center">
               <img
-                className="h-20 w-20 "
+                className="h-16 w-16 "
                 alt={baiguullaga?.ner}
                 src={
                   baiguullaga?.zurgiinNer
