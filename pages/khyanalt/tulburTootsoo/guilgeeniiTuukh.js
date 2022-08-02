@@ -66,8 +66,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -342,13 +343,14 @@ function guilgeeniiTuukh({ token }) {
           if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
 
           return (
-            <div className="flex flex-row divide-x-2 justify-center items-center w-full ">
+            <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
                 onClick={() => guilgeeKhiiya(row)}
                 className="fill-current px-2 text-green-500"
               >
-                <Tooltip title="Гүйлгээ хийх"
-                  className="flex justify-center items-center w-full "
+                <Tooltip
+                  title="Гүйлгээ хийх"
+                  className="flex w-full items-center justify-center "
                 >
                   <svg
                     version="1.0"
@@ -430,14 +432,13 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
-
                 >
                   <Progress
                     type="circle"
@@ -540,7 +541,6 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-
   //#endregion
 
   return (
@@ -572,11 +572,14 @@ function guilgeeniiTuukh({ token }) {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
+              tailbar:
+                "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр буюу энэ сарыг тооцоогүй болно.",
             },
             {
               too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0),
               turul: "voucher",
               utga: "Ваучер төлөлт",
+              tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
             },
             {
               too: formatNumber(
@@ -584,6 +587,7 @@ function guilgeeniiTuukh({ token }) {
               ),
               turul: "tsutslagdsanAvlaga",
               utga: "Цуцлагдсан гэрээний авлага",
+              tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
             {
               too: formatNumber(
@@ -591,6 +595,7 @@ function guilgeeniiTuukh({ token }) {
               ),
               turul: "eneSardTulukh",
               utga: "Төлөвлөлгөө / сар",
+              tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
             {
               too: formatNumber(
@@ -598,6 +603,7 @@ function guilgeeniiTuukh({ token }) {
               ),
               turul: "eneSardTulsun",
               utga: "Гүйцэтгэл / сар",
+              tailbar: "Огноонд хамаарагдах бүх төлөгдсөн дүнгийн нийлбэр",
             },
             {
               too: formatNumber(
@@ -605,50 +611,55 @@ function guilgeeniiTuukh({ token }) {
               ),
               turul: "khungulult",
               utga: "Хөнгөлөлт / сар",
+              tailbar: "Огноонд хамаарагдах бүх хөнгөлөлтийн дүнгийн нийлбэр",
             },
           ].map((mur, index) => {
             return (
               <div
                 key={`${index}toololt`}
-                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2"
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full rounded-xl">
-                  <div className="rounded-xl p-3">
-                    <div className="flex">
-                      <div>
-                        <div className="text-xl font-bold text-green-600">
-                          {mur.too}
+                <Tooltip title={<div>{mur.tailbar}</div>}>
+                  <div className="h-full rounded-xl">
+                    <div className="rounded-xl p-3">
+                      <div className="flex">
+                        <div>
+                          <div className="text-xl font-bold text-green-600">
+                            {mur.too}
+                          </div>
+                          <div className="text-base text-gray-500">
+                            {mur.utga}
+                          </div>
                         </div>
-                        <div className="text-base text-gray-500">
-                          {mur.utga}
+                        <div className="ml-auto flex flex-col text-center">
+                          {mur.turul === "eneSardTulukh" && (
+                            <>
+                              <div className="flex justify-center text-xl">
+                                <ExclamationCircleOutlined
+                                  style={{
+                                    fontSize: "24px",
+                                    color: "red",
+                                  }}
+                                />
+                              </div>
+                              <div className="text-xl font-bold text-red-500">
+                                {eneSardTuluuguiGereenuud?.niitMur ||
+                                  tolooguiGereeniiToo?.too}
+                              </div>
+                            </>
+                          )}
+                          <div className="text-xl text-green-600">
+                            {mur.icon}
+                          </div>
                         </div>
-                      </div>
-                      <div className="ml-auto flex flex-col text-center">
-                        {mur.turul === "eneSardTulukh" && (
-                          <>
-                            <div className="flex justify-center text-xl">
-                              <ExclamationCircleOutlined
-                                style={{
-                                  fontSize: "24px",
-                                  color: "red",
-                                }}
-                              />
-                            </div>
-                            <div className="text-xl font-bold text-red-500">
-                              {eneSardTuluuguiGereenuud?.niitMur ||
-                                tolooguiGereeniiToo?.too}
-                            </div>
-                          </>
-                        )}
-                        <div className="text-xl text-green-600">{mur.icon}</div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Tooltip>
               </div>
             );
           })}
@@ -678,36 +689,35 @@ function guilgeeniiTuukh({ token }) {
                 ))}
             </Select>
           </div>
-          <div className="ml-auto flex place-content-end" >
-
+          <div className="ml-auto flex place-content-end">
             <BaganiinSongolt
               shineBagana={shineBagana}
               setShineBagana={setShineBagana}
               columns={[
-
                 {
                   title: " Төлөх огноо",
-                  dataIndex: 'daraagiinTulukhOgnoo'
+                  dataIndex: "daraagiinTulukhOgnoo",
                 },
                 {
                   title: "Сарын түрээс",
-                  dataIndex: 'sariinTurees'
+                  dataIndex: "sariinTurees",
                 },
                 {
                   title: "Талбайн үнэ",
-                  dataIndex: 'talbainNiitUne'
+                  dataIndex: "talbainNiitUne",
                 },
                 {
                   title: "Регистр",
-                  dataIndex: 'register'
+                  dataIndex: "register",
                 },
-              ]} />
+              ]}
+            />
 
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();

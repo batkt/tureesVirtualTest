@@ -26,6 +26,7 @@ import {
   UploadOutlined,
   DownloadOutlined,
   DownOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
@@ -47,6 +48,7 @@ import CardList from "components/cardList";
 import KhariltsagchTile from "components/pageComponents/khariltsagch/KhariltsagchTile";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
+import _ from "lodash";
 
 const iconColor = { fontSize: "18px" };
 function checkUtas(utasnuud, utga) {
@@ -497,6 +499,7 @@ function AjiltanBurtgel({ token }) {
               ></Input>
             </Form.Item>
           </div>
+
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
@@ -520,76 +523,68 @@ function AjiltanBurtgel({ token }) {
               ></Input>
             </Form.Item>
           </div>
-          <Form.List name="utas">
-            {(fields, { add, remove }, { errors }) => (
-              <>
-                {fields?.length > 0 && (
-                  <Form.Item label={"Утас"}>
-                    <div className="flex flex-wrap">
-                      {fields.map((field) => (
-                        <div
-                          key={field.key}
-                          className="m-1 flex flex-row items-center space-x-1 rounded-md border bg-gray-50 px-1"
-                        >
-                          <label>
-                            {formRef.current.getFieldValue([
-                              "utas",
-                              field.name,
-                            ])}
-                          </label>
-                          <MinusCircleOutlined
-                            style={{ display: "flex" }}
-                            onClick={() => {
-                              remove(field.name);
-                              khariltsagchState.utas.splice(field.name, 1);
-                              onChange("utas", khariltsagchState.utas);
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </Form.Item>
-                )}
-                <div
-                  data-aos="fade-right"
-                  data-aos-duration="1000"
-                  data-aos-delay="500"
-                >
-                  <Form.Item>
-                    <Form.Item labelCol={{ span: 6 }} wrapperCol={{ span: 24 }}>
-                      <Input
-                        allowClear
-                        placeholder="Утас"
-                        onKeyUp={(e) => {
-                          if (
-                            e.key === "Enter" &&
-                            checkUtas(khariltsagchState.utas, e.target.value)
-                          ) {
-                            add(e.target.value, 0);
-                            khariltsagchState.utas.push(e.target.value);
-                            onChange("utas", khariltsagchState.utas);
-                            e.target.value = "";
-                          }
+
+          <div
+            data-aos="fade-right"
+            data-aos-duration="800"
+            data-aos-delay="400"
+          >
+            <Form.List
+              name={"utas"}
+              rules={[
+                {
+                  required: true,
+                  message: "Утас бүртгэнэ үү!",
+                },
+              ]}
+            >
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map((field) => (
+                    <Space key={field.key} align="baseline">
+                      <Form.Item
+                        {...field}
+                        rules={[
+                          { required: true, message: "Дугаар оруулна уу" },
+                        ]}
+                      >
+                        <Input
+                          placeholder={"Дугаар " + (field.name + 1)}
+                          onChange={({ target }) => {
+                            setkhariltsagchState((a) => {
+                              _.set(a, "utas." + field.name, target.value);
+                              return a;
+                            });
+                          }}
+                        />
+                      </Form.Item>
+
+                      <MinusCircleOutlined
+                        onClick={() => {
+                          remove(field.name);
+                          setkhariltsagchState((a) => {
+                            a.utas.splice(a.name, 1);
+                            return a;
+                          });
                         }}
-                        onBlur={(e) => {
-                          if (
-                            e.target.value?.length === 8 &&
-                            checkUtas(khariltsagchState.utas, e.target.value)
-                          ) {
-                            add(e.target.value, 0);
-                            khariltsagchState.utas.push(e.target.value);
-                            onChange("utas", khariltsagchState.utas);
-                            e.target.value = "";
-                          }
-                        }}
-                        prefix={<PhoneOutlined style={iconColor} />}
                       />
-                    </Form.Item>
+                    </Space>
+                  ))}
+
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Дугаар
+                    </Button>
                   </Form.Item>
-                </div>
-              </>
-            )}
-          </Form.List>
+                </>
+              )}
+            </Form.List>
+          </div>
           <div
             data-aos="fade-right"
             data-aos-duration="1000"

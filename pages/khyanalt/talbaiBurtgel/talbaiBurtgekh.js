@@ -1,7 +1,4 @@
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  CloseCircleFilled,
   CloseCircleOutlined,
   DeleteOutlined,
   DownloadOutlined,
@@ -9,7 +6,6 @@ import {
   EditOutlined,
   EyeOutlined,
   FileExcelOutlined,
-  MinusCircleOutlined,
   MoreOutlined,
   PlusOutlined,
   SettingOutlined,
