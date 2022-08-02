@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Input, message } from "antd";
+import { Button, Input, message } from "antd";
 import moment from "moment";
 import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
@@ -36,16 +36,16 @@ function KhuviinMedeelel({
   }
 
   return (
-    <div className="col-span-12 lg:col-span-8 xxl:col-span-9">
+    <div className="xxl:col-span-9 col-span-12 lg:col-span-8">
       <div className="intro-y box lg:mt-5">
-        <div className="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
-          <h2 className="font-medium text-base mr-auto dark:text-gray-200">
+        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
+          <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             Хувийн мэдээлэл
           </h2>
         </div>
         <div className="p-5">
-          <div className="flex flex-col-reverse xl:flex-row flex-col">
-            <div className="flex-1 mt-6 xl:mt-0">
+          <div className="flex flex-col flex-col-reverse xl:flex-row">
+            <div className="mt-6 flex-1 xl:mt-0">
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
@@ -80,7 +80,7 @@ function KhuviinMedeelel({
                 </div>
               </div>
               <div className="grid grid-cols-12 gap-x-5">
-                <div className="col-span-12 xxl:col-span-6">
+                <div className="xxl:col-span-6 col-span-12">
                   <div className="mt-3">
                     <label className="form-label">Утасны дугаар</label>
                     <Input
@@ -101,19 +101,17 @@ function KhuviinMedeelel({
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                className="btn text-white bg-blue-800 w-20 mt-3"
-                onClick={khadgalakh}
-              >
-                Хадгалах
-              </button>
+              <div className="mt-3">
+                <Button type="primary" onClick={khadgalakh}>
+                  Хадгалах
+                </Button>
+              </div>
             </div>
-            <div className="w-52 mx-auto xl:mr-0 xl:ml-6">
-              <div className="border-2 border-dashed shadow-sm border-gray-200 dark:border-dark-5 rounded-md p-5">
-                <div className="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
+            <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
+              <div className="dark:border-dark-5 rounded-md border-2 border-dashed border-gray-200 p-5 shadow-sm">
+                <div className="image-fit zoom-in relative mx-auto h-40 cursor-pointer">
                   <img
-                    className="rounded-md h-40 w-40"
+                    className="h-40 w-40 rounded-md"
                     alt="Rubick Tailwind HTML Admin Template"
                     ref={zuragRef}
                     src={
@@ -122,7 +120,7 @@ function KhuviinMedeelel({
                         : "/profile.svg"
                     }
                   />
-                  <div className="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-theme-6 right-0 top-0 -mr-2 -mt-2">
+                  <div className="tooltip bg-theme-6 absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 items-center justify-center rounded-full text-white">
                     {" "}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -134,24 +132,19 @@ function KhuviinMedeelel({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-x w-4 h-4"
+                      className="feather feather-x h-4 w-4"
                     >
                       <line x1="18" y1="6" x2="6" y2="18"></line>
                       <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>{" "}
                   </div>
                 </div>
-                <div className="mx-auto cursor-pointer relative mt-5">
-                  <button
-                    type="button"
-                    className="btn text-white bg-blue-800 w-full"
-                  >
-                    Зураг солих
-                  </button>
+                <div className="relative mx-auto mt-5 cursor-pointer">
+                  <Button type="primary">Зураг солих</Button>
                   <input
                     type="file"
                     name="zurag"
-                    className="w-full h-full top-0 left-0 absolute opacity-0"
+                    className="absolute top-0 left-0 h-full w-full opacity-0"
                     onChange={zuragSolikh}
                   />
                 </div>
