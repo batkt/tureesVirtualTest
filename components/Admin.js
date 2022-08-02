@@ -1,9 +1,13 @@
-import Head from "next/head"
-import { useRouter } from "next/router"
-import React, { useEffect, useState } from "react"
-import Loader from "./loader"
-import { Switch } from "antd";
-import { CloseOutlined, LeftOutlined } from "@ant-design/icons";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import Loader from "./loader";
+import { Switch, Tooltip } from "antd";
+import {
+  CalendarOutlined,
+  CloseOutlined,
+  LeftOutlined,
+} from "@ant-design/icons";
 import { useAuth } from "../services/auth";
 import NTses from "./tolgoi/Tses";
 import MTses from "./tolgoi/MTses";
@@ -13,6 +17,7 @@ import ProfileTovch from "./tolgoi/ProfileTovch";
 import useErkh from "../tools/logic/khereglegchiinErkhiinTokhirgoo";
 import { useThemeValue } from "pages";
 import MSearch from "./tolgoi/MSearch";
+import moment from "moment";
 import Updater from "./Updater";
 import Zaavar from "./Zaavar";
 
@@ -28,7 +33,7 @@ function Admin({
   hideSearch,
   onBack,
   tsonkhniiId,
-  loading
+  loading,
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -64,9 +69,13 @@ function Admin({
 
     setMSearch(!mSearch);
   }
-  useEffect(() => {
 
-  })
+  function license() {
+    const duusakh = moment(ajiltan?.duusakhOgnoo).format("YYYY-MM-DD");
+    const ognoo = moment(new Date()).format("YYYY-MM-DD");
+    const khonog = moment(duusakh).diff(moment(ognoo), "days");
+    return <span className="font-bold text-red-500">{khonog}</span>;
+  }
 
   return (
     <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
@@ -90,8 +99,9 @@ function Admin({
         />
       )}
       <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
-          }`}
+        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
+          dedKhuudas ? "w-full" : "main"
+        }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2">
           <div className="flex flex-row transition-all">
@@ -150,6 +160,18 @@ function Admin({
                 onClick={() => setTheme(themeValue ? "light" : "dark")}
               />
             </div>
+            <div className="hidden items-center justify-center md:flex">
+              Лиценз- {license()}
+            </div>
+            <Tooltip
+              title={
+                <div>Лицензийн хугацаа дуусахад {license()} хоног үлдлээ</div>
+              }
+            >
+              <div className="flex items-center gap-1 md:hidden">
+                <CalendarOutlined />:{license()}
+              </div>
+            </Tooltip>
             {!hideSearch && (
               <>
                 <div

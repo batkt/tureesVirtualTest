@@ -9,7 +9,7 @@ function ZagvarForm({ value, onChange }) {
 }
 
 function ZagvarBurtgel(
-  { barilgiinId, destroy, token, data = {}, turul, onRefresh },
+  { barilgiinId, destroy, token, setWaiting, data = {}, turul, onRefresh },
   ref
 ) {
   const [form] = Form.useForm();
@@ -27,6 +27,7 @@ function ZagvarBurtgel(
           turul,
         }).then(({ data }) => {
           if (data === "Amjilttai") {
+            setWaiting(false);
             message.success("Амжилттай хадгаллаа");
             onRefresh();
             destroy();

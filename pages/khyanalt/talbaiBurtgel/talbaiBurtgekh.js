@@ -47,10 +47,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
-import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
-import deleteMethod from "tools/function/crud/deleteMethod";
-import updateMethod from "tools/function/crud/updateMethod";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
@@ -67,6 +64,7 @@ function talbaiBurtgekh({ token }) {
     Aos.init({ once: true });
   });
   const formRef = useRef();
+
   const excelref = useRef();
   const { TextArea } = Input;
   const { ajiltan, baiguullaga, barilgiinId } = useAuth();
@@ -648,7 +646,6 @@ function talbaiBurtgekh({ token }) {
                         <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
                           <CloseCircleOutlined onClick={() => remove(name)} />
                         </div>
-
                         <Form.Item
                           className="w-full"
                           {...restField}
@@ -674,7 +671,10 @@ function talbaiBurtgekh({ token }) {
                             },
                           ]}
                         >
-                          <Input placeholder="Тоо ширхэг" />
+                          <InputNumber
+                            style={{ width: "100%" }}
+                            placeholder="Тоо ширхэг"
+                          />
                         </Form.Item>
 
                         <Form.Item
@@ -694,7 +694,6 @@ function talbaiBurtgekh({ token }) {
                               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                             }
                             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                            onChange={() => test({ ...fields })}
                           />
                         </Form.Item>
                         <Form.Item

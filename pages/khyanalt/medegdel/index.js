@@ -337,7 +337,7 @@ function Khyanalt({ token }) {
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya()}
+        onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
         Бүртгэл нэмэх
       </Button>,
@@ -348,6 +348,7 @@ function Khyanalt({ token }) {
       content: (
         <ZagvarBurtgel
           ref={ref}
+          setWaiting={setWaiting}
           data={data}
           token={token}
           turul="sms"

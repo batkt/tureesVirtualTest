@@ -16,7 +16,7 @@
     "@ant-design/icons": "^4.6.2",
     "@react-google-maps/api": "^2.1.1",
     "@sarafhbk/react-audio-recorder": "^1.1.2",
-    "antd": "^4.15.1",
+    "antd": "^4.22.3",
     "antd-table-saveas-excel": "^2.1.4",
     "aos": "^3.0.0-beta.6",
     "autoprefixer": "^10.2.5",

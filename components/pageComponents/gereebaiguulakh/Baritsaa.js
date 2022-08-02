@@ -46,6 +46,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           <InputNumber
             placeholder="Барьцаа байршуулалтын хугацаа"
             style={{ width: "100%" }}
+            min={0}
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }

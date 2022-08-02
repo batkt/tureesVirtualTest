@@ -52,6 +52,7 @@ function tulburTootsoo({ token }) {
   const [songogdsonDans, setDans] = React.useState();
 
   const [loading, setLoading] = useState(false);
+  const [waiting, setWaiting] = useState(false);
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
   const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
     useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul);
@@ -106,7 +107,7 @@ function tulburTootsoo({ token }) {
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
             medeelel.eneSardTulukhDun *
-            (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
+              (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
             { suffix: "n" }
           )} төгрөг`;
           medeelel.niitUldegdelUsgeer = `${toWords(
@@ -150,8 +151,9 @@ function tulburTootsoo({ token }) {
           let nemeltNekhemjlekh = "";
           if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
             medeelel.nemeltNekhemjlekh.forEach((a, index) => {
-              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${2 + (index + 1)
-                }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
+              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${
+                2 + (index + 1)
+              }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
               a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
               a.tulukhDun = formatNumber(a.tulukhDun);
               for (const [key, value] of Object.entries(a)) {
@@ -218,7 +220,10 @@ function tulburTootsoo({ token }) {
       <Button onClick={() => nekhemjlekhRef.current.khaaya()}>Хаах</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => nekhemjlekhRef.current.khadgalya()}
+        onClick={() => {
+          setWaiting(true);
+          nekhemjlekhRef.current.khadgalya();
+        }}
       >
         Хадгалах
       </Button>,
@@ -230,6 +235,7 @@ function tulburTootsoo({ token }) {
       content: (
         <NekhemjlelZagvarBurtgel
           ref={nekhemjlekhRef}
+          setWaiting={setWaiting}
           data={mur}
           barilgiinId={barilgiinId}
           token={token}
@@ -268,12 +274,19 @@ function tulburTootsoo({ token }) {
     });
   }
   function zagvarUstgaya(mur) {
-    deleteMethod("nekhemjlekhiinZagvar", token, mur?._id).then(({ data }) => {
-      if (data === "Amjilttai") {
-        message.success("Устгагдлаа");
-        nekhemjlekhiinZagvarMutate();
-      }
-    });
+    setWaiting(true);
+    deleteMethod("nekhemjlekhiinZagvar", token, mur?._id)
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          setWaiting(false);
+          message.success("Устгагдлаа");
+          nekhemjlekhiinZagvarMutate();
+        }
+      })
+      .catch((e) => {
+        setwaiting(false);
+        aldaaBarigch(e);
+      });
   }
 
   return (
@@ -289,6 +302,7 @@ function tulburTootsoo({ token }) {
         }));
       }}
       tsonkhniiId="61c2c6d91c2830c4e6f90cbd"
+      loading={waiting}
     >
       <Card className="cardgrid col-span-12">
         <Spin spinning={loading}>
@@ -381,7 +395,7 @@ function tulburTootsoo({ token }) {
                         cancelText="Үгүй"
                         onConfirm={() => zagvarUstgaya(a)}
                       >
-                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  dark:bg-gray-700  p-2 text-white">
+                        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
                           <DeleteOutlined
                             style={{ color: "red", display: "flex" }}
                           />
@@ -389,7 +403,7 @@ function tulburTootsoo({ token }) {
                       </Popconfirm>
                     </div>
                     <div
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   dark:bg-gray-700  fill-current p-2 text-white"
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
                       onClick={() => nekhemjlelZagvarBurtgeye(a)}
                     >
                       <EditOutlined
