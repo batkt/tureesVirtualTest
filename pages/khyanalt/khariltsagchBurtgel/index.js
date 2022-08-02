@@ -549,7 +549,7 @@ function AjiltanBurtgel({ token }) {
                         ]}
                       >
                         <Input
-                          placeholder={"Дугаар " + (field.name + 1)}
+                          placeholder={"Утасны дугаар " + (field.name + 1)}
                           onChange={({ target }) => {
                             setkhariltsagchState((a) => {
                               _.set(a, "utas." + field.name, target.value);
@@ -578,7 +578,7 @@ function AjiltanBurtgel({ token }) {
                       block
                       icon={<PlusOutlined />}
                     >
-                      Дугаар
+                      Утасны дугаар
                     </Button>
                   </Form.Item>
                 </>
