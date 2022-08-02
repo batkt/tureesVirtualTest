@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { Button, Input, InputNumber, notification, Switch } from "antd";
-import uilchilgee, { url } from "services/uilchilgee";
-
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import { Button, Input, notification } from "antd";
+import uilchilgee from "services/uilchilgee";
 
 function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
   const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(null);
 
   const khungulultiinTokhirgooKhadgalya = () => {
+    console.log("medegdelTokhirgoo", medegdelTokhirgoo);
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
       .then(({ data }) => {
@@ -40,10 +39,10 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
                   value={baiguullaga?.tokhirgoo?.msgIlgeekhKey}
                   max={100}
                   min={0}
-                  onChange={(v) =>
+                  onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.msgIlgeekhKey": v,
+                      "tokhirgoo.msgIlgeekhKey": target.value,
                     }))
                   }
                 />
@@ -61,10 +60,10 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
                   value={baiguullaga?.tokhirgoo?.msgIlgeekhDugaar}
                   max={100}
                   min={0}
-                  onChange={(v) =>
+                  onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.msgIlgeekhDugaar": v,
+                      "tokhirgoo.msgIlgeekhDugaar": target.value,
                     }))
                   }
                 />
