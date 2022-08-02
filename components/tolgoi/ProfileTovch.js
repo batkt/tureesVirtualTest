@@ -28,7 +28,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
 
   function onScroll(e) {
     if (
-      e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight &&
+      e.target.scrollHeight - e.target.scrollTop - 1 < e.target.clientHeight &&
       !!sonorduulga &&
       sonorduulga?.jagsaalt.length === 20
     ) {
@@ -58,15 +58,13 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   turul,
                   message,
                   khariltsagchiinNer,
-                  createdAt,
                   _id,
                   tailbar,
-                  duusakhOgnoo,
                   ajiltniiNer,
                 } = mur?.object || {};
                 return (
                   <Menu.Item
-                    key={i}
+                    key={`sonorduulga${i}`}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
                     className={`${
                       mur.kharsanEsekh
