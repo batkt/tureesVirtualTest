@@ -73,31 +73,33 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
         <div>Зарлага</div>
         <div>Тайлбар</div>
       </div>
-      {baritsaaKhuulga?.map((a, i) => (
-        <div className="grid grid-cols-5 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-          <div className="p-1">{i + 1}</div>
-          <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
-          <div className="p-1">{formatNumber(a.orlogo, 0)}</div>
-          <div className="p-1">{formatNumber(a.zarlaga, 0)}</div>
-          <div className="flex justify-between p-1">
-            {a.tailbar}
-            {
-              <div className="contents justify-between">
-                <Popconfirm
-                  title="Төлөлт устгах уу?"
-                  okText="Тийм"
-                  cancelText="Үгүй"
-                  onConfirm={() => baritsaaniiGuilgeeUstgaya(a)}
-                >
-                  <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                    <DeleteOutlined />
-                  </div>
-                </Popconfirm>
-              </div>
-            }
+      {baritsaaKhuulga
+        ?.map((a, i) => (
+          <div className="grid grid-cols-5 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+            <div className="p-1">{i + 1}</div>
+            <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
+            <div className="p-1">{formatNumber(a.orlogo, 0)}</div>
+            <div className="p-1">{formatNumber(a.zarlaga, 0)}</div>
+            <div className="flex justify-between p-1">
+              {a.tailbar}
+              {
+                <div className="contents justify-between">
+                  <Popconfirm
+                    title="Төлөлт устгах уу?"
+                    okText="Тийм"
+                    cancelText="Үгүй"
+                    onConfirm={() => baritsaaniiGuilgeeUstgaya(a)}
+                  >
+                    <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                      <DeleteOutlined />
+                    </div>
+                  </Popconfirm>
+                </div>
+              }
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+        .reverse()}
     </div>
   );
 }

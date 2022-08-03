@@ -191,6 +191,7 @@ function Khabea({ token }) {
     <Admin
       title="Анкетын асуулга бэлдэх"
       khuudasniiNer="anket"
+      tsonkhniiId={"62ea0d2b7c54f8189bdca54c"}
       onSearch={(search) =>
         setAsuulgiinKhuudaslalt((kh) => ({
           ...kh,

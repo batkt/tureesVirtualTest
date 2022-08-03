@@ -294,7 +294,6 @@ function guilgeeniiTuukh({ token }) {
         dataIndex: "ner",
         ellipsis: true,
         align: "left",
-        width: "12rem",
       },
       { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center" },
       {
@@ -697,14 +696,17 @@ function guilgeeniiTuukh({ token }) {
                 {
                   title: " Төлөх огноо",
                   dataIndex: "daraagiinTulukhOgnoo",
+                  width: "12rem",
                 },
                 {
                   title: "Сарын түрээс",
                   dataIndex: "sariinTurees",
+                  width: "8rem",
                 },
                 {
                   title: "Талбайн үнэ",
                   dataIndex: "talbainNiitUne",
+                  width: "7rem",
                 },
                 {
                   title: "Регистр",
@@ -798,6 +800,7 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
+            tableLayout="auto"
             garalt={
               turul === "eneSardTulukh"
                 ? eneSardTuluuguiGereenuud

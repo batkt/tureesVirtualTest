@@ -115,6 +115,7 @@ function index({ token }) {
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
+      tsonkhniiId={"62ea0dc27c54f8189bdca566"}
       className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >
@@ -122,7 +123,12 @@ function index({ token }) {
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
             <div className="text-2xl ">Өнөөдөр</div>
-            <div>{task?.data?.jagsaalt.length? task?.data?.jagsaalt.length + 0 : "0"} даалгавар</div>
+            <div>
+              {task?.data?.jagsaalt.length
+                ? task?.data?.jagsaalt.length + 0
+                : "0"}{" "}
+              даалгавар
+            </div>
           </div>
           <div
             onClick={Nemekh}
