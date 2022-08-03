@@ -528,6 +528,7 @@ function AjiltanBurtgel({ token }) {
             data-aos="fade-right"
             data-aos-duration="800"
             data-aos-delay="400"
+            className="relative flex flex-wrap"
           >
             <Form.List
               name={"utas"}
@@ -560,6 +561,7 @@ function AjiltanBurtgel({ token }) {
                       </Form.Item>
 
                       <MinusCircleOutlined
+                        className="mr-3 -ml-1"
                         onClick={() => {
                           remove(field.name);
                           setkhariltsagchState((a) => {
@@ -571,14 +573,14 @@ function AjiltanBurtgel({ token }) {
                     </Space>
                   ))}
 
-                  <Form.Item>
+                  <Form.Item className="w-full">
                     <Button
                       type="dashed"
                       onClick={() => add()}
                       block
                       icon={<PlusOutlined />}
                     >
-                      Утасны дугаар
+                      Утасны дугаар нэмэх
                     </Button>
                   </Form.Item>
                 </>
