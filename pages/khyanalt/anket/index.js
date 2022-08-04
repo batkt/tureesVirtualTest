@@ -137,7 +137,6 @@ function Khabea({ token }) {
   );
 
   function onChangeOgnoo(date, dateString) {
-    console.log(">>>>>>>>>>>", date, dateString);
     setEkhlekhOgnoo(date);
   }
 
