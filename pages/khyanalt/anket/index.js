@@ -1,6 +1,5 @@
-import { DatePicker, message, Table } from "antd";
+import { Button, DatePicker, message, Table } from "antd";
 import React, { useMemo, useState, useEffect } from "react";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import useOrder from "tools/function/useOrder";
 import _ from "lodash";
@@ -10,9 +9,11 @@ const garalt = {
 };
 
 import Admin from "components/Admin";
+import router from "next/router";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
+import { PlusOutlined, SendOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 
 function Khabea({ token }) {
@@ -143,6 +144,14 @@ function Khabea({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  function anketNemekh(id) {
+    router.push(`/khyanalt/anket/nemekh/${id}`);
+  }
+  function anketIlgeekh(id) {
+    router.push(`/khyanalt/anket/${id}`);
+  }
+
   return (
     <Admin
       title="Анкетын асуулга бэлдэх"
@@ -174,6 +183,20 @@ function Khabea({ token }) {
               format={"YYYY-MM-DD"}
               onChange={onChangeOgnoo}
             />
+            <div className="flex">
+              <Button
+                className="mr-3"
+                style={{ backgroundColor: "#209669", color: "#ffffff" }}
+                onClick={() => anketNemekh("new")}
+              >
+                <PlusOutlined />
+                Анкет нэмэх
+              </Button>
+              <Button className="mr-3" onClick={() => anketIlgeekh("new")}>
+                Анкет илгээх
+                <SendOutlined />
+              </Button>
+            </div>
           </div>
           <div
             data-aos="fade-up"
