@@ -5,7 +5,10 @@ import { UnorderedListOutlined } from "@ant-design/icons";
 const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
   React.useEffect(() => {
     const baganuud = localStorage.getItem("bagana-" + window.location.href);
-    if (!!baganuud) setShineBagana(JSON.parse(baganuud));
+    if (!!baganuud) setShineBagana(columns.filter(a => {
+      let parsedBaganuud = JSON.parse(baganuud)
+      return parsedBaganuud.find(b => b === a.dataIndex)
+    }));
   }, []);
 
   function baganaNemekh(e, mur) {
@@ -25,7 +28,7 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
 
     localStorage.setItem(
       "bagana-" + window.location.href,
-      JSON.stringify(jagsaalt)
+      JSON.stringify(jagsaalt.map(a => a.dataIndex))
     );
     setShineBagana([...jagsaalt]);
   }

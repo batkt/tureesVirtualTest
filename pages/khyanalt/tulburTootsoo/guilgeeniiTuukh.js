@@ -66,9 +66,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -271,6 +270,12 @@ function guilgeeniiTuukh({ token }) {
         render: (text, record, index) => index + 1,
       },
       {
+        width: "7rem",
+        align: "center",
+        title: "Регистр",
+        dataIndex: "register",
+      },
+      {
         title: "Талбай",
         dataIndex: "talbainDugaar",
         ellipsis: true,
@@ -279,23 +284,7 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      {
-        title: "Давхар",
-        dataIndex: "davkhar",
-        ellipsis: true,
-        align: "center",
-        width: "5rem",
-        showSorterTooltip: false,
-        defaultSortOrder: "descend",
-        sorter: () => 0,
-      },
-      {
-        title: "Түрээслэгч",
-        dataIndex: "ner",
-        ellipsis: true,
-        align: "left",
-      },
-      { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center" },
+      { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center", width: "7rem", },
       {
         title: "Үлдэгдэл",
         dataIndex: "uldegdel",
@@ -315,21 +304,14 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
-      {
-        title: "Гэрээний огноо",
-        dataIndex: "gereeniiOgnoo",
-        ellipsis: true,
-        align: "center",
-        render(a) {
-          return moment(a).format("YYYY-MM-DD");
-        },
-      },
+
     ];
     return [
       ...jagsaalt,
       ...shineBagana,
       {
         title: "Үйлдэл",
+        width: "6rem",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (text, row) => {
@@ -431,12 +413,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -454,6 +436,7 @@ function guilgeeniiTuukh({ token }) {
         sorter: () => 0,
         showSorterTooltip: false,
       },
+
     ];
   }, [gereeniiMedeelel, loadingIndex, delgegdsenGeree, shineBagana]);
 
@@ -694,24 +677,57 @@ function guilgeeniiTuukh({ token }) {
               setShineBagana={setShineBagana}
               columns={[
                 {
+                  width: "9rem",
+                  align: "center",
                   title: " Төлөх огноо",
                   dataIndex: "daraagiinTulukhOgnoo",
-                  width: "12rem",
+                  render(a) {
+                    return moment(a).format("YYYY-MM-DD");
+                  },
                 },
                 {
                   title: "Сарын түрээс",
                   dataIndex: "sariinTurees",
-                  width: "8rem",
+                  align: "right",
+                  render: (a) => {
+                    return formatNumber(a || 0);
+                  },
                 },
                 {
                   title: "Талбайн үнэ",
+                  align: "right",
                   dataIndex: "talbainNiitUne",
-                  width: "7rem",
+                  render: (a) => {
+                    return formatNumber(a || 0);
+                  },
                 },
                 {
-                  title: "Регистр",
-                  dataIndex: "register",
+                  title: "Давхар",
+                  dataIndex: "davkhar",
+                  ellipsis: true,
+                  align: "center",
+                  width: "5rem",
+                  showSorterTooltip: false,
+                  defaultSortOrder: "descend",
+                  sorter: () => 0,
                 },
+                {
+                  title: "Түрээслэгч",
+                  dataIndex: "ner",
+                  ellipsis: true,
+                  align: "left",
+                  width: "8rem",
+                },
+                {
+                  title: "Гэрээний огноо",
+                  dataIndex: "gereeniiOgnoo",
+                  ellipsis: true,
+                  align: "center",
+                  render(a) {
+                    return moment(a).format("YYYY-MM-DD");
+                  },
+                },
+
               ]}
             />
 
@@ -747,6 +763,8 @@ function guilgeeniiTuukh({ token }) {
                             dataIndex: "utas",
                           },
                           {
+
+
                             title: "Үлдэгдэл",
                             dataIndex: "uldegdel",
                             render(a) {
@@ -756,7 +774,8 @@ function guilgeeniiTuukh({ token }) {
                           {
                             title: "Гэрээний огноо",
                             dataIndex: "gereeniiOgnoo",
-
+                            width: "15rem",
+                            align: "center",
                             render(a) {
                               return moment(a).format("YYYY-MM-DD");
                             },
@@ -800,7 +819,6 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
-            tableLayout="auto"
             garalt={
               turul === "eneSardTulukh"
                 ? eneSardTuluuguiGereenuud
