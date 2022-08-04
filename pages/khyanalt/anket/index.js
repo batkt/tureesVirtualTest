@@ -12,6 +12,8 @@ const garalt = {
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
+import useJagsaalt from "hooks/useJagsaalt";
+const { RangePicker } = DatePicker;
 
 function Khabea({ token }) {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
@@ -20,17 +22,20 @@ function Khabea({ token }) {
   ]);
 
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
-  const [surveyJagsaalt, setSurveyJagsaalt] = useState([]);
-  const [queryGaraasUgsun, setQueryGaraasUgsun] = useState({
-    ognoo:
-      ekhlekhOgnoo !== undefined
+
+  const query = useMemo(
+    () => ({
+      createdAt: !!ekhlekhOgnoo
         ? {
             $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
-  });
-  const { RangePicker } = DatePicker;
+    }),
+    [ekhlekhOgnoo]
+  );
+
+  const survey = useJagsaalt("/survey", undefined, order);
 
   const columns = useMemo(
     () => [
@@ -40,6 +45,7 @@ function Khabea({ token }) {
         className: "text-center",
         width: "2rem",
         render: (text, record, index) => index + 1,
+        sorter: () => 0,
       },
       {
         title: "Огноо",
@@ -49,6 +55,7 @@ function Khabea({ token }) {
         render: (data) => {
           return moment(data).format("YYYY-MM-DD HH:mm");
         },
+        sorter: () => 0,
       },
       {
         title: "Нэр",
@@ -56,6 +63,7 @@ function Khabea({ token }) {
         dataIndex: "ner",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Утас",
@@ -63,6 +71,7 @@ function Khabea({ token }) {
         dataIndex: "utas",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "И-мэйл",
@@ -70,6 +79,7 @@ function Khabea({ token }) {
         dataIndex: "mail",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Чиглэл",
@@ -77,6 +87,7 @@ function Khabea({ token }) {
         dataIndex: "chiglel",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Хугацаа",
@@ -84,6 +95,7 @@ function Khabea({ token }) {
         dataIndex: "uilAjillagaa",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Ажилтан тоо",
@@ -91,6 +103,7 @@ function Khabea({ token }) {
         dataIndex: "ajiltniiToo",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Талбайн хэмжээ",
@@ -98,6 +111,7 @@ function Khabea({ token }) {
         dataIndex: "talbainKhemjee",
         align: "center",
         ellipsis: true,
+        sorter: () => 0,
       },
       {
         title: "Давхар",
@@ -108,6 +122,7 @@ function Khabea({ token }) {
           var turul = Array.from(new Set(data?.davkhar)).toString();
           return turul;
         },
+        sorter: () => 0,
       },
       {
         title: "Нэмэлт",
@@ -115,75 +130,17 @@ function Khabea({ token }) {
         dataIndex: "nemeltMedeelel",
         ellipsis: true,
         align: "center",
+        sorter: () => 0,
       },
     ],
     []
   );
-  useEffect(() => {
-    anketJagsaalt();
-  }, [ekhlekhOgnoo]);
 
-  function ognoogoorShuukh(orolt, ognoo) {
-    queryGaraasUgsun.ognoo = {
-      $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-      $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-    };
-    setQueryGaraasUgsun({
-      ...queryGaraasUgsun,
-    });
-  }
   function onChangeOgnoo(date, dateString) {
-    setEkhlekhOgnoo(dateString);
-    ognoogoorShuukh(garalt, dateString);
+    console.log(">>>>>>>>>>>", date, dateString);
+    setEkhlekhOgnoo(date);
   }
-  function khadgalakh() {
-    // const asuulga = formRef.current.getFieldsValue(asuulga)
-    // const khadgalakhUgugDul = asuulga.asuulga.map((x) =>
-    //   Object.assign(x, {
-    //     baiguullagiinId: baiguullaga?._id,
-    //     barilgiinId: barilgiinId,
-    //   })
-    // )
-    // if (khadgalakhUgugDul.length > 0) {
-    //   uilchilgee(token)
-    //     .post("/asuulgaOlnoorKhadgalya", khadgalakhUgugDul)
-    //     .then(({ data }) => {
-    //       if (data !== undefined) {
-    //         message.success("Бүртгэл амжилттай хийгдлээ")
-    //         formRef.current.resetFields()
-    //         asuulgiinMutate()
-    //       }
-    //     })
-    //     .catch(aldaaBarigch)
-    // }
-  }
-  function asuulgaUstgay(id) {
-    uilchilgee(token)
-      .post("/asuulgaUstgay", { id: id })
-      .then(({ data }) => {
-        if (data !== undefined) {
-          message.success("Устгагдлаа");
-          asuulgiinMutate();
-        }
-      })
-      .catch(aldaaBarigch);
-  }
-  function anketJagsaalt() {
-    uilchilgee(token)
-      .get("/survey", {
-        params: {
-          queryGaraasUgsun,
-          order,
-          khuudasniiKhemjee: 100,
-          khuudasniiDugaar: 1,
-        },
-      })
-      .then(({ data }) => {
-        if (data !== undefined) {
-          setSurveyJagsaalt(data?.jagsaalt);
-        }
-      });
-  }
+
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -230,12 +187,13 @@ function Khabea({ token }) {
               size="small"
               tableLayout="fixed"
               scroll={{ y: "calc(100vh - 20rem)" }}
+              onChange={(a, b, c) => onChangeTable(a, b, c)}
               rowClassName={(record, index) =>
                 index % 2 === 0
                   ? "bg-white dark:bg-gray-600 h-0.5"
                   : "bg-gray-200 dark:bg-gray-800 h-0.5"
               }
-              dataSource={surveyJagsaalt}
+              dataSource={survey?.jagsaalt}
               columns={columns}
             />
           </div>
