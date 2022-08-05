@@ -385,7 +385,7 @@ function GuilgeeNiiluulekh(
                   )}
                 </div>
                 <div>{geree.talbainDugaar}</div>
-                <div className="text-right text-indigo-600">
+                <div className="text-right">
                   <input
                     className="w-full rounded-md border bg-gray-200 px-2 text-right"
                     placeholder="Барьцаа дүн"
@@ -404,9 +404,7 @@ function GuilgeeNiiluulekh(
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">Түрээсийн үлдэгдэл</div>
                 <div
-                  className={`text-${
-                    geree.uldegdel >= 0 ? "green" : "red"
-                  }-500`}
+                  className={`text-${geree.uldegdel > 0 ? "red" : "green"}-500`}
                 >
                   {formatNumber(geree.uldegdel)}
                 </div>
