@@ -1,4 +1,4 @@
-import { Button, DatePicker, message, Table } from "antd";
+import { Button, DatePicker, Form, Input, message, Table, Tabs } from "antd";
 import React, { useMemo, useState, useEffect } from "react";
 import moment from "moment";
 import useOrder from "tools/function/useOrder";
@@ -13,7 +13,17 @@ import router from "next/router";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
-import { PlusOutlined, SendOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  FileDoneOutlined,
+  FileExcelOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
+import { modal } from "components/ant/Modal";
+import AsuultiinKhariultOruulakh from "components/pageComponents/anket/asuultiinKhariultOruulakh";
+const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
 function Khabea({ token }) {
@@ -37,6 +47,7 @@ function Khabea({ token }) {
   );
 
   const survey = useJagsaalt("/survey", undefined, order);
+  const Ref = React.useRef(null);
 
   const columns = useMemo(
     () => [
@@ -145,11 +156,22 @@ function Khabea({ token }) {
     Aos.init({ once: true });
   });
 
-  function anketNemekh(id) {
-    router.push(`/khyanalt/anket/nemekh/${id}`);
-  }
-  function anketIlgeekh(id) {
-    router.push(`/khyanalt/anket/${id}`);
+  function asuultiinKhariultOruulakh() {
+    const footer = [
+      <Button onClick={() => Ref.current.khaaya()}>Хаах</Button>,
+      <Button
+        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        onClick={() => Ref.current.khadgalya()}
+      >
+        сонгох
+      </Button>,
+    ];
+    modal({
+      title: "Асуултын хариулт оруулах",
+      icon: <FileExcelOutlined />,
+      content: <AsuultiinKhariultOruulakh ref={Ref} />,
+      footer,
+    });
   }
 
   return (
@@ -166,60 +188,139 @@ function Khabea({ token }) {
       }
     >
       <div className="col-span-12 p-0 md:p-5">
-        <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-          <div
-            className="flex justify-between"
-            data-aos="fade-right"
-            data-aos-duration="1000"
+        <Tabs>
+          <TabPane
+            key="1"
+            tab={
+              <span>
+                <FileDoneOutlined style={{ fontSize: "32px" }} />
+                Анкет бүртгэл
+              </span>
+            }
           >
-            <RangePicker
-              style={{ marginBottom: "15px" }}
-              size="large"
-              disabledTime
-              defaultValue={[
-                moment(new Date(), "YYYY-MM-DD"),
-                moment(new Date(), "YYYY-MM-DD"),
-              ]}
-              format={"YYYY-MM-DD"}
-              onChange={onChangeOgnoo}
-            />
-            <div className="flex">
-              <Button
-                className="mr-3"
-                style={{ backgroundColor: "#209669", color: "#ffffff" }}
-                onClick={() => anketNemekh("new")}
-              >
-                <PlusOutlined />
-                Анкет нэмэх
-              </Button>
-              <Button className="mr-3" onClick={() => anketIlgeekh("new")}>
-                Анкет илгээх
-                <SendOutlined />
-              </Button>
+            <div className="grid grid-cols-12 gap-5">
+              <div className="box relative col-span-12 p-5 pt-1 md:col-span-4 xl:col-span-2">
+                <span className="font-medium">Анкетын загвар үүсгэх</span>
+                <Form className="pt-5" name="dynamic_form_item">
+                  <Form.Item>
+                    <Input placeholder="Анкетын нэр" />
+                  </Form.Item>
+                  <Form.List name="asuulga">
+                    {(fields, { add, remove }, { errors }) => (
+                      <>
+                        {fields.map((key, name, fieldKey, ...restField) => (
+                          <Form.Item key={fieldKey.key}>
+                            <Form.Item
+                              name={[name, "asuult"]}
+                              fieldKey={[fieldKey, "asuult"]}
+                              {...restField}
+                              //validateTrigger={["onChange", "onBlur"]}
+                              rules={[
+                                {
+                                  required: true,
+                                  whitespace: true,
+                                  message: "",
+                                },
+                              ]}
+                              noStyle
+                            >
+                              <Input
+                                placeholder={`Асуулт ${name + 1}`}
+                                style={{ width: "100%" }}
+                              />
+                            </Form.Item>
+
+                            {fields.length > 1 ? (
+                              <MinusCircleOutlined
+                                className="dynamic-delete-button absolute top-0 -right-6 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
+                                onClick={() => remove(name)}
+                              />
+                            ) : null}
+                            <Button
+                              onClick={() => asuultiinKhariultOruulakh()}
+                              style={{ width: "100%" }}
+                              className="rounded-t-md"
+                            >
+                              Хариултын төрөл оруулах
+                            </Button>
+                          </Form.Item>
+                        ))}
+                        <Form.Item>
+                          <Button
+                            type="dashed"
+                            htmlType="submit"
+                            onClick={() => add()}
+                            style={{ width: "100%" }}
+                            icon={<PlusOutlined />}
+                          >
+                            Асуулт нэмэх
+                          </Button>
+                          <Form.ErrorList errors={errors} />
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </Form>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="absolute bottom-2 right-2"
+                >
+                  Хадгалах
+                </Button>
+              </div>
+              <div className="box col-span-12 overflow-auto p-5 md:col-span-8 xl:col-span-10">
+                <div
+                  className="flex justify-between"
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                >
+                  <RangePicker
+                    style={{ marginBottom: "15px" }}
+                    size="large"
+                    disabledTime
+                    defaultValue={[
+                      moment(new Date(), "YYYY-MM-DD"),
+                      moment(new Date(), "YYYY-MM-DD"),
+                    ]}
+                    format={"YYYY-MM-DD"}
+                    onChange={onChangeOgnoo}
+                  />
+                </div>
+                <div
+                  data-aos="fade-up"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                  data-aos-anchor-placement="top-bottom"
+                >
+                  <Table
+                    bordered
+                    size="small"
+                    tableLayout="fixed"
+                    scroll={{ y: "calc(100vh - 20rem)" }}
+                    onChange={(a, b, c) => onChangeTable(a, b, c)}
+                    rowClassName={(record, index) =>
+                      index % 2 === 0
+                        ? "bg-white dark:bg-gray-600 h-0.5"
+                        : "bg-gray-200 dark:bg-gray-800 h-0.5"
+                    }
+                    dataSource={survey?.jagsaalt}
+                    columns={columns}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            data-aos="fade-up"
-            data-aos-duration="1000"
-            data-aos-delay="200"
-            data-aos-anchor-placement="top-bottom"
-          >
-            <Table
-              bordered
-              size="small"
-              tableLayout="fixed"
-              scroll={{ y: "calc(100vh - 20rem)" }}
-              onChange={(a, b, c) => onChangeTable(a, b, c)}
-              rowClassName={(record, index) =>
-                index % 2 === 0
-                  ? "bg-white dark:bg-gray-600 h-0.5"
-                  : "bg-gray-200 dark:bg-gray-800 h-0.5"
-              }
-              dataSource={survey?.jagsaalt}
-              columns={columns}
-            />
-          </div>
-        </div>
+          </TabPane>
+          <TabPane
+            key="2"
+            tab={
+              <span>
+                <EditOutlined style={{ fontSize: "32px" }} />
+                Анкет ...
+              </span>
+            }
+          ></TabPane>
+        </Tabs>
       </div>
     </Admin>
   );

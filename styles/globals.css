@@ -816,6 +816,14 @@ input:-webkit-autofill {
   @apply dark:text-gray-50 !important;
 }
 
+.ant-tabs-ink-bar {
+  @apply bg-green-600 !important;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: rgb(5 150 105) !important;
+}
+
 .ant-btn {
   border-radius: 0.375rem !important;
   border-width: 1px !important;
@@ -837,6 +845,10 @@ input:-webkit-autofill {
 
 .ant-btn-primary {
   @apply border-none bg-green-500 text-white !important;
+}
+
+.ant-tabs-tab-btn:hover {
+  color: rgb(5 150 105) !important;
 }
 
 .ant-btn:hover {
