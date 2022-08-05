@@ -58,7 +58,7 @@ function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token
       ? [
           "/eneSardTulukhJagsaaltAvya",
@@ -77,6 +77,7 @@ function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul) {
     setNekhemjlelKhuudaslalt,
     nekhemjlel: data,
     nekhemjlelMutate: mutate,
+    isValidating,
   };
 }
 

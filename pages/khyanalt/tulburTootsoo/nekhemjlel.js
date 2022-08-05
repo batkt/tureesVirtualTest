@@ -54,8 +54,12 @@ function tulburTootsoo({ token }) {
   const [loading, setLoading] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
-  const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul);
+  const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
+    token,
+    ognoo,
+    davkhar,
+    ilgeekhTurul
+  );
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
@@ -302,9 +306,12 @@ function tulburTootsoo({ token }) {
         }));
       }}
       tsonkhniiId="61c2c6d91c2830c4e6f90cbd"
-      loading={waiting}
+      loading={isValidating || waiting}
     >
-      <Card className="cardgrid col-span-12">
+      <Card
+        className="cardgrid col-span-12"
+        style={{ minHeight: "calc(100vh - 12rem)" }}
+      >
         <Spin spinning={loading}>
           <div className="grid w-full grid-cols-2" ref={printRef}>
             {nekhemjlekhuud?.map((nekhemjlekh, i) => {
