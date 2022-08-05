@@ -1,16 +1,16 @@
-import React from "react"
-import { renderToString } from "react-dom/server"
-import SunEditor, { buttonList } from "suneditor-react"
-import _ from "lodash"
-import { customPlugin } from "./ZaaltOruulakh"
+import React from "react";
+import { renderToString } from "react-dom/server";
+import SunEditor, { buttonList } from "suneditor-react";
+import _ from "lodash";
+import { customPlugin } from "./ZaaltOruulakh";
 import {
   BankOutlined,
   ClockCircleOutlined,
   DollarCircleOutlined,
   LockOutlined,
   SolutionOutlined,
-} from "@ant-design/icons"
-import { Input, Select } from "antd"
+} from "@ant-design/icons";
+import { Input, Select } from "antd";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -24,7 +24,7 @@ const undsenTalbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "И-мэйл хаяг", talbar: "mail" },
-]
+];
 
 const khugatsaaniiTalbaruud = [
   { ner: "Хугацаа", talbar: "khugatsaa" },
@@ -34,7 +34,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-]
+];
 
 const talbainiiTalbaruud = [
   { ner: "Талбайн дугаар", talbar: "talbainDugaar" },
@@ -46,7 +46,7 @@ const talbainiiTalbaruud = [
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
-]
+];
 
 const baritsaaniiTalbaruud = [
   { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
@@ -54,31 +54,30 @@ const baritsaaniiTalbaruud = [
     ner: "Барьцаа байршуулах хугацаа",
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
-]
+];
 
 const tulburiinTalbaruud = [
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
-]
+];
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
-  const editorRef = React.useRef()
-  const [utga, setUtga] = React.useState(value)
-  console.log('value',value)
+  const editorRef = React.useRef();
+  const [utga, setUtga] = React.useState(value);
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        change(utga)
-        destroy()
+        change(utga);
+        destroy();
       },
       khaaya() {
-        destroy()
+        destroy();
       },
     }),
     [utga]
-  )
+  );
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
@@ -86,35 +85,33 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       name: "undsen",
       title: "Үндсэн мэдээлэл",
       button: renderToString(<SolutionOutlined />),
-    })
+    });
     const khugatsaa = customPlugin({
       songokhTalbaruud: khugatsaaniiTalbaruud,
       name: "khugatsaa",
       title: "Хугацаа",
       button: renderToString(<ClockCircleOutlined />),
-    })
+    });
     const baritsaa = customPlugin({
       songokhTalbaruud: talbainiiTalbaruud,
       name: "talbai",
       title: "Түрээсийн талбай",
       button: renderToString(<BankOutlined />),
-    })
+    });
     const talbai = customPlugin({
       songokhTalbaruud: baritsaaniiTalbaruud,
       name: "baritsaa",
       title: "Барьцаа",
       button: renderToString(<LockOutlined />),
-    })
+    });
     const tulbur = customPlugin({
       songokhTalbaruud: tulburiinTalbaruud,
       name: "tulbur",
       title: "Төлбөр",
       button: renderToString(<DollarCircleOutlined />),
-    })
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur]
-  }, [])
-
-  
+    });
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur];
+  }, []);
 
   if (_.isString(value))
     return (
@@ -126,27 +123,37 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur","table","fontSize"],
+            [
+              "undsen",
+              "khugatsaa",
+              "talbai",
+              "baritsaa",
+              "tulbur",
+              "table",
+              "fontSize",
+            ],
           ],
         }}
         showToolbar={true}
         ref={editorRef}
       />
-    )
+    );
   return (
     <React.Fragment>
-      <div className="w-full flex flex-row">
-        <span className="w-1/3 text-right">Харагдах дугаар:</span>
+      <div className="flex w-full flex-row">
+        <span className="mr-3 w-1/3 text-right">Харагдах дугаар:</span>
         <div className="w-2/3">
           <Input
             placeholder="Харагдах дугаар"
             value={utga?.kharagdakhDugaar}
-            onChange={({target}) => setUtga((a) => ({ ...a, kharagdakhDugaar: target.value }))}
+            onChange={({ target }) =>
+              setUtga((a) => ({ ...a, kharagdakhDugaar: target.value }))
+            }
           />
         </div>
       </div>
-      <div className="w-full flex flex-row mt-5">
-        <span className="w-1/3 text-right">Хамаарагдах хэсэг:</span>
+      <div className="mt-5 flex w-full flex-row">
+        <span className="mr-3 w-1/3 text-right">Хамаарагдах хэсэг:</span>
         <Select
           placeholder="Хамаарагдах хэсэг"
           className="w-2/3"
@@ -173,7 +180,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["table","align","fontSize"],
+            ["table", "align", "fontSize"],
             ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
           ],
         }}
@@ -181,7 +188,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         ref={editorRef}
       />
     </React.Fragment>
-  )
+  );
 }
 
-export default React.forwardRef(ZaaltZasvar)
+export default React.forwardRef(ZaaltZasvar);

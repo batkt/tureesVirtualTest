@@ -1,69 +1,72 @@
 import React from "react";
-import { Menu, Checkbox, Popover, Button, } from "antd";
-import { UnorderedListOutlined, } from "@ant-design/icons";
+import { Menu, Checkbox, Popover, Button } from "antd";
+import { UnorderedListOutlined } from "@ant-design/icons";
 
 const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
+  React.useEffect(() => {
+    const baganuud = localStorage.getItem("bagana-" + window.location.href);
+    if (!!baganuud) setShineBagana(columns.filter(a => {
+      let parsedBaganuud = JSON.parse(baganuud)
+      return parsedBaganuud.find(b => b === a.dataIndex)
+    }));
+  }, []);
 
-    React.useEffect(() => {
-        const baganuud = localStorage.getItem('bagana-' + window.location.href)
-        if (!!baganuud)
-            setShineBagana(JSON.parse(baganuud))
-    }, [])
+  function baganaNemekh(e, mur) {
+    var jagsaalt = shineBagana;
+    if (e.target.checked === true) {
+      var nemekhBagana = {
+        ellipsis: true,
+        showSorterTooltip: false,
+        sorter: () => 0,
+        ...mur,
+      };
+      jagsaalt.push(nemekhBagana);
+    } else
+      jagsaalt = shineBagana.filter(function (item) {
+        return item.dataIndex !== mur.dataIndex;
+      });
 
-    function baganaNemekh(e, mur) {
-        var jagsaalt = shineBagana
-        if (e.target.checked === true) {
-            var nemekhBagana = {
-                ellipsis: true,
-                width: "5rem",
-                showSorterTooltip: false,
-                sorter: () => 0,
-                ...mur
-            };
-            jagsaalt.push(nemekhBagana);
-        } else
-            jagsaalt = shineBagana.filter(function (item) {
-                return item.dataIndex !== mur.dataIndex;
-            });
+    localStorage.setItem(
+      "bagana-" + window.location.href,
+      JSON.stringify(jagsaalt.map(a => a.dataIndex))
+    );
+    setShineBagana([...jagsaalt]);
+  }
 
-        localStorage.setItem('bagana-' + window.location.href, JSON.stringify(jagsaalt))
-        setShineBagana([...jagsaalt]);
-    }
-
-    return (
-        <div>
-            <Popover
-                content={() => (
-                    <div className="contents w-32 flex-col">
-                        <Menu className="contents self-center">
-
-                            {columns.map((mur, i) => (
-                                <Menu.Item key={'bagana-' + i}>
-                                    <Checkbox
-                                        checked={!!shineBagana.find(a => a.dataIndex === mur.dataIndex)}
-                                        onClick={(e) => baganaNemekh(e, mur)}
-                                    >
-                                        {mur.title}
-                                    </Checkbox>
-                                </Menu.Item>
-
-                            ))}
-                        </Menu>
-                    </div>
-                )}
-                style={{ padding: 0 }}
-                placement="bottom"
-                trigger="click"
-            >
-                <Button
-                    style={{ marginRight: "10px" }}
-                    type="primary"
-                    icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
-                >
-                    <span>Багана</span>
-                </Button>
-            </Popover>
-        </div>
-    )
-}
-export default BaganiinSongolt
+  return (
+    <div>
+      <Popover
+        content={() => (
+          <div className="contents w-32 flex-col">
+            <Menu className="contents self-center">
+              {columns.map((mur, i) => (
+                <Menu.Item key={"bagana-" + i}>
+                  <Checkbox
+                    checked={
+                      !!shineBagana.find((a) => a.dataIndex === mur.dataIndex)
+                    }
+                    onClick={(e) => baganaNemekh(e, mur)}
+                  >
+                    {mur.title}
+                  </Checkbox>
+                </Menu.Item>
+              ))}
+            </Menu>
+          </div>
+        )}
+        style={{ padding: 0 }}
+        placement="bottom"
+        trigger="click"
+      >
+        <Button
+          style={{ marginRight: "10px" }}
+          type="primary"
+          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
+        >
+          <span>Багана</span>
+        </Button>
+      </Popover>
+    </div>
+  );
+};
+export default BaganiinSongolt;

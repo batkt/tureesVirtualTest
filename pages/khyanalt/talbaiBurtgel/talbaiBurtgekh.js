@@ -1,7 +1,4 @@
 import {
-  ArrowDownOutlined,
-  ArrowUpOutlined,
-  CloseCircleFilled,
   CloseCircleOutlined,
   DeleteOutlined,
   DownloadOutlined,
@@ -9,7 +6,6 @@ import {
   EditOutlined,
   EyeOutlined,
   FileExcelOutlined,
-  MinusCircleOutlined,
   MoreOutlined,
   PlusOutlined,
   SettingOutlined,
@@ -412,6 +408,7 @@ function talbaiBurtgekh({ token }) {
     <Admin
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
+      tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
       className="p-0 md:p-4"
       onSearch={(search) =>
         setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))

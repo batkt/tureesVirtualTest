@@ -128,6 +128,7 @@ function index({ token }) {
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
+      tsonkhniiId={"62ea0dc27c54f8189bdca566"}
       className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >

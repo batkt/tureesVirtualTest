@@ -135,6 +135,7 @@ function mashinBurtgel({ token }) {
       title="Машин бүртгэл"
       khuudasniiNer="mashinBurtgel"
       className="p-0 md:p-4"
+      tsonkhniiId={"62ea0cad7c54f8189bdca52d"}
       onSearch={(search) =>
         setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
@@ -144,8 +145,9 @@ function mashinBurtgel({ token }) {
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${a.name === turul ? "bg-green-100" : ""
-                }`}
+              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
+                a.name === turul ? "bg-green-100" : ""
+              }`}
               onClick={() => setTurul(a.name)}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
@@ -186,7 +188,7 @@ function mashinBurtgel({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white "
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={mashinOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
@@ -227,7 +229,7 @@ function mashinBurtgel({ token }) {
               width: "2rem",
               render: (text, record, index) =>
                 (mashinGaralt?.khuudasniiDugaar || 0) *
-                (mashinGaralt?.khuudasniiKhemjee || 0) -
+                  (mashinGaralt?.khuudasniiKhemjee || 0) -
                 (mashinGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,

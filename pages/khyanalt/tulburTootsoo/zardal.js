@@ -550,7 +550,7 @@ function zardal({ token }) {
     });
   }
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   return (
@@ -565,16 +565,12 @@ function zardal({ token }) {
           khuudasniiDugaar: 1,
         }))
       }
+      tsonkhniiId="62ea0bf67c54f8189bdca517"
     >
       <div className="col-span-12 space-y-5">
         <div className="flex w-full flex-row">
-          <div
-          data-aos="fade-right"
-          data-aos-duration="1000">
-          <DatePicker.RangePicker
-            value={ognoo}
-            onChange={setOgnoo}            
-          />
+          <div data-aos="fade-right" data-aos-duration="1000">
+            <DatePicker.RangePicker value={ognoo} onChange={setOgnoo} />
           </div>
           <button
             style={{
