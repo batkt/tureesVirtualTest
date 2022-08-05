@@ -28,7 +28,7 @@ import formatNumber from "tools/function/formatNumber";
 import sorterCompare from "tools/function/sorterCompare";
 import useDansKhuulga from "hooks/khuulga/useDansKhuulga";
 import useBankniiGuilgeeToololt from "hooks/khuulga/useBankniiGuilgeeToololt";
-import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeKholbokh";
+import GuilgeeKholbokh from "components/pageComponents/tulbur/GuilgeeNiiluulekh";
 import ZardalKholbokh from "components/pageComponents/tulbur/ZardalKholbokh";
 
 import _ from "lodash";
@@ -57,7 +57,7 @@ function iconAvya(a, bank) {
     color = "yellow";
     tailbar =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-        a?.kholbosonDun > 0
+      a?.kholbosonDun > 0
         ? "Дүн дутуу холбогдсон байна"
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
@@ -194,7 +194,7 @@ function tulburTootsoo({ token }) {
     if (
       data?.kholbosonGereeniiId &&
       data?.kholbosonDun ===
-      data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
+        data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
     ) {
       message.info("Гүйлгээ гэрээнд холбогдсон байна.");
       return;
@@ -399,7 +399,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -517,7 +517,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -576,12 +576,13 @@ function tulburTootsoo({ token }) {
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
-        Number(bankniiGuilgeeToololt?.kholboson || 0) >
-        0 &&
+          Number(bankniiGuilgeeToololt?.kholboson || 0) >
+          0 &&
         notification.error({
-          message: `Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0) -
+          message: `Холболт хийгдээгүй ${
+            Number(bankniiGuilgeeToololt?.niit || 0) -
             Number(bankniiGuilgeeToololt?.kholboson || 0)
-            } гэрээ байна`,
+          } гэрээ байна`,
         })}
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-4">
@@ -644,10 +645,11 @@ function tulburTootsoo({ token }) {
             <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
               {["orlogo", "zarlaga"].map((text) => (
                 <div
-                  className={`cursor-pointer rounded-md p-2 ${khuulgaTurul === text
-                    ? "dark bg-green-500 text-gray-50"
-                    : ""
-                    }`}
+                  className={`cursor-pointer rounded-md p-2 ${
+                    khuulgaTurul === text
+                      ? "dark bg-green-500 text-gray-50"
+                      : ""
+                  }`}
                   onClick={() => setKhuulgaTurul(text)}
                 >
                   {text === "orlogo" ? "Орлого" : "Зарлага"}
@@ -689,7 +691,7 @@ function tulburTootsoo({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:hover:bg-gray-700 dark:text-white"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();
