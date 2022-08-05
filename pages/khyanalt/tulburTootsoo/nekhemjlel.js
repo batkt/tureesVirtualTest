@@ -530,8 +530,19 @@ function tulburTootsoo({ token }) {
                     },
                   },
                 ]}
-                dataSource={nekhemjleliinJagsaalt}
-                pagination={false}
+                dataSource={nekhemjlel?.jagsaalt}
+                pagination={{
+                  current: nekhemjlel?.khuudasniiDugaar,
+                  pageSize: nekhemjlel?.khuudasniiKhemjee,
+                  total: nekhemjlel?.niitMur,
+                  showSizeChanger: true,
+                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                    setNekhemjlelKhuudaslalt((kh) => ({
+                      ...kh,
+                      khuudasniiDugaar,
+                      khuudasniiKhemjee,
+                    })),
+                }}
                 rowKey={(a) => a._id}
               />
             </div>
