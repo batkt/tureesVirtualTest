@@ -90,7 +90,7 @@ async function baritsaaniiGuilgeeKhiiya(token, guilgeenuud) {
 }
 
 function GuilgeeNiiluulekh(
-  { data, dans, token, baiguullagiinId, destroy, onFinish },
+  { data, dans, token, baiguullagiinId, destroy, onFinish, barilgiinId },
   ref
 ) {
   const [gereenuud, setGereenuud] = useState([]);
@@ -141,7 +141,7 @@ function GuilgeeNiiluulekh(
               message: "Амжилттай",
               description: "Гүйлгээ амжилттай холбогдлоо",
             });
-            _.isFunction(onFinish) && onFinish;
+            _.isFunction(onFinish) && onFinish();
             destroy();
           }
         }
@@ -154,7 +154,7 @@ function GuilgeeNiiluulekh(
                   message: "Амжилттай",
                   description: "Гүйлгээ амжилттай холбогдлоо",
                 });
-                _.isFunction(onFinish) && onFinish;
+                _.isFunction(onFinish) && onFinish();
                 destroy();
               }
             })
@@ -185,11 +185,22 @@ function GuilgeeNiiluulekh(
                 });
                 return;
               }
-              setGereenuud((a) => {
-                a.push(mur);
-                return [...a];
-              });
-              setVisible(false);
+              uilchilgee(token)
+                .post("/uldegdelBodyo", {
+                  barilgiinId,
+                  gereeniiDugaar: mur.gereeniiDugaar,
+                })
+                .then(({ data }) => {
+                  if (!!data) {
+                    mur.uldegdel = data.uldegdel;
+                    setGereenuud((a) => {
+                      a.push(mur);
+                      return [...a];
+                    });
+                    setVisible(false);
+                  }
+                })
+                .catch(aldaaBarigch);
             }}
           >
             <div>{mur.talbainDugaar}</div>
@@ -356,7 +367,13 @@ function GuilgeeNiiluulekh(
             {geree && (
               <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">Түрээсийн төлбөр</div>
-                <div>{formatNumber(geree.uldegdel)}</div>
+                <div
+                  className={`text-${
+                    geree.uldegdel >= 0 ? "green" : "red"
+                  }-500`}
+                >
+                  {formatNumber(geree.uldegdel)}
+                </div>
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-center">
                   {moment(geree.gereeniiOgnoo).format("YYYY-MM-DD")}

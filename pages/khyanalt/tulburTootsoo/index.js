@@ -208,7 +208,7 @@ function tulburTootsoo({ token }) {
     ];
     modal({
       title: "",
-      width: "50%",
+      width: "40rem",
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKholbokh
