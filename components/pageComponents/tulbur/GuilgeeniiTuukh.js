@@ -193,45 +193,49 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Хэлбэр</div>
           <div>Бүртгсэн огноо</div>
           <div>Тайлбар</div>
-
         </div>
         <div className="overflow-y-auto" style={{ height: "calc(40vh)" }}>
-          {guilgeeniiTuukh?.map((a, i) => (
-            <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-              <div className="p-1">{i + 1}</div>
-              <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
-              <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
-              <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
-              <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
-              <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
-              <div
-                className={`p-1 ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+          {guilgeeniiTuukh
+            ?.map((a, i) => (
+              <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <div className="p-1">{i + 1}</div>
+                <div className="p-1">
+                  {moment(a.ognoo).format("YYYY-MM-DD")}
+                </div>
+                <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
+                <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
+                <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
+                <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+                <div
+                  className={`p-1 ${
+                    a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                   }`}
-              >
-                {formatNumber(
-                  a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                  0
-                )}
-              </div>
-              <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
-              <div className="p-1">
-                {a.turul === "bank"
-                  ? a.tulsunDans !== " "
-                    ? a.tulsunDans
-                    : "Банк"
-                  : turulAvya(a.turul)}
-              </div>
-              <div className="flex justify-between p-1">
-                {a.guilgeeKhiisenOgnoo && moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
-              </div>
-              <div className="flex justify-between p-1">
-                {a.tailbar}
-                {(a.turul === "avlaga" ||
-                  a.turul === "voucher" ||
-                  a.turul === "barter" ||
-                  a.turul === "bank" ||
-                  a.turul === "khyamdral" ||
-                  a.turul === "baritsaa") && (
+                >
+                  {formatNumber(
+                    a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
+                    0
+                  )}
+                </div>
+                <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
+                <div className="p-1">
+                  {a.turul === "bank"
+                    ? a.tulsunDans !== " "
+                      ? a.tulsunDans
+                      : "Банк"
+                    : turulAvya(a.turul)}
+                </div>
+                <div className="flex justify-between p-1">
+                  {a.guilgeeKhiisenOgnoo &&
+                    moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
+                </div>
+                <div className="flex justify-between p-1">
+                  {a.tailbar}
+                  {(a.turul === "avlaga" ||
+                    a.turul === "voucher" ||
+                    a.turul === "barter" ||
+                    a.turul === "bank" ||
+                    a.turul === "khyamdral" ||
+                    a.turul === "baritsaa") && (
                     <div className="contents justify-between">
                       <Popconfirm
                         title="Төлөлт устгах уу?"
@@ -245,10 +249,10 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                       </Popconfirm>
                     </div>
                   )}
+                </div>
               </div>
-
-            </div>
-          ))}
+            ))
+            .reverse()}
         </div>
       </div>
     </div>
