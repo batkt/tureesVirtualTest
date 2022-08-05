@@ -2,7 +2,14 @@ import _ from "lodash";
 import React, { useMemo, useState } from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
-import { Divider, notification, Popconfirm, Popover } from "antd";
+import {
+  Divider,
+  notification,
+  Popconfirm,
+  Popover,
+  Switch,
+  Tooltip,
+} from "antd";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { formatter, parser } from "tools/function/inputFormatter";
 import { CloseCircleOutlined } from "@ant-design/icons";
@@ -58,7 +65,10 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         default:
           break;
       }
-      if (mur.baritsaaniiUldegdel < mur.baritsaaTulbur)
+      if (
+        (mur?.baritsaaAvakhDun || 0) - (mur?.baritsaaniiUldegdel || 0) <
+        mur.baritsaaTulbur
+      )
         aldaa.push(
           `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`
         );
@@ -95,12 +105,17 @@ function GuilgeeNiiluulekh(
 ) {
   const [gereenuud, setGereenuud] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
+
+  const query = useMemo(() => {
+    return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
+  }, [khaagdsanGereeEsekh]);
 
   const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
     token,
     baiguullagiinId,
     undefined,
-    undefined,
+    query,
     undefined,
     10
   );
@@ -166,7 +181,7 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-72 space-y-1">
+      <div className="relative w-80 space-y-1">
         <div
           onClick={() => setVisible(false)}
           className="absolute right-0 -top-10 text-xl"
@@ -204,7 +219,7 @@ function GuilgeeNiiluulekh(
             }}
           >
             <div>{mur.talbainDugaar}</div>
-            <div>{mur.gereeniiDugaar}</div>
+            <div>{mur.register}</div>
             <div>{mur.ner}</div>
           </div>
         ))}
@@ -274,8 +289,11 @@ function GuilgeeNiiluulekh(
 
   return (
     <div className="flex w-full flex-col space-y-2">
-      <div className="px-2">
-        <div>Гүйлгээний мэдээлэл</div>
+      <div className="space-y-2 px-2">
+        <div className="flex justify-between">
+          <span className="text-xl">Гүйлгээний мэдээлэл</span>
+          <span>{moment().format("YYYY-MM-DD")}</span>
+        </div>
         <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2">
           <div>{data.CtAcct || data.relatedAccount}</div>
           <div>{data.CtActnName}</div>
@@ -285,7 +303,9 @@ function GuilgeeNiiluulekh(
           <div className="text-right text-red-600">
             {formatNumber(guilgeeniiDun)}
           </div>
-          <div className="col-span-4">{data.TxAddInf || data.description}</div>
+          <div className="col-span-4">
+            {data.TxAddInf?.split("-&gt;")[0] || data.description}
+          </div>
           {data.kholbosonDun > 0 && (
             <div className="col-span-4 flex justify-between">
               <span>
@@ -297,7 +317,7 @@ function GuilgeeNiiluulekh(
             </div>
           )}
         </div>
-        <div>Гүйлгээ холбох</div>
+        <div className="text-xl">Гүйлгээ холбох</div>
         <div className="grid grid-cols-2">
           <Popover
             placement="bottom"
@@ -308,14 +328,26 @@ function GuilgeeNiiluulekh(
             onVisibleChange={() => setVisible(true)}
           >
             <input
-              className="rounded-md border border-gray-400 p-1"
-              placeholder="Гэрээ"
+              className="rounded-md border border-gray-400 p-1 px-2"
+              placeholder="Гэрээ сонгох"
               onChange={onChange}
             />
           </Popover>
+          <div className="flex items-center justify-end">
+            <label className="pr-2 text-sm font-bold text-gray-600">
+              Хаагдсан гэрээ холбох эсэх{" "}
+            </label>
+            <Tooltip title="Хаагдсан гэрээ холбох эсэх">
+              <Switch
+                checked={khaagdsanGereeEsekh}
+                onChange={setKhaagdsanGereeEsekh}
+                title="Хаагдсан гэрээ холбох эсэх"
+              />
+            </Tooltip>
+          </div>
         </div>
       </div>
-      <div className="h-72 space-y-2 overflow-auto px-2">
+      <div className="space-y-2 overflow-auto px-2" style={{ height: "25rem" }}>
         {gereenuud.map((geree, index) => (
           <div
             key={`${index}geree-kholbolt`}
@@ -323,7 +355,7 @@ function GuilgeeNiiluulekh(
           >
             <div className="flex w-full justify-between text-right text-xl">
               <span>
-                {geree?.talbainDugaar}-{geree?.ner}
+                {geree?.talbainDugaar} -- {geree?.register} -- {geree?.ner}
               </span>
               <Popconfirm
                 title={`${geree?.talbainDugaar} талбайн мөр бичилт устгах уу?`}
@@ -341,14 +373,18 @@ function GuilgeeNiiluulekh(
                 </span>
               </Popconfirm>
             </div>
-            {geree?.baritsaaniiUldegdel > 0 && (
-              <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Барьцаа дүн</div>
-                <div>{formatNumber(geree.baritsaaniiUldegdel)}</div>
-                <div>{geree.talbainDugaar}</div>
-                <div className="text-center">
-                  {moment(geree.gereeniiOgnoo).format("YYYY-MM-DD")}
+            {(geree?.baritsaaAvakhDun || 0) -
+              (geree?.baritsaaniiUldegdel || 0) >
+              0 && (
+              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                <div className="col-span-4">Барьцааны үлдэгдэл</div>
+                <div>
+                  {formatNumber(
+                    (geree?.baritsaaAvakhDun || 0) -
+                      (geree.baritsaaniiUldegdel || 0)
+                  )}
                 </div>
+                <div>{geree.talbainDugaar}</div>
                 <div className="text-right text-indigo-600">
                   <input
                     className="w-full rounded-md border bg-gray-200 px-2 text-right"
@@ -365,8 +401,8 @@ function GuilgeeNiiluulekh(
               </div>
             )}
             {geree && (
-              <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Түрээсийн төлбөр</div>
+              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                <div className="col-span-4">Түрээсийн үлдэгдэл</div>
                 <div
                   className={`text-${
                     geree.uldegdel >= 0 ? "green" : "red"
@@ -375,9 +411,6 @@ function GuilgeeNiiluulekh(
                   {formatNumber(geree.uldegdel)}
                 </div>
                 <div>{geree.talbainDugaar}</div>
-                <div className="text-center">
-                  {moment(geree.gereeniiOgnoo).format("YYYY-MM-DD")}
-                </div>
                 <div className="text-right text-green-600">
                   <input
                     className="w-full rounded-md border bg-gray-200 px-2 text-right"
@@ -397,13 +430,18 @@ function GuilgeeNiiluulekh(
         ))}
       </div>
       <Divider />
-      <div className="grid w-full grid-cols-4 px-2">
-        <div className="col-span-2">
-          Гүйлгээний огноо:{moment().format("YYYY-MM-DD")}
+      <div className="grid w-full grid-cols-2 divide-x-2 px-2">
+        <div className="flex justify-between pr-2">
+          <div className="">Холбосон дүн:</div>
+          <div className="text-right text-xl text-green-600">
+            {formatNumber(guilgeeniiDun - zuruuDun)}
+          </div>
         </div>
-        <div className="text-center">Зөрүү дүн:</div>
-        <div className="text-right text-xl text-red-600">
-          {formatNumber(zuruuDun)}
+        <div className="flex justify-between pl-2">
+          <div className="">Холбоогүй дүн:</div>
+          <div className="text-right text-xl text-red-600">
+            {formatNumber(zuruuDun)}
+          </div>
         </div>
       </div>
     </div>
