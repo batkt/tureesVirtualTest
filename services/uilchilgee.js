@@ -10,7 +10,7 @@ import _ from "lodash";
 //export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
 //export const url = `http://localhost:8081`;
 //export const url = "http://192.168.0.103:8081"
-export const url = "http://103.143.40.230:8081";
+export const url = "https://turees.zevtabs.mn";
 
 export const socket = () => socketIOClient(url, { transports: ["websocket"] });
 
@@ -44,7 +44,7 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL: url,
+    baseURL: url + "/api",
     headers,
   });
 };

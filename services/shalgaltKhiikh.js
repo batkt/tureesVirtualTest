@@ -25,6 +25,7 @@ const shalgaltKhiikh = async (ctx, ugudulAvchirya) => {
         destination: "/",
         permanent: false,
       },
+      props: {},
     };
   }
 };

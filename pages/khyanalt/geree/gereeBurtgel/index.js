@@ -347,6 +347,13 @@ function ZakhialgiinKhyanalt() {
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  useEffect(() => {
+    if (!!token)
+      uilchilgee(token)
+        .post("/erkhteiEsekh", { zam: "/khyanalt/geree/gereeBurtgel" })
+        .then(({ data }) => data);
+  }, [token]);
   //#endregion
 
   const handlePrint = useReactToPrint({

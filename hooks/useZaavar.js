@@ -3,36 +3,32 @@ import useSWR from "swr";
 import axios from "axios";
 
 const uilchilgee = (token) => {
-    const headers = {
-      "Content-type": "application/json",
-    }
-    if (!!token) headers["Authorization"] = `bearer ${token}`
-    return axios.create({
-      baseURL: 'http://103.50.205.33:8282',
-      headers,
-    })
-}
+  const headers = {
+    "Content-type": "application/json",
+  };
+  if (!!token) headers["Authorization"] = `bearer ${token}`;
+  return axios.create({
+    baseURL: "https://zevtabs.mn/api",
+    headers,
+  });
+};
 
-const fetcher = (
-    url,
-    token,
-    id
-) =>
-uilchilgee(token)
-        .get(`${url}/${id}`)
-        .then((res) => res.data)
-        .catch(aldaaBarigch);
+const fetcher = (url, token, id) =>
+  uilchilgee(token)
+    .get(`${url}/${id}`)
+    .then((res) => res.data)
+    .catch(aldaaBarigch);
 
 function useZaavar(token, id) {
-    const { data, mutate } = useSWR(
-        !!token && !!id ? ['/tsonkhniiMedeelel', token, id] : null,
-        fetcher,
-        { revalidateOnFocus: false }
-    );
-    return {
-        tsonkh: data,
-        tsonkhMutate: mutate,
-    };
+  const { data, mutate } = useSWR(
+    !!token && !!id ? ["/tsonkhniiMedeelel", token, id] : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+  return {
+    tsonkh: data,
+    tsonkhMutate: mutate,
+  };
 }
 
-export default useZaavar
+export default useZaavar;
