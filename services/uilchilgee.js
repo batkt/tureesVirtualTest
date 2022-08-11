@@ -41,6 +41,7 @@ export const aldaaBarigch = (e) => {
 const uilchilgee = (token) => {
   const headers = {
     "Content-type": "application/json",
+    rejectUnauthorized: typeof window === "undefined" ? false : undefined,
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
