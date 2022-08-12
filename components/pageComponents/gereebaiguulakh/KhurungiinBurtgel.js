@@ -1,4 +1,4 @@
-import { Form, Select, Button, Input, InputNumber, notification } from "antd";
+import { Form, Button, Input, InputNumber } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { toWords } from "mon_num";
@@ -27,37 +27,6 @@ const YurunkhiiMedeele = ({
   barilgiinId,
 }) => {
   const [form] = Form.useForm();
-
-  const sulEsekh = (talbainDugaar, callback) => {
-    uilchilgee(token)
-      .get("/talbainSulEskhiigShalgay", {
-        params: {
-          talbainDugaar: talbainDugaar,
-          barilgiinId: barilgiinId,
-        },
-      })
-      .then(({ data }) => {
-        if (data === "OK" || data === value.gereeniiDugaar) {
-          callback(data);
-        } else
-          notification.warning({
-            message: (
-              <div>
-                <b>{talbainDugaar}</b> талбай нь <b>{data}</b> гэрээн дээр
-                холбогдсон байна.
-              </div>
-            ),
-          });
-      });
-  };
-
-  function talbainuudShalgaya(talbainuud, talbainDugaar) {
-    let sultalbainuud = [];
-    talbainuud.forEach((mur, index) => {
-      if (talbainuud.length > index)
-        talbainBurtgelBugulyu(sultalbainuud, talbainDugaar);
-    });
-  }
 
   function talbainBurtgelBugulyu(talbainuud, talbainDugaar) {
     var talbai = {};
