@@ -2,7 +2,6 @@ import { Form, Select, Button, Input, InputNumber, notification } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { toWords } from "mon_num";
-import useTalbai from "hooks/useTalbai";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
 import Aos from "aos";
@@ -56,11 +55,7 @@ const YurunkhiiMedeele = ({
     let sultalbainuud = [];
     talbainuud.forEach((mur, index) => {
       if (talbainuud.length > index)
-        sulEsekh(mur.kod, () => {
-          sultalbainuud.push(mur);
-          if (talbainuud.length - 1 === index)
-            talbainBurtgelBugulyu(sultalbainuud, talbainDugaar);
-        });
+        talbainBurtgelBugulyu(sultalbainuud, talbainDugaar);
     });
   }
 
@@ -106,24 +101,28 @@ const YurunkhiiMedeele = ({
       return;
     }
     const talbainDugaaruud = target.value?.includes(",")
-      ? [...new Set(target.value.split(","))]
-      : target.value;
+      ? [...new Set(target.value.split(","))].map((mur) => ({
+          kod: { $eq: mur },
+        }))
+      : [{ kod: { $eq: target.value } }];
     uilchilgee(token)
       .get("/talbai", {
         params: {
           query: {
-            kod: talbainDugaaruud,
+            $or: talbainDugaaruud,
             barilgiinId,
             baiguullagiinId: baiguullaga._id,
+            idevkhiteiEsekh: false,
           },
         },
       })
       .then((a) => a.data)
       .then((talbainuud) => {
         if (talbainuud?.jagsaalt?.length === 0) utgaTseverleye();
-        talbainuudShalgaya(talbainuud?.jagsaalt, target.value);
+        talbainBurtgelBugulyu(talbainuud?.jagsaalt, target.value);
       });
   }
+
   useEffect(() => {
     Aos.init({ once: true });
   });
