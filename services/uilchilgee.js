@@ -10,9 +10,10 @@ import _ from "lodash";
 //export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
 //export const url = `http://localhost:8081`;
 //export const url = "http://192.168.0.103:8081"
-export const url = "http://103.143.40.230:8081";
+export const url = "https://turees.zevtabs.mn/api";
 
-export const socket = () => socketIOClient(url, { transports: ["websocket"] });
+export const socket = () =>
+  socketIOClient("https://turees.zevtabs.mn", { transports: ["websocket"] });
 
 export const aldaaBarigch = (e) => {
   if (e?.response?.data?.aldaa === "jwt expired") {
@@ -44,7 +45,7 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL: url,
+    baseURL: typeof window === "undefined" ? "http://103.143.40.230:8081" : url,
     headers,
   });
 };
