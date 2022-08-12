@@ -66,8 +66,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -284,7 +285,13 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      { title: "Утас", dataIndex: "utas", ellipsis: true, align: "center", width: "7rem", },
+      {
+        title: "Утас",
+        dataIndex: "utas",
+        ellipsis: true,
+        align: "center",
+        width: "7rem",
+      },
       {
         title: "Үлдэгдэл",
         dataIndex: "uldegdel",
@@ -304,7 +311,6 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
-
     ];
     return [
       ...jagsaalt,
@@ -413,12 +419,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -436,7 +442,6 @@ function guilgeeniiTuukh({ token }) {
         sorter: () => 0,
         showSorterTooltip: false,
       },
-
     ];
   }, [gereeniiMedeelel, loadingIndex, delgegdsenGeree, shineBagana]);
 
@@ -727,7 +732,6 @@ function guilgeeniiTuukh({ token }) {
                     return moment(a).format("YYYY-MM-DD");
                   },
                 },
-
               ]}
             />
 
@@ -763,8 +767,6 @@ function guilgeeniiTuukh({ token }) {
                             dataIndex: "utas",
                           },
                           {
-
-
                             title: "Үлдэгдэл",
                             dataIndex: "uldegdel",
                             render(a) {

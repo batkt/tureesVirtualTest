@@ -47,7 +47,7 @@ function Khabea({ token }) {
   );
 
   const survey = useJagsaalt("/survey", undefined, order);
-  const Ref = React.useRef(null);
+  const khariultRef = React.useRef(null);
 
   const columns = useMemo(
     () => [
@@ -158,18 +158,18 @@ function Khabea({ token }) {
 
   function asuultiinKhariultOruulakh() {
     const footer = [
-      <Button onClick={() => Ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => khariultRef.current.khaaya()}>Хаах</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => Ref.current.khadgalya()}
+        onClick={() => khariultRef.current.khadgalya()}
       >
-        сонгох
+        хадгалах
       </Button>,
     ];
     modal({
       title: "Асуултын хариулт оруулах",
       icon: <FileExcelOutlined />,
-      content: <AsuultiinKhariultOruulakh ref={Ref} />,
+      content: <AsuultiinKhariultOruulakh ref={khariultRef} />,
       footer,
     });
   }
@@ -191,15 +191,10 @@ function Khabea({ token }) {
         <Tabs>
           <TabPane
             key="1"
-            tab={
-              <span>
-                <FileDoneOutlined style={{ fontSize: "32px" }} />
-                Анкет бүртгэл
-              </span>
-            }
+            tab={<span className="text-base font-medium">Асуумж</span>}
           >
             <div className="grid grid-cols-12 gap-5">
-              <div className="box relative col-span-12 p-5 pt-1 md:col-span-4 xl:col-span-2">
+              <div className="box relative col-span-12 p-5 pt-1 md:col-span-4 xl:col-span-3">
                 <span className="font-medium">Анкетын загвар үүсгэх</span>
                 <Form className="pt-5" name="dynamic_form_item">
                   <Form.Item>
@@ -226,26 +221,26 @@ function Khabea({ token }) {
                             >
                               <Input
                                 placeholder={`Асуулт ${name + 1}`}
-                                style={{ width: "100%" }}
+                                style={{ width: "90%" }}
                               />
                             </Form.Item>
 
                             {fields.length > 1 ? (
                               <MinusCircleOutlined
-                                className="dynamic-delete-button absolute top-0 -right-6 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
+                                className="dynamic-delete-button absolute -top-4 right-2 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
                                 onClick={() => remove(name)}
                               />
                             ) : null}
                             <Button
                               onClick={() => asuultiinKhariultOruulakh()}
-                              style={{ width: "100%" }}
+                              style={{ width: "90%" }}
                               className="rounded-t-md"
                             >
                               Хариултын төрөл оруулах
                             </Button>
                           </Form.Item>
                         ))}
-                        <Form.Item>
+                        <Form.Item className="pb-3">
                           <Button
                             type="dashed"
                             htmlType="submit"
@@ -269,7 +264,7 @@ function Khabea({ token }) {
                   Хадгалах
                 </Button>
               </div>
-              <div className="box col-span-12 overflow-auto p-5 md:col-span-8 xl:col-span-10">
+              <div className="box col-span-12 overflow-auto p-5 md:col-span-8 xl:col-span-9">
                 <div
                   className="flex justify-between"
                   data-aos="fade-right"
@@ -287,38 +282,12 @@ function Khabea({ token }) {
                     onChange={onChangeOgnoo}
                   />
                 </div>
-                <div
-                  data-aos="fade-up"
-                  data-aos-duration="1000"
-                  data-aos-delay="200"
-                  data-aos-anchor-placement="top-bottom"
-                >
-                  <Table
-                    bordered
-                    size="small"
-                    tableLayout="fixed"
-                    scroll={{ y: "calc(100vh - 20rem)" }}
-                    onChange={(a, b, c) => onChangeTable(a, b, c)}
-                    rowClassName={(record, index) =>
-                      index % 2 === 0
-                        ? "bg-white dark:bg-gray-600 h-0.5"
-                        : "bg-gray-200 dark:bg-gray-800 h-0.5"
-                    }
-                    dataSource={survey?.jagsaalt}
-                    columns={columns}
-                  />
-                </div>
               </div>
             </div>
           </TabPane>
           <TabPane
             key="2"
-            tab={
-              <span>
-                <EditOutlined style={{ fontSize: "32px" }} />
-                Анкет ...
-              </span>
-            }
+            tab={<span className="text-base font-medium">Жагсаалт</span>}
           ></TabPane>
         </Tabs>
       </div>
