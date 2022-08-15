@@ -131,7 +131,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" text-green-800 flex items-center justify-center   text-[0.860rem] font-normal dark:text-white "
+              className=" text-green-800 flex items-center justify-center   text-base  font-semibold dark:text-white "
             >
               {title}
             </h2>
