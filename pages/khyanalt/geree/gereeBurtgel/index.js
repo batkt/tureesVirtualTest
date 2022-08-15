@@ -536,7 +536,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
-        align: "center",
+        align: "left",
         ellipsis: true,
         width: "10rem",
         render: () => {
@@ -941,6 +941,7 @@ function ZakhialgiinKhyanalt() {
                 {
                   title: "Утас",
                   dataIndex: "utas",
+                  align: "center",
                   ellipsis: true,
                   width: "10rem",
                 },
