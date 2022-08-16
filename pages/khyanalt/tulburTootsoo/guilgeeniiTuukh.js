@@ -90,7 +90,7 @@ function TableGuilgee({
 }) {
   return (
     <Table
-      scroll={{ y: "calc(100vh - 26rem)" }}
+      scroll={{ y: "calc(94vh - 26rem)" }}
       size="small"
       bordered
       columns={columns}
@@ -294,6 +294,7 @@ function guilgeeniiTuukh({ token }) {
       },
       {
         title: "Үлдэгдэл",
+        width: "calc(18rem - 10rem)",
         dataIndex: "uldegdel",
         align: "center",
         render(text, record, index) {
@@ -557,6 +558,7 @@ function guilgeeniiTuukh({ token }) {
           {[
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              selectedColor: "bg-green-600 bg-opacity-20",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
               tailbar:
@@ -564,6 +566,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0),
+              selectedColor: "bg-green-600 bg-opacity-20",
               turul: "voucher",
               utga: "Ваучер төлөлт",
               tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
@@ -573,6 +576,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
               ),
               turul: "tsutslagdsanAvlaga",
+              selectedColor: "bg-green-600 bg-opacity-20",
               utga: "Цуцлагдсан гэрээний авлага",
               tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
@@ -581,6 +585,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
               ),
               turul: "eneSardTulukh",
+              selectedColor: "bg-green-600 bg-opacity-20",
               utga: "Төлөвлөлгөө / сар",
               tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
@@ -589,6 +594,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
               ),
               turul: "eneSardTulsun",
+              selectedColor: "bg-green-600 bg-opacity-20",
               utga: "Гүйцэтгэл / сар",
               tailbar: "Огноонд хамаарагдах бүх төлөгдсөн дүнгийн нийлбэр",
             },
@@ -597,6 +603,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
               ),
               turul: "khungulult",
+              selectedColor: "bg-green-600 bg-opacity-20",
               utga: "Хөнгөлөлт / сар",
               tailbar: "Огноонд хамаарагдах бүх хөнгөлөлтийн дүнгийн нийлбэр",
             },
@@ -604,7 +611,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className="intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2"
+                className={`intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
@@ -692,6 +701,7 @@ function guilgeeniiTuukh({ token }) {
                 },
                 {
                   title: "Сарын түрээс",
+                  width: "8rem",
                   dataIndex: "sariinTurees",
                   align: "right",
                   render: (a) => {
@@ -700,6 +710,7 @@ function guilgeeniiTuukh({ token }) {
                 },
                 {
                   title: "Талбайн үнэ",
+                  width: "8rem",
                   align: "right",
                   dataIndex: "talbainNiitUne",
                   render: (a) => {
@@ -724,7 +735,15 @@ function guilgeeniiTuukh({ token }) {
                   width: "8rem",
                 },
                 {
+                  title: "Төлөлт",
+                  dataIndex: "",
+                  ellipsis: true,
+                  align: "left",
+                  width: "8rem",
+                },
+                {
                   title: "Гэрээний огноо",
+                  width: "11rem",
                   dataIndex: "gereeniiOgnoo",
                   ellipsis: true,
                   align: "center",
