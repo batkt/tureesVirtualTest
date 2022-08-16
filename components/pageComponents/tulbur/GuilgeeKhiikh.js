@@ -14,6 +14,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 
+
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
@@ -32,7 +33,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та гэрээгээ сонгоно уу" });
+          notification.warning({ message: "Та дүн оруулгна уу" });
           return;
         }
 
@@ -134,6 +135,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         placeholder="Дүн"
         style={{ width: "100%" }}
         onChange={setDun}
+        min={0}
       />
       {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
