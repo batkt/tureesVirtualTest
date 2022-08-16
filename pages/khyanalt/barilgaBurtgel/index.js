@@ -216,6 +216,7 @@ function BarilgaBurtgel({ token }) {
   return (
     <Admin
       khuudasniiNer="barilgaBurtgel"
+      title="Барилга"
       className="px-4"
       tsonkhniiId={"61c2c6271c2830c4e6f90c85"}
     >
@@ -237,9 +238,8 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${
-                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                            } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                              } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
