@@ -214,7 +214,8 @@ function talbaiBurtgekh({ token }) {
     }
     if (talbar === "ashiglaltiinZardal") {
       talbaiState.niitAshiglaltiinZardal = (
-        utga * talbaiState.talbainKhemjee
+        utga * talbaiState.talbainKhemjee || 0
+
       ).toFixed(2);
       formRef.current.setFieldsValue({
         niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
@@ -776,11 +777,10 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -939,7 +939,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
