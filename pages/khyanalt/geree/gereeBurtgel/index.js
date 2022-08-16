@@ -451,24 +451,17 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      {
-        title: "Талбай",
-        dataIndex: "talbainDugaar",
-        align: "center",
-        ellipsis: true,
-        width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+
       {
         title: "Нэр",
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
-        width: "5rem",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
+
       {
         title: "Регистр",
         dataIndex: "register",
@@ -478,18 +471,15 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-
       {
-        title: "Төлбөр",
-        dataIndex: "sariinTurees",
-        align: "right",
+        title: "Ажилтан",
+        dataIndex: "burtgesenAjiltaniiNer",
+        align: "left",
         ellipsis: true,
-        width: "7rem",
-        render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0);
+        width: "10rem",
+        render: () => {
+          return "Админ";
         },
-        showSorterTooltip: false,
-        sorter: () => 0,
       },
       {
         title: "Эхлэх",
@@ -501,20 +491,7 @@ function ZakhialgiinKhyanalt() {
           return moment(data).format("YYYY-MM-DD");
         },
       },
-      {
-        title: "Өдөр",
-        dataIndex: "udur",
-        align: "center",
-        ellipsis: true,
-        width: "10rem",
-        render: (t, row) => {
-          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
-        },
-        showSorterTooltip: false,
-        sorter: (a, b) =>
-          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
-          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
-      },
+
       {
         title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
         dataIndex:
@@ -534,15 +511,41 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
-        title: "Ажилтан",
-        dataIndex: "burtgesenAjiltaniiNer",
-        align: "left",
+        title: "Талбай",
+        dataIndex: "talbainDugaar",
+        align: "center",
         ellipsis: true,
         width: "10rem",
-        render: () => {
-          return "Админ";
-        },
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
+      {
+        title: "Төлбөр",
+        dataIndex: "sariinTurees",
+        align: "right",
+        ellipsis: true,
+        width: "7rem",
+        render: (sariinTurees) => {
+          return formatNumber(sariinTurees || 0);
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: "Өдөр",
+        dataIndex: "udur",
+        align: "center",
+        ellipsis: true,
+        width: "6rem",
+        render: (t, row) => {
+          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
+        },
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
+          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
+      },
+
     ];
 
     return [
@@ -929,14 +932,14 @@ function ZakhialgiinKhyanalt() {
                   dataIndex: "khugatsaa",
                   align: "center",
                   ellipsis: true,
-                  width: "10rem",
+                  width: "6rem",
                 },
                 {
                   title: "Давхар",
                   dataIndex: "davkhar",
                   align: "center",
                   ellipsis: true,
-                  width: "10rem",
+                  width: "6rem",
                 },
                 {
                   title: "Утас",
@@ -948,6 +951,7 @@ function ZakhialgiinKhyanalt() {
                 {
                   title: "Төрөл",
                   dataIndex: "turul",
+                  align: "center",
                   ellipsis: true,
                   width: "6rem",
                 },

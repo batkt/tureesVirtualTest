@@ -75,6 +75,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
               message: "Амжилттай",
             });
             _.isFunction(onFinish) && onFinish();
+            _.isFunction(data.mutate) && data.mutate();
+
             destroy();
           })
           .catch(aldaaBarigch);

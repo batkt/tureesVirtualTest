@@ -66,9 +66,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -419,12 +418,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
