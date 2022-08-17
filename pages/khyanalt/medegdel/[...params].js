@@ -11,6 +11,8 @@ import getListMethod from "tools/function/crud/getListMethod";
 import formatNumber from "tools/function/formatNumber";
 import useSWR from "swr";
 
+import { uldegdeliinTurulKhurvuulya } from "./index"
+
 function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
   const { data } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
@@ -28,9 +30,8 @@ function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
 
   return (
     <div
-      className={`font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? (
         <Spin size="small" />
@@ -240,17 +241,15 @@ function index({ token, data }) {
               return (
                 <div
                   key={a._id}
-                  className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3 ${
-                    a.turul === "medegdel"
-                      ? "ml-auto rounded-br-none bg-blue-500"
-                      : "rounded-bl-none"
-                  }`}
+                  className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3 ${a.turul === "medegdel"
+                    ? "ml-auto rounded-br-none bg-blue-500"
+                    : "rounded-bl-none"
+                    }`}
                 >
                   <span className="text-white">{a.message}</span>
                   <div
-                    className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                      a.kharsanEsekh === true ? "" : "hidden"
-                    }`}
+                    className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
+                      }`}
                   >
                     <svg
                       width="20px"
@@ -283,7 +282,7 @@ function index({ token, data }) {
                     {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                   </span>
                   <span className="absolute right-0 -bottom-5 text-gray-500">
-                    {a.turul}
+                    {uldegdeliinTurulKhurvuulya(a.turul)}
                   </span>
                 </div>
               );
