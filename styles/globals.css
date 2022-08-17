@@ -64,6 +64,10 @@ audio::-webkit-media-controls-volume-control-container {
   .print {
     display: block !important;
   }
+  .overflownone{
+    overflow: unset;
+    height: auto !important;
+  }
 }
 
 .a5 {
