@@ -63,6 +63,7 @@ const turulAvya = (turul) => {
   else if (turul === "khyamdral") return "Хямдрал";
   else if (turul === "barter") return "Бартер";
   else if (turul === "baritsaa") return "Барьцаа";
+  else if (turul === "zalruulga") return "Залруулга";
 };
 
 function useGuilgee(token, gereeniiId, ognoo) {
@@ -194,7 +195,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Бүртгсэн огноо</div>
           <div>Тайлбар</div>
         </div>
-        <div className="overflow-y-auto" style={{ height: "calc(40vh)" }}>
+        <div className="overflow-y-auto overflownone" style={{ height: "calc(40vh)" }}>
           {guilgeeniiTuukh
             ?.map((a, i) => (
               <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
@@ -207,9 +208,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
                 <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
                 <div
-                  className={`p-1 ${
-                    a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                  }`}
+                  className={`p-1 ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                    }`}
                 >
                   {formatNumber(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
@@ -235,20 +235,21 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                     a.turul === "barter" ||
                     a.turul === "bank" ||
                     a.turul === "khyamdral" ||
+                    a.turul === "zalruulga" ||
                     a.turul === "baritsaa") && (
-                    <div className="contents justify-between">
-                      <Popconfirm
-                        title="Төлөлт устгах уу?"
-                        okText="Тийм"
-                        cancelText="Үгүй"
-                        onConfirm={() => tulultUstgaya(a)}
-                      >
-                        <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                          <DeleteOutlined />
-                        </div>
-                      </Popconfirm>
-                    </div>
-                  )}
+                      <div className="contents justify-between">
+                        <Popconfirm
+                          title="Төлөлт устгах уу?"
+                          okText="Тийм"
+                          cancelText="Үгүй"
+                          onConfirm={() => tulultUstgaya(a)}
+                        >
+                          <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                            <DeleteOutlined />
+                          </div>
+                        </Popconfirm>
+                      </div>
+                    )}
                 </div>
               </div>
             ))

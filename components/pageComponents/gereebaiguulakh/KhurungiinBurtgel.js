@@ -1,13 +1,13 @@
-import { Form, Select, Button, Input, InputNumber, notification } from "antd";
-import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { Form, Button, Input, Select, notification, Popconfirm } from "antd";
+import { ArrowRightOutlined, ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { toWords } from "mon_num";
-import useTalbai from "hooks/useTalbai";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
 import Aos from "aos";
-
-var timeout = null;
+import useTalbai from "hooks/useTalbai";
+import { useAuth } from "services/auth";
+import formatNumber from "tools/function/formatNumber";
 
 const formItemLayout = {
   labelCol: {
@@ -18,9 +18,26 @@ const formItemLayout = {
   },
 };
 
+function TalbaiSongolt({value,onChange,mode}) {
+  const {token,baiguullaga} = useAuth()
+
+  const {talbainiiGaralt,setTalbaiKhuudaslalt} = useTalbai(token,baiguullaga?._id)
+
+  function onValueChange(v) {
+    onChange(talbainiiGaralt.jagsaalt.find(a=>a._id === v))
+  }
+
+  return (
+    <Select placeholder='Талбай' filterOption={false} value={value} mode={mode} showSearch onChange={onValueChange} loading={!talbainiiGaralt} onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search }))}>
+      {talbainiiGaralt?.jagsaalt?.map(a=>{
+        return <Select.Option key={a._id}>{a.kod}</Select.Option>
+      })}
+    </Select>
+  )
+}
+
 const YurunkhiiMedeele = ({
   token,
-  baiguullaga,
   next,
   prev,
   onChange,
@@ -52,78 +69,47 @@ const YurunkhiiMedeele = ({
       });
   };
 
-  function talbainuudShalgaya(talbainuud, talbainDugaar) {
-    let sultalbainuud = [];
-    talbainuud.forEach((mur, index) => {
-      if (talbainuud.length > index)
-        sulEsekh(mur.kod, () => {
-          sultalbainuud.push(mur);
-          if (talbainuud.length - 1 === index)
-            talbainBurtgelBugulyu(sultalbainuud, talbainDugaar);
-        });
-    });
+  function talbainBurtgelBugulyu(talbainuud) {
+    console.log('talbainuud',talbainuud)
+    value.baritsaaAvakhDun = talbainuud.reduce((a,b)=>a+Number(b.talbainNiitUne || 0),0)
+    value.sariinTurees = talbainuud.reduce((a,b)=>a+Number(b.tureesiinTulbur || 0),0)
+    value.talbainNegjUne = talbainuud.reduce((a,b)=>a+b.talbainNegjUne,0)
+    value.talbainNiitUne = value.baritsaaAvakhDun
+    value.talbainKhemjee = talbainuud.reduce((a,b)=>a+b.talbainKhemjee,0)
+    value.zardliinDun = talbainuud.reduce((a,b)=>a+Number(b.niitAshiglaltiinZardal || 0),0)
+    value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
+    value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
+    value.davkhar = [...new Set(talbainuud.map((a)=>a.davkhar))].join(",")
+    value.talbainDugaar = talbainuud.map((a)=>a.kod).join(",");
+    form.setFieldsValue(value);
   }
 
-  function talbainBurtgelBugulyu(talbainuud, talbainDugaar) {
-    var talbai = {};
-    talbainuud?.forEach((a) => {
-      talbai.baritsaaAvakhDun =
-        (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-      talbai.sariinTurees = (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-      talbai.talbainNegjUne = (talbai?.talbainNegjUne || 0) + a.talbainNegjUne;
-      talbai.talbainNiitUne = (talbai?.talbainNiitUne || 0) + a.talbainNiitUne;
-      talbai.talbainKhemjee = (talbai?.talbainKhemjee || 0) + a.talbainKhemjee;
-      talbai.davkhar =
-        (!!talbai?.davkhar ? `${talbai?.davkhar},` : "") + a.davkhar;
-    });
-    talbai.talbainNegjUneUsgeer = toWords(talbai.talbainNegjUne);
-    talbai.talbainNiitUneUsgeer = toWords(talbai.talbainNiitUne);
-    talbai.davkhar = talbai.davkhar?.includes(",")
-      ? [...new Set(talbai.davkhar.split(","))].join(",")
-      : talbai.davkhar;
-    talbai.talbainDugaar = talbainDugaar;
-    form.setFieldsValue(talbai);
-    onChange({ ...value, ...talbai });
-  }
-
-  function utgaTseverleye() {
-    var talbai = {};
-    talbai.baritsaaAvakhDun = 0;
-    talbai.sariinTurees = 0;
-    talbai.talbainNegjUne = 0;
-    talbai.talbainNiitUne = 0;
-    talbai.talbainKhemjee = 0;
-    talbai.talbainNegjUneUsgeer = toWords(0);
-    talbai.talbainNiitUneUsgeer = toWords(0);
-    talbai.davkhar = 0;
-    form.setFieldsValue(talbai);
-    onChange({ ...value, ...talbai });
-  }
-
-  function talbainDugaarUurchilyu({ target }) {
-    if (typeof target.value !== "string") {
-      utgaTseverleye();
-      return;
-    }
-    const talbainDugaaruud = target.value?.includes(",")
-      ? [...new Set(target.value.split(","))]
-      : target.value;
-    uilchilgee(token)
-      .get("/talbai", {
-        params: {
-          query: {
-            kod: talbainDugaaruud,
-            barilgiinId,
-            baiguullagiinId: baiguullaga._id,
-          },
-        },
-      })
-      .then((a) => a.data)
-      .then((talbainuud) => {
-        if (talbainuud?.jagsaalt?.length === 0) utgaTseverleye();
-        talbainuudShalgaya(talbainuud?.jagsaalt, target.value);
+  function onChangeTalbai(v) {
+    if(!!value.talbainuud?.find(a=>a.kod === v.kod)){
+      notification.warning({
+        message: (
+          <div>
+            <b>{v.kod}</b> талбай нь гэрээн дээр
+            сонгогдсон байна.
+          </div>
+        ),
       });
+      return
+    }
+    sulEsekh(v.kod,()=>{
+      value.talbainuud = value.talbainuud || []
+      value.talbainuud.push(v)
+      talbainBurtgelBugulyu(value.talbainuud)
+      onChange({...value})
+    })
   }
+
+  function talbaiUstgaya(index) {
+    value.talbainuud.splice(index,1)
+    talbainBurtgelBugulyu(value.talbainuud)
+    onChange({...value})
+  }
+
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -137,82 +123,66 @@ const YurunkhiiMedeele = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label="Талбайн дугаар" name="talbainDugaar">
-          <Input
-            placeholder="Талбайн дугаар"
-            onChange={(e) => {
-              clearTimeout(timeout);
-              timeout = setTimeout(function () {
-                talbainDugaarUurchilyu(e);
-              }, 300);
-            }}
-          />
+        <Form.Item label="Талбай" >
+          <TalbaiSongolt value={''} onChange={onChangeTalbai}/>
         </Form.Item>
       </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
-        <Form.Item label="Талбайн нэгж үнэ" name="talbainNegjUne">
-          <InputNumber
-            placeholder="Талбайн нэгж үнэ"
-            disabled
-            style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100" className="space-y-2 pb-4">
+          {value.talbainuud?.map((talbai,index)=>{
+            return (
+              <div key={talbai?._id} className='p-2 rounded-md bg-gray-50 shadow-md space-y-2 border border-gray-400 group relative'>
+                <div className="font-medium text-xl">
+                  Код:{talbai.kod}
+                </div>
+                <div className="divide-y-2 border">
+                  <div className="grid grid-cols-12 divide-x-2">
+                    <div className="col-span-2 text-center">Давхар</div>
+                    <div className="col-span-2 text-center">m<sup>2</sup></div>
+                    <div className="col-span-4 text-center">Зардал</div>
+                    <div className="col-span-4 text-center">Нийт төлбөр</div>
+                  </div>
+                  <div className="grid grid-cols-12 divide-x-2">
+                    <div className="col-span-2 text-center">{talbai.davkhar}</div>
+                    <div className="col-span-2 text-center">{talbai.talbainKhemjee}</div>
+                    <div className="col-span-4 text-right pr-2">{formatNumber(talbai.niitAshiglaltiinZardal)}</div>
+                    <div className="col-span-4 text-right pr-2">{formatNumber(talbai.talbainNiitUne)}</div>
+                  </div>
+                </div>
+                <div className="flex flex-row justify-end">
+                  <div>Түрээсийн төлбөр:</div>
+                  <div className="text-right w-32 font-medium text-base">{formatNumber(talbai.tureesiinTulbur)}</div>
+                </div>
+                <div className="absolute -top-2 right-0 h-full bg-gray-300 rounded-r-md hidden group-hover:flex items-center justify-center p-2 text-lg">
+                  <Popconfirm
+                      title={`${talbai.kod} талбай устгах уу?`}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => talbaiUstgaya(index)}
+                  >
+                    <div className="cursor-pointer p-2 rounded-full bg-gray-100 text-red-500 bg-opacity-80" >
+                      <CloseOutlined/>
+                    </div>
+                  </Popconfirm>
+                </div>
+              </div>
+            )
+          })}
       </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
-        <Form.Item label="Талбайн нийт үнэ" name="talbainNiitUne">
-          <InputNumber
-            disabled
-            placeholder="Талбайн нийт үнэ"
-            style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
-        <Form.Item label="Талбайн хэмжээ" name="talbainKhemjee">
-          <InputNumber
-            disabled
-            placeholder="Талбайн хэмжээ"
-            style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
-        <Form.Item label="Давхар" name="davkhar">
-          <InputNumber
-            disabled
-            placeholder="Давхар"
-            style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
-        <Form.Item label="Ашиглалтын зардал" name="zardliinDun">
-          <InputNumber
-            disabled
-            placeholder="Ашиглалтын зардал"
-            style={{ width: "100%" }}
-            formatter={(value) =>
-              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-          />
-        </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200" className="py-5">
+          <div className="divide-y-2 border">
+            <div className="grid grid-cols-12 divide-x-2">
+              <div className="col-span-2 text-center">Давхар</div>
+              <div className="col-span-2 text-center">m<sup>2</sup></div>
+              <div className="col-span-4 text-center">Зардал</div>
+              <div className="col-span-4 text-center">Нийт төлбөр</div>
+            </div>
+            <div className="grid grid-cols-12 divide-x-2">
+              <div className="col-span-2 text-center font-medium text-base">{value.davkhar}</div>
+              <div className="col-span-2 text-center font-medium text-base">{value.talbainKhemjee}</div>
+              <div className="col-span-4 text-right pr-2 font-medium text-base">{formatNumber(value.zardliinDun)}</div>
+              <div className="col-span-4 text-right pr-2 font-medium text-base">{formatNumber(value.sariinTurees)}</div>
+            </div>
+          </div>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="600">
         <Form.Item label="Зориулалт" name="zoriulalt">

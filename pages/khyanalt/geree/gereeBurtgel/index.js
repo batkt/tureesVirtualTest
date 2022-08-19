@@ -441,103 +441,64 @@ function ZakhialgiinKhyanalt() {
 
   const columns = useMemo(() => {
     var jagsaalt = [
-      {
-        title: "Бүртгэсэн",
-        dataIndex: "createdAt",
-        ellipsis: true,
-        align: "center",
-        width: "8rem",
-        render(date) {
-          return moment(date).format("YYYY-MM-DD HH:mm");
-        },
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
         align: "center",
         ellipsis: true,
+        width: "1rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
-      {
-        title: "Талбай",
-        dataIndex: "talbainDugaar",
-        align: "center",
-        ellipsis: true,
-        width: "5rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+
       {
         title: "Нэр",
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
-        maxWidth: "12rem",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
+
       {
         title: "Регистр",
         dataIndex: "register",
         align: "center",
         ellipsis: true,
-        maxWidth: "15rem",
+        width: "6rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
       {
-        title: "Талбай /м2/",
-        dataIndex: "talbainKhemjee",
-        align: "center",
+        title: "Ажилтан",
+        dataIndex: "burtgesenAjiltaniiNer",
+        align: "left",
         ellipsis: true,
-        render: (talbainKhemjee) => {
-          return `${talbainKhemjee} м2`;
+        width: "10rem",
+        render: () => {
+          return "Админ";
         },
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-      {
-        title: "Төлбөр",
-        dataIndex: "sariinTurees",
-        align: "right",
-        ellipsis: true,
-        render: (sariinTurees) => {
-          return formatNumber(sariinTurees || 0);
-        },
-        showSorterTooltip: false,
-        sorter: () => 0,
       },
       {
         title: "Эхлэх",
         dataIndex: "gereeniiOgnoo",
         align: "center",
         ellipsis: true,
+        width: "6rem",
         render: (data) => {
           return moment(data).format("YYYY-MM-DD");
         },
       },
-      {
-        title: "Өдөр",
-        dataIndex: "udur",
-        align: "center",
-        ellipsis: true,
-        render: (t, row) => {
-          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
-        },
-        showSorterTooltip: false,
-        sorter: (a, b) =>
-          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
-          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
-      },
+
       {
         title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
         dataIndex:
           shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         align: "center",
         ellipsis: true,
+        width: "6rem",
         render: (data) => {
           let ognoo =
             shuult.utga === "Цуцласан"
@@ -550,14 +511,41 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
-        title: "Ажилтан",
-        dataIndex: "burtgesenAjiltaniiNer",
+        title: "Талбай",
+        dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
-        render: () => {
-          return "Админ";
-        },
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
+      {
+        title: "Төлбөр",
+        dataIndex: "sariinTurees",
+        align: "right",
+        ellipsis: true,
+        width: "7rem",
+        render: (sariinTurees) => {
+          return formatNumber(sariinTurees || 0);
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: "Өдөр",
+        dataIndex: "udur",
+        align: "center",
+        ellipsis: true,
+        width: "6rem",
+        render: (t, row) => {
+          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
+        },
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
+          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
+      },
+
     ];
 
     return [
@@ -568,7 +556,8 @@ function ZakhialgiinKhyanalt() {
         fixed: "right",
         className: "text-center",
         align: "center",
-        width: "3rem",
+        ellipsis: true,
+        width: "1rem",
         render: (data) => (
           <div className="flex flex-row justify-center">
             <Popover
@@ -673,7 +662,6 @@ function ZakhialgiinKhyanalt() {
       </Button>,
     ];
     modal({
-      width: "20vw",
       title: "Цуцалсан шалтгаан",
       icon: <MinusCircleOutlined />,
       content: (
@@ -825,7 +813,7 @@ function ZakhialgiinKhyanalt() {
     <Admin
       khuudasniiNer="gereeBurtgel"
       title="Гэрээний жагсаалт"
-      className="p-0 md:p-5"
+      className="p-0 md:p-5  "
       tsonkhniiId="61c2c5dc1c2830c4e6f90c6d"
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
@@ -850,17 +838,15 @@ function ZakhialgiinKhyanalt() {
           />
         )}
       </Drawer>
-      <Card className="cardgrid col-span-12 p-5">
+      <Card className="cardgrid col-span-12 p-5 ">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                }`}
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                  } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -871,11 +857,10 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
+                          className={`text-3xl ${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -885,11 +870,10 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                          className={`${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -920,20 +904,56 @@ function ZakhialgiinKhyanalt() {
               setShineBagana={setShineBagana}
               columns={[
                 {
+                  title: "Талбай /м2/",
+                  dataIndex: "talbainKhemjee",
+                  align: "center",
+                  ellipsis: true,
+                  width: "10rem",
+                  render: (talbainKhemjee) => {
+                    return `${talbainKhemjee} м2`;
+                  },
+                  showSorterTooltip: false,
+                  sorter: () => 0,
+                },
+                {
+                  title: "Бүртгэсэн",
+                  dataIndex: "createdAt",
+                  ellipsis: true,
+                  width: "6rem",
+                  align: "center",
+                  render(date) {
+                    return moment(date).format("YYYY-MM-DD HH:mm");
+                  },
+                  showSorterTooltip: false,
+                  sorter: () => 0,
+                },
+                {
                   title: "Хугацаа",
                   dataIndex: "khugatsaa",
+                  align: "center",
+                  ellipsis: true,
+                  width: "6rem",
                 },
                 {
                   title: "Давхар",
                   dataIndex: "davkhar",
+                  align: "center",
+                  ellipsis: true,
+                  width: "6rem",
                 },
                 {
                   title: "Утас",
                   dataIndex: "utas",
+                  align: "center",
+                  ellipsis: true,
+                  width: "10rem",
                 },
                 {
                   title: "Төрөл",
                   dataIndex: "turul",
+                  align: "center",
+                  ellipsis: true,
+                  width: "6rem",
                 },
               ]}
             />
@@ -975,14 +995,15 @@ function ZakhialgiinKhyanalt() {
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
-          className="mt-8 hidden overflow-auto md:block"
+          className="mt-8 hidden  md:block "
         >
           <Table
             bordered
             tableLayout="auto"
-            scroll={{ y: "calc(100vh - 32rem)" }}
+            scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 7rem)" }}
             size="small"
             loading={!gereeniiMedeelel}
+
             rowKey={(row) => row._id}
             onChange={(a, b, c) =>
               !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c)

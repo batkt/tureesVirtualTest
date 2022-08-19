@@ -329,7 +329,7 @@ function guilgeeniiTuukh({ token }) {
       ...turulColumns,
       {
         title: "Үйлдэл",
-        width: "9rem",
+        width: "6rem",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (text, row) => {

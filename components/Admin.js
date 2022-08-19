@@ -79,6 +79,7 @@ function Admin({
 
   return (
     <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
+
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -99,12 +100,11 @@ function Admin({
         />
       )}
       <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
-          dedKhuudas ? "w-full" : "main"
-        }`}
+        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
+          }`}
       >
-        <div className="flex h-12 flex-row justify-between border-b p-2">
-          <div className="flex flex-row transition-all">
+        <div className="h-12 border-b p-2 flex flex-row justify-between ">
+          <div className="flex p-4 flex-row items-center">
             {!dedKhuudas && (
               <MTses
                 khuudasnuud={khuudasnuud}
@@ -119,17 +119,19 @@ function Admin({
             )}
             {dedKhuudas && (
               <button
-                className="iconbutton focus:outline-none flex h-8 w-8 items-center justify-center rounded-full focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+                className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
               >
-                <LeftOutlined className="flex items-center justify-center text-2xl dark:text-gray-50" />
+                <LeftOutlined
+                  style={{ fontSize: "10px" }}
+                  className="flex items-center justify-center dark:text-gray-50" />
               </button>
             )}
             <h2
               id="garchig"
-              className="mr-5 whitespace-normal text-lg font-medium dark:text-gray-300 md:whitespace-nowrap"
+              className=" text-green-800 flex items-center justify-center   text-base  font-semibold dark:text-white "
             >
               {title}
             </h2>
