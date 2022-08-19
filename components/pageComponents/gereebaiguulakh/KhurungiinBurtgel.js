@@ -80,6 +80,7 @@ const YurunkhiiMedeele = ({
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a)=>a.davkhar))].join(",")
+    value.talbainIdnuud = talbainuud.map(a=>a._id)
     value.talbainDugaar = talbainuud.map((a)=>a.kod).join(",");
     form.setFieldsValue(value);
   }
