@@ -3,18 +3,26 @@ import { useMemo, useState } from "react";
 import { useAuth } from "services/auth";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
+function searchGenerator(keys, search) {
+  return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
+}
+
 function fetcher(
   token,
   url,
   query,
   order,
   select,
-  { search = "", jagsaalt, ...khuudaslalt }
+  { search = "", jagsaalt, ...khuudaslalt },
+  searchKeys = []
 ) {
   return uilchilgee(token)
     .get(url, {
       params: {
-        query,
+        query: {
+          ...query,
+          $or: searchGenerator(searchKeys, search),
+        },
         order,
         select,
         ...khuudaslalt,
@@ -26,7 +34,7 @@ function fetcher(
 
 var timeout = null;
 
-function useJagsaalt(url, query, order, select) {
+function useJagsaalt(url, query, order, select, searchKeys) {
   const { token } = useAuth();
 
   const [khuudaslalt, setKhuudaslalt] = useState({
@@ -37,7 +45,9 @@ function useJagsaalt(url, query, order, select) {
   });
 
   const { data, mutate } = useSWR(
-    token && url ? [token, url, query, order, select, khuudaslalt] : null,
+    token && url
+      ? [token, url, query, order, select, khuudaslalt, searchKeys]
+      : null,
     fetcher,
     {
       revalidateOnFocus: false,

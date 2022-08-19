@@ -135,6 +135,15 @@ function TableGuilgee({
   );
 }
 
+const searchKeys = [
+  "register",
+  "talbainDugaar",
+  "gereeniiDugaar",
+  "utas",
+  "ovog",
+  "ner",
+];
+
 function guilgeeniiTuukh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -241,7 +250,7 @@ function guilgeeniiTuukh({ token }) {
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
     refresh,
-  } = useJagsaalt(sericeName, query, order);
+  } = useJagsaalt(sericeName, query, order, undefined, searchKeys);
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(
