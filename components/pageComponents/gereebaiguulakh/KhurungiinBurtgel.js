@@ -1,6 +1,6 @@
-import { Form, Button, Input, InputNumber, Select, Divider, notification, Popconfirm } from "antd";
+import { Form, Button, Input, Select, notification, Popconfirm } from "antd";
 import { ArrowRightOutlined, ArrowLeftOutlined, CloseOutlined } from "@ant-design/icons";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import { toWords } from "mon_num";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
@@ -8,8 +8,6 @@ import Aos from "aos";
 import useTalbai from "hooks/useTalbai";
 import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
-
-var timeout = null;
 
 const formItemLayout = {
   labelCol: {
