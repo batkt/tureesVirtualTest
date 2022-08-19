@@ -53,15 +53,15 @@ function index({ token, data }) {
       <div className="box col-span-12 flex flex-row items-center p-2">
         <div className="flex font-medium">
           <div className="flex flex-col gap-3">
-            <div className="flex gap-3 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50">
+            <div className="flex gap-3 text-xl text-black text-opacity-70 dark:text-white dark:text-opacity-70">
               <div className="flex">
-                <p className="mr-3 uppercase">{data?.ovog}</p> овогтой
+                овог: <p className="ml-2 uppercase">{data?.ovog}</p>
               </div>
               <div className="flex">
-                <p className="mr-3 uppercase">{data?.ner}</p> эрхийн тохиргоо
+                нэр: <p className="ml-2 uppercase">{data?.ner}</p>
               </div>
             </div>
-            <div className="ml-5 flex flex-row items-center space-x-3 font-medium">
+            <div className="flex flex-row items-center space-x-3 border-t-2 pt-3 font-medium">
               <div>Барилга сонгох:</div>
               <div className="flex flex-wrap gap-5">
                 {barilguud?.map((a) => (

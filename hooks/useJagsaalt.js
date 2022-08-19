@@ -24,6 +24,8 @@ function fetcher(
     .catch(aldaaBarigch);
 }
 
+var timeout = null;
+
 function useJagsaalt(url, query, order, select) {
   const { token } = useAuth();
 
@@ -77,7 +79,7 @@ function useJagsaalt(url, query, order, select) {
     return [...(khuudaslalt?.jagsaalt || []), ...(data?.jagsaalt || [])];
   }, [khuudaslalt, data]);
 
-  return { data, mutate, jagsaalt, next, refresh, onSearch };
+  return { data, mutate, jagsaalt, next, refresh, onSearch, setKhuudaslalt };
 }
 
 export default useJagsaalt;

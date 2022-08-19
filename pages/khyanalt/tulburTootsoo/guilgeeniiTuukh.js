@@ -14,17 +14,12 @@ import {
   Progress,
   Select,
   Popover,
-  Menu,
-  Checkbox,
 } from "antd";
 import {
   FileExcelOutlined,
   ExclamationCircleOutlined,
-  UploadOutlined,
   DownloadOutlined,
   DownOutlined,
-  PlusOutlined,
-  UnorderedListOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -33,19 +28,18 @@ import useOrder from "tools/function/useOrder";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 
-import Khungulukh from "components/pageComponents/tulbur/Khungulukh";
 import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
 import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
 import useSWR from "swr";
 import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile";
 import CardList from "components/cardList";
-import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Aos from "aos";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
+import useJagsaalt from "hooks/useJagsaalt";
+import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -169,24 +163,56 @@ function guilgeeniiTuukh({ token }) {
     if (!JSON.stringify(s).includes("uldegdel")) onChangeTable(r, o, s);
   }
 
-  const query = React.useMemo(() => {
-    if (turul === "voucher")
-      return {
-        davkhar,
-        baiguullagiinId: baiguullaga._id,
-        "avlaga.guilgeenuud": {
-          $elemMatch: {
-            ognoo: {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-            },
-            tulsunDun: { $gte: 0 },
-            turul: "voucher",
-          },
-        },
-      };
-    else if (turul === "avlaga")
-      return {
+  const { sericeName, query, turulColumns } = React.useMemo(() => {
+    let sericeName = "/geree";
+    let query = {};
+    let turulColumns = [];
+    let ekhlekhOgnoo = moment(ognoo[0])
+      .startOf("month")
+      .format("YYYY-MM-DD 00:00:00");
+    let duusakhOgnoo = moment(ognoo[1])
+      .endOf("month")
+      .format("YYYY-MM-DD 23:59:59");
+
+    switch (turul) {
+      case "voucher":
+        sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+
+        turulColumns.push({
+          dataIndex: "voucherDun",
+          title: "Ваучерын дүн",
+          width: "7rem",
+          align: "right",
+          render: (v) => formatNumber(v),
+        });
+        break;
+      case "khungulult":
+        sericeName = `/khungulultteiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+        turulColumns.push({
+          dataIndex: "khungulult",
+          title: "Хөнгөлөлт",
+          width: "6rem",
+          align: "right",
+          render: (v) => formatNumber(v),
+        });
+        break;
+      case "eneSardTulsun":
+        sericeName = `/guitsetgelteiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
+        turulColumns.push({
+          dataIndex: "tulsunDun",
+          title: "Төлсөн дүн",
+          width: "6rem",
+          align: "right",
+          render: (v) => formatNumber(v),
+        });
+        break;
+      default:
+        break;
+    }
+
+    if (turul === "avlaga") {
+      sericeName = null;
+      query = {
         "avlaga.guilgeenuud.ognoo": {
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
         },
@@ -196,63 +222,26 @@ function guilgeeniiTuukh({ token }) {
           $ne: -1,
         },
       };
-    else if (turul === "tsutslagdsanAvlaga")
-      return {
+    } else if (turul === "tsutslagdsanAvlaga")
+      query = {
         baiguullagiinId: baiguullaga._id,
         davkhar,
         tuluv: -1,
       };
     else if (turul === "eneSardTulukh")
-      return {
+      query = {
         davkhar,
       };
-    else if (turul === "eneSardTulsun")
-      return {
-        davkhar,
-        tuluv: { $ne: -1 },
-        baiguullagiinId: baiguullaga?._id,
-        "avlaga.guilgeenuud": {
-          $elemMatch: {
-            ognoo: {
-              $gte: moment(ognoo[0])
-                .startOf("month")
-                .format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1])
-                .endOf("month")
-                .format("YYYY-MM-DD 23:59:59"),
-            },
-            tulsunDun: {
-              $gt: 0,
-            },
-          },
-        },
-      };
-    else if (turul === "khungulult")
-      return {
-        davkhar,
-        "avlaga.guilgeenuud.ognoo": {
-          $gte: moment(ognoo[0]).startOf("month").format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
-        },
-        baiguullagiinId: baiguullaga?._id,
-        "avlaga.guilgeenuud.khyamdral": {
-          $gt: 0,
-        },
-        tuluv: { $ne: -1 },
-      };
-    return { davkhar, tuluv: { $ne: -1 } };
+    else query = { davkhar, baiguullagiinId: baiguullaga?._id };
+    return { sericeName, query, turulColumns };
   }, [turul, ognoo, davkhar]);
 
-  const { gereeniiMedeelel, setGereeniiKhuudaslalt, gereeniiMedeelelMutate } =
-    useGereeniiJagsaalt(
-      turul !== "eneSardTulukh" && token,
-      baiguullaga?._id,
-      undefined,
-      query,
-      undefined,
-      undefined,
-      order
-    );
+  const {
+    data,
+    onSearch: onSearchMedeelel,
+    setKhuudaslalt,
+    refresh,
+  } = useJagsaalt(sericeName, query, order);
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
     useEneSardTuluuguiGereenuudAvya(
@@ -260,6 +249,27 @@ function guilgeeniiTuukh({ token }) {
       ognoo,
       query
     );
+
+  const { gereeniiMedeelel, onSearch } = useMemo(() => {
+    return {
+      gereeniiMedeelel:
+        turul === "eneSardTulukh" ? eneSardTuluuguiGereenuud : data,
+      onSearch: (search) => {
+        onSearchMedeelel(search);
+        setEneSardTuluuguiGereenuud((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }));
+      },
+    };
+  }, [
+    turul,
+    eneSardTuluuguiGereenuud,
+    data,
+    onSearchMedeelel,
+    setEneSardTuluuguiGereenuud,
+  ]);
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -316,9 +326,10 @@ function guilgeeniiTuukh({ token }) {
     return [
       ...jagsaalt,
       ...shineBagana,
+      ...turulColumns,
       {
         title: "Үйлдэл",
-        width: "6rem",
+        width: "9rem",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (text, row) => {
@@ -444,18 +455,24 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
       },
     ];
-  }, [gereeniiMedeelel, loadingIndex, delgegdsenGeree, shineBagana]);
+  }, [
+    gereeniiMedeelel,
+    loadingIndex,
+    delgegdsenGeree,
+    shineBagana,
+    turulColumns,
+  ]);
 
   //#endregion
 
   //#region handlers
   function onChangeTurul(turul) {
     setTurul(turul);
-    setGereeniiKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
+    setKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
   }
 
   function refreshData() {
-    gereeniiMedeelelMutate();
+    refresh();
     tolooguiGereeniiTooMutate();
     refTuukh.current?.refreshData();
   }
@@ -506,29 +523,6 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
-  function khungulultKhiiya(data) {
-    const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
-      </Button>,
-    ];
-    modal({
-      title: "",
-      icon: <FileExcelOutlined />,
-      content: (
-        <Khungulukh
-          data={data}
-          ref={ref}
-          token={token}
-          baiguullagiinId={baiguullaga?._id}
-          onFinish={refreshData}
-        />
-      ),
-      footer,
-    });
-  }
-
   //#endregion
 
   return (
@@ -536,21 +530,7 @@ function guilgeeniiTuukh({ token }) {
       title="Гүйлгээний түүх"
       khuudasniiNer="guilgeeniiTuukh"
       className="p-0 md:p-4"
-      onSearch={(search) => {
-        if (loadingIndex !== 0) setLoadingIndex(0);
-        if (turul !== "eneSardTulukh")
-          setGereeniiKhuudaslalt((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }));
-        else
-          setEneSardTuluuguiGereenuud((a) => ({
-            ...a,
-            search,
-            khuudasniiDugaar: 1,
-          }));
-      }}
+      onSearch={onSearch}
       tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
     >
       <Card className="cardgrid col-span-12 p-5">
@@ -643,8 +623,7 @@ function guilgeeniiTuukh({ token }) {
                                 />
                               </div>
                               <div className="text-xl font-bold text-red-500">
-                                {eneSardTuluuguiGereenuud?.niitMur ||
-                                  tolooguiGereeniiToo?.too}
+                                {tolooguiGereeniiToo?.too}
                               </div>
                             </>
                           )}
@@ -840,16 +819,8 @@ function guilgeeniiTuukh({ token }) {
         >
           <TableGuilgee
             columns={columns}
-            garalt={
-              turul === "eneSardTulukh"
-                ? eneSardTuluuguiGereenuud
-                : gereeniiMedeelel
-            }
-            setKhuudaslalt={
-              turul === "eneSardTulukh"
-                ? setEneSardTuluuguiGereenuud
-                : setGereeniiKhuudaslalt
-            }
+            garalt={gereeniiMedeelel}
+            setKhuudaslalt={setKhuudaslalt}
             setLoadingIndex={setLoadingIndex}
             refTuukh={refTuukh}
             token={token}
@@ -863,11 +834,7 @@ function guilgeeniiTuukh({ token }) {
         <CardList
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"
-          jagsaalt={
-            turul === "eneSardTulukh"
-              ? eneSardTuluuguiGereenuud?.jagsaalt
-              : gereeniiMedeelel?.jagsaalt
-          }
+          jagsaalt={gereeniiMedeelel?.jagsaalt}
           Component={GuilgeenTuukhTile}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,
