@@ -38,7 +38,6 @@ function TalbaiSongolt({value,onChange,mode}) {
 
 const YurunkhiiMedeele = ({
   token,
-  baiguullaga,
   next,
   prev,
   onChange,
@@ -124,7 +123,7 @@ const YurunkhiiMedeele = ({
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label="Талбайн дугаар" >
+        <Form.Item label="Талбай" >
           <TalbaiSongolt value={''} onChange={onChangeTalbai}/>
         </Form.Item>
       </div>
