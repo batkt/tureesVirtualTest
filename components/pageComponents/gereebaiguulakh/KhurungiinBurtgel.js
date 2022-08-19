@@ -8,6 +8,7 @@ import Aos from "aos";
 import useTalbai from "hooks/useTalbai";
 import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
+import getListMethod from "tools/function/crud/getListMethod";
 
 const formItemLayout = {
   labelCol: {
@@ -46,6 +47,15 @@ const YurunkhiiMedeele = ({
 }) => {
   const [form] = Form.useForm();
 
+  useEffect(()=>{
+    if(!!value.talbainIdnuud && !value.talbainuud){
+      getListMethod('talbai',token,{query:{_id:{$in:value.talbainIdnuud}}}).then(({data})=>{
+        value.talbainuud = data.jagsaalt
+        onChange({...value})
+      })
+    }
+  },[value])
+
   const sulEsekh = (talbainDugaar, callback) => {
     uilchilgee(token)
       .get("/talbainSulEskhiigShalgay", {
@@ -80,6 +90,7 @@ const YurunkhiiMedeele = ({
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a)=>a.davkhar))].join(",")
+    value.talbainIdnuud = talbainuud.map(a=>a._id)
     value.talbainDugaar = talbainuud.map((a)=>a.kod).join(",");
     form.setFieldsValue(value);
   }
