@@ -33,7 +33,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та дүн оруулгна уу" });
+          notification.warning({ message: "Та дүн оруулна уу" });
           return;
         }
 

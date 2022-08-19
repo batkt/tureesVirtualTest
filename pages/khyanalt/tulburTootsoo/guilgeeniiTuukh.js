@@ -316,7 +316,7 @@ function guilgeeniiTuukh({ token }) {
       ...shineBagana,
       {
         title: "Үйлдэл",
-        width: "6rem",
+        width: "10rem",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (text, row) => {
