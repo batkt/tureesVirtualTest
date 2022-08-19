@@ -47,7 +47,7 @@ const { TabPane } = Tabs;
 const str = "A";
 
 function Anket({ token }) {
-  const { ajiltan } = useAuth();
+  const { ajiltan, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
@@ -160,7 +160,12 @@ function Anket({ token }) {
           visible={anketIlgeekh === true}
         >
           {anketIlgeekh === true && (
-            <AnketIlgeekh ref={ilgeekhRef} data={asuult.jagsaalt} />
+            <AnketIlgeekh
+              ref={ilgeekhRef}
+              token={token}
+              data={asuult.jagsaalt}
+              barilgiinId={barilgiinId}
+            />
           )}
         </Drawer>
         <div>
@@ -181,7 +186,10 @@ function Anket({ token }) {
             tab={<span className="text-base font-medium">Асуумж</span>}
           >
             <div className="grid grid-cols-12 gap-5">
-              <div className="box relative col-span-12 p-5 pr-8 pt-1 md:col-span-4 xl:col-span-3">
+              <div
+                className="box relative col-span-12 py-5 pt-1 md:col-span-4 xl:col-span-3"
+                style={{ height: "80vh" }}
+              >
                 <span className="font-medium dark:text-gray-100">
                   Анкетын загвар үүсгэх
                 </span>
@@ -196,6 +204,7 @@ function Anket({ token }) {
                 >
                   <Form.Item name="_id" hidden></Form.Item>
                   <Form.Item
+                    className="pl-5 pr-8"
                     name="ner"
                     rules={[
                       {
@@ -207,6 +216,7 @@ function Anket({ token }) {
                     <Input placeholder="Анкетын нэр" />
                   </Form.Item>
                   <Form.Item
+                    className="pl-5 pr-8"
                     name="turul"
                     rules={[
                       {
@@ -217,6 +227,7 @@ function Anket({ token }) {
                   >
                     <Input placeholder="Төрөл" />
                   </Form.Item>
+
                   <Form.List
                     rules={[
                       {
@@ -228,109 +239,119 @@ function Anket({ token }) {
                   >
                     {(fields, { add, remove }, { errors }) => (
                       <>
-                        {fields.map((key, name, fieldKey, ...restField) => (
-                          <Form.Item
-                            className="rounded-md border-4 bg-black bg-opacity-5 py-4 px-2 dark:border-gray-700 dark:bg-white dark:bg-opacity-10"
-                            key={fieldKey.key}
-                          >
-                            <div className="relative mb-2 space-y-3">
-                              <Form.Item
-                                name={[name, "asuult"]}
-                                fieldKey={[fieldKey, "asuult"]}
-                                {...restField}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Асуулт оруулна уу!",
-                                  },
-                                ]}
-                                //validateTrigger={["onChange", "onBlur"]}
-
-                                noStyle
-                              >
-                                <Input
-                                  placeholder={`Асуулт ${name + 1}`}
-                                  style={{ width: "100%" }}
-                                />
-                              </Form.Item>
-                              <Form.Item
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Төрөл сонгоно уу!",
-                                  },
-                                ]}
-                                name={[name, "turul"]}
-                                fieldKey={[fieldKey, "turul"]}
-                                {...restField}
-                                noStyle
-                              >
-                                <Select
-                                  placeholder="Хариултын төрөл"
-                                  options={[
-                                    { label: "Бөглөх", value: "boglokh" },
-                                    { label: "Сонгох", value: "songokh" },
-                                  ]}
-                                  onChange={(e) =>
-                                    e === "songokh"
-                                      ? setHide(false)
-                                      : setHide(true)
-                                  }
-                                />
-                              </Form.Item>
-                              {fields.length > 1 ? (
-                                <CloseCircleOutlined
-                                  className="dynamic-delete-button red absolute -top-16 -right-6 text-3xl text-black text-opacity-60  dark:text-white dark:text-opacity-50"
-                                  onClick={() => remove(name)}
-                                />
-                              ) : null}
-                            </div>
-                            <Form.List
-                              name={[name, "khariultuud"]}
-                              fieldKey={[fieldKey, "khariultuud"]}
-                              {...restField}
-                              noStyle
+                        <div
+                          className="-my-5 w-full overflow-y-auto py-5 pl-5 pr-8"
+                          style={{ maxHeight: "50vh" }}
+                        >
+                          {fields.map((key, name, fieldKey, ...restField) => (
+                            <Form.Item
+                              className="rounded-md border-4 bg-black bg-opacity-5 py-4 px-2 dark:border-gray-700 dark:bg-white dark:bg-opacity-10"
+                              key={fieldKey.key}
                             >
-                              {(fields, { add, remove }, { errors }) => (
-                                <>
-                                  {fields.map(
-                                    (key, khname, khfieldKey, ...restField) => (
-                                      <Form.Item
-                                        rules={[{ required: true }]}
-                                        fieldKey={[khfieldKey]}
-                                        name={[khname]}
-                                        noStyle
-                                      >
-                                        <div className="relative py-2 pr-8">
-                                          <Input
-                                            placeholder={`Хариулт ${String.fromCharCode(
-                                              str.charCodeAt(str.length - 1) +
-                                                khname
-                                            )}`}
-                                            style={{ width: "100%" }}
-                                          />
-                                          <MinusCircleOutlined
-                                            className="dynamic-delete-button absolute right-2 top-0 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
-                                            onClick={() => remove(name)}
-                                          />
-                                        </div>
-                                      </Form.Item>
-                                    )
-                                  )}
-                                  <Button
-                                    className="mt-3 dark:bg-gray-800 dark:text-white "
+                              <div className="relative mb-2 space-y-3">
+                                <Form.Item
+                                  name={[name, "asuult"]}
+                                  fieldKey={[fieldKey, "asuult"]}
+                                  {...restField}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Асуулт оруулна уу!",
+                                    },
+                                  ]}
+                                  //validateTrigger={["onChange", "onBlur"]}
+
+                                  noStyle
+                                >
+                                  <Input
+                                    placeholder={`Асуулт ${name + 1}`}
                                     style={{ width: "100%" }}
-                                    onClick={() => add([name])}
-                                    icon={<PlusOutlined />}
-                                  >
-                                    Хариулт оруулах
-                                  </Button>
-                                </>
-                              )}
-                            </Form.List>
-                          </Form.Item>
-                        ))}
-                        <Form.Item className="pb-3">
+                                  />
+                                </Form.Item>
+                                <Form.Item
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Төрөл сонгоно уу!",
+                                    },
+                                  ]}
+                                  name={[name, "turul"]}
+                                  fieldKey={[fieldKey, "turul"]}
+                                  {...restField}
+                                  noStyle
+                                >
+                                  <Select
+                                    placeholder="Хариултын төрөл"
+                                    options={[
+                                      { label: "Бөглөх", value: "boglokh" },
+                                      { label: "Сонгох", value: "songokh" },
+                                    ]}
+                                    onChange={(e) =>
+                                      e === "songokh"
+                                        ? setHide(false)
+                                        : setHide(true)
+                                    }
+                                  />
+                                </Form.Item>
+                                {fields.length > 1 ? (
+                                  <CloseCircleOutlined
+                                    className="dynamic-delete-button red absolute -top-16 -right-6 text-3xl text-black text-opacity-60  dark:text-white dark:text-opacity-50"
+                                    onClick={() => remove(name)}
+                                  />
+                                ) : null}
+                              </div>
+                              <Form.List
+                                name={[name, "khariultuud"]}
+                                fieldKey={[fieldKey, "khariultuud"]}
+                                {...restField}
+                                noStyle
+                              >
+                                {(fields, { add, remove }, { errors }) => (
+                                  <>
+                                    {fields.map(
+                                      (
+                                        key,
+                                        khname,
+                                        khfieldKey,
+                                        ...restField
+                                      ) => (
+                                        <Form.Item
+                                          rules={[{ required: true }]}
+                                          fieldKey={[khfieldKey]}
+                                          name={[khname]}
+                                          noStyle
+                                        >
+                                          <div className="relative py-2 pr-8">
+                                            <Input
+                                              placeholder={`Хариулт ${String.fromCharCode(
+                                                str.charCodeAt(str.length - 1) +
+                                                  khname
+                                              )}`}
+                                              style={{ width: "100%" }}
+                                            />
+                                            <MinusCircleOutlined
+                                              className="dynamic-delete-button absolute right-2 top-0 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
+                                              onClick={() => remove(name)}
+                                            />
+                                          </div>
+                                        </Form.Item>
+                                      )
+                                    )}
+                                    <Button
+                                      className="mt-3 dark:bg-gray-800 dark:text-white "
+                                      style={{ width: "100%" }}
+                                      onClick={() => add([name])}
+                                      icon={<PlusOutlined />}
+                                    >
+                                      Хариулт оруулах
+                                    </Button>
+                                  </>
+                                )}
+                              </Form.List>
+                            </Form.Item>
+                          ))}
+                        </div>
+                        <Form.Item className="pl-5 pr-8 pb-3">
                           <Button
                             type="dashed"
                             onClick={() => add()}
@@ -345,6 +366,7 @@ function Anket({ token }) {
                       </>
                     )}
                   </Form.List>
+
                   <Form.Item wrapperCol={6}>
                     <Button
                       type="primary"
@@ -366,23 +388,25 @@ function Anket({ token }) {
                       <div
                         className=" group flex h-24 w-28 cursor-pointer items-end justify-center overflow-hidden rounded-md border-2 shadow-md  dark:bg-white dark:bg-opacity-30"
                         key={a._id}
-                        onClick={() => anketZagvar(a)}
                       >
                         <img className="absolute w-36" src="/anket.png" />
-                        <div className="z-50 w-full bg-black bg-opacity-50 px-2  ">
+                        <div className="z-0 w-full bg-black bg-opacity-50 px-2  ">
                           <div className="text-center text-base font-medium text-white">
                             {a.ner}
                           </div>
                         </div>
                         <div className="absolute hidden h-24 w-28 transform justify-between rounded-md transition-all group-hover:relative group-hover:flex ">
-                          <div className="absolute -top-2 h-28 w-28 animate-spin rounded-md border-2 bg-opacity-50 dark:border-white dark:border-opacity-30"></div>
+                          <div
+                            onClick={() => anketZagvar(a)}
+                            className="absolute h-24 w-28 animate-pulse rounded-md bg-white bg-opacity-50 dark:border-white dark:border-opacity-30"
+                          ></div>
                           <Button
                             className=" -top-3 -left-2 bg-black bg-opacity-40 text-green-700 transition-all hover:border-green-700 hover:bg-green-700 hover:bg-opacity-40 hover:text-white group-hover:block dark:bg-green-700 dark:bg-opacity-50 dark:text-white"
                             onClick={(e) => {
                               e.stopPropagation();
                               AnketZasay(a);
                             }}
-                            icon={<ToolOutlined />}
+                            icon={<EditOutlined />}
                           />
                           <Popconfirm
                             placement="right"
