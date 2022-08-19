@@ -4,7 +4,9 @@ import { useAuth } from "services/auth";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function searchGenerator(keys, search) {
-  return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
+  if (keys.length > 0)
+    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
+  return undefined;
 }
 
 function fetcher(
