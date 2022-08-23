@@ -182,7 +182,6 @@ function guilgeeniiTuukh({ token }) {
     let duusakhOgnoo = moment(ognoo[1])
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
-
     switch (turul) {
       case "voucher":
         sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
@@ -220,7 +219,6 @@ function guilgeeniiTuukh({ token }) {
     }
 
     if (turul === "avlaga") {
-      sericeName = null;
       query = {
         "avlaga.guilgeenuud.ognoo": {
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
@@ -230,20 +228,21 @@ function guilgeeniiTuukh({ token }) {
         tuluv: {
           $ne: -1,
         },
+        barilgiinId
       };
     } else if (turul === "tsutslagdsanAvlaga")
       query = {
         baiguullagiinId: baiguullaga._id,
         davkhar,
         tuluv: -1,
+        barilgiinId
       };
-    else if (turul === "eneSardTulukh")
-      query = {
-        davkhar,
-      };
-    else query = { davkhar, baiguullagiinId: baiguullaga?._id };
+    else if (turul === "eneSardTulukh"){
+      sericeName = null;
+    }
+    else query = { davkhar, baiguullagiinId: baiguullaga?._id ,barilgiinId};
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar]);
+  }, [turul, ognoo, davkhar,barilgiinId]);
 
   const {
     data,
@@ -279,6 +278,8 @@ function guilgeeniiTuukh({ token }) {
     onSearchMedeelel,
     setEneSardTuluuguiGereenuud,
   ]);
+
+  console.log(turul)
 
   const columns = useMemo(() => {
     var jagsaalt = [
