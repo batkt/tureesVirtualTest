@@ -136,7 +136,7 @@ export const getServerSideProps = async (ctx, ugudulAvchirya) => {
     let data = null;
     if (!!ctx?.query?.anketId)
       data = await readMethod(
-        "asuult",
+        "asuultAvya",
         session?.tureestoken,
         ctx.query.anketId
       ).then((a) => a.data);
