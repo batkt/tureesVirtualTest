@@ -1,38 +1,31 @@
 import {
   Button,
-  DatePicker,
   Drawer,
-  Dropdown,
   Form,
   Input,
-  Menu,
   message,
   Popconfirm,
   Select,
   Space,
+  Table,
   Tabs,
 } from "antd";
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import moment from "moment";
 import _ from "lodash";
-const garalt = {
-  khuudasniiDugaar: 1,
-  khuudasniiKhemjee: 10,
-};
 
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
 import {
   CloseCircleOutlined,
-  CloseCircleTwoTone,
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
   FileExcelOutlined,
   MinusCircleOutlined,
   PlusOutlined,
   SendOutlined,
-  ToolOutlined,
 } from "@ant-design/icons";
 
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -41,7 +34,6 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { modal } from "components/ant/Modal";
 import AnketBurtgel from "components/pageComponents/anket/[id]";
 import AnketIlgeekh from "components/pageComponents/anket/AnketIlgeekh";
-import { destroyCookie } from "nookies";
 
 const { TabPane } = Tabs;
 const str = "A";
@@ -62,10 +54,52 @@ function Anket({ token }) {
   const [anketIlgeekh, setAnketIlgeekh] = useState(false);
   const [zasakhEsekh, setZasakhEsekh] = useState(false);
   const [hide, setHide] = React.useState(true);
+  const [songogdsonAsuult, setSongogdsonAsuult] = useState();
+
+  const query = useMemo(() => {
+    return { asuultiinId: songogdsonAsuult?._id };
+  }, [songogdsonAsuult]);
+
+  const khariult = useJagsaalt(
+    ajiltan && songogdsonAsuult && "/khariult",
+    query
+  );
 
   function onChangeOgnoo(date, dateString) {
     setEkhlekhOgnoo(date);
   }
+
+  const columns = useMemo(() => {
+    let returnValue = [
+      {
+        title: "№",
+        width: "3rem",
+        align: "center",
+        render: (text, record, index) =>
+          (khariult?.khuudasniiDugaar || 0) *
+            (khariult?.khuudasniiKhemjee || 0) -
+          (khariult?.khuudasniiKhemjee || 0) +
+          index +
+          1,
+      },
+    ];
+    songogdsonAsuult?.asuultuud?.forEach((mur) =>
+      returnValue.push({ title: mur.asuult, dataIndex: mur.asuult })
+    );
+    return returnValue;
+  }, [songogdsonAsuult]);
+
+  const dataSource = useMemo(() => {
+    let returnValue = [];
+    khariult.jagsaalt.forEach((mur, index) => {
+      let murObject = {};
+      mur.khariultuud.forEach((khariult) => {
+        murObject[khariult.asuult] = khariult.khariult;
+      });
+      returnValue.push(murObject);
+    });
+    return returnValue;
+  }, [khariult]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -138,19 +172,15 @@ function Anket({ token }) {
       footer,
     });
   }
+  function anketKharakh(data) {
+    setSongogdsonAsuult(data);
+  }
 
   return (
     <Admin
       title="Анкетын асуулга бэлдэх"
       khuudasniiNer="anket"
       tsonkhniiId={"62ea0d2b7c54f8189bdca54c"}
-      onSearch={(search) =>
-        setAsuulgiinKhuudaslalt((kh) => ({
-          ...kh,
-          khuudasniiDugaar: 1,
-          search,
-        }))
-      }
     >
       <div className="col-span-12 p-0 md:p-5">
         <Drawer
@@ -174,13 +204,16 @@ function Anket({ token }) {
             style={{ backgroundColor: "#209669", color: "#ffffff" }}
             icon={<SendOutlined />}
             onClick={() => {
-              setAnketIlgeekh(true), console.log(anketIlgeekh);
+              setAnketIlgeekh(true);
             }}
           >
             Анкет илгээх
           </Button>
         </div>
-        <Tabs>
+        <Tabs
+          activeKey={!!songogdsonAsuult ? "2" : undefined}
+          onChange={() => setSongogdsonAsuult(undefined)}
+        >
           <TabPane
             key="1"
             tab={<span className="text-base font-medium">Асуумж</span>}
@@ -398,16 +431,26 @@ function Anket({ token }) {
                         <div className="absolute hidden h-24 w-28 transform justify-between rounded-md transition-all group-hover:relative group-hover:flex ">
                           <div
                             onClick={() => anketZagvar(a)}
-                            className="absolute h-24 w-28 animate-pulse rounded-md bg-white bg-opacity-50 dark:border-white dark:border-opacity-30"
+                            className="absolute h-24 w-28 animate-pulse rounded-md bg-white bg-opacity-50 dark:border-white dark:border-opacity-30 dark:bg-black dark:bg-opacity-50"
                           ></div>
-                          <Button
-                            className=" -top-3 -left-2 bg-black bg-opacity-40 text-green-700 transition-all hover:border-green-700 hover:bg-green-700 hover:bg-opacity-40 hover:text-white group-hover:block dark:bg-green-700 dark:bg-opacity-50 dark:text-white"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              AnketZasay(a);
-                            }}
-                            icon={<EditOutlined />}
-                          />
+                          <div className="flex w-full flex-col justify-between">
+                            <Button
+                              className=" -top-3 -left-2 bg-black bg-opacity-40 text-white transition-all hover:border-yellow-700 hover:bg-yellow-700 hover:bg-opacity-40 hover:text-white group-hover:block dark:bg-yellow-700 dark:bg-opacity-50 dark:text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                AnketZasay(a);
+                              }}
+                              icon={<EditOutlined />}
+                            />
+                            <Button
+                              className=" -bottom-2 -left-2 bg-black bg-opacity-40 text-white transition-all hover:border-green-700 hover:bg-green-700 hover:bg-opacity-40 hover:text-white group-hover:block dark:bg-green-700 dark:bg-opacity-50 dark:text-white"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                anketKharakh(a);
+                              }}
+                              icon={<EyeOutlined />}
+                            />
+                          </div>
                           <Popconfirm
                             placement="right"
                             title={"Та анкетын загвар устгах гэж байна!"}
@@ -437,7 +480,35 @@ function Anket({ token }) {
           <TabPane
             key="2"
             tab={<span className="text-base font-medium">Жагсаалт</span>}
-          ></TabPane>
+          >
+            <div className="px-5 pb-2">
+              <div className="text-lg font-medium">
+                Анкетын нэр: {songogdsonAsuult?.ner}
+              </div>
+            </div>
+            <div className="col-span-12 rounded-md bg-white p-5">
+              <Table
+                dataSource={dataSource}
+                bordered
+                size="small"
+                columns={columns}
+                tableLayout={khariult?.jagsaalt?.length > 0 ? "auto" : "fixed"}
+                rowKey={(row) => row._id}
+                pagination={{
+                  current: khariult?.khuudasniiDugaar,
+                  pageSize: khariult?.khuudasniiKhemjee,
+                  total: khariult?.niitMur,
+                  showSizeChanger: true,
+                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                    khariult.setKhuudaslalt((kh) => ({
+                      ...kh,
+                      khuudasniiDugaar,
+                      khuudasniiKhemjee,
+                    })),
+                }}
+              />
+            </div>
+          </TabPane>
         </Tabs>
       </div>
     </Admin>
