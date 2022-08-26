@@ -217,7 +217,7 @@ function AjiltanBurtgel({ token }) {
   }
 
   function khariltsagchBurtgekh() {
-    if (!khariltsagchState.utas || khariltsagchState.utas?.length === 0) {
+    if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
       notification.warn({
         description: "Утасны дугаар оруулна уу !",
         message: "Анхаар",
@@ -539,15 +539,20 @@ function AjiltanBurtgel({ token }) {
             className="relative flex flex-wrap"
           >
             <Form.List
-              name={"utas"}
               rules={[
                 {
-                  required: true,
-                  message: "Утас бүртгэнэ үү!",
+                  validator: async (_, names) => {
+                    if (!names || names.length < 2) {
+                      return Promise.reject(
+                        new Error("Утасны дугаар бүртгэнэ үү")
+                      );
+                    }
+                  },
                 },
               ]}
+              name={"utas"}
             >
-              {(fields, { add, remove }) => (
+              {(fields, { add, remove }, { errors }) => (
                 <>
                   {fields.map((field) => (
                     <Space key={field.key} align="baseline">
@@ -590,6 +595,7 @@ function AjiltanBurtgel({ token }) {
                     >
                       Утасны дугаар нэмэх
                     </Button>
+                    <Form.ErrorList errors={errors} />
                   </Form.Item>
                 </>
               )}
@@ -617,8 +623,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Form.Item>
               <Button
-                //htmlType="submit"
-                onClick={khariltsagchBurtgekh}
+                htmlType="submit"
                 style={{ backgroundColor: "#209669", color: "#ffffff" }}
               >
                 Хадгалах
