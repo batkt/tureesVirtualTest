@@ -35,6 +35,7 @@ function tulburTootsoo() {
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $ne: -1 } },
   });
+  const [songogdsonNuur, setSongogdsonNuur] = useState("1");
   const query = useMemo(() => {
     return {
       createdAt: ekhlekhOgnoo
@@ -48,7 +49,7 @@ function tulburTootsoo() {
   const [form] = Form.useForm();
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(
-      token,
+      songogdsonNuur === "1" && token,
       baiguullaga?._id,
       undefined,
       shuult?.query,
@@ -56,7 +57,11 @@ function tulburTootsoo() {
       1000
     );
   const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
-    useKhungulultTuukh(token, baiguullaga?._id, query);
+    useKhungulultTuukh(
+      songogdsonNuur === "2" && token,
+      baiguullaga?._id,
+      query
+    );
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
@@ -195,13 +200,18 @@ function tulburTootsoo() {
       khuudasniiNer="khungulult"
       className="p-0 md:p-4"
       onSearch={(search) => {
-        setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
+        setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
+        setGereeniiKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }));
       }}
       loading={waiting}
       tsonkhniiId="61c2c6eb1c2830c4e6f90cc5"
     >
       <div className="col-span-12">
-        <Tabs size="large">
+        <Tabs size="large" onChange={(v) => setSongogdsonNuur(v)}>
           <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
             <div className="grid w-full grid-cols-12 gap-6">
               <div

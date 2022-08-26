@@ -228,7 +228,6 @@ function AjiltanBurtgel({ token }) {
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId;
     khariltsagchState.barilgiinId = barilgiinId;
 
-
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
@@ -582,7 +581,7 @@ function AjiltanBurtgel({ token }) {
                     </Space>
                   ))}
 
-                  <Form.Item className="w-full" >
+                  <Form.Item className="w-full">
                     <Button
                       type="dashed"
                       onClick={() => add()}
@@ -601,7 +600,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="600"
           >
-            <Form.Item name="mail" >
+            <Form.Item name="mail">
               <Input
                 type="email"
                 placeholder="И-мэйл хаяг"
@@ -620,7 +619,6 @@ function AjiltanBurtgel({ token }) {
               <Button
                 //htmlType="submit"
                 onClick={khariltsagchBurtgekh}
-
                 style={{ backgroundColor: "#209669", color: "#ffffff" }}
               >
                 Хадгалах
@@ -635,10 +633,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -787,7 +786,7 @@ function AjiltanBurtgel({ token }) {
             tableLayout={
               khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
             }
-            scroll={{ y: "calc(100vh - 26rem)" }}
+            scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             dataSource={khariltsagchiinGaralt?.jagsaalt}
             pagination={{
@@ -817,7 +816,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -923,7 +922,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
