@@ -94,7 +94,7 @@ function AjiltanBurtgel({ token }) {
   const khyanaltiinDun = [
     {
       too: khariltsagchToololt
-        ?.filter((a) => a._id !== true && a._id !== false)
+        ?.filter((a) => a._id !== true && a._id !== false && a._id !== null)
         ?.reduce((a, b) => a + b.too, 0),
       icon: (
         <svg

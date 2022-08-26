@@ -228,21 +228,20 @@ function guilgeeniiTuukh({ token }) {
         tuluv: {
           $ne: -1,
         },
-        barilgiinId
+        barilgiinId,
       };
     } else if (turul === "tsutslagdsanAvlaga")
       query = {
         baiguullagiinId: baiguullaga._id,
         davkhar,
         tuluv: -1,
-        barilgiinId
+        barilgiinId,
       };
-    else if (turul === "eneSardTulukh"){
+    else if (turul === "eneSardTulukh") {
       sericeName = null;
-    }
-    else query = { davkhar, baiguullagiinId: baiguullaga?._id ,barilgiinId};
+    } else query = { davkhar, baiguullagiinId: baiguullaga?._id, barilgiinId };
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar,barilgiinId]);
+  }, [turul, ognoo, davkhar, barilgiinId]);
 
   const {
     data,
@@ -279,7 +278,7 @@ function guilgeeniiTuukh({ token }) {
     setEneSardTuluuguiGereenuud,
   ]);
 
-  console.log(turul)
+  console.log(turul);
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -339,7 +338,8 @@ function guilgeeniiTuukh({ token }) {
       ...turulColumns,
       {
         title: "Үйлдэл",
-        width: "6rem",
+        width: "8rem",
+        align: "center",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
         render: (text, row) => {
@@ -355,7 +355,7 @@ function guilgeeniiTuukh({ token }) {
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
                 onClick={() => guilgeeKhiiya(row)}
-                className="fill-current px-2 text-green-500"
+                className="fill-current  text-green-500"
               >
                 <Tooltip
                   title="Гүйлгээ хийх"
@@ -394,7 +394,7 @@ function guilgeeniiTuukh({ token }) {
               </a>
 
               {row?._id === delgegdsenGeree && (
-                <a className="px-2" onClick={() => refTuukh.current.khevlekh()}>
+                <a className="px-1" onClick={() => refTuukh.current.khevlekh()}>
                   <Tooltip title="Хэвлэх">
                     <svg
                       version="1.0"
@@ -434,7 +434,7 @@ function guilgeeniiTuukh({ token }) {
                 </a>
               )}
               <div
-                className="px-2 text-red-500"
+                className="px-1 text-red-500"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip

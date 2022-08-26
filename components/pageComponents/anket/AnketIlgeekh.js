@@ -45,6 +45,9 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
         .then(({ data }) => {
           if (data && data[0].Result === "SUCCESS") {
             notification.success({ message: "SMS Амжилттай илгээлээ" });
+            setEmail("");
+            setSongogdsonAnket("");
+            setUtasniiDugaar("");
           }
         })
         .catch((e) => {
@@ -77,6 +80,9 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
         .then(({ data }) => {
           if (data === "Amjilttai") {
             notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+            setEmail("");
+            setSongogdsonAnket("");
+            setUtasniiDugaar("");
           }
         })
         .catch((e) => {
@@ -87,7 +93,6 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
   function onchangeDugaar(e) {
     setUtasniiDugaar(e.target.value);
   }
-  console.log();
 
   return (
     <div>
@@ -105,8 +110,9 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
         <div>Анкетын загвар сонгох:</div>
         <Select
           className="w-full"
-          placeholder="Анкетын загвар сонгох"
+          placeholder="Анкетын загвар сонгoно уу"
           onChange={setSongogdsonAnket}
+          value={songogdsonAnket}
           options={data.map((mur) => {
             return { label: mur.ner, value: mur._id };
           })}
@@ -116,11 +122,18 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
         <div className="flex w-full flex-col gap-1 py-3">
           <div>Анкет илгээх утасны дугаар:</div>
           <Input
+            value={utasniiDugaar}
             minlength="8"
             required
             placeholder="утасны дугаар оруулна уу"
             type={"number"}
             onChange={onchangeDugaar}
+            onKeyUp={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                ilgeeye();
+              }
+            }}
           />
         </div>
       ) : (
@@ -131,6 +144,12 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
             type="url"
             placeholder="И-мэйл оруулна уу"
             onChange={(v) => setEmail(v.target.value)}
+            onKeyUp={(event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                ilgeeye();
+              }
+            }}
           />
         </div>
       )}
