@@ -54,6 +54,10 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     Aos.init({ once: true });
   });
 
+  function onFinish() {
+    next();
+  }
+
   return (
     <Form
       form={form}
@@ -61,9 +65,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       {...formItemLayout}
       initialValues={value}
       onValuesChange={onValuesChange}
+      onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item name="gereeniiOgnoo" label="Гэрээ хийх огноо">
+        <Form.Item
+          rules={[{ required: true, message: "Гэрээ хийх огноо бүртгэнэ үү!" }]}
+          name="gereeniiOgnoo"
+          label="Гэрээ хийх огноо"
+        >
           <DatePicker
             style={{ width: "100%" }}
             allowClear
@@ -73,7 +82,12 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
-        <Form.Item name="khugatsaa" label="Гэрээний хугацаа" required>
+        <Form.Item
+          rules={[{ required: true, message: "Гэрээний хугацаа бүртгэнэ үү!" }]}
+          name="khugatsaa"
+          label="Гэрээний хугацаа"
+          required
+        >
           <InputNumber
             style={{ width: "100%" }}
             formatter={(value) =>
@@ -88,6 +102,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item
+          rules={[{ required: true, message: "Төлөлт хийх өдөр бүртгэнэ үү!" }]}
           label="Төлөлт хийх өдөр"
           extra="Төлөлт хийх огноо сар бүрийн / өдөр"
           name="tulukhUdur"
@@ -111,6 +126,9 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           name="duusakhOgnoo"
           label="Гэрээ дуусах хугацаа"
           extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+          rules={[
+            { required: true, message: "Гэрээ дуусах хугацаа бүртгэнэ үү!" },
+          ]}
         >
           <DatePicker
             style={{ width: "100%" }}
@@ -134,7 +152,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
               type="primary"
               htmlType="submit"
               icon={<ArrowRightOutlined />}
-              onClick={() => next()}
             >
               Түрээсийн талбай
             </Button>

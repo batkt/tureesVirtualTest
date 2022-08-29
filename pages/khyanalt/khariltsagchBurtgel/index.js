@@ -336,7 +336,7 @@ function AjiltanBurtgel({ token }) {
       month = month - 1;
       var day = parseInt(khariltsagchState.register.substring(6, 8));
       var nowYear = new Date().getFullYear().toString().substring(2, 4);
-      if (month > 32 || (12 < month && month < 21)) {
+      if (month > 32 || (12 < month && month < 20)) {
         message.warning("Регистерийн дугаарын сар буруу байна!");
         khariltsagchState.register = "";
         return;
@@ -542,7 +542,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   validator: async (_, names) => {
-                    if (!names || names.length < 2) {
+                    if (!names || names.length < 1) {
                       return Promise.reject(
                         new Error("Утасны дугаар бүртгэнэ үү")
                       );

@@ -1,4 +1,4 @@
-import { Form, Input, Switch, Button, Upload } from "antd";
+import { Form, Input, Switch, Button, Upload, message } from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
@@ -42,7 +42,6 @@ const YurunkhiiMedeele = ({
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
-
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
       ner: "",
@@ -86,6 +85,9 @@ const YurunkhiiMedeele = ({
   useEffect(() => {
     Aos.init({ once: true });
   });
+  function onFinish() {
+    next();
+  }
 
   return (
     <Form
@@ -94,6 +96,7 @@ const YurunkhiiMedeele = ({
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
+      onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item name="gereeniiDugaar" label="Гэрээний дугаар">
@@ -113,19 +116,24 @@ const YurunkhiiMedeele = ({
           <Switch onChange={setBaiguullagaEsekh} />
         </Form.Item>
       </div>
-      <div data-aos="fade-right">
-        <Form.Item
-          name="ner"
-          hidden={!baiguullagaEsekh}
-          label="Байгууллага нэр"
-        >
-          <Input
-            allowClear
-            placeholder="Байгууллага нэр"
-            prefix={<SolutionOutlined />}
-          />
-        </Form.Item>
-      </div>
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right">
+          <Form.Item
+            name="ner"
+            hidden={!baiguullagaEsekh}
+            label="Байгууллага нэр"
+            rules={[
+              { required: true, message: "Байгууллага нэр бүртгэнэ үү!" },
+            ]}
+          >
+            <Input
+              allowClear
+              placeholder="Байгууллага нэр"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
       {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="100">
           <Form.Item
@@ -176,66 +184,134 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      <div data-aos="fade-right" data-aos-delay="500">
-        <Form.Item hidden={baiguullagaEsekh} name="ovog" label="Овог">
-          <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="600">
-        <Form.Item hidden={baiguullagaEsekh} name="ner" label="Нэр">
-          <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="300">
-        <Form.Item
-          hidden={!baiguullagaEsekh}
-          name="zakhirliinOvog"
-          label="Захирлын овог"
-        >
-          <Input allowClear placeholder="Овог" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="400">
-        <Form.Item
-          hidden={!baiguullagaEsekh}
-          name="zakhirliinNer"
-          label="Захирлын нэр"
-        >
-          <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="700">
-        <Form.Item name="utas" hidden={baiguullagaEsekh} label="Утас">
-          <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="700">
-        <Form.Item hidden={!baiguullagaEsekh} name="utas" label="Утас">
-          <Input allowClear placeholder="Утас" prefix={<SolutionOutlined />} />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item name="mail" hidden={baiguullagaEsekh} label="И-мэйл хаяг">
-          <Input
-            type="email"
-            placeholder="И-мэйл хаяг"
-            allowClear
-            prefix={<MailOutlined />}
-          />
-        </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="800">
-        <Form.Item name="mail" hidden={!baiguullagaEsekh} label="И-мэйл хаяг">
-          <Input
-            type="email"
-            placeholder="И-мэйл хаяг"
-            allowClear
-            prefix={<MailOutlined />}
-          />
-        </Form.Item>
-      </div>
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="500">
+          <Form.Item
+            hidden={baiguullagaEsekh}
+            rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
+            name="ovog"
+            label="Овог"
+          >
+            <Input
+              allowClear
+              placeholder="Овог"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="600">
+          <Form.Item
+            hidden={baiguullagaEsekh}
+            name="ner"
+            rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
+            label="Нэр"
+          >
+            <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="300">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="zakhirliinOvog"
+            label="Захирлын овог"
+            rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
+          >
+            <Input
+              allowClear
+              placeholder="Овог"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="400">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="zakhirliinNer"
+            label="Захирлын нэр"
+            rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
+          >
+            <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
+          </Form.Item>
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="700">
+          <Form.Item
+            name="utas"
+            rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
+            hidden={baiguullagaEsekh}
+            label="Утас"
+          >
+            <Input
+              allowClear
+              placeholder="Утас"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="700">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="utas"
+            rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
+            label="Утас"
+          >
+            <Input
+              allowClear
+              placeholder="Утас"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item
+            name="mail"
+            hidden={baiguullagaEsekh}
+            rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
+            label="И-мэйл хаяг"
+          >
+            <Input
+              type="email"
+              placeholder="И-мэйл хаяг"
+              allowClear
+              prefix={<MailOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item
+            name="mail"
+            hidden={!baiguullagaEsekh}
+            rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
+            label="И-мэйл хаяг"
+          >
+            <Input
+              type="email"
+              placeholder="И-мэйл хаяг"
+              allowClear
+              prefix={<MailOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
       <div data-aos="fade-right" data-aos-delay="900">
-        <Form.Item name="dans" label="Төлөлт хийх данс">
+        <Form.Item
+          name="dans"
+          rules={[{ required: true, message: "Төлөлт хийх данс бүртгэнэ үү!" }]}
+          label="Төлөлт хийх данс"
+        >
           <FormLavlakh
             lavlakh="dans"
             token={token}
@@ -333,7 +409,6 @@ const YurunkhiiMedeele = ({
             type="primary"
             htmlType="submit"
             icon={<ArrowRightOutlined />}
-            onClick={() => next()}
           >
             Гэрээний хугацаа
           </Button>

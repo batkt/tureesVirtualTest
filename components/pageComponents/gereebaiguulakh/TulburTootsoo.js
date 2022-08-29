@@ -16,110 +16,89 @@ const formItemLayout = {
 
 const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
+
+  function onFinish() {
+    next(value);
+  }
 
   return (
     <Form
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(values) => onChange({ ...value, ...values })}
+      onFinish={onFinish}
     >
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000">
-      <Form.Item
-        label="Түрээсийн төлбөр"
-        style={{ marginBottom: 10 }}
-      >
-        <div className="text-right text-lg font-medium dark:text-gray-100">
-          {formatNumber(value.sariinTurees)}
-        </div>
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000">
+        <Form.Item label="Түрээсийн төлбөр" style={{ marginBottom: 10 }}>
+          <div className="text-right text-lg font-medium dark:text-gray-100">
+            {formatNumber(value.sariinTurees)}
+          </div>
+        </Form.Item>
       </div>
-      <div
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="100">
-      <Form.Item
-        label="Барьцаа төлбөр"
-        style={{ marginBottom: 10 }}
-      >
-        <div className="text-right text-lg font-medium dark:text-gray-100">
-          {`${formatNumber(
-            (value.baritsaaAvakhDun || 0) * (value.baritsaaAvakhKhugatsaa || 0)
-          )}`}
-        </div>
-      </Form.Item>
-      </div>
-      <div 
-      data-aos="fade-right"
-      data-aos-duration="1000"
-      data-aos-delay="200">
-      <Form.Item
-        label="Нийт дүн"
-        style={{ marginBottom: 10 }}
-      >
-        <div className="text-right text-lg font-medium dark:text-gray-100">
-          {formatNumber(
-            (value.sariinTurees || 0) * (value.buunTulult || 1) +
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
+        <Form.Item label="Барьцаа төлбөр" style={{ marginBottom: 10 }}>
+          <div className="text-right text-lg font-medium dark:text-gray-100">
+            {`${formatNumber(
               (value.baritsaaAvakhDun || 0) *
-                (value.baritsaaAvakhKhugatsaa || 0) -
-              (((value.sariinTurees || 0) * 12) / 365) *
-                (value.khungulukhKhugatsaa || 0) -
-              (value.khyamdaral || 0)
-          )}
-        </div>
-      </Form.Item>
+                (value.baritsaaAvakhKhugatsaa || 0)
+            )}`}
+          </div>
+        </Form.Item>
       </div>
-      <div 
-       data-aos="fade-right"
-       data-aos-duration="1000"
-       data-aos-delay="300">
-      <Form.Item
-        label="Төлбөрийн хуваарь"
-        name="khungulukhEsekh"
-        style={{ marginBottom: 10 }}
-        className="flex w-full justify-end dark:text-gray-100"
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
+        <Form.Item label="Нийт дүн" style={{ marginBottom: 10 }}>
+          <div className="text-right text-lg font-medium dark:text-gray-100">
+            {formatNumber(
+              (value.sariinTurees || 0) * (value.buunTulult || 1) +
+                (value.baritsaaAvakhDun || 0) *
+                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (((value.sariinTurees || 0) * 12) / 365) *
+                  (value.khungulukhKhugatsaa || 0) -
+                (value.khyamdaral || 0)
+            )}
+          </div>
+        </Form.Item>
+      </div>
+      <div
+        className="flex gap-5"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+        data-aos-delay="300"
       >
-        <Switch style={{ marginLeft: "auto" }} />
-      </Form.Item>
+        <p className="flex w-2/3 justify-end">Төлбөрийн хуваарь:</p>
+        <Form.Item
+          name="khungulukhEsekh"
+          style={{ marginBottom: 10 }}
+          className="flex w-1/3  dark:text-gray-100"
+        >
+          <Switch style={{ marginLeft: "auto" }} />
+        </Form.Item>
       </div>
       <Divider />
-      <div
-         data-aos="fade-right"
-         data-aos-duration="1000"
-         data-aos-delay="400">
-      <Form.Item
-        name="avlaga"
-        noStyle
-      >
-        <AvlagiinKhuvaariUusgekh ugugdul={value} />
-      </Form.Item>
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
+        <Form.Item name="avlaga" noStyle>
+          <AvlagiinKhuvaariUusgekh ugugdul={value} />
+        </Form.Item>
       </div>
-      <div
-       data-aos="fade-right"
-       data-aos-duration="1000"
-       data-aos-delay="500">
-      <Form.Item
-        wrapperCol={{ span: 24 }}
-      >
-        <div className="mt-4 flex w-full flex-row justify-between">
-          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
-            Барьцаа бүртгэл
-          </Button>
-          {!zasvar && (
+      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
+        <Form.Item wrapperCol={{ span: 24 }}>
+          <div className="mt-4 flex w-full flex-row justify-between">
             <Button
-              type="primary"
-              htmlType="submit"
-              icon={<SaveOutlined />}
-              onClick={() => next(value)}
+              onClick={prev}
+              icon={<ArrowLeftOutlined />}
+              className="mr-4"
             >
-              Хадгалах
+              Барьцаа бүртгэл
             </Button>
-          )}
-        </div>
-      </Form.Item>
+            {!zasvar && (
+              <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+                Хадгалах
+              </Button>
+            )}
+          </div>
+        </Form.Item>
       </div>
     </Form>
   );

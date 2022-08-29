@@ -223,7 +223,7 @@ function Anket({ token }) {
                 className="box relative col-span-12 py-5 pt-1 md:col-span-4 xl:col-span-3"
                 style={{ height: "80vh" }}
               >
-                <span className="font-medium dark:text-gray-100">
+                <span className="px-5 font-medium dark:text-gray-100">
                   Анкетын загвар үүсгэх
                 </span>
                 <Form

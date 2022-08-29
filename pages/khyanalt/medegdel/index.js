@@ -467,31 +467,43 @@ function Khyanalt({ token }) {
           </div>
         </div>
         <div
-          className="box mt-5 flex flex-row items-center p-2"
+          className="box mt-5 flex flex-row items-center p-2 pl-3 "
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <IlgeesenToo
-            barilgiinId={barilgiinId}
-            baiguullagiinId={baiguullaga?._id}
-            ekhlekhOgnoo={dateCount.yearStart}
-            duusakhOgnoo={dateCount.yearEnd}
-            token={token}
-            text="Нийт"
-            turul={turul}
-          />
-          <IlgeesenToo
-            barilgiinId={barilgiinId}
-            baiguullagiinId={baiguullaga?._id}
-            ekhlekhOgnoo={dateCount.monthStart}
-            duusakhOgnoo={dateCount.monthEnd}
-            token={token}
-            text="Сард"
-            turul={turul}
-          />
-          <div className="ml-auto">
+          {turul === "SMS" ? (
+            <div className="mt-3 block 2xl:mt-auto 2xl:flex">
+              <p className="absolute -top-1 -left-1 rounded-md bg-white text-sm dark:bg-gray-900">
+                SMS явуулсан байдал :
+              </p>
+              <IlgeesenToo
+                barilgiinId={barilgiinId}
+                baiguullagiinId={baiguullaga?._id}
+                ekhlekhOgnoo={dateCount.yearStart}
+                duusakhOgnoo={dateCount.yearEnd}
+                token={token}
+                text="Нийт"
+                turul={turul}
+              />
+              <IlgeesenToo
+                barilgiinId={barilgiinId}
+                baiguullagiinId={baiguullaga?._id}
+                ekhlekhOgnoo={dateCount.monthStart}
+                duusakhOgnoo={dateCount.monthEnd}
+                token={token}
+                text="Энэ сард"
+                turul={turul}
+              />
+            </div>
+          ) : null}
+          <div
+            className={` ${
+              turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
+            }`}
+          >
             <Select
+              className="w-full"
               placeholder="Илгээх төрөл"
               value={ilgeekhTurul}
               onChange={setIlgeekhTurul}

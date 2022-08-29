@@ -17,12 +17,17 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     Aos.init({ once: true });
   });
 
+  function onFinish() {
+    next();
+  }
+
   return (
     <Form
       name="validate_other"
       {...formItemLayout}
       onValuesChange={(values) => onChange({ ...value, ...values })}
       initialValues={value}
+      onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
@@ -42,6 +47,12 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
           name="baritsaaBairshuulakhKhugatsaa"
           label="Хугацаа"
           extra="Барьцаа байршуулалтын хугацаа"
+          rules={[
+            {
+              required: true,
+              message: "Барьцаа байршуулалтын хугацаа бүртгэнэ үү!",
+            },
+          ]}
         >
           <InputNumber
             placeholder="Барьцаа байршуулалтын хугацаа"
@@ -68,7 +79,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
               type="primary"
               htmlType="submit"
               icon={<ArrowRightOutlined />}
-              onClick={() => next()}
             >
               Төлбөр тооцоо
             </Button>

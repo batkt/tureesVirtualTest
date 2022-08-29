@@ -310,7 +310,7 @@ function tulburTootsoo() {
                       <Button
                         htmlType="submit"
                         onClick={khungulultKhadgalya}
-                        className="bg-green-500 dark:border-current  dark:bg-green-500"
+                        className="bg-green-500 hover:bg-green-600 dark:border-current dark:bg-green-500"
                       >
                         <span className="text-white">Хадгалах</span>
                       </Button>
