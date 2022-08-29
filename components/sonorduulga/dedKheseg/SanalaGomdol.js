@@ -2,20 +2,17 @@ import React from 'react'
 import moment from 'moment'
 import uilchilgee, { aldaaBarigch } from 'services/uilchilgee'
 
+
 function Zakhialga({ onClose, token, ...object }) {
-    const { turul,message,khariltsagchiinNer,createdAt,_id } = object || {}
+    const { turul, message, khariltsagchiinNer, createdAt, _id } = object || {}
 
 
     function sonorduulgaKharlaa() {
-        uilchilgee(token).post('/sanalKharlaa',{id:_id}).catch(aldaaBarigch)
+        uilchilgee(token).post('/sanalKharlaa', { id: _id }).catch(aldaaBarigch)
         onClose()
     }
-
     return (
-        <div id="notification-with-split-buttons-content" className="flex flex-row items-center" onClick={onClose}>
-            <div className='mr-2 flex'>
-               
-            </div>
+        <div id="notification-with-split-buttons-content" className="max-w-md" onClick={onClose}>
             <div className="md:mr-40">
                 <div className="font-medium">{turul}{khariltsagchiinNer}</div>
                 <div className="text-gray-600 mt-1">{moment(createdAt).format('YYYY-MM-DD')}</div>

@@ -13,7 +13,7 @@ function Daalgavar({ onClose, token, ...object }) {
   return (
     <div
       id="notification-with-split-buttons-content"
-      className="flex flex-row items-center"
+      className="flex flex-row items-center "
       onClick={onClose}
     >
       <div className="mr-2 flex"></div>
@@ -25,8 +25,8 @@ function Daalgavar({ onClose, token, ...object }) {
         <div className="mt-1 text-gray-600">
           {moment(duusakhOgnoo).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1 flex flex-row space-x-10 text-gray-600">
-          <div>{tailbar}</div>
+        <div className="mt-1  flex flex-row space-x-10 text-gray-600">
+          {tailbar}
           <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
             Даалгавар
           </div>

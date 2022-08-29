@@ -11,6 +11,8 @@ import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import AjiltanNemekh from "./ajiltanNemekh";
 import uilchilgee, { url } from "services/uilchilgee";
+import TextArea from "antd/lib/input/TextArea";
+
 
 const ognoonuud = new Array(30)
   .fill("")
@@ -104,11 +106,10 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           <div
             key={ognoo}
             onClick={() => onChange("duusakhOgnoo", ognoo)}
-            className={`w-16 cursor-pointer rounded-2xl ${
-              ognoo === daalgavar.duusakhOgnoo
-                ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
-                : ""
-            } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
+            className={`w-16 cursor-pointer rounded-2xl ${ognoo === daalgavar.duusakhOgnoo
+              ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
+              : ""
+              } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
             <div className="w-16">{moment(ognoo).format("MM")} сар</div>
@@ -125,7 +126,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <UserOutlined className="text-xl" />
             <div>
               <div className="text-lg font-medium">
-              Ажилтан{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
+                Ажилтан{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
               </div>
               <div>Та ажилтангаа сонгоно уу</div>
             </div>
@@ -134,6 +135,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <RightOutlined className="items-end self-center" />
           </div>
         </div>
+
         <Upload
           multiple={true}
           name="file"
@@ -148,9 +150,9 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               v.fileList.map((v) => v.response?.id)
             )
           }
-          className="group flex cursor-pointer flex-col rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-500 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600 xl:w-2/3 "
+          className="flex flex-col w-2/3 rounded-full"
         >
-          <div className="flex justify-between transition-colors duration-500 group-hover:bg-green-600">
+          <div className="flex cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600 w-full">
             <div className="flex gap-5">
               <FileImageOutlined className="text-xl" />
               <div>
@@ -165,12 +167,16 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
         </Upload>
       </div>
       <div>
-        <input
-          className="mt-10 h-24 w-full border-2 p-5"
+        <TextArea
+          autoSize={{
+            minRows: 1,
+            maxRows: 4,
+          }}
+          className="mt-10 h-24 w-full border-2 p-3 "
           placeholder="Даалгавар"
-          type={"text"}
+          type="text"
           onChange={(e) => onChange("tailbar", e.target.value)}
-        ></input>
+        ></TextArea>
       </div>
       <div className="flex w-full justify-center">
         <button
@@ -180,7 +186,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           Хадгалах
         </button>
       </div>
-    </div>
+    </div >
   );
 }
 
