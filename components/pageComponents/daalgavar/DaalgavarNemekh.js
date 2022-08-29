@@ -13,6 +13,7 @@ import AjiltanNemekh from "./ajiltanNemekh";
 import uilchilgee, { url } from "services/uilchilgee";
 import TextArea from "antd/lib/input/TextArea";
 
+
 const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
@@ -134,6 +135,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <RightOutlined className="items-end self-center" />
           </div>
         </div>
+
         <Upload
           multiple={true}
           name="file"
@@ -148,9 +150,9 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               v.fileList.map((v) => v.response?.id)
             )
           }
-          className="group flex cursor-pointer flex-col rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-500 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600 xl:w-2/3 "
+          className="flex flex-col w-2/3 rounded-full"
         >
-          <div className="flex justify-between transition-colors duration-500 group-hover:bg-green-600">
+          <div className="flex cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600 w-full">
             <div className="flex gap-5">
               <FileImageOutlined className="text-xl" />
               <div>
@@ -166,6 +168,10 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       </div>
       <div>
         <TextArea
+          autoSize={{
+            minRows: 1,
+            maxRows: 4,
+          }}
           className="mt-10 h-24 w-full border-2 p-3 "
           placeholder="Даалгавар"
           type="text"
@@ -180,7 +186,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           Хадгалах
         </button>
       </div>
-    </div>
+    </div >
   );
 }
 
