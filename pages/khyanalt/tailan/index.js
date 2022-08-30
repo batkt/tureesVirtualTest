@@ -49,8 +49,8 @@ function Chart({
     return {
       barilgiinId,
       nariivchlal,
-      ekhlekhOgnoo: ognoo[0].format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: ognoo[1].format("YYYY-MM-DD 23:59:59"),
+      ekhlekhOgnoo: ognoo && ognoo[0].format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: ognoo && ognoo[1].format("YYYY-MM-DD 23:59:59"),
     };
   }, [barilgiinId, ognoo, nariivchlal]);
 
@@ -150,7 +150,7 @@ function Chart({
 function AjiltanBurtgel({ token }) {
   const { barilgiinId } = useAuth();
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   return (

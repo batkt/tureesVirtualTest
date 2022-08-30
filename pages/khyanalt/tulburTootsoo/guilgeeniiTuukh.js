@@ -60,9 +60,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -176,10 +175,10 @@ function guilgeeniiTuukh({ token }) {
     let sericeName = "/geree";
     let query = {};
     let turulColumns = [];
-    let ekhlekhOgnoo = moment(ognoo[0])
+    let ekhlekhOgnoo = moment(ognoo && ognoo[0])
       .startOf("month")
       .format("YYYY-MM-DD 00:00:00");
-    let duusakhOgnoo = moment(ognoo[1])
+    let duusakhOgnoo = moment(ognoo && ognoo[1])
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
     switch (turul) {
@@ -441,12 +440,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -601,9 +600,8 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
-                  turul === mur?.turul ? mur.selectedColor : ""
-                }`}
+                className={`intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
+                  }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
