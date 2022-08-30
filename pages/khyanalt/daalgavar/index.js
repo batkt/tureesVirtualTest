@@ -17,6 +17,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
+import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
 
 const order = { createdAt: -1 };
@@ -343,7 +344,7 @@ function index({ token }) {
                       className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
                     >
                       <div className="pb-1 font-medium">{mur.ajiltniiNer}</div>
-                      {mur.message}
+                      <div className="w-full break-words  ">{mur.message}</div>
                       <div className="absolute bottom-1 right-3 text-gray-300">
                         {moment(mur.ognoo).format("HH:mm")}
                       </div>
@@ -357,7 +358,11 @@ function index({ token }) {
         <div className="fixed bottom-3 w-full">
           <div className="flex w-full flex-row px-5 py-2">
             <div className="w-full px-2">
-              <input
+              <TextArea
+                autoSize={{
+                  minRows: 1,
+                  maxRows: 2,
+                }}
                 className="focus:outline-none h-10 w-full rounded-md border border-gray-600 p-2 focus:border-gray-400"
                 placeholder="Тайлбар"
                 ref={inputRef}
@@ -369,7 +374,7 @@ function index({ token }) {
                     setgegdelBichie();
                   }
                 }}
-              />
+              ></TextArea>
             </div>
             <div className="flex flex-row space-x-3">
               <div
