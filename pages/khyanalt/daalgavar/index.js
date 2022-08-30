@@ -17,6 +17,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
+import { useRouter } from "next/router";
 
 const order = { createdAt: -1 };
 
@@ -107,6 +108,14 @@ function index({ token }) {
       });
       return;
     }
+    const router = useRouter();
+    const { id } = router.query;
+
+    useEffect(() => {
+      if (id) {
+        setDaalgavar(task?.jagsaalt?.find((mur) => id === mur.ajiltniiId));
+      }
+    }, [id, task?.data]);
 
     inputRef.current.focus();
     uilchilgee(token)
