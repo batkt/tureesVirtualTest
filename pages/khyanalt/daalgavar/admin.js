@@ -15,6 +15,7 @@ import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
 import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh";
 import TextArea from "antd/lib/input/TextArea";
+import { useRouter } from "next/router";
 
 const order = { createdAt: -1 };
 
@@ -103,7 +104,6 @@ function index({ token }) {
   const [showResults, setShowResults] = React.useState(false);
   const Nemekh = () => {
     setDaalgavar(false), setShowResults(true);
-    console.log(ajiltan.baiguullaga)
   };
   const khaakh = () => setShowResults(false);
   useEffect(() => {
@@ -111,10 +111,12 @@ function index({ token }) {
       setShowResults(false);
     }
   }, []);
+  const router = useRouter();
+  const { id } = router.query;
 
   const tsagTootsoolur = () => {
-    const today = new Date()
-    today.setHours(18, 0, 0)
+    const today = new Date();
+    today.setHours(18, 0, 0);
     const difference = +today - +new Date();
     let timeLeft = {};
     if (difference > 0) {
@@ -128,6 +130,12 @@ function index({ token }) {
     return timeLeft;
   };
 
+  useEffect(() => {
+    if (id) {
+      setDaalgavar(task?.jagsaalt?.find((mur) => id === mur.ajiltniiId));
+    }
+  }, [id, task?.data]);
+
   const [timeLeft, setTimeLeft] = useState(tsagTootsoolur());
 
   useEffect(() => {
@@ -136,9 +144,7 @@ function index({ token }) {
     }, 1000);
   });
 
-
   return (
-
     <Admin
       khuudasniiNer="daalgavar"
       title="Даалгавар"
@@ -171,9 +177,8 @@ function index({ token }) {
           </div>
           <div className="px-3 text-justify">
             {timeLeft.hours || timeLeft.minutes || timeLeft.seconds ? (
-
-              < div >
-                <span className="pr-2" > Ажлын цаг дуусхад</span>
+              <div>
+                <span className="pr-2"> Ажлын цаг дуусхад</span>
                 {timeLeft.hours}
                 <span>:</span>
                 {timeLeft.minutes}
@@ -196,10 +201,11 @@ function index({ token }) {
               onClick={() => setTuluv(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
-              className={`cursor-pointer rounded-lg p-1 text-center ${tuluv === status
-                ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
-                : "text-gray-50"
-                }`}
+              className={`cursor-pointer rounded-lg p-1 text-center ${
+                tuluv === status
+                  ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
+                  : "text-gray-50"
+              }`}
             >
               {status}
             </div>
@@ -211,7 +217,7 @@ function index({ token }) {
           onScroll={(e) => {
             if (
               e.target.scrollHeight - e.target.scrollTop ===
-              e.target.clientHeight &&
+                e.target.clientHeight &&
               !!task.data
             )
               task.next();
@@ -219,10 +225,11 @@ function index({ token }) {
         >
           {task?.jagsaalt?.map((mur, index) => (
             <div
-              className={`my-1 flex w-full cursor-pointer items-center flex-row space-x-2 rounded-lg bg-gray-50 p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
-                ? "bg-green-100 dark:bg-green-700"
-                : ""
-                }`}
+              className={`my-1 flex w-full cursor-pointer flex-row items-center space-x-2 rounded-lg bg-gray-50 p-2 pl-0 dark:bg-gray-800 ${
+                daalgavar?._id === mur._id
+                  ? "bg-green-100 dark:bg-green-700"
+                  : ""
+              }`}
               key={`${index}-daalgavar`}
               onClick={() => {
                 khaakh(), setDaalgavar(mur);
@@ -232,8 +239,9 @@ function index({ token }) {
                 {1 + index}.
               </div>
               <div
-                className={`h-10 w-10 rounded-lg  bg-${mur.started ? "green" : "green"
-                  }-600 text-2xl text-white`}
+                className={`h-10 w-10 rounded-lg  bg-${
+                  mur.started ? "green" : "green"
+                }-600 text-2xl text-white`}
               >
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
@@ -254,18 +262,19 @@ function index({ token }) {
                 <div className="grid grid-cols-12">
                   <div className="col-span-11">
                     <div
-                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${mur.tuluv === 1
-                        ? "yellow"
-                        : mur.tuluv === 2
+                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${
+                        mur.tuluv === 1
+                          ? "yellow"
+                          : mur.tuluv === 2
                           ? "green"
                           : "red"
-                        }-500`}
+                      }-500`}
                     >
                       {mur.tuluv === 1
                         ? "Хүлээн авсан"
                         : mur.tuluv === 2
-                          ? "Дууссан"
-                          : "Эхлээгүй"}
+                        ? "Дууссан"
+                        : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
                   </div>
@@ -289,8 +298,9 @@ function index({ token }) {
       {/* chat */}
 
       <div
-        className={`col-span-12 ${daalgavar ? "block" : "hidden"
-          } relative gap-5 bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
+        className={`col-span-12 ${
+          daalgavar ? "block" : "hidden"
+        } relative gap-5 bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
         data-aos="flip-right"
         style={{ height: "80vh" }}
         data-aos-delay="200"
@@ -306,78 +316,79 @@ function index({ token }) {
             <div className="w-full p-0 sm:p-2">
               {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
                 (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
-                  <div className="flex w-full items-center gap-3">
-                    <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
-                      <img
-                        src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
-                        className="h-10 w-10 rounded-full"
-                      />
-                    </div>
-                    <div className="relative w-10/12 rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
-                      <div className="flex flex-row flex-wrap items-center justify-between">
-                        <div className="font-medium">Захирал</div>
-                        <div className="flex">
-                          <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
-                            {moment(daalgavar.ognoo).format("YYYY/MM/DD HH:mm")}
-                          </div>
-                          <div className="ml-5 flex">
-                            <Popconfirm
-                              disabled={daalgavar?.tuluv === 2}
-                              title={`Та даалгавар цуцлах уу?`}
-                              okText="Тийм"
-                              cancelText="Үгүй"
-                              onConfirm={() => daalgavarTsutslakh()}
-                            >
-                              <div
-                                className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
+                <div className="flex w-full items-center gap-3">
+                  <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
+                    <img
+                      src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
+                      className="h-10 w-10 rounded-full"
+                    />
+                  </div>
+                  <div className="relative w-10/12 rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+                    <div className="flex flex-row flex-wrap items-center justify-between">
+                      <div className="font-medium">Захирал</div>
+                      <div className="flex">
+                        <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
+                          {moment(daalgavar.ognoo).format("YYYY/MM/DD HH:mm")}
+                        </div>
+                        <div className="ml-5 flex">
+                          <Popconfirm
+                            disabled={daalgavar?.tuluv === 2}
+                            title={`Та даалгавар цуцлах уу?`}
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                            onConfirm={() => daalgavarTsutslakh()}
+                          >
+                            <div
+                              className={`text-md cursor-pointer rounded-full bg-${
+                                0 === daalgavar?.tuluv
                                   ? "red"
                                   : 1 === daalgavar?.tuluv
-                                    ? "yellow"
-                                    : "green"
-                                  }-500 py-1 px-3 font-medium text-gray-50`}
-                              >
-                                {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
-                              </div>
-                            </Popconfirm>
-                          </div>
+                                  ? "yellow"
+                                  : "green"
+                              }-500 py-1 px-3 font-medium text-gray-50`}
+                            >
+                              {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
+                            </div>
+                          </Popconfirm>
                         </div>
                       </div>
-                      <div className="flex w-full py-2">{daalgavar?.tailbar}</div>
-                      <div className="flex justify-between">
-                        <div className="w-1/2">
-                          {daalgavar.file?.map((mur) => (
-                            <div className=" flex">
-                              <audio className="" controls key={mur}>
-                                <source
-                                  src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                                  type="audio/ogg"
-                                />
-                                <source
-                                  src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex w-1/2 items-center justify-end gap-2">
-                          <Image.PreviewGroup>
-                            {daalgavar.zurguud?.map((mur) => (
-                              <Image
-                                key={mur}
-                                alt={mur}
-                                height="2rem"
-                                width="2rem"
-                                src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                    </div>
+                    <div className="flex w-full py-2">{daalgavar?.tailbar}</div>
+                    <div className="flex justify-between">
+                      <div className="w-1/2">
+                        {daalgavar.file?.map((mur) => (
+                          <div className=" flex">
+                            <audio className="" controls key={mur}>
+                              <source
+                                src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                                type="audio/ogg"
                               />
-                            ))}
-                          </Image.PreviewGroup>
-                        </div>
+                              <source
+                                src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                                type="audio/mpeg"
+                              />
+                              Your browser does not support the audio element.
+                            </audio>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex w-1/2 items-center justify-end gap-2">
+                        <Image.PreviewGroup>
+                          {daalgavar.zurguud?.map((mur) => (
+                            <Image
+                              key={mur}
+                              alt={mur}
+                              height="2rem"
+                              width="2rem"
+                              src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                            />
+                          ))}
+                        </Image.PreviewGroup>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+              )}
               <div className="flex w-full flex-col">
                 {daalgavriinSetgegdel?.jagsaalt?.map((mur) => (
                   <div className="flex items-center gap-2">
@@ -391,8 +402,10 @@ function index({ token }) {
                       key={mur._id + "daalgavriinSetgegdel"}
                       className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
                     >
-                      <div className="pb-1 font-medium  ">{mur.ajiltniiNer}</div>
-                      <div className="break-words w-full  " >{mur.message}</div>
+                      <div className="pb-1 font-medium  ">
+                        {mur.ajiltniiNer}
+                      </div>
+                      <div className="w-full break-words  ">{mur.message}</div>
                       <div className="absolute bottom-1 right-3 break-words text-gray-300">
                         {moment(mur.ognoo).format("HH:mm")}
                       </div>
@@ -411,7 +424,7 @@ function index({ token }) {
                   minRows: 1,
                   maxRows: 3,
                 }}
-                className="focus:outline-none break-words h-10 w-full rounded-md border border-gray-600 p-2 focus:border-gray-400"
+                className="focus:outline-none h-10 w-full break-words rounded-md border border-gray-600 p-2 focus:border-gray-400"
                 placeholder="Тайлбар"
                 ref={inputRef}
                 value={setgegdel}

@@ -10,6 +10,41 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
+function hrefAvya(mur, ajiltan, turul, _id) {
+  var href = "";
+
+  if (ajiltan.erkh === "Admin")
+    switch (mur.turul) {
+      case "daalgavar":
+        href = "/khyanalt/daalgavar/admin";
+        break;
+      case "sanal":
+        href = `/khyanalt/medegdel/${turul}/${_id}`;
+      case "gomdol":
+        href = `/khyanalt/medegdel/${turul}/${_id}`;
+      case "setgegdel":
+        href = "/khyanalt/daalgavar/admin";
+      default:
+        break;
+    }
+  else {
+    switch (mur.turul) {
+      case "daalgavar":
+        href = "/khyanalt/daalgavar";
+        break;
+      case "sanal":
+        href = `/khyanalt/medegdel/${turul}/${_id}`;
+      case "gomdol":
+        href = `/khyanalt/medegdel/${turul}/${_id}`;
+      case "setgegdel":
+        href = "/khyanalt/daalgavar";
+      default:
+        break;
+    }
+  }
+  return href;
+}
+
 function ProfileTovch({ ajiltan, garya, token }) {
   const {
     sonorduulga,
@@ -73,13 +108,10 @@ function ProfileTovch({ ajiltan, garya, token }) {
                     }`}
                   >
                     <Link
-                      href={
-                        mur.turul === "daalgavar"
-                          ? `/khyanalt/daalgavar`
-                          : mur.turul === "sanal" || mur.turul === "gomdol"
-                          ? `/khyanalt/medegdel/${turul}/${_id}`
-                          : `/khyanalt/daalgavar`
-                      }
+                      href={{
+                        pathname: hrefAvya(mur, ajiltan, turul, _id),
+                        query: { id: mur.object.ajiltniiId },
+                      }}
                     >
                       <div className="relative  flex cursor-pointer items-center justify-between">
                         <div className="flex" style={{ maxWidth: `2.5rem` }}>
