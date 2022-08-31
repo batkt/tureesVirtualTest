@@ -31,12 +31,15 @@ const formItemLayout = {
   },
 };
 
+const query = { idevkhiteiEsekh: false };
+
 function TalbaiSongolt({ value, onChange, mode }) {
   const { token, baiguullaga } = useAuth();
 
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
     token,
-    baiguullaga?._id
+    baiguullaga?._id,
+    query
   );
 
   function onValueChange(v) {
@@ -55,7 +58,20 @@ function TalbaiSongolt({ value, onChange, mode }) {
       onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search }))}
     >
       {talbainiiGaralt?.jagsaalt?.map((a) => {
-        return <Select.Option key={a._id}>{a.kod}</Select.Option>;
+        return (
+          <Select.Option key={a._id}>
+            <div className="flex ">
+              <p className="w-28 border-r-2 text-left">{a.kod}</p>
+              <p className="w-24 border-r-2 text-center">
+                {a.talbainKhemjee}m<sup>2</sup>
+              </p>
+              <p className="w-20 border-r-2 text-center">{a.davkhar}F</p>
+              <p className="w-full text-right">
+                {a.tureesiinTulbur ? a.tureesiinTulbur : 0}₮
+              </p>
+            </div>
+          </Select.Option>
+        );
       })}
     </Select>
   );

@@ -17,7 +17,7 @@ import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh
 import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
 
-const order = { createdAt: -1 };
+const order = { updatedAt: -1 };
 
 function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
@@ -132,7 +132,7 @@ function index({ token }) {
 
   useEffect(() => {
     if (id) {
-      setDaalgavar(task?.jagsaalt?.find((mur) => id === mur.ajiltniiId));
+      setDaalgavar(task?.jagsaalt?.find((mur) => id === mur._id));
     }
   }, [id, task?.data]);
 
@@ -152,7 +152,10 @@ function index({ token }) {
       className={"gap-5 sm:p-6"}
       onSearch={task.onSearch}
     >
-      <div className="col-span-12 flex flex-col space-y-5 bg-white p-8 dark:bg-gray-900 xl:col-span-5">
+      <div
+        style={{ height: "calc(100vh - 8rem)" }}
+        className="col-span-12 flex flex-col space-y-5 rounded-l-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-5"
+      >
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
             <div className="text-2xl ">Өнөөдөр</div>
@@ -274,6 +277,8 @@ function index({ token }) {
                         ? "Хүлээн авсан"
                         : mur.tuluv === 2
                         ? "Дууссан"
+                        : mur.tuluv === -1
+                        ? "Цуцлагдсан"
                         : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
@@ -300,9 +305,9 @@ function index({ token }) {
       <div
         className={`col-span-12 ${
           daalgavar ? "block" : "hidden"
-        } relative gap-5 bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
+        } relative gap-5 rounded-r-2xl bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
         data-aos="flip-right"
-        style={{ height: "80vh" }}
+        style={{ height: "calc(100vh - 8rem)" }}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
@@ -330,7 +335,11 @@ function index({ token }) {
                         <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
                           {moment(daalgavar.ognoo).format("YYYY/MM/DD HH:mm")}
                         </div>
-                        <div className="ml-5 flex">
+                        <div
+                          className={`ml-5 ${
+                            daalgavar?.tuluv === -1 ? "hidden" : "flex"
+                          }`}
+                        >
                           <Popconfirm
                             disabled={daalgavar?.tuluv === 2}
                             title={`Та даалгавар цуцлах уу?`}
@@ -350,6 +359,13 @@ function index({ token }) {
                               {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
                             </div>
                           </Popconfirm>
+                        </div>
+                        <div
+                          className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${
+                            daalgavar?.tuluv === -1 ? "flex" : "hidden"
+                          }`}
+                        >
+                          Цуцлагдсан
                         </div>
                       </div>
                     </div>

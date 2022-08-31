@@ -96,8 +96,9 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   _id,
                   tailbar,
                   ajiltniiNer,
+                  ajiltniiId,
                 } = mur?.object || {};
-                return (
+                return ajiltniiId === ajiltan._id ? null : (
                   <Menu.Item
                     key={`sonorduulga${i}`}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
@@ -110,7 +111,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                     <Link
                       href={{
                         pathname: hrefAvya(mur, ajiltan, turul, _id),
-                        query: { id: mur.object.ajiltniiId },
+                        query: { id: mur.object.daalgavriinId },
                       }}
                     >
                       <div className="relative  flex cursor-pointer items-center justify-between">

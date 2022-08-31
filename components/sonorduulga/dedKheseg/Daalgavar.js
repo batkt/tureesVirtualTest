@@ -7,7 +7,6 @@ function Daalgavar({ onClose, token, ...object }) {
 
   function sonorduulgaKharlaa() {
     uilchilgee(token).post("/sanalKharlaa", { id: _id }).catch(aldaaBarigch);
-    onClose();
   }
 
   return (
@@ -35,7 +34,10 @@ function Daalgavar({ onClose, token, ...object }) {
       <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">
         <a
           className="text-theme-1 dark:border-dark-5 flex flex-1 items-center justify-center border-b border-gray-200 px-6 font-medium dark:text-gray-500"
-          onClick={sonorduulgaKharlaa}
+          onClick={(event) => {
+            event.stopPropagation();
+            sonorduulgaKharlaa();
+          }}
         >
           Дэлгэрэнгүй
         </a>

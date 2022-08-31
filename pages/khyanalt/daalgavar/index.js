@@ -30,6 +30,8 @@ function index({ token }) {
   const inputRef = React.useRef();
   const ChatRef = React.useRef();
   const messageEl = React.useRef(null);
+  const router = useRouter();
+  const { id } = router.query;
 
   const query = React.useMemo(
     () => ({
@@ -100,6 +102,11 @@ function index({ token }) {
       });
     }
   }, []);
+  useEffect(() => {
+    if (id) {
+      setDaalgavar(task?.jagsaalt?.find((mur) => id === mur._id));
+    }
+  }, [id, task?.data]);
 
   function setgegdelBichie() {
     if (!setgegdel) {
@@ -109,14 +116,6 @@ function index({ token }) {
       });
       return;
     }
-    const router = useRouter();
-    const { id } = router.query;
-
-    useEffect(() => {
-      if (id) {
-        setDaalgavar(task?.jagsaalt?.find((mur) => id === mur.ajiltniiId));
-      }
-    }, [id, task?.data]);
 
     inputRef.current.focus();
     uilchilgee(token)
@@ -213,6 +212,8 @@ function index({ token }) {
                         ? "Хүлээн авсан"
                         : mur.tuluv === 2
                         ? "Дууссан"
+                        : mur.tuluv === -1
+                        ? "Цуцлагдсан"
                         : "Эхлээгүй"}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
@@ -261,7 +262,11 @@ function index({ token }) {
                         <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
                           {moment().format("YYYY/MM/DD HH:mm")}
                         </div>
-                        <div className="ml-5 flex">
+                        <div
+                          className={`ml-5 ${
+                            daalgavar?.tuluv === -1 ? "hidden" : "flex"
+                          }`}
+                        >
                           <Popconfirm
                             disabled={daalgavar?.tuluv === 2}
                             title={`Та даалгавар ${
@@ -291,6 +296,13 @@ function index({ token }) {
                                 : "Дууссан"}
                             </div>
                           </Popconfirm>
+                        </div>
+                        <div
+                          className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${
+                            daalgavar?.tuluv === -1 ? "flex" : "hidden"
+                          }`}
+                        >
+                          Цуцлагдсан
                         </div>
                       </div>
                     </div>
