@@ -274,12 +274,7 @@ const YurunkhiiMedeele = ({
       )}
       {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item
-            name="mail"
-            hidden={baiguullagaEsekh}
-            rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
-            label="И-мэйл хаяг"
-          >
+          <Form.Item name="mail" hidden={baiguullagaEsekh} label="И-мэйл хаяг">
             <Input
               type="email"
               placeholder="И-мэйл хаяг"
