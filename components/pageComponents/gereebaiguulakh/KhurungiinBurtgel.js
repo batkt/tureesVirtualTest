@@ -31,7 +31,7 @@ const formItemLayout = {
   },
 };
 
-const query = { idevkhiteiEsekh: false };
+const query = {  };
 
 function TalbaiSongolt({ value, onChange, mode }) {
   const { token, baiguullaga } = useAuth();
