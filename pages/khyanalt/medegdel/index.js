@@ -86,8 +86,8 @@ function IlgeesenToo({
       }).then((a) => a.data)
   );
   return (
-    <div className="mr-5">
-      {text} : <span className="font-medium">{data || 0}</span>
+    <div className="ml-6 flex xl:flex-col xl:text-center">
+      {text} <span className="ml-3 font-medium xl:ml-0">{data || 0}</span>
     </div>
   );
 }
@@ -444,7 +444,7 @@ function Khyanalt({ token }) {
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
     >
-      <div className="col-span-12 lg:col-span-3 xl:col-span-3">
+      <div className="col-span-12 xl:col-span-3">
         <div
           className="intro-y pr-1"
           data-aos="fade-right"
@@ -473,9 +473,9 @@ function Khyanalt({ token }) {
           data-aos-delay="100"
         >
           {turul === "SMS" ? (
-            <div className="mt-3 block 2xl:mt-auto 2xl:flex">
-              <p className="absolute -top-1 -left-1 rounded-md bg-white text-sm dark:bg-gray-900">
-                SMS явуулсан байдал :
+            <div className=" flex items-center xl:mt-3 xl:block 2xl:mt-auto 2xl:flex">
+              <p className="rounded-md bg-white text-sm dark:bg-gray-900">
+                SMS илгээсэн
               </p>
               <IlgeesenToo
                 barilgiinId={barilgiinId}
@@ -582,7 +582,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       <div
-        className={`col-span-12 lg:col-span-3 xl:col-span-3 ${
+        className={`col-span-12 xl:col-span-3 ${
           ilgeekhTurul === "gantsaar" ? "" : "hidden"
         }`}
         data-aos="fade-up"
@@ -671,7 +671,7 @@ function Khyanalt({ token }) {
         )}
       </div>
       <div
-        className={`intro-y col-span-12 lg:col-span-6 xl:col-span-6 ${
+        className={`intro-y col-span-12 xl:col-span-6 ${
           ilgeekhTurul === "gantsaar"
             ? "lg:col-span-6 xl:col-span-6"
             : "lg:col-span-9 xl:col-span-9"
