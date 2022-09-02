@@ -54,7 +54,7 @@ function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: 1000,
     search: "",
     jagsaalt: [],
   });
