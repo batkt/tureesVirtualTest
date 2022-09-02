@@ -193,9 +193,7 @@ function talbaiBurtgekh({ token }) {
 
   function onChange(talbar, utga) {
 
-    if (!talbaiState.ashiglaltiinZardal) {
-      talbaiState.ashiglaltiinZardal = 0
-    }
+
 
     if (talbar === "talbainNegjUne") {
       let value = Number(utga) * Number(talbaiState.talbainKhemjee);
@@ -376,7 +374,9 @@ function talbaiBurtgekh({ token }) {
 
   function onFinish() {
     talbaiBurtgekh();
-
+    if (!talbaiState.ashiglaltiinZardal) {
+      talbaiState.ashiglaltiinZardal = 0
+    }
   }
 
   function onRefresh() {
