@@ -47,7 +47,8 @@ function index({ token }) {
   );
   const daalgavriinSetgegdel = useJagsaalt(
     daalgavar && "/setgegdel",
-    setgegdeliinQuery
+    setgegdeliinQuery,
+    order
   );
 
   function daalgavarTsutslakh() {
@@ -316,6 +317,10 @@ function index({ token }) {
           className="w-full min-w-0 max-w-6xl space-y-5 overflow-y-scroll p-8"
           style={{ height: "90%" }}
           ref={messageEl}
+          // onScroll={(e) => {
+          //   if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
+          //     daalgavriinSetgegdel.next();
+          // }}
         >
           <div className="flex flex-row">
             <div className="w-full p-0 sm:p-2">
@@ -406,28 +411,32 @@ function index({ token }) {
                 </div>
               )}
               <div className="flex w-full flex-col">
-                {daalgavriinSetgegdel?.jagsaalt?.map((mur) => (
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-11 w-11 items-start justify-center rounded-full bg-gray-300 dark:bg-gray-800">
-                      <img
-                        src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
-                        className="-mt-1 h-11 w-11 rounded-full"
-                      />
-                    </div>
-                    <div
-                      key={mur._id + "daalgavriinSetgegdel"}
-                      className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
-                    >
-                      <div className="pb-1 font-medium  ">
-                        {mur.ajiltniiNer}
+                {daalgavriinSetgegdel?.jagsaalt
+                  ?.map((mur) => (
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-11 w-11 items-start justify-center rounded-full bg-gray-300 dark:bg-gray-800">
+                        <img
+                          src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
+                          className="-mt-1 h-11 w-11 rounded-full"
+                        />
                       </div>
-                      <div className="w-full break-words  ">{mur.message}</div>
-                      <div className="absolute bottom-1 right-3 break-words text-gray-300">
-                        {moment(mur.ognoo).format("HH:mm")}
+                      <div
+                        key={mur._id + "daalgavriinSetgegdel"}
+                        className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
+                      >
+                        <div className="pb-1 font-medium  ">
+                          {mur.ajiltniiNer}
+                        </div>
+                        <div className="w-full break-words  ">
+                          {mur.message}
+                        </div>
+                        <div className="absolute bottom-1 right-3 break-words text-gray-300">
+                          {moment(mur.ognoo).format("HH:mm")}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                  .reverse()}
               </div>
             </div>
           </div>

@@ -7,12 +7,7 @@ import getBase64 from "tools/function/getBase64";
 
 const { TextArea } = Input;
 
-function KhuviinMedeelel({
-  ajiltan = {},
-  token,
-  ajiltanMutate,
-  khadgalsniiDaraa,
-}) {
+function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -120,6 +115,11 @@ function KhuviinMedeelel({
                     src={
                       ajiltan?.zurgiinNer
                         ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
+                        : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) /
+                            10) %
+                            2 <
+                          1
+                        ? "/profileFemale.svg"
                         : "/profile.svg"
                     }
                   />

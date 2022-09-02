@@ -642,7 +642,12 @@ function Khyanalt({ token }) {
                     <img
                       alt="Rubick"
                       className="rounded-full"
-                      src="/profile.svg"
+                      src={
+                        ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
+                        1
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
+                      }
                     />
                     <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                   </div>
@@ -706,7 +711,14 @@ function Khyanalt({ token }) {
                     <img
                       alt="Rubick Tailwind HTML Admin Template"
                       className="rounded-full"
-                      src="/profile.svg"
+                      src={
+                        ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
+                          10) %
+                          2 <
+                        1
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
+                      }
                     />
                   </div>
                   <div className="ml-3 mr-auto">
@@ -930,11 +942,19 @@ function Khyanalt({ token }) {
             data-aos-duration="1000"
           >
             <div className="mx-auto text-center">
-              <div className="image-fit mx-auto h-16 w-16 flex-none overflow-hidden rounded-full">
-                <img
-                  alt="Rubick Tailwind HTML Admin Template"
-                  src="/profile.svg"
-                />
+              <div className="flex justify-center">
+                <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                  <img
+                    alt="Rubick Tailwind HTML Admin Template"
+                    src="/profile.svg"
+                  />
+                </div>
+                <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                  <img
+                    alt="Rubick Tailwind HTML Admin Template"
+                    src="/profileFemale.svg"
+                  />
+                </div>
               </div>
               <div className="mt-3">
                 <div className="font-medium">Өдрийн мэнд</div>

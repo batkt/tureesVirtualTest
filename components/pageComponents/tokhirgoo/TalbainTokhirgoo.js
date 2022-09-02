@@ -51,6 +51,9 @@ function KhuviinMedeelel({
                     src={
                       a?.zurgiinNer
                         ? `${url}/ajiltniiZuragAvya/${a?.baiguullagiinId}/${a?.zurgiinNer}`
+                        : ((a?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
+                          1
+                        ? "/profileFemale.svg"
                         : "/profile.svg"
                     }
                     className="rounded-full"

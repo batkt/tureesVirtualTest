@@ -20,7 +20,7 @@ import Aos from "aos";
 import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
 
-const order = { createdAt: -1 };
+const order = { updatedAt: -1 };
 
 function index({ token }) {
   const [tuluv, setTuluv] = React.useState("Идэвхитэй");
@@ -53,7 +53,8 @@ function index({ token }) {
 
   const daalgavriinSetgegdel = useJagsaalt(
     daalgavar && "/setgegdel",
-    setgegdeliinQuery
+    setgegdeliinQuery,
+    order
   );
 
   function daalgavarKhuleejAvlaa() {
@@ -343,26 +344,32 @@ function index({ token }) {
                 </div>
               )}
               <div className="flex w-full flex-col">
-                {daalgavriinSetgegdel?.jagsaalt?.map((mur) => (
-                  <div className="flex items-center gap-2">
-                    <div className="flex h-11 w-11 items-start justify-center rounded-full bg-gray-300 dark:bg-gray-800">
-                      <img
-                        src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
-                        className="-mt-1 h-11 w-11 rounded-full"
-                      />
-                    </div>
-                    <div
-                      key={mur._id + "daalgavriinSetgegdel"}
-                      className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
-                    >
-                      <div className="pb-1 font-medium">{mur.ajiltniiNer}</div>
-                      <div className="w-full break-words  ">{mur.message}</div>
-                      <div className="absolute bottom-1 right-3 text-gray-300">
-                        {moment(mur.ognoo).format("HH:mm")}
+                {daalgavriinSetgegdel?.jagsaalt
+                  ?.map((mur) => (
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-11 w-11 items-start justify-center rounded-full bg-gray-300 dark:bg-gray-800">
+                        <img
+                          src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
+                          className="-mt-1 h-11 w-11 rounded-full"
+                        />
+                      </div>
+                      <div
+                        key={mur._id + "daalgavriinSetgegdel"}
+                        className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
+                      >
+                        <div className="pb-1 font-medium">
+                          {mur.ajiltniiNer}
+                        </div>
+                        <div className="w-full break-words  ">
+                          {mur.message}
+                        </div>
+                        <div className="absolute bottom-1 right-3 text-gray-300">
+                          {moment(mur.ognoo).format("HH:mm")}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                  .reverse()}
               </div>
             </div>
           </div>

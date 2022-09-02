@@ -98,7 +98,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   ajiltniiNer,
                   ajiltniiId,
                 } = mur?.object || {};
-                return ajiltniiId === ajiltan._id ? null : (
+                return (
                   <Menu.Item
                     key={`sonorduulga${i}`}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
@@ -228,6 +228,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
             src={
               ajiltan?.zurgiinNer
                 ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
+                : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
+                ? "/profileFemale.svg"
                 : "/profile.svg"
             }
             className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"

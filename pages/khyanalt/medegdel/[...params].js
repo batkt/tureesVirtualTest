@@ -11,7 +11,7 @@ import getListMethod from "tools/function/crud/getListMethod";
 import formatNumber from "tools/function/formatNumber";
 import useSWR from "swr";
 
-import { uldegdeliinTurulKhurvuulya } from "./index"
+import { uldegdeliinTurulKhurvuulya } from "./index";
 
 function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
   const { data } = useSWR(
@@ -30,8 +30,9 @@ function GereeniiUldegdel({ label = "", ugugdul, token, barilgiinId }) {
 
   return (
     <div
-      className={`font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {!data ? (
         <Spin size="small" />
@@ -217,7 +218,14 @@ function index({ token, data }) {
                   <img
                     alt="Rubick Tailwind HTML Admin Template"
                     className="rounded-full"
-                    src="/profile.svg"
+                    src={
+                      ((khariltsagch.register?.replace(/^\D+/g, "") % 100) /
+                        10) %
+                        2 <
+                      1
+                        ? "/profileFemale.svg"
+                        : "/profile.svg"
+                    }
                   />
                 </div>
                 <div className="ml-3 mr-auto">
@@ -241,15 +249,17 @@ function index({ token, data }) {
               return (
                 <div
                   key={a._id}
-                  className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3 ${a.turul === "medegdel"
-                    ? "ml-auto rounded-br-none bg-blue-500"
-                    : "rounded-bl-none"
-                    }`}
+                  className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3 ${
+                    a.turul === "medegdel"
+                      ? "ml-auto rounded-br-none bg-blue-500"
+                      : "rounded-bl-none"
+                  }`}
                 >
                   <span className="text-white">{a.message}</span>
                   <div
-                    className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
-                      }`}
+                    className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                      a.kharsanEsekh === true ? "" : "hidden"
+                    }`}
                   >
                     <svg
                       width="20px"

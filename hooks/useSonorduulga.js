@@ -10,13 +10,20 @@ const fetcher = (
   token,
   baiguullagiinId,
   barilgiinId,
+  ajiltniiId,
   { jagsaalt, ...khuudaslalt }
 ) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: { baiguullagiinId, barilgiinId },
+        query: {
+          baiguullagiinId,
+          barilgiinId,
+          "object.ajiltniiId": {
+            $ne: ajiltniiId,
+          },
+        },
         order: { createdAt: -1 },
       },
     })
@@ -34,7 +41,14 @@ const tooFetcher = (
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: { baiguullagiinId, barilgiinId, kharsanEsekh: { $ne: true } },
+        query: {
+          baiguullagiinId,
+          barilgiinId,
+          kharsanEsekh: { $ne: true },
+          ajiltniiId: {
+            $ne: "nevtersenAjiltniiId",
+          },
+        },
         order: { createdAt: -1 },
       },
     })
@@ -44,7 +58,7 @@ const tooFetcher = (
 var sonorduulgaId = null;
 
 function useSonorduulga(token) {
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 20,
@@ -52,7 +66,14 @@ function useSonorduulga(token) {
   });
   const { data, mutate } = useSWR(
     !!token && !!baiguullaga?._id
-      ? ["/sonorduulga", token, baiguullaga?._id, barilgiinId, khuudaslalt]
+      ? [
+          "/sonorduulga",
+          token,
+          baiguullaga?._id,
+          barilgiinId,
+          ajiltan?._id,
+          khuudaslalt,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
