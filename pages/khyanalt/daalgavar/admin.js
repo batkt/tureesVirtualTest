@@ -200,8 +200,9 @@ function index({ token }) {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 font-medium dark:bg-green-700 sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
-          {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status) => (
+          {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status, index) => (
             <div
+              key={index}
               onClick={() => setTuluv(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
@@ -333,7 +334,7 @@ function index({ token }) {
                       className="h-10 w-10 rounded-full"
                     />
                   </div>
-                  <div className="relative w-10/12 rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+                  <div className="relative w-10/12  rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
                     <div className="flex flex-row flex-wrap items-center justify-between">
                       <div className="font-medium">Захирал</div>
                       <div className="flex">
@@ -393,7 +394,7 @@ function index({ token }) {
                           </div>
                         ))}
                       </div>
-                      <div className="flex w-1/2 items-center justify-end gap-2">
+                      <div className="flex w-1/2 items-center justify-end gap-2 overflow-hidden">
                         <Image.PreviewGroup>
                           {daalgavar.zurguud?.map((mur) => (
                             <Image
@@ -412,17 +413,32 @@ function index({ token }) {
               )}
               <div className="flex w-full flex-col">
                 {daalgavriinSetgegdel?.jagsaalt
-                  ?.map((mur) => (
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-11 w-11 items-start justify-center rounded-full bg-gray-300 dark:bg-gray-800">
+                  ?.map((mur, index) => (
+                    <div
+                      key={index}
+                      className={`flex ${
+                        ajiltan?._id === mur?.ajiltniiId
+                          ? ""
+                          : "flex-row-reverse"
+                      } items-center gap-2`}
+                    >
+                      <div className="flex h-11 w-11 items-start justify-center rounded-full border-2 border-gray-600 bg-white dark:bg-gray-800">
                         <img
-                          src="https://cdn1.iconfinder.com/data/icons/avatars-1-5/136/87-512.png"
-                          className="-mt-1 h-11 w-11 rounded-full"
+                          src={
+                            ajiltan?._id === mur?.ajiltniiId
+                              ? "/sent.svg"
+                              : "/receive.svg"
+                          }
+                          className="- h-9 w-9"
                         />
                       </div>
                       <div
                         key={mur._id + "daalgavriinSetgegdel"}
-                        className=" relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl bg-green-500 p-5 pt-1 text-white dark:bg-green-600"
+                        className={`relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl ${
+                          ajiltan?._id === mur?.ajiltniiId
+                            ? "bg-gray-400 dark:bg-gray-600"
+                            : "bg-green-500 dark:bg-green-600"
+                        }  p-5 pt-1 text-white `}
                       >
                         <div className="pb-1 font-medium  ">
                           {mur.ajiltniiNer}
