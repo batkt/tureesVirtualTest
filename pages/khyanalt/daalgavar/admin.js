@@ -417,7 +417,9 @@ function index({ token }) {
                     <div
                       key={index}
                       className={`flex ${
-                        ajiltan?._id === mur?.ajiltniiId ? "" : "flex-row"
+                        ajiltan?._id === mur?.ajiltniiId
+                          ? "flex-row-reverse"
+                          : ""
                       } items-center gap-2`}
                     >
                       <div className="flex h-11 w-11 items-start justify-center rounded-full border-2 border-gray-600 bg-white dark:bg-gray-800">
