@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useAjiltan from "hooks/useAjiltan";
+import { useEffect } from "react";
 
 function hrefAvya(turul, _id, daalgavriinId, ajiltan) {
   var href = "";
@@ -46,6 +47,12 @@ function Zakhialga({ onClose, token, ...object }) {
     window.location.href = href;
     uilchilgee(token).post("/sanalKharlaa", { id: _id }).catch(aldaaBarigch);
   }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div

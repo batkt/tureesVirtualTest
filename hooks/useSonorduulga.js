@@ -1,4 +1,4 @@
-import { notification } from "antd";
+import { message, notification } from "antd";
 import axios, { socket, aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Sonorduulga from "components/sonorduulga";
@@ -95,24 +95,25 @@ function useSonorduulga(token) {
   useEffect(() => {
     if (baiguullaga?._id) {
       socket().on(`baiguullaga${baiguullaga?._id}`, (sonorduulga) => {
-        console.log("sonorduulga", sonorduulga);
         const key = `${Math.floor(Math.random() * 100)}+${Date.now()}`;
         mutate();
         too.mutate();
+        console.log(sonorduulga.ajiltniiId);
         if (!!sonorduulga && sonorduulgaId !== sonorduulga?._id) {
           function onClose() {
             notification.close(key);
           }
-
-          notification.open({
-            key: key,
-            message: (
-              <Sonorduulga token={token} {...sonorduulga} onClose={onClose} />
-            ),
-            closeIcon: () => null,
-            duration: 100000,
-          });
-          sonorduulgaId = sonorduulga?._id;
+          if (ajiltan._id !== sonorduulga.ajiltniiId) {
+            notification.open({
+              key: key,
+              message: (
+                <Sonorduulga token={token} {...sonorduulga} onClose={onClose} />
+              ),
+              closeIcon: () => null,
+              duration: 100000,
+            });
+            sonorduulgaId = sonorduulga?._id;
+          }
         }
       });
     }

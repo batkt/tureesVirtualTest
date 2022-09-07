@@ -18,6 +18,7 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
+import router from "next/router";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
@@ -28,7 +29,6 @@ import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 import { toWords } from "mon_num";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
-import NekhemjlelZagvarBurtgel from "components/pageComponents/nekhemjlel/ZagvarBurtgel";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -43,7 +43,6 @@ function tulburTootsoo({ token }) {
   });
   const printRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
-  const nekhemjlekhRef = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
 
   const [ognoo, setOgnoo] = React.useState(moment());
@@ -219,37 +218,6 @@ function tulburTootsoo({ token }) {
     }
   }
 
-  function nekhemjlelZagvarBurtgeye(mur) {
-    const footer = [
-      <Button onClick={() => nekhemjlekhRef.current.khaaya()}>Хаах</Button>,
-      <Button
-        style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => {
-          setWaiting(true);
-          nekhemjlekhRef.current.khadgalya();
-        }}
-      >
-        Хадгалах
-      </Button>,
-    ];
-    modal({
-      title: "Нэхэмжлэл загвар",
-      icon: <FileExcelOutlined />,
-      style: { top: 20 },
-      content: (
-        <NekhemjlelZagvarBurtgel
-          ref={nekhemjlekhRef}
-          setWaiting={setWaiting}
-          data={mur}
-          barilgiinId={barilgiinId}
-          token={token}
-          afterShock={nekhemjlekhiinZagvarMutate}
-        />
-      ),
-      footer,
-    });
-  }
-
   function nekhemjlelZasya(mur, index) {
     const footer = [
       <Button onClick={() => dunZasvarRef.current.khaaya()}>Хаах</Button>,
@@ -382,7 +350,9 @@ function tulburTootsoo({ token }) {
                 <Button
                   style={{ backgroundColor: "#209669", color: "#ffffff" }}
                   className="ml-auto"
-                  onClick={() => nekhemjlelZagvarBurtgeye()}
+                  onClick={() =>
+                    router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
+                  }
                 >
                   Загвар үүсгэх
                 </Button>
@@ -411,7 +381,11 @@ function tulburTootsoo({ token }) {
                     </div>
                     <div
                       className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
-                      onClick={() => nekhemjlelZagvarBurtgeye(a)}
+                      onClick={() =>
+                        router.push(
+                          `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
+                        )
+                      }
                     >
                       <EditOutlined
                         style={{ display: "flex", color: "#85C1E9" }}

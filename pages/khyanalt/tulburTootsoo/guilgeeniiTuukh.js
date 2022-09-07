@@ -60,8 +60,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -238,7 +239,15 @@ function guilgeeniiTuukh({ token }) {
       };
     else if (turul === "eneSardTulukh") {
       sericeName = null;
-    } else query = { davkhar, baiguullagiinId: baiguullaga?._id, barilgiinId };
+    } else
+      query = {
+        davkhar,
+        baiguullagiinId: baiguullaga?._id,
+        barilgiinId,
+        tuluv: {
+          $ne: -1,
+        },
+      };
     return { sericeName, query, turulColumns };
   }, [turul, ognoo, davkhar, barilgiinId]);
 
@@ -276,8 +285,7 @@ function guilgeeniiTuukh({ token }) {
     onSearchMedeelel,
     setEneSardTuluuguiGereenuud,
   ]);
-
-  console.log(turul);
+  console.log(gereeniiMedeelel);
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -440,12 +448,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -600,8 +608,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`intro-y zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
