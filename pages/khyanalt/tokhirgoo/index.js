@@ -15,6 +15,7 @@ import QPay from "components/pageComponents/tokhirgoo/QPay";
 import Dans from "components/pageComponents/tokhirgoo/Dans";
 import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo";
 import Zogsool from "components/pageComponents/tokhirgoo/Zogsool";
+import AppTokhirgoo from "components/pageComponents/tokhirgoo/AppTokhirgoo";
 
 import { useMemo, useState } from "react";
 import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
@@ -356,6 +357,29 @@ function AjiltanBurtgel({ token }) {
             />
           ),
         },
+        {
+          icon: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="64 64 896 896"
+              focusable="false"
+              data-icon="calendar"
+              width="24"
+              height="24"
+              fill="currentColor"
+              aria-hidden="true"
+              className="feather feather-settings mr-2 h-4 w-4"
+            >
+              <path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path></svg>
+          ),
+          text: "Хэрэглэгчийн Апп",
+          tsonkh: (
+            <AppTokhirgoo
+              {...{ baiguullaga }}
+              token={token}
+            />
+          ),
+        },
       ];
     else
       return [
@@ -440,9 +464,8 @@ function AjiltanBurtgel({ token }) {
           <div className="dark:border-dark-5 border-t border-gray-200 p-5 text-green-600">
             {tokhirgoo?.map((mur) => (
               <div
-                className={`mt-5 flex cursor-pointer items-center ${
-                  mur?.text === tsonkh?.text ? "font-medium" : ""
-                } `}
+                className={`mt-5 flex cursor-pointer items-center ${mur?.text === tsonkh?.text ? "font-medium" : ""
+                  } `}
                 onClick={() => setTsonkh(mur)}
               >
                 {mur.icon} {mur.text}
