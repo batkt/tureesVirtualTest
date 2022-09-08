@@ -654,7 +654,7 @@ function talbaiBurtgekh({ token }) {
               </Form.Item>
             </div>
           </div>
-          <Divider className="pb-5">Хөрөнгийн бүртгэл</Divider>
+          <Divider className="pb-5"  >Хөрөнгийн бүртгэл</Divider>
           <div>
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
@@ -759,7 +759,7 @@ function talbaiBurtgekh({ token }) {
                             data={{ turul: "khurungu" }}
                             headers={{ Authorization: `bearer ${token}` }}
                           >
-                            <Button icon={<UploadOutlined />}>
+                            <Button className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  " icon={<UploadOutlined />}>
                               Зураг оруулах
                             </Button>
                           </Upload>
@@ -769,6 +769,7 @@ function talbaiBurtgekh({ token }) {
                   ))}
                   <div className="-mt-4 flex justify-center gap-5 px-2">
                     <Button
+                      className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                       type="dashed"
                       onClick={() => add()}
                       block
