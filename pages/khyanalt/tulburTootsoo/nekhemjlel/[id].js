@@ -97,7 +97,7 @@ const nekhemjlekhiinNemelt = [
 
 function getSize(khemjee, orientation) {
   let width = "210mm";
-  let height = "290mm";
+  let height = "297mm";
   switch (khemjee) {
     case "A4":
       width = "210mm";
