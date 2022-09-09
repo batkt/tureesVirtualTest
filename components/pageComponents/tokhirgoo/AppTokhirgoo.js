@@ -48,7 +48,7 @@ function AppTokhirgoo({ token, baiguullaga, }) {
 
                         <div hidden={!baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo} className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
                             <p className="mr-auto text-xs font-meium dark:text-gray-200">
-                                Хэрвээ энэхүү тохиргоог өөрчилхийг хүсвэл манай байгуулгад хандана уу
+                                Хэрвээ энэхүү тохиргоог өөрчлөхийг хүсвэл манай байгууллагад хандана уу
                             </p>
                         </div>
                     </div>
