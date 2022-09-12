@@ -463,14 +463,14 @@ function AjiltanBurtgel({ token }) {
                         content={() => (
                           <div className="flex w-24 flex-col space-y-2">
                             <a
-                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                               onClick={() => zasya(data)}
                             >
                               <EditOutlined style={{ fontSize: "18px" }} />
                               <label>Засах</label>
                             </a>
                             <a
-                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
+                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                               onClick={() => tokhiruulya(data)}
                             >
                               <SettingOutlined style={{ fontSize: "18px" }} />
@@ -482,7 +482,7 @@ function AjiltanBurtgel({ token }) {
                               cancelText="Үгүй"
                               onConfirm={() => ajiltanUstgay(data)}
                             >
-                              <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
+                              <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                                 <DeleteOutlined
                                   style={{ fontSize: "18px", color: "red" }}
                                 />

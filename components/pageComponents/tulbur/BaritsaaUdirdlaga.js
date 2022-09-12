@@ -129,7 +129,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         </Radio.Group>
       </div>
       <Divider />
-      <div className="flex flex-row">
+      <div className="flex flex-row dark:text-gray-200">
         <div>{labelTurul(turul)}</div>
         <div className="ml-auto">
           {formatNumber(
@@ -163,7 +163,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         onChange={(e) => setTailbar(e.target.value)}
       />
       <div onClick={tuukhKharya}>
-        <a>Барьцааны хуулга</a>
+        <a className="dark:text-gray-200">Барьцааны хуулга</a>
       </div>
     </div>
   );

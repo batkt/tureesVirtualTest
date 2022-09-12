@@ -21,8 +21,10 @@ function ZakhialgaNemekh({ token }) {
   const router = useRouter();
   const { id } = router.query;
   const [form] = Form.useForm();
-  const { baiguullaga,barilgiinId } = useAuth();
-  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({dedKhesguud:[{zaalt:'new'}]});
+  const { baiguullaga, barilgiinId } = useAuth();
+  const [gereeniiZagvar, setGereeniiZagvar] = React.useState({
+    dedKhesguud: [{ zaalt: "new" }],
+  });
   const ref = React.useRef();
 
   React.useEffect(() => {
@@ -39,8 +41,8 @@ function ZakhialgaNemekh({ token }) {
     if (!gereeniiZagvar?._id) {
       values["baiguullagiinNer"] = baiguullaga.ner;
       values["baiguullagiinId"] = baiguullaga._id;
-      values["dedKhesguud"] = gereeniiZagvar.dedKhesguud
-      values["barilgiinId"] = barilgiinId
+      values["dedKhesguud"] = gereeniiZagvar.dedKhesguud;
+      values["barilgiinId"] = barilgiinId;
       createMethod("gereeniiZagvar", token, values).then(({ data }) => {
         if (data === "Amjilttai") {
           message.success("Амжилттай хадгаллаа");
@@ -59,10 +61,15 @@ function ZakhialgaNemekh({ token }) {
   }
 
   function docZasya(key, value) {
-    console.log(value)
+    console.log(value);
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button onClick={() => ref.current.khadgalya()}>Хадгалах</Button>,
+      <Button
+        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        onClick={() => ref.current.khadgalya()}
+      >
+        Хадгалах
+      </Button>,
     ];
 
     function change(utga) {
@@ -115,12 +122,12 @@ function ZakhialgaNemekh({ token }) {
       dedKhuudas
       className="p-4"
     >
-      <div className="col-span-12 lg:col-span-9 xl:col-span-10 box p-4">
-        <div className="flex flex-col w-full space-y-1">
-          <div className="w-full flex flex-row justify-between">
-            <div className="relative group">
+      <div className="box col-span-12 p-4 lg:col-span-9 xl:col-span-10">
+        <div className="flex w-full flex-col space-y-1">
+          <div className="flex w-full flex-row justify-between">
+            <div className="group relative">
               <div
-                className="border border-dashed border-gray-600 rounded-md p-2"
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
@@ -128,17 +135,17 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className="absolute hidden -top-2 -right-2 group-hover:block"
+                className="absolute -top-2 -right-2 hidden group-hover:block"
                 onClick={() =>
-                  docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi || '')
+                  docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi || "")
                 }
               >
-                <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
-            <div className="relative group">
+            <div className="group relative">
               <div
-                className="border border-dashed border-gray-600 rounded-md p-2"
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
@@ -146,12 +153,12 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className="absolute hidden -top-2 -right-2 group-hover:block"
+                className="absolute -top-2 -right-2 hidden group-hover:block"
                 onClick={() =>
-                  docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi || '')
+                  docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi || "")
                 }
               >
-                <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
           </div>
@@ -159,13 +166,17 @@ function ZakhialgaNemekh({ token }) {
             return (
               <div
                 key={mur._id}
-                className="flex flex-row w-full p-1 relative group hover:bg-gray-100 rounded-md"
+                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 {mur.kharagdakhDugaar ? (
                   <>
                     <div className="text-center">{mur.kharagdakhDugaar}</div>
                     <div
-                      className={`${mur.zaalt?.includes('table') ? "sun-editor-editable" : ""} w-full ml-5 p-0`}
+                      className={`${
+                        mur.zaalt?.includes("table")
+                          ? "sun-editor-editable"
+                          : ""
+                      } ml-5 w-full p-0`}
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </>
@@ -175,21 +186,17 @@ function ZakhialgaNemekh({ token }) {
                     dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                   />
                 )}
-                <div className="absolute hidden -top-2 -right-2 group-hover:flex flex-row space-x-2">
-                  <div
-                    onClick={() =>
-                      docZasya(`dedKhesguud.${index}`, mur)
-                    }
-                  >
-                    <EditOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-gray-200" />
+                <div className="absolute -top-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
+                  <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
+                    <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                   <div onClick={() => docUstgaya(index, mur)}>
-                    <DeleteOutlined className="rounded-full p-1 fill-current bg-white border cursor-pointer hover:bg-red-400" />
+                    <DeleteOutlined className="cursor-pointer rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                 </div>
-                <div className="absolute hidden -bottom-2 -right-2 group-hover:flex flex-row space-x-2">
+                <div className="absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
                   <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
-                    <FileAddOutlined className="rounded-full p-1 bg-white border cursor-pointer hover:bg-green-400" />
+                    <FileAddOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-green-400 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                 </div>
               </div>

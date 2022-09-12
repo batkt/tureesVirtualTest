@@ -486,7 +486,7 @@ function Anket({ token }) {
                 Анкетын нэр: {songogdsonAsuult?.ner}
               </div>
             </div>
-            <div className="col-span-12 rounded-md bg-white p-5">
+            <div className="col-span-12 rounded-md bg-white p-5 dark:bg-gray-900">
               <Table
                 dataSource={dataSource}
                 bordered

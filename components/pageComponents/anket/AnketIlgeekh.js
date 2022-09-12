@@ -125,7 +125,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
             value={utasniiDugaar}
             minlength="8"
             required
-            placeholder="утасны дугаар оруулна уу"
+            placeholder="Утасны дугаар оруулна уу"
             type={"number"}
             onChange={onchangeDugaar}
             onKeyUp={(event) => {

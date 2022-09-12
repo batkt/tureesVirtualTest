@@ -14,22 +14,22 @@ function anketBurtgel({ token, destroy, data, id }, ref) {
   );
 
   return (
-    <div className="border-2 px-1">
+    <div className="rounded-md border-2 p-2 dark:border-gray-600">
       <div className="flex justify-between">
-        <div className="flex gap-2 text-base font-medium uppercase">
+        <div className="flex gap-2 text-base font-medium uppercase dark:text-gray-200">
           <p className="normal-case">нэр:</p>
           {data.ner}
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 dark:text-gray-200">
           <p className="font-medium">Төрөл:</p> {data.turul}
         </div>
       </div>
       <div className="py-2 px-4">
         <div>
-          <p className="font-medium">Асуултууд:</p>{" "}
+          <p className="font-medium dark:text-gray-200">Асуултууд:</p>{" "}
           {data.asuultuud.map((mur, i) => {
             return (
-              <div className="pl-2" key={i}>
+              <div className="pl-2 dark:text-gray-200" key={i}>
                 <div className="flex gap-2">
                   <p className="font-medium">{i + 1}).</p>
                   {mur.asuult}

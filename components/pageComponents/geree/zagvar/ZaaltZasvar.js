@@ -141,7 +141,9 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
   return (
     <React.Fragment>
       <div className="flex w-full flex-row">
-        <span className="mr-3 w-1/3 text-right">Харагдах дугаар:</span>
+        <span className="mr-3 w-1/3 text-right dark:text-gray-200">
+          Харагдах дугаар:
+        </span>
         <div className="w-2/3">
           <Input
             placeholder="Харагдах дугаар"
@@ -153,7 +155,9 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         </div>
       </div>
       <div className="mt-5 flex w-full flex-row">
-        <span className="mr-3 w-1/3 text-right">Хамаарагдах хэсэг:</span>
+        <span className="mr-3 w-1/3 text-right dark:text-gray-200">
+          Хамаарагдах хэсэг:
+        </span>
         <Select
           placeholder="Хамаарагдах хэсэг"
           className="w-2/3"

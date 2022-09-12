@@ -18,6 +18,9 @@
 .ant-popover-message-title {
   @apply text-gray-900 dark:text-gray-200 !important;
 }
+.ant-popover-title {
+  @apply text-gray-900 dark:text-gray-200 !important;
+}
 
 .ant-checkbox-input {
   @apply opacity-100 dark:bg-gray-800 !important;
@@ -64,7 +67,7 @@ audio::-webkit-media-controls-volume-control-container {
   .print {
     display: block !important;
   }
-  .overflownone{
+  .overflownone {
     overflow: unset;
     height: auto !important;
   }

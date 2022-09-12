@@ -181,16 +181,16 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-80 space-y-1">
+      <div className="relative w-80 space-y-1 dark:text-gray-200">
         <div
           onClick={() => setVisible(false)}
-          className="absolute right-0 -top-10 text-xl"
+          className="absolute right-0 -top-10 text-xl dark:text-gray-200"
         >
           <CloseCircleOutlined />
         </div>
         {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
-            className="grid cursor-pointer grid-cols-3 rounded-md border border-gray-400 p-1 hover:bg-gray-100"
+            className="grid cursor-pointer grid-cols-3 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
             key={`gereeniisongolt${i}`}
             onClick={() => {
               if (gereenuud.find((a) => a._id === mur._id)) {
@@ -291,13 +291,17 @@ function GuilgeeNiiluulekh(
     <div className="flex w-full flex-col space-y-2">
       <div className="space-y-2 px-2">
         <div className="flex justify-between">
-          <span className="text-xl">Гүйлгээний мэдээлэл</span>
-          <span>{moment().format("YYYY-MM-DD")}</span>
+          <span className="text-xl dark:text-gray-100">
+            Гүйлгээний мэдээлэл
+          </span>
+          <span className="dark:text-gray-200">
+            {moment().format("YYYY-MM-DD")}
+          </span>
         </div>
         <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2">
           <div>{data.CtAcct || data.relatedAccount}</div>
           <div>{data.CtActnName}</div>
-          <div className="text-center">
+          <div className="text-center ">
             {moment(data.TxDt || data.tranDate).format("YYYY-MM-DD")}
           </div>
           <div className="text-right text-red-600">
@@ -317,8 +321,8 @@ function GuilgeeNiiluulekh(
             </div>
           )}
         </div>
-        <div className="text-xl">Гүйлгээ холбох</div>
-        <div className="grid grid-cols-2">
+        <div className="text-xl dark:text-gray-200">Гүйлгээ холбох</div>
+        <div className="grid grid-cols-2 ">
           <Popover
             placement="bottom"
             title="Гэрээний жагсаалт"
@@ -328,7 +332,7 @@ function GuilgeeNiiluulekh(
             onVisibleChange={() => setVisible(true)}
           >
             <input
-              className="rounded-md border border-gray-400 p-1 px-2"
+              className="rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200"
               placeholder="Гэрээ сонгох"
               onChange={onChange}
             />
@@ -353,7 +357,7 @@ function GuilgeeNiiluulekh(
             key={`${index}geree-kholbolt`}
             className="space-y-2 rounded-md border border-gray-400 p-2"
           >
-            <div className="flex w-full justify-between text-right text-xl">
+            <div className="flex w-full justify-between text-right text-xl text-gray-200">
               <span>
                 {geree?.talbainDugaar} -- {geree?.register} -- {geree?.ner}
               </span>
@@ -430,13 +434,13 @@ function GuilgeeNiiluulekh(
       <Divider />
       <div className="grid w-full grid-cols-2 divide-x-2 px-2">
         <div className="flex justify-between pr-2">
-          <div className="">Холбосон дүн:</div>
+          <div className="dark:text-gray-200">Холбосон дүн:</div>
           <div className="text-right text-xl text-green-600">
             {formatNumber(guilgeeniiDun - zuruuDun)}
           </div>
         </div>
         <div className="flex justify-between pl-2">
-          <div className="">Холбоогүй дүн:</div>
+          <div className="dark:text-gray-200">Холбоогүй дүн:</div>
           <div className="text-right text-xl text-red-600">
             {formatNumber(zuruuDun)}
           </div>

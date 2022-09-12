@@ -184,11 +184,12 @@ function index({ token }) {
               <div>
                 <span className="pr-2"> Ажлын цаг дуусхад</span>
                 {timeLeft.hours}
-                <span>:</span>
+                <span className="px-1">цаг</span>
                 {timeLeft.minutes}
-                <span>:</span>
+                <span className="px-1">мин</span>
                 {timeLeft.seconds}
-                <span className="pl-2">дутуу байна</span>
+                <span className="px-1">сек</span>
+                <span className="pl-1">дутуу байна</span>
               </div>
             ) : (
               <p>Ажлын цаг дууссан байна</p>
@@ -238,6 +239,7 @@ function index({ token }) {
               key={`${index}-daalgavar`}
               onClick={() => {
                 khaakh(), setDaalgavar(mur);
+                daalgavriinSetgegdel.refresh();
               }}
             >
               <div className="-ml-1 flex w-10 items-center justify-end text-left text-base">
@@ -318,10 +320,10 @@ function index({ token }) {
           className="w-full min-w-0 max-w-6xl space-y-5 overflow-y-scroll p-8"
           style={{ height: "90%" }}
           ref={messageEl}
-          // onScroll={(e) => {
-          //   if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
-          //     daalgavriinSetgegdel.next();
-          // }}
+          onScroll={(e) => {
+            if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
+              daalgavriinSetgegdel.next();
+          }}
         >
           <div className="flex flex-row">
             <div className="w-full p-0 sm:p-2">

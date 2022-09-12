@@ -272,7 +272,7 @@ function ZakhialgaNemekh({ token }) {
             height={height}
           />
         </div>
-        <div className="col-span-3 rounded-xl bg-white p-10">
+        <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
           <div className="space-y-2">
             <Form.Item name="_id" noStyle />
             <Input
