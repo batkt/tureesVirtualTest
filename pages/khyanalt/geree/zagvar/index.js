@@ -1,6 +1,6 @@
 import React from "react";
 import Admin from "components/Admin";
-import { Button, Drawer, Dropdown, Menu } from "antd";
+import { Button, Drawer, Dropdown, Menu, Popconfirm } from "antd";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
@@ -87,7 +87,6 @@ function index({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-
   return (
     <Admin
       khuudasniiNer="gereeniiZagvar"
@@ -241,34 +240,43 @@ function index({ token }) {
                               </svg>
                               Засах
                             </div>
-                            <div
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                deleteMethod(
-                                  "gereeniiZagvar",
-                                  token,
-                                  a._id
-                                ).then(() => gereeniiZagvarMutate());
-                              }}
-                              className="dark:bg-dark-1 dark:hover:bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white"
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                className="feather feather-trash mr-2 h-4 w-4"
+                            <div >
+                              <Popconfirm
+                                title="Загвар устгах уу?"
+                                okText="Тийм"
+                                cancelText="Үгүй"
+                                className=" dark:bg-dark-1 dark:hover: bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover: hover:bg-gray-200 text-white"
+                                onConfirm={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  deleteMethod(
+                                    "gereeniiZagvar",
+                                    token,
+                                    a._id
+                                  ).then(() => gereeniiZagvarMutate());
+                                }}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
                               >
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                              </svg>
-                              Устгах
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  className="feather feather-trash mr-2 h-4 w-4 text-red-600"
+                                >
+                                  <polyline points="3 6 5 6 21 6"></polyline>
+                                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                </svg>
+                                <p className="text-red-600">Устгах</p>
+                              </Popconfirm>
                             </div>
                           </div>
                         </div>
@@ -306,8 +314,8 @@ function index({ token }) {
             );
           })}
         </div>
-      </div>
-    </Admin>
+      </div >
+    </Admin >
   );
 }
 

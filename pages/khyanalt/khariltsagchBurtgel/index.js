@@ -586,12 +586,14 @@ function AjiltanBurtgel({ token }) {
                     </Space>
                   ))}
 
-                  <Form.Item className="w-full">
+                  <Form.Item className="w-full  ">
                     <Button
+                      icon={<PlusOutlined />}
+                      className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                       type="dashed"
                       onClick={() => add()}
                       block
-                      icon={<PlusOutlined />}
+
                     >
                       Утасны дугаар нэмэх
                     </Button>
@@ -638,11 +640,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -821,7 +822,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -927,7 +928,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
