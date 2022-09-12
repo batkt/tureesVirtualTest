@@ -22,7 +22,7 @@ function ZardalMur({
   const [showDed, setShowDed] = useState(true);
   return (
     <div className="w-full space-y-4">
-      <div className="flex w-full flex-row space-x-4 text-white">
+      <div className="flex w-full flex-row space-x-4 dark:text-white">
         <div
           className="box flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm text-center dark:text-gray-200"
           onClick={() => setShowDed(!showDed)}

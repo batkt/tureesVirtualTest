@@ -441,13 +441,12 @@ function ZakhialgiinKhyanalt() {
 
   const columns = useMemo(() => {
     var jagsaalt = [
-
       {
         title: "Гэрээ",
         dataIndex: "gereeniiDugaar",
         align: "center",
         ellipsis: true,
-        width: "1rem",
+        width: "6rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -457,7 +456,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
-        width: "10rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -467,7 +466,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "register",
         align: "center",
         ellipsis: true,
-        width: "6rem",
+        width: "7rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -476,7 +475,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "burtgesenAjiltaniiNer",
         align: "left",
         ellipsis: true,
-        width: "10rem",
+        width: "7rem",
         render: () => {
           return "Админ";
         },
@@ -515,7 +514,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
-        width: "10rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -545,7 +544,6 @@ function ZakhialgiinKhyanalt() {
           moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
           moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
       },
-
     ];
 
     return [
@@ -557,7 +555,7 @@ function ZakhialgiinKhyanalt() {
         className: "text-center",
         align: "center",
         ellipsis: true,
-        width: "1rem",
+        width: "2.5rem",
         render: (data) => (
           <div className="flex flex-row justify-center">
             <Popover
@@ -844,9 +842,11 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                  } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                  }`}
+                className={`border-2 ${
+                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
+                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -857,10 +857,11 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } font-bold`}
+                          className={`text-3xl ${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -870,10 +871,11 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } text-2xl`}
+                          className={`${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -908,7 +910,7 @@ function ZakhialgiinKhyanalt() {
                   dataIndex: "talbainKhemjee",
                   align: "center",
                   ellipsis: true,
-                  width: "10rem",
+                  width: "7rem",
                   render: (talbainKhemjee) => {
                     return `${talbainKhemjee} м2`;
                   },
@@ -919,7 +921,7 @@ function ZakhialgiinKhyanalt() {
                   title: "Бүртгэсэн",
                   dataIndex: "createdAt",
                   ellipsis: true,
-                  width: "6rem",
+                  width: "8rem",
                   align: "center",
                   render(date) {
                     return moment(date).format("YYYY-MM-DD HH:mm");
@@ -939,14 +941,14 @@ function ZakhialgiinKhyanalt() {
                   dataIndex: "davkhar",
                   align: "center",
                   ellipsis: true,
-                  width: "6rem",
+                  width: "5rem",
                 },
                 {
                   title: "Утас",
                   dataIndex: "utas",
                   align: "center",
                   ellipsis: true,
-                  width: "10rem",
+                  width: "6rem",
                 },
                 {
                   title: "Төрөл",
@@ -999,11 +1001,9 @@ function ZakhialgiinKhyanalt() {
         >
           <Table
             bordered
-            tableLayout="auto"
-            scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 7rem)" }}
+            scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
             size="small"
             loading={!gereeniiMedeelel}
-
             rowKey={(row) => row._id}
             onChange={(a, b, c) =>
               !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c)

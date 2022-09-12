@@ -81,7 +81,7 @@ function index({ token }) {
   }
 
   useEffect(() => {
-    Aos.init({ duration: 1000 });
+    Aos.init({ duration: 1000 }, { once: true });
   });
 
   // useEffect(() => {
@@ -95,14 +95,6 @@ function index({ token }) {
     //document.getElementById('').setAttribute('data-aos','')
   }, [daalgavar?._id]);
 
-  useEffect(() => {
-    if (messageEl) {
-      messageEl.current.addEventListener("DOMNodeInserted", (event) => {
-        const { currentTarget: target } = event;
-        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
-      });
-    }
-  }, []);
   useEffect(() => {
     if (id) {
       setDaalgavar(task?.jagsaalt?.find((mur) => id === mur._id));
@@ -132,6 +124,13 @@ function index({ token }) {
           setSetgegdel("");
         }
       });
+  }
+
+  function scrollTogsgolruu() {
+    messageEl.current.scrollTo({
+      top: messageEl.current.scrollHeight,
+      behavior: "smooth",
+    });
   }
 
   return (
@@ -170,6 +169,8 @@ function index({ token }) {
               key={`${index}-daalgavar`}
               onClick={() => {
                 setDaalgavar(mur);
+                daalgavriinSetgegdel.refresh();
+                setTimeout(scrollTogsgolruu, 500);
               }}
               data-aos="fade-right"
               data-aos-delay={1 + index + "00"}
@@ -244,6 +245,10 @@ function index({ token }) {
           className="w-full min-w-0 max-w-6xl space-y-5 overflow-y-scroll p-8"
           style={{ height: "90%" }}
           ref={messageEl}
+          onScroll={(e) => {
+            if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
+              daalgavriinSetgegdel.next();
+          }}
         >
           <div className="flex flex-row">
             <div className="w-full p-0 sm:p-2">
@@ -396,7 +401,7 @@ function index({ token }) {
                   minRows: 1,
                   maxRows: 2,
                 }}
-                className="focus:outline-none h-10 w-full rounded-md border border-gray-600 p-2 focus:border-gray-400"
+                className="focus:outline-none h-10 w-full break-words rounded-md border border-gray-600 p-2 focus:border-gray-400"
                 placeholder="Тайлбар"
                 ref={inputRef}
                 value={setgegdel}
@@ -405,14 +410,18 @@ function index({ token }) {
                   if (event.key === "Enter") {
                     event.preventDefault();
                     setgegdelBichie();
+                    scrollTogsgolruu();
                   }
                 }}
-              ></TextArea>
+              />
             </div>
             <div className="flex flex-row space-x-3">
               <div
                 className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800"
-                onClick={setgegdelBichie}
+                onClick={() => {
+                  setgegdelBichie();
+                  scrollTogsgolruu();
+                }}
               >
                 <SendOutlined />
               </div>

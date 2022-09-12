@@ -178,7 +178,7 @@ function ZardalMur({
               <Menu className="p-2">
                 <Menu.Item
                   key="Заалт нэмэх"
-                  className="dark:hover:bg-dark-2 block flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                  className="dark:hover:bg-dark-2 flex  items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
                   onClick={() => zardalUstgaya(zardal)}
                 >
                   <DeleteOutlined />
@@ -186,7 +186,7 @@ function ZardalMur({
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
-                  className="dark:hover:bg-dark-2 block flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                  className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
                   onClick={() => zardalBurtgekh(zardal)}
                 >
                   <EditOutlined />

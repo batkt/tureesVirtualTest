@@ -731,13 +731,6 @@ function guilgeeniiTuukh({ token }) {
                   width: "8rem",
                 },
                 {
-                  title: "Төлөлт",
-                  dataIndex: "",
-                  ellipsis: true,
-                  align: "left",
-                  width: "8rem",
-                },
-                {
                   title: "Гэрээний огноо",
                   width: "11rem",
                   dataIndex: "gereeniiOgnoo",

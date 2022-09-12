@@ -61,7 +61,7 @@ function index({ token }) {
   }
 
   useEffect(() => {
-    Aos.init({ duration: 1000 });
+    Aos.init({ duration: 1000 }, { once: true });
   });
 
   useEffect(() => {
@@ -69,14 +69,12 @@ function index({ token }) {
     inputRef.current.focus();
   }, [daalgavar?._id]);
 
-  useEffect(() => {
-    if (messageEl) {
-      messageEl.current.addEventListener("DOMNodeInserted", (event) => {
-        const { currentTarget: target } = event;
-        target.scroll({ top: target.scrollHeight, behavior: "smooth" });
-      });
-    }
-  }, []);
+  function scrollTogsgolruu() {
+    messageEl.current.scrollTo({
+      top: messageEl.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }
 
   function setgegdelBichie() {
     if (!setgegdel) {
@@ -240,6 +238,7 @@ function index({ token }) {
               onClick={() => {
                 khaakh(), setDaalgavar(mur);
                 daalgavriinSetgegdel.refresh();
+                setTimeout(scrollTogsgolruu, 500);
               }}
             >
               <div className="-ml-1 flex w-10 items-center justify-end text-left text-base">
@@ -476,6 +475,7 @@ function index({ token }) {
                   if (event.key === "Enter") {
                     event.preventDefault();
                     setgegdelBichie();
+                    scrollTogsgolruu();
                   }
                 }}
               />
@@ -483,7 +483,10 @@ function index({ token }) {
             <div className="flex flex-row space-x-3">
               <div
                 className="h-10 w-10 cursor-pointer rounded-full bg-gray-100 p-2 text-xl dark:bg-gray-800"
-                onClick={setgegdelBichie}
+                onClick={() => {
+                  setgegdelBichie();
+                  scrollTogsgolruu();
+                }}
               >
                 <SendOutlined />
               </div>
