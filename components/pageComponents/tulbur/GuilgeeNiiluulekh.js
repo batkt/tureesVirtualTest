@@ -1,9 +1,10 @@
 import _ from "lodash";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import {
   Divider,
+  Input,
   notification,
   Popconfirm,
   Popover,
@@ -12,7 +13,12 @@ import {
 } from "antd";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { formatter, parser } from "tools/function/inputFormatter";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  CloseOutlined,
+  EditOutlined,
+  FormOutlined,
+} from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 var timeout = null;
@@ -106,6 +112,8 @@ function GuilgeeNiiluulekh(
   const [gereenuud, setGereenuud] = useState([]);
   const [visible, setVisible] = useState(false);
   const [khaagdsanGereeEsekh, setKhaagdsanGereeEsekh] = useState(false);
+  const [guilgeeniiTailbar, setGuilgeeniiTailbar] = useState();
+  const inputRef = React.useRef();
 
   const query = useMemo(() => {
     return { tuluv: khaagdsanGereeEsekh ? -1 : { $nin: [-1] }, barilgiinId };
@@ -119,6 +127,9 @@ function GuilgeeNiiluulekh(
     undefined,
     10
   );
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [guilgeeniiTailbar]);
 
   React.useImperativeHandle(
     ref,
@@ -135,6 +146,13 @@ function GuilgeeNiiluulekh(
         if (aldaa.length > 0) {
           notification.warning({
             message: "Анхаар",
+            description: aldaa.join(","),
+          });
+          return;
+        }
+        if (undsenGuilgee.length === 0) {
+          notification.warning({
+            message: "Анхаар гүйлгээний дүн холбоно уу!",
             description: aldaa.join(","),
           });
           return;
@@ -160,6 +178,11 @@ function GuilgeeNiiluulekh(
             destroy();
           }
         }
+        if (!!guilgeeniiTailbar)
+          undsenGuilgee?.forEach((mur) => {
+            mur.tailbar = guilgeeniiTailbar;
+          });
+
         if (undsenGuilgee.length > 0)
           uilchilgee(token)
             .post("/tulultOlnoorKhadgalya", { guilgeenuud: undsenGuilgee })
@@ -287,6 +310,10 @@ function GuilgeeNiiluulekh(
     return guilgeeniiDun - sum;
   }, [gereenuud]);
 
+  function inputChange(e) {
+    setGuilgeeniiTailbar(e.target.value);
+  }
+
   return (
     <div className="flex w-full flex-col space-y-2">
       <div className="space-y-2 px-2">
@@ -307,8 +334,33 @@ function GuilgeeNiiluulekh(
           <div className="text-right text-red-600">
             {formatNumber(guilgeeniiDun)}
           </div>
-          <div className="col-span-4">
-            {data.TxAddInf?.split("-&gt;")[0] || data.description}
+          <div className="relative col-span-4 flex justify-between rounded-md">
+            <Input
+              ref={inputRef}
+              className="rounded-md pr-7"
+              value={
+                guilgeeniiTailbar === undefined
+                  ? data.TxAddInf?.split("-&gt;")[0] || data.description
+                  : guilgeeniiTailbar
+              }
+              onChange={inputChange}
+              disabled={guilgeeniiTailbar === undefined}
+            />
+            {guilgeeniiTailbar === undefined ? (
+              <FormOutlined
+                onClick={() =>
+                  setGuilgeeniiTailbar(
+                    data.TxAddInf?.split("-&gt;")[0] || data.description
+                  )
+                }
+                className="absolute right-2 cursor-pointer text-lg hover:text-yellow-600"
+              />
+            ) : (
+              <CloseOutlined
+                onClick={() => setGuilgeeniiTailbar(undefined)}
+                className="absolute right-2 cursor-pointer text-lg hover:text-green-600"
+              />
+            )}
           </div>
           {data.kholbosonDun > 0 && (
             <div className="col-span-4 flex justify-between">
