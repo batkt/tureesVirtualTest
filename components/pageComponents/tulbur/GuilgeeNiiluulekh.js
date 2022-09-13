@@ -357,7 +357,7 @@ function GuilgeeNiiluulekh(
             key={`${index}geree-kholbolt`}
             className="space-y-2 rounded-md border border-gray-400 p-2"
           >
-            <div className="flex w-full justify-between text-right text-xl text-gray-200">
+            <div className="flex w-full justify-between text-right text-xl dark:text-gray-200">
               <span>
                 {geree?.talbainDugaar} -- {geree?.register} -- {geree?.ner}
               </span>
