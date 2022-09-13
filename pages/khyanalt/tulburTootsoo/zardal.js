@@ -512,7 +512,7 @@ function zardal({ token }) {
       </Space>,
     ];
     modal({
-      title: "Зардалын бүлэг үүсгэх",
+      title: "Зардлын бүлэг үүсгэх",
       icon: <FileExcelOutlined />,
       content: (
         <ZardalBurtgekh

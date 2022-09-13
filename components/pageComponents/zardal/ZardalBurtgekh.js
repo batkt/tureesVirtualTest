@@ -24,13 +24,15 @@ function ZardalMur({
     <div className="w-full space-y-4">
       <div className="flex w-full flex-row space-x-4 dark:text-white">
         <div
-          className="box flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm text-center dark:text-gray-200"
+          className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-center dark:text-gray-200 ${
+            zardal.dedKhesguud ? (showDed ? "border " : "border ") : ""
+          }`}
           onClick={() => setShowDed(!showDed)}
         >
           {zardal.dedKhesguud ? (showDed ? "-" : "+") : ""}
         </div>
         <div
-          className="box flex items-center rounded-sm px-2"
+          className=" flex items-center rounded-sm px-2"
           style={{ width: `calc(100% - ${zam !== "" ? "6" : "3"}rem)` }}
         >
           <Input
@@ -41,7 +43,7 @@ function ZardalMur({
           />
         </div>
         <div
-          className="box ml-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm text-center"
+          className=" ml-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border text-center "
           onClick={() => {
             if (zardal?.dedKhesguud?.length > 0) zardalNemekh(zam);
             else dedBulegNemekh(zam);
@@ -51,7 +53,7 @@ function ZardalMur({
         </div>
         {zam !== "" && (
           <div
-            className="box ml-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm text-center"
+            className="ml-5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-md border text-center "
             onClick={() => murUstgaya(index, realZam)}
           >
             -

@@ -77,7 +77,7 @@ function index({ token }) {
   }
 
   function setgegdelBichie() {
-    if (!setgegdel) {
+    if (!setgegdel || setgegdel === "" || setgegdel.length < 2) {
       notification.warning({
         message: "Анхаар",
         description: "Сэтгэгдэлээ бичиж оруулна уу",
@@ -466,6 +466,7 @@ function index({ token }) {
                   minRows: 1,
                   maxRows: 3,
                 }}
+                ng-trim="false"
                 className="focus:outline-none h-10 w-full break-words rounded-md border border-gray-600 p-2 focus:border-gray-400"
                 placeholder="Тайлбар"
                 ref={inputRef}
@@ -473,6 +474,7 @@ function index({ token }) {
                 onChange={({ target }) => setSetgegdel(target.value)}
                 onKeyUp={(event) => {
                   if (event.key === "Enter") {
+                    setSetgegdel("");
                     event.preventDefault();
                     setgegdelBichie();
                     scrollTogsgolruu();
