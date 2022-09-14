@@ -1,5 +1,47 @@
 import React, { Component } from "react";
-import { Stage, Layer, Line, Rect,Circle } from "react-konva";
+import { Stage, Layer, Line, Image, Circle } from "react-konva";
+
+class URLImage extends React.Component {
+  state = {
+    image: null
+  };
+  componentDidMount() {
+    this.loadImage();
+  }
+  componentDidUpdate(oldProps) {
+    if (oldProps.src !== this.props.src) {
+      this.loadImage();
+    }
+  }
+  componentWillUnmount() {
+    this.image.removeEventListener("load", this.handleLoad);
+  }
+  loadImage() {
+    // save to "this" to remove "load" handler on unmount
+    this.image = new window.Image();
+    this.image.src = this.props.src;
+    this.image.addEventListener("load", this.handleLoad);
+  }
+  handleLoad = () => {
+    this.setState({
+      image: this.image
+    });
+  };
+  render() {
+    return (
+      <Image
+        width={this.props.width}
+        height={this.props.height}
+        y={this.props.y}
+        x={this.props.x}
+        image={this.state.image}
+        ref={(node) => {
+          this.imageNode = node;
+        }}
+      />
+    );
+  }
+}
 
 class App extends Component {
   state = {
@@ -12,10 +54,6 @@ class App extends Component {
     isMouseOverStartPoint: false,
     isFinished: true
   };
-
-  componentDidMount() {
-    console.log(window.innerHeight);
-  }
 
   getMousePos = stage => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
@@ -92,24 +130,26 @@ class App extends Component {
       handleDragMovePoint,
       handleDragEndPoint
     } = this;
-    
+
     const flattenedPoints = points
       .concat(isFinished ? [] : curMousePos)
       .reduce((a, b) => a.concat(b), []);
 
-    console.log('flattenedPoints',points)
+    console.log('flattenedPoints', points)
     return (
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
         onMouseDown={handleClick}
         onMouseMove={handleMouseMove}
+
       >
         <Layer>
+          <URLImage width={window.innerWidth} height={window.innerHeight - 48} src="https://konvajs.org/assets/yoda.jpg" y={110} />
           <Line
             points={flattenedPoints}
             stroke="black"
-            fill= '#00D2FF'
+            fill='#00D2FF'
             strokeWidth={5}
             closed={isFinished}
           />
@@ -120,10 +160,10 @@ class App extends Component {
             const startPointAttr =
               index === 0
                 ? {
-                    hitStrokeWidth: 12,
-                    onMouseOver: handleMouseOverStartPoint,
-                    onMouseOut: handleMouseOutStartPoint
-                  }
+                  hitStrokeWidth: 12,
+                  onMouseOver: handleMouseOverStartPoint,
+                  onMouseOut: handleMouseOutStartPoint
+                }
                 : null;
             return (
               <Circle
@@ -139,9 +179,11 @@ class App extends Component {
                 onDragEnd={handleDragEndPoint}
                 draggable
                 {...startPointAttr}
+
               />
             );
           })}
+
         </Layer>
       </Stage>
     );

@@ -22,6 +22,10 @@ import {
     Upload,
 } from "antd";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { url } from "services/uilchilgee";
+
+const Konva = dynamic(() => import('components/konva'), { ssr: false })
 
 const normFile = (e) => {
     if (Array.isArray(e)) {
@@ -57,6 +61,108 @@ function TalbaiBurtgekh({ token }) {
         ...data
     });
 
+    function onChange(talbar, utga) {
+        if (talbar === "talbainNegjUne") {
+            let value = Number(utga) * Number(talbaiState.talbainKhemjee);
+            if (
+                (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
+                    _.isNumber(utga) &&
+                    value) ||
+                0
+            ) {
+                talbaiState.talbainNiitUne = value.toFixed(2);
+                formRef.current.setFieldsValue({
+                    talbainNiitUne: talbaiState.talbainNiitUne,
+                });
+                talbaiState.tureesiinTulbur =
+                    Number(talbaiState.niitAshiglaltiinZardal || 0) +
+                    Number(talbaiState.talbainNiitUne || 0);
+                formRef.current.setFieldsValue({
+                    tureesiinTulbur: talbaiState.tureesiinTulbur,
+                });
+            }
+        }
+        if (talbar === "ashiglaltiinZardal") {
+            talbaiState.niitAshiglaltiinZardal = (
+                utga * talbaiState.talbainKhemjee || 0
+            ).toFixed(2);
+            formRef.current.setFieldsValue({
+                niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
+            });
+            talbaiState.tureesiinTulbur =
+                Number(talbaiState.niitAshiglaltiinZardal || 0) +
+                Number(talbaiState.talbainNiitUne || 0);
+            formRef.current.setFieldsValue({
+                tureesiinTulbur: talbaiState.tureesiinTulbur,
+            });
+        }
+        if (talbar === "talbainNiitUne") {
+            let value = Number(utga) / Number(talbaiState.talbainKhemjee);
+            if (
+                (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
+                    _.isNumber(utga) &&
+                    value) ||
+                0
+            ) {
+                talbaiState.talbainNegjUne = value.toFixed(2);
+                formRef.current.setFieldsValue({
+                    talbainNegjUne: talbaiState.talbainNegjUne,
+                });
+                talbaiState.tureesiinTulbur =
+                    Number(talbaiState.niitAshiglaltiinZardal) + Number(utga);
+                formRef.current.setFieldsValue({
+                    tureesiinTulbur: talbaiState.tureesiinTulbur,
+                });
+            }
+        }
+        if (talbar === "talbainKhemjee") {
+            talbaiState.niitAshiglaltiinZardal = (
+                utga * talbaiState.ashiglaltiinZardal || 0
+            ).toFixed(2);
+            if (!!talbaiState.niitAshiglaltiinZardal) {
+                formRef.current.setFieldsValue({
+                    niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
+                });
+            }
+            console.log(talbaiState.niitAshiglaltiinZardal);
+            let value =
+                talbaiState.talbainNegjUne === undefined
+                    ? Number(talbaiState.talbainNiitUne) / Number(utga)
+                    : Number(utga) * Number(talbaiState.talbainNegjUne);
+
+            if (_.isNumber(value) && !_.isNaN(value)) {
+                if (talbaiState.talbainNegjUne === undefined) {
+                    formRef.current.setFieldsValue({
+                        talbainNegjUne: value.toFixed(2),
+                    });
+                } else {
+                    talbaiState.talbainNiitUne = value.toFixed(2);
+                    formRef.current.setFieldsValue({
+                        talbainNiitUne: value.toFixed(2),
+                    });
+                }
+            }
+            if (
+                talbaiState.talbainNiitUne > 0 &&
+                talbaiState.niitAshiglaltiinZardal > 0
+            ) {
+                talbaiState.tureesiinTulbur =
+                    Number(talbaiState.talbainNiitUne) +
+                    Number(talbaiState.niitAshiglaltiinZardal);
+                formRef.current.setFieldsValue({
+                    tureesiinTulbur: talbaiState.tureesiinTulbur,
+                });
+            }
+        }
+        if (talbar === "khurunguUne") {
+            talbaiState.talbainNiitUne = (utga * talbaiState.talbainKhemjee).toFixed(
+                2
+            );
+            formRef.current.setFieldsValue({});
+        }
+        settalbaiState((a) => ({ ...a, [talbar]: utga }));
+    }
+
     function onFinish() {
         talbaiBurtgekh();
         if (!talbaiState.ashiglaltiinZardal) {
@@ -84,12 +190,14 @@ function TalbaiBurtgekh({ token }) {
             name="control-ref"
             onFinish={onFinish}
             initialValues={{ ...data, remember: true }}
+
         >
             <Admin
                 title="Талбай бүртгэл"
                 khuudasniiNer="talbaiBurtgekh"
                 tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
                 className="p-0 md:p-4"
+                dedKhuudas
                 loading={waiting}
             >
                 <div
@@ -309,11 +417,13 @@ function TalbaiBurtgekh({ token }) {
                                     План зураг тохируулах
                                 </Button>
                                 <Drawer width={"100vw"} title="План зураг тохируулах" placement="left" onClose={onClose} visible={open}>
-                                    <div className=" h-5/6 flex justify-center items-center  bg-gray-300 " width={"100vw"} >
-                                        Конва оруулах
+                                    <div
+                                        className=" h-5/6 flex justify-center items-center " width={"100vw"} >
+                                        <Konva />
                                     </div>
                                     <Button style={{ backgroundColor: "#209669", color: "#ffffff", }}> Хадгалах</Button>
                                 </Drawer>
+
                                 <Button
                                     htmlType="submit"
                                     style={{
@@ -471,7 +581,7 @@ function TalbaiBurtgekh({ token }) {
                         </div>
                     </div>
                 </div>
-            </Admin>
+            </Admin >
         </Form >
     );
 }
