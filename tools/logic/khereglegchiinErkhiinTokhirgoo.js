@@ -389,7 +389,7 @@ const khuudasnuud = [
     ),
   },
   {
-    ner: "Харилцагч жагсаалт",
+    ner: "Харилцагч",
     khuudasniiNer: "khariltsagchBurtgel",
     href: "/khyanalt/khariltsagchBurtgel",
     icon: (
