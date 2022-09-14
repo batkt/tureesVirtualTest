@@ -4,12 +4,16 @@ import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import LocationPicker from "components/ant/LocationPicker";
 import _ from "lodash";
-import { Button, Form, Input, InputNumber, notification, Table } from "antd";
+import { Button, Form, Input, InputNumber, notification, Table, Upload, message, TimePicker } from "antd";
+import { UploadOutlined } from '@ant-design/icons';
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
 import CardList from "components/cardList";
+import { render } from "react-dom";
+
+
 const formItemLayout = {
   labelCol: {
     span: 8,
@@ -101,6 +105,24 @@ function GereeBaiguulakh({ token, data }) {
       setDavkhar(davkhar);
     }
   }
+  const props = {
+    name: 'file',
+    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    headers: {
+      authorization: 'authorization-text',
+    },
+
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+  const format = 'HH:mm';
 
   return (
     <Admin
@@ -139,6 +161,12 @@ function GereeBaiguulakh({ token, data }) {
           </Form.Item>
           <Form.Item name="niitTalbai" label={<label>Нийт м<sup>2</sup></label>}>
             <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item name="" label="Нээх цаг">
+            <TimePicker placeholder="Нээх цаг" style={{ width: "100%" }} format={format} />
+          </Form.Item>
+          <Form.Item name="" label="Хаах цаг">
+            <TimePicker placeholder="Хаах цаг" style={{ width: "100%" }} format={format} />
           </Form.Item>
           <Form.Item name="khayag" label="Хаяг">
             <Input.TextArea />
@@ -186,7 +214,19 @@ function GereeBaiguulakh({ token, data }) {
                 );
               },
             },
-            { title: "План зураг" },
+            {
+              title: "План зураг",
+              render() {
+                return (
+                  <Upload {...props}>
+                    <Button icon={<UploadOutlined />}>План зураг оруулах</Button>
+                  </Upload>
+                )
+
+              }
+
+
+            },
           ]}
           dataSource={[...davkhar, ...bdavkhar]}
         />

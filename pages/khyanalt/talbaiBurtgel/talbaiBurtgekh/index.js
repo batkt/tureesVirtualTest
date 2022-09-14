@@ -47,6 +47,7 @@ import createMethod from "tools/function/crud/createMethod";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
+import Link from "next/link";
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -355,6 +356,8 @@ function talbaiBurtgekh({ token }) {
     settalbaiState(data);
   }
 
+  console
+
   function talbaiUstgay(mur) {
     setWaiting(true);
     uilchilgee(token)
@@ -441,362 +444,10 @@ function talbaiBurtgekh({ token }) {
       }
       loading={waiting}
     >
-      <div
-        className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  xl:col-span-3"
-        style={{ maxHeight: "calc(100vh - 7rem)" }}
-      >
-        <Form
-          ref={formRef}
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 15 }}
-          form={form}
-          name="control-ref"
-          onFinish={onFinish}
-          initialValues={{ remember: true }}
-        >
-          <div>
-            <div data-aos="fade-right" data-aos-duration="1000">
-              <Form.Item
-                name="kod"
-                label="Дугаар"
-                rules={[
-                  {
-                    required: true,
-                    message: "Дугаар бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <Input
-                  type="text"
-                  allowClear
-                  placeholder="Дугаар"
-                  value={talbaiState.kod}
-                  onChange={(e) => onChange("kod", e.target.value)}
-                ></Input>
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-            >
-              <Form.Item
-                label="Хэмжээ"
-                name="talbainKhemjee"
-                rules={[
-                  {
-                    required: true,
-                    message: "Талбайн хэмжээ бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  allowClear
-                  placeholder="Талбайн хэмжээ/м2/"
-                  value={talbaiState.talbainKhemjee}
-                  onChange={(v) => onChange("talbainKhemjee", v)}
-                ></InputNumber>
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="200"
-            >
-              <Form.Item
-                name="talbainNegjUne"
-                label="Нэгж үнэ"
-                rules={[
-                  {
-                    required: true,
-                    message: "Нэгж үнэ бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Нэгж үнэ"
-                  value={talbaiState.talbainNegjUne}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  onChange={(target) => onChange("talbainNegjUne", target)}
-                />
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-            >
-              <Form.Item
-                name="talbainNiitUne"
-                label="Нийт үнэ"
-                rules={[
-                  {
-                    required: true,
-                    message: "Нийт үнэ бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Нийт үнэ"
-                  value={talbaiState.talbainNiitUne}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  onChange={(target) => onChange("talbainNiitUne", target)}
-                />
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="400"
-            >
-              <Form.Item name="ashiglaltiinZardal" label="Ашиглалтын зардал">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Ашиглалтын зардал"
-                  value={talbaiState.ashiglaltiinZardal}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  onChange={(target) => onChange("ashiglaltiinZardal", target)}
-                />
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="500"
-            >
-              <Form.Item name="niitAshiglaltiinZardal" label="Нийт зардал">
-                <InputNumber
-                  style={{ width: "100%" }}
-                  readOnly={true}
-                  placeholder="Нийт зардал"
-                  value={talbaiState.niitAshiglaltiinZardal}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                />
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="600"
-            >
-              <Form.Item
-                name="tureesiinTulbur"
-                label="Түрээсийн төлбөр"
-                rules={[
-                  {
-                    required: true,
-                    message: "Түрээсийн бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  readOnly={true}
-                  placeholder="Түрээсийн төлбөр"
-                  value={talbaiState.tureesiinTulbur}
-                  formatter={(value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                  }
-                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                />
-              </Form.Item>
-            </div>
-            <div
-              data-aos="fade-right"
-              data-aos-duration="1000"
-              data-aos-delay="700"
-            >
-              <Form.Item
-                name="davkhar"
-                label="Давхар"
-                rules={[
-                  {
-                    required: true,
-                    message: "Давхар бүртгэнэ үү!",
-                  },
-                ]}
-              >
-                <Select
-                  placeholder="Давхар"
-                  value={talbaiState.davkhar}
-                  onChange={(e) => onChange("davkhar", e)}
-                  allowClear
-                >
-                  {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
-                    <Select.Option key={a._id} value={a.davkhar}>
-                      {a.davkhar}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item name="tailbar" label="Тайлбар">
-                <TextArea
-                  rows={4}
-                  placeholder="Тайлбар"
-                  value={talbaiState.tailbar}
-                  onChange={(e) => onChange("tailbar", e.target.value)}
-                ></TextArea>
-              </Form.Item>
-            </div>
-          </div>
-          <Divider className="pb-5"  >Хөрөнгийн бүртгэл</Divider>
-          <div>
-            <Form.List name="khurunguud">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <Card>
-                      <div
-                        key={key}
-                        style={{ display: "flex", marginBottom: 8 }}
-                        className="w-full flex-col items-end"
-                      >
-                        <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
-                          <CloseCircleOutlined onClick={() => remove(name)} />
-                        </div>
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          label="Нэр"
-                          name={[name, "ner"]}
-                          fieldKey={[fieldKey, "ner"]}
-                          rules={[
-                            { required: true, message: "Нэр бүртгэнэ үү" },
-                          ]}
-                        >
-                          <Input style={{ width: "100%" }} placeholder="Нэр" />
-                        </Form.Item>
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          label="Тоо"
-                          name={[name, "too"]}
-                          fieldKey={[fieldKey, "too"]}
-                          rules={[
-                            {
-                              required: false,
-                              message: "Тоо ширхэг бүртгэнэ үү",
-                            },
-                          ]}
-                        >
-                          <InputNumber
-                            style={{ width: "100%" }}
-                            placeholder="Тоо ширхэг"
-                          />
-                        </Form.Item>
 
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          label="Үнэ"
-                          name={[name, "une"]}
-                          fieldKey={[fieldKey, "une"]}
-                          rules={[
-                            { required: false, message: "Үнэ бүртгэнэ үү" },
-                          ]}
-                        >
-                          <InputNumber
-                            style={{ width: "100%" }}
-                            placeholder="Нэгж үнэ"
-                            formatter={(value) =>
-                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          label="Нийт"
-                          name={[name, "niit"]}
-                          fieldKey={[fieldKey, "niit"]}
-                          rules={[
-                            {
-                              required: false,
-                              message: "Нийт бүртгэнэ үү",
-                            },
-                          ]}
-                        >
-                          <InputNumber
-                            style={{ width: "100%" }}
-                            placeholder="Нийт үнэ"
-                            formatter={(value) =>
-                              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Form.Item>
-                        <Space></Space>
-                        <Form.Item
-                          className="flex w-full justify-start"
-                          style={{ marginRight: "10px" }}
-                          {...restField}
-                          name={[name, "zurgiinId"]}
-                          fieldKey={[fieldKey, "zurgiinId"]}
-                          getValueFromEvent={normFile}
-                        >
-                          <Upload
-                            multiple={false}
-                            listType="picture"
-                            name="file"
-                            action={`${url}/zuragKhadgalya`}
-                            method="POST"
-                            data={{ turul: "khurungu" }}
-                            headers={{ Authorization: `bearer ${token}` }}
-                          >
-                            <Button className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  " icon={<UploadOutlined />}>
-                              Зураг оруулах
-                            </Button>
-                          </Upload>
-                        </Form.Item>
-                      </div>
-                    </Card>
-                  ))}
-                  <div className="-mt-4 flex justify-center gap-5 px-2">
-                    <Button
-                      className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Хөрөнгө бүртгэх
-                    </Button>
-                    <Button
-                      htmlType="submit"
-                      //onClick={onFinish}
-                      style={{
-                        backgroundColor: "#209669",
-                        color: "#ffffff",
-                      }}
-                    >
-                      Хадгалах
-                    </Button>
-                  </div>
-                </>
-              )}
-            </Form.List>
-          </div>
-        </Form>
-      </div>
       <Card
         size="small"
-        className="col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9"
+        className="col-span-12 overflow-auto p-5 md:col-span-12 xl:col-span-12"
       >
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
           {khyanaltiinDun.map((mur, index) => {
@@ -830,15 +481,31 @@ function talbaiBurtgekh({ token }) {
             );
           })}
         </div>
+
         <div
           className="ml-auto flex place-content-end"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="200"
         >
+          <div
+            className="ml-auto  place-content-end pr-4 "
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="200">
+            <Link href="/khyanalt/talbaiBurtgel/talbaiBurtgekh/new" >
+              <Button
+                type="primary"
+                style={{ marginTop: "10px" }}
+                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Нэмэх</span>
+              </Button>
+            </Link>
+          </div>
           <Popover
             content={() => (
-              <div className="flex w-32 flex-col">
+              <div className="flex w-32 flex-col pl-4 ">
                 <a
                   className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
                   onClick={talbaiOruulakhExcel}
@@ -900,6 +567,7 @@ function talbaiBurtgekh({ token }) {
             placement="bottom"
             trigger="click"
           >
+
             <Button
               type="primary"
               style={{ marginTop: "10px" }}
@@ -908,7 +576,9 @@ function talbaiBurtgekh({ token }) {
               <span>Excel</span>
               <DownOutlined width={5} />
             </Button>
+
           </Popover>
+
         </div>
         <div
           data-aos="fade-up-left"
@@ -1222,13 +892,14 @@ function talbaiBurtgekh({ token }) {
                       trigger="click"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
-                          <a
-                            className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                            onClick={() => zasya(data)}
-                          >
-                            <EditOutlined style={{ fontSize: "18px" }} />
-                            <label>Засах</label>
-                          </a>
+                          <Link href={{ pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`, query: { data: JSON.stringify(data) } }} >
+                            <a
+                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                            >
+                              <EditOutlined style={{ fontSize: "18px" }} />
+                              <label>Засах</label>
+                            </a>
+                          </Link>
                           <Popconfirm
                             title="Талбай устгах уу?"
                             okText="Тийм"
@@ -1243,7 +914,8 @@ function talbaiBurtgekh({ token }) {
                             </a>
                           </Popconfirm>
                         </div>
-                      )}
+                      )
+                      }
                     >
                       <a className=" flex items-center justify-center hover:bg-gray-200">
                         <MoreOutlined style={{ fontSize: "18px" }} />
@@ -1255,8 +927,8 @@ function talbaiBurtgekh({ token }) {
             ]}
           />
         </div>
-      </Card>
-    </Admin>
+      </Card >
+    </Admin >
   );
 }
 
