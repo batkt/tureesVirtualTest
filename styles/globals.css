@@ -330,9 +330,6 @@ audio::-webkit-media-controls-volume-control-container {
   @apply hover:scale-105 hover:shadow-xl;
 }
 
-* > .intro-y {
-  @apply hover:scale-90 !important;
-}
 .ant-input-search
   > .ant-input-group
   > .ant-input-group-addon:last-child
