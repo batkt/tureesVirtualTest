@@ -170,7 +170,7 @@ function EbarimtMedeelel({ token }) {
             return (
               <div
                 key={index}
-                className="intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                className="zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
                 data-aos="zoom-out-down"
                 data-aos-duration="1000"
                 data-aos-delay={6 - index + "00"}

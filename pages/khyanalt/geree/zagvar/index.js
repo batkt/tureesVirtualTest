@@ -95,7 +95,7 @@ function index({ token }) {
       tsonkhniiId={"61c2c6101c2830c4e6f90c7d"}
     >
       <div className="col-span-12">
-        <div className="intro-y flex flex-col-reverse items-center sm:flex-row">
+        <div className="flex flex-col-reverse items-center sm:flex-row">
           <Drawer
             title={kharuulakhGeree?.gereeniiDugaar}
             width={"50vw"}
@@ -180,12 +180,12 @@ function index({ token }) {
             </Dropdown>
           </div>
         </div>
-        <div className="intro-y mt-5 grid grid-cols-12 gap-3 sm:gap-6">
+        <div className="mt-5 grid grid-cols-12 gap-3 sm:gap-6">
           {gereeniiZagvarGaralt?.jagsaalt?.map((a, i) => {
             return (
               <div
                 key={a._id}
-                className="intro-y col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2"
+                className="col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2"
                 onClick={() => setKharuulakhGeree(a)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"

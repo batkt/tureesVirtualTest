@@ -270,7 +270,7 @@ function Zogsool({ token }) {
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`intro-y zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
+              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
                 a.name === turul ? "bg-green-100" : ""
               }`}
               onClick={() => setTurul(a.name)}

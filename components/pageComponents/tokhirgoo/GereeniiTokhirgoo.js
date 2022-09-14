@@ -51,7 +51,7 @@ function KhuviinMedeelel({
   return (
     <>
       <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5">
-        <div className="intro-y box mt-5 lg:mt-0">
+        <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               Гэрээ засах эрх ажилтнаар
@@ -104,7 +104,7 @@ function KhuviinMedeelel({
         </div>
       </div>
       <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5">
-        <div className="intro-y box mt-5 lg:mt-0">
+        <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               Нийтээр тохируулах

@@ -439,7 +439,7 @@ function AjiltanBurtgel({ token }) {
       className="grid grid-cols-12 gap-6 px-4 pb-5"
     >
       <div className="xxl:col-span-3 col-span-12 mt-5 flex flex-col-reverse lg:col-span-2 lg:block">
-        <div className="intro-y box mt-5 lg:mt-0">
+        <div className="box mt-5 lg:mt-0">
           <div className="relative flex items-center p-5">
             <div className="image-fit h-12 w-12">
               <img

@@ -446,7 +446,7 @@ function Khyanalt({ token }) {
     >
       <div className="col-span-12 xl:col-span-3">
         <div
-          className="intro-y pr-1"
+          className="pr-1"
           data-aos="fade-right"
           data-aos-duration="1000"
         >
@@ -676,7 +676,7 @@ function Khyanalt({ token }) {
         )}
       </div>
       <div
-        className={`intro-y col-span-12 xl:col-span-6 ${
+        className={`col-span-12 xl:col-span-6 ${
           ilgeekhTurul === "gantsaar"
             ? "lg:col-span-6 xl:col-span-6"
             : "lg:col-span-9 xl:col-span-9"

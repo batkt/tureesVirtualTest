@@ -844,7 +844,7 @@ function ZakhialgiinKhyanalt() {
                 key={index}
                 className={`border-2 ${
                   mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } intro-y zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
+                } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
                   mur?.utga === shuult?.utga ? mur.selectedColor : ""
                 }`}
                 onClick={() => setShuult(mur)}

@@ -230,7 +230,7 @@ function BarilgaBurtgel({ token }) {
                   data-aos="zoom-in-up"
                   data-aos-duration="1000"
                   data-aos-delay={1 + index + "00"}
-                  className="intro-y col-span-12 sm:col-span-6 xl:col-span-3"
+                  className="col-span-12 sm:col-span-6 xl:col-span-3"
                 >
                   <div className="report-box zoom-in">
                     <div className="box p-5">
@@ -272,7 +272,7 @@ function BarilgaBurtgel({ token }) {
               );
             })}
             <div className="col-span-12">
-              <div className="intro-y mt-8 flex h-10 items-center">
+              <div className="mt-8 flex h-10 items-center">
                 <h2
                   className="mr-5 text-lg font-medium dark:text-gray-300"
                   data-aos="zoom-in-right"
