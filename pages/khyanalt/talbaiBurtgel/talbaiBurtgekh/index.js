@@ -493,7 +493,7 @@ function talbaiBurtgekh({ token }) {
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="200">
-            <Link href="/khyanalt/talbaiBurtgel/talbaiBurtgekh/new" >
+            <Link href={{ pathname: "/khyanalt/talbaiBurtgel/talbaiBurtgekh/new", query: { barilgiinId } }}>
               <Button
                 type="primary"
                 style={{ marginTop: "10px" }}
@@ -892,7 +892,7 @@ function talbaiBurtgekh({ token }) {
                       trigger="click"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
-                          <Link href={{ pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`, query: { data: JSON.stringify(data) } }} >
+                          <Link href={{ pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`, query: { data: JSON.stringify(data), barilgiinId } }} >
                             <a
                               className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                             >

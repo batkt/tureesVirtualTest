@@ -1,5 +1,8 @@
+import { ClearOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 import React, { Component } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
+import { url } from "services/uilchilgee";
 
 class URLImage extends React.Component {
   state = {
@@ -45,14 +48,10 @@ class URLImage extends React.Component {
 
 class App extends Component {
   state = {
-    points: [[134, 384],
-    [201, 212],
-    [310, 211],
-    [411, 337],
-    [298, 463]],
+    points: this.props.points || [],
     curMousePos: [0, 0],
-    isMouseOverStartPoint: false,
-    isFinished: true
+    isMouseOverStartPoint: !!this.props.points?.length || false,
+    isFinished: !!this.props.points?.length || false
   };
 
   getMousePos = stage => {
@@ -104,15 +103,12 @@ class App extends Component {
   handleDragStartPoint = event => {
     console.log("start", event);
   };
-  handleDragEndPoint = event => {
+  handleDragEndPoint = (event, index) => {
     const points = this.state.points;
-    const index = event.target.index - 1;
-    console.log(event.target);
     const pos = [event.target.attrs.x, event.target.attrs.y];
-    console.log("move", event);
-    console.log(pos);
+    points[index] = pos
     this.setState({
-      points: [...points.slice(0, index), pos, ...points.slice(index + 1)]
+      points: [...points]
     });
   };
   handleDragOutPoint = event => {
@@ -128,64 +124,96 @@ class App extends Component {
       handleMouseOutStartPoint,
       handleDragStartPoint,
       handleDragMovePoint,
-      handleDragEndPoint
+      handleDragEndPoint,
+      props
     } = this;
 
     const flattenedPoints = points
       .concat(isFinished ? [] : curMousePos)
       .reduce((a, b) => a.concat(b), []);
 
-    console.log('flattenedPoints', points)
+    const barilga = props.baiguullaga?.barilguud?.find(a => a._id === props.barilgiinId)
+    const plan = barilga?.davkharuud?.find(a => a.davkhar === props.davkhar)?.planZurag
+
+    if (!plan)
+      return (
+        <div className="space-y-6" >
+          <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100" >План зураг оруулаагүй байна
+          </div>
+          <div className="flex justify-center  ">
+            <img
+              src="https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0="
+              alt="no plan"
+              width={"30%"}
+              height={"30%"}
+            />
+
+          </div>
+
+        </div>
+      )
+
     return (
-      <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
-        onMouseDown={handleClick}
-        onMouseMove={handleMouseMove}
+      <div>
+        <Stage
+          width={window.innerWidth - 50}
+          height={window.innerHeight - 140}
+          onMouseDown={handleClick}
+          onMouseMove={handleMouseMove}
 
-      >
-        <Layer>
-          <URLImage width={window.innerWidth} height={window.innerHeight - 48} src="https://konvajs.org/assets/yoda.jpg" y={110} />
-          <Line
-            points={flattenedPoints}
-            stroke="black"
-            fill='#00D2FF'
-            strokeWidth={5}
-            closed={isFinished}
-          />
-          {points.map((point, index) => {
-            const width = 6;
-            const x = point[0]
-            const y = point[1]
-            const startPointAttr =
-              index === 0
-                ? {
-                  hitStrokeWidth: 12,
-                  onMouseOver: handleMouseOverStartPoint,
-                  onMouseOut: handleMouseOutStartPoint
-                }
-                : null;
-            return (
-              <Circle
-                key={index}
-                x={x}
-                y={y}
-                width={width}
-                height={width}
-                fill="white"
-                stroke="black"
-                strokeWidth={3}
-                onDragStart={handleDragStartPoint}
-                onDragEnd={handleDragEndPoint}
-                draggable
-                {...startPointAttr}
+        >
+          <Layer>
+            <URLImage width={window.innerWidth - 50} height={window.innerHeight - 140} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`} />
 
-              />
-            );
-          })}
+            <Line
+              points={flattenedPoints}
+              stroke="black"
+              fill='#00D2FF'
+              opacity={0.3}
+              strokeWidth={5}
+              closed={isFinished}
+            />
+            {points.map((point, index) => {
+              const width = 6;
+              const x = point[0]
+              const y = point[1]
+              const startPointAttr =
+                index === 0
+                  ? {
+                    hitStrokeWidth: 12,
+                    onMouseOver: handleMouseOverStartPoint,
+                    onMouseOut: handleMouseOutStartPoint
+                  }
+                  : null;
+              return (
+                <Circle
+                  key={index}
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={width}
+                  fill="white"
+                  stroke="black"
+                  strokeWidth={3}
+                  onDragStart={handleDragStartPoint}
+                  onDragEnd={(e) => handleDragEndPoint(e, index)}
+                  draggable
+                  {...startPointAttr}
+                />
+              );
+            })}
+          </Layer>
+        </Stage>
 
-        </Layer>
-      </Stage>
+        <div className="flex space-x-3">
+          <Button style={{ backgroundColor: "#209669", color: "#ffffff", }} onClick={() => props.onFinish && props.onFinish(this.state.points)}><SaveOutlined /> Хадгалах</Button>
+          <Button onClick={() => this.setState({
+            points: [],
+            isFinished: false,
+            isMouseOverStartPoint: false
+          })} ><ClearOutlined />Шинээр зурах</Button>
+        </div>
+      </div>
     );
   }
 }
