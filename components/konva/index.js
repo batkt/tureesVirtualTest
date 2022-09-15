@@ -4,6 +4,25 @@ import React, { Component } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
 import { url } from "services/uilchilgee";
 
+export const undur = window.innerHeight - 155
+export const urgun = window.innerWidth - 50
+
+export function bairshilKhurvuuljAvakh(points) {
+  return points?.map(mur => {
+    mur[0] = mur[0] * urgun / 1000
+    mur[1] = mur[1] * undur / 1000
+    return mur
+  }) || []
+}
+
+function khurvuuljYavuulakh(points) {
+  return points?.map(mur => {
+    mur[0] = mur[0] * 1000 / urgun
+    mur[1] = mur[1] * 1000 / undur
+    return mur
+  }) || []
+}
+
 class URLImage extends React.Component {
   state = {
     image: null
@@ -48,7 +67,7 @@ class URLImage extends React.Component {
 
 class App extends Component {
   state = {
-    points: this.props.points || [],
+    points: bairshilKhurvuuljAvakh(this.props.points) || [],
     curMousePos: [0, 0],
     isMouseOverStartPoint: !!this.props.points?.length || false,
     isFinished: !!this.props.points?.length || false
@@ -156,14 +175,14 @@ class App extends Component {
     return (
       <div>
         <Stage
-          width={window.innerWidth - 50}
-          height={window.innerHeight - 140}
+          width={urgun}
+          height={undur}
           onMouseDown={handleClick}
           onMouseMove={handleMouseMove}
 
         >
           <Layer>
-            <URLImage width={window.innerWidth - 50} height={window.innerHeight - 140} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`} />
+            <URLImage width={urgun} height={undur} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`} />
 
             <Line
               points={flattenedPoints}
@@ -206,7 +225,7 @@ class App extends Component {
         </Stage>
 
         <div className="flex space-x-3">
-          <Button style={{ backgroundColor: "#209669", color: "#ffffff", }} onClick={() => props.onFinish && props.onFinish(this.state.points)}><SaveOutlined /> Хадгалах</Button>
+          <Button style={{ backgroundColor: "#209669", color: "#ffffff", }} onClick={() => props.onFinish && props.onFinish(khurvuuljYavuulakh(this.state.points))}><SaveOutlined /> Хадгалах</Button>
           <Button onClick={() => this.setState({
             points: [],
             isFinished: false,

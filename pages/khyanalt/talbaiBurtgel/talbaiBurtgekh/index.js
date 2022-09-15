@@ -1,5 +1,4 @@
 import {
-  CloseCircleOutlined,
   DeleteOutlined,
   DownloadOutlined,
   DownOutlined,
@@ -7,6 +6,7 @@ import {
   EyeOutlined,
   FileExcelOutlined,
   MoreOutlined,
+  PictureOutlined,
   PlusOutlined,
   SettingOutlined,
   UploadOutlined,
@@ -15,19 +15,15 @@ import {
   Badge,
   Button,
   Card,
-  Divider,
   Form,
   Input,
-  InputNumber,
   message,
   Popconfirm,
   Popover,
-  Row,
-  Select,
   Space,
   Table,
   Tag,
-  Upload,
+  Drawer
 } from "antd";
 import Admin from "components/Admin";
 import { modal } from "components/ant/Modal";
@@ -48,6 +44,11 @@ import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+
+const Tailan = dynamic(() => import('components/konva/tailan'), { ssr: false })
+
 const normFile = (e) => {
   if (Array.isArray(e)) {
     return e;
@@ -61,7 +62,9 @@ function talbaiBurtgekh({ token }) {
     Aos.init({ once: true });
   });
   const formRef = useRef();
-
+  const router = useRouter()
+  const querys = router.query
+  const data = JSON.parse(querys.data || ("{}"));
   const excelref = useRef();
   const { TextArea } = Input;
   const { ajiltan, baiguullaga, barilgiinId } = useAuth();
@@ -88,9 +91,20 @@ function talbaiBurtgekh({ token }) {
     davkhar: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
     zasakhEsekh: false,
+    ...data
   });
 
   const { talbainToololt } = useTalbainToololt(token);
+
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const khyanaltiinDun = [
     {
@@ -356,7 +370,7 @@ function talbaiBurtgekh({ token }) {
     settalbaiState(data);
   }
 
-  console
+
 
   function talbaiUstgay(mur) {
     setWaiting(true);
@@ -488,6 +502,26 @@ function talbaiBurtgekh({ token }) {
           data-aos-duration="1000"
           data-aos-delay="200"
         >
+          <div
+            className="ml-auto  place-content-end pr-4  w-full"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="200">
+            <Button
+              onClick={showDrawer}
+              type="primary"
+              style={{ marginTop: "10px" }}
+              icon={<PictureOutlined style={{ fontSize: "16px" }} />}
+            >
+              <span>План зураг харах</span>
+            </Button>
+            <Drawer width={"100vw"} title="Нэгдсэн План зураг" placement="right" onClose={onClose} visible={open}>
+              {open && <Tailan davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} token={token} points={data.bairshil} onFinish={v => {
+                onChange('bairshil', v)
+                onClose()
+              }} />}
+            </Drawer>
+          </div>
           <div
             className="ml-auto  place-content-end pr-4 "
             data-aos="fade-right"
