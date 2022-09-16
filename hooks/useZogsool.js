@@ -54,7 +54,7 @@ function useZogsool(token, baiguullagiinId, query, order) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/zogsool",
@@ -73,6 +73,7 @@ function useZogsool(token, baiguullagiinId, query, order) {
     setZogsoolKhuudaslalt,
     zogsoolGaralt: data,
     zogsoolMutate: mutate,
+    isValidating,
   };
 }
 

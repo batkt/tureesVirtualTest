@@ -256,6 +256,7 @@ function guilgeeniiTuukh({ token }) {
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
     refresh,
+    isValidating,
   } = useJagsaalt(sericeName, query, order, undefined, searchKeys);
 
   const { eneSardTuluuguiGereenuud, setEneSardTuluuguiGereenuud } =
@@ -285,7 +286,6 @@ function guilgeeniiTuukh({ token }) {
     onSearchMedeelel,
     setEneSardTuluuguiGereenuud,
   ]);
-  console.log(gereeniiMedeelel);
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -549,6 +549,7 @@ function guilgeeniiTuukh({ token }) {
       className="p-0 md:p-4"
       onSearch={onSearch}
       tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
+      loading={isValidating}
     >
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-4">

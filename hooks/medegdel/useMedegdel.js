@@ -60,7 +60,7 @@ function useMedegdel(token, ognoo, davkhar, ilgeekhTurul, turul) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token
       ? [
           "/gereeTulukhDunteiAvya",
@@ -80,6 +80,7 @@ function useMedegdel(token, ognoo, davkhar, ilgeekhTurul, turul) {
     setNekhemjlelKhuudaslalt,
     nekhemjlel: data,
     nekhemjlelMutate: mutate,
+    isValidating,
   };
 }
 

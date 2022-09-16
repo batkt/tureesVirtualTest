@@ -165,6 +165,7 @@ function tulburTootsoo({ token }) {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
     dansniiKhuulgaMutate,
+    isValidating,
   } = useDansKhuulga(
     token,
     baiguullaga?._id,
@@ -573,6 +574,7 @@ function tulburTootsoo({ token }) {
         }));
       }}
       tsonkhniiId="61c2c6a51c2830c4e6f90cad"
+      loading={isValidating}
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -

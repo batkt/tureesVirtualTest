@@ -74,7 +74,7 @@ function useKhariltsagch(
 }
 export function useKhariltsagchToololt(token) {
   const { barilgiinId } = useAuth();
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     token ? ["/khariltsagchiinTooAvya", token, barilgiinId] : null,
     fetcherToololt,
     {
@@ -84,6 +84,7 @@ export function useKhariltsagchToololt(token) {
   return {
     khariltsagchToololt: data,
     khariltsagchToololtMutate: mutate,
+    isValidating,
   };
 }
 

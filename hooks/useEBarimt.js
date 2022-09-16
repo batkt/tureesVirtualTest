@@ -41,7 +41,7 @@ function useEBarimt(token, baiguullagiinId, query, order) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/ebarimtJagsaaltAvya",
@@ -60,6 +60,7 @@ function useEBarimt(token, baiguullagiinId, query, order) {
     setEBarimtKhuudaslalt,
     eBarimtGaralt: data,
     eBarimtMutate: mutate,
+    isValidating,
   };
 }
 export function useBarimtToollolt(token, query) {

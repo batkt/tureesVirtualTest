@@ -428,7 +428,7 @@ function Anket({ token }) {
                             {a.ner}
                           </div>
                         </div>
-                        <div className="absolute hidden h-24 w-28 transform justify-between rounded-md transition-all group-hover:relative group-hover:flex ">
+                        <div className="absolute hidden h-24 w-28 transform justify-between rounded-md transition-all  group-hover:flex ">
                           <div
                             onClick={() => anketZagvar(a)}
                             className="absolute h-24 w-28 animate-pulse rounded-md bg-white bg-opacity-50 dark:border-white dark:border-opacity-30 dark:bg-black dark:bg-opacity-50"

@@ -36,12 +36,8 @@ function mashinBurtgel({ token }) {
 
   const { order, onChangeTable } = useOrder({});
 
-  const { mashinGaralt, setMashinKhuudaslalt, mashinMutate } = useMashin(
-    token,
-    baiguullaga?._id,
-    query,
-    order
-  );
+  const { mashinGaralt, setMashinKhuudaslalt, mashinMutate, isValidating } =
+    useMashin(token, baiguullaga?._id, query, order);
 
   const toololt = useMemo(() => {
     return [
@@ -139,6 +135,7 @@ function mashinBurtgel({ token }) {
       onSearch={(search) =>
         setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
+      loading={isValidating}
     >
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">

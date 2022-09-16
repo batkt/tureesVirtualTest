@@ -40,7 +40,7 @@ function useKhungulultTuukh(token, baiguullagiinId, query) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/khungulultiinTuukh",
@@ -58,6 +58,7 @@ function useKhungulultTuukh(token, baiguullagiinId, query) {
     setKhuudaslalt,
     khungulultTuukh: data,
     khungulultTuukhMutate: mutate,
+    isValidating2: isValidating,
   };
 }
 

@@ -73,7 +73,7 @@ function AjiltanBurtgel({ token }) {
   const [query, setQuery] = useState({});
   const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
     useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, query, order);
-  const { khariltsagchToololt, khariltsagchToololtMutate } =
+  const { khariltsagchToololt, khariltsagchToololtMutate, isValidating } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
   const [jagsaaltTuukh, setJagsaaltTuukh] = useState([]);
@@ -90,6 +90,9 @@ function AjiltanBurtgel({ token }) {
     tuluv: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
+  useEffect(() => {
+    formRef.current.resetFields();
+  }, [isValidating]);
 
   const khyanaltiinDun = [
     {
@@ -403,7 +406,7 @@ function AjiltanBurtgel({ token }) {
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
-      loading={waiting}
+      loading={waiting || isValidating}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form ref={formRef} name="control-ref" onFinish={onFinish}>
@@ -589,11 +592,10 @@ function AjiltanBurtgel({ token }) {
                   <Form.Item className="w-full  ">
                     <Button
                       icon={<PlusOutlined />}
-                      className="bg-white w-full h-8 rounded-sm  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                      className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                       type="dashed"
                       onClick={() => add()}
                       block
-
                     >
                       Утасны дугаар нэмэх
                     </Button>
@@ -640,10 +642,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -822,7 +825,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -928,7 +931,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,

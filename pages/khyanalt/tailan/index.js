@@ -36,6 +36,7 @@ function Chart({
   token,
   defaultTurul = "line",
   defaultTailan = "guitsetgeliinTailanAvya",
+  setWaiting,
 }) {
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
@@ -54,11 +55,15 @@ function Chart({
     };
   }, [barilgiinId, ognoo, nariivchlal]);
 
-  const { tailanGaralt, tailanMutate } = useTailan(
+  const { tailanGaralt, isValidating } = useTailan(
     barilgiinId && tailan,
     token,
     query
   );
+
+  useEffect(() => {
+    setWaiting(isValidating);
+  }, [isValidating]);
 
   return (
     <div className="box col-span-12 p-2 md:col-span-6">
@@ -149,6 +154,8 @@ function Chart({
 
 function AjiltanBurtgel({ token }) {
   const { barilgiinId } = useAuth();
+  const [waiting, setWaiting] = useState(false);
+
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -159,6 +166,7 @@ function AjiltanBurtgel({ token }) {
       khuudasniiNer="tailan"
       className="p-0 md:p-4"
       tsonkhniiId={"61c2c75d1c2830c4e6f90ce9"}
+      loading={waiting}
     >
       <div
         className="box col-span-12 p-2 md:col-span-6"
@@ -167,6 +175,7 @@ function AjiltanBurtgel({ token }) {
       >
         <Chart
           barilgiinId={barilgiinId}
+          setWaiting={setWaiting}
           token={token}
           defaultTurul="line"
           defaultTailan="borluulaltiinTailanAvya"
@@ -179,6 +188,7 @@ function AjiltanBurtgel({ token }) {
       >
         <Chart
           barilgiinId={barilgiinId}
+          setWaiting={setWaiting}
           token={token}
           defaultTurul="bar"
           defaultTailan="avlagiinTailanAvya"
@@ -191,6 +201,7 @@ function AjiltanBurtgel({ token }) {
       >
         <Chart
           barilgiinId={barilgiinId}
+          setWaiting={setWaiting}
           token={token}
           defaultTurul="bar"
           defaultTailan="zardaliinTailanAvya"
@@ -203,6 +214,7 @@ function AjiltanBurtgel({ token }) {
       >
         <Chart
           barilgiinId={barilgiinId}
+          setWaiting={setWaiting}
           token={token}
           defaultTurul="bar"
           defaultTailan="ashigiinTailanAvya"

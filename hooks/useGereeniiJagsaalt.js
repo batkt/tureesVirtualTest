@@ -69,7 +69,7 @@ function useGereeniiJagsaalt(
     search: "",
   });
 
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     token && baiguullagiinId
       ? [
           "/geree",
@@ -91,6 +91,7 @@ function useGereeniiJagsaalt(
   );
   return {
     gereeniiMedeelel: data,
+    isValidating,
     gereeniiMedeelelMutate: mutate,
     setGereeniiKhuudaslalt,
   };

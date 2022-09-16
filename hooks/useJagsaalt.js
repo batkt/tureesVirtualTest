@@ -46,7 +46,7 @@ function useJagsaalt(url, query, order, select, searchKeys) {
     jagsaalt: [],
   });
 
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     token && url
       ? [token, url, query, order, select, khuudaslalt, searchKeys]
       : null,
@@ -91,7 +91,16 @@ function useJagsaalt(url, query, order, select, searchKeys) {
     return [...(khuudaslalt?.jagsaalt || []), ...(data?.jagsaalt || [])];
   }, [khuudaslalt, data]);
 
-  return { data, mutate, jagsaalt, next, refresh, onSearch, setKhuudaslalt };
+  return {
+    data,
+    mutate,
+    jagsaalt,
+    next,
+    refresh,
+    onSearch,
+    isValidating,
+    setKhuudaslalt,
+  };
 }
 
 export default useJagsaalt;

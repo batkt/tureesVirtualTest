@@ -57,7 +57,7 @@ function useMashin(token, baiguullagiinId, query, order) {
     search: "",
     jagsaalt: [],
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/mashin",
@@ -77,6 +77,7 @@ function useMashin(token, baiguullagiinId, query, order) {
     setMashinKhuudaslalt,
     mashinGaralt: data,
     mashinMutate: mutate,
+    isValidating,
   };
 }
 

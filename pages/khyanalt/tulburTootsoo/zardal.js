@@ -490,10 +490,8 @@ function zardal({ token }) {
   const zardalRef = useRef(null);
   const [ognoo, setOgnoo] = useState([moment(), moment()]);
 
-  const { zardalGaralt, setZardalKhuudaslalt, zardalMutate } = useZardal(
-    token,
-    baiguullaga?._id
-  );
+  const { zardalGaralt, setZardalKhuudaslalt, zardalMutate, isValidating } =
+    useZardal(token, baiguullaga?._id);
 
   function onRefresh() {
     zardalMutate();
@@ -566,6 +564,7 @@ function zardal({ token }) {
         }))
       }
       tsonkhniiId="62ea0bf67c54f8189bdca517"
+      loading={isValidating}
     >
       <div className="col-span-12 space-y-5">
         <div className="flex w-full flex-row">
@@ -578,7 +577,7 @@ function zardal({ token }) {
               display: "flex",
               justifyContent: "end",
             }}
-            className="dropdown-toggle btn box focus:outline-none mt-8 ml-auto  w-full bg-green-500 px-2 text-white focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={() => zardalBurtgekh()}
             data-aos="fade-left"

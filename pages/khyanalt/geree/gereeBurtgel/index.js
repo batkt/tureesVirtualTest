@@ -322,17 +322,21 @@ function ZakhialgiinKhyanalt() {
     },
   });
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
-  const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
-    useGereeniiJagsaalt(
-      token,
-      baiguullaga?._id,
-      undefined,
-      shuult?.query,
-      undefined,
-      100,
-      order,
-      select
-    );
+  const {
+    gereeniiMedeelel,
+    gereeniiMedeelelMutate,
+    setGereeniiKhuudaslalt,
+    isValidating,
+  } = useGereeniiJagsaalt(
+    token,
+    baiguullaga?._id,
+    undefined,
+    shuult?.query,
+    undefined,
+    100,
+    order,
+    select
+  );
   const { gereeToollolt, gereeToolloltMutate } =
     useGereeniiJagsaaltToollolt(token);
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState(null);
@@ -816,6 +820,7 @@ function ZakhialgiinKhyanalt() {
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
+      loading={isValidating}
     >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}

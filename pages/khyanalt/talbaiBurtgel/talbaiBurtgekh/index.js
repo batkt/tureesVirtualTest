@@ -1,5 +1,4 @@
 import {
-  CloseCircleOutlined,
   DeleteOutlined,
   DownloadOutlined,
   DownOutlined,
@@ -15,19 +14,14 @@ import {
   Badge,
   Button,
   Card,
-  Divider,
   Form,
   Input,
-  InputNumber,
   message,
   Popconfirm,
   Popover,
-  Row,
-  Select,
   Space,
   Table,
   Tag,
-  Upload,
 } from "antd";
 import Admin from "components/Admin";
 import { modal } from "components/ant/Modal";
@@ -70,8 +64,12 @@ function talbaiBurtgekh({ token }) {
   });
   const [query, setQuery] = useState({});
   const { order, onChangeTable } = useOrder({ createAt: -1 });
-  const { setTalbaiKhuudaslalt, talbainiiGaralt, talbainiiJagsaaltMutate } =
-    useTalbai(token, baiguullaga?._id, query, order);
+  const {
+    setTalbaiKhuudaslalt,
+    talbainiiGaralt,
+    talbainiiJagsaaltMutate,
+    isValidating,
+  } = useTalbai(token, baiguullaga?._id, query, order);
 
   const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
     useGereeniiJagsaalt(token, baiguullaga?._id, undefined, shuult?.query);
@@ -193,9 +191,6 @@ function talbaiBurtgekh({ token }) {
   ];
 
   function onChange(talbar, utga) {
-
-
-
     if (talbar === "talbainNegjUne") {
       let value = Number(utga) * Number(talbaiState.talbainKhemjee);
       if (
@@ -258,7 +253,7 @@ function talbaiBurtgekh({ token }) {
           niitAshiglaltiinZardal: talbaiState.niitAshiglaltiinZardal,
         });
       }
-      console.log(talbaiState.niitAshiglaltiinZardal);
+
       let value =
         talbaiState.talbainNegjUne === undefined
           ? Number(talbaiState.talbainNiitUne) / Number(utga)
@@ -356,8 +351,6 @@ function talbaiBurtgekh({ token }) {
     settalbaiState(data);
   }
 
-  console
-
   function talbaiUstgay(mur) {
     setWaiting(true);
     uilchilgee(token)
@@ -378,7 +371,7 @@ function talbaiBurtgekh({ token }) {
   function onFinish() {
     talbaiBurtgekh();
     if (!talbaiState.ashiglaltiinZardal) {
-      talbaiState.ashiglaltiinZardal = 0
+      talbaiState.ashiglaltiinZardal = 0;
     }
   }
 
@@ -442,9 +435,8 @@ function talbaiBurtgekh({ token }) {
       onSearch={(search) =>
         setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      loading={waiting}
+      loading={waiting || isValidating}
     >
-
       <Card
         size="small"
         className="col-span-12 overflow-auto p-5 md:col-span-12 xl:col-span-12"
@@ -454,10 +446,11 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -492,8 +485,9 @@ function talbaiBurtgekh({ token }) {
             className="ml-auto  place-content-end pr-4 "
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="200">
-            <Link href="/khyanalt/talbaiBurtgel/talbaiBurtgekh/new" >
+            data-aos-delay="200"
+          >
+            <Link href="/khyanalt/talbaiBurtgel/talbaiBurtgekh/new">
               <Button
                 type="primary"
                 style={{ marginTop: "10px" }}
@@ -567,7 +561,6 @@ function talbaiBurtgekh({ token }) {
             placement="bottom"
             trigger="click"
           >
-
             <Button
               type="primary"
               style={{ marginTop: "10px" }}
@@ -576,9 +569,7 @@ function talbaiBurtgekh({ token }) {
               <span>Excel</span>
               <DownOutlined width={5} />
             </Button>
-
           </Popover>
-
         </div>
         <div
           data-aos="fade-up-left"
@@ -635,11 +626,21 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
                 width: "1rem",
+              },
+              {
+                title: "бүртгэсэн Огноо",
+                dataIndex: "createdAt",
+                ellipsis: true,
+                width: "2.5rem",
+                align: "center",
+                render(mur) {
+                  return moment(mur.createAt).format("YYYY-MM-DD hh:mm");
+                },
               },
               {
                 title: "Дугаар",
@@ -707,12 +708,14 @@ function talbaiBurtgekh({ token }) {
                 sorter: () => 0,
                 width: "2.5rem",
               },
+
               {
                 title: "Тайлбар",
                 dataIndex: "tailbar",
                 ellipsis: true,
                 width: "4.5rem",
               },
+
               {
                 title: "Төлөв",
                 dataIndex: "idevkhiteiEsekh",
@@ -892,10 +895,13 @@ function talbaiBurtgekh({ token }) {
                       trigger="click"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
-                          <Link href={{ pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`, query: { data: JSON.stringify(data) } }} >
-                            <a
-                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                            >
+                          <Link
+                            href={{
+                              pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`,
+                              query: { data: JSON.stringify(data) },
+                            }}
+                          >
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
                               <EditOutlined style={{ fontSize: "18px" }} />
                               <label>Засах</label>
                             </a>
@@ -914,8 +920,7 @@ function talbaiBurtgekh({ token }) {
                             </a>
                           </Popconfirm>
                         </div>
-                      )
-                      }
+                      )}
                     >
                       <a className=" flex items-center justify-center hover:bg-gray-200">
                         <MoreOutlined style={{ fontSize: "18px" }} />
@@ -927,8 +932,8 @@ function talbaiBurtgekh({ token }) {
             ]}
           />
         </div>
-      </Card >
-    </Admin >
+      </Card>
+    </Admin>
   );
 }
 

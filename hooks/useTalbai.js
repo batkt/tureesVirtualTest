@@ -49,7 +49,7 @@ export function useTalbai(token, baiguullagiinId, query, order) {
     jagsaalt: [],
   });
 
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
       ? [
           "/talbai",
@@ -68,6 +68,7 @@ export function useTalbai(token, baiguullagiinId, query, order) {
     setTalbaiKhuudaslalt,
     talbainiiGaralt: data,
     talbainiiJagsaaltMutate: mutate,
+    isValidating,
   };
 }
 

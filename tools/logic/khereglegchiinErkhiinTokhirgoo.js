@@ -178,6 +178,10 @@ export const tsonknuud = [
     ner: "Даалгавар",
     key: "/khyanalt/daalgavar",
   },
+  {
+    ner: "Даалгавар",
+    key: "/khyanalt/ustsanTuukh",
+  },
 ];
 
 export const khereglegchiinErkhuud = [
@@ -729,6 +733,29 @@ const khuudasnuud = [
         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
         <line x1="12" y1="8" x2="12" y2="16"></line>
         <line x1="8" y1="12" x2="16" y2="12"></line>
+      </svg>
+    ),
+  },
+  {
+    ner: "Устгасан хэрэг",
+    khuudasniiNer: "ustsanTuukh",
+    href: "/khyanalt/ustsanTuukh",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="currentColor"
+          d="M19 19H5V5h6V3H5a2.006 2.006 0 0 0-2 2v14a2.006 2.006 0 0 0 2 2h14a2.006 2.006 0 0 0 2-2v-4h-2Z"
+        />
+        <path
+          fill="currentColor"
+          d="M15 5h6v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5Zm7-2h-2l-.571-1h-2.858L16 3h-2v1h8V3z"
+        />
       </svg>
     ),
   },

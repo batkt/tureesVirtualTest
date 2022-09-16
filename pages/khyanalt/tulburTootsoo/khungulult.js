@@ -47,7 +47,7 @@ function tulburTootsoo() {
     };
   }, [ekhlekhOgnoo]);
   const [form] = Form.useForm();
-  const { gereeniiMedeelel, gereeniiMedeelelMutate, setGereeniiKhuudaslalt } =
+  const { gereeniiMedeelel, setGereeniiKhuudaslalt, isValidating } =
     useGereeniiJagsaalt(
       songogdsonNuur === "1" && token,
       baiguullaga?._id,
@@ -56,12 +56,16 @@ function tulburTootsoo() {
       undefined,
       1000
     );
-  const { khungulultTuukh, khungulultTuukhMutate, setKhuudaslalt } =
-    useKhungulultTuukh(
-      songogdsonNuur === "2" && token,
-      baiguullaga?._id,
-      query
-    );
+  const {
+    khungulultTuukh,
+    khungulultTuukhMutate,
+    setKhuudaslalt,
+    isValidating2,
+  } = useKhungulultTuukh(
+    songogdsonNuur === "2" && token,
+    baiguullaga?._id,
+    query
+  );
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
@@ -207,7 +211,7 @@ function tulburTootsoo() {
           khuudasniiDugaar: 1,
         }));
       }}
-      loading={waiting}
+      loading={waiting || isValidating || isValidating2}
       tsonkhniiId="61c2c6eb1c2830c4e6f90cc5"
     >
       <div className="col-span-12">

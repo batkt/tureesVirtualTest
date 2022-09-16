@@ -114,8 +114,13 @@ function Khyanalt({ token }) {
 
   const ref = useRef(null);
 
-  const { nekhemjlel, setNekhemjlelKhuudaslalt, nekhemjlelMutate } =
-    useMedegdel(token, undefined, davkhar, ilgeekhTurul, turul);
+  const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useMedegdel(
+    token,
+    undefined,
+    davkhar,
+    ilgeekhTurul,
+    turul
+  );
 
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
@@ -442,14 +447,10 @@ function Khyanalt({ token }) {
       className="p-0 md:p-4"
       onSearch={(search) => setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))}
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
-      loading={waiting}
+      loading={waiting || isValidating}
     >
       <div className="col-span-12 xl:col-span-3">
-        <div
-          className="pr-1"
-          data-aos="fade-right"
-          data-aos-duration="1000"
-        >
+        <div className="pr-1" data-aos="fade-right" data-aos-duration="1000">
           <div className="box p-2">
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
               {["SMS", "App", "Mail"].map((mur) => (

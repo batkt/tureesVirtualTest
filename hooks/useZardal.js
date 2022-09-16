@@ -1,7 +1,7 @@
-import { useState } from "react"
-import { useAuth } from "services/auth"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import { useState } from "react";
+import { useAuth } from "services/auth";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
 const fetcher = (
   url,
@@ -9,44 +9,45 @@ const fetcher = (
   baiguullagiinId,
   { search, jagsaalt, ...khuudaslalt },
   barilgiinId,
-  query={}
+  query = {}
 ) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query:{
+        query: {
           barilgiinId,
           baiguullagiinId,
-          $or:[ { ner: { $regex: search, $options: "i" } }],
-          ...query
+          $or: [{ ner: { $regex: search, $options: "i" } }],
+          ...query,
         },
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
-function useZardal(token, baiguullagiinId,query) {
-  const {barilgiinId} = useAuth()
+function useZardal(token, baiguullagiinId, query) {
+  const { barilgiinId } = useAuth();
   const [khuudaslalt, setZardalKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 500,
     search: "",
     jagsaalt: [],
-  })
-  const { data, mutate } = useSWR(
+  });
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
-      ? ["/zardal", token, baiguullagiinId, khuudaslalt,barilgiinId,query]
+      ? ["/zardal", token, baiguullagiinId, khuudaslalt, barilgiinId, query]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
 
   return {
     setZardalKhuudaslalt,
     zardalGaralt: data,
     zardalMutate: mutate,
-  }
+    isValidating,
+  };
 }
 
-export default useZardal
+export default useZardal;

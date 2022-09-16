@@ -51,8 +51,12 @@ function AjiltanBurtgel({ token }) {
 
   const router = useRouter();
   const { ajiltan, barilgiinId } = useAuth();
-  const { ajilchdiinGaralt, setAjiltniiKhuudaslalt, ajiltniiJagsaaltMutate } =
-    useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId);
+  const {
+    ajilchdiinGaralt,
+    setAjiltniiKhuudaslalt,
+    ajiltniiJagsaaltMutate,
+    isValidating,
+  } = useAjiltniiJagsaalt(token, ajiltan?.baiguullagiinId);
 
   const [ajiltanState, setAjiltanState] = useState({
     ner: undefined,
@@ -65,7 +69,9 @@ function AjiltanBurtgel({ token }) {
   });
   const [waiting, setWaiting] = useState(false);
 
-  const { Option } = Select;
+  useEffect(() => {
+    formRef.current.resetFields();
+  }, [isValidating]);
 
   function onChange(talbar, utga) {
     setAjiltanState((a) => ({ ...a, [talbar]: utga }));
@@ -183,7 +189,7 @@ function AjiltanBurtgel({ token }) {
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
       tsonkhniiId={"61c2c6571c2830c4e6f90c95"}
-      loading={waiting}
+      loading={waiting || isValidating}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
         <Form

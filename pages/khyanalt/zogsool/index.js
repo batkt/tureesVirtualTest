@@ -82,12 +82,8 @@ function Zogsool({ token }) {
     };
   }, [ognoo, turul]);
 
-  const { zogsoolGaralt, setZogsoolKhuudaslalt, zogsoolMutate } = useZogsool(
-    token,
-    baiguullaga?._id,
-    query,
-    order
-  );
+  const { zogsoolGaralt, setZogsoolKhuudaslalt, zogsoolMutate, isValidating } =
+    useZogsool(token, baiguullaga?._id, query, order);
 
   const toololt = useMemo(
     () => [
@@ -264,6 +260,7 @@ function Zogsool({ token }) {
         setZogsoolKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
+      loading={isValidating}
     >
       <Card size="small" className="col-span-12 overflow-auto p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">

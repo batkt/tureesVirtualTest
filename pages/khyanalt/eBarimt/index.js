@@ -61,12 +61,8 @@ function EbarimtMedeelel({ token }) {
 
   const { order, onChangeTable } = useOrder({ createAt: -1 });
 
-  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt } = useEBarimt(
-    token,
-    ajiltan?.baiguullagiinId,
-    query,
-    order
-  );
+  const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidating } =
+    useEBarimt(token, ajiltan?.baiguullagiinId, query, order);
 
   const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(
     token,
@@ -162,7 +158,7 @@ function EbarimtMedeelel({ token }) {
       className="p-0 md:p-5"
       onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
       tsonkhniiId="61c2c70a1c2830c4e6f90ccf"
-      loading={waiting}
+      loading={waiting || isValidating}
     >
       <Card className="cardgrid col-span-12 p-5">
         <div className="grid w-full grid-cols-12 gap-6 border-solid">
