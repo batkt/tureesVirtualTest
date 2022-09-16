@@ -28,6 +28,7 @@ import {
   DownloadOutlined,
   DownOutlined,
   PlusOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
@@ -1029,6 +1030,19 @@ function AjiltanBurtgel({ token }) {
                             <label>Засах</label>
                           </a>
                           <Popconfirm
+                            title="Нууц үг сэргээх үү?"
+                            okText="Тийм"
+                            cancelText="Үгүй"
+                          // onConfirm={() =>}
+                          >
+                            <a
+                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                            >
+                              <RedoOutlined className="text-green-600" style={{ fontSize: "18px" }} />
+                              <label className="text-green-600">Нууц үг</label>
+                            </a>
+                          </Popconfirm>
+                          <Popconfirm
                             title="Харилцагч устгах уу?"
                             okText="Тийм"
                             cancelText="Үгүй"
@@ -1036,9 +1050,10 @@ function AjiltanBurtgel({ token }) {
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                               <DeleteOutlined
-                                style={{ fontSize: "18px", color: "red" }}
+                                className="text-red-600"
+                                style={{ fontSize: "18px" }}
                               />
-                              <label>Устгах</label>
+                              <label className="text-red-600">Устгах</label>
                             </a>
                           </Popconfirm>
                         </div>

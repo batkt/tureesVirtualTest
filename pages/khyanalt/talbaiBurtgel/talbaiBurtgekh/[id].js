@@ -20,10 +20,13 @@ import {
     InputNumber,
     Select,
     Upload,
+    message,
 } from "antd";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 import { url } from "services/uilchilgee";
+import createMethod from "tools/function/crud/createMethod";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 const Konva = dynamic(() => import('components/konva'), { ssr: false })
 
@@ -41,10 +44,10 @@ function TalbaiBurtgekh({ token }) {
     const router = useRouter()
     const query = router.query
     const data = JSON.parse(query.data || ("{}"))
+    const barilgiinId = query.barilgiinId
     const formRef = useRef();
-
     const { TextArea } = Input;
-    const { ajiltan, baiguullaga, barilgiinId } = useAuth();
+    const { ajiltan, baiguullaga } = useAuth();
     const [waiting, setWaiting] = useState(false);
     const [talbaiState, settalbaiState] = useState({
         kod: undefined,
@@ -57,10 +60,8 @@ function TalbaiBurtgekh({ token }) {
         tureesiinTulbur: undefined,
         davkhar: undefined,
         baiguullagiinId: ajiltan?.baiguullagiinId,
-        zasakhEsekh: false,
         ...data
     });
-
     function onChange(talbar, utga) {
         if (talbar === "talbainNegjUne") {
             let value = Number(utga) * Number(talbaiState.talbainKhemjee);
@@ -163,12 +164,60 @@ function TalbaiBurtgekh({ token }) {
         settalbaiState((a) => ({ ...a, [talbar]: utga }));
     }
 
+    function talbaiBurtgekh() {
+        const khurunguud = formRef.current.getFieldsValue(khurunguud);
+        talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
+        talbaiState.barilgiinId = barilgiinId
+        if (khurunguud?.khurunguud?.length > 0) {
+            talbaiState.khurunguud = khurunguud.khurunguud;
+            if (talbaiState.khurunguud[0].zurgiinId !== undefined) {
+                talbaiState.khurunguud.map(
+                    (x) =>
+                        x.zurgiinId[0]?.response?.id &&
+                        (x.zurgiinId = x.zurgiinId[0].response.id)
+                );
+            }
+        }
+
+        setWaiting(true);
+        if (!!talbaiState._id) {
+            uilchilgee(token)
+                .post("/talbaiZasya", talbaiState)
+                .then(({ data }) => {
+                    if (data === "Amjilttai") {
+                        setWaiting(false);
+                        message.success("Бүртгэл амжилттай засагдлаа");
+                        formRef.current.resetFields();
+                        router.back()
+                    }
+                })
+                .catch((e) => {
+                    aldaaBarigch(e);
+                    setWaiting(false);
+                });
+        } else
+            createMethod("talbai", token, talbaiState)
+                .then(({ data }) => {
+                    if (data !== undefined) {
+                        setWaiting(false);
+                        message.success("Бүртгэл амжилттай хийгдлээ");
+                        formRef.current.resetFields();
+                        router.back()
+                    }
+                })
+                .catch((e) => {
+                    aldaaBarigch(e);
+                    setWaiting(false);
+                });
+    }
+
     function onFinish() {
         talbaiBurtgekh();
         if (!talbaiState.ashiglaltiinZardal) {
             talbaiState.ashiglaltiinZardal = 0
         }
     };
+
     const [open, setOpen] = useState(false);
 
     const showDrawer = () => {
@@ -182,28 +231,30 @@ function TalbaiBurtgekh({ token }) {
 
     const [form] = Form.useForm();
     return (
-        <Form
-            ref={formRef}
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 15 }}
-            form={form}
-            name="control-ref"
-            onFinish={onFinish}
-            initialValues={{ ...data, remember: true }}
 
+        <Admin
+            title="Талбай бүртгэл"
+            khuudasniiNer="talbaiBurtgekh"
+            tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
+            className="p-0 md:p-4"
+            dedKhuudas
+            loading={waiting}
         >
-            <Admin
-                title="Талбай бүртгэл"
-                khuudasniiNer="talbaiBurtgekh"
-                tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
-                className="p-0 md:p-4"
-                dedKhuudas
-                loading={waiting}
+            <Form
+                ref={formRef}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 15 }}
+                form={form}
+                name="control-ref"
+                onFinish={onFinish}
+                initialValues={{ ...data, remember: true }}
+                className='col-span-12 grid grid-cols-12 gap-6'
             >
                 <div
-                    className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  xl:col-span-4"
+                    className="box overflow-y-scroll p-5 md:col-span-6  xl:col-span-4"
                     style={{ maxHeight: "calc(100vh - 7rem)" }}
                 >
+
                     <div>
 
                         <div data-aos="fade-right" data-aos-duration="1000">
@@ -390,7 +441,7 @@ function TalbaiBurtgekh({ token }) {
                                     onChange={(e) => onChange("davkhar", e)}
                                     allowClear
                                 >
-                                    {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                                    {baiguullaga?.barilguud?.find(a => a._id === barilgiinId)?.davkharuud.map((a) => (
                                         <Select.Option key={a._id} value={a.davkhar}>
                                             {a.davkhar}
                                         </Select.Option>
@@ -417,13 +468,11 @@ function TalbaiBurtgekh({ token }) {
                                     План зураг тохируулах
                                 </Button>
                                 <Drawer width={"100vw"} title="План зураг тохируулах" placement="left" onClose={onClose} visible={open}>
-                                    <div
-                                        className=" h-5/6 flex justify-center items-center " width={"100vw"} >
-                                        <Konva />
-                                    </div>
-                                    <Button style={{ backgroundColor: "#209669", color: "#ffffff", }}> Хадгалах</Button>
+                                    {open && <Konva davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} points={data.bairshil} onFinish={v => {
+                                        onChange('bairshil', v)
+                                        onClose()
+                                    }} />}
                                 </Drawer>
-
                                 <Button
                                     htmlType="submit"
                                     style={{
@@ -581,8 +630,8 @@ function TalbaiBurtgekh({ token }) {
                         </div>
                     </div>
                 </div>
-            </Admin >
-        </Form >
+            </Form>
+        </Admin >
     );
 }
 
