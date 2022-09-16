@@ -10,10 +10,10 @@ import {
   Tag,
   Popover,
   notification,
+  Modal,
 } from "antd";
 import {
   UserOutlined,
-  PhoneOutlined,
   HomeOutlined,
   EditOutlined,
   DeleteOutlined,
@@ -38,7 +38,6 @@ import { useAuth } from "services/auth";
 import React, { useState, useRef, useEffect } from "react";
 import moment from "moment";
 import useKhariltsagch from "hooks/useKhariltsagch";
-import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import getListMethod from "tools/function/crud/getListMethod";
@@ -51,6 +50,7 @@ import KhariltsagchTile from "components/pageComponents/khariltsagch/Khariltsagc
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import _ from "lodash";
+import { data } from "autoprefixer";
 
 const iconColor = { fontSize: "18px" };
 function checkUtas(utasnuud, utga) {
@@ -79,7 +79,7 @@ function AjiltanBurtgel({ token }) {
   const [formNuukh, setFormNuukh] = useState(false);
   const [jagsaaltTuukh, setJagsaaltTuukh] = useState([]);
   const [waiting, setWaiting] = useState(false);
-
+  const [nuutsUgKhariltsagch, setNuutsUgKhariltsagch] = useState();
   const [khariltsagchState, setkhariltsagchState] = useState({
     ner: undefined,
     ovog: undefined,
@@ -91,6 +91,7 @@ function AjiltanBurtgel({ token }) {
     tuluv: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
+
   useEffect(() => {
     formRef.current.resetFields();
   }, [isValidating]);
@@ -198,9 +199,15 @@ function AjiltanBurtgel({ token }) {
 
   const { Option } = Select;
 
+  const nuutsUgModalKhaah = () => {
+    setNuutsUgKhariltsagch(false);
+  };
+
   function onChange(talbar, utga) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
+
+
   function tuukh(data) {
     getListMethod(
       "geree",
@@ -219,6 +226,7 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch);
   }
+
 
   function khariltsagchBurtgekh() {
     if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
@@ -265,10 +273,32 @@ function AjiltanBurtgel({ token }) {
     }
   }
 
+  function shineNuutsUgSolikh(talbar, utga) {
+    setNuutsUgKhariltsagch((a) => ({ ...a, [talbar]: utga }));
+  }
+
+  function nuutsUgSolikh() {
+    if (nuutsUgKhariltsagch.nuutsUg === nuutsUgKhariltsagch.davtanNuutsUg) {
+      uilchilgee(token)
+        .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, { _id: nuutsUgKhariltsagch._id, nuutsUg: nuutsUgKhariltsagch.nuutsUg })
+        .then(({ data }) => {
+          if (data !== undefined) {
+            notification.success({ message: "Мэдэгдэл", description: "Нууц үг амжилттай шинэчлэгдлээ" });
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
+    }
+    else notification.warning({ message: "Мэдэгдэл", description: "Нууц үг таарсангүй" });
+  }
+
   function zasya(data) {
     data.zasakhEsekh = true;
     formRef.current.setFieldsValue({ ...data });
     setkhariltsagchState(data);
+
   }
 
   function khariltsagchUstgay(mur) {
@@ -643,11 +673,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -826,7 +855,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -932,7 +961,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1033,7 +1062,7 @@ function AjiltanBurtgel({ token }) {
                             title="Нууц үг сэргээх үү?"
                             okText="Тийм"
                             cancelText="Үгүй"
-                          // onConfirm={() =>}
+                            onConfirm={() => setNuutsUgKhariltsagch(data)}
                           >
                             <a
                               className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
@@ -1042,6 +1071,7 @@ function AjiltanBurtgel({ token }) {
                               <label className="text-green-600">Нууц үг</label>
                             </a>
                           </Popconfirm>
+
                           <Popconfirm
                             title="Харилцагч устгах уу?"
                             okText="Тийм"
@@ -1068,9 +1098,26 @@ function AjiltanBurtgel({ token }) {
               },
             ]}
           />
+          <Modal title="Нууц үг сэргээх" open={!!nuutsUgKhariltsagch} onOk={() => nuutsUgSolikh(data)} onCancel={nuutsUgModalKhaah}>
+            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
+              <Form.Item
+                label='Нууц үг сэргээх'
+                name="sergesenNuutsUg"
+                onChange={(e) => shineNuutsUgSolikh("nuutsUg", e.target.value)}
+              >
+                <Input.Password style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item
+                label='Нууц үг давтан оруулах'
+              >
+                <Input.Password onChange={(e) => shineNuutsUgSolikh("davtanNuutsUg", e.target.value)} />
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
         <CardList
-          keyValue="khariltsagch"
+          keyValue="
+          "
           className="block overflow-auto md:hidden"
           jagsaalt={khariltsagchiinGaralt?.jagsaalt}
           Component={KhariltsagchTile}
@@ -1087,8 +1134,8 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
         />
-      </div>
-    </Admin>
+      </div >
+    </Admin >
   );
 }
 

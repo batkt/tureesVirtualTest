@@ -1,6 +1,7 @@
 import { Select, Form } from "antd";
+
 import React, { Component } from "react";
-import { Stage, Layer, Line, Image } from "react-konva";
+import { Stage, Layer, Line, Image, Text, Circle, Group, Rect } from "react-konva";
 import uilchilgee, { url } from "services/uilchilgee";
 import { bairshilKhurvuuljAvakh, undur, urgun } from ".";
 
@@ -66,15 +67,14 @@ class App extends Component {
   }
 
   tailbaiAvya = (davkhar, barilga) => {
-    uilchilgee(this.props.token).get('/talbai', { params: { query: { davkhar, barilgiinId: barilga?._id, "bairshil.1": { '$exists': true } }, select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1 }, khuudasniiKhemjee: 1000 } }).then(({ data }) => {
-      console.log('data', data)
+    uilchilgee(this.props.token).get('/talbai', { params: { query: { davkhar, barilgiinId: barilga?._id, "bairshil.1": { '$exists': true } }, select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 }, khuudasniiKhemjee: 1000 } }).then(({ data }) => {
+
       data.jagsaalt.map(mur => mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
       this.setState({
         talbainuud: data.jagsaalt
       })
     })
   }
-
   render() {
     const {
       state: { planZurag, talbainuud },
@@ -88,7 +88,8 @@ class App extends Component {
           width={urgun}
           height={undur}
         >
-          <Layer  >
+
+          <Layer>
             {planZurag && <URLImage width={urgun} height={undur} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${planZurag}`} />}
             {talbainuud?.map((mur) => {
               const flattenedPoints = mur.bairshil
@@ -106,8 +107,26 @@ class App extends Component {
               )
             }
             )}
+            {talbainuud?.map((mur) => {
+              const x = mur.bairshil?.reduce((a, b) => { return a + b[0] }, 0) / mur.bairshil.length
+              const y = mur.bairshil?.reduce((a, b) => { return a + b[1] }, 0) / mur.bairshil.length
+              return (
+                <Group  >
+                  <Rect x={x - (mur.kod.length / 2 * 15)} y={y - (15)} width={50} height={26} fill="white" stroke={1} opacity={0.9} />
+                  <Text
+                    key={mur._id + 'text'}
+                    x={x - (mur.kod.length / 2 * 10)}
+                    y={y - (15 / 2)}
+                    text={mur.kod}
+                    fill={'black'}
+                    fontSize={15}
+                    align="center"
+                  />
+                </Group>
+              )
+            })}
           </Layer>
-        </Stage>
+        </Stage >
 
         <div className="flex space-x-3">
           <Form.Item
