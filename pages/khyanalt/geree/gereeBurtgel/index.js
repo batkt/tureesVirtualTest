@@ -55,6 +55,7 @@ import GereeTile from "components/pageComponents/geree/GereeTile";
 import useOrder from "tools/function/useOrder";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import Aos from "aos";
+import { renderToString } from "react-dom/server";
 
 //#endregion
 
@@ -748,6 +749,31 @@ function ZakhialgiinKhyanalt() {
           }
           geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
           geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
+          geree.gariinUseg = renderToString(
+            <span style={{ position: "absolute" }}>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/d/df/Sign_of_V._K._Novikov.png"
+                style={{
+                  width: 100,
+                  height: 50,
+                  transform: "translate(-50%, -30%)",
+                }}
+              />
+            </span>
+          );
+          geree.tamga = renderToString(
+            <span style={{ position: "absolute", zIndex: 1 }}>
+              <img
+                src="https://www.onlygfx.com/wp-content/uploads/2017/12/empty-stamp-8.png"
+                style={{
+                  width: 115,
+                  height: 100,
+                  transform: "translate(-10%, -50%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+          );
 
           for (const [key, value] of Object.entries(geree)) {
             data.dedKhesguud

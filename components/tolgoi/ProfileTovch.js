@@ -10,7 +10,7 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
-function hrefAvya(mur, ajiltan, turul, _id) {
+function hrefAvya(mur, ajiltan) {
   var href = "";
 
   if (ajiltan.erkh === "Admin")
@@ -19,11 +19,14 @@ function hrefAvya(mur, ajiltan, turul, _id) {
         href = "/khyanalt/daalgavar/admin";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
+        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        break;
       case "gomdol":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
+        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        break;
       case "setgegdel":
         href = "/khyanalt/daalgavar/admin";
+        break;
       default:
         break;
     }
@@ -33,11 +36,14 @@ function hrefAvya(mur, ajiltan, turul, _id) {
         href = "/khyanalt/daalgavar";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
+        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        break;
       case "gomdol":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
+        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        break;
       case "setgegdel":
         href = "/khyanalt/daalgavar";
+        break;
       default:
         break;
     }
@@ -110,8 +116,10 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   >
                     <Link
                       href={{
-                        pathname: hrefAvya(mur, ajiltan, turul, _id),
-                        query: { id: mur.object.daalgavriinId },
+                        pathname: hrefAvya(mur, ajiltan),
+                        query: {
+                          id: mur.object.daalgavriinId,
+                        },
                       }}
                     >
                       <div className="relative  flex cursor-pointer items-center justify-between">
@@ -161,7 +169,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
           </Menu>
         }
       >
-        <button className="focus:outline-none flex h-8 w-8 items-center justify-center rounded-full focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white">
+        <button className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-white">
           <Badge count={kharaaguiToo} dot>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +230,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
         trigger="click"
         className="cursor-pointer"
       >
-        <button className="focus:outline-none flex h-8 w-8 items-center justify-center rounded-full focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
+        <button className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50">
           <img
             alt={ajiltan?.ner}
             src={

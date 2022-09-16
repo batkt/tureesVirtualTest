@@ -5,6 +5,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React from "react";
 import useSWR from "swr";
+import { renderToString } from "react-dom/server";
 
 const fetcher = async (token, id, turul) => {
   if (!token || !id) return {};
@@ -34,6 +35,31 @@ const fetcher = async (token, id, turul) => {
       }
       geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
       geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
+      geree.gariinUseg = renderToString(
+        <span style={{ position: "absolute" }}>
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/d/df/Sign_of_V._K._Novikov.png"
+            style={{
+              width: 100,
+              height: 50,
+              transform: "translate(-50%, -30%)",
+            }}
+          />
+        </span>
+      );
+      geree.tamga = renderToString(
+        <span style={{ position: "absolute", zIndex: 1 }}>
+          <img
+            src="https://www.onlygfx.com/wp-content/uploads/2017/12/empty-stamp-8.png"
+            style={{
+              width: 115,
+              height: 100,
+              transform: "translate(-10%, -50%)",
+              opacity: 0.65,
+            }}
+          />
+        </span>
+      );
 
       for (const [key, value] of Object.entries(geree)) {
         data.dedKhesguud

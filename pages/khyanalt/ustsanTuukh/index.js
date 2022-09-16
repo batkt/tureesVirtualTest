@@ -1,10 +1,12 @@
-import { DatePicker, Select, Table } from "antd";
+import { Card, DatePicker, Select, Table } from "antd";
 import Admin from "components/Admin";
 import moment from "moment";
 import useJagsaalt from "hooks/useJagsaalt";
 import React, { useMemo, useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { useAuth } from "services/auth";
+import router from "next/router";
+import CardList from "components/cardList";
+import UstsanTuukhTile from "components/pageComponents/ustsanTuukh/UstsanTuukhTile";
 
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
@@ -100,14 +102,23 @@ function UstsanTuukh() {
             case "talbai":
               text = "Талбай";
               break;
+            case "Talbai":
+              text = "Талбай";
+              break;
             case "ajiltanBurtgel":
               text = "Ажилтан бүртгэл";
+              break;
+            case "Khariltsagch":
+              text = "Харилцагч";
               break;
             case "khariltsagch":
               text = "Харилцагч";
               break;
-            case "medegdel":
-              text = "Мэдэгдэл";
+            case "khariltsagch":
+              text = "Харилцагч";
+              break;
+            case "asuult":
+              text = "Асуулт";
               break;
             case "nekhemjlekhiinZagvar":
               text = "Нэхэмжлэл загвар";
@@ -123,6 +134,12 @@ function UstsanTuukh() {
               break;
             case "anket":
               text = "Анкетын асуулга бэлдэх";
+              break;
+            case "gereeniiGuilgee":
+              text = "Гэрээний гүйлгээ";
+              break;
+            case "mailiinZagvar":
+              text = "И-мэйл загвар";
               break;
             default:
               text = mur;
@@ -171,8 +188,8 @@ function UstsanTuukh() {
       loading={ustsanBarimt.isValidating}
       className="p-0 md:p-4"
     >
-      <div className="col-span-12 rounded-md bg-white p-5 dark:bg-gray-900">
-        <div className="flex gap-3">
+      <Card className="col-span-12 rounded-md bg-white dark:bg-gray-900">
+        <div className="flex flex-col-reverse gap-3 sm:flex-row">
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -180,7 +197,7 @@ function UstsanTuukh() {
           />
           <div>
             <Select
-              className="w-36"
+              className="w-full sm:w-36"
               placeholder="Ажилтан"
               onChange={(v) => setQuery({ ...query, ajiltniiId: v })}
               allowClear
@@ -194,7 +211,7 @@ function UstsanTuukh() {
           </div>
           <div>
             <Select
-              className="w-36"
+              className="w-full sm:w-36"
               placeholder="Төрөл"
               onChange={(v) => setQuery({ ...query, class: v })}
               allowClear
@@ -208,6 +225,7 @@ function UstsanTuukh() {
         <Table
           bordered
           size="small"
+          className="hidden overflow-auto md:block"
           columns={columns}
           scroll={{ y: "calc(100vh - 20rem)" }}
           dataSource={ustsanBarimt?.jagsaalt}
@@ -225,7 +243,26 @@ function UstsanTuukh() {
               })),
           }}
         />
-      </div>
+        <CardList
+          keyValue="ustsanBarimt"
+          className="block overflow-auto md:hidden"
+          jagsaalt={ustsanBarimt?.jagsaalt}
+          Component={UstsanTuukhTile}
+          componentProps={{ router }}
+          pagination={{
+            current: ustsanBarimt?.data?.khuudasniiDugaar,
+            pageSize: ustsanBarimt?.data?.khuudasniiKhemjee,
+            total: ustsanBarimt?.data?.niitMur,
+            showSizeChanger: true,
+            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+              ustsanBarimt.setKhuudaslalt((kh) => ({
+                ...kh,
+                khuudasniiDugaar,
+                khuudasniiKhemjee,
+              })),
+          }}
+        />
+      </Card>
     </Admin>
   );
 }

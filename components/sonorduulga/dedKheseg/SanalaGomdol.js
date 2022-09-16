@@ -13,10 +13,13 @@ function hrefAvya(turul, _id, daalgavriinId, ajiltan) {
         break;
       case "sanal":
         href = `/khyanalt/medegdel/${turul}/${_id}`;
+        break;
       case "gomdol":
         href = `/khyanalt/medegdel/${turul}/${_id}`;
+        break;
       case "setgegdel":
         href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
+        break;
       default:
         break;
     }
@@ -27,10 +30,13 @@ function hrefAvya(turul, _id, daalgavriinId, ajiltan) {
         break;
       case "sanal":
         href = `/khyanalt/medegdel/${turul}/${_id}`;
+        break;
       case "gomdol":
         href = `/khyanalt/medegdel/${turul}/${_id}`;
+        break;
       case "setgegdel":
         href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
+        break;
       default:
         break;
     }

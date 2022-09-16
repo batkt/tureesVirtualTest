@@ -24,6 +24,8 @@ const undsenTalbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "И-мэйл хаяг", talbar: "mail" },
+  { ner: "Гарын үсэг", talbar: "gariinUseg" },
+  { ner: "Тамга", talbar: "tamga" },
 ];
 
 const khugatsaaniiTalbaruud = [
