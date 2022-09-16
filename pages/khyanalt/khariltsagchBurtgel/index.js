@@ -79,7 +79,6 @@ function AjiltanBurtgel({ token }) {
   const [formNuukh, setFormNuukh] = useState(false);
   const [jagsaaltTuukh, setJagsaaltTuukh] = useState([]);
   const [waiting, setWaiting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [nuutsUgKhariltsagch, setNuutsUgKhariltsagch] = useState();
   const [khariltsagchState, setkhariltsagchState] = useState({
     ner: undefined,
