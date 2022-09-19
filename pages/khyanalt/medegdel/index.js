@@ -444,7 +444,7 @@ function Khyanalt({ token }) {
     <Admin
       title="Мэдэгдэл"
       khuudasniiNer="medegdel"
-      className="p-0 md:p-4"
+      className="p-5 md:p-4"
       onSearch={(search) => setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))}
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting || isValidating}
@@ -474,7 +474,7 @@ function Khyanalt({ token }) {
           data-aos-delay="100"
         >
           {turul === "SMS" ? (
-            <div className=" flex items-center xl:mt-3 xl:block 2xl:mt-auto 2xl:flex">
+            <div className=" flex items-center lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
               </p>
@@ -536,10 +536,7 @@ function Khyanalt({ token }) {
             Загвар үүсгэх
           </button>
         </div>
-        <div
-          className="scrollbar-hidden overflow-y-auto "
-          style={{ height: "calc(100vh - 25rem)" }}
-        >
+        <div className="scrollbar-hidden h-[25vh] overflow-y-auto xl:h-[50vh] ">
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
             <div
               key={a.ner}
@@ -583,7 +580,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       <div
-        className={`col-span-12 xl:col-span-3 ${
+        className={`col-span-12 lg:col-span-6 xl:col-span-3 ${
           ilgeekhTurul === "gantsaar" ? "" : "hidden"
         }`}
         data-aos="fade-up"
@@ -677,12 +674,16 @@ function Khyanalt({ token }) {
         )}
       </div>
       <div
-        className={`col-span-12 xl:col-span-6 ${
+        className={` ${
           ilgeekhTurul === "gantsaar"
-            ? "lg:col-span-6 xl:col-span-6"
-            : "lg:col-span-9 xl:col-span-9"
+            ? "col-span-12 lg:col-span-6 xl:col-span-6"
+            : "col-span-12 xl:col-span-9"
         }`}
-        style={{ height: "calc(100vh - 7rem)" }}
+        style={
+          ilgeekhTurul === "gantsaar"
+            ? { height: "calc(100vh - 7rem)" }
+            : { height: "100%" }
+        }
       >
         {khariltsagch || ilgeekhTurul !== "gantsaar" ? (
           <div className="box flex h-full flex-col">
@@ -745,15 +746,15 @@ function Khyanalt({ token }) {
               {ilgeekhTurul === "gantsaar" &&
                 (turul === "App" ? (
                   <div
-                    className="flex flex-col-reverse overflow-y-auto p-5"
-                    style={{ maxHeight: "calc(100vh - 27rem)" }}
+                    className="mt-0 flex flex-col-reverse overflow-y-auto p-5 sm:mt-10 lg:mt-0 xl:mt-10"
+                    style={{ maxHeight: "calc(100vh - 32rem)" }}
                     onScroll={onScroll}
                   >
                     {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map(
                       (a, i) => {
                         return (
                           <div
-                            className={`relative mt-8 flex w-1/3 flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                            className={`relative mt-8 flex w-4/5 flex-col rounded-xl border border-green-200 bg-green-500 p-3 2xl:w-1/3  ${
                               a.turul === "medegdel"
                                 ? "ml-auto rounded-br-none bg-blue-500"
                                 : "rounded-bl-none"
@@ -841,7 +842,7 @@ function Khyanalt({ token }) {
                       align: "center",
                     },
                     {
-                      width: "21rem",
+                      width: "12rem",
                       title: turul,
                       dataIndex: turul === "Mail" ? "mail" : "utas",
                       align: "center",

@@ -79,7 +79,6 @@ function Admin({
 
   return (
     <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
-
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -100,11 +99,12 @@ function Admin({
         />
       )}
       <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
-          }`}
+        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
+          dedKhuudas ? "w-full" : "main"
+        }`}
       >
-        <div className="h-12 border-b p-2 flex flex-row justify-between ">
-          <div className="flex p-4 flex-row items-center">
+        <div className="flex h-12 flex-row justify-between border-b p-2 ">
+          <div className="flex flex-row items-center p-4">
             {!dedKhuudas && (
               <MTses
                 khuudasnuud={khuudasnuud}
@@ -119,31 +119,32 @@ function Admin({
             )}
             {dedKhuudas && (
               <button
-                className="h-8 w-8 flex rounded-full items-center justify-center focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+                className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
               >
                 <LeftOutlined
                   style={{ fontSize: "10px" }}
-                  className="flex items-center justify-center dark:text-gray-50" />
+                  className="flex items-center justify-center dark:text-gray-50"
+                />
               </button>
             )}
             <h2
               id="garchig"
-              className=" text-green-800 flex items-center justify-center   text-base  font-semibold dark:text-white "
+              className=" flex items-center justify-center text-base   font-semibold  text-green-800 dark:text-white "
             >
               {title}
             </h2>
           </div>
-          <div className="flex flex-row space-x-6">
+          <div className="flex flex-row md:space-x-3 lg:space-x-6">
             {tsonkhniiId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
                 <Zaavar token={token} id={tsonkhniiId} />
               </div>
             )}
             <div className="hidden h-8 items-center justify-center md:flex">
-              <div className="mr-4 hidden whitespace-nowrap text-gray-700 dark:text-gray-300 md:flex">
+              <div className="mr-4 hidden whitespace-nowrap text-gray-700 dark:text-gray-300 lg:flex">
                 Dark Mode
               </div>
               <Switch
@@ -178,7 +179,7 @@ function Admin({
               <>
                 <div
                   id="search"
-                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block md:w-56"
+                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
                 >
                   <input
                     onChange={({ target }) => {
@@ -190,7 +191,7 @@ function Admin({
                       }
                     }}
                     type="text"
-                    className="box focus:outline-none w-40 px-3 py-1 pr-10 shadow-xl focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:w-56"
+                    className="box w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
                     placeholder="Хайлт..."
                   />
                   {mSearch ? (
