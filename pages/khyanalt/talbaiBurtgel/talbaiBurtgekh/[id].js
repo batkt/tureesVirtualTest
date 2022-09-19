@@ -528,8 +528,8 @@ function TalbaiBurtgekh({ token }) {
                                                                         document.getElementById(`${key}-image`).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${e.fileList[e.fileList.length - 1]?.response?.id}`
                                                                     }}
                                                                 >
-                                                                    <div className={data.khurunguud && data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} id={`${key}-upload-image`}  >Зураг оруулах</div>
-                                                                    <img className={data.khurunguud && data.khurunguud[key]?.zurgiinId ? "" : 'hidden'} src={data.khurunguud && `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[key].zurgiinId}`} id={`${key}-image`} alt='Зураг оруулах'></img>
+                                                                    <div className={data.khurunguud && !!data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} id={`${key}-upload-image`}  >Зураг оруулах</div>
+                                                                    <img className={data.khurunguud && !data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} src={data.khurunguud && `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[key]?.zurgiinId}`} id={`${key}-image`} alt='Зураг оруулах'></img>
                                                                 </Upload>
                                                             </Form.Item>
                                                         </div>
