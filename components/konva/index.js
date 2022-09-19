@@ -112,7 +112,7 @@ class App extends Component {
     this.setState({
       isMouseOverStartPoint: true
     });
-    console.log("ehelsan tseg deer ochij bna",)
+    console.log("ehelsen tseg deer ochij bna",)
   };
   handleMouseOutStartPoint = event => {
     event.target.scale({ x: 1, y: 1 });
