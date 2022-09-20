@@ -4,42 +4,17 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useAjiltan from "hooks/useAjiltan";
 import { useEffect } from "react";
 
-function hrefAvya(turul, _id, daalgavriinId, ajiltan) {
+function hrefAvya(turul, _id, daalgavriinId, ajiltan, object) {
   var href = "";
-  if (ajiltan.erkh === "Admin")
-    switch (turul) {
-      case undefined:
-        href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
-        break;
-      case "sanal":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
-        break;
-      case "gomdol":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
-        break;
-      case "setgegdel":
-        href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
-        break;
-      default:
-        break;
-    }
-  else
-    switch (turul) {
-      case undefined:
-        href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
-        break;
-      case "sanal":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
-        break;
-      case "gomdol":
-        href = `/khyanalt/medegdel/${turul}/${_id}`;
-        break;
-      case "setgegdel":
-        href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
-        break;
-      default:
-        break;
-    }
+  if (ajiltan.erkh === "Admin") {
+    if (!!object.daalgavriinId) {
+      href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
+    } else
+      href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
+  } else if (!!object.daalgavriinId) {
+    href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
+  } else
+    href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
   return href;
 }
 
@@ -49,7 +24,7 @@ function Zakhialga({ onClose, token, ...object }) {
   const { ajiltan } = useAjiltan(token);
 
   function sonorduulgaKharlaa() {
-    const href = hrefAvya(turul, _id, daalgavriinId, ajiltan);
+    const href = hrefAvya(turul, _id, daalgavriinId, ajiltan, object);
     window.location.href = href;
     uilchilgee(token).post("/sanalKharlaa", { id: _id }).catch(aldaaBarigch);
   }

@@ -4,12 +4,20 @@ import { useEffect, useState } from "react";
 import { useAuth } from "services/auth";
 import _ from "lodash";
 
-const fetcher = (url, token, khariltsagchiinId, { jagsaalt, ...khuudaslalt }) =>
+const fetcher = (
+  url,
+  token,
+  khariltsagchiinId,
+  { jagsaalt, search, ...khuudaslalt }
+) =>
   axios(token)
     .get(url, {
       params: {
         ...khuudaslalt,
-        query: { khariltsagchiinId },
+        query: {
+          khariltsagchiinId,
+          $or: [{ message: { $regex: search, $options: "i" } }],
+        },
         order: { createdAt: -1, kharsanEsekh: 0 },
       },
     })

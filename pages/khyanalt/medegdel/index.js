@@ -30,7 +30,6 @@ import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
-import { SearchOutlined } from "@ant-design/icons";
 
 //#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
@@ -219,6 +218,8 @@ function Khyanalt({ token }) {
           });
           sonorduulgaMutate({ ...sonorduulga }, false);
           notification.success({ message: "Notification Амжилттай илгээлээ" });
+          setContent("");
+          setTitle("");
           setLoading(false);
         } else if (!!data?.failureCount) {
           notification.warning({
@@ -286,6 +287,8 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
           notification.success({ message: "SMS Амжилттай илгээлээ" });
+          setContent("");
+          setTitle("");
           setLoading(false);
         }
       })
@@ -329,6 +332,8 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          setContent("");
+          setTitle("");
           setLoading(false);
         }
       })

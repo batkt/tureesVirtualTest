@@ -19,10 +19,10 @@ function hrefAvya(mur, ajiltan) {
         href = "/khyanalt/daalgavar/admin";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
       case "gomdol":
-        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
       case "setgegdel":
         href = "/khyanalt/daalgavar/admin";
@@ -36,10 +36,10 @@ function hrefAvya(mur, ajiltan) {
         href = "/khyanalt/daalgavar";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
       case "gomdol":
-        href = `/khyanalt/medegdel/${mur.turul}/${mur.object._id}`;
+        href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
       case "setgegdel":
         href = "/khyanalt/daalgavar";
@@ -117,9 +117,18 @@ function ProfileTovch({ ajiltan, garya, token }) {
                     <Link
                       href={{
                         pathname: hrefAvya(mur, ajiltan),
-                        query: {
-                          id: mur.object.daalgavriinId,
-                        },
+                        query:
+                          mur.turul === "setgegdel"
+                            ? {
+                                id: mur.object.daalgavriinId,
+                              }
+                            : mur.turul === "daalgavar"
+                            ? {
+                                id: mur.object._id,
+                              }
+                            : {
+                                id: mur.object.khariltsagchiinId,
+                              },
                       }}
                     >
                       <div className="relative  flex cursor-pointer items-center justify-between">

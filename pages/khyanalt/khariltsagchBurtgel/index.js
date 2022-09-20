@@ -72,8 +72,11 @@ function AjiltanBurtgel({ token }) {
   const { ajiltan, barilgiinId } = useAuth();
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const [query, setQuery] = useState({});
-  const { setKhuudaslalt, khariltsagchiinGaralt, khariltsagchMutate } =
-    useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, query, order);
+  const {
+    setKhariltsagchKhuudaslalt,
+    khariltsagchiinGaralt,
+    khariltsagchMutate,
+  } = useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, query, order);
   const { khariltsagchToololt, khariltsagchToololtMutate, isValidating } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
@@ -207,7 +210,6 @@ function AjiltanBurtgel({ token }) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
 
-
   function tuukh(data) {
     getListMethod(
       "geree",
@@ -226,7 +228,6 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch);
   }
-
 
   function khariltsagchBurtgekh() {
     if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
@@ -280,25 +281,33 @@ function AjiltanBurtgel({ token }) {
   function nuutsUgSolikh() {
     if (nuutsUgKhariltsagch.nuutsUg === nuutsUgKhariltsagch.davtanNuutsUg) {
       uilchilgee(token)
-        .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, { _id: nuutsUgKhariltsagch._id, nuutsUg: nuutsUgKhariltsagch.nuutsUg })
+        .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, {
+          _id: nuutsUgKhariltsagch._id,
+          nuutsUg: nuutsUgKhariltsagch.nuutsUg,
+        })
         .then(({ data }) => {
           if (data !== undefined) {
-            notification.success({ message: "Мэдэгдэл", description: "Нууц үг амжилттай шинэчлэгдлээ" });
+            notification.success({
+              message: "Мэдэгдэл",
+              description: "Нууц үг амжилттай шинэчлэгдлээ",
+            });
           }
         })
         .catch((e) => {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    }
-    else notification.warning({ message: "Мэдэгдэл", description: "Нууц үг таарсангүй" });
+    } else
+      notification.warning({
+        message: "Мэдэгдэл",
+        description: "Нууц үг таарсангүй",
+      });
   }
 
   function zasya(data) {
     data.zasakhEsekh = true;
     formRef.current.setFieldsValue({ ...data });
     setkhariltsagchState(data);
-
   }
 
   function khariltsagchUstgay(mur) {
@@ -434,7 +443,11 @@ function AjiltanBurtgel({ token }) {
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
       onSearch={(search) =>
-        setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        setKhariltsagchKhuudaslalt((a) => ({
+          ...a,
+          search,
+          khuudasniiDugaar: 1,
+        }))
       }
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
       loading={waiting || isValidating}
@@ -673,10 +686,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -834,7 +848,7 @@ function AjiltanBurtgel({ token }) {
               total: khariltsagchiinGaralt?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setKhuudaslalt((kh) => ({
+                setKhariltsagchKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
                   khuudasniiKhemjee,
@@ -855,7 +869,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -961,7 +975,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1064,10 +1078,11 @@ function AjiltanBurtgel({ token }) {
                             cancelText="Үгүй"
                             onConfirm={() => setNuutsUgKhariltsagch(data)}
                           >
-                            <a
-                              className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                            >
-                              <RedoOutlined className="text-green-600" style={{ fontSize: "18px" }} />
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
+                              <RedoOutlined
+                                className="text-green-600"
+                                style={{ fontSize: "18px" }}
+                              />
                               <label className="text-green-600">Нууц үг</label>
                             </a>
                           </Popconfirm>
@@ -1098,19 +1113,26 @@ function AjiltanBurtgel({ token }) {
               },
             ]}
           />
-          <Modal title="Нууц үг сэргээх" open={!!nuutsUgKhariltsagch} onOk={() => nuutsUgSolikh(data)} onCancel={nuutsUgModalKhaah}>
+          <Modal
+            title="Нууц үг сэргээх"
+            open={!!nuutsUgKhariltsagch}
+            onOk={() => nuutsUgSolikh(data)}
+            onCancel={nuutsUgModalKhaah}
+          >
             <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
               <Form.Item
-                label='Нууц үг сэргээх'
+                label="Нууц үг сэргээх"
                 name="sergesenNuutsUg"
                 onChange={(e) => shineNuutsUgSolikh("nuutsUg", e.target.value)}
               >
-                <Input.Password style={{ width: '100%' }} />
+                <Input.Password style={{ width: "100%" }} />
               </Form.Item>
-              <Form.Item
-                label='Нууц үг давтан оруулах'
-              >
-                <Input.Password onChange={(e) => shineNuutsUgSolikh("davtanNuutsUg", e.target.value)} />
+              <Form.Item label="Нууц үг давтан оруулах">
+                <Input.Password
+                  onChange={(e) =>
+                    shineNuutsUgSolikh("davtanNuutsUg", e.target.value)
+                  }
+                />
               </Form.Item>
             </Form>
           </Modal>
@@ -1127,15 +1149,15 @@ function AjiltanBurtgel({ token }) {
             total: khariltsagchiinGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
+              setKhariltsagchKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,
               })),
           }}
         />
-      </div >
-    </Admin >
+      </div>
+    </Admin>
   );
 }
 

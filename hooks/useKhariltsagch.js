@@ -67,7 +67,7 @@ function useKhariltsagch(
     { revalidateOnFocus: false }
   );
   return {
-    setKhuudaslalt,
+    setKhariltsagchKhuudaslalt: setKhuudaslalt,
     khariltsagchiinGaralt: data,
     khariltsagchMutate: mutate,
   };
