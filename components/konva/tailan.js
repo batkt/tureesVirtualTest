@@ -84,6 +84,37 @@ class App extends Component {
 
     return (
       <div>
+        <div className="flex space-x-3">
+          <Form.Item
+            name="davkhar"
+          >
+            <Select
+              placeholder="Давхар сонгох"
+              onChange={(v, option) => {
+                this.tailbaiAvya(option?.davkhar, barilga)
+                this.setState({ planZurag: v })
+              }}
+              allowClear
+            >
+              {barilga?.davkharuud.map((a) => (
+                <Select.Option key={a._id} value={a.planZurag} davkhar={a.davkhar}   >
+                  {a.davkhar}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <div className=" items-end w-full pb-1  h-8 flex justify-end space-x-10 " >
+            <div className="flex">
+              <div className="border-2 w-5 bg-green-300 " />
+              <div className="pr-10 pl-2">Идэвхгүй</div>
+            </div>
+            <div className="flex ">
+              <div className="border-2 w-5 bg-red-400 " />
+              <div className="pl-2">Идэвхтэй</div>
+            </div>
+          </div>
+        </div>
+
         <Stage
           width={urgun}
           height={undur}
@@ -128,36 +159,7 @@ class App extends Component {
           </Layer>
         </Stage >
 
-        <div className="flex space-x-3">
-          <Form.Item
-            name="davkhar"
-          >
-            <Select
-              placeholder="Давхар"
-              onChange={(v, option) => {
-                this.tailbaiAvya(option?.davkhar, barilga)
-                this.setState({ planZurag: v })
-              }}
-              allowClear
-            >
-              {barilga?.davkharuud.map((a) => (
-                <Select.Option key={a._id} value={a.planZurag} davkhar={a.davkhar}   >
-                  {a.davkhar}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <div className=" items-end w-full pb-1  h-8 flex justify-end space-x-10 " >
-            <div className="flex">
-              <div className="border-2 w-5 bg-green-300 " />
-              <div className="pr-10 pl-2">Идэвхгүй</div>
-            </div>
-            <div className="flex ">
-              <div className="border-2 w-5 bg-red-400 " />
-              <div className="pl-2">Идэвхтэй</div>
-            </div>
-          </div>
-        </div>
+
       </div >
     );
   }

@@ -195,7 +195,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Бүртгсэн огноо</div>
           <div>Тайлбар</div>
         </div>
-        <div className="overflow-y-auto overflownone" style={{ height: "calc(40vh)" }}>
+        <div className="overflow-y-auto overflownone" >
           {guilgeeniiTuukh
             ?.map((a, i) => (
               <div className="grid grid-cols-11 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
