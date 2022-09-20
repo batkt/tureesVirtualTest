@@ -10,6 +10,23 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 
+function idAwyaa(mur) {
+  var id = undefined;
+  switch (mur.turul) {
+    case "setgegdel":
+      id = mur.object.daalgavriinId;
+      break;
+    case "daalgavar":
+      id = mur.object._id;
+      break;
+
+    default:
+      id = mur.object.khariltsagchiinId;
+      break;
+  }
+  return id;
+}
+
 function hrefAvya(mur, ajiltan) {
   var href = "";
 
@@ -19,8 +36,6 @@ function hrefAvya(mur, ajiltan) {
         href = "/khyanalt/daalgavar/admin";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/sanalKhuselt`;
-        break;
       case "gomdol":
         href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
@@ -36,8 +51,6 @@ function hrefAvya(mur, ajiltan) {
         href = "/khyanalt/daalgavar";
         break;
       case "sanal":
-        href = `/khyanalt/medegdel/sanalKhuselt`;
-        break;
       case "gomdol":
         href = `/khyanalt/medegdel/sanalKhuselt`;
         break;
@@ -117,18 +130,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                     <Link
                       href={{
                         pathname: hrefAvya(mur, ajiltan),
-                        query:
-                          mur.turul === "setgegdel"
-                            ? {
-                                id: mur.object.daalgavriinId,
-                              }
-                            : mur.turul === "daalgavar"
-                            ? {
-                                id: mur.object._id,
-                              }
-                            : {
-                                id: mur.object.khariltsagchiinId,
-                              },
+                        query: { id: idAwyaa(mur) },
                       }}
                     >
                       <div className="relative  flex cursor-pointer items-center justify-between">
