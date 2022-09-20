@@ -121,11 +121,10 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   <Menu.Item
                     key={`sonorduulga${i}`}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
-                    className={`${
-                      mur.kharsanEsekh
-                        ? "kharsanSonorduulga opacity-70"
-                        : "kharaaguiSonorduulga"
-                    }`}
+                    className={`${mur.kharsanEsekh
+                      ? "kharsanSonorduulga opacity-70"
+                      : "kharaaguiSonorduulga"
+                      }`}
                   >
                     <Link
                       href={{
@@ -224,10 +223,15 @@ function ProfileTovch({ ajiltan, garya, token }) {
               </Link>
             </Menu.Item>
             <Menu.Item key="1" className="profileMenuItem">
-              <div className="flex w-44 items-center space-x-2 text-white">
-                <QuestionOutlined />
-                <span>Тусламж</span>
-              </div>
+              <Link href="/khyanalt/faq">
+                <a>
+                  <div className="flex w-44 items-center space-x-2 text-white">
+                    <QuestionOutlined />
+                    <span>Тусламж</span>
+
+                  </div>
+                </a>
+              </Link>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="3" onClick={garya} className="profileMenuItem">
@@ -248,14 +252,14 @@ function ProfileTovch({ ajiltan, garya, token }) {
               ajiltan?.zurgiinNer
                 ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                 : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
-                ? "/profileFemale.svg"
-                : "/profile.svg"
+                  ? "/profileFemale.svg"
+                  : "/profile.svg"
             }
             className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"
           />
         </button>
-      </Dropdown>
-    </div>
+      </Dropdown >
+    </div >
   );
 }
 

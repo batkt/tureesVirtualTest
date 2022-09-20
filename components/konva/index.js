@@ -1,4 +1,4 @@
-import { ClearOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React, { Component } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
@@ -112,6 +112,7 @@ class App extends Component {
     this.setState({
       isMouseOverStartPoint: true
     });
+    console.log("ehelsen tseg deer ochij bna",)
   };
   handleMouseOutStartPoint = event => {
     event.target.scale({ x: 1, y: 1 });
@@ -166,7 +167,6 @@ class App extends Component {
               width={"30%"}
               height={"30%"}
             />
-
           </div>
 
         </div>
@@ -216,6 +216,9 @@ class App extends Component {
                   strokeWidth={3}
                   onDragStart={handleDragStartPoint}
                   onDragEnd={(e) => handleDragEndPoint(e, index)}
+                  onDblClick={() => this.setState({
+                    isFinished: true
+                  })}
                   draggable
                   {...startPointAttr}
                 />
