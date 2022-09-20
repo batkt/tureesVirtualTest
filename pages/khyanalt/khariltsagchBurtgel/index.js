@@ -295,6 +295,8 @@ function AjiltanBurtgel({ token }) {
               message: "Мэдэгдэл",
               description: "Нууц үг амжилттай шинэчлэгдлээ",
             });
+            setNuutsUgKhariltsagch(false);
+            resetForm.resetFields()
           }
         })
         .catch((e) => {
@@ -1142,10 +1144,12 @@ function AjiltanBurtgel({ token }) {
           <Modal
             title="Нууц үг сэргээх"
             open={!!nuutsUgKhariltsagch}
-            onOk={() => nuutsUgSolikh(data)}
+            onOk={() => nuutsUgSolikh(nuutsUgKhariltsagch)}
             onCancel={nuutsUgModalKhaah}
+            okText="Сэргээх"
+            cancelText="Цуцлах"
           >
-            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
+            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} ref={formRef}>
               <Form.Item
                 label="Нууц үг сэргээх"
                 name="sergesenNuutsUg"
@@ -1159,7 +1163,7 @@ function AjiltanBurtgel({ token }) {
               >
                 <Input.Password style={{ width: "100%" }} />
               </Form.Item >
-              <Form.Item label="Нууц үг давтан оруулах">
+              <Form.Item label="Нууц үг давтан оруулах" name="davtanNuutsUg">
                 <Input.Password
                   onChange={(e) =>
                     shineNuutsUgSolikh("davtanNuutsUg", e.target.value)
