@@ -51,7 +51,7 @@ function useKhariltsagch(
     khuudasniiKhemjee: khuudasniiKhemjee || 10,
     search: "",
   });
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId && !!barilgiinId
       ? [
           "khariltsagch",
@@ -70,6 +70,7 @@ function useKhariltsagch(
     setKhariltsagchKhuudaslalt: setKhuudaslalt,
     khariltsagchiinGaralt: data,
     khariltsagchMutate: mutate,
+    isValidating,
   };
 }
 export function useKhariltsagchToololt(token) {

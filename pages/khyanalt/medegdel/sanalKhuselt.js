@@ -103,13 +103,8 @@ function index({ token, data }) {
   const [loading, setLoading] = useState(false);
   const [khariltsagch, setKhariltsagch] = useState(null);
   const { baiguullaga } = useAuth();
-  const { khariltsagchiinGaralt, setKhariltsagchKhuudaslalt } = useKhariltsagch(
-    token,
-    baiguullaga?._id,
-    100,
-    undefined,
-    order
-  );
+  const { khariltsagchiinGaralt, setKhariltsagchKhuudaslalt, isValidating } =
+    useKhariltsagch(token, baiguullaga?._id, 100, undefined, order);
   const {
     sonorduulga,
     sonorduulgaMutate,
@@ -230,6 +225,7 @@ function index({ token, data }) {
       onSearch={(search) =>
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
+      loading={loading || isValidating}
     >
       <div
         className={`col-span-12 lg:col-span-6 ${
