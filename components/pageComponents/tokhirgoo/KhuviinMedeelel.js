@@ -107,7 +107,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
                 <div className="image-fit zoom-in relative mx-auto h-40 cursor-pointer">
                   <img
                     className="h-40 w-40 rounded-md"
-                    alt="Rubick Tailwind HTML Admin Template"
+                    alt="ProfileZurag"
                     ref={zuragRef}
                     src={
                       ajiltan?.zurgiinNer

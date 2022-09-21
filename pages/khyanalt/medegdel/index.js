@@ -552,10 +552,7 @@ function Khyanalt({ token }) {
               onClick={() => setContent(a.mail)}
             >
               <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                <img
-                  alt="Rubick Tailwind HTML Admin Template"
-                  src="/email.png"
-                />
+                <img alt="email" src="/email.png" />
               </div>
               <div className="ml-2 mr-1 overflow-hidden">
                 <div className="flex items-center">
@@ -643,7 +640,7 @@ function Khyanalt({ token }) {
                 >
                   <div className="image-fit relative h-10 w-10 flex-none rounded-full">
                     <img
-                      alt="Rubick"
+                      alt="profileZurag"
                       className="rounded-full"
                       src={
                         ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
@@ -716,7 +713,7 @@ function Khyanalt({ token }) {
                 <div className="flex items-center">
                   <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
                     <img
-                      alt="Rubick Tailwind HTML Admin Template"
+                      alt="ProfileZurag"
                       className="rounded-full"
                       src={
                         ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
@@ -951,16 +948,10 @@ function Khyanalt({ token }) {
             <div className="mx-auto text-center">
               <div className="flex justify-center">
                 <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img
-                    alt="Rubick Tailwind HTML Admin Template"
-                    src="/profile.svg"
-                  />
+                  <img alt="ProfileZurag" src="/profile.svg" />
                 </div>
                 <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img
-                    alt="Rubick Tailwind HTML Admin Template"
-                    src="/profileFemale.svg"
-                  />
+                  <img alt="ProfileZurag" src="/profileFemale.svg" />
                 </div>
               </div>
               <div className="mt-3">

@@ -14,6 +14,7 @@ import { uldegdeliinTurulKhurvuulya } from "./index";
 import useKhariltsagch from "hooks/useKhariltsagch";
 import { useAuth } from "services/auth";
 import { useRouter } from "next/router";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const order = { updatedAt: -1 };
 
@@ -229,11 +230,13 @@ function index({ token, data }) {
     >
       <div
         className={`col-span-12 lg:col-span-6 ${
-          khariltsagch === null ? "xl:col-span-4" : "xl:col-span-3"
+          khariltsagch === null
+            ? "xl:col-span-4"
+            : "hidden xl:col-span-3 xl:block"
         } `}
       >
-        <div className="box p-5">
-          <div className="relative w-full text-gray-700   dark:text-gray-300">
+        <div className="box h-[93vh] p-5 md:h-H7HalfRem">
+          <div className="relative  w-full text-gray-700   dark:text-gray-300">
             <input
               type="text"
               className="w-full rounded-md bg-gray-100 px-2  py-1   dark:bg-gray-700"
@@ -267,10 +270,7 @@ function index({ token, data }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <div
-            className="scrollbar-hidden mt-5 overflow-y-scroll"
-            style={{ height: "calc(100vh - 13rem)" }}
-          >
+          <div className="scrollbar-hidden mt-5 h-[94%] overflow-y-scroll md:h-scrollH">
             {khariltsagchiinGaralt?.jagsaalt?.map((mur) => (
               <div
                 className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
@@ -316,36 +316,18 @@ function index({ token, data }) {
           </div>
         </div>
       </div>
-      {khariltsagch !== null && (
-        <div
-          style={{ height: "calc(100vh - 7.5rem)" }}
-          className="box col-span-3 space-y-5 overflow-y-auto p-5"
-        >
-          {gereenuud?.length < 1 ? (
-            <div className="flex h-full w-full items-center justify-center text-lg font-medium">
-              Харилцагч гэрээ байгуулаагүй байна!
-            </div>
-          ) : (
-            gereenuud?.map((a) => (
-              <Geree
-                data={a}
-                token={token}
-                key={a._id}
-                className="rounded-md border-2 border-green-400 p-2 "
-              />
-            ))
-          )}
-        </div>
-      )}
       {khariltsagch !== null ? (
-        <div className="col-span-6">
-          <div className="box flex h-full flex-col">
+        <div className="col-span-12 lg:col-span-6 xl:col-span-5 2xl:col-span-6">
+          <div className="box flex h-[93vh] flex-col md:h-H7HalfRem">
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {khariltsagch && (
                 <div className="flex items-center">
-                  <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
+                  <div className="text-lg xl:hidden">
+                    <ArrowLeftOutlined onClick={() => setKhariltsagch(null)} />
+                  </div>
+                  <div className="image-fit relative mx-3 h-10 w-10 flex-none sm:h-12 sm:w-12">
                     <img
-                      alt="Rubick Tailwind HTML Admin Template"
+                      alt="ProfileZurag"
                       className="rounded-full"
                       src={
                         ((khariltsagch.register?.replace(/^\D+/g, "") % 100) /
@@ -357,7 +339,7 @@ function index({ token, data }) {
                       }
                     />
                   </div>
-                  <div className="ml-3 mr-auto">
+                  <div className=" mr-auto">
                     <div className="text-base font-medium">
                       {khariltsagch?.ner}
                     </div>
@@ -378,7 +360,7 @@ function index({ token, data }) {
                 return (
                   <div
                     key={a._id}
-                    className={`relative mt-8 flex w-1/3 flex-col break-words rounded-xl border border-green-200 bg-green-500 p-3 ${
+                    className={`relative mt-8 flex w-4/5 flex-col break-words rounded-xl border border-green-200 bg-green-500 p-3 2xl:w-1/3 ${
                       a.turul === "medegdel"
                         ? "ml-auto rounded-br-none bg-blue-500"
                         : "rounded-bl-none"
@@ -472,20 +454,14 @@ function index({ token, data }) {
           </div>
         </div>
       ) : (
-        <div className="box col-span-8 flex h-full items-center">
+        <div className="box col-span-6 hidden h-full items-center lg:flex xl:col-span-8">
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                <img
-                  alt="Rubick Tailwind HTML Admin Template"
-                  src="/profile.svg"
-                />
+                <img alt="ProfileZurag" src="/profile.svg" />
               </div>
               <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                <img
-                  alt="Rubick Tailwind HTML Admin Template"
-                  src="/profileFemale.svg"
-                />
+                <img alt="ProfileZurag" src="/profileFemale.svg" />
               </div>
             </div>
             <div className="mt-3">
@@ -495,6 +471,24 @@ function index({ token, data }) {
               </div>
             </div>
           </div>
+        </div>
+      )}
+      {khariltsagch !== null && (
+        <div className="box col-span-6 hidden h-H7HalfRem space-y-5 overflow-y-auto p-5 lg:block xl:col-span-4 2xl:col-span-3">
+          {gereenuud?.length < 1 ? (
+            <div className="flex h-full w-full items-center justify-center text-lg font-medium">
+              Харилцагч гэрээ байгуулаагүй байна!
+            </div>
+          ) : (
+            gereenuud?.map((a) => (
+              <Geree
+                data={a}
+                token={token}
+                key={a._id}
+                className="rounded-md border-2 border-green-400 p-2 "
+              />
+            ))
+          )}
         </div>
       )}
     </Admin>
