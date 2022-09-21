@@ -14,8 +14,7 @@ function tugeemelAsuult() {
         <Admin
             title="Түгээмэл асуулт"
             khuudasniiNer="tugeemelAsuult"
-            className="p-0 md:p-2 "
-        >
+            className="p-0 md:p-2 ">
             <div className="col-span-12 ">
                 {faq?.data?.map((mur) => (
                     <Collapse

@@ -31,7 +31,7 @@ const formItemLayout = {
   },
 };
 
-const query = {  };
+const query = {};
 
 function TalbaiSongolt({ value, onChange, mode }) {
   const { token, baiguullaga } = useAuth();
@@ -216,7 +216,7 @@ const YurunkhiiMedeele = ({
                     m<sup>2</sup>
                   </div>
                   <div className="col-span-4 text-center">Зардал</div>
-                  <div className="col-span-4 text-center">Нийт төлбөр</div>
+                  <div className="col-span-4 text-center">Түрээсийн төлбөр</div>
                 </div>
                 <div className="grid grid-cols-12 divide-x-2">
                   <div className="col-span-2 text-center">{talbai.davkhar}</div>
@@ -232,7 +232,7 @@ const YurunkhiiMedeele = ({
                 </div>
               </div>
               <div className="flex flex-row justify-end">
-                <div>Түрээсийн төлбөр:</div>
+                <div>Нийт төлбөр:</div>
                 <div className="w-32 text-right text-base font-medium">
                   {formatNumber(talbai.tureesiinTulbur)}
                 </div>

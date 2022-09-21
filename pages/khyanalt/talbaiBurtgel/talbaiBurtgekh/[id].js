@@ -516,7 +516,7 @@ function TalbaiBurtgekh({ token }) {
                                                                     showUploadList={false}
                                                                     className="avatar-uploader "
                                                                     multiple={false}
-                                                                    listType="picture"
+                                                                    listType="picture-card"
                                                                     name="file"
                                                                     action={`${url}/zuragKhadgalya`}
                                                                     method="POST"
@@ -568,7 +568,6 @@ function TalbaiBurtgekh({ token }) {
                                                         </div>
                                                         <div className="col-span-5 flex flex-col justify-center ">
                                                             <Form.Item
-
                                                                 {...restField}
                                                                 label="Үнэ"
                                                                 name={[name, "une"]}
@@ -587,7 +586,6 @@ function TalbaiBurtgekh({ token }) {
                                                                 />
                                                             </Form.Item>
                                                             <Form.Item
-
                                                                 {...restField}
                                                                 label="Нийт"
                                                                 name={[name, "niit"]}

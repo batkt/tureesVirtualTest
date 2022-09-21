@@ -29,6 +29,7 @@ import {
   DownOutlined,
   PlusOutlined,
   RedoOutlined,
+  EnvironmentOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
@@ -50,9 +51,9 @@ import KhariltsagchTile from "components/pageComponents/khariltsagch/Khariltsagc
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import _ from "lodash";
-import { data } from "autoprefixer";
 
 const iconColor = { fontSize: "18px" };
+
 function checkUtas(utasnuud, utga) {
   const utguud = utasnuud || [];
   if (!!utguud.find((a) => a === utga)) {
@@ -68,7 +69,7 @@ function AjiltanBurtgel({ token }) {
   });
   const formRef = useRef();
   const excelref = useRef();
-
+  const [resetForm] = Form.useForm()
   const { ajiltan, barilgiinId } = useAuth();
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const [query, setQuery] = useState({});
@@ -279,6 +280,9 @@ function AjiltanBurtgel({ token }) {
   }
 
   function nuutsUgSolikh() {
+
+    let { errors } = resetForm.getFieldsError()
+    if (!!errors) { return; }
     if (nuutsUgKhariltsagch.nuutsUg === nuutsUgKhariltsagch.davtanNuutsUg) {
       uilchilgee(token)
         .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, {
@@ -291,6 +295,8 @@ function AjiltanBurtgel({ token }) {
               message: "Мэдэгдэл",
               description: "Нууц үг амжилттай шинэчлэгдлээ",
             });
+            setNuutsUgKhariltsagch(false);
+            resetForm.resetFields()
           }
         })
         .catch((e) => {
@@ -686,11 +692,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -772,14 +777,7 @@ function AjiltanBurtgel({ token }) {
                             ellipsis: true,
                             width: "5rem",
                           },
-                          {
-                            title: "Утас",
-                            dataIndex: "utas",
-                            ellipsis: true,
-                            render(a) {
-                              return a?.join(",");
-                            },
-                          },
+
                           {
                             title: "И-мэйл",
                             dataIndex: "mail",
@@ -804,6 +802,7 @@ function AjiltanBurtgel({ token }) {
                               return moment(data).format("YYYY-MM-DD");
                             },
                           },
+
                         ])
                         .addDataSource(khariltsagchiinGaralt?.jagsaalt)
                         .saveAs("харилцагчийн жагсаалт.xlsx");
@@ -839,7 +838,7 @@ function AjiltanBurtgel({ token }) {
             tableLayout={
               khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
             }
-            scroll={{ y: "calc(100vh - 27rem)" }}
+            scroll={{ y: "calc(100vh - 27rem)", }}
             rowKey={(row) => row._id}
             dataSource={khariltsagchiinGaralt?.jagsaalt}
             pagination={{
@@ -869,7 +868,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -878,7 +877,6 @@ function AjiltanBurtgel({ token }) {
                 title: "Төрөл",
                 dataIndex: "turul",
                 align: "center",
-                ellipsis: true,
                 render: (turul) => {
                   return (
                     <Tag
@@ -897,42 +895,30 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Регистр",
                 dataIndex: "register",
-                ellipsis: true,
+                width: "10rem",
+                align: "center",
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
               {
                 title: "Нэр",
                 dataIndex: "ner",
-                ellipsis: true,
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
               {
-                title: "Хаяг",
-                dataIndex: "khayag",
-                ellipsis: true,
-                width: "5rem",
-              },
-              {
                 title: "Утас",
                 dataIndex: "utas",
-                ellipsis: true,
-                render(a) {
-                  return a?.join(",");
-                },
-              },
-              {
-                title: "И-мэйл",
-                dataIndex: "mail",
-                ellipsis: true,
-                width: "5rem",
+                width: "7rem",
                 align: "center",
+                render(a) {
+                  return a?.join(",")
+                }
               },
+
               {
                 title: "Төлөв",
                 dataIndex: "idevkhiteiEsekh",
-                ellipsis: true,
                 align: "center",
                 render: (idevkhiteiEsekh) => {
                   return (
@@ -951,10 +937,63 @@ function AjiltanBurtgel({ token }) {
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
+
+              {
+                title: "Бүртгэгдсэн",
+                dataIndex: "createdAt",
+                width: "13rem",
+                align: "center",
+                render: (data) => {
+                  return moment(data).format("YYYY-MM-DD");
+                },
+              },
+              {
+                title: "И-мэйл",
+                dataIndex: "mail",
+                width: "7rem",
+                align: "center",
+                render(email) {
+                  return (<Popover
+                    trigger="click"
+                    content={
+                      <div>{email}</div>
+                    }
+                  >
+                    <a
+                      className=" flex items-center justify-center hover:bg-gray-200"
+                    >
+                      <MailOutlined style={{ fontSize: "18px" }} />
+                    </a>
+                  </Popover>)
+                }
+              },
+              {
+                title: "Хаяг",
+                dataIndex: "khayag",
+                width: "7rem",
+                align: "center",
+                render: (khayag) => {
+                  return (
+                    <Popover
+                      trigger="click"
+                      content={
+                        <div>{khayag}</div>
+                      }
+                    >
+                      <a
+                        className=" flex items-center justify-center hover:bg-gray-200"
+                      >
+                        <EnvironmentOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  );
+                },
+              },
+
               {
                 title: "Түүх",
-                width: "4rem",
                 align: "center",
+                width: "7rem",
                 render: (data) => {
                   return (
                     <Popover
@@ -975,7 +1014,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1046,18 +1085,8 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Бүртгэгдсэн",
-                dataIndex: "createdAt",
-                ellipsis: true,
-                render: (data) => {
-                  return moment(data).format("YYYY-MM-DD");
-                },
-              },
-              {
                 title: () => <SettingOutlined />,
                 align: "center",
-                width: "1rem",
-                ellipsis: true,
                 render: (data) => (
                   <div className="flex flex-row">
                     <Popover
@@ -1086,7 +1115,6 @@ function AjiltanBurtgel({ token }) {
                               <label className="text-green-600">Нууц үг</label>
                             </a>
                           </Popconfirm>
-
                           <Popconfirm
                             title="Харилцагч устгах уу?"
                             okText="Тийм"
@@ -1116,27 +1144,35 @@ function AjiltanBurtgel({ token }) {
           <Modal
             title="Нууц үг сэргээх"
             open={!!nuutsUgKhariltsagch}
-            onOk={() => nuutsUgSolikh(data)}
+            onOk={() => nuutsUgSolikh(nuutsUgKhariltsagch)}
             onCancel={nuutsUgModalKhaah}
+            okText="Сэргээх"
+            cancelText="Цуцлах"
           >
-            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }}>
+            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} ref={formRef}>
               <Form.Item
                 label="Нууц үг сэргээх"
                 name="sergesenNuutsUg"
                 onChange={(e) => shineNuutsUgSolikh("nuutsUg", e.target.value)}
+                rules={[
+                  {
+                    required: true,
+                    message: "Нууц үг оруулна уу!",
+                  },
+                ]}
               >
                 <Input.Password style={{ width: "100%" }} />
-              </Form.Item>
-              <Form.Item label="Нууц үг давтан оруулах">
+              </Form.Item >
+              <Form.Item label="Нууц үг давтан оруулах" name="davtanNuutsUg">
                 <Input.Password
                   onChange={(e) =>
                     shineNuutsUgSolikh("davtanNuutsUg", e.target.value)
                   }
                 />
               </Form.Item>
-            </Form>
-          </Modal>
-        </div>
+            </Form >
+          </Modal >
+        </div >
         <CardList
           keyValue="
           "
@@ -1156,8 +1192,8 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
         />
-      </div>
-    </Admin>
+      </div >
+    </Admin >
   );
 }
 
