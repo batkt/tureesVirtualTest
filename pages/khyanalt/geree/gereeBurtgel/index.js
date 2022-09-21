@@ -310,6 +310,7 @@ const select = {
   dans: 1,
   gereeniiTuukhuud: 1,
   createdAt: 1,
+  aldangiinUldegdel: 1,
 };
 
 function ZakhialgiinKhyanalt() {
@@ -987,6 +988,17 @@ function ZakhialgiinKhyanalt() {
                   align: "center",
                   ellipsis: true,
                   width: "6rem",
+                },
+                {
+                  title: "Алдангийн үлдэгдэл",
+                  dataIndex: "aldangiinUldegdel",
+                  className: "text-center",
+                  align: "right",
+                  ellipsis: true,
+                  width: "7rem",
+                  render: (aldangiinUldegdel) => {
+                    return formatNumber(aldangiinUldegdel || 0);
+                  },
                 },
               ]}
             />

@@ -6,15 +6,20 @@ import {
 import uilchilgee from "services/uilchilgee";
 import moment from 'moment'
 
-function AppTokhirgoo({ token, baiguullaga, }) {
+function AppTokhirgoo({ token, baiguullaga }) {
+
+    const [idvekhtei, setIdvekhgui] = useState(!!baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo)
+
+    console.log(idvekhtei)
 
     const [ekhlekhOgnoo, setekhlekhOgnoo] = useState();
     function ekhlehOgnooBurtgey() {
         uilchilgee(token)
-            .post("/baiguullagaTokhirgooZasya", { tokhirgoo: { khereglegchEkhlekhOgnoo: ekhlekhOgnoo } })
+            .post("/baiguullagaTokhirgooZasya", { tokhirgoo: { khereglegchEkhlekhOgnoo: moment(ekhlekhOgnoo).format("YYYY-MM-DD 00:00:00") } })
             .then(({ data }) => {
                 if (data === "Amjilttai") {
                     notification.success({ message: "Амжилттай засагдлаа" });
+                    setIdvekhgui(true);
                 }
             });
     }
@@ -34,19 +39,18 @@ function AppTokhirgoo({ token, baiguullaga, }) {
                             </div>
                             <div className="ml-auto w-1/2">
                                 <DatePicker
-                                    disabled={!!baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo}
+                                    disabled={idvekhtei}
                                     name="ekhlehOgnoo"
                                     style={{ width: "100%" }}
                                     defaultValue={baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo && moment(baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo)}
                                     prefix={<SolutionOutlined />}
                                     onChange={setekhlekhOgnoo}
-                                    format="YYYY-MM-DD"
                                 />
                             </div>
 
                         </div>
 
-                        <div hidden={!baiguullaga.tokhirgoo.khereglegchEkhlekhOgnoo} className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+                        <div hidden={!idvekhtei} className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
                             <p className="mr-auto text-xs font-meium dark:text-gray-200">
                                 Хэрвээ энэхүү тохиргоог өөрчлөхийг хүсвэл манай байгууллагад хандана уу
                             </p>
@@ -54,7 +58,7 @@ function AppTokhirgoo({ token, baiguullaga, }) {
                     </div>
                     <div
                         className="dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2">
-                        <Button type="primary" onClick={ekhlehOgnooBurtgey} >
+                        <Button disabled={idvekhtei} type="primary" onClick={ekhlehOgnooBurtgey} >
                             Хадгалах
                         </Button>
                     </div>

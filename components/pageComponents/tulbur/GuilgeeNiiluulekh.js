@@ -16,7 +16,6 @@ import { formatter, parser } from "tools/function/inputFormatter";
 import {
   CloseCircleOutlined,
   CloseOutlined,
-  EditOutlined,
   FormOutlined,
 } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -28,13 +27,15 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
   let undsenGuilgee = [];
   let aldaa = [];
   gereenuud.forEach((mur) => {
-    if (mur.tureesiinTulbur > 0) {
+    if (mur.tureesiinTulbur > 0 || mur.tulsunAldangi > 0) {
       let guilgeeniiMur = {
         turul: "bank",
-        tulsunDun: mur.tureesiinTulbur,
+        tulsunDun: mur.tureesiinTulbur || 0,
         guilgeeniiId: guilgee._id,
         gereeniiId: mur._id,
         dansniiDugaar: guilgee.dansniiDugaar,
+        tulukhAldangi: mur.aldangiinUldegdel,
+        tulsunAldangi: mur.tulsunAldangi,
       };
 
       switch (dans.bank) {
@@ -79,6 +80,11 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           `${mur.talbainDugaar} талбайн холбох гүйлгээний барьцааны дүн хэтэрсэн байна`
         );
       baritsaa.push(baritsaaniiMur);
+    }
+    if (mur.aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+      aldaa.push(
+        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүн оруулаагүй байна`
+      );
     }
   });
 
@@ -255,13 +261,15 @@ function GuilgeeNiiluulekh(
     let sum = gereenuud.reduce((a, b, currentIndex) => {
       let value = 0;
       if (currentIndex === index) {
-        value +=
-          b[
-            talbar === "baritsaaTulbur" ? "tureesiinTulbur" : "baritsaaTulbur"
-          ] || 0;
+        ["baritsaaTulbur", "tureesiinTulbur", "tulsunAldangi"]
+          .filter((a) => a !== talbar)
+          .forEach((mur) => {
+            value += b[mur] || 0;
+          });
       } else {
         value += b.baritsaaTulbur || 0;
         value += b.tureesiinTulbur || 0;
+        value += b.tulsunAldangi || 0;
       }
       return _.toNumber(a + value);
     }, 0);
@@ -296,6 +304,12 @@ function GuilgeeNiiluulekh(
 
   function onDoubleClickKholbokhDun(target, index, talbar) {
     let sum = zuruuZun(index, talbar);
+    if (
+      "tulsunAldangi" === talbar &&
+      guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel
+    )
+      sum = guilgeeniiDun - gereenuud[index].aldangiinUldegdel;
+
     if (sum < guilgeeniiDun) {
       target.value = formatter(guilgeeniiDun - sum);
       setGereenuud((a) => {
@@ -429,6 +443,26 @@ function GuilgeeNiiluulekh(
                 </span>
               </Popconfirm>
             </div>
+            {(geree?.aldangiinUldegdel || 0) > 0 && (
+              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                <div className="col-span-4">Алдангийн үлдэгдэл</div>
+                <div>{formatNumber(geree?.aldangiinUldegdel || 0)}</div>
+                <div>{geree.talbainDugaar}</div>
+                <div className="text-right">
+                  <input
+                    className="w-full rounded-md border bg-gray-200 px-2 text-right"
+                    placeholder="Барьцаа дүн"
+                    value={formatter(geree.tulsunAldangi)}
+                    onDoubleClick={({ target }) =>
+                      onDoubleClickKholbokhDun(target, index, "tulsunAldangi")
+                    }
+                    onChange={({ target }) => {
+                      onChangeKholbokhDun(target, index, "tulsunAldangi");
+                    }}
+                  />
+                </div>
+              </div>
+            )}
             {(geree?.baritsaaAvakhDun || 0) -
               (geree?.baritsaaniiUldegdel || 0) >
               0 && (

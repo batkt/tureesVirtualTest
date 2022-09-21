@@ -222,6 +222,53 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Алдангийн хувь</div>
+                <div className="text-gray-600">
+                  Гэрээний төлөлт хугацаа хэвэрсэн үед тооцох алдангийн хувь
+                </div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber
+                  min={0}
+                  max={100}
+                  defaultValue={baiguullaga?.tokhirgoo?.aldangiinKhuvi}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.aldangiinKhuvi": v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">Алданги чөлөөлөх хоног</div>
+                <div className="text-gray-600">
+                  Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож
+                  эхлэх хоног
+                </div>
+              </div>
+              <div className="ml-auto">
+                <InputNumber
+                  min={0}
+                  max={100}
+                  defaultValue={baiguullaga?.tokhirgoo?.aldangiChuluulukhKhonog}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      "tokhirgoo.aldangiChuluulukhKhonog": v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
             className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"

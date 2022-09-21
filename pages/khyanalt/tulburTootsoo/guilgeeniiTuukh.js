@@ -741,6 +741,17 @@ function guilgeeniiTuukh({ token }) {
                     return moment(a).format("YYYY-MM-DD");
                   },
                 },
+                {
+                  title: "Алдангийн үлдэгдэл",
+                  dataIndex: "aldangiinUldegdel",
+                  className: "text-center",
+                  align: "right",
+                  ellipsis: true,
+                  width: "7rem",
+                  render: (aldangiinUldegdel) => {
+                    return formatNumber(aldangiinUldegdel || 0);
+                  },
+                },
               ]}
             />
 

@@ -6,14 +6,14 @@ import {
   notification,
   Radio,
   Switch,
-  Select
+  Select,
 } from "antd";
 import _ from "lodash";
 import React, { useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-
+import formatNumber from "tools/function/formatNumber";
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState(0);
@@ -37,22 +37,25 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           return;
         }
 
-        var guilgee = {}
+        var guilgee = {};
         if (turul === "busad") {
           if (!busadTurul) {
-            notification.warning({ message: "Та гүйлгээний төрөлөө сонгоно уу" });
+            notification.warning({
+              message: "Та гүйлгээний төрөлөө сонгоно уу",
+            });
             return;
           }
           guilgee = {
             turul: busadTurul,
-            tulsunDun: dun,
+            tulsunDun: busadTurul === "aldangi" ? 0 : dun,
             tulukhDun: 0,
+            tulsunAldangi: busadTurul === "aldangi" ? dun : 0,
+            tulukhAldangi: 0,
             ognoo: new Date(),
             gereeniiId: data?._id,
             tailbar,
-          }
-        }
-        else {
+          };
+        } else {
           guilgee = {
             turul: turul,
             tulsunDun: turul === "voucher" ? dun : 0,
@@ -65,7 +68,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             tailbar,
             nekhemjlekhDeerKharagdakh:
               turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
-          }
+          };
         }
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
@@ -122,12 +125,14 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         />
       )}
       {turul === "busad" && (
-        <Select
-          placeholder="Гүйлгээ хийх төрөл"
-          onChange={setBusadTurul}>
+        <Select placeholder="Гүйлгээ хийх төрөл" onChange={setBusadTurul}>
           <Option value="barter">Бартер</Option>
           <Option value="zalruulga">Залруулга</Option>
+          <Option value="aldangi">Алданги</Option>
         </Select>
+      )}
+      {busadTurul === "aldangi" && (
+        <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
       )}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
