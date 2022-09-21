@@ -127,7 +127,7 @@ function index({ token }) {
                 <Menu className="p-2">
                   <Menu.Item
                     key="Заалт нэмэх"
-                    className="dark:hover:bg-dark-2 block flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                    className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
                     onClick={zaaltOruulakh}
                   >
                     <UserAddOutlined />
@@ -135,7 +135,7 @@ function index({ token }) {
                   </Menu.Item>
                   <Menu.Item
                     key="Заалт Excel-ээс оруулах"
-                    className="dark:hover:bg-dark-2 block flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                    className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
                     onClick={zaaltOruulakhExcel}
                   >
                     <UserAddOutlined />
@@ -143,7 +143,7 @@ function index({ token }) {
                   </Menu.Item>
                   <Menu.Item
                     key="Заалт Excel-ээс оруулах"
-                    className="dark:hover:bg-dark-2 block flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
+                    className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
                     onClick={zagvarOruulakhExcel}
                   >
                     <UserAddOutlined />
@@ -155,7 +155,7 @@ function index({ token }) {
               className="cursor-pointer"
             >
               <Button
-                className="dropdown-toggle btn box focus:outline-none mt-4 w-full px-2 text-gray-700 focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
+                className="dropdown-toggle btn box mt-4 w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
                 aria-expanded="false"
                 icon={
                   <span className="flex h-5 w-5 items-center justify-center">
@@ -191,7 +191,7 @@ function index({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="file box zoom-in relative rounded-md px-5 px-3 pt-8 pb-5 sm:px-5">
+                <div className="file box zoom-in relative rounded-md px-3 pt-8 pb-5 sm:px-5">
                   <div className="absolute left-0 top-0 mt-3 ml-3">
                     <input
                       className="form-check-input border border-gray-500"
@@ -240,12 +240,12 @@ function index({ token }) {
                               </svg>
                               Засах
                             </div>
-                            <div >
+                            <div>
                               <Popconfirm
                                 title="Загвар устгах уу?"
                                 okText="Тийм"
                                 cancelText="Үгүй"
-                                className=" dark:bg-dark-1 dark:hover: bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover: hover:bg-gray-200 text-white"
+                                className=" dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200"
                                 onConfirm={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();
@@ -314,8 +314,8 @@ function index({ token }) {
             );
           })}
         </div>
-      </div >
-    </Admin >
+      </div>
+    </Admin>
   );
 }
 
