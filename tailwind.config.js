@@ -10,6 +10,7 @@ module.exports = {
       height: {
         scrollH: "calc(100vh - 13rem)",
         H7HalfRem: "calc(100vh - 7.5rem)",
+        medegdelHariltsagchPhone: "calc(100vh - 27rem)",
       },
       colors: {
         green: {

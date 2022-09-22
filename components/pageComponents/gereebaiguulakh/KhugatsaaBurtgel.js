@@ -96,7 +96,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
             max={100}
             min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            placeholder="Гэрээний хугацаа"
+            placeholder="Гэрээний хугацаа (сараар)"
           />
         </Form.Item>
       </div>

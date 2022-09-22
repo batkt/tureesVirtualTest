@@ -869,7 +869,7 @@ function ZakhialgiinKhyanalt() {
         )}
       </Drawer>
       <Card className="cardgrid col-span-12 p-5 ">
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+        <div className="grid w-full grid-cols-6 gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div

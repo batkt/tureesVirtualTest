@@ -49,7 +49,7 @@ const steps = [
 function GereeBaiguulakh({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   useEffect(() => {
-    Aos.init({once: true});
+    Aos.init({ once: true });
   });
 
   const zagvarRef = React.useRef();
@@ -117,17 +117,19 @@ function GereeBaiguulakh({ token }) {
       if (!!data?.zuvshuurliinZurag)
         data.zuvshuurliinZurag = _.get(data, "zuvshuurliinZurag.0.response.id");
       setWaiting(true);
-      createMethod("gereeKhadgalya", token, data).then(({ data }) => {
-        if (data === "Amjilttai") {
-          setKhagalakhGeree({});
-          setCurrent(0);
-          message.success("Амжилттай хадгаллаа");
-          setWaiting(false)
-        }
-      }).catch(e=>{
-        aldaaBarigch(e)
-        setWaiting(false)
-      });
+      createMethod("gereeKhadgalya", token, data)
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            setKhagalakhGeree({});
+            setCurrent(0);
+            message.success("Амжилттай хадгаллаа");
+            setWaiting(false);
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setWaiting(false);
+        });
     }
   };
 
@@ -155,11 +157,12 @@ function GereeBaiguulakh({ token }) {
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
+    if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (!butsaakhUtga?.dedKhesguud) return {};
-    butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-      (a) => a.khamaarakhKheseg === steps[current].title
-    );
+    if (!butsaakhUtga?.dedKhesguud)
+      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+        (a) => a.khamaarakhKheseg === steps[current].title
+      );
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -253,7 +256,7 @@ function GereeBaiguulakh({ token }) {
                 placeholder="Гэрээний загвар сонгох"
                 className="w-full"
                 size="large"
-                value={null}
+                value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}
                 filterOption={(o) => o}
                 onSearch={(search) =>
                   setGereeniiZagvarKhuudaslalt((a) => ({

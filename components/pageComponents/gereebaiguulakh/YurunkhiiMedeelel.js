@@ -113,7 +113,7 @@ const YurunkhiiMedeele = ({
           label="Байгууллага эсэх"
           valuePropName="checked"
         >
-          <Switch onChange={setBaiguullagaEsekh} />
+          <Switch className="bg-gray-600" onChange={setBaiguullagaEsekh} />
         </Form.Item>
       </div>
       {baiguullagaEsekh && (
@@ -350,7 +350,9 @@ const YurunkhiiMedeele = ({
             data={{ turul: "gerchilgeeniiZurag" }}
             headers={{ Authorization: `bearer ${token}` }}
           >
-            <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+            <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
+              Файл сонгох
+            </Button>
           </Upload>
         </Form.Item>
       </div>
@@ -375,7 +377,9 @@ const YurunkhiiMedeele = ({
               data={{ turul: "zuvshuurliinZurag" }}
               headers={{ Authorization: `bearer ${token}` }}
             >
-              <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+              <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
+                Файл сонгох
+              </Button>
             </Upload>
           </Form.Item>
           <Form.Item
@@ -393,7 +397,9 @@ const YurunkhiiMedeele = ({
               data={{ turul: "unemlekhniiZurag" }}
               headers={{ Authorization: `bearer ${token}` }}
             >
-              <Button icon={<UploadOutlined />}>Файл сонгох</Button>
+              <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
+                Файл сонгох
+              </Button>
             </Upload>
           </Form.Item>
         </Form.Item>

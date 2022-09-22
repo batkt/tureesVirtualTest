@@ -15,6 +15,7 @@ import {
   Table,
 } from "antd";
 import {
+  ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
   FileExcelOutlined,
@@ -104,6 +105,7 @@ function Khyanalt({ token }) {
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
+  const [turulZagvar, setTurulZagvar] = useState(false);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
@@ -449,7 +451,7 @@ function Khyanalt({ token }) {
     <Admin
       title="Мэдэгдэл"
       khuudasniiNer="medegdel"
-      className="p-5 md:p-4"
+      className=" overflow-hidden p-5 md:p-4 lg:h-auto"
       onSearch={(search) => setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))}
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting || isValidating}
@@ -479,7 +481,7 @@ function Khyanalt({ token }) {
           data-aos-delay="100"
         >
           {turul === "SMS" ? (
-            <div className=" flex items-center lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
+            <div className=" items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
               </p>
@@ -528,12 +530,25 @@ function Khyanalt({ token }) {
           </div>
         </div>
         <div
-          className="mt-5 flex flex-row p-2 font-medium"
+          className={`mt-5 flex-row p-2 font-medium xl:flex ${
+            khariltsagch ? "hidden" : "flex"
+          }`}
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <div>{turul} загвар</div>
+          <div className="hidden xl:block">{turul} загвар</div>
+          <div className=" xl:hidden">
+            <Button
+              onClick={
+                turulZagvar === false
+                  ? () => setTurulZagvar(true)
+                  : () => setTurulZagvar(false)
+              }
+            >
+              {turulZagvar === false ? (turul, "загвар") : "буцах"}
+            </Button>
+          </div>
           <button
             className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
             onClick={() => smsZagvarNemya()}
@@ -541,7 +556,11 @@ function Khyanalt({ token }) {
             Загвар үүсгэх
           </button>
         </div>
-        <div className="scrollbar-hidden h-[25vh] overflow-y-auto xl:h-[50vh] ">
+        <div
+          className={`scrollbar-hidden h-full overflow-hidden overflow-y-auto xl:block ${
+            turulZagvar === true ? "block" : "hidden"
+          }`}
+        >
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
             <div
               key={a.ner}
@@ -582,14 +601,20 @@ function Khyanalt({ token }) {
         </div>
       </div>
       <div
-        className={`col-span-12 lg:col-span-6 xl:col-span-3 ${
-          ilgeekhTurul === "gantsaar" ? "" : "hidden"
+        className={`col-span-12 lg:col-span-6 xl:col-span-3  ${
+          ilgeekhTurul !== "gantsaar"
+            ? "hidden"
+            : turulZagvar
+            ? "hidden  xl:block"
+            : khariltsagch
+            ? "hidden lg:block"
+            : ""
         }`}
         data-aos="fade-up"
         data-aos-duration="1000"
       >
         {ilgeekhTurul === "gantsaar" && (
-          <div className="box p-5">
+          <div className={`box p-5 xl:block`}>
             <div className="relative w-full text-gray-700   dark:text-gray-300">
               <input
                 type="text"
@@ -624,10 +649,7 @@ function Khyanalt({ token }) {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </div>
-            <div
-              className="scrollbar-hidden mt-5 overflow-y-auto"
-              style={{ height: "calc(100vh - 13rem)" }}
-            >
+            <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
               {nekhemjlel?.jagsaalt?.map((mur) => (
                 <div
                   className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
@@ -675,17 +697,13 @@ function Khyanalt({ token }) {
           </div>
         )}
       </div>
+
       <div
         className={` ${
           ilgeekhTurul === "gantsaar"
-            ? "col-span-12 lg:col-span-6 xl:col-span-6"
-            : "col-span-12 xl:col-span-9"
-        }`}
-        style={
-          ilgeekhTurul === "gantsaar"
-            ? { height: "calc(100vh - 7rem)" }
-            : { height: "100%" }
-        }
+            ? "col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem"
+            : "col-span-12 xl:col-span-9 xl:h-full"
+        } `}
       >
         {khariltsagch || ilgeekhTurul !== "gantsaar" ? (
           <div className="box flex h-full flex-col">
@@ -711,6 +729,9 @@ function Khyanalt({ token }) {
               )}
               {khariltsagch && (
                 <div className="flex items-center">
+                  <div className="mr-3 text-lg xl:hidden">
+                    <ArrowLeftOutlined onClick={() => setKhariltsagch(null)} />
+                  </div>
                   <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
                     <img
                       alt="ProfileZurag"
@@ -738,7 +759,6 @@ function Khyanalt({ token }) {
                   </div>
                 </div>
               )}
-              <div className="ml-auto flex items-center space-x-2 font-medium"></div>
             </div>
             <div
               className="w-full"
@@ -748,7 +768,7 @@ function Khyanalt({ token }) {
               {ilgeekhTurul === "gantsaar" &&
                 (turul === "App" ? (
                   <div
-                    className="mt-0 flex flex-col-reverse overflow-y-auto p-5 sm:mt-10 lg:mt-0 xl:mt-10"
+                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0 xl:mt-10"
                     style={{ maxHeight: "calc(100vh - 32rem)" }}
                     onScroll={onScroll}
                   >
@@ -817,7 +837,8 @@ function Khyanalt({ token }) {
               {ilgeekhTurul !== "gantsaar" && (
                 <Table
                   rowKey={(row) => row._id}
-                  scroll={{ y: "calc(100vh - 32rem)" }}
+                  scroll={{ y: "calc(100vh - 29rem)" }}
+                  className="overflow-x-auto "
                   rowSelection={{
                     type: "checkbox",
                     onChange: (selectedRowKeys, selectedRows) => {
@@ -832,19 +853,22 @@ function Khyanalt({ token }) {
                       title: "Гэрээний дугаар",
                       dataIndex: "gereeniiDugaar",
                       align: "center",
+                      width: "10rem",
                     },
                     {
                       title: "Нэр",
                       dataIndex: "ner",
                       align: "left",
+                      width: "10rem",
                     },
                     {
                       title: "Талбай",
                       dataIndex: "talbainDugaar",
                       align: "center",
+                      width: "8rem",
                     },
                     {
-                      width: "12rem",
+                      width: "10rem",
                       title: turul,
                       dataIndex: turul === "Mail" ? "mail" : "utas",
                       align: "center",
@@ -852,6 +876,7 @@ function Khyanalt({ token }) {
                     {
                       title: "Сарийн түрээс",
                       dataIndex: "sariinTurees",
+                      width: "10rem",
                       align: "center",
                       render: (sariinTurees) => {
                         return formatNumber(sariinTurees || 0);
@@ -861,6 +886,7 @@ function Khyanalt({ token }) {
                       title: "Энэ сард төлөх дүн",
                       dataIndex: "eneSardTulukhDun",
                       align: "center",
+                      width: "10rem",
                       render: (eneSardTulukhDun) => {
                         return formatNumber(eneSardTulukhDun || 0);
                       },
@@ -869,6 +895,7 @@ function Khyanalt({ token }) {
                       title: "Нийт үлдэгдэл",
                       dataIndex: "niitUldegdel",
                       align: "center",
+                      width: "10rem",
                       render: (niitUldegdel) => {
                         return formatNumber(niitUldegdel || 0);
                       },
@@ -941,7 +968,9 @@ function Khyanalt({ token }) {
           </div>
         ) : (
           <div
-            className="box flex h-full items-center"
+            className={`box hidden h-full items-center xl:flex ${
+              turulZagvar ? "hidden" : "lg:flex"
+            }`}
             data-aos="fade-left"
             data-aos-duration="1000"
           >

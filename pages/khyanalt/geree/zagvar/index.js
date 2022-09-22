@@ -117,7 +117,7 @@ function index({ token }) {
             data-aos-delay="300"
           >
             <Button
-              className="mr-2 font-medium"
+              className="mr-2 font-medium dark:text-gray-200"
               onClick={() => router.push("/khyanalt/geree/zagvar/new")}
             >
               Шинэ гэрээний загвар үүсгэх
@@ -191,7 +191,7 @@ function index({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="file box zoom-in relative rounded-md px-3 pt-8 pb-5 sm:px-5">
+                <div className="file box zoom-in relative rounded-md px-3 pt-8 pb-5 shadow-lg dark:shadow-lg dark:shadow-white sm:px-5">
                   <div className="absolute left-0 top-0 mt-3 ml-3">
                     <input
                       className="form-check-input border border-gray-500"
@@ -204,7 +204,7 @@ function index({ token }) {
                   <div className="mt-4 block text-center font-medium">
                     {a.ner}
                   </div>
-                  <div className="mt-0.5 text-center text-xs text-gray-600">
+                  <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
                     1 KB
                   </div>
                   <div className="dropdown absolute top-0 right-0 mr-2 mt-2 ml-auto">
@@ -219,7 +219,7 @@ function index({ token }) {
                                 e.stopPropagation();
                                 router.push(`/khyanalt/geree/zagvar/${a._id}`);
                               }}
-                              className="dark:bg-dark-1 dark:hover:bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white"
+                              className="dark:bg-dark-1 dark:hover:bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -245,7 +245,7 @@ function index({ token }) {
                                 title="Загвар устгах уу?"
                                 okText="Тийм"
                                 cancelText="Үгүй"
-                                className=" dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200"
+                                className=" dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
                                 onConfirm={(e) => {
                                   e.preventDefault();
                                   e.stopPropagation();

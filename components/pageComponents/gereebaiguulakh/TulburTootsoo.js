@@ -73,7 +73,7 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           style={{ marginBottom: 10 }}
           className="flex w-1/3  dark:text-gray-100"
         >
-          <Switch style={{ marginLeft: "auto" }} />
+          <Switch className="bg-gray-600" style={{ marginLeft: "auto" }} />
         </Form.Item>
       </div>
       <Divider />
