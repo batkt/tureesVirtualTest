@@ -1,205 +1,101 @@
-import React, { useState } from "react";
-import { Button, InputNumber, notification } from "antd";
-import uilchilgee from "services/uilchilgee";
+import React, { useMemo, useRef } from "react";
+import { Button, InputNumber, Popconfirm, Tooltip } from "antd";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import useJagsaalt from "hooks/useJagsaalt";
+import { useAuth } from "services/auth";
+import ZardalBurtgel from "./ZardalBurtgel";
+import { modal } from "components/ant/Modal";
+import formatNumber from "tools/function/formatNumber";
+import deleteMethod from "tools/function/crud/deleteMethod";
 
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+function AshiglaltiinZardal({ baiguullaga, token }) {
+  const { barilgiinId } = useAuth();
+  const query = useMemo(() => ({ barilgiinId }), [barilgiinId]);
+  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", query);
+  const ref = useRef();
 
-function AshiglaltiinZardal({ token, baiguullaga, baiguullagaMutate }) {
-  const [sukhTokhirgoo, setSukhTokhirgoo] = useState(null);
+  function zardalBurtgeye(data) {
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ];
+    modal({
+      title: "Дансны бүртгэл",
+      icon: <PlusOutlined />,
+      content: (
+        <ZardalBurtgel
+          ref={ref}
+          data={data}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullagiinId={baiguullaga?._id}
+          refresh={ashiglaltiinZardal.refresh}
+        />
+      ),
+      footer,
+    });
+  }
 
-  const sukhTokhirgooKhadgalya = () => {
-    uilchilgee(token)
-      .post("/baiguullagaTokhirgooZasya", { tokhirgoo: sukhTokhirgoo })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
-          setSukhTokhirgoo(null);
-          baiguullagaMutate();
-        }
-      });
-  };
+  function ustgaya(mur) {
+    deleteMethod("ashiglaltiinZardluud", token, mur?._id).then(
+      ({ data }) => data === "Amjilttai" && ashiglaltiinZardal.refresh()
+    );
+  }
 
   return (
     <>
-      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5">
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Ус
+              Ашиглалтын зардал
             </h2>
+            <div
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
+              onClick={() => zardalBurtgeye()}
+            >
+              <Tooltip title="Нэмэх">
+                <PlusOutlined />
+              </Tooltip>
+            </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  Цэвэр ус/
-                  <label className="font-medium text-red-500">Халуун</label>/
+          {ashiglaltiinZardal.jagsaalt?.map((mur) => {
+            return (
+              <div className="box" key={mur._id}>
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{mur.ner}</div>
+                    <div className="text-gray-600">{mur.turul}</div>
+                  </div>
+                  <div className="ml-auto">{formatNumber(mur.tariff)}</div>
+                  <div className="ml-5 flex space-x-2">
+                    <Popconfirm
+                      title={`${mur.ner} данс устгах уу?`}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => ustgaya(mur)}
+                    >
+                      <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
+                        <Tooltip title="Устгах">
+                          <DeleteOutlined size={20} />
+                        </Tooltip>
+                      </div>
+                    </Popconfirm>
+                    <div
+                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
+                      onClick={() => zardalBurtgeye(mur)}
+                    >
+                      <Tooltip title="Засах">
+                        <EditOutlined />
+                      </Tooltip>
+                    </div>
+                  </div>
                 </div>
-                <div className="text-gray-600"></div>
               </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.tseverUsKhaluun}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.tseverUsKhaluun": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  Цэвэр ус/
-                  <label className="font-medium text-blue-500">Хүйтэн</label>/
-                </div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.tseverUsKhuiten}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.tseverUsKhuiten": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Бохир ус</div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.bokhirUs}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.bokhirUs": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Халуун ус халаасан дулаан</div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.khaluunUsKhalaasanDulaan}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.khaluunUsKhalaasanDulaan": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Усны суурь хураамж</div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.usniiSuuriKhuraamj}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.usniiSuuriKhuraamj": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5">
-        <div className="box mt-5 lg:mt-0">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
-            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Халаалт
-            </h2>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Халаалт</div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.khalaalt}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.khalaalt": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Дулааны суурь хураамж</div>
-                <div className="text-gray-600"></div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  value={baiguullaga?.SUKH?.dulaaniiSuuriKhuraamj}
-                  max={100}
-                  min={0}
-                  onChange={(v) =>
-                    setSukhTokhirgoo((a) => ({
-                      ...(a || {}),
-                      "SUKH.dulaaniiSuuriKhuraamj": v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!sukhTokhirgoo ? "flex" : "hidden"
-            }`}
-          >
-            <Button type="primary" onClick={sukhTokhirgooKhadgalya}>
-              Хадгалах
-            </Button>
-          </div>
+            );
+          })}
         </div>
       </div>
     </>
