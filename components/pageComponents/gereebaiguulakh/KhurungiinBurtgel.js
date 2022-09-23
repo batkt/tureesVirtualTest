@@ -6,6 +6,7 @@ import {
   notification,
   Popconfirm,
   message,
+  InputNumber,
 } from "antd";
 import {
   ArrowRightOutlined,
@@ -237,14 +238,14 @@ const YurunkhiiMedeele = ({
                   {formatNumber(talbai.tureesiinTulbur)}
                 </div>
               </div>
-              <div className="absolute -top-2 right-0 hidden h-full items-center justify-center rounded-r-md bg-gray-300 p-2 text-lg group-hover:flex">
+              <div className="absolute -top-5 -right-5 hidden items-center justify-center rounded-md border border-black bg-gray-100  p-2 text-lg group-hover:flex">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
                   okText="Тийм"
                   cancelText="Үгүй"
                   onConfirm={() => talbaiUstgaya(index)}
                 >
-                  <div className="cursor-pointer rounded-full bg-gray-100 bg-opacity-80 p-2 text-red-500">
+                  <div className="cursor-pointer rounded-full bg-gray-300 bg-opacity-80 p-2 text-red-500">
                     <CloseOutlined />
                   </div>
                 </Popconfirm>
@@ -308,7 +309,7 @@ const YurunkhiiMedeele = ({
             htmlType="submit"
             icon={<ArrowRightOutlined />}
           >
-            Барьцаа бүртгэл
+            Зардал бүртгэл
           </Button>
         </div>
       </Form.Item>

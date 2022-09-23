@@ -51,6 +51,7 @@ import KhariltsagchTile from "components/pageComponents/khariltsagch/Khariltsagc
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import _ from "lodash";
+import TextArea from "antd/lib/input/TextArea";
 
 const iconColor = { fontSize: "18px" };
 
@@ -69,7 +70,7 @@ function AjiltanBurtgel({ token }) {
   });
   const formRef = useRef();
   const excelref = useRef();
-  const [resetForm] = Form.useForm()
+  const [resetForm] = Form.useForm();
   const { ajiltan, barilgiinId } = useAuth();
   const { order, onChangeTable } = useOrder({ createAt: -1 });
   const [query, setQuery] = useState({});
@@ -93,6 +94,7 @@ function AjiltanBurtgel({ token }) {
     email: undefined,
     turul: undefined,
     tuluv: undefined,
+    temdeglel: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
 
@@ -280,9 +282,10 @@ function AjiltanBurtgel({ token }) {
   }
 
   function nuutsUgSolikh() {
-
-    let { errors } = resetForm.getFieldsError()
-    if (!!errors) { return; }
+    let { errors } = resetForm.getFieldsError();
+    if (!!errors) {
+      return;
+    }
     if (nuutsUgKhariltsagch.nuutsUg === nuutsUgKhariltsagch.davtanNuutsUg) {
       uilchilgee(token)
         .put(`/khariltsagch/${nuutsUgKhariltsagch._id}`, {
@@ -296,7 +299,7 @@ function AjiltanBurtgel({ token }) {
               description: "Нууц үг амжилттай шинэчлэгдлээ",
             });
             setNuutsUgKhariltsagch(false);
-            resetForm.resetFields()
+            resetForm.resetFields();
           }
         })
         .catch((e) => {
@@ -612,10 +615,21 @@ function AjiltanBurtgel({ token }) {
                       <Form.Item
                         {...field}
                         rules={[
-                          { required: true, message: "Дугаар оруулна уу" },
+                          {
+                            required: true,
+                            message: "Дугаар оруулна уу",
+                            min: 8,
+                          },
+                          {
+                            required: true,
+                            pattern: new RegExp("(^[0-9]+$)"),
+                            message: "Дугаараа шалгана уу",
+                          },
                         ]}
                       >
                         <Input
+                          type="number"
+                          className="appearance-none"
                           placeholder={"Утасны дугаар " + (field.name + 1)}
                           onChange={({ target }) => {
                             setkhariltsagchState((a) => {
@@ -675,6 +689,20 @@ function AjiltanBurtgel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="700"
           >
+            <Form.Item name="temdeglel">
+              <TextArea
+                style={{ width: "100%" }}
+                rows={4}
+                placeholder="Тэмдэглэл"
+                onChange={(e) => onChange("temdeglel", e.target.value)}
+              ></TextArea>
+            </Form.Item>
+          </div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="700"
+          >
             <Form.Item>
               <Button
                 htmlType="submit"
@@ -692,10 +720,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -802,7 +831,6 @@ function AjiltanBurtgel({ token }) {
                               return moment(data).format("YYYY-MM-DD");
                             },
                           },
-
                         ])
                         .addDataSource(khariltsagchiinGaralt?.jagsaalt)
                         .saveAs("харилцагчийн жагсаалт.xlsx");
@@ -838,7 +866,7 @@ function AjiltanBurtgel({ token }) {
             tableLayout={
               khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
             }
-            scroll={{ y: "calc(100vh - 27rem)", }}
+            scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             dataSource={khariltsagchiinGaralt?.jagsaalt}
             pagination={{
@@ -868,7 +896,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -912,8 +940,8 @@ function AjiltanBurtgel({ token }) {
                 width: "7rem",
                 align: "center",
                 render(a) {
-                  return a?.join(",")
-                }
+                  return a?.join(",");
+                },
               },
 
               {
@@ -953,19 +981,14 @@ function AjiltanBurtgel({ token }) {
                 width: "7rem",
                 align: "center",
                 render(email) {
-                  return (<Popover
-                    trigger="click"
-                    content={
-                      <div>{email}</div>
-                    }
-                  >
-                    <a
-                      className=" flex items-center justify-center hover:bg-gray-200"
-                    >
-                      <MailOutlined style={{ fontSize: "18px" }} />
-                    </a>
-                  </Popover>)
-                }
+                  return (
+                    <Popover trigger="click" content={<div>{email}</div>}>
+                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                        <MailOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  );
+                },
               },
               {
                 title: "Хаяг",
@@ -974,15 +997,8 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (khayag) => {
                   return (
-                    <Popover
-                      trigger="click"
-                      content={
-                        <div>{khayag}</div>
-                      }
-                    >
-                      <a
-                        className=" flex items-center justify-center hover:bg-gray-200"
-                      >
+                    <Popover trigger="click" content={<div>{khayag}</div>}>
+                      <a className=" flex items-center justify-center hover:bg-gray-200">
                         <EnvironmentOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
@@ -1014,7 +1030,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1149,7 +1165,11 @@ function AjiltanBurtgel({ token }) {
             okText="Сэргээх"
             cancelText="Цуцлах"
           >
-            <Form labelCol={{ span: 10 }} wrapperCol={{ span: 14 }} ref={formRef}>
+            <Form
+              labelCol={{ span: 10 }}
+              wrapperCol={{ span: 14 }}
+              ref={formRef}
+            >
               <Form.Item
                 label="Нууц үг сэргээх"
                 name="sergesenNuutsUg"
@@ -1162,7 +1182,7 @@ function AjiltanBurtgel({ token }) {
                 ]}
               >
                 <Input.Password style={{ width: "100%" }} />
-              </Form.Item >
+              </Form.Item>
               <Form.Item label="Нууц үг давтан оруулах" name="davtanNuutsUg">
                 <Input.Password
                   onChange={(e) =>
@@ -1170,9 +1190,9 @@ function AjiltanBurtgel({ token }) {
                   }
                 />
               </Form.Item>
-            </Form >
-          </Modal >
-        </div >
+            </Form>
+          </Modal>
+        </div>
         <CardList
           keyValue="
           "
@@ -1192,8 +1212,8 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
         />
-      </div >
-    </Admin >
+      </div>
+    </Admin>
   );
 }
 

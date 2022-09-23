@@ -5,10 +5,18 @@ import { url } from "services/uilchilgee";
 import _ from "lodash";
 
 function index(
-  { token, destroy, zam, garchig, tailbar, zagvariinZam, onFinish,barilgiinId },
+  {
+    token,
+    destroy,
+    zam,
+    garchig,
+    tailbar,
+    zagvariinZam,
+    onFinish,
+    barilgiinId,
+  },
   ref
 ) {
-
   const [aldaa, setAldaa] = React.useState(null);
   React.useImperativeHandle(
     ref,
@@ -30,7 +38,7 @@ function index(
         action={`${url}/${zam}`}
         method="POST"
         headers={{ Authorization: `bearer ${token}` }}
-        data={{barilgiinId}}
+        data={{ barilgiinId }}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
             _.isFunction(onFinish) && onFinish();
@@ -56,7 +64,8 @@ function index(
       <div className="mt-5" />
       {zagvariinZam && (
         <a
-          className="cursor-pointer text-blue-600 font-medium"
+          className="cursor-pointer font-medium text-blue-600"
+          target="_blank"
           href={url + `/${zagvariinZam}`}
           download
         >

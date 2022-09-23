@@ -72,7 +72,7 @@ function talbaiBurtgekh({ token }) {
     query: { talbainDugaar: "105" },
   });
   const [query, setQuery] = useState({});
-  const { order, onChangeTable } = useOrder({ createAt: -1 });
+  const { order, onChangeTable } = useOrder({ createdAt: -1 });
   const {
     setTalbaiKhuudaslalt,
     talbainiiGaralt,
@@ -440,6 +440,7 @@ function talbaiBurtgekh({ token }) {
     message.success("Амжилттай бүртгэгдлээ");
     setTimeout(excelref.current.khaaya(), 2500);
   }
+
   return (
     <Admin
       title="Талбай бүртгэл"
@@ -693,8 +694,8 @@ function talbaiBurtgekh({ token }) {
                 ellipsis: true,
                 width: "2.5rem",
                 align: "center",
-                render(mur) {
-                  return moment(mur.createAt).format("YYYY-MM-DD hh:mm");
+                render(createdAt) {
+                  return moment(createdAt).format("YYYY-MM-DD hh:mm");
                 },
               },
               {

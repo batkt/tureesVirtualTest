@@ -204,6 +204,12 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
+                  pattern: new RegExp("(^[А-Яа-яёЁөӨүҮ]+$)"),
+                  message:
+                    ajiltanState?.ovog && "Зөвхөн кирилл үсэг ашиглана уу!",
+                },
+                {
+                  required: true,
                   message: "Овог бүртгэнэ үү!",
                 },
               ]}
@@ -229,6 +235,12 @@ function AjiltanBurtgel({ token }) {
                 {
                   required: true,
                   message: "Нэр бүртгэнэ үү!",
+                },
+                {
+                  required: true,
+                  pattern: new RegExp("(^[А-Яа-яёЁөӨүҮ]+$)"),
+                  message:
+                    ajiltanState?.ner && "Зөвхөн кирилл үсэг ашиглана уу!",
                 },
               ]}
             >
@@ -303,9 +315,17 @@ function AjiltanBurtgel({ token }) {
                   required: true,
                   message: "Утас бүртгэнэ үү!",
                 },
+                {
+                  required: true,
+                  min: 8,
+                  message:
+                    ajiltanState?.utas && "Утасны дугаараа бүрэн оруулна уу!",
+                },
               ]}
             >
               <Input
+                className="appearance-none"
+                type="number"
                 allowClear
                 placeholder="Утас"
                 value={ajiltanState.utas}
@@ -331,7 +351,7 @@ function AjiltanBurtgel({ token }) {
               <DatePicker
                 style={{ width: "100%" }}
                 placeholder="Ажилд орсон огноо"
-                onChange={({}, v) => onChange("ajildOrsonOgnoo", v)}
+                onChange={(v) => onChange("ajildOrsonOgnoo", v)}
               ></DatePicker>
             </Form.Item>
           </div>

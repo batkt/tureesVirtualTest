@@ -815,6 +815,20 @@ input:-webkit-autofill {
 .ant-switch-checked {
   @apply bg-green-500 !important;
 }
+.ant-switch {
+  @apply bg-gray-500;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
 .ant-progress-text {
   @apply dark:text-gray-50 !important;
 }

@@ -5,7 +5,7 @@ import createMethod from "tools/function/crud/createMethod";
 import { message, notification, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
-import Baritsaa from "components/pageComponents/gereebaiguulakh/Baritsaa";
+import Zardal from "components/pageComponents/gereebaiguulakh/Zardal";
 import KhurungiinBurtgel from "components/pageComponents/gereebaiguulakh/KhurungiinBurtgel";
 import KhugatsaaBurtgel from "components/pageComponents/gereebaiguulakh/KhugatsaaBurtgel";
 import TulburTootsoo from "components/pageComponents/gereebaiguulakh/TulburTootsoo";
@@ -35,9 +35,9 @@ const steps = [
     zaaltiinTolgoi: "ДӨРӨВ. БАЙРЛАЛ, ДУГААР, ХЭМЖЭЭ",
   },
   {
-    title: "Барьцаа бүртгэл",
-    content: Baritsaa,
-    zaaltiinTolgoi: "ГУРАВ. БАРЬЦАА",
+    title: "Зардал бүртгэл",
+    content: Zardal,
+    zaaltiinTolgoi: "ГУРАВ. ЗАРДАЛ",
   },
   {
     title: "Төлбөр тооцоо",

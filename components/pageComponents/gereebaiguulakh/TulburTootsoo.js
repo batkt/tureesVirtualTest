@@ -1,4 +1,4 @@
-import { Form, Button, Switch, Divider } from "antd";
+import { Form, Button, Switch, Divider, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
@@ -37,15 +37,47 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           </div>
         </Form.Item>
       </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
-        <Form.Item label="Барьцаа төлбөр" style={{ marginBottom: 10 }}>
-          <div className="text-right text-lg font-medium dark:text-gray-100">
-            {`${formatNumber(
-              (value.baritsaaAvakhDun || 0) *
-                (value.baritsaaAvakhKhugatsaa || 0)
-            )}`}
-          </div>
-        </Form.Item>
+
+      <div>
+        <div data-aos="fade-right" data-aos-duration="1000">
+          <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+            <InputNumber
+              disabled
+              placeholder="Барьцаа дүн"
+              style={{ width: "100%" }}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
+          </Form.Item>
+        </div>
+        <div
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
+          <Form.Item
+            name="baritsaaBairshuulakhKhugatsaa"
+            label="Хугацаа"
+            rules={[
+              {
+                required: true,
+                message: "Барьцаа байршуулалтын хугацаа бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <InputNumber
+              placeholder="Барьцаа байршуулалтын хугацаа"
+              style={{ width: "100%" }}
+              min={0}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
+          </Form.Item>
+        </div>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item label="Нийт дүн" style={{ marginBottom: 10 }}>
@@ -76,6 +108,7 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           <Switch className="bg-gray-600" style={{ marginLeft: "auto" }} />
         </Form.Item>
       </div>
+
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
@@ -90,7 +123,7 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
               icon={<ArrowLeftOutlined />}
               className="mr-4"
             >
-              Барьцаа бүртгэл
+              Зардал бүртгэл
             </Button>
             {!zasvar && (
               <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
