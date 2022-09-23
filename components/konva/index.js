@@ -187,11 +187,7 @@ function Drawer(props) {
                 strokeWidth={3}
                 onDragStart={handleDragStartPoint}
                 onDragEnd={(e) => handleDragEndPoint(e, index)}
-                onDblClick={() =>
-                  this.setState({
-                    isFinished: true,
-                  })
-                }
+                onDblClick={() => setIsFinished(true)}
                 draggable
                 hitStrokeWidth={12}
                 onMouseOver={
@@ -208,20 +204,17 @@ function Drawer(props) {
         <Button
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() =>
-            props.onFinish &&
-            props.onFinish(khurvuuljYavuulakh(this.state.points))
+            props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
           }
         >
           <SaveOutlined /> Хадгалах
         </Button>
         <Button
-          onClick={() =>
-            this.setState({
-              points: [],
-              isFinished: false,
-              isMouseOverStartPoint: false,
-            })
-          }
+          onClick={() => {
+            setPoints([]);
+            setIsFinished(false);
+            setIsMouseOverStartPoint(false);
+          }}
         >
           <ClearOutlined />
           Шинээр зурах
