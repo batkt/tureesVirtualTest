@@ -1,6 +1,6 @@
 import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
 import { url } from "services/uilchilgee";
 
@@ -74,8 +74,8 @@ function Drawer(props) {
     bairshilKhurvuuljAvakh(props.points) || []
   );
   const [curMousePos, setCurMousePos] = useState([0, 0]);
-  const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(true);
+  const [isFinished, setIsFinished] = useState(true);
 
   const getMousePos = (stage) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
@@ -94,7 +94,7 @@ function Drawer(props) {
   const handleMouseMove = (event) => {
     const stage = event.target.getStage();
     const mousePos = getMousePos(stage);
-    setCurMousePos(mousePos);
+    setCurMousePos([...mousePos]);
   };
   const handleMouseOverStartPoint = (event) => {
     if (isFinished || points.length < 3) return;
@@ -120,14 +120,14 @@ function Drawer(props) {
       .reduce((a, b) => a.concat(b), []);
   }, [isFinished, curMousePos, points]);
 
-  const { barilga, plan } = useMemo(() => {
+  const plan = useMemo(() => {
     const barilgaa = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    const plana = barilga?.davkharuud?.find(
+    const plana = barilgaa?.davkharuud?.find(
       (a) => a.davkhar === props.davkhar
     )?.planZurag;
-    return { plan: plana, barilga: barilgaa };
+    return plana;
   }, [props]);
 
   if (!plan)
