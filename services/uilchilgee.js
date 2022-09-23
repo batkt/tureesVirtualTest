@@ -10,7 +10,7 @@ import _ from "lodash";
 //export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
 //export const url = `http://localhost:8081`;
 //export const url = "http://192.168.0.103:8081"
-export const url = "https://turees.zevtabs.mn/api";
+export const url = process.env.URL || "https://turees.zevtabs.mn/api";
 
 export const socket = () =>
   socketIOClient("https://turees.zevtabs.mn", { transports: ["websocket"] });

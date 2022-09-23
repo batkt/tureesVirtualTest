@@ -1,6 +1,8 @@
 version: "2.2"
 services:
   web:
-    build: .
+    image: tureesfront:latest
+    environment:
+      - URL=https://turees.zevtabs.mn/api
     ports:
-      - "3001:3001"
+      - "3000:3000"
