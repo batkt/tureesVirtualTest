@@ -16,6 +16,7 @@ import Dans from "components/pageComponents/tokhirgoo/Dans";
 import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo";
 import Zogsool from "components/pageComponents/tokhirgoo/Zogsool";
 import AppTokhirgoo from "components/pageComponents/tokhirgoo/AppTokhirgoo";
+import SegmentTokhirgo from "components/pageComponents/tokhirgoo/SegmentTokhirgo";
 
 import { useMemo, useState } from "react";
 import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
@@ -380,6 +381,28 @@ function AjiltanBurtgel({ token }) {
             />
           ),
         },
+        {
+          icon: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="64 64 896 896"
+              focusable="false"
+              data-icon="calendar"
+              width="24"
+              height="24"
+              fill="currentColor"
+              aria-hidden="true"
+              className="feather feather-settings mr-2 h-4 w-4"
+            >
+              <path d="M872 476H548V144h-72v332H152c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h324v332h72V548h324c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-166h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 498h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-664h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 498h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM650 216h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 592h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-332 0h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-56-592h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-166 0h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 592h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-56-426h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 260h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8z"></path>
+            </svg>
+          ),
+          text: "Яалгах төрлийн тохиргоо",
+          tsonkh: (
+            <SegmentTokhirgo  {...{ baiguullaga }}
+              token={token} />
+          ),
+        },
       ];
     else
       return [
@@ -438,7 +461,7 @@ function AjiltanBurtgel({ token }) {
       khuudasniiNer="tokhirgoo"
       className="grid grid-cols-12 gap-6 px-4 pb-5"
     >
-      <div className="xxl:col-span-3 col-span-12 mt-5 flex flex-col-reverse lg:col-span-2 lg:block">
+      <div className="xxl:col-span-3 col-span-12 mt-5 flex flex-col-reverse lg:col-span-3 lg:block">
         <div className="box mt-5 lg:mt-0">
           <div className="relative flex items-center p-5">
             <div className="image-fit h-12 w-12">
@@ -448,10 +471,10 @@ function AjiltanBurtgel({ token }) {
                   ajiltan?.zurgiinNer
                     ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                     : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) %
-                        2 <
+                      2 <
                       1
-                    ? "/profileFemale.svg"
-                    : "/profile.svg"
+                      ? "/profileFemale.svg"
+                      : "/profile.svg"
                 }
                 className="h-12 w-12 rounded-full ring-2 ring-green-600 ring-opacity-50"
               />
