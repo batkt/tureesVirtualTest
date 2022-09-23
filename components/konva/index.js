@@ -107,9 +107,11 @@ function Drawer(props) {
     setIsMouseOverStartPoint(false);
   };
   const handleDragStartPoint = (event) => {
+    event.target.scale({ x: 2, y: 2 });
     console.log("start", event);
   };
   const handleDragEndPoint = (event, index) => {
+    event.target.scale({ x: 1, y: 1 });
     const pos = [event.target.attrs.x, event.target.attrs.y];
     points[index] = pos;
     setPoints([...points]);
@@ -188,7 +190,6 @@ function Drawer(props) {
                 onDragEnd={(e) => handleDragEndPoint(e, index)}
                 onDblClick={() => setIsFinished(true)}
                 draggable
-                hitStrokeWidth={12}
                 onMouseOver={
                   index === 0 ? handleMouseOverStartPoint : undefined
                 }
