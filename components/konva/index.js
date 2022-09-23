@@ -227,7 +227,7 @@ class App extends Component {
                     })
                   }
                   draggable
-                  hitStrokeWidth={12}
+                  hitStrokeWidth={8}
                   onMouseOver={
                     index === 0 ? handleMouseOverStartPoint : undefined
                   }
