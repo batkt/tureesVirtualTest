@@ -118,9 +118,7 @@ function Drawer(props) {
   };
 
   const flattenedPoints = useMemo(() => {
-    return points
-      .concat(isFinished ? [] : curMousePos)
-      .reduce((a, b) => a.concat(b), []);
+    return points.reduce((a, b) => a.concat(b), []);
   }, [isFinished, curMousePos, points]);
 
   const plan = useMemo(() => {
