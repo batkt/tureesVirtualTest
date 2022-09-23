@@ -176,7 +176,7 @@ function Drawer(props) {
 
             return (
               <Circle
-                key={index}
+                key={`${index}circle`}
                 x={x}
                 y={y}
                 width={width}
