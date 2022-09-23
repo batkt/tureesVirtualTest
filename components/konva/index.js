@@ -118,7 +118,9 @@ function Drawer(props) {
   };
 
   const flattenedPoints = useMemo(() => {
-    return points.reduce((a, b) => a.concat(b), []);
+    return points
+      .concat(isFinished ? [] : curMousePos)
+      .reduce((a, b) => a.concat(b), []);
   }, [isFinished, curMousePos, points]);
 
   const plan = useMemo(() => {
@@ -188,6 +190,8 @@ function Drawer(props) {
                 onDragEnd={(e) => handleDragEndPoint(e, index)}
                 onDblClick={() => setIsFinished(true)}
                 draggable
+                strokeHitEnabled
+                hitStrokeWidth={12}
                 onMouseOver={
                   index === 0 ? handleMouseOverStartPoint : undefined
                 }
