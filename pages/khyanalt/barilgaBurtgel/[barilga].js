@@ -4,13 +4,23 @@ import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import LocationPicker from "components/ant/LocationPicker";
 import _ from "lodash";
-import { Button, Form, Input, InputNumber, notification, Table, Upload, message, TimePicker, Image } from "antd";
-import { EditOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  notification,
+  Table,
+  Upload,
+  message,
+  TimePicker,
+  Image,
+} from "antd";
+import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import { url } from "services/uilchilgee";
-
 
 const formItemLayout = {
   labelCol: {
@@ -21,7 +31,7 @@ const formItemLayout = {
   },
 };
 
-const format = 'HH:mm';
+const format = "HH:mm";
 
 function GereeBaiguulakh({ token }) {
   const { baiguullaga } = useAuth();
@@ -77,14 +87,12 @@ function GereeBaiguulakh({ token }) {
   };
 
   function planZuragKharakh(e, planZurag) {
-    e.preventDefault()
-    e.stopPropagation()
-    setPlantZurag(planZurag)
-    console.log(planZurag)
+    e.preventDefault();
+    e.stopPropagation();
+    setPlantZurag(planZurag);
   }
 
   function onChangePlan(mur, index, v) {
-    console.log(mur, index, v[0])
     if (_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")) {
       const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar);
       bdavkhar[index].planZurag = v[0];
@@ -94,6 +102,10 @@ function GereeBaiguulakh({ token }) {
       davkhar[index].planZurag = v[0];
       setDavkhar(davkhar);
     }
+  }
+
+  function onFinish() {
+    khadgalya();
   }
 
   function khadgalya() {
@@ -142,6 +154,7 @@ function GereeBaiguulakh({ token }) {
         </div>
         <Form
           form={form}
+          onFinish={onFinish}
           name="barilga"
           {...formItemLayout}
           onValuesChange={onChange}
@@ -151,28 +164,90 @@ function GereeBaiguulakh({ token }) {
             bdavkhar: bdavkhar?.length,
           }}
         >
-          <Form.Item name="ner" label="Нэр">
+          <Form.Item
+            rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
+            name="ner"
+            label="Нэр"
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="register" label="Регистр">
+          <Form.Item
+            rules={[
+              { required: true, message: "Барилгын Регистр оруулна уу!" },
+            ]}
+            name="register"
+            label="Регистр"
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="davkhar" label="Давхар">
+          <Form.Item
+            rules={[
+              { required: true, message: "Барилгын Давхарын тоо оруулна уу!" },
+            ]}
+            name="davkhar"
+            label="Давхар"
+          >
+            <InputNumber min={1} defaultValue={1} style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Барилгын B Давхарын тоо оруулна уу!",
+              },
+            ]}
+            name="bdavkhar"
+            label="B Давхар"
+          >
             <InputNumber style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item name="bdavkhar" label="B Давхар">
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Барилгын талбайн хэмжээ оруулна уу!",
+              },
+            ]}
+            name="niitTalbai"
+            label={
+              <label>
+                Нийт м<sup>2</sup>
+              </label>
+            }
+          >
             <InputNumber style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item name="niitTalbai" label={<label>Нийт м<sup>2</sup></label>}>
-            <InputNumber style={{ width: "100%" }} />
+          <Form.Item
+            rules={[
+              { required: true, message: "Барилгын Нээх цаг оруулна уу!" },
+            ]}
+            name="NeekhTsag"
+            label="Нээх цаг"
+          >
+            <TimePicker
+              placeholder="Нээх цаг"
+              style={{ width: "100%" }}
+              format={format}
+            />
           </Form.Item>
-          <Form.Item name="" label="Нээх цаг">
-            <TimePicker placeholder="Нээх цаг" style={{ width: "100%" }} format={format} />
+          <Form.Item
+            rules={[
+              { required: true, message: "Барилгын Хаах цаг оруулна уу!" },
+            ]}
+            name="KhaakhTsag"
+            label="Хаах цаг"
+          >
+            <TimePicker
+              placeholder="Хаах цаг"
+              style={{ width: "100%" }}
+              format={format}
+            />
           </Form.Item>
-          <Form.Item name="" label="Хаах цаг">
-            <TimePicker placeholder="Хаах цаг" style={{ width: "100%" }} format={format} />
-          </Form.Item>
-          <Form.Item name="khayag" label="Хаяг">
+          <Form.Item
+            rules={[{ required: true, message: "Барилгын Хаяг оруулна уу!" }]}
+            name="khayag"
+            label="Хаяг"
+          >
             <Input.TextArea />
           </Form.Item>
           <Form.Item name="bairshil" label="Байршил">
@@ -184,11 +259,7 @@ function GereeBaiguulakh({ token }) {
               offset: 8,
             }}
           >
-            <Button
-              htmlType="submit"
-              onClick={() => khadgalya()}
-              type="primary"
-            >
+            <Button htmlType="submit" type="primary">
               Хадгалах
             </Button>
           </Form.Item>
@@ -220,7 +291,7 @@ function GereeBaiguulakh({ token }) {
             },
             {
               title: "План зураг",
-              dataIndex: 'planZurag',
+              dataIndex: "planZurag",
               render(planZurag, mur, index) {
                 return (
                   <Upload
@@ -232,26 +303,38 @@ function GereeBaiguulakh({ token }) {
                     headers={{ Authorization: `bearer ${token}` }}
                     onChange={(v) =>
                       onChangePlan(
-                        mur, index,
+                        mur,
+                        index,
                         v.fileList.map((v) => v.response?.id)
                       )
-                    }>
+                    }
+                  >
                     <div className="flex flex-row space-x-2">
-                      {!planZurag && <Button icon={<UploadOutlined />}>План зураг оруулах</Button>}
-                      {!!planZurag && <Button icon={<EyeOutlined />} onClick={(e) => planZuragKharakh(e, planZurag)}  >План зураг харах</Button>}
+                      {!planZurag && (
+                        <Button icon={<UploadOutlined />}>
+                          План зураг оруулах
+                        </Button>
+                      )}
+                      {!!planZurag && (
+                        <Button
+                          icon={<EyeOutlined />}
+                          onClick={(e) => planZuragKharakh(e, planZurag)}
+                        >
+                          План зураг харах
+                        </Button>
+                      )}
                       {!!planZurag && <Button icon={<EditOutlined />}></Button>}
                     </div>
                   </Upload>
-                )
-              }
+                );
+              },
             },
           ]}
-
           dataSource={[...davkhar, ...bdavkhar]}
         />
         <Image
           width={200}
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           preview={{
             visible: !!plantZurag,
             src: `${url}/zuragAvya/plan/${baiguullaga?._id}/${plantZurag}`,
@@ -261,7 +344,7 @@ function GereeBaiguulakh({ token }) {
           }}
         />
       </div>
-    </Admin >
+    </Admin>
   );
 }
 
