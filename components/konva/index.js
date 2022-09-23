@@ -121,13 +121,11 @@ function Drawer(props) {
   }, [isFinished, curMousePos, points]);
 
   const plan = useMemo(() => {
-    const barilgaa = props.baiguullaga?.barilguud?.find(
+    const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    const plana = barilgaa?.davkharuud?.find(
-      (a) => a.davkhar === props.davkhar
-    )?.planZurag;
-    return plana;
+    return barilga?.davkharuud?.find((a) => a.davkhar === props.davkhar)
+      ?.planZurag;
   }, [props]);
 
   if (!plan)
