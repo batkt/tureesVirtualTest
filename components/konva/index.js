@@ -1,6 +1,6 @@
 import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
 import { url } from "services/uilchilgee";
 
