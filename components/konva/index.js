@@ -93,8 +93,9 @@ function Drawer(props) {
 
   const handleMouseMove = (event) => {
     const stage = event.target.getStage();
+    if (isFinished) return;
     const mousePos = getMousePos(stage);
-    setCurMousePos([...mousePos]);
+    setCurMousePos(mousePos);
   };
   const handleMouseOverStartPoint = (event) => {
     if (isFinished || points.length < 3) return;
