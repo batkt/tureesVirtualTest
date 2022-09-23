@@ -1,6 +1,6 @@
 import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import React, { useMemo, useState } from "react";
+import React, { Component } from "react";
 import { Stage, Layer, Line, Image, Circle } from "react-konva";
 import { url } from "services/uilchilgee";
 
@@ -69,158 +69,203 @@ class URLImage extends React.Component {
   }
 }
 
-function Drawer(props) {
-  const [points, setPoints] = useState(
-    bairshilKhurvuuljAvakh(props.points) || []
-  );
-  const [curMousePos, setCurMousePos] = useState([0, 0]);
-  const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(true);
-  const [isFinished, setIsFinished] = useState(true);
+class App extends Component {
+  state = {
+    points: bairshilKhurvuuljAvakh(this.props.points) || [],
+    curMousePos: [0, 0],
+    isMouseOverStartPoint: !!this.props.points?.length || false,
+    isFinished: !!this.props.points?.length || false,
+  };
 
-  const getMousePos = (stage) => {
+  getMousePos = (stage) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
   };
-  const handleClick = (event) => {
+  handleClick = (event) => {
+    const {
+      state: { points, isMouseOverStartPoint, isFinished },
+      getMousePos,
+    } = this;
     const stage = event.target.getStage();
     const mousePos = getMousePos(stage);
 
     if (isFinished) {
       return;
     }
-    if (isMouseOverStartPoint && points.length >= 3) setIsFinished(true);
-    else setPoints([...points, mousePos]);
+    if (isMouseOverStartPoint && points.length >= 3) {
+      this.setState({
+        isFinished: true,
+      });
+    } else {
+      this.setState({
+        points: [...points, mousePos],
+      });
+    }
   };
-
-  const handleMouseMove = (event) => {
+  handleMouseMove = (event) => {
+    const { getMousePos } = this;
     const stage = event.target.getStage();
-    if (isFinished) return;
     const mousePos = getMousePos(stage);
-    setCurMousePos(mousePos);
+
+    this.setState({
+      curMousePos: mousePos,
+    });
   };
-  const handleMouseOverStartPoint = (event) => {
-    if (isFinished || points.length < 3) return;
+  handleMouseOverStartPoint = (event) => {
+    if (this.state.isFinished || this.state.points.length < 3) return;
     event.target.scale({ x: 2, y: 2 });
-    setIsMouseOverStartPoint(true);
+    this.setState({
+      isMouseOverStartPoint: true,
+    });
+    console.log("ehelsen tseg deer ochij bna");
   };
-  const handleMouseOutStartPoint = (event) => {
+  handleMouseOutStartPoint = (event) => {
     event.target.scale({ x: 1, y: 1 });
-    setIsMouseOverStartPoint(false);
+    this.setState({
+      isMouseOverStartPoint: false,
+    });
   };
-  const handleDragStartPoint = (event) => {
+  handleDragStartPoint = (event) => {
+    event.target.scale({ x: 2, y: 2 });
     console.log("start", event);
   };
-  const handleDragEndPoint = (event, index) => {
+  handleDragEndPoint = (event, index) => {
+    event.target.scale({ x: 1, y: 1 });
+    const points = this.state.points;
     const pos = [event.target.attrs.x, event.target.attrs.y];
     points[index] = pos;
-    setPoints([...points]);
+    this.setState({
+      points: [...points],
+    });
+  };
+  handleDragOutPoint = (event) => {
+    console.log("end", event);
   };
 
-  const flattenedPoints = useMemo(() => {
-    return points
+  render() {
+    const {
+      state: { points, isFinished, curMousePos },
+      handleClick,
+      handleMouseMove,
+      handleMouseOverStartPoint,
+      handleMouseOutStartPoint,
+      handleDragStartPoint,
+      handleDragEndPoint,
+      props,
+    } = this;
+
+    const flattenedPoints = points
       .concat(isFinished ? [] : curMousePos)
       .reduce((a, b) => a.concat(b), []);
-  }, [isFinished, curMousePos, points]);
 
-  const plan = useMemo(() => {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    return barilga?.davkharuud?.find((a) => a.davkhar === props.davkhar)
-      ?.planZurag;
-  }, [props]);
+    const plan = barilga?.davkharuud?.find(
+      (a) => a.davkhar === props.davkhar
+    )?.planZurag;
 
-  if (!plan)
-    return (
-      <div className="space-y-6">
-        <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
-          План зураг оруулаагүй байна
+    if (!plan)
+      return (
+        <div className="space-y-6">
+          <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
+            План зураг оруулаагүй байна
+          </div>
+          <div className="flex justify-center  ">
+            <img
+              src="https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0="
+              alt="no plan"
+              width={"30%"}
+              height={"30%"}
+            />
+          </div>
         </div>
-        <div className="flex justify-center  ">
-          <img
-            src="https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0="
-            alt="no plan"
-            width={"30%"}
-            height={"30%"}
-          />
+      );
+
+    return (
+      <div>
+        <Stage
+          width={urgun}
+          height={undur}
+          onMouseDown={handleClick}
+          onMouseMove={handleMouseMove}
+        >
+          <Layer>
+            <URLImage
+              width={urgun}
+              height={undur}
+              src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
+            />
+
+            <Line
+              points={flattenedPoints}
+              stroke="black"
+              fill="#00D2FF"
+              opacity={0.3}
+              strokeWidth={5}
+              closed={isFinished}
+            />
+            {points.map((point, index) => {
+              const width = 6;
+              const x = point[0];
+              const y = point[1];
+
+              return (
+                <Circle
+                  key={index}
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={width}
+                  fill="white"
+                  stroke="black"
+                  strokeWidth={3}
+                  onDragStart={handleDragStartPoint}
+                  onDragEnd={(e) => handleDragEndPoint(e, index)}
+                  onDblClick={() =>
+                    this.setState({
+                      isFinished: true,
+                    })
+                  }
+                  draggable
+                  hitStrokeWidth={12}
+                  onMouseOver={
+                    index === 0 ? handleMouseOverStartPoint : undefined
+                  }
+                  onMouseOut={
+                    index === 0 ? handleMouseOutStartPoint : undefined
+                  }
+                />
+              );
+            })}
+          </Layer>
+        </Stage>
+
+        <div className="flex space-x-3">
+          <Button
+            style={{ backgroundColor: "#209669", color: "#ffffff" }}
+            onClick={() =>
+              props.onFinish &&
+              props.onFinish(khurvuuljYavuulakh(this.state.points))
+            }
+          >
+            <SaveOutlined /> Хадгалах
+          </Button>
+          <Button
+            onClick={() =>
+              this.setState({
+                points: [],
+                isFinished: false,
+                isMouseOverStartPoint: false,
+              })
+            }
+          >
+            <ClearOutlined />
+            Шинээр зурах
+          </Button>
         </div>
       </div>
     );
-
-  return (
-    <div>
-      <Stage
-        width={urgun}
-        height={undur}
-        onMouseDown={handleClick}
-        onMouseMove={handleMouseMove}
-      >
-        <Layer>
-          <URLImage
-            width={urgun}
-            height={undur}
-            src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
-          />
-
-          <Line
-            points={flattenedPoints}
-            stroke="black"
-            fill="#00D2FF"
-            opacity={0.3}
-            strokeWidth={5}
-            closed={isFinished}
-          />
-          {points.map((point, index) => {
-            const width = 6;
-            const x = point[0];
-            const y = point[1];
-
-            return (
-              <Circle
-                key={index}
-                x={x}
-                y={y}
-                width={width}
-                height={width}
-                fill="white"
-                stroke="black"
-                strokeWidth={3}
-                onDragStart={handleDragStartPoint}
-                onDragEnd={(e) => handleDragEndPoint(e, index)}
-                onDblClick={() => setIsFinished(true)}
-                draggable
-                hitStrokeWidth={12}
-                onMouseOver={
-                  index === 0 ? handleMouseOverStartPoint : undefined
-                }
-                onMouseOut={index === 0 ? handleMouseOutStartPoint : undefined}
-              />
-            );
-          })}
-        </Layer>
-      </Stage>
-
-      <div className="flex space-x-3">
-        <Button
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() =>
-            props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
-          }
-        >
-          <SaveOutlined /> Хадгалах
-        </Button>
-        <Button
-          onClick={() => {
-            setPoints([]);
-            setIsFinished(false);
-            setIsMouseOverStartPoint(false);
-          }}
-        >
-          <ClearOutlined />
-          Шинээр зурах
-        </Button>
-      </div>
-    </div>
-  );
+  }
 }
 
-export default Drawer;
+export default App;
