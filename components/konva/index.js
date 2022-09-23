@@ -110,19 +110,21 @@ class App extends Component {
       curMousePos: mousePos,
     });
   };
-  handleMouseOverStartPoint = (event) => {
+  handleMouseOverStartPoint = (event, index) => {
     if (this.state.isFinished || this.state.points.length < 3) return;
     event.target.scale({ x: 2, y: 2 });
-    this.setState({
-      isMouseOverStartPoint: true,
-    });
+    if (index === 0)
+      this.setState({
+        isMouseOverStartPoint: true,
+      });
     console.log("ehelsen tseg deer ochij bna");
   };
   handleMouseOutStartPoint = (event) => {
     event.target.scale({ x: 1, y: 1 });
-    this.setState({
-      isMouseOverStartPoint: false,
-    });
+    if (index === 0)
+      this.setState({
+        isMouseOverStartPoint: false,
+      });
   };
   handleDragStartPoint = (event) => {
     event.target.scale({ x: 2, y: 2 });
@@ -229,12 +231,8 @@ class App extends Component {
                   draggable
                   hitStrokeWidth={8}
                   strokeHitEnabled
-                  onMouseOver={
-                    index === 0 ? handleMouseOverStartPoint : undefined
-                  }
-                  onMouseOut={
-                    index === 0 ? handleMouseOutStartPoint : undefined
-                  }
+                  onMouseOver={(e) => handleMouseOverStartPoint(e, index)}
+                  onMouseOut={(e) => handleMouseOutStartPoint(e, index)}
                 />
               );
             })}
