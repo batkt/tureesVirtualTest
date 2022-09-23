@@ -4,9 +4,9 @@
   "private": true,
   "description": "",
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev --port 3000",
     "build": "next build",
-    "start": "next start --port 3001",
+    "start": "next start --port 3000",
     "pm2": "pm2 start yarn --name \"turees\" --interpreter bash -- start --port 3001",
     "update": "git pull && yarn build && pm2 reload turees"
   },

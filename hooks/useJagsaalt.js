@@ -71,6 +71,7 @@ function useJagsaalt(url, query, order, select, searchKeys) {
       a.khuudasniiDugaar = 1;
       return { ...a };
     });
+    mutate();
   }
 
   function onSearch(search) {
