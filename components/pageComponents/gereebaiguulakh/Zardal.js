@@ -1,4 +1,4 @@
-import { Form, Select, Button, InputNumber } from "antd";
+import { Form, Select, Button, InputNumber, Checkbox } from "antd";
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
@@ -21,134 +21,78 @@ const formItemLayout = {
 
 const query = {};
 
-function TalbaiSongolt({ value, onChange, mode }) {
-  const { token, baiguullaga } = useAuth();
-
-  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", query);
-
-  function onValueChange(v) {
-    onChange(ashiglaltiinZardal.jagsaalt.find((a) => a._id === v));
-  }
-
-  return (
-    <Select
-      placeholder="Зардалын төрөл"
-      filterOption={false}
-      value={value}
-      mode={mode}
-      showSearch
-      onChange={onValueChange}
-      loading={!ashiglaltiinZardal}
-      onSearch={(search) => setTalbaiKhuudaslalt((a) => ({ ...a, search }))}
-    >
-      {ashiglaltiinZardal?.jagsaalt?.map((a) => {
-        return (
-          <Select.Option key={a._id}>
-            <div className="flex justify-between">
-              <p className=" ">{a.ner}</p>
-
-              <p className="flex gap-1">
-                {a.turul} {a.turul && a.tariff && <p>=</p>}
-                <p>{a.tariff}</p>
-              </p>
-            </div>
-          </Select.Option>
-        );
-      })}
-    </Select>
-  );
-}
-
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  const [zardlinTurul, setZardlinTurul] = useState([]);
-  const [niitKhemjee, setNiitKhemjee] = useState();
+  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", query);
 
   function onFinish() {
     next();
   }
+  useEffect(() => {
+    if (value.zardluud === undefined) {
+      return (value.zardluud = []);
+    }
+  }, []);
 
-  function zardlinTurulUstgay(index) {
-    zardlinTurul.splice(index, 1);
-    setZardlinTurul([...zardlinTurul]);
-  }
+  const onCheckChange = (e, a) => {
+    if (e.target.checked === true) value.zardluud.push(a);
+    else
+      value.zardluud = value.zardluud.filter(function (item) {
+        return item._id !== a._id;
+      });
+    onChange({ ...value });
+  };
 
   return (
     <Form
       name="validate_other"
       {...formItemLayout}
-      onValuesChange={(values) => onChange({ ...value, ...values })}
+      onValuesChange={() => onChange({ ...value })}
       initialValues={value}
       onFinish={onFinish}
     >
-      <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label="Зардалын төрөл">
-          <TalbaiSongolt
-            value={""}
-            onChange={(v) => setZardlinTurul([...zardlinTurul, v])}
-          />
-        </Form.Item>
-      </div>
       <div className="space-y-5">
-        {zardlinTurul?.map((mur, index) => {
+        <div className="text-lg font-medium dark:text-white">
+          Ашиглагдах зардлаа сонгоно уу
+        </div>
+        {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
           return (
-            <div className="rounded-lg border border-black p-2" key={index}>
-              <div className="flex">
-                {" "}
-                {zardlinTurul !== undefined && (
-                  <div className="relative flex w-full justify-between rounded-md rounded-b-none border bg-white p-2 py-1 dark:bg-gray-700">
-                    <p>{mur?.ner}</p>
-                    <div className="flex gap-1">
-                      <p>{mur?.turul}</p>
-                      <p>=</p>
-                      <p>{mur?.tariff}</p>
-                      <div
-                        onClick={() => zardlinTurulUstgay(index)}
-                        className="absolute -right-6 -top-4 rounded-full bg-white text-3xl text-red-600"
-                      >
-                        <CloseCircleOutlined />
-                      </div>
-                    </div>
-                  </div>
-                )}
+            <div
+              key={a._id}
+              className={`relative flex justify-between overflow-hidden rounded-lg border-2 p-2 transition-all  dark:text-gray-200 ${
+                value.zardluud !== undefined &&
+                !!value.zardluud.find((c) => c._id === a._id)
+                  ? "border-green-600 bg-white dark:bg-gray-900"
+                  : "bg-gray-200 dark:bg-gray-800"
+              }`}
+            >
+              <div
+                className={`absolute top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 dark:bg-green-600 ${
+                  value.zardluud !== undefined &&
+                  !!value.zardluud.find((c) => c._id === a._id)
+                    ? "-left-2/4"
+                    : "left-full"
+                }`}
+              />
+              <div className="z-10 flex gap-5">
+                <Checkbox
+                  checked={
+                    value.zardluud !== undefined &&
+                    !!value.zardluud.find((c) => c._id === a._id)
+                  }
+                  onChange={(e) => onCheckChange(e, a)}
+                />
+                <div>{a.ner}</div>
               </div>
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    <th className="w-1/4 border-2">Нэр</th>
-                    <th className="w-1/4 border-2">{mur?.turul || "Үнэ"}</th>
-                    <th className="w-1/4 border-2">Нийт хэмжээ</th>
-                    <th className="w-1/4 border-2">Нийт үнэ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th className="border-2">{mur?.ner}</th>
-                    <th className="border-2">{formatNumber(mur?.tariff)}</th>
-                    <th className="border-2">
-                      <InputNumber
-                        onChange={(v) => setNiitKhemjee(v)}
-                        className="w-full"
-                        value={niitKhemjee}
-                        placeholder={`хэмжээ (${mur?.turul})`}
-                      />
-                    </th>
-                    <th className="border-2">
-                      {formatNumber(mur?.tariff * niitKhemjee)}
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
+              <div className="z-10">
+                {a.turul} {a.turul && a.tariff && ":"} {a.tariff}{" "}
+                {a.tariff && "₮"}
+              </div>
             </div>
           );
         })}
-      </div>
-      <div className="mt-5">
-        <Form.Item label={"Нийт хэмжээ"}>
-          <InputNumber className=" w-full" disabled value={niitKhemjee} />
-        </Form.Item>
       </div>
 
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
@@ -157,7 +101,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4"
+              className="mr-4 dark:text-white dark:hover:text-black"
             >
               Түрээсийн талбай
             </Button>
