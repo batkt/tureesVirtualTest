@@ -188,7 +188,6 @@ function TalbaiBurtgekh({ token }) {
         }
         settalbaiState((a) => ({ ...a, [talbar]: utga }));
     }
-    // console.log(">>>>>>.", talbaiState)
 
     function talbaiBurtgekh() {
         const khurunguud = formRef.current.getFieldsValue(khurunguud);
@@ -207,9 +206,6 @@ function TalbaiBurtgekh({ token }) {
 
         const segmentuud = formRef.current.getFieldsValue(segmentuud);
         talbaiState.segmentuud = segmentuud.segmentuud;
-
-
-
 
         setWaiting(true);
         if (!!talbaiState._id) {
@@ -518,7 +514,6 @@ function TalbaiBurtgekh({ token }) {
                                                                 ))}
                                                             </Select>
                                                         </Form.Item>
-
                                                     </div>
                                                     <div className=" w-full ">
                                                         <Form.Item
