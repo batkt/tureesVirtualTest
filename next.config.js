@@ -16,8 +16,8 @@ module.exports = {
   async rewrites() {
     return [
       {
-        source: "/hicarapi",
-        destination: "http://103.50.205.33:8080/",
+        source: "/hicarapi/:path*",
+        destination: "http://103.50.205.33:8080/:path*",
       },
     ];
   },
