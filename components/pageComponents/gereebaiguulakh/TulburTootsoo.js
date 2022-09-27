@@ -2,8 +2,9 @@ import { Form, Button, Switch, Divider, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Aos from "aos";
+import uilchilgee from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
@@ -14,10 +15,32 @@ const formItemLayout = {
   },
 };
 
-const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
+const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
   useEffect(() => {
     Aos.init({ once: true });
   });
+  const [khuvaari, setKhuvaari] = useState();
+
+  useEffect(() => {
+    const zardluud = (value.zardluud = value.zardluud.filter(function (item) {
+      return item.dun !== undefined;
+    }));
+    uilchilgee(token)
+      .post(`/khuvaariUusgey`, {
+        dun: value.talbainNiitUne,
+        khugatsaa: value.khugatsaa,
+        tulukhUdruud: value.tulukhUdur,
+        ekhlekhOgnoo: value.gereeniiOgnoo,
+        duusakhOgnoo: value.duusakhOgnoo,
+        zardluud: zardluud,
+      })
+      .then(({ data }) => {
+        setKhuvaari(data);
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+      });
+  }, []);
 
   function onFinish() {
     next(value);
@@ -105,14 +128,14 @@ const Tulbur = ({ value, onChange, next, prev, zasvar }) => {
           style={{ marginBottom: 10 }}
           className="flex w-1/3  dark:text-gray-100"
         >
-          <Switch className="bg-gray-600" style={{ marginLeft: "auto" }} />
+          <Switch style={{ marginLeft: "auto" }} />
         </Form.Item>
       </div>
 
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
-          <AvlagiinKhuvaariUusgekh ugugdul={value} />
+          <AvlagiinKhuvaariUusgekh ugugdul={khuvaari} />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">

@@ -24,7 +24,7 @@ function AnketBuglukh({ data, token }) {
   };
   function anketIlgeeye(khariult) {
     uilchilgee(token)
-      .post("/khariult", khariult)
+      .post("/surveyKhadgalya", khariult)
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setGarakhScreen(true);

@@ -30,6 +30,7 @@ import {
   PlusOutlined,
   RedoOutlined,
   EnvironmentOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
@@ -52,6 +53,7 @@ import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import _ from "lodash";
 import TextArea from "antd/lib/input/TextArea";
+import useJagsaalt from "hooks/useJagsaalt";
 
 const iconColor = { fontSize: "18px" };
 
@@ -62,6 +64,19 @@ function checkUtas(utasnuud, utga) {
     return false;
   }
   return true;
+}
+
+function Tile({ zasya, token, ...a }) {
+  return (
+    <div className="box">
+      <div className="flex items-center p-7 shadow-none">
+        <div className="border-l-2 border-green-500 pl-4">
+          <div className="font-medium">{a.ner}</div>
+          <div className="text-gray-600">{a.utga}</div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function AjiltanBurtgel({ token }) {
@@ -209,9 +224,27 @@ function AjiltanBurtgel({ token }) {
     setNuutsUgKhariltsagch(false);
   };
 
+  const segment = useJagsaalt("/segment")
+  const [turul, setTurul] = useState()
+  const [songosonSegment, setSongosonSegment] = useState()
+
+  function solikh(value) {
+    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    shineSolikh("ner", value);
+  }
+  function solikhtTurul(value) {
+    shineSolikh("utga", value);
+  }
+
+  function shineSolikh(talbar, utga) {
+    setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
+  }
+
   function onChange(talbar, utga) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
+
+
 
   function tuukh(data) {
     getListMethod(
@@ -231,6 +264,8 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch);
   }
+
+
 
   function khariltsagchBurtgekh() {
     if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
@@ -589,6 +624,78 @@ function AjiltanBurtgel({ token }) {
           </div>
 
           <div
+            className=""
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="700">
+            <Form.List name="segmentuud" >
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, fieldKey, field, ...restField }) => (
+                    <div className="">
+                      <Form className="flex space-x-2 ">
+
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          name={[name, "ner"]}
+                          fieldKey={[fieldKey, "ner"]}
+                        >
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder='Төрөл'
+                            name="ner"
+                            onChange={solikh}
+                          >
+                            {segment?.jagsaalt?.map((mur) => (
+                              <Select.Option value={mur?.ner}>
+                                {mur?.ner}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <Form.Item
+                          className="w-full"
+                          {...restField}
+                          name={[name, "utga"]}
+                          fieldKey={[fieldKey, "utga"]}>
+                          <Select
+                            style={{ width: "100%" }}
+                            placeholder='Утга'
+                            onChange={solikhtTurul}
+                          >
+                            {turul?.utguud?.map((a) => (
+                              <Select.Option value={a}>
+                                {a}
+                              </Select.Option>
+                            ))}
+                          </Select>
+                        </Form.Item>
+                        <CloseCircleOutlined
+                          className="mt-2 ml-2"
+                          onClick={() => remove(name)}
+                        />
+
+                      </Form>
+                    </div>
+                  ))}
+                  <Form.Item className="w-full py-2">
+                    <Button
+                      icon={<PlusOutlined />}
+                      className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                      type="dashed"
+                      onClick={() => add()}
+                      block
+                    >
+                      Ялгах утга оруулах
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </div>
+
+          <div
             data-aos="fade-right"
             data-aos-duration="800"
             data-aos-delay="400"
@@ -720,11 +827,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -896,7 +1002,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -976,6 +1082,31 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
+                title: "Сегмент",
+                dataIndex: "segmentuud",
+                width: "7rem",
+                align: "center",
+                render(segmentuud) {
+                  return (
+                    <Popover trigger="hover" content={
+                      <div>
+                        <CardList
+                          keyValue="segment"
+                          className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                          jagsaalt={segmentuud}
+                          Component={Tile}
+                          componentProps={{ token }}
+                        />
+                      </div>
+                    }>
+                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  );
+                },
+              },
+              {
                 title: "И-мэйл",
                 dataIndex: "mail",
                 width: "7rem",
@@ -1030,7 +1161,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1212,8 +1343,8 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
         />
-      </div>
-    </Admin>
+      </div >
+    </Admin >
   );
 }
 

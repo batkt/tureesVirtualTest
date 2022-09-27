@@ -13,9 +13,13 @@ import useJagsaalt from "hooks/useJagsaalt";
 import CardList from "components/cardList";
 import deleteMethod from "tools/function/crud/deleteMethod";
 
-function Tile({ token, ...a }) {
+function Tile({ zasya, token, ...a }) {
+
+  const segment = useJagsaalt("/segment");
   function segmentUstgaya() {
-    deleteMethod("segment", token, a._id);
+    deleteMethod("segment", token, a._id).then(
+      ({ data }) => data === "Amjilttai" && segment.refresh()
+    )
   }
   return (
     <div className="box">
@@ -27,17 +31,16 @@ function Tile({ token, ...a }) {
         <div className="ml-auto">
           <Popover
             placement="bottom"
-            trigger="click"
+            trigger="hover"
             content={() => (
               <div className="flex w-24 flex-col space-y-2">
                 <a
                   className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100"
-                  // onClick={(a) => segmentBurtegye(a)}
+                  onClick={() => zasya(a)}
                 >
                   <EditOutlined style={{ fontSize: "18px" }} />
                   <label>Засах</label>
                 </a>
-
                 <Popconfirm
                   okText="Тийм"
                   cancelText="Үгүй"
@@ -63,7 +66,6 @@ function Tile({ token, ...a }) {
 
 function segmentiinTokhirgoo({ token }) {
   const ref = React.useRef(null);
-
   const segment = useJagsaalt("/segment");
 
   function segmentBurtegye(data) {
@@ -76,7 +78,13 @@ function segmentiinTokhirgoo({ token }) {
     modal({
       title: "Ялгаж бүртгэх",
       icon: <PlusOutlined />,
-      content: <SegmentBurtgekh ref={ref} data={data} token={token} />,
+      content:
+        <SegmentBurtgekh
+          ref={ref}
+          data={data}
+          token={token}
+          refresh={segment.refresh}
+        />,
       footer,
     });
   }
@@ -86,7 +94,7 @@ function segmentiinTokhirgoo({ token }) {
       <div className="box mt-5 lg:mt-0">
         <div
           className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pt-5 pb-2"
-          onClick={(a) => segmentBurtegye(a)}
+          onClick={() => segmentBurtegye()}
         >
           <Button type="primary">Ялгаж бүртгэх</Button>
         </div>
@@ -96,7 +104,7 @@ function segmentiinTokhirgoo({ token }) {
             className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
             jagsaalt={segment?.jagsaalt}
             Component={Tile}
-            componentProps={{ token }}
+            componentProps={{ zasya: segmentBurtegye, token }}
           />
         </div>
         <div hidden={!segment.jagsaalt}>

@@ -113,7 +113,7 @@ const YurunkhiiMedeele = ({
           label="Байгууллага эсэх"
           valuePropName="checked"
         >
-          <Switch className="bg-gray-600" onChange={setBaiguullagaEsekh} />
+          <Switch onChange={setBaiguullagaEsekh} />
         </Form.Item>
       </div>
       {baiguullagaEsekh && (
