@@ -36,9 +36,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
               </div>
               <div className="ml-auto">
                 <Input
-                  value={baiguullaga?.tokhirgoo?.msgIlgeekhKey}
-                  max={100}
-                  min={0}
+                  defaultValue={baiguullaga?.tokhirgoo?.msgIlgeekhKey}
                   onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
@@ -57,9 +55,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
               </div>
               <div className="ml-auto">
                 <Input
-                  value={baiguullaga?.tokhirgoo?.msgIlgeekhDugaar}
-                  max={100}
-                  min={0}
+                  defaultValue={baiguullaga?.tokhirgoo?.msgIlgeekhDugaar}
                   onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
