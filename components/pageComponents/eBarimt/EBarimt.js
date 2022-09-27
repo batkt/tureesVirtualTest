@@ -23,40 +23,44 @@ function EBarimt({
   setIrgenEsekh,
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
-  eBarimtAutomataarShivikh
+  eBarimtAutomataarShivikh,
 }) {
-
   function registerShalgaya(register) {
-    if(isString(register) && irgenEsekh === true)
-      register = register?.toUpperCase()
+    if (isString(register) && irgenEsekh === true)
+      register = register?.toUpperCase();
     setRegister(register);
     setBaiguullaga(null);
-    if (register?.toString().length === 7 && baiguullagaEsekh || irgenEsekh && register?.toString().length === 10)
+    if (
+      (register?.toString().length === 7 && baiguullagaEsekh) ||
+      (irgenEsekh && register?.toString().length === 10)
+    )
       axios
-        .get(`http://103.50.205.33:8080/tatvaraasBaiguullagaAvya/${register}`)
+        .get(`/hicarapi/tatvaraasBaiguullagaAvya/${register}`)
         .then(({ data }) => {
           if (data?.found === true) setBaiguullaga(data);
         });
   }
 
-  useEffect(()=>{
-    if(eBarimtAutomataarShivikh === true && register.length > 6)
-    registerShalgaya(register)
-  },[eBarimtAutomataarShivikh,register])
+  useEffect(() => {
+    if (eBarimtAutomataarShivikh === true && register.length > 6)
+      registerShalgaya(register);
+  }, [eBarimtAutomataarShivikh, register]);
 
   return (
     <div className="flex flex-row">
-      <div className="p-2 w-full">
-        {eBarimtAutomataarShivikh !== true  && <div className="flex flex-row border-b-2 border-dashed py-2">
-          <div>Хувь хүн</div>
-          <div className="ml-auto">
-            <Switch
-              checked={barimtKhevlekhEsekh}
-              onChange={setBarimtKhevlekhEsekh}
-            />
+      <div className="w-full p-2">
+        {eBarimtAutomataarShivikh !== true && (
+          <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div>Хувь хүн</div>
+            <div className="ml-auto">
+              <Switch
+                checked={barimtKhevlekhEsekh}
+                onChange={setBarimtKhevlekhEsekh}
+              />
+            </div>
           </div>
-        </div>}
-        {eBarimtAutomataarShivikh !== true  &&
+        )}
+        {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН эсэх</div>
             <div className="ml-auto">
@@ -66,16 +70,16 @@ function EBarimt({
               />
             </div>
           </div>
-        }
-        {eBarimtAutomataarShivikh !== true  &&
+        )}
+        {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Татвар төлөгч иргэнд эсэх</div>
             <div className="ml-auto">
               <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
             </div>
           </div>
-        }
-        {eBarimtAutomataarShivikh !== true  && baiguullagaEsekh && (
+        )}
+        {eBarimtAutomataarShivikh !== true && baiguullagaEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>ААН регистр</div>
             <div className="ml-auto">
@@ -89,7 +93,7 @@ function EBarimt({
             </div>
           </div>
         )}
-        {eBarimtAutomataarShivikh !== true  && irgenEsekh && (
+        {eBarimtAutomataarShivikh !== true && irgenEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Иргэний регистр</div>
             <div className="ml-auto">
@@ -103,13 +107,15 @@ function EBarimt({
             </div>
           </div>
         )}
-        {eBarimtAutomataarShivikh === true && <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
-            <div>{irgenEsekh ? 'Татвар төлөгч иргэн' : 'ААН'} регистр</div>
-            <div className="font-medium text-base">{register}</div>
-          </div>}
+        {eBarimtAutomataarShivikh === true && (
+          <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
+            <div>{irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр</div>
+            <div className="text-base font-medium">{register}</div>
+          </div>
+        )}
         {baiguullagiinMedeelel?.name && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{irgenEsekh ? 'Татвар төлөгч иргэн' : 'ААН'} нэр</div>
+            <div>{irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} нэр</div>
             <div className="ml-auto text-lg font-medium">
               {baiguullagiinMedeelel?.name}
             </div>
@@ -130,17 +136,17 @@ function EBarimt({
               </colgroup>
               <tbody>
                 <tr>
-                  <td colSpan={6} className="text-center border">
+                  <td colSpan={6} className="border text-center">
                     {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="text-center border">
+                  <td colSpan={6} className="border text-center">
                     {baiguullaga?.ner}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="font-medium border">
+                  <td colSpan={6} className="border font-medium">
                     Борлуулагч
                   </td>
                 </tr>
@@ -238,7 +244,7 @@ function EBarimt({
                 ))}
                 {data?.khungulukhKhuvi && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
+                    <td colSpan={5} className="border text-right">
                       Хөнгөлөлт
                     </td>
                     <td className="border text-right">
@@ -247,7 +253,7 @@ function EBarimt({
                   </tr>
                 )}
                 <tr>
-                  <td colSpan={5} className="text-right border">
+                  <td colSpan={5} className="border text-right">
                     НӨАТ-н дүн
                   </td>
                   <td className="border text-right">
@@ -255,7 +261,7 @@ function EBarimt({
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={5} className="text-right border">
+                  <td colSpan={5} className="border text-right">
                     Төлөх дүн
                   </td>
                   <td className="border text-right">
@@ -264,7 +270,7 @@ function EBarimt({
                 </tr>
                 {tulbur?.belen && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
+                    <td colSpan={5} className="border text-right">
                       Бэлнээр
                     </td>
                     <td className="border text-right">
@@ -274,7 +280,7 @@ function EBarimt({
                 )}
                 {tulbur?.belenBus && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
+                    <td colSpan={5} className="border text-right">
                       Бэлэн бусаар
                     </td>
                     <td className="border text-right">
@@ -284,7 +290,7 @@ function EBarimt({
                 )}
                 {tulbur?.khariult && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
+                    <td colSpan={5} className="border text-right">
                       Хариулт
                     </td>
                     <td className="border text-right">
@@ -312,8 +318,8 @@ function EBarimt({
                 )}
                 <tr>
                   <td colSpan={6}>
-                    <div className="w-full flex justify-center p-5">
-                      <div className="w-40 h-40">
+                    <div className="flex w-full justify-center p-5">
+                      <div className="h-40 w-40">
                         <QRCode value={eBarimt?.qrData} size={160} />
                       </div>
                     </div>

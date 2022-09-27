@@ -13,4 +13,12 @@ module.exports = {
     URL: process.env.URL || "https://turees.zevtabs.mn/api",
     SOCKET: process.env.SOCKET || "https://turees.zevtabs.mn",
   },
+  async rewrites() {
+    return [
+      {
+        source: "/hicarapi",
+        destination: "http://103.50.205.33:8080",
+      },
+    ];
+  },
 };
