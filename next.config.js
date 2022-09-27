@@ -9,11 +9,13 @@ module.exports = {
     SOCKET: process.env.SOCKET || "https://turees.zevtabs.mn",
   },
   async rewrites() {
-    return [
-      {
-        source: "/hicarapi/:path*",
-        destination: "http://103.50.205.33:8080/:path*",
-      },
-    ];
+    return {
+      fallback: [
+        {
+          source: "/hicarapi/:path*",
+          destination: "http://103.50.205.33:8080/:path*",
+        },
+      ],
+    };
   },
 };
