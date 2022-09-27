@@ -1,4 +1,4 @@
-import { Form, Select, Button, InputNumber, Checkbox } from "antd";
+import { Form, Select, Button, InputNumber, Checkbox, Input } from "antd";
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
@@ -21,6 +21,82 @@ const formItemLayout = {
 
 const query = {};
 
+const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
+  const inputRef = React.useRef();
+
+  const onCheckChange = (e, a) => {
+    if (e.target.checked === true) {
+      value.zardluud.push(a);
+      setTimeout(
+        () => inputRef.current !== undefined && inputRef?.current.focus(),
+        300
+      );
+    } else
+      value.zardluud = value.zardluud.filter(function (item) {
+        return item._id !== a._id;
+      });
+    onChange({ ...value });
+  };
+
+  return (
+    <div
+      key={a._id}
+      className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border-2 px-2 transition-all  dark:text-gray-200 ${
+        value.zardluud !== undefined &&
+        !!value.zardluud.find((c) => c._id === a._id)
+          ? "border-green-600 bg-white dark:bg-gray-900"
+          : "bg-gray-200 dark:bg-gray-800"
+      }`}
+    >
+      <div
+        className={`absolute top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 dark:bg-green-600 ${
+          value.zardluud !== undefined &&
+          !!value.zardluud.find((c) => c._id === a._id)
+            ? "-left-2/4"
+            : "left-full"
+        }`}
+      />
+      <div className="z-10 flex gap-5">
+        <Checkbox
+          checked={
+            value.zardluud !== undefined &&
+            !!value.zardluud.find((c) => c._id === a._id)
+          }
+          onChange={(e) => onCheckChange(e, a)}
+        />
+        <div>{a.ner}</div>
+      </div>
+      {a.turul || a.tariff ? (
+        <div className="z-10">
+          {a.turul} {a.turul && a.tariff && ":"} {a.tariff} {a.tariff && "₮"}
+        </div>
+      ) : (
+        <div className="w-20">
+          <Input
+            ref={inputRef}
+            disabled={
+              value.zardluud !== undefined &&
+              !value.zardluud.find((c) => c._id === a._id)
+            }
+            value={
+              value.zardluud !== undefined &&
+              !!value.zardluud.find((c) => c._id === a._id)
+                ? value.zardluud[
+                    value.zardluud.findIndex((c) => c._id === a._id)
+                  ].dun
+                : ""
+            }
+            placeholder="(...₮)"
+            onChange={(e) => inputChange(e, a)}
+            className="h-7 rounded-md text-center"
+            type="number"
+          />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   useEffect(() => {
     Aos.init({ once: true });
@@ -36,12 +112,14 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     }
   }, []);
 
-  const onCheckChange = (e, a) => {
-    if (e.target.checked === true) value.zardluud.push(a);
-    else
-      value.zardluud = value.zardluud.filter(function (item) {
-        return item._id !== a._id;
-      });
+  const inputChange = (e, a) => {
+    const index = value.zardluud.findIndex((object) => {
+      return object._id === a._id;
+    });
+
+    if (index !== -1) {
+      value.zardluud[index].dun = e.target.value;
+    }
     onChange({ ...value });
   };
 
@@ -59,38 +137,12 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         </div>
         {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
           return (
-            <div
-              key={a._id}
-              className={`relative flex justify-between overflow-hidden rounded-lg border-2 p-2 transition-all  dark:text-gray-200 ${
-                value.zardluud !== undefined &&
-                !!value.zardluud.find((c) => c._id === a._id)
-                  ? "border-green-600 bg-white dark:bg-gray-900"
-                  : "bg-gray-200 dark:bg-gray-800"
-              }`}
-            >
-              <div
-                className={`absolute top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 dark:bg-green-600 ${
-                  value.zardluud !== undefined &&
-                  !!value.zardluud.find((c) => c._id === a._id)
-                    ? "-left-2/4"
-                    : "left-full"
-                }`}
-              />
-              <div className="z-10 flex gap-5">
-                <Checkbox
-                  checked={
-                    value.zardluud !== undefined &&
-                    !!value.zardluud.find((c) => c._id === a._id)
-                  }
-                  onChange={(e) => onCheckChange(e, a)}
-                />
-                <div>{a.ner}</div>
-              </div>
-              <div className="z-10">
-                {a.turul} {a.turul && a.tariff && ":"} {a.tariff}{" "}
-                {a.tariff && "₮"}
-              </div>
-            </div>
+            <ChecklekhKheseg
+              a={a}
+              inputChange={inputChange}
+              value={value}
+              onChange={onChange}
+            />
           );
         })}
       </div>
