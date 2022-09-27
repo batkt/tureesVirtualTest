@@ -1,2 +1,5 @@
-docker build -t tureesfront .
+docker build -t batuk0227/turees-web .
+
+docker push batuk0227/turees-web:latest
+
 docker save tureesfront:latest | gzip > ./docker/tureesfront_front.tar.gz
