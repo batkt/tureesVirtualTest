@@ -1,7 +1,8 @@
-import React, { useImperativeHandle, useState } from 'react'
-import { Form, Select, Input, Button, Space, notification } from 'antd'
+import React, { useImperativeHandle, } from 'react'
+import { Form, Select, Input, Button, notification } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import uilchilgee, { aldaaBarigch } from 'services/uilchilgee';
+import createMethod from 'tools/function/crud/createMethod';
+import updateMethod from 'tools/function/crud/updateMethod';
 
 
 const formItemLayout = {
@@ -21,28 +22,26 @@ const formItemLayoutWithOutLabel = {
     },
 };
 
-function SegmentBurtgekh({ destroy, token }, ref) {
+function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
+
     const [form] = Form.useForm();
-
-
+    console.log(data)
 
     useImperativeHandle(
         ref,
         () => ({
             khadgalya() {
-                var utga = form.getFieldsValue();
-                uilchilgee(token)
-                    .post('/segment', utga)
-                    .then(({ data }) => {
+                const utga = form.getFieldsValue();
+                const method = data?._id ? updateMethod : createMethod;
+                method("segment", token, { ...data, ...utga }).then(
+                    ({ data }) => {
                         if (data === "Amjilttai") {
-                            notification.success({ message: "Амжилттай " });
-
-                            destroy()
+                            notification.success({ message: "Амжилттай хадгаллаа" });
+                            refresh();
+                            destroy();
                         }
-                    })
-                    .catch((e) => {
-                        aldaaBarigch(e);
-                    });
+                    }
+                );
             },
             khaaya() {
                 destroy()
@@ -51,9 +50,8 @@ function SegmentBurtgekh({ destroy, token }, ref) {
         [form],
     )
 
-
     return (
-        <Form form={form} autoComplete="off" {...formItemLayout} >
+        <Form form={form} autoComplete="off" initialValues={data} {...formItemLayout} >
             <Form.Item label='Төрөл' name="turul">
                 <Select >
                     <Select.Option key='khariltsagch' value='khariltsagch'>Харилцагч</Select.Option>
@@ -94,7 +92,7 @@ function SegmentBurtgekh({ destroy, token }, ref) {
                                     ]}
                                     noStyle
                                 >
-                                    <Input placeholder="Утга" className='relative w-[85%] ' />
+                                    <Input placeholder="Утга" className='relative w-[85%]' />
                                 </Form.Item>
 
                                 {fields.length > 1 ? (
