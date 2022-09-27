@@ -66,30 +66,8 @@ function Tile({ zasya, token, ...a }) {
 
 function segmentiinTokhirgoo({ token }) {
   const ref = React.useRef(null);
-
   const segment = useJagsaalt("/segment");
 
-  function zasya(a) {
-
-    const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
-      </Button>,
-    ];
-    modal({
-      title: "Ялгаж бүртгэх",
-      icon: <PlusOutlined />,
-      content:
-        <SegmentBurtgekh
-          ref={ref}
-          data={a}
-          token={token}
-          refresh={segment.refresh}
-        />,
-      footer,
-    });
-  }
   function segmentBurtegye(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
@@ -116,7 +94,7 @@ function segmentiinTokhirgoo({ token }) {
       <div className="box mt-5 lg:mt-0">
         <div
           className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pt-5 pb-2"
-          onClick={(a) => segmentBurtegye(a)}
+          onClick={() => segmentBurtegye()}
         >
           <Button type="primary">Ялгаж бүртгэх</Button>
         </div>
@@ -126,7 +104,7 @@ function segmentiinTokhirgoo({ token }) {
             className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
             jagsaalt={segment?.jagsaalt}
             Component={Tile}
-            componentProps={{ zasya, token }}
+            componentProps={{ zasya: segmentBurtegye, token }}
           />
         </div>
         <div hidden={!segment.jagsaalt}>

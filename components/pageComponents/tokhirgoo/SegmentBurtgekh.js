@@ -3,7 +3,7 @@ import { Form, Select, Input, Button, notification } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import createMethod from 'tools/function/crud/createMethod';
 import updateMethod from 'tools/function/crud/updateMethod';
-
+import { aldaaBarigch } from 'services/uilchilgee';
 
 const formItemLayout = {
     labelCol: {
@@ -25,7 +25,6 @@ const formItemLayoutWithOutLabel = {
 function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
 
     const [form] = Form.useForm();
-    console.log(data)
 
     useImperativeHandle(
         ref,
@@ -39,9 +38,13 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                             notification.success({ message: "Амжилттай хадгаллаа" });
                             refresh();
                             destroy();
+                            console.log(">>>>")
                         }
                     }
-                );
+
+                ).catch((e) => {
+                    aldaaBarigch(e);
+                });
             },
             khaaya() {
                 destroy()
