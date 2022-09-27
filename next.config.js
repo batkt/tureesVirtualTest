@@ -17,7 +17,7 @@ module.exports = {
     return [
       {
         source: "/hicarapi",
-        destination: "http://103.50.205.33:8080",
+        destination: "http://103.50.205.33:8080/",
       },
     ];
   },
