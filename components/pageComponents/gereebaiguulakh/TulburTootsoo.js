@@ -4,7 +4,7 @@ import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/A
 import formatNumber from "tools/function/formatNumber";
 import { useEffect, useState } from "react";
 import Aos from "aos";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 const formItemLayout = {
   labelCol: {
