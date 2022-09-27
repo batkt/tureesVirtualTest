@@ -57,6 +57,18 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
+function Tile({ zasya, token, ...a }) {
+  return (
+    <div className="box">
+      <div className="flex items-center p-7 shadow-none">
+        <div className="border-l-2 border-green-500 pl-4">
+          <div className="font-medium">{a.ner}</div>
+          <div className="text-gray-600">{a.utga}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 function talbaiBurtgekh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -461,11 +473,10 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
-                    : ""
-                }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -682,7 +693,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -792,6 +803,32 @@ function talbaiBurtgekh({ token }) {
                     >
                       {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
                     </Tag>
+                  );
+                },
+              },
+              {
+                title: "Сегмент",
+                dataIndex: "segmentuud",
+                ellipsis: true,
+                width: "2rem",
+                align: "center",
+                render(segmentuud) {
+                  return (
+                    <Popover trigger="hover" content={
+                      <div>
+                        <CardList
+                          keyValue="segment"
+                          className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                          jagsaalt={segmentuud}
+                          Component={Tile}
+                          componentProps={{ token }}
+                        />
+                      </div>
+                    }>
+                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
                   );
                 },
               },
