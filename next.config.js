@@ -1,10 +1,5 @@
 module.exports = {
-  experimental: {
-    outputStandalone: true,
-  },
-  env: {
-    customKey: "my-value",
-  },
+  output: "standalone",
   serverRuntimeConfig: {
     HTTP_URL: process.env.HTTP_URL || "http://103.143.40.230:8081", // Pass through env variables
   },
