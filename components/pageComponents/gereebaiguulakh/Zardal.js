@@ -108,7 +108,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   }
   useEffect(() => {
     if (value.zardluud === undefined) {
-      return (value.zardluud = []);
+      value.zardluud = [];
     }
   }, []);
 
