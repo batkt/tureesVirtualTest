@@ -3,6 +3,8 @@ services:
   web:
     image: tureesfront:latest
     environment:
-      - URL=https://turees.zevtabs.mn/api
+      - URL=http://192.168.0.108:8081
+      - SOCKET=http://192.168.0.108:8081
+      - HTTP_URL=http://192.168.0.108:8081
     ports:
       - "3000:3000"

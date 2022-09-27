@@ -2,18 +2,15 @@ import { notification } from "antd";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
 import _ from "lodash";
+import getConfig from "next/config";
+const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
-// function hostnameAvya() {
-//   return global.window?.location?.hostname
-// }
-
-//export const url = `http://${hostnameAvya() || 'localhost'}:8081`;
-//export const url = `http://localhost:8081`;
-//export const url = "http://192.168.0.103:8081"
-export const url = process.env.URL || "https://turees.zevtabs.mn/api";
+export const url = publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
 
 export const socket = () =>
-  socketIOClient("https://turees.zevtabs.mn", { transports: ["websocket"] });
+  socketIOClient(publicRuntimeConfig.SOCKET || "https://turees.zevtabs.mn", {
+    transports: ["websocket"],
+  });
 
 export const aldaaBarigch = (e) => {
   if (e?.response?.data?.aldaa === "jwt expired") {
@@ -45,7 +42,10 @@ const uilchilgee = (token) => {
   };
   if (!!token) headers["Authorization"] = `bearer ${token}`;
   return axios.create({
-    baseURL: typeof window === "undefined" ? "http://103.143.40.230:8081" : url,
+    baseURL:
+      typeof window === "undefined"
+        ? serverRuntimeConfig.HTTP_URL || "http://103.143.40.230:8081"
+        : url,
     headers,
   });
 };

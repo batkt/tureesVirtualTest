@@ -72,15 +72,12 @@ function GereeBaiguulakh({ token }) {
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
-        .get(
-          `http://103.50.205.33:8080/tatvaraasBaiguullagaAvya/${v?.register}`,
-          {
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `bearer ${token}`,
-            },
-          }
-        )
+        .get(`/hicarapi/tatvaraasBaiguullagaAvya/${v?.register}`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `bearer ${token}`,
+          },
+        })
         .then(({ data }) => {
           if (data?.found === true) form.setFieldsValue({ ner: data?.name });
         });

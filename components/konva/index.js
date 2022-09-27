@@ -74,8 +74,10 @@ function Drawer(props) {
     bairshilKhurvuuljAvakh(props.points) || []
   );
   const [curMousePos, setCurMousePos] = useState([0, 0]);
-  const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(true);
-  const [isFinished, setIsFinished] = useState(true);
+  const [isMouseOverStartPoint, setIsMouseOverStartPoint] = useState(
+    !!props.points || false
+  );
+  const [isFinished, setIsFinished] = useState(!!props.points || false);
 
   const getMousePos = (stage) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
