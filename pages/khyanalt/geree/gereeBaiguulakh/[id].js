@@ -171,7 +171,7 @@ function GereeBaiguulakh({ token, data }) {
           </Steps>
         </div>
         <div className="mt-3 grid grid-cols-12 gap-6">
-          <div className="col-span-4 mt-3 bg-gray-50 p-2 dark:bg-gray-900">
+          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               next={next}
               prev={prev}
@@ -192,8 +192,8 @@ function GereeBaiguulakh({ token, data }) {
             )}
           </div>
           <div
-            className="col-span-8 mt-3 bg-gray-50 p-2 dark:bg-gray-900"
-            style={{ maxHeight: "calc(100vh - 15rem)", overflow: "auto" }}
+            className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8"
+            style={{ maxHeight: "calc(100vh - 17rem)", overflow: "auto" }}
           >
             {current === 0 && (
               <Select
@@ -254,7 +254,7 @@ function GereeBaiguulakh({ token, data }) {
                 return (
                   <div
                     key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100"
+                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     {mur.kharagdakhDugaar ? (
                       <>

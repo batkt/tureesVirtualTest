@@ -12,6 +12,7 @@ import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
   CloseOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import React, { useEffect } from "react";
 import { toWords } from "mon_num";
@@ -68,7 +69,7 @@ function TalbaiSongolt({ value, onChange, mode }) {
               </p>
               <p className="w-20 border-r-2 text-center">{a.davkhar}F</p>
               <p className="w-full text-right">
-                {a.tureesiinTulbur ? a.tureesiinTulbur : 0}₮
+                {formatNumber(a.talbainNiitUne ? a.talbainNiitUne : 0)}₮
               </p>
             </div>
           </Select.Option>
@@ -128,16 +129,12 @@ const YurunkhiiMedeele = ({
       0
     );
     value.sariinTurees = talbainuud.reduce(
-      (a, b) => a + Number(b.tureesiinTulbur || 0),
+      (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
     value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
     value.talbainNiitUne = value.baritsaaAvakhDun;
     value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
-    value.zardliinDun = talbainuud.reduce(
-      (a, b) => a + Number(b.niitAshiglaltiinZardal || 0),
-      0
-    );
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
@@ -201,52 +198,46 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="100"
-        className="space-y-2 pb-4"
+        className="space-y-2 pb-4 md:w-3/4"
       >
         {value.talbainuud?.map((talbai, index) => {
           return (
             <div
               key={talbai?._id}
-              className="group relative space-y-2 rounded-md border border-gray-400 bg-gray-50 p-2 shadow-md"
+              className="group relative space-y-2 rounded-md border border-gray-400 bg-gray-50 p-2 pb-5 shadow-md dark:bg-gray-800 dark:text-gray-300"
             >
               <div className="text-xl font-medium">Код:{talbai.kod}</div>
               <div className="divide-y-2 border">
                 <div className="grid grid-cols-12 divide-x-2">
-                  <div className="col-span-2 text-center">Давхар</div>
-                  <div className="col-span-2 text-center">
+                  <div className="col-span-4 flex items-center justify-center text-center">
+                    Давхар
+                  </div>
+                  <div className="col-span-4 flex items-center justify-center text-center">
                     m<sup>2</sup>
                   </div>
-                  <div className="col-span-4 text-center">Зардал</div>
-                  <div className="col-span-4 text-center">Түрээсийн төлбөр</div>
-                </div>
-                <div className="grid grid-cols-12 divide-x-2">
-                  <div className="col-span-2 text-center">{talbai.davkhar}</div>
-                  <div className="col-span-2 text-center">
-                    {talbai.talbainKhemjee}
+                  <div className="col-span-4 flex items-center justify-center text-center">
+                    Түрээсийн төлбөр
                   </div>
-                  <div className="col-span-4 pr-2 text-right">
-                    {formatNumber(talbai.niitAshiglaltiinZardal)}
+                </div>
+                <div className="grid grid-cols-12 divide-x-2 py-1">
+                  <div className="col-span-4 text-center">{talbai.davkhar}</div>
+                  <div className="col-span-4 text-center">
+                    {talbai.talbainKhemjee}
                   </div>
                   <div className="col-span-4 pr-2 text-right">
                     {formatNumber(talbai.talbainNiitUne)}
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row justify-end">
-                <div>Нийт төлбөр:</div>
-                <div className="w-32 text-right text-base font-medium">
-                  {formatNumber(talbai.tureesiinTulbur)}
-                </div>
-              </div>
-              <div className="absolute -top-5 -right-5 hidden items-center justify-center rounded-md border border-black bg-gray-100  p-2 text-lg group-hover:flex">
+              <div className="absolute top-0  right-2 flex items-center justify-center rounded-full bg-gray-100  text-lg dark:bg-gray-800">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
                   okText="Тийм"
                   cancelText="Үгүй"
                   onConfirm={() => talbaiUstgaya(index)}
                 >
-                  <div className="cursor-pointer rounded-full bg-gray-300 bg-opacity-80 p-2 text-red-500">
-                    <CloseOutlined />
+                  <div className="cursor-pointer text-3xl text-gray-400 transition-colors duration-300 hover:text-red-500 dark:text-gray-200 dark:hover:text-red-600">
+                    <CloseCircleOutlined />
                   </div>
                 </Popconfirm>
               </div>
@@ -258,26 +249,22 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="200"
-        className="py-5"
+        className="py-5 dark:text-gray-200"
       >
         <div className="divide-y-2 border">
           <div className="grid grid-cols-12 divide-x-2">
-            <div className="col-span-2 text-center">Давхар</div>
-            <div className="col-span-2 text-center">
+            <div className="col-span-4 text-center">Давхар</div>
+            <div className="col-span-4 text-center">
               m<sup>2</sup>
             </div>
-            <div className="col-span-4 text-center">Зардал</div>
             <div className="col-span-4 text-center">Нийт төлбөр</div>
           </div>
           <div className="grid grid-cols-12 divide-x-2">
-            <div className="col-span-2 text-center text-base font-medium">
+            <div className="col-span-4 text-center text-base font-medium">
               {value.davkhar}
             </div>
-            <div className="col-span-2 text-center text-base font-medium">
+            <div className="col-span-4 text-center text-base font-medium">
               {value.talbainKhemjee}
-            </div>
-            <div className="col-span-4 pr-2 text-right text-base font-medium">
-              {formatNumber(value.zardliinDun)}
             </div>
             <div className="col-span-4 pr-2 text-right text-base font-medium">
               {formatNumber(value.sariinTurees)}
@@ -301,7 +288,11 @@ const YurunkhiiMedeele = ({
           data-aos-duration="1000"
           data-aos-delay="700"
         >
-          <Button onClick={prev} icon={<ArrowLeftOutlined />} className="mr-4">
+          <Button
+            onClick={prev}
+            icon={<ArrowLeftOutlined />}
+            className="mr-4 dark:text-gray-200 dark:hover:text-gray-800"
+          >
             Гэрээний хугацаа
           </Button>
           <Button

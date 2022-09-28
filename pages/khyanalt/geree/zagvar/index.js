@@ -198,6 +198,7 @@ function index({ token }) {
                       type="checkbox"
                     />
                   </div>
+
                   <div className="file__icon file__icon--file mx-auto w-3/5">
                     <div className="file__icon__file-name"></div>
                   </div>
@@ -205,7 +206,7 @@ function index({ token }) {
                     {a.ner}
                   </div>
                   <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
-                    1 KB
+                    {a.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ"}
                   </div>
                   <div className="dropdown absolute top-0 right-0 mr-2 mt-2 ml-auto">
                     <Dropdown

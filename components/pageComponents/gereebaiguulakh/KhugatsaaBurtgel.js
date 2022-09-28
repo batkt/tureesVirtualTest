@@ -144,7 +144,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4"
+              className="mr-4 dark:text-gray-200 dark:hover:text-gray-800"
             >
               Ерөнхий мэдээлэл
             </Button>

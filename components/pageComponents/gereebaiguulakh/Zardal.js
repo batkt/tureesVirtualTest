@@ -1,14 +1,8 @@
-import { Form, Select, Button, InputNumber, Checkbox, Input } from "antd";
-import {
-  ArrowRightOutlined,
-  ArrowLeftOutlined,
-  CloseCircleOutlined,
-} from "@ant-design/icons";
-import React, { useEffect, useState } from "react";
+import { Form, Button, Checkbox, Input, InputNumber } from "antd";
+import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import React, { useEffect } from "react";
 import Aos from "aos";
-import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
-import formatNumber from "tools/function/formatNumber";
 
 const formItemLayout = {
   labelCol: {
@@ -71,9 +65,13 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
           {a.turul} {a.turul && a.tariff && ":"} {a.tariff} {a.tariff && "₮"}
         </div>
       ) : (
-        <div className="w-20">
-          <Input
+        <div className=" w-24">
+          <InputNumber
             ref={inputRef}
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             disabled={
               value.zardluud !== undefined &&
               !value.zardluud.find((c) => c._id === a._id)
@@ -88,8 +86,7 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
             }
             placeholder="(...₮)"
             onChange={(e) => inputChange(e, a)}
-            className="h-7 rounded-md text-center"
-            type="number"
+            className="flex h-7 w-full items-center rounded-l-md pr-4 "
           />
         </div>
       )}
@@ -118,7 +115,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     });
 
     if (index !== -1) {
-      value.zardluud[index].dun = e.target.value;
+      value.zardluud[index].dun = e;
     }
     onChange({ ...value });
   };

@@ -94,10 +94,6 @@ const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
               placeholder="Барьцаа байршуулалтын хугацаа"
               style={{ width: "100%" }}
               min={0}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             />
           </Form.Item>
         </div>
@@ -116,21 +112,6 @@ const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
           </div>
         </Form.Item>
       </div>
-      <div
-        className="flex gap-5"
-        data-aos="fade-right"
-        data-aos-duration="1000"
-        data-aos-delay="300"
-      >
-        <p className="flex w-2/3 justify-end">Төлбөрийн хуваарь:</p>
-        <Form.Item
-          name="khungulukhEsekh"
-          style={{ marginBottom: 10 }}
-          className="flex w-1/3  dark:text-gray-100"
-        >
-          <Switch style={{ marginLeft: "auto" }} />
-        </Form.Item>
-      </div>
 
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
@@ -144,7 +125,7 @@ const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4"
+              className="mr-4 dark:text-gray-200 dark:hover:text-gray-800"
             >
               Зардал бүртгэл
             </Button>

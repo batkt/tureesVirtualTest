@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { Input, InputNumber, Table } from "antd";
 import moment from "moment";
-import { CloseCircleOutlined } from "@ant-design/icons";
 import Aos from "aos";
+import formatNumber from "tools/function/formatNumber";
 
 function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
   return (
     <div className="w-full">
       <div className="space-y-2 divide-y-2">
         <Table
+          scroll={{ y: "30vh" }}
           className="mt-2"
           dataSource={ugugdul}
           size="small"
+          pagination={false}
           bordered
           columns={[
             {
@@ -31,38 +33,18 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
               width: "2.5rem",
               align: "center",
               render(ognoo) {
-                return moment(ognoo).format("YYYY-MM-DD hh:mm");
+                return moment(ognoo).format("YYYY-MM-DD");
               },
             },
             {
-              title: "Төлөх дүн",
+              title: "Төлөх дүн (₮)",
               dataIndex: "tulukhDun",
               ellipsis: true,
               width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
-            },
-            {
-              title: "Төрөл",
-              dataIndex: "turul",
-              ellipsis: true,
-              width: "1.5rem",
-              align: "center",
-              showSorterTooltip: false,
-              render(a) {
-                let turulMongloor = "";
-                switch (a) {
-                  case "khuvaari":
-                    turulMongloor = "Хуваарь";
-                    break;
-                  case "avlaga":
-                    turulMongloor = "Авлага";
-                    break;
-                  default:
-                    turulMongloor = a;
-                    break;
-                }
-                return turulMongloor;
+              render(tulukhDun) {
+                return formatNumber(tulukhDun);
               },
             },
             {
@@ -72,6 +54,19 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
               width: "1.5rem",
               align: "center",
               showSorterTooltip: false,
+              render(a, b) {
+                var tailbar = "";
+                switch (b.turul) {
+                  case "khuvaari":
+                    tailbar = "Түрээсийн төлбөр";
+                    break;
+                  case "avlaga":
+                    tailbar = a;
+                  default:
+                    break;
+                }
+                return tailbar;
+              },
             },
           ]}
         />

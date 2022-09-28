@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import readMethod from "tools/function/crud/readMethod";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import { Button, Form, Input, message, Modal } from "antd";
+import { Button, Form, Input, message, Modal, Switch } from "antd";
 import { useAuth } from "services/auth";
 import {
   DeleteOutlined,
@@ -210,6 +210,15 @@ function ZakhialgaNemekh({ token }) {
             <Form.Item name="ner">
               <Input placeholder="Гэрээний загварын нэр" />
             </Form.Item>
+            <div className="flex justify-end">
+              <Form.Item
+                name="turGereeEsekh"
+                label="Түр гэрээ эсэх"
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </div>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Хадгалах

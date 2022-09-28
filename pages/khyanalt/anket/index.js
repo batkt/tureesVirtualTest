@@ -423,8 +423,8 @@ function Anket({ token }) {
                         key={a._id}
                       >
                         <img className="absolute w-36" src="/anket.png" />
-                        <div className="z-0 w-full bg-black bg-opacity-50 px-2  ">
-                          <div className="text-center text-base font-medium text-white">
+                        <div className="z-0 flex h-7 w-full justify-center bg-black  bg-opacity-50 px-2 transition-all duration-500 group-hover:h-full group-hover:items-center ">
+                          <div className=" text-ellipsis text-center text-base font-medium text-white">
                             {a.ner}
                           </div>
                         </div>
