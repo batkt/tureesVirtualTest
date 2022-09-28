@@ -22,7 +22,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
       </Button>,
     ];
     modal({
-      title: "Дансны бүртгэл",
+      title: "Зардал бүртгэл",
       icon: <PlusOutlined />,
       content: (
         <ZardalBurtgel
