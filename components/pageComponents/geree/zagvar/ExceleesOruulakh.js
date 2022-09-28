@@ -82,8 +82,7 @@ function index(
         <a
           className="cursor-pointer font-medium text-blue-600"
           target="_blank"
-          href={url + `/${zagvariinZam}`}
-          download
+          onClick={zagvarAvya}
         >
           Загвар татах
         </a>
