@@ -1,15 +1,18 @@
-import { Form, Input, Switch, Button, Upload, message } from "antd";
+import { Form, Input, Switch, Button, Upload, message, Select } from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
   ArrowRightOutlined,
   MailOutlined,
+  PlusOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
-import React from "react";
+import React, { useRef, useState } from "react";
 import uilchilgee, { url, aldaaBarigch } from "services/uilchilgee";
 import FormLavlakh from "components/FormLavlakh";
 import { useEffect } from "react";
 import Aos from "aos";
+import useJagsaalt from "hooks/useJagsaalt";
 
 var timeout = null;
 
@@ -30,6 +33,71 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
+
+function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
+  const segment = useJagsaalt("/segment")
+  const [turul, setTurul] = useState()
+  const [songosonSegment, setSongosonSegment] = useState()
+
+  function solikh(value) {
+    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    shineSolikh("ner", value);
+  }
+  function solikhtTurul(value) {
+    shineSolikh("utga", value);
+
+  }
+  function shineSolikh(talbar, utga) {
+    setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
+  }
+  return <>
+    <div className="flex flex-row justify-end">
+      <Form.Item
+        className="w-full pl-2"
+        wrapperCol={{ span: 9, offset: 15, }}
+        {...restField}
+        name={[name, "ner"]}
+        fieldKey={[fieldKey, "ner"]}
+      >
+        <Select
+          style={{ width: "100%" }}
+          placeholder='Төрөл'
+          onChange={solikh}
+        >
+          {segment?.jagsaalt?.map((mur) => (
+            <Select.Option value={mur?.ner}>
+              {mur?.ner}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        className="w-2/4 "
+        wrapperCol={{ span: 18, offset: 2, }}
+        {...restField}
+        name={[name, "utga"]}
+        fieldKey={[fieldKey, "utga"]}>
+        <Select
+          style={{ width: "100%" }}
+          placeholder='Утга'
+          onChange={solikhtTurul}
+        >
+          {turul?.utguud?.map((a) => (
+            <Select.Option value={a}>
+              {a}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <CloseCircleOutlined
+        className="pt-2"
+        onClick={() => remove(name)}
+      />
+    </div>
+  </>
+}
+
+
 const YurunkhiiMedeele = ({
   token,
   next,
@@ -39,10 +107,14 @@ const YurunkhiiMedeele = ({
   barilgiinId,
 }) => {
   const [form] = Form.useForm();
+  const formRef = useRef();
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
   function onChangeRegister({ target }) {
+
+
+
     var onookhKhariltsagch = {
       ner: "",
       utas: "",
@@ -91,11 +163,17 @@ const YurunkhiiMedeele = ({
 
   return (
     <Form
+      ref={formRef}
       form={form}
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
-      onValuesChange={(values) => onChange({ ...value, ...values })}
+      onValuesChange={(changedValues, values) => {
+        console.log(values, changedValues)
+        onChange({ ...value, ...values })
+      }
+
+      }
       onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-delay="200">
@@ -301,7 +379,32 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      <div data-aos="fade-right" data-aos-delay="900">
+      <div
+        data-aos="fade-right" data-aos-delay="900">
+        <Form.List name="segmentuud" className=" " >
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, fieldKey, ...restField }) => (
+                <div key={key}  >
+                  <YalgakhUtga key={key} name={name} fieldKey={fieldKey}  {...restField} remove={remove} />
+                </div>
+              ))}
+              <Form.Item className="" wrapperCol={{ span: 15, offset: 10, }}>
+                <Button
+                  icon={<PlusOutlined />}
+                  className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                >
+                  Ялгах утга оруулах
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </div>
+      <div data-aos="fade-right" data-aos-delay="1000">
         <Form.Item
           name="dans"
           rules={[{ required: true, message: "Төлөлт хийх данс бүртгэнэ үү!" }]}
