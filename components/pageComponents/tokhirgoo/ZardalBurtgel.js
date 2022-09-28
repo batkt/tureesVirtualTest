@@ -48,11 +48,14 @@ function ZardalBurtgel(
       </Form.Item>
       <Form.Item label="Нэгж" name="turul">
         <Select>
-          <Select.Option key="m2" value="m2">
-            m2
+          <Select.Option key="кВт" value="кВт">
+            кВт
           </Select.Option>
-          <Select.Option key="litr" value="litr">
-            Литр
+          <Select.Option key="1м3" value="1м3">
+            1м<sup>3</sup>
+          </Select.Option>
+          <Select.Option key="төг" value="төг">
+            төг
           </Select.Option>
         </Select>
       </Form.Item>

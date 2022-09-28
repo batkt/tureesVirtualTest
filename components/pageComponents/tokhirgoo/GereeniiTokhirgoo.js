@@ -158,7 +158,7 @@ function KhuviinMedeelel({
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">Барьцаа авах /сараар/</div>
                 <div className="text-gray-600">
-                  Гэрээ байгуулсаны дараа сараар тооцож барьцаа авна
+                  Гэрээ байгуулсны дараа сараар тооцож барьцаа авна
                 </div>
               </div>
               <div className="ml-auto">
@@ -180,7 +180,7 @@ function KhuviinMedeelel({
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">Барьцаа хөрөнгө авах эсэх</div>
                 <div className="text-gray-600">
-                  Гэрээ байгууллахад барьцаа хөрөнгө авах эсэх
+                  Гэрээ байгуулахад барьцаа хөрөнгө авах эсэх
                 </div>
               </div>
               <div className="ml-auto">

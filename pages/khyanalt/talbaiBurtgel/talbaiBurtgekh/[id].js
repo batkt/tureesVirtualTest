@@ -23,7 +23,6 @@ import {
     Upload,
     message,
     Space,
-    notification,
 } from "antd";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -41,6 +40,71 @@ const normFile = (e) => {
     return e && e.fileList;
 };
 
+function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
+
+    const segment = useJagsaalt("/segment")
+    const [turul, setTurul] = useState()
+    const [songosonSegment, setSongosonSegment] = useState()
+
+    function solikh(value) {
+        setTurul(segment.jagsaalt.find((a) => a.ner === value))
+        shineSolikh("ner", value);
+    }
+    function solikhtTurul(value) {
+        shineSolikh("utga", value);
+    }
+    function shineSolikh(talbar, utga) {
+        setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
+    }
+
+    return <>
+        <div className="flex flex-row justify-end ">
+            <Form.Item
+                className="w-full "
+                wrapperCol={{ span: 12, offset: 12, }}
+                {...restField}
+                name={[name, "ner"]}
+                fieldKey={[fieldKey, "ner"]}
+            >
+                <Select
+                    style={{ width: "100%" }}
+                    className=" "
+                    placeholder='Төрөл'
+                    name="ner"
+                    onChange={solikh}
+                >
+                    {segment?.jagsaalt?.map((mur) => (
+                        <Select.Option value={mur?.ner}>
+                            {mur?.ner}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <Form.Item
+                className="w-2/4 "
+                wrapperCol={{ span: 22, offset: 1, }}
+                {...restField}
+                name={[name, "utga"]}
+                fieldKey={[fieldKey, "utga"]}>
+                <Select
+                    style={{ width: "100%" }}
+                    placeholder='Утга'
+                    onChange={solikhtTurul}
+                >
+                    {turul?.utguud?.map((a) => (
+                        <Select.Option value={a}>
+                            {a}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </Form.Item>
+            <CloseCircleOutlined
+                className="pt-2"
+                onClick={() => remove(name)}
+            />
+        </div>
+    </>
+}
 
 
 function TalbaiBurtgekh({ token }) {
@@ -70,20 +134,7 @@ function TalbaiBurtgekh({ token }) {
         ...data
     });
 
-    const segment = useJagsaalt("/segment")
-    const [turul, setTurul] = useState()
-    const [songosonSegment, setSongosonSegment] = useState()
 
-    function solikh(value) {
-        setTurul(segment.jagsaalt.find((a) => a.ner === value))
-        shineSolikh("ner", value);
-    }
-    function solikhtTurul(value) {
-        shineSolikh("utga", value);
-    }
-    function shineSolikh(talbar, utga) {
-        setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
-    }
 
     function onChange(talbar, utga) {
 
@@ -473,78 +524,36 @@ function TalbaiBurtgekh({ token }) {
                                     allowClear
                                 >
                                     {baiguullaga?.barilguud?.find(a => a._id === barilgiinId)?.davkharuud.map((a) => (
+
                                         <Select.Option key={a._id} value={a.davkhar}>
                                             {a.davkhar}
                                         </Select.Option>
                                     ))}
                                 </Select>
                             </Form.Item>
-
-
-
                             <div
-                                className="space-y-3"
-                                data-aos="fade-right"
+                                data-aos="fade-right "
                                 data-aos-duration="1000"
                                 data-aos-delay="700">
-                                <Form.List name="segmentuud" >
+                                <Form.List name="segmentuud" className=" " >
                                     {(fields, { add, remove }) => (
                                         <>
                                             {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                                <div key={key} className="bg-black bg-opacity-5 pt-5 ml-40 mr-5 border-gray-300 border-[1px] rounded-xl">
-                                                    <CloseCircleOutlined className="dynamic-delete-button red absolute top-10 right-5 text-3xl text-black text-opacity-60  dark:text-white dark:text-opacity-50" onClick={() => remove(name)} />
-                                                    <div className="flex">
-                                                        <Form.Item
-                                                            label="Төрөл"
-                                                            className="w-full"
-                                                            {...restField}
-                                                            name={[name, "ner"]}
-                                                            fieldKey={[fieldKey, "ner"]}
-                                                        >
-                                                            <Select
-                                                                style={{ width: "100%" }}
-                                                                placeholder='Төрөл'
-                                                                name="ner"
-                                                                onChange={solikh}
-                                                            >
-                                                                {segment?.jagsaalt?.map((mur) => (
-                                                                    <Select.Option value={mur?.ner}>
-                                                                        {mur?.ner}
-                                                                    </Select.Option>
-                                                                ))}
-                                                            </Select>
-                                                        </Form.Item>
-                                                    </div>
-                                                    <div className=" w-full ">
-                                                        <Form.Item
-                                                            label="Утга"
-                                                            className="w-full"
-                                                            {...restField}
-                                                            name={[name, "utga"]}
-                                                            fieldKey={[fieldKey, "utga"]}>
-                                                            <Select
-                                                                style={{ width: "100%" }}
-                                                                placeholder='Утга'
-                                                                onChange={solikhtTurul}
-                                                            >
-                                                                {turul?.utguud?.map((a) => (
-                                                                    <Select.Option value={a}>
-                                                                        {a}
-                                                                    </Select.Option>
-                                                                ))}
-                                                            </Select>
-                                                        </Form.Item>
-                                                    </div>
-
+                                                <div key={key}  >
+                                                    <YalgakhUtga key={key} name={name} fieldKey={fieldKey}  {...restField} remove={remove} />
                                                 </div>
-
-
                                             ))}
-                                            <div className=" flex justify-center gap-5 px-2 py-5">
-                                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            <Form.Item className="" wrapperCol={{ span: 15, offset: 8, }}>
+                                                <Button
+                                                    icon={<PlusOutlined />}
+                                                    className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                                                    type="dashed"
+                                                    onClick={() => add()}
+                                                    block
+                                                >
                                                     Ялгах утга оруулах
                                                 </Button>
-                                            </div>
+                                            </Form.Item>
                                         </>
                                     )}
                                 </Form.List>
@@ -729,7 +738,7 @@ function TalbaiBurtgekh({ token }) {
                         </div>
                     </div>
                 </div>
-            </Form>
+            </Form >
         </Admin >
     );
 }
