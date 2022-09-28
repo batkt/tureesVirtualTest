@@ -31,7 +31,7 @@ function index(
 
   function zagvarAvya() {
     uilchilgee(token)
-      .get(`/${zagvariinZam}`)
+      .get(`/${zagvariinZam}`, { responseType: "blob" })
       .then(({ data }) => {
         const url = window.URL.createObjectURL(data);
         const a = document.createElement("a");
