@@ -1,7 +1,7 @@
 import React from "react";
 import { message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { url } from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
 
 function index(
@@ -28,6 +28,22 @@ function index(
     }),
     []
   );
+
+  function zagvarAvya() {
+    uilchilgee(token)
+      .get(`/${zagvariinZam}`)
+      .then(({ data }) => {
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        // the filename you want
+        a.download = `${zagvariinZam}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+  }
 
   return (
     <div>
