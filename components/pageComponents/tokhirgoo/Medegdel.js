@@ -40,7 +40,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.msgIlgeekhKey": target.value,
+                      msgIlgeekhKey: target.value,
                     }))
                   }
                 />
@@ -59,7 +59,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setMedegdelTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.msgIlgeekhDugaar": target.value,
+                      msgIlgeekhDugaar: target.value,
                     }))
                   }
                 />
