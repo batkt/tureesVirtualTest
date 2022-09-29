@@ -438,69 +438,7 @@ function TalbaiBurtgekh({ token }) {
                                 />
                             </Form.Item>
                         </div>
-                        <div
-                            data-aos="fade-right"
-                            data-aos-duration="1000"
-                            data-aos-delay="400"
-                        >
-                            <Form.Item name="ashiglaltiinZardal" label="Ашиглалтын зардал">
-                                <InputNumber
-                                    style={{ width: "100%" }}
-                                    placeholder="Ашиглалтын зардал"
-                                    value={talbaiState.ashiglaltiinZardal}
-                                    formatter={(value) =>
-                                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }
-                                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                                    onChange={(target) => onChange("ashiglaltiinZardal", target)}
-                                />
-                            </Form.Item>
-                        </div>
-                        <div
-                            data-aos="fade-right"
-                            data-aos-duration="1000"
-                            data-aos-delay="500"
-                        >
-                            <Form.Item name="niitAshiglaltiinZardal" label="Нийт зардал">
-                                <InputNumber
-                                    style={{ width: "100%" }}
-                                    readOnly={true}
-                                    placeholder="Нийт зардал"
-                                    value={talbaiState.niitAshiglaltiinZardal}
-                                    formatter={(value) =>
-                                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }
-                                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                                />
-                            </Form.Item>
-                        </div>
-                        <div
-                            data-aos="fade-right"
-                            data-aos-duration="1000"
-                            data-aos-delay="600"
-                        >
-                            <Form.Item
-                                name="tureesiinTulbur"
-                                label="Түрээсийн төлбөр"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Түрээсийн бүртгэнэ үү!",
-                                    },
-                                ]}
-                            >
-                                <InputNumber
-                                    style={{ width: "100%" }}
-                                    readOnly={true}
-                                    placeholder="Түрээсийн төлбөр"
-                                    value={talbaiState.tureesiinTulbur}
-                                    formatter={(value) =>
-                                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                    }
-                                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                                />
-                            </Form.Item>
-                        </div>
+
                         <div
                             data-aos="fade-right"
                             data-aos-duration="1000"
@@ -568,30 +506,40 @@ function TalbaiBurtgekh({ token }) {
                                 ></TextArea>
                             </Form.Item>
                             <div className="flex justify-center space-x-5" >
-                                <Button
-                                    onClick={showDrawer}
-                                    style={{
-                                        backgroundColor: "white",
-                                        color: "black",
-                                    }}
-                                ><SettingOutlined />
-                                    План зураг тохируулах
-                                </Button>
-                                <Drawer width={"100vw"} title="План зураг тохируулах" placement="left" onClose={onClose} visible={open}>
-                                    {open && <Konva davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} points={data.bairshil} onFinish={v => {
-                                        onChange('bairshil', v)
-                                        onClose()
-                                    }} />}
-                                </Drawer>
-                                <Button
-                                    htmlType="submit"
-                                    style={{
-                                        backgroundColor: "#209669",
-                                        color: "#ffffff",
-                                    }}
+                                <Form.Item
+                                    className="w-full pl-1"
+                                    wrapperCol={{ span: 12, offset: 12, }}
                                 >
-                                    Хадгалах
-                                </Button>
+                                    <Button
+                                        onClick={showDrawer}
+                                        style={{
+                                            backgroundColor: "white",
+                                            color: "black",
+                                        }}
+                                    ><SettingOutlined />
+                                        План зураг тохируулах
+                                    </Button>
+                                    <Drawer width={"100vw"} title="План зураг тохируулах" placement="left" onClose={onClose} visible={open}>
+                                        {open && <Konva davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} points={data.bairshil} onFinish={v => {
+                                            onChange('bairshil', v)
+                                            onClose()
+                                        }} />}
+                                    </Drawer>
+                                </Form.Item>
+                                <Form.Item
+                                    className="w-2/4 "
+                                    wrapperCol={{ span: 1, offset: 7, }}
+                                >
+                                    <Button
+                                        htmlType="submit"
+                                        style={{
+                                            backgroundColor: "#209669",
+                                            color: "#ffffff",
+                                        }}
+                                    >
+                                        Хадгалах
+                                    </Button>
+                                </Form.Item>
                             </div>
                         </div>
                     </div>
@@ -639,7 +587,7 @@ function TalbaiBurtgekh({ token }) {
                                                                     }}
                                                                 >
                                                                     <div className={data.khurunguud && !!data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} id={`${key}-upload-image`}  >Зураг оруулах</div>
-                                                                    <img className={data.khurunguud && !data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} src={data.khurunguud && `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[key]?.zurgiinId}`} id={`${key}-image`} alt='Зураг оруулах'></img>
+                                                                    <img className={data.khurunguud && !data.khurunguud[key]?.zurgiinId ? "hidden" : "text-sm"} src={data.khurunguud && `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[key]?.zurgiinId}`} id={`${key}-image`} alt=''></img>
                                                                 </Upload>
                                                             </Form.Item>
                                                         </div>
