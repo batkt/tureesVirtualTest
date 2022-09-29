@@ -56,7 +56,6 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
     function shineSolikh(talbar, utga) {
         setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
     }
-
     return <>
         <div className="flex flex-row justify-end ">
             <Form.Item
@@ -520,7 +519,7 @@ function TalbaiBurtgekh({ token }) {
                                         План зураг тохируулах
                                     </Button>
                                     <Drawer width={"100vw"} title="План зураг тохируулах" placement="left" onClose={onClose} visible={open}>
-                                        {open && <Konva davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} points={data.bairshil} onFinish={v => {
+                                        {open && <Konva token={token} _id={talbaiState} davkhar={talbaiState.davkhar} baiguullaga={baiguullaga} barilgiinId={barilgiinId} points={data.bairshil} onFinish={v => {
                                             onChange('bairshil', v)
                                             onClose()
                                         }} />}
