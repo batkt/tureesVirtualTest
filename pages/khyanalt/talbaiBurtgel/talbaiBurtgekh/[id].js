@@ -537,7 +537,7 @@ function TalbaiBurtgekh({ token }) {
                         davkhar={talbaiState.davkhar}
                         baiguullaga={baiguullaga}
                         barilgiinId={barilgiinId}
-                        points={data.bairshil}
+                        points={JSON.parse(JSON.stringify(talbaiState.bairshil))}
                         onFinish={(v) => {
                           onChange("bairshil", v);
                           onClose();
@@ -607,18 +607,16 @@ function TalbaiBurtgekh({ token }) {
                                       .classList.remove("hidden");
                                     document.getElementById(
                                       `${key}-image`
-                                    ).src = `${url}/zuragAvya/khurungu/${
-                                      baiguullaga._id
-                                    }/${
-                                      e.fileList[e.fileList.length - 1]
-                                        ?.response?.id
-                                    }`;
+                                    ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id
+                                    }/${e.fileList[e.fileList.length - 1]
+                                      ?.response?.id
+                                      }`;
                                   }}
                                 >
                                   <div
                                     className={
                                       data.khurunguud &&
-                                      !!data.khurunguud[key]?.zurgiinId
+                                        !!data.khurunguud[key]?.zurgiinId
                                         ? "hidden"
                                         : "text-sm"
                                     }
@@ -629,7 +627,7 @@ function TalbaiBurtgekh({ token }) {
                                   <img
                                     className={
                                       data.khurunguud &&
-                                      !data.khurunguud[key]?.zurgiinId
+                                        !data.khurunguud[key]?.zurgiinId
                                         ? "hidden"
                                         : "text-sm"
                                     }
