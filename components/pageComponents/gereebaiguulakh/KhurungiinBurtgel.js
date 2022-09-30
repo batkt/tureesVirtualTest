@@ -14,7 +14,7 @@ import {
   CloseOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { toWords } from "mon_num";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
@@ -33,11 +33,11 @@ const formItemLayout = {
   },
 };
 
-const query = {};
-
-function TalbaiSongolt({ value, onChange, mode }) {
+function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
-
+  const query = useMemo(() => {
+    return { niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh };
+  }, [gereeniiZagvar]);
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
     token,
     baiguullaga?._id,
@@ -202,7 +202,11 @@ const YurunkhiiMedeele = ({
     >
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item label="Талбай">
-          <TalbaiSongolt value={""} onChange={onChangeTalbai} />
+          <TalbaiSongolt
+            value={""}
+            onChange={onChangeTalbai}
+            gereeniiZagvar={gereeniiZagvar}
+          />
         </Form.Item>
       </div>
       <div

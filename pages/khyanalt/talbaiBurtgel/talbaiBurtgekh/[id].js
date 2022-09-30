@@ -250,7 +250,9 @@ function TalbaiBurtgekh({ token }) {
 
     const segmentuud = formRef.current.getFieldsValue(segmentuud);
     talbaiState.segmentuud = segmentuud.segmentuud;
-
+    if (talbaiState.niitiinTalbaiEsekh)
+      talbaiState.sulKhemjee =
+        talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
     setWaiting(true);
     if (!!talbaiState._id) {
       uilchilgee(token)
