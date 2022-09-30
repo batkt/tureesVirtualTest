@@ -94,16 +94,18 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinId = baiguullaga._id;
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
-      _.set(data.avlaga, "guilgeenuud", [
-        ...(data.avlaga.guilgeenuud || []),
-        {
-          turul: "baritsaa",
-          ognoo: data.gereeniiOgnoo,
-          khyamdral: 0,
-          undsenDun: data?.baritsaaAvakhDun,
-          tulukhDun: data?.baritsaaAvakhDun,
-        },
-      ]);
+      if (gereeniiZagvar?.turGereeEsekh !== true) {
+        _.set(data.avlaga, "guilgeenuud", [
+          ...(data.avlaga.guilgeenuud || []),
+          {
+            turul: "baritsaa",
+            ognoo: data.gereeniiOgnoo,
+            khyamdral: 0,
+            undsenDun: data?.baritsaaAvakhDun,
+            tulukhDun: data?.baritsaaAvakhDun,
+          },
+        ]);
+      }
 
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
@@ -240,6 +242,7 @@ function GereeBaiguulakh({ token }) {
               token={token}
               baiguullaga={baiguullaga}
               barilgiinId={barilgiinId}
+              gereeniiZagvar={gereeniiZagvar}
             />
           </div>
           <div
@@ -270,7 +273,14 @@ function GereeBaiguulakh({ token }) {
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
-                      <div dangerouslySetInnerHTML={{ __html: mur.ner }} />
+                      <div className="flex justify-between">
+                        <p>{mur.ner}</p>
+                        <p className="text-gray-500">
+                          {mur.turGereeEsekh === true
+                            ? "/Түр гэрээ/"
+                            : "/Үндсэн гэрээ/"}
+                        </p>
+                      </div>
                     </Select.Option>
                   );
                 })}
@@ -301,7 +311,8 @@ function GereeBaiguulakh({ token }) {
                     <div>Улаанбаатар хот</div>
                   </div>
                   <div className="w-full text-center font-medium">
-                    АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
+                    АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН
+                    {gereeniiZagvar.turGereeEsekh === true && " ТҮР"} ГЭРЭЭ
                   </div>
                 </>
               )}

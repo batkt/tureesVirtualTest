@@ -179,6 +179,7 @@ function GereeBaiguulakh({ token, data }) {
               value={khadgalakhGeree}
               token={token}
               baiguullaga={baiguullaga}
+              gereeniiZagvar={gereeniiZagvar}
               zasvar
             />
             {JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (

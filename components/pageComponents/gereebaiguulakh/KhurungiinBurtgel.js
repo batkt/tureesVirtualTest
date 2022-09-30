@@ -85,6 +85,7 @@ const YurunkhiiMedeele = ({
   prev,
   onChange,
   value,
+  gereeniiZagvar,
   barilgiinId,
 }) => {
   const [form] = Form.useForm();
@@ -124,16 +125,26 @@ const YurunkhiiMedeele = ({
   };
 
   function talbainBurtgelBugulyu(talbainuud) {
-    value.baritsaaAvakhDun = talbainuud.reduce(
-      (a, b) => a + Number(b.talbainNiitUne || 0),
-      0
-    );
+    {
+      gereeniiZagvar?.turGereeEsekh !== true
+        ? (value.baritsaaAvakhDun = talbainuud.reduce(
+            (a, b) => a + Number(b.talbainNiitUne || 0),
+            0
+          ))
+        : (value.talbainNiitUne = talbainuud.reduce(
+            (a, b) => a + Number(b.talbainNiitUne || 0),
+            0
+          ));
+    }
     value.sariinTurees = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
     value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
-    value.talbainNiitUne = value.baritsaaAvakhDun;
+    {
+      gereeniiZagvar?.turGereeEsekh !== true &&
+        (value.talbainNiitUne = value.baritsaaAvakhDun);
+    }
     value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
@@ -198,7 +209,7 @@ const YurunkhiiMedeele = ({
         data-aos="fade-right"
         data-aos-duration="1000"
         data-aos-delay="100"
-        className="space-y-2 pb-4 md:w-3/4"
+        className="space-y-2 pb-4"
       >
         {value.talbainuud?.map((talbai, index) => {
           return (

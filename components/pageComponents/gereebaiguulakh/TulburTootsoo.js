@@ -15,7 +15,15 @@ const formItemLayout = {
   },
 };
 
-const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
+const Tulbur = ({
+  value,
+  onChange,
+  next,
+  prev,
+  zasvar,
+  token,
+  gereeniiZagvar,
+}) => {
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -61,54 +69,63 @@ const Tulbur = ({ value, onChange, next, prev, zasvar, token }) => {
         </Form.Item>
       </div>
 
-      <div>
-        <div data-aos="fade-right" data-aos-duration="1000">
-          <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
-            <InputNumber
-              disabled
-              placeholder="Барьцаа дүн"
-              style={{ width: "100%" }}
-              formatter={(value) =>
-                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            />
-          </Form.Item>
-        </div>
-        <div
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          <Form.Item
-            name="baritsaaBairshuulakhKhugatsaa"
-            label="Хугацаа"
-            rules={[
-              {
-                required: true,
-                message: "Барьцаа байршуулалтын хугацаа бүртгэнэ үү!",
-              },
-            ]}
+      {gereeniiZagvar?.turGereeEsekh !== true ? (
+        <div>
+          <div data-aos="fade-right" data-aos-duration="1000">
+            <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+              <InputNumber
+                disabled
+                placeholder="Барьцаа дүн"
+                style={{ width: "100%" }}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              />
+            </Form.Item>
+          </div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="100"
           >
-            <InputNumber
-              placeholder="Барьцаа байршуулалтын хугацаа"
-              style={{ width: "100%" }}
-              min={0}
-            />
-          </Form.Item>
+            <Form.Item
+              name="baritsaaBairshuulakhKhugatsaa"
+              label="Хугацаа"
+              rules={[
+                {
+                  required: true,
+                  message: "Барьцаа байршуулалтын хугацаа бүртгэнэ үү!",
+                },
+              ]}
+            >
+              <InputNumber
+                placeholder="Барьцаа байршуулалтын хугацаа"
+                style={{ width: "100%" }}
+                min={0}
+              />
+            </Form.Item>
+          </div>
         </div>
-      </div>
+      ) : null}
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item label="Нийт дүн" style={{ marginBottom: 10 }}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
-            {formatNumber(
-              (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                (value.baritsaaAvakhDun || 0) *
-                  (value.baritsaaAvakhKhugatsaa || 0) -
-                (((value.sariinTurees || 0) * 12) / 365) *
-                  (value.khungulukhKhugatsaa || 0) -
-                (value.khyamdaral || 0)
-            )}
+            {gereeniiZagvar?.turGereeEsekh === true
+              ? formatNumber(
+                  (value.sariinTurees || 0) * (value.buunTulult || 1) +
+                    (((value.sariinTurees || 0) * 12) / 365) *
+                      (value.khungulukhKhugatsaa || 0) -
+                    (value.khyamdaral || 0)
+                )
+              : formatNumber(
+                  (value.sariinTurees || 0) * (value.buunTulult || 1) +
+                    (value.baritsaaAvakhDun || 0) *
+                      (value.baritsaaAvakhKhugatsaa || 0) -
+                    (((value.sariinTurees || 0) * 12) / 365) *
+                      (value.khungulukhKhugatsaa || 0) -
+                    (value.khyamdaral || 0)
+                )}
           </div>
         </Form.Item>
       </div>

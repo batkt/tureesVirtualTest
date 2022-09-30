@@ -1,4 +1,4 @@
-import { Form, Button, DatePicker, InputNumber, Select } from "antd";
+import { Form, Button, DatePicker, InputNumber, Select, Input } from "antd";
 import {
   SolutionOutlined,
   ArrowRightOutlined,
@@ -18,21 +18,21 @@ const formItemLayout = {
   },
 };
 
-const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
+const YurunkhiiMedeele = ({ next, prev, onChange, value, gereeniiZagvar }) => {
   const [form] = Form.useForm();
 
   const onValuesChange = (values, v) => {
     if (!!values?.gereeniiOgnoo && !!value?.khugatsaa) {
       value.duusakhOgnoo = moment(values.gereeniiOgnoo).add(
         value.khugatsaa,
-        "M"
+        gereeniiZagvar.turGereeEsekh === true ? "d" : "M"
       );
       form.setFieldsValue({ ...value, ...values });
     }
     if (!!value?.gereeniiOgnoo && !!values?.khugatsaa) {
       value.duusakhOgnoo = moment(value.gereeniiOgnoo).add(
         values.khugatsaa,
-        "M"
+        gereeniiZagvar.turGereeEsekh === true ? "d" : "M"
       );
       form.setFieldsValue({ ...value, ...values });
     }
@@ -43,10 +43,21 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       form.setFieldsValue({ khugatsaa: sar });
       value.khugatsaa = sar;
     }
-    if (!!values?.tulukhUdur) values.tulukhUdur = [values?.tulukhUdur];
+    if (gereeniiZagvar.turGereeEsekh !== true) {
+      if (!!values?.tulukhUdur) values.tulukhUdur = [values?.tulukhUdur];
+      form.setFieldsValue({ ...value, ...values });
+    }
+    if (gereeniiZagvar.turGereeEsekh === true) {
+      values.tulukhUdur = [moment(values?.gereeniiOgnoo).format("DD")];
+      form.setFieldsValue({ ...value, ...values });
+    }
+
     onChange({ ...value, ...values });
   };
 
+  if (gereeniiZagvar?.turGereeEsekh === true) {
+    value.tulukhUdur = [moment(value?.gereeniiOgnoo).format("DD")];
+  }
   value.gereeniiOgnoo = moment(value.gereeniiOgnoo);
   value.duusakhOgnoo = moment(value.duusakhOgnoo);
 
@@ -96,7 +107,9 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
             max={100}
             min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            placeholder="Гэрээний хугацаа (сараар)"
+            placeholder={`Гэрээний хугацаа ${
+              gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
+            }`}
           />
         </Form.Item>
       </div>
@@ -104,21 +117,34 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
         <Form.Item
           rules={[{ required: true, message: "Төлөлт хийх өдөр бүртгэнэ үү!" }]}
           label="Төлөлт хийх өдөр"
-          extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+          extra={
+            gereeniiZagvar?.turGereeEsekh !== true &&
+            "Төлөлт хийх огноо сар бүрийн / өдөр"
+          }
           name="tulukhUdur"
           required
         >
-          <Select
-            defaultValue={_.get(value, "tulukhUdur.0")}
-            placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
-            prefix={<SolutionOutlined />}
-          >
-            {new Array(31).fill("").map((a, i) => (
-              <Select.Option key={`${i + 1}tulukhUdur`} value={i + 1}>
-                {i + 1}
-              </Select.Option>
-            ))}
-          </Select>
+          {gereeniiZagvar?.turGereeEsekh === true ? (
+            <Input
+              style={{ width: "100%" }}
+              disabled
+              allowClear
+              placeholder="Төлөлт хийх огноо"
+              prefix={<SolutionOutlined />}
+            />
+          ) : (
+            <Select
+              defaultValue={_.get(value, "tulukhUdur.0")}
+              placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
+              prefix={<SolutionOutlined />}
+            >
+              {new Array(31).fill("").map((a, i) => (
+                <Select.Option key={`${i + 1}tulukhUdur`} value={i + 1}>
+                  {i + 1}
+                </Select.Option>
+              ))}
+            </Select>
+          )}
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
