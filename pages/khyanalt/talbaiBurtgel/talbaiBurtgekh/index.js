@@ -57,7 +57,8 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-function Tile({ zasya, token, ...a }) {
+function TalbaiSegment({ token, ...a }) {
+  console.log(a)
   return (
     <div className="box">
       <div className="flex items-center p-7 shadow-none">
@@ -807,7 +808,7 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Сегмент",
+                title: "Ангилал",
                 dataIndex: "segmentuud",
                 ellipsis: true,
                 width: "2rem",
@@ -820,7 +821,7 @@ function talbaiBurtgekh({ token }) {
                           keyValue="segment"
                           className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
                           jagsaalt={segmentuud}
-                          Component={Tile}
+                          Component={TalbaiSegment}
                           componentProps={{ token }}
                         />
                       </div>

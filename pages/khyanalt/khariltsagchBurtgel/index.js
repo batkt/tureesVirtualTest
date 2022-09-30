@@ -1108,7 +1108,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Сегмент",
+                title: "Ангилал",
                 dataIndex: "segmentuud",
                 width: "7rem",
                 align: "center",
