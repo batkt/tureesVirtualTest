@@ -30,7 +30,7 @@ const Tulbur = ({
   const [khuvaari, setKhuvaari] = useState();
 
   useEffect(() => {
-    const zardluud = (value.zardluud = value.zardluud.filter(function (item) {
+    const zardluud = (value.zardluud = value.zardluud?.filter(function (item) {
       return item.dun !== undefined;
     }));
     uilchilgee(token)
