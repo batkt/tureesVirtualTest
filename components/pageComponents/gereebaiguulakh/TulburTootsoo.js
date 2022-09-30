@@ -44,6 +44,8 @@ const Tulbur = ({
       })
       .then(({ data }) => {
         setKhuvaari(data);
+        _.set(value, "avlaga.guilgeenuud", data);
+        onChange({ ...value });
       })
       .catch((e) => {
         aldaaBarigch(e);
@@ -111,21 +113,15 @@ const Tulbur = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item label="Нийт дүн" style={{ marginBottom: 10 }}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
-            {gereeniiZagvar?.turGereeEsekh === true
-              ? formatNumber(
-                  (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                    (((value.sariinTurees || 0) * 12) / 365) *
-                      (value.khungulukhKhugatsaa || 0) -
-                    (value.khyamdaral || 0)
-                )
-              : formatNumber(
-                  (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                    (value.baritsaaAvakhDun || 0) *
-                      (value.baritsaaAvakhKhugatsaa || 0) -
-                    (((value.sariinTurees || 0) * 12) / 365) *
-                      (value.khungulukhKhugatsaa || 0) -
-                    (value.khyamdaral || 0)
-                )}
+            {formatNumber(
+              (value.sariinTurees || 0) * (value.buunTulult || 1) +
+                (value.baritsaaAvakhDun || 0) *
+                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (((value.sariinTurees || 0) * 12) / 365) *
+                  (value.khungulukhKhugatsaa || 0) -
+                (value.khyamdaral || 0) +
+                value.zardluud?.reduce((a, b) => a + b.dun, 0)
+            )}
           </div>
         </Form.Item>
       </div>

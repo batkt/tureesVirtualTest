@@ -94,18 +94,18 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinId = baiguullaga._id;
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
-      if (gereeniiZagvar?.turGereeEsekh !== true) {
-        _.set(data.avlaga, "guilgeenuud", [
-          ...(data.avlaga.guilgeenuud || []),
-          {
-            turul: "baritsaa",
-            ognoo: data.gereeniiOgnoo,
-            khyamdral: 0,
-            undsenDun: data?.baritsaaAvakhDun,
-            tulukhDun: data?.baritsaaAvakhDun,
-          },
-        ]);
-      }
+
+      const guilgeenuud = [...(data.avlaga.guilgeenuud || [])];
+      if (gereeniiZagvar?.turGereeEsekh !== true && data?.baritsaaAvakhDun > 0)
+        guilgeenuud.push({
+          turul: "baritsaa",
+          ognoo: data.gereeniiOgnoo,
+          khyamdral: 0,
+          undsenDun: data?.baritsaaAvakhDun,
+          tulukhDun: data?.baritsaaAvakhDun,
+        });
+
+      _.set(data.avlaga, "guilgeenuud", guilgeenuud);
 
       if (!!data?.unemlekhniiZurag)
         data.unemlekhniiZurag = _.get(data, "unemlekhniiZurag.0.response.id");
