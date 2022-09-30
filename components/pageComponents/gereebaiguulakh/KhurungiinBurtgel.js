@@ -165,12 +165,15 @@ const YurunkhiiMedeele = ({
       });
       return;
     }
-    sulEsekh(v.kod, () => {
+    function talbaiOruulya() {
       value.talbainuud = value.talbainuud || [];
       value.talbainuud.push(v);
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
-    });
+    }
+    if (gereeniiZagvar.turGereeEsekh) {
+      talbaiOruulya();
+    } else sulEsekh(v.kod, talbaiOruulya);
   }
 
   function talbaiUstgaya(index) {
@@ -189,6 +192,18 @@ const YurunkhiiMedeele = ({
     } else if (value.talbainuud.length <= 0) {
       message.warning("Талбай бүртгэнэ үү!");
     } else next();
+  }
+
+  function onChangeM2(i, v) {
+    _.set(value.talbainuud, `${i}.talbainKhemjee`, v);
+    talbainBurtgelBugulyu(value.talbainuud);
+    onChange({ ...value });
+  }
+
+  function onChangeUne(i, v) {
+    _.set(value.talbainuud, `${i}.talbainNiitUne`, v);
+    talbainBurtgelBugulyu(value.talbainuud);
+    onChange({ ...value });
   }
 
   return (
@@ -223,24 +238,66 @@ const YurunkhiiMedeele = ({
             >
               <div className="text-xl font-medium">Код:{talbai.kod}</div>
               <div className="divide-y-2 border">
-                <div className="grid grid-cols-12 divide-x-2">
-                  <div className="col-span-4 flex items-center justify-center text-center">
+                <div
+                  className={`grid ${
+                    gereeniiZagvar?.turGereeEsekh
+                      ? "grid-cols-4"
+                      : "grid-cols-3"
+                  } divide-x-2 py-1`}
+                >
+                  <div className="flex items-center justify-center text-center">
                     Давхар
                   </div>
-                  <div className="col-span-4 flex items-center justify-center text-center">
+                  {gereeniiZagvar.turGereeEsekh && (
+                    <div className="flex items-center justify-center text-center">
+                      сул m<sup>2</sup>
+                    </div>
+                  )}
+                  <div className="flex items-center justify-center text-center">
                     m<sup>2</sup>
                   </div>
-                  <div className="col-span-4 flex items-center justify-center text-center">
+                  <div className="flex items-center justify-center text-center">
                     Түрээсийн төлбөр
                   </div>
                 </div>
-                <div className="grid grid-cols-12 divide-x-2 py-1">
-                  <div className="col-span-4 text-center">{talbai.davkhar}</div>
-                  <div className="col-span-4 text-center">
-                    {talbai.talbainKhemjee}
+                <div
+                  className={`grid ${
+                    gereeniiZagvar?.turGereeEsekh
+                      ? "grid-cols-4"
+                      : "grid-cols-3"
+                  } divide-x-2 py-1`}
+                >
+                  <div className="text-center">{talbai.davkhar}</div>
+                  <div className="text-center">
+                    {talbai.sulKhemjee || talbai.talbainKhemjee}
                   </div>
-                  <div className="col-span-4 pr-2 text-right">
-                    {formatNumber(talbai.talbainNiitUne)}
+                  {gereeniiZagvar.turGereeEsekh && (
+                    <div className="flex items-center justify-center text-center">
+                      <InputNumber
+                        size="small"
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        value={talbai.talbainKhemjee}
+                        onChange={(v) => onChangeM2(index, v)}
+                      />
+                    </div>
+                  )}
+                  <div className="pr-2 text-right">
+                    {gereeniiZagvar.turGereeEsekh ? (
+                      <InputNumber
+                        size="small"
+                        value={talbai.talbainNiitUne}
+                        formatter={(value) =>
+                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        }
+                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        onChange={(v) => onChangeUne(index, v)}
+                      />
+                    ) : (
+                      formatNumber(talbai.talbainNiitUne)
+                    )}
                   </div>
                 </div>
               </div>
