@@ -218,7 +218,7 @@ function talbaiBurtgekh({ token }) {
         </svg>
       ),
       khuvi: 100,
-      utga: "Түр",
+      utga: "Нийтийн эзэмшлийн талбай м²",
       query: { turEsekh: true },
     },
   ];

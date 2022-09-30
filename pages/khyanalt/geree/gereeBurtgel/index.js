@@ -59,6 +59,19 @@ import { renderToString } from "react-dom/server";
 
 //#endregion
 
+function GereeSegmentKharakh({ zasya, token, ...a }) {
+  return (
+    <div className="box">
+      <div className="flex items-center p-7 shadow-none">
+        <div className="border-l-2 border-green-500 pl-4">
+          <div className="font-medium">{a.ner}</div>
+          <div className="text-gray-600">{a.utga}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const sheet = [
   {
     title: "Бүртгэсэн",
@@ -537,6 +550,31 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
+        title: "Ангилал",
+        dataIndex: "segmentuud",
+        width: "7rem",
+        align: "center",
+        render(segmentuud) {
+          return (
+            <Popover trigger="hover" content={
+              <div>
+                <CardList
+                  keyValue="segment"
+                  className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                  jagsaalt={segmentuud}
+                  Component={GereeSegmentKharakh}
+                  componentProps={{ token }}
+                />
+              </div>
+            }>
+              <a className=" flex items-center justify-center">
+                <EyeOutlined style={{ fontSize: "18px" }} />
+              </a>
+            </Popover>
+          );
+        },
+      },
+      {
         title: "Өдөр",
         dataIndex: "udur",
         align: "center",
@@ -874,11 +912,9 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                }`}
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                  } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -889,11 +925,10 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
+                          className={`text-3xl ${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -903,11 +938,10 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                          className={`${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } text-2xl`}
                         >
                           {mur.icon}
                         </div>
