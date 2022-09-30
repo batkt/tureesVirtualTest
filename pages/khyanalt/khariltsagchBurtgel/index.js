@@ -98,7 +98,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
         <Select
           style={{ width: "100%" }}
           className=" "
-          placeholder='Төрөл'
+          placeholder='Нэр'
           name="ner"
           onChange={solikh}
           filterOption={(o) => o}

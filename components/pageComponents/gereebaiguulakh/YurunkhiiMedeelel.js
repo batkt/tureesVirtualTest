@@ -62,7 +62,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
       >
         <Select
           style={{ width: "100%" }}
-          placeholder='Төрөл'
+          placeholder='Нэр'
           onChange={solikh}
         >
           {segment?.jagsaalt?.map((mur) => (
