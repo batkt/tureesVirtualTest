@@ -94,6 +94,7 @@ function GereeBaiguulakh({ token }) {
       data.baiguullagiinId = baiguullaga._id;
       data.gereeniiZagvariinId = gereeniiZagvar._id;
       data.barilgiinId = barilgiinId;
+      data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
 
       const guilgeenuud = [...(data.avlaga.guilgeenuud || [])];
       if (gereeniiZagvar?.turGereeEsekh !== true && data?.baritsaaAvakhDun > 0)

@@ -33,23 +33,24 @@ const Tulbur = ({
     const zardluud = (value.zardluud = value.zardluud?.filter(function (item) {
       return item.dun !== undefined;
     }));
-    uilchilgee(token)
-      .post(`/khuvaariUusgey`, {
-        dun: value.talbainNiitUne,
-        khugatsaa: value.khugatsaa,
-        tulukhUdruud: value.tulukhUdur,
-        ekhlekhOgnoo: value.gereeniiOgnoo,
-        duusakhOgnoo: value.duusakhOgnoo,
-        zardluud: zardluud,
-      })
-      .then(({ data }) => {
-        setKhuvaari(data);
-        _.set(value, "avlaga.guilgeenuud", data);
-        onChange({ ...value });
-      })
-      .catch((e) => {
-        aldaaBarigch(e);
-      });
+    if (!!value.talbainNiitUne && !!value.khugatsaa)
+      uilchilgee(token)
+        .post(`/khuvaariUusgey`, {
+          dun: value.talbainNiitUne,
+          khugatsaa: value.khugatsaa,
+          tulukhUdruud: value.tulukhUdur,
+          ekhlekhOgnoo: value.gereeniiOgnoo,
+          duusakhOgnoo: value.duusakhOgnoo,
+          zardluud: zardluud,
+        })
+        .then(({ data }) => {
+          setKhuvaari(data);
+          _.set(value, "avlaga.guilgeenuud", data);
+          onChange({ ...value });
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
   }, []);
 
   function onFinish() {
