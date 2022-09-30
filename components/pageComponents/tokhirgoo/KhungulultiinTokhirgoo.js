@@ -126,7 +126,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setKhungulultiinTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.bukhAjiltanKhungulultOruulakhEsekh": v,
+                      bukhAjiltanKhungulultOruulakhEsekh: v,
                     }))
                   }
                 />
@@ -149,7 +149,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setKhungulultiinTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.deedKhungulultiinKhuvi": v,
+                      deedKhungulultiinKhuvi: v,
                     }))
                   }
                 />

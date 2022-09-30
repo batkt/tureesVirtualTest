@@ -38,7 +38,7 @@ function EBarimt({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.eBarimtAshiglakhEsekh": v,
+                      eBarimtAshiglakhEsekh: v,
                     }))
                   }
                 />
@@ -60,7 +60,7 @@ function EBarimt({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.eBarimtAutomataarShivikh": v,
+                      eBarimtAutomataarShivikh: v,
                     }))
                   }
                 />

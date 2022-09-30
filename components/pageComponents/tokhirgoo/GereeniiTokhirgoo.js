@@ -124,7 +124,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.gereeAvtomataarSungakhEsekh": v,
+                      gereeAvtomataarSungakhEsekh: v,
                     }))
                   }
                 />
@@ -146,7 +146,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.bukhAjiltanGereendZasvarOruulakhEsekh": v,
+                      bukhAjiltanGereendZasvarOruulakhEsekh: v,
                     }))
                   }
                 />
@@ -168,7 +168,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.baritsaaAvakhSar": v,
+                      baritsaaAvakhSar: v,
                     }))
                   }
                 />
@@ -189,7 +189,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.baritsaaAvakhEsekh": v,
+                      baritsaaAvakhEsekh: v,
                     }))
                   }
                 />
@@ -215,7 +215,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.baritsaaBairshuulakhKhugatsaa": v,
+                      baritsaaBairshuulakhKhugatsaa: v,
                     }))
                   }
                 />
@@ -238,7 +238,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.aldangiinKhuvi": v,
+                      aldangiinKhuvi: v,
                     }))
                   }
                 />
@@ -262,7 +262,7 @@ function KhuviinMedeelel({
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.aldangiChuluulukhKhonog": v,
+                      aldangiChuluulukhKhonog: v,
                     }))
                   }
                 />

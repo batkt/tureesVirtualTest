@@ -59,7 +59,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.mailNevtrekhNer": target.value,
+                      mailNevtrekhNer: target.value,
                     }))
                   }
                   rules={[
@@ -78,7 +78,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.mailPassword": target.value,
+                      mailPassword: target.value,
                     }))
                   }
                   rules={[
@@ -96,7 +96,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.mailHost": target.value,
+                      mailHost: target.value,
                     }))
                   }
                 >
@@ -108,7 +108,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.mailPort": target.value,
+                      mailPort: target.value,
                     }))
                   }
                 >

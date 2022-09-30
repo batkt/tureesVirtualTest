@@ -8,9 +8,10 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
   useEffect(() => {
     if (baiguullaga !== undefined) {
       setZogsoolTokhirgoo({
-        "tokhirgoo.zogsooliinMinut": baiguullaga?.tokhirgoo?.zogsooliinMinut,
-        "tokhirgoo.zogsooliinDun": baiguullaga?.tokhirgoo?.zogsooliinDun,
-        "tokhirgoo.zogsooliinKhungulukhMinut": baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut,
+        zogsooliinMinut: baiguullaga?.tokhirgoo?.zogsooliinMinut,
+        zogsooliinDun: baiguullaga?.tokhirgoo?.zogsooliinDun,
+        zogsooliinKhungulukhMinut:
+          baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut,
       });
     }
   }, [baiguullaga]);
@@ -30,11 +31,11 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
     if (!zogsoolTokhirgoo) return false;
     return (
       baiguullaga?.tokhirgoo?.zogsooliinMinut !==
-        zogsoolTokhirgoo["tokhirgoo.zogsooliinMinut"] ||
+        zogsoolTokhirgoo["zogsooliinMinut"] ||
       baiguullaga?.tokhirgoo?.zogsooliinDun !==
-        zogsoolTokhirgoo["tokhirgoo.zogsooliinDun"] ||
-        baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
-          zogsoolTokhirgoo["tokhirgoo.zogsooliinKhungulukhMinut"]
+        zogsoolTokhirgoo["zogsooliinDun"] ||
+      baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
+        zogsoolTokhirgoo["zogsooliinKhungulukhMinut"]
     );
   }, [zogsoolTokhirgoo, baiguullaga]);
 
@@ -55,11 +56,11 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
               </div>
               <div className="ml-auto">
                 <Input
-                  value={zogsoolTokhirgoo?.["tokhirgoo.zogsooliinMinut"]}
+                  value={zogsoolTokhirgoo?.["zogsooliinMinut"]}
                   onChange={({ target }) =>
                     setZogsoolTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.zogsooliinMinut": target.value,
+                      zogsooliinMinut: target.value,
                     }))
                   }
                 />
@@ -74,11 +75,11 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
               </div>
               <div className="ml-auto">
                 <Input
-                  value={zogsoolTokhirgoo?.["tokhirgoo.zogsooliinDun"]}
+                  value={zogsoolTokhirgoo?.["zogsooliinDun"]}
                   onChange={({ target }) =>
                     setZogsoolTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.zogsooliinDun": target.value,
+                      zogsooliinDun: target.value,
                     }))
                   }
                 />
@@ -93,11 +94,11 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
               </div>
               <div className="ml-auto">
                 <Input
-                  value={zogsoolTokhirgoo?.["tokhirgoo.zogsooliinKhungulukhMinut"]}
+                  value={zogsoolTokhirgoo?.["zogsooliinKhungulukhMinut"]}
                   onChange={({ target }) =>
                     setZogsoolTokhirgoo((a) => ({
                       ...(a || {}),
-                      "tokhirgoo.zogsooliinKhungulukhMinut": target.value,
+                      zogsooliinKhungulukhMinut: target.value,
                     }))
                   }
                 />
