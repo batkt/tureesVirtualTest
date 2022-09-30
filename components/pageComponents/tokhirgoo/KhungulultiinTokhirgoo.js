@@ -7,7 +7,6 @@ import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 function KhuviinMedeelel({
   ajiltan = {},
   token,
-  ajiltanMutate,
   baiguullaga,
   baiguullagaMutate,
 }) {
@@ -120,7 +119,7 @@ function KhuviinMedeelel({
               </div>
               <div className="ml-auto">
                 <Switch
-                  checked={
+                  defaultChecked={
                     baiguullaga?.tokhirgoo?.bukhAjiltanKhungulultOruulakhEsekh
                   }
                   onChange={(v) =>
