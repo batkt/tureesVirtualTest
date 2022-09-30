@@ -458,7 +458,7 @@ function TalbaiBurtgekh({ token }) {
               </Form.Item>
               <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх">
                 <Switch
-                  value={talbaiState.niitiinTalbaiEsekh}
+                  defaultChecked={talbaiState.niitiinTalbaiEsekh}
                   onChange={(e) => onChange("niitiinTalbaiEsekh", e)}
                 />
               </Form.Item>
@@ -537,7 +537,10 @@ function TalbaiBurtgekh({ token }) {
                         davkhar={talbaiState.davkhar}
                         baiguullaga={baiguullaga}
                         barilgiinId={barilgiinId}
-                        points={JSON.parse(JSON.stringify(talbaiState.bairshil))}
+                        points={
+                          talbaiState.bairshil &&
+                          JSON.parse(JSON.stringify(talbaiState.bairshil))
+                        }
                         onFinish={(v) => {
                           onChange("bairshil", v);
                           onClose();
@@ -607,16 +610,18 @@ function TalbaiBurtgekh({ token }) {
                                       .classList.remove("hidden");
                                     document.getElementById(
                                       `${key}-image`
-                                    ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id
-                                    }/${e.fileList[e.fileList.length - 1]
-                                      ?.response?.id
-                                      }`;
+                                    ).src = `${url}/zuragAvya/khurungu/${
+                                      baiguullaga._id
+                                    }/${
+                                      e.fileList[e.fileList.length - 1]
+                                        ?.response?.id
+                                    }`;
                                   }}
                                 >
                                   <div
                                     className={
                                       data.khurunguud &&
-                                        !!data.khurunguud[key]?.zurgiinId
+                                      !!data.khurunguud[key]?.zurgiinId
                                         ? "hidden"
                                         : "text-sm"
                                     }
@@ -627,7 +632,7 @@ function TalbaiBurtgekh({ token }) {
                                   <img
                                     className={
                                       data.khurunguud &&
-                                        !data.khurunguud[key]?.zurgiinId
+                                      !data.khurunguud[key]?.zurgiinId
                                         ? "hidden"
                                         : "text-sm"
                                     }
