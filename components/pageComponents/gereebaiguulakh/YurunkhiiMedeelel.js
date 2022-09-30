@@ -33,9 +33,10 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
+const query = { turul: "geree" }
 
 function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
-  const segment = useJagsaalt("/segment")
+  const segment = useJagsaalt("/segment", query)
   const [turul, setTurul] = useState()
   const [songosonSegment, setSongosonSegment] = useState()
 

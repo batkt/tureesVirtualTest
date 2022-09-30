@@ -66,6 +66,76 @@ function checkUtas(utasnuud, utga) {
   return true;
 }
 
+
+const query = { turul: "khariltsagch" }
+
+function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
+
+  const segment = useJagsaalt("/segment", query)
+  const [turul, setTurul] = useState()
+  const [songosonSegment, setSongosonSegment] = useState()
+  console.log(songosonSegment)
+
+  function solikh(value) {
+    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    shineSolikh("ner", value);
+  }
+  function solikhtTurul(value) {
+    shineSolikh("utga", value);
+  }
+  function shineSolikh(talbar, utga) {
+    setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
+  }
+
+  return <>
+    <div className="flex flex-row justify-end space-x-2 ">
+      <Form.Item
+        className="w-full "
+        {...restField}
+        name={[name, "ner"]}
+        fieldKey={[fieldKey, "ner"]}
+      >
+        <Select
+          style={{ width: "100%" }}
+          className=" "
+          placeholder='Төрөл'
+          name="ner"
+          onChange={solikh}
+          filterOption={(o) => o}
+        >
+          {segment?.jagsaalt.map((mur) => (
+            <Select.Option value={mur?.ner}>
+              {mur?.ner}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        className="w-full "
+        {...restField}
+        name={[name, "utga"]}
+        fieldKey={[fieldKey, "utga"]}>
+        <Select
+          style={{ width: "100%" }}
+          placeholder='Утга'
+          onChange={solikhtTurul}
+        >
+          {turul?.utguud?.map((a) => (
+            <Select.Option value={a}>
+              {a}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <CloseCircleOutlined
+        className="pt-2"
+        onClick={() => remove(name)}
+      />
+    </div>
+  </>
+}
+
+
 function Tile({ zasya, token, ...a }) {
   return (
     <div className="box">
@@ -624,62 +694,18 @@ function AjiltanBurtgel({ token }) {
           </div>
 
           <div
-            className=""
-            data-aos="fade-right"
+            data-aos="fade-right "
             data-aos-duration="1000"
             data-aos-delay="700">
-            <Form.List name="segmentuud" >
+            <Form.List name="segmentuud" className=" " >
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, fieldKey, field, ...restField }) => (
-                    <div className="">
-                      <Form className="flex space-x-2 ">
-
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          name={[name, "ner"]}
-                          fieldKey={[fieldKey, "ner"]}
-                        >
-                          <Select
-                            style={{ width: "100%" }}
-                            placeholder='Төрөл'
-                            name="ner"
-                            onChange={solikh}
-                          >
-                            {segment?.jagsaalt?.map((mur) => (
-                              <Select.Option value={mur?.ner}>
-                                {mur?.ner}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                        <Form.Item
-                          className="w-full"
-                          {...restField}
-                          name={[name, "utga"]}
-                          fieldKey={[fieldKey, "utga"]}>
-                          <Select
-                            style={{ width: "100%" }}
-                            placeholder='Утга'
-                            onChange={solikhtTurul}
-                          >
-                            {turul?.utguud?.map((a) => (
-                              <Select.Option value={a}>
-                                {a}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                        <CloseCircleOutlined
-                          className="mt-2 ml-2"
-                          onClick={() => remove(name)}
-                        />
-
-                      </Form>
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <div key={key}  >
+                      <YalgakhUtga key={key} name={name} fieldKey={fieldKey}  {...restField} remove={remove} />
                     </div>
                   ))}
-                  <Form.Item className="w-full py-2">
+                  <Form.Item >
                     <Button
                       icon={<PlusOutlined />}
                       className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "

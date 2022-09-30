@@ -146,7 +146,7 @@ function Drawer(props) {
 
   if (!plan)
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 ">
         <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
           План зураг оруулаагүй байна
         </div>
@@ -162,7 +162,17 @@ function Drawer(props) {
     );
 
   return (
-    <div>
+    <div className="flex flex-col">
+      <div className="flex  space-x-3 justify-end">
+        <div className="flex space-x-3 border-2 border-dashed p-1">
+          <div className="h-5 bg-green-400 w-5 border-2"></div>
+          <div> Идэвхтэй</div>
+        </div>
+        <div className="flex space-x-3 border-2 border-dashed p-1">
+          <div className="h-5 bg-red-400 w-5 border-2"></div>
+          <div>Идэвхгүй </div>
+        </div>
+      </div>
       <Stage
         width={urgun}
         height={undur}
@@ -224,7 +234,7 @@ function Drawer(props) {
                 key={mur._id}
                 points={flattenedPoints}
                 stroke="black"
-                fill={mur.idevkhiteiEsekh ? 'red' : 'lightgreen'}
+                fill={mur.idevkhiteiEsekh ? 'lightgreen' : 'red'}
                 opacity={0.3}
                 strokeWidth={5}
                 closed={true}
@@ -273,16 +283,6 @@ function Drawer(props) {
             <ClearOutlined />
             Шинээр зурах
           </Button>
-        </div>
-        <div className="flex  space-x-3">
-          <div className="flex space-x-3 border-2 border-dashed p-1">
-            <div className="h-5 bg-red-400 w-5 border-2"></div>
-            <div>Идвэхтэй</div>
-          </div>
-          <div className="flex space-x-3 border-2 border-dashed p-1">
-            <div className="h-5 bg-green-400 w-5 border-2"></div>
-            <div>Идвэхгүй</div>
-          </div>
         </div>
       </div>
     </div>

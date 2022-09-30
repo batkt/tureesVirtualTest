@@ -106,11 +106,11 @@ class App extends Component {
           <div className=" items-end w-full pb-1  h-8 flex justify-end space-x-10 " >
             <div className="flex">
               <div className="border-2 w-5 bg-green-300 " />
-              <div className="pr-10 pl-2">Идэвхгүй</div>
+              <div className="pr-10 pl-2">Идэвхтэй</div>
             </div>
             <div className="flex ">
               <div className="border-2 w-5 bg-red-400 " />
-              <div className="pl-2">Идэвхтэй</div>
+              <div className="pl-2">Идэвхгүй</div>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@ class App extends Component {
                   key={mur._id}
                   points={flattenedPoints}
                   stroke="black"
-                  fill={mur.idevkhiteiEsekh ? 'red' : 'lightgreen'}
+                  fill={mur.idevkhiteiEsekh ? 'lightgreen' : 'red'}
                   opacity={0.3}
                   strokeWidth={5}
                   closed={true}

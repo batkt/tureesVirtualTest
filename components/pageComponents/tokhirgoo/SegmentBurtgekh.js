@@ -59,6 +59,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                 <Select >
                     <Select.Option key='khariltsagch' value='khariltsagch'>Харилцагч</Select.Option>
                     <Select.Option key='talbai' value='talbai'>Талбай</Select.Option>
+                    <Select.Option key='geree' value='geree'>Гэрээ</Select.Option>
                 </Select>
             </Form.Item>
             <Form.Item
