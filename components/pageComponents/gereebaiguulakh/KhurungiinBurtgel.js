@@ -125,26 +125,22 @@ const YurunkhiiMedeele = ({
   };
 
   function talbainBurtgelBugulyu(talbainuud) {
-    {
-      gereeniiZagvar?.turGereeEsekh !== true
-        ? (value.baritsaaAvakhDun = talbainuud.reduce(
-            (a, b) => a + Number(b.talbainNiitUne || 0),
-            0
-          ))
-        : (value.talbainNiitUne = talbainuud.reduce(
-            (a, b) => a + Number(b.talbainNiitUne || 0),
-            0
-          ));
-    }
+    gereeniiZagvar?.turGereeEsekh !== true
+      ? (value.baritsaaAvakhDun = talbainuud.reduce(
+          (a, b) => a + Number(b.talbainNiitUne || 0),
+          0
+        ))
+      : (value.talbainNiitUne = talbainuud.reduce(
+          (a, b) => a + Number(b.talbainNiitUne || 0),
+          0
+        ));
     value.sariinTurees = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
     );
     value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
-    {
-      gereeniiZagvar?.turGereeEsekh !== true &&
-        (value.talbainNiitUne = value.baritsaaAvakhDun);
-    }
+    gereeniiZagvar?.turGereeEsekh !== true &&
+      (value.talbainNiitUne = value.baritsaaAvakhDun);
     value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
