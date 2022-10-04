@@ -32,9 +32,8 @@ import {
   message,
   Input,
   notification,
-  Menu,
-  Checkbox,
 } from "antd";
+import { TbBoxMultiple } from 'react-icons/tb';
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
 import formatNumber from "tools/function/formatNumber";
@@ -573,8 +572,8 @@ function ZakhialgiinKhyanalt() {
                 />
               </div>
             }>
-              <a className=" flex items-center justify-center  hover:scale-150">
-                <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
+              <a className=" flex items-center justify-center  hover:scale-150 " >
+                <TbBoxMultiple className="text-xl" />
               </a>
             </Popover>
           );
