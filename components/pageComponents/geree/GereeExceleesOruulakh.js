@@ -1,11 +1,11 @@
 import React from "react";
 import { DatePicker, message, Select, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { url } from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
-import local from 'antd/lib/date-picker/locale/mn_MN'
+import local from "antd/lib/date-picker/locale/mn_MN";
 import _ from "lodash";
-import moment from 'moment'
+import moment from "moment";
 function GereeExceleesOruulakh(
   {
     token,
@@ -16,15 +16,19 @@ function GereeExceleesOruulakh(
     zagvariinZam,
     onFinish,
     baiguullaga,
-    barilgiinId
+    barilgiinId,
   },
   ref
 ) {
   const [zagvariinId, setGereeniiZagvar] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
-  
-  const { gereeniiZagvarGaralt } = useGereeniiZagvar(token, baiguullaga?._id,barilgiinId);
+
+  const { gereeniiZagvarGaralt } = useGereeniiZagvar(
+    token,
+    baiguullaga?._id,
+    barilgiinId
+  );
 
   React.useImperativeHandle(
     ref,
@@ -37,9 +41,25 @@ function GereeExceleesOruulakh(
     []
   );
 
+  function zagvarAvya() {
+    uilchilgee(token)
+      .get(`/${zagvariinZam}`, { responseType: "blob" })
+      .then(({ data }) => {
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        // the filename you want
+        a.download = `${zagvariinZam}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      });
+  }
+
   return (
     <div>
-      <div className='w-full grid grid-cols-2 gap-4'>
+      <div className="grid w-full grid-cols-2 gap-4">
         <DatePicker.MonthPicker locale={local} onChange={setOgnoo} />
         <Select
           placeholder="Гэрээний загвар"
@@ -47,7 +67,9 @@ function GereeExceleesOruulakh(
           style={{ width: "100%" }}
         >
           {gereeniiZagvarGaralt?.jagsaalt?.map((a) => (
-            <Select.Option key={a._id} value={a._id}>{a.ner}</Select.Option>
+            <Select.Option key={a._id} value={a._id}>
+              {a.ner}
+            </Select.Option>
           ))}
         </Select>
       </div>
@@ -58,7 +80,11 @@ function GereeExceleesOruulakh(
           showUploadList={false}
           multiple={false}
           name="file"
-          data={{ barilgiinId,zagvariinId,ognoo:moment(ognoo).format('YYYY-MM-01 00:00:00')}}
+          data={{
+            barilgiinId,
+            zagvariinId,
+            ognoo: moment(ognoo).format("YYYY-MM-01 00:00:00"),
+          }}
           action={`${url}/${zam}`}
           method="POST"
           headers={{ Authorization: `bearer ${token}` }}
@@ -97,9 +123,8 @@ function GereeExceleesOruulakh(
       <div className="mt-5" />
       {zagvariinZam && (
         <a
-          className="cursor-pointer text-blue-600 font-medium"
-          href={url + `/${zagvariinZam}`}
-          download
+          className="cursor-pointer font-medium text-blue-600"
+          onClick={zagvarAvya}
         >
           Загвар татах
         </a>
