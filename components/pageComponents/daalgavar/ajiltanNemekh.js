@@ -9,7 +9,7 @@ function ajiltanNemekh(
 ) {
   const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullaga?._id);
 
- const [songogdsonAjiltan, setSongogdsonAjiltan] = useState()
+  const [songogdsonAjiltan, setSongogdsonAjiltan] = useState();
 
   React.useImperativeHandle(
     ref,
@@ -18,7 +18,7 @@ function ajiltanNemekh(
         destroy();
       },
       khadgalya() {
-        if (!songogdsonAjiltan){
+        if (!songogdsonAjiltan) {
           notification.warn({
             description: "Ажилтан сонгоно уу !",
             message: "Анхаар",
@@ -29,7 +29,7 @@ function ajiltanNemekh(
           ...v,
           ["ajiltniiId"]: songogdsonAjiltan._id,
           ["ajiltniiNer"]: songogdsonAjiltan.ner,
-        }))
+        }));
         destroy();
       },
     }),
@@ -42,12 +42,10 @@ function ajiltanNemekh(
         <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
           <div
             className="flex flex-row justify-between"
-            onClick={() =>
-              setSongogdsonAjiltan(mur)
-            }
+            onClick={() => setSongogdsonAjiltan(mur)}
           >
             <span>
-              {mur.ovog[0]}.{mur.ner}
+              {mur.ovog && mur.ovog[0]}.{mur.ner}
             </span>
             <span>{mur.register}</span>
           </div>
