@@ -933,3 +933,6 @@ input[type="number"] {
 .ant-drawer-close {
   @apply dark:text-white !important;
 }
+.ant-btn-default {
+  @apply dark:text-white !important;
+}

@@ -1249,7 +1249,7 @@ function AjiltanBurtgel({ token }) {
                         className=" flex items-center justify-center  hover:scale-150"
                         onClick={() => tuukh(data)}
                       >
-                        <GiBackwardTime style={{ fontSize: "18px" }} />
+                        <GiBackwardTime className="text-xl" />
                       </a>
                     </Popover>
                   );
