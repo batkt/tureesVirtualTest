@@ -54,6 +54,7 @@ import Aos from "aos";
 import _ from "lodash";
 import TextArea from "antd/lib/input/TextArea";
 import useJagsaalt from "hooks/useJagsaalt";
+import { TbBoxMultiple } from "react-icons/tb";
 
 const iconColor = { fontSize: "18px" };
 
@@ -1122,7 +1123,7 @@ function AjiltanBurtgel({ token }) {
                       </div>
                     }>
                       <a className=" flex items-center justify-center  hover:scale-150">
-                        <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
+                        <TbBoxMultiple className="text-xl" />
                       </a>
                     </Popover>
                   );
