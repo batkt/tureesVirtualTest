@@ -142,6 +142,7 @@ const sheet = [
     },
     showSorterTooltip: false,
   },
+
   {
     title: "Эхлэх",
     dataIndex: "gereeniiOgnoo",
@@ -207,6 +208,7 @@ const Tailbar = React.forwardRef(
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
+
 
     React.useImperativeHandle(
       ref,
@@ -379,6 +381,8 @@ function ZakhialgiinKhyanalt() {
     content: () => componentRef.current,
   });
 
+
+  console.log(shuult.utga)
   const khyanaltiinDun = [
     {
       too:
@@ -458,6 +462,7 @@ function ZakhialgiinKhyanalt() {
     },
   ];
 
+
   const columns = useMemo(() => {
     var jagsaalt = [
       {
@@ -504,7 +509,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "gereeniiOgnoo",
         align: "center",
         ellipsis: true,
-        width: "6rem",
+        width: "7rem",
         render: (data) => {
           return moment(data).format("YYYY-MM-DD");
         },
@@ -516,7 +521,7 @@ function ZakhialgiinKhyanalt() {
           shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         align: "center",
         ellipsis: true,
-        width: "6rem",
+        width: "7rem",
         render: (data) => {
           let ognoo =
             shuult.utga === "Цуцласан"
@@ -549,10 +554,11 @@ function ZakhialgiinKhyanalt() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+
       {
-        title: "Ангилал",
+        title: "Төрөл",
         dataIndex: "segmentuud",
-        width: "7rem",
+        width: "4rem",
         align: "center",
         render(segmentuud) {
           return (
@@ -567,8 +573,8 @@ function ZakhialgiinKhyanalt() {
                 />
               </div>
             }>
-              <a className=" flex items-center justify-center">
-                <EyeOutlined style={{ fontSize: "18px" }} />
+              <a className=" flex items-center justify-center  hover:scale-150">
+                <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
               </a>
             </Popover>
           );
@@ -589,7 +595,31 @@ function ZakhialgiinKhyanalt() {
           moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
       },
     ];
-
+    if (shuult.utga == "Цуцласан") {
+      jagsaalt.push({
+        title: "Цуцалсан шалтгаан",
+        dataIndex: "gereeniiTuukhuud",
+        align: "center",
+        ellipsis: true,
+        width: "6rem",
+        render: (gereeniiTuukhuud) => {
+          return <div>
+            <Popover trigger="hover" content={
+              <div>
+                {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
+              </div>
+            }>
+              <a className=" flex items-center justify-center hover:scale-150 ">
+                <img src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png" data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png" alt="Cancel" width={23}></img>
+              </a>
+            </Popover>
+          </div>;
+        },
+        showSorterTooltip: false,
+        defaultSortOrder: "descend",
+        sorter: () => 0,
+      });
+    }
     return [
       ...jagsaalt,
       ...shineBagana,
@@ -687,7 +717,7 @@ function ZakhialgiinKhyanalt() {
         ),
       },
     ];
-  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana]);
+  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana,]);
 
   function refresh() {
     gereeniiMedeelelMutate();
@@ -909,6 +939,7 @@ function ZakhialgiinKhyanalt() {
       <Card className="cardgrid col-span-12 p-5 ">
         <div className="grid w-full grid-cols-6 gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
+
             return (
               <div
                 key={index}
@@ -951,7 +982,8 @@ function ZakhialgiinKhyanalt() {
                 </div>
               </div>
             );
-          })}
+          }
+          )}
         </div>
         <div className="mt-5 flex flex-row">
           <div
@@ -1034,6 +1066,7 @@ function ZakhialgiinKhyanalt() {
                     return formatNumber(aldangiinUldegdel || 0);
                   },
                 },
+
               ]}
             />
             <Popover

@@ -60,7 +60,16 @@ function ZardalBurtgel(
         </Select>
       </Form.Item>
       <Form.Item label="Тариф" name="tariff">
-        <InputNumber style={{ width: "100%" }} />
+        <InputNumber style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(
+              /\B(?=(\d{3})+(?!\d))/g,
+              ","
+            )
+          }
+          parser={(value) =>
+            value.replace(/\$\s?|(,*)/g, "")
+          } />
       </Form.Item>
     </Form>
   );
