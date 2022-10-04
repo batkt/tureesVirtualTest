@@ -64,11 +64,11 @@ const normFile = (e) => {
 function TalbaiSegment({ token, ...a }) {
   console.log(a)
   return (
-    <div className="box">
+    <div className="box dark:text-white">
       <div className="flex items-center p-7 shadow-none">
         <div className="border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600">{a.utga}</div>
+          <div className="text-gray-600 dark:text-gray-300">{a.utga}</div>
         </div>
       </div>
     </div>
@@ -884,7 +884,7 @@ function talbaiBurtgekh({ token }) {
                           trigger="click"
                         >
                           <a className="flex items-center justify-center  hover:scale-125 ">
-                            <Badge count={data?.khurunguud?.length} className="">
+                            <Badge count={data?.khurunguud?.length}>
                               <MdOutlineInventory className="text-xl dark:text-gray-300 " />
                             </Badge>
                           </a>

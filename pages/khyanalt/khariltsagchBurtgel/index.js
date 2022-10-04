@@ -55,6 +55,7 @@ import _ from "lodash";
 import TextArea from "antd/lib/input/TextArea";
 import useJagsaalt from "hooks/useJagsaalt";
 import { TbBoxMultiple } from "react-icons/tb";
+import { GiBackwardTime } from "react-icons/gi";
 
 const iconColor = { fontSize: "18px" };
 
@@ -139,11 +140,11 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
 
 function Tile({ zasya, token, ...a }) {
   return (
-    <div className="box">
+    <div className="box dark:text-white">
       <div className="flex items-center p-7 shadow-none">
         <div className="border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600">{a.utga}</div>
+          <div className="text-gray-600 dark:text-gray-300">{a.utga}</div>
         </div>
       </div>
     </div>
@@ -1136,7 +1137,7 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render(email) {
                   return (
-                    <Popover trigger="hover" content={<div>{email}</div>}>
+                    <Popover trigger="hover" content={<div className="dark:text-white">{email}</div>}>
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <MailOutlined style={{ fontSize: "18px" }} />
                       </a>
@@ -1151,7 +1152,7 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (khayag) => {
                   return (
-                    <Popover trigger="hover" content={<div>{khayag}</div>}>
+                    <Popover trigger="hover" content={<div className="dark:text-white" >{khayag}</div>}>
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <EnvironmentOutlined style={{ fontSize: "18px" }} />
                       </a>
@@ -1248,7 +1249,7 @@ function AjiltanBurtgel({ token }) {
                         className=" flex items-center justify-center  hover:scale-150"
                         onClick={() => tuukh(data)}
                       >
-                        <EyeOutlined style={{ fontSize: "18px" }} />
+                        <GiBackwardTime style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
                   );
