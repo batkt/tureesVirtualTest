@@ -1,9 +1,10 @@
 import { Select, Form } from "antd";
-
+import { modal } from "components/ant/Modal";
 import React, { Component } from "react";
-import { Stage, Layer, Line, Image, Text, Circle, Group, Rect } from "react-konva";
+import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
 import uilchilgee, { url } from "services/uilchilgee";
 import { bairshilKhurvuuljAvakh, undur, urgun } from ".";
+import PlanMedeelel from "./PlanMedeelel";
 
 class URLImage extends React.Component {
   state = {
@@ -53,6 +54,7 @@ class App extends Component {
     isFinished: !!this.props.points?.length || false
   };
 
+
   componentDidMount() {
     const barilga = this.props.baiguullaga?.barilguud?.find(a => a._id === this.props.barilgiinId)
 
@@ -75,6 +77,7 @@ class App extends Component {
       })
     })
   }
+
   render() {
     const {
       state: { planZurag, talbainuud },
@@ -82,6 +85,19 @@ class App extends Component {
     } = this;
     const barilga = props.baiguullaga?.barilguud?.find(a => a._id === props.barilgiinId)
 
+    function medeelelKharya(mur) {
+      uilchilgee(props.token).get(`/talbai/${mur._id}`).then((response) => {
+        modal({
+          title: "План зураг мэдээлэл",
+          content: (
+            <PlanMedeelel
+              data={response.data}
+            />
+          ),
+          footer: [],
+        });
+      })
+    }
     return (
       <div>
         <div className="flex space-x-3">
@@ -134,6 +150,7 @@ class App extends Component {
                   opacity={0.3}
                   strokeWidth={5}
                   closed={true}
+                  onClick={() => medeelelKharya(mur)}
                 />
               )
             }

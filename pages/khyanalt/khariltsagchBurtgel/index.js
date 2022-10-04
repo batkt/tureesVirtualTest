@@ -314,8 +314,6 @@ function AjiltanBurtgel({ token }) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
   }
 
-
-
   function tuukh(data) {
     getListMethod(
       "geree",
@@ -334,8 +332,6 @@ function AjiltanBurtgel({ token }) {
       })
       .catch(aldaaBarigch);
   }
-
-
 
   function khariltsagchBurtgekh() {
     if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
@@ -974,7 +970,7 @@ function AjiltanBurtgel({ token }) {
                 </div>
               )}
               placement="bottom"
-              trigger="click"
+              trigger="hover"
             >
               <Button
                 type="primary"
@@ -1108,7 +1104,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Ангилал",
+                title: "Төрөл",
                 dataIndex: "segmentuud",
                 width: "7rem",
                 align: "center",
@@ -1125,8 +1121,8 @@ function AjiltanBurtgel({ token }) {
                         />
                       </div>
                     }>
-                      <a className=" flex items-center justify-center hover:bg-gray-200">
-                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      <a className=" flex items-center justify-center  hover:scale-150">
+                        <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
                       </a>
                     </Popover>
                   );
@@ -1139,8 +1135,8 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render(email) {
                   return (
-                    <Popover trigger="click" content={<div>{email}</div>}>
-                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                    <Popover trigger="hover" content={<div>{email}</div>}>
+                      <a className=" flex items-center justify-center  hover:scale-150">
                         <MailOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
@@ -1154,8 +1150,8 @@ function AjiltanBurtgel({ token }) {
                 align: "center",
                 render: (khayag) => {
                   return (
-                    <Popover trigger="click" content={<div>{khayag}</div>}>
-                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                    <Popover trigger="hover" content={<div>{khayag}</div>}>
+                      <a className=" flex items-center justify-center  hover:scale-150">
                         <EnvironmentOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
@@ -1170,7 +1166,7 @@ function AjiltanBurtgel({ token }) {
                 render: (data) => {
                   return (
                     <Popover
-                      trigger="click"
+                      trigger="hover"
                       content={
                         <Table
                           bordered
@@ -1248,7 +1244,7 @@ function AjiltanBurtgel({ token }) {
                       }
                     >
                       <a
-                        className=" flex items-center justify-center hover:bg-gray-200"
+                        className=" flex items-center justify-center  hover:scale-150"
                         onClick={() => tuukh(data)}
                       >
                         <EyeOutlined style={{ fontSize: "18px" }} />
@@ -1264,7 +1260,7 @@ function AjiltanBurtgel({ token }) {
                   <div className="flex flex-row">
                     <Popover
                       placement="bottom"
-                      trigger="click"
+                      trigger="hover"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
                           <a
@@ -1305,7 +1301,7 @@ function AjiltanBurtgel({ token }) {
                         </div>
                       )}
                     >
-                      <a className="flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700">
+                      <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>

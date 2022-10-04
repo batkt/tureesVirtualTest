@@ -701,7 +701,7 @@ function talbaiBurtgekh({ token }) {
                 width: "1rem",
               },
               {
-                title: "бүртгэсэн Огноо",
+                title: "Бүртгэсэн Огноо",
                 dataIndex: "createdAt",
                 ellipsis: true,
                 width: "2.5rem",
@@ -808,10 +808,10 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Ангилал",
+                title: "Төрөл",
                 dataIndex: "segmentuud",
                 ellipsis: true,
-                width: "2rem",
+                width: "1.5rem",
                 align: "center",
                 render(segmentuud) {
                   return (
@@ -826,8 +826,8 @@ function talbaiBurtgekh({ token }) {
                         />
                       </div>
                     }>
-                      <a className=" flex items-center justify-center hover:bg-gray-200">
-                        <EyeOutlined style={{ fontSize: "18px" }} />
+                      <a className=" flex items-center justify-center  hover:scale-150">
+                        <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
                       </a>
                     </Popover>
                   );
@@ -879,11 +879,9 @@ function talbaiBurtgekh({ token }) {
                           }
                           trigger="click"
                         >
-                          <a className="flex items-center justify-center hover:bg-gray-200">
+                          <a className="flex items-center justify-center  hover:scale-150">
                             <Badge count={data?.khurunguud?.length}>
-                              <EyeOutlined
-                                style={{ color: "#1890ff", fontSize: "18px" }}
-                              />
+                              <img src="https://cdn-icons-png.flaticon.com/512/6735/6735211.png" width="25" alt="Checklists free icon"></img>
                             </Badge>
                           </a>
                         </Popover>
@@ -894,12 +892,13 @@ function talbaiBurtgekh({ token }) {
               },
               {
                 title: "Түүх",
-                width: "1rem",
+                width: "1.5rem",
                 align: "center",
                 render: (data) => {
                   return (
                     <div className="flex flex-row justify-center">
                       <Popover
+                        trigger="hover"
                         content={
                           <Table
                             style={{
@@ -959,18 +958,16 @@ function talbaiBurtgekh({ token }) {
                             ]}
                           ></Table>
                         }
-                        trigger="click"
+
                       >
-                        <a className="flex items-center justify-center hover:bg-gray-200">
-                          <EyeOutlined
-                            style={{ fontSize: "18px" }}
+                        <a className="flex items-center justify-center hover:scale-150">
+                          <img src="https://cdn-icons-png.flaticon.com/128/1584/1584808.png" data-src="https://cdn-icons-png.flaticon.com/128/1584/1584808.png" alt="Back in time " width={22}
                             onClick={() =>
                               setShuult((a) => ({
                                 ...a,
                                 query: { talbainDugaar: data.kod },
                               }))
-                            }
-                          />
+                            } ></img>
                         </a>
                       </Popover>
                     </div>
@@ -986,7 +983,7 @@ function talbaiBurtgekh({ token }) {
                   <div className="flex flex-row justify-center">
                     <Popover
                       placement="bottom"
-                      trigger="click"
+                      trigger="hover"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
                           <Link
@@ -1019,7 +1016,7 @@ function talbaiBurtgekh({ token }) {
                         </div>
                       )}
                     >
-                      <a className=" flex items-center justify-center hover:bg-gray-200">
+                      <a className=" flex items-center justify-center  hover:scale-150">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
