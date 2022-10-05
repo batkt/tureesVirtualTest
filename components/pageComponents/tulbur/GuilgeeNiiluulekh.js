@@ -81,7 +81,11 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         );
       baritsaa.push(baritsaaniiMur);
     }
-    if (mur.aldangiinUldegdel > (mur.tulsunAldangi || 0)) {
+    if (
+      mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
+      (mur.tulsunAldangi || 0) <
+        (dans.bank === "tdb" ? guilgee.Amt : guilgee.amount)
+    ) {
       aldaa.push(
         `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүн оруулаагүй байна`
       );
