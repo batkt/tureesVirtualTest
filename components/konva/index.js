@@ -185,44 +185,6 @@ function Drawer(props) {
             height={undur}
             src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
           />
-          <Line
-            points={flattenedPoints}
-            stroke="black"
-            fill="#00D2FF"
-            opacity={0.3}
-            strokeWidth={5}
-            closed={isFinished}
-          />
-          {
-            points.map((point, index) => {
-              const width = 6;
-              const x = point[0];
-              const y = point[1];
-
-              return (
-                <Circle
-                  key={`${index}circle`}
-                  x={x}
-                  y={y}
-                  width={width}
-                  height={width}
-                  fill="white"
-                  stroke="black"
-                  strokeWidth={3}
-                  onDragStart={handleDragStartPoint}
-                  onDragEnd={(e) => handleDragEndPoint(e, index)}
-                  onDblClick={() => setIsFinished(true)}
-                  draggable
-                  strokeHitEnabled
-                  hitStrokeWidth={12}
-                  onMouseOver={
-                    index === 0 ? handleMouseOverStartPoint : undefined
-                  }
-                  onMouseOut={index === 0 ? handleMouseOutStartPoint : undefined}
-                />
-              );
-            })
-          }
           {talbainuud?.map((mur) => {
             const flattenedPoints = mur.bairshil
               .reduce((a, b) => a.concat(b), []);
@@ -257,6 +219,46 @@ function Drawer(props) {
               </Group>
             )
           })}
+          <Line
+            points={flattenedPoints}
+            stroke="black"
+            fill="#00D2FF"
+            opacity={0.3}
+            strokeWidth={5}
+            closed={isFinished}
+          />
+
+          {
+            points.map((point, index) => {
+              const width = 6;
+              const x = point[0];
+              const y = point[1];
+
+              return (
+                <Circle
+                  key={`${index}circle`}
+                  x={x}
+                  y={y}
+                  width={width}
+                  height={width}
+                  fill="white"
+                  stroke="black"
+                  strokeWidth={3}
+                  onDragStart={handleDragStartPoint}
+                  onDragEnd={(e) => handleDragEndPoint(e, index)}
+                  onDblClick={() => setIsFinished(true)}
+                  draggable
+                  strokeHitEnabled
+                  hitStrokeWidth={12}
+                  onMouseOver={
+                    index === 0 ? handleMouseOverStartPoint : undefined
+                  }
+                  onMouseOut={index === 0 ? handleMouseOutStartPoint : undefined}
+                />
+              );
+            })
+          }
+
         </Layer>
       </Stage>
 

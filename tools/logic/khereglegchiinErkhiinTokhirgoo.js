@@ -779,7 +779,7 @@ const khuudasnuud = [
     ),
   },
   {
-    ner: "Устгасан хэрэг",
+    ner: "Устгасан түүх",
     khuudasniiNer: "ustsanTuukh",
     href: "/khyanalt/ustsanTuukh",
     icon: (

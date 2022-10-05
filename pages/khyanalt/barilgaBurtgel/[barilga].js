@@ -128,11 +128,11 @@ function GereeBaiguulakh({ token }) {
   function m2Uurchilyu(v, mur) {
     if (_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")) {
       const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar);
-      bdavkhar[index].tariff = v;
+      bdavkhar[index].talbai = v;
       setBDavkhar(bdavkhar);
     } else {
       const index = davkhar.findIndex((a) => a.davkhar === mur?.davkhar);
-      davkhar[index].tariff = v;
+      davkhar[index].talbai = v;
       setDavkhar(davkhar);
     }
   }
@@ -269,13 +269,14 @@ function GereeBaiguulakh({ token }) {
           columns={[
             { title: "Давхар", dataIndex: "davkhar" },
             {
-              title: <label>Нэгж үнэ</label>,
-
-              dataIndex: "tariff",
+              title: <label>
+                Давхарын м<sup>2</sup>
+              </label>,
+              dataIndex: "talbai",
               render(utga, mur, index) {
                 return (
                   <InputNumber
-                    placeholder="m2 Үнэ"
+                    placeholder="м2"
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }

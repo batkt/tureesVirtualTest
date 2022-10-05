@@ -80,7 +80,7 @@ class App extends Component {
 
   render() {
     const {
-      state: { planZurag, talbainuud },
+      state: { planZurag, talbainuud, pointer },
       props
     } = this;
     const barilga = props.baiguullaga?.barilguud?.find(a => a._id === props.barilgiinId)
@@ -98,6 +98,8 @@ class App extends Component {
         });
       })
     }
+
+
     return (
       <div>
         <div className="flex space-x-3">
@@ -110,7 +112,7 @@ class App extends Component {
                 this.tailbaiAvya(option?.davkhar, barilga)
                 this.setState({ planZurag: v })
               }}
-              allowClear
+              clearIcon={false}
             >
               {barilga?.davkharuud.map((a) => (
                 <Select.Option key={a._id} value={a.planZurag} davkhar={a.davkhar}   >
@@ -135,7 +137,6 @@ class App extends Component {
           width={urgun}
           height={undur}
         >
-
           <Layer>
             {planZurag && <URLImage width={urgun} height={undur} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${planZurag}`} />}
             {talbainuud?.map((mur) => {
@@ -143,6 +144,9 @@ class App extends Component {
                 .reduce((a, b) => a.concat(b), []);
               return (
                 <Line
+                  onMouseMove={e => {
+                    this.setState({ pointer: { x: e.evt.layerX, y: e.evt.layerY } })
+                  }}
                   key={mur._id}
                   points={flattenedPoints}
                   stroke="black"
@@ -151,6 +155,7 @@ class App extends Component {
                   strokeWidth={5}
                   closed={true}
                   onClick={() => medeelelKharya(mur)}
+                // onMouseMove={() => medeelelKharya(mur)}
                 />
               )
             }
@@ -159,10 +164,9 @@ class App extends Component {
               const x = mur.bairshil?.reduce((a, b) => { return a + b[0] }, 0) / mur.bairshil.length
               const y = mur.bairshil?.reduce((a, b) => { return a + b[1] }, 0) / mur.bairshil.length
               return (
-                <Group  >
+                <Group key={mur._id + 'text'}>
                   <Rect x={x - (mur.kod.length / 2 * 15)} y={y - (15)} width={50} height={26} fill="white" stroke={1} opacity={0.9} />
                   <Text
-                    key={mur._id + 'text'}
                     x={x - (mur.kod.length / 2 * 10)}
                     y={y - (15 / 2)}
                     text={mur.kod}
@@ -173,10 +177,27 @@ class App extends Component {
                 </Group>
               )
             })}
+            {pointer && <Group>
+              <Rect x={pointer.x + 15} y={pointer.y + 5} width={200} height={80} fill="white" stroke={1} opacity={0.9} />
+              <Text
+                x={pointer.x + 30}
+                y={pointer.y + 10}
+                text={console.log(talbainuud.map((mur) => mur))}
+                fill={'black'}
+                fontSize={15}
+                align="center"
+              />
+              <Text
+                x={pointer.x + 90}
+                y={pointer.y + 10}
+                text={"mur.kod"}
+                fill={'black'}
+                fontSize={15}
+                align="center"
+              />
+            </Group>}
           </Layer>
         </Stage >
-
-
       </div >
     );
   }

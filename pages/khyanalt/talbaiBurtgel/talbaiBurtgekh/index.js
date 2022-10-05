@@ -987,7 +987,7 @@ function talbaiBurtgekh({ token }) {
                   <div className="flex flex-row justify-center">
                     <Popover
                       placement="bottom"
-                      trigger="hover"
+                      trigger="click"
                       content={() => (
                         <div className="flex w-24 flex-col space-y-2">
                           <Link

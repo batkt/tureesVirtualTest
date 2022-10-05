@@ -22,7 +22,7 @@ const turluud = [
     text: "Талбай",
   },
   {
-    turul: "ajiltanBurtgel",
+    turul: "ajiltan",
     text: "Ажилтан бүртгэл",
   },
   {
@@ -55,6 +55,7 @@ const turluud = [
   },
 ];
 
+
 function UstsanTuukh() {
   const [query, setQuery] = useState({
     ajiltniiId: undefined,
@@ -68,8 +69,84 @@ function UstsanTuukh() {
     undefined,
     searchKeys
   );
-
   const ajiltan = useJagsaalt("/ajiltan");
+
+  const { turulColumns } = React.useMemo(() => {
+    let turulColumns = [];
+    switch (query.class) {
+      case "gereeniiZagvar":
+        turulColumns.push({
+          title: "Нэр",
+          width: "5rem",
+          align: "center",
+          render: (gereeNer) => {
+            return <>
+              <div>{gereeNer.object.ner}</div>
+            </>
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "talbai":
+        turulColumns.push({
+          title: "Талбайн дугаар",
+          width: "3rem",
+          align: "center",
+          render: (talbai) => {
+            return <>
+              <div>{talbai.object.kod}</div>
+            </>
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "ajiltan":
+        turulColumns.push({
+          title: "Регистр",
+          width: "2rem",
+          align: "center",
+          render: (ajiltanBurtgel) => {
+            console.log(ajiltanBurtgel)
+            return <>
+              <div>{ajiltanBurtgel.object.register}</div>
+            </>
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "khariltsagch":
+        turulColumns.push({
+          title: "Регистр",
+          width: "2rem",
+          align: "center",
+          render: (khariltsagch) => {
+            return <>
+              <div>{khariltsagch.object.register}</div>
+            </>
+          },
+          sorter: () => 0,
+        });
+        break;
+      case "nekhemjlekhiinZagvar":
+        turulColumns.push({
+          title: "Нэр",
+          width: "3rem",
+          align: "center",
+          render: (nekhemjlekhiinZagvar) => {
+            return <>
+              <div>{nekhemjlekhiinZagvar.object.ner}</div>
+            </>
+          },
+          sorter: () => 0,
+        });
+        break;
+      default:
+        break;
+    }
+    return { turulColumns };
+  }, [query.class]);
+
+
   console.log(ustsanBarimt)
   const columns = useMemo(() => {
     return [
@@ -91,7 +168,7 @@ function UstsanTuukh() {
         dataIndex: "class",
         align: "left",
         ellipsis: true,
-        width: "8rem",
+        width: "6rem",
         showSorterTooltip: false,
         render: (mur) => {
           var text;
@@ -105,7 +182,7 @@ function UstsanTuukh() {
             case "Talbai":
               text = "Талбай";
               break;
-            case "ajiltanBurtgel":
+            case "ajiltan":
               text = "Ажилтан бүртгэл";
               break;
             case "Khariltsagch":
@@ -148,15 +225,20 @@ function UstsanTuukh() {
           return text;
         },
         sorter: () => 0,
-      }, {
+      },
+      {
         title: "Устгасан шалтгаан",
-        dataIndex: "",
         align: "center",
         ellipsis: true,
         width: "7rem",
         showSorterTooltip: false,
-        sorter: () => 0,
+        render: (tailbar) => {
+          return <>
+            <div>{tailbar?.object?.tailbar || tailbar?.tailbar}</div>
+          </>
+        }
       },
+      ...turulColumns,
       {
         title: "Ажилтны нэр",
         dataIndex: "ajiltniiNer",
@@ -166,6 +248,7 @@ function UstsanTuukh() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+
     ];
   });
 
