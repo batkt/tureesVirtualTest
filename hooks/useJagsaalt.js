@@ -36,7 +36,7 @@ function fetcher(
 
 var timeout = null;
 
-function useJagsaalt(url, query, order, select, searchKeys) {
+function useJagsaalt(url, query, order, select, searchKeys, supToken) {
   const { token } = useAuth();
 
   const [khuudaslalt, setKhuudaslalt] = useState({
@@ -47,8 +47,8 @@ function useJagsaalt(url, query, order, select, searchKeys) {
   });
 
   const { data, mutate, isValidating } = useSWR(
-    token && url
-      ? [token, url, query, order, select, khuudaslalt, searchKeys]
+    (token || supToken) && url
+      ? [token || supToken, url, query, order, select, khuudaslalt, searchKeys]
       : null,
     fetcher,
     {

@@ -14,6 +14,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
+import useJagsaalt from "hooks/useJagsaalt";
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState(0);
@@ -23,6 +24,15 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
+
+  const zardal = useJagsaalt(
+    "/ashiglaltiinZardluud",
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    token
+  );
 
   React.useImperativeHandle(
     ref,
@@ -38,38 +48,59 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         }
 
         var guilgee = {};
-        if (turul === "busad") {
-          if (!busadTurul) {
-            notification.warning({
-              message: "Та гүйлгээний төрөлөө сонгоно уу",
-            });
-            return;
-          }
-          guilgee = {
-            turul: busadTurul,
-            tulsunDun: busadTurul === "aldangi" ? 0 : dun,
-            tulukhDun: 0,
-            tulsunAldangi: busadTurul === "aldangi" ? dun : 0,
-            tulukhAldangi: 0,
-            ognoo: new Date(),
-            gereeniiId: data?._id,
-            tailbar,
-          };
-        } else {
-          guilgee = {
-            turul: turul,
-            tulsunDun: turul === "voucher" ? dun : 0,
-            tulukhDun: turul === "avlaga" ? dun : 0,
-            ognoo:
-              turul === "avlaga"
-                ? moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")
-                : new Date(),
-            gereeniiId: data?._id,
-            tailbar,
-            nekhemjlekhDeerKharagdakh:
-              turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
-          };
+
+        switch (turul) {
+          case "busad":
+            if (!busadTurul) {
+              notification.warning({
+                message: "Та гүйлгээний төрөлөө сонгоно уу",
+              });
+              return;
+            }
+            guilgee = {
+              turul: busadTurul,
+              tulsunDun: busadTurul === "aldangi" ? 0 : dun,
+              tulukhDun: 0,
+              tulsunAldangi: busadTurul === "aldangi" ? dun : 0,
+              tulukhAldangi: 0,
+              ognoo: new Date(),
+              gereeniiId: data?._id,
+              tailbar,
+            };
+            break;
+          case "voucher":
+          case "avlaga":
+            guilgee = {
+              turul: turul,
+              tulsunDun: turul === "voucher" ? dun : 0,
+              tulukhDun: turul === "avlaga" ? dun : 0,
+              ognoo:
+                turul === "avlaga"
+                  ? moment(ognoo).startOf("month").format("YYYY-MM-DD 00:00:00")
+                  : new Date(),
+              gereeniiId: data?._id,
+              tailbar,
+              nekhemjlekhDeerKharagdakh:
+                turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
+            };
+            break;
+          case "zardal":
+            guilgee = {
+              turul: "avlaga",
+              tulsunDun: 0,
+              tulukhDun: dun,
+              ognoo: moment(ognoo)
+                .startOf("month")
+                .format("YYYY-MM-DD 00:00:00"),
+              gereeniiId: data?._id,
+              tailbar,
+              nekhemjlekhDeerKharagdakh,
+            };
+            break;
+          default:
+            break;
         }
+
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
@@ -111,7 +142,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       <div className="flex justify-center">
         <Radio.Group onChange={(e) => setTurul(e.target.value)} value={turul}>
           <Radio value={"voucher"}>Ваучераар</Radio>
-          <Radio value={"avlaga"}>Авлага үүсгэх</Radio>
+          <Radio value={"avlaga"}>Авлага</Radio>
+          <Radio value={"ahiglalt"}>Ашиглалт</Radio>
           <Radio value={"busad"}>Бусад </Radio>
         </Radio.Group>
       </div>
@@ -134,6 +166,13 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       {busadTurul === "aldangi" && (
         <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
       )}
+      {turul === "ahiglalt" && (
+        <Select placeholder="Зардлын төрөл">
+          {zardal.jagsaalt?.map((mur) => (
+            <Select.Option key={mur._id}>{mur.ner}</Select.Option>
+          ))}
+        </Select>
+      )}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -142,14 +181,14 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         onChange={setDun}
         min={0}
       />
-      {(turul === "avlaga" || turul === "busad") && (
+      {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
         <Input.TextArea
           placeholder="Тайлбар"
           value={tailbar}
           onChange={(e) => setTailbar(e.target.value)}
         />
       )}
-      {turul === "avlaga" && (
+      {(turul === "avlaga" || turul === "ahiglalt") && (
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">
