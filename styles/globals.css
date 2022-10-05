@@ -930,3 +930,9 @@ input[type="number"] {
 .ant-popover-arrow-content::before {
   @apply dark:bg-gray-800 !important;
 }
+.ant-drawer-close {
+  @apply dark:text-white !important;
+}
+.ant-btn-default {
+  @apply dark:text-white !important;
+}

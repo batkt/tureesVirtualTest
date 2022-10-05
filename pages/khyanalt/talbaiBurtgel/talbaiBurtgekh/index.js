@@ -46,6 +46,10 @@ import Aos from "aos";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { MdOutlineInventory } from "react-icons/md";
+import { GiBackwardTime } from "react-icons/gi";
+import { TbBoxMultiple } from "react-icons/tb";
+
 
 const Tailan = dynamic(() => import("components/konva/tailan"), { ssr: false });
 
@@ -60,11 +64,11 @@ const normFile = (e) => {
 function TalbaiSegment({ token, ...a }) {
   console.log(a)
   return (
-    <div className="box">
+    <div className="box dark:text-white">
       <div className="flex items-center p-7 shadow-none">
         <div className="border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600">{a.utga}</div>
+          <div className="text-gray-600 dark:text-gray-300">{a.utga}</div>
         </div>
       </div>
     </div>
@@ -827,7 +831,7 @@ function talbaiBurtgekh({ token }) {
                       </div>
                     }>
                       <a className=" flex items-center justify-center  hover:scale-150">
-                        <img src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" data-src="https://cdn-icons-png.flaticon.com/128/7771/7771738.png" alt="Types" width={23}></img>
+                        <TbBoxMultiple className="text-xl" />
                       </a>
                     </Popover>
                   );
@@ -879,9 +883,9 @@ function talbaiBurtgekh({ token }) {
                           }
                           trigger="click"
                         >
-                          <a className="flex items-center justify-center  hover:scale-150">
+                          <a className="flex items-center justify-center  hover:scale-125 ">
                             <Badge count={data?.khurunguud?.length}>
-                              <img src="https://cdn-icons-png.flaticon.com/512/6735/6735211.png" width="25" alt="Checklists free icon"></img>
+                              <MdOutlineInventory className="text-xl dark:text-gray-300 " />
                             </Badge>
                           </a>
                         </Popover>
@@ -961,13 +965,13 @@ function talbaiBurtgekh({ token }) {
 
                       >
                         <a className="flex items-center justify-center hover:scale-150">
-                          <img src="https://cdn-icons-png.flaticon.com/128/1584/1584808.png" data-src="https://cdn-icons-png.flaticon.com/128/1584/1584808.png" alt="Back in time " width={22}
-                            onClick={() =>
-                              setShuult((a) => ({
-                                ...a,
-                                query: { talbainDugaar: data.kod },
-                              }))
-                            } ></img>
+                          <GiBackwardTime className="text-2xl" onClick={() =>
+                            setShuult((a) => ({
+                              ...a,
+                              query: { talbainDugaar: data.kod },
+                            }))
+                          } />
+
                         </a>
                       </Popover>
                     </div>

@@ -70,7 +70,7 @@ function UstsanTuukh() {
   );
 
   const ajiltan = useJagsaalt("/ajiltan");
-
+  console.log(ustsanBarimt)
   const columns = useMemo(() => {
     return [
       {
@@ -148,8 +148,15 @@ function UstsanTuukh() {
           return text;
         },
         sorter: () => 0,
+      }, {
+        title: "Устгасан шалтгаан",
+        dataIndex: "",
+        align: "center",
+        ellipsis: true,
+        width: "7rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
-
       {
         title: "Ажилтны нэр",
         dataIndex: "ajiltniiNer",
@@ -167,9 +174,9 @@ function UstsanTuukh() {
       ...query,
       createdAt: e
         ? {
-            $gte: moment(e[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(e[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(e[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(e[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
     });
   }

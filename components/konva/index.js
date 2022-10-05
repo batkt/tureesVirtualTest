@@ -163,7 +163,7 @@ function Drawer(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex  space-x-3 justify-end">
+      <div className="flex  space-x-3 pb-3 justify-end">
         <div className="flex space-x-3 border-2 border-dashed p-1">
           <div className="h-5 bg-green-400 w-5 border-2"></div>
           <div> Идэвхтэй</div>
@@ -185,9 +185,6 @@ function Drawer(props) {
             height={undur}
             src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
           />
-
-
-
           <Line
             points={flattenedPoints}
             stroke="black"
@@ -264,7 +261,7 @@ function Drawer(props) {
       </Stage>
 
       <div className="flex space-x-3 justify-between items-center">
-        <div className=" space-x-3 ">
+        <div className=" space-x-3 space-y-2 ">
           <Button
             style={{ backgroundColor: "#209669", color: "#ffffff" }}
             onClick={() =>
@@ -280,8 +277,8 @@ function Drawer(props) {
               setIsMouseOverStartPoint(false);
             }}
           >
-            <ClearOutlined />
-            Шинээр зурах
+            <ClearOutlined className="dark:text-white pr-2" />
+            <p className="dark:text-white" >Шинээр зурах</p>
           </Button>
         </div>
       </div>
