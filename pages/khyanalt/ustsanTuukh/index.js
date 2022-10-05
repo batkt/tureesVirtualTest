@@ -266,7 +266,7 @@ function UstsanTuukh() {
 
   return (
     <Admin
-      title="Устсан түүх"
+      title="Устгасан түүх"
       khuudasniiNer="ustsanTuukh"
       onSearch={(search) =>
         ustsanBarimt.setKhuudaslalt((a) => ({
