@@ -20,11 +20,13 @@ import {
   ExclamationCircleOutlined,
   DownloadOutlined,
   DownOutlined,
+  FileDoneOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 
+import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 
@@ -40,6 +42,7 @@ import Aos from "aos";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
+import useDans from "hooks/useDans";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -60,9 +63,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -360,6 +362,18 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
+
+              <a
+                onClick={() => nekhemjlelIlgeekh(row)}
+                className="fill-current  text-green-500"
+              >
+                <Tooltip
+                  title="Нэхэмжлэл"
+                  className="flex w-full items-center justify-center "
+                >
+                  <FileDoneOutlined className=" text-xl fill-current p-1 text-green-500" />
+                </Tooltip>
+              </a>
               <a
                 onClick={() => guilgeeKhiiya(row)}
                 className="fill-current  text-green-500"
@@ -399,7 +413,6 @@ function guilgeeniiTuukh({ token }) {
                   </svg>
                 </Tooltip>
               </a>
-
               {row?._id === delgegdsenGeree && (
                 <a className="px-1" onClick={() => refTuukh.current.khevlekh()}>
                   <Tooltip title="Хэвлэх">
@@ -448,12 +461,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -481,7 +494,6 @@ function guilgeeniiTuukh({ token }) {
   ]);
 
   //#endregion
-
   //#region handlers
   function onChangeTurul(turul) {
     setTurul(turul);
@@ -518,6 +530,7 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
+    console.log(dansGaralt)
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
@@ -539,6 +552,24 @@ function guilgeeniiTuukh({ token }) {
       footer,
     });
   }
+
+
+  function nekhemjlelIlgeekh(data) {
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <NekhemjlelIlgeekh
+          data={data}
+          ref={ref}
+          token={token}
+          onFinish={refreshData}
+        />
+      ),
+      footer: []
+    });
+  }
+
 
   //#endregion
 
@@ -609,9 +640,8 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
-                  turul === mur?.turul ? mur.selectedColor : ""
-                }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
+                  }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
