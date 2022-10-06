@@ -522,8 +522,10 @@ function TalbaiBurtgekh({ token }) {
                       color: "black",
                     }}
                   >
-                    <SettingOutlined />
-                    План зураг тохируулах
+                    <span className="mr-2 text-black">
+                      <SettingOutlined />
+                    </span>
+                    <span className="text-black ">План зураг тохируулах</span>
                   </Button>
                   <Drawer
                     width={"100vw"}

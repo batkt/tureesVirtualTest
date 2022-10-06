@@ -26,6 +26,10 @@ module.exports = {
           900: "#064E3B",
         },
       },
+      animation: {
+        "spin-slow": "spin 4s linear infinite",
+        "spin-mid": "spin 2s linear infinite",
+      },
     },
   },
   variants: {

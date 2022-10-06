@@ -184,7 +184,13 @@ function GereeBaiguulakh({ token }) {
             name="davkhar"
             label="Давхар"
           >
-            <InputNumber min={1} defaultValue={1} style={{ width: "100%" }} />
+            <InputNumber
+              min={1}
+              type="number"
+              step="1"
+              defaultValue={1}
+              style={{ width: "100%" }}
+            />
           </Form.Item>
           <Form.Item
             rules={[
@@ -269,9 +275,11 @@ function GereeBaiguulakh({ token }) {
           columns={[
             { title: "Давхар", dataIndex: "davkhar" },
             {
-              title: <label>
-                Давхарын м<sup>2</sup>
-              </label>,
+              title: (
+                <label>
+                  Давхарын м<sup>2</sup>
+                </label>
+              ),
               dataIndex: "talbai",
               render(utga, mur, index) {
                 return (

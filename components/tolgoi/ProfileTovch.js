@@ -3,12 +3,13 @@ import {
   QuestionOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Tooltip, Empty } from "antd";
+import { Badge, Dropdown, Menu, Tooltip, Empty, Drawer } from "antd";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
+import Tuslamj from "./tuslamj";
 
 function idAwyaa(mur) {
   var id = undefined;
@@ -79,6 +80,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
       .then(() => sonorduulgaMutate())
       .catch(aldaaBarigch);
   }
+  const [showTuslamj, setShowTuslamj] = useState(false);
 
   function onScroll(e) {
     if (
@@ -96,6 +98,17 @@ function ProfileTovch({ ajiltan, garya, token }) {
 
   return (
     <div className="flex h-8 items-center justify-end gap-3">
+      <Drawer
+        placement={"right"}
+        closable={false}
+        onClose={() => setShowTuslamj(false)}
+        visible={showTuslamj}
+        key={"righttuslamj"}
+        width={600}
+        bodyStyle={{ padding: "10px 0" }}
+      >
+        <Tuslamj />
+      </Drawer>
       <Dropdown
         trigger="click"
         overlay={
@@ -223,15 +236,15 @@ function ProfileTovch({ ajiltan, garya, token }) {
                 </a>
               </Link>
             </Menu.Item>
-            <Menu.Item key="1" className="profileMenuItem">
-              <Link href="/khyanalt/faq">
-                <a>
-                  <div className="flex w-44 items-center space-x-2 text-white">
-                    <QuestionOutlined />
-                    <span>Тусламж</span>
-                  </div>
-                </a>
-              </Link>
+            <Menu.Item
+              key="1"
+              className="profileMenuItem"
+              onClick={() => setShowTuslamj(true)}
+            >
+              <div className="flex w-44 items-center space-x-2 text-white">
+                <QuestionOutlined />
+                <span>Тусламж</span>
+              </div>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="3" onClick={garya} className="profileMenuItem">

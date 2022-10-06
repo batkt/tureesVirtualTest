@@ -50,7 +50,6 @@ import { MdOutlineInventory } from "react-icons/md";
 import { GiBackwardTime } from "react-icons/gi";
 import { TbBoxMultiple } from "react-icons/tb";
 
-
 const Tailan = dynamic(() => import("components/konva/tailan"), { ssr: false });
 
 const normFile = (e) => {
@@ -62,7 +61,6 @@ const normFile = (e) => {
 };
 
 function TalbaiSegment({ token, ...a }) {
-  console.log(a)
   return (
     <div className="box dark:text-white">
       <div className="flex items-center p-7 shadow-none">
@@ -478,10 +476,11 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50 dark:bg-gray-900"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -698,7 +697,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -819,17 +818,20 @@ function talbaiBurtgekh({ token }) {
                 align: "center",
                 render(segmentuud) {
                   return (
-                    <Popover trigger="hover" content={
-                      <div>
-                        <CardList
-                          keyValue="segment"
-                          className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                          jagsaalt={segmentuud}
-                          Component={TalbaiSegment}
-                          componentProps={{ token }}
-                        />
-                      </div>
-                    }>
+                    <Popover
+                      trigger="hover"
+                      content={
+                        <div>
+                          <CardList
+                            keyValue="segment"
+                            className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                            jagsaalt={segmentuud}
+                            Component={TalbaiSegment}
+                            componentProps={{ token }}
+                          />
+                        </div>
+                      }
+                    >
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <TbBoxMultiple className="text-xl" />
                       </a>
@@ -962,16 +964,17 @@ function talbaiBurtgekh({ token }) {
                             ]}
                           ></Table>
                         }
-
                       >
                         <a className="flex items-center justify-center hover:scale-150">
-                          <GiBackwardTime className="text-2xl" onClick={() =>
-                            setShuult((a) => ({
-                              ...a,
-                              query: { talbainDugaar: data.kod },
-                            }))
-                          } />
-
+                          <GiBackwardTime
+                            className="text-2xl"
+                            onClick={() =>
+                              setShuult((a) => ({
+                                ...a,
+                                query: { talbainDugaar: data.kod },
+                              }))
+                            }
+                          />
                         </a>
                       </Popover>
                     </div>

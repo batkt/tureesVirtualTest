@@ -199,32 +199,6 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">
-                  Барьцаа хөрөнгө байршуулах хугацаа
-                </div>
-                <div className="text-gray-600">
-                  Гэрээнд суутгагдсан барьцаа хөрөнгийг байршуулах хугацаа
-                </div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  min={0}
-                  defaultValue={
-                    baiguullaga?.tokhirgoo?.baritsaaBairshuulakhKhugatsaa
-                  }
-                  onChange={(v) =>
-                    setGereeTokhirgoo((a) => ({
-                      ...(a || {}),
-                      baritsaaBairshuulakhKhugatsaa: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">Алдангийн хувь</div>
                 <div className="text-gray-600">
                   Гэрээний төлөлт хугацаа хэвэрсэн үед тооцох алдангийн хувь

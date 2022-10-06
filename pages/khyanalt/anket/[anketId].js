@@ -12,6 +12,7 @@ function AnketBuglukh({ data, token }) {
   const onFinish = (values) => {
     const khariult = {
       asuultiinId: data._id,
+      baiguullagiinId: data.baiguullagiinId,
       asuultiinNer: data.ner,
       asuultiinTurul: data.turul,
       ognoo: new Date(),
