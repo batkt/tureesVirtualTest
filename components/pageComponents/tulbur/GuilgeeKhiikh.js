@@ -15,19 +15,20 @@ import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
-
+const query = {turul:{$ne:'төг'}}
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
+  const [negjUne, setNegjUne] = useState("");
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
 
   const zardal = useJagsaalt(
     "/ashiglaltiinZardluud",
-    undefined,
+    query,
     undefined,
     undefined,
     undefined,
@@ -88,7 +89,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
             guilgee = {
               turul: "avlaga",
               tulsunDun: 0,
-              tulukhDun: dun,
+              tulukhDun: negjUne * dun,
               ognoo: moment(ognoo)
                 .startOf("month")
                 .format("YYYY-MM-DD 00:00:00"),
@@ -117,7 +118,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           .catch(aldaaBarigch);
       },
     }),
-    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul]
+    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul,negjUne]
   );
   function labelTurul(guilgeeTurul) {
     var text;
@@ -167,20 +168,22 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
       )}
       {turul === "ahiglalt" && (
-        <Select placeholder="Зардлын төрөл">
+        <Select placeholder="Зардлын төрөл" onChange={setNegjUne}>
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id}>{mur.ner}</Select.Option>
+            <Select.Option key={mur._id} value={mur.tariff}>{mur.ner} /{mur.turul}/</Select.Option>
           ))}
         </Select>
       )}
+      {negjUne && (<div className="p-2">Нэгж үнэ:{formatNumber(negjUne)}</div>)}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        placeholder="Дүн"
-        style={{ width: "100%" }}
+        placeholder={turul === "ahiglalt" ? 'Нэгж' : "Дүн"}
+        style={{ width: "100%",textAlign: 'center' }}
         onChange={setDun}
         min={0}
       />
+      {negjUne && (<div className="p-2">Нийт үнэ:{formatNumber(negjUne * dun)}</div>)}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
         <Input.TextArea
           placeholder="Тайлбар"

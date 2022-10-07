@@ -530,7 +530,6 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
-    console.log(dansGaralt)
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
