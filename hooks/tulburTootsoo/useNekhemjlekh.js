@@ -17,7 +17,8 @@ const fetcher = (
   { search, jagsaalt, ...khuudaslalt },
   davkhar,
   barilgiinId,
-  ilgeekhTurul
+  ilgeekhTurul,
+  _id
 ) =>
   axios(token)
     .post(url, {
@@ -36,6 +37,7 @@ const fetcher = (
             { gereeniiDugaar: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },
           ],
+          _id
         },
         ...khuudaslalt,
       },
@@ -50,7 +52,7 @@ const fetcher = (
     })
     .catch(aldaaBarigch);
 
-function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul) {
+function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul, mbarilgiinId, _id) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -61,14 +63,15 @@ function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul) {
   const { data, mutate, isValidating } = useSWR(
     !!token
       ? [
-          "/eneSardTulukhJagsaaltAvya",
-          token,
-          ognoo,
-          khuudaslalt,
-          davkhar,
-          barilgiinId,
-          ilgeekhTurul,
-        ]
+        "/eneSardTulukhJagsaaltAvya",
+        token,
+        ognoo,
+        khuudaslalt,
+        davkhar,
+        (barilgiinId || mbarilgiinId),
+        ilgeekhTurul,
+        _id
+      ]
       : null,
     fetcher,
     { revalidateOnFocus: false }

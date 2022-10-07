@@ -1,4 +1,4 @@
-import { Button, message, notification, Select, } from "antd";
+import { Button, DatePicker, message, notification, Select, } from "antd";
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -10,34 +10,43 @@ import { toWords } from "mon_num";
 import formatNumber from "tools/function/formatNumber";
 import moment from "moment";
 import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarlalt";
+
+const ilgeekhTurul = "davkharaar";
+
 function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
     const { dansGaralt } = useDans(token, data?.baiguullagiinId);
     const printRef = React.useRef(null);
     const [songogdsonDans, setDans] = React.useState();
     const [barimt, setBarimt] = React.useState();
     const { nekhemjlekhiinZagvar } = useNekhemjlekhiinZagvar(token);
+
     function khaaya() {
         _.isFunction(onFinish) && onFinish();
         destroy();
     }
-
-    const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
-    const { nekhemjlel } = useNekhemjlekh();
-    const [loading, setLoading] = useState(false);
+    const [nekhemjleliinJagsaalt] = React.useState([]);
     const { dugaarlalt } = useNekhemjlekhDugaarlalt(token);
-    useEffect(() => {
-        if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
-    }, [nekhemjlel]);
+    const [loading, setLoading] = useState(false);
+    const [ognoo, setOgnoo] = React.useState(moment());
+
+    const { nekhemjlel } = useNekhemjlekh(
+        token,
+        ognoo,
+        data.davkhar,
+        ilgeekhTurul,
+        data.barilgiinId,
+        data._id
+    );
 
     const nekhemjlekh = useMemo(() => {
         if (barimt && data)
             var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
                 (a) => a._id === barimt
             )?.nekhemjlekh;
-        const medeelel = _.cloneDeep(
-            data
+        const medeelel = _.get(
+            nekhemjlel, 'jagsaalt.0'
         );
-        if (!!zagvar) {
+        if (!!zagvar && !!medeelel) {
             medeelel.eneSardTulukhUsgeer = `${toWords(
                 medeelel.eneSardTulukhDun *
                 (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
@@ -105,10 +114,9 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
                 nemeltNekhemjlekh
             );
         }
-        return { zagvar, mail: medeelel.mail };
-    }, [barimt, nekhemjleliinJagsaalt]);
+        return { zagvar, mail: medeelel?.mail };
+    }, [barimt, nekhemjleliinJagsaalt, nekhemjlel]);
 
-    console.log(">>>>.", nekhemjlekh.mail)
     function maileerIlgeekh() {
         if (!barimt) {
             message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
@@ -118,7 +126,6 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
             message.warning("И-мэйл илгээгдсэн байна");
             return;
         }
-
         if (nekhemjlekh.mail?.length > 0) {
             var mailuud = [];
             mailuud.push({
@@ -187,6 +194,10 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
                     dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
                 />
             </div>
+            <DatePicker
+                value={ognoo}
+                onChange={setOgnoo}
+            />
             <Select placeholder="Дансны төрөл" onChange={setDans}>
                 {dansGaralt?.jagsaalt?.map((a) => (
                     <Select.Option key={a.dugaar} value={a.dugaar}>
