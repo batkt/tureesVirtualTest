@@ -21,7 +21,7 @@ import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
     );
   
     return (
-      <div className="flex flex-col space-y-2 h-[76vh]">
+      <div className="flex flex-col space-y-2 h-[76vh] overflow-y-auto">
         <GuilgeeniiTuukh
             ref={refTuukh}
             data={data}
