@@ -122,7 +122,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
         if (nekhemjlekh.mail?.length > 0) {
             var mailuud = [];
             mailuud.push({
-                mail: "csodhuu@gmail.com",
+                mail: nekhemjlekh.zagvar,
                 content: nekhemjlekh.zagvar,
             })
             setLoading(true);
