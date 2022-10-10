@@ -95,34 +95,30 @@ function index({ token, data }) {
         </div>
       </div>
       <div className="box col-span-6 p-2">
-        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-1 pt-5 pb-2 space-x-2">
+          <Checkbox onChange={(e)=>setTargetKeys(e.target.checked ? tsonknuud?.filter((a) => !a.nuuya).map(a=>a.key) : []) }/> 
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             Цонхны эрх
           </h2>
         </div>
-        <Transfer
-          locale={{
-            itemsUnit: "Боломжит эрх",
-            remove: "Буцаах",
-            selectAll: "Бүгдийг сонгох",
-            selectInvert: "Эсэргээр нь сонгох",
-            removeAll: "Бүгдийг буцаах",
-          }}
-          listStyle={{ height: "100%", width: "45%", marginTop: 10 }}
-          className="dark:text-gray-200"
-          dataSource={tsonknuud.filter((a) => !a.nuuya)}
-          titles={["Цонхнууд", "Цонхны эрх"]}
-          targetKeys={targetKeys}
-          selectedKeys={selectedKeys}
-          onChange={setTargetKeys}
-          onSelectChange={handleSelectChange}
-          render={(item) => (
-            <Tooltip title={item.tailbar}>
-              <div>{item.ner}</div>
-            </Tooltip>
-          )}
-          oneWay
-        />
+        {
+          tsonknuud?.filter((a) => !a.nuuya)?.map((mur,index)=>{
+            return (
+              <div key={`${mur.key}-${index}`} className='flex flex-row space-x-2 p-1'>
+                <Checkbox checked={!!targetKeys?.find(a=>a === mur.key)} onChange={e=>{
+                  if(e.target.checked === true){
+                    targetKeys.push(mur.key)
+                  }else{
+                    targetKeys.splice(targetKeys.indexOf(mur.key),1)
+                  }
+                  
+                  setTargetKeys([...targetKeys])
+                }}/>
+                <div>{mur.ner}</div>
+              </div>
+            )
+          })
+        }
       </div>
       <div className="box col-span-6 p-2">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
