@@ -20,15 +20,18 @@ import {
   ExclamationCircleOutlined,
   DownloadOutlined,
   DownOutlined,
+  FileDoneOutlined,
+  PrinterOutlined,
+  CloseCircleOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 
+import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
-
-import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
@@ -40,11 +43,12 @@ import Aos from "aos";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
+import Khuulga from "components/pageComponents/tulbur/Khuulga";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
   const { barilgiinId } = useAuth();
-  const { data, mutate } = useSWR(
+  const { data, mutate ,isValidating} = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
@@ -60,11 +64,10 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
-      {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
+      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
   );
 }
@@ -73,12 +76,6 @@ function TableGuilgee({
   columns,
   garalt,
   setKhuudaslalt,
-  delgegdsenGeree,
-  setDelgegdsenGeree,
-  refTuukh,
-  token,
-  ognoo,
-  refreshData,
   setLoadingIndex,
   onChange,
 }) {
@@ -112,25 +109,6 @@ function TableGuilgee({
           }));
         },
       }}
-      expandable={{
-        expandedRowRender: (mur) =>
-          mur?._id === delgegdsenGeree && (
-            <GuilgeeniiTuukh
-              ref={refTuukh}
-              mur={mur}
-              token={token}
-              ognoo={ognoo}
-              data={mur}
-              refreshData={refreshData}
-            />
-          ),
-        expandedRowKeys: [delgegdsenGeree],
-        expandedRowClassName: (a, index) =>
-          index % 2 === 0
-            ? "bg-white dark:bg-gray-600"
-            : "bg-gray-200 dark:bg-gray-800",
-        onExpand: (a, b) => setDelgegdsenGeree(a === true && b._id),
-      }}
     />
   );
 }
@@ -150,7 +128,6 @@ function guilgeeniiTuukh({ token }) {
   });
   //#region state
   const ref = React.useRef(null);
-  const refTuukh = React.useRef(null);
   const baritsaaref = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
@@ -292,7 +269,7 @@ function guilgeeniiTuukh({ token }) {
       {
         title: "№",
         key: "index",
-        width: "3rem",
+        width: "2rem",
         align: "center",
         render: (text, record, index) => index + 1,
       },
@@ -360,6 +337,29 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
+
+              <a
+                onClick={() => nekhemjlelIlgeekh(row)}
+                className="fill-current  text-green-500"
+              >
+                <Tooltip
+                  title="Нэхэмжлэл"
+                  className="flex w-full items-center justify-center "
+                >
+                  <FileDoneOutlined className=" text-xl fill-current p-1 text-green-500" />
+                </Tooltip>
+              </a>
+              <a
+                onClick={() => khuulgaKharya(row)}
+                className="fill-current  text-green-500"
+              >
+                <Tooltip
+                  title="Хуулга"
+                  className="flex w-full items-center justify-center "
+                >
+                  <FileTextOutlined className=" text-xl fill-current p-1 text-green-500" />
+                </Tooltip>
+              </a>
               <a
                 onClick={() => guilgeeKhiiya(row)}
                 className="fill-current  text-green-500"
@@ -399,47 +399,6 @@ function guilgeeniiTuukh({ token }) {
                   </svg>
                 </Tooltip>
               </a>
-
-              {row?._id === delgegdsenGeree && (
-                <a className="px-1" onClick={() => refTuukh.current.khevlekh()}>
-                  <Tooltip title="Хэвлэх">
-                    <svg
-                      version="1.0"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="428.000000pt"
-                      height="438.000000pt"
-                      viewBox="0 0 428.000000 438.000000"
-                      preserveAspectRatio="xMidYMid meet"
-                      className="h-6 w-6 fill-current p-1 text-green-500"
-                    >
-                      <g transform="translate(0.000000,438.000000) scale(0.100000,-0.100000)">
-                        <path
-                          d="M1104 4166 c-62 -19 -130 -73 -167 -130 l-32 -51 -3 -507 -3 -508
-                  -74 0 -75 0 0 -445 0 -445 1365 0 1365 0 0 445 0 445 -79 0 -80 0 -3 278 -3
-                  277 -27 58 c-19 39 -58 90 -125 159 -54 56 -111 116 -128 133 -113 120 -222
-                  230 -249 250 -73 55 -75 55 -890 54 -586 0 -760 -3 -792 -13z m1500 -157 c51
-                  -40 56 -64 56 -251 0 -195 8 -224 69 -265 32 -21 45 -23 185 -23 173 0 209
-                  -10 238 -70 16 -31 18 -69 18 -322 l0 -288 -1060 0 -1060 0 0 563 c0 638 -3
-                  610 80 654 l43 23 702 0 c697 0 703 0 729 -21z"
-                        />
-                        <path
-                          d="M346 2909 c-54 -13 -91 -42 -115 -92 -21 -43 -21 -53 -21 -830 l0
-                  -787 345 0 345 0 0 -320 c0 -176 0 -322 0 -325 0 -3 11 -26 24 -53 39 -75 91
-                  -123 161 -146 40 -14 166 -16 1029 -16 666 -1 992 3 1012 10 50 18 76 34 108
-                  66 80 81 86 116 86 482 l0 302 350 0 350 0 0 788 c0 502 -4 800 -10 822 -27
-                  91 -80 111 -290 107 l-135 -2 -3 -467 -2 -468 -1465 0 -1465 0 -2 468 -3 467
-                  -130 1 c-72 1 -147 -3 -169 -7z m3454 -1419 l0 -70 -70 0 -70 0 0 70 0 70 70
-                  0 70 0 0 -70z m-630 -412 c0 -285 -4 -477 -10 -500 -6 -20 -24 -48 -41 -62
-                  l-31 -26 -971 0 c-757 0 -977 3 -997 13 -13 7 -35 28 -47 46 l-23 34 0 478 0
-                  479 1060 0 1060 0 0 -462z"
-                        />
-                        <path d="M1330 1255 l0 -75 785 0 785 0 0 75 0 75 -785 0 -785 0 0 -75z" />
-                        <path d="M1332 898 l3 -73 780 0 780 1 3 72 3 72 -786 0 -786 0 3 -72z" />
-                      </g>
-                    </svg>
-                  </Tooltip>
-                </a>
-              )}
               <div
                 className="px-1 text-red-500"
                 onClick={() => baritsaaUdirdya(row)}
@@ -448,12 +407,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -481,7 +440,6 @@ function guilgeeniiTuukh({ token }) {
   ]);
 
   //#endregion
-
   //#region handlers
   function onChangeTurul(turul) {
     setTurul(turul);
@@ -491,7 +449,6 @@ function guilgeeniiTuukh({ token }) {
   function refreshData() {
     refresh();
     tolooguiGereeniiTooMutate();
-    refTuukh.current?.refreshData();
   }
 
   function baritsaaUdirdya(data) {
@@ -533,6 +490,46 @@ function guilgeeniiTuukh({ token }) {
           ref={ref}
           token={token}
           baiguullagiinId={baiguullaga?._id}
+          onFinish={refreshData}
+        />
+      ),
+      footer,
+    });
+  }
+
+  function nekhemjlelIlgeekh(data) {
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <NekhemjlelIlgeekh
+          data={data}
+          ref={ref}
+          token={token}
+          onFinish={refreshData}
+        />
+      ),
+      footer: []
+    });
+  }
+
+  function khuulgaKharya(data) {
+    const footer = [
+      <Button type="primary" onClick={() => ref.current.khevlekh()} icon={<PrinterOutlined/>}>Хэвлэх</Button>,
+      <Button onClick={() => ref.current.khaaya()} icon={<CloseCircleOutlined/>}>Хаах</Button>,
+    ];
+    modal({
+      title: "Хуулга",
+      icon: <FileExcelOutlined />,
+      width:'90vw',
+      style:{ top: 20 },
+      content: (
+        <Khuulga
+          data={data}
+          ref={ref}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          ognoo={ognoo}
           onFinish={refreshData}
         />
       ),
@@ -609,9 +606,8 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
-                  turul === mur?.turul ? mur.selectedColor : ""
-                }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
+                  }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
@@ -844,12 +840,6 @@ function guilgeeniiTuukh({ token }) {
             garalt={gereeniiMedeelel}
             setKhuudaslalt={setKhuudaslalt}
             setLoadingIndex={setLoadingIndex}
-            refTuukh={refTuukh}
-            token={token}
-            ognoo={ognoo}
-            refreshData={refreshData}
-            delgegdsenGeree={delgegdsenGeree}
-            setDelgegdsenGeree={setDelgegdsenGeree}
             onChange={khusnegtOrderChange}
           />
         </div>

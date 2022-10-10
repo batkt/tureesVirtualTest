@@ -1,35 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function Loader() {
-  useEffect(() => {
-    // window.addEventListener("keydown", (e) => {
-    //   e = e || window.event;
-    //   e.preventDefault();
-    //   return "Sure?";
-    // });
-    window.addEventListener("beforeunload", (e) => {
-      e = e || window.event;
-      e.preventDefault();
-      if (e) {
-        e.returnValue = "Sure?";
-      }
-      return "yahoo";
-    });
-    return () => {
-      // window.removeEventListener("keydown", (e) => {
-      //   e = e || window.event;
-      //   e.preventDefault();
-      //   return "Sure?";
-      // });
-      window.removeEventListener("beforeunload", (e) => {
-        e = e || window.event;
-        if (e) {
-          e.returnValue = "Sure?";
-        }
-        return "yahoo";
-      });
-    };
-  }, []);
 
   return (
     <div className="absolute z-50 flex h-full w-full select-none items-center justify-center rounded-xl bg-white bg-opacity-60 transition-all dark:bg-black dark:bg-opacity-60">

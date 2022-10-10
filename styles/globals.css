@@ -946,5 +946,5 @@ input[type="number"] {
   @apply dark:text-white !important;
 }
 .ant-btn-default {
-  @apply dark:text-white !important;
+  @apply dark:text-white dark:focus:text-gray-700 dark:hover:text-gray-700 !important;
 }

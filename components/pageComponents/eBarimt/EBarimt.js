@@ -48,7 +48,7 @@ function EBarimt({
 
   return (
     <div className="flex flex-row">
-      <div className="w-full p-2">
+      <div className="w-full p-2 dark:text-gray-100">
         {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
             <div>Хувь хүн</div>
