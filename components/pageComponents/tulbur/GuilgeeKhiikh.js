@@ -85,7 +85,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
                 turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
             };
             break;
-          case "zardal":
+          case "ahiglalt":
             guilgee = {
               turul: "avlaga",
               tulsunDun: 0,
@@ -174,7 +174,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           ))}
         </Select>
       )}
-      {negjUne && (<div className="p-2">Нэгж үнэ:{formatNumber(negjUne)}</div>)}
+      {negjUne && turul === "ahiglalt" && (<div className="p-2">Нэгж үнэ:{formatNumber(negjUne)}</div>)}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -183,7 +183,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         onChange={setDun}
         min={0}
       />
-      {negjUne && (<div className="p-2">Нийт үнэ:{formatNumber(negjUne * dun)}</div>)}
+      {negjUne && turul === "ahiglalt" && (<div className="p-2">Нийт үнэ:{formatNumber(negjUne * dun)}</div>)}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
         <Input.TextArea
           placeholder="Тайлбар"
