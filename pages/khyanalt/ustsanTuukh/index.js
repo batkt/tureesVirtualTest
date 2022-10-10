@@ -2,7 +2,7 @@ import { Card, DatePicker, Select, Table } from "antd";
 import Admin from "components/Admin";
 import moment from "moment";
 import useJagsaalt from "hooks/useJagsaalt";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import router from "next/router";
 import CardList from "components/cardList";
@@ -53,14 +53,21 @@ const turluud = [
     turul: "anket",
     text: "Анкетын асуулга бэлдэх",
   },
+  {
+    turul: "gereeniiGuilgee",
+    text: "Гэрээний гүйлгээ",
+  },
 ];
-
 
 function UstsanTuukh() {
   const [query, setQuery] = useState({
     ajiltniiId: undefined,
     class: undefined,
   });
+  const [shuukhOgnoo, setShuukhOgnoo] = useState([
+    moment().subtract(1, "months"),
+    moment(),
+  ]);
 
   const ustsanBarimt = useJagsaalt(
     "/ustsanBarimt",
@@ -71,6 +78,18 @@ function UstsanTuukh() {
   );
   const ajiltan = useJagsaalt("/ajiltan");
 
+  useEffect(() => {
+    setQuery({
+      ...query,
+      createdAt: shuukhOgnoo
+        ? {
+            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
+        : undefined,
+    });
+  }, [shuukhOgnoo]);
+
   const { turulColumns } = React.useMemo(() => {
     let turulColumns = [];
     switch (query.class) {
@@ -80,9 +99,11 @@ function UstsanTuukh() {
           width: "5rem",
           align: "center",
           render: (gereeNer) => {
-            return <>
-              <div>{gereeNer.object.ner}</div>
-            </>
+            return (
+              <>
+                <div>{gereeNer.object.ner}</div>
+              </>
+            );
           },
           sorter: () => 0,
         });
@@ -93,9 +114,11 @@ function UstsanTuukh() {
           width: "3rem",
           align: "center",
           render: (talbai) => {
-            return <>
-              <div>{talbai.object.kod}</div>
-            </>
+            return (
+              <>
+                <div>{talbai.object.kod}</div>
+              </>
+            );
           },
           sorter: () => 0,
         });
@@ -106,10 +129,11 @@ function UstsanTuukh() {
           width: "2rem",
           align: "center",
           render: (ajiltanBurtgel) => {
-            console.log(ajiltanBurtgel)
-            return <>
-              <div>{ajiltanBurtgel.object.register}</div>
-            </>
+            return (
+              <>
+                <div>{ajiltanBurtgel.object.register}</div>
+              </>
+            );
           },
           sorter: () => 0,
         });
@@ -120,9 +144,11 @@ function UstsanTuukh() {
           width: "2rem",
           align: "center",
           render: (khariltsagch) => {
-            return <>
-              <div>{khariltsagch.object.register}</div>
-            </>
+            return (
+              <>
+                <div>{khariltsagch.object.register}</div>
+              </>
+            );
           },
           sorter: () => 0,
         });
@@ -133,9 +159,11 @@ function UstsanTuukh() {
           width: "3rem",
           align: "center",
           render: (nekhemjlekhiinZagvar) => {
-            return <>
-              <div>{nekhemjlekhiinZagvar.object.ner}</div>
-            </>
+            return (
+              <>
+                <div>{nekhemjlekhiinZagvar.object.ner}</div>
+              </>
+            );
           },
           sorter: () => 0,
         });
@@ -146,8 +174,6 @@ function UstsanTuukh() {
     return { turulColumns };
   }, [query.class]);
 
-
-  console.log(ustsanBarimt)
   const columns = useMemo(() => {
     return [
       {
@@ -233,10 +259,12 @@ function UstsanTuukh() {
         width: "7rem",
         showSorterTooltip: false,
         render: (tailbar) => {
-          return <>
-            <div>{tailbar?.object?.tailbar || tailbar?.tailbar}</div>
-          </>
-        }
+          return (
+            <>
+              <div>{tailbar?.object?.tailbar || tailbar?.tailbar}</div>
+            </>
+          );
+        },
       },
       ...turulColumns,
       {
@@ -248,20 +276,13 @@ function UstsanTuukh() {
         showSorterTooltip: false,
         sorter: () => 0,
       },
-
     ];
   });
 
   function ognooShuultOnChange(e) {
-    setQuery({
-      ...query,
-      createdAt: e
-        ? {
-          $gte: moment(e[0]).format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(e[1]).format("YYYY-MM-DD 23:59:59"),
-        }
-        : undefined,
-    });
+    if (e === null) {
+      setShuukhOgnoo(undefined);
+    } else setShuukhOgnoo([moment(e[0]), moment(e[1])]);
   }
 
   return (
@@ -283,6 +304,7 @@ function UstsanTuukh() {
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
+            value={shuukhOgnoo}
             onChange={ognooShuultOnChange}
           />
           <div>
