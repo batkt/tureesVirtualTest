@@ -77,6 +77,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value, gereeniiZagvar }) => {
       initialValues={value}
       onValuesChange={onValuesChange}
       onFinish={onFinish}
+      autoComplete={"off"}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item

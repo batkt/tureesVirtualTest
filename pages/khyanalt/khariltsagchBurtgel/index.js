@@ -68,18 +68,16 @@ function checkUtas(utasnuud, utga) {
   return true;
 }
 
-
-const query = { turul: "khariltsagch" }
+const query = { turul: "khariltsagch" };
 
 function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
-
-  const segment = useJagsaalt("/segment", query)
-  const [turul, setTurul] = useState()
-  const [songosonSegment, setSongosonSegment] = useState()
-  console.log(songosonSegment)
+  const segment = useJagsaalt("/segment", query);
+  const [turul, setTurul] = useState();
+  const [songosonSegment, setSongosonSegment] = useState();
+  console.log(songosonSegment);
 
   function solikh(value) {
-    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    setTurul(segment.jagsaalt.find((a) => a.ner === value));
     shineSolikh("ner", value);
   }
   function solikhtTurul(value) {
@@ -89,54 +87,49 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
     setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
   }
 
-  return <>
-    <div className="flex flex-row justify-end space-x-2 ">
-      <Form.Item
-        className="w-full "
-        {...restField}
-        name={[name, "ner"]}
-        fieldKey={[fieldKey, "ner"]}
-      >
-        <Select
-          style={{ width: "100%" }}
-          className=" "
-          placeholder='Нэр'
-          name="ner"
-          onChange={solikh}
-          filterOption={(o) => o}
+  return (
+    <>
+      <div className="flex flex-row justify-end space-x-2 ">
+        <Form.Item
+          className="w-full "
+          {...restField}
+          name={[name, "ner"]}
+          fieldKey={[fieldKey, "ner"]}
         >
-          {segment?.jagsaalt.map((mur) => (
-            <Select.Option value={mur?.ner}>
-              {mur?.ner}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        className="w-full "
-        {...restField}
-        name={[name, "utga"]}
-        fieldKey={[fieldKey, "utga"]}>
-        <Select
-          style={{ width: "100%" }}
-          placeholder='Утга'
-          onChange={solikhtTurul}
+          <Select
+            style={{ width: "100%" }}
+            className=" "
+            placeholder="Нэр"
+            name="ner"
+            onChange={solikh}
+            filterOption={(o) => o}
+          >
+            {segment?.jagsaalt.map((mur) => (
+              <Select.Option value={mur?.ner}>{mur?.ner}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          className="w-full "
+          {...restField}
+          name={[name, "utga"]}
+          fieldKey={[fieldKey, "utga"]}
         >
-          {turul?.utguud?.map((a) => (
-            <Select.Option value={a}>
-              {a}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <CloseCircleOutlined
-        className="pt-2"
-        onClick={() => remove(name)}
-      />
-    </div>
-  </>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Утга"
+            onChange={solikhtTurul}
+          >
+            {turul?.utguud?.map((a) => (
+              <Select.Option value={a}>{a}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
+      </div>
+    </>
+  );
 }
-
 
 function Tile({ zasya, token, ...a }) {
   return (
@@ -296,12 +289,12 @@ function AjiltanBurtgel({ token }) {
     setNuutsUgKhariltsagch(false);
   };
 
-  const segment = useJagsaalt("/segment")
-  const [turul, setTurul] = useState()
-  const [songosonSegment, setSongosonSegment] = useState()
+  const segment = useJagsaalt("/segment");
+  const [turul, setTurul] = useState();
+  const [songosonSegment, setSongosonSegment] = useState();
 
   function solikh(value) {
-    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    setTurul(segment.jagsaalt.find((a) => a.ner === value));
     shineSolikh("ner", value);
   }
   function solikhtTurul(value) {
@@ -449,13 +442,13 @@ function AjiltanBurtgel({ token }) {
   }
 
   function checkRegister() {
-    var value1 = khariltsagchState.register.substring(0, 2);
-    var value2 = khariltsagchState.register.substring(2, 10);
+    var value1 = khariltsagchState.register?.substring(0, 2);
+    var value2 = khariltsagchState.register?.substring(2, 10);
     var error = 0;
     for (var i = 0; i < 2; i++) {
-      var c = value1.charCodeAt(i);
+      var c = value1?.charCodeAt(i);
       if (c) {
-        var alp = value1.charAt(i);
+        var alp = value1?.charAt(i);
         if (
           c !== 32 &&
           c !== 45 &&
@@ -463,29 +456,29 @@ function AjiltanBurtgel({ token }) {
           (c < 65 || (c < 97 && c > 90) || c > 122) &&
           (c < 1024 || c > 1535)
         ) {
-          value1 = value1.replace(alp, "");
+          value1 = value1?.replace(alp, "");
           error++;
         }
       }
     }
     for (i = 0; i < 8; i++) {
-      c = value2.charCodeAt(i);
+      c = value2?.charCodeAt(i);
       if (c) {
-        alp = value2.charAt(i);
+        alp = value2?.charAt(i);
         if (c < 48 || c > 57) {
-          value2 = value2.replace(alp, "");
+          value2 = value2?.replace(alp, "");
           error++;
         }
       }
     }
     if (
-      khariltsagchState.register.length <= 2 ||
-      khariltsagchState.register.length > 10 ||
+      khariltsagchState.register?.length <= 2 ||
+      khariltsagchState.register?.length > 10 ||
       error > 0
     ) {
       khariltsagchState.register = value1.toUpperCase() + value2;
     }
-    if (khariltsagchState.register.length === 10) {
+    if (khariltsagchState.register?.length === 10) {
       var year = parseInt(khariltsagchState.register.substring(2, 4));
       var month = parseInt(khariltsagchState.register.substring(4, 6));
       month = month - 1;
@@ -565,7 +558,12 @@ function AjiltanBurtgel({ token }) {
       loading={waiting || isValidating}
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
-        <Form ref={formRef} name="control-ref" onFinish={onFinish}>
+        <Form
+          autoComplete={"off"}
+          ref={formRef}
+          name="control-ref"
+          onFinish={onFinish}
+        >
           <div data-aos="fade-right" data-aos-duration="1000">
             <Form.Item
               name="turul"
@@ -694,16 +692,23 @@ function AjiltanBurtgel({ token }) {
           <div
             data-aos="fade-right "
             data-aos-duration="1000"
-            data-aos-delay="700">
-            <Form.List name="segmentuud" className=" " >
+            data-aos-delay="700"
+          >
+            <Form.List name="segmentuud" className=" ">
               {(fields, { add, remove }) => (
                 <>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
-                    <div key={key}  >
-                      <YalgakhUtga key={key} name={name} fieldKey={fieldKey}  {...restField} remove={remove} />
+                    <div key={key}>
+                      <YalgakhUtga
+                        key={key}
+                        name={name}
+                        fieldKey={fieldKey}
+                        {...restField}
+                        remove={remove}
+                      />
                     </div>
                   ))}
-                  <Form.Item >
+                  <Form.Item>
                     <Button
                       icon={<PlusOutlined />}
                       className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
@@ -851,10 +856,11 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -993,9 +999,6 @@ function AjiltanBurtgel({ token }) {
         >
           <Table
             bordered
-            tableLayout={
-              khariltsagchiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
-            }
             scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             dataSource={khariltsagchiinGaralt?.jagsaalt}
@@ -1013,26 +1016,24 @@ function AjiltanBurtgel({ token }) {
             }}
             loading={!khariltsagchiinGaralt}
             size="small"
-            rowSelection={{
-              onSelect: (selectedRowKeys) => {
-                console.log("selectedRowKeys changed: ", selectedRowKeys);
-              },
-            }}
             onChange={onChangeTable}
             columns={[
               {
                 title: "№",
+                width: "3rem",
                 key: "index",
+                align: "center",
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
               },
               {
                 title: "Төрөл",
+                width: "5rem",
                 dataIndex: "turul",
                 align: "center",
                 render: (turul) => {
@@ -1053,13 +1054,14 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Регистр",
                 dataIndex: "register",
-                width: "10rem",
+                width: "8rem",
                 align: "center",
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
               {
                 title: "Нэр",
+                width: "10rem",
                 dataIndex: "ner",
                 showSorterTooltip: false,
                 sorter: () => 0,
@@ -1076,6 +1078,7 @@ function AjiltanBurtgel({ token }) {
 
               {
                 title: "Төлөв",
+                width: "8rem",
                 dataIndex: "idevkhiteiEsekh",
                 align: "center",
                 render: (idevkhiteiEsekh) => {
@@ -1099,7 +1102,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Бүртгэгдсэн",
                 dataIndex: "createdAt",
-                width: "13rem",
+                width: "8rem",
                 align: "center",
                 render: (data) => {
                   return moment(data).format("YYYY-MM-DD");
@@ -1108,21 +1111,24 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Төрөл",
                 dataIndex: "segmentuud",
-                width: "7rem",
+                width: "5rem",
                 align: "center",
                 render(segmentuud) {
                   return (
-                    <Popover trigger="hover" content={
-                      <div>
-                        <CardList
-                          keyValue="segment"
-                          className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                          jagsaalt={segmentuud}
-                          Component={Tile}
-                          componentProps={{ token }}
-                        />
-                      </div>
-                    }>
+                    <Popover
+                      trigger="hover"
+                      content={
+                        <div>
+                          <CardList
+                            keyValue="segment"
+                            className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                            jagsaalt={segmentuud}
+                            Component={Tile}
+                            componentProps={{ token }}
+                          />
+                        </div>
+                      }
+                    >
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <TbBoxMultiple className="text-xl" />
                       </a>
@@ -1133,11 +1139,14 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "И-мэйл",
                 dataIndex: "mail",
-                width: "7rem",
+                width: "5rem",
                 align: "center",
                 render(email) {
                   return (
-                    <Popover trigger="hover" content={<div className="dark:text-white">{email}</div>}>
+                    <Popover
+                      trigger="hover"
+                      content={<div className="dark:text-white">{email}</div>}
+                    >
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <MailOutlined style={{ fontSize: "18px" }} />
                       </a>
@@ -1148,11 +1157,14 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Хаяг",
                 dataIndex: "khayag",
-                width: "7rem",
+                width: "4rem",
                 align: "center",
                 render: (khayag) => {
                   return (
-                    <Popover trigger="hover" content={<div className="dark:text-white" >{khayag}</div>}>
+                    <Popover
+                      trigger="hover"
+                      content={<div className="dark:text-white">{khayag}</div>}
+                    >
                       <a className=" flex items-center justify-center  hover:scale-150">
                         <EnvironmentOutlined style={{ fontSize: "18px" }} />
                       </a>
@@ -1164,7 +1176,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Түүх",
                 align: "center",
-                width: "7rem",
+                width: "4rem",
                 render: (data) => {
                   return (
                     <Popover
@@ -1185,7 +1197,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1257,6 +1269,7 @@ function AjiltanBurtgel({ token }) {
               },
               {
                 title: () => <SettingOutlined />,
+                width: "2rem",
                 align: "center",
                 render: (data) => (
                   <div className="flex flex-row">
@@ -1321,6 +1334,7 @@ function AjiltanBurtgel({ token }) {
             cancelText="Цуцлах"
           >
             <Form
+              autoComplete={"off"}
               labelCol={{ span: 10 }}
               wrapperCol={{ span: 14 }}
               ref={formRef}
@@ -1367,8 +1381,8 @@ function AjiltanBurtgel({ token }) {
               })),
           }}
         />
-      </div >
-    </Admin >
+      </div>
+    </Admin>
   );
 }
 

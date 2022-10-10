@@ -48,7 +48,7 @@ function AnketBuglukh({ data, token }) {
             form={form}
             name="dynamic_form_nest_item"
             onFinish={onFinish}
-            autoComplete="off"
+            autoComplete={"off"}
             initialValues={data}
             className="block h-5/6 overflow-y-auto pt-5"
             layout="vertical"

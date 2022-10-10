@@ -30,11 +30,11 @@ function Ajiltan() {
     form.setFieldsValue({ nevtrekhNer });
   }, []);
   useEffect(() => {
-    Aos.init({once: true});
-  },[]);
+    Aos.init({ once: true });
+  }, []);
 
   return (
-    <div className="login flex justify-center bg-green-600 xl:bg-white dark:bg-gray-800 ">
+    <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
       <Head>
         <title>Нэвтрэх хуудас</title>
         <link rel="icon" href="/favicon.ico" />
@@ -68,6 +68,7 @@ function Ajiltan() {
               <h2 className="intro-x text-center text-2xl font-bold dark:text-gray-300 xl:text-left xl:text-3xl"></h2>
               <div data-aos="flip-right">
                 <Form
+                  autoComplete={"off"}
                   form={form}
                   initialValues={{}}
                   onKeyDown={(e) => {
@@ -75,24 +76,18 @@ function Ajiltan() {
                       newterya({ ...form.getFieldsValue(), namaigsana });
                   }}
                 >
-                  <div  data-aos="fade-up"
-                      data-aos-delay="500">
-                  <Form.Item name="nevtrekhNer">
-                    <Input
-                      placeholder="Нэвтрэх нэр"
-                      className="login-input"
-                    />
-                  </Form.Item>
+                  <div data-aos="fade-up" data-aos-delay="500">
+                    <Form.Item name="nevtrekhNer">
+                      <Input
+                        placeholder="Нэвтрэх нэр"
+                        className="login-input"
+                      />
+                    </Form.Item>
                   </div>
-                  <div
-                  data-aos="fade"
-                  data-aos-delay="300">
-                  <Form.Item name="nuutsUg">
-                    <Password
-                      placeholder="Нууц үг"
-                      className="login-input"
-                    />
-                  </Form.Item>
+                  <div data-aos="fade" data-aos-delay="300">
+                    <Form.Item name="nuutsUg">
+                      <Password placeholder="Нууц үг" className="login-input" />
+                    </Form.Item>
                   </div>
                 </Form>
                 <div
@@ -121,7 +116,7 @@ function Ajiltan() {
                   onClick={() =>
                     newterya({ ...form.getFieldsValue(), namaigsana })
                   }
-                  className="focus:outline-none group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
+                  className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
                   data-aos="fade-down"
                   data-aos-delay="500"
                 >
@@ -142,12 +137,11 @@ function Ajiltan() {
                   Нэвтрэх
                 </button>
                 <div className="mt-24 text-center xl:hidden">
-                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
-                хуулиар баталгаажсан.
-                
+                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
+                  хуулиар баталгаажсан.
+                </div>
               </div>
-              </div>
-              <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 h-12 w-40 cursor-pointer items-center justify-center bg-white dark:bg-gray-900 rounded-full border shadow-md flex">
+              <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 flex h-12 w-40 cursor-pointer items-center justify-center rounded-full border bg-white shadow-md dark:bg-gray-900">
                 <div className="mr-4 text-gray-700 dark:text-gray-300">
                   Dark Mode
                 </div>
@@ -159,9 +153,7 @@ function Ajiltan() {
               <div className="fixed bottom-0 hidden xl:block">
                 © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
                 хуулиар баталгаажсан.
-                
               </div>
-              
             </div>
           </div>
         </div>

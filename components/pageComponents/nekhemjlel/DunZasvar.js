@@ -38,6 +38,7 @@ function DunZasvar(
       initialValues={data}
       labelCol={{ span: 15 }}
       wrapperCol={{ span: 14 }}
+      autoComplete={"off"}
     >
       <Form.Item
         label="Өмнөх хуримтлагдсан өр төлбөр"

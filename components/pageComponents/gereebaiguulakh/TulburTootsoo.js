@@ -61,6 +61,7 @@ const Tulbur = ({
     <Form
       {...formItemLayout}
       initialValues={value}
+      autoComplete={"off"}
       onValuesChange={(values) => onChange({ ...value, ...values })}
       onFinish={onFinish}
     >

@@ -231,6 +231,7 @@ function Anket({ token }) {
                   form={form}
                   className="pt-5"
                   name="dynamic_form_item"
+                  autoComplete={"off"}
                   onFinish={(v) => {
                     anketBurtgey(v);
                   }}

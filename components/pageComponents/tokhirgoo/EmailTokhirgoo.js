@@ -51,6 +51,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
                 wrapperCol={{
                   span: 14,
                 }}
+                autoComplete={"off"}
                 onFinish={tokhirgooKhadgalakh}
               >
                 <Form.Item
