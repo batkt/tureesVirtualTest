@@ -55,10 +55,10 @@ function index({ token, data }) {
           <div className="flex flex-col gap-3">
             <div className="flex gap-3 text-xl text-black text-opacity-70 dark:text-white dark:text-opacity-70">
               <div className="flex">
-                овог: <p className="ml-2 uppercase">{data?.ovog}</p>
+                Овог: <p className="ml-2 uppercase">{data?.ovog}</p>
               </div>
               <div className="flex">
-                нэр: <p className="ml-2 uppercase">{data?.ner}</p>
+                Нэр: <p className="ml-2 uppercase">{data?.ner}</p>
               </div>
             </div>
             <div className="flex flex-row items-center space-x-3 border-t-2 pt-3 font-medium">

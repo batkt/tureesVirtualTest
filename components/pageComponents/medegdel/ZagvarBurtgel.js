@@ -42,7 +42,7 @@ function ZagvarBurtgel(
   );
 
   return (
-    <Form form={form} initialValues={data}>
+    <Form autoComplete={"off"} form={form} initialValues={data}>
       <Form.Item name="ner">
         <Input placeholder="Нэр" />
       </Form.Item>

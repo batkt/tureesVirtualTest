@@ -124,6 +124,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
     <Form
       name="validate_other"
       {...formItemLayout}
+      autoComplete={"off"}
       onValuesChange={() => onChange({ ...value })}
       initialValues={value}
       onFinish={onFinish}

@@ -209,6 +209,7 @@ const YurunkhiiMedeele = ({
       {...formItemLayout}
       initialValues={value}
       onFinish={onFinish}
+      autoComplete={"off"}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
       <div data-aos="fade-right" data-aos-duration="1000">

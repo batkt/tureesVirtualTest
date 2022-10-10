@@ -199,6 +199,7 @@ function Dans({ token, baiguullaga }) {
               initialValues={khanbankCoprporate}
               labelCol={{ span: 10 }}
               wrapperCol={{ span: 14 }}
+              autoComplete={"off"}
             >
               <Form.Item
                 hidden={khanbankCoprporate?.corporateAshiglakhEsekh !== true}
@@ -299,6 +300,7 @@ function Dans({ token, baiguullaga }) {
               initialValues={tdbCoprporate}
               labelCol={{ span: 10 }}
               wrapperCol={{ span: 14 }}
+              autoComplete={"off"}
             >
               <Form.Item
                 hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true}

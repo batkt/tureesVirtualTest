@@ -206,7 +206,7 @@ function ZakhialgaNemekh({ token }) {
       </div>
       <div className="col-span-12 lg:col-span-3 xl:col-span-2">
         <div className="box p-5">
-          <Form form={form} onFinish={onFinish}>
+          <Form form={form} autoComplete={"off"} onFinish={onFinish}>
             <Form.Item name="ner">
               <Input placeholder="Гэрээний загварын нэр" />
             </Form.Item>

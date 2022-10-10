@@ -197,6 +197,7 @@ function AjiltanBurtgel({ token }) {
           name="control-ref"
           onFinish={onFinish}
           initialValues={{ remember: true }}
+          autoComplete={"off"}
         >
           <div data-aos="fade-right" data-aos-duration="800">
             <Form.Item
@@ -429,9 +430,6 @@ function AjiltanBurtgel({ token }) {
         >
           <Table
             bordered
-            tableLayout={
-              ajilchdiinGaralt?.jagsaalt?.length > 0 ? "auto" : "fixed"
-            }
             rowKey={(row) => row._id}
             dataSource={ajilchdiinGaralt?.jagsaalt}
             pagination={{
@@ -450,6 +448,8 @@ function AjiltanBurtgel({ token }) {
             columns={[
               {
                 title: "№",
+                width: "3rem",
+                align: "center",
                 key: "index",
                 className: "text-center",
                 render: (text, record, index) =>
@@ -460,13 +460,24 @@ function AjiltanBurtgel({ token }) {
                   1,
               },
               { title: "Нэр", dataIndex: "ner", ellipsis: true },
-              { title: "Регистр", dataIndex: "register", ellipsis: true },
+              {
+                title: "Регистр",
+                dataIndex: "register",
+                ellipsis: true,
+                align: "center",
+              },
               { title: "Хаяг", dataIndex: "khayag", ellipsis: true },
-              { title: "Утас", dataIndex: "utas", ellipsis: true },
+              {
+                title: "Утас",
+                dataIndex: "utas",
+                ellipsis: true,
+                align: "center",
+              },
               {
                 title: "Ажилд орсон огноо",
                 dataIndex: "ajildOrsonOgnoo",
                 ellipsis: true,
+                align: "center",
                 render: (ajildOrsonOgnoo) => (
                   <span>
                     {ajildOrsonOgnoo !== null
@@ -478,7 +489,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: () => <SettingOutlined />,
                 align: "center",
-                width: "1rem",
+                width: "2rem",
                 ellipsis: true,
                 render: (data) =>
                   ajiltan?.erkh === "Admin" && (

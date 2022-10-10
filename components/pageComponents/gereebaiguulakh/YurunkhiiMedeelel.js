@@ -33,71 +33,61 @@ const normFile = (e) => {
   return e && e.fileList;
 };
 
-const query = { turul: "geree" }
+const query = { turul: "geree" };
 
 function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
-  const segment = useJagsaalt("/segment", query)
-  const [turul, setTurul] = useState()
-  const [songosonSegment, setSongosonSegment] = useState()
+  const segment = useJagsaalt("/segment", query);
+  const [turul, setTurul] = useState();
+  const [songosonSegment, setSongosonSegment] = useState();
 
   function solikh(value) {
-    setTurul(segment.jagsaalt.find((a) => a.ner === value))
+    setTurul(segment.jagsaalt.find((a) => a.ner === value));
     shineSolikh("ner", value);
   }
   function solikhtTurul(value) {
     shineSolikh("utga", value);
-
   }
   function shineSolikh(talbar, utga) {
     setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
   }
-  return <>
-    <div className="flex flex-row justify-end">
-      <Form.Item
-        className="w-full pl-2"
-        wrapperCol={{ span: 9, offset: 15, }}
-        {...restField}
-        name={[name, "ner"]}
-        fieldKey={[fieldKey, "ner"]}
-      >
-        <Select
-          style={{ width: "100%" }}
-          placeholder='Нэр'
-          onChange={solikh}
+  return (
+    <>
+      <div className="flex flex-row justify-end">
+        <Form.Item
+          className="w-full pl-2"
+          wrapperCol={{ span: 9, offset: 15 }}
+          {...restField}
+          name={[name, "ner"]}
+          fieldKey={[fieldKey, "ner"]}
         >
-          {segment?.jagsaalt?.map((mur) => (
-            <Select.Option value={mur?.ner}>
-              {mur?.ner}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <Form.Item
-        className="w-2/4 "
-        wrapperCol={{ span: 18, offset: 2, }}
-        {...restField}
-        name={[name, "utga"]}
-        fieldKey={[fieldKey, "utga"]}>
-        <Select
-          style={{ width: "100%" }}
-          placeholder='Утга'
-          onChange={solikhtTurul}
+          <Select style={{ width: "100%" }} placeholder="Нэр" onChange={solikh}>
+            {segment?.jagsaalt?.map((mur) => (
+              <Select.Option value={mur?.ner}>{mur?.ner}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          className="w-2/4 "
+          wrapperCol={{ span: 18, offset: 2 }}
+          {...restField}
+          name={[name, "utga"]}
+          fieldKey={[fieldKey, "utga"]}
         >
-          {turul?.utguud?.map((a) => (
-            <Select.Option value={a}>
-              {a}
-            </Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
-      <CloseCircleOutlined
-        className="pt-2"
-        onClick={() => remove(name)}
-      />
-    </div>
-  </>
+          <Select
+            style={{ width: "100%" }}
+            placeholder="Утга"
+            onChange={solikhtTurul}
+          >
+            {turul?.utguud?.map((a) => (
+              <Select.Option value={a}>{a}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
+      </div>
+    </>
+  );
 }
-
 
 const YurunkhiiMedeele = ({
   token,
@@ -113,9 +103,6 @@ const YurunkhiiMedeele = ({
     value.baiguullagaEsekh
   );
   function onChangeRegister({ target }) {
-
-
-
     var onookhKhariltsagch = {
       ner: "",
       utas: "",
@@ -166,15 +153,13 @@ const YurunkhiiMedeele = ({
     <Form
       ref={formRef}
       form={form}
+      autoComplete={"off"}
       name="validate_other"
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(changedValues, values) => {
-        console.log(values, changedValues)
-        onChange({ ...value, ...values })
-      }
-
-      }
+        onChange({ ...value, ...values });
+      }}
       onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-delay="200">
@@ -380,17 +365,22 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      <div
-        data-aos="fade-right" data-aos-delay="900">
-        <Form.List name="segmentuud" className=" " >
+      <div data-aos="fade-right" data-aos-delay="900">
+        <Form.List name="segmentuud" className=" ">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, fieldKey, ...restField }) => (
-                <div key={key}  >
-                  <YalgakhUtga key={key} name={name} fieldKey={fieldKey}  {...restField} remove={remove} />
+                <div key={key}>
+                  <YalgakhUtga
+                    key={key}
+                    name={name}
+                    fieldKey={fieldKey}
+                    {...restField}
+                    remove={remove}
+                  />
                 </div>
               ))}
-              <Form.Item className="" wrapperCol={{ span: 15, offset: 10, }}>
+              <Form.Item className="" wrapperCol={{ span: 15, offset: 10 }}>
                 <Button
                   icon={<PlusOutlined />}
                   className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "

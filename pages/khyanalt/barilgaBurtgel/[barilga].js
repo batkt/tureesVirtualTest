@@ -156,6 +156,7 @@ function GereeBaiguulakh({ token }) {
           <label>Барилга бүртгэл</label>
         </div>
         <Form
+          autoComplete={"off"}
           form={form}
           onFinish={onFinish}
           name="barilga"

@@ -237,8 +237,8 @@ function TalbaiBurtgekh({ token }) {
     const khurunguud = formRef.current.getFieldsValue(khurunguud);
     talbaiState.baiguullagiinId = ajiltan?.baiguullagiinId;
     talbaiState.barilgiinId = barilgiinId;
+    talbaiState.khurunguud = khurunguud.khurunguud;
     if (khurunguud?.khurunguud?.length > 0) {
-      talbaiState.khurunguud = khurunguud.khurunguud;
       if (talbaiState.khurunguud[0].zurgiinId !== undefined) {
         talbaiState.khurunguud.map(
           (x) =>
@@ -317,6 +317,7 @@ function TalbaiBurtgekh({ token }) {
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 15 }}
         form={form}
+        autoComplete={"off"}
         name="control-ref"
         onFinish={onFinish}
         initialValues={{ ...data, remember: true }}
@@ -585,7 +586,11 @@ function TalbaiBurtgekh({ token }) {
                       <Card>
                         <div key={key}>
                           <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
-                            <CloseCircleOutlined onClick={() => remove(name)} />
+                            <CloseCircleOutlined
+                              onClick={() => {
+                                remove(name), khurungKhasakh();
+                              }}
+                            />
                           </div>
                           <div className=" grid grid-cols-12">
                             <div className="col-span-2 row-span-2 flex items-center justify-center">
