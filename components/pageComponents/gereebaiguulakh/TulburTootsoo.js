@@ -33,7 +33,7 @@ const Tulbur = ({
     const zardluud = (value.zardluud = value.zardluud?.filter(function (item) {
       return item.dun !== undefined;
     }));
-    if (!!value.talbainNiitUne && !!value.khugatsaa && !value._id)
+    if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,
@@ -45,8 +45,10 @@ const Tulbur = ({
         })
         .then(({ data }) => {
           setKhuvaari(data);
-          _.set(value, "avlaga.guilgeenuud", data);
-          onChange({ ...value });
+          if(!value._id){
+            _.set(value, "avlaga.guilgeenuud", data);
+            onChange({ ...value });
+          }
         })
         .catch((e) => {
           aldaaBarigch(e);
