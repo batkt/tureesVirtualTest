@@ -76,12 +76,6 @@ function TableGuilgee({
   columns,
   garalt,
   setKhuudaslalt,
-  delgegdsenGeree,
-  setDelgegdsenGeree,
-  refTuukh,
-  token,
-  ognoo,
-  refreshData,
   setLoadingIndex,
   onChange,
 }) {
@@ -134,7 +128,6 @@ function guilgeeniiTuukh({ token }) {
   });
   //#region state
   const ref = React.useRef(null);
-  const refTuukh = React.useRef(null);
   const baritsaaref = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
   const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
@@ -456,7 +449,6 @@ function guilgeeniiTuukh({ token }) {
   function refreshData() {
     refresh();
     tolooguiGereeniiTooMutate();
-    refTuukh.current?.refreshData();
   }
 
   function baritsaaUdirdya(data) {
@@ -848,12 +840,6 @@ function guilgeeniiTuukh({ token }) {
             garalt={gereeniiMedeelel}
             setKhuudaslalt={setKhuudaslalt}
             setLoadingIndex={setLoadingIndex}
-            refTuukh={refTuukh}
-            token={token}
-            ognoo={ognoo}
-            refreshData={refreshData}
-            delgegdsenGeree={delgegdsenGeree}
-            setDelgegdsenGeree={setDelgegdsenGeree}
             onChange={khusnegtOrderChange}
           />
         </div>
