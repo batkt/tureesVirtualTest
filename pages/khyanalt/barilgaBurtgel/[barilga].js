@@ -49,11 +49,12 @@ function GereeBaiguulakh({ token }) {
       let davkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
         (a) => !a?.davkhar?.includes("B")
       ) || []
+
       let bdavkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
         (a) => !!a?.davkhar?.includes("B")
       ) || []
-      setDavkhar(davkhar)
-      setDavkhar(bdavkhar)
+      setDavkhar(_.cloneDeep(davkhar))
+      setBDavkhar(_.cloneDeep(bdavkhar))
       let data = _.get(baiguullaga, `barilguud.${barilga}`)
       data.neekhTsag = moment(data.neekhTsag)
       data.khaakhTsag = moment(data.khaakhTsag)
@@ -61,23 +62,36 @@ function GereeBaiguulakh({ token }) {
     }
   },[baiguullaga])
 
+  function planAvya(davkhar,bEsekh) {
+    if(bEsekh){
+      let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !!a?.davkhar?.includes("B")
+      ) || []
+      return data?.find(b=>b.davkhar === davkhar)
+    }
+    let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+      (a) => !a?.davkhar?.includes("B")
+    ) || []
+    return data?.find(b=>b.davkhar === davkhar)
+  }
+
   const onChange = (v) => {
     if (!!v?.davkhar) {
-      const davkhar = new Array(v?.davkhar)
+      const value = new Array(v?.davkhar)
         .fill("")
         .map((a, i) => ({
-          davkhar: i + 1,
-          tariff: 0,
+          ...(davkhar.find(b=>b.davkhar === `${i+1}`) || planAvya(`${i+1}`) || {}),
+          davkhar: `${i + 1}`,
         }))
         .reverse();
-      setDavkhar([...davkhar]);
+      setDavkhar([...value]);
     }
     if (!!v?.bdavkhar) {
-      const bdavkhar = new Array(v?.bdavkhar).fill("").map((a, i) => ({
+      const value = new Array(v?.bdavkhar).fill("").map((a, i) => ({
+        ...(bdavkhar.find(b=>b.davkhar === `B${i + 1}`) || planAvya(`B${i + 1}`) || {}),
         davkhar: `B${i + 1}`,
-        tariff: 0,
       }));
-      setBDavkhar([...bdavkhar]);
+      setBDavkhar([...value]);
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
