@@ -32,8 +32,6 @@ import useOrder from "tools/function/useOrder";
 import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
-
-import GuilgeeniiTuukh from "components/pageComponents/tulbur/GuilgeeniiTuukh";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
@@ -45,13 +43,12 @@ import Aos from "aos";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
-import useDans from "hooks/useDans";
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
   const { barilgiinId } = useAuth();
-  const { data, mutate } = useSWR(
+  const { data, mutate ,isValidating} = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
@@ -70,7 +67,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
       className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
         }`}
     >
-      {!data ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
+      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
   );
 }
