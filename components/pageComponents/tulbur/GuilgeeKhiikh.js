@@ -15,9 +15,9 @@ import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
-const query = {turul:{$ne:'төг'}}
+const query = { turul: { $ne: "төг" }, tariff: { $exists: true } };
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
-  const [dun, setDun] = useState(0);
+  const [dun, setDun] = useState("");
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
@@ -118,7 +118,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           .catch(aldaaBarigch);
       },
     }),
-    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul,negjUne]
+    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul, negjUne]
   );
   function labelTurul(guilgeeTurul) {
     var text;
@@ -141,7 +141,12 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
-        <Radio.Group onChange={(e) => setTurul(e.target.value)} value={turul}>
+        <Radio.Group
+          onChange={(e) => {
+            setTurul(e.target.value), setDun("");
+          }}
+          value={turul}
+        >
           <Radio value={"voucher"}>Ваучераар</Radio>
           <Radio value={"avlaga"}>Авлага</Radio>
           <Radio value={"ahiglalt"}>Ашиглалт</Radio>
@@ -168,22 +173,33 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
       )}
       {turul === "ahiglalt" && (
-        <Select placeholder="Зардлын төрөл" onChange={setNegjUne}>
+        <Select placeholder="Зардлын төрөл" onChange={(v) => setNegjUne(v)}>
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur.tariff}>{mur.ner} /{mur.turul}/</Select.Option>
+            <Select.Option key={mur._id} value={mur.tariff}>
+              {mur.ner} /{mur.turul}/
+            </Select.Option>
           ))}
         </Select>
       )}
-      {negjUne && turul === "ahiglalt" && (<div className="p-2 dark:text-gray-100">Нэгж үнэ:{formatNumber(negjUne)}</div>)}
+      {negjUne && turul === "ahiglalt" && (
+        <div className="p-2 dark:text-gray-100">
+          Нэгж үнэ:{formatNumber(negjUne)}
+        </div>
+      )}
       <InputNumber
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        placeholder={turul === "ahiglalt" ? 'Нэгж' : "Дүн"}
-        style={{ width: "100%",textAlign: 'center' }}
-        onChange={setDun}
+        placeholder={turul === "ahiglalt" ? "Нэгж" : "Дүн"}
+        style={{ width: "100%", textAlign: "center" }}
+        value={dun}
+        onChange={(v) => setDun(v)}
         min={0}
       />
-      {negjUne && turul === "ahiglalt" && (<div className="p-2 dark:text-gray-100">Нийт үнэ:{formatNumber(negjUne * dun)}</div>)}
+      {negjUne && turul === "ahiglalt" && (
+        <div className="p-2 dark:text-gray-100">
+          Нийт үнэ:{formatNumber(negjUne * dun || 0)}
+        </div>
+      )}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
         <Input.TextArea
           placeholder="Тайлбар"

@@ -74,7 +74,6 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
   const segment = useJagsaalt("/segment", query);
   const [turul, setTurul] = useState();
   const [songosonSegment, setSongosonSegment] = useState();
-  console.log(songosonSegment);
 
   function solikh(value) {
     setTurul(segment.jagsaalt.find((a) => a.ner === value));
@@ -858,7 +857,7 @@ function AjiltanBurtgel({ token }) {
                 key={index}
                 className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
                   JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50"
+                    ? "bg-green-50 dark:bg-gray-800"
                     : ""
                 }`}
                 onClick={() => setQuery(mur.query)}
@@ -1020,7 +1019,7 @@ function AjiltanBurtgel({ token }) {
             columns={[
               {
                 title: "№",
-                width: "3rem",
+                width: "2.5rem",
                 key: "index",
                 align: "center",
                 className: "text-center",
@@ -1033,7 +1032,7 @@ function AjiltanBurtgel({ token }) {
               },
               {
                 title: "Төрөл",
-                width: "5rem",
+                width: "4rem",
                 dataIndex: "turul",
                 align: "center",
                 render: (turul) => {
@@ -1054,14 +1053,14 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Регистр",
                 dataIndex: "register",
-                width: "8rem",
+                width: "6rem",
                 align: "center",
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
               {
                 title: "Нэр",
-                width: "10rem",
+                width: "8rem",
                 dataIndex: "ner",
                 showSorterTooltip: false,
                 sorter: () => 0,
@@ -1069,7 +1068,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Утас",
                 dataIndex: "utas",
-                width: "7rem",
+                width: "5rem",
                 align: "center",
                 render(a) {
                   return a?.join(",");
@@ -1078,7 +1077,7 @@ function AjiltanBurtgel({ token }) {
 
               {
                 title: "Төлөв",
-                width: "8rem",
+                width: "5rem",
                 dataIndex: "idevkhiteiEsekh",
                 align: "center",
                 render: (idevkhiteiEsekh) => {
@@ -1102,7 +1101,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Бүртгэгдсэн",
                 dataIndex: "createdAt",
-                width: "8rem",
+                width: "6rem",
                 align: "center",
                 render: (data) => {
                   return moment(data).format("YYYY-MM-DD");
@@ -1111,7 +1110,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Төрөл",
                 dataIndex: "segmentuud",
-                width: "5rem",
+                width: "6rem",
                 align: "center",
                 render(segmentuud) {
                   return (
@@ -1139,7 +1138,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "И-мэйл",
                 dataIndex: "mail",
-                width: "5rem",
+                width: "4.5rem",
                 align: "center",
                 render(email) {
                   return (
@@ -1157,7 +1156,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Хаяг",
                 dataIndex: "khayag",
-                width: "4rem",
+                width: "3.5rem",
                 align: "center",
                 render: (khayag) => {
                   return (
@@ -1176,7 +1175,7 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Түүх",
                 align: "center",
-                width: "4rem",
+                width: "3.5rem",
                 render: (data) => {
                   return (
                     <Popover

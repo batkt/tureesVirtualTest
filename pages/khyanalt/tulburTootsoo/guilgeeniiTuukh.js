@@ -48,7 +48,7 @@ import Khuulga from "components/pageComponents/tulbur/Khuulga";
 
 function GereeniiUldegdel({ ugugdul, token }) {
   const { barilgiinId } = useAuth();
-  const { data, mutate ,isValidating} = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!ugugdul?.gereeniiDugaar && !!barilgiinId
       ? ["/uldegdelBodyo", barilgiinId, ugugdul?.gereeniiDugaar]
       : null,
@@ -64,8 +64,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -337,7 +338,6 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
-
               <a
                 onClick={() => nekhemjlelIlgeekh(row)}
                 className="fill-current  text-green-500"
@@ -346,7 +346,7 @@ function guilgeeniiTuukh({ token }) {
                   title="Нэхэмжлэл"
                   className="flex w-full items-center justify-center "
                 >
-                  <FileDoneOutlined className=" text-xl fill-current p-1 text-green-500" />
+                  <FileDoneOutlined className=" fill-current p-1 text-xl text-green-500" />
                 </Tooltip>
               </a>
               <a
@@ -357,7 +357,7 @@ function guilgeeniiTuukh({ token }) {
                   title="Хуулга"
                   className="flex w-full items-center justify-center "
                 >
-                  <FileTextOutlined className=" text-xl fill-current p-1 text-green-500" />
+                  <FileTextOutlined className=" fill-current p-1 text-xl text-green-500" />
                 </Tooltip>
               </a>
               <a
@@ -407,12 +407,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -509,20 +509,31 @@ function guilgeeniiTuukh({ token }) {
           onFinish={refreshData}
         />
       ),
-      footer: []
+      footer: [],
     });
   }
 
   function khuulgaKharya(data) {
     const footer = [
-      <Button type="primary" onClick={() => ref.current.khevlekh()} icon={<PrinterOutlined/>}>Хэвлэх</Button>,
-      <Button onClick={() => ref.current.khaaya()} icon={<CloseCircleOutlined/>}>Хаах</Button>,
+      <Button
+        type="primary"
+        onClick={() => ref.current.khevlekh()}
+        icon={<PrinterOutlined />}
+      >
+        Хэвлэх
+      </Button>,
+      <Button
+        onClick={() => ref.current.khaaya()}
+        icon={<CloseCircleOutlined />}
+      >
+        Хаах
+      </Button>,
     ];
     modal({
       title: "Хуулга",
       icon: <FileExcelOutlined />,
-      width:'90vw',
-      style:{ top: 20 },
+      width: "90vw",
+      style: { top: 20 },
       content: (
         <Khuulga
           data={data}
@@ -553,7 +564,7 @@ function guilgeeniiTuukh({ token }) {
           {[
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
               tailbar:
@@ -561,7 +572,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0),
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
               tailbar: "Огноонд хамаарагдах бүх Ваучер төлөлтийн нийлбэр дүн",
@@ -571,7 +582,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
               ),
               turul: "tsutslagdsanAvlaga",
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
               tailbar: "Идэвхигүй буюу цуцлагдсан гэрээний нийт авлага",
             },
@@ -580,7 +591,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
               ),
               turul: "eneSardTulukh",
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Төлөвлөлгөө / сар",
               tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
@@ -589,7 +600,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
               ),
               turul: "eneSardTulsun",
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Гүйцэтгэл / сар",
               tailbar: "Огноонд хамаарагдах бүх төлөгдсөн дүнгийн нийлбэр",
             },
@@ -598,7 +609,7 @@ function guilgeeniiTuukh({ token }) {
                 _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
               ),
               turul: "khungulult",
-              selectedColor: "bg-green-600 bg-opacity-20",
+              selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Хөнгөлөлт / сар",
               tailbar: "Огноонд хамаарагдах бүх хөнгөлөлтийн дүнгийн нийлбэр",
             },
@@ -606,8 +617,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"

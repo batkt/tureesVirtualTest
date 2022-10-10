@@ -237,7 +237,7 @@ function ZakhialgaNemekh({ token }) {
   return (
     <Admin
       khuudasniiNer="zakhialgiinKhyanalt"
-      title="Гэрээний загвар угсрах"
+      title="Нэхэмжлэлийн загвар угсрах"
       hideSearch
       dedKhuudas
       className="p-4"

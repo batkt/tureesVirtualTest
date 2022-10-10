@@ -33,7 +33,7 @@ import {
   Input,
   notification,
 } from "antd";
-import { TbBoxMultiple } from 'react-icons/tb';
+import { TbBoxMultiple } from "react-icons/tb";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
 import formatNumber from "tools/function/formatNumber";
@@ -208,7 +208,6 @@ const Tailbar = React.forwardRef(
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
 
-
     React.useImperativeHandle(
       ref,
       () => ({
@@ -380,8 +379,6 @@ function ZakhialgiinKhyanalt() {
     content: () => componentRef.current,
   });
 
-
-  console.log(shuult.utga)
   const khyanaltiinDun = [
     {
       too:
@@ -392,7 +389,7 @@ function ZakhialgiinKhyanalt() {
       icon: <FileDoneOutlined />,
       utga: "Хэвийн",
       color: "text-green-500",
-      selectedColor: "bg-green-100",
+      selectedColor: "bg-green-50 dark:bg-gray-900",
       border: "border-green-500",
       query: {
         tuluv: { $nin: [-1] },
@@ -404,7 +401,7 @@ function ZakhialgiinKhyanalt() {
       icon: <UserOutlined />,
       utga: "Онцгой",
       color: "text-green-500",
-      selectedColor: "bg-green-100",
+      selectedColor: "bg-green-50 dark:bg-gray-900",
       border: "border-green-500",
       query: {},
     },
@@ -416,7 +413,7 @@ function ZakhialgiinKhyanalt() {
       icon: <HistoryOutlined />,
       utga: "Хугацаа хэтэрсэн",
       color: "text-red-500",
-      selectedColor: "bg-red-100",
+      selectedColor: "bg-red-50 dark:bg-gray-900",
       border: "border-red-500",
       query: {
         tuluv: { $ne: -1 },
@@ -428,7 +425,7 @@ function ZakhialgiinKhyanalt() {
       icon: <FileSyncOutlined />,
       utga: "Хаагдсан",
       color: "text-blue-500",
-      selectedColor: "bg-blue-100",
+      selectedColor: "bg-blue-50 dark:bg-gray-900",
       border: "border-blue-500",
       query: { tuluv: 9 },
     },
@@ -440,7 +437,7 @@ function ZakhialgiinKhyanalt() {
       icon: <WarningOutlined />,
       utga: "Сунгах гэрээ",
       color: "text-yellow-500",
-      selectedColor: "bg-yellow-100",
+      selectedColor: "bg-yellow-50 dark:bg-gray-900",
       border: "border-yellow-500",
       query: {
         tuluv: { $ne: -1 },
@@ -454,13 +451,12 @@ function ZakhialgiinKhyanalt() {
           : 0,
       icon: <FileExcelOutlined />,
       utga: "Цуцласан",
-      color: "text-gray-800",
-      selectedColor: "bg-gray-200",
-      border: "border-gray-800",
+      color: "text-gray-800 dark:text-gray-300",
+      selectedColor: "bg-gray-200 dark:bg-gray-900",
+      border: "border-gray-800 dark:border-gray-300",
       query: { tuluv: -1 },
     },
   ];
-
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -561,18 +557,21 @@ function ZakhialgiinKhyanalt() {
         align: "center",
         render(segmentuud) {
           return (
-            <Popover trigger="hover" content={
-              <div>
-                <CardList
-                  keyValue="segment"
-                  className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                  jagsaalt={segmentuud}
-                  Component={GereeSegmentKharakh}
-                  componentProps={{ token }}
-                />
-              </div>
-            }>
-              <a className=" flex items-center justify-center  hover:scale-150 " >
+            <Popover
+              trigger="hover"
+              content={
+                <div>
+                  <CardList
+                    keyValue="segment"
+                    className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
+                    jagsaalt={segmentuud}
+                    Component={GereeSegmentKharakh}
+                    componentProps={{ token }}
+                  />
+                </div>
+              }
+            >
+              <a className=" flex items-center justify-center  hover:scale-150 ">
                 <TbBoxMultiple className="text-xl" />
               </a>
             </Popover>
@@ -602,17 +601,27 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "6rem",
         render: (gereeniiTuukhuud) => {
-          return <div>
-            <Popover trigger="hover" content={
-              <div>
-                {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
-              </div>
-            }>
-              <a className=" flex items-center justify-center hover:scale-150 ">
-                <img src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png" data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png" alt="Cancel" width={23}></img>
-              </a>
-            </Popover>
-          </div>;
+          return (
+            <div>
+              <Popover
+                trigger="hover"
+                content={
+                  <div className="dark:text-gray-200">
+                    {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
+                  </div>
+                }
+              >
+                <a className=" flex items-center justify-center hover:scale-150 dark:invert ">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                    data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                    alt="Cancel"
+                    width={23}
+                  ></img>
+                </a>
+              </Popover>
+            </div>
+          );
         },
         showSorterTooltip: false,
         defaultSortOrder: "descend",
@@ -716,7 +725,7 @@ function ZakhialgiinKhyanalt() {
         ),
       },
     ];
-  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana,]);
+  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana]);
 
   function refresh() {
     gereeniiMedeelelMutate();
@@ -938,13 +947,14 @@ function ZakhialgiinKhyanalt() {
       <Card className="cardgrid col-span-12 p-5 ">
         <div className="grid w-full grid-cols-6 gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
-
             return (
               <div
                 key={index}
-                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                  } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                  }`}
+                className={`border-2 ${
+                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
+                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -955,10 +965,11 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } font-bold`}
+                          className={`text-3xl ${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -968,10 +979,11 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${mur?.utga === shuult?.utga
-                            ? mur.color
-                            : "text-green-500"
-                            } text-2xl`}
+                          className={`${
+                            mur?.utga === shuult?.utga
+                              ? mur.color
+                              : "text-green-500"
+                          } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -981,8 +993,7 @@ function ZakhialgiinKhyanalt() {
                 </div>
               </div>
             );
-          }
-          )}
+          })}
         </div>
         <div className="mt-5 flex flex-row">
           <div
@@ -1065,7 +1076,6 @@ function ZakhialgiinKhyanalt() {
                     return formatNumber(aldangiinUldegdel || 0);
                   },
                 },
-
               ]}
             />
             <Popover

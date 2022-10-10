@@ -603,7 +603,11 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className="zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3"
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${
+                  mur.utga === songogdsonTurul
+                    ? "bg-green-50 dark:bg-gray-900"
+                    : ""
+                }`}
                 onClick={() => turulSongyo(mur.utga)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
