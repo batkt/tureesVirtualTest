@@ -179,7 +179,7 @@ export const tsonknuud = [
     key: "/khyanalt/daalgavar",
   },
   {
-    ner: "Даалгавар",
+    ner: "Устгасан түүх",
     key: "/khyanalt/ustsanTuukh",
   },
 ];

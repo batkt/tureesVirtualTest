@@ -23,15 +23,10 @@ import _ from "lodash";
 function index({ token, data }) {
   const router = useRouter();
   const [targetKeys, setTargetKeys] = useState(data?.tsonkhniiErkhuud || []);
-  const [selectedKeys, setSelectedKeys] = useState([]);
   const [tokhirgoo, setTokhirgoo] = useState(data?.tokhirgoo || {});
   const { baiguullaga } = useAuth();
   const [barilgiinErkh, setBarilgiinErkh] = useState(data?.barilguud || []);
   const barilguud = baiguullaga?.barilguud;
-
-  const handleSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
-    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
-  };
 
   const khadgalya = () => {
     uilchilgee(token)
@@ -55,10 +50,10 @@ function index({ token, data }) {
           <div className="flex flex-col gap-3">
             <div className="flex gap-3 text-xl text-black text-opacity-70 dark:text-white dark:text-opacity-70">
               <div className="flex">
-                Овог: <p className="ml-2 uppercase">{data?.ovog}</p>
+                Овог: <p className="ml-2">{data?.ovog}</p>
               </div>
               <div className="flex">
-                Нэр: <p className="ml-2 uppercase">{data?.ner}</p>
+                Нэр: <p className="ml-2">{data?.ner}</p>
               </div>
             </div>
             <div className="flex flex-row items-center space-x-3 border-t-2 pt-3 font-medium">
@@ -96,7 +91,9 @@ function index({ token, data }) {
       </div>
       <div className="box col-span-6 p-2">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-1 pt-5 pb-2 space-x-2">
-          <Checkbox onChange={(e)=>setTargetKeys(e.target.checked ? tsonknuud?.filter((a) => !a.nuuya).map(a=>a.key) : []) }/> 
+          <Checkbox checked={!tsonknuud?.filter((a) => !a.nuuya).find((mur)=>{
+              return !targetKeys?.find(a=>a === mur.key)
+            })} onChange={(e)=>setTargetKeys(e.target.checked ? tsonknuud?.filter((a) => !a.nuuya).map(a=>a.key) : []) }/> 
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             Цонхны эрх
           </h2>
