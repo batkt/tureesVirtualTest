@@ -12,7 +12,6 @@ import {
   notification,
   Table,
   Upload,
-  message,
   TimePicker,
   Image,
 } from "antd";
@@ -231,7 +230,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               { required: true, message: "Барилгын Нээх цаг оруулна уу!" },
             ]}
-            name="NeekhTsag"
+            name="neekhTsag"
             label="Нээх цаг"
           >
             <TimePicker
@@ -244,7 +243,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               { required: true, message: "Барилгын Хаах цаг оруулна уу!" },
             ]}
-            name="KhaakhTsag"
+            name="khaakhTsag"
             label="Хаах цаг"
           >
             <TimePicker
