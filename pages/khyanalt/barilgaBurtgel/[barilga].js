@@ -20,6 +20,7 @@ import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import { url } from "services/uilchilgee";
+import moment from 'moment'
 
 const formItemLayout = {
   labelCol: {
@@ -53,7 +54,10 @@ function GereeBaiguulakh({ token }) {
       ) || []
       setDavkhar(davkhar)
       setDavkhar(bdavkhar)
-      form.setFieldsValue({..._.get(baiguullaga, `barilguud.${barilga}`),davkhar:davkhar.length,bdavkhar:bdavkhar.length})
+      let data = _.get(baiguullaga, `barilguud.${barilga}`)
+      data.neekhTsag = moment(data.neekhTsag)
+      data.khaakhTsag = moment(data.khaakhTsag)
+      form.setFieldsValue({...data,davkhar:davkhar.length,bdavkhar:bdavkhar.length})
     }
   },[baiguullaga])
 
