@@ -237,6 +237,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                     a.turul === "barter" ||
                     a.turul === "bank" ||
                     a.turul === "khyamdral" ||
+                    a.turul === "aldangi" ||
                     a.turul === "zalruulga" ||
                     a.turul === "baritsaa") && (
                       <div className="contents justify-between">
