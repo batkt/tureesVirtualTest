@@ -37,20 +37,26 @@ function GereeBaiguulakh({ token }) {
   const { baiguullaga } = useAuth();
   const router = useRouter();
   const { barilga } = router.query;
-  const [davkhar, setDavkhar] = useState(
-    _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-      (a) => !a.davkhar.includes("B")
-    ) || []
-  );
-  const [bdavkhar, setBDavkhar] = useState(
-    _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-      (a) => !!a.davkhar.includes("B")
-    ) || []
-  );
+  const [davkhar, setDavkhar] = useState([]);
+  const [bdavkhar, setBDavkhar] = useState([]);
 
   const [plantZurag, setPlantZurag] = useState();
 
   const [form] = Form.useForm();
+
+  useEffect(()=>{
+    if(!!baiguullaga){
+      let davkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !a?.davkhar?.includes("B")
+      ) || []
+      let bdavkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !!a?.davkhar?.includes("B")
+      ) || []
+      setDavkhar(davkhar)
+      setDavkhar(bdavkhar)
+      form.setFieldsValue({..._.get(baiguullaga, `barilguud.${barilga}`),davkhar:davkhar.length,bdavkhar:bdavkhar.length})
+    }
+  },[baiguullaga])
 
   const onChange = (v) => {
     if (!!v?.davkhar) {
