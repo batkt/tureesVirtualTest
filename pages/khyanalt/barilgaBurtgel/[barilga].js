@@ -12,7 +12,6 @@ import {
   notification,
   Table,
   Upload,
-  message,
   TimePicker,
   Image,
 } from "antd";
@@ -21,6 +20,7 @@ import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import { url } from "services/uilchilgee";
+import moment from 'moment'
 
 const formItemLayout = {
   labelCol: {
@@ -37,38 +37,61 @@ function GereeBaiguulakh({ token }) {
   const { baiguullaga } = useAuth();
   const router = useRouter();
   const { barilga } = router.query;
-  const [davkhar, setDavkhar] = useState(
-    _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-      (a) => !a.davkhar.includes("B")
-    ) || []
-  );
-  const [bdavkhar, setBDavkhar] = useState(
-    _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-      (a) => !!a.davkhar.includes("B")
-    ) || []
-  );
+  const [davkhar, setDavkhar] = useState([]);
+  const [bdavkhar, setBDavkhar] = useState([]);
 
   const [plantZurag, setPlantZurag] = useState();
 
   const [form] = Form.useForm();
 
+  useEffect(()=>{
+    if(!!baiguullaga){
+      let davkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !a?.davkhar?.includes("B")
+      ) || []
+
+      let bdavkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !!a?.davkhar?.includes("B")
+      ) || []
+      setDavkhar(_.cloneDeep(davkhar))
+      setBDavkhar(_.cloneDeep(bdavkhar))
+      let data = _.get(baiguullaga, `barilguud.${barilga}`)
+      data.neekhTsag = moment(data.neekhTsag)
+      data.khaakhTsag = moment(data.khaakhTsag)
+      form.setFieldsValue({...data,davkhar:davkhar.length,bdavkhar:bdavkhar.length})
+    }
+  },[baiguullaga])
+
+  function planAvya(davkhar,bEsekh) {
+    if(bEsekh){
+      let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+        (a) => !!a?.davkhar?.includes("B")
+      ) || []
+      return data?.find(b=>b.davkhar === davkhar)
+    }
+    let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+      (a) => !a?.davkhar?.includes("B")
+    ) || []
+    return data?.find(b=>b.davkhar === davkhar)
+  }
+
   const onChange = (v) => {
     if (!!v?.davkhar) {
-      const davkhar = new Array(v?.davkhar)
+      const value = new Array(v?.davkhar)
         .fill("")
         .map((a, i) => ({
-          davkhar: i + 1,
-          tariff: 0,
+          ...(davkhar.find(b=>b.davkhar === `${i+1}`) || planAvya(`${i+1}`) || {}),
+          davkhar: `${i + 1}`,
         }))
         .reverse();
-      setDavkhar([...davkhar]);
+      setDavkhar([...value]);
     }
     if (!!v?.bdavkhar) {
-      const bdavkhar = new Array(v?.bdavkhar).fill("").map((a, i) => ({
+      const value = new Array(v?.bdavkhar).fill("").map((a, i) => ({
+        ...(bdavkhar.find(b=>b.davkhar === `B${i + 1}`) || planAvya(`B${i + 1}`) || {}),
         davkhar: `B${i + 1}`,
-        tariff: 0,
       }));
-      setBDavkhar([...bdavkhar]);
+      setBDavkhar([...value]);
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
@@ -225,7 +248,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               { required: true, message: "Барилгын Нээх цаг оруулна уу!" },
             ]}
-            name="NeekhTsag"
+            name="neekhTsag"
             label="Нээх цаг"
           >
             <TimePicker
@@ -238,7 +261,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               { required: true, message: "Барилгын Хаах цаг оруулна уу!" },
             ]}
-            name="KhaakhTsag"
+            name="khaakhTsag"
             label="Хаах цаг"
           >
             <TimePicker

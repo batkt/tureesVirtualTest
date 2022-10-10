@@ -308,11 +308,17 @@ function GuilgeeNiiluulekh(
 
   function onDoubleClickKholbokhDun(target, index, talbar) {
     let sum = zuruuZun(index, talbar);
-    if (
-      "tulsunAldangi" === talbar &&
-      guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel
-    )
+    
+    if ("tulsunAldangi" === talbar && guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel)
       sum = guilgeeniiDun - gereenuud[index].aldangiinUldegdel;
+
+    if (
+      ("baritsaaTulbur" === talbar) &&
+      guilgeeniiDun - sum > ((gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0))
+    ){
+      let baritsaadun = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0)
+      sum += guilgeeniiDun - sum - baritsaadun;
+    }
 
     if (sum < guilgeeniiDun) {
       target.value = formatter(guilgeeniiDun - sum);

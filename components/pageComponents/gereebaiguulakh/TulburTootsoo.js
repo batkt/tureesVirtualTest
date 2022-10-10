@@ -45,8 +45,10 @@ const Tulbur = ({
         })
         .then(({ data }) => {
           setKhuvaari(data);
-          _.set(value, "avlaga.guilgeenuud", data);
-          onChange({ ...value });
+          if(!value._id){
+            _.set(value, "avlaga.guilgeenuud", data);
+            onChange({ ...value });
+          }
         })
         .catch((e) => {
           aldaaBarigch(e);
