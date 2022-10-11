@@ -183,7 +183,6 @@ function GereeBaiguulakh({ token }) {
           {...formItemLayout}
           onValuesChange={onChange}
           initialValues={{
-            ..._.get(baiguullaga, `barilguud.${barilga}`),
             davkhar: davkhar?.length,
             bdavkhar: bdavkhar?.length,
           }}
