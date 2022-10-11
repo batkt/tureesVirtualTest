@@ -46,25 +46,28 @@ function GereeBaiguulakh({ token }) {
 
   useEffect(() => {
     if (!!baiguullaga) {
-      let davkhar =
-        _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-          (a) => !a?.davkhar?.includes("B")
-        ) || [];
-
-      let bdavkhar =
-        _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-          (a) => !!a?.davkhar?.includes("B")
-        ) || [];
-      setDavkhar(_.cloneDeep(davkhar));
-      setBDavkhar(_.cloneDeep(bdavkhar));
       let data = _.get(baiguullaga, `barilguud.${barilga}`);
-      data.neekhTsag = moment(data.neekhTsag);
-      data.khaakhTsag = moment(data.khaakhTsag);
-      form.setFieldsValue({
-        ...data,
-        davkhar: davkhar.length,
-        bdavkhar: bdavkhar.length,
-      });
+      if (!!data) {
+        let davkhar =
+          _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+            (a) => !a?.davkhar?.includes("B")
+          ) || [];
+
+        let bdavkhar =
+          _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+            (a) => !!a?.davkhar?.includes("B")
+          ) || [];
+        setDavkhar(_.cloneDeep(davkhar));
+        setBDavkhar(_.cloneDeep(bdavkhar));
+
+        data.neekhTsag = moment(data.neekhTsag);
+        data.khaakhTsag = moment(data.khaakhTsag);
+        form.setFieldsValue({
+          ...data,
+          davkhar: davkhar.length,
+          bdavkhar: bdavkhar.length,
+        });
+      }
     }
   }, [baiguullaga]);
 
@@ -191,11 +194,6 @@ function GereeBaiguulakh({ token }) {
           name="barilga"
           {...formItemLayout}
           onValuesChange={onChange}
-          initialValues={{
-            ..._.get(baiguullaga, `barilguud.${barilga}`),
-            davkhar: davkhar?.length,
-            bdavkhar: bdavkhar?.length,
-          }}
         >
           <Form.Item
             rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}

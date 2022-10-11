@@ -3,7 +3,7 @@ import { useAuth } from "services/auth"
 import axios, { aldaaBarigch } from "services/uilchilgee"
 import useSWR from "swr"
 
-const fetcher = (url, token, baiguullagiinId, { search, turul,...khuudaslalt },barilgiinId) =>
+const fetcher = (url, token, baiguullagiinId, { search, turul, ...khuudaslalt }, barilgiinId) =>
   axios(token)
     .get(url, {
       params: {
@@ -22,8 +22,8 @@ const fetcher = (url, token, baiguullagiinId, { search, turul,...khuudaslalt },b
     .then((res) => res.data)
     .catch(aldaaBarigch)
 
-function useMailiinZagvar(token,turul) {
-  const {barilgiinId,baiguullaga} = useAuth()
+function useMailiinZagvar(token, turul) {
+  const { barilgiinId, baiguullaga } = useAuth()
   const [khuudaslalt, setMailiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
@@ -32,7 +32,34 @@ function useMailiinZagvar(token,turul) {
   })
   const { data, mutate } = useSWR(
     !!token && !!baiguullaga?._id
-      ? ["mailiinZagvar", token, baiguullaga?._id, khuudaslalt,barilgiinId]
+      ? ["mailiinZagvar", token, baiguullaga?._id, khuudaslalt, barilgiinId]
+      : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  )
+  return {
+    setMailiinZagvarKhuudaslalt,
+    mailiinZagvarGaralt: data,
+    mailiinZagvarMutate: mutate,
+  }
+}
+
+export function useMailiinZagvarWithoutAuth(token, turul, barilgiinId, baiguullagiinId) {
+  const [khuudaslalt, setMailiinZagvarKhuudaslalt] = useState({
+    khuudasniiDugaar: 1,
+    khuudasniiKhemjee: 10,
+    search: "",
+    jagsaalt: [],
+  })
+  const { data, mutate } = useSWR(
+    !!token
+      ? [
+        "/mailiinZagvar",
+        token,
+        baiguullagiinId,
+        khuudaslalt,
+        barilgiinId
+      ]
       : null,
     fetcher,
     { revalidateOnFocus: false }

@@ -20,16 +20,18 @@ import {
   ExclamationCircleOutlined,
   DownloadOutlined,
   DownOutlined,
-  FileDoneOutlined,
   PrinterOutlined,
   CloseCircleOutlined,
   FileTextOutlined,
+  FileDoneOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 
+
 import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
+import MedegdelIlgeekh from "components/pageComponents/tulbur/MedegdelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 import _ from "lodash";
@@ -64,9 +66,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
     </div>
@@ -339,6 +340,29 @@ function guilgeeniiTuukh({ token }) {
           return (
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
               <a
+                onClick={() => medegdelIlgeekh(row)}
+                className="fill-current  text-green-500"
+              >
+                <Tooltip
+                  title="Нэхэмжлэл"
+                  className="flex w-full items-center justify-center "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                </Tooltip>
+              </a>
+              <a
                 onClick={() => nekhemjlelIlgeekh(row)}
                 className="fill-current  text-green-500"
               >
@@ -407,12 +431,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -512,27 +536,31 @@ function guilgeeniiTuukh({ token }) {
       footer: [],
     });
   }
+  function medegdelIlgeekh(data) {
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <MedegdelIlgeekh
+          data={data}
+          ref={ref}
+          token={token}
+          onFinish={refreshData}
+        />
+      ),
+      footer: [],
+    });
+  }
 
   function khuulgaKharya(data) {
     const footer = [
-      <Button
-        type="primary"
-        onClick={() => ref.current.khevlekh()}
-        icon={<PrinterOutlined />}
-      >
-        Хэвлэх
-      </Button>,
-      <Button
-        onClick={() => ref.current.khaaya()}
-        icon={<CloseCircleOutlined />}
-      >
-        Хаах
-      </Button>,
+      <Button type="primary" onClick={() => ref.current.khevlekh()} icon={<PrinterOutlined />}>Хэвлэх</Button>,
+      <Button onClick={() => ref.current.khaaya()} icon={<CloseCircleOutlined />}>Хаах</Button>,
     ];
     modal({
       title: "Хуулга",
       icon: <FileExcelOutlined />,
-      width: "90vw",
+      width: '90vw',
       style: { top: 20 },
       content: (
         <Khuulga
@@ -617,9 +645,8 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
-                  turul === mur?.turul ? mur.selectedColor : ""
-                }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
+                  }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
