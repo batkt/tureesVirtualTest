@@ -158,13 +158,12 @@ function guilgeeniiTuukh({ token }) {
     let ekhlekhOgnoo = moment(ognoo && ognoo[0])
       .startOf("month")
       .format("YYYY-MM-DD 00:00:00");
-    let duusakhOgnoo = moment(ognoo && ognoo[1])
+    let duusakhOgnoo = moment(ognoo && ognoo[1] )
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
     switch (turul) {
       case "voucher":
         sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
-
         turulColumns.push({
           dataIndex: "voucherDun",
           title: "Ваучерын дүн",
@@ -200,7 +199,7 @@ function guilgeeniiTuukh({ token }) {
     if (turul === "avlaga") {
       query = {
         "avlaga.guilgeenuud.ognoo": {
-          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+          $lte:duusakhOgnoo,
         },
         davkhar,
         baiguullagiinId: baiguullaga._id,
@@ -339,12 +338,12 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
-              <a
+              {/* <a
                 onClick={() => medegdelIlgeekh(row)}
                 className="fill-current  text-green-500"
               >
                 <Tooltip
-                  title="Нэхэмжлэл"
+                  title="Мэдэгдэл"
                   className="flex w-full items-center justify-center "
                 >
                   <svg
@@ -357,11 +356,12 @@ function guilgeeniiTuukh({ token }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    className="p-1 text-green-500"
                   >
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                 </Tooltip>
-              </a>
+              </a> */}
               <a
                 onClick={() => nekhemjlelIlgeekh(row)}
                 className="fill-current  text-green-500"
@@ -370,7 +370,7 @@ function guilgeeniiTuukh({ token }) {
                   title="Нэхэмжлэл"
                   className="flex w-full items-center justify-center "
                 >
-                  <FileDoneOutlined className=" fill-current p-1 text-xl text-green-500" />
+                  <FileDoneOutlined className=" fill-current p-1 text-lg text-green-500" />
                 </Tooltip>
               </a>
               <a
@@ -381,7 +381,7 @@ function guilgeeniiTuukh({ token }) {
                   title="Хуулга"
                   className="flex w-full items-center justify-center "
                 >
-                  <FileTextOutlined className=" fill-current p-1 text-xl text-green-500" />
+                  <FileTextOutlined className=" fill-current p-1 text-lg text-green-500" />
                 </Tooltip>
               </a>
               <a
@@ -607,8 +607,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
-              ),
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
@@ -705,6 +704,7 @@ function guilgeeniiTuukh({ token }) {
               setOgnoo(v);
               setLoadingIndex(0);
             }}
+            clearIcon={false}
           />
           <div className="ml-5">
             <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
