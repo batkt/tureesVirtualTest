@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import readMethod from "tools/function/crud/readMethod";
@@ -63,11 +63,35 @@ function GereeBaiguulakh({ token, data }) {
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
-    if (current < 4) setCurrent(current + 1);
+    if (current < 4) {
+      setCurrent(current + 1);
+    }
     if (!!data) {
       khadgalya(data);
     }
   };
+  useEffect(() => {
+    if (current === 0) {
+      var elem = document.getElementById("erunkhiiMedeelel");
+      elem?.scrollIntoView();
+    }
+    if (current === 1) {
+      var elem = document.getElementById("gereeniiKhugatsaa");
+      elem?.scrollIntoView();
+    }
+    if (current === 2) {
+      var elem = document.getElementById("tureesiinTalbai");
+      elem?.scrollIntoView();
+    }
+    if (current === 3) {
+      var elem = document.getElementById("baritsaaBurtgel");
+      elem?.scrollIntoView();
+    }
+    if (current === 4) {
+      var elem = document.getElementById("tulburToostoo");
+      elem?.scrollIntoView();
+    }
+  }, [current]);
 
   function khadgalya(data) {
     data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
@@ -107,9 +131,12 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
+    if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
-    if (!butsaakhUtga?.dedKhesguud) return {};
-
+    if (!butsaakhUtga?.dedKhesguud)
+      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+        (a) => a.khamaarakhKheseg === steps[current].title
+      );
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
         "YYYY"
@@ -121,10 +148,12 @@ function GereeBaiguulakh({ token, data }) {
         khadgalakhGeree.gereeniiOgnoo
       ).format("DD");
       if (khadgalakhGeree.khugatsaa > 0) {
-        let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
-          khadgalakhGeree.khugatsaa,
-          "M"
-        );
+        // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
+        //   khadgalakhGeree.khugatsaa,
+        //   "months"
+        // )
+        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo);
+
         khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
         khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
         khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
@@ -137,10 +166,12 @@ function GereeBaiguulakh({ token, data }) {
         .map((b) => {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
     }
-    butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
-      (a) => a.khamaarakhKheseg === steps[current].title
-    );
+
     return butsaakhUtga;
   }, [gereeniiZagvar, khadgalakhGeree, current]);
 
@@ -194,7 +225,11 @@ function GereeBaiguulakh({ token, data }) {
           </div>
           <div
             className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8"
-            style={{ maxHeight: "calc(100vh - 17rem)", overflow: "auto" }}
+            style={{
+              maxHeight: "calc(100vh - 17rem)",
+              overflow: "auto",
+              scrollBehavior: "smooth",
+            }}
           >
             {current === 0 && (
               <Select
@@ -254,6 +289,19 @@ function GereeBaiguulakh({ token, data }) {
               {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
                 return (
                   <div
+                    id={
+                      mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
+                        ? "erunkhiiMedeelel"
+                        : mur.khamaarakhKheseg === "Гэрээний хугацаа"
+                        ? "gereeniiKhugatsaa"
+                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                        ? "tureesiinTalbai"
+                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                        ? "baritsaaBurtgel"
+                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                        ? "tulburToostoo"
+                        : ""
+                    }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >

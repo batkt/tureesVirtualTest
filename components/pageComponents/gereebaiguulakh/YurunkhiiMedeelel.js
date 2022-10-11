@@ -163,7 +163,16 @@ const YurunkhiiMedeele = ({
       onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-delay="200">
-        <Form.Item name="gereeniiDugaar" label="Гэрээний дугаар">
+        <Form.Item
+          name="gereeniiDugaar"
+          rules={[
+            {
+              required: true,
+              message: "Гэрээний дугаар бүртгэнэ үү!",
+            },
+          ]}
+          label="Гэрээний дугаар"
+        >
           <Input
             allowClear
             placeholder="Гэрээний дугаар"
@@ -214,6 +223,7 @@ const YurunkhiiMedeele = ({
             ]}
           >
             <Input
+              onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
               allowClear
               maxLength={10}
               placeholder="Регистр"
