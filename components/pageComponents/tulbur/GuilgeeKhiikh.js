@@ -9,13 +9,13 @@ import {
   Select,
 } from "antd";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
-const query = { turul: { $ne: "төг" }, tariff: { $exists: true } };
+
 function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [dun, setDun] = useState("");
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
@@ -25,6 +25,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
+
+  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)}, tariff: { $exists: true } }),[data]);
 
   const zardal = useJagsaalt(
     "/ashiglaltiinZardluud",
@@ -173,10 +175,12 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
       )}
       {turul === "ahiglalt" && (
-        <Select placeholder="Зардлын төрөл" onChange={(v) => setNegjUne(v)}>
+        <Select placeholder="Зардлын төрөл" >
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur.tariff}>
-              {mur.ner} /{mur.turul}/
+            <Select.Option key={mur._id} value={mur.ner}>
+              <div onClick={() => setNegjUne(mur.tariff || 0)}>
+                {mur.ner}/{mur.turul}
+              </div>
             </Select.Option>
           ))}
         </Select>
