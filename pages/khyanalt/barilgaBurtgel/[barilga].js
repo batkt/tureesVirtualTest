@@ -182,10 +182,6 @@ function GereeBaiguulakh({ token }) {
           name="barilga"
           {...formItemLayout}
           onValuesChange={onChange}
-          initialValues={{
-            davkhar: davkhar?.length,
-            bdavkhar: bdavkhar?.length,
-          }}
         >
           <Form.Item
             rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
