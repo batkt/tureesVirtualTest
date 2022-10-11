@@ -172,7 +172,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         </Select>
       )}
       {busadTurul === "aldangi" && (
-        <div>Алдангийн үлдэгдэл:{formatNumber(data?.aldangiinUldegdel)}</div>
+        <div>Алдангийн үлдэгдэл: {formatNumber(data?.aldangiinUldegdel)}</div>
       )}
       {turul === "ahiglalt" && (
         <Select placeholder="Зардлын төрөл" >
@@ -187,7 +187,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       )}
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нэгж үнэ:{formatNumber(negjUne)}
+          Нэгж үнэ: {formatNumber(negjUne)}
         </div>
       )}
       <InputNumber
@@ -201,7 +201,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       />
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нийт үнэ:{formatNumber(negjUne * dun || 0)}
+          Нийт үнэ: {formatNumber(negjUne * dun || 0)}
         </div>
       )}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (

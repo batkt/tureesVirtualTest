@@ -54,6 +54,7 @@ function GereeBaiguulakh({ token }) {
 
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
+  const [alkhamErkh, setAlkhamErkh] = useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
@@ -67,6 +68,9 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
+    if (alkhamErkh <= current) {
+      setAlkhamErkh(alkhamErkh + 1);
+    }
     if (current === 0 && !gereeniiZagvar) {
       message.warning("Гэрээний загвар сонгоно уу!");
       zagvarRef.current.focus();
@@ -135,6 +139,28 @@ function GereeBaiguulakh({ token }) {
         });
     }
   };
+  useEffect(() => {
+    if (current === 0) {
+      var elem = document.getElementById("erunkhiiMedeelel");
+      elem?.scrollIntoView();
+    }
+    if (current === 1) {
+      var elem = document.getElementById("gereeniiKhugatsaa");
+      elem?.scrollIntoView();
+    }
+    if (current === 2) {
+      var elem = document.getElementById("tureesiinTalbai");
+      elem?.scrollIntoView();
+    }
+    if (current === 3) {
+      var elem = document.getElementById("baritsaaBurtgel");
+      elem?.scrollIntoView();
+    }
+    if (current === 4) {
+      var elem = document.getElementById("tulburToostoo");
+      elem?.scrollIntoView();
+    }
+  }, [current]);
 
   function alkhamSoliyo(index) {
     if (current === 0 && !gereeniiZagvar) {
@@ -209,7 +235,6 @@ function GereeBaiguulakh({ token }) {
   };
 
   const currentItem = steps[current];
-
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -225,7 +250,11 @@ function GereeBaiguulakh({ token }) {
               <Step
                 key={item.title}
                 title={item.title}
-                onStepClick={() => alkhamSoliyo(index)}
+                onStepClick={() => {
+                  alkhamErkh < index
+                    ? message.warning("Алхам алгасах боломжгүй!")
+                    : alkhamSoliyo(index);
+                }}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
@@ -248,7 +277,11 @@ function GereeBaiguulakh({ token }) {
           </div>
           <div
             className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8"
-            style={{ maxHeight: "calc(100vh - 17rem)", overflow: "auto" }}
+            style={{
+              maxHeight: "calc(100vh - 17rem)",
+              overflow: "auto",
+              scrollBehavior: "smooth",
+            }}
             data-aos="fade-right"
             data-aos-delay="300"
             data-aos-duration="1000"
@@ -320,6 +353,19 @@ function GereeBaiguulakh({ token }) {
               {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
                 return (
                   <div
+                    id={
+                      mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
+                        ? "erunkhiiMedeelel"
+                        : mur.khamaarakhKheseg === "Гэрээний хугацаа"
+                        ? "gereeniiKhugatsaa"
+                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                        ? "tureesiinTalbai"
+                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                        ? "baritsaaBurtgel"
+                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                        ? "tulburToostoo"
+                        : ""
+                    }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >

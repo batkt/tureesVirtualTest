@@ -11,7 +11,6 @@ import {
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
-  CloseOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useMemo } from "react";
