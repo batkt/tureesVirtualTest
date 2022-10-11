@@ -20,7 +20,7 @@ import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import { url } from "services/uilchilgee";
-import moment from 'moment'
+import moment from "moment";
 
 const formItemLayout = {
   labelCol: {
@@ -44,35 +44,43 @@ function GereeBaiguulakh({ token }) {
 
   const [form] = Form.useForm();
 
-  useEffect(()=>{
-    if(!!baiguullaga){
-      let davkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+  useEffect(() => {
+    if (!!baiguullaga) {
+      let davkhar =
+        _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+          (a) => !a?.davkhar?.includes("B")
+        ) || [];
+
+      let bdavkhar =
+        _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+          (a) => !!a?.davkhar?.includes("B")
+        ) || [];
+      setDavkhar(_.cloneDeep(davkhar));
+      setBDavkhar(_.cloneDeep(bdavkhar));
+      let data = _.get(baiguullaga, `barilguud.${barilga}`);
+      data.neekhTsag = moment(data.neekhTsag);
+      data.khaakhTsag = moment(data.khaakhTsag);
+      form.setFieldsValue({
+        ...data,
+        davkhar: davkhar.length,
+        bdavkhar: bdavkhar.length,
+      });
+    }
+  }, [baiguullaga]);
+
+  function planAvya(davkhar, bEsekh) {
+    if (bEsekh) {
+      let data =
+        _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
+          (a) => !!a?.davkhar?.includes("B")
+        ) || [];
+      return data?.find((b) => b.davkhar === davkhar);
+    }
+    let data =
+      _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
         (a) => !a?.davkhar?.includes("B")
-      ) || []
-
-      let bdavkhar = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-        (a) => !!a?.davkhar?.includes("B")
-      ) || []
-      setDavkhar(_.cloneDeep(davkhar))
-      setBDavkhar(_.cloneDeep(bdavkhar))
-      let data = _.get(baiguullaga, `barilguud.${barilga}`)
-      data.neekhTsag = moment(data.neekhTsag)
-      data.khaakhTsag = moment(data.khaakhTsag)
-      form.setFieldsValue({...data,davkhar:davkhar.length,bdavkhar:bdavkhar.length})
-    }
-  },[baiguullaga])
-
-  function planAvya(davkhar,bEsekh) {
-    if(bEsekh){
-      let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-        (a) => !!a?.davkhar?.includes("B")
-      ) || []
-      return data?.find(b=>b.davkhar === davkhar)
-    }
-    let data = _.get(baiguullaga, `barilguud.${barilga}.davkharuud`)?.filter(
-      (a) => !a?.davkhar?.includes("B")
-    ) || []
-    return data?.find(b=>b.davkhar === davkhar)
+      ) || [];
+    return data?.find((b) => b.davkhar === davkhar);
   }
 
   const onChange = (v) => {
@@ -80,7 +88,9 @@ function GereeBaiguulakh({ token }) {
       const value = new Array(v?.davkhar)
         .fill("")
         .map((a, i) => ({
-          ...(davkhar.find(b=>b.davkhar === `${i+1}`) || planAvya(`${i+1}`) || {}),
+          ...(davkhar.find((b) => b.davkhar === `${i + 1}`) ||
+            planAvya(`${i + 1}`) ||
+            {}),
           davkhar: `${i + 1}`,
         }))
         .reverse();
@@ -88,7 +98,9 @@ function GereeBaiguulakh({ token }) {
     }
     if (!!v?.bdavkhar) {
       const value = new Array(v?.bdavkhar).fill("").map((a, i) => ({
-        ...(bdavkhar.find(b=>b.davkhar === `B${i + 1}`) || planAvya(`B${i + 1}`) || {}),
+        ...(bdavkhar.find((b) => b.davkhar === `B${i + 1}`) ||
+          planAvya(`B${i + 1}`) ||
+          {}),
         davkhar: `B${i + 1}`,
       }));
       setBDavkhar([...value]);
@@ -163,7 +175,7 @@ function GereeBaiguulakh({ token }) {
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
-      title="Гэрээ байгуулах"
+      title="Барилга бүртгэл"
       className="grid grid-cols-12 gap-6 p-5"
       hideSearch
       dedKhuudas
@@ -237,9 +249,9 @@ function GereeBaiguulakh({ token }) {
             ]}
             name="niitTalbai"
             label={
-              <label>
+              <div className="text-black dark:text-gray-400">
                 Нийт м<sup>2</sup>
-              </label>
+              </div>
             }
           >
             <InputNumber style={{ width: "100%" }} />
