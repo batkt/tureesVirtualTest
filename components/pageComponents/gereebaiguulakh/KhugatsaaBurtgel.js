@@ -87,7 +87,7 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value, gereeniiZagvar }) => {
         >
           <DatePicker
             style={{ width: "100%" }}
-            allowClear
+            allowClear={false}
             placeholder="Гэрээ хийх огноо"
             prefix={<SolutionOutlined />}
           />

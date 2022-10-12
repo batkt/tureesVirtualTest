@@ -50,7 +50,7 @@ function GereeBaiguulakh({ token, data }) {
   const router = useRouter();
   const [current, setCurrent] = React.useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState(
-    data || {
+    _.cloneDeep(data) || {
       ognoo: new Date(),
       gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
     }
@@ -212,6 +212,7 @@ function GereeBaiguulakh({ token, data }) {
               baiguullaga={baiguullaga}
               gereeniiZagvar={gereeniiZagvar}
               zasvar
+              barilgiinId={barilgiinId}
             />
             {JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (
               <Button
@@ -280,9 +281,6 @@ function GereeBaiguulakh({ token, data }) {
                     </div>
                     <div>№:{khadgalakhGeree.gereeniiDugaar}</div>
                     <div>Улаанбаатар хот</div>
-                  </div>
-                  <div className="w-full text-center font-medium">
-                    АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
                   </div>
                 </>
               )}

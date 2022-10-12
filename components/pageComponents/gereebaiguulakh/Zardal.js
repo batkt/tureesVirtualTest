@@ -27,17 +27,18 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
       );
     } else
       value.zardluud = value.zardluud.filter(function (item) {
-        return item._id !== a._id;
+        return item.ner !== a.ner;
       });
+
     onChange({ ...value });
   };
 
   return (
     <div
       key={a._id}
-      className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border-2 px-2 transition-all  dark:text-gray-200 ${
+      className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border px-2 transition-all  dark:text-gray-200 ${
         value.zardluud !== undefined &&
-        !!value.zardluud.find((c) => c._id === a._id)
+        !!value.zardluud.find((c) => c.ner === a.ner)
           ? "border-green-600 bg-white dark:bg-gray-900"
           : "bg-gray-200 dark:bg-gray-800"
       }`}
@@ -45,7 +46,7 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
       <div
         className={`absolute top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 dark:bg-green-600 ${
           value.zardluud !== undefined &&
-          !!value.zardluud.find((c) => c._id === a._id)
+          !!value.zardluud.find((c) => c.ner === a.ner)
             ? "-left-2/4"
             : "left-full"
         }`}
@@ -54,18 +55,14 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
         <Checkbox
           checked={
             value.zardluud !== undefined &&
-            !!value.zardluud.find((c) => c._id === a._id)
+            !!value.zardluud.find((c) => c.ner === a.ner)
           }
           onChange={(e) => onCheckChange(e, a)}
         />
         <div>{a.ner}</div>
       </div>
-      {a.turul || a.tariff ? (
-        <div className="z-10">
-          {a.turul} {a.turul && a.tariff && ":"} {a.tariff} {a.tariff && "₮"}
-        </div>
-      ) : (
-        <div className=" w-24">
+      {a.turul === "Дурын" ? (
+        <div className="flex w-24 items-center justify-center gap-1">
           <InputNumber
             ref={inputRef}
             formatter={(value) =>
@@ -74,31 +71,40 @@ const ChecklekhKheseg = ({ a, inputChange, onChange, value }) => {
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             disabled={
               value.zardluud !== undefined &&
-              !value.zardluud.find((c) => c._id === a._id)
+              !value.zardluud.find((c) => c.ner === a.ner)
             }
             value={
               value.zardluud !== undefined &&
-              !!value.zardluud.find((c) => c._id === a._id)
+              !!value.zardluud.find((c) => c.ner === a.ner)
                 ? value.zardluud[
-                    value.zardluud.findIndex((c) => c._id === a._id)
+                    value.zardluud.findIndex((c) => c.ner === a.ner)
                   ].dun
                 : ""
             }
-            placeholder="(...₮)"
+            placeholder="Тариф"
             onChange={(e) => inputChange(e, a)}
             className="flex h-7 w-full items-center rounded-l-md pr-4 "
           />
+          <div>₮</div>
+        </div>
+      ) : (
+        <div className="z-10">
+          {a.turul} {a.turul && a.tariff && ":"} {a.tariff} {a.tariff && "₮"}
         </div>
       )}
     </div>
   );
 };
 
-const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
+const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", query);
+
+  const ashiglaltiinZardal = useJagsaalt(
+    "/ashiglaltiinZardluud",
+    (query = { barilgiinId: barilgiinId })
+  );
 
   function onFinish() {
     next();
@@ -125,7 +131,6 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
       name="validate_other"
       {...formItemLayout}
       autoComplete={"off"}
-      onValuesChange={() => onChange({ ...value })}
       initialValues={value}
       onFinish={onFinish}
     >
@@ -169,4 +174,4 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value }) => {
   );
 };
 
-export default YurunkhiiMedeele;
+export default Zardal;

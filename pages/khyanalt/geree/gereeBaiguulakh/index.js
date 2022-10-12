@@ -344,10 +344,6 @@ function GereeBaiguulakh({ token }) {
                     <div>№:{khadgalakhGeree.gereeniiDugaar}</div>
                     <div>Улаанбаатар хот</div>
                   </div>
-                  <div className="w-full text-center font-medium">
-                    АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН
-                    {gereeniiZagvar.turGereeEsekh === true && " ТҮР"} ГЭРЭЭ
-                  </div>
                 </>
               )}
               {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {

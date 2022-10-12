@@ -35,7 +35,10 @@ const formItemLayout = {
 function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
   const query = useMemo(() => {
-    return { niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh };
+    return {
+      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
+      idevkhiteiEsekh: false,
+    };
   }, [gereeniiZagvar]);
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
     token,
@@ -64,7 +67,7 @@ function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
             <div className="flex ">
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
-                {a.talbainKhemjee}m<sup>2</sup>
+                {a.talbainKhemjee}м<sup>2</sup>
               </p>
               <p className="w-20 border-r-2 text-center">{a.davkhar}F</p>
               <p className="w-full text-right">
@@ -246,11 +249,11 @@ const YurunkhiiMedeele = ({
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
                     <div className="flex items-center justify-center text-center">
-                      сул m<sup>2</sup>
+                      сул м<sup>2</sup>
                     </div>
                   )}
                   <div className="flex items-center justify-center text-center">
-                    m<sup>2</sup>
+                    м<sup>2</sup>
                   </div>
                   <div className="flex items-center justify-center text-center">
                     Түрээсийн төлбөр
@@ -323,7 +326,7 @@ const YurunkhiiMedeele = ({
           <div className="grid grid-cols-12 divide-x-2">
             <div className="col-span-4 text-center">Давхар</div>
             <div className="col-span-4 text-center">
-              m<sup>2</sup>
+              м<sup>2</sup>
             </div>
             <div className="col-span-4 text-center">Нийт төлбөр</div>
           </div>

@@ -175,27 +175,7 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Барьцаа хөрөнгө авах эсэх</div>
-                <div className="text-gray-600">
-                  Гэрээ байгуулахад барьцаа хөрөнгө авах эсэх
-                </div>
-              </div>
-              <div className="ml-auto">
-                <Switch
-                  defaultChecked={baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh}
-                  onChange={(v) =>
-                    setGereeTokhirgoo((a) => ({
-                      ...(a || {}),
-                      baritsaaAvakhEsekh: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
+
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">

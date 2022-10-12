@@ -2,7 +2,7 @@ import { Form, Button, Switch, Divider, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
@@ -28,11 +28,20 @@ const Tulbur = ({
     Aos.init({ once: true });
   });
   const [khuvaari, setKhuvaari] = useState();
+  const [baritsaaAvakhEsekh, setBaritsaaAvakhEsekh] = useState(
+    value?.baritsaaAvakhEsekh
+  );
+  const baritsaaChange = (e) => {
+    if (e === true) {
+      value.baritsaaAvakhDun = value.sariinTurees;
+    } else value.baritsaaAvakhDun = 0;
+    onChange({ ...value });
+  };
 
   useEffect(() => {
-    const zardluud = (value.zardluud = value.zardluud?.filter(function (item) {
-      return item.dun !== undefined;
-    }));
+    const zardluud = value.zardluud?.filter(function (item) {
+      return item.turul === "Дурын" || item.turul === "1м2";
+    });
     if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
@@ -45,7 +54,7 @@ const Tulbur = ({
         })
         .then(({ data }) => {
           setKhuvaari(data);
-          if(!value._id){
+          if (!value._id) {
             _.set(value, "avlaga.guilgeenuud", data);
             onChange({ ...value });
           }
@@ -77,41 +86,59 @@ const Tulbur = ({
 
       {gereeniiZagvar?.turGereeEsekh !== true ? (
         <div>
-          <div data-aos="fade-right" data-aos-duration="1000">
-            <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
-              <InputNumber
-                disabled
-                placeholder="Барьцаа дүн"
-                style={{ width: "100%" }}
-                formatter={(value) =>
-                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                }
-                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-              />
-            </Form.Item>
-          </div>
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="100"
+            className="ml-auto"
           >
             <Form.Item
-              name="baritsaaBairshuulakhKhugatsaa"
-              label="Хугацаа"
-              rules={[
-                {
-                  required: true,
-                  message: "Барьцаа байршуулалтын хугацаа бүртгэнэ үү!",
-                },
-              ]}
+              label="Барьцаа хөрөнгө авах эсэх"
+              name="baritsaaAvakhEsekh"
             >
-              <InputNumber
-                placeholder="Барьцаа байршуулалтын хугацаа"
-                style={{ width: "100%" }}
-                min={0}
+              <Switch
+                onChange={(e) => {
+                  setBaritsaaAvakhEsekh(e), baritsaaChange(e);
+                }}
               />
             </Form.Item>
           </div>
+          {baritsaaAvakhEsekh && (
+            <div data-aos="fade-right" data-aos-duration="1000">
+              <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+                <InputNumber
+                  disabled
+                  placeholder="Барьцаа дүн"
+                  style={{ width: "100%" }}
+                  formatter={(value) => formatNumber(`${value}`)}
+                />
+              </Form.Item>
+            </div>
+          )}
+          {baritsaaAvakhEsekh && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="baritsaaBairshuulakhKhugatsaa"
+                label="Хугацаа"
+                rules={[
+                  {
+                    required: true,
+                    message: "Барьцаа байршуулах хугацаа бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  placeholder="Барьцаа байршуулах хугацаа"
+                  style={{ width: "100%" }}
+                  min={0}
+                />
+              </Form.Item>
+            </div>
+          )}
         </div>
       ) : null}
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
@@ -123,8 +150,7 @@ const Tulbur = ({
                   (value.baritsaaAvakhKhugatsaa || 0) -
                 (((value.sariinTurees || 0) * 12) / 365) *
                   (value.khungulukhKhugatsaa || 0) -
-                (value.khyamdaral || 0) +
-                value.zardluud?.reduce((a, b) => a + b.dun, 0)
+                (value.khyamdaral || 0)
             )}
           </div>
         </Form.Item>
