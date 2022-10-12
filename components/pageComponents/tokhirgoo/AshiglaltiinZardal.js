@@ -43,7 +43,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
 
   function ustgaya(mur) {
     deleteMethod("ashiglaltiinZardluud", token, mur?._id).then(
-      ({ data }) => data === "Amjilttai" && ashiglaltiinZardal.refresh()
+      ({ data }) => data === "Amjilttai" && (togtmolEsekh ? togtmolZardal : khuvisakhZardal).refresh()
     );
   }
 
@@ -130,7 +130,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                       title={`${mur.ner} зардал устгах уу?`}
                       okText="Тийм"
                       cancelText="Үгүй"
-                      onConfirm={() => ustgaya(mur)}
+                      onConfirm={() => ustgaya(mur,true)}
                     >
                       <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
                         <Tooltip title="Устгах">
