@@ -123,7 +123,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                     <div className="font-medium">{mur.ner}</div>
                     <div className="text-gray-600">{mur.turul}</div>
                   </div>
-                  <div className="ml-auto">{formatNumber(mur.tariff)}</div>
+                  <div className="ml-auto">{mur.tariff}</div>
                   <div className="ml-5 flex space-x-2">
                     <Popconfirm
                       title={`${mur.ner} данс устгах уу?`}
