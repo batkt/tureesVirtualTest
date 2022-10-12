@@ -22,7 +22,7 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useNekhemjlekhiinZagvar(token) {
+function useNekhemjlekhiinZagvar(token,mbarilgiinId) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setNekhemjlekhiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -31,7 +31,7 @@ function useNekhemjlekhiinZagvar(token) {
     jagsaalt: [],
   });
   const { data, mutate } = useSWR(
-    !!token ? ["/nekhemjlekhiinZagvar", token, khuudaslalt, barilgiinId] : null,
+    !!token ? ["/nekhemjlekhiinZagvar", token, khuudaslalt, (barilgiinId || mbarilgiinId)] : null,
     fetcher,
     { revalidateOnFocus: false }
   );

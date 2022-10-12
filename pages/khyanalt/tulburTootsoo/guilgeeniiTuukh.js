@@ -158,13 +158,12 @@ function guilgeeniiTuukh({ token }) {
     let ekhlekhOgnoo = moment(ognoo && ognoo[0])
       .startOf("month")
       .format("YYYY-MM-DD 00:00:00");
-    let duusakhOgnoo = moment(ognoo && ognoo[1])
+    let duusakhOgnoo = moment(ognoo && ognoo[1] )
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
     switch (turul) {
       case "voucher":
         sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
-
         turulColumns.push({
           dataIndex: "voucherDun",
           title: "Ваучерын дүн",
@@ -200,7 +199,7 @@ function guilgeeniiTuukh({ token }) {
     if (turul === "avlaga") {
       query = {
         "avlaga.guilgeenuud.ognoo": {
-          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+          $lte:duusakhOgnoo,
         },
         davkhar,
         baiguullagiinId: baiguullaga._id,
@@ -338,14 +337,15 @@ function guilgeeniiTuukh({ token }) {
           if (khuvi < 0) strokeColor = "rgba(245, 158, 18,1)";
 
           return (
-            <div className="flex w-full flex-row items-center justify-center divide-x-2 ">
-              <a
+            <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
+              {/* <a
                 onClick={() => medegdelIlgeekh(row)}
-                className="fill-current  text-green-500"
+                className="hover:scale-110"
+                
               >
                 <Tooltip
-                  title="Нэхэмжлэл"
-                  className="flex w-full items-center justify-center "
+                  title="Мэдэгдэл илгээх"
+                  className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -357,49 +357,78 @@ function guilgeeniiTuukh({ token }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    className=" text-green-500"
                   >
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                   </svg>
                 </Tooltip>
-              </a>
+              </a> */}
               <a
                 onClick={() => nekhemjlelIlgeekh(row)}
-                className="fill-current  text-green-500"
+                className=" text-green-500 hover:scale-110"
               >
                 <Tooltip
-                  title="Нэхэмжлэл"
-                  className="flex w-full items-center justify-center "
+                  title="Нэхэмжлэл илгээх"
+                  className="flex w-full items-center  justify-center px-[6px] "
                 >
-                  <FileDoneOutlined className=" fill-current p-1 text-xl text-green-500" />
+                  <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>  
                 </Tooltip>
               </a>
               <a
                 onClick={() => khuulgaKharya(row)}
-                className="fill-current  text-green-500"
+                className="fill-current  text-green-500 hover:scale-110"
               >
                 <Tooltip
                   title="Хуулга"
-                  className="flex w-full items-center justify-center "
+                  className="flex w-full items-center  justify-center px-[6px] "
                 >
-                  <FileTextOutlined className=" fill-current p-1 text-xl text-green-500" />
+                  <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                            </svg>
                 </Tooltip>
               </a>
               <a
                 onClick={() => guilgeeKhiiya(row)}
-                className="fill-current  text-green-500"
+                className="fill-current  text-green-500  hover:scale-125"
               >
                 <Tooltip
                   title="Гүйлгээ хийх"
-                  className="flex w-full items-center justify-center "
+                  className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
                     version="1.0"
                     xmlns="http://www.w3.org/2000/svg"
-                    width="440.000000pt"
-                    height="377.000000pt"
+                    width="24"
+                    height="24"
                     viewBox="0 0 440.000000 377.000000"
                     preserveAspectRatio="xMidYMid meet"
-                    className="h-6 w-8 fill-current p-1 text-green-500"
+                    className="h-6 w-8 fill-current  text-green-500"
                   >
                     <g transform="translate(0.000000,377.000000) scale(0.100000,-0.100000)">
                       <path
@@ -424,10 +453,11 @@ function guilgeeniiTuukh({ token }) {
                 </Tooltip>
               </a>
               <div
-                className="px-1 text-red-500"
+                className=" text-red-500  hover:scale-110"
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
+                className="flex w-full items-center  justify-center px-[6px] "
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
@@ -440,9 +470,10 @@ function guilgeeniiTuukh({ token }) {
                   }
                 >
                   <Progress
+                  
                     type="circle"
                     percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)}
-                    width={25}
+                    width={22}
                     strokeColor={strokeColor}
                     trailColor={khuvi === 0 && "rgba(239, 68, 68,1)"}
                   />
@@ -607,8 +638,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
-              ),
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
@@ -705,6 +735,7 @@ function guilgeeniiTuukh({ token }) {
               setOgnoo(v);
               setLoadingIndex(0);
             }}
+            clearIcon={false}
           />
           <div className="ml-5">
             <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
@@ -794,7 +825,7 @@ function guilgeeniiTuukh({ token }) {
               content={() => (
                 <div className="flex w-32 flex-col">
                   <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg  hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();

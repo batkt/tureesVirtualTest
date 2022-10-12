@@ -70,6 +70,7 @@ function ZardalKholbokh(
         options={zardalGaralt?.jagsaalt}
         value={songogdsonZardal}
         onChange={onChange}
+        style={{width:'100%'}}
         changeOnSelect
         placeholder="Зардал сонгох"
       />
