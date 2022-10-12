@@ -10,13 +10,13 @@ import deleteMethod from "tools/function/crud/deleteMethod";
 
 function AshiglaltiinZardal({ baiguullaga, token }) {
   const { barilgiinId } = useAuth();
-  const khuvisakhQuery = useMemo(() => ({ barilgiinId }), [barilgiinId]);
-  const togtmolQuery = useMemo(() => ({ barilgiinId,togtmolEsekh:true }), [barilgiinId]);
+  const khuvisakhQuery = useMemo(() => ({ barilgiinId,turul:{$nin:['togtmol','duriin']} }), [barilgiinId]);
+  const togtmolQuery = useMemo(() => ({ barilgiinId,turul:{$in:['togtmol','duriin']}}), [barilgiinId]);
   const khuvisakhZardal = useJagsaalt("/ashiglaltiinZardluud", khuvisakhQuery);
   const togtmolZardal = useJagsaalt("/ashiglaltiinZardluud", togtmolQuery);
   const ref = useRef();
 
-  function zardalBurtgeye(data) {
+  function zardalBurtgeye(data,togtmolEsekh) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
@@ -32,8 +32,9 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
           data={data}
           token={token}
           barilgiinId={barilgiinId}
+          togtmolEsekh={togtmolEsekh}
           baiguullagiinId={baiguullaga?._id}
-          refresh={khuvisakhZardal.refresh}
+          refresh={togtmolEsekh ? togtmolZardal.refresh : khuvisakhZardal.refresh}
         />
       ),
       footer,
@@ -74,7 +75,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                   <div className="ml-auto">{formatNumber(mur.tariff)}</div>
                   <div className="ml-5 flex space-x-2">
                     <Popconfirm
-                      title={`${mur.ner} данс устгах уу?`}
+                      title={`${mur.ner} зардал устгах уу?`}
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => ustgaya(mur)}
@@ -108,7 +109,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
             </h2>
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
-              onClick={() => zardalBurtgeye()}
+              onClick={() => zardalBurtgeye(undefined,true)}
             >
               <Tooltip title="Нэмэх">
                 <PlusOutlined />
@@ -123,10 +124,10 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                     <div className="font-medium">{mur.ner}</div>
                     <div className="text-gray-600">{mur.turul}</div>
                   </div>
-                  <div className="ml-auto">{mur.tariff}</div>
+                  <div className="ml-auto">{formatNumber(mur.tariff)}</div>
                   <div className="ml-5 flex space-x-2">
                     <Popconfirm
-                      title={`${mur.ner} данс устгах уу?`}
+                      title={`${mur.ner} зардал устгах уу?`}
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => ustgaya(mur)}
@@ -139,7 +140,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                     </Popconfirm>
                     <div
                       className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
-                      onClick={() => zardalBurtgeye(mur)}
+                      onClick={() => zardalBurtgeye(mur,true)}
                     >
                       <Tooltip title="Засах">
                         <EditOutlined />

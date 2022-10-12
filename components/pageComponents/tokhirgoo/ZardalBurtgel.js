@@ -1,13 +1,14 @@
 import React, { useImperativeHandle, useState } from "react";
-import { Form, InputNumber, Select, Input, notification, Switch } from "antd";
+import { Form, InputNumber, Select, Input, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 
 function ZardalBurtgel(
-  { data, destroy, baiguullagiinId, barilgiinId, token, refresh },
+  { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
   ref
 ) {
   const [form] = Form.useForm();
+  const [hideTariff,setHideTariff] = useState(false)
 
   useImperativeHandle(
     ref,
@@ -48,19 +49,28 @@ function ZardalBurtgel(
         <Input />
       </Form.Item>
       <Form.Item label="Нэгж" name="turul">
-        <Select>
+        {togtmolEsekh ? <Select onChange={(v)=> { 
+            setHideTariff(v === 'duriin')
+          }}>
+          <Select.Option key="togtmol" value="togtmol">
+            Тогтмол
+          </Select.Option>
+          <Select.Option key="duriin" value="duriin">
+            Дурын
+          </Select.Option>
+        </Select> : <Select>
           <Select.Option key="кВт" value="кВт">
             кВт
           </Select.Option>
           <Select.Option key="1м3" value="1м3">
             1м<sup>3</sup>
           </Select.Option>
-          <Select.Option key="төг" value="төг">
-            төг
+          <Select.Option key="1м2" value="1м2">
+            1м<sup>2</sup>
           </Select.Option>
-        </Select>
+        </Select>}
       </Form.Item>
-      <Form.Item label="Тариф" name="tariff">
+     <Form.Item label="Тариф" name="tariff" hidden={hideTariff}> 
         <InputNumber
           style={{ width: "100%" }}
           formatter={(value) =>
