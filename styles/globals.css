@@ -957,3 +957,6 @@ input[type="number"] {
 .ant-btn-default {
   @apply dark:text-white dark:hover:text-gray-700 dark:focus:text-gray-700 !important;
 }
+.ant-cascader-menu-item{
+  @apply whitespace-pre-wrap !important;
+}
