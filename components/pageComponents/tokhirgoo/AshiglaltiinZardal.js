@@ -10,8 +10,8 @@ import deleteMethod from "tools/function/crud/deleteMethod";
 
 function AshiglaltiinZardal({ baiguullaga, token }) {
   const { barilgiinId } = useAuth();
-  const khuvisakhQuery = useMemo(() => ({ barilgiinId,turul:{$nin:['togtmol','duriin']} }), [barilgiinId]);
-  const togtmolQuery = useMemo(() => ({ barilgiinId,turul:{$in:['togtmol','duriin']}}), [barilgiinId]);
+  const khuvisakhQuery = useMemo(() => ({ barilgiinId,turul:{$nin:['Дурын','Тогтмол']} }), [barilgiinId]);
+  const togtmolQuery = useMemo(() => ({ barilgiinId,turul:{$in:['Дурын','Тогтмол']}}), [barilgiinId]);
   const khuvisakhZardal = useJagsaalt("/ashiglaltiinZardluud", khuvisakhQuery);
   const togtmolZardal = useJagsaalt("/ashiglaltiinZardluud", togtmolQuery);
   const ref = useRef();
