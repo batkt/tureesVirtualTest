@@ -52,10 +52,10 @@ function ZardalBurtgel(
         {togtmolEsekh ? <Select onChange={(v)=> { 
             setHideTariff(v === 'duriin')
           }}>
-          <Select.Option key="togtmol" value="togtmol">
+          <Select.Option key="Тогтмол" value="Тогтмол">
             Тогтмол
           </Select.Option>
-          <Select.Option key="duriin" value="duriin">
+          <Select.Option key="Дурын" value="Дурын">
             Дурын
           </Select.Option>
         </Select> : <Select>
