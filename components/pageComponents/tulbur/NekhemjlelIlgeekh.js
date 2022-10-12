@@ -18,7 +18,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
     const printRef = React.useRef(null);
     const [songogdsonDans, setDans] = React.useState();
     const [barimt, setBarimt] = React.useState();
-    const { nekhemjlekhiinZagvar } = useNekhemjlekhiinZagvar(token);
+    const { nekhemjlekhiinZagvar } = useNekhemjlekhiinZagvar(token, data.barilgiinId);
 
     function khaaya() {
         _.isFunction(onFinish) && onFinish();
@@ -185,6 +185,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
         }),
         []
     );
+    
+    
     return (
         <div className=" space-y-3 flex flex-col" >
             <div className="grid w-full grid-cols-2" ref={printRef}>
@@ -207,7 +209,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
             </Select>
 
             <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
-                {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
+                {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>(
                     <Select.Option key={a._id} value={a._id}>
                         {a.ner}
                     </Select.Option>
