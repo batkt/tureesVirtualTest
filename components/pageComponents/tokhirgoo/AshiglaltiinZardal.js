@@ -41,7 +41,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
     });
   }
 
-  function ustgaya(mur) {
+  function ustgaya(mur,togtmolEsekh) {
     deleteMethod("ashiglaltiinZardluud", token, mur?._id).then(
       ({ data }) => data === "Amjilttai" && (togtmolEsekh ? togtmolZardal : khuvisakhZardal).refresh()
     );
