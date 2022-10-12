@@ -50,7 +50,7 @@ function ZardalBurtgel(
       </Form.Item>
       <Form.Item label="Нэгж" name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> { 
-            setHideTariff(v === 'duriin')
+            setHideTariff(v === 'Дурын')
           }}>
           <Select.Option key="Тогтмол" value="Тогтмол">
             Тогтмол
