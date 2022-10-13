@@ -1,4 +1,4 @@
-FROM node:16.14.2
+FROM --platform=linux/amd64 node:16.14.2
 WORKDIR /app
 COPY . ./
 RUN npm install

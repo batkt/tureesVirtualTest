@@ -48,6 +48,7 @@ const tooFetcher = (
           ajiltniiId: {
             $ne: "nevtersenAjiltniiId",
           },
+          khariltsagchiinId:{$exists:false}
         },
         order: { createdAt: -1 },
       },

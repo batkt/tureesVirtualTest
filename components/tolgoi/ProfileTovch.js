@@ -15,14 +15,14 @@ function idAwyaa(mur) {
   var id = undefined;
   switch (mur.turul) {
     case "setgegdel":
-      id = mur.object.daalgavriinId;
+      id = mur?.object?.daalgavriinId;
       break;
     case "daalgavar":
-      id = mur.object._id;
+      id = mur?.object?._id;
       break;
 
     default:
-      id = mur.object.khariltsagchiinId;
+      id = mur?.object?.khariltsagchiinId;
       break;
   }
   return id;

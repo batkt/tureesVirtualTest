@@ -960,3 +960,7 @@ input[type="number"] {
 .ant-cascader-menu-item{
   @apply whitespace-pre-wrap !important;
 }
+
+.ant-cascader-menu-item-active{
+  @apply dark:bg-gray-700 !important;
+}
