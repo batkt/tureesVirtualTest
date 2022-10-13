@@ -71,6 +71,7 @@ function ZardalKholbokh(
         value={songogdsonZardal}
         onChange={onChange}
         style={{width:'100%'}}
+        dropdownMenuColumnStyle={{maxWidth:'20rem'}}
         changeOnSelect
         placeholder="Зардал сонгох"
       />
