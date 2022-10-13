@@ -41,7 +41,7 @@ function ZardalKholbokh(
   }
 
   return (
-    <div className="flex w-full flex-col space-y-4">
+    <div className="flex w-full flex-col space-y-4 dark:text-gray-100">
       <label className="text-lg font-medium">Гүйлгээний мэдээлэл</label>
       <div className="grid grid-cols-2">
         <div className="space-x-2 p-2">
