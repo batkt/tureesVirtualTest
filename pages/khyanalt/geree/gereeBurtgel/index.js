@@ -932,7 +932,12 @@ function ZakhialgiinKhyanalt() {
         visible={!!kharuulakhGeree}
         footer={
           <div>
-            <button onClick={handlePrint}>Хэвлэх</button>
+            <Button
+              style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              onClick={handlePrint}
+            >
+              Хэвлэх
+            </Button>
           </div>
         }
       >

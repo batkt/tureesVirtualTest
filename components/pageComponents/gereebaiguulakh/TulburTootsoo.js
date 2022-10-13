@@ -28,13 +28,15 @@ const Tulbur = ({
     Aos.init({ once: true });
   });
   const [khuvaari, setKhuvaari] = useState();
-  const [baritsaaAvakhEsekh, setBaritsaaAvakhEsekh] = useState(
-    value?.baritsaaAvakhEsekh
-  );
+
   const baritsaaChange = (e) => {
     if (e === true) {
+      value.baritsaaAvakhEsekh = e;
       value.baritsaaAvakhDun = value.sariinTurees;
-    } else value.baritsaaAvakhDun = 0;
+    } else {
+      value.baritsaaAvakhDun = 0;
+      value.baritsaaAvakhEsekh = e;
+    }
     onChange({ ...value });
   };
 
@@ -97,16 +99,18 @@ const Tulbur = ({
               name="baritsaaAvakhEsekh"
             >
               <Switch
+                checked={value.baritsaaAvakhEsekh}
                 onChange={(e) => {
-                  setBaritsaaAvakhEsekh(e), baritsaaChange(e);
+                  baritsaaChange(e);
                 }}
               />
             </Form.Item>
           </div>
-          {baritsaaAvakhEsekh && (
+          {value.baritsaaAvakhEsekh === true && (
             <div data-aos="fade-right" data-aos-duration="1000">
-              <Form.Item name="baritsaaAvakhDun" label="Барьцаа дүн">
+              <Form.Item label="Барьцаа дүн">
                 <InputNumber
+                  value={value.baritsaaAvakhDun}
                   disabled
                   placeholder="Барьцаа дүн"
                   style={{ width: "100%" }}
@@ -115,7 +119,7 @@ const Tulbur = ({
               </Form.Item>
             </div>
           )}
-          {baritsaaAvakhEsekh && (
+          {value.baritsaaAvakhEsekh === true && (
             <div
               data-aos="fade-right"
               data-aos-duration="1000"
