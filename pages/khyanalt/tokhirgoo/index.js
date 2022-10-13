@@ -22,8 +22,8 @@ import { useMemo, useState } from "react";
 import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
 
 function AjiltanBurtgel({ token }) {
-  const { ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate } = useAuth();
-  const [tsonkh, setTsonkh] = useState(null);
+  const { ajiltan, ajiltanMutate, baiguullaga,  barilgiinId, baiguullagaMutate } = useAuth();
+  const [songogdsonTsonkhniiIndex, setSongogdsonTsonkhniiIndex] = useState(0);
 
   const tokhirgoo = useMemo(() => {
     if (ajiltan?.erkh === "Admin")
@@ -47,12 +47,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Үндсэн тохиргоо",
-          tsonkh: (
-            <UndsenMedeelel
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: UndsenMedeelel
         },
         {
           icon: (
@@ -72,12 +67,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Хөнгөлөлт",
-          tsonkh: (
-            <KhungulultiinTokhirgoo
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: KhungulultiinTokhirgoo
         },
         {
           icon: (
@@ -101,12 +91,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Гэрээний удирдлага",
-          tsonkh: (
-            <GereeniiTokhirgoo
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: GereeniiTokhirgoo
         },
         {
           icon: (
@@ -127,12 +112,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Талбайн удирдлага",
-          tsonkh: (
-            <TalbainTokhirgoo
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: TalbainTokhirgoo
         },
         {
           icon: (
@@ -152,12 +132,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Ашиглалтын зардал",
-          tsonkh: (
-            <AshiglaltiinZardal
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: AshiglaltiinZardal
         },
         {
           icon: (
@@ -177,12 +152,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Мэдэгдэл",
-          tsonkh: (
-            <Medegdel
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: Medegdel
         },
         {
           icon: (
@@ -205,12 +175,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "И-мэйл тохиргоо",
-          tsonkh: (
-            <Email
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: Email
         },
         {
           icon: (
@@ -232,12 +197,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "И-Баримт",
-          tsonkh: (
-            <EBarimt
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh:EBarimt
         },
         {
           icon: (
@@ -277,12 +237,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "QPay",
-          tsonkh: (
-            <QPay
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: QPay
         },
         {
           icon: (
@@ -323,12 +278,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Данс",
-          tsonkh: (
-            <Dans
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: Dans
         },
         {
           icon: (
@@ -351,12 +301,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Зогсоол",
-          tsonkh: (
-            <Zogsool
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: Zogsool
         },
         {
           icon: (
@@ -375,7 +320,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Хэрэглэгчийн Апп",
-          tsonkh: <AppTokhirgoo {...{ baiguullaga }} token={token} />,
+          tsonkh: AppTokhirgoo
         },
         {
           icon: (
@@ -394,7 +339,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Төрөлжүүлэх",
-          tsonkh: <SegmentTokhirgo {...{ baiguullaga }} token={token} />,
+          tsonkh: SegmentTokhirgo
         },
       ];
     else
@@ -417,12 +362,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Хувийн мэдээлэл",
-          tsonkh: (
-            <KhuviinMedeelel
-              {...{ ajiltan, ajiltanMutate, baiguullaga, baiguullagaMutate }}
-              token={token}
-            />
-          ),
+          tsonkh: KhuviinMedeelel
         },
         {
           icon: (
@@ -443,10 +383,14 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "Нууц үг солих",
-          tsonkh: <NuutsUgSolikh />,
+          tsonkh: NuutsUgSolikh
         },
       ];
-  }, [ajiltan, baiguullaga]);
+  }, [ajiltan, baiguullaga,barilgiinId]);
+
+  const Tsonkh = useMemo(()=>{
+    return tokhirgoo[songogdsonTsonkhniiIndex].tsonkh
+  },[tokhirgoo,songogdsonTsonkhniiIndex])
 
   return (
     <Admin
@@ -478,12 +422,12 @@ function AjiltanBurtgel({ token }) {
             </div>
           </div>
           <div className="dark:border-dark-5 border-t border-gray-200 p-5 text-green-600">
-            {tokhirgoo?.map((mur) => (
+            {tokhirgoo?.map((mur,index) => (
               <div
                 className={`mt-5 flex cursor-pointer items-center ${
-                  mur?.text === tsonkh?.text ? "font-medium" : ""
+                  index === songogdsonTsonkhniiIndex ? "font-medium" : ""
                 } `}
-                onClick={() => setTsonkh(mur)}
+                onClick={() => setSongogdsonTsonkhniiIndex(index)}
               >
                 {mur.icon} {mur.text}
               </div>
@@ -491,7 +435,7 @@ function AjiltanBurtgel({ token }) {
           </div>
         </div>
       </div>
-      {tsonkh?.tsonkh}
+      {ajiltan && <Tsonkh {...{ ajiltan, ajiltanMutate, baiguullaga,barilgiinId, baiguullagaMutate,token }}/>}
     </Admin>
   );
 }
