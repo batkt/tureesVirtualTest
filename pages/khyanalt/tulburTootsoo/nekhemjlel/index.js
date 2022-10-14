@@ -34,6 +34,7 @@ import { useAuth } from "services/auth";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
+import { renderToString } from "react-dom/server";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -99,6 +100,7 @@ function tulburTootsoo({ token }) {
   }
 
   const nekhemjlekhuud = useMemo(() => {
+  
     if (barimt && songogdsonGereenuud)
       return songogdsonGereenuud?.map((a, i) => {
         var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
@@ -107,6 +109,7 @@ function tulburTootsoo({ token }) {
         const medeelel = _.cloneDeep(
           nekhemjleliinJagsaalt.find((n) => n._id === a)
         );
+        const barilga = baiguullaga.barilguud.find(a=>a._id === medeelel.barilgiinId);
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
             medeelel.eneSardTulukhDun *
@@ -125,6 +128,31 @@ function tulburTootsoo({ token }) {
           medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+          medeelel.gariinUseg = renderToString(
+            <span style={{ position: "absolute" }}>
+              <img
+                src={`https://turees.zevtabs.mn/api/file?path=gariinUseg/${barilga.gariinUseg}`}
+                style={{
+                  width: 100,
+                  height: 50,
+                  transform: "translate(10%, -30%)",
+                }}
+              />
+            </span>
+          );
+          medeelel.tamga = renderToString(
+            <span style={{ position: "absolute", zIndex: 1 }}>
+              <img
+                src={`https://turees.zevtabs.mn/api/file?path=tamga/${barilga.tamga}`}
+                style={{
+                  width: 115,
+                  height: 100,
+                  transform: "translate(-10%, -50%)",
+                  opacity: 0.65,
+                }}
+              />
+            </span>
+          );
           medeelel.umnukhSariinUrTulbur = formatNumber(
             medeelel.umnukhSariinUrTulbur
           );

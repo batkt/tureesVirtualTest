@@ -19,7 +19,7 @@ import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
-import { url } from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import moment from "moment";
 
 const formItemLayout = {
@@ -144,6 +144,12 @@ function GereeBaiguulakh({ token }) {
     khadgalya();
   }
 
+  const [logo, setLogo]=useState()
+
+  
+  const logokharakh =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
+  
+
   function khadgalya() {
     const burtgekhBarilga = form.getFieldsValue();
     burtgekhBarilga.davkharuud = [...davkhar, ...bdavkhar];
@@ -155,15 +161,19 @@ function GereeBaiguulakh({ token }) {
       _.set(burtgekhBarilga, `_id`, _id);
       _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga);
     }
-
-    updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
-      if (data === "Amjilttai") {
-        notification.success({ message: "Амжилттай хадгаллаа" });
-        router.back();
-      } else notification.warning({ message: "Алдаа гарлаа" });
-    });
+    let data =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
+    const index = baiguullaga.barilguud.findIndex(a=>a._id === data._id)
+    logo && (baiguullaga.barilguud[index].logo = logo)
+    
+    // updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
+    //   logo && uilchilgee(token).post('/confirmFile',{filename:logo,path:'logo'})
+    //   if (data === "Amjilttai") {
+    //     notification.success({ message: "Амжилттай хадгаллаа" });
+    //     // router.back();
+    //   } else notification.warning({ message: "Алдаа гарлаа" });
+    // });
   }
-
+  
   function m2Uurchilyu(v, mur) {
     if (_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")) {
       const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar);
@@ -174,6 +184,12 @@ function GereeBaiguulakh({ token }) {
       davkhar[index].talbai = v;
       setDavkhar(davkhar);
     }
+  }
+  const [kharakhZurgiinZam , setKharakhZurgiinZam]=useState(false)
+  function tamgaZuragKharakh(e,path ) {
+    setKharakhZurgiinZam(path)
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   return (
@@ -196,6 +212,35 @@ function GereeBaiguulakh({ token }) {
           {...formItemLayout}
           onValuesChange={onChange}
         >
+           <Form.Item label="Лого"  name="logo">
+              <Upload
+                      multiple={false}
+                      // name="file"
+                      action={`${url}/upload`}
+                      method="POST"
+                      onChange={(v) =>
+                        setLogo(v.file.response)
+                      }
+                    >
+                      <div className="flex flex-row space-x-1">
+                          {!logokharakh?.logo && (
+                          <Button icon={<UploadOutlined />}>
+                          Лого зураг оруулах
+                          </Button>
+                        )}
+                        {!!logokharakh?.logo && (
+                          <Button
+                            icon={<EyeOutlined />}
+                            onClick={(e) => tamgaZuragKharakh(e,`logo/${logokharakh.logo}`)}
+                          >
+                          Тамга зураг харах
+                          </Button>
+                        )}
+                        {!!logokharakh?.logo && <Button icon={<EditOutlined />}></Button>}
+                      </div>
+              </Upload>
+            </Form.Item>
+          
           <Form.Item
             rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
             name="ner"
@@ -227,7 +272,7 @@ function GereeBaiguulakh({ token }) {
              <InputNumber
               parser={(value) => value.includes('.') ? value.split('.')[0] : value}
               min={1}
-              max={30}
+              max={40}
               step="1"
               defaultValue={1}
               style={{ width: "100%" }}             
@@ -246,7 +291,6 @@ function GereeBaiguulakh({ token }) {
           >
              <InputNumber
               parser={(value) => value.includes('.') ? value.split('.')[0] : value}
-              min={1}
               max={30}
               step="1"
               defaultValue={1}
@@ -386,6 +430,17 @@ function GereeBaiguulakh({ token }) {
             },
           ]}
           dataSource={[...davkhar, ...bdavkhar]}
+        />
+         <Image
+          width={200}
+          preview={{
+            visible:!!kharakhZurgiinZam,
+            src: `https://turees.zevtabs.mn/api/file?path=${kharakhZurgiinZam}`,
+            onVisibleChange: value => {
+              setKharakhZurgiinZam(undefined);
+            },
+  
+          }}
         />
         <Image
           width={200}

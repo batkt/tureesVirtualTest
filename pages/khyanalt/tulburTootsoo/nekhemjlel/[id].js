@@ -34,6 +34,8 @@ const undsenTalbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
+  { ner: "Гарын үсэг", talbar: "gariinUseg" },
+  { ner: "Тамга", talbar: "tamga" },
 ];
 
 const khugatsaaniiTalbaruud = [
@@ -121,7 +123,7 @@ function ZakhialgaNemekh({ token }) {
   const [nekhemjlelZagvar, setNekhemjlelZagvar] = React.useState({});
   const [khemjee, setKhemjee] = useState("A4");
   const { barilgiinId } = useAuth();
-  const [orientation, setOrientation] = useState();
+  const [orientation, setOrientation] = useState("portrait");
   const [waiting, setWaiting] = useState(false);
 
   React.useEffect(() => {
@@ -132,13 +134,6 @@ function ZakhialgaNemekh({ token }) {
         }
       });
   }, [id]);
-
-  function onChange(e) {
-    setKhemjee(e.target.value);
-  }
-  function rotate(e) {
-    setOrientation(e);
-  }
 
   const { width, height } = React.useMemo(() => {
     return getSize(khemjee, orientation);
@@ -207,7 +202,8 @@ function ZakhialgaNemekh({ token }) {
       setWaiting(true);
       nekhemjlelZagvar.barilgiinId = barilgiinId;
       const method = nekhemjlelZagvar?._id ? updateMethod : createMethod;
-      method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
+      method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar, 
+      )
         .then(({ data }) => {
           if (data === "Amjilttai") {
             message.success("Амжилттай хадгаллаа");
@@ -219,6 +215,18 @@ function ZakhialgaNemekh({ token }) {
           setWaiting(false);
         });
     } else message.warning("Нэр оруулна уу!");
+  }
+  function hemjee(e){
+    setNekhemjlelZagvar((nekhemjlelZagvar) => ({
+      ...nekhemjlelZagvar,
+      khuudasniiKhemjee: e.target.value,
+    }));
+  }
+  function rotate(e) {
+    setNekhemjlelZagvar((nekhemjlelZagvar) => ({
+      ...nekhemjlelZagvar,
+      chiglel: e,
+    }));
   }
   function handleChange(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
@@ -288,7 +296,7 @@ function ZakhialgaNemekh({ token }) {
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 className="my-3"
-                onChange={onChange}
+                onChange={hemjee}
                 defaultValue={"A4"}
               >
                 <Radio value={"A4"}>A4</Radio>
@@ -301,7 +309,7 @@ function ZakhialgaNemekh({ token }) {
                 menuItemSelectedIcon={<CheckOutlined />}
                 suffixIcon={<img src="/rotate.svg" width={"16px"} />}
               >
-                <Select.Option value={"portrait"}>portrait</Select.Option>
+                <Select.Option  value={"portrait"}>portrait</Select.Option>
                 <Select.Option value={"landscape"}>landscape</Select.Option>
               </Select>
             </div>
