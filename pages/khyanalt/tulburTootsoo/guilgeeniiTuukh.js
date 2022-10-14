@@ -545,6 +545,7 @@ function guilgeeniiTuukh({ token }) {
           ref={ref}
           token={token}
           baiguullagiinId={baiguullaga?._id}
+          barilgiinId={barilgiinId}
           onFinish={refreshData}
         />
       ),

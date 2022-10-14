@@ -16,7 +16,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 
-function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
+function GuilgeeKhiikh({ data, token, onFinish, destroy,barilgiinId }, ref) {
   const [dun, setDun] = useState("");
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
@@ -26,7 +26,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
 
-  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)} ,turul:{$nin:['Тогтмол','Дурын']}, tariff: { $exists: true } }),[data]);
+  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)} ,turul:{$nin:['Тогтмол','Дурын']}, tariff: { $exists: true },barilgiinId }),[data,barilgiinId]);
 
   const zardal = useJagsaalt(
     "/ashiglaltiinZardluud",
