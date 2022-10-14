@@ -164,6 +164,13 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           onChange={setOgnoo}
         />
       )}
+      {turul === "ahiglalt" && (
+        <DatePicker
+          locale={locale}
+          value={ognoo}
+          onChange={setOgnoo}
+        />
+      )}
       {turul === "busad" && (
         <Select placeholder="Гүйлгээ хийх төрөл" onChange={setBusadTurul}>
           <Option value="barter">Бартер</Option>
