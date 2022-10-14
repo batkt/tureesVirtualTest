@@ -429,7 +429,7 @@ function talbaiBurtgekh({ token }) {
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() => talbainiiJagsaaltMutate().finally(() => duusgakh())}
         >
-          хадгалах
+          Хадгалах
         </Button>
       </Space>,
     ];
