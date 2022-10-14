@@ -905,11 +905,11 @@ function talbaiBurtgekh({ token }) {
                     <div className="flex flex-row justify-center">
                       <Popover
                         trigger="hover"
+                        placement="topLeft"
                         content={
                           <Table
                             style={{
                               display: "flex",
-                              width: "900px",
                             }}
                             pagination={false}
                             size="small"
