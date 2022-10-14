@@ -84,7 +84,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
     if (
       mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
       (mur.tulsunAldangi || 0) <
-        (dans.bank === "tdb" ? guilgee.Amt : guilgee.amount)
+        (Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) - guilgee.kholbosonDun)
     ) {
       aldaa.push(
         `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүн оруулаагүй байна`

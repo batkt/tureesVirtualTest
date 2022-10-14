@@ -16,7 +16,7 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 
-function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
+function GuilgeeKhiikh({ data, token, onFinish, destroy,barilgiinId }, ref) {
   const [dun, setDun] = useState("");
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
@@ -26,7 +26,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
 
-  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)}, tariff: { $exists: true } }),[data]);
+  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)} ,turul:{$nin:['Тогтмол','Дурын']}, tariff: { $exists: true },barilgiinId }),[data,barilgiinId]);
 
   const zardal = useJagsaalt(
     "/ashiglaltiinZardluud",
@@ -164,6 +164,13 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           onChange={setOgnoo}
         />
       )}
+      {turul === "ahiglalt" && (
+        <DatePicker
+          locale={locale}
+          value={ognoo}
+          onChange={setOgnoo}
+        />
+      )}
       {turul === "busad" && (
         <Select placeholder="Гүйлгээ хийх төрөл" onChange={setBusadTurul}>
           <Option value="barter">Бартер</Option>
@@ -172,7 +179,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         </Select>
       )}
       {busadTurul === "aldangi" && (
-        <div>Алдангийн үлдэгдэл: {formatNumber(data?.aldangiinUldegdel)}</div>
+        <div>Алдангийн үлдэгдэл: {formatNumber(data?.aldangiinUldegdel,2)}</div>
       )}
       {turul === "ahiglalt" && (
         <Select placeholder="Зардлын төрөл" >
@@ -187,7 +194,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       )}
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нэгж үнэ: {negjUne}
+          Нэгж үнэ: {formatNumber(negjUne,2)}
         </div>
       )}
       <InputNumber
@@ -201,7 +208,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       />
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нийт үнэ: {negjUne * dun || 0}
+          Нийт үнэ: {formatNumber(negjUne * dun || 0,2)}
         </div>
       )}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (

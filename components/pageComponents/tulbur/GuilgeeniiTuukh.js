@@ -112,6 +112,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           if (data) {
             message.success("Төлөлт амжилттай устгагдлаа!");
             refreshData();
+            guilgeeniiTuukhMutate()
           }
         })
         .catch(aldaaBarigch);
@@ -146,6 +147,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                   if (data) {
                     message.success("Төлөлт амжилттай устгагдлаа!");
                     uldegdelMutate();
+                    guilgeeniiTuukhMutate()
                     refreshData();
                   }
                 })
