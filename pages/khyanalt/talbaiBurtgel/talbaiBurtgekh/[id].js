@@ -21,7 +21,6 @@ import {
   Select,
   Upload,
   message,
-  Space,
   Switch,
 } from "antd";
 import { useRouter } from "next/router";
@@ -459,7 +458,7 @@ function TalbaiBurtgekh({ token }) {
                     ))}
                 </Select>
               </Form.Item>
-              <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх">
+              <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх" hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}>
                 <Switch
                   defaultChecked={talbaiState.niitiinTalbaiEsekh}
                   onChange={(e) => onChange("niitiinTalbaiEsekh", e)}
