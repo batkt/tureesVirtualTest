@@ -13,6 +13,7 @@ function AnketBuglukh({ data, token }) {
     const khariult = {
       asuultiinId: data._id,
       baiguullagiinId: data.baiguullagiinId,
+      barilgiinId: data.barilgiinId,
       asuultiinNer: data.ner,
       asuultiinTurul: data.turul,
       ognoo: new Date(),
@@ -122,7 +123,7 @@ function AnketBuglukh({ data, token }) {
               <img src="/success.png"></img>
             </div>
             <p className="px-5 text-xl font-medium">
-              Анкет амжилттай илгээгдлээ баярлалаа
+              Таны мэдээлэл амжилттай илгээгдлээ, баярлалаа
             </p>
           </div>
         </div>
