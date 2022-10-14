@@ -26,7 +26,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
 
-  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)}, tariff: { $exists: true } }),[data]);
+  const query = useMemo(()=>({ ner: {$in:data?.zardluud?.map((a)=>a.ner)} ,turul:{$nin:['Тогтмол','Дурын']}, tariff: { $exists: true } }),[data]);
 
   const zardal = useJagsaalt(
     "/ashiglaltiinZardluud",
