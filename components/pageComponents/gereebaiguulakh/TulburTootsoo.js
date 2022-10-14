@@ -42,7 +42,7 @@ const Tulbur = ({
 
   useEffect(() => {
     const zardluud = value.zardluud?.filter(function (item) {
-      return item.turul === "Дурын" || item.turul === "1м2";
+      return item.turul === "Тогтмол" || item.turul === "Дурын" || item.turul === "1м2";
     });
     if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
