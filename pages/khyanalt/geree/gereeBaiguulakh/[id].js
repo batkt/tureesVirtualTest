@@ -61,6 +61,7 @@ function GereeBaiguulakh({ token, data }) {
   );
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
+  const [waiting, setWaiting] = useState(false);
 
   const next = (data) => {
     if (current < 4) {
@@ -94,6 +95,7 @@ function GereeBaiguulakh({ token, data }) {
   }, [current]);
 
   function khadgalya(data) {
+    setWaiting(true);
     data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
     data.baiguullagiinNer = baiguullaga.ner;
     data.baiguullagiinId = baiguullaga._id;
@@ -117,7 +119,6 @@ function GereeBaiguulakh({ token, data }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
-          setCurrent(0);
           router.back();
           message.success("Амжилттай хадгаллаа");
         }
@@ -134,7 +135,7 @@ function GereeBaiguulakh({ token, data }) {
     if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
     if (!butsaakhUtga?.dedKhesguud)
-      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+      butsaakhUtga.dedKhesguud = butsaakhUtga?.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
     if (khadgalakhGeree.gereeniiOgnoo) {
@@ -162,7 +163,7 @@ function GereeBaiguulakh({ token, data }) {
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       butsaakhUtga.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
         .map((b) => {
           b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         });
@@ -188,6 +189,7 @@ function GereeBaiguulakh({ token, data }) {
       className="grid grid-cols-12 gap-6 p-5"
       hideSearch
       dedKhuudas
+      loading={waiting}
     >
       <div className="box col-span-12 p-5">
         <div className="px-10">
@@ -391,6 +393,7 @@ const ugudulAvchirya = async (ctx, session) => {
     );
 
   data.gereeniiZagvar = gereeniiZagvar.data;
+  data.baritsaaAvakhEsekh = data.baritsaaAvakhDun > 0;
   return data;
 };
 

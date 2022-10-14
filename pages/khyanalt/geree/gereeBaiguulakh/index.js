@@ -57,6 +57,7 @@ function GereeBaiguulakh({ token }) {
   const [alkhamErkh, setAlkhamErkh] = useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
+    baritsaaAvakhEsekh: true,
     gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
     baritsaaAvakhKhugatsaa: 1,
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),

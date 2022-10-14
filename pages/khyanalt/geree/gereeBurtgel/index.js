@@ -362,6 +362,8 @@ function ZakhialgiinKhyanalt() {
   const tailbarRef = React.useRef();
   const sungaltRef = React.useRef();
 
+  
+
   const [shineBagana, setShineBagana] = React.useState([]);
   useEffect(() => {
     Aos.init({ once: true });
@@ -807,6 +809,8 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeKharya(geree) {
+    const barilga = baiguullaga.barilguud.find(a=>a._id === geree.barilgiinId);
+    console.log(barilga)
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
       ({ data }) => {
         if (!!data) {
@@ -829,7 +833,7 @@ function ZakhialgiinKhyanalt() {
           geree.gariinUseg = renderToString(
             <span style={{ position: "absolute" }}>
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/d/df/Sign_of_V._K._Novikov.png"
+                src={`https://turees.zevtabs.mn/api/file?path=gariinUseg/${barilga.gariinUseg}`}
                 style={{
                   width: 100,
                   height: 50,
@@ -841,7 +845,7 @@ function ZakhialgiinKhyanalt() {
           geree.tamga = renderToString(
             <span style={{ position: "absolute", zIndex: 1 }}>
               <img
-                src="https://www.onlygfx.com/wp-content/uploads/2017/12/empty-stamp-8.png"
+                src={`https://turees.zevtabs.mn/api/file?path=tamga/${barilga.tamga}`}
                 style={{
                   width: 115,
                   height: 100,
@@ -932,7 +936,12 @@ function ZakhialgiinKhyanalt() {
         visible={!!kharuulakhGeree}
         footer={
           <div>
-            <button onClick={handlePrint}>Хэвлэх</button>
+            <Button
+              style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              onClick={handlePrint}
+            >
+              Хэвлэх
+            </Button>
           </div>
         }
       >

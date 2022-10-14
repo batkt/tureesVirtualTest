@@ -41,8 +41,8 @@ function GereeBaiguulakh({ token }) {
   const [bdavkhar, setBDavkhar] = useState([]);
 
   const [plantZurag, setPlantZurag] = useState();
-
   const [form] = Form.useForm();
+
 
   useEffect(() => {
     if (!!baiguullaga) {
@@ -100,9 +100,9 @@ function GereeBaiguulakh({ token }) {
       setDavkhar([...value]);
     }
     if (!!v?.bdavkhar) {
-      const value = new Array(v?.bdavkhar).fill("").map((a, i) => ({
+      const value = new Array(v.bdavkhar).fill("").map((a, i) => ({
         ...(bdavkhar.find((b) => b.davkhar === `B${i + 1}`) ||
-          planAvya(`B${i + 1}`) ||
+          planAvya(`B${i + 1}`,true) ||
           {}),
         davkhar: `B${i + 1}`,
       }));
@@ -137,6 +137,7 @@ function GereeBaiguulakh({ token }) {
       davkhar[index].planZurag = v[0];
       setDavkhar(davkhar);
     }
+
   }
 
   function onFinish() {
@@ -213,18 +214,25 @@ function GereeBaiguulakh({ token }) {
           </Form.Item>
           <Form.Item
             rules={[
-              { required: true, message: "Барилгын Давхарын тоо оруулна уу!" },
+            { 
+              required: true, 
+              message: "Барилгын Давхарын тоо оруулна уу!",
+              
+              
+            },
             ]}
             name="davkhar"
             label="Давхар"
-          >
-            <InputNumber
+          >  
+             <InputNumber
+              parser={(value) => value.includes('.') ? value.split('.')[0] : value}
               min={1}
-              type="number"
+              max={30}
               step="1"
               defaultValue={1}
-              style={{ width: "100%" }}
+              style={{ width: "100%" }}             
             />
+            
           </Form.Item>
           <Form.Item
             rules={[
@@ -236,7 +244,14 @@ function GereeBaiguulakh({ token }) {
             name="bdavkhar"
             label="B Давхар"
           >
-            <InputNumber style={{ width: "100%" }} />
+             <InputNumber
+              parser={(value) => value.includes('.') ? value.split('.')[0] : value}
+              min={1}
+              max={30}
+              step="1"
+              defaultValue={1}
+              style={{ width: "100%" }}             
+            />
           </Form.Item>
           <Form.Item
             rules={[
