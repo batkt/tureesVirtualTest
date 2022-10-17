@@ -12,15 +12,6 @@ export function modal({ content, ...config }) {
     }
   }
 
-  //   function keyUp(e) {
-  //     if (e.key === "Escape") {
-  //       destroy();
-  //       document.removeEventListener("keyup", keyUp);
-  //     }
-  //   }
-
-  //   document.addEventListener("keyup", keyUp);
-
   ReactDOM.render(
     <Modal visible closable={false} {...config}>
       {React.cloneElement(content, { destroy })}
