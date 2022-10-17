@@ -29,7 +29,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy,barilgiinId }, ref) {
   const query = useMemo(()=>({ ner: data?.zardluud && {$in:data.zardluud.map((a)=>a.ner)} ,turul:{$nin:['Тогтмол','Дурын']}, tariff: { $exists: true },barilgiinId }),[data,barilgiinId]);
 
   const zardal = useJagsaalt(
-    "/ashiglaltiinZardluud",
+    data?.zardluud && "/ashiglaltiinZardluud",
     query,
     undefined,
     undefined,
