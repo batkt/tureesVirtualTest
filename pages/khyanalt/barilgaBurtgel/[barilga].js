@@ -148,7 +148,7 @@ function GereeBaiguulakh({ token }) {
   const [logo, setLogo]=useState()
 
   
-  const logokharakh =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
+  const logoMedeelel =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
   
 
   function khadgalya() {
@@ -186,7 +186,7 @@ function GereeBaiguulakh({ token }) {
     }
   }
   const [kharakhZurgiinZam , setKharakhZurgiinZam]=useState(false)
-  function tamgaZuragKharakh(e,path ) {
+  function logoZuragKharakh(e,path ) {
     setKharakhZurgiinZam(path)
     e.preventDefault();
     e.stopPropagation();
@@ -223,20 +223,20 @@ function GereeBaiguulakh({ token }) {
                       }
                     >
                       <div className="flex flex-row space-x-1">
-                          {!logokharakh?.logo && (
+                          {!logoMedeelel?.logo && (
                           <Button icon={<UploadOutlined />}>
                           Лого зураг оруулах
                           </Button>
                         )}
-                        {!!logokharakh?.logo && (
+                        {!!logoMedeelel?.logo && (
                           <Button
                             icon={<EyeOutlined />}
-                            onClick={(e) => tamgaZuragKharakh(e,`logo/${logokharakh.logo}`)}
+                            onClick={(e) => logoZuragKharakh(e,`logo/${logoMedeelel.logo}`)}
                           >
                           Тамга зураг харах
                           </Button>
                         )}
-                        {!!logokharakh?.logo && <Button icon={<EditOutlined />}></Button>}
+                        {!!logoMedeelel?.logo && <Button icon={<EditOutlined />}></Button>}
                       </div>
               </Upload>
             </Form.Item>
