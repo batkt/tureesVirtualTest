@@ -73,7 +73,7 @@ function ZardalBurtgel(
           break;
       }
     }
-  })
+  },[])
 
   return (
     <Form
