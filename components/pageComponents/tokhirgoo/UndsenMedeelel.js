@@ -34,7 +34,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
   }
 
   return (
-    <div className="xxl:col-span-9 col-span-12 lg:col-span-9">
+    <div className="xxl:col-span-9 col-span-12 lg:col-span-12">
       <div className="box lg:mt-5">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
