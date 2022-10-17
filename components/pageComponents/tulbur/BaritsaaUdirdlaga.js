@@ -46,7 +46,7 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та гэрээгээ сонгоно уу" });
+          notification.warning({ message: "Та барьцааны дүн оруулна уу" });
           return;
         }
 
