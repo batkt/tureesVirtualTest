@@ -164,14 +164,13 @@ function GereeBaiguulakh({ token }) {
     let data =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
     const index = baiguullaga.barilguud.findIndex(a=>a._id === data._id)
     logo && (baiguullaga.barilguud[index].logo = logo)
-    
-    // updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
-    //   logo && uilchilgee(token).post('/confirmFile',{filename:logo,path:'logo'})
-    //   if (data === "Amjilttai") {
-    //     notification.success({ message: "Амжилттай хадгаллаа" });
-    //     // router.back();
-    //   } else notification.warning({ message: "Алдаа гарлаа" });
-    // });
+    updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
+      logo && uilchilgee(token).post('/confirmFile',{filename:logo,path:'logo'})
+      if (data === "Amjilttai") {
+        notification.success({ message: "Амжилттай хадгаллаа" });
+        router.back();
+      } else notification.warning({ message: "Алдаа гарлаа" });
+    });
   }
   
   function m2Uurchilyu(v, mur) {

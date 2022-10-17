@@ -32,7 +32,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
 
   return (
     <>
-      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-4">
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
@@ -41,15 +41,15 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
           </div>
 
           <div className="box">
-            <div className="flex  p-5">
+            <div className="flex p-5  ">
               <Form
                 form={form}
                 name="basic"
                 labelCol={{
-                  span: 10,
+                  span: 12,
                 }}
                 wrapperCol={{
-                  span: 14,
+                  span: 12,
                 }}
                 autoComplete={"off"}
                 onFinish={tokhirgooKhadgalakh}
@@ -123,7 +123,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
           </div>
         </div>
       </div>
-      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5"></div>
+      <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6"></div>
     </>
   );
 }
