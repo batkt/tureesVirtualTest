@@ -849,6 +849,7 @@ function talbaiBurtgekh({ token }) {
                     data?.khurunguud !== undefined && (
                       <div className="flex flex-row justify-center">
                         <Popover
+                        trigger="hover"
                           content={
                             <Table
                               pagination={false}
@@ -883,7 +884,7 @@ function talbaiBurtgekh({ token }) {
                               ]}
                             ></Table>
                           }
-                          trigger="click"
+                          
                         >
                           <a className="flex items-center justify-center  hover:scale-125 ">
                             <Badge count={data?.khurunguud?.length}>
@@ -904,13 +905,12 @@ function talbaiBurtgekh({ token }) {
                   return (
                     <div className="flex flex-row justify-center">
                       <Popover
-                        trigger="clickz"
+                        trigger="click"
                         placement="topLeft"
                         content={
                           <Table
                             style={{
                               display: "flex",
-                              minWidth:'50vw'
                             }}
                             pagination={false}
                             size="small"
