@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useImperativeHandle, useState } from "re
 import { Form, InputNumber, Select, Input, notification, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
+import compareFields from "tools/function/compareFields";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
@@ -10,21 +11,23 @@ function ZardalBurtgel(
   const [form] = Form.useForm();
   const [hideTariff,setHideTariff] = useState(false)
 
+  function garya() {
+    const values = form.getFieldsValue()
+    if(compareFields(values,data,['ner','turul','tariff']))
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
   useEffect(()=>{
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault()
-        const values = form.getFieldsValue()
-        values["barilgiinId"] = barilgiinId;
-        values["baiguullagiinId"] = baiguullagiinId;
-        if(JSON.stringify(data) !== JSON.stringify(values))
-            Modal.confirm({
-              content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-              okText: "Тийм",
-              cancelText: "Үгүй",
-              onOk: destroy})
-        else
-          destroy();
+        garya()
       }
     }
     form.getFieldInstance('ner').focus()
@@ -52,7 +55,7 @@ function ZardalBurtgel(
         );
       },
       khaaya() {
-        destroy();
+        garya();
       },
     }),
     [form]

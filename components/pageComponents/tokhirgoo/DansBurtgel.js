@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useImperativeHandle, useState } from "re
 import { Form, InputNumber, Select, Input, notification, Switch, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
+import compareFields from "tools/function/compareFields";
 
 function DansBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, dansMutate },
@@ -12,9 +13,7 @@ function DansBurtgel(
 
   function garya() {
     const values = form.getFieldsValue()
-    values["barilgiinId"] = barilgiinId;
-    values["baiguullagiinId"] = baiguullagiinId;
-    if(JSON.stringify(data) !== JSON.stringify(values))
+    if(compareFields(values,data,['bank','dugaar','dansniiNer','valyut']))
         Modal.confirm({
           content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
           okText: "Тийм",
