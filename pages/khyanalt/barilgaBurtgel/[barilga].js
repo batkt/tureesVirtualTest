@@ -99,7 +99,7 @@ function GereeBaiguulakh({ token }) {
         .reverse();
       setDavkhar([...value]);
     }
-    if (!!v?.bdavkhar) {
+    if (_.isNumber(v?.bdavkhar)) {
       const value = new Array(v.bdavkhar).fill("").map((a, i) => ({
         ...(bdavkhar.find((b) => b.davkhar === `B${i + 1}`) ||
           planAvya(`B${i + 1}`,true) ||
@@ -107,6 +107,7 @@ function GereeBaiguulakh({ token }) {
         davkhar: `B${i + 1}`,
       }));
       setBDavkhar([...value]);
+      console.log(bdavkhar)
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
@@ -289,7 +290,7 @@ function GereeBaiguulakh({ token }) {
             label="B Давхар"
           >
              <InputNumber
-              parser={(value) => value.includes('.') ? value.split('.')[0] : value}
+             parser={(value) => value.includes('.') ? value.split('.')[0] : value}
               max={30}
               step="1"
               defaultValue={1}
