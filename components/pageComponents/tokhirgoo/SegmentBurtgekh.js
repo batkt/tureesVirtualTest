@@ -72,7 +72,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                 });
             },
             khaaya() {
-                destroy()
+                garya()
             },
         }),
         [form],
