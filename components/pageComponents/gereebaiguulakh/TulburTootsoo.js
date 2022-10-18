@@ -42,7 +42,11 @@ const Tulbur = ({
 
   useEffect(() => {
     const zardluud = value.zardluud?.filter(function (item) {
-      return item.turul === "Дурын" || item.turul === "1м2";
+      return (
+        item.turul === "Дурын" ||
+        item.turul === "1м2" ||
+        item.turul === "Тогтмол"
+      );
     });
     if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
@@ -53,6 +57,7 @@ const Tulbur = ({
           ekhlekhOgnoo: value.gereeniiOgnoo,
           duusakhOgnoo: value.duusakhOgnoo,
           zardluud: zardluud,
+          mk: value.talbainKhemjee,
         })
         .then(({ data }) => {
           setKhuvaari(data);
