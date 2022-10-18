@@ -1,8 +1,9 @@
-import React, { useImperativeHandle, useState } from "react";
-import { Form, Input, message } from "antd";
+import React, { suseEffect, useImperativeHandle } from "react";
+import { Form, Input, message, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "./ZagvarUusgekh";
+import compareFields from "tools/function/compareFields";
 
 function ZagvarForm({ value, onChange }) {
   return <ZagvarUusgekh value={value} change={onChange} />;
@@ -13,6 +14,30 @@ function ZagvarBurtgel(
   ref
 ) {
   const [form] = Form.useForm();
+
+  function garya() {
+    const values = form.getFieldsValue()
+    if(compareFields(values,data,['ner','mail']))
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
+  useEffect(()=>{
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        garya()
+      }
+    }
+    form.getFieldInstance('ner').focus()
+    document.addEventListener("keyup", keyUp);
+    return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
 
   useImperativeHandle(
     ref,
@@ -44,7 +69,7 @@ function ZagvarBurtgel(
   return (
     <Form autoComplete={"off"} form={form} initialValues={data}>
       <Form.Item name="ner">
-        <Input placeholder="Нэр" />
+        <Input placeholder="Нэр"/>
       </Form.Item>
       <Form.Item name="mail">
         <ZagvarForm />

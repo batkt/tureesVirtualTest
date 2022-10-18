@@ -10,7 +10,7 @@ import {
   LockOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
-import { Input, Select } from "antd";
+import { Input, Modal, Select } from "antd";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -67,6 +67,29 @@ const tulburiinTalbaruud = [
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef();
   const [utga, setUtga] = React.useState(value);
+
+  function garya() {
+    if(utga !== value)
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
+  React.useEffect(()=>{
+    function keyUp(e) {
+        if (e.key === "Escape") {
+          e.preventDefault()
+          garya()
+        }
+    }
+    document.addEventListener("keyup", keyUp);
+    return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
+
   React.useImperativeHandle(
     ref,
     () => ({
@@ -75,7 +98,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         destroy();
       },
       khaaya() {
-        destroy();
+        garya();
       },
     }),
     [utga]

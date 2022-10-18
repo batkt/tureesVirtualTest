@@ -1,5 +1,5 @@
 import React from "react";
-import { message, Upload } from "antd";
+import { message, Modal, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
@@ -18,6 +18,22 @@ function index(
   ref
 ) {
   const [aldaa, setAldaa] = React.useState(null);
+
+  function garya() {
+    destroy();
+  }
+
+  React.useEffect(()=>{
+      function keyUp(e) {
+          if (e.key === "Escape") {
+            e.preventDefault()
+            garya()
+          }
+      }
+      document.addEventListener("keyup", keyUp);
+      return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
+
   React.useImperativeHandle(
     ref,
     () => ({

@@ -37,19 +37,19 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
               onOk: destroy})
         else
           destroy();
-      }
-    
-      useEffect(()=>{
+    }
+
+    useEffect(()=>{
         function keyUp(e) {
-          if (e.key === "Escape") {
+            if (e.key === "Escape") {
             e.preventDefault()
             garya()
-          }
+            }
         }
         form.getFieldInstance('turul').focus()
         document.addEventListener("keyup", keyUp);
         return ()=>document.removeEventListener("keyup", keyUp);
-      },[])
+    },[])
 
     useImperativeHandle(
         ref,
