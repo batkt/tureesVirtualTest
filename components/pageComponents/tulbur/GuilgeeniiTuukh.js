@@ -205,18 +205,18 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 <div className="p-1">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </div>
-                <div className="p-1">{formatNumber(a.undsenDun, 0)}</div>
-                <div className="p-1">{formatNumber(a.tulukhDun, 0)}</div>
-                <div className="p-1">{formatNumber(a.khyamdral, 0)}</div>
-                <div className="p-1">{formatNumber(a.tulsunAldangi, 0)}</div>
-                <div className="p-1">{formatNumber(a.tulsunDun, 0)}</div>
+                <div className="p-1">{formatNumber(a.undsenDun, 2)}</div>
+                <div className="p-1">{formatNumber(a.tulukhDun, 2)}</div>
+                <div className="p-1">{formatNumber(a.khyamdral, 2)}</div>
+                <div className="p-1">{formatNumber(a.tulsunAldangi, 2)}</div>
+                <div className="p-1">{formatNumber(a.tulsunDun, 2)}</div>
                 <div
                   className={`p-1 ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
                   {formatNumber(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                    0
+                    2
                   )}
                 </div>
                 

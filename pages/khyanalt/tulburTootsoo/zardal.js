@@ -541,7 +541,7 @@ function zardal({ token }) {
       onOk: ustgaya,
       content: (
         <div>
-          <strong>{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?
+          <strong >{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?
         </div>
       ),
       okText: "Тийм",
@@ -666,18 +666,19 @@ function zardal({ token }) {
                 return (
                   <div className="flex flex-row justify-center">
                     <Popover
-                      placement="bottom"
+                      placement="left"
                       trigger="click"
                       content={() => (
-                        <div className="flex w-24 flex-col space-y-2">
-                          <a
-                            className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                        <div className="flex w-full flex-col space-y-2">
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                             onClick={() => zardalBurtgekh(mur)}
                           >
-                            <EditOutlined style={{ fontSize: "18px" }} />
+                            <EditOutlined  className="px-3"
+                                style={{ fontSize: "18px", color: "green" }} />
                             <label>Засах</label>
                           </a>
                           <Popconfirm
+                          className=""
                             title="Талбай устгах уу?"
                             okText="Тийм"
                             cancelText="Үгүй"
@@ -685,6 +686,7 @@ function zardal({ token }) {
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                               <DeleteOutlined
+                              className="px-3"
                                 style={{ fontSize: "18px", color: "red" }}
                               />
                               <label>Устгах</label>

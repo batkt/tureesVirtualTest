@@ -21,7 +21,6 @@ import {
   Select,
   Upload,
   message,
-  Space,
   Switch,
 } from "antd";
 import { useRouter } from "next/router";
@@ -131,7 +130,9 @@ function TalbaiBurtgekh({ token }) {
     ...data,
   });
 
+
   function onChange(talbar, utga) {
+    
     if (talbar === "talbainNegjUne") {
       let value = Number(utga) * Number(talbaiState.talbainKhemjee);
       if (
@@ -459,7 +460,7 @@ function TalbaiBurtgekh({ token }) {
                     ))}
                 </Select>
               </Form.Item>
-              <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх">
+              <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх" hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}>
                 <Switch
                   defaultChecked={talbaiState.niitiinTalbaiEsekh}
                   onChange={(e) => onChange("niitiinTalbaiEsekh", e)}
@@ -580,7 +581,7 @@ function TalbaiBurtgekh({ token }) {
           <div className="">
             <div className="">
               <Form.List name="khurunguud">
-                {(fields, { add, remove }) => (
+                {(fields, { add, remove,}) => (
                   <>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <Card>
@@ -588,7 +589,7 @@ function TalbaiBurtgekh({ token }) {
                           <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
                             <CloseCircleOutlined
                               onClick={() => {
-                                remove(name), khurungKhasakh();
+                                remove(name)
                               }}
                             />
                           </div>

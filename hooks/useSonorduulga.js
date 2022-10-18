@@ -1,4 +1,4 @@
-import { message, notification } from "antd";
+import { notification } from "antd";
 import axios, { socket, aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Sonorduulga from "components/sonorduulga";
@@ -20,6 +20,7 @@ const fetcher = (
         query: {
           baiguullagiinId,
           barilgiinId,
+          khuleenAvagchiinId:{$in:[ajiltniiId,barilgiinId]},
           "object.ajiltniiId": {
             $ne: ajiltniiId,
           },

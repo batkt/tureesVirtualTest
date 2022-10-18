@@ -1,9 +1,10 @@
-import React, { useImperativeHandle, } from 'react'
-import { Form, Select, Input, Button, notification } from 'antd'
+import React, { useCallback, useEffect, useImperativeHandle, } from 'react'
+import { Form, Select, Input, Button, notification, Modal } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import createMethod from 'tools/function/crud/createMethod';
 import updateMethod from 'tools/function/crud/updateMethod';
 import { aldaaBarigch } from 'services/uilchilgee';
+import compareFields from 'tools/function/compareFields';
 
 const formItemLayout = {
     labelCol: {
@@ -26,6 +27,30 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
 
     const [form] = Form.useForm();
 
+    function garya() {
+        const values = form.getFieldsValue()
+        if(compareFields(values,data,['ner','turul','tariff']))
+            Modal.confirm({
+              content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+              okText: "Тийм",
+              cancelText: "Үгүй",
+              onOk: destroy})
+        else
+          destroy();
+      }
+    
+      useEffect(()=>{
+        function keyUp(e) {
+          if (e.key === "Escape") {
+            e.preventDefault()
+            garya()
+          }
+        }
+        form.getFieldInstance('turul').focus()
+        document.addEventListener("keyup", keyUp);
+        return ()=>document.removeEventListener("keyup", keyUp);
+      },[])
+
     useImperativeHandle(
         ref,
         () => ({
@@ -47,16 +72,32 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                 });
             },
             khaaya() {
-                destroy()
+                garya()
             },
         }),
         [form],
     )
 
+    const focuser = useCallback((e)=>{
+        if(e.key === 'Enter'){
+          e.preventDefault()
+          switch (e.target.id) {
+            case 'turul':
+              form.getFieldInstance('ner').focus()
+              break;
+            case 'ner':
+              form.getFieldInstance('ner').focus()
+              break;
+            default:
+              break;
+          }
+        }
+      },[])
+
     return (
         <Form form={form} autoComplete="off" initialValues={data} {...formItemLayout} >
             <Form.Item label='Төрөл' name="turul">
-                <Select >
+                <Select onKeyUp={focuser}>
                     <Select.Option key='khariltsagch' value='khariltsagch'>Харилцагч</Select.Option>
                     <Select.Option key='talbai' value='talbai'>Талбай</Select.Option>
                     <Select.Option key='geree' value='geree'>Гэрээ</Select.Option>
@@ -72,7 +113,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                     },
                 ]}
             >
-                <Input  ></Input>
+                <Input onKeyUp={focuser} ></Input>
             </Form.Item>
             <Form.List name="utguud">
                 {(fields, { add, remove }, { errors }) => (
@@ -124,9 +165,6 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                     </>
                 )}
             </Form.List>
-            {/* <Form.Item>
-                <Button onClick={segmentAvya} > ss</Button>
-            </Form.Item> */}
         </Form >
     )
 }

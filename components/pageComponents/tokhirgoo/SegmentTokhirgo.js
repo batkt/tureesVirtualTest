@@ -90,7 +90,7 @@ function segmentiinTokhirgoo({ token }) {
   }
 
   return (
-    <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-5">
+    <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
       <div className="box mt-5 lg:mt-0">
         <div
           className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pt-5 pb-2"

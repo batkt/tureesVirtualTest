@@ -1,7 +1,8 @@
-import React, { useImperativeHandle, useState } from "react";
-import { Form, InputNumber, Select, Input, notification } from "antd";
+import React, { useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { Form, InputNumber, Select, Input, notification, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
+import compareFields from "tools/function/compareFields";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
@@ -9,6 +10,30 @@ function ZardalBurtgel(
 ) {
   const [form] = Form.useForm();
   const [hideTariff,setHideTariff] = useState(false)
+
+  function garya() {
+    const values = form.getFieldsValue()
+    if(compareFields(values,data,['ner','turul','tariff']))
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
+  useEffect(()=>{
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        garya()
+      }
+    }
+    form.getFieldInstance('ner').focus()
+    document.addEventListener("keyup", keyUp);
+    return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
 
   useImperativeHandle(
     ref,
@@ -30,11 +55,28 @@ function ZardalBurtgel(
         );
       },
       khaaya() {
-        destroy();
+        garya();
       },
     }),
     [form]
   );
+
+  const focuser = useCallback((e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault()
+      switch (e.target.id) {
+        case 'ner':
+          form.getFieldInstance('turul').focus()
+          break;
+        case 'turul':
+          form.getFieldInstance('tariff').focus()
+          form.getFieldInstance('tariff').select()
+          break;
+        default:
+          break;
+      }
+    }
+  },[])
 
   return (
     <Form
@@ -46,10 +88,12 @@ function ZardalBurtgel(
     >
       <Form.Item hidden name="_id"></Form.Item>
       <Form.Item label="Нэр" name="ner">
-        <Input />
+        <Input onKeyUp={focuser}/>
       </Form.Item>
       <Form.Item label="Нэгж" name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> { 
+            form.getFieldInstance('tariff').focus()
+            form.getFieldInstance('tariff').select()
             setHideTariff(v === 'Дурын')
           }}>
           <Select.Option key="Тогтмол" value="Тогтмол">
@@ -58,7 +102,7 @@ function ZardalBurtgel(
           <Select.Option key="Дурын" value="Дурын">
             Дурын
           </Select.Option>
-        </Select> : <Select>
+        </Select> : <Select onKeyUp={focuser}>
           <Select.Option key="кВт" value="кВт">
             кВт
           </Select.Option>

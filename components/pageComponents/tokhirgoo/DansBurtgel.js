@@ -1,7 +1,8 @@
-import React, { useImperativeHandle, useState } from "react";
-import { Form, InputNumber, Select, Input, notification, Switch } from "antd";
+import React, { useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { Form, InputNumber, Select, Input, notification, Switch, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
+import compareFields from "tools/function/compareFields";
 
 function DansBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, dansMutate },
@@ -9,6 +10,30 @@ function DansBurtgel(
 ) {
   const [form] = Form.useForm();
   const [bank, setBank] = useState(data?.bank);
+
+  function garya() {
+    const values = form.getFieldsValue()
+    if(compareFields(values,data,['bank','dugaar','dansniiNer','valyut']))
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
+  useEffect(()=>{
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        garya()
+      }
+    }
+    form.getFieldInstance('bank').focus()
+    document.addEventListener("keyup", keyUp);
+    return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
 
   useImperativeHandle(
     ref,
@@ -29,11 +54,32 @@ function DansBurtgel(
         });
       },
       khaaya() {
-        destroy();
+        garya();
       },
     }),
     [form]
   );
+
+  const focuser = useCallback((e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault()
+      switch (e.target.id) {
+        case 'bank':
+          form.getFieldInstance('dugaar').focus()
+          form.getFieldInstance('dugaar').select()
+          break;
+        case 'dugaar':
+          form.getFieldInstance('dansniiNer').focus()
+          form.getFieldInstance('dansniiNer').select()
+          break;
+        case 'dansniiNer':
+          form.getFieldInstance('valyut').focus()
+          break;
+        default:
+          break;
+      }
+    }
+  },[]);
 
   return (
     <Form
@@ -45,7 +91,7 @@ function DansBurtgel(
     >
       <Form.Item hidden name="_id"></Form.Item>
       <Form.Item label="Банкны нэр" name="bank">
-        <Select onSelect={setBank}>
+        <Select onSelect={setBank} onKeyUp={focuser}>
           <Select.Option key="khanbank" value="khanbank">
             Хаан банк
           </Select.Option>
@@ -55,13 +101,13 @@ function DansBurtgel(
         </Select>
       </Form.Item>
       <Form.Item label="Дансны дугаар" name="dugaar">
-        <InputNumber style={{ width: "100%" }} />
+        <InputNumber style={{ width: "100%" }} onKeyUp={focuser}/>
       </Form.Item>
-      <Form.Item label="Дансны нэр" name="dansniiNer">
-        <Input />
+      <Form.Item label="Дансны нэр" name="dansniiNer" > 
+        <Input onKeyUp={focuser}/>
       </Form.Item>
-      <Form.Item label="Валют" name="valyut">
-        <Select>
+      <Form.Item label="Валют" name="valyut" >
+        <Select onKeyUp={focuser}>
           <Select.Option key="MNT" value="MNT">
             MNT
           </Select.Option>
