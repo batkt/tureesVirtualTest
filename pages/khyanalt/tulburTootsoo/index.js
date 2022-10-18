@@ -161,6 +161,10 @@ function tulburTootsoo({ token }) {
     return query;
   }, [songogdsonTurul, khuulgaTurul, songogdsonDans]);
 
+  useEffect(() => {
+    setSongogdsonDans(null);
+  }, [barilgiinId]);
+
   const {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
@@ -668,6 +672,7 @@ function tulburTootsoo({ token }) {
               placeholder="Данс"
               style={{ width: "100%" }}
               onChange={dansSongoy}
+              value={songogdsonDans?.dugaar}
             >
               {dansGaralt?.jagsaalt?.map((a) => (
                 <Select.Option key={a.dugaar} value={a.dugaar}>
