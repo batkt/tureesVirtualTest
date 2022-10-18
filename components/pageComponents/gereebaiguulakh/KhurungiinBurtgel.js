@@ -34,12 +34,13 @@ const formItemLayout = {
 
 function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
+
   const query = useMemo(() => {
     return {
-      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
-      idevkhiteiEsekh: false,
+      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh
     };
   }, [gereeniiZagvar]);
+
   const { talbainiiGaralt, setTalbaiKhuudaslalt } = useTalbai(
     token,
     baiguullaga?._id,
@@ -64,7 +65,7 @@ function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
       {talbainiiGaralt?.jagsaalt?.map((a) => {
         return (
           <Select.Option key={a._id}>
-            <div className="flex ">
+            <div className={`flex ${a.idevkhiteiEsekh ? 'opacity-50' : 'opacity-100' }`}>
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
                 {a.talbainKhemjee}м<sup>2</sup>
