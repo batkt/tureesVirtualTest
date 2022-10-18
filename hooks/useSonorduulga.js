@@ -20,6 +20,7 @@ const fetcher = (
         query: {
           baiguullagiinId,
           barilgiinId,
+          khuleenAvagchiinId:{$in:[ajiltniiId,barilgiinId]},
           "object.ajiltniiId": {
             $ne: ajiltniiId,
           },
