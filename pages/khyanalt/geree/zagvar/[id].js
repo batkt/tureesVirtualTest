@@ -61,7 +61,6 @@ function ZakhialgaNemekh({ token }) {
   }
 
   function docZasya(key, value) {
-    console.log(value);
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button
