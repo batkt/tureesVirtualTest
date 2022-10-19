@@ -7,18 +7,22 @@ import useMedegdel from "hooks/medegdel/useMedegdel";
 import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
+  Checkbox,
   Input,
   notification,
   Popconfirm,
   Select,
   Spin,
   Table,
+  Upload,
 } from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
   FileExcelOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
@@ -28,9 +32,11 @@ import createMethod from "tools/function/crud/createMethod";
 import useSWR from "swr";
 import formatNumber from "tools/function/formatNumber";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
+import useKhariltsagch from "hooks/useKhariltsagch";
+import TextArea from "antd/lib/input/TextArea";
 
 //#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
@@ -98,7 +104,7 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
-  const [turul, setTurul] = useState("SMS");
+  const [turul, setTurul] = useState("App");
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState("");
@@ -106,14 +112,19 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
-  const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
+  // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
+  const [tuluv, setTuluv] = useState("idevkhtei");
   const [waiting, setWaiting] = useState(false);
-
   const ref = useRef(null);
+
+  const [zurag ,setZurag]=useState();
+
+  const [songogdsonKhariltsagch,setSongogdsonKhariltsagch]=useState([]);
+  
 
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useMedegdel(
     token,
@@ -136,10 +147,14 @@ function Khyanalt({ token }) {
     setKhuudaslalt,
   } = useSanalGomdol(turul === "App" && token, khariltsagch?.khariltsagchiinId);
 
+  
+
   useEffect(() => {
     setKhariltsagch(null);
     if (ilgeekhTurul !== "davkharaar") setDavkhar(null);
   }, [ilgeekhTurul]);
+
+  
 
   useEffect(() => {
     setKhariltsagch(null);
@@ -157,31 +172,32 @@ function Khyanalt({ token }) {
   //#endregion
 
   //#region method
-
   async function appIlgeeye() {
-    if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0) {
+    
+    if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0) {
       var khariu = { successCount: 0, failureCount: 0 };
-      songogdsonGereenuud
+      songogdsonKhariltsagch
         .filter((a) => !!a.khariltsagchiinId)
         .map((a, index, array) => {
           let body = msj;
           for (const [key, value] of Object.entries(a)) {
             body = body?.replace(new RegExp(`<${key}>`, "g"), value);
           }
-
           uilchilgee(token)
             .post(`/sonorduulgaIlgeeye`, {
               firebaseToken: a?.firebaseToken,
               khariltsagchiinId: a?.khariltsagchiinId,
               barilgiinId: a.barilgiinId,
               khariltsagchiinNer: a.ner,
-              medeelel: { title, body },
+              medeelel: { title, body:content },
             })
             .then(({ data }) => {
               if (!!data?.successCount) khariu.successCount += 1;
               else if (!!data?.failureCount) khariu.failureCount += 1;
               if (index === array.length - 1) {
+
                 notification.success({
+
                   message: `Notification Амжилттай ${khariu.successCount} ${
                     khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
                   } илгээлээ`,
@@ -199,6 +215,7 @@ function Khyanalt({ token }) {
       return;
     }
 
+    
     setLoading(true);
     uilchilgee(token)
       .post(`/sonorduulgaIlgeeye`, {
@@ -206,9 +223,11 @@ function Khyanalt({ token }) {
         khariltsagchiinId: khariltsagch?.khariltsagchiinId,
         barilgiinId: khariltsagch.barilgiinId,
         khariltsagchiinNer: khariltsagch.ner,
-        medeelel: { title, body: ingeekhmSms },
+        zurgiinId: zurag,
+        medeelel: { title, body: content },
       })
       .then(({ data }) => {
+        zurag && uilchilgee(token).post('/confirmFile',{filename:zurag,path:'medegdel'})
         if (!!data?.successCount) {
           sonorduulga.jagsaalt.unshift({
             khariltsagchiinId: khariltsagch?.khariltsagchiinId,
@@ -243,8 +262,8 @@ function Khyanalt({ token }) {
       return;
     }
     var msgnuud = [];
-    if (ilgeekhTurul !== "gantsaar" && songogdsonGereenuud.length > 0)
-      songogdsonGereenuud.map((a) => {
+    if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0)
+      songogdsonKhariltsagch.map((a) => {
         var text = msj;
         for (const [key, value] of Object.entries(a)) {
           text = text?.replace(new RegExp(`<${key}>`, "g"), value);
@@ -316,8 +335,8 @@ function Khyanalt({ token }) {
         mail: khariltsagch.mail,
         content: zagvar,
       });
-    } else if (songogdsonGereenuud?.length > 0) {
-      songogdsonGereenuud.forEach((a) => {
+    } else if (songogdsonKhariltsagch?.length > 0) {
+      songogdsonKhariltsagch.forEach((a) => {
         var zagvar = content;
         for (const [key, value] of Object.entries(a)) {
           zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
@@ -435,6 +454,8 @@ function Khyanalt({ token }) {
     }
   }
 
+
+
   function onScroll(e) {
     clearTimeout(timeout);
     timeout = setTimeout(function () {
@@ -481,7 +502,7 @@ function Khyanalt({ token }) {
           data-aos-delay="100"
         >
           {turul === "SMS" ? (
-            <div className=" items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
+            <div className="items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
               </p>
@@ -510,24 +531,37 @@ function Khyanalt({ token }) {
               turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
             }`}
           >
+          </div>
+        </div>
+        <div
+          className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
             <Select
-              className="w-full"
-              placeholder="Илгээх төрөл"
-              value={ilgeekhTurul}
-              onChange={setIlgeekhTurul}
+                 className="w-full"
+                 value={tuluv}
+                 onChange={setTuluv}
             >
               {[
-                { key: "buunuur", v: "Бөөнөөр" },
-                { key: "davkharaar", v: "Давхараар" },
-                { key: "avlagaar", v: "Авлагаар" },
-                { key: "gantsaar", v: "Ганцаар" },
+                { key: "idevkhtei", v: "Идэвхтэй" },
+                { key: "idevkhgiu", v: "Идэвхгүй " },
               ].map((a) => (
                 <Select.Option key={a.key} value={a.key}>
                   {a.v}
                 </Select.Option>
               ))}
             </Select>
-          </div>
+            <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+              {baiguullaga?.barilguud
+                ?.find((a) => a._id === barilgiinId)
+                ?.davkharuud.map((a) => (
+                  <Select.Option key={a._id} value={a.davkhar}>
+                    {a.davkhar}
+                  </Select.Option>
+                ))}
+            </Select>
         </div>
         <div
           className={`mt-5 flex-row p-2 font-medium xl:flex ${
@@ -650,7 +684,10 @@ function Khyanalt({ token }) {
               </svg>
             </div>
             <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-              {nekhemjlel?.jagsaalt?.map((mur) => (
+         
+              {nekhemjlel?.jagsaalt?.map((mur)=> ( 
+                
+                !!davkhar ? davkhar== mur.davkhar ?
                 <div
                   className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
                     khariltsagch?._id === mur?._id
@@ -660,6 +697,82 @@ function Khyanalt({ token }) {
                   key={mur?._id}
                   onClick={() => setKhariltsagch(mur)}
                 >
+                  <div>
+                   <Checkbox
+                    onChange={(e)=>{
+                      
+                      e.target.checked
+                      if(e.target.checked == true){
+                        songogdsonKhariltsagch.push(mur)
+                      }else  {
+                        const index=songogdsonKhariltsagch.findIndex((a)=>a._id === mur._id)
+                        if(index !== -1){
+                          songogdsonKhariltsagch.splice(index, 1)
+                        }
+                      }
+                      setSongogdsonKhariltsagch([...songogdsonKhariltsagch])
+                    }}
+                     />
+                  </div>
+                  <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                    <img
+                      alt="profileZurag"
+                      className="rounded-full"
+                      src={
+                        ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
+                        1
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
+                      }
+                    />
+                    <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                  </div>
+                  <div
+                    className={`truncate text-center text-xs text-gray-600  ${
+                      khariltsagch?._id === mur?._id
+                        ? "dark:text-gray-50"
+                        : "dark:text-gray-400"
+                    }`}
+                  >
+                    {mur?.ner}
+                  </div>
+                  <div
+                    className={`truncate text-center text-xs text-gray-600 ${
+                      khariltsagch?._id === mur?._id
+                        ? "dark:text-gray-50"
+                        : "dark:text-gray-400"
+                    }`}
+                  >
+                    {mur?.gereeniiDugaar}
+                  </div>
+                </div>
+                : ""
+                : <div
+                  className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                    khariltsagch?._id === mur?._id
+                      ? "bg-green-100 dark:bg-green-500"
+                      : ""
+                  } `}
+                  key={mur?._id}
+                  onClick={() => setKhariltsagch(mur)}
+                >
+                  <div>
+                    <Checkbox
+                    onChange={(e)=>{
+                      
+                      e.target.checked
+                      if(e.target.checked == true){
+                        songogdsonKhariltsagch.push(mur)
+                      }else  {
+                        const index=songogdsonKhariltsagch.findIndex((a)=>a._id === mur._id)
+                        if(index !== -1){
+                          songogdsonKhariltsagch.splice(index, 1)
+                        }
+                      }
+                      setSongogdsonKhariltsagch([...songogdsonKhariltsagch])
+                    }}
+                     />
+                  </div>
                   <div className="image-fit relative h-10 w-10 flex-none rounded-full">
                     <img
                       alt="profileZurag"
@@ -693,6 +806,7 @@ function Khyanalt({ token }) {
                   </div>
                 </div>
               ))}
+              
             </div>
           </div>
         )}
@@ -707,6 +821,7 @@ function Khyanalt({ token }) {
       >
         {khariltsagch || ilgeekhTurul !== "gantsaar" ? (
           <div className="box flex h-full flex-col">
+            {songogdsonKhariltsagch.length <= 1 ?
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {ilgeekhTurul === "davkharaar" && (
                 <div className="flex flex-row space-x-2">
@@ -760,6 +875,7 @@ function Khyanalt({ token }) {
                 </div>
               )}
             </div>
+            :""}
             <div
               className="w-full"
               data-aos="fade-left"
@@ -776,7 +892,7 @@ function Khyanalt({ token }) {
                       (a, i) => {
                         return (
                           <div
-                            className={`relative mt-8 flex w-4/5 flex-col rounded-xl border border-green-200 bg-green-500 p-3 2xl:w-1/3  ${
+                            className={`relative mt-8 flex flex-col rounded-xl border border-green-200 bg-green-500 p-3 w-full  ${
                               a.turul === "medegdel"
                                 ? "ml-auto rounded-br-none bg-blue-500"
                                 : "rounded-bl-none"
@@ -834,88 +950,6 @@ function Khyanalt({ token }) {
                     dangerouslySetInnerHTML={{ __html: ingeekhmSms }}
                   />
                 ))}
-              {ilgeekhTurul !== "gantsaar" && (
-                <Table
-                  rowKey={(row) => row._id}
-                  scroll={{ y: "calc(100vh - 29rem)" }}
-                  className="overflow-x-auto "
-                  rowSelection={{
-                    type: "checkbox",
-                    onChange: (selectedRowKeys, selectedRows) => {
-                      setSongogdsonGereenuud(selectedRows);
-                    },
-                  }}
-                  size="small"
-                  loading={!nekhemjlel}
-                  dataSource={nekhemjlel?.jagsaalt}
-                  columns={[
-                    {
-                      title: "Гэрээний дугаар",
-                      dataIndex: "gereeniiDugaar",
-                      align: "center",
-                      width: "10rem",
-                    },
-                    {
-                      title: "Нэр",
-                      dataIndex: "ner",
-                      align: "left",
-                      width: "10rem",
-                    },
-                    {
-                      title: "Талбай",
-                      dataIndex: "talbainDugaar",
-                      align: "center",
-                      width: "8rem",
-                    },
-                    {
-                      width: "10rem",
-                      title: turul,
-                      dataIndex: turul === "Mail" ? "mail" : "utas",
-                      align: "center",
-                    },
-                    {
-                      title: "Сарийн түрээс",
-                      dataIndex: "sariinTurees",
-                      width: "10rem",
-                      align: "center",
-                      render: (sariinTurees) => {
-                        return formatNumber(sariinTurees || 0);
-                      },
-                    },
-                    {
-                      title: "Энэ сард төлөх дүн",
-                      dataIndex: "eneSardTulukhDun",
-                      align: "center",
-                      width: "10rem",
-                      render: (eneSardTulukhDun) => {
-                        return formatNumber(eneSardTulukhDun || 0);
-                      },
-                    },
-                    {
-                      title: "Нийт үлдэгдэл",
-                      dataIndex: "niitUldegdel",
-                      align: "center",
-                      width: "10rem",
-                      render: (niitUldegdel) => {
-                        return formatNumber(niitUldegdel || 0);
-                      },
-                    },
-                  ]}
-                  pagination={{
-                    showTotal: (total) => <div>Нийт: {total}</div>,
-                    current: nekhemjlel?.khuudasniiDugaar,
-                    pageSize: nekhemjlel?.khuudasniiKhemjee,
-                    total: nekhemjlel?.niitMur,
-                    showSizeChanger: true,
-                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                      setNekhemjlelKhuudaslalt((kh) => ({
-                        ...kh,
-                        khuudasniiDugaar,
-                        khuudasniiKhemjee,
-                      })),
-                  }}
-                />
-              )}
             </div>
             <div
               className="mt-auto w-full p-2"
@@ -924,18 +958,42 @@ function Khyanalt({ token }) {
             >
               {turul !== "SMS" && (
                 <Input
+                className="space-y-3"
                   placeholder="Гарчиг"
                   value={title}
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}
+              
+              { turul !== "App" ? 
               <ZagvarUusgekh
                 change={setContent}
                 value={content}
                 onTextChange={onTextChange}
               />
+              : 
+              <div className="py-3" >
+              <Upload
+                      showUploadList={false}
+                      multiple={false}
+                      name="file"
+                      action={`${url}/upload`}
+                      method="POST"
+                      onChange={(v) =>
+                        setZurag(v.file.response)
+                      }
+                    >
+                      <div className="flex flex-row space-x-1">
+                          <Button icon={<UploadOutlined />}>
+                            зураг оруулах
+                          </Button>
+                      </div>
+              </Upload>
+              <TextArea  
+                onChange={(e)=>setContent(e.target.value)}/>
+              </div>
+              }
             </div>
-
             <div className="flex w-full items-center justify-end space-x-2 p-2">
               <label className="font-medium">{turul} Илгээх</label>
               <div
