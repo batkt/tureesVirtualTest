@@ -832,7 +832,52 @@ function guilgeeniiTuukh({ token }) {
                       const excelExport = new Excel();
                       excelExport
                         .addSheet("Гүйлгээний түүх")
-                        .addColumns(columns.map(({render,...mur})=>mur))
+                        .addColumns([
+                          {
+                            title: "Гэрээний дугаар",
+                            dataIndex: "gereeniiDugaar",
+                          },
+                          {
+                            title: "Талбай",
+                            dataIndex: "talbainDugaar",
+                          },
+                          {
+                            title: "Давхар",
+                            dataIndex: "davkhar",
+                          },
+                          {
+                            title: "Түрээслэгч",
+                            dataIndex: "ner",
+                          },
+                          {
+                            title: "Утас",
+                            dataIndex: "utas",
+                          },
+                          {
+                            title: "Үлдэгдэл",
+                            dataIndex: "uldegdel",
+                            render(a) {
+                              return formatNumber(a);
+                            },
+                          },
+                          {
+                            title: "Гэрээний огноо",
+                            dataIndex: "gereeniiOgnoo",
+                            width: "15rem",
+                            align: "center",
+                            render(a) {
+                              return moment(a).format("YYYY-MM-DD");
+                            },
+                          },
+                          {
+                            title: "Дуусах огноо",
+                            dataIndex: "duusakhOgnoo",
+
+                            render(a) {
+                              return moment(a).format("YYYY-MM-DD");
+                            },
+                          },
+                        ])
                         .addDataSource(gereeniiMedeelel?.jagsaalt)
                         .saveAs("Гүйлгээний түүх.xlsx");
                     }}
