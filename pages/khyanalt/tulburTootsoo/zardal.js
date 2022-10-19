@@ -388,7 +388,7 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
               render: (text, record, index) => index + 1,
             },
             {
-              title: "Дансны нэр",
+              title: "Хүлээн авагчийн дансны нэр",
               dataIndex: "CtActnName",
               ellipsis: true,
               align: "center",
@@ -693,14 +693,14 @@ function zardal({ token }) {
                             onClick={() => zardalBurtgekh(mur)}
                           >
                             <EditOutlined
-                              className="px-3"
+                              className=""
                               style={{ fontSize: "18px", color: "green" }}
                             />
                             <label>Засах</label>
                           </a>
                           <Popconfirm
                             className=""
-                            title="Талбай устгах уу?"
+                            title="Та зардал устгах гэж байна үргэлжлүүлэх үү?"
                             okText="Тийм"
                             cancelText="Үгүй"
                             onConfirm={() => zardalUstgaya(mur)}

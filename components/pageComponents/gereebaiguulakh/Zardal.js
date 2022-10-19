@@ -49,18 +49,33 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange }) => {
         ashiglaltiinZardal.setKhuudaslalt((a) => ({ ...a, search }))
       }
     >
+      <div value={1} disabled className="flex w-full border-b">
+        <div className="flex">
+          <div className="w-1/2 border-r bg-green-400 bg-opacity-10 text-center font-medium text-gray-600 dark:text-gray-200">
+            Зардлын нэршил
+          </div>
+          <div className="w-1/2 bg-blue-600 bg-opacity-5 text-center font-medium text-gray-600 dark:text-gray-200">
+            Нэгж, Үнэ
+          </div>
+        </div>
+      </div>
       {ashiglaltiinZardal?.jagsaalt.map((a, i) => {
         return (
           <Select.Option key={a._id}>
             <div className="flex justify-between border-b">
-              <p className="w-28  text-left">{a.ner}</p>
-              <div className="flex">
-                <p className="w-20 text-right">
+              <p className="flex w-1/2 truncate border-r bg-green-400 bg-opacity-10 pl-2 text-left">
+                {a.ner}
+              </p>
+              <div className="flex w-1/2 bg-blue-600 bg-opacity-5 pr-2">
+                <p
+                  className={` ${
+                    a.turul !== "Дурын" ? "w-1/2 border-r" : "w-full"
+                  } text-center`}
+                >
                   {a.turul}
-                  {a.turul !== "Дурын" && ":"}
                 </p>
                 {a.turul !== "Дурын" && (
-                  <p className="w-16 text-right">{a.tariff}₮</p>
+                  <p className="w-1/2 text-right">{a.tariff}₮</p>
                 )}
               </div>
             </div>
@@ -145,13 +160,14 @@ const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
         <div className="text-lg font-medium dark:text-white">
           Ашиглагдах зардлаа сонгоно уу
         </div>
-        <Form.Item label="Зардал">
+
+        <div className="w-full bg-white">
           <SongokhKheseg
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}
             onChange={onChangeZardal}
           />
-        </Form.Item>
+        </div>
 
         <div className="space-y-5">
           {value?.zardluud?.map((a, i) => {
@@ -160,7 +176,7 @@ const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
                 key={a._id}
                 className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border border-green-600 bg-white  px-2 
                   
-                    transition-all dark:bg-black dark:text-gray-200
+                    transition-all dark:bg-gray-800 dark:text-gray-200
                   
                 `}
               >
@@ -176,6 +192,7 @@ const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
                   {a.turul === "Дурын" ? (
                     <div className="flex w-24 items-center justify-center gap-1">
                       <InputNumber
+                        min={0}
                         ref={inputRef}
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
