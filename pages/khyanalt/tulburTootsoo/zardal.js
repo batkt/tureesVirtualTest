@@ -37,7 +37,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 
 const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
-  const { data } = useSWR(
+  const { data, mutate } = useSWR(
     ["zardliinDunAvya", ognoo, idnuud],
     (url, ognoo, idnuud) =>
       createMethod(url, token, {
@@ -48,7 +48,7 @@ const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
       }).then((a) => a.data),
     { revalidateOnFocus: false }
   );
-  return { zardaliinDun: data };
+  return { zardaliinDun: data, mutate };
 };
 
 const useDansniiKhuulga = (token, barilgiinId, zardliinBulgiinId, ognoo) => {
@@ -108,7 +108,15 @@ function Dun({ token, barilgiinId, ognoo, zardal }) {
     return idnuud;
   }, [zardal]);
 
-  const { zardaliinDun } = useZardaliinDun(token, barilgiinId, Idnuud, ognoo);
+  const { zardaliinDun, mutate } = useZardaliinDun(
+    token,
+    barilgiinId,
+    Idnuud,
+    ognoo
+  );
+
+  zardal.mutate = mutate;
+
   return <div>{formatNumber(zardaliinDun)}</div>;
 }
 
@@ -297,7 +305,7 @@ function KholbosonZardalTable({ columns, garalt, pagination }) {
   );
 }
 
-function ZardalExpander({ mur, token, barilgiinId, ognoo, columns }) {
+function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
   const {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
@@ -311,8 +319,14 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, columns }) {
         if (data === "Amjilttai") {
           notification.success({ message: "Амжилттай устгалаа." });
           dansniiKhuulgaMutate();
+          sergeeya();
         }
       });
+  }
+
+  function sergeeya() {
+    onRefresh();
+    mur.mutate && mur.mutate();
   }
 
   return (
@@ -324,6 +338,7 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, columns }) {
             zardal={mur}
             barilgiinId={barilgiinId}
             token={token}
+            onRefresh={sergeeya}
             columns={[
               {
                 title: "№",
@@ -373,14 +388,14 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, columns }) {
               render: (text, record, index) => index + 1,
             },
             {
-              title: "Нэр",
-              dataIndex: "dansniiDugaar",
+              title: "Дансны нэр",
+              dataIndex: "CtActnName",
               ellipsis: true,
               align: "center",
             },
             {
-              title: "Дансны нэр",
-              dataIndex: "CtActnName",
+              title: "Дансны дугаар",
+              dataIndex: "dansniiDugaar",
               ellipsis: true,
               align: "center",
               width: "10rem",
@@ -446,6 +461,7 @@ function ZardalTable({
   rowClassName,
   showHeader,
   expandedRowClassName,
+  onRefresh,
 }) {
   const [expandedKeys, setExpandedKeys] = useState([]);
 
@@ -462,6 +478,7 @@ function ZardalTable({
           expandedKeys.includes(mur._id) && (
             <ZardalExpander
               mur={mur}
+              onRefresh={onRefresh}
               barilgiinId={barilgiinId}
               columns={columns}
               ognoo={ognoo}
@@ -541,7 +558,7 @@ function zardal({ token }) {
       onOk: ustgaya,
       content: (
         <div>
-          <strong >{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?
+          <strong>{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?
         </div>
       ),
       okText: "Тийм",
@@ -612,6 +629,7 @@ function zardal({ token }) {
       >
         <ZardalTable
           token={token}
+          onRefresh={onRefresh}
           barilgiinId={barilgiinId}
           garalt={zardalGaralt}
           ognoo={ognoo}
@@ -664,21 +682,24 @@ function zardal({ token }) {
               width: "3rem",
               render(z, mur) {
                 return (
-                  <div className="flex flex-row justify-center">
+                  <div className="absolute flex flex-row justify-center">
                     <Popover
                       placement="left"
                       trigger="click"
                       content={() => (
                         <div className="flex w-full flex-col space-y-2">
-                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                          <a
+                            className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                             onClick={() => zardalBurtgekh(mur)}
                           >
-                            <EditOutlined  className="px-3"
-                                style={{ fontSize: "18px", color: "green" }} />
+                            <EditOutlined
+                              className="px-3"
+                              style={{ fontSize: "18px", color: "green" }}
+                            />
                             <label>Засах</label>
                           </a>
                           <Popconfirm
-                          className=""
+                            className=""
                             title="Талбай устгах уу?"
                             okText="Тийм"
                             cancelText="Үгүй"
@@ -686,7 +707,7 @@ function zardal({ token }) {
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                               <DeleteOutlined
-                              className="px-3"
+                                className="px-3"
                                 style={{ fontSize: "18px", color: "red" }}
                               />
                               <label>Устгах</label>

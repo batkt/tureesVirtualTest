@@ -87,7 +87,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         (Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) - guilgee.kholbosonDun)
     ) {
       aldaa.push(
-        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүн оруулаагүй байна`
+        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү`
       );
     }
   });
@@ -405,7 +405,7 @@ function GuilgeeNiiluulekh(
             content={content}
             visible={visible}
             trigger="click"
-            onVisibleChange={() => setVisible(true)}
+            onVisibleChange={(v) => setVisible(v)}
           >
             <input
               className="rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200"
@@ -441,6 +441,7 @@ function GuilgeeNiiluulekh(
                 title={`${geree?.talbainDugaar} талбайн мөр бичилт устгах уу?`}
                 okText="Тийм"
                 cancelText="Үгүй"
+                trigger={'click'}
                 onConfirm={() =>
                   setGereenuud((a) => {
                     a.splice(index, 1);

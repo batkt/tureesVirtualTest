@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useCallback, useEffect } from "react"
 import SunEditor, { buttonList } from "suneditor-react"
 import { Form, Input, Select } from "antd"
 import createMethod from "tools/function/crud/createMethod"
 import { aldaaBarigch } from "services/uilchilgee"
 import _ from "lodash"
+import compareFields from "tools/function/compareFields"
 
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -124,6 +125,31 @@ function index({ token, baiguullaga, destroy }, ref) {
   const editorRef = React.useRef()
   const [form] = Form.useForm()
   const [zaalt, setZaalt] = React.useState("")
+
+  function garya() {
+    const values = form.getFieldsValue()
+    if(compareFields(values,{},['kharagdakhDugaar']))
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy})
+    else
+      destroy();
+  }
+
+  useEffect(()=>{
+      function keyUp(e) {
+          if (e.key === "Escape") {
+            e.preventDefault()
+            garya()
+          }
+      }
+      form.getFieldInstance('kharagdakhDugaar').focus()
+      document.addEventListener("keyup", keyUp);
+      return ()=>document.removeEventListener("keyup", keyUp);
+  },[])
+
   const onFinish = (values) => {
     if (zaalt === "") return
     values["zaalt"] = zaalt
@@ -138,6 +164,19 @@ function index({ token, baiguullaga, destroy }, ref) {
       })
       .catch(aldaaBarigch)
   }
+
+  const focuser = useCallback((e)=>{
+    if(e.key === 'Enter'){
+      e.preventDefault()
+      switch (e.target.id) {
+        case 'kharagdakhDugaar':
+          form.getFieldInstance('khamaarakhKheseg').focus()
+          break;
+        default:
+          break;
+      }
+    }
+  },[])
 
   React.useImperativeHandle(
     ref,
@@ -160,7 +199,7 @@ function index({ token, baiguullaga, destroy }, ref) {
   return (
     <Form form={form} {...formItemLayout}>
       <Form.Item label="Харагдах дугаар" name="kharagdakhDugaar">
-        <Input />
+        <Input onKeyUp={focuser}/>
       </Form.Item>
       <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
         <Select>

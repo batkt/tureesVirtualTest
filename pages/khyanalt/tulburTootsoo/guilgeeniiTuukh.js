@@ -69,7 +69,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
       className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
         }`}
     >
-      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
+      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel,2)}
     </div>
   );
 }

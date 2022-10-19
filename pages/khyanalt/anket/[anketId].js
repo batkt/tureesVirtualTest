@@ -39,9 +39,9 @@ function AnketBuglukh({ data, token }) {
   }
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-200 py-5  md:py-12  lg:py-20 ">
+    <div className="flex h-screen w-full items-center justify-center bg-gray-200 py-5 dark:bg-gray-800  md:py-12  lg:py-20 ">
       {!garakhScreen && (
-        <div className="relative block h-full w-11/12 rounded-lg bg-white pt-3 shadow-2xl sm:w-10/12 sm:p-5 md:w-8/12 lg:w-6/12 2xl:w-4/12">
+        <div className="relative block h-full w-11/12 rounded-lg bg-white pt-3 shadow-2xl dark:bg-gray-900 sm:w-10/12 sm:p-5 md:w-8/12 lg:w-6/12 2xl:w-4/12">
           <header className="border-b-2 px-3 text-xl font-medium uppercase">
             {data.ner}
           </header>
@@ -56,51 +56,57 @@ function AnketBuglukh({ data, token }) {
           >
             <Form.List name="asuultuud">
               {(fields) => (
-                <div className="flex flex-col">
-                  {fields.map((field) => (
-                    <div className="px-6 pb-3" key={field.key}>
-                      <div className="flex gap-1 text-base">
-                        <p className="font-medium">{field.name + 1}.</p>
-                        {data.asuultuud[field.name].asuult}
-                      </div>
-                      <div className="flex flex-wrap gap-2 py-2 sm:px-10">
-                        <Form.Item
-                          {...field}
-                          hidden
-                          name={[field.name, "asuult"]}
-                          noStyle
-                        >
-                          <Input />
-                        </Form.Item>
-                        <Form.Item
-                          {...field}
-                          name={[field.name, "khariult"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Анкетаа бүрэн бөгөлнө үү",
-                            },
-                          ]}
-                          noStyle
-                        >
-                          {data.asuultuud[field.name].turul === "songokh" ? (
-                            <Radio.Group>
-                              {data.asuultuud[field.name].khariultuud?.map(
-                                (a) => (
-                                  <Radio key={a + field.name} value={a}>
+                <>
+                  <div className="flex flex-col">
+                    {fields.map((key, name, fieldKey, ...restField) => (
+                      <div
+                        className="px-6 pb-3 dark:text-gray-300"
+                        key={fieldKey.key}
+                      >
+                        <div className="flex gap-1 text-base">
+                          <p className="font-medium">{name + 1}.</p>
+                          {data.asuultuud[name].asuult}
+                        </div>
+                        <div className="flex flex-wrap gap-2 py-2 dark:text-gray-200 sm:px-10">
+                          <Form.Item
+                            {...restField}
+                            hidden
+                            name={[name, "asuult"]}
+                            noStyle
+                          >
+                            <Input />
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "khariult"]}
+                            className="w-full"
+                            rules={[
+                              {
+                                required: true,
+                                message: "Анкетаа бүрэн бөгөлнө үү",
+                              },
+                            ]}
+                          >
+                            {data.asuultuud[name].turul === "songokh" ? (
+                              <Radio.Group>
+                                {data.asuultuud[name].khariultuud?.map((a) => (
+                                  <Radio key={a + name} value={a}>
                                     {a}
                                   </Radio>
-                                )
-                              )}
-                            </Radio.Group>
-                          ) : (
-                            <Input placeholder="Энд хариултаа бичинэ үү" />
-                          )}
-                        </Form.Item>
+                                ))}
+                              </Radio.Group>
+                            ) : (
+                              <Input
+                                width={"100%"}
+                                placeholder="Энд хариултаа бичинэ үү"
+                              />
+                            )}
+                          </Form.Item>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </>
               )}
             </Form.List>
             <footer className="absolute bottom-0 right-0 flex w-full justify-end border-t-2 px-3 pt-2 pb-5">
@@ -118,7 +124,7 @@ function AnketBuglukh({ data, token }) {
       )}
       {garakhScreen ? (
         <div className="absolute flex h-full w-full items-center justify-center pt-3  ">
-          <div className="relative flex h-3/6 w-10/12 flex-col items-center justify-center rounded-xl bg-white bg-opacity-80 shadow-2xl lg:w-8/12 2xl:w-6/12">
+          <div className="relative flex h-3/6 w-10/12 flex-col items-center justify-center rounded-xl bg-white bg-opacity-80 shadow-2xl dark:bg-gray-900 dark:bg-opacity-80 lg:w-8/12 2xl:w-6/12">
             <div className="h-40 w-40 animate-bounce">
               <img src="/success.png"></img>
             </div>

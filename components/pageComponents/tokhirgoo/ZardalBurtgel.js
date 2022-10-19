@@ -116,6 +116,7 @@ function ZardalBurtgel(
       </Form.Item>
      <Form.Item label="Тариф" name="tariff" hidden={hideTariff}> 
         <InputNumber
+          min={0}
           style={{ width: "100%" }}
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

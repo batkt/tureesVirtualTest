@@ -2,10 +2,10 @@ import { Form, Button, Switch, Divider, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-
+import moment from 'moment'
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -42,7 +42,11 @@ const Tulbur = ({
 
   useEffect(() => {
     const zardluud = value.zardluud?.filter(function (item) {
-      return item.turul === "Тогтмол" || item.turul === "Дурын" || item.turul === "1м2";
+      return (
+        item.turul === "Дурын" ||
+        item.turul === "1м2" ||
+        item.turul === "Тогтмол"
+      );
     });
     if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
@@ -50,9 +54,10 @@ const Tulbur = ({
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: value.gereeniiOgnoo,
-          duusakhOgnoo: value.duusakhOgnoo,
+          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format('YYYY-MM-DD 00:00:00'),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format('YYYY-MM-DD 00:00:00'),
           zardluud: zardluud,
+          mk: value.talbainKhemjee,
         })
         .then(({ data }) => {
           setKhuvaari(data);
