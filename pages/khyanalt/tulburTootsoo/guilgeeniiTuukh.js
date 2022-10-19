@@ -69,7 +69,7 @@ function GereeniiUldegdel({ ugugdul, token }) {
       className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
         }`}
     >
-      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel)}
+      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel,2)}
     </div>
   );
 }
@@ -832,52 +832,7 @@ function guilgeeniiTuukh({ token }) {
                       const excelExport = new Excel();
                       excelExport
                         .addSheet("Гүйлгээний түүх")
-                        .addColumns([
-                          {
-                            title: "Гэрээний дугаар",
-                            dataIndex: "gereeniiDugaar",
-                          },
-                          {
-                            title: "Талбай",
-                            dataIndex: "talbainDugaar",
-                          },
-                          {
-                            title: "Давхар",
-                            dataIndex: "davkhar",
-                          },
-                          {
-                            title: "Түрээслэгч",
-                            dataIndex: "ner",
-                          },
-                          {
-                            title: "Утас",
-                            dataIndex: "utas",
-                          },
-                          {
-                            title: "Үлдэгдэл",
-                            dataIndex: "uldegdel",
-                            render(a) {
-                              return formatNumber(a);
-                            },
-                          },
-                          {
-                            title: "Гэрээний огноо",
-                            dataIndex: "gereeniiOgnoo",
-                            width: "15rem",
-                            align: "center",
-                            render(a) {
-                              return moment(a).format("YYYY-MM-DD");
-                            },
-                          },
-                          {
-                            title: "Дуусах огноо",
-                            dataIndex: "duusakhOgnoo",
-
-                            render(a) {
-                              return moment(a).format("YYYY-MM-DD");
-                            },
-                          },
-                        ])
+                        .addColumns(columns.filter(a=>a.dataIndex !== 'baritsaaniiUldegdel' && a.dataIndex !== 'uldegdel'))
                         .addDataSource(gereeniiMedeelel?.jagsaalt)
                         .saveAs("Гүйлгээний түүх.xlsx");
                     }}

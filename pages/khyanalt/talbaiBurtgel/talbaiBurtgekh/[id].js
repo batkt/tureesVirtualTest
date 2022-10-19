@@ -520,14 +520,14 @@ function TalbaiBurtgekh({ token }) {
                   <Button
                     onClick={showDrawer}
                     style={{
-                      backgroundColor: "white",
-                      color: "black",
+                      backgroundColor: "#209669",
+                      color: "#ffffff",
                     }}
                   >
-                    <span className="mr-2 text-black">
+                    <span className="mr-2 text-white">
                       <SettingOutlined />
                     </span>
-                    <span className="text-black ">План зураг тохируулах</span>
+                    <span className="text-white ">План зураг тохируулах</span>
                   </Button>
                   <Drawer
                     width={"100vw"}

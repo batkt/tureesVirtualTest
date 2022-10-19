@@ -37,6 +37,7 @@ const fetcher = (
             { talbainDugaar: { $regex: search, $options: "i" } },
             { gereeniiDugaar: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },
+            { ner: { $regex: search, $options: "i" } },
           ],
         },
         ...khuudaslalt,
