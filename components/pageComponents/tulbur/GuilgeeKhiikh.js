@@ -92,9 +92,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy,barilgiinId }, ref) {
               turul: "avlaga",
               tulsunDun: 0,
               tulukhDun: negjUne * dun,
-              ognoo: moment(ognoo)
-                .startOf("month")
-                .format("YYYY-MM-DD 00:00:00"),
+              ognoo: moment(ognoo).format("YYYY-MM-DD 00:00:00"),
               gereeniiId: data?._id,
               tailbar,
               nekhemjlekhDeerKharagdakh,
