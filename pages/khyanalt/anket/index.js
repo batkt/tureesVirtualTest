@@ -167,7 +167,6 @@ function Anket({ token }) {
 
   function anketBurtgey(v) {
     v.barilgiinId = barilgiinId;
-    console.log(v);
     uilchilgee(token)
       .post("/asuult", v)
       .then(({ data }) => {
