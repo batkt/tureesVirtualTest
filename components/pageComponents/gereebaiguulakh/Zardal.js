@@ -67,16 +67,11 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange }) => {
                 {a.ner}
               </p>
               <div className="flex w-1/2 bg-blue-600 bg-opacity-5 pr-2">
-                <p
-                  className={` ${
-                    a.turul !== "Дурын" ? "w-1/2 border-r" : "w-full"
-                  } text-center`}
-                >
-                  {a.turul}
+                <p className={`   w-1/2 border-r text-right`}>{a.turul}</p>
+                <p className="w-1/2 text-right">
+                  {a.turul !== "Дурын" ? a.tariff : "Дурын"}
+                  {a.turul !== "Дурын" && "₮"}
                 </p>
-                {a.turul !== "Дурын" && (
-                  <p className="w-1/2 text-right">{a.tariff}₮</p>
-                )}
               </div>
             </div>
           </Select.Option>
