@@ -87,7 +87,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
         (Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) - guilgee.kholbosonDun)
     ) {
       aldaa.push(
-        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүн оруулаагүй байна`
+        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү`
       );
     }
   });
