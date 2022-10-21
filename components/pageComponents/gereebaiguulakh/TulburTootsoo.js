@@ -2,10 +2,10 @@ import { Form, Button, Switch, Divider, InputNumber } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import moment from 'moment'
+import moment from "moment";
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -54,10 +54,15 @@ const Tulbur = ({
           dun: value.talbainNiitUne,
           khugatsaa: value.khugatsaa,
           tulukhUdruud: value.tulukhUdur,
-          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format('YYYY-MM-DD 00:00:00'),
-          duusakhOgnoo: moment(value.duusakhOgnoo).format('YYYY-MM-DD 00:00:00'),
+          ekhlekhOgnoo: moment(value.gereeniiOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
+          duusakhOgnoo: moment(value.duusakhOgnoo).format(
+            "YYYY-MM-DD 00:00:00"
+          ),
           zardluud: zardluud,
           mk: value.talbainKhemjee,
+          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         })
         .then(({ data }) => {
           setKhuvaari(data);
