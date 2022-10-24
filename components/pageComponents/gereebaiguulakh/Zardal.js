@@ -81,9 +81,22 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange }) => {
   );
 };
 
-const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
+const Zardal = ({
+  next,
+  prev,
+  onChange,
+  value,
+  barilgiinId,
+  formSubmit,
+  setFormSubmit,
+}) => {
+  const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
+    if (formSubmit === true) {
+      setFormSubmit(false);
+      onFinish();
+    }
   });
 
   const ashiglaltiinZardal = useJagsaalt(
@@ -146,6 +159,7 @@ const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
   return (
     <Form
       name="validate_other"
+      form={form}
       {...formItemLayout}
       autoComplete={"off"}
       initialValues={value}
@@ -188,6 +202,7 @@ const Zardal = ({ next, prev, onChange, value, barilgiinId }) => {
                     <div className="flex w-24 items-center justify-center gap-1">
                       <InputNumber
                         min={0}
+                        required
                         ref={inputRef}
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")

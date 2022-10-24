@@ -101,6 +101,7 @@ function GereeBaiguulakh({ token, data }) {
     data.baiguullagiinId = baiguullaga._id;
     data.gereeniiZagvariinId = gereeniiZagvar._id;
     data.barilgiinId = barilgiinId;
+    data.turGereeEsekh = gereeniiZagvar?.turGereeEsekh;
 
     if (!!data?.unemlekhniiZurag)
       data.unemlekhniiZurag =

@@ -1,4 +1,4 @@
-import { Form, Button, Switch, Divider, InputNumber } from "antd";
+import { Form, Button, Switch, Divider, InputNumber, notification } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
@@ -23,9 +23,16 @@ const Tulbur = ({
   zasvar,
   token,
   gereeniiZagvar,
+  formSubmit,
+  setFormSubmit,
 }) => {
+  const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
+    if (formSubmit === true) {
+      setFormSubmit(false);
+      form.submit();
+    }
   });
   const [khuvaari, setKhuvaari] = useState();
 
@@ -82,6 +89,7 @@ const Tulbur = ({
 
   return (
     <Form
+      form={form}
       {...formItemLayout}
       initialValues={value}
       autoComplete={"off"}
