@@ -65,10 +65,12 @@ function GereeBaiguulakh({ token }) {
   const [waiting, setWaiting] = useState(false);
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
+  const [formSubmit, setFormSubmit] = useState(false);
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
 
   const next = (data) => {
+    setFormSubmit(false);
     if (alkhamErkh <= current) {
       setAlkhamErkh(alkhamErkh + 1);
     }
@@ -252,7 +254,9 @@ function GereeBaiguulakh({ token }) {
                 key={item.title}
                 title={item.title}
                 onStepClick={() => {
-                  alkhamErkh < index
+                  current + 1 === index
+                    ? setFormSubmit(true)
+                    : alkhamErkh < index
                     ? message.warning("Алхам алгасах боломжгүй!")
                     : alkhamSoliyo(index);
                 }}
@@ -267,7 +271,11 @@ function GereeBaiguulakh({ token }) {
           <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               next={next}
+              formSubmit={formSubmit}
+              current={current}
+              setFormSubmit={setFormSubmit}
               prev={prev}
+              alkhamErkh={alkhamSoliyo}
               onChange={setKhagalakhGeree}
               value={khadgalakhGeree}
               token={token}

@@ -96,6 +96,8 @@ const YurunkhiiMedeele = ({
   value,
   baiguullaga,
   barilgiinId,
+  formSubmit,
+  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
@@ -142,8 +144,13 @@ const YurunkhiiMedeele = ({
       }, 300);
     }
   }
+
   useEffect(() => {
     Aos.init({ once: true });
+    if (formSubmit === true) {
+      setFormSubmit(false);
+      form.submit();
+    }
   });
   function onFinish() {
     next();

@@ -37,7 +37,7 @@ function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
 
   const query = useMemo(() => {
     return {
-      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh
+      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
     };
   }, [gereeniiZagvar]);
 
@@ -65,7 +65,11 @@ function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
       {talbainiiGaralt?.jagsaalt?.map((a) => {
         return (
           <Select.Option key={a._id}>
-            <div className={`flex ${a.idevkhiteiEsekh ? 'opacity-50' : 'opacity-100' }`}>
+            <div
+              className={`flex ${
+                a.idevkhiteiEsekh ? "opacity-50" : "opacity-100"
+              }`}
+            >
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
                 {a.talbainKhemjee}м<sup>2</sup>
@@ -90,6 +94,8 @@ const YurunkhiiMedeele = ({
   value,
   gereeniiZagvar,
   barilgiinId,
+  formSubmit,
+  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
 
@@ -183,6 +189,10 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
+    if (formSubmit === true) {
+      setFormSubmit(false);
+      form.submit();
+    }
   });
 
   function onFinish() {

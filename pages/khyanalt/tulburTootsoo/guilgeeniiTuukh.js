@@ -29,7 +29,6 @@ import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import useOrder from "tools/function/useOrder";
 
-
 import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import MedegdelIlgeekh from "components/pageComponents/tulbur/MedegdelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
@@ -38,7 +37,7 @@ import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
 import { useTuluugiiGereeniiToololtAvya } from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import GuilgeenTuukhTile from "components/pageComponents/tulbur/GuilgeeTuukhTile";
 import CardList from "components/cardList";
 import Aos from "aos";
@@ -66,10 +65,11 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
-      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel,2)}
+      {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
     </div>
   );
 }
@@ -158,7 +158,7 @@ function guilgeeniiTuukh({ token }) {
     let ekhlekhOgnoo = moment(ognoo && ognoo[0])
       .startOf("month")
       .format("YYYY-MM-DD 00:00:00");
-    let duusakhOgnoo = moment(ognoo && ognoo[1] )
+    let duusakhOgnoo = moment(ognoo && ognoo[1])
       .endOf("month")
       .format("YYYY-MM-DD 23:59:59");
     switch (turul) {
@@ -199,7 +199,7 @@ function guilgeeniiTuukh({ token }) {
     if (turul === "avlaga") {
       query = {
         "avlaga.guilgeenuud.ognoo": {
-          $lte:duusakhOgnoo,
+          $lte: duusakhOgnoo,
         },
         davkhar,
         baiguullagiinId: baiguullaga._id,
@@ -231,6 +231,7 @@ function guilgeeniiTuukh({ token }) {
 
   const {
     data,
+    mutate,
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
     refresh,
@@ -338,13 +339,12 @@ function guilgeeniiTuukh({ token }) {
 
           return (
             <div className="flex w-full flex-row items-center justify-center  divide-x-2 ">
-              {/* <a
-                onClick={() => medegdelIlgeekh(row)}
-                className="hover:scale-110"
-                
+              <a
+                onClick={() => nekhemjlelIlgeekh(row)}
+                className=" text-green-500 hover:scale-110"
               >
                 <Tooltip
-                  title="Мэдэгдэл илгээх"
+                  title="Нэхэмжлэл илгээх"
                   className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
@@ -357,36 +357,19 @@ function guilgeeniiTuukh({ token }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className=" text-green-500"
                   >
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    <rect
+                      x="3"
+                      y="4"
+                      width="18"
+                      height="18"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
-                </Tooltip>
-              </a> */}
-              <a
-                onClick={() => nekhemjlelIlgeekh(row)}
-                className=" text-green-500 hover:scale-110"
-              >
-                <Tooltip
-                  title="Нэхэмжлэл илгээх"
-                  className="flex w-full items-center  justify-center px-[6px] "
-                >
-                  <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>  
                 </Tooltip>
               </a>
               <a
@@ -398,19 +381,19 @@ function guilgeeniiTuukh({ token }) {
                   className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                            </svg>
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  </svg>
                 </Tooltip>
               </a>
               <a
@@ -457,20 +440,19 @@ function guilgeeniiTuukh({ token }) {
                 onClick={() => baritsaaUdirdya(row)}
               >
                 <Tooltip
-                className="flex w-full items-center  justify-center px-[6px] "
+                  className="flex w-full items-center  justify-center px-[6px] "
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
-                  
                     type="circle"
                     percent={1 > khuvi ? khuvi?.toFixed(1) : khuvi?.toFixed(0)}
                     width={22}
@@ -530,6 +512,11 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
+    function refreshdata() {
+      data.mutate && data.mutate();
+      refreshData();
+    }
+
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
@@ -546,7 +533,7 @@ function guilgeeniiTuukh({ token }) {
           token={token}
           baiguullagiinId={baiguullaga?._id}
           barilgiinId={barilgiinId}
-          onFinish={refreshData}
+          onFinish={refreshdata}
         />
       ),
       footer,
@@ -586,13 +573,24 @@ function guilgeeniiTuukh({ token }) {
 
   function khuulgaKharya(data) {
     const footer = [
-      <Button type="primary" onClick={() => ref.current.khevlekh()} icon={<PrinterOutlined />}>Хэвлэх</Button>,
-      <Button onClick={() => ref.current.khaaya()} icon={<CloseCircleOutlined />}>Хаах</Button>,
+      <Button
+        type="primary"
+        onClick={() => ref.current.khevlekh()}
+        icon={<PrinterOutlined />}
+      >
+        Хэвлэх
+      </Button>,
+      <Button
+        onClick={() => ref.current.khaaya()}
+        icon={<CloseCircleOutlined />}
+      >
+        Хаах
+      </Button>,
     ];
     modal({
       title: "Хуулга",
       icon: <FileExcelOutlined />,
-      width: '90vw',
+      width: "90vw",
       style: { top: 20 },
       content: (
         <Khuulga
@@ -639,7 +637,8 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0),
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
+              ),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
               utga: "Цуцлагдсан гэрээний авлага",
@@ -676,8 +675,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
