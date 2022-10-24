@@ -18,7 +18,15 @@ const formItemLayout = {
   },
 };
 
-const YurunkhiiMedeele = ({ next, prev, onChange, value, gereeniiZagvar }) => {
+const YurunkhiiMedeele = ({
+  next,
+  prev,
+  onChange,
+  value,
+  gereeniiZagvar,
+  formSubmit,
+  setFormSubmit,
+}) => {
   const [form] = Form.useForm();
 
   const onValuesChange = (values, v) => {
@@ -63,6 +71,10 @@ const YurunkhiiMedeele = ({ next, prev, onChange, value, gereeniiZagvar }) => {
 
   useEffect(() => {
     Aos.init({ once: true });
+    if (formSubmit === true) {
+      setFormSubmit(false);
+      form.submit();
+    }
   });
 
   function onFinish() {

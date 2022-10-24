@@ -811,7 +811,7 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Төрөл",
+                title: "Ангилал",
                 dataIndex: "segmentuud",
                 ellipsis: true,
                 width: "1.5rem",
@@ -849,7 +849,7 @@ function talbaiBurtgekh({ token }) {
                     data?.khurunguud !== undefined && (
                       <div className="flex flex-row justify-center">
                         <Popover
-                        trigger="hover"
+                          trigger="hover"
                           content={
                             <Table
                               pagination={false}
@@ -884,7 +884,6 @@ function talbaiBurtgekh({ token }) {
                               ]}
                             ></Table>
                           }
-                          
                         >
                           <a className="flex items-center justify-center  hover:scale-125 ">
                             <Badge count={data?.khurunguud?.length}>

@@ -55,16 +55,19 @@ import useOrder from "tools/function/useOrder";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import Aos from "aos";
 import { renderToString } from "react-dom/server";
+import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 
 //#endregion
 
-function GereeSegmentKharakh({ zasya, token, ...a }) {
+function GereeSegmentTile({ zasya, token, ...a }) {
   return (
-    <div className="box">
-      <div className="flex items-center p-7 shadow-none">
-        <div className="border-l-2 border-green-500 pl-4">
+    <div className="box dark:text-white">
+      <div className="flex items-center py-2 px-5 shadow-none">
+        <div className="flex gap-2 border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600">{a.utga}</div>
+          <div className="font-medium text-gray-600 dark:text-gray-300">
+            ({a.utga})
+          </div>
         </div>
       </div>
     </div>
@@ -324,6 +327,8 @@ const select = {
   gereeniiTuukhuud: 1,
   createdAt: 1,
   aldangiinUldegdel: 1,
+  segmentuud: 1,
+  turGereeEsekh: 1,
 };
 
 function ZakhialgiinKhyanalt() {
@@ -361,8 +366,6 @@ function ZakhialgiinKhyanalt() {
   const excelref = React.useRef();
   const tailbarRef = React.useRef();
   const sungaltRef = React.useRef();
-
-  
 
   const [shineBagana, setShineBagana] = React.useState([]);
   useEffect(() => {
@@ -467,9 +470,29 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "gereeniiDugaar",
         align: "center",
         ellipsis: true,
-        width: "6rem",
+        width: "7rem",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (data, a) => {
+          return (
+            <div
+              className={`relative ml-1 border-l-2 ${
+                a.turGereeEsekh === true
+                  ? "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
+                  : "rounded-md border-green-600 bg-gradient-to-r from-green-200 dark:border-green-400 dark:from-green-900 "
+              }`}
+            >
+              <div
+                className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${
+                  a.turGereeEsekh === true
+                    ? "bg-blue-500 dark:bg-blue-400"
+                    : "bg-green-600 dark:bg-green-400"
+                }`}
+              />
+              {data}
+            </div>
+          );
+        },
       },
 
       {
@@ -553,31 +576,38 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: "Төрөл",
+        title: "Ангилал",
         dataIndex: "segmentuud",
         width: "4rem",
         align: "center",
         render(segmentuud) {
-          return (
-            <Popover
-              trigger="hover"
-              content={
-                <div>
-                  <CardList
-                    keyValue="segment"
-                    className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                    jagsaalt={segmentuud}
-                    Component={GereeSegmentKharakh}
-                    componentProps={{ token }}
-                  />
-                </div>
-              }
-            >
-              <a className=" flex items-center justify-center  hover:scale-150 ">
-                <TbBoxMultiple className="text-xl" />
-              </a>
-            </Popover>
-          );
+          if (segmentuud?.length > 0) {
+            return (
+              <Popover
+                trigger="hover"
+                content={
+                  <div>
+                    <CardList
+                      keyValue="segment"
+                      className="max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2"
+                      jagsaalt={segmentuud}
+                      Component={GereeSegmentTile}
+                      componentProps={{ token }}
+                    />
+                  </div>
+                }
+              >
+                <a className=" flex items-center justify-center  hover:scale-150 ">
+                  <ImFileText2 className="text-xl" />
+                </a>
+              </Popover>
+            );
+          } else
+            return (
+              <div className=" flex items-center justify-center">
+                <ImFileEmpty className="text-xl" />
+              </div>
+            );
         },
       },
       {
@@ -733,7 +763,6 @@ function ZakhialgiinKhyanalt() {
     gereeniiMedeelelMutate();
     gereeToolloltMutate();
   }
-
   //#region dialogs
   function gereeTsutsalya(data) {
     setGereeniiTokhirgoo(null);
@@ -809,8 +838,9 @@ function ZakhialgiinKhyanalt() {
   }
 
   function gereeKharya(geree) {
-    const barilga = baiguullaga.barilguud.find(a=>a._id === geree.barilgiinId);
-    console.log(barilga)
+    const barilga = baiguullaga.barilguud.find(
+      (a) => a._id === geree.barilgiinId
+    );
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
       ({ data }) => {
         if (!!data) {
@@ -1120,12 +1150,22 @@ function ZakhialgiinKhyanalt() {
             </Popover>
           </div>
         </div>
+        <div className="mt-6 flex gap-5 font-medium">
+          <div className="flex items-center gap-1">
+            Үндсэн гэрээ :{" "}
+            <div className="h-3 w-3 rounded-full bg-green-600 dark:bg-green-400" />
+          </div>
+          <div className="flex items-center gap-1">
+            Түр гэрээ :{" "}
+            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+          </div>
+        </div>
         <div
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
-          className="mt-8 hidden  md:block "
+          className="mt-2 hidden  md:block "
         >
           <Table
             bordered
