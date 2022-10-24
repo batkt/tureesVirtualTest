@@ -69,6 +69,7 @@ const Tulbur = ({
           ),
           zardluud: zardluud,
           mk: value.talbainKhemjee,
+          turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         })
         .then(({ data }) => {
           setKhuvaari(data);
