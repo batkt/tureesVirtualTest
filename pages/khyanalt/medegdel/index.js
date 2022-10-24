@@ -121,10 +121,9 @@ function Khyanalt({ token }) {
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
 
-  const [zurag ,setZurag]=useState();
+  const [zurag, setZurag] = useState();
 
-  const [songogdsonKhariltsagch,setSongogdsonKhariltsagch]=useState([]);
-  
+  const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
 
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useMedegdel(
     token,
@@ -147,14 +146,10 @@ function Khyanalt({ token }) {
     setKhuudaslalt,
   } = useSanalGomdol(turul === "App" && token, khariltsagch?.khariltsagchiinId);
 
-  
-
   useEffect(() => {
     setKhariltsagch(null);
     if (ilgeekhTurul !== "davkharaar") setDavkhar(null);
   }, [ilgeekhTurul]);
-
-  
 
   useEffect(() => {
     setKhariltsagch(null);
@@ -173,7 +168,6 @@ function Khyanalt({ token }) {
 
   //#region method
   async function appIlgeeye() {
-    
     if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0) {
       var khariu = { successCount: 0, failureCount: 0 };
       songogdsonKhariltsagch
@@ -189,15 +183,13 @@ function Khyanalt({ token }) {
               khariltsagchiinId: a?.khariltsagchiinId,
               barilgiinId: a.barilgiinId,
               khariltsagchiinNer: a.ner,
-              medeelel: { title, body:content },
+              medeelel: { title, body: content },
             })
             .then(({ data }) => {
               if (!!data?.successCount) khariu.successCount += 1;
               else if (!!data?.failureCount) khariu.failureCount += 1;
               if (index === array.length - 1) {
-
                 notification.success({
-
                   message: `Notification Амжилттай ${khariu.successCount} ${
                     khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
                   } илгээлээ`,
@@ -215,7 +207,6 @@ function Khyanalt({ token }) {
       return;
     }
 
-    
     setLoading(true);
     uilchilgee(token)
       .post(`/sonorduulgaIlgeeye`, {
@@ -227,7 +218,11 @@ function Khyanalt({ token }) {
         medeelel: { title, body: content },
       })
       .then(({ data }) => {
-        zurag && uilchilgee(token).post('/confirmFile',{filename:zurag,path:'medegdel'})
+        zurag &&
+          uilchilgee(token).post("/confirmFile", {
+            filename: zurag,
+            path: "medegdel",
+          });
         if (!!data?.successCount) {
           sonorduulga.jagsaalt.unshift({
             khariltsagchiinId: khariltsagch?.khariltsagchiinId,
@@ -454,8 +449,6 @@ function Khyanalt({ token }) {
     }
   }
 
-
-
   function onScroll(e) {
     clearTimeout(timeout);
     timeout = setTimeout(function () {
@@ -530,8 +523,7 @@ function Khyanalt({ token }) {
             className={` ${
               turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
             }`}
-          >
-          </div>
+          ></div>
         </div>
         <div
           className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
@@ -539,29 +531,25 @@ function Khyanalt({ token }) {
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-            <Select
-                 className="w-full"
-                 value={tuluv}
-                 onChange={setTuluv}
-            >
-              {[
-                { key: "idevkhtei", v: "Идэвхтэй" },
-                { key: "idevkhgiu", v: "Идэвхгүй " },
-              ].map((a) => (
-                <Select.Option key={a.key} value={a.key}>
-                  {a.v}
+          <Select className="w-full" value={tuluv} onChange={setTuluv}>
+            {[
+              { key: "idevkhtei", v: "Идэвхтэй" },
+              { key: "idevkhgiu", v: "Идэвхгүй " },
+            ].map((a) => (
+              <Select.Option key={a.key} value={a.key}>
+                {a.v}
+              </Select.Option>
+            ))}
+          </Select>
+          <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+            {baiguullaga?.barilguud
+              ?.find((a) => a._id === barilgiinId)
+              ?.davkharuud.map((a) => (
+                <Select.Option key={a._id} value={a.davkhar}>
+                  {a.davkhar}
                 </Select.Option>
               ))}
-            </Select>
-            <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
-              {baiguullaga?.barilguud
-                ?.find((a) => a._id === barilgiinId)
-                ?.davkharuud.map((a) => (
-                  <Select.Option key={a._id} value={a.davkhar}>
-                    {a.davkhar}
-                  </Select.Option>
-                ))}
-            </Select>
+          </Select>
         </div>
         <div
           className={`mt-5 flex-row p-2 font-medium xl:flex ${
@@ -684,129 +672,139 @@ function Khyanalt({ token }) {
               </svg>
             </div>
             <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-         
-              {nekhemjlel?.jagsaalt?.map((mur)=> ( 
-                
-                !!davkhar ? davkhar== mur.davkhar ?
-                <div
-                  className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
-                    khariltsagch?._id === mur?._id
-                      ? "bg-green-100 dark:bg-green-500"
-                      : ""
-                  } `}
-                  key={mur?._id}
-                  onClick={() => setKhariltsagch(mur)}
-                >
-                  <div>
-                   <Checkbox
-                    onChange={(e)=>{
-                      
-                      e.target.checked
-                      if(e.target.checked == true){
-                        songogdsonKhariltsagch.push(mur)
-                      }else  {
-                        const index=songogdsonKhariltsagch.findIndex((a)=>a._id === mur._id)
-                        if(index !== -1){
-                          songogdsonKhariltsagch.splice(index, 1)
+              {nekhemjlel?.jagsaalt?.map((mur) =>
+                !!davkhar ? (
+                  davkhar == mur.davkhar ? (
+                    <div
+                      className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                        khariltsagch?._id === mur?._id
+                          ? "bg-green-100 dark:bg-green-500"
+                          : ""
+                      } `}
+                      key={mur?._id}
+                      onClick={() => setKhariltsagch(mur)}
+                    >
+                      <div>
+                        <Checkbox
+                          onChange={(e) => {
+                            e.target.checked;
+                            if (e.target.checked == true) {
+                              songogdsonKhariltsagch.push(mur);
+                            } else {
+                              const index = songogdsonKhariltsagch.findIndex(
+                                (a) => a._id === mur._id
+                              );
+                              if (index !== -1) {
+                                songogdsonKhariltsagch.splice(index, 1);
+                              }
+                            }
+                            setSongogdsonKhariltsagch([
+                              ...songogdsonKhariltsagch,
+                            ]);
+                          }}
+                        />
+                      </div>
+                      <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                        <img
+                          alt="profileZurag"
+                          className="rounded-full"
+                          src={
+                            ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
+                              2 <
+                            1
+                              ? "/profileFemale.svg"
+                              : "/profile.svg"
+                          }
+                        />
+                        <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                      </div>
+                      <div
+                        className={`truncate text-center text-xs text-gray-600  ${
+                          khariltsagch?._id === mur?._id
+                            ? "dark:text-gray-50"
+                            : "dark:text-gray-400"
+                        }`}
+                      >
+                        {mur?.ner}
+                      </div>
+                      <div
+                        className={`truncate text-center text-xs text-gray-600 ${
+                          khariltsagch?._id === mur?._id
+                            ? "dark:text-gray-50"
+                            : "dark:text-gray-400"
+                        }`}
+                      >
+                        {mur?.gereeniiDugaar}
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )
+                ) : (
+                  <div
+                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                      khariltsagch?._id === mur?._id
+                        ? "bg-green-100 dark:bg-green-500"
+                        : ""
+                    } `}
+                    key={mur?._id}
+                    onClick={() => setKhariltsagch(mur)}
+                  >
+                    <div>
+                      <Checkbox
+                        onChange={(e) => {
+                          e.target.checked;
+                          if (e.target.checked == true) {
+                            songogdsonKhariltsagch.push(mur);
+                          } else {
+                            const index = songogdsonKhariltsagch.findIndex(
+                              (a) => a._id === mur._id
+                            );
+                            if (index !== -1) {
+                              songogdsonKhariltsagch.splice(index, 1);
+                            }
+                          }
+                          setSongogdsonKhariltsagch([
+                            ...songogdsonKhariltsagch,
+                          ]);
+                        }}
+                      />
+                    </div>
+                    <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                      <img
+                        alt="profileZurag"
+                        className="rounded-full"
+                        src={
+                          ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
+                            2 <
+                          1
+                            ? "/profileFemale.svg"
+                            : "/profile.svg"
                         }
-                      }
-                      setSongogdsonKhariltsagch([...songogdsonKhariltsagch])
-                    }}
-                     />
+                      />
+                      <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                    </div>
+                    <div
+                      className={`truncate text-center text-xs text-gray-600  ${
+                        khariltsagch?._id === mur?._id
+                          ? "dark:text-gray-50"
+                          : "dark:text-gray-400"
+                      }`}
+                    >
+                      {mur?.ner}
+                    </div>
+                    <div
+                      className={`truncate text-center text-xs text-gray-600 ${
+                        khariltsagch?._id === mur?._id
+                          ? "dark:text-gray-50"
+                          : "dark:text-gray-400"
+                      }`}
+                    >
+                      {mur?.gereeniiDugaar}
+                    </div>
                   </div>
-                  <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                    <img
-                      alt="profileZurag"
-                      className="rounded-full"
-                      src={
-                        ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
-                        1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
-                      }
-                    />
-                    <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
-                  </div>
-                  <div
-                    className={`truncate text-center text-xs text-gray-600  ${
-                      khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
-                    }`}
-                  >
-                    {mur?.ner}
-                  </div>
-                  <div
-                    className={`truncate text-center text-xs text-gray-600 ${
-                      khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
-                    }`}
-                  >
-                    {mur?.gereeniiDugaar}
-                  </div>
-                </div>
-                : ""
-                : <div
-                  className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
-                    khariltsagch?._id === mur?._id
-                      ? "bg-green-100 dark:bg-green-500"
-                      : ""
-                  } `}
-                  key={mur?._id}
-                  onClick={() => setKhariltsagch(mur)}
-                >
-                  <div>
-                    <Checkbox
-                    onChange={(e)=>{
-                      
-                      e.target.checked
-                      if(e.target.checked == true){
-                        songogdsonKhariltsagch.push(mur)
-                      }else  {
-                        const index=songogdsonKhariltsagch.findIndex((a)=>a._id === mur._id)
-                        if(index !== -1){
-                          songogdsonKhariltsagch.splice(index, 1)
-                        }
-                      }
-                      setSongogdsonKhariltsagch([...songogdsonKhariltsagch])
-                    }}
-                     />
-                  </div>
-                  <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                    <img
-                      alt="profileZurag"
-                      className="rounded-full"
-                      src={
-                        ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
-                        1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
-                      }
-                    />
-                    <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
-                  </div>
-                  <div
-                    className={`truncate text-center text-xs text-gray-600  ${
-                      khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
-                    }`}
-                  >
-                    {mur?.ner}
-                  </div>
-                  <div
-                    className={`truncate text-center text-xs text-gray-600 ${
-                      khariltsagch?._id === mur?._id
-                        ? "dark:text-gray-50"
-                        : "dark:text-gray-400"
-                    }`}
-                  >
-                    {mur?.gereeniiDugaar}
-                  </div>
-                </div>
-              ))}
-              
+                )
+              )}
             </div>
           </div>
         )}
@@ -821,61 +819,65 @@ function Khyanalt({ token }) {
       >
         {khariltsagch || ilgeekhTurul !== "gantsaar" ? (
           <div className="box flex h-full flex-col">
-            {songogdsonKhariltsagch.length <= 1 ?
-            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
-              {ilgeekhTurul === "davkharaar" && (
-                <div className="flex flex-row space-x-2">
-                  <div>Давхар сонгох</div>
-                  <div className="">
-                    <Select
-                      placeholder="Давхар"
-                      value={davkhar}
-                      onChange={setDavkhar}
-                      allowClear
-                    >
-                      {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
-                        <Select.Option key={a._id} value={a.davkhar}>
-                          {a.davkhar}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </div>
-                </div>
-              )}
-              {khariltsagch && (
-                <div className="flex items-center">
-                  <div className="mr-3 text-lg xl:hidden">
-                    <ArrowLeftOutlined onClick={() => setKhariltsagch(null)} />
-                  </div>
-                  <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
-                    <img
-                      alt="ProfileZurag"
-                      className="rounded-full"
-                      src={
-                        ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
-                          10) %
-                          2 <
-                        1
-                          ? "/profileFemale.svg"
-                          : "/profile.svg"
-                      }
-                    />
-                  </div>
-                  <div className="ml-3 mr-auto">
-                    <div className="text-base font-medium">
-                      {khariltsagch?.ner}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                      {turul === "Mail"
-                        ? khariltsagch?.mail
-                        : khariltsagch?.utas}{" "}
-                      <span className="mx-1">•</span> {turul}
+            {songogdsonKhariltsagch.length <= 1 ? (
+              <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
+                {ilgeekhTurul === "davkharaar" && (
+                  <div className="flex flex-row space-x-2">
+                    <div>Давхар сонгох</div>
+                    <div className="">
+                      <Select
+                        placeholder="Давхар"
+                        value={davkhar}
+                        onChange={setDavkhar}
+                        allowClear
+                      >
+                        {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
+                          <Select.Option key={a._id} value={a.davkhar}>
+                            {a.davkhar}
+                          </Select.Option>
+                        ))}
+                      </Select>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            :""}
+                )}
+                {khariltsagch && (
+                  <div className="flex items-center">
+                    <div className="mr-3 text-lg xl:hidden">
+                      <ArrowLeftOutlined
+                        onClick={() => setKhariltsagch(null)}
+                      />
+                    </div>
+                    <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
+                      <img
+                        alt="ProfileZurag"
+                        className="rounded-full"
+                        src={
+                          ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
+                            10) %
+                            2 <
+                          1
+                            ? "/profileFemale.svg"
+                            : "/profile.svg"
+                        }
+                      />
+                    </div>
+                    <div className="ml-3 mr-auto">
+                      <div className="text-base font-medium">
+                        {khariltsagch?.ner}
+                      </div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                        {turul === "Mail"
+                          ? khariltsagch?.mail
+                          : khariltsagch?.utas}{" "}
+                        <span className="mx-1">•</span> {turul}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              ""
+            )}
             <div
               className="w-full"
               data-aos="fade-left"
@@ -892,7 +894,7 @@ function Khyanalt({ token }) {
                       (a, i) => {
                         return (
                           <div
-                            className={`relative mt-8 flex flex-col rounded-xl border border-green-200 bg-green-500 p-3 w-full  ${
+                            className={`relative mt-8 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
                               a.turul === "medegdel"
                                 ? "ml-auto rounded-br-none bg-blue-500"
                                 : "rounded-bl-none"
@@ -958,41 +960,36 @@ function Khyanalt({ token }) {
             >
               {turul !== "SMS" && (
                 <Input
-                className="space-y-3"
+                  className="space-y-3"
                   placeholder="Гарчиг"
                   value={title}
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}
-              
-              { turul !== "App" ? 
-              <ZagvarUusgekh
-                change={setContent}
-                value={content}
-                onTextChange={onTextChange}
-              />
-              : 
-              <div className="py-3" >
-              <Upload
-                      showUploadList={false}
-                      multiple={false}
-                      name="file"
-                      action={`${url}/upload`}
-                      method="POST"
-                      onChange={(v) =>
-                        setZurag(v.file.response)
-                      }
-                    >
-                      <div className="flex flex-row space-x-1">
-                          <Button icon={<UploadOutlined />}>
-                            зураг оруулах
-                          </Button>
-                      </div>
-              </Upload>
-              <TextArea  
-                onChange={(e)=>setContent(e.target.value)}/>
-              </div>
-              }
+
+              {turul !== "App" ? (
+                <ZagvarUusgekh
+                  change={setContent}
+                  value={content}
+                  onTextChange={onTextChange}
+                />
+              ) : (
+                <div className="py-3">
+                  <Upload
+                    showUploadList={false}
+                    multiple={false}
+                    name="file"
+                    action={`${url}/upload`}
+                    method="POST"
+                    onChange={(v) => setZurag(v.file.response)}
+                  >
+                    <div className="flex flex-row space-x-1">
+                      <Button icon={<UploadOutlined />}>зураг оруулах</Button>
+                    </div>
+                  </Upload>
+                  <TextArea onChange={(e) => setContent(e.target.value)} />
+                </div>
+              )}
             </div>
             <div className="flex w-full items-center justify-end space-x-2 p-2">
               <label className="font-medium">{turul} Илгээх</label>

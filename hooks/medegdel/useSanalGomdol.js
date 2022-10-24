@@ -8,7 +8,9 @@ const fetcher = (
   url,
   token,
   khariltsagchiinId,
-  { jagsaalt, search, ...khuudaslalt }
+  { jagsaalt, search, ...khuudaslalt },
+  query,
+  order
 ) =>
   axios(token)
     .get(url, {
@@ -17,23 +19,25 @@ const fetcher = (
         query: {
           khariltsagchiinId,
           $or: [{ message: { $regex: search, $options: "i" } }],
+          ...query,
         },
-        order: { createdAt: -1, kharsanEsekh: 0 },
+        order: { createdAt: -1, ...order },
       },
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useSanalGomdol(token, khariltsagchiinId) {
+function useSanalGomdol(token, khariltsagchiinId, query, order) {
   const { baiguullaga } = useAuth();
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     jagsaalt: [],
+    search: "",
   });
   const { data, mutate } = useSWR(
-    !!token && !!khariltsagchiinId
-      ? ["/sanalGomdol", token, khariltsagchiinId, khuudaslalt]
+    !!token
+      ? ["/sanalGomdol", token, khariltsagchiinId, khuudaslalt, query, order]
       : null,
     fetcher
   );
