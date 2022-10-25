@@ -37,7 +37,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import moment from "moment";
 import useKhariltsagch from "hooks/useKhariltsagch";
 import createMethod from "tools/function/crud/createMethod";
@@ -56,6 +56,7 @@ import TextArea from "antd/lib/input/TextArea";
 import useJagsaalt from "hooks/useJagsaalt";
 import { TbBoxMultiple } from "react-icons/tb";
 import { GiBackwardTime } from "react-icons/gi";
+import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 
 const iconColor = { fontSize: "18px" };
 
@@ -133,10 +134,12 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
 function Tile({ zasya, token, ...a }) {
   return (
     <div className="box dark:text-white">
-      <div className="flex items-center p-7 shadow-none">
-        <div className="border-l-2 border-green-500 pl-4">
+      <div className="flex items-center py-2 px-5 shadow-none">
+        <div className="flex gap-2 border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600 dark:text-gray-300">{a.utga}</div>
+          <div className="font-medium text-gray-600 dark:text-gray-300">
+            ({a.utga})
+          </div>
         </div>
       </div>
     </div>
@@ -440,6 +443,37 @@ function AjiltanBurtgel({ token }) {
     khariltsagchToololtMutate();
   }
 
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "control-ref_turul":
+          formRef.current.getFieldInstance("ovog").focus();
+          break;
+        case "control-ref_ovog":
+          formRef.current.getFieldInstance("ner").focus();
+          break;
+        case "control-ref_ner":
+          formRef.current.getFieldInstance("register").focus();
+          break;
+        case "control-ref_register":
+          formRef.current.getFieldInstance("khayag").focus();
+          break;
+        case "control-ref_khayag":
+          formRef.current.getFieldInstance("mail").focus();
+          break;
+        case "control-ref_mail":
+          formRef.current.getFieldInstance("temdeglel").focus();
+          break;
+        case "control-ref_temdeglel":
+          document.getElementById("khariltsagchBurtgekhButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   function checkRegister() {
     var value1 = khariltsagchState.register?.substring(0, 2);
     var value2 = khariltsagchState.register?.substring(2, 10);
@@ -574,6 +608,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Select
+                onKeyUp={focuser}
+                autoFocus={true}
                 style={{ width: "100%" }}
                 value={khariltsagchState.turul}
                 placeholder={"Төрөл сонгох"}
@@ -600,6 +636,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                onKeyUp={focuser}
                 type="text"
                 allowClear
                 placeholder="Овог"
@@ -624,6 +661,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                onKeyUp={focuser}
                 type="text"
                 allowClear
                 placeholder="Нэр"
@@ -653,6 +691,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                onKeyUp={focuser}
                 allowClear
                 maxLength={10}
                 placeholder="Регистр"
@@ -679,6 +718,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                onKeyUp={focuser}
                 allowClear
                 placeholder="Хаяг"
                 value={khariltsagchState.khayag}
@@ -811,6 +851,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Form.Item name="mail">
               <Input
+                onKeyUp={focuser}
                 type="email"
                 placeholder="И-мэйл хаяг"
                 value={khariltsagchState.email}
@@ -826,6 +867,7 @@ function AjiltanBurtgel({ token }) {
           >
             <Form.Item name="temdeglel">
               <TextArea
+                onKeyDown={focuser}
                 style={{ width: "100%" }}
                 rows={4}
                 placeholder="Тэмдэглэл"
@@ -837,11 +879,13 @@ function AjiltanBurtgel({ token }) {
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="700"
+            className="flex justify-end"
           >
             <Form.Item>
               <Button
-                htmlType="submit"
-                style={{ backgroundColor: "#209669", color: "#ffffff" }}
+                id="khariltsagchBurtgekhButton"
+                onClick={() => formRef.current.submit()}
+                type={"primary"}
               >
                 Хадгалах
               </Button>
@@ -1110,29 +1154,36 @@ function AjiltanBurtgel({ token }) {
               {
                 title: "Ангилал",
                 dataIndex: "segmentuud",
-                width: "6rem",
+                width: "5rem",
                 align: "center",
                 render(segmentuud) {
-                  return (
-                    <Popover
-                      trigger="hover"
-                      content={
-                        <div>
-                          <CardList
-                            keyValue="segment"
-                            className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                            jagsaalt={segmentuud}
-                            Component={Tile}
-                            componentProps={{ token }}
-                          />
-                        </div>
-                      }
-                    >
-                      <a className=" flex items-center justify-center  hover:scale-150">
-                        <TbBoxMultiple className="text-xl" />
-                      </a>
-                    </Popover>
-                  );
+                  if (segmentuud?.length > 0) {
+                    return (
+                      <Popover
+                        trigger="hover"
+                        content={
+                          <div>
+                            <CardList
+                              keyValue="segment"
+                              className="max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2"
+                              jagsaalt={segmentuud}
+                              Component={Tile}
+                              componentProps={{ token }}
+                            />
+                          </div>
+                        }
+                      >
+                        <a className=" flex items-center justify-center  hover:scale-150 ">
+                          <ImFileText2 className="text-xl" />
+                        </a>
+                      </Popover>
+                    );
+                  } else
+                    return (
+                      <div className=" flex items-center justify-center">
+                        <ImFileEmpty className="text-xl text-gray-500" />
+                      </div>
+                    );
                 },
               },
               {

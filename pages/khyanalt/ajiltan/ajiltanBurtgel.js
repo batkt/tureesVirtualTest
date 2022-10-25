@@ -28,7 +28,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import moment from "moment";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -72,6 +72,47 @@ function AjiltanBurtgel({ token }) {
   useEffect(() => {
     formRef.current.resetFields();
   }, [isValidating]);
+
+  useEffect(() => {
+    document.getElementById("input1").focus();
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "input1":
+          document.getElementById("input2").focus();
+          break;
+        case "input2":
+          document.getElementById("input3").focus();
+          break;
+        case "input3":
+          document.getElementById("input4").focus();
+          break;
+        case "input4":
+          document.getElementById("input5").focus();
+          break;
+        case "input5":
+          document.getElementById("input6").focus();
+          break;
+        case "input6":
+          document.getElementById("input7").focus();
+          break;
+        case "input7":
+          document.getElementById("input8").focus();
+          break;
+        case "input8":
+          document.getElementById("input9").focus();
+          break;
+        case "input9":
+          document.getElementById("khadgalyaButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   function onChange(talbar, utga) {
     setAjiltanState((a) => ({ ...a, [talbar]: utga }));
@@ -216,6 +257,9 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                id="input1"
+                onKeyUp={focuser}
+                autoFocus={true}
                 type="text"
                 allowClear
                 placeholder="Овог"
@@ -246,6 +290,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                id="input2"
+                onKeyUp={focuser}
                 type="text"
                 allowClear
                 placeholder="Нэр"
@@ -272,6 +318,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                id="input3"
+                onKeyUp={focuser}
                 allowClear
                 maxLength={10}
                 placeholder="Регистр"
@@ -296,6 +344,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                id="input4"
+                onKeyUp={focuser}
                 allowClear
                 placeholder="Хаяг"
                 value={ajiltanState.khayag}
@@ -327,6 +377,8 @@ function AjiltanBurtgel({ token }) {
               <Input
                 className="appearance-none"
                 type="number"
+                id="input5"
+                onKeyUp={focuser}
                 allowClear
                 placeholder="Утас"
                 value={ajiltanState.utas}
@@ -350,6 +402,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <DatePicker
+                id="input6"
+                onKeyDown={focuser}
                 style={{ width: "100%" }}
                 placeholder="Ажилд орсон огноо"
                 onChange={(v) => onChange("ajildOrsonOgnoo", v)}
@@ -371,6 +425,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                id="input7"
+                onKeyDown={focuser}
                 allowClear
                 placeholder="Албан тушаал"
                 value={ajiltanState.albanTushaal}
@@ -391,6 +447,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                onKeyDown={focuser}
+                id="input8"
                 placeholder="Нэвтрэх нэр"
                 value={ajiltanState.nevtrekhNer}
                 onChange={(e) => onChange("nevtrekhNer", e.target.value)}
@@ -407,6 +465,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input.Password
+                onKeyDown={focuser}
+                id="input9"
                 placeholder="Нууц үг"
                 value={ajiltanState.nuutsUg}
                 onChange={(e) => onChange("nuutsUg", e.target.value)}
@@ -414,7 +474,11 @@ function AjiltanBurtgel({ token }) {
               />
             </Form.Item>
             <Form.Item>
-              <Button htmlType="submit" type="primary">
+              <Button
+                id="khadgalyaButton"
+                onClick={() => formRef.current.submit()}
+                type="primary"
+              >
                 Хадгалах
               </Button>
             </Form.Item>

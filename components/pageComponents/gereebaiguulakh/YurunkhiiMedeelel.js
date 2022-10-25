@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import uilchilgee, { url, aldaaBarigch } from "services/uilchilgee";
 import FormLavlakh from "components/FormLavlakh";
 import { useEffect } from "react";
@@ -98,6 +98,7 @@ const YurunkhiiMedeele = ({
   barilgiinId,
   formSubmit,
   setFormSubmit,
+  gereeniiZagvariinId,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
@@ -152,6 +153,71 @@ const YurunkhiiMedeele = ({
       form.submit();
     }
   });
+
+  useEffect(() => {
+    form.getFieldInstance("register").focus();
+  }, []);
+
+  const focuser = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        switch (e.target.id) {
+          case "validate_other_gereeniiDugaar":
+            {
+              if (baiguullagaEsekh === true) {
+                form.getFieldInstance("ner").focus();
+              } else {
+                form.getFieldInstance("register").focus();
+              }
+            }
+            break;
+          case "validate_other_register":
+            {
+              if (baiguullagaEsekh === true) {
+                form.getFieldInstance("zakhirliinOvog").focus();
+              } else {
+                form.getFieldInstance("ovog").focus();
+              }
+            }
+            break;
+          case "validate_other_ovog":
+            form.getFieldInstance("ner").focus();
+            break;
+          case "validate_other_zakhirliinOvog":
+            form.getFieldInstance("zakhirliinNer").focus();
+            break;
+          case "validate_other_zakhirliinNer":
+            form.getFieldInstance("utas").focus();
+            break;
+          case "validate_other_ner":
+            {
+              if (baiguullagaEsekh === true) {
+                form.getFieldInstance("register").focus();
+              } else {
+                form.getFieldInstance("utas").focus();
+              }
+            }
+            break;
+          case "validate_other_utas":
+            form.getFieldInstance("mail").focus();
+            break;
+          case "validate_other_mail":
+            document.getElementById("dans").focus();
+            document.getElementById("dans").select();
+            break;
+          case "dans":
+            document.getElementById(gereeniiZagvariinId).focus();
+            document.getElementById(gereeniiZagvariinId).select();
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    [baiguullagaEsekh]
+  );
+
   function onFinish() {
     next();
   }
@@ -181,6 +247,7 @@ const YurunkhiiMedeele = ({
           label="Гэрээний дугаар"
         >
           <Input
+            onKeyUp={focuser}
             allowClear
             placeholder="Гэрээний дугаар"
             prefix={<SolutionOutlined />}
@@ -207,6 +274,7 @@ const YurunkhiiMedeele = ({
             ]}
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               placeholder="Байгууллага нэр"
               prefix={<SolutionOutlined />}
@@ -230,6 +298,7 @@ const YurunkhiiMedeele = ({
             ]}
           >
             <Input
+              onKeyUp={focuser}
               onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
               allowClear
               maxLength={10}
@@ -256,6 +325,7 @@ const YurunkhiiMedeele = ({
             ]}
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               maxLength={7}
               placeholder="Регистр"
@@ -274,6 +344,7 @@ const YurunkhiiMedeele = ({
             label="Овог"
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               placeholder="Овог"
               prefix={<SolutionOutlined />}
@@ -289,7 +360,12 @@ const YurunkhiiMedeele = ({
             rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
             label="Нэр"
           >
-            <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              placeholder="Нэр"
+              prefix={<SolutionOutlined />}
+            />
           </Form.Item>
         </div>
       )}
@@ -302,6 +378,7 @@ const YurunkhiiMedeele = ({
             rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               placeholder="Овог"
               prefix={<SolutionOutlined />}
@@ -317,7 +394,12 @@ const YurunkhiiMedeele = ({
             label="Захирлын нэр"
             rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
           >
-            <Input allowClear placeholder="Нэр" prefix={<SolutionOutlined />} />
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              placeholder="Нэр"
+              prefix={<SolutionOutlined />}
+            />
           </Form.Item>
         </div>
       )}
@@ -330,6 +412,7 @@ const YurunkhiiMedeele = ({
             label="Утас"
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               placeholder="Утас"
               prefix={<SolutionOutlined />}
@@ -346,6 +429,7 @@ const YurunkhiiMedeele = ({
             label="Утас"
           >
             <Input
+              onKeyUp={focuser}
               allowClear
               placeholder="Утас"
               prefix={<SolutionOutlined />}
@@ -357,6 +441,7 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item name="mail" hidden={baiguullagaEsekh} label="И-мэйл хаяг">
             <Input
+              onKeyUp={focuser}
               type="email"
               placeholder="И-мэйл хаяг"
               allowClear
@@ -374,6 +459,7 @@ const YurunkhiiMedeele = ({
             label="И-мэйл хаяг"
           >
             <Input
+              onKeyUp={focuser}
               type="email"
               placeholder="И-мэйл хаяг"
               allowClear
@@ -419,6 +505,8 @@ const YurunkhiiMedeele = ({
           label="Төлөлт хийх данс"
         >
           <FormLavlakh
+            selectId={"dans"}
+            focuser={focuser}
             lavlakh="dans"
             token={token}
             valKey="dugaar"
@@ -518,8 +606,9 @@ const YurunkhiiMedeele = ({
       <Form.Item wrapperCol={{ span: 24 }}>
         <div className="flex w-full justify-end">
           <Button
+            id="gereeniiKhugatsaaButton"
             type="primary"
-            htmlType="submit"
+            onClick={(e) => form.submit()}
             icon={<ArrowRightOutlined />}
           >
             Гэрээний хугацаа

@@ -1,7 +1,7 @@
 import { Cascader, notification } from "antd";
 import useZardal from "hooks/useZardal";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import formatNumber from "../../../tools/function/formatNumber";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
@@ -36,6 +36,18 @@ function ZardalKholbokh(
     [songogdsonZardal]
   );
 
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.getElementById("cascader").focus();
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
   function onChange(v) {
     setSongogdsonZardal(v);
   }
@@ -66,12 +78,13 @@ function ZardalKholbokh(
         </div>
       </div>
       <Cascader
+        id="cascader"
         fieldNames={{ label: "ner", value: "_id", children: "dedKhesguud" }}
         options={zardalGaralt?.jagsaalt}
         value={songogdsonZardal}
         onChange={onChange}
-        style={{width:'100%'}}
-        dropdownMenuColumnStyle={{maxWidth:'20rem'}}
+        style={{ width: "100%" }}
+        dropdownMenuColumnStyle={{ maxWidth: "20rem" }}
         changeOnSelect
         placeholder="Зардал сонгох"
       />

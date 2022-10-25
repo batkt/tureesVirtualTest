@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
 
 function Khuulga({ data, token, ognoo, onFinish, destroy }, ref) {
@@ -18,6 +18,17 @@ function Khuulga({ data, token, ognoo, onFinish, destroy }, ref) {
     }),
     [refTuukh]
   );
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
 
   return (
     <div className="flex h-[76vh] flex-col space-y-2 overflow-y-auto">

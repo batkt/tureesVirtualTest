@@ -478,15 +478,15 @@ function ZakhialgiinKhyanalt() {
             <div
               className={`relative ml-1 border-l-2 ${
                 a.turGereeEsekh === true
-                  ? "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
-                  : "rounded-md border-green-600 bg-gradient-to-r from-green-200 dark:border-green-400 dark:from-green-900 "
+                  ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
+                  : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
               }`}
             >
               <div
                 className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${
                   a.turGereeEsekh === true
-                    ? "bg-blue-500 dark:bg-blue-400"
-                    : "bg-green-600 dark:bg-green-400"
+                    ? "bg-purple-600 dark:bg-purple-400"
+                    : "bg-blue-500 dark:bg-blue-400"
                 }`}
               />
               {data}
@@ -558,7 +558,7 @@ function ZakhialgiinKhyanalt() {
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
-        width: "8rem",
+        width: "7rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -578,7 +578,7 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Ангилал",
         dataIndex: "segmentuud",
-        width: "4rem",
+        width: "5rem",
         align: "center",
         render(segmentuud) {
           if (segmentuud?.length > 0) {
@@ -604,8 +604,8 @@ function ZakhialgiinKhyanalt() {
             );
           } else
             return (
-              <div className=" flex items-center justify-center">
-                <ImFileEmpty className="text-xl" />
+              <div className=" flex items-center justify-center text-gray-500">
+                <ImFileEmpty className="text-xl text-gray-500" />
               </div>
             );
         },
@@ -1153,11 +1153,11 @@ function ZakhialgiinKhyanalt() {
         <div className="mt-6 flex gap-5 font-medium">
           <div className="flex items-center gap-1">
             Үндсэн гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-green-600 dark:bg-green-400" />
+            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
           </div>
           <div className="flex items-center gap-1">
             Түр гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />
           </div>
         </div>
         <div

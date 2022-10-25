@@ -2,7 +2,7 @@ import { Form, Button, Switch, Divider, InputNumber, notification } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import AvlagiinKhuvaariUusgekh from "components/pageComponents/gereebaiguulakh/AvlagaiinKhuvaariUusgekh";
 import formatNumber from "tools/function/formatNumber";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
@@ -46,6 +46,9 @@ const Tulbur = ({
     }
     onChange({ ...value });
   };
+  useEffect(() => {
+    form.getFieldInstance("baritsaaBairshuulakhKhugatsaa")?.focus();
+  }, []);
 
   useEffect(() => {
     const zardluud = value.zardluud?.filter(function (item) {
@@ -55,6 +58,7 @@ const Tulbur = ({
         item.turul === "Тогтмол"
       );
     });
+
     if (!!value.talbainNiitUne && !!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
@@ -86,6 +90,19 @@ const Tulbur = ({
   function onFinish() {
     next(value);
   }
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "baritsaaBairshuulakhKhugatsaa":
+          document.getElementById("khadgalakhButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   return (
     <Form
@@ -154,6 +171,7 @@ const Tulbur = ({
                 ]}
               >
                 <InputNumber
+                  onKeyUp={focuser}
                   placeholder="Барьцаа байршуулах хугацаа"
                   style={{ width: "100%" }}
                   min={0}
@@ -195,7 +213,12 @@ const Tulbur = ({
               Зардал бүртгэл
             </Button>
             {!zasvar && (
-              <Button type="primary" htmlType="submit" icon={<SaveOutlined />}>
+              <Button
+                type="primary"
+                id="khadgalakhButton"
+                onClick={() => form.submit()}
+                icon={<SaveOutlined />}
+              >
                 Хадгалах
               </Button>
             )}

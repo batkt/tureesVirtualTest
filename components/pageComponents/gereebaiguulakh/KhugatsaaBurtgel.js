@@ -4,7 +4,7 @@ import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import moment from "moment";
 import Aos from "aos";
 import _ from "lodash";
@@ -76,6 +76,34 @@ const YurunkhiiMedeele = ({
       form.submit();
     }
   });
+  useEffect(() => {
+    form.getFieldInstance("khugatsaa").focus();
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "validate_other_gereeniiOgnoo":
+          form.getFieldInstance("khugatsaa").focus();
+          break;
+        case "validate_other_khugatsaa":
+          if (value?.turGereeEsekh === true) {
+            form.getFieldInstance("duusakhOgnoo").focus();
+          } else form.getFieldInstance("tulukhUdur").focus();
+          break;
+        case "validate_other_tulukhUdur":
+          form.getFieldInstance("duusakhOgnoo").focus();
+
+          break;
+        case "validate_other_duusakhOgnoo":
+          document.getElementById("tureesinTalbaiButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   function onFinish() {
     next();
@@ -98,6 +126,7 @@ const YurunkhiiMedeele = ({
           label="Гэрээ хийх огноо"
         >
           <DatePicker
+            onKeyDown={focuser}
             style={{ width: "100%" }}
             allowClear={false}
             placeholder="Гэрээ хийх огноо"
@@ -113,6 +142,7 @@ const YurunkhiiMedeele = ({
           required
         >
           <InputNumber
+            onKeyUp={focuser}
             style={{ width: "100%" }}
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -139,6 +169,7 @@ const YurunkhiiMedeele = ({
         >
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
+              onKeyUp={focuser}
               style={{ width: "100%" }}
               disabled
               allowClear
@@ -147,6 +178,7 @@ const YurunkhiiMedeele = ({
             />
           ) : (
             <Select
+              onKeyUp={focuser}
               defaultValue={_.get(value, "tulukhUdur.0")}
               placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
               prefix={<SolutionOutlined />}
@@ -170,6 +202,7 @@ const YurunkhiiMedeele = ({
           ]}
         >
           <DatePicker
+            onKeyDown={focuser}
             style={{ width: "100%" }}
             allowClear
             placeholder="Гэрээ дуусах хугацаа"
@@ -188,8 +221,9 @@ const YurunkhiiMedeele = ({
               Ерөнхий мэдээлэл
             </Button>
             <Button
+              id="tureesinTalbaiButton"
               type="primary"
-              htmlType="submit"
+              onClick={() => form.submit()}
               icon={<ArrowRightOutlined />}
             >
               Түрээсийн талбай

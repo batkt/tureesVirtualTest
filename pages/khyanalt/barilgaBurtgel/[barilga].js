@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Admin from "components/Admin";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -42,7 +42,6 @@ function GereeBaiguulakh({ token }) {
 
   const [plantZurag, setPlantZurag] = useState();
   const [form] = Form.useForm();
-
 
   useEffect(() => {
     if (!!baiguullaga) {
@@ -102,12 +101,12 @@ function GereeBaiguulakh({ token }) {
     if (_.isNumber(v?.bdavkhar)) {
       const value = new Array(v.bdavkhar).fill("").map((a, i) => ({
         ...(bdavkhar.find((b) => b.davkhar === `B${i + 1}`) ||
-          planAvya(`B${i + 1}`,true) ||
+          planAvya(`B${i + 1}`, true) ||
           {}),
         davkhar: `B${i + 1}`,
       }));
       setBDavkhar([...value]);
-      console.log(bdavkhar)
+      console.log(bdavkhar);
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
@@ -138,18 +137,54 @@ function GereeBaiguulakh({ token }) {
       davkhar[index].planZurag = v[0];
       setDavkhar(davkhar);
     }
-
   }
 
   function onFinish() {
     khadgalya();
   }
 
-  const [logo, setLogo]=useState()
+  const [logo, setLogo] = useState();
 
-  
-  const logoMedeelel =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
-  
+  const logoMedeelel = _.get(baiguullaga, `barilguud.${barilga}`) || [];
+
+  useEffect(() => {
+    form.getFieldInstance("ner").focus();
+  }, []);
+
+  const focuser = useCallback((e) => {
+    console.log(e);
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "barilga_ner":
+          form.getFieldInstance("register").focus();
+          break;
+        case "barilga_register":
+          form.getFieldInstance("davkhar").focus();
+          break;
+        case "barilga_davkhar":
+          form.getFieldInstance("bdavkhar").focus();
+          break;
+        case "barilga_bdavkhar":
+          form.getFieldInstance("niitTalbai").focus();
+          break;
+        case "barilga_niitTalbai":
+          form.getFieldInstance("neekhTsag").focus();
+          break;
+        case "barilga_neekhTsag":
+          form.getFieldInstance("khaakhTsag").focus();
+          break;
+        case "barilga_khaakhTsag":
+          form.getFieldInstance("khayag").focus();
+          break;
+        case "barilga_khayag":
+          document.getElementById("barilgaButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   function khadgalya() {
     const burtgekhBarilga = form.getFieldsValue();
@@ -162,18 +197,22 @@ function GereeBaiguulakh({ token }) {
       _.set(burtgekhBarilga, `_id`, _id);
       _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga);
     }
-    let data =_.get(baiguullaga, `barilguud.${barilga}`)|| [];
-    const index = baiguullaga.barilguud.findIndex(a=>a._id === data._id)
-    logo && (baiguullaga.barilguud[index].logo = logo)
+    let data = _.get(baiguullaga, `barilguud.${barilga}`) || [];
+    const index = baiguullaga.barilguud.findIndex((a) => a._id === data._id);
+    logo && (baiguullaga.barilguud[index].logo = logo);
     updateMethod("baiguullaga", token, baiguullaga).then(({ data }) => {
-      logo && uilchilgee(token).post('/confirmFile',{filename:logo,path:'logo'})
+      logo &&
+        uilchilgee(token).post("/confirmFile", {
+          filename: logo,
+          path: "logo",
+        });
       if (data === "Amjilttai") {
         notification.success({ message: "Амжилттай хадгаллаа" });
         router.back();
       } else notification.warning({ message: "Алдаа гарлаа" });
     });
   }
-  
+
   function m2Uurchilyu(v, mur) {
     if (_.isString(mur?.davkhar) && mur?.davkhar?.includes("B")) {
       const index = bdavkhar.findIndex((a) => a.davkhar === mur?.davkhar);
@@ -185,9 +224,9 @@ function GereeBaiguulakh({ token }) {
       setDavkhar(davkhar);
     }
   }
-  const [kharakhZurgiinZam , setKharakhZurgiinZam]=useState(false)
-  function logoZuragKharakh(e,path ) {
-    setKharakhZurgiinZam(path)
+  const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
+  function logoZuragKharakh(e, path) {
+    setKharakhZurgiinZam(path);
     e.preventDefault();
     e.stopPropagation();
   }
@@ -212,41 +251,41 @@ function GereeBaiguulakh({ token }) {
           {...formItemLayout}
           onValuesChange={onChange}
         >
-           <Form.Item label="Лого"  name="logo">
-              <Upload
-                      multiple={false}
-                      // name="file"
-                      action={`${url}/upload`}
-                      method="POST"
-                      onChange={(v) =>
-                        setLogo(v.file.response)
-                      }
-                    >
-                      <div className="flex flex-row space-x-1">
-                          {!logoMedeelel?.logo && (
-                          <Button icon={<UploadOutlined />}>
-                          Лого зураг оруулах
-                          </Button>
-                        )}
-                        {!!logoMedeelel?.logo && (
-                          <Button
-                            icon={<EyeOutlined />}
-                            onClick={(e) => logoZuragKharakh(e,`logo/${logoMedeelel.logo}`)}
-                          >
-                          Тамга зураг харах
-                          </Button>
-                        )}
-                        {!!logoMedeelel?.logo && <Button icon={<EditOutlined />}></Button>}
-                      </div>
-              </Upload>
-            </Form.Item>
-          
+          <Form.Item label="Лого" name="logo">
+            <Upload
+              multiple={false}
+              // name="file"
+              action={`${url}/upload`}
+              method="POST"
+              onChange={(v) => setLogo(v.file.response)}
+            >
+              <div className="flex flex-row space-x-1">
+                {!logoMedeelel?.logo && (
+                  <Button icon={<UploadOutlined />}>Лого зураг оруулах</Button>
+                )}
+                {!!logoMedeelel?.logo && (
+                  <Button
+                    icon={<EyeOutlined />}
+                    onClick={(e) =>
+                      logoZuragKharakh(e, `logo/${logoMedeelel.logo}`)
+                    }
+                  >
+                    Тамга зураг харах
+                  </Button>
+                )}
+                {!!logoMedeelel?.logo && (
+                  <Button icon={<EditOutlined />}></Button>
+                )}
+              </div>
+            </Upload>
+          </Form.Item>
+
           <Form.Item
             rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
             name="ner"
             label="Нэр"
           >
-            <Input />
+            <Input onKeyUp={focuser} />
           </Form.Item>
           <Form.Item
             rules={[
@@ -255,29 +294,29 @@ function GereeBaiguulakh({ token }) {
             name="register"
             label="Регистр"
           >
-            <Input />
+            <Input onKeyUp={focuser} />
           </Form.Item>
           <Form.Item
             rules={[
-            { 
-              required: true, 
-              message: "Барилгын Давхарын тоо оруулна уу!",
-              
-              
-            },
+              {
+                required: true,
+                message: "Барилгын Давхарын тоо оруулна уу!",
+              },
             ]}
             name="davkhar"
             label="Давхар"
-          >  
-             <InputNumber
-              parser={(value) => value.includes('.') ? value.split('.')[0] : value}
+          >
+            <InputNumber
+              onKeyUp={focuser}
+              parser={(value) =>
+                value.includes(".") ? value.split(".")[0] : value
+              }
               min={1}
               max={40}
               step="1"
               defaultValue={1}
-              style={{ width: "100%" }}             
+              style={{ width: "100%" }}
             />
-            
           </Form.Item>
           <Form.Item
             rules={[
@@ -289,12 +328,15 @@ function GereeBaiguulakh({ token }) {
             name="bdavkhar"
             label="B Давхар"
           >
-             <InputNumber
-             parser={(value) => value.includes('.') ? value.split('.')[0] : value}
+            <InputNumber
+              onKeyUp={focuser}
+              parser={(value) =>
+                value.includes(".") ? value.split(".")[0] : value
+              }
               max={30}
               step="1"
               defaultValue={1}
-              style={{ width: "100%" }}             
+              style={{ width: "100%" }}
             />
           </Form.Item>
           <Form.Item
@@ -311,7 +353,7 @@ function GereeBaiguulakh({ token }) {
               </div>
             }
           >
-            <InputNumber style={{ width: "100%" }} />
+            <InputNumber onKeyUp={focuser} style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item
             rules={[
@@ -321,6 +363,7 @@ function GereeBaiguulakh({ token }) {
             label="Нээх цаг"
           >
             <TimePicker
+              onKeyDown={focuser}
               placeholder="Нээх цаг"
               style={{ width: "100%" }}
               format={format}
@@ -334,6 +377,7 @@ function GereeBaiguulakh({ token }) {
             label="Хаах цаг"
           >
             <TimePicker
+              onKeyDown={focuser}
               placeholder="Хаах цаг"
               style={{ width: "100%" }}
               format={format}
@@ -344,18 +388,17 @@ function GereeBaiguulakh({ token }) {
             name="khayag"
             label="Хаяг"
           >
-            <Input.TextArea />
+            <Input.TextArea onKeyDown={focuser} />
           </Form.Item>
           <Form.Item name="bairshil" label="Байршил">
             <LocationPicker />
           </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              span: 16,
-              offset: 8,
-            }}
-          >
-            <Button htmlType="submit" type="primary">
+          <Form.Item className="flex w-full justify-end">
+            <Button
+              id="barilgaButton"
+              onClick={() => form.submit()}
+              type="primary"
+            >
               Хадгалах
             </Button>
           </Form.Item>
@@ -431,15 +474,14 @@ function GereeBaiguulakh({ token }) {
           ]}
           dataSource={[...davkhar, ...bdavkhar]}
         />
-         <Image
+        <Image
           width={200}
           preview={{
-            visible:!!kharakhZurgiinZam,
+            visible: !!kharakhZurgiinZam,
             src: `https://turees.zevtabs.mn/api/file?path=${kharakhZurgiinZam}`,
-            onVisibleChange: value => {
+            onVisibleChange: (value) => {
               setKharakhZurgiinZam(undefined);
             },
-  
           }}
         />
         <Image
