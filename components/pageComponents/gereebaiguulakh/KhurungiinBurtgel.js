@@ -13,7 +13,7 @@ import {
   ArrowLeftOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { toWords } from "mon_num";
 import uilchilgee from "services/uilchilgee";
 import _ from "lodash";
@@ -32,7 +32,7 @@ const formItemLayout = {
   },
 };
 
-function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
+function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
   const { token, baiguullaga } = useAuth();
 
   const query = useMemo(() => {
@@ -53,6 +53,7 @@ function TalbaiSongolt({ value, onChange, mode, gereeniiZagvar }) {
 
   return (
     <Select
+      id={id}
       placeholder="Талбай"
       filterOption={false}
       value={value}
@@ -195,6 +196,26 @@ const YurunkhiiMedeele = ({
     }
   });
 
+  useEffect(() => {
+    document.getElementById("talbaiSongolt").focus();
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "validate_other_gereeniiOgnoo":
+          form.getFieldInstance("khugatsaa").focus();
+          break;
+        case "validate_other_zoriulalt":
+          document.getElementById("zardalBurtgelButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   function onFinish() {
     if (value.talbainuud === undefined) {
       message.warning("Талбай бүртгэнэ үү!");
@@ -229,6 +250,7 @@ const YurunkhiiMedeele = ({
         <Form.Item label="Талбай">
           <TalbaiSongolt
             value={""}
+            id={"talbaiSongolt"}
             onChange={onChangeTalbai}
             gereeniiZagvar={gereeniiZagvar}
           />
@@ -360,7 +382,7 @@ const YurunkhiiMedeele = ({
           label="Зориулалт"
           name="zoriulalt"
         >
-          <Input placeholder="Зориулалт" />
+          <Input onKeyUp={focuser} placeholder="Зориулалт" />
         </Form.Item>
       </div>
       <Form.Item wrapperCol={{ span: 24 }}>
@@ -379,7 +401,8 @@ const YurunkhiiMedeele = ({
           </Button>
           <Button
             type="primary"
-            htmlType="submit"
+            id="zardalBurtgelButton"
+            onClick={() => form.submit()}
             icon={<ArrowRightOutlined />}
           >
             Зардал бүртгэл

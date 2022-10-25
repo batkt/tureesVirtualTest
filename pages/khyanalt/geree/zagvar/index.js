@@ -192,12 +192,7 @@ function index({ token }) {
                 data-aos-delay={1 + index + "00"}
               >
                 <div className="file box zoom-in relative rounded-md px-3 pt-8 pb-5 shadow-lg dark:shadow-lg dark:shadow-white sm:px-5">
-                  <div className="absolute left-0 top-0 mt-3 ml-3">
-                    <input
-                      className="form-check-input border border-gray-500"
-                      type="checkbox"
-                    />
-                  </div>
+                  <div className="absolute left-0 top-0 mt-3 ml-3"></div>
 
                   <div className="file__icon file__icon--file mx-auto w-3/5">
                     <div className="file__icon__file-name"></div>

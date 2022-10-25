@@ -84,7 +84,8 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
     if (
       mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
       (mur.tulsunAldangi || 0) <
-        (Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) - guilgee.kholbosonDun)
+        Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) -
+          guilgee.kholbosonDun
     ) {
       aldaa.push(
         `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү`
@@ -212,6 +213,18 @@ function GuilgeeNiiluulekh(
     [gereenuud]
   );
 
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.getElementById("gereeSongokh").focus();
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
   const content = useMemo(
     () => (
       <div className="relative w-80 space-y-1 dark:text-gray-200">
@@ -308,15 +321,22 @@ function GuilgeeNiiluulekh(
 
   function onDoubleClickKholbokhDun(target, index, talbar) {
     let sum = zuruuZun(index, talbar);
-    
-    if ("tulsunAldangi" === talbar && guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel)
+
+    if (
+      "tulsunAldangi" === talbar &&
+      guilgeeniiDun - sum > gereenuud[index].aldangiinUldegdel
+    )
       sum = guilgeeniiDun - gereenuud[index].aldangiinUldegdel;
 
     if (
-      ("baritsaaTulbur" === talbar) &&
-      guilgeeniiDun - sum > ((gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0))
-    ){
-      let baritsaadun = (gereenuud[index]?.baritsaaAvakhDun || 0) - (gereenuud[index]?.baritsaaniiUldegdel || 0)
+      "baritsaaTulbur" === talbar &&
+      guilgeeniiDun - sum >
+        (gereenuud[index]?.baritsaaAvakhDun || 0) -
+          (gereenuud[index]?.baritsaaniiUldegdel || 0)
+    ) {
+      let baritsaadun =
+        (gereenuud[index]?.baritsaaAvakhDun || 0) -
+        (gereenuud[index]?.baritsaaniiUldegdel || 0);
       sum += guilgeeniiDun - sum - baritsaadun;
     }
 
@@ -408,6 +428,12 @@ function GuilgeeNiiluulekh(
             onVisibleChange={(v) => setVisible(v)}
           >
             <input
+              id="gereeSongokh"
+              onFocus={() =>
+                setTimeout(() => {
+                  setVisible(true);
+                }, 300)
+              }
               className="rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200"
               placeholder="Гэрээ сонгох"
               onChange={onChange}
@@ -441,7 +467,7 @@ function GuilgeeNiiluulekh(
                 title={`${geree?.talbainDugaar} талбайн мөр бичилт устгах уу?`}
                 okText="Тийм"
                 cancelText="Үгүй"
-                trigger={'click'}
+                trigger={"click"}
                 onConfirm={() =>
                   setGereenuud((a) => {
                     a.splice(index, 1);

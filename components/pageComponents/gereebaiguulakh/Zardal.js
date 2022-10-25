@@ -29,7 +29,7 @@ const formItemLayout = {
 const query = {};
 const searchKeys = ["ner"];
 
-const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange }) => {
+const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id }) => {
   const [valueState, setValueState] = useState(undefined);
   function onValueChange(v) {
     onChange(ashiglaltiinZardal?.jagsaalt.find((a) => a._id === v));
@@ -38,6 +38,7 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange }) => {
 
   return (
     <Select
+      id={id}
       placeholder="Зардал сонгох"
       filterOption={false}
       value={valueState}
@@ -144,6 +145,9 @@ const Zardal = ({
     });
     onChange({ ...value });
   }
+  useEffect(() => {
+    document.getElementById("songokhKheseg").focus();
+  }, []);
 
   const inputChange = (e, a) => {
     const index = value.zardluud.findIndex((object) => {
@@ -172,6 +176,7 @@ const Zardal = ({
 
         <div className="w-full bg-white">
           <SongokhKheseg
+            id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}
             onChange={onChangeZardal}

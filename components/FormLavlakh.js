@@ -56,6 +56,7 @@ function useLavlakh(lavlakh, token, query, fields) {
 }
 
 function FormLavlakh({
+  focuser,
   lavlakh,
   shuukhTalbaruud,
   query,
@@ -64,6 +65,7 @@ function FormLavlakh({
   onChange,
   valKey = "",
   infoKey = "",
+  selectId,
   InfoComponent = () => <div></div>,
   style,
   placeholder,
@@ -83,6 +85,8 @@ function FormLavlakh({
     <>
       <Select
         style={style}
+        id={selectId}
+        onKeyUp={focuser}
         showSearch
         placeholder={placeholder}
         value={value}

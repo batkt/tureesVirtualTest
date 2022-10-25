@@ -49,6 +49,7 @@ import { useRouter } from "next/router";
 import { MdOutlineInventory } from "react-icons/md";
 import { GiBackwardTime } from "react-icons/gi";
 import { TbBoxMultiple } from "react-icons/tb";
+import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 
 const Tailan = dynamic(() => import("components/konva/tailan"), { ssr: false });
 
@@ -63,10 +64,12 @@ const normFile = (e) => {
 function TalbaiSegment({ token, ...a }) {
   return (
     <div className="box dark:text-white">
-      <div className="flex items-center p-7 shadow-none">
-        <div className="border-l-2 border-green-500 pl-4">
+      <div className="flex items-center py-2 px-5 shadow-none">
+        <div className="flex gap-2 border-l-2 border-green-500 pl-4">
           <div className="font-medium">{a.ner}</div>
-          <div className="text-gray-600 dark:text-gray-300">{a.utga}</div>
+          <div className="font-medium text-gray-600 dark:text-gray-300">
+            ({a.utga})
+          </div>
         </div>
       </div>
     </div>
@@ -817,26 +820,33 @@ function talbaiBurtgekh({ token }) {
                 width: "1.5rem",
                 align: "center",
                 render(segmentuud) {
-                  return (
-                    <Popover
-                      trigger="hover"
-                      content={
-                        <div>
-                          <CardList
-                            keyValue="segment"
-                            className="max-h-[70vh] overflow-y-scroll bg-[#F3F4F6]"
-                            jagsaalt={segmentuud}
-                            Component={TalbaiSegment}
-                            componentProps={{ token }}
-                          />
-                        </div>
-                      }
-                    >
-                      <a className=" flex items-center justify-center  hover:scale-150">
-                        <TbBoxMultiple className="text-xl" />
-                      </a>
-                    </Popover>
-                  );
+                  if (segmentuud?.length > 0) {
+                    return (
+                      <Popover
+                        trigger="hover"
+                        content={
+                          <div>
+                            <CardList
+                              keyValue="segment"
+                              className="max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2"
+                              jagsaalt={segmentuud}
+                              Component={TalbaiSegment}
+                              componentProps={{ token }}
+                            />
+                          </div>
+                        }
+                      >
+                        <a className=" flex items-center justify-center  hover:scale-150 ">
+                          <ImFileText2 className="text-xl" />
+                        </a>
+                      </Popover>
+                    );
+                  } else
+                    return (
+                      <div className=" flex items-center justify-center">
+                        <ImFileEmpty className="text-xl text-gray-500" />
+                      </div>
+                    );
                 },
               },
               {

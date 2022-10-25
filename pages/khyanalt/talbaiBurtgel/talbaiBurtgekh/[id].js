@@ -6,7 +6,7 @@ import {
 } from "@ant-design/icons";
 import Admin from "components/Admin";
 import _ from "lodash";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
@@ -130,9 +130,7 @@ function TalbaiBurtgekh({ token }) {
     ...data,
   });
 
-
   function onChange(talbar, utga) {
-    
     if (talbar === "talbainNegjUne") {
       let value = Number(utga) * Number(talbaiState.talbainKhemjee);
       if (
@@ -302,8 +300,39 @@ function TalbaiBurtgekh({ token }) {
   const onClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    formRef.current.getFieldInstance("kod").focus();
+  }, []);
 
-  const [form] = Form.useForm();
+  const focuser = useCallback((e) => {
+    console.log(e);
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "control-ref_kod":
+          formRef.current.getFieldInstance("talbainKhemjee").focus();
+          break;
+        case "control-ref_talbainKhemjee":
+          formRef.current.getFieldInstance("talbainNegjUne").focus();
+          break;
+        case "control-ref_talbainNegjUne":
+          formRef.current.getFieldInstance("talbainNiitUne").focus();
+          break;
+        case "control-ref_talbainNiitUne":
+          formRef.current.getFieldInstance("davkhar").focus();
+          break;
+        case "control-ref_davkhar":
+          formRef.current.getFieldInstance("tailbar").focus();
+          break;
+        case "control-ref_tailbar":
+          document.getElementById("talbaiBurtgekhButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   return (
     <Admin
       title="Талбай бүртгэл"
@@ -317,7 +346,6 @@ function TalbaiBurtgekh({ token }) {
         ref={formRef}
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 15 }}
-        form={form}
         autoComplete={"off"}
         name="control-ref"
         onFinish={onFinish}
@@ -341,6 +369,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <Input
+                  onKeyUp={focuser}
                   type="text"
                   allowClear
                   style={{ width: "100%" }}
@@ -366,6 +395,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <InputNumber
+                  onKeyUp={focuser}
                   style={{ width: "100%" }}
                   allowClear
                   placeholder="Талбайн хэмжээ/м2/"
@@ -390,6 +420,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <InputNumber
+                  onKeyUp={focuser}
                   style={{ width: "100%" }}
                   placeholder="Нэгж үнэ"
                   value={talbaiState.talbainNegjUne}
@@ -417,6 +448,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <InputNumber
+                  onKeyUp={focuser}
                   style={{ width: "100%" }}
                   placeholder="Нийт үнэ"
                   value={talbaiState.talbainNiitUne}
@@ -445,6 +477,7 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <Select
+                  onKeyUp={focuser}
                   style={{ width: "100%" }}
                   placeholder="Давхар"
                   value={talbaiState.davkhar}
@@ -460,7 +493,11 @@ function TalbaiBurtgekh({ token }) {
                     ))}
                 </Select>
               </Form.Item>
-              <Form.Item name="niitiinTalbaiEsekh" label="Нийтийн талбай эсэх" hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}>
+              <Form.Item
+                name="niitiinTalbaiEsekh"
+                label="Нийтийн талбай эсэх"
+                hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}
+              >
                 <Switch
                   defaultChecked={talbaiState.niitiinTalbaiEsekh}
                   onChange={(e) => onChange("niitiinTalbaiEsekh", e)}
@@ -505,6 +542,7 @@ function TalbaiBurtgekh({ token }) {
               </div>
               <Form.Item name="tailbar" label="Тайлбар">
                 <TextArea
+                  onKeyDown={focuser}
                   style={{ width: "100%" }}
                   rows={4}
                   placeholder="Тайлбар"
@@ -517,13 +555,7 @@ function TalbaiBurtgekh({ token }) {
                   className="w-full pl-1"
                   wrapperCol={{ span: 12, offset: 12 }}
                 >
-                  <Button
-                    onClick={showDrawer}
-                    style={{
-                      backgroundColor: "#209669",
-                      color: "#ffffff",
-                    }}
-                  >
+                  <Button onClick={showDrawer} type="primary">
                     <span className="mr-2 text-white">
                       <SettingOutlined />
                     </span>
@@ -560,11 +592,9 @@ function TalbaiBurtgekh({ token }) {
                   wrapperCol={{ span: 1, offset: 7 }}
                 >
                   <Button
-                    htmlType="submit"
-                    style={{
-                      backgroundColor: "#209669",
-                      color: "#ffffff",
-                    }}
+                    id="talbaiBurtgekhButton"
+                    onClick={() => formRef.current.submit()}
+                    type="primary"
                   >
                     Хадгалах
                   </Button>
@@ -581,7 +611,7 @@ function TalbaiBurtgekh({ token }) {
           <div className="">
             <div className="">
               <Form.List name="khurunguud">
-                {(fields, { add, remove,}) => (
+                {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <Card>
@@ -589,7 +619,7 @@ function TalbaiBurtgekh({ token }) {
                           <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
                             <CloseCircleOutlined
                               onClick={() => {
-                                remove(name)
+                                remove(name);
                               }}
                             />
                           </div>

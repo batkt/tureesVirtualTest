@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
 const { DatePicker, InputNumber, message } = require("antd");
@@ -13,6 +13,31 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   React.useEffect(() => {
     setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar, "month"));
   }, [sar]);
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.getElementById("sungakhSar").focus();
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "sungakhSar":
+          document.getElementById("ognoo").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
 
   React.useImperativeHandle(
     ref,
@@ -62,11 +87,18 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">Сунгах сар:</div>
-          <InputNumber style={{ width: "60%" }} value={sar} onChange={setSar} />
+          <InputNumber
+            id="sungakhSar"
+            onKeyUp={focuser}
+            style={{ width: "60%" }}
+            value={sar}
+            onChange={setSar}
+          />
         </div>
         <div className="flex w-full flex-row justify-between">
           <div className="text-right">Дуусгах огноо:</div>
           <DatePicker
+            id="ognoo"
             allowClear={false}
             style={{ width: "60%" }}
             value={duusakhOgnoo}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import createMethod from "tools/function/crud/createMethod";
@@ -238,6 +238,21 @@ function GereeBaiguulakh({ token }) {
   };
 
   const currentItem = steps[current];
+  const gereeniiZagvariinId = "gereeniiZagvar";
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "gereeniiZagvar":
+          document.getElementById("gereeniiKhugatsaaButton").focus();
+
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -282,6 +297,7 @@ function GereeBaiguulakh({ token }) {
               baiguullaga={baiguullaga}
               barilgiinId={barilgiinId}
               gereeniiZagvar={gereeniiZagvar}
+              gereeniiZagvariinId={gereeniiZagvariinId}
             />
           </div>
           <div
@@ -297,7 +313,9 @@ function GereeBaiguulakh({ token }) {
           >
             {current === 0 && (
               <Select
+                onKeyUp={focuser}
                 ref={zagvarRef}
+                id={gereeniiZagvariinId}
                 showSearch
                 placeholder="Гэрээний загвар сонгох"
                 className="w-full"
