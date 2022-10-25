@@ -9,18 +9,17 @@ import {
   Button,
   Checkbox,
   Input,
+  message,
   notification,
   Popconfirm,
   Select,
   Spin,
-  Table,
   Upload,
 } from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
-  EyeOutlined,
   FileExcelOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -30,12 +29,10 @@ import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import useSWR from "swr";
-import formatNumber from "tools/function/formatNumber";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
-import useKhariltsagch from "hooks/useKhariltsagch";
 import TextArea from "antd/lib/input/TextArea";
 
 //#endregion
@@ -384,7 +381,7 @@ function Khyanalt({ token }) {
       </Button>,
     ];
     modal({
-      title: "SMS Загвар үүсгэх",
+      title: `${turul} Загвар үүсгэх`,
       icon: <FileExcelOutlined />,
       content: (
         <ZagvarBurtgel

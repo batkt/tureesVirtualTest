@@ -1,3 +1,9 @@
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { BiCommentError } from "react-icons/bi";
+import { BiBellPlus } from "react-icons/bi";
+import { BsGraphUp } from "react-icons/bs";
+import { MdOutlineAnalytics } from "react-icons/md";
+
 export const tsonknuud = [
   {
     key: "/khyanalt/ajiltan/tokhirgoo",
@@ -437,62 +443,20 @@ const khuudasnuud = [
         ner: "Мэдэгдэл",
         khuudasniiNer: "medegdel",
         href: "/khyanalt/medegdel",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        ),
+        icon: <BiBellPlus className="text-2xl" />,
       },
       {
         ner: "Шаардлага",
         khuudasniiNer: "shaardlaga",
         href: "/khyanalt/medegdel/shaardlaga",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        ),
+        icon: <AiOutlineExclamationCircle className=" text-2xl" />,
       },
 
       {
         ner: "Санал хүсэлт",
         khuudasniiNer: "sanalKhuselt",
         href: "/khyanalt/medegdel/sanalKhuselt",
-        icon: (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        ),
+        icon: <BiCommentError className="text-2xl" />,
       },
     ],
   },
@@ -754,7 +718,6 @@ const khuudasnuud = [
   },
   {
     ner: "Тайлан",
-    khuudasniiNer: "tailan",
     href: "/khyanalt/tailan",
     icon: (
       <svg
@@ -773,6 +736,20 @@ const khuudasnuud = [
         <path d="M15 3.5a9 9 0 0 1 5.5 5.5h-4.5a1 1 0 0 1 -1 -1v-4.5" />
       </svg>
     ),
+    sub: [
+      {
+        ner: "График",
+        khuudasniiNer: "tailan",
+        href: "/khyanalt/tailan",
+        icon: <BsGraphUp className="text-2xl" />,
+      },
+      {
+        ner: "Аналитик",
+        khuudasniiNer: "analytictailan",
+        href: "/khyanalt/tailan/analytic",
+        icon: <MdOutlineAnalytics className="text-2xl" />,
+      },
+    ],
   },
   {
     ner: "Даалгавар",

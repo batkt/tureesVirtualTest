@@ -202,8 +202,7 @@ function ZakhialgaNemekh({ token }) {
       setWaiting(true);
       nekhemjlelZagvar.barilgiinId = barilgiinId;
       const method = nekhemjlelZagvar?._id ? updateMethod : createMethod;
-      method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar, 
-      )
+      method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
             message.success("Амжилттай хадгаллаа");
@@ -216,7 +215,7 @@ function ZakhialgaNemekh({ token }) {
         });
     } else message.warning("Нэр оруулна уу!");
   }
-  function hemjee(e){
+  function hemjee(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
       ...nekhemjlelZagvar,
       khuudasniiKhemjee: e.target.value,
@@ -232,6 +231,7 @@ function ZakhialgaNemekh({ token }) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
       ...nekhemjlelZagvar,
       nekhemjlekh: e,
+      turul: "Mail",
     }));
   }
 
@@ -309,7 +309,7 @@ function ZakhialgaNemekh({ token }) {
                 menuItemSelectedIcon={<CheckOutlined />}
                 suffixIcon={<img src="/rotate.svg" width={"16px"} />}
               >
-                <Select.Option  value={"portrait"}>portrait</Select.Option>
+                <Select.Option value={"portrait"}>portrait</Select.Option>
                 <Select.Option value={"landscape"}>landscape</Select.Option>
               </Select>
             </div>

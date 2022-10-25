@@ -259,61 +259,21 @@ function Khyanalt({ token }) {
   }
 
   function send() {
-    switch (turul) {
-      case "App":
-        appIlgeeye();
-        break;
-      case "Mail":
-        mailIlgeeye();
-        break;
-      default:
-        msgIlgeeye();
-        break;
+    if (!!title) {
+      switch (turul) {
+        case "App":
+          appIlgeeye();
+          break;
+        case "Mail":
+          mailIlgeeye();
+          break;
+        default:
+          msgIlgeeye();
+          break;
+      }
+    } else {
+      notification.warning({ message: "Гарчиг заавал оруулна уу!" });
     }
-  }
-
-  function smsZagvarNemya(data) {
-    const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button
-        style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya(setWaiting(true))}
-      >
-        Бүртгэл нэмэх
-      </Button>,
-    ];
-    modal({
-      title: "SMS Загвар үүсгэх",
-      icon: <FileExcelOutlined />,
-      content: (
-        <ZagvarBurtgel
-          ref={ref}
-          setWaiting={setWaiting}
-          data={data}
-          token={token}
-          turul="sms"
-          barilgiinId={barilgiinId}
-          onRefresh={mailiinZagvarMutate}
-        />
-      ),
-      footer,
-    });
-  }
-
-  function zagvarUstgaya(mur) {
-    setWaiting(true);
-    deleteMethod("mailiinZagvar", token, mur?._id)
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          setWaiting(false);
-          notification.success({ message: "Устгагдлаа" });
-          mailiinZagvarMutate();
-        }
-      })
-      .catch((e) => {
-        aldaaBarigch(e);
-        setWaiting(false);
-      });
   }
 
   function seen() {
@@ -539,13 +499,15 @@ function Khyanalt({ token }) {
                   <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                 </div>
                 <div
-                  className={`truncate text-center text-xs text-gray-600  ${
+                  className={`flex w-full justify-between truncate text-center text-xs text-gray-600  ${
                     khariltsagch?._id === mur?._id
                       ? "dark:text-gray-50"
                       : "dark:text-gray-400"
                   }`}
                 >
-                  {mur?.ner}
+                  <div> {mur?.ner}</div>
+
+                  <div>{mur.utas}</div>
                 </div>
               </div>
             ))}
@@ -606,7 +568,7 @@ function Khyanalt({ token }) {
               ""
             )}
             <div
-              style={{ maxHeight: "calc(100vh - 22rem)" }}
+              style={{ maxHeight: "calc(100vh - 27rem)" }}
               onScroll={onScroll}
               className="col-span-12 mt-0 min-h-[50vh] overflow-auto rounded-r-xl bg-white lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem"
             >
@@ -653,6 +615,9 @@ function Khyanalt({ token }) {
             >
               {turul !== "SMS" && (
                 <Input
+                  rules={[
+                    { required: true, message: "Гарчиг заавал оруулна уу!" },
+                  ]}
                   className="space-y-3"
                   placeholder="Гарчиг"
                   value={title}
@@ -680,7 +645,10 @@ function Khyanalt({ token }) {
                       <Button icon={<UploadOutlined />}>зураг оруулах</Button>
                     </div>
                   </Upload>
-                  <TextArea onChange={(e) => setContent(e.target.value)} />
+                  <TextArea
+                    className="mt-4"
+                    onChange={(e) => setContent(e.target.value)}
+                  />
                 </div>
               )}
             </div>
