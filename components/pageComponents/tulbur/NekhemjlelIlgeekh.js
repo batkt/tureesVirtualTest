@@ -1,4 +1,4 @@
-import { Button, DatePicker, message, notification, Select } from "antd";
+import { Button, DatePicker, message, Modal, notification, Select } from "antd";
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -161,16 +161,31 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
     handlePrint();
   }
 
+  function garya() {
+    if (songogdsonDans !== undefined || barimt !== undefined)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
-    document.getElementById("dansniiTurul").focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
+  }, [songogdsonDans, barimt]);
+
+  useEffect(() => {
+    document.getElementById("dansniiTurul").focus();
   }, []);
 
   React.useImperativeHandle(

@@ -7,16 +7,20 @@ import {
   Radio,
   Switch,
   Select,
+  Modal,
 } from "antd";
 import _ from "lodash";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 
-function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
+function GuilgeeKhiikh(
+  { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId },
+  ref
+) {
   const [dun, setDun] = useState("");
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
@@ -146,6 +150,74 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
     return text;
   }
 
+  function garya() {
+    if (
+      dun !== "" ||
+      tailbar !== "" ||
+      negjUne !== "" ||
+      nekhemjlekhDeerKharagdakh !== false
+    )
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [dun, tailbar, negjUne, nekhemjlekhDeerKharagdakh]);
+
+  useEffect(() => {
+    document.getElementById("inputNumber").focus();
+  }, []);
+
+  const focuser = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        switch (e.target.id) {
+          case "inputNumber":
+            if (turul !== "voucher") {
+              document.getElementById("textArea").focus();
+            } else document.getElementById(khadgalyaButtonId).focus();
+            break;
+          case "dataPicker1":
+            document.getElementById("inputNumber").focus();
+            break;
+          case "inputNumber":
+            document.getElementById("textArea").focus();
+            break;
+          case "dataPicker2":
+            document.getElementById("select2").focus();
+            break;
+          case "select2":
+            document.getElementById("inputNumber").focus();
+            break;
+          case "select":
+            document.getElementById("inputNumber").focus();
+            break;
+          case "textArea":
+            document.getElementById(khadgalyaButtonId).focus();
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    [turul]
+  );
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
@@ -165,16 +237,29 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
       <label>{labelTurul(turul)}</label>
       {turul === "avlaga" && (
         <DatePicker.MonthPicker
+          onKeyDown={focuser}
+          id="dataPicker1"
           locale={locale}
           value={ognoo}
           onChange={setOgnoo}
         />
       )}
       {turul === "ahiglalt" && (
-        <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
+        <DatePicker
+          onKeyDown={focuser}
+          id="dataPicker2"
+          locale={locale}
+          value={ognoo}
+          onChange={setOgnoo}
+        />
       )}
       {turul === "busad" && (
-        <Select placeholder="Гүйлгээ хийх төрөл" onChange={setBusadTurul}>
+        <Select
+          onKeyDown={focuser}
+          id="select"
+          placeholder="Гүйлгээ хийх төрөл"
+          onChange={setBusadTurul}
+        >
           <Option value="barter">Бартер</Option>
           <Option value="zalruulga">Залруулга</Option>
           <Option value="aldangi">Алданги</Option>
@@ -186,7 +271,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
         </div>
       )}
       {turul === "ahiglalt" && (
-        <Select placeholder="Зардлын төрөл">
+        <Select onKeyDown={focuser} id="select2" placeholder="Зардлын төрөл">
           {zardal.jagsaalt?.map((mur) => (
             <Select.Option key={mur._id} value={mur.ner}>
               <div onClick={() => setNegjUne(mur.tariff || 0)}>
@@ -202,6 +287,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
         </div>
       )}
       <InputNumber
+        onKeyDown={focuser}
+        id="inputNumber"
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         placeholder={turul === "ahiglalt" ? "Нэгж" : "Дүн"}
@@ -217,6 +304,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, barilgiinId }, ref) {
       )}
       {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
         <Input.TextArea
+          onKeyDown={focuser}
+          id="textArea"
           placeholder="Тайлбар"
           value={tailbar}
           onChange={(e) => setTailbar(e.target.value)}

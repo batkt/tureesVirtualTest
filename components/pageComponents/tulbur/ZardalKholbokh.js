@@ -1,4 +1,4 @@
-import { Cascader, notification } from "antd";
+import { Cascader, Modal, notification } from "antd";
 import useZardal from "hooks/useZardal";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -36,16 +36,31 @@ function ZardalKholbokh(
     [songogdsonZardal]
   );
 
+  function garya() {
+    if (songogdsonZardal !== undefined)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
-    document.getElementById("cascader").focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
+  }, [songogdsonZardal]);
+
+  useEffect(() => {
+    document.getElementById("cascader").focus();
   }, []);
 
   function onChange(v) {

@@ -13,7 +13,6 @@ import AjiltanNemekh from "./ajiltanNemekh";
 import uilchilgee, { url } from "services/uilchilgee";
 import TextArea from "antd/lib/input/TextArea";
 
-
 const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
@@ -31,7 +30,8 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
     const footer = [
       <Button onClick={() => ajitanRef.current.khaaya()}>Хаах</Button>,
       <Button
-        style={{ backgroundColor: "#209669", color: "#ffffff" }}
+        type="primary"
+        id="ajiltanSongokhButton"
         onClick={() => ajitanRef.current.khadgalya()}
       >
         сонгох
@@ -106,10 +106,11 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           <div
             key={ognoo}
             onClick={() => onChange("duusakhOgnoo", ognoo)}
-            className={`w-16 cursor-pointer rounded-2xl ${ognoo === daalgavar.duusakhOgnoo
-              ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
-              : ""
-              } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
+            className={`w-16 cursor-pointer rounded-2xl ${
+              ognoo === daalgavar.duusakhOgnoo
+                ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
+                : ""
+            } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
             <div className="w-16">{moment(ognoo).format("MM")} сар</div>
@@ -150,9 +151,9 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               v.fileList.map((v) => v.response?.id)
             )
           }
-          className="flex flex-col w-2/3 rounded-full"
+          className="flex w-2/3 flex-col rounded-full"
         >
-          <div className="flex cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600 w-full">
+          <div className="flex w-full cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600">
             <div className="flex gap-5">
               <FileImageOutlined className="text-xl" />
               <div>
@@ -186,7 +187,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           Хадгалах
         </button>
       </div>
-    </div >
+    </div>
   );
 }
 

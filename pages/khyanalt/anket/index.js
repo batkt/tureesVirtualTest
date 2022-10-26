@@ -10,7 +10,13 @@ import {
   Table,
   Tabs,
 } from "antd";
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import moment from "moment";
 import _ from "lodash";
 
@@ -215,6 +221,26 @@ function Anket({ token }) {
     });
   }
 
+  useEffect(() => {
+    form.getFieldInstance("ner").focus();
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "dynamic_form_item_ner":
+          form.getFieldInstance("turul").focus();
+          break;
+        case "dynamic_form_item_turul":
+          document.getElementById("asuultNemekhButton").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   return (
     <Admin
       title="Анкетын асуулга бэлдэх"
@@ -331,7 +357,11 @@ function Anket({ token }) {
                           },
                         ]}
                       >
-                        <Input placeholder="Анкетын нэр" />
+                        <Input
+                          autoFocus={true}
+                          onKeyUp={focuser}
+                          placeholder="Анкетын нэр"
+                        />
                       </Form.Item>
                       <Form.Item
                         className="w-full"
@@ -343,7 +373,7 @@ function Anket({ token }) {
                           },
                         ]}
                       >
-                        <Input placeholder="Төрөл" />
+                        <Input onKeyUp={focuser} placeholder="Төрөл" />
                       </Form.Item>
                     </div>
                     <Form.List
@@ -360,6 +390,7 @@ function Anket({ token }) {
                           <Form.Item className=" pb-3">
                             <Button
                               type="dashed"
+                              id="asuultNemekhButton"
                               onClick={() => {
                                 add();
                                 let div =
@@ -500,7 +531,7 @@ function Anket({ token }) {
                   <Form.Item wrapperCol={6}>
                     <Button
                       type="primary"
-                      htmlType="submit"
+                      onClick={() => form.submit()}
                       className="absolute -bottom-8 right-0 w-full"
                     >
                       Хадгалах

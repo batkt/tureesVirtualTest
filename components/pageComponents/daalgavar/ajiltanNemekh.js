@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import _ from "lodash";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
-import { Select, notification } from "antd";
+import { Select, notification, Modal } from "antd";
 
 function ajiltanNemekh(
   { token, destroy, onChange, baiguullaga, setDaalgavar },
@@ -36,14 +36,49 @@ function ajiltanNemekh(
     [songogdsonAjiltan]
   );
 
+  function garya() {
+    if (songogdsonAjiltan !== undefined)
+      Modal.confirm({
+        content: `Та гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    if (songogdsonAjiltan !== undefined) {
+      document.getElementById("ajiltanSongokhButton").focus();
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [songogdsonAjiltan]);
+
+  useEffect(() => {
+    document.getElementById("ajiltanSongokhInput").focus();
+  }, []);
+
   return (
-    <Select placeholder="Ажилтан" style={{ width: "100%" }}>
+    <Select
+      id="ajiltanSongokhInput"
+      placeholder="Ажилтан"
+      style={{ width: "100%" }}
+      onChange={(e) =>
+        setSongogdsonAjiltan(
+          ajilchdiinGaralt?.jagsaalt.find((a) => a._id === e)
+        )
+      }
+    >
       {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
         <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
-          <div
-            className="flex flex-row justify-between"
-            onClick={() => setSongogdsonAjiltan(mur)}
-          >
+          <div className="flex flex-row justify-between">
             <span>
               {mur.ovog && mur.ovog[0]}.{mur.ner}
             </span>
