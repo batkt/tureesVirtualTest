@@ -115,10 +115,6 @@ function tulburTootsoo({ token }) {
   }
 
   function hevlekh() {
-    if (!songogdsonDans) {
-      message.warning("Данс сонгоно уу");
-      return;
-    }
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
       return;
