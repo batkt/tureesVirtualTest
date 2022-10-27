@@ -148,7 +148,7 @@ function BaritsaaUdirdlaga(
   }, [dun, tailbar]);
 
   useEffect(() => {
-    document.getElementById("inputNumber").focus();
+    document.getElementById("dunInputNumber").focus();
   }, []);
 
   const focuser = useCallback(
@@ -156,10 +156,10 @@ function BaritsaaUdirdlaga(
       if (e.key === "Enter") {
         e.preventDefault();
         switch (e.target.id) {
-          case "inputNumber":
+          case "dunInputNumber":
             document.getElementById("textArea").focus();
             break;
-          case "inputNumber":
+          case "dunInputNumber":
             document.getElementById("textArea").focus();
             break;
           case "textArea":
