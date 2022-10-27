@@ -47,7 +47,7 @@ function index({ token }) {
     >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-l-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-4"
+        className="col-span-12 flex flex-col space-y-5 rounded-l-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-5"
       >
         <RangePicker
           locale={local}
@@ -79,12 +79,18 @@ function index({ token }) {
           <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "sanal" ? (
-                <div className="">
+                <div
+                  className={` ${
+                    khariltsagch?._id === mur?._id
+                      ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                      : ""
+                  } `}
+                >
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 `}
+                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md  p-2 `}
                     onClick={() => setKhariltsagch(mur)}
                   >
-                    <div className="image-fit relative h-12 w-12 flex-none rounded-full">
+                    <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
                       <img
                         alt="Rubick"
                         className="rounded-full"
@@ -96,13 +102,21 @@ function index({ token }) {
                             : "/profile.svg"
                         }
                       />
-                      <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                     </div>
                     <div className="grid w-full grid-cols-2">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div>{mur?.khariltsagchiinNer}</div>
+                        <div
+                          className={` ${
+                            khariltsagch?._id === mur?._id ? "text-white" : ""
+                          } `}
+                        >
+                          {mur?.khariltsagchiinNer}
+                        </div>
                         <div style={{ width: "40%" }}>
                           <div
+                            className={` ${
+                              khariltsagch?._id === mur?._id ? "text-white" : ""
+                            } `}
                             style={{
                               whiteSpace: "nowrap",
                               overflow: "hidden",
@@ -117,12 +131,16 @@ function index({ token }) {
                             Хүлээн авсан
                           </div>
                         ) : (
-                          <div className="font-semibold text-red-400 ">
-                            Хүлээн аваагүй
-                          </div>
+                          <div className="text-red-500">Хүлээн аваагүй</div>
                         )}
                       </div>
-                      <div className="col-span-1 flex items-center justify-end text-sm text-gray-600">
+                      <div
+                        className={`col-span-1 flex items-center justify-end text-sm ${
+                          khariltsagch?._id === mur?._id
+                            ? "text-white"
+                            : "text-gray-500"
+                        }`}
+                      >
                         {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                       </div>
                     </div>
@@ -137,13 +155,18 @@ function index({ token }) {
           <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "gomdol" ? (
-                <div className="">
+                <div
+                  className={` ${
+                    khariltsagch?._id === mur?._id
+                      ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                      : ""
+                  } `}
+                >
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 `}
-                    key={mur?._id}
+                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md  p-2 `}
                     onClick={() => setKhariltsagch(mur)}
                   >
-                    <div className="image-fit relative h-12 w-12 flex-none rounded-full">
+                    <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
                       <img
                         alt="Rubick"
                         className="rounded-full"
@@ -155,19 +178,45 @@ function index({ token }) {
                             : "/profile.svg"
                         }
                       />
-                      <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                     </div>
                     <div className="grid w-full grid-cols-2">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div>{mur?.khariltsagchiinNer}</div>
-                        <div>{mur?.title}</div>
+                        <div
+                          className={` ${
+                            khariltsagch?._id === mur?._id ? "text-white" : ""
+                          } `}
+                        >
+                          {mur?.khariltsagchiinNer}
+                        </div>
+                        <div style={{ width: "40%" }}>
+                          <div
+                            className={` ${
+                              khariltsagch?._id === mur?._id ? "text-white" : ""
+                            } `}
+                            style={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {mur.title}
+                          </div>
+                        </div>
                         {mur.tuluv === "0" ? (
-                          <div className="text-green-400">Хүлээн авсан</div>
+                          <div className="font-semibold text-green-400">
+                            Хүлээн авсан
+                          </div>
                         ) : (
-                          <div className="text-red-400">Хүлээн аваагүй</div>
+                          <div className="text-red-500">Хүлээн аваагүй</div>
                         )}
                       </div>
-                      <div className="col-span-1 flex items-center justify-end text-sm text-gray-600">
+                      <div
+                        className={`col-span-1 flex items-center justify-end text-sm ${
+                          khariltsagch?._id === mur?._id
+                            ? "text-white"
+                            : "text-gray-500"
+                        }`}
+                      >
                         {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                       </div>
                     </div>
@@ -181,7 +230,7 @@ function index({ token }) {
         )}
       </div>
       {!!khariltsagch ? (
-        <div className="col-span-8 rounded-r-lg bg-green-50 ">
+        <div className="col-span-7 rounded-r-lg bg-green-50 ">
           <div className="flex w-full items-center gap-3 px-5 pt-2">
             <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
               <img src="/profile.svg" className="h-10 w-10 rounded-full" />
@@ -193,7 +242,7 @@ function index({ token }) {
                 </div>
                 <div className=" flex  flex-col">
                   <div
-                    className={`mb-3 ${
+                    className={`mb-3  ${
                       khariltsagch?.tuluv === -1 ? "hidden" : "flex"
                     }`}
                   >
@@ -205,7 +254,7 @@ function index({ token }) {
                       onConfirm={() => sanalGomdolAvakh(khariltsagch._id)}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full bg-${
+                        className={`text-md cursor-pointer  rounded-full bg-${
                           0 === khariltsagch?.tuluv
                             ? "red"
                             : 1 === khariltsagch?.tuluv
@@ -241,7 +290,7 @@ function index({ token }) {
           </div>
         </div>
       ) : (
-        <div className="col-span-8 flex items-center justify-center rounded-r-lg bg-green-50">
+        <div className="col-span-7 flex items-center justify-center rounded-r-lg bg-green-50">
           <img src="https://cdn-icons-png.flaticon.com/512/2472/2472717.png" />
         </div>
       )}
