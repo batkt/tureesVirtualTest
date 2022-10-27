@@ -239,19 +239,6 @@ function GereeBaiguulakh({ token }) {
 
   const currentItem = steps[current];
   const gereeniiZagvariinId = "gereeniiZagvar";
-  const focuser = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      switch (e.target.id) {
-        case "gereeniiZagvar":
-          document.getElementById("gereeniiKhugatsaaButton").focus();
-
-          break;
-        default:
-          break;
-      }
-    }
-  }, []);
 
   return (
     <Admin
@@ -313,7 +300,6 @@ function GereeBaiguulakh({ token }) {
           >
             {current === 0 && (
               <Select
-                onKeyUp={focuser}
                 ref={zagvarRef}
                 id={gereeniiZagvariinId}
                 showSearch
@@ -329,7 +315,10 @@ function GereeBaiguulakh({ token }) {
                     khuudasniiDugaar: 1,
                   }))
                 }
-                onChange={onChangeGereeniiZagvar}
+                onChange={(v) => {
+                  onChangeGereeniiZagvar(v);
+                  document.getElementById("gereeniiKhugatsaaButton").focus();
+                }}
               >
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (

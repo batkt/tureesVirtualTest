@@ -96,11 +96,13 @@ function mashinBurtgel({ token }) {
   }
 
   function mashinBurtgekh(data) {
+    var mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
     const footer = [
       <Space>
         <Button onClick={() => mashinref.current.khaaya()}>Хаах</Button>
         <Button
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
+          type="primary"
+          id={mashinBurtgekhButtonId}
           onClick={() => mashinref.current.khadgalya()}
         >
           Хадгалах
@@ -112,6 +114,7 @@ function mashinBurtgel({ token }) {
       icon: <FileExcelOutlined />,
       content: (
         <MashinBurtgel
+          mashinBurtgekhButtonId={mashinBurtgekhButtonId}
           ref={mashinref}
           token={token}
           onRefresh={onRefresh}

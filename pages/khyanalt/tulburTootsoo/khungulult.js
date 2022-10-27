@@ -16,7 +16,13 @@ import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
 import _, { set } from "lodash";
 import moment from "moment";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -175,6 +181,26 @@ function tulburTootsoo() {
     formRef.current.resetFields();
     setShuult();
   }
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "control-ref_davkhar":
+          formRef.current.getFieldInstance("khungulukhKhuvi").focus();
+          break;
+        case "control-ref_khungulukhKhuvi":
+          formRef.current.getFieldInstance("shaltgaan").focus();
+          break;
+        case "control-ref_shaltgaan":
+          document.getElementById("khungulultKhadgalya").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
   function onSelectChange(selectedRowKeys, selectedRows) {
     setRowKeys(selectedRowKeys);
     setSongogdsonGereenuud(selectedRows);
@@ -252,10 +278,19 @@ function tulburTootsoo() {
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder="Сар"
+                      onChange={() =>
+                        formRef.current.getFieldInstance("turul").focus()
+                      }
                     />
                   </Form.Item>
                   <Form.Item name="turul" label="Нөхцөл">
-                    <Select placeholder="Нөхцөл" onChange={nukhtulSongokh}>
+                    <Select
+                      placeholder="Нөхцөл"
+                      onChange={(v) => {
+                        nukhtulSongokh(v);
+                        formRef.current.getFieldInstance("davkhar").focus();
+                      }}
+                    >
                       <Option value="Давхараар">Давхараар</Option>
                       <Option value="Бүгд">Бүгд</Option>
                     </Select>
@@ -281,13 +316,17 @@ function tulburTootsoo() {
 
                   <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
                     <Input
+                      onKeyDown={focuser}
                       type={"number"}
                       placeholder="Хөнгөлөх хувь"
                       onChange={khungulukhDunTootsoolyo}
                     />
                   </Form.Item>
                   <Form.Item label="Шалтгаан" name="shaltgaan">
-                    <Input.TextArea placeholder="Шалтгаан" />
+                    <Input.TextArea
+                      onKeyDown={focuser}
+                      placeholder="Шалтгаан"
+                    />
                   </Form.Item>
                   <div className="flex-column mt-12 grid text-base dark:text-gray-50">
                     <div className="flex justify-between">
@@ -314,15 +353,6 @@ function tulburTootsoo() {
                     <Form.Item>
                       <Button
                         htmlType="submit"
-                        onClick={khungulultKhadgalya}
-                        className="bg-green-500 hover:bg-green-600 dark:border-current dark:bg-green-500"
-                      >
-                        <span className="text-white">Хадгалах</span>
-                      </Button>
-                    </Form.Item>
-                    <Form.Item>
-                      <Button
-                        htmlType="submit"
                         onClick={tseverlekh}
                         //style={{ backgroundColor: "#209669", color: "#ffffff" }}
                         className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
@@ -330,6 +360,16 @@ function tulburTootsoo() {
                         <span className="text-red-400 dark:text-red-400">
                           Цэвэрлэх
                         </span>
+                      </Button>
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        id="khungulultKhadgalya"
+                        htmlType="submit"
+                        onClick={khungulultKhadgalya}
+                        type="primary"
+                      >
+                        <span className="text-white">Хадгалах</span>
                       </Button>
                     </Form.Item>
                   </div>

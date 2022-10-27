@@ -506,7 +506,7 @@ const YurunkhiiMedeele = ({
         >
           <FormLavlakh
             selectId={"dans"}
-            focuser={focuser}
+            gereeniiZagvariinId={gereeniiZagvariinId}
             lavlakh="dans"
             token={token}
             valKey="dugaar"

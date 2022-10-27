@@ -4,11 +4,12 @@ import {
   Divider,
   Input,
   InputNumber,
+  Modal,
   notification,
   Radio,
 } from "antd";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import uilchilgee from "services/uilchilgee";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
@@ -30,7 +31,10 @@ function labelTurul(guilgeeTurul) {
   return text;
 }
 
-function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
+function BaritsaaUdirdlaga(
+  { data, token, onFinish, destroy, baritsaaUdirdanKhadgalyaaId },
+  ref
+) {
   const khuulgaRef = React.useRef(null);
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
@@ -120,6 +124,55 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
     });
   }
 
+  function garya() {
+    if (dun !== 0 || tailbar !== "")
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [dun, tailbar]);
+
+  useEffect(() => {
+    document.getElementById("dunInputNumber").focus();
+  }, []);
+
+  const focuser = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        switch (e.target.id) {
+          case "dunInputNumber":
+            document.getElementById("textArea").focus();
+            break;
+          case "dunInputNumber":
+            document.getElementById("textArea").focus();
+            break;
+          case "textArea":
+            document.getElementById(baritsaaUdirdanKhadgalyaaId).focus();
+            break;
+          default:
+            break;
+        }
+      }
+    },
+    [turul]
+  );
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
@@ -140,9 +193,19 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         </div>
       </div>
       {turul === "ashiglakh" && (
-        <DatePicker locale={locale} value={ognoo} onChange={setOgnoo} />
+        <DatePicker
+          locale={locale}
+          value={ognoo}
+          onChange={(v) => {
+            setOgnoo(v);
+            document.getElementById("dunInputNumber").focus();
+          }}
+        />
       )}
       <InputNumber
+        onKeyDown={focuser}
+        autoFocus="true"
+        id="dunInputNumber"
         value={dun}
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
@@ -158,6 +221,8 @@ function BaritsaaUdirdlaga({ data, token, onFinish, destroy }, ref) {
         }
       />
       <Input.TextArea
+        onKeyDown={focuser}
+        id="textArea"
         placeholder="Тайлбар"
         value={tailbar}
         onChange={(e) => setTailbar(e.target.value)}

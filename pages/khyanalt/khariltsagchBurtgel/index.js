@@ -447,9 +447,6 @@ function AjiltanBurtgel({ token }) {
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
-        case "control-ref_turul":
-          formRef.current.getFieldInstance("ovog").focus();
-          break;
         case "control-ref_ovog":
           formRef.current.getFieldInstance("ner").focus();
           break;
@@ -541,6 +538,7 @@ function AjiltanBurtgel({ token }) {
   function turulSongokh(value) {
     onChange("turul", value);
     setFormNuukh(value);
+    formRef.current.getFieldInstance("ovog").focus();
   }
 
   function talbaiOruulakhExcel() {
@@ -608,7 +606,6 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Select
-                onKeyUp={focuser}
                 autoFocus={true}
                 style={{ width: "100%" }}
                 value={khariltsagchState.turul}

@@ -1,15 +1,21 @@
-import { Cascader, notification } from "antd";
+import { Cascader, Modal, notification } from "antd";
 import useZardal from "hooks/useZardal";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import formatNumber from "../../../tools/function/formatNumber";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function ZardalKholbokh(
-  { data, token, baiguullagiinId, onFinish, destroy, dans },
+  { data, token, baiguullagiinId, barilgiinId, onFinish, destroy, dans },
   ref
 ) {
-  const { zardalGaralt } = useZardal(token, baiguullagiinId);
+  const query = useMemo(() => {
+    return {
+      barilgiinId,
+    };
+  }, [barilgiinId]);
+
+  const { zardalGaralt } = useZardal(token, baiguullagiinId, query);
   const [songogdsonZardal, setSongogdsonZardal] = useState();
 
   React.useImperativeHandle(
@@ -36,16 +42,31 @@ function ZardalKholbokh(
     [songogdsonZardal]
   );
 
+  function garya() {
+    if (songogdsonZardal !== undefined)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
-    document.getElementById("cascader").focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
+  }, [songogdsonZardal]);
+
+  useEffect(() => {
+    document.getElementById("cascader").focus();
   }, []);
 
   function onChange(v) {

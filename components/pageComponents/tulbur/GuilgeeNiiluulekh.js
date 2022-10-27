@@ -5,6 +5,7 @@ import formatNumber from "tools/function/formatNumber";
 import {
   Divider,
   Input,
+  Modal,
   notification,
   Popconfirm,
   Popover,
@@ -161,7 +162,7 @@ function GuilgeeNiiluulekh(
           });
           return;
         }
-        if (undsenGuilgee.length === 0) {
+        if (undsenGuilgee.length === 0 && baritsaa.length === 0) {
           notification.warning({
             message: "Анхаар гүйлгээний дүн холбоно уу!",
             description: aldaa.join(","),
@@ -213,16 +214,35 @@ function GuilgeeNiiluulekh(
     [gereenuud]
   );
 
+  function garya() {
+    if (
+      gereenuud.length > 0 ||
+      khaagdsanGereeEsekh === true ||
+      guilgeeniiTailbar !== data.description
+    )
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
-    document.getElementById("gereeSongokh").focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
+  }, [gereenuud, khaagdsanGereeEsekh, guilgeeniiTailbar]);
+
+  useEffect(() => {
+    document.getElementById("gereeSongokh").focus();
   }, []);
 
   const content = useMemo(

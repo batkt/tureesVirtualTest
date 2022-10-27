@@ -1,5 +1,10 @@
-import React, { useImperativeHandle, useMemo, useState } from "react";
-import { Input, message } from "antd";
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
+import { Input, message, Modal } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import _ from "lodash";
@@ -36,6 +41,7 @@ function ZardalMur({
           style={{ width: `calc(100% - ${zam !== "" ? "6" : "3"}rem)` }}
         >
           <Input
+            id="zardalMurInput"
             placeholder="Нэр"
             value={zardal.ner}
             style={{ width: "100%" }}
@@ -143,6 +149,29 @@ function ZardalBurtgekh(
     }),
     [zardal]
   );
+
+  function garya() {
+    if (zardal !== data)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.getElementById("zardalMurInput").focus();
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [zardal]);
 
   function onChangeZardal({ target }, zam) {
     _.set(zardal, zam + (zam === "" ? "" : ".") + "ner", target.value);

@@ -96,9 +96,6 @@ function AjiltanBurtgel({ token }) {
         case "input5":
           document.getElementById("input6").focus();
           break;
-        case "input6":
-          document.getElementById("input7").focus();
-          break;
         case "input7":
           document.getElementById("input8").focus();
           break;
@@ -403,10 +400,12 @@ function AjiltanBurtgel({ token }) {
             >
               <DatePicker
                 id="input6"
-                onKeyDown={focuser}
                 style={{ width: "100%" }}
                 placeholder="Ажилд орсон огноо"
-                onChange={(v) => onChange("ajildOrsonOgnoo", v)}
+                onChange={(v) => {
+                  onChange("ajildOrsonOgnoo", v);
+                  document.getElementById("input7").focus();
+                }}
               ></DatePicker>
             </Form.Item>
           </div>

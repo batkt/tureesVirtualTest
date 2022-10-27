@@ -32,6 +32,7 @@ import {
   message,
   Input,
   notification,
+  Modal,
 } from "antd";
 import { TbBoxMultiple } from "react-icons/tb";
 import { toWords } from "mon_num";
@@ -245,6 +246,32 @@ const Tailbar = React.forwardRef(
       }),
       [shaltgaan, duusakhOgnoo, sergeekhOgnoo]
     );
+    function garya() {
+      if (shaltgaan !== "")
+        Modal.confirm({
+          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+          okText: "Тийм",
+          cancelText: "Үгүй",
+          onOk: destroy,
+        });
+      else destroy();
+    }
+
+    useEffect(() => {
+      function keyUp(e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          garya();
+        }
+      }
+
+      document.addEventListener("keyup", keyUp);
+      return () => document.removeEventListener("keyup", keyUp);
+    }, [shaltgaan]);
+
+    useEffect(() => {
+      document.getElementById("shaltgaanTextArea").focus();
+    }, []);
 
     return (
       <div className="w-full space-y-2">
@@ -284,6 +311,7 @@ const Tailbar = React.forwardRef(
         </div>
 
         <Input.TextArea
+          id="shaltgaanTextArea"
           value={shaltgaan}
           onChange={({ target }) => setTailbar(target?.value)}
         />
@@ -983,7 +1011,7 @@ function ZakhialgiinKhyanalt() {
           />
         )}
       </Drawer>
-      <Card className="cardgrid col-span-12 p-5 ">
+      <Card className="cardgrid col-span-12 ">
         <div className="grid w-full grid-cols-6 gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (

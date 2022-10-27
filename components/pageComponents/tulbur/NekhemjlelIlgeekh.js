@@ -1,4 +1,4 @@
-import { Button, DatePicker, message, notification, Select } from "antd";
+import { Button, DatePicker, message, Modal, notification, Select } from "antd";
 import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -161,16 +161,31 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
     handlePrint();
   }
 
+  function garya() {
+    if (songogdsonDans !== undefined || barimt !== undefined)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
+
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
-    document.getElementById("dansniiTurul").focus();
+
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
+  }, [songogdsonDans, barimt]);
+
+  useEffect(() => {
+    document.getElementById("dansniiTurul").focus();
   }, []);
 
   React.useImperativeHandle(
@@ -203,8 +218,21 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
           dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
         />
       </div>
-      <DatePicker value={ognoo} onChange={setOgnoo} />
-      <Select id="dansniiTurul" placeholder="Дансны төрөл" onChange={setDans}>
+      <DatePicker
+        value={ognoo}
+        onChange={(v) => {
+          setOgnoo(v);
+          document.getElementById("dansniiTurul").focus();
+        }}
+      />
+      <Select
+        id="dansniiTurul"
+        placeholder="Дансны төрөл"
+        onChange={(v) => {
+          setDans(v);
+          document.getElementById("nekhemjlekhTurul").focus();
+        }}
+      >
         {dansGaralt?.jagsaalt?.map((a) => (
           <Select.Option key={a.dugaar} value={a.dugaar}>
             <div>{a.dugaar}</div>
@@ -212,7 +240,14 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         ))}
       </Select>
 
-      <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
+      <Select
+        id="nekhemjlekhTurul"
+        placeholder="Нэхэмжлэхийн төрөл"
+        onChange={(v) => {
+          setBarimt(v);
+          document.getElementById("nekhemjlelIlgeekhButton").focus();
+        }}
+      >
         {nekhemjlekhiinZagvar?.jagsaalt?.map((a) => (
           <Select.Option key={a._id} value={a._id}>
             {a.ner}
@@ -223,7 +258,11 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         <Button onClick={khaaya}>Хаах</Button>
         <div className="flex gap-2">
           <Button onClick={hevlekh}>Хэвлэх</Button>
-          <Button type="primary" onClick={maileerIlgeekh}>
+          <Button
+            type="primary"
+            id="nekhemjlelIlgeekhButton"
+            onClick={maileerIlgeekh}
+          >
             Нэхэмжлэл илгээх
           </Button>
         </div>

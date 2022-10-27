@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 const str = "A";
 
 function anketBurtgel({ token, destroy, data, id }, ref) {
@@ -12,6 +12,16 @@ function anketBurtgel({ token, destroy, data, id }, ref) {
     }),
     []
   );
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
 
   return (
     <div className="rounded-md border-2 p-2 dark:border-gray-600">

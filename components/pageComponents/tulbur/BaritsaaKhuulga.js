@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -63,6 +63,16 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
       })
       .catch(aldaaBarigch);
   }
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
 
   return (
     <div className="flex flex-col space-y-2">

@@ -489,9 +489,14 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function baritsaaUdirdya(data) {
+    var baritsaaUdirdanKhadgalyaaId = "baritsaaUdirdanKhadgalyaaId";
     const footer = [
       <Button onClick={() => baritsaaref.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => baritsaaref.current.khadgalya()}>
+      <Button
+        type="primary"
+        id={baritsaaUdirdanKhadgalyaaId}
+        onClick={() => baritsaaref.current.khadgalya()}
+      >
         Хадгалах
       </Button>,
     ];
@@ -501,6 +506,7 @@ function guilgeeniiTuukh({ token }) {
       content: (
         <BaritsaaUdirdlaga
           data={data}
+          baritsaaUdirdanKhadgalyaaId={baritsaaUdirdanKhadgalyaaId}
           ref={baritsaaref}
           token={token}
           baiguullagiinId={baiguullaga?._id}
@@ -516,10 +522,14 @@ function guilgeeniiTuukh({ token }) {
       data.mutate && data.mutate();
       refreshData();
     }
-
+    var khadgalyaButtonId = "khadgalyaButtonId";
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+      <Button
+        type="primary"
+        id={khadgalyaButtonId}
+        onClick={() => ref.current.khadgalya()}
+      >
         Хадгалах
       </Button>,
     ];
@@ -528,6 +538,7 @@ function guilgeeniiTuukh({ token }) {
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKhiikh
+          khadgalyaButtonId={khadgalyaButtonId}
           data={data}
           ref={ref}
           token={token}
