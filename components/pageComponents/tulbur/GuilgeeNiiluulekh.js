@@ -162,7 +162,7 @@ function GuilgeeNiiluulekh(
           });
           return;
         }
-        if (undsenGuilgee.length === 0) {
+        if (undsenGuilgee.length === 0 && baritsaa.length === 0) {
           notification.warning({
             message: "Анхаар гүйлгээний дүн холбоно уу!",
             description: aldaa.join(","),
