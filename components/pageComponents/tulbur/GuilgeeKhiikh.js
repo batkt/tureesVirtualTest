@@ -155,7 +155,8 @@ function GuilgeeKhiikh(
       dun !== "" ||
       tailbar !== "" ||
       negjUne !== "" ||
-      nekhemjlekhDeerKharagdakh !== false
+      nekhemjlekhDeerKharagdakh !== false ||
+      busadTurul !== undefined
     )
       Modal.confirm({
         content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
@@ -176,10 +177,10 @@ function GuilgeeKhiikh(
 
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, [dun, tailbar, negjUne, nekhemjlekhDeerKharagdakh]);
+  }, [dun, tailbar, negjUne, nekhemjlekhDeerKharagdakh, busadTurul]);
 
   useEffect(() => {
-    document.getElementById("inputNumber").focus();
+    document.getElementById("guilgeeDunInputNumber").focus();
   }, []);
 
   const focuser = useCallback(
@@ -187,26 +188,12 @@ function GuilgeeKhiikh(
       if (e.key === "Enter") {
         e.preventDefault();
         switch (e.target.id) {
-          case "inputNumber":
+          case "guilgeeDunInputNumber":
             if (turul !== "voucher") {
               document.getElementById("textArea").focus();
             } else document.getElementById(khadgalyaButtonId).focus();
             break;
-          case "dataPicker1":
-            document.getElementById("inputNumber").focus();
-            break;
-          case "inputNumber":
-            document.getElementById("textArea").focus();
-            break;
-          case "dataPicker2":
-            document.getElementById("select2").focus();
-            break;
-          case "select2":
-            document.getElementById("inputNumber").focus();
-            break;
-          case "select":
-            document.getElementById("inputNumber").focus();
-            break;
+
           case "textArea":
             document.getElementById(khadgalyaButtonId).focus();
             break;
@@ -237,28 +224,34 @@ function GuilgeeKhiikh(
       <label>{labelTurul(turul)}</label>
       {turul === "avlaga" && (
         <DatePicker.MonthPicker
-          onKeyDown={focuser}
           id="dataPicker1"
           locale={locale}
           value={ognoo}
-          onChange={setOgnoo}
+          onChange={(v) => {
+            setOgnoo(v);
+            document.getElementById("guilgeeDunInputNumber").focus();
+          }}
         />
       )}
       {turul === "ahiglalt" && (
         <DatePicker
-          onKeyDown={focuser}
           id="dataPicker2"
           locale={locale}
           value={ognoo}
-          onChange={setOgnoo}
+          onChange={(v) => {
+            setOgnoo(v);
+            document.getElementById("select2").focus();
+          }}
         />
       )}
       {turul === "busad" && (
         <Select
-          onKeyDown={focuser}
           id="select"
           placeholder="Гүйлгээ хийх төрөл"
-          onChange={setBusadTurul}
+          onChange={(v) => {
+            setBusadTurul(v);
+            document.getElementById("guilgeeDunInputNumber").focus();
+          }}
         >
           <Option value="barter">Бартер</Option>
           <Option value="zalruulga">Залруулга</Option>
@@ -271,10 +264,17 @@ function GuilgeeKhiikh(
         </div>
       )}
       {turul === "ahiglalt" && (
-        <Select onKeyDown={focuser} id="select2" placeholder="Зардлын төрөл">
+        <Select
+          onChange={(v) => {
+            setNegjUne(v || 0);
+            document.getElementById("guilgeeDunInputNumber").focus();
+          }}
+          id="select2"
+          placeholder="Зардлын төрөл"
+        >
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur.ner}>
-              <div onClick={() => setNegjUne(mur.tariff || 0)}>
+            <Select.Option key={mur._id} value={mur.tariff}>
+              <div>
                 {mur.ner}/{mur.turul}
               </div>
             </Select.Option>
@@ -288,7 +288,7 @@ function GuilgeeKhiikh(
       )}
       <InputNumber
         onKeyDown={focuser}
-        id="inputNumber"
+        id="guilgeeDunInputNumber"
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         placeholder={turul === "ahiglalt" ? "Нэгж" : "Дүн"}

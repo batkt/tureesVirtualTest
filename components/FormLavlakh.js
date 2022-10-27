@@ -56,7 +56,6 @@ function useLavlakh(lavlakh, token, query, fields) {
 }
 
 function FormLavlakh({
-  focuser,
   lavlakh,
   shuukhTalbaruud,
   query,
@@ -69,6 +68,7 @@ function FormLavlakh({
   InfoComponent = () => <div></div>,
   style,
   placeholder,
+  gereeniiZagvariinId,
 }) {
   const { lavlakhGaralt, setLavlakhKhuudaslalt } = useLavlakh(
     lavlakh,
@@ -86,11 +86,14 @@ function FormLavlakh({
       <Select
         style={style}
         id={selectId}
-        onKeyUp={focuser}
         showSearch
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
+        onChange={(v) => {
+          onChange(v);
+          gereeniiZagvariinId &&
+            document.getElementById(gereeniiZagvariinId)?.focus();
+        }}
         loading={!lavlakhGaralt}
         onSearch={(search) => setLavlakhKhuudaslalt((a) => ({ ...a, search }))}
       >

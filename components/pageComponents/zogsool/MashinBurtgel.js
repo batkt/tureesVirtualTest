@@ -78,9 +78,6 @@ function MashinBurtgel(
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
-        case "turul":
-          form.getFieldInstance("ezemshigchiinUtas").focus();
-          break;
         case "ezemshigchiinUtas":
           form.getFieldInstance("dugaar").focus();
           break;
@@ -118,7 +115,10 @@ function MashinBurtgel(
     >
       <Form.Item name="_id" noStyle />
       <Form.Item label="Төрөл" name="turul">
-        <Select onKeyUp={focuser} placeholder="Төрөл">
+        <Select
+          onChange={() => form.getFieldInstance("ezemshigchiinUtas").focus()}
+          placeholder="Төрөл"
+        >
           {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
             <Select.Option key={a} value={a}>
               {a}

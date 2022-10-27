@@ -321,9 +321,7 @@ function TalbaiBurtgekh({ token }) {
         case "control-ref_talbainNiitUne":
           formRef.current.getFieldInstance("davkhar").focus();
           break;
-        case "control-ref_davkhar":
-          formRef.current.getFieldInstance("tailbar").focus();
-          break;
+
         case "control-ref_tailbar":
           document.getElementById("talbaiBurtgekhButton").focus();
           break;
@@ -477,11 +475,13 @@ function TalbaiBurtgekh({ token }) {
                 ]}
               >
                 <Select
-                  onKeyUp={focuser}
                   style={{ width: "100%" }}
                   placeholder="Давхар"
                   value={talbaiState.davkhar}
-                  onChange={(e) => onChange("davkhar", e)}
+                  onChange={(e) => {
+                    onChange("davkhar", e);
+                    formRef.current.getFieldInstance("tailbar").focus();
+                  }}
                   allowClear
                 >
                   {baiguullaga?.barilguud

@@ -130,6 +130,7 @@ function GereeBaiguulakh({ token, data }) {
     let gereeniiZagvar =
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     setGereeniiZagvar({ ...gereeniiZagvar });
+    document.getElementById("gereeniiKhugatsaaButton").focus();
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
@@ -183,19 +184,6 @@ function GereeBaiguulakh({ token, data }) {
 
   const currentItem = steps[current];
   const gereeniiZagvariinId = "gereeniiZagvar";
-  const focuser = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      switch (e.target.id) {
-        case "gereeniiZagvar":
-          document.getElementById("gereeniiKhugatsaaButton").focus();
-
-          break;
-        default:
-          break;
-      }
-    }
-  }, []);
 
   return (
     <Admin
@@ -253,7 +241,6 @@ function GereeBaiguulakh({ token, data }) {
             {current === 0 && (
               <Select
                 showSearch
-                onKeyUp={focuser}
                 id={gereeniiZagvariinId}
                 placeholder="Гэрээний загвар сонгох"
                 className="w-full"

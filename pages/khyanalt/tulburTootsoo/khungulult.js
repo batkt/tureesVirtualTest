@@ -182,20 +182,10 @@ function tulburTootsoo() {
     setShuult();
   }
 
-  useEffect(() => {
-    formRef.current.getFieldInstance("ognoonuud").focus();
-  }, []);
-
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
-        case "control-ref_ognoonuud":
-          formRef.current.getFieldInstance("turul").focus();
-          break;
-        case "control-ref_turul":
-          formRef.current.getFieldInstance("davkhar").focus();
-          break;
         case "control-ref_davkhar":
           formRef.current.getFieldInstance("khungulukhKhuvi").focus();
           break;
@@ -284,19 +274,22 @@ function tulburTootsoo() {
                     ]}
                   >
                     <DatePicker
-                      autoFocus={true}
-                      onKeyDown={focuser}
                       style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder="Сар"
+                      onChange={() =>
+                        formRef.current.getFieldInstance("turul").focus()
+                      }
                     />
                   </Form.Item>
                   <Form.Item name="turul" label="Нөхцөл">
                     <Select
-                      onKeyDown={focuser}
                       placeholder="Нөхцөл"
-                      onChange={nukhtulSongokh}
+                      onChange={(v) => {
+                        nukhtulSongokh(v);
+                        formRef.current.getFieldInstance("davkhar").focus();
+                      }}
                     >
                       <Option value="Давхараар">Давхараар</Option>
                       <Option value="Бүгд">Бүгд</Option>
@@ -304,7 +297,6 @@ function tulburTootsoo() {
                   </Form.Item>
                   <Form.Item name="davkhar" label="Давхар">
                     <Select
-                      onKeyDown={focuser}
                       mode="multiple"
                       placeholder="Давхар"
                       onChange={handleChange}

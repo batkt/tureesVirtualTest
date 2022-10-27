@@ -152,7 +152,6 @@ function GereeBaiguulakh({ token }) {
   }, []);
 
   const focuser = useCallback((e) => {
-    console.log(e);
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
@@ -170,12 +169,6 @@ function GereeBaiguulakh({ token }) {
           break;
         case "barilga_niitTalbai":
           form.getFieldInstance("neekhTsag").focus();
-          break;
-        case "barilga_neekhTsag":
-          form.getFieldInstance("khaakhTsag").focus();
-          break;
-        case "barilga_khaakhTsag":
-          form.getFieldInstance("khayag").focus();
           break;
         case "barilga_khayag":
           document.getElementById("barilgaButton").focus();
@@ -363,7 +356,7 @@ function GereeBaiguulakh({ token }) {
             label="Нээх цаг"
           >
             <TimePicker
-              onKeyDown={focuser}
+              onChange={() => form.getFieldInstance("khaakhTsag").focus()}
               placeholder="Нээх цаг"
               style={{ width: "100%" }}
               format={format}
@@ -377,7 +370,7 @@ function GereeBaiguulakh({ token }) {
             label="Хаах цаг"
           >
             <TimePicker
-              onKeyDown={focuser}
+              onChange={() => form.getFieldInstance("khayag").focus()}
               placeholder="Хаах цаг"
               style={{ width: "100%" }}
               format={format}

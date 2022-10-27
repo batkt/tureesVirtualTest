@@ -159,9 +159,6 @@ function BaritsaaUdirdlaga(
           case "inputNumber":
             document.getElementById("textArea").focus();
             break;
-          case "dataPicker":
-            document.getElementById("inputNumber").focus();
-            break;
           case "inputNumber":
             document.getElementById("textArea").focus();
             break;
@@ -197,17 +194,18 @@ function BaritsaaUdirdlaga(
       </div>
       {turul === "ashiglakh" && (
         <DatePicker
-          id="dataPicker"
-          onKeyDown={focuser}
           locale={locale}
           value={ognoo}
-          onChange={setOgnoo}
+          onChange={(v) => {
+            setOgnoo(v);
+            document.getElementById("dunInputNumber").focus();
+          }}
         />
       )}
       <InputNumber
         onKeyDown={focuser}
         autoFocus="true"
-        id="inputNumber"
+        id="dunInputNumber"
         value={dun}
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}

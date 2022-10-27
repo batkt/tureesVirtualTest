@@ -518,10 +518,7 @@ function zardal({ token }) {
     const footer = [
       <Space>
         <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>
-        <Button
-          style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() => zardalRef.current.khadgalya()}
-        >
+        <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
           Хадгалах
         </Button>
       </Space>,

@@ -84,20 +84,10 @@ const YurunkhiiMedeele = ({
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
-        case "validate_other_gereeniiOgnoo":
-          form.getFieldInstance("khugatsaa").focus();
-          break;
         case "validate_other_khugatsaa":
           if (value?.turGereeEsekh === true) {
             form.getFieldInstance("duusakhOgnoo").focus();
           } else form.getFieldInstance("tulukhUdur").focus();
-          break;
-        case "validate_other_tulukhUdur":
-          form.getFieldInstance("duusakhOgnoo").focus();
-
-          break;
-        case "validate_other_duusakhOgnoo":
-          document.getElementById("tureesinTalbaiButton").focus();
           break;
         default:
           break;
@@ -126,11 +116,11 @@ const YurunkhiiMedeele = ({
           label="Гэрээ хийх огноо"
         >
           <DatePicker
-            onKeyDown={focuser}
             style={{ width: "100%" }}
             allowClear={false}
             placeholder="Гэрээ хийх огноо"
             prefix={<SolutionOutlined />}
+            onChange={() => form.getFieldInstance("khugatsaa").focus()}
           />
         </Form.Item>
       </div>
@@ -169,7 +159,6 @@ const YurunkhiiMedeele = ({
         >
           {gereeniiZagvar?.turGereeEsekh === true ? (
             <Input
-              onKeyUp={focuser}
               style={{ width: "100%" }}
               disabled
               allowClear
@@ -178,7 +167,7 @@ const YurunkhiiMedeele = ({
             />
           ) : (
             <Select
-              onKeyUp={focuser}
+              onChange={() => form.getFieldInstance("duusakhOgnoo").focus()}
               defaultValue={_.get(value, "tulukhUdur.0")}
               placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
               prefix={<SolutionOutlined />}
@@ -202,7 +191,9 @@ const YurunkhiiMedeele = ({
           ]}
         >
           <DatePicker
-            onKeyDown={focuser}
+            onChange={() =>
+              document.getElementById("tureesinTalbaiButton").focus()
+            }
             style={{ width: "100%" }}
             allowClear
             placeholder="Гэрээ дуусах хугацаа"

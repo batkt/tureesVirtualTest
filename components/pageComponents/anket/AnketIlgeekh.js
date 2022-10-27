@@ -102,11 +102,6 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
-        case "zagvarSongokhInput":
-          if (value === 1) {
-            document.getElementById("input1").focus();
-          } else document.getElementById("input2").focus();
-          break;
         case "input1":
           document.getElementById("anketIlgeekhButton").focus();
           break;
@@ -134,11 +129,15 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
       <div className="flex w-full flex-col gap-1 py-3 ">
         <div>Анкетын загвар сонгох:</div>
         <Select
-          onKeyUp={focuser}
           id="zagvarSongokhInput"
           className="w-full"
           placeholder="Анкетын загвар сонгoно уу"
-          onChange={setSongogdsonAnket}
+          onChange={(v) => {
+            setSongogdsonAnket(v);
+            if (value === 1) {
+              document.getElementById("input1").focus();
+            } else document.getElementById("input2").focus();
+          }}
           value={songogdsonAnket}
           options={data.map((mur) => {
             return { label: mur.ner, value: mur._id };
