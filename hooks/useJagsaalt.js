@@ -41,7 +41,7 @@ function useJagsaalt(url, query, order, select, searchKeys, supToken) {
 
   const [khuudaslalt, setKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
+    khuudasniiKhemjee: 1000,
     search: "",
     jagsaalt: [],
   });

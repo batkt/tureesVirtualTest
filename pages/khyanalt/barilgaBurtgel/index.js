@@ -238,8 +238,9 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                              } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${
+                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                            } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}

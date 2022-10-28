@@ -247,6 +247,7 @@ function Khyanalt({ token }) {
       message.warning("Илгээх мэдээлэл байхгүй байна");
       return;
     }
+
     setLoading(true);
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
@@ -292,21 +293,27 @@ function Khyanalt({ token }) {
         });
       });
     }
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
+    if (!!title) {
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+            setContent("");
+            setTitle("");
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
           setLoading(false);
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
+          aldaaBarigch(e);
+        });
+    } else {
+      notification.warning({
+        message: "Гарчиг заавал оруулна уу",
       });
+    }
   }
 
   function send() {
