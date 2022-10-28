@@ -420,6 +420,17 @@ function tulburTootsoo({ token }) {
         style={{ minHeight: "calc(100vh - 12rem)" }}
       >
         <Spin spinning={loading}>
+          <div className="grid w-full grid-cols-2" ref={printRef}>
+            {nekhemjlekhuud?.map((nekhemjlekh, i) => {
+              return (
+                <div
+                  key={`khevlekhNekhemjlel${i}`}
+                  className="print a5 sun-editor-editable p-10"
+                  dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
+                />
+              );
+            })}
+          </div>
           <div
             className="mt-5 flex w-full flex-row"
             data-aos="zoom-in-left"
@@ -583,11 +594,9 @@ function tulburTootsoo({ token }) {
                         <div
                           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
                           onClick={() =>
-                            turul === "sms" || "App"
-                              ? smsZagvarNemya(a)
-                              : router.push(
-                                  `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
-                                )
+                            router.push(
+                              `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
+                            )
                           }
                         >
                           <EditOutlined

@@ -64,6 +64,7 @@ function ZagvarBurtgel(
           .then(({ data }) => {
             if (data === "Amjilttai") {
               message.success("Амжилттай хадгаллаа");
+              onRefresh();
               destroy();
               setWaiting(false);
             }
