@@ -290,8 +290,27 @@ function index({ token }) {
           </div>
         </div>
       ) : (
-        <div className="col-span-7 flex items-center justify-center rounded-r-lg bg-green-50">
-          <img src="https://cdn-icons-png.flaticon.com/512/2472/2472717.png" />
+        <div
+          className="box col-span-7 flex h-full items-center"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+        >
+          <div className="mx-auto text-center">
+            <div className="flex justify-center">
+              <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profile.svg" />
+              </div>
+              <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profileFemale.svg" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="mt-1 text-gray-600 dark:text-gray-300">
+                Та харилцагчаа сонгоно уу.
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </Admin>

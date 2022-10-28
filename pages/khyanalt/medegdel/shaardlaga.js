@@ -76,8 +76,6 @@ function Khyanalt({ token }) {
 
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-  const [bugdiigSongokh, setBugdiigSongokh] = useState();
-  console.log(songogdsonKhariltsagch);
   const query = useMemo(() => {
     return {
       barilgiinId,
@@ -122,30 +120,36 @@ function Khyanalt({ token }) {
       message.warning("Хүсэлт илгээгдсэн байна");
       return;
     }
-    uilchilgee(token)
-      .post(`/sanalKhadgalya`, {
-        khariltsagchiinId: khariltsagch?._id,
-        khariltsagchiinNer: khariltsagch.ner,
-        zurguud: zurag,
-        turul: "shaardlaga",
-        title,
-        message: content,
-        firebaseToken: khariltsagch?.firebaseToken,
-        barilgiinId: khariltsagch.barilgiinId,
-      })
-      .then(({ data }) => {
-        zurag &&
-          uilchilgee(token).post("/confirmFile", {
-            filename: zurag,
-            path: "shaardlaga",
-          });
+    if (!!title && !!content) {
+      uilchilgee(token)
+        .post(`/sanalKhadgalya`, {
+          khariltsagchiinId: khariltsagch?._id,
+          khariltsagchiinNer: khariltsagch.ner,
+          zurguud: zurag,
+          turul: "shaardlaga",
+          title,
+          message: content,
+          firebaseToken: khariltsagch?.firebaseToken,
+          barilgiinId: khariltsagch.barilgiinId,
+        })
+        .then(({ data }) => {
+          zurag &&
+            uilchilgee(token).post("/confirmFile", {
+              filename: zurag,
+              path: "shaardlaga",
+            });
 
-        notification.success({ message: "Амжилттай Илгээлээ" });
-        setContent(""), setTitle(""), onTextChange("");
-      })
-      .catch((e) => {
-        aldaaBarigch(e);
+          notification.success({ message: "Амжилттай Илгээлээ" });
+          setContent(""), setTitle(""), onTextChange("");
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+        });
+    } else {
+      notification.warning({
+        message: !title ? "Гарчиг оруулна уу" : "content оруулана уу",
       });
+    }
   }
 
   async function msgIlgeeye() {
@@ -210,6 +214,8 @@ function Khyanalt({ token }) {
         aldaaBarigch(e);
       });
   }
+
+  console.log(songogdsonKhariltsagch);
   async function mailIlgeeye() {
     if (ilgeekhTurul === "gantsaar" && !khariltsagch?.mail) {
       notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
@@ -272,6 +278,7 @@ function Khyanalt({ token }) {
       notification.warning({ message: "Гарчиг заавал оруулна уу!" });
     }
   }
+  console.log(khariltsagch);
 
   function seen() {
     const seenList = [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].filter(
@@ -423,6 +430,7 @@ function Khyanalt({ token }) {
         <div className="box p-5 xl:block xl:h-H7HalfRem">
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
+              disabled
               type="text"
               className="w-full rounded-md bg-gray-100 px-2  py-1 dark:bg-gray-700"
               placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
@@ -455,23 +463,32 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <div className=" flex flex-row items-center space-x-2 rounded-md pt-3 ">
+
+          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
             <Checkbox
-              className=""
-              onChange={(e) => setBugdiigSongokh(e.target.checked)}
+              checked={
+                khariltsagchiinMedeelel?.jagsaalt?.length ===
+                songogdsonKhariltsagch.length
+              }
+              onChange={(e) => {
+                if (e.target.checked === true)
+                  setSongogdsonKhariltsagch([
+                    ...khariltsagchiinMedeelel?.jagsaalt,
+                  ]);
+                else setSongogdsonKhariltsagch([]);
+              }}
             >
               {" "}
-              All check
+              Харилцагч
             </Checkbox>
           </div>
-          <Divider />
 
           <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
                 className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
                   khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                    ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                     : ""
                 } `}
                 onClick={() => setKhariltsagch(mur)}
@@ -479,15 +496,9 @@ function Khyanalt({ token }) {
                 <div>
                   <Checkbox
                     checked={
-                      bugdiigSongokh === true
-                        ? songogdsonKhariltsagch.push(
-                            khariltsagchiinMedeelel.jagsaalt
-                          )
-                        : bugdiigSongokh === false
-                        ? songogdsonKhariltsagch.splice(
-                            khariltsagchiinMedeelel.jagsaalt
-                          ) && false
-                        : false
+                      songogdsonKhariltsagch.findIndex(
+                        (a) => a._id === mur._id
+                      ) !== -1
                     }
                     onChange={(e) => {
                       e.target.checked;
@@ -517,41 +528,14 @@ function Khyanalt({ token }) {
                   />
                   <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                 </div>
-                <div
-                  className={`flex w-full justify-between truncate text-center text-xs text-gray-600  ${
-                    khariltsagch?._id === mur?._id
-                      ? "dark:text-gray-50"
-                      : "dark:text-gray-400"
-                  }`}
-                >
-                  <div
-                    className={` ${
-                      khariltsagch?._id === mur?._id ? "text-white" : ""
-                    } `}
-                  >
-                    {" "}
-                    {mur?.ner}
-                  </div>
-
-                  <div
-                    className={` ${
-                      khariltsagch?._id === mur?._id ? "text-white" : ""
-                    } `}
-                  >
-                    {mur.utas}
-                  </div>
+                <div className="flex w-full justify-between truncate text-center text-xs text-gray-600 ">
+                  <div> {mur?.ner}</div>
+                  <div>{mur?.utas}</div>
                 </div>
               </div>
             ))}
           </div>
-          <div className="flex w-full justify-center">
-            <Button
-              style={{ backgroundColor: "#209669", color: "green" }}
-              onClick={seeMore}
-            >
-              <p className="text-white">See more...</p>
-            </Button>
-          </div>
+          <div className="flex w-full justify-center"></div>
         </div>
       </div>
       {/* </div> */}
@@ -602,20 +586,33 @@ function Khyanalt({ token }) {
             <div
               style={{ maxHeight: "calc(100vh - 27rem)" }}
               onScroll={onScroll}
-              className="col-span-12 mt-0 min-h-[50vh] overflow-auto rounded-r-xl bg-white lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem"
+              className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
             >
               {sonorduulga.jagsaalt.map((mur) =>
                 mur.khariltsagchiinId === khariltsagch._id ? (
-                  <div className="bg flex w-full items-center gap-3 px-5 pt-2">
+                  <div className="bg flex w-full items-center gap-3 px-12">
                     <div className="relative w-10/12  rounded-lg bg-green-50 p-3  dark:bg-gray-800 sm:w-full">
-                      <div className="flex flex-row flex-wrap items-center ">
-                        <div className="text-purple-600">
+                      <div className="flex flex-row flex-wrap items-center justify-between pb-3 ">
+                        <div className="text-base text-green-600">
                           Гарчиг:{mur.title}
                         </div>
+                        {mur?.tuluv === 0 ? (
+                          <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
+                            {" "}
+                            Хүлээж аваагүй{" "}
+                          </div>
+                        ) : (
+                          <div className="rounded-lg border-[1px] bg-green-500 p-1 text-white ">
+                            {" "}
+                            Хүлээж авсан{" "}
+                          </div>
+                        )}
                       </div>
                       <div className="flex">
                         <div className="w-full">
-                          <div className="">Message:{mur.message}</div>
+                          <div className="font-bold">
+                            Message: {mur.message}
+                          </div>
 
                           <div>
                             {mur.zurguud.map((a) => (

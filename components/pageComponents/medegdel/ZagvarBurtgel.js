@@ -1,5 +1,5 @@
 import React, { suseEffect, useEffect, useImperativeHandle } from "react";
-import { Form, Input, message, Modal } from "antd";
+import { Form, Input, message, Modal, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "./ZagvarUusgekh";
@@ -45,19 +45,21 @@ function ZagvarBurtgel(
       khadgalya() {
         const method = data?._id ? updateMethod : createMethod;
         const zagvar = form.getFieldsValue();
-        method("mailiinZagvar", token, {
-          barilgiinId,
-          ...data,
-          ...zagvar,
-          turul,
-        }).then(({ data }) => {
-          if (data === "Amjilttai") {
-            setWaiting(false);
-            message.success("Амжилттай хадгаллаа");
-            onRefresh();
-            destroy();
-          }
-        });
+        zagvar?.ner !== undefined
+          ? method("mailiinZagvar", token, {
+              barilgiinId,
+              ...data,
+              ...zagvar,
+              turul,
+            }).then(({ data }) => {
+              if (data === "Amjilttai") {
+                setWaiting(false);
+                message.success("Амжилттай хадгаллаа");
+                onRefresh();
+                destroy();
+              }
+            })
+          : notification.warning({ message: "Нэр заавал оруулна уу!" });
       },
       khaaya() {
         destroy();
@@ -67,8 +69,11 @@ function ZagvarBurtgel(
   );
 
   return (
-    <Form autoComplete={"off"} form={form} initialValues={data}>
-      <Form.Item name="ner">
+    <Form form={form} initialValues={data}>
+      <Form.Item
+        name="ner"
+        rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}
+      >
         <Input placeholder="Нэр" />
       </Form.Item>
       <Form.Item name="mail">
