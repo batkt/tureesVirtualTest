@@ -1227,7 +1227,8 @@ function AjiltanBurtgel({ token }) {
                 render: (data) => {
                   return (
                     <Popover
-                      trigger="hover"
+                      placement="left"
+                      trigger="click"
                       content={
                         <Table
                           bordered

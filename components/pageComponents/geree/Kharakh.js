@@ -32,18 +32,6 @@ function Kharakh({ data, print }, ref) {
               }}
             />
           </div>
-          <div className="flex flex-row justify-between">
-            <div>
-              {moment(geree.ognoo).format("YYYY")} он{" "}
-              {moment(geree.ognoo).format("MM")} сар{" "}
-              {moment(geree.ognoo).format("DD")} өдөр
-            </div>
-            <div>№:{geree.gereeniiDugaar}</div>
-            <div>Улаанбаатар хот</div>
-          </div>
-          <div className="w-full text-center font-medium">
-            АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
-          </div>
         </>
       )}
       {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {

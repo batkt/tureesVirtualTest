@@ -503,7 +503,7 @@ function GuilgeeNiiluulekh(
             {(geree?.aldangiinUldegdel || 0) > 0 && (
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">Алдангийн үлдэгдэл</div>
-                <div>{formatNumber(geree?.aldangiinUldegdel || 0)}</div>
+                <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-right">
                   <input
@@ -528,7 +528,8 @@ function GuilgeeNiiluulekh(
                 <div>
                   {formatNumber(
                     (geree?.baritsaaAvakhDun || 0) -
-                      (geree.baritsaaniiUldegdel || 0)
+                      (geree.baritsaaniiUldegdel || 0),
+                    2
                   )}
                 </div>
                 <div>{geree.talbainDugaar}</div>
@@ -553,7 +554,7 @@ function GuilgeeNiiluulekh(
                 <div
                   className={`text-${geree.uldegdel > 0 ? "red" : "green"}-500`}
                 >
-                  {formatNumber(geree.uldegdel)}
+                  {formatNumber(geree.uldegdel, 2)}
                 </div>
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-right text-green-600">

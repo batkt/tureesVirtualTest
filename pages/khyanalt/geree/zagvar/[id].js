@@ -206,7 +206,15 @@ function ZakhialgaNemekh({ token }) {
       <div className="col-span-12 lg:col-span-3 xl:col-span-2">
         <div className="box p-5">
           <Form form={form} autoComplete={"off"} onFinish={onFinish}>
-            <Form.Item name="ner">
+            <Form.Item
+              name="ner"
+              rules={[
+                {
+                  required: true,
+                  message: "Гэрээний загварын нэр оруулна уу",
+                },
+              ]}
+            >
               <Input placeholder="Гэрээний загварын нэр" />
             </Form.Item>
             <div className="flex justify-end">
@@ -219,7 +227,11 @@ function ZakhialgaNemekh({ token }) {
               </Form.Item>
             </div>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
+              <Button
+                className="w-full"
+                type="primary"
+                onClick={() => form.submit()}
+              >
                 Хадгалах
               </Button>
             </Form.Item>

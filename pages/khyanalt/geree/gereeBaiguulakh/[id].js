@@ -280,15 +280,6 @@ function GereeBaiguulakh({ token, data }) {
                       }}
                     />
                   </div>
-                  <div className="flex flex-row justify-between">
-                    <div>
-                      {moment(khadgalakhGeree.ognoo).format("YYYY")} он{" "}
-                      {moment(khadgalakhGeree.ognoo).format("MM")} сар{" "}
-                      {moment(khadgalakhGeree.ognoo).format("DD")} өдөр
-                    </div>
-                    <div>№:{khadgalakhGeree.gereeniiDugaar}</div>
-                    <div>Улаанбаатар хот</div>
-                  </div>
                 </>
               )}
               {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
