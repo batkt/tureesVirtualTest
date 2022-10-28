@@ -8,6 +8,7 @@ import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Checkbox,
+  Image,
   Input,
   message,
   notification,
@@ -34,24 +35,10 @@ import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import TextArea from "antd/lib/input/TextArea";
 import useJagsaalt from "hooks/useJagsaalt";
+import useKhariltsagch from "hooks/useKhariltsagch";
 
 //#endregion
-export function uldegdeliinTurulKhurvuulya(turul) {
-  var butsaahUtga = turul;
-  switch (turul) {
-    case "medegdel":
-      butsaahUtga = "мэдэгдэл";
-      break;
-    case "gomdol":
-      butsaahUtga = "гомдол";
-      break;
-    case "sanal":
-      butsaahUtga = "санал";
-      break;
-  }
 
-  return butsaahUtga;
-}
 var dateCount = {
   yearStart: moment().startOf("year"),
   yearEnd: moment().endOf("year"),
@@ -127,10 +114,8 @@ function Khyanalt({ token }) {
     ilgeekhTurul,
     turul
   );
-  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
-    token,
-    "sms"
-  );
+
+  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(token);
   const query = useMemo(() => {
     return {
       turul: "medegdel",
@@ -166,48 +151,56 @@ function Khyanalt({ token }) {
       message.warning("Хүсэлт илгээгдсэн байна");
       return;
     }
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/sonorduulgaIlgeeye`, {
-        firebaseToken: khariltsagch?.firebaseToken,
-        khariltsagchiinId: khariltsagch?.khariltsagchiinId,
-        barilgiinId: khariltsagch.barilgiinId,
-        khariltsagchiinNer: khariltsagch.ner,
-        zurgiinId: zurag,
-        medeelel: { title, body: ingeekhmSms },
-      })
-      .then(({ data }) => {
-        zurag &&
-          uilchilgee(token).post("/confirmFile", {
-            filename: zurag,
-            path: "medegdel",
-          });
-        if (!!data?.successCount) {
-          sonorduulga.jagsaalt.unshift({
-            khariltsagchiinId: khariltsagch?.khariltsagchiinId,
-            barilgiinId: khariltsagch.barilgiinId,
-            khariltsagchiinNer: khariltsagch.ner,
-            title,
-            message: ingeekhmSms,
-            turul: "medegdel",
-          });
-          sonorduulgaMutate({ ...sonorduulga }, false);
-          notification.success({ message: "Notification Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
+    if (!!title) {
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/sonorduulgaIlgeeye`, {
+          firebaseToken: khariltsagch?.firebaseToken,
+          khariltsagchiinId: khariltsagch?.khariltsagchiinId,
+          barilgiinId: khariltsagch.barilgiinId,
+          khariltsagchiinNer: khariltsagch.ner,
+          zurgiinId: zurag,
+          medeelel: { title, body: ingeekhmSms },
+        })
+        .then(({ data }) => {
+          zurag &&
+            uilchilgee(token).post("/confirmFile", {
+              filename: zurag,
+              path: "medegdel",
+            });
+          if (!!data?.successCount) {
+            sonorduulga.jagsaalt.unshift({
+              khariltsagchiinId: khariltsagch?.khariltsagchiinId,
+              barilgiinId: khariltsagch.barilgiinId,
+              khariltsagchiinNer: khariltsagch.ner,
+              title,
+              message: ingeekhmSms,
+              turul: "medegdel",
+            });
+            sonorduulgaMutate({ ...sonorduulga }, false);
+            notification.success({
+              message: "Notification Амжилттай илгээлээ",
+            });
+            setContent("");
+            setTitle("");
+            setLoading(false);
+          } else if (!!data?.failureCount) {
+            notification.warning({
+              description: _.get(data, "results.0.error.message"),
+              message: _.get(data, "results.0.error.code"),
+            });
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
           setLoading(false);
-        } else if (!!data?.failureCount) {
-          notification.warning({
-            description: _.get(data, "results.0.error.message"),
-            message: _.get(data, "results.0.error.code"),
-          });
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
+          aldaaBarigch(e);
+        });
+    } else {
+      notification.warning({
+        message: "Гарчиг заавал оруулна уу",
       });
+    }
   }
 
   async function msgIlgeeye() {
@@ -339,7 +332,7 @@ function Khyanalt({ token }) {
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
-        Бүртгэл нэмэх
+        Хадгалах
       </Button>,
     ];
     modal({
@@ -351,7 +344,7 @@ function Khyanalt({ token }) {
           setWaiting={setWaiting}
           data={data}
           token={token}
-          turul="sms"
+          turul={turul}
           barilgiinId={barilgiinId}
           onRefresh={mailiinZagvarMutate}
         />
@@ -413,10 +406,6 @@ function Khyanalt({ token }) {
     timeout = setTimeout(function () {
       seen();
     }, 300);
-
-    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga();
-    }
   }
   //#endregion
 
@@ -447,13 +436,14 @@ function Khyanalt({ token }) {
             </div>
           </div>
         </div>
-        <div
-          className="box mt-5 flex flex-row items-center p-2 pl-3 "
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          {turul === "SMS" ? (
+
+        {turul === "SMS" ? (
+          <div
+            className="box mt-5 flex flex-row items-center p-2 pl-3 "
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="100"
+          >
             <div className="items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
@@ -477,13 +467,14 @@ function Khyanalt({ token }) {
                 turul={turul}
               />
             </div>
-          ) : null}
-          <div
-            className={` ${
-              turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
-            }`}
-          ></div>
-        </div>
+          </div>
+        ) : null}
+        <div
+          className={` ${
+            turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
+          }`}
+        ></div>
+
         <div
           className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
           data-aos="fade-left"
@@ -543,40 +534,46 @@ function Khyanalt({ token }) {
           }`}
         >
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
-            <div
-              key={a.ner}
-              className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
-              data-aos="fade-left"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-              onClick={() => setContent(a.mail)}
-            >
-              <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                <img alt="email" src="/email.png" />
-              </div>
-              <div className="ml-2 mr-1 overflow-hidden">
-                <div className="flex items-center">
-                  <div className="font-medium">{a.ner}</div>
-                </div>
-              </div>
-              <div className="ml-auto flex flex-row space-x-2">
-                <Popconfirm
-                  title="Загвар устгах уу?"
-                  okText="Тийм"
-                  cancelText="Үгүй"
-                  onConfirm={() => zagvarUstgaya(a)}
-                >
-                  <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
-                    <DeleteOutlined style={{ color: "red" }} />
-                  </div>
-                </Popconfirm>
+            <div>
+              {a.turul === turul ? (
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
-                  onClick={() => smsZagvarNemya(a)}
+                  key={a.ner}
+                  className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
+                  data-aos="fade-left"
+                  data-aos-duration="1000"
+                  data-aos-delay="100"
+                  onClick={() => setContent(a.mail)}
                 >
-                  <EditOutlined style={{ color: "#85C1E9" }} />
+                  <div className="image-fit mr-1 h-8 w-8 flex-none ">
+                    <img alt="email" src="/email.png" />
+                  </div>
+                  <div className="ml-2 mr-1 overflow-hidden">
+                    <div className="flex items-center">
+                      <div className="font-medium">{a.ner}</div>
+                    </div>
+                  </div>
+                  <div className="ml-auto flex flex-row space-x-2">
+                    <Popconfirm
+                      title="Загвар устгах уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => zagvarUstgaya(a)}
+                    >
+                      <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
+                        <DeleteOutlined style={{ color: "red" }} />
+                      </div>
+                    </Popconfirm>
+                    <div
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
+                      onClick={() => smsZagvarNemya(a)}
+                    >
+                      <EditOutlined style={{ color: "#85C1E9" }} />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </div>
@@ -632,10 +629,10 @@ function Khyanalt({ token }) {
 
           <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
-              <Checkbox onChange={(e) => setBugdiigSongokh(e.target.checked)}>
+              {/* <Checkbox onChange={(e) => setBugdiigSongokh(e.target.checked)}>
                 {" "}
-                All check
-              </Checkbox>
+                Харилцагч
+              </Checkbox> */}
             </div>
             {nekhemjlel?.jagsaalt?.map((mur) => (
               <div>
@@ -643,7 +640,7 @@ function Khyanalt({ token }) {
                   <div
                     className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
                       khariltsagch?._id === mur?._id
-                        ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                        ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                         : ""
                     } `}
                     key={mur?._id}
@@ -651,6 +648,13 @@ function Khyanalt({ token }) {
                   >
                     <div>
                       <Checkbox
+                        // checked={
+                        //   bugdiigSongokh === true
+                        //     ? songogdsonKhariltsagch.push(nekhemjlel.jagsaalt)
+                        //     : bugdiigSongokh === false
+                        //     ? songogdsonKhariltsagch.splice(nekhemjlel.jagsaalt)
+                        //     : ""
+                        // }
                         onChange={(e) => {
                           e.target.checked;
                           if (e.target.checked == true) {
@@ -683,20 +687,8 @@ function Khyanalt({ token }) {
                       />
                       <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                     </div>
-                    <div
-                      className={` ${
-                        khariltsagch?._id === mur?._id ? "text-white" : ""
-                      } `}
-                    >
-                      {mur?.ner}
-                    </div>
-                    <div
-                      className={` ${
-                        khariltsagch?._id === mur?._id ? "text-white" : ""
-                      } `}
-                    >
-                      {mur?.gereeniiDugaar}
-                    </div>
+                    <div>{mur?.ner}</div>
+                    <div>{mur?.gereeniiDugaar}</div>
                   </div>
                 ) : (
                   ""
@@ -798,6 +790,16 @@ function Khyanalt({ token }) {
                         <span className="w-full break-words text-justify text-white ">
                           {a.message}
                         </span>
+                        <div>
+                          {!!a.zurgiinId ? (
+                            <Image
+                              width={75}
+                              src={`https://turees.zevtabs.mn/api/file?path=medegdel/${a.zurgiinId}`}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
                         <div
                           className={`absolute right-2 h-5 w-5 fill-current text-white ${
                             a.kharsanEsekh === true ? "" : "hidden"
@@ -834,7 +836,7 @@ function Khyanalt({ token }) {
                           {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                         </span>
                         <span className="absolute right-0 -bottom-5 text-gray-500">
-                          {uldegdeliinTurulKhurvuulya(a.turul)}
+                          {a.turul}
                         </span>
                       </div>
                     );
