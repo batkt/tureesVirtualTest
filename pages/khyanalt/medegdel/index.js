@@ -103,10 +103,8 @@ function Khyanalt({ token }) {
   const [tuluv, setTuluv] = useState("idevkhtei");
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
-  const [bugdiigSongokh, setBugdiigSongokh] = useState();
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useMedegdel(
     token,
     undefined,
@@ -626,14 +624,22 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-
-          <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-            <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
-              {/* <Checkbox onChange={(e) => setBugdiigSongokh(e.target.checked)}>
-                {" "}
-                Харилцагч
-              </Checkbox> */}
-            </div>
+          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
+            <Checkbox
+              checked={
+                nekhemjlel?.jagsaalt?.length === songogdsonKhariltsagch.length
+              }
+              onChange={(e) => {
+                if (e.target.checked === true)
+                  setSongogdsonKhariltsagch([...nekhemjlel?.jagsaalt]);
+                else setSongogdsonKhariltsagch([]);
+              }}
+            >
+              {" "}
+              Харилцагч
+            </Checkbox>
+          </div>
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             {nekhemjlel?.jagsaalt?.map((mur) => (
               <div>
                 {!!mur.khariltsagchiinId ? (
@@ -648,13 +654,11 @@ function Khyanalt({ token }) {
                   >
                     <div>
                       <Checkbox
-                        // checked={
-                        //   bugdiigSongokh === true
-                        //     ? songogdsonKhariltsagch.push(nekhemjlel.jagsaalt)
-                        //     : bugdiigSongokh === false
-                        //     ? songogdsonKhariltsagch.splice(nekhemjlel.jagsaalt)
-                        //     : ""
-                        // }
+                        checked={
+                          songogdsonKhariltsagch.findIndex(
+                            (a) => a._id === mur._id
+                          ) !== -1
+                        }
                         onChange={(e) => {
                           e.target.checked;
                           if (e.target.checked == true) {
