@@ -7,6 +7,7 @@ import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Checkbox,
+  Divider,
   Image,
   Input,
   message,
@@ -75,18 +76,14 @@ function Khyanalt({ token }) {
 
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-
-  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
-    token,
-    "sms"
-  );
+  const [bugdiigSongokh, setBugdiigSongokh] = useState();
+  console.log(songogdsonKhariltsagch);
   const query = useMemo(() => {
     return {
       barilgiinId,
     };
   }, [barilgiinId]);
   const khariltsagchiinMedeelel = useJagsaalt("/khariltsagch", query);
-
   const { sonorduulga, sonorduulgaMutate, jagsaalt, nextSonorduulga } =
     useSanalGomdol(
       turul === "App" && token,
@@ -458,18 +455,40 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
+          <div className=" flex flex-row items-center space-x-2 rounded-md pt-3 ">
+            <Checkbox
+              className=""
+              onChange={(e) => setBugdiigSongokh(e.target.checked)}
+            >
+              {" "}
+              All check
+            </Checkbox>
+          </div>
+          <Divider />
+
           <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
                 className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
                   khariltsagch?._id === mur?._id
-                    ? "bg-green-100 dark:bg-green-500"
+                    ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
                     : ""
                 } `}
                 onClick={() => setKhariltsagch(mur)}
               >
                 <div>
                   <Checkbox
+                    checked={
+                      bugdiigSongokh === true
+                        ? songogdsonKhariltsagch.push(
+                            khariltsagchiinMedeelel.jagsaalt
+                          )
+                        : bugdiigSongokh === false
+                        ? songogdsonKhariltsagch.splice(
+                            khariltsagchiinMedeelel.jagsaalt
+                          ) && false
+                        : false
+                    }
                     onChange={(e) => {
                       e.target.checked;
                       if (e.target.checked == true) {
@@ -505,9 +524,22 @@ function Khyanalt({ token }) {
                       : "dark:text-gray-400"
                   }`}
                 >
-                  <div> {mur?.ner}</div>
+                  <div
+                    className={` ${
+                      khariltsagch?._id === mur?._id ? "text-white" : ""
+                    } `}
+                  >
+                    {" "}
+                    {mur?.ner}
+                  </div>
 
-                  <div>{mur.utas}</div>
+                  <div
+                    className={` ${
+                      khariltsagch?._id === mur?._id ? "text-white" : ""
+                    } `}
+                  >
+                    {mur.utas}
+                  </div>
                 </div>
               </div>
             ))}

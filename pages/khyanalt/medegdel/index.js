@@ -8,6 +8,7 @@ import useMailiinZagvar from "hooks/useMailiinZagvar";
 import {
   Button,
   Checkbox,
+  Image,
   Input,
   message,
   notification,
@@ -29,29 +30,15 @@ import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import createMethod from "tools/function/crud/createMethod";
 import useSWR from "swr";
-import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import TextArea from "antd/lib/input/TextArea";
+import useJagsaalt from "hooks/useJagsaalt";
+import useKhariltsagch from "hooks/useKhariltsagch";
 
 //#endregion
-export function uldegdeliinTurulKhurvuulya(turul) {
-  var butsaahUtga = turul;
-  switch (turul) {
-    case "medegdel":
-      butsaahUtga = "мэдэгдэл";
-      break;
-    case "gomdol":
-      butsaahUtga = "гомдол";
-      break;
-    case "sanal":
-      butsaahUtga = "санал";
-      break;
-  }
 
-  return butsaahUtga;
-}
 var dateCount = {
   yearStart: moment().startOf("year"),
   yearEnd: moment().endOf("year"),
@@ -109,7 +96,6 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
-  // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
@@ -117,11 +103,8 @@ function Khyanalt({ token }) {
   const [tuluv, setTuluv] = useState("idevkhtei");
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
-
   const [zurag, setZurag] = useState();
-
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
-
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useMedegdel(
     token,
     undefined,
@@ -130,18 +113,15 @@ function Khyanalt({ token }) {
     turul
   );
 
-  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
-    token,
-    "sms"
-  );
+  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(token);
+  const query = useMemo(() => {
+    return {
+      turul: "medegdel",
+      khuleenAvagchiinId: khariltsagch?.khariltsagchiinId,
+    };
+  }, [turul, khariltsagch]);
 
-  const {
-    sonorduulga,
-    sonorduulgaMutate,
-    jagsaalt,
-    nextSonorduulga,
-    setKhuudaslalt,
-  } = useSanalGomdol(turul === "App" && token, khariltsagch?.khariltsagchiinId);
+  const medegdelAvya = useJagsaalt("/sonorduulga", query);
 
   useEffect(() => {
     setKhariltsagch(null);
@@ -165,87 +145,60 @@ function Khyanalt({ token }) {
 
   //#region method
   async function appIlgeeye() {
-    if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0) {
-      var khariu = { successCount: 0, failureCount: 0 };
-      songogdsonKhariltsagch
-        .filter((a) => !!a.khariltsagchiinId)
-        .map((a, index, array) => {
-          let body = msj;
-          for (const [key, value] of Object.entries(a)) {
-            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
-          }
-          uilchilgee(token)
-            .post(`/sonorduulgaIlgeeye`, {
-              firebaseToken: a?.firebaseToken,
-              khariltsagchiinId: a?.khariltsagchiinId,
-              barilgiinId: a.barilgiinId,
-              khariltsagchiinNer: a.ner,
-              medeelel: { title, body: content },
-            })
-            .then(({ data }) => {
-              if (!!data?.successCount) khariu.successCount += 1;
-              else if (!!data?.failureCount) khariu.failureCount += 1;
-              if (index === array.length - 1) {
-                notification.success({
-                  message: `Notification Амжилттай ${khariu.successCount} ${
-                    khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
-                  } илгээлээ`,
-                });
-                setLoading(false);
-              }
-            });
-          return;
-        });
-      return;
-    }
-
     if (loading) {
       message.warning("Хүсэлт илгээгдсэн байна");
       return;
     }
-
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/sonorduulgaIlgeeye`, {
-        firebaseToken: khariltsagch?.firebaseToken,
-        khariltsagchiinId: khariltsagch?.khariltsagchiinId,
-        barilgiinId: khariltsagch.barilgiinId,
-        khariltsagchiinNer: khariltsagch.ner,
-        zurgiinId: zurag,
-        medeelel: { title, body: content },
-      })
-      .then(({ data }) => {
-        zurag &&
-          uilchilgee(token).post("/confirmFile", {
-            filename: zurag,
-            path: "medegdel",
-          });
-        if (!!data?.successCount) {
-          sonorduulga.jagsaalt.unshift({
-            khariltsagchiinId: khariltsagch?.khariltsagchiinId,
-            barilgiinId: khariltsagch.barilgiinId,
-            khariltsagchiinNer: khariltsagch.ner,
-            title,
-            message: ingeekhmSms,
-            turul: "medegdel",
-          });
-          sonorduulgaMutate({ ...sonorduulga }, false);
-          notification.success({ message: "Notification Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
+    if (!!title) {
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/sonorduulgaIlgeeye`, {
+          firebaseToken: khariltsagch?.firebaseToken,
+          khariltsagchiinId: khariltsagch?.khariltsagchiinId,
+          barilgiinId: khariltsagch.barilgiinId,
+          khariltsagchiinNer: khariltsagch.ner,
+          zurgiinId: zurag,
+          medeelel: { title, body: ingeekhmSms },
+        })
+        .then(({ data }) => {
+          zurag &&
+            uilchilgee(token).post("/confirmFile", {
+              filename: zurag,
+              path: "medegdel",
+            });
+          if (!!data?.successCount) {
+            sonorduulga.jagsaalt.unshift({
+              khariltsagchiinId: khariltsagch?.khariltsagchiinId,
+              barilgiinId: khariltsagch.barilgiinId,
+              khariltsagchiinNer: khariltsagch.ner,
+              title,
+              message: ingeekhmSms,
+              turul: "medegdel",
+            });
+            sonorduulgaMutate({ ...sonorduulga }, false);
+            notification.success({
+              message: "Notification Амжилттай илгээлээ",
+            });
+            setContent("");
+            setTitle("");
+            setLoading(false);
+          } else if (!!data?.failureCount) {
+            notification.warning({
+              description: _.get(data, "results.0.error.message"),
+              message: _.get(data, "results.0.error.code"),
+            });
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
           setLoading(false);
-        } else if (!!data?.failureCount) {
-          notification.warning({
-            description: _.get(data, "results.0.error.message"),
-            message: _.get(data, "results.0.error.code"),
-          });
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
+          aldaaBarigch(e);
+        });
+    } else {
+      notification.warning({
+        message: "Гарчиг заавал оруулна уу",
       });
+    }
   }
 
   async function msgIlgeeye() {
@@ -377,7 +330,7 @@ function Khyanalt({ token }) {
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
-        Бүртгэл нэмэх
+        Хадгалах
       </Button>,
     ];
     modal({
@@ -389,7 +342,7 @@ function Khyanalt({ token }) {
           setWaiting={setWaiting}
           data={data}
           token={token}
-          turul="sms"
+          turul={turul}
           barilgiinId={barilgiinId}
           onRefresh={mailiinZagvarMutate}
         />
@@ -415,13 +368,13 @@ function Khyanalt({ token }) {
   }
 
   function seen() {
-    const seenList = [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].filter(
+    const seenList = [...(medegdelAvya?.jagsaalt || [])].filter(
       (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
     );
     if (seenList.length > 0) {
       const seenIds = seenList.map((a) => a._id);
       if (
-        jagsaalt.filter(
+        medegdelAvya?.jagsaalt.filter(
           (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
         ).length > 0
       )
@@ -436,7 +389,7 @@ function Khyanalt({ token }) {
         .post("/sanalKharlaa", { id: seenIds })
         .then(() => {
           if (
-            sonorduulga?.jagsaalt?.filter(
+            medegdelAvya?.jagsaalt?.filter(
               (a) => a.turul !== "medegdel" && a.kharsanEsekh === false
             ).length > 0
           )
@@ -451,10 +404,6 @@ function Khyanalt({ token }) {
     timeout = setTimeout(function () {
       seen();
     }, 300);
-
-    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga();
-    }
   }
   //#endregion
 
@@ -485,13 +434,14 @@ function Khyanalt({ token }) {
             </div>
           </div>
         </div>
-        <div
-          className="box mt-5 flex flex-row items-center p-2 pl-3 "
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          {turul === "SMS" ? (
+
+        {turul === "SMS" ? (
+          <div
+            className="box mt-5 flex flex-row items-center p-2 pl-3 "
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="100"
+          >
             <div className="items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
@@ -515,13 +465,14 @@ function Khyanalt({ token }) {
                 turul={turul}
               />
             </div>
-          ) : null}
-          <div
-            className={` ${
-              turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
-            }`}
-          ></div>
-        </div>
+          </div>
+        ) : null}
+        <div
+          className={` ${
+            turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
+          }`}
+        ></div>
+
         <div
           className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
           data-aos="fade-left"
@@ -581,40 +532,46 @@ function Khyanalt({ token }) {
           }`}
         >
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
-            <div
-              key={a.ner}
-              className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
-              data-aos="fade-left"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-              onClick={() => setContent(a.mail)}
-            >
-              <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                <img alt="email" src="/email.png" />
-              </div>
-              <div className="ml-2 mr-1 overflow-hidden">
-                <div className="flex items-center">
-                  <div className="font-medium">{a.ner}</div>
-                </div>
-              </div>
-              <div className="ml-auto flex flex-row space-x-2">
-                <Popconfirm
-                  title="Загвар устгах уу?"
-                  okText="Тийм"
-                  cancelText="Үгүй"
-                  onConfirm={() => zagvarUstgaya(a)}
-                >
-                  <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
-                    <DeleteOutlined style={{ color: "red" }} />
-                  </div>
-                </Popconfirm>
+            <div>
+              {a.turul === turul ? (
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
-                  onClick={() => smsZagvarNemya(a)}
+                  key={a.ner}
+                  className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
+                  data-aos="fade-left"
+                  data-aos-duration="1000"
+                  data-aos-delay="100"
+                  onClick={() => setContent(a.mail)}
                 >
-                  <EditOutlined style={{ color: "#85C1E9" }} />
+                  <div className="image-fit mr-1 h-8 w-8 flex-none ">
+                    <img alt="email" src="/email.png" />
+                  </div>
+                  <div className="ml-2 mr-1 overflow-hidden">
+                    <div className="flex items-center">
+                      <div className="font-medium">{a.ner}</div>
+                    </div>
+                  </div>
+                  <div className="ml-auto flex flex-row space-x-2">
+                    <Popconfirm
+                      title="Загвар устгах уу?"
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                      onConfirm={() => zagvarUstgaya(a)}
+                    >
+                      <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
+                        <DeleteOutlined style={{ color: "red" }} />
+                      </div>
+                    </Popconfirm>
+                    <div
+                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
+                      onClick={() => smsZagvarNemya(a)}
+                    >
+                      <EditOutlined style={{ color: "#85C1E9" }} />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                ""
+              )}
             </div>
           ))}
         </div>
@@ -632,116 +589,64 @@ function Khyanalt({ token }) {
         data-aos="fade-up"
         data-aos-duration="1000"
       >
-        {ilgeekhTurul === "gantsaar" && (
-          <div className={`box p-5 xl:block`}>
-            <div className="relative w-full text-gray-700   dark:text-gray-300">
-              <input
-                type="text"
-                className="w-full rounded-md bg-gray-100 px-2  py-1   dark:bg-gray-700"
-                placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
-                onSearch={(search) =>
-                  setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
-                }
-                onChange={({ target }) => {
-                  clearTimeout(timeout);
-                  timeout = setTimeout(function () {
-                    setNekhemjlelKhuudaslalt((a) => ({
-                      ...a,
-                      search: target.value,
-                    }));
-                  }, 300);
-                }}
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </div>
-            <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-              {nekhemjlel?.jagsaalt?.map((mur) =>
-                !!davkhar ? (
-                  davkhar == mur.davkhar ? (
-                    <div
-                      className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
-                        khariltsagch?._id === mur?._id
-                          ? "bg-green-100 dark:bg-green-500"
-                          : ""
-                      } `}
-                      key={mur?._id}
-                      onClick={() => setKhariltsagch(mur)}
-                    >
-                      <div>
-                        <Checkbox
-                          onChange={(e) => {
-                            e.target.checked;
-                            if (e.target.checked == true) {
-                              songogdsonKhariltsagch.push(mur);
-                            } else {
-                              const index = songogdsonKhariltsagch.findIndex(
-                                (a) => a._id === mur._id
-                              );
-                              if (index !== -1) {
-                                songogdsonKhariltsagch.splice(index, 1);
-                              }
-                            }
-                            setSongogdsonKhariltsagch([
-                              ...songogdsonKhariltsagch,
-                            ]);
-                          }}
-                        />
-                      </div>
-                      <div className="image-fit relative h-10 w-10 flex-none rounded-full">
-                        <img
-                          alt="profileZurag"
-                          className="rounded-full"
-                          src={
-                            ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
-                              2 <
-                            1
-                              ? "/profileFemale.svg"
-                              : "/profile.svg"
-                          }
-                        />
-                        <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
-                      </div>
-                      <div
-                        className={`truncate text-center text-xs text-gray-600  ${
-                          khariltsagch?._id === mur?._id
-                            ? "dark:text-gray-50"
-                            : "dark:text-gray-400"
-                        }`}
-                      >
-                        {mur?.ner}
-                      </div>
-                      <div
-                        className={`truncate text-center text-xs text-gray-600 ${
-                          khariltsagch?._id === mur?._id
-                            ? "dark:text-gray-50"
-                            : "dark:text-gray-400"
-                        }`}
-                      >
-                        {mur?.gereeniiDugaar}
-                      </div>
-                    </div>
-                  ) : (
-                    ""
-                  )
-                ) : (
+        <div className={`box p-5 xl:block`}>
+          <div className="relative w-full text-gray-700   dark:text-gray-300">
+            <input
+              type="text"
+              className="w-full rounded-md bg-gray-100 px-2  py-1   dark:bg-gray-700"
+              placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
+              onSearch={(search) =>
+                setNekhemjlelKhuudaslalt((a) => ({ ...a, search }))
+              }
+              onChange={({ target }) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(function () {
+                  setNekhemjlelKhuudaslalt((a) => ({
+                    ...a,
+                    search: target.value,
+                  }));
+                }, 300);
+              }}
+            />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+            >
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
+          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
+            <Checkbox
+              checked={
+                nekhemjlel?.jagsaalt?.length === songogdsonKhariltsagch.length
+              }
+              onChange={(e) => {
+                if (e.target.checked === true)
+                  setSongogdsonKhariltsagch([...nekhemjlel?.jagsaalt]);
+                else setSongogdsonKhariltsagch([]);
+              }}
+            >
+              {" "}
+              Харилцагч
+            </Checkbox>
+          </div>
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
+            {nekhemjlel?.jagsaalt?.map((mur) => (
+              <div>
+                {!!mur.khariltsagchiinId ? (
                   <div
                     className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
                       khariltsagch?._id === mur?._id
-                        ? "bg-green-100 dark:bg-green-500"
+                        ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                         : ""
                     } `}
                     key={mur?._id}
@@ -749,6 +654,11 @@ function Khyanalt({ token }) {
                   >
                     <div>
                       <Checkbox
+                        checked={
+                          songogdsonKhariltsagch.findIndex(
+                            (a) => a._id === mur._id
+                          ) !== -1
+                        }
                         onChange={(e) => {
                           e.target.checked;
                           if (e.target.checked == true) {
@@ -781,30 +691,16 @@ function Khyanalt({ token }) {
                       />
                       <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                     </div>
-                    <div
-                      className={`truncate text-center text-xs text-gray-600  ${
-                        khariltsagch?._id === mur?._id
-                          ? "dark:text-gray-50"
-                          : "dark:text-gray-400"
-                      }`}
-                    >
-                      {mur?.ner}
-                    </div>
-                    <div
-                      className={`truncate text-center text-xs text-gray-600 ${
-                        khariltsagch?._id === mur?._id
-                          ? "dark:text-gray-50"
-                          : "dark:text-gray-400"
-                      }`}
-                    >
-                      {mur?.gereeniiDugaar}
-                    </div>
+                    <div>{mur?.ner}</div>
+                    <div>{mur?.gereeniiDugaar}</div>
                   </div>
-                )
-              )}
-            </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </div>
 
       <div
@@ -814,7 +710,7 @@ function Khyanalt({ token }) {
             : "col-span-12 xl:col-span-9 xl:h-full"
         } `}
       >
-        {khariltsagch || ilgeekhTurul !== "gantsaar" ? (
+        {khariltsagch ? (
           <div className="box flex h-full flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
               <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
@@ -880,75 +776,82 @@ function Khyanalt({ token }) {
               data-aos="fade-left"
               data-aos-duration="1000"
             >
-              {ilgeekhTurul === "gantsaar" &&
-                (turul === "App" ? (
-                  <div
-                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0 xl:mt-10"
-                    style={{ maxHeight: "calc(100vh - 32rem)" }}
-                    onScroll={onScroll}
-                  >
-                    {[...jagsaalt, ...(sonorduulga?.jagsaalt || [])].map(
-                      (a, i) => {
-                        return (
-                          <div
-                            className={`relative mt-8 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                              a.turul === "medegdel"
-                                ? "ml-auto rounded-br-none bg-blue-500"
-                                : "rounded-bl-none"
-                            }`}
+              {turul === "App" ? (
+                <div
+                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                  style={{ maxHeight: "calc(100vh - 32rem)" }}
+                  onScroll={onScroll}
+                >
+                  {medegdelAvya?.jagsaalt.map((a) => {
+                    return (
+                      <div
+                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                          a.turul === "medegdel"
+                            ? "ml-auto rounded-br-none bg-green-500"
+                            : "rounded-bl-none"
+                        }`}
+                      >
+                        <span className="w-full break-words text-justify text-white ">
+                          {a.message}
+                        </span>
+                        <div>
+                          {!!a.zurgiinId ? (
+                            <Image
+                              width={75}
+                              src={`https://turees.zevtabs.mn/api/file?path=medegdel/${a.zurgiinId}`}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        <div
+                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                            a.kharsanEsekh === true ? "" : "hidden"
+                          }`}
+                        >
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
                           >
-                            <span className="w-full break-words text-justify text-white ">
-                              {a.message}
-                            </span>
-                            <div
-                              className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                                a.kharsanEsekh === true ? "" : "hidden"
-                              }`}
-                            >
-                              <svg
-                                width="20px"
-                                height="20px"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                />
-                                <path
-                                  d="M16 7L12 11"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                />
-                                <path
-                                  d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinecap="round"
-                                />
-                              </svg>
-                            </div>
-                            <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                              {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                            </span>
-                            <span className="absolute right-0 -bottom-5 text-gray-500">
-                              {uldegdeliinTurulKhurvuulya(a.turul)}
-                            </span>
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    className="p-2"
-                    dangerouslySetInnerHTML={{ __html: ingeekhmSms }}
-                  />
-                ))}
+                            <path
+                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M16 7L12 11"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                        </span>
+                        <span className="absolute right-0 -bottom-5 text-gray-500">
+                          {a.turul}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  className="p-2"
+                  dangerouslySetInnerHTML={{ __html: ingeekhmSms }}
+                />
+              )}
             </div>
             <div
               className="mt-auto w-full p-2"
@@ -971,7 +874,7 @@ function Khyanalt({ token }) {
                   onTextChange={onTextChange}
                 />
               ) : (
-                <div className="py-3">
+                <div className="py-3 pb-3">
                   <Upload
                     showUploadList={false}
                     multiple={false}
@@ -984,7 +887,11 @@ function Khyanalt({ token }) {
                       <Button icon={<UploadOutlined />}>зураг оруулах</Button>
                     </div>
                   </Upload>
-                  <TextArea onChange={(e) => setContent(e.target.value)} />
+                  <ZagvarUusgekh
+                    change={setContent}
+                    value={content}
+                    onTextChange={onTextChange}
+                  />
                 </div>
               )}
             </div>

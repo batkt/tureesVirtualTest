@@ -1,15 +1,21 @@
 import { Cascader, Modal, notification } from "antd";
 import useZardal from "hooks/useZardal";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import formatNumber from "../../../tools/function/formatNumber";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
 function ZardalKholbokh(
-  { data, token, baiguullagiinId, onFinish, destroy, dans },
+  { data, token, baiguullagiinId, barilgiinId, onFinish, destroy, dans },
   ref
 ) {
-  const { zardalGaralt } = useZardal(token, baiguullagiinId);
+  const query = useMemo(() => {
+    return {
+      barilgiinId,
+    };
+  }, [barilgiinId]);
+
+  const { zardalGaralt } = useZardal(token, baiguullagiinId, query);
   const [songogdsonZardal, setSongogdsonZardal] = useState();
 
   React.useImperativeHandle(
