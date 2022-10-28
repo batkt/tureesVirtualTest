@@ -484,8 +484,12 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function refreshData() {
-    refresh();
     tolooguiGereeniiTooMutate();
+    setKhuudaslalt((a) => {
+      a.jagsaalt = [];
+      return { ...a };
+    });
+    mutate();
   }
 
   function baritsaaUdirdya(data) {
@@ -518,8 +522,8 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function guilgeeKhiiya(data) {
-    function refreshdata() {
-      data.mutate && data.mutate();
+    function refresh() {
+      setTimeout(() => data.mutate && data.mutate(), 500);
       refreshData();
     }
     var khadgalyaButtonId = "khadgalyaButtonId";
@@ -544,7 +548,7 @@ function guilgeeniiTuukh({ token }) {
           token={token}
           baiguullagiinId={baiguullaga?._id}
           barilgiinId={barilgiinId}
-          onFinish={refreshdata}
+          onFinish={refresh}
         />
       ),
       footer,
