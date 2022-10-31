@@ -17,6 +17,8 @@ import {
 } from "antd";
 import {
   ArrowLeftOutlined,
+  EditOutlined,
+  EyeOutlined,
   FileExcelOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -56,7 +58,7 @@ function Khyanalt({ token }) {
     Aos.init({ once: true });
   });
 
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { barilgiinId } = useAuth();
   const [turul, setTurul] = useState("App");
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
@@ -66,6 +68,7 @@ function Khyanalt({ token }) {
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
   const { order } = useOrder({ createdAt: -1 });
+  const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
@@ -89,7 +92,6 @@ function Khyanalt({ token }) {
       undefined,
       order
     );
-
   useEffect(() => {
     setKhariltsagch(null);
     if (ilgeekhTurul !== "davkharaar") setDavkhar(null);
@@ -102,6 +104,12 @@ function Khyanalt({ token }) {
 
   function seeMore() {
     khariltsagchiinMedeelel.next();
+  }
+
+  function tamgaZuragKharakh(e, path) {
+    setKharakhZurgiinZam(path);
+    e.preventDefault();
+    e.stopPropagation();
   }
 
   const ingeekhmSms = useMemo(() => {
@@ -128,7 +136,7 @@ function Khyanalt({ token }) {
           zurguud: zurag,
           turul: "shaardlaga",
           title,
-          message: content,
+          message: ingeekhmSms,
           firebaseToken: khariltsagch?.firebaseToken,
           barilgiinId: khariltsagch.barilgiinId,
         })
@@ -215,7 +223,6 @@ function Khyanalt({ token }) {
       });
   }
 
-  console.log(songogdsonKhariltsagch);
   async function mailIlgeeye() {
     if (ilgeekhTurul === "gantsaar" && !khariltsagch?.mail) {
       notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
@@ -278,8 +285,6 @@ function Khyanalt({ token }) {
       notification.warning({ message: "Гарчиг заавал оруулна уу!" });
     }
   }
-  console.log(khariltsagch);
-
   function seen() {
     const seenList = [...jagsaalt, ...(sonorduulga?.jagsaalt || [])].filter(
       (a) => a.turul !== "medegdel" && a.kharsanEsekh !== true
@@ -584,7 +589,7 @@ function Khyanalt({ token }) {
               ""
             )}
             <div
-              style={{ maxHeight: "calc(100vh - 27rem)" }}
+              style={{ maxHeight: "calc(100vh - 32rem)" }}
               onScroll={onScroll}
               className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
             >
@@ -592,8 +597,8 @@ function Khyanalt({ token }) {
                 mur.khariltsagchiinId === khariltsagch._id ? (
                   <div className="bg flex w-full items-center gap-3 px-12">
                     <div className="relative w-10/12  rounded-lg bg-green-50 p-3  dark:bg-gray-800 sm:w-full">
-                      <div className="flex flex-row flex-wrap items-center justify-between pb-3 ">
-                        <div className="text-base text-green-600">
+                      <div className="flex flex-row flex-wrap items-center justify-between  ">
+                        <div className="text-sm text-green-600">
                           Гарчиг:{mur.title}
                         </div>
                         {mur?.tuluv === 0 ? (
@@ -602,7 +607,7 @@ function Khyanalt({ token }) {
                             Хүлээж аваагүй{" "}
                           </div>
                         ) : (
-                          <div className="rounded-lg border-[1px] bg-green-500 p-1 text-white ">
+                          <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
                             {" "}
                             Хүлээж авсан{" "}
                           </div>
@@ -610,15 +615,15 @@ function Khyanalt({ token }) {
                       </div>
                       <div className="flex">
                         <div className="w-full">
-                          <div className="font-bold">
-                            Message: {mur.message}
+                          <div className="font-semibold">
+                            Шаардлага : {mur.message}
                           </div>
 
                           <div>
                             {mur.zurguud.map((a) => (
                               <Image
                                 width={75}
-                                src={`https://turees.zevtabs.mn/api/file?path=shaardlaga/${a}`}
+                                src={`${url}/file?path=shaardlaga/${a}`}
                               />
                             ))}
                           </div>
@@ -638,7 +643,7 @@ function Khyanalt({ token }) {
               )}
             </div>
             <div
-              className="mt-auto w-full p-2"
+              className="w-full  space-y-3 px-3"
               data-aos="fade-right"
               data-aos-duration="1000"
             >
@@ -653,7 +658,6 @@ function Khyanalt({ token }) {
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}
-
               {turul !== "App" ? (
                 <ZagvarUusgekh
                   change={setContent}
@@ -661,7 +665,7 @@ function Khyanalt({ token }) {
                   onTextChange={onTextChange}
                 />
               ) : (
-                <div className="py-3">
+                <div className="space-y-3">
                   <Upload
                     showUploadList={false}
                     multiple={false}
@@ -671,17 +675,45 @@ function Khyanalt({ token }) {
                     onChange={(v) => setZurag(v.file.response)}
                   >
                     <div className="flex flex-row space-x-1">
-                      <Button icon={<UploadOutlined />}>зураг оруулах</Button>
+                      <div className="flex flex-row space-x-1">
+                        {!zurag && (
+                          <Button icon={<UploadOutlined />}>
+                            зураг оруулах
+                          </Button>
+                        )}
+                        {!!zurag && (
+                          <Button
+                            icon={<EyeOutlined />}
+                            onClick={(e) =>
+                              tamgaZuragKharakh(e, `shaardlaga/${zurag}`)
+                            }
+                          >
+                            зураг харах
+                          </Button>
+                        )}
+                        {!!zurag && <Button icon={<EditOutlined />}></Button>}
+                      </div>
                     </div>
                   </Upload>
-                  <TextArea
-                    className="mt-4"
-                    onChange={(e) => setContent(e.target.value)}
+                  <Image
+                    width={200}
+                    preview={{
+                      visible: !!kharakhZurgiinZam,
+                      src: `${url}/file?path=${zurag}`,
+                      onVisibleChange: (value) => {
+                        setKharakhZurgiinZam(undefined);
+                      },
+                    }}
+                  />
+                  <ZagvarUusgekh
+                    change={setContent}
+                    value={content}
+                    onTextChange={onTextChange}
                   />
                 </div>
-              )}
+              )}{" "}
             </div>
-            <div className="flex w-full items-center justify-end space-x-2 p-2">
+            <div className="flex w-full items-center justify-end space-x-2  space-y-3">
               <label className="font-medium">{turul} Илгээх</label>
               <div
                 onClick={send}

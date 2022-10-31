@@ -847,7 +847,7 @@ function Khyanalt({ token }) {
                           {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                         </span>
                         <span className="absolute right-0 -bottom-5 text-gray-500">
-                          {a.turul}
+                          Мэдэгдэл
                         </span>
                       </div>
                     );
