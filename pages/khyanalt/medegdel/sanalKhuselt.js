@@ -5,7 +5,7 @@ import Aos from "aos";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import moment from "moment";
 import { Image, Popconfirm, DatePicker } from "antd";
-import uilchilgee from "services/uilchilgee";
+import uilchilgee, { url } from "services/uilchilgee";
 import local from "antd/lib/date-picker/locale/mn_MN";
 const { RangePicker } = DatePicker;
 
@@ -39,7 +39,7 @@ function index({ token }) {
   return (
     <Admin
       khuudasniiNer="sanalKhuselt"
-      title="Даалгавар"
+      title="Санал хүсэлт"
       className={"gap-5 sm:p-6"}
       onSearch={(search) =>
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
@@ -51,6 +51,7 @@ function index({ token }) {
       >
         <RangePicker
           locale={local}
+          className="w-[20vw]"
           style={{ marginBottom: "20px" }}
           size="middle"
           onChange={setEkhlekhOgnoo}
@@ -76,21 +77,21 @@ function index({ token }) {
           ))}
         </div>
         {turul === "sanal" ? (
-          <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH ">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "sanal" ? (
                 <div
                   className={` ${
                     khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-200"
                       : ""
                   } `}
                 >
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md  p-2 `}
+                    className={`flex h-[7vh] cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
                     onClick={() => setKhariltsagch(mur)}
                   >
-                    <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
+                    <div className="image-fit bg-blackrounded-full relative h-12 w-12  flex-none">
                       <img
                         alt="Rubick"
                         className="rounded-full"
@@ -105,18 +106,9 @@ function index({ token }) {
                     </div>
                     <div className="grid w-full grid-cols-2">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div
-                          className={` ${
-                            khariltsagch?._id === mur?._id ? "text-white" : ""
-                          } `}
-                        >
-                          {mur?.khariltsagchiinNer}
-                        </div>
+                        <div>{mur?.khariltsagchiinNer}</div>
                         <div style={{ width: "40%" }}>
                           <div
-                            className={` ${
-                              khariltsagch?._id === mur?._id ? "text-white" : ""
-                            } `}
                             style={{
                               whiteSpace: "nowrap",
                               overflow: "hidden",
@@ -134,13 +126,7 @@ function index({ token }) {
                           <div className="text-red-500">Хүлээн аваагүй</div>
                         )}
                       </div>
-                      <div
-                        className={`col-span-1 flex items-center justify-end text-sm ${
-                          khariltsagch?._id === mur?._id
-                            ? "text-white"
-                            : "text-gray-500"
-                        }`}
-                      >
+                      <div className="col-span-1 flex items-center justify-end pr-3 text-sm">
                         {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                       </div>
                     </div>
@@ -158,12 +144,12 @@ function index({ token }) {
                 <div
                   className={` ${
                     khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-[#00B077] shadow-lg saturate-50 dark:bg-green-500 "
+                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                       : ""
                   } `}
                 >
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md  p-2 `}
+                    className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
                     onClick={() => setKhariltsagch(mur)}
                   >
                     <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
@@ -181,18 +167,9 @@ function index({ token }) {
                     </div>
                     <div className="grid w-full grid-cols-2">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div
-                          className={` ${
-                            khariltsagch?._id === mur?._id ? "text-white" : ""
-                          } `}
-                        >
-                          {mur?.khariltsagchiinNer}
-                        </div>
+                        <div>{mur?.khariltsagchiinNer}</div>
                         <div style={{ width: "40%" }}>
                           <div
-                            className={` ${
-                              khariltsagch?._id === mur?._id ? "text-white" : ""
-                            } `}
                             style={{
                               whiteSpace: "nowrap",
                               overflow: "hidden",
@@ -210,13 +187,7 @@ function index({ token }) {
                           <div className="text-red-500">Хүлээн аваагүй</div>
                         )}
                       </div>
-                      <div
-                        className={`col-span-1 flex items-center justify-end text-sm ${
-                          khariltsagch?._id === mur?._id
-                            ? "text-white"
-                            : "text-gray-500"
-                        }`}
-                      >
+                      <div className="col-span-1 flex items-center justify-end pr-3  text-sm">
                         {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
                       </div>
                     </div>
@@ -254,16 +225,12 @@ function index({ token }) {
                       onConfirm={() => sanalGomdolAvakh(khariltsagch._id)}
                     >
                       <div
-                        className={`text-md cursor-pointer  rounded-full bg-${
-                          0 === khariltsagch?.tuluv
-                            ? "red"
-                            : 1 === khariltsagch?.tuluv
-                            ? "yellow"
-                            : "green"
+                        className={`text-md cursor-pointer rounded-full font-bold bg-${
+                          0 === khariltsagch?.tuluv ? "red" : "green"
                         }-500 py-1 px-3 font-medium text-gray-50`}
                       >
-                        {2 === khariltsagch?.tuluv
-                          ? "Хүлээж авах"
+                        {0 !== khariltsagch?.tuluv
+                          ? "Хүлээж aвсан"
                           : "Хүлээж авах"}
                       </div>
                     </Popconfirm>
@@ -280,7 +247,7 @@ function index({ token }) {
                     {khariltsagch.zurguud.map((a) => (
                       <Image
                         width={100}
-                        src={`https://turees.zevtabs.mn/api/file?path=sanalkhuselt/${a}`}
+                        src={`${url}/file?path=sanalkhuselt/${a}`}
                       />
                     ))}
                   </div>
