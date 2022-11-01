@@ -305,7 +305,6 @@ function TalbaiBurtgekh({ token }) {
   }, []);
 
   const focuser = useCallback((e) => {
-    console.log(e);
     if (e.key === "Enter") {
       e.preventDefault();
       switch (e.target.id) {
@@ -711,12 +710,20 @@ function TalbaiBurtgekh({ token }) {
                                 fieldKey={[fieldKey, "too"]}
                                 rules={[
                                   {
-                                    required: false,
+                                    required: true,
                                     message: "Тоо ширхэг бүртгэнэ үү",
                                   },
                                 ]}
                               >
                                 <InputNumber
+                                  onChange={(e) => {
+                                    const ads =
+                                      formRef.current?.getFieldsValue();
+
+                                    ads.khurunguud[key].niit =
+                                      e * ads.khurunguud[key].une || 0;
+                                    formRef.current?.setFieldsValue(ads);
+                                  }}
                                   style={{ width: "100%" }}
                                   placeholder="Тоо ширхэг"
                                 />
@@ -730,12 +737,19 @@ function TalbaiBurtgekh({ token }) {
                                 fieldKey={[fieldKey, "une"]}
                                 rules={[
                                   {
-                                    required: false,
+                                    required: true,
                                     message: "Үнэ бүртгэнэ үү",
                                   },
                                 ]}
                               >
                                 <InputNumber
+                                  onChange={(e) => {
+                                    const ads =
+                                      formRef.current?.getFieldsValue();
+                                    ads.khurunguud[key].niit =
+                                      e * ads.khurunguud[key].too || 0;
+                                    formRef.current?.setFieldsValue(ads);
+                                  }}
                                   style={{ width: "100%" }}
                                   placeholder="Нэгж үнэ"
                                   formatter={(value) =>
