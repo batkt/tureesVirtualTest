@@ -84,7 +84,13 @@ function Khyanalt({ token }) {
       barilgiinId,
     };
   }, [barilgiinId]);
-  const khariltsagchiinMedeelel = useJagsaalt("/khariltsagch", query);
+  const khariltsagchiinMedeelel = useJagsaalt(
+    "/khariltsagch",
+    query,
+    undefined,
+    undefined,
+    ["ner", "ovog", "utas"]
+  );
   const { sonorduulga, sonorduulgaMutate, jagsaalt, nextSonorduulga } =
     useSanalGomdol(
       turul === "App" && token,
@@ -335,7 +341,7 @@ function Khyanalt({ token }) {
       khuudasniiNer="shaardlaga"
       className=" overflow-hidden p-5 md:p-4 lg:h-auto"
       onSearch={(search) =>
-        setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
+        khariltsagchiinMedeelel.setKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
     >
@@ -435,17 +441,13 @@ function Khyanalt({ token }) {
         <div className="box p-5 xl:block xl:h-H7HalfRem">
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
-              disabled
               type="text"
               className="w-full rounded-md bg-gray-100 px-2  py-1 dark:bg-gray-700"
               placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
-              onSearch={(search) =>
-                setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
-              }
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
-                  setKhariltsagchKhuudaslalt((a) => ({
+                  khariltsagchiinMedeelel.setKhuudaslalt((a) => ({
                     ...a,
                     search: target.value,
                   }));
@@ -484,7 +486,7 @@ function Khyanalt({ token }) {
               }}
             >
               {" "}
-              Харилцагч
+              Бүгдийг сонгох
             </Checkbox>
           </div>
 
