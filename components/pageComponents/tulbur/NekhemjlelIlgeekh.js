@@ -125,7 +125,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
     if (nekhemjlekh.mail?.length > 0) {
       var mailuud = [];
       mailuud.push({
-        mail: nekhemjlekh.zagvar,
+        mail: nekhemjlekh.mail,
         content: nekhemjlekh.zagvar,
       });
       setLoading(true);
