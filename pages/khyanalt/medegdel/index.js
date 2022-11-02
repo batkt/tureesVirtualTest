@@ -710,7 +710,7 @@ function Khyanalt({ token }) {
               <div>
                 {!!mur._id ? (
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md border-t p-2 ${
                       khariltsagch?._id === mur?._id
                         ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                         : ""
