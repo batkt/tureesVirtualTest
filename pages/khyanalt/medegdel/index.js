@@ -186,7 +186,7 @@ function Khyanalt({ token }) {
               path: "medegdel",
             });
           if (!!data?.successCount) {
-            sonorduulga.jagsaalt.unshift({
+            medegdelAvya.jagsaalt.unshift({
               khariltsagchiinId: khariltsagch?._id,
               barilgiinId: khariltsagch.barilgiinId,
               khariltsagchiinNer: khariltsagch.ner,
@@ -194,7 +194,6 @@ function Khyanalt({ token }) {
               message: ingeekhmSms,
               turul: "medegdel",
             });
-            sonorduulgaMutate({ ...sonorduulga }, false);
             notification.success({
               message: "Notification Амжилттай илгээлээ",
             });
