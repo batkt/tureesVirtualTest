@@ -185,6 +185,10 @@ function GereeBaiguulakh({ token, data }) {
   const currentItem = steps[current];
   const gereeniiZagvariinId = "gereeniiZagvar";
 
+  const onChange = (value) => {
+    setCurrent(value);
+  };
+
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -196,13 +200,9 @@ function GereeBaiguulakh({ token, data }) {
     >
       <div className="box col-span-12 p-5">
         <div className="px-10">
-          <Steps current={current}>
+          <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
-              <Step
-                key={item.title}
-                title={item.title}
-                onStepClick={() => setCurrent(index)}
-              />
+              <Step value={index} key={item.title} title={item.title} />
             ))}
           </Steps>
         </div>

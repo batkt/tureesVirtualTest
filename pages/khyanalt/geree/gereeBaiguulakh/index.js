@@ -240,6 +240,14 @@ function GereeBaiguulakh({ token }) {
   const currentItem = steps[current];
   const gereeniiZagvariinId = "gereeniiZagvar";
 
+  const onChange = (value) => {
+    current + 1 === value
+      ? setFormSubmit(true)
+      : alkhamErkh < value
+      ? message.warning("Алхам алгасах боломжгүй!")
+      : alkhamSoliyo(value);
+  };
+
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -250,18 +258,12 @@ function GereeBaiguulakh({ token }) {
     >
       <div className="box col-span-12 p-5">
         <div className="contents px-10">
-          <Steps current={current}>
+          <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
               <Step
+                value={index}
                 key={item.title}
                 title={item.title}
-                onStepClick={() => {
-                  current + 1 === index
-                    ? setFormSubmit(true)
-                    : alkhamErkh < index
-                    ? message.warning("Алхам алгасах боломжгүй!")
-                    : alkhamSoliyo(index);
-                }}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
