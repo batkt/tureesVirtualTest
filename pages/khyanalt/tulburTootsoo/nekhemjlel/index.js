@@ -557,7 +557,7 @@ function tulburTootsoo({ token }) {
                       <div
                         className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
                         onClick={() =>
-                          turul === "sms" || turul === "App"
+                          turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
                             : router.push(
                                 `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
