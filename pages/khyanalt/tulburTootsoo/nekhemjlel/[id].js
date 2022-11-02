@@ -120,10 +120,12 @@ function getSize(khemjee, orientation) {
 function ZakhialgaNemekh({ token }) {
   const router = useRouter();
   const { id } = router.query;
-  const [nekhemjlelZagvar, setNekhemjlelZagvar] = React.useState({});
-  const [khemjee, setKhemjee] = useState("A4");
+  const [nekhemjlelZagvar, setNekhemjlelZagvar] = React.useState({
+    khuudasniiKhemjee: "A4",
+    chiglel: "landscape",
+  });
+
   const { barilgiinId } = useAuth();
-  const [orientation, setOrientation] = useState("portrait");
   const [waiting, setWaiting] = useState(false);
 
   React.useEffect(() => {
@@ -136,8 +138,11 @@ function ZakhialgaNemekh({ token }) {
   }, [id]);
 
   const { width, height } = React.useMemo(() => {
-    return getSize(khemjee, orientation);
-  }, [khemjee, orientation]);
+    return getSize(
+      nekhemjlelZagvar?.khuudasniiKhemjee,
+      nekhemjlelZagvar?.chiglel
+    );
+  }, [nekhemjlelZagvar.khuudasniiKhemjee, nekhemjlelZagvar.chiglel]);
 
   const custom = React.useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -215,7 +220,7 @@ function ZakhialgaNemekh({ token }) {
         });
     } else message.warning("Нэр оруулна уу!");
   }
-  function hemjee(e) {
+  function onChange(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
       ...nekhemjlelZagvar,
       khuudasniiKhemjee: e.target.value,
@@ -231,14 +236,13 @@ function ZakhialgaNemekh({ token }) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
       ...nekhemjlelZagvar,
       nekhemjlekh: e,
-      turul: "Mail",
     }));
   }
-
   function inputOnchange(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({
       ...nekhemjlelZagvar,
       ner: e.target.value,
+      turul: "Mail",
     }));
   }
 
@@ -296,15 +300,15 @@ function ZakhialgaNemekh({ token }) {
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 className="my-3"
-                onChange={hemjee}
-                defaultValue={"A4"}
+                onChange={onChange}
+                value={nekhemjlelZagvar.khuudasniiKhemjee}
               >
                 <Radio value={"A4"}>A4</Radio>
                 <Radio value={"A5"}>A5</Radio>
               </Radio.Group>
               <Select
                 className="w-28"
-                defaultValue={"portrait"}
+                value={nekhemjlelZagvar.chiglel}
                 onChange={rotate}
                 menuItemSelectedIcon={<CheckOutlined />}
                 suffixIcon={<img src="/rotate.svg" width={"16px"} />}

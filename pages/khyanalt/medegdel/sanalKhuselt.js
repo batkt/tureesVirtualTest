@@ -77,7 +77,7 @@ function index({ token }) {
           ))}
         </div>
         {turul === "sanal" ? (
-          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH ">
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto text-xs  lg:h-scrollH">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "sanal" ? (
                 <div
@@ -104,7 +104,7 @@ function index({ token }) {
                         }
                       />
                     </div>
-                    <div className="grid w-full grid-cols-2">
+                    <div className="grid w-full grid-cols-2 text-xs">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
                         <div>{mur?.khariltsagchiinNer}</div>
                         <div style={{ width: "40%" }}>
@@ -138,7 +138,7 @@ function index({ token }) {
             )}
           </div>
         ) : (
-          <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
+          <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto text-xs lg:h-scrollH">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "gomdol" ? (
                 <div
@@ -165,7 +165,7 @@ function index({ token }) {
                         }
                       />
                     </div>
-                    <div className="grid w-full grid-cols-2">
+                    <div className="grid w-full grid-cols-2 text-xs">
                       <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
                         <div>{mur?.khariltsagchiinNer}</div>
                         <div style={{ width: "40%" }}>

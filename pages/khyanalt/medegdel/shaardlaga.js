@@ -471,7 +471,7 @@ function Khyanalt({ token }) {
             </svg>
           </div>
 
-          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
+          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
             <Checkbox
               checked={
                 khariltsagchiinMedeelel?.jagsaalt?.length ===
@@ -533,7 +533,6 @@ function Khyanalt({ token }) {
                         : "/profile.svg"
                     }
                   />
-                  <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                 </div>
                 <div className="flex w-full justify-between truncate text-center text-xs text-gray-600 ">
                   <div> {mur?.ner}</div>
@@ -591,9 +590,9 @@ function Khyanalt({ token }) {
               ""
             )}
             <div
+              className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
               style={{ maxHeight: "calc(100vh - 32rem)" }}
               onScroll={onScroll}
-              className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
             >
               {sonorduulga.jagsaalt.map((mur) =>
                 mur.khariltsagchiinId === khariltsagch._id ? (
@@ -601,7 +600,7 @@ function Khyanalt({ token }) {
                     <div className="relative w-10/12  rounded-lg bg-green-50 p-3  dark:bg-gray-800 sm:w-full">
                       <div className="flex flex-row flex-wrap items-center justify-between  ">
                         <div className="text-sm text-green-600">
-                          Гарчиг:{mur.title}
+                          Гарчиг: {mur.title}
                         </div>
                         {mur?.tuluv === 0 ? (
                           <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
@@ -618,7 +617,7 @@ function Khyanalt({ token }) {
                       <div className="flex">
                         <div className="w-full">
                           <div className="font-semibold">
-                            Шаардлага : {mur.message}
+                            Шаардлага: {mur.message}
                           </div>
 
                           <div>
@@ -715,33 +714,35 @@ function Khyanalt({ token }) {
                 </div>
               )}{" "}
             </div>
-            <div className="flex w-full items-center justify-end space-x-2  space-y-3">
-              <label className="font-medium">{turul} Илгээх</label>
-              <div
-                onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
-                  loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
-              >
-                {loading ? (
-                  <Spin size="small" />
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-4 w-4"
-                  >
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                  </svg>
-                )}
+            <div className="flex w-full items-center justify-end space-x-2">
+              <div className="flex items-center justify-between space-x-3">
+                <label className="font-medium">{turul} Илгээх</label>
+                <div
+                  onClick={send}
+                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                    loading ? "200" : "600"
+                  } flex flex-none items-center justify-center rounded-full text-white`}
+                >
+                  {loading ? (
+                    <Spin size="small" />
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-4 w-4"
+                    >
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                  )}
+                </div>
               </div>
             </div>
           </div>
