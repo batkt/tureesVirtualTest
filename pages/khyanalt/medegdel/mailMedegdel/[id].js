@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
+import Admin from "components/Admin";
 import { useRouter } from "next/router";
 import { Button, Form, Input, message, Radio, Select } from "antd";
 import _ from "lodash";
 import { useAuth } from "services/auth";
+import readMethod from "tools/function/crud/readMethod";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
@@ -115,18 +117,29 @@ function getSize(khemjee, orientation) {
   return { width, height };
 }
 
-function MailNemekh({ token, destroy }) {
+function ZakhialgaNemekh({ token }) {
   const router = useRouter();
   const { id } = router.query;
-  const [mailZagvar, setMailZagvar] = React.useState({});
-  const [khemjee, setKhemjee] = useState("A4");
+  const [mailiinZagvar, setMailiinZagvar] = React.useState({
+    khuudasniiKhemjee: "A4",
+    chiglel: "portrait",
+  });
+  console.log(mailiinZagvar);
   const { barilgiinId } = useAuth();
-  const [orientation, setOrientation] = useState("portrait");
   const [waiting, setWaiting] = useState(false);
 
+  React.useEffect(() => {
+    if (id !== "new")
+      readMethod("mailiinZagvar", token, id).then(({ data }) => {
+        if (data) {
+          setMailiinZagvar({ ...data });
+        }
+      });
+  }, [id]);
+
   const { width, height } = React.useMemo(() => {
-    return getSize(khemjee, orientation);
-  }, [khemjee, orientation]);
+    return getSize(mailiinZagvar?.khuudasniiKhemjee, mailiinZagvar?.chiglel);
+  }, [mailiinZagvar.khuudasniiKhemjee, mailiinZagvar.chiglel]);
 
   const custom = React.useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -187,15 +200,15 @@ function MailNemekh({ token, destroy }) {
   }, []);
 
   function khadgalya() {
-    if (mailZagvar.ner) {
+    if (mailiinZagvar.ner) {
       setWaiting(true);
-      mailZagvar.barilgiinId = barilgiinId;
-      const method = mailZagvar?._id ? updateMethod : createMethod;
-      method("mailiinZagvar", token, mailZagvar)
+      mailiinZagvar.barilgiinId = barilgiinId;
+      const method = mailiinZagvar?._id ? updateMethod : createMethod;
+      method("mailiinZagvar", token, mailiinZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
             message.success("Амжилттай хадгаллаа");
-            router.reload();
+            router.back();
           }
         })
         .catch((e) => {
@@ -204,111 +217,93 @@ function MailNemekh({ token, destroy }) {
         });
     } else message.warning("Нэр оруулна уу!");
   }
-  function hemjee(e) {
-    setMailZagvar((mailZagvar) => ({
-      ...mailZagvar,
-      khuudasniiKhemjee: e.target.value,
-    }));
-  }
-  function rotate(e) {
-    setMailZagvar((mailZagvar) => ({
-      ...mailZagvar,
-      chiglel: e,
-    }));
-  }
+
   function handleChange(e) {
-    setMailZagvar((mailZagvar) => ({
-      ...mailZagvar,
+    setMailiinZagvar((mailiinZagvar) => ({
+      ...mailiinZagvar,
       mail: e,
+    }));
+  }
+  function inputOnchange(e) {
+    setMailiinZagvar((mailiinZagvar) => ({
+      ...mailiinZagvar,
+      ner: e.target.value,
       turul: "Mail",
     }));
   }
 
-  function inputOnchange(e) {
-    setMailZagvar((mailZagvar) => ({
-      ...mailZagvar,
-      ner: e.target.value,
-    }));
-  }
-
   return (
-    <div className=" relative col-span-12 grid grid-cols-12 ">
-      <div
-        style={{ height: "calc(100vh - 7rem)" }}
-        className="col-span-9 overflow-auto p-10"
-      >
-        <SunEditor
-          onChange={(e) => handleChange(e)}
-          value={mailZagvar?.nekhemjlekh}
-          setContents={mailZagvar?.nekhemjlekh}
-          setOptions={{
-            plugins: custom,
-            buttonList: [
-              [
-                "undsen",
-                "khugatsaa",
-                "talbai",
-                "baritsaa",
-                "tulbur",
-                "nekhemjlel",
-                "nekhemjlekhiinNemelt",
+    <Admin
+      khuudasniiNer="MailZagvarKhyanalt"
+      title="Mail загвар угсрах"
+      hideSearch
+      dedKhuudas
+      className="p-4"
+      loading={waiting}
+    >
+      <div className=" relative col-span-12 grid grid-cols-12 ">
+        <div
+          style={{ height: "calc(100vh - 7rem)" }}
+          className="col-span-9 overflow-auto p-10"
+        >
+          <SunEditor
+            onChange={(e) => handleChange(e)}
+            value={mailiinZagvar?.mail}
+            setContents={mailiinZagvar?.mail}
+            setOptions={{
+              plugins: custom,
+              buttonList: [
+                [
+                  "undsen",
+                  "khugatsaa",
+                  "talbai",
+                  "baritsaa",
+                  "tulbur",
+                  "nekhemjlel",
+                  "nekhemjlekhiinNemelt",
+                ],
+                ["list", "align", "codeView"],
+                ["font", "fontSize", "fontColor"],
               ],
-              ["image", "table", "list", "align", "codeView"],
-              ["font", "fontSize", "fontColor"],
-            ],
-          }}
-          width={width}
-          height={height}
-        />
-      </div>
-      <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
-        <div className="space-y-2">
-          <Form.Item name="_id" noStyle />
-          <Input
-            value={mailZagvar.ner}
-            onChange={inputOnchange}
-            placeholder="Нэр"
+            }}
+            width={width}
+            height={height}
           />
-          <Form.Item
-            label="Нэхэмжлэхийн загвар"
-            name="nekhemjlekh"
-            noStyle
-          ></Form.Item>
-          <div className="mt-3 flex items-center justify-between">
-            <Radio.Group className="my-3" onChange={hemjee} defaultValue={"A4"}>
-              <Radio value={"A4"}>A4</Radio>
-              <Radio value={"A5"}>A5</Radio>
-            </Radio.Group>
-            <Select
-              className="w-28"
-              defaultValue={"portrait"}
-              onChange={rotate}
-              menuItemSelectedIcon={<CheckOutlined />}
-              suffixIcon={<img src="/rotate.svg" width={"16px"} />}
-            >
-              <Select.Option value={"portrait"}>portrait</Select.Option>
-              <Select.Option value={"landscape"}>landscape</Select.Option>
-            </Select>
+        </div>
+        <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
+          <div className="space-y-2">
+            <Form.Item name="_id" noStyle />
+            <Input
+              value={mailiinZagvar.ner}
+              onChange={inputOnchange}
+              placeholder="Нэр"
+            />
+            <Form.Item
+              label="Нэхэмжлэхийн загвар"
+              name="nekhemjlekh"
+              noStyle
+            ></Form.Item>
+
+            <Form.Item>
+              <Button
+                onClick={khadgalya}
+                style={{
+                  backgroundColor: "#209669",
+                  color: "#ffffff",
+                  width: "100%",
+                  marginTop: "20px",
+                }}
+              >
+                Хадгалах
+              </Button>
+            </Form.Item>
           </div>
-          <Form.Item>
-            <Button
-              onClick={khadgalya}
-              style={{
-                backgroundColor: "#209669",
-                color: "#ffffff",
-                width: "100%",
-                marginTop: "20px",
-              }}
-            >
-              Хадгалах
-            </Button>
-          </Form.Item>
         </div>
       </div>
-    </div>
+    </Admin>
   );
 }
 
 export const getServerSideProps = shalgaltKhiikh;
 
-export default MailNemekh;
+export default ZakhialgaNemekh;

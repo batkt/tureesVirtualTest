@@ -27,7 +27,6 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import router from "next/router";
-import MedegdelMailIlgeekh from "components/pageComponents/medegdel/MedegdelMailIlgeekh";
 import ZagvarBurtgel from "components/pageComponents/medegdel/ZagvarBurtgel";
 import ZagvarUusgekh from "components/pageComponents/medegdel/ZagvarUusgekh";
 import deleteMethod from "tools/function/crud/deleteMethod";
@@ -119,7 +118,7 @@ function Khyanalt({ token }) {
     khariltsagchiinQuery,
     undefined,
     undefined,
-    ["ner", "ovog", "utas"]
+    ["ner", "ovog", "utas", "register"]
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(token);
 
@@ -151,7 +150,6 @@ function Khyanalt({ token }) {
     setKhariltsagch(null);
     setDavkhar(null);
   }, [turul]);
-
   const ingeekhmSms = useMemo(() => {
     if (!khariltsagch) return msj;
     var utga = msj;
@@ -161,61 +159,103 @@ function Khyanalt({ token }) {
     return utga;
   }, [khariltsagch, msj]);
   //#endregion
-
   //#region method
   async function appIlgeeye() {
-    if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна");
+    if (songogdsonKhariltsagch.length > 0) {
+      var khariu = { successCount: 0, failureCount: 0 };
+      songogdsonKhariltsagch
+        .filter((a) => !!a._id)
+        .map((a, index, array) => {
+          let body = msj;
+          for (const [key, value] of Object.entries(a)) {
+            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
+          }
+          uilchilgee(token)
+            .post(`/sonorduulgaIlgeeye`, {
+              firebaseToken: a?.firebaseToken,
+              khariltsagchiinId: a?._id,
+              barilgiinId: a.barilgiinId,
+              khariltsagchiinNer: a.ner,
+              zurgiinId: a.zurag,
+              medeelel: { title, body: ingeekhmSms },
+            })
+            .then(({ data }) => {
+              if (!!data?.successCount) khariu.successCount += 1;
+              else if (!!data?.failureCount) khariu.failureCount += 1;
+              if (index === array.length - 1) {
+                notification.success({
+                  message: `Notification Амжилттай ${khariu.successCount} ${
+                    khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
+                  } илгээлээ`,
+                });
+                setLoading(false);
+                onTextChange("");
+                setContent("");
+                setTitle("");
+              }
+            });
+          return;
+        });
       return;
     }
-    if (!!title) {
-      setLoading(true);
-      uilchilgee(token)
-        .post(`/sonorduulgaIlgeeye`, {
-          firebaseToken: khariltsagch?.firebaseToken,
-          khariltsagchiinId: khariltsagch?._id,
-          barilgiinId: khariltsagch.barilgiinId,
-          khariltsagchiinNer: khariltsagch.ner,
-          zurgiinId: zurag,
-          medeelel: { title, body: ingeekhmSms },
-        })
-        .then(({ data }) => {
-          zurag &&
-            uilchilgee(token).post("/confirmFile", {
-              filename: zurag,
-              path: "medegdel",
-            });
-          if (!!data?.successCount) {
-            medegdelAvya.jagsaalt.unshift({
-              khariltsagchiinId: khariltsagch?._id,
-              barilgiinId: khariltsagch.barilgiinId,
-              khariltsagchiinNer: khariltsagch.ner,
-              title,
-              message: ingeekhmSms,
-              turul: "medegdel",
-            });
-            notification.success({
-              message: "Notification Амжилттай илгээлээ",
-            });
-            onTextChange("");
-            setContent("");
-            setTitle("");
+    if (msj.length < 3600) {
+      if (loading) {
+        message.warning("Хүсэлт илгээгдсэн байна");
+        return;
+      }
+      if (!!title) {
+        setLoading(true);
+        uilchilgee(token)
+          .post(`/sonorduulgaIlgeeye`, {
+            firebaseToken: khariltsagch?.firebaseToken,
+            khariltsagchiinId: khariltsagch?._id,
+            barilgiinId: khariltsagch.barilgiinId,
+            khariltsagchiinNer: khariltsagch.ner,
+            zurgiinId: zurag,
+            medeelel: { title, body: ingeekhmSms },
+          })
+          .then(({ data }) => {
+            zurag &&
+              uilchilgee(token).post("/confirmFile", {
+                filename: zurag,
+                path: "medegdel",
+              });
+            if (!!data?.successCount) {
+              medegdelAvya.jagsaalt.unshift({
+                khariltsagchiinId: khariltsagch?._id,
+                barilgiinId: khariltsagch.barilgiinId,
+                khariltsagchiinNer: khariltsagch.ner,
+                title,
+                message: ingeekhmSms,
+                turul: "medegdel",
+              });
+              notification.success({
+                message: "Notification Амжилттай илгээлээ",
+              });
+              onTextChange("");
+              setContent("");
+              setTitle("");
+              setLoading(false);
+            } else if (!!data?.failureCount) {
+              notification.warning({
+                description: _.get(data, "results.0.error.message"),
+                message: _.get(data, "results.0.error.code"),
+              });
+              setLoading(false);
+            }
+          })
+          .catch((e) => {
             setLoading(false);
-          } else if (!!data?.failureCount) {
-            notification.warning({
-              description: _.get(data, "results.0.error.message"),
-              message: _.get(data, "results.0.error.code"),
-            });
-            setLoading(false);
-          }
-        })
-        .catch((e) => {
-          setLoading(false);
-          aldaaBarigch(e);
+            aldaaBarigch(e);
+          });
+      } else {
+        notification.warning({
+          message: "Гарчиг заавал оруулна уу",
         });
+      }
     } else {
       notification.warning({
-        message: "Гарчиг заавал оруулна уу",
+        message: "SmS илгээх үсгийн тоо хэтэрсэн байна",
       });
     }
   }
@@ -226,7 +266,7 @@ function Khyanalt({ token }) {
       return;
     }
     var msgnuud = [];
-    if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0)
+    if (songogdsonKhariltsagch.length > 0)
       songogdsonKhariltsagch.map((a) => {
         var text = msj;
         for (const [key, value] of Object.entries(a)) {
@@ -276,6 +316,7 @@ function Khyanalt({ token }) {
           setContent("");
           setTitle("");
           setLoading(false);
+          router.reload();
         }
       })
       .catch((e) => {
@@ -285,7 +326,7 @@ function Khyanalt({ token }) {
   }
 
   async function mailIlgeeye() {
-    if (ilgeekhTurul === "gantsaar" && !khariltsagch?.mail) {
+    if (!khariltsagch?.mail) {
       notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
       return;
     }
@@ -464,15 +505,17 @@ function Khyanalt({ token }) {
 
         {turul === "SMS" ? (
           <div
-            className="box mt-5 flex flex-row items-center p-2 pl-3 "
+            className="box mt-5 flex flex-row items-center justify-between p-2 px-10"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="100"
           >
-            <div className="items-center sm:flex lg:mt-3 xl:block 2xl:mt-auto 2xl:flex">
+            <div>
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS илгээсэн
               </p>
+            </div>
+            <div>
               <IlgeesenToo
                 barilgiinId={barilgiinId}
                 baiguullagiinId={baiguullaga?._id}
@@ -482,6 +525,8 @@ function Khyanalt({ token }) {
                 text="Нийт"
                 turul={turul}
               />
+            </div>
+            <div>
               <IlgeesenToo
                 barilgiinId={barilgiinId}
                 baiguullagiinId={baiguullaga?._id}
@@ -494,19 +539,19 @@ function Khyanalt({ token }) {
             </div>
           </div>
         ) : null}
-        <div
-          className={` ${
-            turul === "SMS" ? "ml-auto" : "flex w-full justify-center"
-          }`}
-        ></div>
 
-        <div
+        {/* <div
           className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          {/* <Select className="w-full" value={tuluv} onChange={setTuluv}>
+          <Select
+            className="w-full"
+            placeholder="Төрөл сонгоно уу"
+            value={tuluv}
+            onChange={setTuluv}
+          >
             {[
               { key: "idevkhtei", v: "Идэвхтэй" },
               { key: "idevkhgiu", v: "Идэвхгүй " },
@@ -515,17 +560,8 @@ function Khyanalt({ token }) {
                 {a.v}
               </Select.Option>
             ))}
-          </Select> */}
-          <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
-            {baiguullaga?.barilguud
-              ?.find((a) => a._id === barilgiinId)
-              ?.davkharuud.map((a) => (
-                <Select.Option key={a._id} value={a.davkhar}>
-                  {a.davkhar}
-                </Select.Option>
-              ))}
           </Select>
-        </div>
+        </div> */}
         <div
           className={`mt-5 flex-row p-2 font-medium xl:flex ${
             khariltsagch ? "hidden" : "flex"
@@ -546,23 +582,19 @@ function Khyanalt({ token }) {
               {turulZagvar === false ? (turul, "загвар") : "буцах"}
             </Button>
           </div>
-          {turul === "Mail" ? (
-            <button
-              className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
-              onClick={() => {
-                setMailIlgeekh(true);
-              }}
-            >
-              Загвар үүсгэх
-            </button>
-          ) : (
-            <button
-              className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
-              onClick={() => smsZagvarNemya()}
-            >
-              Загвар үүсгэх
-            </button>
-          )}
+
+          <button
+            className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
+            onClick={() =>
+              turul === "SMS"
+                ? smsZagvarNemya()
+                : turul === "App"
+                ? smsZagvarNemya()
+                : router.push("/khyanalt/medegdel/mailMedegdel/new")
+            }
+          >
+            {turul} Загвар үүсгэх
+          </button>
         </div>
         <div
           className={`scrollbar-hidden h-full overflow-hidden overflow-y-auto xl:block ${
@@ -602,9 +634,11 @@ function Khyanalt({ token }) {
                     <div
                       className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
                       onClick={() =>
-                        turul === "sms" || "App"
+                        turul === "SMS" || turul === "App"
                           ? smsZagvarNemya(a)
-                          : router.push(`/khyanalt/medegdel/${a._id}`)
+                          : router.push(
+                              `/khyanalt/medegdel/mailMedegdel/${a._id}`
+                            )
                       }
                     >
                       <EditOutlined style={{ color: "#85C1E9" }} />
@@ -627,7 +661,8 @@ function Khyanalt({ token }) {
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
               type="text"
-              className="w-full rounded-md bg-gray-100 px-2  py-1   dark:bg-gray-700"
+              className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none
+              focus:ring-1 focus:ring-[#8aaaef] "
               placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
               onChange={({ target }) => {
                 clearTimeout(timeout);
@@ -720,9 +755,11 @@ function Khyanalt({ token }) {
                             : "/profile.svg"
                         }
                       />
-                      <div className="bg-theme-9 absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                     </div>
-                    <div>{mur?.ner}</div>
+                    <div className="flex w-full justify-between">
+                      <div className="text-xs">{mur?.ner}</div>
+                      <div className="text-xs">{mur?.utas}</div>
+                    </div>
                   </div>
                 ) : (
                   ""
@@ -738,25 +775,6 @@ function Khyanalt({ token }) {
           <div className="box flex h-full flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
               <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
-                {ilgeekhTurul === "davkharaar" && (
-                  <div className="flex flex-row space-x-2">
-                    <div>Давхар сонгох</div>
-                    <div className="">
-                      <Select
-                        placeholder="Давхар"
-                        value={davkhar}
-                        onChange={setDavkhar}
-                        allowClear
-                      >
-                        {baiguullaga?.barilguud[0]?.davkharuud.map((a) => (
-                          <Select.Option key={a._id} value={a.davkhar}>
-                            {a.davkhar}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </div>
-                  </div>
-                )}
                 {khariltsagch && (
                   <div className="flex items-center">
                     <div className="mr-3 text-lg xl:hidden">
@@ -815,6 +833,10 @@ function Khyanalt({ token }) {
                             : "rounded-bl-none"
                         }`}
                       >
+                        {" "}
+                        <span className="w-full break-words text-justify text-white ">
+                          Гарчиг: {a.title}
+                        </span>
                         <span className="w-full break-words text-justify text-white ">
                           {a.message}
                         </span>
@@ -985,7 +1007,7 @@ function Khyanalt({ token }) {
               )}
             </div>
             <div className="flex w-full items-center justify-between space-x-2 p-2">
-              <div className="text-lg">{msj.length}/160</div>
+              <div className="text-xs font-semibold">{msj.length}/160</div>
               <div className="flex items-center justify-between space-x-3">
                 <label className="font-medium">{turul} Илгээх</label>
                 <div
@@ -1043,16 +1065,6 @@ function Khyanalt({ token }) {
             </div>
           </div>
         )}
-        <Drawer
-          title={"Mail Загвар үүсгэх"}
-          width={"70vw"}
-          onClose={() => setMailIlgeekh(false)}
-          visible={mailIlgeekh === true}
-        >
-          {mailIlgeekh === true && (
-            <MedegdelMailIlgeekh ref={ilgeekhRef} token={token} />
-          )}
-        </Drawer>
       </div>
     </Admin>
   );

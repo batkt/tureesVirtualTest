@@ -122,27 +122,25 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
       message.warning("И-мэйл илгээгдсэн байна");
       return;
     }
-    if (nekhemjlekh.mail?.length > 0) {
-      var mailuud = [];
-      mailuud.push({
-        mail: nekhemjlekh.mail,
-        content: nekhemjlekh.zagvar,
-      });
-      setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-            setLoading(false);
-            destroy();
-          }
-        })
-        .catch((e) => {
+    var mailuud = [];
+    mailuud.push({
+      mail: nekhemjlekh.mail,
+      content: nekhemjlekh.zagvar,
+    });
+    setLoading(true);
+    uilchilgee(token)
+      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
           setLoading(false);
-          aldaaBarigch(e);
-        });
-    }
+          destroy();
+        }
+      })
+      .catch((e) => {
+        setLoading(false);
+        aldaaBarigch(e);
+      });
   }
 
   const handlePrint = useReactToPrint({
