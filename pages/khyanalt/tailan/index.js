@@ -4,7 +4,6 @@ import React, { useMemo, useState, useEffect } from "react";
 import VerticarlBarChart from "components/pageComponents/tailan/chart/VerticarlBarChart";
 import LineChart from "components/pageComponents/tailan/chart/LineChart";
 import HorizontalBarChart from "components/pageComponents/tailan/chart/HorizontalBarChart";
-import PieChart from "components/pageComponents/tailan/chart/PieChart";
 import useTailan from "hooks/tailan/useTailan";
 import { DatePicker, Progress, Select } from "antd";
 import local from "antd/lib/date-picker/locale/mn_MN";
@@ -86,7 +85,6 @@ function Chart({
               { val: "line", lab: "Шугаман" },
               { val: "bar", lab: "Багана/босоо/" },
               { val: "barHorizontal", lab: "Багана/хэвтээ/" },
-              { val: "pie", lab: "pie/Дугуй/" },
             ].map((a) => (
               <Select.Option key={a.val} value={a.val}>
                 {a.lab}
@@ -120,7 +118,6 @@ function Chart({
       {tailanTurul === "barHorizontal" && (
         <HorizontalBarChart data={tailanGaralt || {}} />
       )}
-      {tailanTurul === "pie" && <PieChart data={tailanGaralt || {}} />}
       <div className="flex flex-col items-center space-y-2">
         <div className="table w-full">
           {tailanGaralt?.jagsaalt?.map((a) => (
@@ -219,8 +216,8 @@ function AjiltanBurtgel({ token }) {
           barilgiinId={barilgiinId}
           setWaiting={setWaiting}
           token={token}
-          defaultTurul="pie"
-          defaultTailan="ashigiinTailanAvya"
+          defaultTurul="line"
+          defaultTailan="borluulaltiinTailanAvya"
         />
       </div>
     </Admin>
