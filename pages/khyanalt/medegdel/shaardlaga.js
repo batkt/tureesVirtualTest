@@ -471,7 +471,7 @@ function Khyanalt({ token }) {
             </svg>
           </div>
 
-          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
+          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
             <Checkbox
               checked={
                 khariltsagchiinMedeelel?.jagsaalt?.length ===
@@ -485,17 +485,16 @@ function Khyanalt({ token }) {
                 else setSongogdsonKhariltsagch([]);
               }}
             >
-              {" "}
-              Бүгдийг сонгох
+              <p className="pl-3">Бүгдийг сонгох</p>
             </Checkbox>
           </div>
 
           <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
-                className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
                   khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
                     : ""
                 } `}
                 onClick={() => setKhariltsagch(mur)}
@@ -523,7 +522,7 @@ function Khyanalt({ token }) {
                     }}
                   />
                 </div>
-                <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                <div className="image-fit relative h-10 w-10 flex-none rounded-full ">
                   <img
                     alt="profileZurag"
                     className="rounded-full"

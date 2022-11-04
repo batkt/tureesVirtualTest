@@ -97,8 +97,6 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
-  const [mailIlgeekh, setMailIlgeekh] = useState(false);
-  const ilgeekhRef = useRef();
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
@@ -163,6 +161,7 @@ function Khyanalt({ token }) {
 
   //#endregion
   //#region method
+
   async function appIlgeeye() {
     if (songogdsonKhariltsagch.length > 0) {
       var khariu = { successCount: 0, failureCount: 0 };
@@ -258,7 +257,7 @@ function Khyanalt({ token }) {
       }
     } else {
       notification.warning({
-        message: "SmS илгээх үсгийн тоо хэтэрсэн байна",
+        message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
       });
     }
   }
@@ -483,6 +482,14 @@ function Khyanalt({ token }) {
   }
   //#endregion
 
+  function khariltsagchSongokh(mur) {
+    setKhariltsagch(mur);
+    const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
+    index !== -1
+      ? songogdsonKhariltsagch.splice(index, 1)
+      : songogdsonKhariltsagch.push(mur);
+    setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
+  }
   return (
     <Admin
       title="Мэдэгдэл"
@@ -698,7 +705,7 @@ function Khyanalt({ token }) {
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </div>
-          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ">
+          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
               checked={
                 nekhemjlel?.jagsaalt?.length === songogdsonKhariltsagch.length
@@ -709,8 +716,7 @@ function Khyanalt({ token }) {
                 else setSongogdsonKhariltsagch([]);
               }}
             >
-              {" "}
-              Бүгдийг сонгох
+              <p className="pl-3">Бүгдийг сонгох</p>
             </Checkbox>
           </div>
           <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
@@ -718,13 +724,13 @@ function Khyanalt({ token }) {
               <div>
                 {!!mur._id ? (
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md border-t p-2 ${
+                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
                       khariltsagch?._id === mur?._id
-                        ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
                         : ""
                     } `}
                     key={mur?._id}
-                    onClick={() => setKhariltsagch(mur)}
+                    onClick={() => khariltsagchSongokh(mur)}
                   >
                     <div>
                       <Checkbox
@@ -734,7 +740,6 @@ function Khyanalt({ token }) {
                           ) !== -1
                         }
                         onChange={(e) => {
-                          e.target.checked;
                           if (e.target.checked == true) {
                             songogdsonKhariltsagch.push(mur);
                           } else {
@@ -787,7 +792,7 @@ function Khyanalt({ token }) {
                   <div className="flex items-center">
                     <div className="mr-3 text-lg xl:hidden">
                       <ArrowLeftOutlined
-                        onClick={() => setKhariltsagch(null)}
+                        onClick={() => khariltsagchSongokh(mur)}
                       />
                     </div>
                     <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
