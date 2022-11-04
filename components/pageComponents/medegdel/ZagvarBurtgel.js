@@ -45,7 +45,7 @@ function ZagvarBurtgel(
       khadgalya() {
         const method = data?._id ? updateMethod : createMethod;
         const zagvar = form.getFieldsValue();
-        zagvar?.ner !== undefined
+        zagvar?.ner !== ""
           ? method("mailiinZagvar", token, {
               barilgiinId,
               ...data,
