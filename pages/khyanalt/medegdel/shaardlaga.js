@@ -547,7 +547,6 @@ function Khyanalt({ token }) {
               </div>
             ))}
           </div>
-          <div className="flex w-full justify-center"></div>
         </div>
       </div>
       {/* </div> */}

@@ -6,7 +6,7 @@ import ZagvarUusgekh from "./ZagvarUusgekh";
 import compareFields from "tools/function/compareFields";
 
 function ZagvarForm({ value, onChange }) {
-  return <ZagvarUusgekh value={value} change={onChange} />;
+  return <ZagvarUusgekh value={value} onTextChange={onChange} />;
 }
 
 function ZagvarBurtgel(
