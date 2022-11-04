@@ -334,7 +334,15 @@ function Khyanalt({ token }) {
     }
   }
   //#endregion
-
+  function khariltsagchSongokh(mur) {
+    setKhariltsagch(mur);
+    const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
+    index !== -1
+      ? songogdsonKhariltsagch.splice(index, 1)
+      : songogdsonKhariltsagch.push(mur);
+    setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
+  }
+  console.log(songogdsonKhariltsagch);
   return (
     <Admin
       title="Шаардлага"
@@ -497,7 +505,7 @@ function Khyanalt({ token }) {
                     ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
                     : ""
                 } `}
-                onClick={() => setKhariltsagch(mur)}
+                onClick={() => khariltsagchSongokh(mur)}
               >
                 <div>
                   <Checkbox
@@ -554,7 +562,7 @@ function Khyanalt({ token }) {
                   <div className="flex items-center">
                     <div className="mr-3 text-lg xl:hidden">
                       <ArrowLeftOutlined
-                        onClick={() => setKhariltsagch(null)}
+                        onClick={() => khariltsagchSongokh(mur)}
                       />
                     </div>
                     <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
