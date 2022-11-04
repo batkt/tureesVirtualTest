@@ -51,7 +51,6 @@ function tulburTootsoo({ token }) {
   const [ognoo, setOgnoo] = React.useState(moment());
   const [barimt, setBarimt] = React.useState();
   const [davkhar, setDavkhar] = React.useState();
-  const [songogdsonDans, setDans] = React.useState();
   const [turul, setTurul] = useState("SMS");
   const [loading, setLoading] = useState(false);
   const [waiting, setWaiting] = useState(false);
@@ -151,11 +150,28 @@ function tulburTootsoo({ token }) {
           medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
             suffix: "n",
           })} төгрөг`;
+          medeelel.albanTushaal = medeelel.albanTushaal || "";
+          medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
+          medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
+          medeelel.khayag = medeelel.khayag || "";
+          medeelel.talbainNegjUneUsgeer = medeelel.talbainNegjUneUsgeer || "";
+          medeelel.talbainNiitUneUsgeer = medeelel.talbainNiitUneUsgeer || "";
+          medeelel.zoriulalt = medeelel.zoriulalt || "";
+          medeelel.khungulukhKhugatsaa = medeelel.khungulukhKhugatsaa || "";
+          medeelel.nemeltNekhemjlekh.tailbar =
+            medeelel.nemeltNekhemjlekh.tailbar || "";
+          medeelel.nemeltNekhemjlekh.tulukhDun =
+            medeelel.nemeltNekhemjlekh.tulukhDun || "";
+          medeelel.nemeltNekhemjlekh.ognoo =
+            medeelel.nemeltNekhemjlekh.ognoo || "";
+          medeelel.nemeltNekhemjlekh = medeelel.nemeltNekhemjlekh || "";
+          medeelel.zardliinDun = formatNumber(medeelel.zardliinDun) || "";
           medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
           medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
           medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+
           medeelel.gariinUseg = renderToString(
             <span style={{ position: "absolute" }}>
               <img
@@ -186,16 +202,18 @@ function tulburTootsoo({ token }) {
           );
 
           medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+
           medeelel.niitAshiglaltiinZardal = formatNumber(
             medeelel.niitAshiglaltiinZardal
           );
-          const dans = dansGaralt?.jagsaalt?.find(
-            (a) => a.dugaar === songogdsonDans
-          );
-          medeelel.dans = dans?.dugaar;
-          medeelel.bank =
-            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
-          medeelel.dansniiNer = dans?.dansniiNer;
+
+          medeelel.sar = moment().format("MM");
+          medeelel.ekhlekhOn = moment().format("YYYY");
+          medeelel.ekhelkhSar = moment().format("MM");
+          medeelel.ekhlekhUdur = moment().format("DD");
+          medeelel.duusakhOn = moment().format("YYYY");
+          medeelel.duusakhSar = moment().format("MM");
+          medeelel.duusakhUdur = moment().format("DD");
 
           medeelel.nekhemjlekhiinDugaar =
             moment().format("YY") + "/" + (dugaarlalt + i);
@@ -237,16 +255,21 @@ function tulburTootsoo({ token }) {
   }, [barimt, songogdsonGereenuud]);
 
   function send() {
-    switch (turul) {
-      case "App":
-        appIlgeeye();
-        break;
-      case "Mail":
-        mailIlgeeye();
-        break;
-      default:
-        msgIlgeeye();
-        break;
+    if (!barimt) {
+      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      return;
+    } else {
+      switch (turul) {
+        case "App":
+          appIlgeeye();
+          break;
+        case "Mail":
+          mailIlgeeye();
+          break;
+        default:
+          msgIlgeeye();
+          break;
+      }
     }
   }
 
@@ -345,12 +368,7 @@ function tulburTootsoo({ token }) {
         .then(({ data }) => {
           if (!!data?.successCount) khariu.successCount += 1;
           else if (!!data?.failureCount) khariu.failureCount += 1;
-
-          notification.success({
-            message: `Notification Амжилттай ${khariu.successCount} ${
-              khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
-            } илгээлээ`,
-          });
+          notification.success({ message: " Notification Амжилттай илгээлээ" });
         });
       return;
     });
@@ -399,6 +417,10 @@ function tulburTootsoo({ token }) {
         aldaaBarigch(e);
       });
   }
+  function turulSongokh(mur) {
+    setTurul(mur);
+    setBarimt(undefined);
+  }
 
   return (
     <Admin
@@ -438,6 +460,8 @@ function tulburTootsoo({ token }) {
           >
             <div className="ml-auto space-x-2  ">
               <DatePicker
+                clearIcon
+                placeholder="Огноо сонгох"
                 style={{ marginBottom: "20px" }}
                 value={ognoo}
                 onChange={setOgnoo}
@@ -458,7 +482,11 @@ function tulburTootsoo({ token }) {
                     </Select.Option>
                   ))}
               </Select>
-              <Select placeholder="Нэхэмжлэхийн төрөл" onChange={setBarimt}>
+              <Select
+                placeholder="Нэхэмжлэхийн төрөл"
+                value={barimt}
+                onChange={setBarimt}
+              >
                 {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
                   turul === a.turul ? (
                     <Select.Option key={a._id} value={a._id}>
@@ -509,7 +537,7 @@ function tulburTootsoo({ token }) {
                       className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
                         turul === mur ? "bg-green-500 text-white" : ""
                       }`}
-                      onClick={() => setTurul(mur)}
+                      onClick={() => turulSongokh(mur)}
                     >
                       {mur}
                     </div>
@@ -518,8 +546,7 @@ function tulburTootsoo({ token }) {
               </div>
               <div className="flex w-full justify-between">
                 <Button
-                  style={{ backgroundColor: "#209669", color: "#ffffff" }}
-                  className="ml-auto"
+                  className="ml-auto bg-green-500 text-white"
                   onClick={() =>
                     turul === "SMS"
                       ? smsZagvarNemya()
@@ -528,7 +555,7 @@ function tulburTootsoo({ token }) {
                       : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
                 >
-                  '{turul}' Загвар үүсгэх
+                  Загвар үүсгэх
                 </Button>
               </div>
               <div className="mt-4 space-y-2">
