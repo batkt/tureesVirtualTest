@@ -130,8 +130,19 @@ function GereeBaiguulakh({ token }) {
       createMethod("gereeKhadgalya", token, data)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            setKhagalakhGeree({});
+            setKhagalakhGeree({
+              ognoo: new Date(),
+              baritsaaAvakhEsekh: true,
+              gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
+              baritsaaAvakhKhugatsaa: 1,
+              baritsaaAvakhSar: _.get(
+                baiguullaga,
+                "tokhirgoo.baritsaaAvakhSar"
+              ),
+            });
             setCurrent(0);
+            setAlkhamErkh(0);
+            setGereeniiZagvar(undefined);
             message.success("Амжилттай хадгаллаа");
             setWaiting(false);
           }

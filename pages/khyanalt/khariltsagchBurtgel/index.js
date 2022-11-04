@@ -343,6 +343,7 @@ function AjiltanBurtgel({ token }) {
     khariltsagchState.barilgiinId = barilgiinId;
 
     if (khariltsagchState.zasakhEsekh === true) {
+      console.log("orson2");
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
@@ -363,6 +364,8 @@ function AjiltanBurtgel({ token }) {
           if (data !== undefined) {
             setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
+            setWaiting(false);
+            console.log("bolson shu");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
             khariltsagchToololtMutate();
@@ -538,7 +541,12 @@ function AjiltanBurtgel({ token }) {
   function turulSongokh(value) {
     onChange("turul", value);
     setFormNuukh(value);
-    formRef.current.getFieldInstance("ovog").focus();
+
+    if (value === "Иргэн") {
+      setTimeout(() => {
+        formRef.current.getFieldInstance("ovog").focus();
+      }, 800);
+    } else formRef.current.getFieldInstance("ner").focus();
   }
 
   function talbaiOruulakhExcel() {
@@ -617,32 +625,33 @@ function AjiltanBurtgel({ token }) {
               </Select>
             </Form.Item>
           </div>
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
-          >
-            <Form.Item
-              hidden={formNuukh === "ААН" ? true : false}
-              name="ovog"
-              rules={[
-                {
-                  required: true,
-                  message: "Овог бүртгэнэ үү!",
-                },
-              ]}
+          {formNuukh !== "ААН" && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
             >
-              <Input
-                onKeyUp={focuser}
-                type="text"
-                allowClear
-                placeholder="Овог"
-                value={khariltsagchState.ovog}
-                prefix={<UserOutlined style={iconColor} />}
-                onChange={(e) => onChange("ovog", e.target.value)}
-              ></Input>
-            </Form.Item>
-          </div>
+              <Form.Item
+                name="ovog"
+                rules={[
+                  {
+                    required: true,
+                    message: "Овог бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <Input
+                  onKeyUp={focuser}
+                  type="text"
+                  allowClear
+                  placeholder="Овог"
+                  value={khariltsagchState.ovog}
+                  prefix={<UserOutlined style={iconColor} />}
+                  onChange={(e) => onChange("ovog", e.target.value)}
+                ></Input>
+              </Form.Item>
+            </div>
+          )}
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
@@ -789,12 +798,9 @@ function AjiltanBurtgel({ token }) {
                         rules={[
                           {
                             required: true,
+                            pattern: new RegExp("(^[0-9]+$)"),
                             message: "Дугаар оруулна уу",
                             min: 8,
-                          },
-                          {
-                            required: true,
-                            pattern: new RegExp("(^[0-9]+$)"),
                             message: "Дугаараа шалгана уу",
                           },
                         ]}
@@ -881,7 +887,9 @@ function AjiltanBurtgel({ token }) {
             <Form.Item>
               <Button
                 id="khariltsagchBurtgekhButton"
-                onClick={() => formRef.current.submit()}
+                onClick={() => {
+                  formRef.current.submit();
+                }}
                 type={"primary"}
               >
                 Хадгалах
