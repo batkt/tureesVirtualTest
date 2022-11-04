@@ -552,7 +552,7 @@ function Khyanalt({ token }) {
       </div>
       {/* </div> */}
 
-      <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem">
+      <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9">
         {khariltsagch ? (
           <div className="box flex  flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
