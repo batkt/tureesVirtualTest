@@ -342,7 +342,6 @@ function Khyanalt({ token }) {
       : songogdsonKhariltsagch.push(mur);
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
-  console.log(songogdsonKhariltsagch);
   return (
     <Admin
       title="Шаардлага"
