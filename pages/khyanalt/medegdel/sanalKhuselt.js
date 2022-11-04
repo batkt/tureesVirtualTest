@@ -274,7 +274,7 @@ function index({ token }) {
             <div className="mt-3">
               <div className="font-medium">Өдрийн мэнд</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та харилцагчаа сонгоно уу.
+                Та санал хүсэлт илгээх харилцагчаа сонгоно уу.
               </div>
             </div>
           </div>

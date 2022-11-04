@@ -63,13 +63,14 @@ function ZagvarBurtgel(
       },
       khaaya() {
         destroy();
+        setWaiting(false);
       },
     }),
     [form, barilgiinId]
   );
 
   return (
-    <Form form={form} initialValues={data}>
+    <Form autoComplete="off" form={form} initialValues={data}>
       <Form.Item
         name="ner"
         rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}

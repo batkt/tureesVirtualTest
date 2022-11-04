@@ -150,14 +150,17 @@ function Khyanalt({ token }) {
     setKhariltsagch(null);
     setDavkhar(null);
   }, [turul]);
+
   const ingeekhmSms = useMemo(() => {
     if (!khariltsagch) return msj;
     var utga = msj;
     for (const [key, value] of Object.entries(khariltsagch)) {
       utga = utga?.replace(new RegExp(`<${key}>`, "g"), value);
     }
+
     return utga;
   }, [khariltsagch, msj]);
+
   //#endregion
   //#region method
   async function appIlgeeye() {
@@ -332,16 +335,15 @@ function Khyanalt({ token }) {
     }
     const mailuud = [];
 
-    if (ilgeekhTurul === "gantsaar") {
-      var zagvar = content;
-      for (const [key, value] of Object.entries(khariltsagch)) {
-        zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-      }
-      mailuud.push({
-        mail: khariltsagch.mail,
-        content: zagvar,
-      });
-    } else if (songogdsonKhariltsagch?.length > 0) {
+    var zagvar = content;
+    for (const [key, value] of Object.entries(khariltsagch)) {
+      zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+    }
+    mailuud.push({
+      mail: khariltsagch.mail,
+      content: zagvar,
+    });
+    if (songogdsonKhariltsagch?.length > 0) {
       songogdsonKhariltsagch.forEach((a) => {
         var zagvar = content;
         for (const [key, value] of Object.entries(a)) {
@@ -412,6 +414,7 @@ function Khyanalt({ token }) {
           turul={turul}
           barilgiinId={barilgiinId}
           onRefresh={mailiinZagvarMutate}
+          medegdelZagvar={mailiinZagvarGaralt}
         />
       ),
       footer,
@@ -466,6 +469,12 @@ function Khyanalt({ token }) {
     }
   }
 
+  function turulSongokh(mur) {
+    setTurul(mur);
+    setContent("");
+    setTitle("");
+  }
+
   function onScroll(e) {
     clearTimeout(timeout);
     timeout = setTimeout(function () {
@@ -494,7 +503,7 @@ function Khyanalt({ token }) {
                   className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
                     turul === mur ? "bg-green-500 text-white" : ""
                   }`}
-                  onClick={() => setTurul(mur)}
+                  onClick={() => turulSongokh(mur)}
                 >
                   {mur}
                 </div>
@@ -582,7 +591,6 @@ function Khyanalt({ token }) {
               {turulZagvar === false ? (turul, "загвар") : "буцах"}
             </Button>
           </div>
-
           <button
             className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
             onClick={() =>
@@ -593,7 +601,7 @@ function Khyanalt({ token }) {
                 : router.push("/khyanalt/medegdel/mailMedegdel/new")
             }
           >
-            {turul} Загвар үүсгэх
+            Загвар үүсгэх
           </button>
         </div>
         <div
@@ -1059,7 +1067,7 @@ function Khyanalt({ token }) {
               <div className="mt-3">
                 <div className="font-medium">Өдрийн мэнд</div>
                 <div className="mt-1 text-gray-600 dark:text-gray-300">
-                  Та {turul} илгээх харилцагчаа сонгоно уу.
+                  Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
                 </div>
               </div>
             </div>

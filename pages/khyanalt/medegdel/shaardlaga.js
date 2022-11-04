@@ -766,7 +766,7 @@ function Khyanalt({ token }) {
               <div className="mt-3">
                 <div className="font-medium">Өдрийн мэнд</div>
                 <div className="mt-1 text-gray-600 dark:text-gray-300">
-                  Та {turul} илгээх харилцагчаа сонгоно уу.
+                  Та шаардлага илгээх харилцагчаа сонгоно уу.
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { renderToString } from "react-dom/server";
-import SunEditor from "suneditor-react";
+import SunEditor, { buttonList } from "suneditor-react";
 import _ from "lodash";
 import { customPlugin } from "../geree/zagvar/ZaaltOruulakh";
 import {
@@ -8,6 +8,7 @@ import {
   ClockCircleOutlined,
   DollarCircleOutlined,
   LockOutlined,
+  SnippetsOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
 
@@ -61,7 +62,6 @@ const tulburiinTalbaruud = [
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
-  { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
 ];
 
 const nekhemjlekhiinTalbaruud = [
@@ -95,7 +95,6 @@ function NekhemjlekhZasvar({
 
   useEffect(() => {
     onTextChange && onTextChange(editorRef.current.editor.getText());
-    console.log(value);
   }, [value]);
 
   const custom = React.useMemo(() => {
@@ -129,21 +128,18 @@ function NekhemjlekhZasvar({
       title: "Төлбөр",
       button: renderToString(<DollarCircleOutlined />),
     });
-
     const nekhemjlel = customPlugin({
       songokhTalbaruud: nekhemjlekhiinTalbaruud,
       name: "nekhemjlel",
       title: "Нэхэмжлэл",
-      button: renderToString(<DollarCircleOutlined />),
+      button: renderToString(<SnippetsOutlined />),
     });
-
     const nekhemjlelNemelt = customPlugin({
       songokhTalbaruud: nekhemjlekhiinNemelt,
       name: "nekhemjlekhiinNemelt",
       title: "Нэхэмжлэхийн бусад авлага",
       button: renderToString(<DollarCircleOutlined />),
     });
-
     return [
       undsen,
       khugatsaa,
@@ -163,6 +159,7 @@ function NekhemjlekhZasvar({
       setOptions={{
         plugins: custom,
         buttonList: [
+          ...buttonList.formatting,
           [
             "undsen",
             "khugatsaa",
