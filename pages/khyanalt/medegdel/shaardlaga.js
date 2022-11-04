@@ -334,7 +334,14 @@ function Khyanalt({ token }) {
     }
   }
   //#endregion
-
+  function khariltsagchSongokh(mur) {
+    setKhariltsagch(mur);
+    const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
+    index !== -1
+      ? songogdsonKhariltsagch.splice(index, 1)
+      : songogdsonKhariltsagch.push(mur);
+    setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
+  }
   return (
     <Admin
       title="Шаардлага"
@@ -471,7 +478,7 @@ function Khyanalt({ token }) {
             </svg>
           </div>
 
-          <div className=" flex  cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
+          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
             <Checkbox
               checked={
                 khariltsagchiinMedeelel?.jagsaalt?.length ===
@@ -485,20 +492,19 @@ function Khyanalt({ token }) {
                 else setSongogdsonKhariltsagch([]);
               }}
             >
-              {" "}
-              Бүгдийг сонгох
+              <p className="pl-3">Бүгдийг сонгох</p>
             </Checkbox>
           </div>
 
           <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
-                className={`flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2 ${
+                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
                   khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
                     : ""
                 } `}
-                onClick={() => setKhariltsagch(mur)}
+                onClick={() => khariltsagchSongokh(mur)}
               >
                 <div>
                   <Checkbox
@@ -523,7 +529,7 @@ function Khyanalt({ token }) {
                     }}
                   />
                 </div>
-                <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                <div className="image-fit relative h-10 w-10 flex-none rounded-full ">
                   <img
                     alt="profileZurag"
                     className="rounded-full"
@@ -541,12 +547,11 @@ function Khyanalt({ token }) {
               </div>
             ))}
           </div>
-          <div className="flex w-full justify-center"></div>
         </div>
       </div>
       {/* </div> */}
 
-      <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem">
+      <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9">
         {khariltsagch ? (
           <div className="box flex  flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
@@ -555,7 +560,7 @@ function Khyanalt({ token }) {
                   <div className="flex items-center">
                     <div className="mr-3 text-lg xl:hidden">
                       <ArrowLeftOutlined
-                        onClick={() => setKhariltsagch(null)}
+                        onClick={() => khariltsagchSongokh(mur)}
                       />
                     </div>
                     <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
@@ -766,7 +771,7 @@ function Khyanalt({ token }) {
               <div className="mt-3">
                 <div className="font-medium">Өдрийн мэнд</div>
                 <div className="mt-1 text-gray-600 dark:text-gray-300">
-                  Та {turul} илгээх харилцагчаа сонгоно уу.
+                  Та шаардлага илгээх харилцагчаа сонгоно уу.
                 </div>
               </div>
             </div>

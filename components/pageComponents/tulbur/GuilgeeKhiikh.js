@@ -130,7 +130,7 @@ function GuilgeeKhiikh(
           .catch(aldaaBarigch);
       },
     }),
-    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul, negjUne]
+    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul, negjUne, ognoo]
   );
   function labelTurul(guilgeeTurul) {
     var text;

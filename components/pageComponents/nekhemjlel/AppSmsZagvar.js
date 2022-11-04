@@ -1,20 +1,12 @@
 import React, { useEffect, useImperativeHandle, useState } from "react";
-import { Form, Input, message, Modal } from "antd";
+import { Form, Input, message, Modal, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "./ZagvarUusgekh";
 import compareFields from "tools/function/compareFields";
-import { aldaaBarigch } from "services/uilchilgee";
 
 function ZagvarForm({ value, onChange }) {
-  const [context, setContext] = useState(value);
-  return (
-    <ZagvarUusgekh
-      value={context}
-      change={setContext}
-      onTextChange={onChange}
-    />
-  );
+  return <ZagvarUusgekh value={value} onTextChange={onChange} />;
 }
 
 function ZagvarBurtgel(
@@ -51,37 +43,32 @@ function ZagvarBurtgel(
     ref,
     () => ({
       khadgalya() {
-        const zagvar = form.getFieldsValue();
-        setWaiting(true);
-        nekhemjlelZagvar.barilgiinId = barilgiinId;
         const method = data?._id ? updateMethod : createMethod;
-        method("nekhemjlekhiinZagvar", token, {
-          turul,
-          barilgiinId,
-          ...data,
-          ...zagvar,
-        })
-          .then(({ data }) => {
-            if (data === "Amjilttai") {
-              message.success("Амжилттай хадгаллаа");
-              onRefresh();
-              destroy();
-              setWaiting(false);
-            }
-          })
-          .catch((e) => {
-            aldaaBarigch(e);
-            setWaiting(false);
-          });
+        const zagvar = form.getFieldsValue();
+        zagvar?.ner !== undefined
+          ? method("nekhemjlekhiinZagvar", token, {
+              barilgiinId,
+              ...data,
+              ...zagvar,
+              turul,
+            }).then(({ data }) => {
+              if (data === "Amjilttai") {
+                setWaiting(false);
+                message.success("Амжилттай хадгаллаа");
+                onRefresh();
+                destroy();
+              }
+            })
+          : notification.warning({ message: "Нэр заавал оруулна уу!" });
       },
 
       khaaya() {
+        setWaiting(false);
         destroy();
       },
     }),
     [form, barilgiinId]
   );
-
   return (
     <>
       <Form autoComplete={"off"} form={form} initialValues={data}>

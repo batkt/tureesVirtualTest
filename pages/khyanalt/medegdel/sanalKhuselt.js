@@ -49,13 +49,13 @@ function index({ token }) {
         style={{ height: "calc(100vh - 8rem)" }}
         className="col-span-12 flex flex-col space-y-5 rounded-l-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-5"
       >
-        <RangePicker
-          locale={local}
-          className="w-[20vw]"
-          style={{ marginBottom: "20px" }}
-          size="middle"
-          onChange={setEkhlekhOgnoo}
-        />
+        <div className="mb-2 grid grid-cols-2 gap-x-5 px-2 ">
+          <RangePicker
+            locale={local}
+            size="middle"
+            onChange={setEkhlekhOgnoo}
+          />
+        </div>
         <div className="grid grid-cols-2 gap-5 rounded-xl bg-green-500 p-2 font-medium dark:bg-green-700 sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
           {[
             { ner: "Санал", utga: "sanal" },
@@ -77,13 +77,13 @@ function index({ token }) {
           ))}
         </div>
         {turul === "sanal" ? (
-          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto text-xs  lg:h-scrollH">
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto text-xs lg:h-scrollH">
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "sanal" ? (
                 <div
                   className={` ${
                     khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-200"
+                      ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-200"
                       : ""
                   } `}
                 >
@@ -91,7 +91,7 @@ function index({ token }) {
                     className={`flex h-[7vh] cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
                     onClick={() => setKhariltsagch(mur)}
                   >
-                    <div className="image-fit bg-blackrounded-full relative h-12 w-12  flex-none">
+                    <div className="image-fit bg-blackrounded-full relative ml-3 h-12 w-12 flex-none">
                       <img
                         alt="Rubick"
                         className="rounded-full"
@@ -274,7 +274,7 @@ function index({ token }) {
             <div className="mt-3">
               <div className="font-medium">Өдрийн мэнд</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та харилцагчаа сонгоно уу.
+                Та санал хүсэлт илгээх харилцагчаа сонгоно уу.
               </div>
             </div>
           </div>

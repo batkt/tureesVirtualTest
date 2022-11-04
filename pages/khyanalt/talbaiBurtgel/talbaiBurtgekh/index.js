@@ -130,7 +130,13 @@ function talbaiBurtgekh({ token }) {
 
   const khyanaltiinDun = [
     {
-      too: talbainToololt?.reduce((a, b) => a + b.too, 0),
+      too: talbainToololt
+        ?.filter((a) => a?._id !== "niitiinTalbai")
+        ?.reduce((a, b) => a + b?.too, 0),
+      mk: talbainToololt
+        ?.filter((a) => a?._id !== "niitiinTalbai")
+        ?.reduce((a, b) => a + b?.khemjee, 0),
+
       icon: (
         <svg
           width="24"
@@ -156,6 +162,7 @@ function talbaiBurtgekh({ token }) {
     },
     {
       too: talbainToololt?.find((a) => a._id === true)?.too || 0,
+      mk: talbainToololt?.find((a) => a._id === true)?.khemjee || 0,
       icon: (
         <svg
           width="24"
@@ -179,6 +186,7 @@ function talbaiBurtgekh({ token }) {
     },
     {
       too: talbainToololt?.find((a) => a._id === false)?.too || 0,
+      mk: talbainToololt?.find((a) => a._id === false)?.khemjee || 0,
       icon: (
         <svg
           width="24"
@@ -202,7 +210,8 @@ function talbaiBurtgekh({ token }) {
       query: { idevkhiteiEsekh: false },
     },
     {
-      too: 0,
+      too: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.too || 0,
+      mk: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0,
       icon: (
         <svg
           width="24"
@@ -224,7 +233,7 @@ function talbaiBurtgekh({ token }) {
       ),
       khuvi: 100,
       utga: "Нийтийн эзэмшлийн талбай м²",
-      query: { turEsekh: true },
+      query: { niitiinTalbaiEsekh: true },
     },
   ];
 
@@ -491,13 +500,18 @@ function talbaiBurtgekh({ token }) {
               >
                 <div className="h-full rounded-xl">
                   <div className="rounded-xl p-3">
-                    <div className="flex">
+                    <div className="flex justify-between">
                       <div>
                         <div className="text-3xl font-bold text-green-600">
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
                           {mur.utga}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-green-600">
+                          Нийт м²: {mur.mk}
                         </div>
                       </div>
                     </div>
