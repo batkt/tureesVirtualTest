@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
@@ -16,6 +16,7 @@ import {
 import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import _ from "lodash";
+import { aldaaBarigch } from "services/uilchilgee";
 
 function ZakhialgaNemekh({ token }) {
   const router = useRouter();
@@ -25,6 +26,7 @@ function ZakhialgaNemekh({ token }) {
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState({
     dedKhesguud: [{ zaalt: "new" }],
   });
+  const [towchTuluv, setTowchTuluv] = useState(false);
   const ref = React.useRef();
 
   React.useEffect(() => {
@@ -38,25 +40,36 @@ function ZakhialgaNemekh({ token }) {
   }, [id]);
 
   function onFinish(values) {
+    setTowchTuluv(true);
     if (!gereeniiZagvar?._id) {
       values["baiguullagiinNer"] = baiguullaga.ner;
       values["baiguullagiinId"] = baiguullaga._id;
       values["dedKhesguud"] = gereeniiZagvar.dedKhesguud;
       values["barilgiinId"] = barilgiinId;
-      createMethod("gereeniiZagvar", token, values).then(({ data }) => {
-        if (data === "Amjilttai") {
-          message.success("Амжилттай хадгаллаа");
-          router.back();
-        }
-      });
+      createMethod("gereeniiZagvar", token, values)
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            message.success("Амжилттай хадгаллаа");
+            router.back();
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setTowchTuluv(false);
+        });
     } else if (!!gereeniiZagvar?._id) {
       gereeniiZagvar.ner = values.ner;
-      updateMethod("gereeniiZagvar", token, gereeniiZagvar).then(({ data }) => {
-        if (data === "Amjilttai") {
-          message.success("Амжилттай хадгаллаа");
-          router.back();
-        }
-      });
+      updateMethod("gereeniiZagvar", token, gereeniiZagvar)
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            message.success("Амжилттай хадгаллаа");
+            router.back();
+          }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setTowchTuluv(false);
+        });
     }
   }
 
@@ -231,6 +244,7 @@ function ZakhialgaNemekh({ token }) {
                 className="w-full"
                 type="primary"
                 onClick={() => form.submit()}
+                loading={towchTuluv}
               >
                 Хадгалах
               </Button>

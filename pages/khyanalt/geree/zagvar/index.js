@@ -1,6 +1,6 @@
 import React from "react";
 import Admin from "components/Admin";
-import { Button, Drawer, Dropdown, Menu, Popconfirm } from "antd";
+import { Button, Drawer, Dropdown, Menu, message, Popconfirm } from "antd";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
@@ -249,7 +249,12 @@ function index({ token }) {
                                     "gereeniiZagvar",
                                     token,
                                     a._id
-                                  ).then(() => gereeniiZagvarMutate());
+                                  ).then(() => {
+                                    gereeniiZagvarMutate();
+                                    message.success(
+                                      "Гэрээний загвар устгагдлаа"
+                                    );
+                                  });
                                 }}
                                 onClick={(e) => {
                                   e.preventDefault();

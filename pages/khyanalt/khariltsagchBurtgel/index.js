@@ -625,7 +625,7 @@ function AjiltanBurtgel({ token }) {
               </Select>
             </Form.Item>
           </div>
-          {formNuukh !== "ААН" && (
+          {khariltsagchState.turul !== "ААН" && (
             <div
               data-aos="fade-right"
               data-aos-duration="1000"
