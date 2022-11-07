@@ -66,12 +66,9 @@ function AjiltanBurtgel({ token }) {
     utas: undefined,
     albanTushaal: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
+    ajildOrsonOgnoo: moment(),
   });
   const [waiting, setWaiting] = useState(false);
-
-  useEffect(() => {
-    formRef.current.resetFields();
-  }, [isValidating]);
 
   useEffect(() => {
     document.getElementById("input1").focus();
@@ -234,7 +231,7 @@ function AjiltanBurtgel({ token }) {
           ref={formRef}
           name="control-ref"
           onFinish={onFinish}
-          initialValues={{ remember: true }}
+          initialValues={{ remember: true, ajildOrsonOgnoo: moment() }}
           autoComplete={"off"}
         >
           <div data-aos="fade-right" data-aos-duration="800">
@@ -272,6 +269,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="100"
           >
             <Form.Item
+              autoComplete="off"
               name="ner"
               rules={[
                 {
@@ -280,7 +278,7 @@ function AjiltanBurtgel({ token }) {
                 },
                 {
                   required: true,
-                  pattern: new RegExp("(^[А-Яа-яёЁөӨүҮ]+$)"),
+                  pattern: new RegExp("([А-Я|Ө|Ү])"),
                   message:
                     ajiltanState?.ner && "Зөвхөн кирилл үсэг ашиглана уу!",
                 },
@@ -304,6 +302,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="200"
           >
             <Form.Item
+              autoComplete="off"
               name="register"
               rules={[
                 {
@@ -321,7 +320,9 @@ function AjiltanBurtgel({ token }) {
                 maxLength={10}
                 placeholder="Регистр"
                 value={ajiltanState.register}
-                onChange={(e) => onChange("register", e.target.value)}
+                onChange={(e) =>
+                  onChange("register", e?.target?.value?.toUpperCase())
+                }
                 prefix={<SolutionOutlined style={iconColor} />}
               ></Input>
             </Form.Item>
@@ -332,6 +333,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="300"
           >
             <Form.Item
+              autoComplete="off"
               name="khayag"
               rules={[
                 {
@@ -357,6 +359,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="400"
           >
             <Form.Item
+              autoComplete="off"
               name="utas"
               rules={[
                 {
@@ -385,6 +388,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="500"
           >
             <Form.Item
+              autoComplete="off"
               name="ajildOrsonOgnoo"
               rules={[
                 {
@@ -410,6 +414,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="600"
           >
             <Form.Item
+              autoComplete="off"
               name="albanTushaal"
               rules={[
                 {
@@ -432,12 +437,19 @@ function AjiltanBurtgel({ token }) {
           <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="900">
             <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
             <Form.Item
+              autoComplete="off"
               name="nevtrekhNer"
               rules={[
-                {
-                  required: true,
-                  message: "Нэвтрэх нэр бүртгэнэ үү!",
-                },
+                !!ajiltanState.nevtrekhNer
+                  ? {
+                      pattern: new RegExp("(^[A-z]+$)"),
+                      required: true,
+                      message: "Крилл үсгээр бичнэ үү",
+                    }
+                  : {
+                      required: true,
+                      message: "Нэвтрэх нэр оруулан уу",
+                    },
               ]}
             >
               <Input
@@ -450,13 +462,18 @@ function AjiltanBurtgel({ token }) {
               />
             </Form.Item>
             <Form.Item
+              autoComplete="off"
               name="nuutsUg"
-              rules={[
-                {
-                  required: !ajiltanState._id,
-                  message: "Нэвтрэх нууц үг бүртгэнэ үү!",
-                },
-              ]}
+              rules={
+                !!ajiltanState._id
+                  ? undefined
+                  : [
+                      {
+                        required: true,
+                        message: "Нэвтрэх нууц үг бүртгэнэ үү!",
+                      },
+                    ]
+              }
             >
               <Input.Password
                 onKeyDown={focuser}

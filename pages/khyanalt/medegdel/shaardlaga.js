@@ -161,7 +161,7 @@ function Khyanalt({ token }) {
         });
     } else {
       notification.warning({
-        message: !title ? "Гарчиг оруулна уу" : "content оруулана уу",
+        message: !title ? "Гарчиг оруулна уу" : "Мэдээлэл оруулана уу",
       });
     }
   }
