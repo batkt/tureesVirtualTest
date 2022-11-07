@@ -105,12 +105,15 @@ const YurunkhiiMedeele = ({
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
+
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
-      ner: "",
-      utas: "",
-      ovog: "",
-      mail: "",
+      ner: undefined,
+      utas: undefined,
+      ovog: undefined,
+      mail: undefined,
+      zakhirliinOvog: undefined,
+      zakhirliinNer: undefined,
     };
     form.setFieldsValue(onookhKhariltsagch);
     clearTimeout(timeout);
@@ -123,6 +126,7 @@ const YurunkhiiMedeele = ({
                 barilgiinId,
                 baiguullagiinId: baiguullaga._id,
                 register: target.value,
+                turul: baiguullagaEsekh ? "ААН" : "Иргэн",
               },
               select: { ner: 1, utas: 1, ovog: 1, mail: 1 },
             },
@@ -130,13 +134,23 @@ const YurunkhiiMedeele = ({
           .then(({ data }) => {
             if (data?.jagsaalt.length > 0) {
               const { ner, utas, ovog, mail } = data?.jagsaalt[0];
-              var onookhKhariltsagch = {
-                ner,
-                utas,
-                ovog,
-                mail,
-                register: target.value,
-              };
+              if (baiguullagaEsekh) {
+                var onookhKhariltsagch = {
+                  utas,
+                  zakhirliinOvog: ovog,
+                  zakhirliinNer: ner,
+                  mail,
+                  register: target.value,
+                };
+              } else {
+                var onookhKhariltsagch = {
+                  ner,
+                  utas,
+                  ovog,
+                  mail,
+                  register: target.value,
+                };
+              }
               form.setFieldsValue(onookhKhariltsagch);
               onChange({ ...value, ...onookhKhariltsagch });
             }
@@ -260,7 +274,22 @@ const YurunkhiiMedeele = ({
           label="Байгууллага эсэх"
           valuePropName="checked"
         >
-          <Switch onChange={setBaiguullagaEsekh} />
+          <Switch
+            onChange={(v) => {
+              const khariltsagch = {
+                register: "",
+                ner: "",
+                utas: "",
+                ovog: "",
+                mail: "",
+                zakhirliinOvog: "",
+                zakhirliinNer: "",
+              };
+
+              form.setFieldsValue(khariltsagch);
+              setBaiguullagaEsekh(v);
+            }}
+          />
         </Form.Item>
       </div>
       {baiguullagaEsekh && (
