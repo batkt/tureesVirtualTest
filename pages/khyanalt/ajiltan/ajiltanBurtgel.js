@@ -360,14 +360,9 @@ function AjiltanBurtgel({ token }) {
               name="utas"
               rules={[
                 {
+                  min: 8,
                   required: true,
                   message: "Утас бүртгэнэ үү!",
-                },
-                {
-                  required: true,
-                  min: 8,
-                  message:
-                    ajiltanState?.utas && "Утасны дугаараа бүрэн оруулна уу!",
                 },
               ]}
             >
@@ -458,8 +453,8 @@ function AjiltanBurtgel({ token }) {
               name="nuutsUg"
               rules={[
                 {
-                  required: true,
-                  message: "Нууц үг бүртгэнэ үү!",
+                  required: !ajiltanState._id,
+                  message: "Нэвтрэх нууц үг бүртгэнэ үү!",
                 },
               ]}
             >
