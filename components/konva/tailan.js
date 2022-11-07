@@ -8,7 +8,7 @@ import PlanMedeelel from "./PlanMedeelel";
 
 class URLImage extends React.Component {
   state = {
-    image: null
+    image: null,
   };
   componentDidMount() {
     this.loadImage();
@@ -29,7 +29,7 @@ class URLImage extends React.Component {
   }
   handleLoad = () => {
     this.setState({
-      image: this.image
+      image: this.image,
     });
   };
   render() {
@@ -51,156 +51,203 @@ class URLImage extends React.Component {
 class App extends Component {
   state = {
     isMouseOverStartPoint: !!this.props.points?.length || false,
-    isFinished: !!this.props.points?.length || false
+    isFinished: !!this.props.points?.length || false,
   };
 
-
   componentDidMount() {
-    const barilga = this.props.baiguullaga?.barilguud?.find(a => a._id === this.props.barilgiinId)
+    const barilga = this.props.baiguullaga?.barilguud?.find(
+      (a) => a._id === this.props.barilgiinId
+    );
 
     if (!barilga?.davkharuud[0] || !this.props.token)
-      console.log('barilga algoo')
+      console.log("barilga algoo");
     else {
       this.setState({
-        planZurag: barilga.davkharuud[0]?.planZurag
-      })
-      this.tailbaiAvya(barilga.davkharuud[0].davkhar, barilga)
+        planZurag: barilga.davkharuud[0]?.planZurag,
+      });
+      this.tailbaiAvya(barilga.davkharuud[0].davkhar, barilga);
     }
   }
 
   tailbaiAvya = (davkhar, barilga) => {
-    uilchilgee(this.props.token).get('/talbai', { params: { query: { davkhar, barilgiinId: barilga?._id, "bairshil.1": { '$exists': true } }, select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 }, khuudasniiKhemjee: 1000 } }).then(({ data }) => {
-
-      data.jagsaalt.map(mur => mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
-      this.setState({
-        talbainuud: data.jagsaalt
+    uilchilgee(this.props.token)
+      .get("/talbai", {
+        params: {
+          query: {
+            davkhar,
+            barilgiinId: barilga?._id,
+            "bairshil.1": { $exists: true },
+          },
+          select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 },
+          khuudasniiKhemjee: 1000,
+        },
       })
-    })
-  }
+      .then(({ data }) => {
+        data.jagsaalt.map(
+          (mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
+        );
+        this.setState({
+          talbainuud: data.jagsaalt,
+        });
+      });
+  };
 
   render() {
     const {
       state: { planZurag, talbainuud, pointer },
-      props
+      props,
     } = this;
-    const barilga = props.baiguullaga?.barilguud?.find(a => a._id === props.barilgiinId)
 
+    const barilga = props.baiguullaga?.barilguud?.find(
+      (a) => a._id === props.barilgiinId
+    );
     function medeelelKharya(mur) {
-      uilchilgee(props.token).get(`/talbai/${mur._id}`).then((response) => {
-        modal({
-          title: "План зураг мэдээлэл",
-          content: (
-            <PlanMedeelel
-              data={response.data}
-            />
-          ),
-          footer: [],
+      uilchilgee(props.token)
+        .get(`/talbai/${mur._id}`)
+        .then((response) => {
+          modal({
+            title: "План зураг мэдээлэл",
+            content: <PlanMedeelel data={response.data} />,
+            footer: [],
+          });
         });
-      })
     }
-
-
     return (
       <div>
         <div className="flex space-x-3">
-          <Form.Item
-            name="davkhar"
-          >
+          <Form.Item name="davkhar">
             <Select
               placeholder="Давхар сонгох"
               onChange={(v, option) => {
-                this.tailbaiAvya(option?.davkhar, barilga)
-                this.setState({ planZurag: v })
+                this.tailbaiAvya(option?.davkhar, barilga);
+                this.setState({ planZurag: v });
               }}
               clearIcon={false}
             >
               {barilga?.davkharuud.map((a) => (
-                <Select.Option key={a._id} value={a.planZurag} davkhar={a.davkhar}   >
+                <Select.Option
+                  key={a._id}
+                  value={a.planZurag}
+                  davkhar={a.davkhar}
+                >
                   {a.davkhar}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-          <div className=" items-end w-full pb-1  h-8 flex justify-end space-x-10 " >
+          <div className=" flex h-8 w-full  items-end justify-end space-x-10 pb-1 ">
             <div className="flex">
-              <div className="border-2 w-5 bg-green-300 " />
+              <div className="w-5 border-2 bg-green-300 " />
               <div className="pr-10 pl-2">Идэвхтэй</div>
             </div>
             <div className="flex ">
-              <div className="border-2 w-5 bg-red-400 " />
+              <div className="w-5 border-2 bg-red-400 " />
               <div className="pl-2">Идэвхгүй</div>
             </div>
           </div>
         </div>
 
-        <Stage
-          width={urgun}
-          height={undur}
-        >
+        <Stage width={urgun} height={undur}>
           <Layer>
-            {planZurag && <URLImage width={urgun} height={undur} src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${planZurag}`} />}
+            {planZurag && (
+              <URLImage
+                width={urgun}
+                height={undur}
+                src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${planZurag}`}
+              />
+            )}
             {talbainuud?.map((mur) => {
-              const flattenedPoints = mur.bairshil
-                .reduce((a, b) => a.concat(b), []);
+              const flattenedPoints = mur.bairshil.reduce(
+                (a, b) => a.concat(b),
+                []
+              );
+
               return (
                 <Line
-                  onMouseMove={e => {
-                    this.setState({ pointer: { x: e.evt.layerX, y: e.evt.layerY } })
+                  onMouseMove={(e) => {
+                    this.setState({
+                      pointer: {
+                        x: e.evt.layerX,
+                        y: e.evt.layerY,
+                        kod: mur.kod,
+                      },
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    this.setState({
+                      pointer: undefined,
+                    });
                   }}
                   key={mur._id}
                   points={flattenedPoints}
                   stroke="black"
-                  fill={mur.idevkhiteiEsekh ? 'lightgreen' : 'red'}
+                  fill={mur.idevkhiteiEsekh ? "lightgreen" : "red"}
                   opacity={0.3}
                   strokeWidth={5}
                   closed={true}
                   onClick={() => medeelelKharya(mur)}
-                // onMouseMove={() => medeelelKharya(mur)}
+                  // onMouseMove={() => medeelelKharya(mur)}
                 />
-              )
-            }
-            )}
+              );
+            })}
             {talbainuud?.map((mur) => {
-              const x = mur.bairshil?.reduce((a, b) => { return a + b[0] }, 0) / mur.bairshil.length
-              const y = mur.bairshil?.reduce((a, b) => { return a + b[1] }, 0) / mur.bairshil.length
+              const x =
+                mur.bairshil?.reduce((a, b) => {
+                  return a + b[0];
+                }, 0) / mur.bairshil.length;
+              const y =
+                mur.bairshil?.reduce((a, b) => {
+                  return a + b[1];
+                }, 0) / mur.bairshil.length;
               return (
-                <Group key={mur._id + 'text'}>
-                  <Rect x={x - (mur.kod.length / 2 * 15)} y={y - (15)} width={50} height={26} fill="white" stroke={1} opacity={0.9} />
+                <Group key={mur._id + "text"}>
+                  <Rect
+                    x={x - (mur.kod.length / 2) * 15}
+                    y={y - 15}
+                    width={50}
+                    height={26}
+                    fill="white"
+                    stroke={1}
+                    opacity={0.9}
+                  />
                   <Text
-                    x={x - (mur.kod.length / 2 * 10)}
-                    y={y - (15 / 2)}
+                    x={x - (mur.kod.length / 2) * 10}
+                    y={y - 15 / 2}
                     text={mur.kod}
-                    fill={'black'}
+                    fill={"black"}
                     fontSize={15}
                     align="center"
                   />
                 </Group>
-              )
+              );
             })}
-            {pointer && <Group>
-              <Rect x={pointer.x + 15} y={pointer.y + 5} width={200} height={80} fill="white" stroke={1} opacity={0.9} />
-              <Text
-                x={pointer.x + 30}
-                y={pointer.y + 10}
-                text={console.log(talbainuud.map((mur) => mur))}
-                fill={'black'}
-                fontSize={15}
-                align="center"
-              />
-              <Text
-                x={pointer.x + 90}
-                y={pointer.y + 10}
-                text={"mur.kod"}
-                fill={'black'}
-                fontSize={15}
-                align="center"
-              />
-            </Group>}
+
+            {pointer && (
+              <Group>
+                <Rect
+                  x={pointer.x + 15}
+                  y={pointer.y + 5}
+                  width={200}
+                  height={80}
+                  fill="white"
+                  stroke={1}
+                  opacity={0.9}
+                />
+                <Text
+                  x={pointer.x + 30}
+                  y={pointer.y + 10}
+                  text={pointer.kod}
+                  fill={"black"}
+                  fontSize={15}
+                  align="center"
+                />
+              </Group>
+            )}
           </Layer>
-        </Stage >
-      </div >
+        </Stage>
+      </div>
     );
   }
 }
 
-export default App
+export default App;

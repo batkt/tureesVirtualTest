@@ -160,7 +160,7 @@ function AjiltanBurtgel({ token }) {
     setKhariltsagchKhuudaslalt,
     khariltsagchiinGaralt,
     khariltsagchMutate,
-  } = useKhariltsagch(token, ajiltan?.baiguullagiinId, 100, query, order);
+  } = useKhariltsagch(token, ajiltan?.baiguullagiinId, 10, query, order);
   const { khariltsagchToololt, khariltsagchToololtMutate, isValidating } =
     useKhariltsagchToololt(token);
   const [formNuukh, setFormNuukh] = useState(false);
@@ -179,6 +179,14 @@ function AjiltanBurtgel({ token }) {
     temdeglel: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
+
+  useEffect(() => {
+    barilgiinId;
+    setKhariltsagchKhuudaslalt((a) => ({
+      ...a,
+      khuudasniiDugaar: 1,
+    }));
+  }, [barilgiinId]);
 
   useEffect(() => {
     formRef.current.resetFields();
@@ -852,7 +860,15 @@ function AjiltanBurtgel({ token }) {
             data-aos-duration="1000"
             data-aos-delay="600"
           >
-            <Form.Item name="mail">
+            <Form.Item
+              name="mail"
+              rules={[
+                {
+                  required: true,
+                  message: "И-мейл хаяг бүртгэнэ үү!",
+                },
+              ]}
+            >
               <Input
                 onKeyUp={focuser}
                 type="email"
@@ -1419,8 +1435,7 @@ function AjiltanBurtgel({ token }) {
           </Modal>
         </div>
         <CardList
-          keyValue="
-          "
+          keyValue=""
           className="block overflow-auto md:hidden"
           jagsaalt={khariltsagchiinGaralt?.jagsaalt}
           Component={KhariltsagchTile}
