@@ -9,9 +9,13 @@ function tugeemelAsuult() {
   const faq = useJagsaalt("https://zevtabs.mn/api/faqavya/rent");
 
   return (
-    <div className="col-span-12 ">
-      {faq?.data?.map((mur) => (
+    <div
+      className="col-span-12 h-full overflow-y-auto"
+      scroll={{ y: "calc(100vh - 27rem)" }}
+    >
+      {faq?.data?.map((mur, i) => (
         <Collapse
+          key={`collapse${i}`}
           defaultActiveKey={["0"]}
           expandIcon={({ isActive }) => (
             <PlusOutlined
@@ -22,7 +26,7 @@ function tugeemelAsuult() {
           ghost
         >
           <Panel header={mur?.asuult} className="font-semibold" key="1">
-            <div className="px-16 pb-2 font-normal dark:text-white">
+            <div className="px-16 pb-2 font-normal dark:text-gray-200">
               {mur?.khariult}
             </div>
           </Panel>
