@@ -200,22 +200,6 @@ const YurunkhiiMedeele = ({
     document.getElementById("talbaiSongolt").focus();
   }, []);
 
-  const focuser = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      switch (e.target.id) {
-        case "validate_other_gereeniiOgnoo":
-          form.getFieldInstance("khugatsaa").focus();
-          break;
-        case "validate_other_zoriulalt":
-          document.getElementById("zardalBurtgelButton").focus();
-          break;
-        default:
-          break;
-      }
-    }
-  }, []);
-
   function onFinish() {
     if (value.talbainuud === undefined) {
       message.warning("Талбай бүртгэнэ үү!");
@@ -375,15 +359,6 @@ const YurunkhiiMedeele = ({
             </div>
           </div>
         </div>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="600">
-        <Form.Item
-          rules={[{ required: true, message: "Зориулалт бүртгэнэ үү!" }]}
-          label="Зориулалт"
-          name="zoriulalt"
-        >
-          <Input onKeyUp={focuser} placeholder="Зориулалт" />
-        </Form.Item>
       </div>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
