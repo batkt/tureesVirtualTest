@@ -14,7 +14,7 @@ function Tuslamj() {
   const [daragdsanTokhirgooMedeelel, setDaragdsanTokhirgooMedeelel] =
     useState(0);
   const tuslamj = useJagsaalt(
-    "https://zevtabs.mn/tuslamjAvya/rent",
+    "https://zevtabs.mn/api/tuslamjAvya/rent",
     undefined,
     order
   );
