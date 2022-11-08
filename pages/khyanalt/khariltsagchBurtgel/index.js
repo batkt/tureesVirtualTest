@@ -465,6 +465,14 @@ function AjiltanBurtgel({ token }) {
           formRef.current.getFieldInstance("register").focus();
           break;
         case "control-ref_register":
+          if (khariltsagchState?.turul === "ААН") {
+            formRef.current.getFieldInstance("zakhirliinOvog")?.focus();
+            break;
+          } else formRef.current.getFieldInstance("khayag")?.focus();
+        case "control-ref_zakhirliinOvog":
+          formRef.current.getFieldInstance("zakhirliinNer")?.focus();
+          break;
+        case "control-ref_zakhirliinNer":
           formRef.current.getFieldInstance("khayag").focus();
           break;
         case "control-ref_khayag":
@@ -548,13 +556,17 @@ function AjiltanBurtgel({ token }) {
   }
   function turulSongokh(value) {
     onChange("turul", value);
-    setFormNuukh(value);
+    formRef.current.resetFields();
+    formRef.current.setFieldsValue({ turul: value });
 
+    setFormNuukh(value);
     if (value === "Иргэн") {
       setTimeout(() => {
         formRef.current.getFieldInstance("ovog").focus();
       }, 800);
-    } else formRef.current.getFieldInstance("ner").focus();
+    } else {
+      formRef.current.getFieldInstance("ner").focus();
+    }
   }
 
   function talbaiOruulakhExcel() {
@@ -710,12 +722,69 @@ function AjiltanBurtgel({ token }) {
                 maxLength={10}
                 placeholder="Регистр"
                 value={khariltsagchState.register}
-                onChange={(e) => onChange("register", e.target.value)}
+                onChange={(e) =>
+                  onChange("register", e?.target?.value?.toUpperCase())
+                }
                 prefix={<SolutionOutlined style={iconColor} />}
                 onBlur={() => (formNuukh === "ААН" ? "" : checkRegister())}
               ></Input>
             </Form.Item>
           </div>
+
+          {khariltsagchState.turul === "ААН" && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="zakhirliinOvog"
+                rules={[
+                  {
+                    required: true,
+                    message: "Захирлын Овог бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <Input
+                  onKeyUp={focuser}
+                  type="text"
+                  allowClear
+                  placeholder="Захирлын Овог"
+                  value={khariltsagchState.zakhirliinOvog}
+                  prefix={<UserOutlined style={iconColor} />}
+                  onChange={(e) => onChange("zakhirliinOvog", e.target.value)}
+                ></Input>
+              </Form.Item>
+            </div>
+          )}
+          {khariltsagchState.turul === "ААН" && (
+            <div
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
+              <Form.Item
+                name="zakhirliinNer"
+                rules={[
+                  {
+                    required: true,
+                    message: "Захирлын нэр бүртгэнэ үү!",
+                  },
+                ]}
+              >
+                <Input
+                  onKeyUp={focuser}
+                  type="text"
+                  allowClear
+                  placeholder="Захирлын нэр"
+                  value={khariltsagchState.zakhirliinNer}
+                  prefix={<UserOutlined style={iconColor} />}
+                  onChange={(e) => onChange("zakhirliinNer", e.target.value)}
+                ></Input>
+              </Form.Item>
+            </div>
+          )}
 
           <div
             data-aos="fade-right"
