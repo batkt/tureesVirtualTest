@@ -67,8 +67,6 @@ function tulburTootsoo({ token }) {
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
 
-  const { dansGaralt } = useDans(token, baiguullaga?._id);
-
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
 
   useEffect(() => {
@@ -139,17 +137,24 @@ function tulburTootsoo({ token }) {
         );
         if (!!zagvar) {
           medeelel.eneSardTulukhUsgeer = `${toWords(
-            medeelel.eneSardTulukhDun *
-              (medeelel.eneSardTulukhDun < 0 ? -1 : 1),
+            (
+              medeelel.eneSardTulukhDun *
+              (medeelel.eneSardTulukhDun < 0 ? -1 : 1)
+            ).toFixed(0),
             { suffix: "n" }
           )} төгрөг`;
-          medeelel.niitUldegdelUsgeer = `${toWords(
-            medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1),
-            { suffix: "n" }
-          )} төгрөг`;
+          medeelel.niitUldegdelUsgeer =
+            `${toWords(
+              (
+                medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1)
+              ).toFixed(0),
+              { suffix: "n" }
+            )} төгрөг` || 0;
           medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
             suffix: "n",
           })} төгрөг`;
+          medeelel.aldangiinUldegdel =
+            formatNumber(medeelel.aldangiinUldegdel) || "";
           medeelel.albanTushaal = medeelel.albanTushaal || "";
           medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
           medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
@@ -703,7 +708,7 @@ function tulburTootsoo({ token }) {
               <Table
                 bordered
                 size="small"
-                scroll={{ y: "calc(100vh - 18rem)" }}
+                scroll={{ y: "calc(100vh - 22rem)" }}
                 rowSelection={{
                   type: "checkbox",
                   selectedRowKeys: songogdsonGereenuud,
@@ -804,19 +809,8 @@ function tulburTootsoo({ token }) {
                     },
                   },
                 ]}
-                dataSource={nekhemjlel?.jagsaalt}
-                pagination={{
-                  current: nekhemjlel?.khuudasniiDugaar,
-                  pageSize: nekhemjlel?.khuudasniiKhemjee,
-                  total: nekhemjlel?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setNekhemjlelKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
+                dataSource={nekhemjleliinJagsaalt}
+                pagination={false}
                 rowKey={(a) => a._id}
               />
             </div>

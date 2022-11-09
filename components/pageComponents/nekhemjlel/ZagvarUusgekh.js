@@ -62,6 +62,7 @@ const tulburiinTalbaruud = [
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
+  { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
 const nekhemjlekhiinTalbaruud = [

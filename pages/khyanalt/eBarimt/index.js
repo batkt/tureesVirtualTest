@@ -50,12 +50,8 @@ function EbarimtMedeelel({ token }) {
   const queryToololt = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
-      ekhlekhOgnoo: ekhlekhOgnoo
-        ? {
-            ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
-        : undefined,
+      ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
     };
   }, [ekhlekhOgnoo]);
 
@@ -195,6 +191,7 @@ function EbarimtMedeelel({ token }) {
             data-aos-delay="100"
           >
             <RangePicker
+              clearIcon
               style={{ marginBottom: "20px" }}
               size="middle"
               value={ekhlekhOgnoo}
