@@ -197,6 +197,7 @@ function Khyanalt({ token }) {
                 onTextChange("");
                 setContent("");
                 setTitle("");
+                setNer(undefined);
               }
             });
           return;
@@ -240,6 +241,7 @@ function Khyanalt({ token }) {
               onTextChange("");
               setContent("");
               setTitle("");
+              setNer(undefined);
               setLoading(false);
             } else if (!!data?.failureCount) {
               notification.warning({
@@ -357,27 +359,23 @@ function Khyanalt({ token }) {
         });
       });
     }
-    if (!!title) {
-      setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-            setContent("");
-            setTitle("");
-            setLoading(false);
-          }
-        })
-        .catch((e) => {
+
+    setLoading(true);
+    uilchilgee(token)
+      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          setContent("");
+          setTitle("");
+          setNer("");
           setLoading(false);
-          aldaaBarigch(e);
-        });
-    } else {
-      notification.warning({
-        message: "Гарчиг заавал оруулна уу",
+        }
+      })
+      .catch((e) => {
+        setLoading(false);
+        aldaaBarigch(e);
       });
-    }
   }
 
   function send() {
@@ -474,6 +472,8 @@ function Khyanalt({ token }) {
   function turulSongokh(mur) {
     setTurul(mur);
     setContent("");
+    setTitle("");
+    setNer(undefined);
   }
 
   function onScroll(e) {
@@ -975,7 +975,7 @@ function Khyanalt({ token }) {
                 <Input
                   className="space-y-3"
                   placeholder="Гарчиг"
-                  value={ner}
+                  value={!!ner ? ner : title}
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}
