@@ -438,7 +438,7 @@ function ZakhialgiinKhyanalt() {
       color: "text-blue-500",
       selectedColor: "bg-blue-50 dark:bg-gray-900",
       border: "border-blue-500",
-      query: { turGereeEsekh:  {$ne:true} },
+      query: { turGereeEsekh:  {$ne:true},  tuluv: { $ne: -1 },},
     },
     {
       too: gereeToollolt !== undefined
@@ -449,7 +449,7 @@ function ZakhialgiinKhyanalt() {
       color: "text-purple-500",
       selectedColor: "bg-purple-50 dark:bg-gray-900",
       border: "border-purple-600",
-      query: { turGereeEsekh:  true },
+      query: { turGereeEsekh: true, tuluv: { $ne: -1 }, },
     },
     {
       too:

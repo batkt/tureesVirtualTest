@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
@@ -17,6 +17,13 @@ import { modal } from "components/ant/Modal";
 import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import _ from "lodash";
 import { aldaaBarigch } from "services/uilchilgee";
+import compareFields from "tools/function/compareFields";
+
+var defaultUtga = {
+  dedKhesguud: [{ zaalt: "new" }],
+  ner: undefined,
+  turGereeEsekh:undefined
+}
 
 function ZakhialgaNemekh({ token }) {
   const router = useRouter();
@@ -33,6 +40,7 @@ function ZakhialgaNemekh({ token }) {
     if (id !== "new")
       readMethod("gereeniiZagvar", token, id).then(({ data }) => {
         if (data) {
+          defaultUtga = data
           form.setFieldsValue(data);
           setGereeniiZagvar({ ...data });
         }
@@ -118,6 +126,28 @@ function ZakhialgaNemekh({ token }) {
       },
     });
   }
+  function garya() {
+    const values = form.getFieldsValue();
+    if ( defaultUtga.dedKhesguud !== gereeniiZagvar.dedKhesguud || compareFields(defaultUtga, values, ["turGereeEsekh", "ner"]))
+      Modal.confirm({
+        content: `Та гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: router.back,
+      });
+    else router.back();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [gereeniiZagvar, defaultUtga]);
 
   function docNemekh(key, mur) {
     mur.zaalt = "<b>Шинэ заалт</b>";

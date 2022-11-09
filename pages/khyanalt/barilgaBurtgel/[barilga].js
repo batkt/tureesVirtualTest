@@ -14,6 +14,7 @@ import {
   Upload,
   TimePicker,
   Image,
+  Modal,
 } from "antd";
 import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -21,6 +22,18 @@ import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
 import uilchilgee, { url } from "services/uilchilgee";
 import moment from "moment";
+import compareFields from "tools/function/compareFields";
+
+var ankhniiUtga = {bairshil : undefined,
+  bdavkhar : undefined,
+  davkhar : undefined,
+  khaakhTsag : undefined,
+  khayag: undefined,
+  logo: undefined,
+  neekhTsag: undefined,
+  ner: undefined,
+  niitTalbai: undefined,
+  register: undefined}
 
 const formItemLayout = {
   labelCol: {
@@ -66,9 +79,16 @@ function GereeBaiguulakh({ token }) {
           davkhar: davkhar.length,
           bdavkhar: bdavkhar.length,
         });
+        ankhniiUtga = ({
+          ...data,
+          davkhar: davkhar.length,
+          bdavkhar: bdavkhar.length,
+        })
       }
     }
   }, [baiguullaga]);
+
+  
 
   function planAvya(davkhar, bEsekh) {
     if (bEsekh) {
@@ -106,7 +126,6 @@ function GereeBaiguulakh({ token }) {
         davkhar: `B${i + 1}`,
       }));
       setBDavkhar([...value]);
-      console.log(bdavkhar);
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
@@ -117,7 +136,7 @@ function GereeBaiguulakh({ token }) {
           },
         })
         .then(({ data }) => {
-          if (data?.found === true) form.setFieldsValue({ ner: data?.name });
+          if (data?.found === true) {form.setFieldsValue({ ner: data?.name })};
         });
   };
 
@@ -217,6 +236,37 @@ function GereeBaiguulakh({ token }) {
       setDavkhar(davkhar);
     }
   }
+  function garya() {
+    const values = form.getFieldsValue();
+    if (compareFields(values, ankhniiUtga, ["bairshil", "bdavkhar",
+    "davkhar",
+    "khaakhTsag",
+    "khayag",
+    "logo",
+    "neekhTsag",
+    "ner",
+    "niitTalbai",
+    "register",
+    ]))
+      Modal.confirm({
+        content: `Та гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: router.back,
+      });
+    else router.back();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [ankhniiUtga]);
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   function logoZuragKharakh(e, path) {
     setKharakhZurgiinZam(path);

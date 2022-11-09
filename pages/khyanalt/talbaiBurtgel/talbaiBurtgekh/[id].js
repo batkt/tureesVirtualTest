@@ -521,7 +521,7 @@ function TalbaiBurtgekh({ token }) {
       ])
     )
       Modal.confirm({
-        content: `Та гарахдаа гарахдаа итгэлтэй байна уу?`,
+        content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
         onOk: router.back,
