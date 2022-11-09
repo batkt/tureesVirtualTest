@@ -5,7 +5,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import Admin from "components/Admin";
-import _ from "lodash";
+import _, { values } from "lodash";
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useAuth } from "services/auth";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
@@ -22,6 +22,7 @@ import {
   Upload,
   message,
   Switch,
+  Modal,
 } from "antd";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -29,6 +30,7 @@ import { url } from "services/uilchilgee";
 import createMethod from "tools/function/crud/createMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
+import compareFields from "tools/function/compareFields";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -99,6 +101,208 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
         <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
       </div>
     </>
+  );
+}
+
+function KhurunguudCard({
+  key,
+  name,
+  fieldKey,
+  remove,
+  token,
+  data,
+  baiguullaga,
+  formRef,
+  ...restField
+}) {
+  const niitUneRef = useRef();
+  const tooRef = useRef();
+  const uneRef = useRef();
+
+  return (
+    <Card>
+      <div key={key}>
+        <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
+          <CloseCircleOutlined
+            onClick={() => {
+              remove(name);
+            }}
+          />
+        </div>
+        <div className=" grid grid-cols-12">
+          <div className="col-span-2 row-span-2 flex items-center justify-center">
+            <Form.Item
+              {...restField}
+              name={[name, "zurgiinId"]}
+              fieldKey={[fieldKey, "zurgiinId"]}
+              getValueFromEvent={normFile}
+            >
+              <Upload
+                showUploadList={false}
+                className="avatar-uploader "
+                multiple={false}
+                listType="picture-card"
+                name="file"
+                action={`${url}/zuragKhadgalya`}
+                method="POST"
+                data={{ turul: "khurungu" }}
+                headers={{ Authorization: `bearer ${token}` }}
+                onChange={(e) => {
+                  document
+                    .getElementById(`${name}-upload-image`)
+                    .classList.add("hidden");
+                  document
+                    .getElementById(`${name}-image`)
+                    .classList.remove("hidden");
+                  document.getElementById(
+                    `${name}-image`
+                  ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${
+                    e.fileList[e.fileList.length - 1]?.response?.id
+                  }`;
+                }}
+              >
+                <div
+                  className={
+                    data.khurunguud && !!data.khurunguud[name]?.zurgiinId
+                      ? "hidden"
+                      : "text-sm"
+                  }
+                  id={`${name}-upload-image`}
+                >
+                  Зураг оруулах
+                </div>
+                <img
+                  className={
+                    data.khurunguud && !data.khurunguud[name]?.zurgiinId
+                      ? "hidden"
+                      : "text-sm"
+                  }
+                  src={
+                    data.khurunguud &&
+                    `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[name]?.zurgiinId}`
+                  }
+                  id={`${key}-image`}
+                  alt=""
+                ></img>
+              </Upload>
+            </Form.Item>
+          </div>
+          <div className="col-span-5 flex flex-col justify-center ">
+            <Form.Item
+              {...restField}
+              label="Нэр"
+              name={[name, "ner"]}
+              fieldKey={[fieldKey, "ner"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Нэр бүртгэнэ үү",
+                },
+              ]}
+            >
+              <Input
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    uneRef.current.focus();
+                  }
+                }}
+                style={{ width: "100%" }}
+                placeholder="Нэр"
+              />
+            </Form.Item>
+            <Form.Item
+              {...restField}
+              label="Тоо"
+              name={[name, "too"]}
+              fieldKey={[fieldKey, "too"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Тоо ширхэг бүртгэнэ үү",
+                },
+              ]}
+            >
+              <InputNumber
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    niitUneRef.current.focus();
+                  }
+                }}
+                onChange={(e) => {
+                  const ads = formRef.current?.getFieldsValue();
+                  ads.khurunguud[name].niit = e * ads.khurunguud[name].une || 0;
+                  formRef.current?.setFieldsValue(ads);
+                }}
+                style={{ width: "100%" }}
+                placeholder="Тоо ширхэг"
+                ref={tooRef}
+              />
+            </Form.Item>
+          </div>
+          <div className="col-span-5 flex flex-col justify-center ">
+            <Form.Item
+              {...restField}
+              label="Үнэ"
+              name={[name, "une"]}
+              fieldKey={[fieldKey, "une"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Үнэ бүртгэнэ үү",
+                },
+              ]}
+            >
+              <InputNumber
+                ref={uneRef}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    tooRef.current.focus();
+                  }
+                }}
+                onChange={(e) => {
+                  const ads = formRef.current?.getFieldsValue();
+                  ads.khurunguud[name].niit = e * ads.khurunguud[name].too || 0;
+                  formRef.current?.setFieldsValue(ads);
+                }}
+                style={{ width: "100%" }}
+                placeholder="Нэгж үнэ"
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              />
+            </Form.Item>
+            <Form.Item
+              {...restField}
+              label="Нийт"
+              name={[name, "niit"]}
+              fieldKey={[fieldKey, "niit"]}
+              rules={[
+                {
+                  required: false,
+                  message: "Нийт бүртгэнэ үү",
+                },
+              ]}
+            >
+              <InputNumber
+                ref={niitUneRef}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    document.getElementById("khurunguBurtgekh").focus();
+                  }
+                }}
+                style={{ width: "100%" }}
+                placeholder="Нийт үнэ"
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              />
+            </Form.Item>
+          </div>
+        </div>
+      </div>
+    </Card>
   );
 }
 
@@ -300,8 +504,41 @@ function TalbaiBurtgekh({ token }) {
   const onClose = () => {
     setOpen(false);
   };
+
+  function garya() {
+    const values = formRef.current.getFieldsValue();
+    if (
+      compareFields(values, data, [
+        "kod",
+        "talbainKhemjee",
+        "talbainNegjUne",
+        "talbainNiitUne",
+        "davkhar",
+        "tailbar",
+        "khurunguud",
+        "segmentuud",
+        "niitiinTalbaiEsekh",
+      ])
+    )
+      Modal.confirm({
+        content: `Та гарахдаа гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: router.back,
+      });
+    else router.back();
+  }
+
   useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
     formRef.current.getFieldInstance("kod").focus();
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
   }, []);
 
   const focuser = useCallback((e) => {
@@ -324,6 +561,7 @@ function TalbaiBurtgekh({ token }) {
         case "control-ref_tailbar":
           document.getElementById("talbaiBurtgekhButton").focus();
           break;
+
         default:
           break;
       }
@@ -613,192 +851,24 @@ function TalbaiBurtgekh({ token }) {
                 {(fields, { add, remove }) => (
                   <>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Card>
-                        <div key={key}>
-                          <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
-                            <CloseCircleOutlined
-                              onClick={() => {
-                                remove(name);
-                              }}
-                            />
-                          </div>
-                          <div className=" grid grid-cols-12">
-                            <div className="col-span-2 row-span-2 flex items-center justify-center">
-                              <Form.Item
-                                {...restField}
-                                name={[name, "zurgiinId"]}
-                                fieldKey={[fieldKey, "zurgiinId"]}
-                                getValueFromEvent={normFile}
-                              >
-                                <Upload
-                                  showUploadList={false}
-                                  className="avatar-uploader "
-                                  multiple={false}
-                                  listType="picture-card"
-                                  name="file"
-                                  action={`${url}/zuragKhadgalya`}
-                                  method="POST"
-                                  data={{ turul: "khurungu" }}
-                                  headers={{ Authorization: `bearer ${token}` }}
-                                  onChange={(e) => {
-                                    document
-                                      .getElementById(`${key}-upload-image`)
-                                      .classList.add("hidden");
-                                    document
-                                      .getElementById(`${key}-image`)
-                                      .classList.remove("hidden");
-                                    document.getElementById(
-                                      `${key}-image`
-                                    ).src = `${url}/zuragAvya/khurungu/${
-                                      baiguullaga._id
-                                    }/${
-                                      e.fileList[e.fileList.length - 1]
-                                        ?.response?.id
-                                    }`;
-                                  }}
-                                >
-                                  <div
-                                    className={
-                                      data.khurunguud &&
-                                      !!data.khurunguud[key]?.zurgiinId
-                                        ? "hidden"
-                                        : "text-sm"
-                                    }
-                                    id={`${key}-upload-image`}
-                                  >
-                                    Зураг оруулах
-                                  </div>
-                                  <img
-                                    className={
-                                      data.khurunguud &&
-                                      !data.khurunguud[key]?.zurgiinId
-                                        ? "hidden"
-                                        : "text-sm"
-                                    }
-                                    src={
-                                      data.khurunguud &&
-                                      `${url}/zuragAvya/khurungu/${baiguullaga?._id}/${data.khurunguud[key]?.zurgiinId}`
-                                    }
-                                    id={`${key}-image`}
-                                    alt=""
-                                  ></img>
-                                </Upload>
-                              </Form.Item>
-                            </div>
-                            <div className="col-span-5 flex flex-col justify-center ">
-                              <Form.Item
-                                {...restField}
-                                label="Нэр"
-                                name={[name, "ner"]}
-                                fieldKey={[fieldKey, "ner"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Нэр бүртгэнэ үү",
-                                  },
-                                ]}
-                              >
-                                <Input
-                                  style={{ width: "100%" }}
-                                  placeholder="Нэр"
-                                />
-                              </Form.Item>
-                              <Form.Item
-                                {...restField}
-                                label="Тоо"
-                                name={[name, "too"]}
-                                fieldKey={[fieldKey, "too"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Тоо ширхэг бүртгэнэ үү",
-                                  },
-                                ]}
-                              >
-                                <InputNumber
-                                  onChange={(e) => {
-                                    const ads =
-                                      formRef.current?.getFieldsValue();
-
-                                    ads.khurunguud[key].niit =
-                                      e * ads.khurunguud[key].une || 0;
-                                    formRef.current?.setFieldsValue(ads);
-                                  }}
-                                  style={{ width: "100%" }}
-                                  placeholder="Тоо ширхэг"
-                                />
-                              </Form.Item>
-                            </div>
-                            <div className="col-span-5 flex flex-col justify-center ">
-                              <Form.Item
-                                {...restField}
-                                label="Үнэ"
-                                name={[name, "une"]}
-                                fieldKey={[fieldKey, "une"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Үнэ бүртгэнэ үү",
-                                  },
-                                ]}
-                              >
-                                <InputNumber
-                                  onChange={(e) => {
-                                    const ads =
-                                      formRef.current?.getFieldsValue();
-                                    ads.khurunguud[key].niit =
-                                      e * ads.khurunguud[key].too || 0;
-                                    formRef.current?.setFieldsValue(ads);
-                                  }}
-                                  style={{ width: "100%" }}
-                                  placeholder="Нэгж үнэ"
-                                  formatter={(value) =>
-                                    `${value}`.replace(
-                                      /\B(?=(\d{3})+(?!\d))/g,
-                                      ","
-                                    )
-                                  }
-                                  parser={(value) =>
-                                    value.replace(/\$\s?|(,*)/g, "")
-                                  }
-                                />
-                              </Form.Item>
-                              <Form.Item
-                                {...restField}
-                                label="Нийт"
-                                name={[name, "niit"]}
-                                fieldKey={[fieldKey, "niit"]}
-                                rules={[
-                                  {
-                                    required: false,
-                                    message: "Нийт бүртгэнэ үү",
-                                  },
-                                ]}
-                              >
-                                <InputNumber
-                                  style={{ width: "100%" }}
-                                  placeholder="Нийт үнэ"
-                                  formatter={(value) =>
-                                    `${value}`.replace(
-                                      /\B(?=(\d{3})+(?!\d))/g,
-                                      ","
-                                    )
-                                  }
-                                  parser={(value) =>
-                                    value.replace(/\$\s?|(,*)/g, "")
-                                  }
-                                />
-                              </Form.Item>
-                            </div>
-                          </div>
-                        </div>
-                      </Card>
+                      <KhurunguudCard
+                        key={key}
+                        name={name}
+                        fieldKey={fieldKey}
+                        restField={restField}
+                        token={token}
+                        remove={remove}
+                        data={data}
+                        baiguullaga={baiguullaga}
+                        formRef={formRef}
+                      />
                     ))}
                     <div className="-mt-4 flex justify-center gap-5 px-2">
                       <Button
                         className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                         type="dashed"
                         onClick={() => add()}
+                        id={"khurunguBurtgekh"}
                         block
                         icon={<PlusOutlined />}
                       >

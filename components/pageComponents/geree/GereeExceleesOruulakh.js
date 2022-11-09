@@ -85,7 +85,7 @@ function GereeExceleesOruulakh(
         </Select>
       </div>
       <div className="mt-5" />
-      {!!zagvariinId && (
+      {!!zagvariinId && !!ognoo && (
         <Upload
           type="drag"
           showUploadList={false}

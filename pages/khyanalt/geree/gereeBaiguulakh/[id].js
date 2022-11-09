@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import readMethod from "tools/function/crud/readMethod";
-import { Button, message, Select, Steps } from "antd";
+import { Button, message, Modal, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
 import Zardal from "components/pageComponents/gereebaiguulakh/Zardal";
@@ -133,6 +133,28 @@ function GereeBaiguulakh({ token, data }) {
     document.getElementById("gereeniiKhugatsaaButton").focus();
   };
 
+  function garya() {
+    if (data !== khadgalakhGeree)
+      Modal.confirm({
+        content: `Та гарахдаа гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: router.back,
+      });
+    else router.back();
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
@@ -259,7 +281,14 @@ function GereeBaiguulakh({ token, data }) {
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
-                      <div dangerouslySetInnerHTML={{ __html: mur.ner }} />
+                      <div className="flex justify-between">
+                        <p>{mur.ner}</p>
+                        <p className="text-gray-500">
+                          {mur.turGereeEsekh === true
+                            ? "/Түр гэрээ/"
+                            : "/Үндсэн гэрээ/"}
+                        </p>
+                      </div>
                     </Select.Option>
                   );
                 })}

@@ -37,7 +37,7 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
 
   const query = useMemo(() => {
     return {
-      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
+      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh === true ? gereeniiZagvar.turGereeEsekh : {$ne:true},
     };
   }, [gereeniiZagvar]);
 
@@ -46,7 +46,6 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     baiguullaga?._id,
     query
   );
-
   function onValueChange(v) {
     onChange(talbainiiGaralt.jagsaalt.find((a) => a._id === v));
   }
@@ -198,22 +197,6 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     document.getElementById("talbaiSongolt").focus();
-  }, []);
-
-  const focuser = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      switch (e.target.id) {
-        case "validate_other_gereeniiOgnoo":
-          form.getFieldInstance("khugatsaa").focus();
-          break;
-        case "validate_other_zoriulalt":
-          document.getElementById("zardalBurtgelButton").focus();
-          break;
-        default:
-          break;
-      }
-    }
   }, []);
 
   function onFinish() {
@@ -375,15 +358,6 @@ const YurunkhiiMedeele = ({
             </div>
           </div>
         </div>
-      </div>
-      <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="600">
-        <Form.Item
-          rules={[{ required: true, message: "Зориулалт бүртгэнэ үү!" }]}
-          label="Зориулалт"
-          name="zoriulalt"
-        >
-          <Input onKeyUp={focuser} placeholder="Зориулалт" />
-        </Form.Item>
       </div>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
