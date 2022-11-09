@@ -66,8 +66,8 @@ const YurunkhiiMedeele = ({
   if (gereeniiZagvar?.turGereeEsekh === true) {
     value.tulukhUdur = [moment(value?.gereeniiOgnoo).format("DD")];
   }
-  value.gereeniiOgnoo = moment(value.gereeniiOgnoo);
-  value.duusakhOgnoo = moment(value.duusakhOgnoo);
+  value.gereeniiOgnoo = moment(moment(value.gereeniiOgnoo).format("YYYY-MM-DD 00:00:00"));
+  value.duusakhOgnoo = moment(moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"));
 
   useEffect(() => {
     Aos.init({ once: true });

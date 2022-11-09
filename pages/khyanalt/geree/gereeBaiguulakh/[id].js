@@ -136,7 +136,7 @@ function GereeBaiguulakh({ token, data }) {
   function garya() {
     if (data !== khadgalakhGeree)
       Modal.confirm({
-        content: `Та гарахдаа гарахдаа итгэлтэй байна уу?`,
+        content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
         onOk: router.back,
