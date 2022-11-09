@@ -1,10 +1,10 @@
 import { Select, Form } from "antd";
-import { modal } from "components/ant/Modal";
-import React, { Component } from "react";
+import useJagsaalt from "hooks/useJagsaalt";
+import _ from "lodash";
+import React, { Component, useMemo } from "react";
 import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
 import uilchilgee, { url } from "services/uilchilgee";
 import { bairshilKhurvuuljAvakh, undur, urgun } from ".";
-import PlanMedeelel from "./PlanMedeelel";
 
 class URLImage extends React.Component {
   state = {
@@ -48,6 +48,68 @@ class URLImage extends React.Component {
   }
 }
 
+const select = { gereeniiDugaar: 1, ner: 1, mail: 1 };
+
+function ToolTip({ pointer }) {
+  const query = useMemo(() => {
+    return {
+      talbainIdnuud: pointer?._id,
+    };
+  }, [pointer?._id]);
+
+  const gereeMedeelel = useJagsaalt(
+    pointer?.kod && "/geree",
+    query,
+    undefined,
+    select
+  );
+  return (
+    <Group>
+      <Rect
+        x={pointer.x + 15}
+        y={pointer.y + 5}
+        width={200}
+        height={90}
+        fill={pointer.col}
+        stroke={1}
+        opacity={0.9}
+      />
+      <Text
+        x={pointer.x + 30}
+        y={pointer.y + 10}
+        text={pointer.kod}
+        fill={"black"}
+        fontSize={15}
+        align="center"
+      />
+      <Text
+        x={pointer.x + 30}
+        y={pointer.y + 30}
+        text={_.get(gereeMedeelel, "jagsaalt.0.gereeniiDugaar")}
+        fill={"black"}
+        fontSize={15}
+        align="center"
+      />
+      <Text
+        x={pointer.x + 30}
+        y={pointer.y + 50}
+        text={_.get(gereeMedeelel, "jagsaalt.0.ner")}
+        fill={"black"}
+        fontSize={15}
+        align="center"
+      />
+      <Text
+        x={pointer.x + 30}
+        y={pointer.y + 70}
+        text={_.get(gereeMedeelel, "jagsaalt.0.mail")}
+        fill={"black"}
+        fontSize={15}
+        align="center"
+      />
+    </Group>
+  );
+}
+
 class App extends Component {
   state = {
     isMouseOverStartPoint: !!this.props.points?.length || false,
@@ -59,8 +121,7 @@ class App extends Component {
       (a) => a._id === this.props.barilgiinId
     );
 
-    if (!barilga?.davkharuud[0] || !this.props.token)
-      console.log("barilga algoo");
+    if (!barilga?.davkharuud[0] || !this.props.token);
     else {
       this.setState({
         planZurag: barilga.davkharuud[0]?.planZurag,
@@ -91,7 +152,6 @@ class App extends Component {
         });
       });
   };
-
   render() {
     const {
       state: { planZurag, talbainuud, pointer },
@@ -101,17 +161,7 @@ class App extends Component {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    function medeelelKharya(mur) {
-      uilchilgee(props.token)
-        .get(`/talbai/${mur._id}`)
-        .then((response) => {
-          modal({
-            title: "План зураг мэдээлэл",
-            content: <PlanMedeelel data={response.data} />,
-            footer: [],
-          });
-        });
-    }
+
     return (
       <div>
         <div className="flex space-x-3">
@@ -161,12 +211,13 @@ class App extends Component {
                 (a, b) => a.concat(b),
                 []
               );
-
               return (
                 <Line
                   onMouseMove={(e) => {
                     this.setState({
                       pointer: {
+                        col: "white",
+                        _id: mur._id,
                         x: e.evt.layerX,
                         y: e.evt.layerY,
                         kod: mur.kod,
@@ -181,12 +232,16 @@ class App extends Component {
                   key={mur._id}
                   points={flattenedPoints}
                   stroke="black"
-                  fill={mur.idevkhiteiEsekh ? "lightgreen" : "red"}
+                  fill={
+                    pointer?._id === mur._id
+                      ? "pink"
+                      : mur.idevkhiteiEsekh
+                      ? "green"
+                      : "red"
+                  }
                   opacity={0.3}
                   strokeWidth={5}
                   closed={true}
-                  onClick={() => medeelelKharya(mur)}
-                  // onMouseMove={() => medeelelKharya(mur)}
                 />
               );
             })}
@@ -199,12 +254,13 @@ class App extends Component {
                 mur.bairshil?.reduce((a, b) => {
                   return a + b[1];
                 }, 0) / mur.bairshil.length;
+
               return (
                 <Group key={mur._id + "text"}>
                   <Rect
                     x={x - (mur.kod.length / 2) * 15}
                     y={y - 15}
-                    width={50}
+                    width={65}
                     height={26}
                     fill="white"
                     stroke={1}
@@ -222,27 +278,7 @@ class App extends Component {
               );
             })}
 
-            {pointer && (
-              <Group>
-                <Rect
-                  x={pointer.x + 15}
-                  y={pointer.y + 5}
-                  width={200}
-                  height={80}
-                  fill="white"
-                  stroke={1}
-                  opacity={0.9}
-                />
-                <Text
-                  x={pointer.x + 30}
-                  y={pointer.y + 10}
-                  text={pointer.kod}
-                  fill={"black"}
-                  fontSize={15}
-                  align="center"
-                />
-              </Group>
-            )}
+            {pointer && <ToolTip pointer={pointer} />}
           </Layer>
         </Stage>
       </div>

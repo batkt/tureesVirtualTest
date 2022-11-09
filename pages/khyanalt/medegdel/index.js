@@ -92,7 +92,8 @@ function Khyanalt({ token }) {
   const [turul, setTurul] = useState("SMS");
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState();
+  const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -118,7 +119,11 @@ function Khyanalt({ token }) {
     undefined,
     ["ner", "ovog", "utas", "register"]
   );
-  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(token);
+
+  const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
+    token,
+    turul
+  );
 
   const query = useMemo(() => {
     return {
@@ -186,9 +191,7 @@ function Khyanalt({ token }) {
               else if (!!data?.failureCount) khariu.failureCount += 1;
               if (index === array.length - 1) {
                 notification.success({
-                  message: `Notification Амжилттай ${khariu.successCount} ${
-                    khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
-                  } илгээлээ`,
+                  message: `Notification Амжилттай илгээлээ`,
                 });
                 setLoading(false);
                 onTextChange("");
@@ -471,7 +474,6 @@ function Khyanalt({ token }) {
   function turulSongokh(mur) {
     setTurul(mur);
     setContent("");
-    setTitle("");
   }
 
   function onScroll(e) {
@@ -480,7 +482,12 @@ function Khyanalt({ token }) {
       seen();
     }, 300);
   }
+
   //#endregion
+  function zagvarSongokh(a) {
+    setContent(a.mail);
+    setNer(a.ner);
+  }
 
   function khariltsagchSongokh(mur) {
     setKhariltsagch(mur);
@@ -625,7 +632,7 @@ function Khyanalt({ token }) {
                   data-aos="fade-left"
                   data-aos-duration="1000"
                   data-aos-delay="100"
-                  onClick={() => setContent(a.mail)}
+                  onClick={() => zagvarSongokh(a)}
                 >
                   <div className="image-fit mr-1 h-8 w-8 flex-none ">
                     <img alt="email" src="/email.png" />
@@ -784,9 +791,9 @@ function Khyanalt({ token }) {
       </div>
 
       <div className="col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
-        {khariltsagch ? (
+        {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
           <div className="box flex h-full flex-col">
-            {songogdsonKhariltsagch.length <= 1 ? (
+            {songogdsonKhariltsagch.length < 2 ? (
               <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
                 {khariltsagch && (
                   <div className="flex items-center">
@@ -826,150 +833,139 @@ function Khyanalt({ token }) {
             ) : (
               ""
             )}
-            <div
-              className="w-full"
-              data-aos="fade-left"
-              data-aos-duration="1000"
-            >
-              {turul === "App" ? (
-                <div
-                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                  style={{ maxHeight: "calc(100vh - 32rem)" }}
-                  onScroll={onScroll}
-                >
-                  {medegdelAvya?.jagsaalt.map((a) => {
-                    return (
-                      <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                          a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
-                        }`}
-                      >
-                        {" "}
-                        <span className="w-full break-words text-justify text-white ">
-                          Гарчиг: {a.title}
-                        </span>
-                        <span className="w-full break-words text-justify text-white ">
-                          {a.message}
-                        </span>
-                        <div>
-                          {!!a.zurgiinId ? (
-                            <Image
-                              width={75}
-                              src={`https://turees.zevtabs.mn/api/file?path=medegdel/${a.zurgiinId}`}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
+            {songogdsonKhariltsagch.length > 2 ? (
+              ""
+            ) : (
+              <div
+                className="w-full"
+                data-aos="fade-left"
+                data-aos-duration="1000"
+              >
+                {turul === "SMS" ? (
+                  <div
+                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                    style={{ maxHeight: "calc(100vh - 32rem)" }}
+                    onScroll={onScroll}
+                  >
+                    {msjTuukh?.jagsaalt.map((a) => {
+                      return (
                         <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                            a.kharsanEsekh === true ? "" : "hidden"
+                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                            a.turul === "medegdel"
+                              ? "ml-auto rounded-br-none bg-green-500"
+                              : "rounded-bl-none"
                           }`}
                         >
-                          <svg
-                            width="20px"
-                            height="20px"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M16 7L12 11"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                        </span>
-                        <span className="absolute right-0 -bottom-5 text-gray-500">
-                          Мэдэгдэл
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : turul === "SMS" ? (
-                <div
-                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                  style={{ maxHeight: "calc(100vh - 32rem)" }}
-                  onScroll={onScroll}
-                >
-                  {msjTuukh?.jagsaalt.map((a) => {
-                    return (
-                      <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                          a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
-                        }`}
-                      >
-                        <span className="w-full break-words text-justify text-white ">
-                          {a.msg}
-                        </span>
+                          <span className="w-full break-words text-justify text-white ">
+                            {a.msg}
+                          </span>
 
+                          <div
+                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                              a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
+                          >
+                            <svg
+                              width="20px"
+                              height="20px"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                              <path
+                                d="M16 7L12 11"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                              <path
+                                d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                            {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                          </span>
+                          <span className="absolute right-0 -bottom-5 text-gray-500">
+                            Мэдэгдэл
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div
+                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                    style={{ maxHeight: "calc(100vh - 32rem)" }}
+                    onScroll={onScroll}
+                  >
+                    {medegdelAvya?.jagsaalt.map((a) => {
+                      return (
                         <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                            a.kharsanEsekh === true ? "" : "hidden"
+                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                            a.turul === "medegdel"
+                              ? "ml-auto rounded-br-none bg-green-500"
+                              : "rounded-bl-none"
                           }`}
                         >
-                          <svg
-                            width="20px"
-                            height="20px"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
+                          <span className="w-full break-words text-justify text-white ">
+                            {a.message}
+                          </span>
+
+                          <div
+                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                              a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
                           >
-                            <path
-                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M16 7L12 11"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
+                            <svg
+                              width="20px"
+                              height="20px"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                              <path
+                                d="M16 7L12 11"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                              <path
+                                d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                            {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                          </span>
+                          <span className="absolute right-0 -bottom-5 text-gray-500">
+                            Мэдэгдэл
+                          </span>
                         </div>
-                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                        </span>
-                        <span className="absolute right-0 -bottom-5 text-gray-500">
-                          Мэдэгдэл
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
             <div
               className="mt-auto w-full p-2"
               data-aos="fade-right"
@@ -979,7 +975,7 @@ function Khyanalt({ token }) {
                 <Input
                   className="space-y-3"
                   placeholder="Гарчиг"
-                  value={title}
+                  value={ner}
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}

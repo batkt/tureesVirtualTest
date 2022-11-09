@@ -14,30 +14,6 @@ function ZagvarBurtgel(
   ref
 ) {
   const [form] = Form.useForm();
-  const [nekhemjlelZagvar] = React.useState({});
-  function garya() {
-    const values = form.getFieldsValue();
-    if (compareFields(values, data, ["ner", "mail"]))
-      Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
-        onOk: destroy,
-      });
-    else destroy();
-  }
-
-  useEffect(() => {
-    function keyUp(e) {
-      if (e.key === "Escape") {
-        e.preventDefault();
-        garya();
-      }
-    }
-    form.getFieldInstance("ner").focus();
-    document.addEventListener("keyup", keyUp);
-    return () => document.removeEventListener("keyup", keyUp);
-  }, []);
 
   useImperativeHandle(
     ref,
@@ -69,6 +45,26 @@ function ZagvarBurtgel(
     }),
     [form, barilgiinId]
   );
+  function garya() {
+    Modal.confirm({
+      content: `Та гарахдаа итгэлтэй байна уу?`,
+      okText: "Тийм",
+      cancelText: "Үгүй",
+      onOk: destroy,
+    });
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
   return (
     <>
       <Form autoComplete={"off"} form={form} initialValues={data}>
