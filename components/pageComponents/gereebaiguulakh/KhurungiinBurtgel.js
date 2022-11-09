@@ -37,7 +37,7 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
 
   const query = useMemo(() => {
     return {
-      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
+      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh === true ? gereeniiZagvar.turGereeEsekh : {$ne:true},
     };
   }, [gereeniiZagvar]);
 
@@ -46,7 +46,6 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     baiguullaga?._id,
     query
   );
-
   function onValueChange(v) {
     onChange(talbainiiGaralt.jagsaalt.find((a) => a._id === v));
   }

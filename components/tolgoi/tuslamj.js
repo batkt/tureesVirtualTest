@@ -14,7 +14,7 @@ function Tuslamj() {
   const [daragdsanTokhirgooMedeelel, setDaragdsanTokhirgooMedeelel] =
     useState(0);
   const tuslamj = useJagsaalt(
-    "https://zevtabs.mn/tuslamjAvya/rent",
+    "https://zevtabs.mn/api/tuslamjAvya/rent",
     undefined,
     order
   );
@@ -30,7 +30,7 @@ function Tuslamj() {
         <Tabs.TabPane
           className="h-[100vh]"
           tab={
-            <span className="text-base font-medium">нэвтрүүлэлтийн алхам</span>
+            <span className="text-base font-medium">Нэвтрүүлэлтийн алхам</span>
           }
           key="1"
         >
@@ -59,7 +59,7 @@ function Tuslamj() {
                     songogdsonAlkham === 0
                       ? "relative top-0 right-0 opacity-100"
                       : songogdsonAlkham === index + 1
-                      ? `absolute -right-3/4 -top-16 z-50 opacity-100`
+                      ? `absolute -right-3/4 -top-14 z-50 opacity-100`
                       : "invisible relative -top-96 opacity-0"
                   }`}
                   onClick={
@@ -72,7 +72,7 @@ function Tuslamj() {
                     <img
                       src={
                         mur.zurgiinId &&
-                        `https://zevtabs.mn/file?path=tuslamj/${mur.zurgiinId}`
+                        `https://zevtabs.mn/api/file?path=tuslamj/${mur.zurgiinId}`
                       }
                       className=" animate-css-deer h-20"
                     />
@@ -147,7 +147,7 @@ function Tuslamj() {
                               className="w-full"
                               src={
                                 a.zurgiinId &&
-                                `https://zevtabs.mn/file?path=tuslamj/${a.zurgiinId}`
+                                `https://zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
                               }
                             />
                             <LeftOutlined
@@ -195,7 +195,7 @@ function Tuslamj() {
                                 height={220}
                                 src={
                                   a.zurgiinId &&
-                                  `https://zevtabs.mn/file?path=tuslamj/${a.zurgiinId}`
+                                  `https://zevtabs.mn/api/file?path=tuslamj/${a.zurgiinId}`
                                 }
                                 className={` border border-dashed border-blue-500 bg-gray-900 object-contain `}
                               />

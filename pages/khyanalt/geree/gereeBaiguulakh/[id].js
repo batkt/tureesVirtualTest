@@ -281,7 +281,14 @@ function GereeBaiguulakh({ token, data }) {
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
-                      <div dangerouslySetInnerHTML={{ __html: mur.ner }} />
+                      <div className="flex justify-between">
+                        <p>{mur.ner}</p>
+                        <p className="text-gray-500">
+                          {mur.turGereeEsekh === true
+                            ? "/Түр гэрээ/"
+                            : "/Үндсэн гэрээ/"}
+                        </p>
+                      </div>
                     </Select.Option>
                   );
                 })}

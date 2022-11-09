@@ -53,6 +53,15 @@
   @apply dark:text-white !important;
 }
 
+.tariffInput.ant-form-item-with-help .ant-form-item-explain {
+  height: auto;
+  opacity: 1;
+  position: absolute;
+  width: 10rem;
+  right: 4.5rem;
+  top: 1px;
+}
+
 .ant-table-footer {
   @apply dark:bg-gray-900 !important;
 }
