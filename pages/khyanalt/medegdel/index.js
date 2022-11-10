@@ -473,7 +473,7 @@ function Khyanalt({ token }) {
     setTurul(mur);
     setContent("");
     setTitle("");
-    setNer(undefined);
+    setNer("");
   }
 
   function onScroll(e) {
