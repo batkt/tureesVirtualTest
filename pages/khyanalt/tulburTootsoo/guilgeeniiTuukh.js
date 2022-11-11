@@ -318,6 +318,20 @@ function guilgeeniiTuukh({ token }) {
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
     ];
+
+    if (turul == "eneSardTulukh") {
+      jagsaalt.push({
+        title: "Төлөвлөгөөт",
+        dataIndex: "tuluvluguut",
+        align: "right",
+        render: (tuluvluguut) => {
+          return formatNumber(tuluvluguut || 0);
+        },
+        ellipsis: true,
+        width: "6rem",
+      });
+    }
+
     return [
       ...jagsaalt,
       ...shineBagana,
@@ -665,7 +679,7 @@ function guilgeeniiTuukh({ token }) {
               ),
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
-              utga: "Төлөвлөлгөө / сар",
+              utga: "Төлөвлөгөө / сар",
               tailbar: "Энэ сард төлөгдвөл зохих нийт дүн",
             },
             {
