@@ -14,6 +14,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
 import { useRouter } from "next/router";
+import compareFields from "tools/function/compareFields";
 
 const { Step } = Steps;
 
@@ -134,7 +135,40 @@ function GereeBaiguulakh({ token, data }) {
   };
 
   function garya() {
-    if (data !== khadgalakhGeree)
+    if (
+      compareFields(data, khadgalakhGeree, [
+        "baiguullagaEsekh",
+        "baritsaaAvakhDun",
+        "baritsaaAvakhEsekh",
+        "baritsaaAvakhKhugatsaa",
+        "baritsaaBairshuulakhKhugatsaa",
+        "baritsaaniiUldegdel",
+        "dans",
+        "davkhar",
+        "duusakhOgnoo",
+        "gereeniiDugaar",
+        "gereeniiOgnoo",
+        "gereeniiZagvar",
+        "gereeniiZagvariinId",
+        "khugatsaa",
+        "mail",
+        "ner",
+        "ovog",
+        "register",
+        "sariinTurees",
+        "segmentuud",
+        "talbainDugaar",
+        "talbainIdnuud",
+        "talbainKhemjee",
+        "talbainNegjUne",
+        "talbainNiitUne",
+        "tulukhUdur",
+        "tuluv",
+        "turul",
+        "utas",
+        "zardluud",
+      ])
+    )
       Modal.confirm({
         content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
@@ -153,7 +187,7 @@ function GereeBaiguulakh({ token, data }) {
     }
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, []);
+  }, [khadgalakhGeree]);
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
     if (gereeniiZagvar === undefined) return;
