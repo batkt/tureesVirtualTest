@@ -38,6 +38,7 @@ import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 
 import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
 import numberToWords from "tools/function/numberToWords";
+import useDans from "hooks/useDans";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -58,6 +59,7 @@ function tulburTootsoo({ token }) {
   const [loading, setLoading] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
+  const [songogdsonDans, setDans] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
     token,
     ognoo,
@@ -65,7 +67,7 @@ function tulburTootsoo({ token }) {
     ilgeekhTurul
   );
   const [content, setContent] = React.useState();
-
+  const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
 
@@ -80,6 +82,7 @@ function tulburTootsoo({ token }) {
   useEffect(() => {
     barilgiinId;
     setBarimt(undefined);
+    setDans(undefined);
     setSongogdsonGereenuud([]);
   }, [barilgiinId]);
   const handlePrint = useReactToPrint({
@@ -121,6 +124,10 @@ function tulburTootsoo({ token }) {
   }
 
   function hevlekh() {
+    if (!songogdsonDans) {
+      message.warning("Данс сонгоно уу");
+      return;
+    }
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
       return;
@@ -173,6 +180,13 @@ function tulburTootsoo({ token }) {
             "төгрөг",
             "мөнгө"
           );
+          const dans = dansGaralt?.jagsaalt?.find(
+            (a) => a.dugaar === songogdsonDans
+          );
+          medeelel.dans = dans?.dugaar;
+          medeelel.bank =
+            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+          medeelel.dansniiNer = dans?.dansniiNer;
           medeelel.aldangiinUldegdel =
             formatNumber(medeelel.aldangiinUldegdel) || "";
           medeelel.albanTushaal = medeelel.albanTushaal || "";
@@ -305,6 +319,7 @@ function tulburTootsoo({ token }) {
     setTurul(mur);
     setContent(undefined);
     setBarimt(undefined);
+    setDans(undefined);
   }
   var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
     (a) => a._id === barimt
@@ -389,6 +404,14 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
+      nekhemjlekh.dans = dans?.dugaar;
+      nekhemjlekh.bank =
+        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+      nekhemjlekh.dansniiNer = dans?.dansniiNer;
+
       nekhemjlekh.aldangiinUldegdel =
         formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
       nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
@@ -457,31 +480,110 @@ function tulburTootsoo({ token }) {
 
   async function appIlgeeye() {
     if (songogdsonGereenuud.length > 0) {
+      setWaiting(true);
       var khariu = { successCount: 0, failureCount: 0 };
-      songogdsonGereenuud.map((a, index, array) => {
-        let text = msj;
-        for (const [key, value] of Object.entries(a)) {
-          text = text?.replace(new RegExp(`<${key}>`, "g"), value);
-        }
-        uilchilgee(token)
-          .post(`/sonorduulgaIlgeeye`, {
-            firebaseToken: a?.firebaseToken,
-            khariltsagchiinId: a?.khariltsagchiinId,
-            barilgiinId: a.barilgiinId,
-            khariltsagchiinNer: a.ner,
-            medeelel: { body: text },
-          })
-          .then(({ data }) => {
-            if (!!data?.successCount) khariu.successCount += 1;
-            else if (!!data?.failureCount) khariu.failureCount += 1;
-            if (index === array.length - 1) {
-              notification.success({
-                message: `Notification Амжилттай илгээлээ`,
-              });
-            }
-          });
-        return;
-      });
+      songogdsonGereenuud
+        .filter((a) => !a._id)
+        .map((a, index, array) => {
+          console.log(a);
+          const medeelel = _.cloneDeep(
+            nekhemjleliinJagsaalt.find((n) => n._id === a)
+          );
+          medeelel.eneSardTulukhUsgeer = numberToWords(
+            medeelel?.eneSardTulukhDun *
+              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.niitUldegdelUsgeer = numberToWords(
+            medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.mungunDunUsgeer = numberToWords(
+            medeelel?.sariinTurees,
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+          const dans = dansGaralt?.jagsaalt?.find(
+            (a) => a.dugaar === songogdsonDans
+          );
+          medeelel.dans = dans?.dugaar;
+          medeelel.bank =
+            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+          medeelel.dansniiNer = dans?.dansniiNer;
+          medeelel.aldangiinUldegdel =
+            formatNumber(medeelel.aldangiinUldegdel) || "";
+          medeelel.albanTushaal = medeelel.albanTushaal || "";
+          medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
+          medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
+          medeelel.khayag = medeelel.khayag || "";
+          medeelel.talbainNegjUneUsgeer = medeelel.talbainNegjUneUsgeer || "";
+          medeelel.talbainNiitUneUsgeer = medeelel.talbainNiitUneUsgeer || "";
+          medeelel.zoriulalt = medeelel.zoriulalt || "";
+          medeelel.khungulukhKhugatsaa = medeelel.khungulukhKhugatsaa || "";
+          medeelel.nemeltNekhemjlekh.tailbar =
+            medeelel.nemeltNekhemjlekh.tailbar || "";
+          medeelel.nemeltNekhemjlekh.tulukhDun =
+            medeelel.nemeltNekhemjlekh.tulukhDun || "";
+          medeelel.nemeltNekhemjlekh.ognoo =
+            medeelel.nemeltNekhemjlekh.ognoo || "";
+          medeelel.nemeltNekhemjlekh = medeelel.nemeltNekhemjlekh || "";
+          medeelel.zardliinDun = formatNumber(medeelel.zardliinDun) || "";
+          medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
+          medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
+          medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
+          medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
+          medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+          medeelel.umnukhSariinUrTulbur = formatNumber(
+            medeelel.umnukhSariinUrTulbur
+          );
+
+          medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+
+          medeelel.niitAshiglaltiinZardal = formatNumber(
+            medeelel.niitAshiglaltiinZardal
+          );
+
+          medeelel.sar = moment().format("MM");
+          medeelel.ekhlekhOn = moment().format("YYYY");
+          medeelel.ekhelkhSar = moment().format("MM");
+          medeelel.ekhlekhUdur = moment().format("DD");
+          medeelel.duusakhOn = moment().format("YYYY");
+          medeelel.duusakhSar = moment().format("MM");
+          medeelel.duusakhUdur = moment().format("DD");
+
+          let body = msj;
+          for (const [key, value] of Object.entries(medeelel)) {
+            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
+          }
+
+          uilchilgee(token)
+            .post(`/sonorduulgaIlgeeye`, {
+              firebaseToken: medeelel?.firebaseToken,
+              khariltsagchiinId: medeelel?.khariltsagchiinId,
+              barilgiinId: medeelel.barilgiinId,
+              khariltsagchiinNer: medeelel.ner,
+              medeelel: { body: body },
+            })
+            .then(({ data }) => {
+              if (!!data?.successCount) khariu.successCount += 1;
+              else if (!!data?.failureCount) khariu.failureCount += 1;
+              if (index === array.length - 1) {
+                notification.success({
+                  message: `Notification Амжилттай илгээлээ`,
+                });
+                setWaiting(false);
+              }
+            });
+
+          return;
+        });
       return;
     }
 
@@ -515,6 +617,11 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+      nekhemjlekh.dans = dans?.dugaar;
+      nekhemjlekh.bank =
+        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+      nekhemjlekh.dansniiNer = dans?.dansniiNer;
+
       nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
       nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
       nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -569,10 +676,9 @@ function tulburTootsoo({ token }) {
         .then(({ data }) => {
           if (!!data?.successCount) khariu.successCount += 1;
           else if (!!data?.failureCount) khariu.failureCount += 1;
+
           notification.success({
-            message: `Notification Амжилттай ${khariu.successCount} ${
-              khariu.failureCount ? `Алдаатай ${khariu.failureCount}` : ""
-            } илгээлээ`,
+            message: `Notification Амжилттай илгээлээ`,
           });
         });
       return;
@@ -666,6 +772,17 @@ function tulburTootsoo({ token }) {
                 value={ognoo}
                 onChange={setOgnoo}
               />
+              <Select
+                placeholder="Дансны төрөл"
+                value={songogdsonDans}
+                onChange={setDans}
+              >
+                {dansGaralt?.jagsaalt?.map((a) => (
+                  <Select.Option key={a.dugaar} value={a.dugaar}>
+                    <div>{a.dugaar}</div>
+                  </Select.Option>
+                ))}
+              </Select>
               <Select
                 allowClear
                 placeholder="Давхар"
