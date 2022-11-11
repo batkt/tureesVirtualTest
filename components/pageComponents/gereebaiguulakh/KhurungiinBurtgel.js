@@ -50,7 +50,7 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     query
   );
   function onValueChange(v) {
-    onChange(talbainiiGaralt.jagsaalt.find((a) => a._id === v));
+    onChange(_.cloneDeep(talbainiiGaralt.jagsaalt.find((a) => a._id === v)));
   }
 
   return (
@@ -213,11 +213,6 @@ const YurunkhiiMedeele = ({
 
   function onChangeM2(i, v) {
     _.set(value.talbainuud, `${i}.talbainKhemjee`, v);
-    _.set(
-      value.talbainuud,
-      `${i}.talbainNiitUne`,
-      v * value?.talbainuud[i]?.talbainNegjUne
-    );
 
     talbainBurtgelBugulyu(value.talbainuud);
     onChange({ ...value });
