@@ -128,19 +128,28 @@ const YurunkhiiMedeele = ({
                 register: target.value,
                 turul: baiguullagaEsekh ? "ААН" : "Иргэн",
               },
-              select: { ner: 1, utas: 1, ovog: 1, mail: 1 },
+              select: {
+                ner: 1,
+                utas: 1,
+                ovog: 1,
+                mail: 1,
+                zakhirliinOvog: 1,
+                zakhirliinNer: 1,
+              },
             },
           })
           .then(({ data }) => {
             if (data?.jagsaalt.length > 0) {
-              const { ner, utas, ovog, mail } = data?.jagsaalt[0];
+              const { ner, utas, ovog, mail, zakhirliinOvog, zakhirliinNer } =
+                data?.jagsaalt[0];
               if (baiguullagaEsekh) {
                 var onookhKhariltsagch = {
                   utas,
-                  zakhirliinOvog: ovog,
-                  zakhirliinNer: ner,
+                  zakhirliinOvog,
+                  zakhirliinNer,
                   mail,
                   register: target.value,
+                  ner,
                 };
               } else {
                 var onookhKhariltsagch = {
