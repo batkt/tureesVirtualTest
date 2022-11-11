@@ -67,7 +67,7 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
-  const { order } = useOrder({ createdAt: -1 });
+
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
   /**Илгээх төрөл
@@ -91,6 +91,7 @@ function Khyanalt({ token }) {
     undefined,
     ["ner", "ovog", "utas"]
   );
+  const { order } = useOrder({ createdAt: -1 });
   const { sonorduulga, sonorduulgaMutate, jagsaalt, nextSonorduulga } =
     useSanalGomdol(
       turul === "App" && token,
@@ -323,16 +324,6 @@ function Khyanalt({ token }) {
     }
   }
 
-  function onScroll(e) {
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      seen();
-    }, 300);
-
-    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga();
-    }
-  }
   //#endregion
   function khariltsagchSongokh(mur) {
     setKhariltsagch(mur);
@@ -552,7 +543,7 @@ function Khyanalt({ token }) {
       {/* </div> */}
 
       <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9">
-        {khariltsagch ? (
+        {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
           <div className="box flex  flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
               <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
@@ -594,60 +585,103 @@ function Khyanalt({ token }) {
             ) : (
               ""
             )}
-            <div
-              className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-              style={{ maxHeight: "calc(100vh - 32rem)" }}
-              onScroll={onScroll}
-            >
-              {sonorduulga.jagsaalt.map((mur) =>
-                mur.khariltsagchiinId === khariltsagch._id ? (
-                  <div className="bg flex w-full items-center gap-3 px-12">
-                    <div className="relative w-10/12  rounded-lg bg-green-50 p-3  dark:bg-gray-800 sm:w-full">
-                      <div className="flex flex-row flex-wrap items-center justify-between  ">
-                        <div className="text-sm text-green-600">
-                          Гарчиг: {mur.title}
+            <div>
+              {songogdsonKhariltsagch.length > 1 ? (
+                <div
+                  className="col-span-12 min-h-[60vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                  style={{ maxHeight: "calc(100vh - 44rem)" }}
+                >
+                  <div
+                    className={`box hidden h-full items-center xl:flex ${
+                      turulZagvar ? "hidden" : "lg:flex"
+                    }`}
+                    data-aos="fade-left"
+                    data-aos-duration="1000"
+                  >
+                    <div className="mx-auto text-center">
+                      <div className="flex justify-center">
+                        <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                          <img alt="ProfileZurag" src="/profile.svg" />
                         </div>
-                        {mur?.tuluv === 0 ? (
-                          <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
-                            {" "}
-                            Хүлээж аваагүй{" "}
-                          </div>
-                        ) : (
-                          <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
-                            {" "}
-                            Хүлээж авсан{" "}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex">
-                        <div className="w-full">
-                          <div className="font-semibold">
-                            Шаардлага: {mur.message}
-                          </div>
-
-                          <div>
-                            {mur.zurguud.map((a) => (
-                              <Image
-                                width={75}
-                                src={`${url}/file?path=shaardlaga/${a}`}
-                              />
-                            ))}
-                          </div>
+                        <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                          <img alt="ProfileZurag" src="/profileFemale.svg" />
                         </div>
                       </div>
-                    </div>
-                    <div className="h-11 w-11 min-w-max rounded-full  bg-green-300 dark:bg-gray-800">
-                      <img
-                        src="/profile.svg"
-                        className="h-10 w-10 rounded-full"
-                      />
+                      <div className="mt-3">
+                        <div className="font-medium">Өдрийн мэнд</div>
+                        <div className="mt-1 text-gray-600 dark:text-gray-300">
+                          Та шаардлага илгээнэ үү.
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  ""
-                )
+                </div>
+              ) : (
+                <div
+                  className="col-span-12 flex min-h-[50vh] flex-col-reverse items-center overflow-auto rounded-r-xl bg-white px-10 pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                  style={{ maxHeight: "calc(100vh - 32rem)" }}
+                  onScroll={(e) => {
+                    if (
+                      e.target.scrollHeight + e.target.scrollTop - 1 <
+                        e.target.clientHeight &&
+                      !!jagsaalt
+                    ) {
+                      nextSonorduulga();
+                    }
+                  }}
+                >
+                  {jagsaalt?.map((mur) =>
+                    mur.khariltsagchiinId === khariltsagch?._id ? (
+                      <div className="my-5 flex w-full items-center ">
+                        <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-gray-800 sm:w-full">
+                          <div className="flex flex-row flex-wrap items-center justify-between  ">
+                            <div className="text-sm text-green-600">
+                              Гарчиг: {mur.title}
+                            </div>
+                            {mur?.tuluv === 0 ? (
+                              <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
+                                {" "}
+                                Хүлээж аваагүй{" "}
+                              </div>
+                            ) : (
+                              <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
+                                {" "}
+                                Хүлээж авсан{" "}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex">
+                            <div className="w-full">
+                              <div className="font-semibold">
+                                Шаардлага: {mur.message}
+                              </div>
+
+                              <div>
+                                {mur.zurguud.map((a) => (
+                                  <Image
+                                    width={75}
+                                    src={`${url}/file?path=shaardlaga/${a}`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="h-11 w-11 rounded-full  bg-green-300 dark:bg-gray-800">
+                          <img
+                            src="/profile.svg"
+                            className="h-10 w-10 rounded-full"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  )}
+                </div>
               )}
             </div>
+
             <div
               className="w-full  space-y-3 px-3"
               data-aos="fade-right"
