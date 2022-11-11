@@ -183,6 +183,13 @@ function Khyanalt({ token }) {
             .filter((a) => !!a._id)
             .map((a, index, array) => {
               let body = msj;
+              a.ovog = a.ovog || "";
+              a.ner = a.ner || "";
+              a.register = a.register || "";
+              a.utas = a.utas || "";
+              a.turul = a.turul || "";
+              a.khayag = a.khayag || "";
+              a.khayag = a.khayag || "";
               for (const [key, value] of Object.entries(a)) {
                 body = body?.replace(new RegExp(`<${key}>`, "g"), value);
               }
@@ -219,6 +226,13 @@ function Khyanalt({ token }) {
             return;
           }
           if (!!title) {
+            khariltsagch.ovog = khariltsagch.ovog || "";
+            khariltsagch.ner = khariltsagch.ner || "";
+            khariltsagch.register = khariltsagch.register || "";
+            khariltsagch.utas = khariltsagch.utas || "";
+            khariltsagch.turul = khariltsagch.turul || "";
+            khariltsagch.khayag = khariltsagch.khayag || "";
+            khariltsagch.khayag = khariltsagch.khayag || "";
             setLoading(true);
             uilchilgee(token)
               .post(`/sonorduulgaIlgeeye`, {
@@ -296,6 +310,13 @@ function Khyanalt({ token }) {
       if (songogdsonKhariltsagch.length > 0)
         songogdsonKhariltsagch.map((a) => {
           var text = msj;
+          a.ovog = a.ovog || "";
+          a.ner = a.ner || "";
+          a.register = a.register || "";
+          a.utas = a.utas || "";
+          a.turul = a.turul || "";
+          a.khayag = a.khayag || "";
+          a.khayag = a.khayag || "";
           for (const [key, value] of Object.entries(a)) {
             text = text?.replace(new RegExp(`<${key}>`, "g"), value);
           }
@@ -364,6 +385,13 @@ function Khyanalt({ token }) {
         if (songogdsonKhariltsagch?.length > 0) {
           songogdsonKhariltsagch.forEach((a) => {
             var zagvar = content;
+            a.ovog = a.ovog || "";
+            a.ner = a.ner || "";
+            a.register = a.register || "";
+            a.utas = a.utas || "";
+            a.turul = a.turul || "";
+            a.khayag = a.khayag || "";
+            a.khayag = a.khayag || "";
             for (const [key, value] of Object.entries(a)) {
               zagvar = zagvar?.replace(
                 new RegExp(`&lt;${key}&gt;`, "g"),
