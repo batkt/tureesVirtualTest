@@ -36,6 +36,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" }
 ];
 
 const talbainiiTalbaruud = [
@@ -69,26 +70,27 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
   const [utga, setUtga] = React.useState(value);
 
   function garya() {
-    if(utga !== value)
-        Modal.confirm({
-          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-          okText: "Тийм",
-          cancelText: "Үгүй",
-          onOk: destroy})
+    if (utga !== value)
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy
+      })
     else
       destroy();
   }
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     function keyUp(e) {
-        if (e.key === "Escape") {
-          e.preventDefault()
-          garya()
-        }
+      if (e.key === "Escape") {
+        e.preventDefault()
+        garya()
+      }
     }
     document.addEventListener("keyup", keyUp);
-    return ()=>document.removeEventListener("keyup", keyUp);
-  },[])
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [])
 
   React.useImperativeHandle(
     ref,

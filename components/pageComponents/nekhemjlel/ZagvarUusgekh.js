@@ -34,6 +34,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" }
 ];
 
 const talbainiiTalbaruud = [
