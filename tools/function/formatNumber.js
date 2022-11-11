@@ -1,10 +1,11 @@
 import _ from "lodash";
-function formatNumber(num, fixed = 0) {
-  if (num === undefined || num === null || num === "") return formatNumber("0.00",fixed);
+function formatNumber(num, fixed = 2) {
+  if (num === undefined || num === null || num === "")
+    return formatNumber("0.00", fixed);
   var fixedNum = parseFloat(num).toFixed(fixed).toString();
   var numSplit = fixedNum.split(".");
   if (numSplit === null || numSplit.length === 0) {
-    return formatNumber("0.00",fixed);
+    return formatNumber("0.00", fixed);
   }
   var firstFormatNum = numSplit[0]
     .toString()

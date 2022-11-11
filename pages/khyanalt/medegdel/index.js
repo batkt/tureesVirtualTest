@@ -197,6 +197,7 @@ function Khyanalt({ token }) {
                 onTextChange("");
                 setContent("");
                 setTitle("");
+                setNer(undefined);
               }
             });
           return;
@@ -240,6 +241,7 @@ function Khyanalt({ token }) {
               onTextChange("");
               setContent("");
               setTitle("");
+              setNer(undefined);
               setLoading(false);
             } else if (!!data?.failureCount) {
               notification.warning({
@@ -357,27 +359,23 @@ function Khyanalt({ token }) {
         });
       });
     }
-    if (!!title) {
-      setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-            setContent("");
-            setTitle("");
-            setLoading(false);
-          }
-        })
-        .catch((e) => {
+
+    setLoading(true);
+    uilchilgee(token)
+      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          setContent("");
+          setTitle("");
+          setNer("");
           setLoading(false);
-          aldaaBarigch(e);
-        });
-    } else {
-      notification.warning({
-        message: "Гарчиг заавал оруулна уу",
+        }
+      })
+      .catch((e) => {
+        setLoading(false);
+        aldaaBarigch(e);
       });
-    }
   }
 
   function send() {
@@ -472,8 +470,11 @@ function Khyanalt({ token }) {
   }
 
   function turulSongokh(mur) {
+    setSongogdsonKhariltsagch([]);
     setTurul(mur);
     setContent("");
+    setTitle("");
+    setNer("");
   }
 
   function onScroll(e) {
@@ -563,28 +564,6 @@ function Khyanalt({ token }) {
           </div>
         ) : null}
 
-        {/* <div
-          className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          <Select
-            className="w-full"
-            placeholder="Төрөл сонгоно уу"
-            value={tuluv}
-            onChange={setTuluv}
-          >
-            {[
-              { key: "idevkhtei", v: "Идэвхтэй" },
-              { key: "idevkhgiu", v: "Идэвхгүй " },
-            ].map((a) => (
-              <Select.Option key={a.key} value={a.key}>
-                {a.v}
-              </Select.Option>
-            ))}
-          </Select>
-        </div> */}
         <div
           className={`mt-5 flex-row p-2 font-medium xl:flex ${
             khariltsagch ? "hidden" : "flex"
@@ -619,7 +598,7 @@ function Khyanalt({ token }) {
           </button>
         </div>
         <div
-          className={`scrollbar-hidden h-full overflow-hidden overflow-y-auto xl:block ${
+          className={`scrollbar-hidden h-[70vh] overflow-hidden overflow-y-scroll  xl:block   ${
             turulZagvar === true ? "block" : "hidden"
           }`}
         >
@@ -895,9 +874,6 @@ function Khyanalt({ token }) {
                           <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
                             {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                           </span>
-                          <span className="absolute right-0 -bottom-5 text-gray-500">
-                            Мэдэгдэл
-                          </span>
                         </div>
                       );
                     })}
@@ -975,7 +951,7 @@ function Khyanalt({ token }) {
                 <Input
                   className="space-y-3"
                   placeholder="Гарчиг"
-                  value={ner}
+                  value={!!ner ? ner : title}
                   onChange={({ target }) => setTitle(target.value)}
                 />
               )}

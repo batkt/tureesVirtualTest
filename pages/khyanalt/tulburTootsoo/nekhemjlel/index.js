@@ -24,8 +24,7 @@ import formatNumber from "tools/function/formatNumber";
 import useNekhemjlekh from "hooks/tulburTootsoo/useNekhemjlekh";
 import useNekhemjlekhiinZagvar from "hooks/tulburTootsoo/useNekhemjlekhiinZagvar";
 import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarlalt";
-import useDans from "hooks/useDans";
-import _, { identity } from "lodash";
+import _ from "lodash";
 import { useReactToPrint } from "react-to-print";
 import { toWords } from "mon_num";
 import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
@@ -35,8 +34,11 @@ import deleteMethod from "tools/function/crud/deleteMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { renderToString } from "react-dom/server";
+import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 
 import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
+import numberToWords from "tools/function/numberToWords";
+import useDans from "hooks/useDans";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -49,30 +51,40 @@ function tulburTootsoo({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const ref = useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
-  const [barimt, setBarimt] = React.useState();
+
   const [davkhar, setDavkhar] = React.useState();
   const [turul, setTurul] = useState("SMS");
+  const [barimt, setBarimt] = useState();
+  const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
   const [waiting, setWaiting] = useState(false);
   const [nekhemjleliinJagsaalt, setNekhemjleliinJagsaalt] = React.useState([]);
+  const [songogdsonDans, setDans] = React.useState();
   const { nekhemjlel, setNekhemjlelKhuudaslalt, isValidating } = useNekhemjlekh(
     token,
     ognoo,
     davkhar,
     ilgeekhTurul
   );
+  const [content, setContent] = React.useState();
+  const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
 
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
-
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
   }, [nekhemjlel]);
 
+  useEffect(() => {
+    barilgiinId;
+    setBarimt(undefined);
+    setDans(undefined);
+    setSongogdsonGereenuud([]);
+  }, [barilgiinId]);
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
     onAfterPrint: () => {
@@ -112,6 +124,10 @@ function tulburTootsoo({ token }) {
   }
 
   function hevlekh() {
+    if (!songogdsonDans) {
+      message.warning("Данс сонгоно уу");
+      return;
+    }
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
       return;
@@ -129,30 +145,48 @@ function tulburTootsoo({ token }) {
         var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
         )?.nekhemjlekh;
+        var khuudasniiKhemjee = nekhemjlekhiinZagvar?.jagsaalt?.find(
+          (a) => a._id === barimt
+        )?.khuudasniiKhemjee;
+        var chiglel = nekhemjlekhiinZagvar?.jagsaalt?.find(
+          (a) => a._id === barimt
+        )?.chiglel;
         const medeelel = _.cloneDeep(
           nekhemjleliinJagsaalt.find((n) => n._id === a)
         );
         const barilga = baiguullaga.barilguud.find(
-          (a) => a._id === medeelel.barilgiinId
+          (a) => a._id === medeelel?.barilgiinId
         );
+
         if (!!zagvar) {
-          medeelel.eneSardTulukhUsgeer = `${toWords(
-            (
-              medeelel.eneSardTulukhDun *
-              (medeelel.eneSardTulukhDun < 0 ? -1 : 1)
-            ).toFixed(0),
-            { suffix: "n" }
-          )} төгрөг`;
-          medeelel.niitUldegdelUsgeer =
-            `${toWords(
-              (
-                medeelel.niitUldegdel * (medeelel.niitUldegdel < 0 ? -1 : 1)
-              ).toFixed(0),
-              { suffix: "n" }
-            )} төгрөг` || 0;
-          medeelel.mungunDunUsgeer = `${toWords(medeelel.sariinTurees, {
-            suffix: "n",
-          })} төгрөг`;
+          medeelel.eneSardTulukhUsgeer = numberToWords(
+            medeelel?.eneSardTulukhDun *
+              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.niitUldegdelUsgeer = numberToWords(
+            medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.mungunDunUsgeer = numberToWords(
+            medeelel?.sariinTurees,
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+          const dans = dansGaralt?.jagsaalt?.find(
+            (a) => a.dugaar === songogdsonDans
+          );
+          medeelel.dans = dans?.dugaar;
+          medeelel.bank =
+            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+          medeelel.dansniiNer = dans?.dansniiNer;
           medeelel.aldangiinUldegdel =
             formatNumber(medeelel.aldangiinUldegdel) || "";
           medeelel.albanTushaal = medeelel.albanTushaal || "";
@@ -254,7 +288,7 @@ function tulburTootsoo({ token }) {
             nemeltNekhemjlekh
           );
         }
-        return { zagvar, mail: medeelel.mail };
+        return { zagvar, mail: medeelel.mail, khuudasniiKhemjee, chiglel };
       });
     return [];
   }, [barimt, songogdsonGereenuud]);
@@ -262,6 +296,9 @@ function tulburTootsoo({ token }) {
   function send() {
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      return;
+    } else if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
+      message.warning("Гэрээ сонгоно уу");
       return;
     } else {
       switch (turul) {
@@ -278,13 +315,23 @@ function tulburTootsoo({ token }) {
     }
   }
 
+  function turulSongokh(mur) {
+    setTurul(mur);
+    setContent(undefined);
+    setBarimt(undefined);
+    setDans(undefined);
+  }
+  var zagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
+    (a) => a._id === barimt
+  )?.nekhemjlekh;
+
   async function msgIlgeeye() {
     var msgnuud = [];
     songogdsonGereenuud.map((mur) => {
-      var text = nekhemjlekhiinZagvar?.jagsaalt?.find(
-        (a) => a._id === barimt
-      )?.nekhemjlekh;
-      var nekhemjlekh = nekhemjleliinJagsaalt.find((a) => a._id === mur);
+      var nekhemjlekh = _.cloneDeep(
+        nekhemjleliinJagsaalt.find((a) => a._id === mur)
+      );
+      var text = msj;
       for (const [key, value] of Object.entries(nekhemjlekh)) {
         text = text?.replace(new RegExp(`<${key}>`, "g"), value);
       }
@@ -301,6 +348,7 @@ function tulburTootsoo({ token }) {
           text,
         });
     });
+
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
@@ -326,53 +374,46 @@ function tulburTootsoo({ token }) {
       message.warning("И-мэйл илгээгдсэн байна");
       return;
     }
-    var ilgeekhMailuud = nekhemjlekhuud.filter((x) => x.mail !== undefined);
-    var mailuud = [];
-    if (ilgeekhMailuud?.length > 0) {
-      ilgeekhMailuud?.map((x) =>
-        mailuud.push({
-          mail: x.mail,
-          content: x.zagvar,
-        })
-      );
-      setLoading(true);
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-            setLoading(false);
-          }
-        })
-        .catch((e) => {
-          setLoading(false);
-          aldaaBarigch(e);
-        });
-    }
-  }
-
-  async function appIlgeeye() {
+    const mailuud = [];
     songogdsonGereenuud.map((mur) => {
-      var khariu = { successCount: 0, failureCount: 0 };
+      var nekhemjlekh = _.cloneDeep(
+        nekhemjleliinJagsaalt.find((a) => a._id === mur)
+      );
       var text = nekhemjlekhiinZagvar?.jagsaalt?.find(
         (a) => a._id === barimt
       )?.nekhemjlekh;
-      var nekhemjlekh = nekhemjleliinJagsaalt.find((a) => a._id === mur);
-      nekhemjlekh.ekhelkhSar = moment(nekhemjlekh.ekhelkhSar).format("MM");
-      nekhemjlekh.ekhlekhOn = moment(nekhemjlekh.ekhlekhOn).format("YYYY");
 
-      nekhemjlekh.eneSardTulukhUsgeer = `${toWords(
+      nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
           (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
-        { suffix: "n" }
-      )} төгрөг`;
-      nekhemjlekh.niitUldegdelUsgeer = `${toWords(
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.niitUldegdelUsgeer = numberToWords(
         nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
-        { suffix: "n" }
-      )} төгрөг`;
-      nekhemjlekh.mungunDunUsgeer = `${toWords(nekhemjlekh.sariinTurees, {
-        suffix: "n",
-      })} төгрөг`;
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.mungunDunUsgeer = numberToWords(
+        nekhemjlekh.sariinTurees,
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
+      nekhemjlekh.dans = dans?.dugaar;
+      nekhemjlekh.bank =
+        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+      nekhemjlekh.dansniiNer = dans?.dansniiNer;
+
+      nekhemjlekh.aldangiinUldegdel =
+        formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
       nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
       nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
       nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -413,10 +454,217 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.duusakhUdur = moment().format("DD");
 
       for (const [key, value] of Object.entries(nekhemjlekh)) {
+        text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+      }
+      if (!!nekhemjlekh.mail) {
+        mailuud.push({
+          mail: nekhemjlekh.mail,
+          content: text,
+        });
+      }
+    });
+    setLoading(true);
+    uilchilgee(token)
+      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          setLoading(false);
+        }
+      })
+      .catch((e) => {
+        setLoading(false);
+        aldaaBarigch(e);
+      });
+  }
+
+  async function appIlgeeye() {
+    if (songogdsonGereenuud.length > 0) {
+      setWaiting(true);
+      var khariu = { successCount: 0, failureCount: 0 };
+      songogdsonGereenuud
+        .filter((a) => !a._id)
+        .map((a, index, array) => {
+          console.log(a);
+          const medeelel = _.cloneDeep(
+            nekhemjleliinJagsaalt.find((n) => n._id === a)
+          );
+          medeelel.eneSardTulukhUsgeer = numberToWords(
+            medeelel?.eneSardTulukhDun *
+              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.niitUldegdelUsgeer = numberToWords(
+            medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+
+          medeelel.mungunDunUsgeer = numberToWords(
+            medeelel?.sariinTurees,
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+          const dans = dansGaralt?.jagsaalt?.find(
+            (a) => a.dugaar === songogdsonDans
+          );
+          medeelel.dans = dans?.dugaar;
+          medeelel.bank =
+            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+          medeelel.dansniiNer = dans?.dansniiNer;
+          medeelel.aldangiinUldegdel =
+            formatNumber(medeelel.aldangiinUldegdel) || "";
+          medeelel.albanTushaal = medeelel.albanTushaal || "";
+          medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
+          medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
+          medeelel.khayag = medeelel.khayag || "";
+          medeelel.talbainNegjUneUsgeer = medeelel.talbainNegjUneUsgeer || "";
+          medeelel.talbainNiitUneUsgeer = medeelel.talbainNiitUneUsgeer || "";
+          medeelel.zoriulalt = medeelel.zoriulalt || "";
+          medeelel.khungulukhKhugatsaa = medeelel.khungulukhKhugatsaa || "";
+          medeelel.nemeltNekhemjlekh.tailbar =
+            medeelel.nemeltNekhemjlekh.tailbar || "";
+          medeelel.nemeltNekhemjlekh.tulukhDun =
+            medeelel.nemeltNekhemjlekh.tulukhDun || "";
+          medeelel.nemeltNekhemjlekh.ognoo =
+            medeelel.nemeltNekhemjlekh.ognoo || "";
+          medeelel.nemeltNekhemjlekh = medeelel.nemeltNekhemjlekh || "";
+          medeelel.zardliinDun = formatNumber(medeelel.zardliinDun) || "";
+          medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
+          medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
+          medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
+          medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
+          medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+          medeelel.umnukhSariinUrTulbur = formatNumber(
+            medeelel.umnukhSariinUrTulbur
+          );
+
+          medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+
+          medeelel.niitAshiglaltiinZardal = formatNumber(
+            medeelel.niitAshiglaltiinZardal
+          );
+
+          medeelel.sar = moment().format("MM");
+          medeelel.ekhlekhOn = moment().format("YYYY");
+          medeelel.ekhelkhSar = moment().format("MM");
+          medeelel.ekhlekhUdur = moment().format("DD");
+          medeelel.duusakhOn = moment().format("YYYY");
+          medeelel.duusakhSar = moment().format("MM");
+          medeelel.duusakhUdur = moment().format("DD");
+
+          let body = msj;
+          for (const [key, value] of Object.entries(medeelel)) {
+            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
+          }
+
+          uilchilgee(token)
+            .post(`/sonorduulgaIlgeeye`, {
+              firebaseToken: medeelel?.firebaseToken,
+              khariltsagchiinId: medeelel?.khariltsagchiinId,
+              barilgiinId: medeelel.barilgiinId,
+              khariltsagchiinNer: medeelel.ner,
+              medeelel: { body: body },
+            })
+            .then(({ data }) => {
+              if (!!data?.successCount) khariu.successCount += 1;
+              else if (!!data?.failureCount) khariu.failureCount += 1;
+              if (index === array.length - 1) {
+                notification.success({
+                  message: `Notification Амжилттай илгээлээ`,
+                });
+                setWaiting(false);
+              }
+            });
+
+          return;
+        });
+      return;
+    }
+
+    songogdsonGereenuud.map((mur) => {
+      var khariu = { successCount: 0, failureCount: 0 };
+      var text = msj;
+      var nekhemjlekh = _.cloneDeep(
+        nekhemjleliinJagsaalt.find((a) => a._id === mur)
+      );
+      nekhemjlekh.ekhelkhSar = moment(nekhemjlekh.ekhelkhSar).format("MM");
+      nekhemjlekh.ekhlekhOn = moment(nekhemjlekh.ekhlekhOn).format("YYYY");
+
+      nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
+        nekhemjlekh.eneSardTulukhDun *
+          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.niitUldegdelUsgeer = numberToWords(
+        nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.mungunDunUsgeer = numberToWords(
+        nekhemjlekh.sariinTurees,
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+      nekhemjlekh.dans = dans?.dugaar;
+      nekhemjlekh.bank =
+        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+      nekhemjlekh.dansniiNer = dans?.dansniiNer;
+
+      nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
+      nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
+      nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
+      nekhemjlekh.khayag = nekhemjlekh.khayag || "";
+      nekhemjlekh.talbainNegjUneUsgeer = nekhemjlekh.talbainNegjUneUsgeer || "";
+      nekhemjlekh.talbainNiitUneUsgeer = nekhemjlekh.talbainNiitUneUsgeer || "";
+      nekhemjlekh.zoriulalt = nekhemjlekh.zoriulalt || "";
+      nekhemjlekh.khungulukhKhugatsaa = nekhemjlekh.khungulukhKhugatsaa || "";
+      nekhemjlekh.nemeltNekhemjlekh.tailbar =
+        nekhemjlekh.nemeltNekhemjlekh.tailbar || "";
+      nekhemjlekh.nemeltNekhemjlekh.tulukhDun =
+        nekhemjlekh.nemeltNekhemjlekh.tulukhDun || "";
+      nekhemjlekh.nemeltNekhemjlekh.ognoo =
+        nekhemjlekh.nemeltNekhemjlekh.ognoo || "";
+      nekhemjlekh.nemeltNekhemjlekh = nekhemjlekh.nemeltNekhemjlekh || "";
+      nekhemjlekh.zardliinDun = formatNumber(nekhemjlekh.zardliinDun) || "";
+      nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
+      nekhemjlekh.eneSardTulukhDun = formatNumber(nekhemjlekh.eneSardTulukhDun);
+      nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+      nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
+      nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
+      nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
+        nekhemjlekh.umnukhSariinUrTulbur
+      );
+
+      nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+
+      nekhemjlekh.niitAshiglaltiinZardal = formatNumber(
+        nekhemjlekh.niitAshiglaltiinZardal
+      );
+
+      nekhemjlekh.sar = moment().format("MM");
+      nekhemjlekh.ekhlekhOn = moment().format("YYYY");
+      nekhemjlekh.ekhelkhSar = moment().format("MM");
+      nekhemjlekh.ekhlekhUdur = moment().format("DD");
+      nekhemjlekh.duusakhOn = moment().format("YYYY");
+      nekhemjlekh.duusakhSar = moment().format("MM");
+      nekhemjlekh.duusakhUdur = moment().format("DD");
+
+      var medeelel = nekhemjleliinJagsaalt.find((a) => a._id === mur);
+      for (const [key, value] of Object.entries(nekhemjlekh)) {
         text = text?.replace(new RegExp(`<${key}>`, "g"), value);
       }
-      var medeelel = nekhemjleliinJagsaalt.find((a) => a._id === mur);
-
       uilchilgee(token)
         .post(`/sonorduulgaIlgeeye`, {
           firebaseToken: medeelel?.firebaseToken,
@@ -428,11 +676,13 @@ function tulburTootsoo({ token }) {
         .then(({ data }) => {
           if (!!data?.successCount) khariu.successCount += 1;
           else if (!!data?.failureCount) khariu.failureCount += 1;
-          notification.success({ message: " Notification Амжилттай илгээлээ" });
+
+          notification.success({
+            message: `Notification Амжилттай илгээлээ`,
+          });
         });
       return;
     });
-    return;
   }
 
   function nekhemjlelZasya(mur, index) {
@@ -477,10 +727,6 @@ function tulburTootsoo({ token }) {
         aldaaBarigch(e);
       });
   }
-  function turulSongokh(mur) {
-    setTurul(mur);
-    setBarimt(undefined);
-  }
 
   return (
     <Admin
@@ -507,7 +753,7 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className="print a5 sun-editor-editable p-10"
+                  className={`print ${nekhemjlekh.khuudasniiKhemjee} sun-editor-editable p-10"`}
                   dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
                 />
               );
@@ -527,6 +773,17 @@ function tulburTootsoo({ token }) {
                 onChange={setOgnoo}
               />
               <Select
+                placeholder="Дансны төрөл"
+                value={songogdsonDans}
+                onChange={setDans}
+              >
+                {dansGaralt?.jagsaalt?.map((a) => (
+                  <Select.Option key={a.dugaar} value={a.dugaar}>
+                    <div>{a.dugaar}</div>
+                  </Select.Option>
+                ))}
+              </Select>
+              <Select
                 allowClear
                 placeholder="Давхар"
                 onChange={(v) => {
@@ -543,9 +800,13 @@ function tulburTootsoo({ token }) {
                   ))}
               </Select>
               <Select
+                className="w-[200px]"
                 placeholder="Нэхэмжлэхийн төрөл"
                 value={barimt}
-                onChange={setBarimt}
+                onChange={(content) => {
+                  setBarimt(content);
+                  setContent(content);
+                }}
               >
                 {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
                   turul === a.turul ? (
@@ -705,6 +966,9 @@ function tulburTootsoo({ token }) {
               data-aos="fade-up"
               data-aos-duration="1000"
             >
+              <div className="hidden">
+                <ZagvarUusgekh value={zagvar} onTextChange={onTextChange} />
+              </div>
               <Table
                 bordered
                 size="small"

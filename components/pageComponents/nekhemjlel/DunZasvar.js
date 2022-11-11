@@ -68,15 +68,20 @@ function DunZasvar(
       >
         <InputNumber
           className="w-[200px]"
-          formatter={(value) => formatNumber(`${value}`, 2)}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
       <Form.Item label="Энэ сард төлөх дүн" name="eneSardTulukhDun">
         <InputNumber
           className="w-[200px]"
-          formatter={(value) => formatNumber(`${value}`, 2)}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          precisionc={2}
         />
       </Form.Item>
     </Form>
