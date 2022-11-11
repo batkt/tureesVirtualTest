@@ -485,7 +485,6 @@ function tulburTootsoo({ token }) {
       songogdsonGereenuud
         .filter((a) => !a._id)
         .map((a, index, array) => {
-          console.log(a);
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
@@ -562,6 +561,9 @@ function tulburTootsoo({ token }) {
           for (const [key, value] of Object.entries(medeelel)) {
             body = body?.replace(new RegExp(`<${key}>`, "g"), value);
           }
+          var garchig = nekhemjlekhiinZagvar?.jagsaalt?.find(
+            (a) => a._id === barimt
+          )?.ner;
 
           uilchilgee(token)
             .post(`/sonorduulgaIlgeeye`, {
@@ -569,7 +571,7 @@ function tulburTootsoo({ token }) {
               khariltsagchiinId: medeelel?.khariltsagchiinId,
               barilgiinId: medeelel.barilgiinId,
               khariltsagchiinNer: medeelel.ner,
-              medeelel: { body: body },
+              medeelel: { title: garchig, body: body },
             })
             .then(({ data }) => {
               if (!!data?.successCount) khariu.successCount += 1;
