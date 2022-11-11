@@ -37,6 +37,7 @@ import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
+import next from "next";
 
 //#endregion
 
@@ -133,7 +134,13 @@ function Khyanalt({ token }) {
   }, [turul, khariltsagch]);
 
   const { order } = useOrder({ createdAt: -1 });
-  const medegdelAvya = useJagsaalt("/sonorduulga", query, order);
+  const medegdelAvya = useJagsaalt(
+    "/sonorduulga",
+    query,
+    order,
+    undefined,
+    next
+  );
 
   const khariltsagchiinMsjTuukhKharakh = useMemo(() => {
     return { barilgiinId: barilgiinId, dugaar: khariltsagch?.utas };
@@ -168,86 +175,218 @@ function Khyanalt({ token }) {
   //#region method
 
   async function appIlgeeye() {
-    if (songogdsonKhariltsagch.length > 0) {
-      var khariu = { successCount: 0, failureCount: 0 };
-      songogdsonKhariltsagch
-        .filter((a) => !!a._id)
-        .map((a, index, array) => {
-          let body = msj;
-          for (const [key, value] of Object.entries(a)) {
-            body = body?.replace(new RegExp(`<${key}>`, "g"), value);
-          }
-          uilchilgee(token)
-            .post(`/sonorduulgaIlgeeye`, {
-              firebaseToken: a?.firebaseToken,
-              khariltsagchiinId: a?._id,
-              barilgiinId: a.barilgiinId,
-              khariltsagchiinNer: a.ner,
-              zurgiinId: a.zurag,
-              medeelel: { title, body: ingeekhmSms },
-            })
-            .then(({ data }) => {
-              if (!!data?.successCount) khariu.successCount += 1;
-              else if (!!data?.failureCount) khariu.failureCount += 1;
-              if (index === array.length - 1) {
-                notification.success({
-                  message: `Notification Амжилттай илгээлээ`,
-                });
-                setLoading(false);
-                onTextChange("");
-                setContent("");
-                setTitle("");
-                setNer(undefined);
+    if (!!title) {
+      if (content !== "") {
+        if (songogdsonKhariltsagch.length > 0) {
+          var khariu = { successCount: 0, failureCount: 0 };
+          songogdsonKhariltsagch
+            .filter((a) => !!a._id)
+            .map((a, index, array) => {
+              let body = msj;
+              for (const [key, value] of Object.entries(a)) {
+                body = body?.replace(new RegExp(`<${key}>`, "g"), value);
               }
+              uilchilgee(token)
+                .post(`/sonorduulgaIlgeeye`, {
+                  firebaseToken: a?.firebaseToken,
+                  khariltsagchiinId: a?._id,
+                  barilgiinId: a.barilgiinId,
+                  khariltsagchiinNer: a.ner,
+                  zurgiinId: a.zurag,
+                  medeelel: { title, body: ingeekhmSms },
+                })
+                .then(({ data }) => {
+                  if (!!data?.successCount) khariu.successCount += 1;
+                  else if (!!data?.failureCount) khariu.failureCount += 1;
+                  if (index === array.length - 1) {
+                    notification.success({
+                      message: `Notification Амжилттай илгээлээ`,
+                    });
+                    setLoading(false);
+                    onTextChange("");
+                    setContent("");
+                    setTitle("");
+                    setNer(undefined);
+                  }
+                });
+              return;
             });
           return;
+        }
+        if (msj.length < 3600) {
+          if (loading) {
+            message.warning("Хүсэлт илгээгдсэн байна");
+            return;
+          }
+          if (!!title) {
+            setLoading(true);
+            uilchilgee(token)
+              .post(`/sonorduulgaIlgeeye`, {
+                firebaseToken: khariltsagch?.firebaseToken,
+                khariltsagchiinId: khariltsagch?._id,
+                barilgiinId: khariltsagch.barilgiinId,
+                khariltsagchiinNer: khariltsagch.ner,
+                zurgiinId: zurag,
+                medeelel: { title, body: ingeekhmSms },
+              })
+              .then(({ data }) => {
+                zurag &&
+                  uilchilgee(token).post("/confirmFile", {
+                    filename: zurag,
+                    path: "medegdel",
+                  });
+                if (!!data?.successCount) {
+                  medegdelAvya.jagsaalt.unshift({
+                    khariltsagchiinId: khariltsagch?._id,
+                    barilgiinId: khariltsagch.barilgiinId,
+                    khariltsagchiinNer: khariltsagch.ner,
+                    title,
+                    message: ingeekhmSms,
+                    turul: "medegdel",
+                  });
+                  notification.success({
+                    message: "Notification Амжилттай илгээлээ",
+                  });
+                  onTextChange("");
+                  setContent("");
+                  setTitle("");
+                  setNer(undefined);
+                  setLoading(false);
+                } else if (!!data?.failureCount) {
+                  notification.warning({
+                    description: _.get(data, "results.0.error.message"),
+                    message: _.get(data, "results.0.error.code"),
+                  });
+                  setLoading(false);
+                }
+              })
+              .catch((e) => {
+                setLoading(false);
+                aldaaBarigch(e);
+              });
+          } else {
+            notification.warning({
+              message: "Гарчиг заавал оруулна уу",
+            });
+          }
+        } else {
+          notification.warning({
+            message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
+          });
+        }
+      } else {
+        notification.warning({
+          message: "Мэдэгдэл оруулна уу",
         });
-      return;
+      }
+    } else {
+      notification.warning({
+        message: "Гарчиг оруулна уу",
+      });
     }
-    if (msj.length < 3600) {
+  }
+
+  async function msgIlgeeye() {
+    if (content !== "") {
       if (loading) {
         message.warning("Хүсэлт илгээгдсэн байна");
         return;
       }
-      if (!!title) {
+      var msgnuud = [];
+      if (songogdsonKhariltsagch.length > 0)
+        songogdsonKhariltsagch.map((a) => {
+          var text = msj;
+          for (const [key, value] of Object.entries(a)) {
+            text = text?.replace(new RegExp(`<${key}>`, "g"), value);
+          }
+          if (_.isArray(a.utas))
+            a.utas.map((to) =>
+              msgnuud.push({
+                to,
+                text,
+              })
+            );
+          else
+            msgnuud.push({
+              to: a.utas,
+              text,
+            });
+        });
+      else if (!!khariltsagch) {
+        if (_.isArray(khariltsagch?.utas))
+          khariltsagch?.utas.map((to) =>
+            msgnuud.push({
+              to,
+              text: ingeekhmSms,
+            })
+          );
+        else
+          msgnuud.push({
+            to: khariltsagch?.utas,
+            text: ingeekhmSms,
+          });
+      } else {
+        message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
+        return;
+      }
+      if (!(msgnuud.length > 0)) {
+        message.warning("Илгээх мэдээлэл байхгүй байна");
+        return;
+      }
+
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
+        .then(({ data }) => {
+          if (data && data[0].Result === "SUCCESS") {
+            notification.success({ message: "SMS Амжилттай илгээлээ" });
+            setContent("");
+            setTitle("");
+            setLoading(false);
+            router.reload();
+          }
+        })
+        .catch((e) => {
+          setLoading(false);
+          aldaaBarigch(e);
+        });
+    } else {
+      notification.warning({
+        message: "Мэдэгдэл оруулна уу",
+      });
+    }
+  }
+
+  async function mailIlgeeye() {
+    if (!!title) {
+      if (content !== " " || content !== "") {
+        const mailuud = [];
+        if (songogdsonKhariltsagch?.length > 0) {
+          songogdsonKhariltsagch.forEach((a) => {
+            var zagvar = content;
+            for (const [key, value] of Object.entries(a)) {
+              zagvar = zagvar?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                value
+              );
+            }
+            if (!!a.mail) {
+              mailuud.push({
+                mail: a.mail,
+                content: zagvar,
+              });
+            }
+          });
+        }
         setLoading(true);
         uilchilgee(token)
-          .post(`/sonorduulgaIlgeeye`, {
-            firebaseToken: khariltsagch?.firebaseToken,
-            khariltsagchiinId: khariltsagch?._id,
-            barilgiinId: khariltsagch.barilgiinId,
-            khariltsagchiinNer: khariltsagch.ner,
-            zurgiinId: zurag,
-            medeelel: { title, body: ingeekhmSms },
-          })
+          .post(`/mailOlnoorIlgeeye`, { subject: title, mailuud })
           .then(({ data }) => {
-            zurag &&
-              uilchilgee(token).post("/confirmFile", {
-                filename: zurag,
-                path: "medegdel",
-              });
-            if (!!data?.successCount) {
-              medegdelAvya.jagsaalt.unshift({
-                khariltsagchiinId: khariltsagch?._id,
-                barilgiinId: khariltsagch.barilgiinId,
-                khariltsagchiinNer: khariltsagch.ner,
-                title,
-                message: ingeekhmSms,
-                turul: "medegdel",
-              });
-              notification.success({
-                message: "Notification Амжилттай илгээлээ",
-              });
-              onTextChange("");
+            if (data === "Amjilttai") {
+              notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
               setContent("");
               setTitle("");
-              setNer(undefined);
-              setLoading(false);
-            } else if (!!data?.failureCount) {
-              notification.warning({
-                description: _.get(data, "results.0.error.message"),
-                message: _.get(data, "results.0.error.code"),
-              });
+              setNer("");
               setLoading(false);
             }
           })
@@ -257,125 +396,14 @@ function Khyanalt({ token }) {
           });
       } else {
         notification.warning({
-          message: "Гарчиг заавал оруулна уу",
+          message: "Мэдэгдэл оруулна уу",
         });
       }
     } else {
       notification.warning({
-        message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
+        message: "Гарчиг оруулна уу",
       });
     }
-  }
-
-  async function msgIlgeeye() {
-    if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна");
-      return;
-    }
-    var msgnuud = [];
-    if (songogdsonKhariltsagch.length > 0)
-      songogdsonKhariltsagch.map((a) => {
-        var text = msj;
-        for (const [key, value] of Object.entries(a)) {
-          text = text?.replace(new RegExp(`<${key}>`, "g"), value);
-        }
-        if (_.isArray(a.utas))
-          a.utas.map((to) =>
-            msgnuud.push({
-              to,
-              text,
-            })
-          );
-        else
-          msgnuud.push({
-            to: a.utas,
-            text,
-          });
-      });
-    else if (!!khariltsagch) {
-      if (_.isArray(khariltsagch?.utas))
-        khariltsagch?.utas.map((to) =>
-          msgnuud.push({
-            to,
-            text: ingeekhmSms,
-          })
-        );
-      else
-        msgnuud.push({
-          to: khariltsagch?.utas,
-          text: ingeekhmSms,
-        });
-    } else {
-      message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
-      return;
-    }
-    if (!(msgnuud.length > 0)) {
-      message.warning("Илгээх мэдээлэл байхгүй байна");
-      return;
-    }
-
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
-      .then(({ data }) => {
-        if (data && data[0].Result === "SUCCESS") {
-          notification.success({ message: "SMS Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
-          setLoading(false);
-          router.reload();
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
-      });
-  }
-
-  async function mailIlgeeye() {
-    if (!khariltsagch?.mail) {
-      notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
-      return;
-    }
-    const mailuud = [];
-
-    var zagvar = content;
-    for (const [key, value] of Object.entries(khariltsagch)) {
-      zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-    }
-    mailuud.push({
-      mail: khariltsagch.mail,
-      content: zagvar,
-    });
-    if (songogdsonKhariltsagch?.length > 0) {
-      songogdsonKhariltsagch.forEach((a) => {
-        var zagvar = content;
-        for (const [key, value] of Object.entries(a)) {
-          zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-        }
-        mailuud.push({
-          mail: a.mail,
-          content: zagvar,
-        });
-      });
-    }
-
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
-          setNer("");
-          setLoading(false);
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
-      });
   }
 
   function send() {
