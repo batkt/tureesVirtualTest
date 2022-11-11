@@ -132,7 +132,6 @@ function guilgeeniiTuukh({ token }) {
   const ref = React.useRef(null);
   const baritsaaref = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
-  const [delgegdsenGeree, setDelgegdsenGeree] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState([
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
@@ -141,7 +140,8 @@ function guilgeeniiTuukh({ token }) {
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
 
-  const { guilgeeniiToololt } = useGuilgeeniiToololtAvya(token, ognoo);
+  const { guilgeeniiToololt, guilgeeniiToololtMutate } =
+    useGuilgeeniiToololtAvya(token, ognoo);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo);
 
@@ -234,7 +234,6 @@ function guilgeeniiTuukh({ token }) {
     mutate,
     onSearch: onSearchMedeelel,
     setKhuudaslalt,
-    refresh,
     isValidating,
   } = useJagsaalt(sericeName, query, order, undefined, searchKeys);
 
@@ -482,13 +481,7 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
       },
     ];
-  }, [
-    gereeniiMedeelel,
-    loadingIndex,
-    delgegdsenGeree,
-    shineBagana,
-    turulColumns,
-  ]);
+  }, [gereeniiMedeelel, loadingIndex, shineBagana, turulColumns]);
 
   //#endregion
   //#region handlers
@@ -498,12 +491,15 @@ function guilgeeniiTuukh({ token }) {
   }
 
   function refreshData() {
-    tolooguiGereeniiTooMutate();
-    setKhuudaslalt((a) => {
-      a.jagsaalt = [];
-      return { ...a };
-    });
-    mutate();
+    setTimeout(() => {
+      tolooguiGereeniiTooMutate();
+      guilgeeniiToololtMutate();
+      setKhuudaslalt((a) => {
+        a.jagsaalt = [];
+        return { ...a };
+      });
+      mutate();
+    }, 500);
   }
 
   function baritsaaUdirdya(data) {
