@@ -470,6 +470,7 @@ function Khyanalt({ token }) {
   }
 
   function turulSongokh(mur) {
+    setSongogdsonKhariltsagch([]);
     setTurul(mur);
     setContent("");
     setTitle("");
@@ -563,28 +564,6 @@ function Khyanalt({ token }) {
           </div>
         ) : null}
 
-        {/* <div
-          className="box mt-5 flex flex-row items-center space-x-3 p-2 pl-3"
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          <Select
-            className="w-full"
-            placeholder="Төрөл сонгоно уу"
-            value={tuluv}
-            onChange={setTuluv}
-          >
-            {[
-              { key: "idevkhtei", v: "Идэвхтэй" },
-              { key: "idevkhgiu", v: "Идэвхгүй " },
-            ].map((a) => (
-              <Select.Option key={a.key} value={a.key}>
-                {a.v}
-              </Select.Option>
-            ))}
-          </Select>
-        </div> */}
         <div
           className={`mt-5 flex-row p-2 font-medium xl:flex ${
             khariltsagch ? "hidden" : "flex"
@@ -619,7 +598,7 @@ function Khyanalt({ token }) {
           </button>
         </div>
         <div
-          className={`scrollbar-hidden h-full overflow-hidden overflow-y-auto xl:block ${
+          className={`scrollbar-hidden h-[70vh] overflow-hidden overflow-y-scroll  xl:block   ${
             turulZagvar === true ? "block" : "hidden"
           }`}
         >
@@ -894,9 +873,6 @@ function Khyanalt({ token }) {
                           </div>
                           <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
                             {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                          </span>
-                          <span className="absolute right-0 -bottom-5 text-gray-500">
-                            Мэдэгдэл
                           </span>
                         </div>
                       );
