@@ -21,6 +21,7 @@ import {
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
+import useJagsaalt from "hooks/useJagsaalt";
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -127,6 +128,9 @@ function ZakhialgaNemekh({ token }) {
 
   const { barilgiinId } = useAuth();
   const [waiting, setWaiting] = useState(false);
+  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
+    barilgiinId: barilgiinId,
+  });
 
   React.useEffect(() => {
     if (id !== "new")
@@ -191,6 +195,16 @@ function ZakhialgaNemekh({ token }) {
       button: renderToString(<DollarCircleOutlined />),
     });
 
+    const zardaluud = customPlugin({
+      songokhTalbaruud: ashiglaltiinZardal?.jagsaalt?.map((a) => ({
+        ner: a.ner,
+        talbar: a.ner,
+      })),
+      name: "zardaluud",
+      title: "Ашиглалтын зардал авлага",
+      button: renderToString(<DollarCircleOutlined />),
+    });
+
     return [
       undsen,
       khugatsaa,
@@ -199,8 +213,9 @@ function ZakhialgaNemekh({ token }) {
       tulbur,
       nekhemjlel,
       nekhemjlelNemelt,
+      zardaluud,
     ];
-  }, []);
+  }, [ashiglaltiinZardal]);
 
   function khadgalya() {
     if (nekhemjlelZagvar.ner) {
@@ -260,29 +275,32 @@ function ZakhialgaNemekh({ token }) {
           style={{ height: "calc(100vh - 7rem)" }}
           className="col-span-9 overflow-auto p-10"
         >
-          <SunEditor
-            onChange={(e) => handleChange(e)}
-            value={nekhemjlelZagvar?.nekhemjlekh}
-            setContents={nekhemjlelZagvar?.nekhemjlekh}
-            setOptions={{
-              plugins: custom,
-              buttonList: [
-                [
-                  "undsen",
-                  "khugatsaa",
-                  "talbai",
-                  "baritsaa",
-                  "tulbur",
-                  "nekhemjlel",
-                  "nekhemjlekhiinNemelt",
+          {!ashiglaltiinZardal?.isValidating && (
+            <SunEditor
+              onChange={(e) => handleChange(e)}
+              value={nekhemjlelZagvar?.nekhemjlekh}
+              setContents={nekhemjlelZagvar?.nekhemjlekh}
+              setOptions={{
+                plugins: custom,
+                buttonList: [
+                  [
+                    "undsen",
+                    "khugatsaa",
+                    "talbai",
+                    "baritsaa",
+                    "tulbur",
+                    "nekhemjlel",
+                    "nekhemjlekhiinNemelt",
+                    "zardaluud",
+                  ],
+                  ["image", "table", "list", "align", "codeView"],
+                  ["font", "fontSize", "fontColor"],
                 ],
-                ["image", "table", "list", "align", "codeView"],
-                ["font", "fontSize", "fontColor"],
-              ],
-            }}
-            width={width}
-            height={height}
-          />
+              }}
+              width={width}
+              height={height}
+            />
+          )}
         </div>
         <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
           <div className="space-y-2">
