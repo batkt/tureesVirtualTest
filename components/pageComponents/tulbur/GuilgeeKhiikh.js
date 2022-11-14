@@ -266,14 +266,16 @@ function GuilgeeKhiikh(
       {turul === "ahiglalt" && (
         <Select
           onChange={(v) => {
-            setNegjUne(v || 0);
+            const utga = zardal.jagsaalt.find((a) => a._id === v);
+            setNegjUne(utga.tariff || 0);
+            setTailbar(utga.ner);
             document.getElementById("guilgeeDunInputNumber").focus();
           }}
           id="select2"
           placeholder="Зардлын төрөл"
         >
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur.tariff}>
+            <Select.Option key={mur._id} value={mur._id}>
               <div>
                 {mur.ner}/{mur.turul}
               </div>
@@ -302,7 +304,7 @@ function GuilgeeKhiikh(
           Нийт үнэ: {formatNumber(negjUne * dun || 0, 2)}
         </div>
       )}
-      {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
+      {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
           onKeyDown={focuser}
           id="textArea"
