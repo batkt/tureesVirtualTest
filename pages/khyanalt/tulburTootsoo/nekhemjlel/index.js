@@ -264,6 +264,12 @@ function tulburTootsoo({ token }) {
                 value
               );
           }
+          medeelel?.zardluud?.map((a) => {
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.tailbar}&gt;`, "g"),
+              formatNumber(a.tulukhDun || 0)
+            );
+          });
           let nemeltNekhemjlekh = "";
           if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
             medeelel.nemeltNekhemjlekh.forEach((a, index) => {
