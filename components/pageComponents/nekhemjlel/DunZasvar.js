@@ -1,5 +1,6 @@
-import React, { useImperativeHandle } from "react";
-import { Form, InputNumber } from "antd";
+import React, { useEffect, useImperativeHandle } from "react";
+import { Form, Input, InputNumber, Modal } from "antd";
+import formatNumber from "tools/function/formatNumber";
 function DunZasvar(
   {
     data,
@@ -22,6 +23,7 @@ function DunZasvar(
           ...nekhemjleliinJagsaalt[index],
           ...nekhemjlelChanged,
         };
+
         setNekhemjleliinJagsaalt([...nekhemjleliinJagsaalt]);
         destroy();
       },
@@ -32,11 +34,31 @@ function DunZasvar(
     [form]
   );
 
+  function garya() {
+    Modal.confirm({
+      content: `Та гарахдаа итгэлтэй байна уу?`,
+      okText: "Тийм",
+      cancelText: "Үгүй",
+      onOk: destroy,
+    });
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        garya();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
   return (
     <Form
       form={form}
       initialValues={data}
-      labelCol={{ span: 15 }}
+      labelCol={{ span: 12 }}
       wrapperCol={{ span: 14 }}
       autoComplete={"off"}
     >
@@ -45,6 +67,7 @@ function DunZasvar(
         name="umnukhSariinUrTulbur"
       >
         <InputNumber
+          className="w-[200px]"
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
@@ -53,10 +76,12 @@ function DunZasvar(
       </Form.Item>
       <Form.Item label="Энэ сард төлөх дүн" name="eneSardTulukhDun">
         <InputNumber
+          className="w-[200px]"
           formatter={(value) =>
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          precisionc={2}
         />
       </Form.Item>
     </Form>

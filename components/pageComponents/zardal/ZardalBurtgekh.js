@@ -29,9 +29,8 @@ function ZardalMur({
     <div className="w-full space-y-4">
       <div className="flex w-full flex-row space-x-4 dark:text-white">
         <div
-          className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-center dark:text-gray-200 ${
-            zardal.dedKhesguud ? (showDed ? "border " : "border ") : ""
-          }`}
+          className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-center dark:text-gray-200 ${zardal.dedKhesguud ? (showDed ? "border " : "border ") : ""
+            }`}
           onClick={() => setShowDed(!showDed)}
         >
           {zardal.dedKhesguud ? (showDed ? "-" : "+") : ""}
@@ -168,10 +167,13 @@ function ZardalBurtgekh(
         garya();
       }
     }
-    document.getElementById("zardalMurInput").focus();
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, [zardal]);
+
+  useEffect(() => {
+    document.getElementById("zardalMurInput").focus();
+  }, [])
 
   function onChangeZardal({ target }, zam) {
     _.set(zardal, zam + (zam === "" ? "" : ".") + "ner", target.value);
@@ -186,7 +188,6 @@ function ZardalBurtgekh(
   }
 
   function murUstgaya(index, zam) {
-    console.log(index, zam);
     const jagsaalt = _.get(zardal, zam);
     jagsaalt.splice(index, 1);
     _.set(zardal, zam, jagsaalt);

@@ -1,9 +1,16 @@
-import { useState } from "react"
-import { useAuth } from "services/auth"
-import axios, { aldaaBarigch } from "services/uilchilgee"
-import useSWR from "swr"
+import { useState } from "react";
+import { useAuth } from "services/auth";
+import axios, { aldaaBarigch } from "services/uilchilgee";
+import useSWR from "swr";
 
-const fetcher = (url, token, baiguullagiinId, { search, turul, ...khuudaslalt }, barilgiinId) =>
+const fetcher = (
+  url,
+  token,
+  baiguullagiinId,
+  { search, ...khuudaslalt },
+  barilgiinId,
+  turul
+) =>
   axios(token)
     .get(url, {
       params: {
@@ -12,63 +19,66 @@ const fetcher = (url, token, baiguullagiinId, { search, turul, ...khuudaslalt },
           baiguullagiinId,
           barilgiinId,
           turul,
-          $or: [
-            { ner: { $regex: search, $options: "i" } },
-          ],
+          $or: [{ ner: { $regex: search, $options: "i" } }],
         },
         ...khuudaslalt,
       },
     })
     .then((res) => res.data)
-    .catch(aldaaBarigch)
+    .catch(aldaaBarigch);
 
 function useMailiinZagvar(token, turul) {
-  const { barilgiinId, baiguullaga } = useAuth()
+  const { barilgiinId, baiguullaga } = useAuth();
   const [khuudaslalt, setMailiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
-    turul
-  })
+  });
   const { data, mutate } = useSWR(
     !!token && !!baiguullaga?._id
-      ? ["mailiinZagvar", token, baiguullaga?._id, khuudaslalt, barilgiinId]
+      ? [
+          "mailiinZagvar",
+          token,
+          baiguullaga?._id,
+          khuudaslalt,
+          barilgiinId,
+          turul,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setMailiinZagvarKhuudaslalt,
     mailiinZagvarGaralt: data,
     mailiinZagvarMutate: mutate,
-  }
+  };
 }
 
-export function useMailiinZagvarWithoutAuth(token, turul, barilgiinId, baiguullagiinId) {
+export function useMailiinZagvarWithoutAuth(
+  token,
+  turul,
+  barilgiinId,
+  baiguullagiinId
+) {
   const [khuudaslalt, setMailiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
     jagsaalt: [],
-  })
+  });
   const { data, mutate } = useSWR(
     !!token
-      ? [
-        "/mailiinZagvar",
-        token,
-        baiguullagiinId,
-        khuudaslalt,
-        barilgiinId
-      ]
+      ? ["/mailiinZagvar", token, baiguullagiinId, khuudaslalt, barilgiinId]
       : null,
     fetcher,
     { revalidateOnFocus: false }
-  )
+  );
   return {
     setMailiinZagvarKhuudaslalt,
     mailiinZagvarGaralt: data,
     mailiinZagvarMutate: mutate,
-  }
+  };
 }
 
-export default useMailiinZagvar
+export default useMailiinZagvar;

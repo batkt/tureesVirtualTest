@@ -19,6 +19,7 @@ const talbaruud = [
   { ner: "Утас", talbar: "utas" },
   { ner: "Хаяг", talbar: "khayag" },
   { ner: "Хугацаа", talbar: "khugatsaa" },
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" },
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
   { ner: "Эхлэх он", talbar: "ekhlekhOn" },
@@ -128,27 +129,28 @@ function index({ token, baiguullaga, destroy }, ref) {
 
   function garya() {
     const values = form.getFieldsValue()
-    if(compareFields(values,{},['kharagdakhDugaar']))
-        Modal.confirm({
-          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-          okText: "Тийм",
-          cancelText: "Үгүй",
-          onOk: destroy})
+    if (compareFields(values, {}, ['kharagdakhDugaar']))
+      Modal.confirm({
+        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy
+      })
     else
       destroy();
   }
 
-  useEffect(()=>{
-      function keyUp(e) {
-          if (e.key === "Escape") {
-            e.preventDefault()
-            garya()
-          }
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault()
+        garya()
       }
-      form.getFieldInstance('kharagdakhDugaar').focus()
-      document.addEventListener("keyup", keyUp);
-      return ()=>document.removeEventListener("keyup", keyUp);
-  },[])
+    }
+    form.getFieldInstance('kharagdakhDugaar').focus()
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, [])
 
   const onFinish = (values) => {
     if (zaalt === "") return
@@ -165,8 +167,8 @@ function index({ token, baiguullaga, destroy }, ref) {
       .catch(aldaaBarigch)
   }
 
-  const focuser = useCallback((e)=>{
-    if(e.key === 'Enter'){
+  const focuser = useCallback((e) => {
+    if (e.key === 'Enter') {
       e.preventDefault()
       switch (e.target.id) {
         case 'kharagdakhDugaar':
@@ -176,7 +178,7 @@ function index({ token, baiguullaga, destroy }, ref) {
           break;
       }
     }
-  },[])
+  }, [])
 
   React.useImperativeHandle(
     ref,
@@ -199,7 +201,7 @@ function index({ token, baiguullaga, destroy }, ref) {
   return (
     <Form form={form} {...formItemLayout}>
       <Form.Item label="Харагдах дугаар" name="kharagdakhDugaar">
-        <Input onKeyUp={focuser}/>
+        <Input onKeyUp={focuser} />
       </Form.Item>
       <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
         <Select>

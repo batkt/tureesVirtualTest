@@ -34,6 +34,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" }
 ];
 
 const talbainiiTalbaruud = [
@@ -62,6 +63,7 @@ const tulburiinTalbaruud = [
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
+  { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
 const nekhemjlekhiinTalbaruud = [

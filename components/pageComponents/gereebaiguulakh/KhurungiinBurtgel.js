@@ -37,7 +37,10 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
 
   const query = useMemo(() => {
     return {
-      niitiinTalbaiEsekh: gereeniiZagvar?.turGereeEsekh,
+      niitiinTalbaiEsekh:
+        gereeniiZagvar?.turGereeEsekh === true
+          ? gereeniiZagvar.turGereeEsekh
+          : { $ne: true },
     };
   }, [gereeniiZagvar]);
 
@@ -46,9 +49,8 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     baiguullaga?._id,
     query
   );
-
   function onValueChange(v) {
-    onChange(talbainiiGaralt.jagsaalt.find((a) => a._id === v));
+    onChange(_.cloneDeep(talbainiiGaralt.jagsaalt.find((a) => a._id === v)));
   }
 
   return (
@@ -67,9 +69,10 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
         return (
           <Select.Option key={a._id}>
             <div
-              className={`flex ${
-                a.idevkhiteiEsekh ? "opacity-50" : "opacity-100"
-              }`}
+              className={`flex ${gereeniiZagvar?.turGereeEsekh !== true && a.idevkhiteiEsekh
+                ? "opacity-50"
+                : "opacity-100"
+                }`}
             >
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
@@ -137,13 +140,13 @@ const YurunkhiiMedeele = ({
   function talbainBurtgelBugulyu(talbainuud) {
     gereeniiZagvar?.turGereeEsekh !== true
       ? (value.baritsaaAvakhDun = talbainuud.reduce(
-          (a, b) => a + Number(b.talbainNiitUne || 0),
-          0
-        ))
+        (a, b) => a + Number(b.talbainNiitUne || 0),
+        0
+      ))
       : (value.talbainNiitUne = talbainuud.reduce(
-          (a, b) => a + Number(b.talbainNiitUne || 0),
-          0
-        ));
+        (a, b) => a + Number(b.talbainNiitUne || 0),
+        0
+      ));
     value.sariinTurees = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
@@ -210,6 +213,7 @@ const YurunkhiiMedeele = ({
 
   function onChangeM2(i, v) {
     _.set(value.talbainuud, `${i}.talbainKhemjee`, v);
+
     talbainBurtgelBugulyu(value.talbainuud);
     onChange({ ...value });
   }
@@ -230,8 +234,14 @@ const YurunkhiiMedeele = ({
       autoComplete={"off"}
       onValuesChange={(values) => onChange({ ...value, ...values })}
     >
-      <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label="Талбай">
+      <div data-aos="fade-right " data-aos-duration="1000">
+        <Form.Item
+          hidden={
+            gereeniiZagvar?.turGereeEsekh === true &&
+            value?.talbainuud?.length > 0
+          }
+          label="Талбай"
+        >
           <TalbaiSongolt
             value={""}
             id={"talbaiSongolt"}
@@ -255,11 +265,10 @@ const YurunkhiiMedeele = ({
               <div className="text-xl font-medium">Код:{talbai.kod}</div>
               <div className="divide-y-2 border">
                 <div
-                  className={`grid ${
-                    gereeniiZagvar?.turGereeEsekh
-                      ? "grid-cols-4"
-                      : "grid-cols-3"
-                  } divide-x-2 py-1`}
+                  className={`grid ${gereeniiZagvar?.turGereeEsekh
+                    ? "grid-cols-4"
+                    : "grid-cols-3"
+                    } divide-x-2 py-1`}
                 >
                   <div className="flex items-center justify-center text-center">
                     Давхар
@@ -277,11 +286,10 @@ const YurunkhiiMedeele = ({
                   </div>
                 </div>
                 <div
-                  className={`grid ${
-                    gereeniiZagvar?.turGereeEsekh
-                      ? "grid-cols-4"
-                      : "grid-cols-3"
-                  } divide-x-2 py-1`}
+                  className={`grid ${gereeniiZagvar?.turGereeEsekh
+                    ? "grid-cols-4"
+                    : "grid-cols-3"
+                    } divide-x-2 py-1`}
                 >
                   <div className="text-center">{talbai.davkhar}</div>
                   <div className="text-center">
@@ -294,8 +302,9 @@ const YurunkhiiMedeele = ({
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
+                        max={value?._id ? undefined : talbai?.sulKhemjee}
                         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                        value={talbai.talbainKhemjee}
+                        value={value?.talbainKhemjee || 0}
                         onChange={(v) => onChangeM2(index, v)}
                       />
                     </div>
@@ -304,7 +313,7 @@ const YurunkhiiMedeele = ({
                     {gereeniiZagvar.turGereeEsekh ? (
                       <InputNumber
                         size="small"
-                        value={talbai.talbainNiitUne}
+                        value={value?.talbainNiitUne || 0}
                         formatter={(value) =>
                           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
@@ -312,7 +321,7 @@ const YurunkhiiMedeele = ({
                         onChange={(v) => onChangeUne(index, v)}
                       />
                     ) : (
-                      formatNumber(talbai.talbainNiitUne)
+                      formatNumber(talbai.talbainNiitUne || 0)
                     )}
                   </div>
                 </div>
@@ -360,6 +369,9 @@ const YurunkhiiMedeele = ({
           </div>
         </div>
       </div>
+      <Form.Item label="Зориулалт" name={"zoriulalt"}>
+        <Input placeholder="Ашиглах зориулалт" />
+      </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
           className="flex w-full flex-row justify-between"

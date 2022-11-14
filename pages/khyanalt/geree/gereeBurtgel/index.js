@@ -4,9 +4,7 @@ import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
 import {
   FileDoneOutlined,
-  UserOutlined,
   HistoryOutlined,
-  FileSyncOutlined,
   WarningOutlined,
   FileExcelOutlined,
   EyeOutlined,
@@ -19,6 +17,8 @@ import {
   DownloadOutlined,
   DownOutlined,
   RedoOutlined,
+  FileTextOutlined,
+  FileOutlined,
 } from "@ant-design/icons";
 import {
   Table,
@@ -234,7 +234,7 @@ const Tailbar = React.forwardRef(
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                message.success("Гэрээ амжилттай цуцаллаа");
+                message.success("Гэрээ амжилттай сэргээгдлээ");
                 confirm(shaltgaan);
                 destroy();
               }
@@ -430,13 +430,26 @@ function ZakhialgiinKhyanalt() {
       },
     },
     {
-      too: 0,
-      icon: <UserOutlined />,
-      utga: "Онцгой",
-      color: "text-green-500",
-      selectedColor: "bg-green-50 dark:bg-gray-900",
-      border: "border-green-500",
-      query: {},
+      too: gereeToollolt !== undefined
+        ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0)
+        : 0,
+      icon: <FileTextOutlined />,
+      utga: "Үндсэн гэрээ",
+      color: "text-blue-500",
+      selectedColor: "bg-blue-50 dark:bg-gray-900",
+      border: "border-blue-500",
+      query: { turGereeEsekh: { $ne: true }, tuluv: { $ne: -1 }, },
+    },
+    {
+      too: gereeToollolt !== undefined
+        ? gereeToollolt?.reduce((a, b) => b.turGeree, 0)
+        : 0,
+      icon: <FileOutlined />,
+      utga: "Түр гэрээ",
+      color: "text-purple-500",
+      selectedColor: "bg-purple-50 dark:bg-gray-900",
+      border: "border-purple-600",
+      query: { turGereeEsekh: true, tuluv: { $ne: -1 }, },
     },
     {
       too:
@@ -452,15 +465,6 @@ function ZakhialgiinKhyanalt() {
         tuluv: { $ne: -1 },
         duusakhOgnoo: { $lte: new Date() },
       },
-    },
-    {
-      too: 0,
-      icon: <FileSyncOutlined />,
-      utga: "Хаагдсан",
-      color: "text-blue-500",
-      selectedColor: "bg-blue-50 dark:bg-gray-900",
-      border: "border-blue-500",
-      query: { tuluv: 9 },
     },
     {
       too:
@@ -504,18 +508,16 @@ function ZakhialgiinKhyanalt() {
         render: (data, a) => {
           return (
             <div
-              className={`relative ml-1 border-l-2 ${
-                a.turGereeEsekh === true
-                  ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
-                  : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
-              }`}
+              className={`relative ml-1 border-l-2 ${a.turGereeEsekh === true
+                ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
+                : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
+                }`}
             >
               <div
-                className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${
-                  a.turGereeEsekh === true
-                    ? "bg-purple-600 dark:bg-purple-400"
-                    : "bg-blue-500 dark:bg-blue-400"
-                }`}
+                className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${a.turGereeEsekh === true
+                  ? "bg-purple-600 dark:bg-purple-400"
+                  : "bg-blue-500 dark:bg-blue-400"
+                  }`}
               />
               {data}
             </div>
@@ -1017,11 +1019,9 @@ function ZakhialgiinKhyanalt() {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                }`}
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                  } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -1032,11 +1032,10 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
+                          className={`text-3xl ${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -1046,11 +1045,10 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                          className={`${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -1181,11 +1179,14 @@ function ZakhialgiinKhyanalt() {
         <div className="mt-6 flex gap-5 font-medium">
           <div className="flex items-center gap-1">
             Үндсэн гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />({gereeToollolt !== undefined
+              ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0) : 0})
           </div>
           <div className="flex items-center gap-1">
             Түр гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />
+            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />({gereeToollolt !== undefined
+              ? gereeToollolt?.reduce((a, b) => b.turGeree, 0)
+              : 0})
           </div>
         </div>
         <div

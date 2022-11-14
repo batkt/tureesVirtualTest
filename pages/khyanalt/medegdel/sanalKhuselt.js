@@ -4,16 +4,17 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Aos from "aos";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import moment from "moment";
-import { Image, Popconfirm, DatePicker } from "antd";
+import { Image, Popconfirm, DatePicker, notification } from "antd";
 import uilchilgee, { url } from "services/uilchilgee";
 import local from "antd/lib/date-picker/locale/mn_MN";
+import { useRouter } from "next/router";
 const { RangePicker } = DatePicker;
 
 function index({ token }) {
   const [turul, setTurul] = useState("sanal");
   const [khariltsagch, setKhariltsagch] = useState();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState();
-
+  const router = useRouter();
   const query = useMemo(() => {
     return {
       turul,
@@ -34,6 +35,12 @@ function index({ token }) {
 
   function sanalGomdolAvakh() {
     uilchilgee(token).post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id });
+    notification.success({ message: "Хүлээн авлаа" });
+    router.reload();
+  }
+  function turulSongokh(status) {
+    setTurul(status.utga);
+    setKhariltsagch(undefined);
   }
 
   return (
@@ -63,7 +70,7 @@ function index({ token }) {
           ].map((status, index) => (
             <div
               key={index}
-              onClick={() => setTurul(status.utga)}
+              onClick={() => turulSongokh(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
               className={`cursor-pointer rounded-lg p-1 text-center ${

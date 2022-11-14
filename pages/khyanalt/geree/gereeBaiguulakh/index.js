@@ -194,9 +194,51 @@ function GereeBaiguulakh({ token }) {
   }
 
   const onChangeGereeniiZagvar = (_id) => {
-    let gereeniiZagvar =
+    let value =
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
-    setGereeniiZagvar({ ...gereeniiZagvar });
+    if (!!gereeniiZagvar?.turGereeEsekh !== !!value?.turGereeEsekh) {
+      setAlkhamErkh(0)
+      const { baiguullagaEsekh,
+        baritsaaAvakhEsekh,
+        baritsaaAvakhKhugatsaa,
+        baritsaaAvakhSar,
+        dans,
+        gerchilgeeniiZurag,
+        gereeniiDugaar,
+        mail,
+        ner,
+        ognoo,
+        ovog,
+        register,
+        segmentuud,
+        unemlekhniiZurag,
+        zuvshuurliinZurag,
+        utas,
+        zakhirliinOvog,
+        zakhirliinNer } = khadgalakhGeree
+      setKhagalakhGeree({
+        baiguullagaEsekh,
+        baritsaaAvakhEsekh,
+        baritsaaAvakhKhugatsaa,
+        baritsaaAvakhSar,
+        dans,
+        gerchilgeeniiZurag,
+        gereeniiDugaar,
+        mail,
+        ner,
+        ognoo,
+        ovog,
+        register,
+        segmentuud,
+        unemlekhniiZurag,
+        zuvshuurliinZurag,
+        utas,
+        zakhirliinOvog,
+        zakhirliinNer
+      })
+    }
+    setGereeniiZagvar({ ...value });
+
   };
 
   const alkhamiinGereeniiZagvar = React.useMemo(() => {
@@ -255,8 +297,8 @@ function GereeBaiguulakh({ token }) {
     current + 1 === value
       ? setFormSubmit(true)
       : alkhamErkh < value
-      ? message.warning("Алхам алгасах боломжгүй!")
-      : alkhamSoliyo(value);
+        ? message.warning("Алхам алгасах боломжгүй!")
+        : alkhamSoliyo(value);
   };
 
   return (
@@ -373,14 +415,14 @@ function GereeBaiguulakh({ token }) {
                       mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                         ? "erunkhiiMedeelel"
                         : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                        ? "gereeniiKhugatsaa"
-                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                        ? "tureesiinTalbai"
-                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                        ? "baritsaaBurtgel"
-                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                        ? "tulburToostoo"
-                        : ""
+                          ? "gereeniiKhugatsaa"
+                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                            ? "tureesiinTalbai"
+                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                              ? "baritsaaBurtgel"
+                              : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                ? "tulburToostoo"
+                                : ""
                     }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -391,11 +433,10 @@ function GereeBaiguulakh({ token }) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className={`${
-                            mur.zaalt?.includes("table")
-                              ? "sun-editor-editable"
-                              : ""
-                          } ml-5 w-full p-0`}
+                          className={`${mur.zaalt?.includes("table")
+                            ? "sun-editor-editable"
+                            : ""
+                            } ml-5 w-full p-0`}
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>

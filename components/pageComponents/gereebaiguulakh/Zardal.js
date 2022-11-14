@@ -82,6 +82,82 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id }) => {
   );
 };
 
+function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
+  return (
+    <div
+      key={value?.zardluud && value?.zardluud[i]?._id}
+      className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border border-green-600 bg-white  px-2 
+        
+          transition-all dark:bg-gray-800 dark:text-gray-200
+        
+      `}
+    >
+      <div
+        className={`absolute top-0 -left-2/4 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+           dark:bg-green-600`}
+      />
+      <div className="z-10 flex gap-1">
+        <div>{i + 1}.</div>
+        <div>{value?.zardluud && value?.zardluud[i]?.ner}</div>
+      </div>
+      <div className="flex items-center gap-1">
+        {value?.zardluud && value?.zardluud[i]?.turul === "Дурын" ? (
+          <div className="flex w-full items-center justify-center gap-1">
+            <Form.Item
+              className="tariffInput absolute top-[3px] -right-5 w-44"
+              name={[a.name, "dun"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Тариф оруулна уу!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                ref={inputRef}
+                formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                placeholder="Тариф"
+                onChange={(e) =>
+                  inputChange(e, value?.zardluud && value?.zardluud[i])
+                }
+                className="flex h-7 w-full items-center rounded-l-md pr-4 "
+              />
+            </Form.Item>
+            <div>₮</div>
+          </div>
+        ) : (
+          <div className="z-10">
+            {value?.zardluud && value?.zardluud[i]?.turul}{" "}
+            {value?.zardluud &&
+              value?.zardluud[i]?.turul &&
+              value?.zardluud[i]?.tariff &&
+              ":"}{" "}
+            {value?.zardluud && value?.zardluud[i]?.tariff}{" "}
+            {value?.zardluud && value?.zardluud[i]?.tariff && "₮"}
+          </div>
+        )}
+        <Popconfirm
+          title={`${value?.zardluud && value?.zardluud[i]?.ner
+            } зардал устгах уу?`}
+          okText="Тийм"
+          cancelText="Үгүй"
+          onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
+        >
+          <div className="flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
+            <Tooltip title="Устгах">
+              <CloseCircleOutlined size={20} />
+            </Tooltip>
+          </div>
+        </Popconfirm>
+      </div>
+    </div>
+  );
+}
+
 const Zardal = ({
   next,
   prev,
@@ -107,12 +183,11 @@ const Zardal = ({
     undefined,
     searchKeys
   );
-  const inputRef = useRef();
 
   function onFinish() {
     next();
   }
-
+  const inputRef = useRef();
   function onChangeZardal(v) {
     if (!!value.zardluud?.find((a) => a._id === v._id)) {
       notification.warning({
@@ -133,16 +208,16 @@ const Zardal = ({
         }, 300);
         v.dun = "";
       }
-
+      form.setFieldsValue({ ...value });
       onChange({ ...value });
     }
     zardalOruulya();
   }
-
   function zardalUstgaya(a) {
     value.zardluud = value.zardluud.filter(function (item) {
-      return item._id !== a._id;
+      return item._id !== a?._id;
     });
+    form.setFieldsValue({ ...value });
     onChange({ ...value });
   }
   useEffect(() => {
@@ -159,7 +234,6 @@ const Zardal = ({
     }
     onChange({ ...value });
   };
-
   return (
     <Form
       name="validate_other"
@@ -184,68 +258,22 @@ const Zardal = ({
         </div>
 
         <div className="space-y-5">
-          {value?.zardluud?.map((a, i) => {
-            return (
-              <div
-                key={a._id}
-                className={`relative flex h-10 items-center justify-between overflow-hidden rounded-lg border border-green-600 bg-white  px-2 
-                  
-                    transition-all dark:bg-gray-800 dark:text-gray-200
-                  
-                `}
-              >
-                <div
-                  className={`absolute top-0 -left-2/4 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
-                     dark:bg-green-600`}
-                />
-                <div className="z-10 flex gap-1">
-                  <div>{i + 1}.</div>
-                  <div>{a.ner}</div>
-                </div>
-                <div className="flex items-center gap-1">
-                  {a.turul === "Дурын" ? (
-                    <div className="flex w-24 items-center justify-center gap-1">
-                      <InputNumber
-                        min={0}
-                        required
-                        ref={inputRef}
-                        formatter={(value) =>
-                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        }
-                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                        value={
-                          value?.zardluud[
-                            value?.zardluud.findIndex((c) => c._id === a._id)
-                          ]?.dun || ""
-                        }
-                        placeholder="Тариф"
-                        onChange={(e) => inputChange(e, a)}
-                        className="flex h-7 w-full items-center rounded-l-md pr-4 "
-                      />
-                      <div>₮</div>
-                    </div>
-                  ) : (
-                    <div className="z-10">
-                      {a.turul} {a.turul && a.tariff && ":"} {a.tariff}{" "}
-                      {a.tariff && "₮"}
-                    </div>
-                  )}
-                  <Popconfirm
-                    title={`${a.ner} зардал устгах уу?`}
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={() => zardalUstgaya(a)}
-                  >
-                    <div className="flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
-                      <Tooltip title="Устгах">
-                        <CloseCircleOutlined size={20} />
-                      </Tooltip>
-                    </div>
-                  </Popconfirm>
-                </div>
-              </div>
-            );
-          })}
+          <Form.List name="zardluud">
+            {(fields,) => (
+              <>
+                {fields.map((a, i) => (
+                  <Zardluud
+                    inputRef={inputRef}
+                    value={value}
+                    a={a}
+                    i={i}
+                    zardalUstgaya={zardalUstgaya}
+                    inputChange={inputChange}
+                  />
+                ))}
+              </>
+            )}
+          </Form.List>
         </div>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">

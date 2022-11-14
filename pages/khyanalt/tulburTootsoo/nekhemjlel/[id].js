@@ -76,6 +76,7 @@ const tulburiinTalbaruud = [
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
   { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
+  { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
 const nekhemjlekhiinTalbaruud = [

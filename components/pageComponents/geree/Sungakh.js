@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
-const { DatePicker, InputNumber, message } = require("antd");
+const { DatePicker, InputNumber, message, Modal } = require("antd");
 const moment = require("moment");
 
 const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
@@ -13,18 +13,31 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   React.useEffect(() => {
     setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar, "month"));
   }, [sar]);
+  function garya() {
+    if (
+      moment(data?.duusakhOgnoo).add(1, "month").format("YYYY-MM-DD") !=
+      moment(duusakhOgnoo).format("YYYY-MM-DD")
+    )
+      Modal.confirm({
+        content: `Та гарахдаа итгэлтэй байна уу?`,
+        okText: "Тийм",
+        cancelText: "Үгүй",
+        onOk: destroy,
+      });
+    else destroy();
+  }
 
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        garya();
       }
     }
     document.getElementById("sungakhSar").focus();
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, []);
+  }, [duusakhOgnoo]);
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {

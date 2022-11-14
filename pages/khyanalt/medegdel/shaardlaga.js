@@ -32,6 +32,7 @@ import Aos from "aos";
 import TextArea from "antd/lib/input/TextArea";
 import useOrder from "tools/function/useOrder";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useRouter } from "next/router";
 
 //#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
@@ -57,7 +58,7 @@ function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-
+  const router = useRouter();
   const { barilgiinId } = useAuth();
   const [turul, setTurul] = useState("App");
   const [khariltsagch, setKhariltsagch] = useState(null);
@@ -67,7 +68,7 @@ function Khyanalt({ token }) {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [turulZagvar, setTurulZagvar] = useState(false);
-  const { order } = useOrder({ createdAt: -1 });
+
   const [kharakhZurgiinZam, setKharakhZurgiinZam] = useState(false);
   // const [songogdsonKhariltsagch, setsongogdsonKhariltsagch] = useState([]);
   /**Илгээх төрөл
@@ -91,6 +92,7 @@ function Khyanalt({ token }) {
     undefined,
     ["ner", "ovog", "utas"]
   );
+  const { order } = useOrder({ createdAt: -1 });
   const { sonorduulga, sonorduulgaMutate, jagsaalt, nextSonorduulga } =
     useSanalGomdol(
       turul === "App" && token,
@@ -128,40 +130,117 @@ function Khyanalt({ token }) {
   }, [khariltsagch, msj]);
   //#endregion
 
-  //#region method
   async function appIlgeeye() {
-    if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна");
-      return;
-    }
-    if (!!title && !!content) {
-      uilchilgee(token)
-        .post(`/sanalKhadgalya`, {
-          khariltsagchiinId: khariltsagch?._id,
-          khariltsagchiinNer: khariltsagch.ner,
-          zurguud: zurag,
-          turul: "shaardlaga",
-          title,
-          message: ingeekhmSms,
-          firebaseToken: khariltsagch?.firebaseToken,
-          barilgiinId: khariltsagch.barilgiinId,
-        })
-        .then(({ data }) => {
-          zurag &&
-            uilchilgee(token).post("/confirmFile", {
-              filename: zurag,
-              path: "shaardlaga",
+    if (!!title) {
+      if (content !== "") {
+        if (songogdsonKhariltsagch.length > 0) {
+          var khariu = { successCount: 0, failureCount: 0 };
+          songogdsonKhariltsagch
+            .filter((a) => !!a._id)
+            .map((a, index, array) => {
+              a.ovog = a.ovog || "";
+              a.ner = a.ner || "";
+              a.register = a.register || "";
+              a.utas = a.utas || "";
+              a.turul = a.turul || "";
+              a.khayag = a.khayag || "";
+              a.khayag = a.khayag || "";
+              let body = msj;
+              for (const [key, value] of Object.entries(a)) {
+                body = body?.replace(new RegExp(`<${key}>`, "g"), value);
+              }
+              uilchilgee(token)
+                .post(`/sanalKhadgalya`, {
+                  firebaseToken: a?.firebaseToken,
+                  khariltsagchiinId: a?._id,
+                  barilgiinId: a.barilgiinId,
+                  khariltsagchiinNer: a.ner,
+                  zurgiinId: zurag,
+                  turul: "shaardlaga",
+                  title,
+                  message: ingeekhmSms,
+                })
+                .then(({ data }) => {
+                  zurag &&
+                    uilchilgee(token).post("/confirmFile", {
+                      filename: zurag,
+                      path: "shaardlaga",
+                    });
+                  if (!!data?.successCount) khariu.successCount += 1;
+                  else if (!!data?.failureCount) khariu.failureCount += 1;
+                  if (index === array.length - 1) {
+                    notification.success({
+                      message: `Notification Амжилттай илгээлээ`,
+                    });
+                    router.reload();
+                  }
+                });
+              return;
             });
-
-          notification.success({ message: "Амжилттай Илгээлээ" });
-          setContent(""), setTitle(""), onTextChange("");
-        })
-        .catch((e) => {
-          aldaaBarigch(e);
+          return;
+        }
+        if (msj.length < 3600) {
+          if (loading) {
+            message.warning("Хүсэлт илгээгдсэн байна");
+            return;
+          }
+          if (!!title) {
+            khariltsagch.ovog = khariltsagch.ovog || "";
+            khariltsagch.ner = khariltsagch.ner || "";
+            khariltsagch.register = khariltsagch.register || "";
+            khariltsagch.utas = khariltsagch.utas || "";
+            khariltsagch.turul = khariltsagch.turul || "";
+            khariltsagch.khayag = khariltsagch.khayag || "";
+            khariltsagch.khayag = khariltsagch.khayag || "";
+            setLoading(true);
+            uilchilgee(token)
+              .post(`/sanalKhadgalya`, {
+                khariltsagchiinId: khariltsagch?._id,
+                khariltsagchiinNer: khariltsagch?.ner,
+                zurguud: zurag,
+                turul: "shaardlaga",
+                title,
+                message: ingeekhmSms,
+                firebaseToken: khariltsagch?.firebaseToken,
+                barilgiinId: khariltsagch?.barilgiinId,
+              })
+              .then(({ data }) => {
+                zurag &&
+                  uilchilgee(token).post("/confirmFile", {
+                    filename: zurag,
+                    path: "shaardlaga",
+                  });
+                if (!!data?.successCount) khariu.successCount += 1;
+                else if (!!data?.failureCount) khariu.failureCount += 1;
+                if (index === array.length - 1) {
+                  notification.success({
+                    message: `Notification Амжилттай илгээлээ`,
+                  });
+                  router.reload();
+                }
+              })
+              .catch((e) => {
+                setLoading(false);
+                aldaaBarigch(e);
+              });
+          } else {
+            notification.warning({
+              message: "Гарчиг заавал оруулна уу",
+            });
+          }
+        } else {
+          notification.warning({
+            message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
+          });
+        }
+      } else {
+        notification.warning({
+          message: "Мэдэгдэл оруулна уу",
         });
+      }
     } else {
       notification.warning({
-        message: !title ? "Гарчиг оруулна уу" : "Мэдээлэл оруулана уу",
+        message: "Гарчиг оруулна уу",
       });
     }
   }
@@ -218,9 +297,11 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
           notification.success({ message: "SMS Амжилттай илгээлээ" });
+
           setContent("");
           setTitle("");
           setLoading(false);
+          router.reload();
         }
       })
       .catch((e) => {
@@ -266,6 +347,7 @@ function Khyanalt({ token }) {
           setContent("");
           setTitle("");
           setLoading(false);
+          router.reload();
         }
       })
       .catch((e) => {
@@ -323,16 +405,6 @@ function Khyanalt({ token }) {
     }
   }
 
-  function onScroll(e) {
-    clearTimeout(timeout);
-    timeout = setTimeout(function () {
-      seen();
-    }, 300);
-
-    if (e.target.scrollHeight + e.target.scrollTop === e.target.clientHeight) {
-      nextSonorduulga();
-    }
-  }
   //#endregion
   function khariltsagchSongokh(mur) {
     setKhariltsagch(mur);
@@ -552,7 +624,7 @@ function Khyanalt({ token }) {
       {/* </div> */}
 
       <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9">
-        {khariltsagch ? (
+        {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
           <div className="box flex  flex-col">
             {songogdsonKhariltsagch.length <= 1 ? (
               <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
@@ -594,60 +666,103 @@ function Khyanalt({ token }) {
             ) : (
               ""
             )}
-            <div
-              className="col-span-12 min-h-[50vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-              style={{ maxHeight: "calc(100vh - 32rem)" }}
-              onScroll={onScroll}
-            >
-              {sonorduulga.jagsaalt.map((mur) =>
-                mur.khariltsagchiinId === khariltsagch._id ? (
-                  <div className="bg flex w-full items-center gap-3 px-12">
-                    <div className="relative w-10/12  rounded-lg bg-green-50 p-3  dark:bg-gray-800 sm:w-full">
-                      <div className="flex flex-row flex-wrap items-center justify-between  ">
-                        <div className="text-sm text-green-600">
-                          Гарчиг: {mur.title}
+            <div>
+              {songogdsonKhariltsagch.length > 1 ? (
+                <div
+                  className="col-span-12 min-h-[60vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                  style={{ maxHeight: "calc(100vh - 44rem)" }}
+                >
+                  <div
+                    className={`box hidden h-full items-center xl:flex ${
+                      turulZagvar ? "hidden" : "lg:flex"
+                    }`}
+                    data-aos="fade-left"
+                    data-aos-duration="1000"
+                  >
+                    <div className="mx-auto text-center">
+                      <div className="flex justify-center">
+                        <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                          <img alt="ProfileZurag" src="/profile.svg" />
                         </div>
-                        {mur?.tuluv === 0 ? (
-                          <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
-                            {" "}
-                            Хүлээж аваагүй{" "}
-                          </div>
-                        ) : (
-                          <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
-                            {" "}
-                            Хүлээж авсан{" "}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex">
-                        <div className="w-full">
-                          <div className="font-semibold">
-                            Шаардлага: {mur.message}
-                          </div>
-
-                          <div>
-                            {mur.zurguud.map((a) => (
-                              <Image
-                                width={75}
-                                src={`${url}/file?path=shaardlaga/${a}`}
-                              />
-                            ))}
-                          </div>
+                        <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                          <img alt="ProfileZurag" src="/profileFemale.svg" />
                         </div>
                       </div>
-                    </div>
-                    <div className="h-11 w-11 min-w-max rounded-full  bg-green-300 dark:bg-gray-800">
-                      <img
-                        src="/profile.svg"
-                        className="h-10 w-10 rounded-full"
-                      />
+                      <div className="mt-3">
+                        <div className="font-medium">Өдрийн мэнд</div>
+                        <div className="mt-1 text-gray-600 dark:text-gray-300">
+                          Та шаардлага илгээнэ үү.
+                        </div>
+                      </div>
                     </div>
                   </div>
-                ) : (
-                  ""
-                )
+                </div>
+              ) : (
+                <div
+                  className="col-span-12 flex min-h-[50vh] flex-col-reverse items-center overflow-auto rounded-r-xl bg-white px-10 pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                  style={{ maxHeight: "calc(100vh - 32rem)" }}
+                  onScroll={(e) => {
+                    if (
+                      e.target.scrollHeight + e.target.scrollTop - 1 <
+                        e.target.clientHeight &&
+                      !!jagsaalt
+                    ) {
+                      nextSonorduulga();
+                    }
+                  }}
+                >
+                  {jagsaalt?.map((mur) =>
+                    mur.khariltsagchiinId === khariltsagch?._id ? (
+                      <div className="my-5 flex w-full items-center ">
+                        <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-gray-800 sm:w-full">
+                          <div className="flex flex-row flex-wrap items-center justify-between  ">
+                            <div className="text-sm text-green-600">
+                              Гарчиг: {mur.title}
+                            </div>
+                            {mur?.tuluv === 0 ? (
+                              <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
+                                {" "}
+                                Хүлээж аваагүй{" "}
+                              </div>
+                            ) : (
+                              <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
+                                {" "}
+                                Хүлээж авсан{" "}
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex">
+                            <div className="w-full">
+                              <div className="font-semibold">
+                                Шаардлага: {mur.message}
+                              </div>
+
+                              <div>
+                                {mur.zurguud.map((a) => (
+                                  <Image
+                                    width={75}
+                                    src={`${url}/file?path=shaardlaga/${a}`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="h-11 w-11 rounded-full  bg-green-300 dark:bg-gray-800">
+                          <img
+                            src="/profile.svg"
+                            className="h-10 w-10 rounded-full"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      ""
+                    )
+                  )}
+                </div>
               )}
             </div>
+
             <div
               className="w-full  space-y-3 px-3"
               data-aos="fade-right"
