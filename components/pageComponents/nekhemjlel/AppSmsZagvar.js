@@ -14,11 +14,12 @@ function AppSmsZagvar(
   ref
 ) {
   const [form] = Form.useForm();
-  const zagvar = form.getFieldsValue();
+
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
+        const zagvar = form.getFieldsValue();
         if (!!zagvar.ner) {
           const method = data?._id ? updateMethod : createMethod;
           method("nekhemjlekhiinZagvar", token, {
