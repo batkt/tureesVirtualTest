@@ -1,6 +1,6 @@
 import axios, { socket, aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "services/auth";
 import _ from "lodash";
 
@@ -73,12 +73,12 @@ function useSanalGomdol(token, khariltsagchiinId, query, order) {
   }, [khariltsagchiinId]);
 
   function nextSonorduulga() {
-    if (data?.khuudasniiDugaar < data?.niitKhuudas)
-      setKhuudaslalt((a) => ({
-        ...a,
-        khuudasniiDugaar: a.khuudasniiDugaar + 1,
-        jagsaalt: [...khuudaslalt.jagsaalt, ...(data?.jagsaalt || [])],
-      }));
+    if (!!data)
+      setKhuudaslalt((a) => {
+        a.jagsaalt = [...a.jagsaalt, ...(data?.jagsaalt || [])];
+        a.khuudasniiDugaar += 1;
+        return { ...a };
+      });
   }
 
   function resetSonorduulga() {
@@ -91,11 +91,15 @@ function useSanalGomdol(token, khariltsagchiinId, query, order) {
     mutate();
   }
 
+  const jagsaalt = useMemo(() => {
+    return [...(khuudaslalt.jagsaalt || []), ...(data?.jagsaalt || [])];
+  }, [khuudaslalt, data]);
+
   return {
     setKhuudaslalt,
     sonorduulga: data,
     sonorduulgaMutate: mutate,
-    jagsaalt: khuudaslalt.jagsaalt,
+    jagsaalt,
     resetSonorduulga,
     nextSonorduulga,
     sonorduulgaKharlaa,

@@ -13,6 +13,7 @@ function ZagvarBurtgel(
   { barilgiinId, destroy, token, setWaiting, data = {}, turul, onRefresh },
   ref
 ) {
+  console.log(data);
   const [form] = Form.useForm();
 
   function garya() {
@@ -38,28 +39,27 @@ function ZagvarBurtgel(
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
-
+  const zagvar = form.getFieldsValue();
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        const method = data?._id ? updateMethod : createMethod;
-        const zagvar = form.getFieldsValue();
-        zagvar?.ner !== ""
-          ? method("mailiinZagvar", token, {
-              barilgiinId,
-              ...data,
-              ...zagvar,
-              turul,
-            }).then(({ data }) => {
-              if (data === "Amjilttai") {
-                setWaiting(false);
-                message.success("Амжилттай хадгаллаа");
-                onRefresh();
-                destroy();
-              }
-            })
-          : notification.warning({ message: "Нэр заавал оруулна уу!" });
+        if (zagvar.ner) {
+          const method = data?._id ? updateMethod : createMethod;
+          method("mailiinZagvar", token, {
+            barilgiinId,
+            ...data,
+            ...zagvar,
+            turul,
+          }).then(({ data }) => {
+            if (data === "Amjilttai") {
+              setWaiting(false);
+              message.success("Амжилттай хадгаллаа");
+              onRefresh();
+              destroy();
+            }
+          });
+        } else notification.warning({ message: "Нэр заавал оруулна уу!" });
       },
       khaaya() {
         destroy();
