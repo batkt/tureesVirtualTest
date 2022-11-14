@@ -310,7 +310,6 @@ function TalbaiBurtgekh({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-
   const router = useRouter();
   const query = router.query;
   const data = JSON.parse(query.data || "{}");
@@ -319,6 +318,24 @@ function TalbaiBurtgekh({ token }) {
   const { TextArea } = Input;
   const { ajiltan, baiguullaga } = useAuth();
   const [waiting, setWaiting] = useState(false);
+
+  const [gereeteiEsekh, setGereeteiEsekh] = React.useState({});
+
+  React.useEffect(() => {
+    uilchilgee(token)
+      .get("/geree", {
+        params: {
+          query: { talbainIdnuud: data?._id, tuluv: { $ne: -1 } },
+          select: { gereeniiDugaar: 1 },
+        },
+      })
+      .then(({ data }) => {
+        if (data) {
+          setGereeteiEsekh(data.jagsaalt > 0);
+        }
+      });
+  }, []);
+
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
     talbainKhemjee: undefined,
@@ -736,6 +753,7 @@ function TalbaiBurtgekh({ token }) {
                 hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}
               >
                 <Switch
+                  disabled={gereeteiEsekh}
                   defaultChecked={talbaiState.niitiinTalbaiEsekh}
                   onChange={(e) => onChange("niitiinTalbaiEsekh", e)}
                 />

@@ -297,9 +297,11 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data && data[0].Result === "SUCCESS") {
           notification.success({ message: "SMS Амжилттай илгээлээ" });
+
           setContent("");
           setTitle("");
           setLoading(false);
+          router.reload();
         }
       })
       .catch((e) => {
@@ -345,6 +347,7 @@ function Khyanalt({ token }) {
           setContent("");
           setTitle("");
           setLoading(false);
+          router.reload();
         }
       })
       .catch((e) => {

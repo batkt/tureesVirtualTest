@@ -331,6 +331,76 @@ function tulburTootsoo({ token }) {
       var nekhemjlekh = _.cloneDeep(
         nekhemjleliinJagsaalt.find((a) => a._id === mur)
       );
+      nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
+        nekhemjlekh.eneSardTulukhDun *
+          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.niitUldegdelUsgeer = numberToWords(
+        nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.mungunDunUsgeer = numberToWords(
+        nekhemjlekh.sariinTurees,
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+      const dans = dansGaralt?.jagsaalt?.find(
+        (a) => a.dugaar === songogdsonDans
+      );
+      nekhemjlekh.dans = dans?.dugaar;
+      nekhemjlekh.bank =
+        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+      nekhemjlekh.dansniiNer = dans?.dansniiNer;
+
+      nekhemjlekh.aldangiinUldegdel =
+        formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
+      nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
+      nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
+      nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
+      nekhemjlekh.khayag = nekhemjlekh.khayag || "";
+      nekhemjlekh.talbainNegjUneUsgeer = nekhemjlekh.talbainNegjUneUsgeer || "";
+      nekhemjlekh.talbainNiitUneUsgeer = nekhemjlekh.talbainNiitUneUsgeer || "";
+      nekhemjlekh.zoriulalt = nekhemjlekh.zoriulalt || "";
+      nekhemjlekh.khungulukhKhugatsaa = nekhemjlekh.khungulukhKhugatsaa || "";
+      nekhemjlekh.nemeltNekhemjlekh.tailbar =
+        nekhemjlekh.nemeltNekhemjlekh.tailbar || "";
+      nekhemjlekh.nemeltNekhemjlekh.tulukhDun =
+        nekhemjlekh.nemeltNekhemjlekh.tulukhDun || "";
+      nekhemjlekh.nemeltNekhemjlekh.ognoo =
+        nekhemjlekh.nemeltNekhemjlekh.ognoo || "";
+      nekhemjlekh.nemeltNekhemjlekh = nekhemjlekh.nemeltNekhemjlekh || "";
+      nekhemjlekh.zardliinDun = formatNumber(nekhemjlekh.zardliinDun) || "";
+      nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
+      nekhemjlekh.eneSardTulukhDun = formatNumber(nekhemjlekh.eneSardTulukhDun);
+      nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+      nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
+      nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
+      nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
+        nekhemjlekh.umnukhSariinUrTulbur
+      );
+
+      nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+
+      nekhemjlekh.niitAshiglaltiinZardal = formatNumber(
+        nekhemjlekh.niitAshiglaltiinZardal
+      );
+
+      nekhemjlekh.sar = moment().format("MM");
+      nekhemjlekh.ekhlekhOn = moment().format("YYYY");
+      nekhemjlekh.ekhelkhSar = moment().format("MM");
+      nekhemjlekh.ekhlekhUdur = moment().format("DD");
+      nekhemjlekh.duusakhOn = moment().format("YYYY");
+      nekhemjlekh.duusakhSar = moment().format("MM");
+      nekhemjlekh.duusakhUdur = moment().format("DD");
+
       var text = msj;
       for (const [key, value] of Object.entries(nekhemjlekh)) {
         text = text?.replace(new RegExp(`<${key}>`, "g"), value);
