@@ -54,6 +54,8 @@ const talbainiiTalbaruud = [
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
+  { ner: "Талбайн нийт үнэ/Нөатгүй/", talbar: "talbainNiitUneNuatgui" },
+  { ner: "Талбайн нийт үнэ/Нөат/", talbar: "talbainNiitUneNuat" },
   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
@@ -72,13 +74,11 @@ const baritsaaniiTalbaruud = [
 const tulburiinTalbaruud = [
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
-  { ner: "Сарын түрээс/Нөатгүй/", talbar: "sariinTureesNuatgui" },
-  { ner: "Сарын түрээс/Нөат (10%)/", talbar: "sariinTureesNuat" },
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
   { ner: "Нийт үлдэгдэл/Нөатгүй/", talbar: "niitUldegdelNuatgui" },
-  { ner: "Нийт үлдэгдэл/Нөат (10%)/", talbar: "niitUldegdelNuat" },
+  { ner: "Нийт үлдэгдэл/Нөат/", talbar: "niitUldegdelNuat" },
   { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
