@@ -98,14 +98,6 @@ function ToolTip({ pointer }) {
         fontSize={15}
         align="center"
       />
-      <Text
-        x={pointer.x + 30}
-        y={pointer.y + 70}
-        text={_.get(gereeMedeelel, "jagsaalt.0.mail")}
-        fill={"black"}
-        fontSize={15}
-        align="center"
-      />
     </Group>
   );
 }

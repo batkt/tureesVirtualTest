@@ -90,7 +90,7 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
-  const [turul, setTurul] = useState("SMS");
+  const [turul, setTurul] = useState(turul);
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
@@ -214,6 +214,7 @@ function Khyanalt({ token }) {
                     setContent("");
                     setTitle("");
                     setNer(undefined);
+                    router.reload();
                   }
                 });
               return;
