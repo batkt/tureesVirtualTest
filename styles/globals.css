@@ -110,12 +110,12 @@ audio::-webkit-media-controls-volume-control-container {
   height: 11.7in;
 }
 
-.A4-portrait {
+.A4-landscape {
   height: 8.25in;
   width: 11.7in;
 }
 
-.A4-landscape {
+.A4-portrait {
   width: 8.25in;
   height: 11.7in;
 }
@@ -124,7 +124,7 @@ audio::-webkit-media-controls-volume-control-container {
   width: 100%;
 }
 
-.A5-landscape {
+.A5-portrait {
   width: 8.25in;
   height: 5.843in;
   max-width: 8.25in;
@@ -133,7 +133,7 @@ audio::-webkit-media-controls-volume-control-container {
   min-width: 8.25in;
 }
 
-.A5-portrait {
+.A5-landscape {
   width: 5.8in;
   height: 8.25in;
   max-width: 5.8in;
@@ -198,6 +198,10 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .sun-editor-editable table td,
+.sun-editor-editable table th {
+  padding: 0.1em !important;
+}
+
 .ant-badge-dot.ant-scroll-number {
   right: 5px;
   top: 2px;
