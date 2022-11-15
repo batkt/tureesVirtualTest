@@ -144,6 +144,13 @@ function tulburTootsoo({ token }) {
             "төгрөг",
             "мөнгө"
           );
+          medeelel.talbainNiitUneUsgeer = numberToWords(
+            medeelel.talbainNiitUneUsgeer *
+              (medeelel.talbainNiitUneUsgeer < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
 
           medeelel.mungunDunUsgeer = numberToWords(
             medeelel?.sariinTurees,
@@ -435,6 +442,7 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh.talbainNiitUneUsgeer *
           (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
@@ -570,6 +578,13 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+      nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
+        nekhemjlekh.talbainNiitUneUsgeer *
+          (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
       const dans = dansGaralt?.jagsaalt?.find(
         (a) => a.dugaar === songogdsonDans
       );
@@ -664,6 +679,13 @@ function tulburTootsoo({ token }) {
 
           medeelel.niitUldegdelUsgeer = numberToWords(
             medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          );
+          medeelel.talbainNiitUneUsgeer = numberToWords(
+            medeelel.talbainNiitUneUsgeer *
+              (medeelel.talbainNiitUneUsgeer < 0 ? -1 : 1),
             { fixed: 2, suffix: "n" },
             "төгрөг",
             "мөнгө"
@@ -767,6 +789,14 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
           (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        { fixed: 2, suffix: "n" },
+        "төгрөг",
+        "мөнгө"
+      );
+
+      nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
+        nekhemjlekh.talbainNiitUneUsgeer *
+          (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
