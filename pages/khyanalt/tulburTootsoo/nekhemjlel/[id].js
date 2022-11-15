@@ -118,7 +118,11 @@ function getSize(khemjee, orientation) {
     default:
       break;
   }
-  if (orientation === "landscape") return { width: height, height: width };
+  if (
+    (khemjee !== "A5" && orientation === "landscape") ||
+    (khemjee === "A5" && orientation !== "landscape")
+  )
+    return { width: height, height: width };
   return { width, height };
 }
 
