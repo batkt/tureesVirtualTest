@@ -39,12 +39,13 @@ function ZagvarBurtgel(
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
-  const zagvar = form.getFieldsValue();
+
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        if (zagvar.ner) {
+        const zagvar = form.getFieldsValue();
+        if (!!zagvar.ner) {
           const method = data?._id ? updateMethod : createMethod;
           method("mailiinZagvar", token, {
             barilgiinId,
@@ -71,10 +72,7 @@ function ZagvarBurtgel(
 
   return (
     <Form autoComplete="off" form={form} initialValues={data}>
-      <Form.Item
-        name="ner"
-        rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}
-      >
+      <Form.Item name="ner">
         <Input placeholder="Нэр" />
       </Form.Item>
       <Form.Item name="mail">

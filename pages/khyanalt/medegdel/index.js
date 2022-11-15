@@ -90,7 +90,7 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
-  const [turul, setTurul] = useState(turul);
+
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
@@ -108,6 +108,7 @@ function Khyanalt({ token }) {
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
+  const [turul, setTurul] = useState("SMS");
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
