@@ -109,8 +109,37 @@ audio::-webkit-media-controls-volume-control-container {
   width: 8.3in;
   height: 11.7in;
 }
+
+.A4-landscape {
+  height: 8.25in;
+  width: 11.7in;
+}
+
+.A4-portrait {
+  width: 8.25in;
+  height: 11.7in;
+}
+
 .A4 table {
   width: 100%;
+}
+
+.A5-portrait {
+  width: 8.25in;
+  height: 5.843in;
+  max-width: 8.25in;
+  max-height: 5.843in;
+  min-height: 5.843in;
+  min-width: 8.25in;
+}
+
+.A5-landscape {
+  width: 5.8in;
+  height: 8.25in;
+  max-width: 5.8in;
+  max-height: 8.25in;
+  min-height: 8.25in;
+  min-width: 5.8in;
 }
 .A5 {
   width: 5.8in;
@@ -168,6 +197,11 @@ audio::-webkit-media-controls-volume-control-container {
   margin: 0 !important;
 }
 
+.sun-editor-editable table td,
+.sun-editor-editable table th {
+  padding: 0.1em !important;
+}
+
 .ant-badge-dot.ant-scroll-number {
   right: 5px;
   top: 2px;
@@ -176,7 +210,7 @@ audio::-webkit-media-controls-volume-control-container {
 .login-input {
   min-width: 100% !important;
   box-shadow: 0 3px 5px rgb(0 0 0 / 25%);
-  border-radius: 0.375rem !importan25;
+  border-radius: 0.375rem !important;
   border-width: 1px !important;
   @apply px-4 py-3 !important;
 }
