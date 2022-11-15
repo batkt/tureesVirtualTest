@@ -26,6 +26,8 @@ function GuilgeeKhiikh(
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
+  const [khemjikhNegj, setKhemjikhNegj] = useState("");
+
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
     useState(false);
@@ -104,6 +106,9 @@ function GuilgeeKhiikh(
               turul: "avlaga",
               tulsunDun: 0,
               tulukhDun: negjUne * dun,
+              negj: dun,
+              khemjikhNegj: khemjikhNegj,
+              tariff: negjUne,
               ognoo: moment(ognoo).format("YYYY-MM-DD 00:00:00"),
               gereeniiId: data?._id,
               tailbar,
@@ -266,14 +271,17 @@ function GuilgeeKhiikh(
       {turul === "ahiglalt" && (
         <Select
           onChange={(v) => {
-            setNegjUne(v || 0);
+            const utga = zardal.jagsaalt.find((a) => a._id === v);
+            setNegjUne(utga.tariff || 0);
+            setTailbar(utga.ner);
+            setKhemjikhNegj(utga.turul);
             document.getElementById("guilgeeDunInputNumber").focus();
           }}
           id="select2"
           placeholder="Зардлын төрөл"
         >
           {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur.tariff}>
+            <Select.Option key={mur._id} value={mur._id}>
               <div>
                 {mur.ner}/{mur.turul}
               </div>
@@ -302,7 +310,7 @@ function GuilgeeKhiikh(
           Нийт үнэ: {formatNumber(negjUne * dun || 0, 2)}
         </div>
       )}
-      {(turul === "avlaga" || turul === "busad" || turul === "ahiglalt") && (
+      {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
           onKeyDown={focuser}
           id="textArea"
