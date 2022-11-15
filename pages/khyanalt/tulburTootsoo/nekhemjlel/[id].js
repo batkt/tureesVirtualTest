@@ -196,11 +196,36 @@ function ZakhialgaNemekh({ token }) {
       button: renderToString(<DollarCircleOutlined />),
     });
 
+    var songokhTalbaruud = [];
+    ashiglaltiinZardal?.jagsaalt?.map((a) => {
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Дүн`,
+        talbar: `${a.ner}.tulukhDun`,
+      });
+
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Хэмжих нэгж`,
+        talbar: `${a.ner}.khemjikhNegj`,
+      });
+
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Тариф`,
+        talbar: `${a.ner}.tariff`,
+      });
+
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Нэгж`,
+        talbar: `${a.ner}.negj`,
+      });
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт зардалын дүн`,
+      talbar: `niitZardliinDun`,
+    });
+
     const zardaluud = customPlugin({
-      songokhTalbaruud: ashiglaltiinZardal?.jagsaalt?.map((a) => ({
-        ner: a.ner,
-        talbar: a.ner,
-      })),
+      songokhTalbaruud,
       name: "zardaluud",
       title: "Ашиглалтын зардал авлага",
       button: renderToString(<DollarCircleOutlined />),

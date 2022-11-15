@@ -39,6 +39,7 @@ import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
 import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
+import useJagsaalt from "hooks/useJagsaalt";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -70,6 +71,9 @@ function tulburTootsoo({ token }) {
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
+  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
+    barilgiinId: barilgiinId,
+  });
 
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
@@ -266,10 +270,58 @@ function tulburTootsoo({ token }) {
           }
           medeelel?.zardluud?.map((a) => {
             zagvar = zagvar?.replace(
-              new RegExp(`&lt;${a.tailbar}&gt;`, "g"),
+              new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
+              a.khemjikhNegj || ""
+            );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
               formatNumber(a.tulukhDun || 0)
             );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+              formatNumber(a.tariff || 0)
+            );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+              formatNumber(a.negj || 0)
+            );
           });
+
+          ashiglaltiinZardal?.jagsaalt?.map((a) => {
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
+              ""
+            );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
+              0
+            );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
+              0
+            );
+
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
+              0
+            );
+          });
+
+          if (medeelel?.zardluud.length > 0) {
+            const niitZardliinDun = medeelel?.zardluud.reduce(
+              (a, b) => a + b.tulukhDun,
+              0
+            );
+            zagvar = zagvar?.replace(
+              new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
+              formatNumber(niitZardliinDun || 0)
+            );
+          }
           let nemeltNekhemjlekh = "";
           if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
             medeelel.nemeltNekhemjlekh.forEach((a, index) => {
@@ -297,7 +349,7 @@ function tulburTootsoo({ token }) {
         return { zagvar, mail: medeelel.mail, khuudasniiKhemjee, chiglel };
       });
     return [];
-  }, [barimt, songogdsonGereenuud]);
+  }, [barimt, songogdsonGereenuud, ashiglaltiinZardal, ashiglaltiinZardal]);
 
   function send() {
     if (!barimt) {
