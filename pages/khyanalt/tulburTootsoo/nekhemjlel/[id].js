@@ -72,10 +72,13 @@ const baritsaaniiTalbaruud = [
 const tulburiinTalbaruud = [
   { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
   { ner: "Сарын түрээс", talbar: "sariinTurees" },
+  { ner: "Сарын түрээс/Нөатгүй/", talbar: "sariinTureesNuatgui" },
+  { ner: "Сарын түрээс/Нөат (10%)/", talbar: "sariinTureesNuat" },
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
-  { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
+  { ner: "Нийт үлдэгдэл/Нөатгүй/", talbar: "niitUldegdelNuatgui" },
+  { ner: "Нийт үлдэгдэл/Нөат (10%)/", talbar: "niitUldegdelNuat" },
   { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
@@ -220,8 +223,18 @@ function ZakhialgaNemekh({ token }) {
     });
 
     songokhTalbaruud.push({
-      ner: `Нийт зардалын дүн`,
+      ner: `Нийт ашиглалтын зардал`,
       talbar: `niitZardliinDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал/Нөатгүй/`,
+      talbar: `niitZardliinNuatguiDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нөат (10%)`,
+      talbar: `niitZardliinNuatiinDun`,
     });
 
     const zardaluud = customPlugin({
