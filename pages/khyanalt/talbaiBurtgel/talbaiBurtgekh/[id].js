@@ -331,7 +331,7 @@ function TalbaiBurtgekh({ token }) {
       })
       .then(({ data }) => {
         if (data) {
-          setGereeteiEsekh(data.jagsaalt > 0);
+          setGereeteiEsekh(data.jagsaalt.length > 0);
         }
       });
   }, []);
