@@ -152,9 +152,12 @@ const YurunkhiiMedeele = ({
       0
     );
     value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
-    gereeniiZagvar?.turGereeEsekh !== true &&
+
+    if (gereeniiZagvar?.turGereeEsekh !== true) {
       (value.talbainNiitUne = value.baritsaaAvakhDun);
-    value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
+      value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
+    } else value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
+
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
@@ -293,17 +296,17 @@ const YurunkhiiMedeele = ({
                 >
                   <div className="text-center">{talbai.davkhar}</div>
                   <div className="text-center">
-                    {talbai.sulKhemjee || talbai.talbainKhemjee}
+                    {gereeniiZagvar.turGereeEsekh ? talbai.sulKhemjee : talbai.talbainKhemjee}
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
                     <div className="flex items-center justify-center text-center">
                       <InputNumber
                         size="small"
-                        formatter={(value) =>
-                          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        formatter={(v) =>
+                          `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         }
                         max={value?._id ? undefined : talbai?.sulKhemjee}
-                        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        parser={(v) => v.replace(/\$\s?|(,*)/g, "")}
                         value={value?.talbainKhemjee || 0}
                         onChange={(v) => onChangeM2(index, v)}
                       />
