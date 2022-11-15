@@ -186,6 +186,7 @@ function tulburTootsoo({ token }) {
           medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
           medeelel.talbainNiitUneNuat = medeelel.talbainNiitUne / 1.1 * 0.1
           medeelel.talbainNiitUneNuatgui = formatNumber(medeelel.talbainNiitUne - medeelel.talbainNiitUneNuat)
+          medeelel.talbainNiitUneNuat = formatNumber(medeelel.talbainNiitUneNuat)
           medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
 
           medeelel.gariinUseg = renderToString(
