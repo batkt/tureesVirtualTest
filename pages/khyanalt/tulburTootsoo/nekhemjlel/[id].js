@@ -54,6 +54,8 @@ const talbainiiTalbaruud = [
   { ner: "Талбайн нэгж үнэ", talbar: "talbainNegjUne" },
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
+  { ner: "Талбайн нийт үнэ/Нөатгүй/", talbar: "talbainNiitUneNuatgui" },
+  { ner: "Талбайн нийт үнэ/Нөат/", talbar: "talbainNiitUneNuat" },
   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
   { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
@@ -75,7 +77,8 @@ const tulburiinTalbaruud = [
   { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
   { ner: "Энэ сард төлөх дүн", talbar: "eneSardTulukhDun" },
   { ner: "Нийт үлдэгдэл", talbar: "niitUldegdel" },
-  { ner: "Нийт ашиглалтын зардал", talbar: "niitAshiglaltiinZardal" },
+  { ner: "Нийт үлдэгдэл/Нөатгүй/", talbar: "niitUldegdelNuatgui" },
+  { ner: "Нийт үлдэгдэл/Нөат/", talbar: "niitUldegdelNuat" },
   { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
 ];
 
@@ -115,7 +118,11 @@ function getSize(khemjee, orientation) {
     default:
       break;
   }
-  if (orientation === "landscape") return { width: height, height: width };
+  if (
+    (khemjee !== "A5" && orientation === "landscape") ||
+    (khemjee === "A5" && orientation !== "landscape")
+  )
+    return { width: height, height: width };
   return { width, height };
 }
 
@@ -220,8 +227,18 @@ function ZakhialgaNemekh({ token }) {
     });
 
     songokhTalbaruud.push({
-      ner: `Нийт зардалын дүн`,
+      ner: `Нийт ашиглалтын зардал`,
       talbar: `niitZardliinDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал/Нөатгүй/`,
+      talbar: `niitZardliinNuatguiDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нөат (10%)`,
+      talbar: `niitZardliinNuatiinDun`,
     });
 
     const zardaluud = customPlugin({

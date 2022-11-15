@@ -31,7 +31,7 @@ function useMailiinZagvar(token, turul) {
   const { barilgiinId, baiguullaga } = useAuth();
   const [khuudaslalt, setMailiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 10,
+    khuudasniiKhemjee: 1000,
     search: "",
   });
   const { data, mutate } = useSWR(

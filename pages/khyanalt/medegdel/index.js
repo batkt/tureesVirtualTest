@@ -666,9 +666,6 @@ function Khyanalt({ token }) {
                 <div
                   key={a.ner}
                   className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
-                  data-aos="fade-left"
-                  data-aos-duration="1000"
-                  data-aos-delay="100"
                   onClick={() => zagvarSongokh(a)}
                 >
                   <div className="image-fit mr-1 h-8 w-8 flex-none ">
