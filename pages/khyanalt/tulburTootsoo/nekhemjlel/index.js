@@ -231,7 +231,7 @@ function tulburTootsoo({ token }) {
             medeelel.umnukhSariinUrTulbur
           );
 
-          medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+          medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");
 
           medeelel.niitAshiglaltiinZardal = formatNumber(
             medeelel.niitAshiglaltiinZardal
@@ -354,7 +354,13 @@ function tulburTootsoo({ token }) {
         };
       });
     return [];
-  }, [barimt, songogdsonGereenuud, ashiglaltiinZardal, ashiglaltiinZardal]);
+  }, [
+    barimt,
+    songogdsonGereenuud,
+    ashiglaltiinZardal,
+    ashiglaltiinZardal,
+    ognoo,
+  ]);
 
   function send() {
     if (!barimt) {
