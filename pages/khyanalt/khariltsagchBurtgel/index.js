@@ -179,7 +179,6 @@ function AjiltanBurtgel({ token }) {
     temdeglel: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
-
   useEffect(() => {
     barilgiinId;
     setKhariltsagchKhuudaslalt((a) => ({
@@ -187,7 +186,6 @@ function AjiltanBurtgel({ token }) {
       khuudasniiDugaar: 1,
     }));
   }, [barilgiinId]);
-
   useEffect(() => {
     formRef.current.resetFields();
   }, [isValidating]);
@@ -423,6 +421,7 @@ function AjiltanBurtgel({ token }) {
   }
 
   function zasya(data) {
+    setFormNuukh(data.turul);
     data.zasakhEsekh = true;
     formRef.current.setFieldsValue({ ...data });
     setkhariltsagchState(data);
