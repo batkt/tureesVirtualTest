@@ -192,6 +192,7 @@ function guilgeeniiTuukh({ token }) {
         turulColumns.push({
           dataIndex: "khungulult",
           title: "Хөнгөлөлт",
+          summary: true,
           width: "6rem",
           align: "right",
           render: (v) => formatNumber(v),
@@ -202,7 +203,8 @@ function guilgeeniiTuukh({ token }) {
         turulColumns.push({
           dataIndex: "tulsunDun",
           title: "Төлсөн дүн",
-          width: "6rem",
+          summary: true,
+          width: "7rem",
           align: "right",
           render: (v) => formatNumber(v),
         });
@@ -342,11 +344,12 @@ function guilgeeniiTuukh({ token }) {
         title: "Төлөвлөгөөт",
         dataIndex: "tuluvluguut",
         align: "right",
+        summary: true,
         render: (tuluvluguut) => {
           return formatNumber(tuluvluguut || 0);
         },
         ellipsis: true,
-        width: "6rem",
+        width: "7rem",
       });
     }
 
