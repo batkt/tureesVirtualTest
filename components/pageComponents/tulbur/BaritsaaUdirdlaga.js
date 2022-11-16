@@ -39,6 +39,8 @@ function BaritsaaUdirdlaga(
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
   const [turul, setTurul] = useState("tululkh");
+  const [tulukhUldegdel, setTulukhUldegdel] = useState((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))
+  const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(data.baritsaaniiUldegdel)
   const [tailbar, setTailbar] = useState("");
 
   React.useImperativeHandle(
@@ -114,6 +116,10 @@ function BaritsaaUdirdlaga(
       icon: <OrderedListOutlined />,
       content: (
         <BaritsaaKhuulga
+          tulukhUldegdel={tulukhUldegdel}
+          ashiglakhUldegdel={ashiglakhUldegdel}
+          setAshiglakhUldegdel={setAshiglakhUldegdel}
+          setTulukhUldegdel={setTulukhUldegdel}
           data={data}
           ref={khuulgaRef}
           token={token}
@@ -187,8 +193,8 @@ function BaritsaaUdirdlaga(
         <div className="ml-auto">
           {formatNumber(
             turul === "ashiglakh"
-              ? data.baritsaaniiUldegdel
-              : (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
+              ? ashiglakhUldegdel
+              : tulukhUldegdel
           )}
         </div>
       </div>

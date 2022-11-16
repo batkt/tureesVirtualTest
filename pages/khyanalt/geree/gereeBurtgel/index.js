@@ -34,7 +34,6 @@ import {
   notification,
   Modal,
 } from "antd";
-import { TbBoxMultiple } from "react-icons/tb";
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
 import formatNumber from "tools/function/formatNumber";
@@ -176,7 +175,7 @@ const sheet = [
       return moment(data).format("YYYY-MM-DD");
     },
     showSorterTooltip: false,
-    defaultSortOrder: "descend",
+    sortOrder: "descend",
   },
   {
     title: "Ажилтан",
@@ -359,6 +358,12 @@ const select = {
   turGereeEsekh: 1,
 };
 
+function setURLSearchParam(key, value) {
+  const url = new URLSearchParams(window.location.search);
+  url.set(key, value);
+  history.replaceState(null, null, "?" + url.toString());
+}
+
 function ZakhialgiinKhyanalt() {
   //#region const
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -369,7 +374,7 @@ function ZakhialgiinKhyanalt() {
       duusakhOgnoo: { $gte: new Date() },
     },
   });
-  const { order, onChangeTable } = useOrder({ createdAt: -1 });
+  const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
   const {
     gereeniiMedeelel,
     gereeniiMedeelelMutate,
@@ -399,6 +404,18 @@ function ZakhialgiinKhyanalt() {
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  useEffect(() => {
+    if (JSON.stringify(order) !== JSON.stringify({ createdAt: -1 }))
+      setURLSearchParam("orderID", JSON.stringify(order))
+  }, [order]);
+
+  useEffect(() => {
+    const url = new URLSearchParams(window.location.search);
+    if (url !== undefined) {
+      setOrder({ ...JSON.parse(url.get('orderID')) })
+    }
+  }, [])
 
   useEffect(() => {
     if (!!token)
@@ -442,7 +459,7 @@ function ZakhialgiinKhyanalt() {
     },
     {
       too: gereeToollolt !== undefined
-        ? gereeToollolt?.reduce((a, b) => b.turGeree, 0)
+        ? gereeToollolt?.reduce((a, b) => b.turGeree, 0) || 0
         : 0,
       icon: <FileOutlined />,
       utga: "Түр гэрээ",
@@ -494,7 +511,13 @@ function ZakhialgiinKhyanalt() {
       query: { tuluv: -1 },
     },
   ];
-
+  function sortOrderShalgakh(v) {
+    var utga = ""
+    if (!!v) {
+      v === -1 ? utga = 'descend' : utga = 'ascend'
+    }
+    return utga
+  }
   const columns = useMemo(() => {
     var jagsaalt = [
       {
@@ -503,7 +526,8 @@ function ZakhialgiinKhyanalt() {
         align: "center",
         ellipsis: true,
         width: "7rem",
-        showSorterTooltip: false,
+        sortOrder: sortOrderShalgakh(order.gereeniiDugaar),
+        showSortesrTooltip: false,
         sorter: () => 0,
         render: (data, a) => {
           return (
@@ -531,6 +555,7 @@ function ZakhialgiinKhyanalt() {
         align: "left",
         ellipsis: true,
         width: "8rem",
+        sortOrder: sortOrderShalgakh(order.ner),
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -541,6 +566,7 @@ function ZakhialgiinKhyanalt() {
         align: "center",
         ellipsis: true,
         width: "7rem",
+        sortOrder: sortOrderShalgakh(order.register),
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -580,7 +606,7 @@ function ZakhialgiinKhyanalt() {
           return moment(ognoo).format("YYYY-MM-DD");
         },
         showSorterTooltip: false,
-        defaultSortOrder: "descend",
+        sortOrder: sortOrderShalgakh(shuult.utga === "Цуцласан" ? order.gereeniiTuukhuud : order.duusakhOgnoo),
         sorter: () => 0,
       },
       {
@@ -589,6 +615,7 @@ function ZakhialgiinKhyanalt() {
         align: "center",
         ellipsis: true,
         width: "7rem",
+        sortOrder: sortOrderShalgakh(order.talbainDugaar),
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -601,6 +628,7 @@ function ZakhialgiinKhyanalt() {
         render: (sariinTurees) => {
           return formatNumber(sariinTurees || 0);
         },
+        sortOrder: sortOrderShalgakh(order.sariinTurees),
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -642,17 +670,16 @@ function ZakhialgiinKhyanalt() {
       },
       {
         title: "Өдөр",
-        dataIndex: "udur",
+        dataIndex: "duusakhOgnoo",
         align: "center",
         ellipsis: true,
         width: "6rem",
-        render: (t, row) => {
-          return moment(row.duusakhOgnoo).diff(moment(new Date()), "days");
+        render: (t) => {
+          return moment(t).diff(moment(new Date()), "days");
         },
+        sortOrder: sortOrderShalgakh(order.duusakhOgnoo),
         showSorterTooltip: false,
-        sorter: (a, b) =>
-          moment(a.duusakhOgnoo).diff(moment(new Date()), "days") -
-          moment(b.duusakhOgnoo).diff(moment(new Date()), "days"),
+        sorter: () => 0
       },
     ];
     if (shuult.utga == "Цуцласан") {
@@ -686,7 +713,7 @@ function ZakhialgiinKhyanalt() {
           );
         },
         showSorterTooltip: false,
-        defaultSortOrder: "descend",
+        sortOrder: sortOrderShalgakh(order.gereeniiTuukhuud),
         sorter: () => 0,
       });
     }
@@ -787,7 +814,7 @@ function ZakhialgiinKhyanalt() {
         ),
       },
     ];
-  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana]);
+  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana, order]);
 
   function refresh() {
     gereeniiMedeelelMutate();
@@ -1202,9 +1229,9 @@ function ZakhialgiinKhyanalt() {
             size="small"
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
-            onChange={(a, b, c) =>
+            onChange={(a, b, c) => {
               !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c)
-            }
+            }}
             columns={columns}
             dataSource={gereeniiMedeelel?.jagsaalt}
             pagination={{

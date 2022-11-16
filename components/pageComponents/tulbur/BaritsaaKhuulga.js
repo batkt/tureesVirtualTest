@@ -27,7 +27,7 @@ function useBaritsaa(token, gereeniiId) {
   };
 }
 
-function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
+function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashiglakhUldegdel, setAshiglakhUldegdel, setTulukhUldegdel }, ref) {
   const { baritsaaKhuulga, baritsaaKhuulgaMutate } = useBaritsaa(
     token,
     data?._id
@@ -45,6 +45,15 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy }, ref) {
   );
 
   function baritsaaniiGuilgeeUstgaya({ _id, orlogo, zarlaga, guilgeeniiId }) {
+    if (orlogo !== 0) {
+      setTulukhUldegdel(tulukhUldegdel + orlogo)
+      setAshiglakhUldegdel(ashiglakhUldegdel - orlogo)
+    }
+    if (zarlaga !== 0) {
+      setTulukhUldegdel(tulukhUldegdel - zarlaga)
+      setAshiglakhUldegdel(ashiglakhUldegdel + zarlaga)
+    }
+
     axios(token)
       .post("/baritsaaniiGuilgeeUstgaya", {
         gereeniiId: data?._id,

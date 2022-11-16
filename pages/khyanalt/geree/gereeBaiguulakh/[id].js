@@ -122,6 +122,9 @@ function GereeBaiguulakh({ token, data }) {
         if (data === "Amjilttai") {
           setKhagalakhGeree({});
           router.back();
+          setTimeout(() => {
+            window.location.reload()
+          }, 600);
           message.success("Амжилттай хадгаллаа");
         }
       });
@@ -173,9 +176,17 @@ function GereeBaiguulakh({ token, data }) {
         content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
-        onOk: router.back,
+        onOk: (() => {
+          router.back(), setTimeout(() => {
+            window.location.reload()
+          }, 600)
+        }),
       });
-    else router.back();
+    else {
+      router.back(), setTimeout(() => {
+        window.location.reload()
+      }, 600);
+    };
   }
 
   useEffect(() => {
@@ -245,6 +256,14 @@ function GereeBaiguulakh({ token, data }) {
     setCurrent(value);
   };
 
+  function onBack() {
+    router.back();
+    setTimeout(() => {
+      window.location.reload()
+    }, 600);
+
+  }
+
   return (
     <Admin
       khuudasniiNer="gereeBaiguulakh"
@@ -252,6 +271,7 @@ function GereeBaiguulakh({ token, data }) {
       className="grid grid-cols-12 gap-6 p-5"
       hideSearch
       dedKhuudas
+      onBack={onBack}
       loading={waiting}
     >
       <div className="box col-span-12 p-5">
@@ -352,14 +372,14 @@ function GereeBaiguulakh({ token, data }) {
                       mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                         ? "erunkhiiMedeelel"
                         : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                        ? "gereeniiKhugatsaa"
-                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                        ? "tureesiinTalbai"
-                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                        ? "baritsaaBurtgel"
-                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                        ? "tulburToostoo"
-                        : ""
+                          ? "gereeniiKhugatsaa"
+                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                            ? "tureesiinTalbai"
+                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                              ? "baritsaaBurtgel"
+                              : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                ? "tulburToostoo"
+                                : ""
                     }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -370,11 +390,10 @@ function GereeBaiguulakh({ token, data }) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className={`${
-                            mur.zaalt?.includes("table")
-                              ? "sun-editor-editable"
-                              : ""
-                          } ml-5 w-full p-0`}
+                          className={`${mur.zaalt?.includes("table")
+                            ? "sun-editor-editable"
+                            : ""
+                            } ml-5 w-full p-0`}
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>
