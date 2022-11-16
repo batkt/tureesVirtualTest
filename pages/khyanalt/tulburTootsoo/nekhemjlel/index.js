@@ -88,6 +88,10 @@ function tulburTootsoo({ token }) {
     setSongogdsonGereenuud([]);
   }, [barilgiinId]);
 
+  useEffect(() => {
+    setSongogdsonGereenuud([]);
+  }, [ognoo]);
+
   function smsZagvarNemya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
