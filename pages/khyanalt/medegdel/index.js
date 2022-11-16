@@ -97,7 +97,8 @@ function Khyanalt({ token }) {
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState();
+
   const [turulZagvar, setTurulZagvar] = useState(false);
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
@@ -544,6 +545,7 @@ function Khyanalt({ token }) {
 
   //#endregion
   function zagvarSongokh(a) {
+    setTitle(a.ner);
     setContent(a.mail);
     setNer(a.ner);
   }
