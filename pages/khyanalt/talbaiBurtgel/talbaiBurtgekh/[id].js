@@ -319,21 +319,22 @@ function TalbaiBurtgekh({ token }) {
   const { ajiltan, baiguullaga } = useAuth();
   const [waiting, setWaiting] = useState(false);
 
-  const [gereeteiEsekh, setGereeteiEsekh] = React.useState({});
+  const [gereeteiEsekh, setGereeteiEsekh] = React.useState(false);
 
   React.useEffect(() => {
-    uilchilgee(token)
-      .get("/geree", {
-        params: {
-          query: { talbainIdnuud: data?._id, tuluv: { $ne: -1 } },
-          select: { gereeniiDugaar: 1 },
-        },
-      })
-      .then(({ data }) => {
-        if (data) {
-          setGereeteiEsekh(data.jagsaalt.length > 0);
-        }
-      });
+    if (!!data?._id)
+      uilchilgee(token)
+        .get("/geree", {
+          params: {
+            query: { talbainIdnuud: data?._id, tuluv: { $ne: -1 } },
+            select: { gereeniiDugaar: 1 },
+          },
+        })
+        .then(({ data }) => {
+          if (data) {
+            setGereeteiEsekh(data.jagsaalt.length > 0);
+          }
+        });
   }, []);
 
   const [talbaiState, settalbaiState] = useState({
