@@ -80,11 +80,12 @@ function TableGuilgee({
   setLoadingIndex,
   onChange,
 }) {
-  function UilgelAvya({ garalt }) {
+  function UilgelAvya({ garalt, columns }) {
     const [uldegdel, setUldegdel] = useState(0)
     useEffect(() => {
-      setUldegdel(garalt?.jagsaalt?.reduce((a, b) => a + b["uldegdel"] || 0), 0)
-
+      setTimeout(() => {
+        setUldegdel(uldegdel + 1)
+      }, 500);
     }, [garalt, setLoadingIndex, columns])
 
     return (
@@ -123,7 +124,7 @@ function TableGuilgee({
           }));
         },
       }}
-      summary={() => <Table.Summary fixed> <UilgelAvya garalt={garalt} /> </Table.Summary>}
+      summary={() => <Table.Summary fixed> <UilgelAvya garalt={garalt} columns={columns} /> </Table.Summary>}
     />
   );
 }
@@ -286,7 +287,7 @@ function guilgeeniiTuukh({ token }) {
       {
         title: "№",
         key: "index",
-        width: "2rem",
+        width: "2.5rem",
         align: "center",
         render: (text, record, index) => index + 1,
       },
@@ -354,7 +355,7 @@ function guilgeeniiTuukh({ token }) {
       ...turulColumns,
       {
         title: "Үйлдэл",
-        width: "8rem",
+        width: "10rem",
         align: "center",
         dataIndex: "baritsaaniiUldegdel",
         ellipsis: true,
