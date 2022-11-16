@@ -78,7 +78,7 @@ function useGuilgee(token, gereeniiId, ognoo) {
   };
 }
 
-function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
+function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId }, ref) {
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGuilgee(
     token,
     data?._id,
@@ -86,11 +86,9 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
   );
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
-
   function uldegdelMutate() {
     _.isFunction(data.mutate) && data.mutate();
   }
-
   function tulultUstgaya({
     guilgeeniiId,
     tulsunDun,
@@ -192,7 +190,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
           <div>Төлсөн алданги</div>
           <div>Төлсөн дүн</div>
           <div>Үлдэгдэл</div>
-          
+
           <div>Ажилтан</div>
           <div>Хэлбэр</div>
           <div>Бүртгсэн огноо</div>
@@ -219,7 +217,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                     2
                   )}
                 </div>
-                
+
                 <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
                 <div className="p-1">
                   {a.turul === "bank"
@@ -234,7 +232,9 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo }, ref) {
                 </div>
                 <div className="flex justify-between p-1 col-span-2">
                   {a.tailbar}
-                  {(a.turul === "avlaga" ||
+                  {(ajiltan?.erkh === "Admin" || !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
+                    (a) => a === barilgiinId
+                  )) && (a.turul === "avlaga" ||
                     a.turul === "voucher" ||
                     a.turul === "barter" ||
                     a.turul === "bank" ||

@@ -67,12 +67,12 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     >
       {talbainiiGaralt?.jagsaalt?.map((a) => {
         return (
-          <Select.Option key={a._id}>
+          <Select.Option key={a._id} disabled={a?.sulKhemjee === 0} >
             <div
               className={`flex ${gereeniiZagvar?.turGereeEsekh !== true && a.idevkhiteiEsekh
                 ? "opacity-50"
                 : "opacity-100"
-                }`}
+                } `}
             >
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
@@ -179,6 +179,10 @@ const YurunkhiiMedeele = ({
     }
     function talbaiOruulya() {
       value.talbainuud = value.talbainuud || [];
+      if (gereeniiZagvar?.turGereeEsekh === true) {
+        v.talbainKhemjee = 0
+        v.talbainNiitUne = 0
+      }
       value.talbainuud.push(v);
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
@@ -209,13 +213,24 @@ const YurunkhiiMedeele = ({
   function onFinish() {
     if (value.talbainuud === undefined) {
       message.warning("Талбай бүртгэнэ үү!");
+      return
     } else if (value.talbainuud.length <= 0) {
       message.warning("Талбай бүртгэнэ үү!");
-    } else next();
+      return
+    };
+    if (value.talbainNiitUne === 0) {
+      message.warning("Талбайн үнэ бүртгэнэ үү!");
+      return
+    }
+    if (value.talbainKhemjee === 0) {
+      message.warning("Талбайн хэмжээ бүртгэнэ үү!");
+      return
+    }
+    next();
   }
 
   function onChangeM2(i, v) {
-    _.set(value.talbainuud, `${i}.talbainKhemjee`, v);
+    _.set(value.talbainuud, `${i}.talbainKhemjee`, v || 0);
 
     talbainBurtgelBugulyu(value.talbainuud);
     onChange({ ...value });
