@@ -182,6 +182,7 @@ function guilgeeniiTuukh({ token }) {
           dataIndex: "voucherDun",
           title: "Ваучерын дүн",
           width: "7rem",
+          summary: true,
           align: "right",
           render: (v) => formatNumber(v),
         });
