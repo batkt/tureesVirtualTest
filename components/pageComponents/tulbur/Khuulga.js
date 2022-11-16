@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
 
-function Khuulga({ data, token, ognoo, onFinish, destroy }, ref) {
+function Khuulga({ data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId }, ref) {
   const refTuukh = useRef(null);
 
   React.useImperativeHandle(
@@ -33,6 +33,8 @@ function Khuulga({ data, token, ognoo, onFinish, destroy }, ref) {
   return (
     <div className="flex h-[76vh] flex-col space-y-2 overflow-y-auto">
       <GuilgeeniiTuukh
+        ajiltan={ajiltan}
+        barilgiinId={barilgiinId}
         ref={refTuukh}
         data={data}
         token={token}
