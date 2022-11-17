@@ -349,7 +349,6 @@ function AjiltanBurtgel({ token }) {
     khariltsagchState.barilgiinId = barilgiinId;
 
     if (khariltsagchState.zasakhEsekh === true) {
-      console.log("orson2");
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
           if (data !== undefined) {
@@ -371,7 +370,6 @@ function AjiltanBurtgel({ token }) {
             setWaiting(false);
             message.success("Бүртгэл амжилттай хийгдлээ");
             setWaiting(false);
-            console.log("bolson shu");
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
             khariltsagchToololtMutate();

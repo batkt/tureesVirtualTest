@@ -2,7 +2,6 @@ import { Button } from "antd";
 import React from "react";
 
 function PlanMedeelel({ destroy, data }) {
-    console.log(data)
 
     return (
         <div>

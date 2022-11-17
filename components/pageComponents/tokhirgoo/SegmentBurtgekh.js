@@ -63,7 +63,6 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                             notification.success({ message: "Амжилттай хадгаллаа" });
                             refresh();
                             destroy();
-                            console.log(">>>>")
                         }
                     }
 
@@ -170,4 +169,3 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
 }
 
 export default React.forwardRef(SegmentBurtgekh)
-

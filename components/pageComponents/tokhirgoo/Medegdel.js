@@ -6,7 +6,6 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
   const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(null);
 
   const khungulultiinTokhirgooKhadgalya = () => {
-    console.log("medegdelTokhirgoo", medegdelTokhirgoo);
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
       .then(({ data }) => {

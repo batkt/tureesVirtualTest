@@ -39,7 +39,6 @@ export const options = {
   tooltips: {
     callbacks: {
       label: function (tooltipItem, data) {
-        console.log(tooltipItem, data)
         const { datasetIndex } = tooltipItem
         const { datasets } = data
         if (_.isNumber(tooltipItem?.xLabel))
