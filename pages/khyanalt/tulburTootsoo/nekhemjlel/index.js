@@ -52,7 +52,7 @@ function tulburTootsoo({ token }) {
   const [ognoo, setOgnoo] = React.useState(moment());
 
   const [davkhar, setDavkhar] = React.useState();
-  const [turul, setTurul] = useState("SMS");
+  const [turul, setTurul] = useState("Mail");
   const [barimt, setBarimt] = useState();
   const [msj, onTextChange] = useState("");
   const [loading, setLoading] = useState(false);
@@ -1075,7 +1075,7 @@ function tulburTootsoo({ token }) {
                   className="grid grid-cols-3 gap-1  font-medium"
                   role="tablist"
                 >
-                  {["SMS", "App", "Mail"].map((mur) => (
+                  {["Mail", "SMS", "App"].map((mur) => (
                     <div
                       key={mur}
                       className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
