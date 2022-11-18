@@ -48,7 +48,7 @@ class URLImage extends React.Component {
   }
 }
 
-const select = { gereeniiDugaar: 1, ner: 1, mail: 1 };
+const select = { gereeniiDugaar: 1, ner: 1, mail: 1, talbainKhemjee: 1, talbainNiitUne: 1 };
 
 function ToolTip({ pointer }) {
   const query = useMemo(() => {
@@ -67,37 +67,100 @@ function ToolTip({ pointer }) {
     <Group>
       <Rect
         x={pointer.x + 15}
-        y={pointer.y + 5}
-        width={200}
-        height={90}
+        y={pointer.y - 5}
+        cornerRadius={15}
+        width={pointer.idevkhiteiEsekh === true ? 260 : 200}
+        height={pointer.idevkhiteiEsekh === true ? 123 : 85}
         fill={pointer.col}
         stroke={1}
         opacity={0.9}
       />
+
       <Text
         x={pointer.x + 30}
+        y={pointer.y + 10}
+        text={"Талбайн Дугаар:"}
+        fill={"black"}
+        fontSize={15}
+        fontStyle="bold"
+        align="center"
+      />
+      <Text
+        x={pointer.x + 155}
         y={pointer.y + 10}
         text={pointer.kod}
         fill={"black"}
         fontSize={15}
-        align="center"
+        align="left"
       />
       <Text
         x={pointer.x + 30}
         y={pointer.y + 30}
-        text={_.get(gereeMedeelel, "jagsaalt.0.gereeniiDugaar")}
+        text={"Талбайн Хэмжээ:"}
         fill={"black"}
         fontSize={15}
+        fontStyle="bold"
         align="center"
+      />
+      <Text
+        x={pointer.x + 163}
+        y={pointer.y + 30}
+        text={pointer.talbainKhemjee}
+        fill={"black"}
+        fontSize={15}
+        align="left"
       />
       <Text
         x={pointer.x + 30}
         y={pointer.y + 50}
+        text={"Талбайн үнэ:"}
+        fill={"black"}
+        fontSize={15}
+        fontStyle="bold"
+        align="center"
+      />
+      <Text
+        x={pointer.x + 130}
+        y={pointer.y + 50}
+        text={pointer.talbainNiitUne}
+        fill={"black"}
+        fontSize={15}
+        align="left"
+      />
+      {pointer.idevkhiteiEsekh === true && <Text
+        x={pointer.x + 31}
+        y={pointer.y + 70}
+        text={"Гэрээний Дугаар:"}
+        fill={"black"}
+        fontSize={15}
+        fontStyle="bold"
+        align="center"
+      />}
+      {pointer.idevkhiteiEsekh === true && <Text
+        x={pointer.x + 164}
+        y={pointer.y + 70}
+        text={_.get(gereeMedeelel, "jagsaalt.0.gereeniiDugaar")}
+        fill={"black"}
+        fontSize={15}
+        align="center"
+      />}
+      {pointer.idevkhiteiEsekh === true && <Text
+        x={pointer.x + 30}
+        y={pointer.y + 90}
+        text={"Эзэмшигчийн нэр:"}
+        fill={"black"}
+        fontSize={15}
+        fontStyle="bold"
+        align="center"
+      />}
+      {pointer.idevkhiteiEsekh === true && <Text
+        x={pointer.x + 172}
+        y={pointer.y + 90}
         text={_.get(gereeMedeelel, "jagsaalt.0.ner")}
         fill={"black"}
         fontSize={15}
         align="center"
-      />
+      />}
     </Group>
   );
 }
@@ -131,7 +194,7 @@ class App extends Component {
             barilgiinId: barilga?._id,
             "bairshil.1": { $exists: true },
           },
-          select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 },
+          select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1, talbainKhemjee: 1, talbainNiitUne: 1 },
           khuudasniiKhemjee: 1000,
         },
       })
@@ -213,6 +276,9 @@ class App extends Component {
                         x: e.evt.layerX,
                         y: e.evt.layerY,
                         kod: mur.kod,
+                        idevkhiteiEsekh: mur.idevkhiteiEsekh,
+                        talbainNiitUne: mur.talbainNiitUne,
+                        talbainKhemjee: mur.talbainKhemjee
                       },
                     });
                   }}
@@ -226,10 +292,10 @@ class App extends Component {
                   stroke="black"
                   fill={
                     pointer?._id === mur._id
-                      ? "pink"
+                      ? mur.idevkhiteiEsekh ? "#B7DC96" : "pink"
                       : mur.idevkhiteiEsekh
-                      ? "green"
-                      : "red"
+                        ? "green"
+                        : "red"
                   }
                   opacity={0.3}
                   strokeWidth={5}

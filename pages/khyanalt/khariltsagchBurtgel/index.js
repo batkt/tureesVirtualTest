@@ -433,6 +433,7 @@ function AjiltanBurtgel({ token }) {
         if (data === "Amjilttai") {
           setWaiting(false);
           khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+          khariltsagchToololtMutate();
           message.success("Устгагдлаа");
         }
       })
@@ -986,11 +987,10 @@ function AjiltanBurtgel({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
                     ? "bg-green-50 dark:bg-gray-800"
                     : ""
-                }`}
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
@@ -1156,7 +1156,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -1335,7 +1335,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,

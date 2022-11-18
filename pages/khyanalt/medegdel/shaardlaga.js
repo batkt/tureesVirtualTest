@@ -33,6 +33,7 @@ import TextArea from "antd/lib/input/TextArea";
 import useOrder from "tools/function/useOrder";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useRouter } from "next/router";
+import getBase64 from "tools/function/getBase64";
 
 //#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
@@ -58,7 +59,6 @@ function Khyanalt({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  const router = useRouter();
   const { barilgiinId } = useAuth();
   const [turul, setTurul] = useState("App");
   const [khariltsagch, setKhariltsagch] = useState(null);
@@ -77,6 +77,18 @@ function Khyanalt({ token }) {
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
   const [tuluv, setTuluv] = useState("idevkhtei");
   const ref = useRef(null);
+  function beforeUpload(file, callback) {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    callback(file);
+    return true;
+  }
 
   const [zurag, setZurag] = useState();
   const [songogdsonKhariltsagch, setSongogdsonKhariltsagch] = useState([]);
@@ -156,6 +168,7 @@ function Khyanalt({ token }) {
                   barilgiinId: a.barilgiinId,
                   khariltsagchiinNer: a.ner,
                   zurgiinId: zurag,
+                  zurguud: zurag,
                   turul: "shaardlaga",
                   title,
                   message: ingeekhmSms,
@@ -172,7 +185,10 @@ function Khyanalt({ token }) {
                     notification.success({
                       message: `Notification Амжилттай илгээлээ`,
                     });
-                    router.reload();
+                    setContent("");
+                    setTitle("");
+                    setZurag()
+                    sonorduulgaMutate()
                   }
                 });
               return;
@@ -216,7 +232,10 @@ function Khyanalt({ token }) {
                   notification.success({
                     message: `Notification Амжилттай илгээлээ`,
                   });
-                  router.reload();
+                  setContent("");
+                  setTitle("");
+                  setZurag()
+                  sonorduulgaMutate()
                 }
               })
               .catch((e) => {
@@ -245,130 +264,9 @@ function Khyanalt({ token }) {
     }
   }
 
-  async function msgIlgeeye() {
-    if (loading) {
-      message.warning("Хүсэлт илгээгдсэн байна");
-      return;
-    }
-    var msgnuud = [];
-    if (ilgeekhTurul !== "gantsaar" && songogdsonKhariltsagch.length > 0)
-      songogdsonKhariltsagch.map((a) => {
-        var text = msj;
-        for (const [key, value] of Object.entries(a)) {
-          text = text?.replace(new RegExp(`<${key}>`, "g"), value);
-        }
-        if (_.isArray(a.utas))
-          a.utas.map((to) =>
-            msgnuud.push({
-              to,
-              text,
-            })
-          );
-        else
-          msgnuud.push({
-            to: a.utas,
-            text,
-          });
-      });
-    else if (!!khariltsagch) {
-      if (_.isArray(khariltsagch?.utas))
-        khariltsagch?.utas.map((to) =>
-          msgnuud.push({
-            to,
-            text: ingeekhmSms,
-          })
-        );
-      else
-        msgnuud.push({
-          to: khariltsagch?.utas,
-          text: ingeekhmSms,
-        });
-    } else {
-      message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
-      return;
-    }
-    if (!(msgnuud.length > 0)) {
-      message.warning("Илгээх мэдээлэл байхгүй байна");
-      return;
-    }
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
-      .then(({ data }) => {
-        if (data && data[0].Result === "SUCCESS") {
-          notification.success({ message: "SMS Амжилттай илгээлээ" });
-
-          setContent("");
-          setTitle("");
-          setLoading(false);
-          router.reload();
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
-      });
-  }
-
-  async function mailIlgeeye() {
-    if (ilgeekhTurul === "gantsaar" && !khariltsagch?.mail) {
-      notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
-      return;
-    }
-    const mailuud = [];
-
-    if (ilgeekhTurul === "gantsaar") {
-      var zagvar = content;
-      for (const [key, value] of Object.entries(khariltsagch)) {
-        zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-      }
-      mailuud.push({
-        mail: khariltsagch.mail,
-        content: zagvar,
-      });
-    } else if (songogdsonKhariltsagch?.length > 0) {
-      songogdsonKhariltsagch.forEach((a) => {
-        var zagvar = content;
-        for (const [key, value] of Object.entries(a)) {
-          zagvar = zagvar?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-        }
-        mailuud.push({
-          mail: a.mail,
-          content: zagvar,
-        });
-      });
-    }
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: title })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-          setContent("");
-          setTitle("");
-          setLoading(false);
-          router.reload();
-        }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
-      });
-  }
-
   function send() {
     if (!!title) {
-      switch (turul) {
-        case "App":
-          appIlgeeye();
-          break;
-        case "Mail":
-          mailIlgeeye();
-          break;
-        default:
-          msgIlgeeye();
-          break;
-      }
+      appIlgeeye()
     } else {
       notification.warning({ message: "Гарчиг заавал оруулна уу!" });
     }
@@ -424,94 +322,6 @@ function Khyanalt({ token }) {
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
     >
-      {/* <div className="col-span-12 xl:col-span-3"> */}
-      {/* <div className="pr-1" data-aos="fade-right" data-aos-duration="1000">
-          <div className="box p-2">
-            <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
-              {["SMS", "App", "Mail"].map((mur) => (
-                <div
-                  key={mur}
-                  className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
-                    turul === mur ? "bg-green-500 text-white" : ""
-                  }`}
-                  onClick={() => setTurul(mur)}
-                >
-                  {mur}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div> */}
-      {/* <div
-          className={`mt-5 flex-row p-2 font-medium xl:flex ${
-            khariltsagch ? "hidden" : "flex"
-          }`}
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          <div className="hidden xl:block">{turul} загвар</div>
-          <div className=" xl:hidden">
-            <Button
-              onClick={
-                turulZagvar === false
-                  ? () => setTurulZagvar(true)
-                  : () => setTurulZagvar(false)
-              }
-            >
-              {turulZagvar === false ? (turul, "загвар") : "буцах"}
-            </Button>
-          </div>
-          <button
-            className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
-            onClick={() => smsZagvarNemya()}
-          >
-            Загвар үүсгэх
-          </button>
-        </div> */}
-      {/* <div
-          className={`scrollbar-hidden h-full overflow-hidden overflow-y-auto xl:block ${
-            turulZagvar === true ? "block" : "hidden"
-          }`}
-        >
-          {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
-            <div
-              key={a.ner}
-              className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
-              data-aos="fade-left"
-              data-aos-duration="1000"
-              data-aos-delay="100"
-              onClick={() => setContent(a.mail)}
-            >
-              <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                <img alt="email" src="/email.png" />
-              </div>
-              <div className="ml-2 mr-1 overflow-hidden">
-                <div className="flex items-center">
-                  <div className="font-medium">{a.ner}</div>
-                </div>
-              </div>
-              <div className="ml-auto flex flex-row space-x-2">
-                <Popconfirm
-                  title="Загвар устгах уу?"
-                  okText="Тийм"
-                  cancelText="Үгүй"
-                  onConfirm={() => zagvarUstgaya(a)}
-                >
-                  <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
-                    <DeleteOutlined style={{ color: "red" }} />
-                  </div>
-                </Popconfirm>
-                <div
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
-                  onClick={() => smsZagvarNemya(a)}
-                >
-                  <EditOutlined style={{ color: "#85C1E9" }} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div> */}
       <div
         className="col-span-12 lg:col-span-6 xl:col-span-3 "
         data-aos="fade-up"
@@ -571,11 +381,10 @@ function Khyanalt({ token }) {
           <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
-                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
-                  khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
-                    : ""
-                } `}
+                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${khariltsagch?._id === mur?._id
+                  ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
+                  : ""
+                  } `}
                 onClick={() => khariltsagchSongokh(mur)}
               >
                 <div>
@@ -643,7 +452,7 @@ function Khyanalt({ token }) {
                           ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
                             10) %
                             2 <
-                          1
+                            1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -654,9 +463,8 @@ function Khyanalt({ token }) {
                         {khariltsagch?.ner}
                       </div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                        {turul === "Mail"
-                          ? khariltsagch?.mail
-                          : khariltsagch?.utas}{" "}
+
+                        {khariltsagch?.utas}{" "}
                         <span className="mx-1">•</span> {turul}
                       </div>
                     </div>
@@ -673,9 +481,8 @@ function Khyanalt({ token }) {
                   style={{ maxHeight: "calc(100vh - 44rem)" }}
                 >
                   <div
-                    className={`box hidden h-full items-center xl:flex ${
-                      turulZagvar ? "hidden" : "lg:flex"
-                    }`}
+                    className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
+                      }`}
                     data-aos="fade-left"
                     data-aos-duration="1000"
                   >
@@ -704,7 +511,7 @@ function Khyanalt({ token }) {
                   onScroll={(e) => {
                     if (
                       e.target.scrollHeight + e.target.scrollTop - 1 <
-                        e.target.clientHeight &&
+                      e.target.clientHeight &&
                       !!jagsaalt
                     ) {
                       nextSonorduulga();
@@ -738,8 +545,9 @@ function Khyanalt({ token }) {
                               </div>
 
                               <div>
-                                {mur.zurguud.map((a) => (
+                                {mur.zurguud.map((a, i) => (
                                   <Image
+                                    key={i}
                                     width={75}
                                     src={`${url}/file?path=shaardlaga/${a}`}
                                   />
@@ -768,80 +576,65 @@ function Khyanalt({ token }) {
               data-aos="fade-right"
               data-aos-duration="1000"
             >
-              {turul !== "SMS" && (
-                <Input
-                  rules={[
-                    { required: true, message: "Гарчиг заавал оруулна уу!" },
-                  ]}
-                  className="space-y-3"
-                  placeholder="Гарчиг"
-                  value={title}
-                  onChange={({ target }) => setTitle(target.value)}
-                />
-              )}
-              {turul !== "App" ? (
+              <Input
+                rules={[
+                  { required: true, message: "Гарчиг заавал оруулна уу!" },
+                ]}
+                className="space-y-3"
+                placeholder="Гарчиг"
+                value={title}
+                onChange={({ target }) => setTitle(target.value)}
+              />
+              <div className="space-y-3">
+                {console.log(zurag)}
+                <Upload
+                  showUploadList={false}
+                  multiple={false}
+                  name="file"
+                  maxCount={1}
+                  action={`${url}/upload`}
+                  method="POST"
+                  onChange={(v) => setZurag(v.file.response)}
+                  beforeUpload={(file) => {
+                    function handleChange(img) {
+                      getBase64(img, (img) => (ref.current.src = img));
+                      ref.current.classList.remove("hidden");
+                    }
+                    return beforeUpload(file, handleChange);
+                  }}
+                >
+                  <div className="flex flex-row space-x-1">
+                    <div className="flex flex-row space-x-1">
+                      {!zurag && (
+                        <Button icon={<UploadOutlined />}>
+                          зураг оруулах
+                        </Button>
+                      )}
+                      <img
+                        ref={ref}
+                        width={200}
+                        src=""
+                        className="hidden"
+                      />
+                      {!!zurag && <Button icon={<EditOutlined />}></Button>}
+                    </div>
+                  </div>
+
+                </Upload>
                 <ZagvarUusgekh
                   change={setContent}
                   value={content}
                   onTextChange={onTextChange}
                 />
-              ) : (
-                <div className="space-y-3">
-                  <Upload
-                    showUploadList={false}
-                    multiple={false}
-                    name="file"
-                    action={`${url}/upload`}
-                    method="POST"
-                    onChange={(v) => setZurag(v.file.response)}
-                  >
-                    <div className="flex flex-row space-x-1">
-                      <div className="flex flex-row space-x-1">
-                        {!zurag && (
-                          <Button icon={<UploadOutlined />}>
-                            зураг оруулах
-                          </Button>
-                        )}
-                        {!!zurag && (
-                          <Button
-                            icon={<EyeOutlined />}
-                            onClick={(e) =>
-                              tamgaZuragKharakh(e, `shaardlaga/${zurag}`)
-                            }
-                          >
-                            зураг харах
-                          </Button>
-                        )}
-                        {!!zurag && <Button icon={<EditOutlined />}></Button>}
-                      </div>
-                    </div>
-                  </Upload>
-                  <Image
-                    width={200}
-                    preview={{
-                      visible: !!kharakhZurgiinZam,
-                      src: `${url}/file?path=${zurag}`,
-                      onVisibleChange: (value) => {
-                        setKharakhZurgiinZam(undefined);
-                      },
-                    }}
-                  />
-                  <ZagvarUusgekh
-                    change={setContent}
-                    value={content}
-                    onTextChange={onTextChange}
-                  />
-                </div>
-              )}{" "}
+              </div>
             </div>
             <div className="flex w-full items-center justify-end space-x-2">
               <div className="flex items-center justify-between space-x-3">
                 <label className="font-medium">{turul} Илгээх</label>
                 <div
                   onClick={send}
-                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
-                    loading ? "200" : "600"
-                  } flex flex-none items-center justify-center rounded-full text-white`}
+                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
+                    } flex flex-none items-center justify-center rounded-full text-white`}
                 >
                   {loading ? (
                     <Spin size="small" />
@@ -868,9 +661,8 @@ function Khyanalt({ token }) {
           </div>
         ) : (
           <div
-            className={`box hidden h-full items-center xl:flex ${
-              turulZagvar ? "hidden" : "lg:flex"
-            }`}
+            className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
+              }`}
             data-aos="fade-left"
             data-aos-duration="1000"
           >
