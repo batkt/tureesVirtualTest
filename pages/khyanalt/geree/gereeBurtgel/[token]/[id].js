@@ -84,7 +84,6 @@ function GereeBaiguulakh() {
   const { query } = useRouter();
 
   const { token, id, turul } = query;
-  console.log(token, id, turul);
 
   const { data } = useSWR(
     !!token && !!id ? [token, id, turul] : null,

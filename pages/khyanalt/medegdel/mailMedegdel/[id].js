@@ -58,7 +58,6 @@ function ZakhialgaNemekh({ token }) {
     khuudasniiKhemjee: "A4",
     chiglel: "portrait",
   });
-  console.log(mailiinZagvar);
   const { barilgiinId } = useAuth();
   const [waiting, setWaiting] = useState(false);
 

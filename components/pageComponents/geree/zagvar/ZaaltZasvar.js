@@ -158,6 +158,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
               "tulbur",
               "table",
               "fontSize",
+              "font"
             ],
           ],
         }}
@@ -211,12 +212,11 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           height: 200,
           buttonList: [
             ...buttonList.formatting,
-            ["table", "align", "fontSize"],
+            ["table", "align", "fontSize", "font"],
             ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
           ],
         }}
         showToolbar={true}
-        ref={editorRef}
       />
     </React.Fragment>
   );

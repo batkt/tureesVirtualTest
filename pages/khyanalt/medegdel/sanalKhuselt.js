@@ -20,9 +20,9 @@ function index({ token }) {
       turul,
       createdAt: ekhlekhOgnoo
         ? {
-            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
     };
   }, [ekhlekhOgnoo, turul]);
@@ -73,11 +73,10 @@ function index({ token }) {
               onClick={() => turulSongokh(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
-              className={`cursor-pointer rounded-lg p-1 text-center ${
-                turul === status.utga
+              className={`cursor-pointer rounded-lg p-1 text-center ${turul === status.utga
                   ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
                   : "text-gray-50"
-              }`}
+                }`}
             >
               {status.ner}
             </div>
@@ -88,11 +87,10 @@ function index({ token }) {
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "sanal" ? (
                 <div
-                  className={` ${
-                    khariltsagch?._id === mur?._id
+                  className={` ${khariltsagch?._id === mur?._id
                       ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-200"
                       : ""
-                  } `}
+                    } `}
                 >
                   <div
                     className={`flex h-[7vh] cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
@@ -105,7 +103,7 @@ function index({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                          1
+                            1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -149,11 +147,10 @@ function index({ token }) {
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "gomdol" ? (
                 <div
-                  className={` ${
-                    khariltsagch?._id === mur?._id
+                  className={` ${khariltsagch?._id === mur?._id
                       ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                       : ""
-                  } `}
+                    } `}
                 >
                   <div
                     className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
@@ -166,7 +163,7 @@ function index({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                          1
+                            1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -220,9 +217,8 @@ function index({ token }) {
                 </div>
                 <div className=" flex  flex-col">
                   <div
-                    className={`mb-3  ${
-                      khariltsagch?.tuluv === -1 ? "hidden" : "flex"
-                    }`}
+                    className={`mb-3  ${khariltsagch?.tuluv === -1 ? "hidden" : "flex"
+                      }`}
                   >
                     <Popconfirm
                       disabled={khariltsagch?.tuluv === 2}
@@ -232,9 +228,8 @@ function index({ token }) {
                       onConfirm={() => sanalGomdolAvakh(khariltsagch._id)}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full font-bold bg-${
-                          0 === khariltsagch?.tuluv ? "red" : "green"
-                        }-500 py-1 px-3 font-medium text-gray-50`}
+                        className={`text-md cursor-pointer rounded-full font-bold bg-${0 === khariltsagch?.tuluv ? "red" : "green"
+                          }-500 py-1 px-3 font-medium text-gray-50`}
                       >
                         {0 !== khariltsagch?.tuluv
                           ? "Хүлээж aвсан"

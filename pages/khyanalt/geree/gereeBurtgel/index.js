@@ -413,7 +413,8 @@ function ZakhialgiinKhyanalt() {
   useEffect(() => {
     const url = new URLSearchParams(window.location.search);
     if (url !== undefined) {
-      setOrder({ ...JSON.parse(url.get('orderID')) })
+      if (!!url.get('orderID'))
+        setOrder({ ...JSON.parse(url.get('orderID')) })
     }
   }, [])
 

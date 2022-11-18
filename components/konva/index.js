@@ -121,7 +121,6 @@ function Drawer(props) {
   };
   const handleDragStartPoint = (event) => {
     event.target.scale({ x: 2, y: 2 });
-    console.log("start", event);
   };
   const handleDragEndPoint = (event, index) => {
     event.target.scale({ x: 1, y: 1 });

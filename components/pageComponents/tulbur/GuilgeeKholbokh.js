@@ -89,7 +89,6 @@ function GuilgeeKholbokh(
           });
           return;
         }
-        console.log("niitDun", niitDun, data?.kholbosonDun);
         if (niitDun > data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`]) {
           notification.warning({
             message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна",

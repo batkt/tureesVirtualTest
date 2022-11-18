@@ -9,7 +9,6 @@ function AppTokhirgoo({ token, baiguullaga }) {
     !!baiguullaga?.tokhirgoo?.khereglegchEkhlekhOgnoo
   );
 
-  console.log(idvekhtei);
 
   const [ekhlekhOgnoo, setekhlekhOgnoo] = useState();
   function ekhlehOgnooBurtgey() {

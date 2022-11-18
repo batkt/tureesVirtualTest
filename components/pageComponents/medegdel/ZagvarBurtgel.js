@@ -13,7 +13,6 @@ function ZagvarBurtgel(
   { barilgiinId, destroy, token, setWaiting, data = {}, turul, onRefresh },
   ref
 ) {
-  console.log(data);
   const [form] = Form.useForm();
 
   function garya() {

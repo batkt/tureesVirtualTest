@@ -100,7 +100,6 @@ function useSonorduulga(token) {
         const key = `${Math.floor(Math.random() * 100)}+${Date.now()}`;
         mutate();
         too.mutate();
-        console.log(sonorduulga.ajiltniiId);
         if (!!sonorduulga && sonorduulgaId !== sonorduulga?._id) {
           function onClose() {
             notification.close(key);
