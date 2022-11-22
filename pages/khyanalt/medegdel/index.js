@@ -11,6 +11,7 @@ import {
   message,
   notification,
   Popconfirm,
+  Select,
   Spin,
   Upload,
 } from "antd";
@@ -34,6 +35,7 @@ import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
 import next from "next";
+import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 
 //#endregion
 
@@ -59,12 +61,12 @@ function IlgeesenToo({
   const { data, mutate } = useSWR(
     turul === "SMS"
       ? [
-        "msgIlgeesenTooAvya",
-        barilgiinId,
-        baiguullagiinId,
-        ekhlekhOgnoo,
-        duusakhOgnoo,
-      ]
+          "msgIlgeesenTooAvya",
+          barilgiinId,
+          baiguullagiinId,
+          ekhlekhOgnoo,
+          duusakhOgnoo,
+        ]
       : null,
     (url, barilgiinId, baiguullagiinId) =>
       createMethod(url, token, {
@@ -75,8 +77,8 @@ function IlgeesenToo({
       }).then((a) => a.data)
   );
   useEffect(() => {
-    mutate()
-  }, [msjTuukh])
+    mutate();
+  }, [msjTuukh]);
   return (
     <div className="ml-6 flex xl:flex-col xl:text-center">
       {text} <span className="ml-3 font-medium xl:ml-0">{data || 0}</span>
@@ -104,7 +106,8 @@ function Khyanalt({ token }) {
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
-  const [tuluv, setTuluv] = useState("idevkhtei");
+  const [tuluv, setTuluv] = useState();
+  console.log(tuluv);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -113,15 +116,17 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
+      davkhar: davkhar,
     };
-  }, [barilgiinId]);
-  const nekhemjlel = useJagsaalt(
-    "/khariltsagch",
+  }, [barilgiinId, tuluv, davkhar]);
+
+  // const nekhemjlel = useJagsaalt("/khariltsagch",);
+  const nekhemjlel = useKhariltsagchDavkhraarAvya(
+    token,
     khariltsagchiinQuery,
-    undefined,
-    undefined,
-    ["ner", "ovog", "utas", "register"]
+    davkhar
   );
+  console.log(nekhemjlel);
 
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
@@ -173,7 +178,6 @@ function Khyanalt({ token }) {
     return utga;
   }, [khariltsagch, msj]);
 
-
   //#endregion
   //#region method
 
@@ -216,7 +220,7 @@ function Khyanalt({ token }) {
                     onTextChange("");
                     setContent("");
                     setTitle("");
-                    medegdelAvya.mutate()
+                    medegdelAvya.mutate();
                     setNer(undefined);
                   }
                 });
@@ -269,7 +273,7 @@ function Khyanalt({ token }) {
                   setContent("");
                   setTitle("");
                   setNer(undefined);
-                  medegdelAvya.mutate()
+                  medegdelAvya.mutate();
                   setLoading(false);
                 } else if (!!data?.failureCount) {
                   notification.warning({
@@ -368,7 +372,7 @@ function Khyanalt({ token }) {
             notification.success({ message: "SMS Амжилттай илгээлээ" });
             setContent("");
             setTitle("");
-            msjTuukh.mutate()
+            msjTuukh.mutate();
             setLoading(false);
           }
         })
@@ -420,7 +424,7 @@ function Khyanalt({ token }) {
               setContent("");
               setTitle("");
               setNer("");
-              medegdelAvya.mutate()
+              medegdelAvya.mutate();
               setLoading(false);
             }
           })
@@ -566,9 +570,9 @@ function Khyanalt({ token }) {
       title="Мэдэгдэл"
       khuudasniiNer="medegdel"
       className=" overflow-hidden p-5 md:p-4 lg:h-auto"
-      onSearch={(search) =>
-        nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
-      }
+      // onSearch={(search) =>
+      //   nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
+      // }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
     >
@@ -579,14 +583,38 @@ function Khyanalt({ token }) {
               {["SMS", "App", "Mail"].map((mur) => (
                 <div
                   key={mur}
-                  className={`flex-1 cursor-pointer rounded-md py-2 text-center ${turul === mur ? "bg-green-500 text-white" : ""
-                    }`}
+                  className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
+                    turul === mur ? "bg-green-500 text-white" : ""
+                  }`}
                   onClick={() => turulSongokh(mur)}
                 >
                   {mur}
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+        <div
+          className="box mt-5 grid grid-cols-12 items-center space-x-3 p-2 pl-3"
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="100"
+        >
+          <div className="col-span-12">
+            <Select
+              placeholder="Давхар"
+              onChange={setDavkhar}
+              allowClear
+              style={{ width: "100%" }}
+            >
+              {baiguullaga?.barilguud
+                ?.find((a) => a._id === barilgiinId)
+                ?.davkharuud.map((a) => (
+                  <Select.Option key={a._id} value={a.davkhar} w="100px">
+                    {a.davkhar}
+                  </Select.Option>
+                ))}
+            </Select>
           </div>
         </div>
 
@@ -630,8 +658,9 @@ function Khyanalt({ token }) {
         ) : null}
 
         <div
-          className={`mt-5 flex-row p-2 font-medium xl:flex ${khariltsagch ? "hidden" : "flex"
-            }`}
+          className={`mt-5 flex-row p-2 font-medium xl:flex ${
+            khariltsagch ? "hidden" : "flex"
+          }`}
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="100"
@@ -654,16 +683,17 @@ function Khyanalt({ token }) {
               turul === "SMS"
                 ? smsZagvarNemya()
                 : turul === "App"
-                  ? smsZagvarNemya()
-                  : router.push("/khyanalt/medegdel/mailMedegdel/new")
+                ? smsZagvarNemya()
+                : router.push("/khyanalt/medegdel/mailMedegdel/new")
             }
           >
             Загвар үүсгэх
           </button>
         </div>
         <div
-          className={`scrollbar-hidden h-[70vh] overflow-hidden overflow-y-scroll  xl:block   ${turulZagvar === true ? "block" : "hidden"
-            }`}
+          className={`scrollbar-hidden h-[70vh] overflow-hidden overflow-y-scroll  xl:block   ${
+            turulZagvar === true ? "block" : "hidden"
+          }`}
         >
           {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
             <div>
@@ -698,8 +728,8 @@ function Khyanalt({ token }) {
                         turul === "SMS" || turul === "App"
                           ? smsZagvarNemya(a)
                           : router.push(
-                            `/khyanalt/medegdel/mailMedegdel/${a._id}`
-                          )
+                              `/khyanalt/medegdel/mailMedegdel/${a._id}`
+                            )
                       }
                     >
                       <EditOutlined style={{ color: "#85C1E9" }} />
@@ -721,10 +751,12 @@ function Khyanalt({ token }) {
         <div className={`box p-5 xl:block`}>
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
+              disabled
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none
               focus:ring-1 focus:ring-[#8aaaef] "
-              placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
+              // placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
+              placeholder="Тун удахгүй"
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
@@ -770,10 +802,11 @@ function Khyanalt({ token }) {
               <div>
                 {!!mur._id ? (
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
-                      : ""
-                      } `}
+                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
+                      khariltsagch?._id === mur?._id
+                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
+                        : ""
+                    } `}
                     key={mur?._id}
                     onClick={() => khariltsagchSongokh(mur)}
                   >
@@ -808,7 +841,7 @@ function Khyanalt({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                            1
+                          1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -848,7 +881,7 @@ function Khyanalt({ token }) {
                           ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
                             10) %
                             2 <
-                            1
+                          1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -888,18 +921,20 @@ function Khyanalt({ token }) {
                     {msjTuukh?.jagsaalt.map((a) => {
                       return (
                         <div
-                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
-                            }`}
+                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                            a.turul === "medegdel"
+                              ? "ml-auto rounded-br-none bg-green-500"
+                              : "rounded-bl-none"
+                          }`}
                         >
                           <span className="w-full break-words text-justify text-white ">
                             {a.msg}
                           </span>
 
                           <div
-                            className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
-                              }`}
+                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                              a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
                           >
                             <svg
                               width="20px"
@@ -944,18 +979,20 @@ function Khyanalt({ token }) {
                     {medegdelAvya?.jagsaalt.map((a) => {
                       return (
                         <div
-                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
-                            }`}
+                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                            a.turul === "medegdel"
+                              ? "ml-auto rounded-br-none bg-green-500"
+                              : "rounded-bl-none"
+                          }`}
                         >
                           <span className="w-full break-words text-justify text-white ">
                             {a.message}
                           </span>
 
                           <div
-                            className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
-                              }`}
+                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                              a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
                           >
                             <svg
                               width="20px"
@@ -1052,8 +1089,9 @@ function Khyanalt({ token }) {
                 <label className="font-medium">{turul} Илгээх</label>
                 <div
                   onClick={send}
-                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
-                    } flex flex-none items-center justify-center rounded-full text-white`}
+                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                    loading ? "200" : "600"
+                  } flex flex-none items-center justify-center rounded-full text-white`}
                 >
                   {loading ? (
                     <Spin size="small" />
@@ -1080,8 +1118,9 @@ function Khyanalt({ token }) {
           </div>
         ) : (
           <div
-            className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
-              }`}
+            className={`box hidden h-full items-center xl:flex ${
+              turulZagvar ? "hidden" : "lg:flex"
+            }`}
             data-aos="fade-left"
             data-aos-duration="1000"
           >
