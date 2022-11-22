@@ -18,7 +18,7 @@ export const useBarilga = () => {
 
   useEffect(async () => {
     const { barilgiinId } = await parseCookies();
-    if (barilgiinId) setBarilgiinId(barilgiinId);
+    if (barilgiinId && barilgiinId !== "undefined") setBarilgiinId(barilgiinId);
   }, []);
 
   const barilgaSoliyo = (id) => {
@@ -40,6 +40,13 @@ export const AuthProvider = ({ children }) => {
     ajiltan?.baiguullagiinId
   );
   const { barilgaSoliyo, barilgiinId } = useBarilga();
+
+  useEffect(() => {
+    console.log(barilgiinId, typeof barilgiinId);
+    if (!barilgiinId && !!baiguullaga?.barilguud) {
+      barilgaSoliyo(_.get(baiguullaga, "barilguud.0._id"));
+    }
+  }, [barilgiinId, baiguullaga]);
 
   useEffect(() => {
     const t = parseCookies();
@@ -64,15 +71,13 @@ export const AuthProvider = ({ children }) => {
   const auth = useMemo(
     () => ({
       newterya: async (khereglech) => {
-        if(!khereglech.nevtrekhNer)
-        {
-          message.warning('Нэвтрэх нэр талбарыг бөглөнө үү')
-          return
+        if (!khereglech.nevtrekhNer) {
+          message.warning("Нэвтрэх нэр талбарыг бөглөнө үү");
+          return;
         }
-        if(!khereglech.nuutsUg)
-        {
-          message.warning('Нууц үг талбарыг бөглөнө үү')
-          return
+        if (!khereglech.nuutsUg) {
+          message.warning("Нууц үг талбарыг бөглөнө үү");
+          return;
         }
         if (khereglech.namaigsana)
           localStorage.setItem("newtrekhNerTurees", khereglech.nevtrekhNer);
@@ -88,7 +93,8 @@ export const AuthProvider = ({ children }) => {
                 });
                 setToken(data.token);
                 ajiltanMutate(data.result);
-                barilgaSoliyo(data.result.barilguud[0]);
+                data?.result?.barilguud?.length > 0 &&
+                  barilgaSoliyo(data.result.barilguud[0]);
                 ekhniiTsonkhruuOchyo(data.result);
                 message.success("Тавтай морил");
               } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");

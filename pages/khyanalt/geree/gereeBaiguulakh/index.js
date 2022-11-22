@@ -54,7 +54,6 @@ function GereeBaiguulakh({ token }) {
 
   const zagvarRef = React.useRef();
   const [current, setCurrent] = React.useState(0);
-  const [alkhamErkh, setAlkhamErkh] = useState(0);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState({
     ognoo: new Date(),
     baritsaaAvakhEsekh: true,
@@ -63,17 +62,12 @@ function GereeBaiguulakh({ token }) {
     baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
   });
   const [waiting, setWaiting] = useState(false);
+  const [dutuuAlkham, setDutuuAlkham] = useState([])
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
-  const [formSubmit, setFormSubmit] = useState(false);
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
-
   const next = (data) => {
-    setFormSubmit(false);
-    if (alkhamErkh <= current) {
-      setAlkhamErkh(alkhamErkh + 1);
-    }
     if (current === 0 && !gereeniiZagvar) {
       message.warning("Гэрээний загвар сонгоно уу!");
       zagvarRef.current.focus();
@@ -96,6 +90,25 @@ function GereeBaiguulakh({ token }) {
 
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
+      if (!data.dans || !data.gereeniiDugaar || !data.register || !data.utas || (data.baiguullagaEsekh === true ? !data.zakhirliinNer || !data.zakhirliinOvog || !data.baiguullagiinNer || !data.mail : !data.ner || !data.ovog || !gereeniiZagvar)) {
+        notification.warning({ message: "Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!" })
+        setDutuuAlkham(oldArray => [...oldArray, 0])
+      }
+      if (!data.duusakhOgnoo || !data.duusakhOn || !data.duusakhSar || !data.duusakhUdur || !data.ekhelkhSar || !data.ekhlekhOn || !data.ekhlekhUdur || !data.khugatsaa || !data.tulukhUdur || !data.gereeniiOgnoo || !khadgalakhGeree?.tulukhUdur || !khadgalakhGeree?.khugatsaa) {
+        notification.warning({ message: "Гэрээний хугацаагаа бүрэн оруулна уу!" })
+        setDutuuAlkham(oldArray => [...oldArray, 1])
+      }
+      if (!data.baritsaaAvakhDun || !data.talbainIdnuud || !data.sariinTurees || !data.talbainKhemjee || !data.talbainNiitUne) {
+        notification.warning({ message: "Талбай мэдээллээ оруулна уу!" })
+        setDutuuAlkham(oldArray => [...oldArray, 2])
+      }
+      if (data.baritsaaAvakhEsekh === true && !data.baritsaaBairshuulakhKhugatsaa) {
+        notification.warning({ message: "барицаа хугацаа оруулна уу!" })
+        setDutuuAlkham(oldArray => [...oldArray, 4])
+      }
+      if (dutuuAlkham.length !== 0) {
+        return
+      }
       data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
       data.baiguullagiinNer = baiguullaga.ner;
       data.baiguullagiinId = baiguullaga._id;
@@ -141,8 +154,6 @@ function GereeBaiguulakh({ token }) {
               ),
             });
             setCurrent(0);
-            setAlkhamErkh(0);
-            setGereeniiZagvar(undefined);
             message.success("Амжилттай хадгаллаа");
             setWaiting(false);
           }
@@ -191,13 +202,14 @@ function GereeBaiguulakh({ token }) {
       }
     }
     setCurrent(index);
+    const find = dutuuAlkham.filter((a) => a !== index)
+    setDutuuAlkham(find)
   }
 
   const onChangeGereeniiZagvar = (_id) => {
     let value =
       gereeniiZagvarGaralt?.jagsaalt?.find((a) => a._id === _id) || {};
     if (!!gereeniiZagvar?.turGereeEsekh !== !!value?.turGereeEsekh) {
-      setAlkhamErkh(0)
       const { baiguullagaEsekh,
         baritsaaAvakhEsekh,
         baritsaaAvakhKhugatsaa,
@@ -288,17 +300,14 @@ function GereeBaiguulakh({ token }) {
 
   const prev = () => {
     if (current > 0) setCurrent(current - 1);
+    setDutuuAlkham([])
   };
 
   const currentItem = steps[current];
   const gereeniiZagvariinId = "gereeniiZagvar";
 
   const onChange = (value) => {
-    current + 1 === value
-      ? setFormSubmit(true)
-      : alkhamErkh < value
-        ? message.warning("Алхам алгасах боломжгүй!")
-        : alkhamSoliyo(value);
+    alkhamSoliyo(value);
   };
 
   return (
@@ -314,6 +323,7 @@ function GereeBaiguulakh({ token }) {
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
               <Step
+                status={dutuuAlkham?.find((a) => a === index) === index && "error"}
                 value={index}
                 key={item.title}
                 title={item.title}
@@ -321,6 +331,7 @@ function GereeBaiguulakh({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               />
+
             ))}
           </Steps>
         </div>
@@ -328,9 +339,7 @@ function GereeBaiguulakh({ token }) {
           <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               next={next}
-              formSubmit={formSubmit}
               current={current}
-              setFormSubmit={setFormSubmit}
               prev={prev}
               alkhamErkh={alkhamSoliyo}
               onChange={setKhagalakhGeree}

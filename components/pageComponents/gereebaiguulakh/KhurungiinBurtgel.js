@@ -99,7 +99,6 @@ const YurunkhiiMedeele = ({
   gereeniiZagvar,
   barilgiinId,
   formSubmit,
-  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
 
@@ -187,7 +186,7 @@ const YurunkhiiMedeele = ({
       talbainBurtgelBugulyu(value.talbainuud);
       onChange({ ...value });
     }
-    if (gereeniiZagvar.turGereeEsekh) {
+    if (gereeniiZagvar?.turGereeEsekh) {
       talbaiOruulya();
     } else sulEsekh(v.kod, talbaiOruulya);
   }
@@ -200,10 +199,6 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
-    if (formSubmit === true) {
-      setFormSubmit(false);
-      form.submit();
-    }
   });
 
   useEffect(() => {

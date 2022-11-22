@@ -24,15 +24,10 @@ const Tulbur = ({
   token,
   gereeniiZagvar,
   formSubmit,
-  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
-    if (formSubmit === true) {
-      setFormSubmit(false);
-      form.submit();
-    }
   });
   const [khuvaari, setKhuvaari] = useState();
 
@@ -186,11 +181,11 @@ const Tulbur = ({
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
-                (value.baritsaaAvakhDun || 0) *
-                  (value.baritsaaAvakhKhugatsaa || 0) -
-                (((value.sariinTurees || 0) * 12) / 365) *
-                  (value.khungulukhKhugatsaa || 0) -
-                (value.khyamdaral || 0)
+              (value.baritsaaAvakhDun || 0) *
+              (value.baritsaaAvakhKhugatsaa || 0) -
+              (((value.sariinTurees || 0) * 12) / 365) *
+              (value.khungulukhKhugatsaa || 0) -
+              (value.khyamdaral || 0)
             )}
           </div>
         </Form.Item>
