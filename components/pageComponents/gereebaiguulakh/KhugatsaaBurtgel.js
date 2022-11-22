@@ -25,7 +25,6 @@ const YurunkhiiMedeele = ({
   value,
   gereeniiZagvar,
   formSubmit,
-  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
 
@@ -71,10 +70,6 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
-    if (formSubmit === true) {
-      setFormSubmit(false);
-      form.submit();
-    }
   });
   useEffect(() => {
     form.getFieldInstance("khugatsaa").focus();
@@ -140,9 +135,8 @@ const YurunkhiiMedeele = ({
             max={100}
             min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            placeholder={`Гэрээний хугацаа ${
-              gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
-            }`}
+            placeholder={`Гэрээний хугацаа ${gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
+              }`}
           />
         </Form.Item>
       </div>

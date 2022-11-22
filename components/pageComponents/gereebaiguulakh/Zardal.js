@@ -165,15 +165,10 @@ const Zardal = ({
   value,
   barilgiinId,
   formSubmit,
-  setFormSubmit,
 }) => {
   const [form] = Form.useForm();
   useEffect(() => {
     Aos.init({ once: true });
-    if (formSubmit === true) {
-      setFormSubmit(false);
-      onFinish();
-    }
   });
 
   const ashiglaltiinZardal = useJagsaalt(
