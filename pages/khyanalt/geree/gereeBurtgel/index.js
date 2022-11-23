@@ -1258,7 +1258,7 @@ function ZakhialgiinKhyanalt() {
           Component={GereeTile}
           neesenEsekh={neesenEsekh}
           componentProps={{ router }}
-          tolov={"utas"}
+          cardListTuluv={"utas"}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,
             pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
