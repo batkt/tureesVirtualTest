@@ -37,7 +37,7 @@ import {
 import { toWords } from "mon_num";
 import Admin from "components/Admin";
 import formatNumber from "tools/function/formatNumber";
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import { useGereeniiJagsaaltToollolt } from "hooks/useGereeniiJagsaalt";
 import uilchilgee, { url } from "services/uilchilgee";
@@ -374,6 +374,7 @@ function ZakhialgiinKhyanalt() {
       duusakhOgnoo: { $gte: new Date() },
     },
   });
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
   const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
   const {
     gereeniiMedeelel,
@@ -1011,6 +1012,7 @@ function ZakhialgiinKhyanalt() {
       khuudasniiNer="gereeBurtgel"
       title="Гэрээний жагсаалт"
       className="p-0 md:p-5  "
+      setNeesenEsekh={setNeesenEsekh}
       tsonkhniiId="61c2c5dc1c2830c4e6f90c6d"
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
@@ -1042,20 +1044,20 @@ function ZakhialgiinKhyanalt() {
         )}
       </Drawer>
       <Card className="cardgrid col-span-12 ">
-        <div className="grid w-full grid-cols-6 gap-6 border-solid 2xl:grid-cols-12">
+        <div className="flex overflow-hidden overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
                 className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                  } zoom-in col-span-12 cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }  cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
                   }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full rounded-xl">
+                <div className="h-full w-[67vw] sm:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -1088,13 +1090,13 @@ function ZakhialgiinKhyanalt() {
             );
           })}
         </div>
-        <div className="mt-5 flex flex-row">
+        <div className="mt-5 flex flex-col-reverse gap-5 sm:flex-row">
           <div
             data-aos="zoom-in-right"
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <DatePicker.RangePicker locale={locale} />
+            <DatePicker.RangePicker className="w-full sm:w-auto" locale={locale} />
           </div>
           <div
             className="ml-auto flex place-content-end"
@@ -1251,17 +1253,19 @@ function ZakhialgiinKhyanalt() {
         </div>
         <CardList
           keyValue="geree"
-          className="block overflow-auto md:hidden"
+          className="block md:hidden"
           jagsaalt={gereeniiMedeelel?.jagsaalt}
           Component={GereeTile}
+          neesenEsekh={neesenEsekh}
           componentProps={{ router }}
+          tolov={"utas"}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,
             pageSize: gereeniiMedeelel?.khuudasniiKhemjee,
             total: gereeniiMedeelel?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
+              setGereeniiKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,

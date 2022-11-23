@@ -273,11 +273,11 @@ const Zardal = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="mt-5 flex w-full flex-row justify-between">
+          <div className="mt-5 flex w-full flex-col gap-4 md:flex-row justify-between">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4 dark:text-white dark:hover:text-black"
+              className="dark:text-white dark:hover:text-black"
             >
               Түрээсийн талбай
             </Button>

@@ -15,6 +15,7 @@ import _ from "lodash";
 import Aos from "aos";
 import { useEffect } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
+import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 
 const { Step } = Steps;
 
@@ -63,6 +64,7 @@ function GereeBaiguulakh({ token }) {
   });
   const [waiting, setWaiting] = useState(false);
   const [dutuuAlkham, setDutuuAlkham] = useState([])
+  const [gereekharakhTovch, setGereekharakhTovch] = useState(false)
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
@@ -98,11 +100,11 @@ function GereeBaiguulakh({ token }) {
         notification.warning({ message: "Гэрээний хугацаагаа бүрэн оруулна уу!" })
         setDutuuAlkham(oldArray => [...oldArray, 1])
       }
-      if (!data.baritsaaAvakhDun || !data.talbainIdnuud || !data.sariinTurees || !data.talbainKhemjee || !data.talbainNiitUne) {
+      if (gereeniiZagvar?.turGereeEsekh !== true && data.baritsaaAvakhDun || !data.talbainIdnuud || !data.sariinTurees || !data.talbainKhemjee || !data.talbainNiitUne) {
         notification.warning({ message: "Талбай мэдээллээ оруулна уу!" })
         setDutuuAlkham(oldArray => [...oldArray, 2])
       }
-      if (data.baritsaaAvakhEsekh === true && !data.baritsaaBairshuulakhKhugatsaa) {
+      if (gereeniiZagvar?.turGereeEsekh !== true && data.baritsaaAvakhEsekh === true && !data.baritsaaBairshuulakhKhugatsaa) {
         notification.warning({ message: "барицаа хугацаа оруулна уу!" })
         setDutuuAlkham(oldArray => [...oldArray, 4])
       }
@@ -351,16 +353,17 @@ function GereeBaiguulakh({ token }) {
               gereeniiZagvariinId={gereeniiZagvariinId}
             />
           </div>
+          {!!gereeniiZagvar && <div className={`${gereekharakhTovch ? "bottom-20 right-5" : "bottom-[72vh] right-1"} fixed transition-all md:hidden duration-300 text-2xl border-2 z-50 bg-green-600 text-white rounded-full p-2`}>
+            {gereekharakhTovch === true ? <FileTextOutlined onClick={() => setGereekharakhTovch(false)} /> :
+              <EyeInvisibleOutlined onClick={() => setGereekharakhTovch(true)} />}
+          </div>}
           <div
-            className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8"
+            className={`col-span-12 mt-3 fixed transition-all duration-300 w-[91vw] md:w-auto top-40 ${gereekharakhTovch ? " -right-full" : " right-4"} border-2 md:border-0 border-green-600 md:static bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
               scrollBehavior: "smooth",
             }}
-            data-aos="fade-right"
-            data-aos-delay="300"
-            data-aos-duration="1000"
           >
             {current === 0 && (
               <Select
@@ -381,7 +384,6 @@ function GereeBaiguulakh({ token }) {
                 }
                 onChange={(v) => {
                   onChangeGereeniiZagvar(v);
-                  document.getElementById("gereeniiKhugatsaaButton").focus();
                 }}
               >
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {

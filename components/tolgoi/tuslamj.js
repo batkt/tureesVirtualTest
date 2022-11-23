@@ -3,11 +3,11 @@ import { GiArrowDunk } from "react-icons/gi/index";
 import React, { useEffect, useState } from "react";
 import Aos from "aos";
 import { Image, Tabs } from "antd";
+import _ from "lodash";
 import { useAuth } from "services/auth";
 import Faq from "./faq";
 import useJagsaalt from "hooks/useJagsaalt";
 
-const order = { daraalal: -1 };
 
 function Tuslamj() {
   const [songogdsonAlkham, setSongogdsonAlkham] = useState(0);
@@ -15,8 +15,6 @@ function Tuslamj() {
     useState(0);
   const tuslamj = useJagsaalt(
     "https://zevtabs.mn/api/tuslamjAvya/rent",
-    undefined,
-    order
   );
 
   useEffect(() => {
@@ -35,33 +33,29 @@ function Tuslamj() {
           key="1"
         >
           <div
-            className={`relative h-[90%] space-y-3  px-5  pb-10 ${
-              songogdsonAlkham === 0 ? "overflow-y-auto overflow-x-hidden" : ""
-            }`}
+            className={`relative h-[90%] space-y-3  px-5  pb-10 ${songogdsonAlkham === 0 ? "overflow-y-auto overflow-x-hidden" : ""
+              }`}
           >
             <div
-              className={`absolute z-30 text-lg transition-all duration-500 ${
-                songogdsonAlkham === 0 ? "left-full" : "left-0 "
-              }`}
+              className={`absolute z-30 text-lg transition-all duration-500 ${songogdsonAlkham === 0 ? "left-full" : "left-0 "
+                }`}
             >
               <LeftOutlined
-                className={`mt-2 ml-2 rounded-full border-2 p-1 transition-all duration-500 hover:bg-green-600 hover:bg-opacity-30 dark:text-gray-200 ${
-                  songogdsonAlkham === 0 ? "invisible opacity-0" : "opacity-100"
-                }`}
+                className={`mt-2 ml-2 rounded-full border-2 p-1 transition-all duration-500 hover:bg-green-600 hover:bg-opacity-30 dark:text-gray-200 ${songogdsonAlkham === 0 ? "invisible opacity-0" : "opacity-100"
+                  }`}
                 onClick={() => setSongogdsonAlkham(0)}
               />
             </div>
-            {tuslamj?.data?.map((mur, index) => {
+            {_.sortBy(tuslamj?.data, (v) => v.daraalal)?.map((mur, index) => {
               return (
                 <div
                   key={index}
-                  className={`group flex h-[120px] w-full scale-95 cursor-pointer items-center rounded-full bg-green-600 p-1 transition-all duration-500 hover:scale-100 hover:bg-green-800 ${
-                    songogdsonAlkham === 0
-                      ? "relative top-0 right-0 opacity-100"
-                      : songogdsonAlkham === index + 1
+                  className={`group flex h-[120px] w-full scale-95 cursor-pointer items-center rounded-full bg-green-600 p-1 transition-all duration-500 hover:scale-100 hover:bg-green-800 ${songogdsonAlkham === 0
+                    ? "relative top-0 right-0 opacity-100"
+                    : songogdsonAlkham === index + 1
                       ? `absolute -right-3/4 -top-14 z-50 opacity-100`
                       : "invisible relative -top-96 opacity-0"
-                  }`}
+                    }`}
                   onClick={
                     songogdsonAlkham === index + 1
                       ? () => setSongogdsonAlkham(0)
@@ -81,20 +75,18 @@ function Tuslamj() {
                     className={` w-full py-2 pr-6 pl-3 transition-opacity duration-700`}
                   >
                     <h1
-                      className={`pl-12 text-2xl font-semibold text-white transition-all duration-500 ${
-                        songogdsonAlkham === index + 1
-                          ? "absolute -left-[60%] top-6 -z-50 w-full rounded-l-full bg-green-600 py-6 px-10 pr-20 group-hover:bg-green-800"
-                          : "left-0 top-10 rounded-sm p-0 px-0 py-0 pr-0"
-                      }`}
+                      className={`pl-12 text-2xl font-semibold text-white transition-all duration-500 ${songogdsonAlkham === index + 1
+                        ? "absolute -left-[60%] top-6 -z-50 w-full rounded-l-full bg-green-600 py-6 px-10 pr-20 group-hover:bg-green-800"
+                        : "left-0 top-10 rounded-sm p-0 px-0 py-0 pr-0"
+                        }`}
                     >
                       {mur.garchig}
                     </h1>
                     <p
-                      className={`text-white ${
-                        songogdsonAlkham === index + 1
-                          ? "opacity-0"
-                          : "opacity-100"
-                      }`}
+                      className={`text-white ${songogdsonAlkham === index + 1
+                        ? "opacity-0"
+                        : "opacity-100"
+                        }`}
                     >
                       {mur.tailbar}
                     </p>
@@ -106,11 +98,10 @@ function Tuslamj() {
                   )}
                   {index + 1 !== tuslamj?.data?.length && index % 2 !== 0 && (
                     <div
-                      className={`absolute -bottom-7 -left-3 text-5xl text-green-600 transition-all duration-500 group-hover:text-green-800 ${
-                        songogdsonAlkham === index + 1
-                          ? "opacity-0"
-                          : "opacity-100"
-                      }`}
+                      className={`absolute -bottom-7 -left-3 text-5xl text-green-600 transition-all duration-500 group-hover:text-green-800 ${songogdsonAlkham === index + 1
+                        ? "opacity-0"
+                        : "opacity-100"
+                        }`}
                     >
                       <GiArrowDunk className="-rotate-[80deg] -scale-x-100" />
                     </div>
@@ -124,9 +115,8 @@ function Tuslamj() {
                   key={i}
                   data-aos="fade-right"
                   data-aos-delay="200"
-                  className={`absolute top-20 z-10 h-scrollH w-full overflow-y-auto py-5 px-3 pr-16 ${
-                    data?.turul === "dropdown" ? "" : "space-y-10"
-                  }`}
+                  className={`absolute top-20 z-10 h-scrollH w-full overflow-y-auto py-5 px-3 pr-16 ${data?.turul === "dropdown" ? "" : "space-y-10"
+                    }`}
                 >
                   {data?.alkhamuud?.map((a, i) => {
                     if (data?.turul === "dropdown") {
@@ -151,19 +141,17 @@ function Tuslamj() {
                               }
                             />
                             <LeftOutlined
-                              className={`transition-all duration-300 dark:text-gray-200 ${
-                                daragdsanTokhirgooMedeelel === i + 1
-                                  ? "-rotate-90"
-                                  : "rotate-0"
-                              }`}
+                              className={`transition-all duration-300 dark:text-gray-200 ${daragdsanTokhirgooMedeelel === i + 1
+                                ? "-rotate-90"
+                                : "rotate-0"
+                                }`}
                             />
                           </div>
                           <div
-                            className={`px-5 text-opacity-80 transition-all duration-300 dark:text-gray-200 ${
-                              daragdsanTokhirgooMedeelel === i + 1
-                                ? "h-32 overflow-y-auto  py-5 opacity-100 "
-                                : "invisible h-0 opacity-0"
-                            }`}
+                            className={`px-5 text-opacity-80 transition-all duration-300 dark:text-gray-200 ${daragdsanTokhirgooMedeelel === i + 1
+                              ? "h-32 overflow-y-auto  py-5 opacity-100 "
+                              : "invisible h-0 opacity-0"
+                              }`}
                           >
                             {a.tailbar}
                           </div>

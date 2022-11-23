@@ -199,11 +199,11 @@ const Tulbur = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="mt-4 flex w-full flex-row justify-between">
+          <div className="mt-4 flex w-full flex-col gap-4 md:flex-row justify-between">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4 dark:text-gray-200 dark:hover:text-gray-800"
+              className="dark:text-gray-200 dark:hover:text-gray-800"
             >
               Зардал бүртгэл
             </Button>

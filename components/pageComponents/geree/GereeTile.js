@@ -14,10 +14,11 @@ function GereeTile({
   gereeniiOgnoo,
   duusakhOgnoo,
   burtgesenAjiltaniiNer,
+  turGereeEsekh,
   ...ugugdul
 }) {
   return (
-    <div className="mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 shadow-2xl dark:bg-gray-900">
+    <div className={`mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 bg-opacity-30 dark:bg-opacity-30 shadow-2xl dark:bg-gray-900 ${turGereeEsekh === true ? "bg-purple-600 dark:bg-purple-400" : "bg-blue-500 dark:bg-blue-400"}`}>
       <div className="flex w-full flex-row">
         <div className="font-bold dark:text-gray-100">{ner}</div>
         <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-200">
