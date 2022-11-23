@@ -117,17 +117,15 @@ function Khyanalt({ token }) {
     return {
       barilgiinId,
       davkhar: davkhar,
+      idevkhiteiEsekh: tuluv,
     };
-  }, [barilgiinId, tuluv, davkhar]);
+  }, [barilgiinId, tuluv, davkhar, tuluv]);
 
-  // const nekhemjlel = useJagsaalt("/khariltsagch",);
   const nekhemjlel = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
     davkhar
   );
-  console.log(nekhemjlel);
-
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
     turul
@@ -570,9 +568,9 @@ function Khyanalt({ token }) {
       title="Мэдэгдэл"
       khuudasniiNer="medegdel"
       className=" overflow-hidden p-5 md:p-4 lg:h-auto"
-      // onSearch={(search) =>
-      //   nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
-      // }
+      onSearch={(search) =>
+        nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
+      }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
     >
@@ -600,7 +598,26 @@ function Khyanalt({ token }) {
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <div className="col-span-12">
+          <div className="col-span-6">
+            <Select
+              allowClear
+              className="w-full"
+              placeholder="Төрөл сонгоно уу"
+              value={tuluv}
+              onChange={setTuluv}
+              style={{ width: "100%" }}
+            >
+              {[
+                { key: true, v: "Идэвхтэй" },
+                { key: false, v: "Идэвхгүй " },
+              ].map((a) => (
+                <Select.Option key={a.key} value={a.key}>
+                  {a.v}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div className="col-span-6">
             <Select
               placeholder="Давхар"
               onChange={setDavkhar}
@@ -751,12 +768,10 @@ function Khyanalt({ token }) {
         <div className={`box p-5 xl:block`}>
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
-              disabled
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none
               focus:ring-1 focus:ring-[#8aaaef] "
-              // placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
-              placeholder="Тун удахгүй"
+              placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
