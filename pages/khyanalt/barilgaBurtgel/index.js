@@ -1,15 +1,14 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect } from "react";
 import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Button, Table, Popover, Calendar, Select, DatePicker } from "antd";
+import { Button, Table, Popover } from "antd";
 import {
   PlusOutlined,
   SettingOutlined,
   MoreOutlined,
   EditOutlined,
-  ReloadOutlined,
 } from "@ant-design/icons";
 import _ from "lodash";
 import router from "next/router";
@@ -21,26 +20,13 @@ import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import moment from "moment";
 
-import { VictoryChart, VictoryLine } from "victory";
-import locale from "antd/lib/calendar/locale/mn_MN";
-import dynamic from "next/dynamic";
-const CustomLabel = dynamic(
-  () => import("components/pageComponents/talbaiBurtgelChart/CustomLabel"),
-  { ssr: false }
-);
-const CustomChart = dynamic(
-  () => import("components/pageComponents/talbaiBurtgelChart/CustomChart"),
-  { ssr: false }
-);
-moment.locale("mn");
-
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
-  const [ognoo, setOgnoo] = useState(new Date());
+
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token] : null,
     (url, token) =>
@@ -226,9 +212,6 @@ function BarilgaBurtgel({ token }) {
   function barilgaBurtgel(id) {
     router.push(`/khyanalt/barilgaBurtgel/${id}`);
   }
-  const onChange = (value) => {
-    console.log(`selected ${value}`);
-  };
 
   return (
     <Admin
@@ -238,17 +221,8 @@ function BarilgaBurtgel({ token }) {
       tsonkhniiId={"61c2c6271c2830c4e6f90c85"}
     >
       <div className="col-span-12 xl:col-span-9">
-        <div className=" flex justify-between p-8 text-lg text-gray-400">
-          <div>Dashboard</div>
-          <div className="flex space-x-3 text-blue-500 ">
-            <div>
-              <ReloadOutlined />
-            </div>
-            <div>Дахин ачааллах</div>
-          </div>
-        </div>
-        <div className="col-span-12 mt-3 space-y-4 px-2">
-          <div className=" mb-10 grid grid-cols-12 gap-6 ">
+        <div className="col-span-12 mt-3 px-2">
+          <div className="mt-5 grid grid-cols-12 gap-6">
             {khyanaltiinDun.map((mur, index) => {
               return (
                 <div
@@ -268,7 +242,8 @@ function BarilgaBurtgel({ token }) {
                               mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
                             } tooltip cursor-pointer `}
                           >
-                            {mur.khuvi}%
+                            {" "}
+                            {mur.khuvi}%{" "}
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="24"
@@ -282,7 +257,7 @@ function BarilgaBurtgel({ token }) {
                               className="feather feather-chevron-up ml-0.5 h-4 w-4"
                             >
                               <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
+                            </svg>{" "}
                           </div>
                         </div>
                       </div>
@@ -297,7 +272,50 @@ function BarilgaBurtgel({ token }) {
                 </div>
               );
             })}
-            <div className="t-2 col-span-12">
+            <div className="col-span-12">
+              <div className="mt-8 flex h-10 items-center">
+                <h2
+                  className="mr-5 text-lg font-medium dark:text-gray-300"
+                  data-aos="zoom-in-right"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                >
+                  Барилга жагсаалт
+                </h2>
+                <div
+                  className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400"
+                  data-aos="zoom-in-left"
+                  data-aos-duration="1000"
+                  data-aos-delay="200"
+                >
+                  <Button
+                    type="primary"
+                    onClick={() => barilgaBurtgel("new")}
+                    icon={<PlusOutlined />}
+                  >
+                    Нэмэх
+                  </Button>
+                </div>
+              </div>
+              <div
+                className="hidden md:block"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="400"
+              >
+                <Table
+                  tableLayout={
+                    baiguullaga?.barilguud?.length > 0 ? "auto" : "fixed"
+                  }
+                  size="small"
+                  bordered
+                  scroll={{ y: "calc(100vh - 31rem)" }}
+                  rowKey={(row) => row._id}
+                  columns={columns}
+                  loading={!baiguullaga}
+                  dataSource={baiguullaga?.barilguud}
+                />
+              </div>
               <CardList
                 keyValue="barilga"
                 className="block overflow-auto md:hidden"
@@ -307,164 +325,18 @@ function BarilgaBurtgel({ token }) {
               />
             </div>
           </div>
-
-          <div className=" grid grid-cols-12 space-x-6 ">
-            <div className="col-span-6 space-y-4  ">
-              <div className="mb-8 flex justify-between ">
-                <div className="text-lg text-gray-700">Sales Report</div>
-                <div>
-                  <DatePicker />
-                </div>
-              </div>
-              <div className=" box   flex flex-col p-4">
-                <div className="grid h-[4rem] grid-cols-2">
-                  <div className="flex justify-center space-x-3 ">
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="text-xl text-green-600">$15,000</div>
-                      <div className="text-sm text-gray-500">This Month</div>
-                    </div>
-                    <div className="w-1 bg-gray-400 " />
-                    <div className="flex flex-col items-center justify-center">
-                      <div className="text-xl text-gray-500">$15,000</div>
-                      <div className="text-sm text-gray-500">Last Month</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-end ">
-                    <Select
-                      className="rounded-2xl"
-                      style={{ width: "70%" }}
-                      placeholder="Select a person"
-                      onChange={onChange}
-                      options={[
-                        {
-                          value: "jack",
-                          label: "Jack",
-                        },
-                        {
-                          value: "lucy",
-                          label: "Lucy",
-                        },
-                        {
-                          value: "tom",
-                          label: "Tom",
-                        },
-                      ]}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <VictoryChart height={275}>
-                    <VictoryLine
-                      interpolation="cardinal"
-                      data={[
-                        { x: 1, y: 1 },
-                        { x: 2, y: 3 },
-                        { x: 3, y: 6 },
-                        { x: 4, y: 6 },
-                        { x: 5, y: 7 },
-                        { x: 6, y: 7 },
-                        { x: 7, y: 9 },
-                        { x: 8, y: 9 },
-                        { x: 9, y: 11 },
-                        { x: 10, y: 11 },
-                      ]}
-                      style={{ data: { stroke: "#c43a31" } }}
-                    />
-                    <VictoryLine
-                      interpolation="cardinal"
-                      style={{ data: { stroke: "green" } }}
-                      data={[
-                        { x: 1, y: 1 },
-                        { x: 2, y: 3 },
-                        { x: 3, y: 5 },
-                        { x: 4, y: 2 },
-                        { x: 5, y: 3 },
-                        { x: 6, y: 4 },
-                        { x: 7, y: 6 },
-                        { x: 8, y: 7 },
-                        { x: 9, y: 8 },
-                        { x: 10, y: 12 },
-                      ]}
-                    />
-                  </VictoryChart>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-span-3  space-y-5  ">
-              <div className="mb-8 flex items-center justify-between ">
-                <div className="text-base font-bold text-gray-700">
-                  Weekly Top Seller
-                </div>
-                <div className="text-sm text-blue-700">Show More</div>
-              </div>
-
-              <div className=" box h-[87%] w-full p-4">
-                <div className="h-[59%] w-full p-4">
-                  <CustomLabel chartID="pie-two" />
-                </div>
-                <div>asdas</div>
-              </div>
-            </div>
-
-            <div className="col-span-3   space-y-5 ">
-              <div className="mb-8 flex items-center justify-between ">
-                <div className="text-base font-bold text-gray-700">
-                  Weekly Top Seller
-                </div>
-                <div className="text-sm text-blue-700">Show More</div>
-              </div>
-
-              <div className=" box h-[87%] w-full p-4">
-                <div className="h-[59%] w-full p-4">
-                  {/* <CustomLabel chartID="pie-two" /> */}
-                </div>
-                <div>asdas</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-
       <div
-        className="col-span-12 space-y-3 xl:col-span-3 "
+        className="col-span-12 xl:col-span-3"
         data-aos="fade-left"
         data-aos-duration="1000"
         data-aos-delay="300"
       >
         <div className="xxl:col-span-12 col-span-12 mt-5 md:col-span-12 xl:col-span-4">
-          <Calendar
-            fullscreen={false}
-            mode="month"
-            locale={locale}
-            onChange={setOgnoo}
-          />
-        </div>
-        <div className="mt-8 flex h-10 items-center">
-          <div
-            className="text-theme-1 dark:text-theme-10 ml-auto flex items-center text-blue-400 dark:text-gray-400"
-            data-aos="zoom-in-left"
-            data-aos-duration="1000"
-            data-aos-delay="200"
-          >
-            <Button
-              type="primary"
-              onClick={() => barilgaBurtgel("new")}
-              icon={<PlusOutlined />}
-            >
-              Нэмэх
-            </Button>
-          </div>
-        </div>
-        <div
-          className="h-[45vh] space-y-3 overflow-scroll p-2"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-        >
-          {baiguullaga?.barilguud.map((a) => (
-            <div className="my-2 grid grid-cols-12  space-x-3  rounded-md bg-white py-2 px-4 hover:scale-110 hover:shadow-lg ">
-              <div className="col-span-2 flex items-center justify-start">
+          <div className="h-0md:mt-5 bg-white p-2 dark:bg-gray-900">
+            <div className="flex cursor-pointer flex-row rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800">
+              <div className="md:w-1/5">
                 <img
                   className="h-14 w-14"
                   alt={baiguullaga?.ner}
@@ -475,39 +347,37 @@ function BarilgaBurtgel({ token }) {
                   }
                 />
               </div>
-              <div className="col-span-5 flex flex-col space-y-2">
-                <div className="font-bold">{a.ner}</div>
-                <div>{a.register}</div>
-              </div>
-              <div className="col-span-3  flex items-center justify-center ">
-                {formatNumber(a?.niitTalbai)}м<sup> 2</sup>
-              </div>
-              <div className="col-span-1 flex items-center justify-end">
-                {a?.davkharuud?.length}
-              </div>
-              <div className=" col-span-1 flex items-center justify-end">
-                <Popover
-                  content={() => (
-                    <div className="flex w-24 flex-col space-y-2">
-                      <a
-                        className="ant-dropdown-link flex items-center justify-between rounded-lg  p-2 hover:bg-green-100  dark:text-white dark:hover:bg-gray-700  "
-                        onClick={() => barilgaBurtgel(a._id)}
-                      >
-                        <EditOutlined className="text-xl text-green-400" />
-                        <label className="hover:text-black"> Засах</label>
-                      </a>
-                    </div>
-                  )}
-                  placement="bottom"
-                  trigger="click"
-                >
-                  <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
-                    <MoreOutlined style={{ fontSize: "18px" }} />
-                  </a>
-                </Popover>
+              <div className="flex flex-col">
+                <span className="mt-1 font-medium text-gray-600">
+                  {barilga?.ner}
+                </span>
               </div>
             </div>
-          ))}
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Регистр:</div>
+              <div className="font-medium text-gray-600 md:w-4/5">
+                {barilga?.register}
+              </div>
+            </div>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Хаяг:</div>
+              <div className="w-full font-medium text-gray-600 md:w-4/5">
+                {barilga?.khayag}
+              </div>
+            </div>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Давхар:</div>
+              <div className="font-medium text-gray-600">
+                {barilga?.davkharuud?.length}
+              </div>
+            </div>
+            <div className="flex cursor-pointer flex-col rounded-md bg-white p-3 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex-row">
+              <div className="md:w-1/5">Талбай:</div>
+              <div className="font-medium text-gray-600">
+                {formatNumber(barilga?.niitTalbai)}м<sup> 2</sup>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Admin>
