@@ -106,7 +106,7 @@ function Khyanalt({ token }) {
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
-  const [tuluv, setTuluv] = useState(true);
+  const [tuluv, setTuluv] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -115,14 +115,14 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      idevkhiteiEsekh: tuluv !== null ? tuluv : undefined,
     };
-  }, [barilgiinId, tuluv, davkhar, tuluv]);
+  }, [barilgiinId]);
 
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
-    davkhar
+    davkhar,
+    tuluv
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
