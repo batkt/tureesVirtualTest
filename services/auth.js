@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
 
   useEffect(() => {
-    console.log(barilgiinId, typeof barilgiinId);
     if (
       (!barilgiinId && !!baiguullaga?.barilguud) ||
       (!!barilgiinId &&
