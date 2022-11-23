@@ -197,11 +197,11 @@ const YurunkhiiMedeele = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="flex w-full flex-row justify-between">
+          <div className="flex w-full flex-col gap-4 md:flex-row justify-between">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
-              className="mr-4 dark:text-gray-200 dark:hover:text-gray-800"
+              className="dark:text-gray-200 dark:hover:text-gray-800"
             >
               Ерөнхий мэдээлэл
             </Button>

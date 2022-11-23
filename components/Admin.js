@@ -34,6 +34,7 @@ function Admin({
   onBack,
   tsonkhniiId,
   loading,
+  setNeesenEsekh,
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -52,6 +53,7 @@ function Admin({
     barilgiinId,
   } = useAuth();
   const khuudasnuud = useErkh(ajiltan);
+  const [visible, setVisible] = useState(false)
 
   function onClickSearch() {
     if (mSearch) {
@@ -76,14 +78,79 @@ function Admin({
     const khonog = moment(duusakh).diff(moment(ognoo), "days");
     return <span className="font-bold text-red-500">{khonog}</span>;
   }
+  const barilguud = baiguullaga?.barilguud?.filter(
+    (a) =>
+      !!ajiltan?.barilguud?.find((b) => b === a._id) ||
+      ajiltan?.erkh === "Admin"
+  )
 
   return (
-    <div className="flex min-h-screen w-screen flex-row bg-green-600 dark:bg-gray-900 md:px-6 md:py-4">
+    <div onClick={(e) => { e.stopPropagation(); visible === true && setVisible(false) }} className="md:flex relative min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Updater />
+      <div className="flex justify-between items-center py-4">
+        {dedKhuudas && (
+          <button
+            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+            onClick={() =>
+              _.isFunction(onBack) ? onBack(router.back) : router.back()
+            }
+          >
+            <LeftOutlined
+              style={{ fontSize: "10px" }}
+              className="flex items-center justify-center dark:text-gray-50"
+            />
+          </button>
+        )}
+        <div className="flex gap-2 md:hidden">
+          <img
+            className="h-10 w-10 "
+            alt={baiguullaga?.ner}
+            src={
+              baiguullaga?.zurgiinNer
+                ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
+                : "/rent.png"
+            }
+          />
+          {barilguud?.length > 0 ? (
+            <div className="relative mt-2 inline-block">
+              <select
+                defaultValue={barilgiinId}
+                onChange={({ target }) => barilgaSoliyo(target.value)}
+                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-white"
+              >
+                {barilguud?.map((a) => (
+                  <option key={a?._id} className="" value={a?._id}>
+                    {a?.ner}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="h-4 w-4 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          ) : (
+            _.get(barilguud, "0.ner")
+          )}
+        </div>
+        {!dedKhuudas && (
+          <button
+            className="border-none outline-none md:hidden"
+            onClick={(e) => { e.stopPropagation; setVisible(!visible); !!setNeesenEsekh && setNeesenEsekh(!visible) }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 w-8 h-8 -rotate-90 text-white"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </button>
+        )}
+      </div>
       {!dedKhuudas && (
         <NTses
           khuudasnuud={khuudasnuud}
@@ -98,46 +165,29 @@ function Admin({
           barilgiinId={barilgiinId}
         />
       )}
+      {!dedKhuudas && (
+        <MTses
+          visible={visible}
+          khuudasnuud={khuudasnuud}
+          khuudasniiNer={khuudasniiNer}
+        />
+      )}
+      <h2
+        id="garchig"
+        className=" flex -mt-4 ml-3 text-base md:hidden font-semibold text-white "
+      >{title}</h2>
       <div
-        className={`bg-gray-100 dark:bg-gray-800 md:rounded-3xl md:px-2 ${
-          dedKhuudas ? "w-full" : "main"
-        }`}
+        className={`bg-gray-100 dark:bg-gray-800 rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
+          }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
-          <div className="flex flex-row items-center p-4">
-            {!dedKhuudas && (
-              <MTses
-                khuudasnuud={khuudasnuud}
-                baiguullaga={baiguullaga}
-                khuudasniiNer={khuudasniiNer}
-                themeValue={themeValue}
-                setTheme={setTheme}
-                ajiltan={ajiltan}
-                barilgaSoliyo={barilgaSoliyo}
-                barilgiinId={barilgiinId}
-              />
-            )}
-            {dedKhuudas && (
-              <button
-                className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
-                onClick={() =>
-                  _.isFunction(onBack) ? onBack(router.back) : router.back()
-                }
-              >
-                <LeftOutlined
-                  style={{ fontSize: "10px" }}
-                  className="flex items-center justify-center dark:text-gray-50"
-                />
-              </button>
-            )}
-            <h2
-              id="garchig"
-              className=" flex items-center justify-center text-base   font-semibold  text-green-800 dark:text-white "
-            >
-              {title}
-            </h2>
-          </div>
-          <div className="flex flex-row md:space-x-3 lg:space-x-6">
+          <h2
+            id="garchig"
+            className=" md:flex items-center justify-center text-base  hidden font-semibold  text-green-800 dark:text-white "
+          >
+            {title}
+          </h2>
+          <div className="flex justify-between w-full md:w-auto flex-row md:space-x-3 lg:space-x-6">
             {tsonkhniiId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
                 <Zaavar token={token} id={tsonkhniiId} />
@@ -166,15 +216,6 @@ function Admin({
             <div className="hidden items-center justify-center md:flex">
               Лиценз- {license()}
             </div>
-            <Tooltip
-              title={
-                <div>Лицензийн хугацаа дуусахад {license()} хоног үлдлээ</div>
-              }
-            >
-              <div className="flex items-center gap-1 md:hidden">
-                <CalendarOutlined />:{license()}
-              </div>
-            </Tooltip>
             {!hideSearch && (
               <>
                 <div
@@ -223,7 +264,20 @@ function Admin({
                 />
               </>
             )}
-            <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
+            <div className="flex gap-[5px]">
+              <Tooltip
+                placement="bottom"
+                title={
+                  <div>Лицензийн хугацаа дуусахад {license()} хоног үлдлээ</div>
+                }
+              >
+                <div className="flex items-center gap-1 ml-1 text-base md:hidden">
+                  {license()}:
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+              </Tooltip>
+              <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
+            </div>
           </div>
         </div>
 
@@ -231,6 +285,15 @@ function Admin({
           {loading && <Loader />}
           {children}
         </div>
+      </div>
+      <div className={`fixed z-50 bottom-[1.7rem] ${visible === true ? "-right-full" : "right-5"} transition-all md:hidden duration-500 dark:bg-gray-900 bg-green-600 px-3 py-5 shadow-md rounded-3xl flex h-8 items-center justify-center`}>
+        <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
+          Dark Mode
+        </div>
+        <Switch
+          checked={themeValue}
+          onClick={() => setTheme(themeValue ? "light" : "dark")}
+        />
       </div>
     </div>
   );

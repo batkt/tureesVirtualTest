@@ -42,8 +42,12 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
 
   useEffect(() => {
-    console.log(barilgiinId, typeof barilgiinId);
-    if (!barilgiinId && !!baiguullaga?.barilguud) {
+    if (
+      (!barilgiinId && !!baiguullaga?.barilguud) ||
+      (!!barilgiinId &&
+        !!baiguullaga &&
+        !baiguullaga?.barilguud?.find((mur) => mur._id === barilgiinId))
+    ) {
       barilgaSoliyo(_.get(baiguullaga, "barilguud.0._id"));
     }
   }, [barilgiinId, baiguullaga]);

@@ -52,10 +52,10 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
   }
   return (
     <>
-      <div className="flex flex-row justify-end">
+      <div className="flex flex-row md:ml-44 gap-3 justify-end">
         <Form.Item
           className="w-full pl-2"
-          wrapperCol={{ span: 9, offset: 15 }}
+          wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
@@ -68,7 +68,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
         </Form.Item>
         <Form.Item
           className="w-2/4 "
-          wrapperCol={{ span: 18, offset: 2 }}
+          wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "utga"]}
           fieldKey={[fieldKey, "utga"]}
@@ -516,7 +516,7 @@ const YurunkhiiMedeele = ({
                   />
                 </div>
               ))}
-              <Form.Item className="" wrapperCol={{ span: 15, offset: 10 }}>
+              <Form.Item className="md:ml-44" wrapperCol={{ offset: 0 }}>
                 <Button
                   icon={<PlusOutlined />}
                   className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "

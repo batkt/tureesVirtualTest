@@ -97,7 +97,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
   }
 
   return (
-    <div className="flex h-8 items-center justify-end gap-3">
+    <div className="flex h-8 gap-1 items-center justify-end md:gap-3">
       <Drawer
         placement={"right"}
         closable={false}
@@ -134,11 +134,10 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   <Menu.Item
                     key={`sonorduulga${i}`}
                     onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
-                    className={`${
-                      mur.kharsanEsekh
-                        ? "kharsanSonorduulga opacity-70"
-                        : "kharaaguiSonorduulga"
-                    }`}
+                    className={`${mur.kharsanEsekh
+                      ? "kharsanSonorduulga opacity-70"
+                      : "kharaaguiSonorduulga"
+                      }`}
                   >
                     <Link
                       href={{
@@ -265,8 +264,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
               ajiltan?.zurgiinNer
                 ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                 : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
-                ? "/profileFemale.svg"
-                : "/profile.svg"
+                  ? "/profileFemale.svg"
+                  : "/profile.svg"
             }
             className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"
           />

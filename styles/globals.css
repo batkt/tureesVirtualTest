@@ -830,7 +830,9 @@ input:-webkit-autofill {
 .ant-input-suffix > .anticon {
   display: flex !important;
 }
-
+.menuForPhone::-webkit-scrollbar-thumb {
+  background: white;
+}
 .sub-menu {
   overflow: hidden;
   --tw-bg-opacity: 1;
