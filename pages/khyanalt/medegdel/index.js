@@ -106,8 +106,7 @@ function Khyanalt({ token }) {
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
-  const [tuluv, setTuluv] = useState();
-  console.log(tuluv);
+  const [tuluv, setTuluv] = useState(true);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -116,7 +115,7 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      idevkhiteiEsekh: tuluv,
+      idevkhiteiEsekh: tuluv !== null ? tuluv : undefined,
     };
   }, [barilgiinId, tuluv, davkhar, tuluv]);
 
@@ -599,7 +598,6 @@ function Khyanalt({ token }) {
         >
           <div className="col-span-6">
             <Select
-              allowClear
               className="w-full"
               placeholder="Төрөл сонгоно уу"
               value={tuluv}
@@ -609,6 +607,7 @@ function Khyanalt({ token }) {
               {[
                 { key: true, v: "Идэвхтэй" },
                 { key: false, v: "Идэвхгүй " },
+                { key: undefined, v: "Бүгд " },
               ].map((a) => (
                 <Select.Option key={a.key} value={a.key}>
                   {a.v}
