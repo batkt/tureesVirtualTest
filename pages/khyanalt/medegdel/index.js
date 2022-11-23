@@ -116,12 +116,11 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      davkhar: davkhar,
       idevkhiteiEsekh: tuluv,
     };
   }, [barilgiinId, tuluv, davkhar, tuluv]);
 
-  const nekhemjlel = useKhariltsagchDavkhraarAvya(
+  const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
     davkhar
@@ -569,7 +568,7 @@ function Khyanalt({ token }) {
       khuudasniiNer="medegdel"
       className=" overflow-hidden p-5 md:p-4 lg:h-auto"
       onSearch={(search) =>
-        nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
+        setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
@@ -775,7 +774,7 @@ function Khyanalt({ token }) {
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
-                  nekhemjlel.setKhuudaslalt((a) => ({
+                  setKhariltsagchKhuudaslalt((a) => ({
                     ...a,
                     search: target.value,
                   }));
@@ -800,12 +799,10 @@ function Khyanalt({ token }) {
           </div>
           <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
-              checked={
-                nekhemjlel?.jagsaalt?.length === songogdsonKhariltsagch.length
-              }
+              checked={jagsaalt?.length === songogdsonKhariltsagch.length}
               onChange={(e) => {
                 if (e.target.checked === true)
-                  setSongogdsonKhariltsagch([...nekhemjlel?.jagsaalt]);
+                  setSongogdsonKhariltsagch([...jagsaalt]);
                 else setSongogdsonKhariltsagch([]);
               }}
             >
@@ -813,7 +810,7 @@ function Khyanalt({ token }) {
             </Checkbox>
           </div>
           <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-            {nekhemjlel?.jagsaalt?.map((mur) => (
+            {jagsaalt?.map((mur) => (
               <div>
                 {!!mur._id ? (
                   <div
