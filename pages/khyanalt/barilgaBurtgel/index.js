@@ -1,6 +1,6 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import { Button, Table, Popover } from "antd";
@@ -26,6 +26,7 @@ function BarilgaBurtgel({ token }) {
   });
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
 
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token] : null,
@@ -219,6 +220,7 @@ function BarilgaBurtgel({ token }) {
       title="Барилга"
       className="px-4"
       tsonkhniiId={"61c2c6271c2830c4e6f90c85"}
+      setNeesenEsekh={setNeesenEsekh}
     >
       <div className="col-span-12 xl:col-span-9">
         <div className="col-span-12 mt-3 px-2">
@@ -238,9 +240,8 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${
-                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                            } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                              } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
@@ -317,11 +318,13 @@ function BarilgaBurtgel({ token }) {
                 />
               </div>
               <CardList
+                cardListTuluv="utas"
                 keyValue="barilga"
                 className="block overflow-auto md:hidden"
                 jagsaalt={baiguullaga?.barilguud}
                 Component={BarilgaTile}
                 pagination={{ pageSize: 100 }}
+                neesenEsekh={neesenEsekh}
               />
             </div>
           </div>

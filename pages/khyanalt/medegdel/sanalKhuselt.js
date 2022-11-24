@@ -31,7 +31,7 @@ function index({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
-  });
+  }, []);
 
   function sanalGomdolAvakh() {
     uilchilgee(token).post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id });
@@ -47,16 +47,16 @@ function index({ token }) {
     <Admin
       khuudasniiNer="sanalKhuselt"
       title="Санал хүсэлт"
-      className={"gap-5 sm:p-6"}
+      className={"gap-5 sm:p-6 p-2 pb-14 md:pb-0"}
       onSearch={(search) =>
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
     >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-l-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-5"
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl xl:rounded-l-2xl bg-white p-4 md:p-8 dark:bg-gray-900 xl:col-span-5"
       >
-        <div className="mb-2 grid grid-cols-2 gap-x-5 px-2 ">
+        <div className="mb-2 grid md:grid-cols-2 gap-x-5 px-2 ">
           <RangePicker
             locale={local}
             size="middle"
@@ -74,8 +74,8 @@ function index({ token }) {
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
               className={`cursor-pointer rounded-lg p-1 text-center ${turul === status.utga
-                  ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
-                  : "text-gray-50"
+                ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
+                : "text-gray-50"
                 }`}
             >
               {status.ner}
@@ -83,17 +83,18 @@ function index({ token }) {
           ))}
         </div>
         {turul === "sanal" ? (
-          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto text-xs lg:h-scrollH">
-            {sanal?.sonorduulga?.jagsaalt.map((mur) =>
+          <div className="scrollbar-hidden overflow-y-auto text-xs h-scrollH">
+            {sanal?.sonorduulga?.jagsaalt.map((mur, i) =>
               mur.turul === "sanal" ? (
                 <div
+                  key={i}
                   className={` ${khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-200"
-                      : ""
+                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-200 transition-all"
+                    : i % 2 === 0 && "bg-gray-100"
                     } `}
                 >
                   <div
-                    className={`flex h-[7vh] cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
+                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
                     onClick={() => setKhariltsagch(mur)}
                   >
                     <div className="image-fit bg-blackrounded-full relative ml-3 h-12 w-12 flex-none">
@@ -148,8 +149,8 @@ function index({ token }) {
               mur.turul === "gomdol" ? (
                 <div
                   className={` ${khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
-                      : ""
+                    ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                    : ""
                     } `}
                 >
                   <div
@@ -205,7 +206,7 @@ function index({ token }) {
         )}
       </div>
       {!!khariltsagch ? (
-        <div className="col-span-7 rounded-r-lg bg-green-50 ">
+        <div className="col-span-12 xl:col-span-7 h-[40vh] xl:h-auto rounded-r-lg bg-green-50 ">
           <div className="flex w-full items-center gap-3 px-5 pt-2">
             <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
               <img src="/profile.svg" className="h-10 w-10 rounded-full" />
@@ -260,7 +261,7 @@ function index({ token }) {
         </div>
       ) : (
         <div
-          className="box col-span-7 flex h-full items-center"
+          className="box col-span-12 xl:col-span-7 h-[40vh] xl:h-full flex items-center"
           data-aos="fade-left"
           data-aos-duration="1000"
         >

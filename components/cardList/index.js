@@ -16,7 +16,7 @@ function CardList({
         jagsaalt.map((mur, index) => (
           <Component {...mur} {...componentProps} key={`${keyValue}${index}`} />
         ))}
-      {!!pagination && !!pagination?.pageSize && <Pagination className={`transition-all duration-500 ${cardListTuluv === "utas" && neesenEsekh === true ? "fixed -left-full bottom-8" : "fixed bottom-8 left-5"}`} {...pagination} />}
+      {!!pagination && !!pagination?.pageSize && <Pagination className={`transition-all duration-500 ${cardListTuluv === "utas" && neesenEsekh === true ? "fixed -left-full bottom-8" : "fixed bottom-8 w-2/5 overflow-x-auto hideScroll overflow-hidden flex left-6"}`} {...pagination} />}
     </div>
   );
 }

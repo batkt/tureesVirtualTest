@@ -119,6 +119,7 @@ function talbaiBurtgekh({ token }) {
   const { talbainToololt } = useTalbainToololt(token);
 
   const [open, setOpen] = useState(false);
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
 
   const showDrawer = () => {
     setOpen(true);
@@ -472,6 +473,7 @@ function talbaiBurtgekh({ token }) {
     <Admin
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
+      setNeesenEsekh={setNeesenEsekh}
       tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
       className="p-0 md:p-4"
       onSearch={(search) =>
@@ -481,24 +483,23 @@ function talbaiBurtgekh({ token }) {
     >
       <Card
         size="small"
-        className="col-span-12 overflow-auto p-5 md:col-span-12 xl:col-span-12"
+        className="col-span-12 overflow-auto mb-14 md:col-span-12 xl:col-span-12"
       >
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50 dark:bg-gray-900"
-                    : ""
-                }`}
+                className={`zoom-in h-20 cursor-pointer rounded-xl relative sm:col-span-12 lg:col-span-3 border-2 border-green-600 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50 dark:bg-gray-900"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full rounded-xl">
+                <div className="h-full  w-[70vw] sm:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex justify-between">
                       <div>
@@ -510,7 +511,7 @@ function talbaiBurtgekh({ token }) {
                         </div>
                       </div>
                       <div>
-                        <div className="text-xs text-green-600">
+                        <div className="text-xs flex top-2 right-2 text-green-600 absolute">
                           Нийт м²: {mur.mk}
                         </div>
                       </div>
@@ -523,13 +524,13 @@ function talbaiBurtgekh({ token }) {
         </div>
 
         <div
-          className="ml-auto flex place-content-end"
+          className="ml-auto md:flex p-5 place-content-end"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="200"
         >
           <div
-            className="ml-auto  w-full place-content-end  pr-4"
+            className="  w-full place-content-end  md:pr-4"
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="200"
@@ -537,6 +538,7 @@ function talbaiBurtgekh({ token }) {
             <Button
               onClick={showDrawer}
               type="primary"
+              className="w-full md:w-auto"
               style={{ marginTop: "10px" }}
               icon={<PictureOutlined style={{ fontSize: "16px" }} />}
             >
@@ -565,7 +567,7 @@ function talbaiBurtgekh({ token }) {
             </Drawer>
           </div>
           <div
-            className="ml-auto  place-content-end pr-4 "
+            className="flex gap-4 justify-between place-content-end "
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="200"
@@ -578,95 +580,102 @@ function talbaiBurtgekh({ token }) {
             >
               <Button
                 type="primary"
+                className="w-full md:w-auto"
                 style={{ marginTop: "10px" }}
                 icon={<PlusOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Нэмэх</span>
               </Button>
             </Link>
-          </div>
-          <Popover
-            content={() => (
-              <div className="flex w-32 flex-col pl-4 ">
-                <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
-                  onClick={talbaiOruulakhExcel}
-                >
-                  <UploadOutlined style={{ fontSize: "18px" }} />
-                  <label>Оруулах</label>
-                </a>
-                <a
-                  className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                  onClick={() => {
-                    const { Excel } = require("antd-table-saveas-excel");
-                    const excelExport = new Excel();
-                    excelExport
-                      .addSheet("түрээсийн талбай")
-                      .addColumns([
-                        {
-                          title: "Дугаар",
-                          dataIndex: "kod",
-                        },
-                        {
-                          title: "Давхар",
-                          dataIndex: "davkhar",
-                        },
-                        {
-                          title: "Талбай/м2/",
-                          dataIndex: "talbainKhemjee",
-                        },
 
-                        {
-                          title: "Нийт үнэ/₮/",
-                          dataIndex: "talbainNiitUne",
-
-                          render: (talbainNiitUne) => {
-                            return formatNumber(talbainNiitUne || 0);
+            <Popover
+              content={() => (
+                <div className="flex w-32 flex-col pl-4 ">
+                  <a
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
+                    onClick={talbaiOruulakhExcel}
+                  >
+                    <UploadOutlined style={{ fontSize: "18px" }} />
+                    <label>Оруулах</label>
+                  </a>
+                  <a
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                    onClick={() => {
+                      const { Excel } = require("antd-table-saveas-excel");
+                      const excelExport = new Excel();
+                      excelExport
+                        .addSheet("түрээсийн талбай")
+                        .addColumns([
+                          {
+                            title: "Дугаар",
+                            dataIndex: "kod",
                           },
-                        },
-                        {
-                          title: "Зардал",
-                          dataIndex: "niitAshiglaltiinZardal",
-                        },
-                        {
-                          title: "Төлбөр",
-                          dataIndex: "tureesiinTulbur",
-                        },
-                        {
-                          title: "Тайлбар",
-                          dataIndex: "tailbar",
-                        },
-                      ])
-                      .addDataSource(talbainiiGaralt?.jagsaalt)
-                      .saveAs("түрээсийн талбай.xlsx");
-                  }}
-                >
-                  <DownloadOutlined style={{ fontSize: "18px" }} />
-                  <label>Татах</label>
-                </a>
-              </div>
-            )}
-            placement="bottom"
-            trigger="click"
-          >
-            <Button
-              type="primary"
-              style={{ marginTop: "10px" }}
-              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                          {
+                            title: "Давхар",
+                            dataIndex: "davkhar",
+                          },
+                          {
+                            title: "Талбай/м2/",
+                            dataIndex: "talbainKhemjee",
+                          },
+
+                          {
+                            title: "Нийт үнэ/₮/",
+                            dataIndex: "talbainNiitUne",
+
+                            render: (talbainNiitUne) => {
+                              return formatNumber(talbainNiitUne || 0);
+                            },
+                          },
+                          {
+                            title: "Зардал",
+                            dataIndex: "niitAshiglaltiinZardal",
+                          },
+                          {
+                            title: "Төлбөр",
+                            dataIndex: "tureesiinTulbur",
+                          },
+                          {
+                            title: "Тайлбар",
+                            dataIndex: "tailbar",
+                          },
+                        ])
+                        .addDataSource(talbainiiGaralt?.jagsaalt)
+                        .saveAs("түрээсийн талбай.xlsx");
+                    }}
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>Татах</label>
+                  </a>
+                </div>
+              )}
+              placement="bottom"
+              trigger="click"
             >
-              <span>Excel</span>
-              <DownOutlined width={5} />
-            </Button>
-          </Popover>
+              <Button
+                type="primary"
+                className="w-full md:w-auto"
+                style={{ marginTop: "10px" }}
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Excel</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>
+          </div>
         </div>
         <div
           data-aos="fade-up-left"
           data-aos-duration="1000"
           data-aos-delay="200"
           data-aos-anchor-placement="top-bottom"
+          className="mt-5 md:mt-0"
         >
+          <p className="font-medium py-2 md:hidden">Талбайн жагсаалт</p>
           <CardList
             keyValue="talbai"
+            cardListTuluv={"utas"}
+            neesenEsekh={neesenEsekh}
             className="block overflow-auto md:hidden"
             jagsaalt={talbainiiGaralt?.jagsaalt}
             Component={TalbaiTile}
@@ -676,7 +685,7 @@ function talbaiBurtgekh({ token }) {
               total: talbainiiGaralt?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setKhuudaslalt((kh) => ({
+                setTalbaiKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
                   khuudasniiKhemjee,
@@ -714,7 +723,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,

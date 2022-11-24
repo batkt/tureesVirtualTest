@@ -305,7 +305,9 @@ function Khyanalt({ token }) {
 
   //#endregion
   function khariltsagchSongokh(mur) {
-    setKhariltsagch(mur);
+    if (khariltsagch === null) {
+      setKhariltsagch(mur);
+    } else setKhariltsagch(null)
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
     index !== -1
       ? songogdsonKhariltsagch.splice(index, 1)
@@ -316,7 +318,7 @@ function Khyanalt({ token }) {
     <Admin
       title="Шаардлага"
       khuudasniiNer="shaardlaga"
-      className=" overflow-hidden p-5 md:p-4 lg:h-auto"
+      className=" overflow-hidden pb-14 md:pb-0 p-5 md:p-4 lg:h-auto"
       onSearch={(search) =>
         khariltsagchiinMedeelel.setKhuudaslalt((a) => ({ ...a, search }))
       }
@@ -332,7 +334,7 @@ function Khyanalt({ token }) {
             <input
               type="text"
               className="w-full rounded-md bg-gray-100 px-2  py-1 dark:bg-gray-700"
-              placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
+              placeholder="Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/"
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
@@ -430,261 +432,256 @@ function Khyanalt({ token }) {
           </div>
         </div>
       </div>
-      {/* </div> */}
-
-      <div className="col-span-12 mt-0 lg:col-span-6 lg:mt-0 xl:col-span-9">
-        {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-          <div className="box flex  flex-col">
-            {songogdsonKhariltsagch.length <= 1 ? (
-              <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
-                {khariltsagch && (
-                  <div className="flex items-center">
-                    <div className="mr-3 text-lg xl:hidden">
-                      <ArrowLeftOutlined
-                        onClick={() => khariltsagchSongokh(mur)}
-                      />
+      {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
+        <div className="box flex col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem h-full flex-col">
+          {songogdsonKhariltsagch.length <= 1 ? (
+            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
+              {khariltsagch && (
+                <div className="flex items-center">
+                  <div className="mr-3 text-lg xl:hidden">
+                    <ArrowLeftOutlined
+                      onClick={() => khariltsagchSongokh(khariltsagch)}
+                    />
+                  </div>
+                  <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
+                    <img
+                      alt="ProfileZurag"
+                      className="rounded-full"
+                      src={
+                        ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
+                          10) %
+                          2 <
+                          1
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
+                      }
+                    />
+                  </div>
+                  <div className="ml-3 mr-auto">
+                    <div className="text-base font-medium">
+                      {khariltsagch?.ner}
                     </div>
-                    <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
-                      <img
-                        alt="ProfileZurag"
-                        className="rounded-full"
-                        src={
-                          ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
-                            10) %
-                            2 <
-                            1
-                            ? "/profileFemale.svg"
-                            : "/profile.svg"
-                        }
-                      />
-                    </div>
-                    <div className="ml-3 mr-auto">
-                      <div className="text-base font-medium">
-                        {khariltsagch?.ner}
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                    <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
 
-                        {khariltsagch?.utas}{" "}
-                        <span className="mx-1">•</span> {turul}
-                      </div>
+                      {khariltsagch?.utas}{" "}
+                      <span className="mx-1">•</span> {turul}
                     </div>
                   </div>
-                )}
-              </div>
-            ) : (
-              ""
-            )}
-            <div>
-              {songogdsonKhariltsagch.length > 1 ? (
-                <div
-                  className="col-span-12 min-h-[60vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                  style={{ maxHeight: "calc(100vh - 44rem)" }}
-                >
-                  <div
-                    className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
-                      }`}
-                    data-aos="fade-left"
-                    data-aos-duration="1000"
-                  >
-                    <div className="mx-auto text-center">
-                      <div className="flex justify-center">
-                        <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                          <img alt="ProfileZurag" src="/profile.svg" />
-                        </div>
-                        <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                          <img alt="ProfileZurag" src="/profileFemale.svg" />
-                        </div>
-                      </div>
-                      <div className="mt-3">
-                        <div className="font-medium">Өдрийн мэнд</div>
-                        <div className="mt-1 text-gray-600 dark:text-gray-300">
-                          Та шаардлага илгээнэ үү.
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  className="col-span-12 flex min-h-[50vh] flex-col-reverse items-center overflow-auto rounded-r-xl bg-white px-10 pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                  style={{ maxHeight: "calc(100vh - 32rem)" }}
-                  onScroll={(e) => {
-                    if (
-                      e.target.scrollHeight + e.target.scrollTop - 1 <
-                      e.target.clientHeight &&
-                      !!jagsaalt
-                    ) {
-                      nextSonorduulga();
-                    }
-                  }}
-                >
-                  {jagsaalt?.map((mur) =>
-                    mur.khariltsagchiinId === khariltsagch?._id ? (
-                      <div className="my-5 flex w-full items-center ">
-                        <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-gray-800 sm:w-full">
-                          <div className="flex flex-row flex-wrap items-center justify-between  ">
-                            <div className="text-sm text-green-600">
-                              Гарчиг: {mur.title}
-                            </div>
-                            {mur?.tuluv === 0 ? (
-                              <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
-                                {" "}
-                                Хүлээж аваагүй{" "}
-                              </div>
-                            ) : (
-                              <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
-                                {" "}
-                                Хүлээж авсан{" "}
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex">
-                            <div className="w-full">
-                              <div className="font-semibold">
-                                Шаардлага: {mur.message}
-                              </div>
-
-                              <div>
-                                {mur.zurguud.map((a, i) => (
-                                  <Image
-                                    key={i}
-                                    width={75}
-                                    src={`${url}/file?path=shaardlaga/${a}`}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="h-11 w-11 rounded-full  bg-green-300 dark:bg-gray-800">
-                          <img
-                            src="/profile.svg"
-                            className="h-10 w-10 rounded-full"
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      ""
-                    )
-                  )}
                 </div>
               )}
             </div>
-
-            <div
-              className="w-full  space-y-3 px-3"
-              data-aos="fade-right"
-              data-aos-duration="1000"
-            >
-              <Input
-                rules={[
-                  { required: true, message: "Гарчиг заавал оруулна уу!" },
-                ]}
-                className="space-y-3"
-                placeholder="Гарчиг"
-                value={title}
-                onChange={({ target }) => setTitle(target.value)}
-              />
-              <div className="space-y-3">
-                {console.log(zurag)}
-                <Upload
-                  showUploadList={false}
-                  multiple={false}
-                  name="file"
-                  maxCount={1}
-                  action={`${url}/upload`}
-                  method="POST"
-                  onChange={(v) => setZurag(v.file.response)}
-                  beforeUpload={(file) => {
-                    function handleChange(img) {
-                      getBase64(img, (img) => (ref.current.src = img));
-                      ref.current.classList.remove("hidden");
-                    }
-                    return beforeUpload(file, handleChange);
-                  }}
+          ) : (
+            ""
+          )}
+          <div>
+            {songogdsonKhariltsagch.length > 1 ? (
+              <div
+                className="col-span-12 min-h-[60vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                style={{ maxHeight: "calc(100vh - 44rem)" }}
+              >
+                <div
+                  className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
+                    }`}
+                  data-aos="fade-left"
+                  data-aos-duration="1000"
                 >
-                  <div className="flex flex-row space-x-1">
-                    <div className="flex flex-row space-x-1">
-                      {!zurag && (
-                        <Button icon={<UploadOutlined />}>
-                          зураг оруулах
-                        </Button>
-                      )}
-                      <img
-                        ref={ref}
-                        width={200}
-                        src=""
-                        className="hidden"
-                      />
-                      {!!zurag && <Button icon={<EditOutlined />}></Button>}
+                  <div className="mx-auto text-center">
+                    <div className="flex justify-center">
+                      <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                        <img alt="ProfileZurag" src="/profile.svg" />
+                      </div>
+                      <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                        <img alt="ProfileZurag" src="/profileFemale.svg" />
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      <div className="font-medium">Өдрийн мэнд</div>
+                      <div className="mt-1 text-gray-600 dark:text-gray-300">
+                        Та шаардлага илгээнэ үү.
+                      </div>
                     </div>
                   </div>
-
-                </Upload>
-                <ZagvarUusgekh
-                  change={setContent}
-                  value={content}
-                  onTextChange={onTextChange}
-                />
-              </div>
-            </div>
-            <div className="flex w-full items-center justify-end space-x-2">
-              <div className="flex items-center justify-between space-x-3">
-                <label className="font-medium">{turul} Илгээх</label>
-                <div
-                  onClick={send}
-                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
-                    } flex flex-none items-center justify-center rounded-full text-white`}
-                >
-                  {loading ? (
-                    <Spin size="small" />
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                    >
-                      <line x1="22" y1="2" x2="11" y2="13"></line>
-                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                  )}
                 </div>
               </div>
-            </div>
+            ) : (
+              <div
+                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl bg-white px-10 pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                style={{ maxHeight: "calc(100vh - 32rem)" }}
+                onScroll={(e) => {
+                  if (
+                    e.target.scrollHeight + e.target.scrollTop - 1 <
+                    e.target.clientHeight &&
+                    !!jagsaalt
+                  ) {
+                    nextSonorduulga();
+                  }
+                }}
+              >
+                {jagsaalt?.map((mur) =>
+                  mur.khariltsagchiinId === khariltsagch?._id ? (
+                    <div className="my-5 flex w-full items-center ">
+                      <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-gray-800 sm:w-full">
+                        <div className="flex flex-row flex-wrap items-center justify-between  ">
+                          <div className="text-sm text-green-600">
+                            Гарчиг: {mur.title}
+                          </div>
+                          {mur?.tuluv === 0 ? (
+                            <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
+                              {" "}
+                              Хүлээж аваагүй{" "}
+                            </div>
+                          ) : (
+                            <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
+                              {" "}
+                              Хүлээж авсан{" "}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex">
+                          <div className="w-full">
+                            <div className="font-semibold">
+                              Шаардлага: {mur.message}
+                            </div>
+
+                            <div>
+                              {mur.zurguud.map((a, i) => (
+                                <Image
+                                  key={i}
+                                  width={75}
+                                  src={`${url}/file?path=shaardlaga/${a}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="h-11 w-11 rounded-full  bg-green-300 dark:bg-gray-800">
+                        <img
+                          src="/profile.svg"
+                          className="h-10 w-10 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )
+                )}
+              </div>
+            )}
           </div>
-        ) : (
+
           <div
-            className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
-              }`}
-            data-aos="fade-left"
+            className="w-full  space-y-3 px-3"
+            data-aos="fade-right"
             data-aos-duration="1000"
           >
-            <div className="mx-auto text-center">
-              <div className="flex justify-center">
-                <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img alt="ProfileZurag" src="/profile.svg" />
+            <Input
+              rules={[
+                { required: true, message: "Гарчиг заавал оруулна уу!" },
+              ]}
+              className="space-y-3"
+              placeholder="Гарчиг"
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+            <div className="space-y-3">
+              <Upload
+                showUploadList={false}
+                multiple={false}
+                name="file"
+                maxCount={1}
+                action={`${url}/upload`}
+                method="POST"
+                onChange={(v) => setZurag(v.file.response)}
+                beforeUpload={(file) => {
+                  function handleChange(img) {
+                    getBase64(img, (img) => (ref.current.src = img));
+                    ref.current.classList.remove("hidden");
+                  }
+                  return beforeUpload(file, handleChange);
+                }}
+              >
+                <div className="flex flex-row space-x-1">
+                  <div className="flex flex-row space-x-1">
+                    {!zurag && (
+                      <Button icon={<UploadOutlined />}>
+                        зураг оруулах
+                      </Button>
+                    )}
+                    <img
+                      ref={ref}
+                      width={200}
+                      src=""
+                      className="hidden"
+                    />
+                    {!!zurag && <Button icon={<EditOutlined />}></Button>}
+                  </div>
                 </div>
-                <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img alt="ProfileZurag" src="/profileFemale.svg" />
-                </div>
-              </div>
-              <div className="mt-3">
-                <div className="font-medium">Өдрийн мэнд</div>
-                <div className="mt-1 text-gray-600 dark:text-gray-300">
-                  Та шаардлага илгээх харилцагчаа сонгоно уу.
-                </div>
+
+              </Upload>
+              <ZagvarUusgekh
+                change={setContent}
+                value={content}
+                onTextChange={onTextChange}
+              />
+            </div>
+          </div>
+          <div className="flex w-full items-center justify-end space-x-2">
+            <div className="flex items-center justify-between space-x-3">
+              <label className="font-medium">{turul} Илгээх</label>
+              <div
+                onClick={send}
+                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
+                  } flex flex-none items-center justify-center rounded-full text-white`}
+              >
+                {loading ? (
+                  <Spin size="small" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4"
+                  >
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                )}
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div
+          className={`box hidden mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
+            }`}
+          data-aos="fade-left"
+          data-aos-duration="1000"
+        >
+          <div className="mx-auto text-center">
+            <div className="flex justify-center">
+              <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profile.svg" />
+              </div>
+              <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profileFemale.svg" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="mt-1 text-gray-600 dark:text-gray-300">
+                Та шаардлага илгээх харилцагчаа сонгоно уу.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Admin>
   );
 }

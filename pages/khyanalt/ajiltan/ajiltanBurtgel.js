@@ -69,6 +69,7 @@ function AjiltanBurtgel({ token }) {
     ajildOrsonOgnoo: moment(),
   });
   const [waiting, setWaiting] = useState(false);
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
 
   useEffect(() => {
     document.getElementById("input1").focus();
@@ -186,6 +187,9 @@ function AjiltanBurtgel({ token }) {
     formRef.current.setFieldsValue({ ...data });
     setAjiltanState(data);
   }
+  useEffect(() => {
+
+  }, [])
 
   function ajiltanUstgay(mur) {
     if (ajiltan._id === mur._id) {
@@ -219,6 +223,7 @@ function AjiltanBurtgel({ token }) {
     <Admin
       title="Ажилтан бүртгэл"
       khuudasniiNer="ajiltanBurtgel"
+      setNeesenEsekh={setNeesenEsekh}
       className="p-0 md:p-4"
       onSearch={(search) =>
         setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
@@ -442,14 +447,14 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 !!ajiltanState.nevtrekhNer
                   ? {
-                      pattern: new RegExp("(^[A-z]+$)"),
-                      required: true,
-                      message: "Крилл үсгээр бичнэ үү",
-                    }
+                    pattern: new RegExp("(^[A-z]+$)"),
+                    required: true,
+                    message: "Крилл үсгээр бичнэ үү",
+                  }
                   : {
-                      required: true,
-                      message: "Нэвтрэх нэр оруулан уу",
-                    },
+                    required: true,
+                    message: "Нэвтрэх нэр оруулан уу",
+                  },
               ]}
             >
               <Input
@@ -468,11 +473,11 @@ function AjiltanBurtgel({ token }) {
                 !!ajiltanState._id
                   ? undefined
                   : [
-                      {
-                        required: true,
-                        message: "Нэвтрэх нууц үг бүртгэнэ үү!",
-                      },
-                    ]
+                    {
+                      required: true,
+                      message: "Нэвтрэх нууц үг бүртгэнэ үү!",
+                    },
+                  ]
               }
             >
               <Input.Password
@@ -496,7 +501,7 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+      <div className="box col-span-12 mb-16 md:mb-0 overflow-auto p-5 md:col-span-6 xl:col-span-9">
         <div
           className="hidden overflow-auto md:block"
           data-aos="fade-down-left"
@@ -529,7 +534,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -614,8 +619,11 @@ function AjiltanBurtgel({ token }) {
             ]}
           />
         </div>
+        <p className="font-medium md:hidden">Ажилтны жагсаалт</p>
         <CardList
+          neesenEsekh={neesenEsekh}
           keyValue="ajiltan"
+          cardListTuluv={"utas"}
           className="block overflow-auto md:hidden"
           jagsaalt={ajilchdiinGaralt?.jagsaalt}
           Component={AjiltanTile}
@@ -625,7 +633,7 @@ function AjiltanBurtgel({ token }) {
             total: ajilchdiinGaralt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
+              setAjiltniiKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,

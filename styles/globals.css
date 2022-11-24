@@ -833,6 +833,9 @@ input:-webkit-autofill {
 .menuForPhone::-webkit-scrollbar-thumb {
   background: white;
 }
+.hideScroll::-webkit-scrollbar {
+  display: none;
+}
 .sub-menu {
   overflow: hidden;
   --tw-bg-opacity: 1;
