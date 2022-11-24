@@ -618,8 +618,8 @@ function AjiltanBurtgel({ token }) {
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
       loading={waiting || isValidating}
     >
-      <Button type="primary" onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} className="col-span-12 mx-5 md:hidden -mb-4">{utasKhariltsagchNmekh ? <EyeInvisibleOutlined className="text-xl" /> : "Харилцагч нэмэх"}</Button>
-      <div className={`box col-span-12 p-5 md:col-span-6 xl:col-span-3 ${utasKhariltsagchNmekh === true ? "" : "hidden md:flex"}`}>
+      {utasKhariltsagchNmekh && <div className="col-span-12 -mb-4 mx-5 md:hidden"><Button type="primary" onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} className="w-full  "><EyeInvisibleOutlined className="text-xl" /></Button></div>}
+      <div className={`box col-span-12 p-5 md:col-span-6 xl:col-span-3  ${utasKhariltsagchNmekh === true ? "" : "hidden md:block"}`}>
         <Form
           autoComplete={"off"}
           ref={formRef}
@@ -1030,8 +1030,10 @@ function AjiltanBurtgel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="300"
         >
-          <div></div>
-          <div className="ml-auto flex">
+          <div className="md:ml-auto items-center justify-between md:justify-end w-full flex">
+            <div className=" md:hidden ">
+              <Button type="primary"
+                style={{ marginTop: "10px" }} onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} >Харилцагч нэмэх</Button></div>
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
