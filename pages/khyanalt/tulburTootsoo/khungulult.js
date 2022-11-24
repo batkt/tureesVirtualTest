@@ -46,9 +46,9 @@ function tulburTootsoo() {
     return {
       createdAt: ekhlekhOgnoo
         ? {
-            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
     };
   }, [ekhlekhOgnoo]);
@@ -228,7 +228,7 @@ function tulburTootsoo() {
     <Admin
       title="Хөнгөлөлт"
       khuudasniiNer="khungulult"
-      className="p-0 md:p-4"
+      className="p-0 pb-12 px-3 md:px-4 md:pb-0 md:p-4"
       onSearch={(search) => {
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
         setGereeniiKhuudaslalt((a) => ({
@@ -245,7 +245,7 @@ function tulburTootsoo() {
           <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
             <div className="grid w-full grid-cols-12 gap-6">
               <div
-                className="col-span-3 border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3"
+                className="col-span-12 rounded-md border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3"
                 data-aos="fade-right"
                 data-aos-duration="1000"
               >
@@ -377,7 +377,7 @@ function tulburTootsoo() {
               </div>
 
               <div
-                className="box col-span-9 overflow-auto p-5 md:col-span-3 xl:col-span-9"
+                className="box col-span-12 overflow-auto p-5 md:col-span-3 xl:col-span-9"
                 data-aos="fade-right"
                 data-aos-duration="1000"
                 data-aos-delay="300"
@@ -396,6 +396,7 @@ function tulburTootsoo() {
                       dataIndex: "gereeniiDugaar",
                       className: "text-center",
                       align: "center",
+                      width: "7rem",
                       showSorterTooltip: false,
                       sorter: (a, b) =>
                         a.gereeniiDugaar?.localeCompare(b.gereeniiDugaar),
@@ -405,6 +406,7 @@ function tulburTootsoo() {
                       dataIndex: "talbainDugaar",
                       className: "text-center",
                       align: "center",
+                      width: "7rem",
                       showSorterTooltip: false,
                       sorter: (a, b) =>
                         a.talbainDugaar?.localeCompare(b.talbainDugaar),
@@ -423,6 +425,7 @@ function tulburTootsoo() {
                       title: "Талбай /м2/",
                       dataIndex: "talbainKhemjee",
                       align: "center",
+                      width: "7rem",
                       className: "text-center",
                       render: (talbainKhemjee) => {
                         return `${talbainKhemjee} м2`;
@@ -437,6 +440,7 @@ function tulburTootsoo() {
                       title: "Төлбөр",
                       dataIndex: "sariinTurees",
                       className: "text-center",
+                      width: "7rem",
                       align: "center",
                       render: (sariinTurees) => {
                         return formatNumber(sariinTurees || 0);
@@ -491,6 +495,7 @@ function tulburTootsoo() {
                       dataIndex: "createdAt",
                       ellipsis: true,
                       align: "center",
+                      width: "7rem",
                       render: (data) => {
                         return moment(data).format("YYYY-MM-DD hh:mm:ss");
                       },
@@ -499,10 +504,12 @@ function tulburTootsoo() {
                       title: "Хөнгөлөлт %",
                       dataIndex: "khungulukhKhuvi",
                       ellipsis: true,
+                      width: "7rem",
                       align: "center",
                     },
                     {
                       title: "Хугацаа",
+                      width: "7rem",
                       dataIndex: "ognoonuud",
                       ellipsis: true,
                       align: "center",
@@ -514,6 +521,7 @@ function tulburTootsoo() {
                     },
                     {
                       title: "Төлөх дүн",
+                      width: "7rem",
                       dataIndex: "tulukhDun",
                       align: "center",
                       render: (data) => {
@@ -522,6 +530,7 @@ function tulburTootsoo() {
                     },
                     {
                       title: "Хөнгөлөх дүн",
+                      width: "7rem",
                       dataIndex: "khungulultiinDun",
                       align: "center",
                       render: (data) => {
@@ -530,6 +539,7 @@ function tulburTootsoo() {
                     },
                     {
                       title: "Төлсөн дүн",
+                      width: "7rem",
                       dataIndex: "khungulsunDun",
                       align: "center",
                       render: (data) => {
@@ -538,18 +548,21 @@ function tulburTootsoo() {
                     },
                     {
                       title: "Төрөл",
+                      width: "7rem",
                       dataIndex: "turul",
                       ellipsis: true,
                       align: "center",
                     },
                     {
                       title: "Шалтгаан",
+                      width: "7rem",
                       dataIndex: "shaltgaan",
                       ellipsis: true,
                       align: "center",
                     },
                     {
                       title: "Ажилтан",
+                      width: "7rem",
                       dataIndex: "guilgeeKhiisenAjiltniiNer",
                       align: "center",
                       showSorterTooltip: false,

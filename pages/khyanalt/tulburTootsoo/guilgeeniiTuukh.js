@@ -151,6 +151,7 @@ function guilgeeniiTuukh({ token }) {
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
   ]);
   const [turul, setTurul] = React.useState("");
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
 
@@ -665,9 +666,10 @@ function guilgeeniiTuukh({ token }) {
       onSearch={onSearch}
       tsonkhniiId="61c2c6bc1c2830c4e6f90cb5"
       loading={isValidating}
+      setNeesenEsekh={setNeesenEsekh}
     >
-      <Card className="cardgrid col-span-12 p-5">
-        <div className="grid w-full grid-cols-12 gap-4">
+      <Card className="cardgrid col-span-12 md:p-5">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {[
             {
               too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
@@ -732,7 +734,7 @@ function guilgeeniiTuukh({ token }) {
                 data-aos-delay={1 + index + "00"}
               >
                 <Tooltip title={<div>{mur.tailbar}</div>}>
-                  <div className="h-full rounded-xl">
+                  <div className="h-full w-[65vw] sm:w-auto rounded-xl">
                     <div className="rounded-xl p-3">
                       <div className="flex">
                         <div>
@@ -772,107 +774,110 @@ function guilgeeniiTuukh({ token }) {
           })}
         </div>
         <div
-          className="mt-5 flex w-full flex-row"
+          className="mt-5 flex w-full flex-col-reverse gap-5 md:flex-row"
           data-aos="zoom-in-up"
           data-aos-duration="1000"
           data-aos-delay="200"
         >
-          <DatePicker.RangePicker
-            picker="month"
-            value={ognoo}
-            onChange={(v) => {
-              setOgnoo(v);
-              setLoadingIndex(0);
-            }}
-            clearIcon={false}
-          />
-          <div className="ml-5">
-            <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
-              {baiguullaga?.barilguud
-                ?.find((a) => a._id === barilgiinId)
-                ?.davkharuud.map((a) => (
-                  <Select.Option key={a._id} value={a.davkhar}>
-                    {a.davkhar}
-                  </Select.Option>
-                ))}
-            </Select>
-          </div>
-          <div className="ml-auto flex place-content-end">
-            <BaganiinSongolt
-              shineBagana={shineBagana}
-              setShineBagana={setShineBagana}
-              columns={[
-                {
-                  width: "9rem",
-                  align: "center",
-                  title: " Төлөх огноо",
-                  dataIndex: "daraagiinTulukhOgnoo",
-                  render(a) {
-                    return moment(a).format("YYYY-MM-DD");
-                  },
-                },
-                {
-                  title: "Сарын түрээс",
-                  width: "8rem",
-                  dataIndex: "sariinTurees",
-                  summary: true,
-                  align: "right",
-                  render: (a) => {
-                    return formatNumber(a || 0);
-                  },
-                },
-                {
-                  title: "Талбайн үнэ",
-                  width: "8rem",
-                  align: "right",
-                  summary: true,
-                  dataIndex: "talbainNiitUne",
-                  render: (a) => {
-                    return formatNumber(a || 0);
-                  },
-                },
-                {
-                  title: "Давхар",
-                  dataIndex: "davkhar",
-                  ellipsis: true,
-                  align: "center",
-                  width: "5rem",
-                  showSorterTooltip: false,
-                  defaultSortOrder: "descend",
-                  sorter: () => 0,
-                },
-                {
-                  title: "Түрээслэгч",
-                  dataIndex: "ner",
-                  ellipsis: true,
-                  align: "left",
-                  width: "8rem",
-                },
-                {
-                  title: "Гэрээний огноо",
-                  width: "11rem",
-                  dataIndex: "gereeniiOgnoo",
-                  ellipsis: true,
-                  align: "center",
-                  render(a) {
-                    return moment(a).format("YYYY-MM-DD");
-                  },
-                },
-                {
-                  title: "Алдангийн үлдэгдэл",
-                  dataIndex: "aldangiinUldegdel",
-                  className: "text-center",
-                  align: "right",
-                  ellipsis: true,
-                  width: "7rem",
-                  summary: true,
-                  render: (aldangiinUldegdel) => {
-                    return formatNumber(aldangiinUldegdel || 0);
-                  },
-                },
-              ]}
+          <div className="flex">
+            <DatePicker.RangePicker
+              picker="month"
+              value={ognoo}
+              onChange={(v) => {
+                setOgnoo(v);
+                setLoadingIndex(0);
+              }}
+              clearIcon={false}
             />
-
+            <div className="ml-5">
+              <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+                {baiguullaga?.barilguud
+                  ?.find((a) => a._id === barilgiinId)
+                  ?.davkharuud.map((a) => (
+                    <Select.Option key={a._id} value={a.davkhar}>
+                      {a.davkhar}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </div>
+          </div>
+          <div className="ml-auto w-full md:w-auto flex place-content-end">
+            <div className="hidden md:flex">
+              <BaganiinSongolt
+                shineBagana={shineBagana}
+                setShineBagana={setShineBagana}
+                columns={[
+                  {
+                    width: "9rem",
+                    align: "center",
+                    title: " Төлөх огноо",
+                    dataIndex: "daraagiinTulukhOgnoo",
+                    render(a) {
+                      return moment(a).format("YYYY-MM-DD");
+                    },
+                  },
+                  {
+                    title: "Сарын түрээс",
+                    width: "8rem",
+                    dataIndex: "sariinTurees",
+                    summary: true,
+                    align: "right",
+                    render: (a) => {
+                      return formatNumber(a || 0);
+                    },
+                  },
+                  {
+                    title: "Талбайн үнэ",
+                    width: "8rem",
+                    align: "right",
+                    summary: true,
+                    dataIndex: "talbainNiitUne",
+                    render: (a) => {
+                      return formatNumber(a || 0);
+                    },
+                  },
+                  {
+                    title: "Давхар",
+                    dataIndex: "davkhar",
+                    ellipsis: true,
+                    align: "center",
+                    width: "5rem",
+                    showSorterTooltip: false,
+                    defaultSortOrder: "descend",
+                    sorter: () => 0,
+                  },
+                  {
+                    title: "Түрээслэгч",
+                    dataIndex: "ner",
+                    ellipsis: true,
+                    align: "left",
+                    width: "8rem",
+                  },
+                  {
+                    title: "Гэрээний огноо",
+                    width: "11rem",
+                    dataIndex: "gereeniiOgnoo",
+                    ellipsis: true,
+                    align: "center",
+                    render(a) {
+                      return moment(a).format("YYYY-MM-DD");
+                    },
+                  },
+                  {
+                    title: "Алдангийн үлдэгдэл",
+                    dataIndex: "aldangiinUldegdel",
+                    className: "text-center",
+                    align: "right",
+                    ellipsis: true,
+                    width: "7rem",
+                    summary: true,
+                    render: (aldangiinUldegdel) => {
+                      return formatNumber(aldangiinUldegdel || 0);
+                    },
+                  },
+                ]}
+              />
+            </div>
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
@@ -942,6 +947,7 @@ function guilgeeniiTuukh({ token }) {
               trigger="click"
             >
               <Button
+                className="w-full"
                 type="primary"
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
@@ -966,6 +972,8 @@ function guilgeeniiTuukh({ token }) {
           />
         </div>
         <CardList
+          neesenEsekh={neesenEsekh}
+          cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"
           jagsaalt={gereeniiMedeelel?.jagsaalt}

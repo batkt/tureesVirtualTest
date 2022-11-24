@@ -827,6 +827,10 @@ input:-webkit-autofill {
   height: 100%;
 }
 
+.ant-picker-panel-container {
+  @apply w-[85vw] md:w-auto overflow-x-auto overflow-hidden 
+}
+
 .ant-input-suffix > .anticon {
   display: flex !important;
 }

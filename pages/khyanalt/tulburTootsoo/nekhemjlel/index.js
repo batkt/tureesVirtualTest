@@ -945,7 +945,7 @@ function tulburTootsoo({ token }) {
     <Admin
       title="Нэхэмжлэл"
       khuudasniiNer="nekhemjlel"
-      className="p-0 md:p-4"
+      className="p-0 pb-12 md:pb-0 md:p-4"
       onSearch={(search) => {
         setNekhemjlelKhuudaslalt((a) => ({
           ...a,
@@ -982,89 +982,94 @@ function tulburTootsoo({ token }) {
             })}
           </div>
           <div
-            className="mt-5 flex w-full flex-row"
+            className=" flex w-full flex-row"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
           >
-            <div className="ml-auto space-x-2  ">
-              <DatePicker
-                clearIcon
-                placeholder="Огноо сонгох"
-                style={{ marginBottom: "20px" }}
-                value={ognoo}
-                onChange={setOgnoo}
-              />
-              <Select
-                placeholder="Дансны төрөл"
-                value={songogdsonDans}
-                onChange={setDans}
-              >
-                {dansGaralt?.jagsaalt?.map((a) => (
-                  <Select.Option key={a.dugaar} value={a.dugaar}>
-                    <div>{a.dugaar}</div>
-                  </Select.Option>
-                ))}
-              </Select>
-              <Select
-                allowClear
-                placeholder="Давхар"
-                onChange={(v) => {
-                  setDavkhar(v);
-                  setSongogdsonGereenuud([]);
-                }}
-              >
-                {baiguullaga?.barilguud
-                  ?.find((a) => a._id === barilgiinId)
-                  ?.davkharuud.map((a) => (
-                    <Select.Option key={a._id} value={a.davkhar}>
-                      {a.davkhar}
+            <div className="md:ml-auto flex w-full md:w-auto flex-col md:flex-row mb-3 gap-2">
+              <div className="flex w-full gap-2 justify-between">
+                <DatePicker
+                  clearIcon
+                  placeholder="Огноо сонгох"
+                  value={ognoo}
+                  onChange={setOgnoo}
+                />
+                <Select
+                  placeholder="Дансны төрөл"
+                  value={songogdsonDans}
+                  onChange={setDans}
+                >
+                  {dansGaralt?.jagsaalt?.map((a) => (
+                    <Select.Option key={a.dugaar} value={a.dugaar}>
+                      <div>{a.dugaar}</div>
                     </Select.Option>
                   ))}
-              </Select>
-              <Select
-                className="w-[200px]"
-                placeholder="Нэхэмжлэхийн төрөл"
-                value={barimt}
-                onChange={(content) => {
-                  setBarimt(content);
-                  setContent(content);
-                }}
-              >
-                {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
-                  turul === a.turul ? (
-                    <Select.Option key={a._id} value={a._id}>
-                      {a.ner}
-                    </Select.Option>
-                  ) : turul === "Mail" ? (
-                    a.turul === undefined ? (
+                </Select>
+              </div>
+              <div className="flex w-full gap-2 justify-between">
+                <Select
+                  allowClear
+                  placeholder="Давхар"
+                  onChange={(v) => {
+                    setDavkhar(v);
+                    setSongogdsonGereenuud([]);
+                  }}
+                >
+                  {baiguullaga?.barilguud
+                    ?.find((a) => a._id === barilgiinId)
+                    ?.davkharuud.map((a) => (
+                      <Select.Option key={a._id} value={a.davkhar}>
+                        {a.davkhar}
+                      </Select.Option>
+                    ))}
+                </Select>
+                <Select
+                  className="w-[200px]"
+                  placeholder="Нэхэмжлэхийн төрөл"
+                  value={barimt}
+                  onChange={(content) => {
+                    setBarimt(content);
+                    setContent(content);
+                  }}
+                >
+                  {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
+                    turul === a.turul ? (
                       <Select.Option key={a._id} value={a._id}>
                         {a.ner}
                       </Select.Option>
+                    ) : turul === "Mail" ? (
+                      a.turul === undefined ? (
+                        <Select.Option key={a._id} value={a._id}>
+                          {a.ner}
+                        </Select.Option>
+                      ) : (
+                        ""
+                      )
                     ) : (
                       ""
                     )
-                  ) : (
-                    ""
-                  )
+                  )}
+                </Select>
+              </div>
+              <div className="justify-end flex gap-2">
+                {turul === "Mail" ? (
+                  <Button
+                    hidden={turul !== "Mail"}
+                    type="primary"
+                    onClick={hevlekh}
+                  >
+                    Хэвлэх
+                  </Button>
+                ) : (
+                  ""
                 )}
-              </Select>
-              {turul === "Mail" ? (
-                <Button
-                  hidden={turul !== "Mail"}
-                  type="primary"
-                  onClick={hevlekh}
-                >
-                  Хэвлэх
-                </Button>
-              ) : (
-                ""
-              )}
-              <Button onClick={send}>Илгээх</Button>
+                <Button onClick={send}>Илгээх</Button>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-8 gap-2">
             <div
-              className="col-span-2 rounded-md px-2 "
+              className="col-span-8 md:col-span-2 rounded-md p-2 "
               data-aos="fade-left"
               data-aos-duration="1000"
               data-aos-delay="500"
@@ -1183,7 +1188,7 @@ function tulburTootsoo({ token }) {
               </div>
             </div>
             <div
-              className="col-span-6"
+              className="col-span-8 md:col-span-6"
               data-aos="fade-up"
               data-aos-duration="1000"
             >
@@ -1219,6 +1224,7 @@ function tulburTootsoo({ token }) {
                   {
                     title: "Дараагийн төлөх огноо",
                     showSorterTooltip: false,
+                    width: "7rem",
                     sorter: (a, b) =>
                       moment(a.talbainDugaar).diff(
                         moment(b.talbainDugaar),
@@ -1234,6 +1240,7 @@ function tulburTootsoo({ token }) {
                   {
                     title: "Өмнөх хуримтлагдсан өр төлбөр",
                     showSorterTooltip: false,
+                    width: "7rem",
                     sorter: (a, b) =>
                       a.umnukhSariinUrTulbur - b.umnukhSariinUrTulbur,
                     dataIndex: "umnukhSariinUrTulbur",
@@ -1246,6 +1253,7 @@ function tulburTootsoo({ token }) {
                   {
                     title: "Энэ сард төлөх дүн",
                     showSorterTooltip: false,
+                    width: "7rem",
                     sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
                     dataIndex: "eneSardTulukhDun",
                     render(a) {
@@ -1256,6 +1264,7 @@ function tulburTootsoo({ token }) {
                   },
                   {
                     title: "Нийт үлдэгдэл",
+                    width: "7rem",
                     showSorterTooltip: false,
                     sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
                     dataIndex: "niitUldegdel",
