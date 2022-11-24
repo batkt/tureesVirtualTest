@@ -23,6 +23,8 @@ const fetcher = (
               { ner: { $regex: search, $options: "i" } },
               { register: { $regex: search, $options: "i" } },
               { utas: { $regex: search, $options: "i" } },
+              { "geree.gereeniiDugaar": { $regex: search, $options: "i" } },
+              { "geree.talbainDugaar": { $regex: search, $options: "i" } },
             ],
           },
           tuluv !== null
