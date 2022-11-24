@@ -56,6 +56,7 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 import Aos from "aos";
 import { renderToString } from "react-dom/server";
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
+import _ from "lodash";
 
 //#endregion
 
@@ -374,7 +375,7 @@ function ZakhialgiinKhyanalt() {
       duusakhOgnoo: { $gte: new Date() },
     },
   });
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
   const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
   const {
     gereeniiMedeelel,
@@ -408,16 +409,15 @@ function ZakhialgiinKhyanalt() {
 
   useEffect(() => {
     if (JSON.stringify(order) !== JSON.stringify({ createdAt: -1 }))
-      setURLSearchParam("orderID", JSON.stringify(order))
+      setURLSearchParam("orderID", JSON.stringify(order));
   }, [order]);
 
   useEffect(() => {
     const url = new URLSearchParams(window.location.search);
     if (url !== undefined) {
-      if (!!url.get('orderID'))
-        setOrder({ ...JSON.parse(url.get('orderID')) })
+      if (!!url.get("orderID")) setOrder({ ...JSON.parse(url.get("orderID")) });
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!!token)
@@ -449,26 +449,28 @@ function ZakhialgiinKhyanalt() {
       },
     },
     {
-      too: gereeToollolt !== undefined
-        ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0)
-        : 0,
+      too:
+        gereeToollolt !== undefined
+          ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0)
+          : 0,
       icon: <FileTextOutlined />,
       utga: "Үндсэн гэрээ",
       color: "text-blue-500",
       selectedColor: "bg-blue-50 dark:bg-gray-900",
       border: "border-blue-500",
-      query: { turGereeEsekh: { $ne: true }, tuluv: { $ne: -1 }, },
+      query: { turGereeEsekh: { $ne: true }, tuluv: { $ne: -1 } },
     },
     {
-      too: gereeToollolt !== undefined
-        ? gereeToollolt?.reduce((a, b) => b.turGeree, 0) || 0
-        : 0,
+      too:
+        gereeToollolt !== undefined
+          ? gereeToollolt?.reduce((a, b) => b.turGeree, 0) || 0
+          : 0,
       icon: <FileOutlined />,
       utga: "Түр гэрээ",
       color: "text-purple-500",
       selectedColor: "bg-purple-50 dark:bg-gray-900",
       border: "border-purple-600",
-      query: { turGereeEsekh: true, tuluv: { $ne: -1 }, },
+      query: { turGereeEsekh: true, tuluv: { $ne: -1 } },
     },
     {
       too:
@@ -514,11 +516,11 @@ function ZakhialgiinKhyanalt() {
     },
   ];
   function sortOrderShalgakh(v) {
-    var utga = ""
+    var utga = "";
     if (!!v) {
-      v === -1 ? utga = 'descend' : utga = 'ascend'
+      v === -1 ? (utga = "descend") : (utga = "ascend");
     }
-    return utga
+    return utga;
   }
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -608,7 +610,11 @@ function ZakhialgiinKhyanalt() {
           return moment(ognoo).format("YYYY-MM-DD");
         },
         showSorterTooltip: false,
-        sortOrder: sortOrderShalgakh(shuult.utga === "Цуцласан" ? order.gereeniiTuukhuud : order.duusakhOgnoo),
+        sortOrder: sortOrderShalgakh(
+          shuult.utga === "Цуцласан"
+            ? order.gereeniiTuukhuud
+            : order.duusakhOgnoo
+        ),
         sorter: () => 0,
       },
       {
@@ -681,7 +687,7 @@ function ZakhialgiinKhyanalt() {
         },
         sortOrder: sortOrderShalgakh(order.duusakhOgnoo),
         showSorterTooltip: false,
-        sorter: () => 0
+        sorter: () => 0,
       },
     ];
     if (shuult.utga == "Цуцласан") {
@@ -994,6 +1000,7 @@ function ZakhialgiinKhyanalt() {
   }
 
   function excelTatakh() {
+    _.set(shuult.query, "barilgiinId", barilgiinId);
     excelTatajAvya(
       token,
       "/geree",
@@ -1057,7 +1064,7 @@ function ZakhialgiinKhyanalt() {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[67vw] sm:w-auto rounded-xl">
+                <div className="h-full w-[67vw] rounded-xl sm:w-auto">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -1096,7 +1103,10 @@ function ZakhialgiinKhyanalt() {
             data-aos-duration="1000"
             data-aos-delay="300"
           >
-            <DatePicker.RangePicker className="w-full sm:w-auto" locale={locale} />
+            <DatePicker.RangePicker
+              className="w-full sm:w-auto"
+              locale={locale}
+            />
           </div>
           <div
             className="ml-auto flex place-content-end"
@@ -1209,14 +1219,21 @@ function ZakhialgiinKhyanalt() {
         <div className="mt-6 flex gap-5 font-medium">
           <div className="flex items-center gap-1">
             Үндсэн гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />({gereeToollolt !== undefined
-              ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0) : 0})
+            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
+            (
+            {gereeToollolt !== undefined
+              ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0)
+              : 0}
+            )
           </div>
           <div className="flex items-center gap-1">
             Түр гэрээ :{" "}
-            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />({gereeToollolt !== undefined
+            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />
+            (
+            {gereeToollolt !== undefined
               ? gereeToollolt?.reduce((a, b) => b.turGeree, 0)
-              : 0})
+              : 0}
+            )
           </div>
         </div>
         <div
@@ -1233,7 +1250,7 @@ function ZakhialgiinKhyanalt() {
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
             onChange={(a, b, c) => {
-              !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c)
+              !JSON.stringify(c).includes("udur") && onChangeTable(a, b, c);
             }}
             columns={columns}
             dataSource={gereeniiMedeelel?.jagsaalt}

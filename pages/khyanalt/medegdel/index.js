@@ -108,7 +108,7 @@ function Khyanalt({ token }) {
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
   const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
-  const [tuluv, setTuluv] = useState();
+  const [tuluv, setTuluv] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
   const [zurag, setZurag] = useState();
@@ -117,15 +117,14 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
-      davkhar: davkhar,
-      idevkhiteiEsekh: tuluv,
     };
-  }, [barilgiinId, tuluv, davkhar, tuluv]);
+  }, [barilgiinId]);
 
-  const nekhemjlel = useKhariltsagchDavkhraarAvya(
+  const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
-    davkhar
+    davkhar,
+    tuluv
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
     token,
@@ -579,7 +578,7 @@ function Khyanalt({ token }) {
       setNeesenEsekh={setNeesenEsekh}
       className=" overflow-hidden p-5 pb-12 md:pb-0 md:p-4 lg:h-auto"
       onSearch={(search) =>
-        nekhemjlel.setKhuudaslalt((a) => ({ ...a, search }))
+        setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
@@ -609,7 +608,6 @@ function Khyanalt({ token }) {
         >
           <div className="col-span-6">
             <Select
-              allowClear
               className="w-full"
               placeholder="Төрөл сонгоно уу"
               value={tuluv}
@@ -619,6 +617,7 @@ function Khyanalt({ token }) {
               {[
                 { key: true, v: "Идэвхтэй" },
                 { key: false, v: "Идэвхгүй " },
+                { key: undefined, v: "Бүгд " },
               ].map((a) => (
                 <Select.Option key={a.key} value={a.key}>
                   {a.v}
@@ -773,7 +772,7 @@ function Khyanalt({ token }) {
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
-                  nekhemjlel.setKhuudaslalt((a) => ({
+                  setKhariltsagchKhuudaslalt((a) => ({
                     ...a,
                     search: target.value,
                   }));
@@ -798,12 +797,10 @@ function Khyanalt({ token }) {
           </div>
           <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
-              checked={
-                nekhemjlel?.jagsaalt?.length === songogdsonKhariltsagch.length
-              }
+              checked={jagsaalt?.length === songogdsonKhariltsagch.length}
               onChange={(e) => {
                 if (e.target.checked === true)
-                  setSongogdsonKhariltsagch([...nekhemjlel?.jagsaalt]);
+                  setSongogdsonKhariltsagch([...jagsaalt]);
                 else setSongogdsonKhariltsagch([]);
               }}
             >
@@ -811,7 +808,7 @@ function Khyanalt({ token }) {
             </Checkbox>
           </div>
           <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
-            {nekhemjlel?.jagsaalt?.map((mur) => (
+            {jagsaalt?.map((mur) => (
               <div>
                 {!!mur._id ? (
                   <div
