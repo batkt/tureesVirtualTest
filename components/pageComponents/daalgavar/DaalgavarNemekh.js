@@ -98,7 +98,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       data-aos="flip-right"
       data-aos-delay="200"
       data-aos-anchor-placement="top-bottom"
-      className={`relative col-span-12 space-y-10 bg-white p-8 dark:bg-gray-900 xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
+      className={`relative col-span-12 space-y-10 rounded-2xl md:rounded-none md:rounded-r-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
     >
       <div className="text-center text-xl font-medium">Даалгавар бүртгэх</div>
       <div className="flex justify-between gap-2 overflow-x-scroll p-2 lg:justify-center xl:justify-between">
@@ -106,11 +106,10 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           <div
             key={ognoo}
             onClick={() => onChange("duusakhOgnoo", ognoo)}
-            className={`w-16 cursor-pointer rounded-2xl ${
-              ognoo === daalgavar.duusakhOgnoo
-                ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
-                : ""
-            } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
+            className={`w-16 cursor-pointer rounded-2xl ${ognoo === daalgavar.duusakhOgnoo
+              ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
+              : ""
+              } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
             <div className="w-16">{moment(ognoo).format("MM")} сар</div>
@@ -169,6 +168,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       </div>
       <div>
         <TextArea
+          id="DaalgavarNemekhTextArea"
           autoSize={{
             minRows: 1,
             maxRows: 4,

@@ -64,7 +64,7 @@ function GereeBaiguulakh({ token }) {
   });
   const [waiting, setWaiting] = useState(false);
   const [dutuuAlkham, setDutuuAlkham] = useState([])
-  const [gereekharakhTovch, setGereekharakhTovch] = useState(true)
+  const [gereekharakhTovch, setGereekharakhTovch] = useState(false)
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
@@ -318,6 +318,8 @@ function GereeBaiguulakh({ token }) {
       className="grid grid-cols-12 gap-6 p-5"
       tsonkhniiId={"61c2c5f91c2830c4e6f90c75"}
       loading={waiting}
+      setTurulZagvar={setGereekharakhTovch}
+      fixedZagvarNeegdsenEsekh={gereekharakhTovch}
     >
       <div className="box col-span-12 p-5">
         <div className="contents px-10">
@@ -356,12 +358,12 @@ function GereeBaiguulakh({ token }) {
               zagvarRef={zagvarRef}
             />
           </div>
-          {!!gereeniiZagvar && <div className={`${gereekharakhTovch ? "bottom-20 right-5" : "bottom-[72vh] right-1"} fixed transition-all md:hidden duration-300 text-2xl border-2 z-50 bg-green-600 text-white rounded-full p-2`}>
-            {gereekharakhTovch === true ? <FileTextOutlined onClick={() => setGereekharakhTovch(false)} /> :
-              <EyeInvisibleOutlined onClick={() => setGereekharakhTovch(true)} />}
+          {!!gereeniiZagvar && <div className={`${gereekharakhTovch !== true ? "bottom-20 right-5" : "bottom-[72vh] right-1"} fixed transition-all md:hidden duration-300 text-2xl border-2 z-50 bg-green-600 text-white rounded-full p-2`}>
+            {gereekharakhTovch !== true ? <FileTextOutlined onClick={(e) => { e.stopPropagation(); setGereekharakhTovch(true) }} /> :
+              <EyeInvisibleOutlined onClick={(e) => { e.stopPropagation(), setGereekharakhTovch(false) }} />}
           </div>}
           <div
-            className={`col-span-12 mt-3 fixed transition-all duration-300 w-[91vw] md:w-auto top-40 ${gereekharakhTovch ? " -right-full" : " right-4"} border-2 md:border-0 border-green-600 md:static bg-gray-50 p-2 dark:bg-gray-900 ${!gereeniiZagvar ? "md:block hidden" : ""} lg:col-span-6 2xl:col-span-8`}
+            className={`col-span-12 mt-3 fixed transition-all duration-300 w-[91vw] md:w-auto top-40 ${gereekharakhTovch !== true ? " -right-full" : " right-4"} border-2 md:border-0 border-green-600 md:static bg-gray-50 p-2 dark:bg-gray-900 ${gereekharakhTovch !== true ? "md:block hidden" : ""} lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",

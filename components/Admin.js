@@ -35,7 +35,8 @@ function Admin({
   tsonkhniiId,
   loading,
   setNeesenEsekh,
-  setTurulZagvar
+  setTurulZagvar,
+  fixedZagvarNeegdsenEsekh
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -86,7 +87,7 @@ function Admin({
   )
 
   return (
-    <div onClick={(e) => { e.stopPropagation(); visible === true && setVisible(false); !!setTurulZagvar && setTurulZagvar(false) }} className="md:flex relative overflow-hidden min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
+    <div onClick={() => { visible === true && setVisible(false); !!setTurulZagvar && fixedZagvarNeegdsenEsekh === true && setTurulZagvar(false) }} className="md:flex relative overflow-hidden min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -185,7 +186,7 @@ function Admin({
           <div className="flex">
             {dedKhuudas && (
               <button
-                className="md:flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+                className="md:flex hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }

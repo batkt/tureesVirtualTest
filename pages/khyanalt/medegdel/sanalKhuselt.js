@@ -31,7 +31,7 @@ function index({ token }) {
 
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
-  }, []);
+  });
 
   function sanalGomdolAvakh() {
     uilchilgee(token).post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id });
@@ -49,7 +49,7 @@ function index({ token }) {
       title="Санал хүсэлт"
       className={"gap-5 sm:p-6 p-2 pb-14 md:pb-0"}
       onSearch={(search) =>
-        setAjiltniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+        sanal.setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
     >
       <div
@@ -73,6 +73,7 @@ function index({ token }) {
               onClick={() => turulSongokh(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
+              data-aos-anchor-placement="top-bottom"
               className={`cursor-pointer rounded-lg p-1 text-center ${turul === status.utga
                 ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
                 : "text-gray-50"
@@ -124,7 +125,7 @@ function index({ token }) {
                             {mur.title}
                           </div>
                         </div>
-                        {mur.tuluv === "0" ? (
+                        {mur.tuluv !== 0 ? (
                           <div className="font-semibold text-green-400">
                             Хүлээн авсан
                           </div>

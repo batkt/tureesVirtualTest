@@ -887,7 +887,7 @@ function ZakhialgiinKhyanalt() {
       </Button>,
     ];
     modal({
-      width: "20vw",
+      width: global.innerWidth < 768 ? "90vw" : "20vw",
       title: "Гэрээ сунгах",
       icon: <MinusCircleOutlined />,
       content: (
@@ -1028,7 +1028,7 @@ function ZakhialgiinKhyanalt() {
     >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}
-        width={"50vw"}
+        width={global.innerWidth < 768 ? "100vw" : "50vw"}
         onClose={() => setKharuulakhGeree(null)}
         visible={!!kharuulakhGeree}
         footer={
@@ -1276,6 +1276,7 @@ function ZakhialgiinKhyanalt() {
           neesenEsekh={neesenEsekh}
           componentProps={{ router }}
           cardListTuluv={"utas"}
+          tileProps={{ gereeniiTokhirgoo, shuult, gereeSungaya, gereeTsutsalya, gereeKharya, ajiltan, gereeSergeeye }}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,
             pageSize: gereeniiMedeelel?.khuudasniiKhemjee,

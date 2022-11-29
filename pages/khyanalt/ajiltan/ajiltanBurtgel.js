@@ -245,17 +245,12 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  pattern: new RegExp("(^[А-Яа-яёЁөӨүҮ]+$)"),
-                  message:
-                    ajiltanState?.ovog && "Зөвхөн кирилл үсэг ашиглана уу!",
-                },
-                {
-                  required: true,
                   message: "Овог бүртгэнэ үү!",
                 },
               ]}
             >
               <Input
+                autoComplete="off"
                 id="input1"
                 onKeyUp={focuser}
                 autoFocus={true}
@@ -274,22 +269,16 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="100"
           >
             <Form.Item
-              autoComplete="off"
               name="ner"
               rules={[
                 {
                   required: true,
                   message: "Нэр бүртгэнэ үү!",
                 },
-                {
-                  required: true,
-                  pattern: new RegExp("([А-Я|Ө|Ү])"),
-                  message:
-                    ajiltanState?.ner && "Зөвхөн кирилл үсэг ашиглана уу!",
-                },
               ]}
             >
               <Input
+                autoComplete="off"
                 id="input2"
                 onKeyUp={focuser}
                 type="text"
@@ -307,7 +296,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="200"
           >
             <Form.Item
-              autoComplete="off"
+
               name="register"
               rules={[
                 {
@@ -319,6 +308,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                autoComplete="off"
                 id="input3"
                 onKeyUp={focuser}
                 allowClear
@@ -348,6 +338,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                autoComplete="off"
                 id="input4"
                 onKeyUp={focuser}
                 allowClear
@@ -364,7 +355,7 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="400"
           >
             <Form.Item
-              autoComplete="off"
+
               name="utas"
               rules={[
                 {
@@ -375,6 +366,8 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+
+                autoComplete="off"
                 className="appearance-none"
                 type="number"
                 id="input5"
@@ -429,6 +422,7 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
+                autoComplete="off"
                 id="input7"
                 onKeyDown={focuser}
                 allowClear
@@ -445,19 +439,14 @@ function AjiltanBurtgel({ token }) {
               autoComplete="off"
               name="nevtrekhNer"
               rules={[
-                !!ajiltanState.nevtrekhNer
-                  ? {
-                    pattern: new RegExp("(^[A-z]+$)"),
-                    required: true,
-                    message: "Крилл үсгээр бичнэ үү",
-                  }
-                  : {
-                    required: true,
-                    message: "Нэвтрэх нэр оруулан уу",
-                  },
+                {
+                  required: true,
+                  message: "Нэвтрэх нэр оруулан уу",
+                },
               ]}
             >
               <Input
+                autoComplete="off"
                 onKeyDown={focuser}
                 id="input8"
                 placeholder="Нэвтрэх нэр"

@@ -140,20 +140,19 @@ function mashinBurtgel({ token }) {
       }
       loading={isValidating}
     >
-      <Card size="small" className="col-span-12 overflow-auto p-5">
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+      <Card size="small" className="col-span-12 overflow-auto">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
-                a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
-              }`}
+              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
+                }`}
               onClick={() => setTurul(a.name)}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={4 - i + "00"}
             >
-              <div className="h-full rounded-xl">
+              <div className="h-full w-[67vw] md:w-auto rounded-xl">
                 <div className="rounded-xl p-3">
                   <div className="flex flex-row items-center space-x-2">
                     <div className="text-3xl font-bold text-green-600">
@@ -175,7 +174,7 @@ function mashinBurtgel({ token }) {
           data-aos-delay="100"
         >
           <div></div>
-          <div className="ml-auto space-x-5">
+          <div className="ml-auto mb-5 md:mb-0 space-x-5">
             <Button
               type="primary"
               icon={<PlusOutlined />}
@@ -229,7 +228,7 @@ function mashinBurtgel({ token }) {
               width: "2rem",
               render: (text, record, index) =>
                 (mashinGaralt?.khuudasniiDugaar || 0) *
-                  (mashinGaralt?.khuudasniiKhemjee || 0) -
+                (mashinGaralt?.khuudasniiKhemjee || 0) -
                 (mashinGaralt?.khuudasniiKhemjee || 0) +
                 index +
                 1,
@@ -293,6 +292,7 @@ function mashinBurtgel({ token }) {
           }}
         />
         <CardList
+          cardListTuluv={"utas"}
           keyValue="uilchluulegch"
           className="block overflow-auto md:hidden"
           jagsaalt={mashinGaralt?.jagsaalt}

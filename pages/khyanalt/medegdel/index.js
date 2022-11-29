@@ -82,8 +82,8 @@ function IlgeesenToo({
     mutate();
   }, [msjTuukh]);
   return (
-    <div className="ml-6 flex xl:flex-col xl:text-center">
-      {text} <span className="ml-3 font-medium xl:ml-0">{data || 0}</span>
+    <div className="ml-6 flex text-center flex-col-reverse xl:flex-col xl:text-center">
+      <span>{text}</span> <span className=" font-medium ">{data || 0}</span>
     </div>
   );
 }
@@ -576,6 +576,7 @@ function Khyanalt({ token }) {
       khuudasniiNer="medegdel"
       setTurulZagvar={setTurulZagvar}
       setNeesenEsekh={setNeesenEsekh}
+      fixedZagvarNeegdsenEsekh={turulZagvar}
       className=" overflow-hidden p-5 pb-12 md:pb-0 md:p-4 lg:h-auto"
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
