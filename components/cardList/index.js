@@ -9,7 +9,6 @@ function CardList({
   tileProps,
   componentProps,
   cardListTuluv,
-  neesenEsekh,
 }) {
   return (
     <div>

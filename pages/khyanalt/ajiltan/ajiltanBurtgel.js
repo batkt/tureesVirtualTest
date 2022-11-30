@@ -490,9 +490,9 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 mb-16 md:mb-0 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+      <div className="box col-span-12 mb-16 md:mb-0 p-5 md:col-span-6 xl:col-span-9">
         <div
-          className="hidden overflow-auto md:block"
+          className="hidden md:block"
           data-aos="fade-down-left"
           data-aos-duration="1500"
           data-aos-delay="100"
