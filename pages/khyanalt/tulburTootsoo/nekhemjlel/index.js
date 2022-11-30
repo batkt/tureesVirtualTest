@@ -958,7 +958,7 @@ function tulburTootsoo({ token }) {
     >
       <Card
         className="cardgrid col-span-12"
-        style={{ minHeight: "calc(100vh - 12rem)" }}
+        style={{ minHeight: "calc(100vh - 8rem)" }}
       >
         <Spin spinning={loading}>
           <div
@@ -989,13 +989,15 @@ function tulburTootsoo({ token }) {
             <div className="md:ml-auto flex w-full md:w-auto flex-col md:flex-row mb-3 gap-2">
               <div className="flex w-full gap-2 justify-between">
                 <DatePicker
+                  className="w-1/2 lg:w-auto"
                   clearIcon
                   placeholder="Огноо сонгох"
                   value={ognoo}
                   onChange={setOgnoo}
                 />
                 <Select
-                  placeholder="Дансны төрөл"
+                  className="w-1/2 lg:w-auto"
+                  placeholder="Данс сонгох"
                   value={songogdsonDans}
                   onChange={setDans}
                 >
@@ -1008,8 +1010,9 @@ function tulburTootsoo({ token }) {
               </div>
               <div className="flex w-full gap-2 justify-between">
                 <Select
+                  className="w-1/2 lg:w-auto"
                   allowClear
-                  placeholder="Давхар"
+                  placeholder="Давхар сонгох"
                   onChange={(v) => {
                     setDavkhar(v);
                     setSongogdsonGereenuud([]);
@@ -1024,8 +1027,8 @@ function tulburTootsoo({ token }) {
                     ))}
                 </Select>
                 <Select
-                  className="w-[200px]"
-                  placeholder="Нэхэмжлэхийн төрөл"
+                  className="w-1/2 lg:w-[200px]"
+                  placeholder="Төрөл сонгох"
                   value={barimt}
                   onChange={(content) => {
                     setBarimt(content);
@@ -1051,7 +1054,7 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
-              <div className="justify-end flex gap-2">
+              <div className="justify-end hidden md:flex gap-2">
                 {turul === "Mail" ? (
                   <Button
                     hidden={turul !== "Mail"}
@@ -1069,12 +1072,12 @@ function tulburTootsoo({ token }) {
           </div>
           <div className="grid grid-cols-8 gap-2">
             <div
-              className="col-span-8 md:col-span-2 rounded-md p-2 "
+              className="col-span-8 md:col-span-2 rounded-md lg:p-2"
               data-aos="fade-left"
               data-aos-duration="1000"
               data-aos-delay="500"
             >
-              <div className="box mb-3 space-y-3 bg-gray-100 p-2">
+              <div className="border rounded-md shadow-md p-2 mb-3">
                 <div
                   className="grid grid-cols-3 gap-1  font-medium"
                   role="tablist"
@@ -1082,7 +1085,7 @@ function tulburTootsoo({ token }) {
                   {["Mail", "SMS", "App"].map((mur) => (
                     <div
                       key={mur}
-                      className={`flex-1 cursor-pointer rounded-md py-2 text-center ${turul === mur ? "bg-green-500 text-white" : ""
+                      className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${turul === mur ? "bg-green-500 text-white" : "border-x hover:bg-green-500"
                         }`}
                       onClick={() => turulSongokh(mur)}
                     >
@@ -1091,9 +1094,26 @@ function tulburTootsoo({ token }) {
                   ))}
                 </div>
               </div>
-              <div className="flex w-full justify-between">
+              <div className="flex w-full gap-1 justify-between lg:justify-end">
+                {turul === "Mail" ? (
+                  <div className="w-1/3 lg:hidden">
+                    <Button
+                      className="w-full"
+                      hidden={turul !== "Mail"}
+                      type="primary"
+                      onClick={hevlekh}
+                    >
+                      Хэвлэх
+                    </Button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="w-1/3 lg:hidden">
+                  <Button className="w-full" onClick={send}>Илгээх</Button></div>
                 <Button
-                  className="ml-auto bg-green-500 text-white"
+                  className="w-1/3 lg:w-auto"
+                  type="primary"
                   onClick={() =>
                     turul === "SMS"
                       ? smsZagvarNemya()
@@ -1102,10 +1122,10 @@ function tulburTootsoo({ token }) {
                         : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
                 >
-                  Загвар үүсгэх
+                  Загвар <p className="lg:hidden ml-1"> +</p> <p className="hidden lg:flex ml-1"> үүсгэх</p>
                 </Button>
               </div>
-              <div className="mt-4 space-y-2">
+              <div className="my-4 space-y-2">
                 {nekhemjlekhiinZagvar?.jagsaalt?.map((a, i) =>
                   a.turul === turul ? (
                     <div

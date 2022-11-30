@@ -380,7 +380,7 @@ function Khyanalt({ token }) {
             </Checkbox>
           </div>
 
-          <div className="scrollbar-hidden  h-scrollH overflow-y-auto ">
+          <div className="hideScroll h-medegdelHariltsagchPhone lg:h-scrollH overflow-y-auto ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
                 className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${khariltsagch?._id === mur?._id
@@ -476,11 +476,11 @@ function Khyanalt({ token }) {
           <div>
             {songogdsonKhariltsagch.length > 1 ? (
               <div
-                className="col-span-12 min-h-[60vh] space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                style={{ maxHeight: "calc(100vh - 44rem)" }}
+                className="col-span-12 space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                style={{ height: "calc(100vh - 28rem)" }}
               >
                 <div
-                  className={`box hidden h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
+                  className={`box h-full items-center flex ${turulZagvar ? "hidden" : "lg:flex"
                     }`}
                   data-aos="fade-left"
                   data-aos-duration="1000"
@@ -496,6 +496,7 @@ function Khyanalt({ token }) {
                     </div>
                     <div className="mt-3">
                       <div className="font-medium">Өдрийн мэнд</div>
+                      <p>Сонгогдсон {songogdsonKhariltsagch.length} харилцагч байна.</p>
                       <div className="mt-1 text-gray-600 dark:text-gray-300">
                         Та шаардлага илгээнэ үү.
                       </div>
@@ -659,8 +660,7 @@ function Khyanalt({ token }) {
         </div>
       ) : (
         <div
-          className={`box hidden mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
-            }`}
+          className={`box col-span-12 xl:col-span-9 lg:col-span-6 h-[40vh] lg:h-full flex items-center`}
           data-aos="fade-left"
           data-aos-duration="1000"
         >
