@@ -986,7 +986,7 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 mb-16 md:mb-0 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+      <div className="box col-span-12 mb-16 md:mb-0 p-5 md:col-span-6 xl:col-span-9">
         <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (

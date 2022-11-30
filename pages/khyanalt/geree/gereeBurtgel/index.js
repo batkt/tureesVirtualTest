@@ -234,7 +234,9 @@ const Tailbar = React.forwardRef(
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                message.success("Гэрээ амжилттай сэргээгдлээ");
+                if (service === "/gereeSergeeye") {
+                  message.success("Гэрээ амжилттай сэргээгдлээ");
+                } else message.success("Гэрээ амжилттай цуцлагдлаа");
                 confirm(shaltgaan);
                 destroy();
               }
