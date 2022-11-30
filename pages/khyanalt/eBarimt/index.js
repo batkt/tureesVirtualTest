@@ -40,9 +40,9 @@ function EbarimtMedeelel({ token }) {
       $or: [{ ustgasanOgnoo: null }, { ustgasanOgnoo: { $exists: false } }],
       createdAt: ekhlekhOgnoo
         ? {
-            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
     };
   }, [ekhlekhOgnoo]);
@@ -156,8 +156,8 @@ function EbarimtMedeelel({ token }) {
       tsonkhniiId="61c2c70a1c2830c4e6f90ccf"
       loading={waiting || isValidating}
     >
-      <Card className="cardgrid col-span-12 p-5">
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+      <Card className="cardgrid col-span-12">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
@@ -167,7 +167,7 @@ function EbarimtMedeelel({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={6 - index + "00"}
               >
-                <div className="h-full rounded-xl">
+                <div className="h-full w-[67vw] md:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -184,13 +184,14 @@ function EbarimtMedeelel({ token }) {
           })}
         </div>
 
-        <div className="mt-5 flex w-full flex-row justify-between">
+        <div className="mt-5 flex w-full flex-col md:flex-row justify-between">
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="100"
           >
             <RangePicker
+              className="w-full md:w-auto"
               clearIcon
               style={{ marginBottom: "20px" }}
               size="middle"
@@ -199,7 +200,7 @@ function EbarimtMedeelel({ token }) {
             />
           </div>
           <div
-            className="flex flex-row space-x-2"
+            className="flex flex-row justify-between mb-5 md:mb-0 md:space-x-2"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="300"

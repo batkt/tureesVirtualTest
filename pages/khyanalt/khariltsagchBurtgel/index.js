@@ -31,6 +31,7 @@ import {
   RedoOutlined,
   EnvironmentOutlined,
   CloseCircleOutlined,
+  EyeInvisibleOutlined,
 } from "@ant-design/icons";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 
@@ -179,6 +180,7 @@ function AjiltanBurtgel({ token }) {
     temdeglel: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
   useEffect(() => {
     barilgiinId;
     setKhariltsagchKhuudaslalt((a) => ({
@@ -300,6 +302,7 @@ function AjiltanBurtgel({ token }) {
   const segment = useJagsaalt("/segment");
   const [turul, setTurul] = useState();
   const [songosonSegment, setSongosonSegment] = useState();
+  const [utasKhariltsagchNmekh, setUtasKhariltsagchNmekh] = useState(false)
 
   function solikh(value) {
     setTurul(segment.jagsaalt.find((a) => a.ner === value));
@@ -604,6 +607,7 @@ function AjiltanBurtgel({ token }) {
       title="Харилцагч бүртгэл"
       khuudasniiNer="khariltsagchBurtgel"
       className="p-0 md:p-4"
+      setNeesenEsekh={setNeesenEsekh}
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({
           ...a,
@@ -614,7 +618,8 @@ function AjiltanBurtgel({ token }) {
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
       loading={waiting || isValidating}
     >
-      <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-3">
+      {utasKhariltsagchNmekh && <div className="col-span-12 -mb-4 mx-5 md:hidden"><Button type="primary" onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} className="w-full  "><EyeInvisibleOutlined className="text-xl" /></Button></div>}
+      <div className={`box col-span-12 p-5 md:col-span-6 xl:col-span-3  ${utasKhariltsagchNmekh === true ? "" : "hidden md:block"}`}>
         <Form
           autoComplete={"off"}
           ref={formRef}
@@ -981,22 +986,22 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 overflow-auto p-5 md:col-span-6 xl:col-span-9">
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+      <div className="box col-span-12 mb-16 md:mb-0 overflow-auto p-5 md:col-span-6 xl:col-span-9">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
                 className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50 dark:bg-gray-800"
-                    : ""
+                  ? "bg-green-50 dark:bg-gray-800"
+                  : ""
                   }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full rounded-xl">
+                <div className="h-full w-[40vw] md:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -1025,8 +1030,10 @@ function AjiltanBurtgel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="300"
         >
-          <div></div>
-          <div className="ml-auto flex">
+          <div className="md:ml-auto items-center justify-between md:justify-end w-full flex">
+            <div className=" md:hidden ">
+              <Button type="primary"
+                style={{ marginTop: "10px" }} onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} >Харилцагч нэмэх</Button></div>
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
@@ -1500,8 +1507,11 @@ function AjiltanBurtgel({ token }) {
             </Form>
           </Modal>
         </div>
+        <p className="font-medium py-2 md:hidden">Харилцагчийн жагсаалт</p>
         <CardList
           keyValue=""
+          cardListTuluv={"utas"}
+          neesenEsekh={neesenEsekh}
           className="block overflow-auto md:hidden"
           jagsaalt={khariltsagchiinGaralt?.jagsaalt}
           Component={KhariltsagchTile}

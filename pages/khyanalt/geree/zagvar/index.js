@@ -98,7 +98,7 @@ function index({ token }) {
         <div className="flex flex-col-reverse items-center sm:flex-row">
           <Drawer
             title={kharuulakhGeree?.gereeniiDugaar}
-            width={"50vw"}
+            width={global.innerWidth < 768 ? "100vw" : "50vw"}
             onClose={() => setKharuulakhGeree(null)}
             visible={!!kharuulakhGeree}
             footer={
@@ -112,12 +112,12 @@ function index({ token }) {
             )}
           </Drawer>
           <div
-            className="flex w-full sm:w-auto"
+            className="flex w-full gap-2 sm:w-auto"
             data-aos="fade-right"
             data-aos-delay="300"
           >
             <Button
-              className="mr-2 font-medium dark:text-gray-200"
+              className=" font-medium dark:text-gray-200"
               onClick={() => router.push("/khyanalt/geree/zagvar/new")}
             >
               Шинэ гэрээний загвар үүсгэх
@@ -155,7 +155,7 @@ function index({ token }) {
               className="cursor-pointer"
             >
               <Button
-                className="dropdown-toggle btn box mt-4 w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
+                className="dropdown-toggle btn w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
                 aria-expanded="false"
                 icon={
                   <span className="flex h-5 w-5 items-center justify-center">
@@ -185,7 +185,7 @@ function index({ token }) {
             return (
               <div
                 key={a._id}
-                className="col-span-6 sm:col-span-4 md:col-span-3 xl:col-span-2"
+                className="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-2"
                 onClick={() => setKharuulakhGeree(a)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -197,7 +197,7 @@ function index({ token }) {
                   <div className="file__icon file__icon--file mx-auto w-3/5">
                     <div className="file__icon__file-name"></div>
                   </div>
-                  <div className="mt-4 block text-center font-medium">
+                  <div className="mt-4 block text-center truncate font-medium">
                     {a.ner}
                   </div>
                   <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">

@@ -58,7 +58,7 @@ function Khariultuud(record) {
         align: "center",
         render: (text, record, index) =>
           (khariult?.khuudasniiDugaar || 0) *
-            (khariult?.khuudasniiKhemjee || 0) -
+          (khariult?.khuudasniiKhemjee || 0) -
           (khariult?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -250,7 +250,7 @@ function Anket({ token }) {
       <div className="col-span-12 p-3 md:p-5">
         <Drawer
           title={"Анкет илгээх"}
-          width={"50vw"}
+          width={global.innerWidth < 768 ? "90vw" : "50vw"}
           onClose={() => setAnketIlgeekh(false)}
           visible={anketIlgeekh === true}
         >
@@ -280,7 +280,7 @@ function Anket({ token }) {
             key="1"
             tab={<span className="text-base font-medium">Асуумж</span>}
           >
-            <div className="grid grid-cols-12 gap-5">
+            <div className="md:grid flex flex-col-reverse grid-cols-12 gap-5">
               <div
                 className="box relative col-span-12 p-4 py-5 pt-3 md:col-span-4 xl:col-span-3"
                 style={{ height: "80vh" }}

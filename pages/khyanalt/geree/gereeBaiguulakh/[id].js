@@ -15,6 +15,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import compareFields from "tools/function/compareFields";
+import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 
 const { Step } = Steps;
 
@@ -63,6 +64,7 @@ function GereeBaiguulakh({ token, data }) {
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
   const [waiting, setWaiting] = useState(false);
+  const [gereekharakhTovch, setGereekharakhTovch] = useState(false)
 
   const next = (data) => {
     if (current < 4) {
@@ -272,7 +274,9 @@ function GereeBaiguulakh({ token, data }) {
       hideSearch
       dedKhuudas
       onBack={onBack}
+      setTurulZagvar={setGereekharakhTovch}
       loading={waiting}
+      fixedZagvarNeegdsenEsekh={gereekharakhTovch}
     >
       <div className="box col-span-12 p-5">
         <div className="px-10">
@@ -292,9 +296,11 @@ function GereeBaiguulakh({ token, data }) {
               token={token}
               baiguullaga={baiguullaga}
               gereeniiZagvar={gereeniiZagvar}
-              zasvar
               barilgiinId={barilgiinId}
               gereeniiZagvariinId={gereeniiZagvariinId}
+              gereeniiZagvarGaralt={gereeniiZagvarGaralt}
+              onChangeGereeniiZagvar={onChangeGereeniiZagvar}
+              setGereeniiZagvarKhuudaslalt={setGereeniiZagvarKhuudaslalt}
             />
             {JSON.stringify(data) !== JSON.stringify(khadgalakhGeree) && (
               <Button
@@ -306,20 +312,25 @@ function GereeBaiguulakh({ token, data }) {
               </Button>
             )}
           </div>
+          {!!gereeniiZagvar && <div className={`${gereekharakhTovch !== true ? "bottom-20 right-5" : "bottom-[72vh] right-1"} fixed transition-all md:hidden duration-300 text-2xl border-2 z-50 bg-green-600 text-white rounded-full p-2`}>
+            {gereekharakhTovch !== true ? <FileTextOutlined onClick={(e) => { e.stopPropagation(); setGereekharakhTovch(true) }} /> :
+              <EyeInvisibleOutlined onClick={(e) => { e.stopPropagation(), setGereekharakhTovch(false) }} />}
+          </div>}
           <div
-            className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-8"
+            className={`col-span-12 mt-3 fixed transition-all duration-300 w-[91vw] md:w-auto top-40 ${gereekharakhTovch !== true ? " -right-full" : " right-4"} border-2 md:border-0 border-green-600 md:static bg-gray-50 p-2 dark:bg-gray-900 ${gereekharakhTovch !== true ? "md:block hidden" : ""} lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
               scrollBehavior: "smooth",
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             {current === 0 && (
               <Select
                 showSearch
                 id={gereeniiZagvariinId}
                 placeholder="Гэрээний загвар сонгох"
-                className="w-full"
+                className="w-full hidden md:block"
                 size="large"
                 value={null}
                 filterOption={(o) => o}

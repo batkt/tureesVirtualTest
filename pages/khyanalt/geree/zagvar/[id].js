@@ -22,7 +22,7 @@ import compareFields from "tools/function/compareFields";
 var defaultUtga = {
   dedKhesguud: [{ zaalt: "new" }],
   ner: undefined,
-  turGereeEsekh:undefined
+  turGereeEsekh: undefined
 }
 
 function ZakhialgaNemekh({ token }) {
@@ -128,7 +128,7 @@ function ZakhialgaNemekh({ token }) {
   }
   function garya() {
     const values = form.getFieldsValue();
-    if ( defaultUtga.dedKhesguud !== gereeniiZagvar.dedKhesguud || compareFields(defaultUtga, values, ["turGereeEsekh", "ner"]))
+    if (defaultUtga.dedKhesguud !== gereeniiZagvar.dedKhesguud || compareFields(defaultUtga, values, ["turGereeEsekh", "ner"]))
       Modal.confirm({
         content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
@@ -214,11 +214,10 @@ function ZakhialgaNemekh({ token }) {
                   <>
                     <div className="text-center">{mur.kharagdakhDugaar}</div>
                     <div
-                      className={`${
-                        mur.zaalt?.includes("table")
-                          ? "sun-editor-editable"
-                          : ""
-                      } ml-5 w-full p-0`}
+                      className={`${mur.zaalt?.includes("table")
+                        ? "sun-editor-editable"
+                        : ""
+                        } ml-5 w-full p-0`}
                       dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                     />
                   </>
@@ -260,10 +259,10 @@ function ZakhialgaNemekh({ token }) {
             >
               <Input placeholder="Гэрээний загварын нэр" />
             </Form.Item>
-            <div className="flex justify-end">
+            <div className="flex gap-2 justify-end">
+              <p className="mt-1">Түр гэрээ эсэх :</p>
               <Form.Item
                 name="turGereeEsekh"
-                label="Түр гэрээ эсэх"
                 valuePropName="checked"
               >
                 <Switch />

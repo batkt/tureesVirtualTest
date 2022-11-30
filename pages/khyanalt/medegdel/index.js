@@ -19,7 +19,9 @@ import {
   ArrowLeftOutlined,
   DeleteOutlined,
   EditOutlined,
+  EyeInvisibleOutlined,
   FileExcelOutlined,
+  SnippetsOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
@@ -61,12 +63,12 @@ function IlgeesenToo({
   const { data, mutate } = useSWR(
     turul === "SMS"
       ? [
-          "msgIlgeesenTooAvya",
-          barilgiinId,
-          baiguullagiinId,
-          ekhlekhOgnoo,
-          duusakhOgnoo,
-        ]
+        "msgIlgeesenTooAvya",
+        barilgiinId,
+        baiguullagiinId,
+        ekhlekhOgnoo,
+        duusakhOgnoo,
+      ]
       : null,
     (url, barilgiinId, baiguullagiinId) =>
       createMethod(url, token, {
@@ -80,8 +82,8 @@ function IlgeesenToo({
     mutate();
   }, [msjTuukh]);
   return (
-    <div className="ml-6 flex xl:flex-col xl:text-center">
-      {text} <span className="ml-3 font-medium xl:ml-0">{data || 0}</span>
+    <div className="ml-6 flex text-center flex-col-reverse xl:flex-col xl:text-center">
+      <span>{text}</span> <span className=" font-medium ">{data || 0}</span>
     </div>
   );
 }
@@ -128,6 +130,7 @@ function Khyanalt({ token }) {
     token,
     turul
   );
+  const [neesenEsekh, setNeesenEsekh] = useState(false)
 
   const query = useMemo(() => {
     return {
@@ -163,6 +166,12 @@ function Khyanalt({ token }) {
     setKhariltsagch(null);
     setDavkhar(null);
   }, [turul]);
+
+  useEffect(() => {
+    if (neesenEsekh === true) {
+      setTurulZagvar(false)
+    }
+  }, [neesenEsekh])
 
   const ingeekhmSms = useMemo(() => {
     if (!khariltsagch) return msj;
@@ -557,7 +566,7 @@ function Khyanalt({ token }) {
     setKhariltsagch(mur);
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
     index !== -1
-      ? songogdsonKhariltsagch.splice(index, 1)
+      ? (songogdsonKhariltsagch.splice(index, 1), setKhariltsagch(null))
       : songogdsonKhariltsagch.push(mur);
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
@@ -565,23 +574,25 @@ function Khyanalt({ token }) {
     <Admin
       title="Мэдэгдэл"
       khuudasniiNer="medegdel"
-      className=" overflow-hidden p-5 md:p-4 lg:h-auto"
+      setTurulZagvar={setTurulZagvar}
+      setNeesenEsekh={setNeesenEsekh}
+      fixedZagvarNeegdsenEsekh={turulZagvar}
+      className=" overflow-hidden p-5 pb-12 md:pb-0 md:p-4 lg:h-auto"
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
     >
-      <div className="col-span-12 xl:col-span-3">
-        <div className="pr-1" data-aos="fade-right" data-aos-duration="1000">
-          <div className="box p-2">
+      <div className="col-span-12 box xl:col-span-3">
+        <div className="p-2" data-aos="fade-right" data-aos-duration="1000">
+          <div className="border rounded-md shadow-md p-2">
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
               {["SMS", "App", "Mail"].map((mur) => (
                 <div
                   key={mur}
-                  className={`flex-1 cursor-pointer rounded-md py-2 text-center ${
-                    turul === mur ? "bg-green-500 text-white" : ""
-                  }`}
+                  className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${turul === mur ? "bg-green-500 text-white" : "border-x hover:bg-green-500"
+                    }`}
                   onClick={() => turulSongokh(mur)}
                 >
                   {mur}
@@ -591,7 +602,7 @@ function Khyanalt({ token }) {
           </div>
         </div>
         <div
-          className="box mt-5 grid grid-cols-12 items-center space-x-3 p-2 pl-3"
+          className="border rounded-md mx-2 shadow-md mt-2 grid grid-cols-12 items-center space-x-3 p-2 pl-3"
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="100"
@@ -635,7 +646,7 @@ function Khyanalt({ token }) {
 
         {turul === "SMS" ? (
           <div
-            className="box mt-5 flex flex-row items-center justify-between p-2 px-10"
+            className="border my-4 rounded-md mx-2 shadow-md flex flex-row items-center justify-between p-2 px-10"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="100"
@@ -671,91 +682,80 @@ function Khyanalt({ token }) {
             </div>
           </div>
         ) : null}
+        <div onClick={(e) => { e.stopPropagation(); setTurulZagvar(!turulZagvar) }} className={`text-2xl p-2 border bg-green-600 text-white rounded-full fixed transition-all duration-300  z-50 md:hidden ${turulZagvar === true ? "top-[10vh] right-[2vw]" : neesenEsekh ? "top-[100vh] right-full" : "top-[25vh] right-5"}`}>
 
-        <div
-          className={`mt-5 flex-row p-2 font-medium xl:flex ${
-            khariltsagch ? "hidden" : "flex"
-          }`}
-          data-aos="fade-right"
-          data-aos-duration="1000"
-          data-aos-delay="100"
-        >
-          <div className="hidden xl:block">{turul} загвар</div>
-          <div className=" xl:hidden">
-            <Button
-              onClick={
-                turulZagvar === false
-                  ? () => setTurulZagvar(true)
-                  : () => setTurulZagvar(false)
-              }
-            >
-              {turulZagvar === false ? (turul, "загвар") : "буцах"}
-            </Button>
-          </div>
-          <button
-            className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
-            onClick={() =>
-              turul === "SMS"
-                ? smsZagvarNemya()
-                : turul === "App"
-                ? smsZagvarNemya()
-                : router.push("/khyanalt/medegdel/mailMedegdel/new")
-            }
-          >
-            Загвар үүсгэх
-          </button>
+          {turulZagvar !== true ? <SnippetsOutlined /> : <EyeInvisibleOutlined />}
         </div>
         <div
-          className={`scrollbar-hidden h-[70vh] overflow-hidden overflow-y-scroll  xl:block   ${
-            turulZagvar === true ? "block" : "hidden"
-          }`}
+          className={`mt-5 bg-white md:bg-transparent md:shadow-none z-40 duration-300 border-2 border-green-500 fixed md:static md:w-auto md:border-none transition-all shadow-md rounded-md ${turulZagvar === true ? " right-[5vw] w-[90vw] top-[10vh] " : " -right-full w-[90vw] top-[30vh] "
+            } flex-col p-2 font-medium  `}
+          onClick={(e) => e.stopPropagation()}
         >
-          {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
-            <div>
-              {a.turul === turul ? (
-                <div
-                  key={a.ner}
-                  className="intro-x box relative mt-2 flex cursor-pointer items-center p-2"
-                  onClick={() => zagvarSongokh(a)}
-                >
-                  <div className="image-fit mr-1 h-8 w-8 flex-none ">
-                    <img alt="email" src="/email.png" />
-                  </div>
-                  <div className="ml-2 mr-1 overflow-hidden">
-                    <div className="flex items-center">
-                      <div className="font-medium">{a.ner}</div>
+          <div className="flex px-1 pb-2"><p>{turul} загвар</p>
+
+            <button
+              className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
+              onClick={() =>
+                turul === "SMS"
+                  ? smsZagvarNemya()
+                  : turul === "App"
+                    ? smsZagvarNemya()
+                    : router.push("/khyanalt/medegdel/mailMedegdel/new")
+              }
+            >
+              Загвар үүсгэх
+            </button>
+          </div>
+          <div
+            className={` h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}
+          >
+            {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
+              <div>
+                {a.turul === turul ? (
+                  <div
+                    key={a.ner}
+                    className="intro-x border rounded-md shadow-md relative mt-2 flex cursor-pointer items-center p-2"
+                    onClick={() => zagvarSongokh(a)}
+                  >
+                    <div className="image-fit mr-1 h-8 w-8 flex-none ">
+                      <img alt="email" src="/email.png" />
                     </div>
-                  </div>
-                  <div className="ml-auto flex flex-row space-x-2">
-                    <Popconfirm
-                      title="Загвар устгах уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
-                      onConfirm={() => zagvarUstgaya(a)}
-                    >
-                      <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
-                        <DeleteOutlined style={{ color: "red" }} />
+                    <div className="ml-2 mr-1 overflow-hidden">
+                      <div className="flex items-center">
+                        <div className="font-medium">{a.ner}</div>
                       </div>
-                    </Popconfirm>
-                    <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
-                      onClick={() =>
-                        turul === "SMS" || turul === "App"
-                          ? smsZagvarNemya(a)
-                          : router.push(
+                    </div>
+                    <div className="ml-auto flex flex-row space-x-2">
+                      <Popconfirm
+                        title="Загвар устгах уу?"
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => zagvarUstgaya(a)}
+                      >
+                        <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
+                          <DeleteOutlined style={{ color: "red" }} />
+                        </div>
+                      </Popconfirm>
+                      <div
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800"
+                        onClick={() =>
+                          turul === "SMS" || turul === "App"
+                            ? smsZagvarNemya(a)
+                            : router.push(
                               `/khyanalt/medegdel/mailMedegdel/${a._id}`
                             )
-                      }
-                    >
-                      <EditOutlined style={{ color: "#85C1E9" }} />
+                        }
+                      >
+                        <EditOutlined style={{ color: "#85C1E9" }} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
+                ) : (
+                  ""
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div
@@ -769,7 +769,7 @@ function Khyanalt({ token }) {
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none
               focus:ring-1 focus:ring-[#8aaaef] "
-              placeholder="Харилцагч хайх /Утас , Нэр, Регистр/"
+              placeholder="Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/"
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {
@@ -813,11 +813,10 @@ function Khyanalt({ token }) {
               <div>
                 {!!mur._id ? (
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
-                      khariltsagch?._id === mur?._id
-                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
-                        : ""
-                    } `}
+                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${khariltsagch?._id === mur?._id
+                      ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
+                      : ""
+                      } `}
                     key={mur?._id}
                     onClick={() => khariltsagchSongokh(mur)}
                   >
@@ -852,7 +851,7 @@ function Khyanalt({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                          1
+                            1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -871,289 +870,280 @@ function Khyanalt({ token }) {
           </div>
         </div>
       </div>
-
-      <div className="col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
-        {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-          <div className="box flex h-full flex-col">
-            {songogdsonKhariltsagch.length < 2 ? (
-              <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
-                {khariltsagch && (
-                  <div className="flex items-center">
-                    <div className="mr-3 text-lg xl:hidden">
-                      <ArrowLeftOutlined
-                        onClick={() => khariltsagchSongokh(mur)}
-                      />
-                    </div>
-                    <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
-                      <img
-                        alt="ProfileZurag"
-                        className="rounded-full"
-                        src={
-                          ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
-                            10) %
-                            2 <
+      {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
+        <div className="box flex col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem h-full flex-col">
+          {songogdsonKhariltsagch.length < 2 ? (
+            <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
+              {khariltsagch && (
+                <div className="flex items-center">
+                  <div className="mr-3 text-lg xl:hidden">
+                    <ArrowLeftOutlined
+                      onClick={() => khariltsagchSongokh(khariltsagch)}
+                    />
+                  </div>
+                  <div className="image-fit relative h-10 w-10 flex-none sm:h-12 sm:w-12">
+                    <img
+                      alt="ProfileZurag"
+                      className="rounded-full"
+                      src={
+                        ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
+                          10) %
+                          2 <
                           1
-                            ? "/profileFemale.svg"
-                            : "/profile.svg"
-                        }
-                      />
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
+                      }
+                    />
+                  </div>
+                  <div className="ml-3 mr-auto">
+                    <div className="text-base font-medium">
+                      {khariltsagch?.ner}
                     </div>
-                    <div className="ml-3 mr-auto">
-                      <div className="text-base font-medium">
-                        {khariltsagch?.ner}
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                        {turul === "Mail"
-                          ? khariltsagch?.mail
-                          : khariltsagch?.utas}{" "}
-                        <span className="mx-1">•</span> {turul}
-                      </div>
+                    <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                      {turul === "Mail"
+                        ? khariltsagch?.mail
+                        : khariltsagch?.utas}{" "}
+                      <span className="mx-1">•</span> {turul}
                     </div>
                   </div>
-                )}
-              </div>
-            ) : (
-              ""
-            )}
-            {songogdsonKhariltsagch.length > 2 ? (
-              ""
-            ) : (
-              <div
-                className="w-full"
-                data-aos="fade-left"
-                data-aos-duration="1000"
-              >
-                {turul === "SMS" ? (
-                  <div
-                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                    style={{ maxHeight: "calc(100vh - 32rem)" }}
-                    onScroll={onScroll}
-                  >
-                    {msjTuukh?.jagsaalt.map((a) => {
-                      return (
-                        <div
-                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                            a.turul === "medegdel"
-                              ? "ml-auto rounded-br-none bg-green-500"
-                              : "rounded-bl-none"
-                          }`}
-                        >
-                          <span className="w-full break-words text-justify text-white ">
-                            {a.msg}
-                          </span>
-
-                          <div
-                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                              a.kharsanEsekh === true ? "" : "hidden"
-                            }`}
-                          >
-                            <svg
-                              width="20px"
-                              height="20px"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                              <path
-                                d="M16 7L12 11"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                              <path
-                                d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                            </svg>
-                          </div>
-                          <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                            {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div
-                    className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                    style={{ maxHeight: "calc(100vh - 32rem)" }}
-                    onScroll={onScroll}
-                  >
-                    {medegdelAvya?.jagsaalt.map((a) => {
-                      return (
-                        <div
-                          className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                            a.turul === "medegdel"
-                              ? "ml-auto rounded-br-none bg-green-500"
-                              : "rounded-bl-none"
-                          }`}
-                        >
-                          <span className="w-full break-words text-justify text-white ">
-                            {a.message}
-                          </span>
-
-                          <div
-                            className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                              a.kharsanEsekh === true ? "" : "hidden"
-                            }`}
-                          >
-                            <svg
-                              width="20px"
-                              height="20px"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                              <path
-                                d="M16 7L12 11"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                              <path
-                                d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                              />
-                            </svg>
-                          </div>
-                          <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                            {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                          </span>
-                          <span className="absolute right-0 -bottom-5 text-gray-500">
-                            Мэдэгдэл
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+          {songogdsonKhariltsagch.length > 2 ? (
+            ""
+          ) : (
             <div
-              className="mt-auto w-full p-2"
-              data-aos="fade-right"
+              className="w-full"
+              data-aos="fade-left"
               data-aos-duration="1000"
             >
-              {turul !== "SMS" && (
-                <Input
-                  className="space-y-3"
-                  placeholder="Гарчиг"
-                  value={!!ner ? ner : title}
-                  onChange={({ target }) => setTitle(target.value)}
-                />
-              )}
+              {turul === "SMS" ? (
+                <div
+                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                  style={{ maxHeight: "calc(100vh - 32rem)" }}
+                  onScroll={onScroll}
+                >
+                  {msjTuukh?.jagsaalt.map((a) => {
+                    return (
+                      <div
+                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
+                          ? "ml-auto rounded-br-none bg-green-500"
+                          : "rounded-bl-none"
+                          }`}
+                      >
+                        <span className="w-full break-words text-justify text-white ">
+                          {a.msg}
+                        </span>
 
-              {turul !== "App" ? (
+                        <div
+                          className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
+                        >
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M16 7L12 11"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div
+                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                  style={{ maxHeight: "calc(100vh - 32rem)" }}
+                  onScroll={onScroll}
+                >
+                  {medegdelAvya?.jagsaalt.map((a) => {
+                    return (
+                      <div
+                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
+                          ? "ml-auto rounded-br-none bg-green-500"
+                          : "rounded-bl-none"
+                          }`}
+                      >
+                        <span className="w-full break-words text-justify text-white ">
+                          {a.message}
+                        </span>
+
+                        <div
+                          className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
+                            }`}
+                        >
+                          <svg
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M16 7L12 11"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                            <path
+                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                        </span>
+                        <span className="absolute right-0 -bottom-5 text-gray-500">
+                          Мэдэгдэл
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+          <div
+            className="mt-auto w-full p-2"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+          >
+            {turul !== "SMS" && (
+              <Input
+                className="space-y-3"
+                placeholder="Гарчиг"
+                value={!!ner ? ner : title}
+                onChange={({ target }) => setTitle(target.value)}
+              />
+            )}
+
+            {turul !== "App" ? (
+              <ZagvarUusgekh
+                change={setContent}
+                value={content}
+                onTextChange={onTextChange}
+              />
+            ) : (
+              <div className="py-5">
+                <div className="flex items-center space-x-3">
+                  <div>
+                    <Upload
+                      showUploadList={false}
+                      multiple={false}
+                      name="file"
+                      action={`${url}/upload`}
+                      method="POST"
+                      onChange={(v) => setZurag(v.file.response)}
+                    >
+                      <div className="flex flex-row space-x-1">
+                        <Button icon={<UploadOutlined />}>
+                          зураг оруулах
+                        </Button>
+                      </div>
+                    </Upload>
+                  </div>
+                </div>
+
                 <ZagvarUusgekh
                   change={setContent}
                   value={content}
                   onTextChange={onTextChange}
                 />
-              ) : (
-                <div className="py-5">
-                  <div className="flex items-center space-x-3">
-                    <div>
-                      <Upload
-                        showUploadList={false}
-                        multiple={false}
-                        name="file"
-                        action={`${url}/upload`}
-                        method="POST"
-                        onChange={(v) => setZurag(v.file.response)}
-                      >
-                        <div className="flex flex-row space-x-1">
-                          <Button icon={<UploadOutlined />}>
-                            зураг оруулах
-                          </Button>
-                        </div>
-                      </Upload>
-                    </div>
-                  </div>
-
-                  <ZagvarUusgekh
-                    change={setContent}
-                    value={content}
-                    onTextChange={onTextChange}
-                  />
-                </div>
-              )}
-            </div>
-            <div className="flex w-full items-center justify-between space-x-2 p-2">
-              <div className="text-xs font-semibold">{msj.length}/160</div>
-              <div className="flex items-center justify-between space-x-3">
-                <label className="font-medium">{turul} Илгээх</label>
-                <div
-                  onClick={send}
-                  className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
-                    loading ? "200" : "600"
+              </div>
+            )}
+          </div>
+          <div className="flex w-full items-center justify-between space-x-2 p-2">
+            <div className="text-xs font-semibold">{msj.length}/160</div>
+            <div className="flex items-center justify-between space-x-3">
+              <label className="font-medium">{turul} Илгээх</label>
+              <div
+                onClick={send}
+                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
                   } flex flex-none items-center justify-center rounded-full text-white`}
-                >
-                  {loading ? (
-                    <Spin size="small" />
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-4 w-4"
-                    >
-                      <line x1="22" y1="2" x2="11" y2="13"></line>
-                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                    </svg>
-                  )}
-                </div>
+              >
+                {loading ? (
+                  <Spin size="small" />
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="h-4 w-4"
+                  >
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                )}
               </div>
             </div>
           </div>
-        ) : (
-          <div
-            className={`box hidden h-full items-center xl:flex ${
-              turulZagvar ? "hidden" : "lg:flex"
+        </div>
+      ) : (
+        <div
+          className={`box hidden mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
             }`}
-            data-aos="fade-left"
-            data-aos-duration="1000"
-          >
-            <div className="mx-auto text-center">
-              <div className="flex justify-center">
-                <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img alt="ProfileZurag" src="/profile.svg" />
-                </div>
-                <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                  <img alt="ProfileZurag" src="/profileFemale.svg" />
-                </div>
+          data-aos="fade-left"
+          data-aos-duration="1000"
+        >
+          <div className="mx-auto text-center">
+            <div className="flex justify-center">
+              <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profile.svg" />
               </div>
-              <div className="mt-3">
-                <div className="font-medium">Өдрийн мэнд</div>
-                <div className="mt-1 text-gray-600 dark:text-gray-300">
-                  Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
-                </div>
+              <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                <img alt="ProfileZurag" src="/profileFemale.svg" />
+              </div>
+            </div>
+            <div className="mt-3">
+              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="mt-1 text-gray-600 dark:text-gray-300">
+                Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </Admin>
   );
 }

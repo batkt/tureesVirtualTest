@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       height: {
-        scrollH: "calc(100vh - 13rem)",
-        H7HalfRem: "calc(100vh - 7.5rem)",
+        scrollH: "calc(100vh - 15.5rem)",
+        H7HalfRem: "calc(100vh - 8.5rem)",
         HMobile: "calc(100vh - 5rem)",
         medegdelHariltsagchPhone: "calc(100vh - 27rem)",
       },

@@ -35,6 +35,8 @@ function Admin({
   tsonkhniiId,
   loading,
   setNeesenEsekh,
+  setTurulZagvar,
+  fixedZagvarNeegdsenEsekh
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -85,7 +87,7 @@ function Admin({
   )
 
   return (
-    <div onClick={(e) => { e.stopPropagation(); visible === true && setVisible(false) }} className="md:flex relative min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
+    <div onClick={() => { visible === true && setVisible(false); !!setTurulZagvar && fixedZagvarNeegdsenEsekh === true && setTurulZagvar(false) }} className="md:flex relative overflow-hidden min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -94,14 +96,14 @@ function Admin({
       <div className="flex justify-between items-center py-4">
         {dedKhuudas && (
           <button
-            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+            className="flex h-8 w-8 items-center md:hidden justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
             }
           >
             <LeftOutlined
-              style={{ fontSize: "10px" }}
-              className="flex items-center justify-center dark:text-gray-50"
+              style={{ fontSize: "15px" }}
+              className="flex items-center justify-center text-gray-50"
             />
           </button>
         )}
@@ -145,7 +147,7 @@ function Admin({
         {!dedKhuudas && (
           <button
             className="border-none outline-none md:hidden"
-            onClick={(e) => { e.stopPropagation; setVisible(!visible); !!setNeesenEsekh && setNeesenEsekh(!visible) }}
+            onClick={() => { setVisible(!visible); !!setNeesenEsekh && setNeesenEsekh(!visible) }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 w-8 h-8 -rotate-90 text-white"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           </button>
@@ -181,12 +183,27 @@ function Admin({
           }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
-          <h2
-            id="garchig"
-            className=" md:flex items-center justify-center text-base  hidden font-semibold  text-green-800 dark:text-white "
-          >
-            {title}
-          </h2>
+          <div className="flex">
+            {dedKhuudas && (
+              <button
+                className="md:flex hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+                onClick={() =>
+                  _.isFunction(onBack) ? onBack(router.back) : router.back()
+                }
+              >
+                <LeftOutlined
+                  style={{ fontSize: "15px" }}
+                  className="flex items-center justify-center dark:text-gray-50"
+                />
+              </button>
+            )}
+            <h2
+              id="garchig"
+              className=" md:flex items-center justify-center text-base  hidden font-semibold  text-green-800 dark:text-white "
+            >
+              {title}
+            </h2>
+          </div>
           <div className="flex justify-between w-full md:w-auto flex-row md:space-x-3 lg:space-x-6">
             {tsonkhniiId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
@@ -216,7 +233,7 @@ function Admin({
             <div className="hidden items-center justify-center md:flex">
               Лиценз- {license()}
             </div>
-            {!hideSearch && (
+            {!hideSearch ? (
               <>
                 <div
                   id="search"
@@ -263,7 +280,7 @@ function Admin({
                   onClick={onClickSearch}
                 />
               </>
-            )}
+            ) : <div></div>}
             <div className="flex gap-[5px]">
               <Tooltip
                 placement="bottom"

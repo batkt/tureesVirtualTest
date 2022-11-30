@@ -827,11 +827,18 @@ input:-webkit-autofill {
   height: 100%;
 }
 
+.ant-picker-panel-container {
+  @apply w-[85vw] md:w-auto overflow-x-auto overflow-hidden 
+}
+
 .ant-input-suffix > .anticon {
   display: flex !important;
 }
 .menuForPhone::-webkit-scrollbar-thumb {
   background: white;
+}
+.hideScroll::-webkit-scrollbar {
+  display: none;
 }
 .sub-menu {
   overflow: hidden;

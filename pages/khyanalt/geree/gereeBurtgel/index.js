@@ -536,18 +536,16 @@ function ZakhialgiinKhyanalt() {
         render: (data, a) => {
           return (
             <div
-              className={`relative ml-1 border-l-2 ${
-                a.turGereeEsekh === true
-                  ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
-                  : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
-              }`}
+              className={`relative ml-1 border-l-2 ${a.turGereeEsekh === true
+                ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
+                : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
+                }`}
             >
               <div
-                className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${
-                  a.turGereeEsekh === true
-                    ? "bg-purple-600 dark:bg-purple-400"
-                    : "bg-blue-500 dark:bg-blue-400"
-                }`}
+                className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${a.turGereeEsekh === true
+                  ? "bg-purple-600 dark:bg-purple-400"
+                  : "bg-blue-500 dark:bg-blue-400"
+                  }`}
               />
               {data}
             </div>
@@ -889,7 +887,7 @@ function ZakhialgiinKhyanalt() {
       </Button>,
     ];
     modal({
-      width: "20vw",
+      width: global.innerWidth < 768 ? "90vw" : "20vw",
       title: "Гэрээ сунгах",
       icon: <MinusCircleOutlined />,
       content: (
@@ -1030,7 +1028,7 @@ function ZakhialgiinKhyanalt() {
     >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}
-        width={"50vw"}
+        width={global.innerWidth < 768 ? "100vw" : "50vw"}
         onClose={() => setKharuulakhGeree(null)}
         visible={!!kharuulakhGeree}
         footer={
@@ -1053,16 +1051,14 @@ function ZakhialgiinKhyanalt() {
         )}
       </Drawer>
       <Card className="cardgrid col-span-12 ">
-        <div className="flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`border-2 ${
-                  mur?.utga === shuult?.utga ? mur.border : "border-green-500"
-                }  cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${
-                  mur?.utga === shuult?.utga ? mur.selectedColor : ""
-                }`}
+                className={`border-2 ${mur?.utga === shuult?.utga ? mur.border : "border-green-500"
+                  }  cursor-pointer rounded-xl sm:col-span-12 lg:col-span-2 ${mur?.utga === shuult?.utga ? mur.selectedColor : ""
+                  }`}
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
@@ -1073,11 +1069,10 @@ function ZakhialgiinKhyanalt() {
                     <div className="flex">
                       <div>
                         <div
-                          className={`text-3xl ${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } font-bold`}
+                          className={`text-3xl ${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } font-bold`}
                         >
                           {mur.too}
                         </div>
@@ -1087,11 +1082,10 @@ function ZakhialgiinKhyanalt() {
                       </div>
                       <div className="ml-auto">
                         <div
-                          className={`${
-                            mur?.utga === shuult?.utga
-                              ? mur.color
-                              : "text-green-500"
-                          } text-2xl`}
+                          className={`${mur?.utga === shuult?.utga
+                            ? mur.color
+                            : "text-green-500"
+                            } text-2xl`}
                         >
                           {mur.icon}
                         </div>
@@ -1282,6 +1276,7 @@ function ZakhialgiinKhyanalt() {
           neesenEsekh={neesenEsekh}
           componentProps={{ router }}
           cardListTuluv={"utas"}
+          tileProps={{ gereeniiTokhirgoo, shuult, gereeSungaya, gereeTsutsalya, gereeKharya, ajiltan, gereeSergeeye }}
           pagination={{
             current: gereeniiMedeelel?.khuudasniiDugaar,
             pageSize: gereeniiMedeelel?.khuudasniiKhemjee,

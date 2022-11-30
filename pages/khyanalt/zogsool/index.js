@@ -74,9 +74,9 @@ function Zogsool({ token }) {
     return {
       check_in_time: ognoo
         ? {
-            $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
       turul: turul === "Үйлчлүүлэгч" ? null : turul,
     };
@@ -158,7 +158,7 @@ function Zogsool({ token }) {
         width: "2rem",
         render: (text, record, index) =>
           (zogsoolGaralt?.khuudasniiDugaar || 0) *
-            (zogsoolGaralt?.khuudasniiKhemjee || 0) -
+          (zogsoolGaralt?.khuudasniiKhemjee || 0) -
           (zogsoolGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -262,20 +262,19 @@ function Zogsool({ token }) {
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
     >
-      <Card size="small" className="col-span-12 overflow-auto p-5">
-        <div className="grid w-full grid-cols-12 gap-6 border-solid">
+      <Card size="small" className="col-span-12 overflow-auto">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {toololt.map((a, i) => (
             <div
               key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
-                a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
-              }`}
+              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
+                }`}
               onClick={() => setTurul(a.name)}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}
             >
-              <div className="h-full rounded-xl">
+              <div className="h-full w-[67vw] md:w-auto rounded-xl">
                 <div className="rounded-xl p-3">
                   <div className="flex flex-row items-center space-x-2">
                     <div className="text-3xl font-bold text-green-600">
@@ -290,27 +289,29 @@ function Zogsool({ token }) {
         </div>
       </Card>
       <Card className="col-span-12">
-        <div className="flex flex-row">
+        <div className="flex gap-5 flex-col md:flex-row">
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="100"
           >
             <DatePicker.RangePicker
-              size="small"
+              className="w-full md:w-auto"
+              size="middle"
               value={ognoo}
               onChange={setOgnoo}
             />
           </div>
-          <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
-            Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
-          </div>
+
           <div
-            className="ml-auto"
+            className="md:ml-auto mb-5 md:mb-0 w-full justify-between flex items-center"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="300"
           >
+            <div className="flex text-xs md:text-base flex-row space-x-2 p-1 font-medium">
+              Зогсоолын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
+            </div>
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col space-y-2">
@@ -374,6 +375,7 @@ function Zogsool({ token }) {
             }}
           />
           <CardList
+            cardListTuluv={"utas"}
             keyValue="uilchluulegch"
             className="block overflow-auto md:hidden"
             jagsaalt={zogsoolGaralt?.jagsaalt}

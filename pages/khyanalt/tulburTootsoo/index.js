@@ -57,7 +57,7 @@ function iconAvya(a, bank) {
     color = "yellow";
     tailbar =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-      a?.kholbosonDun > 0
+        a?.kholbosonDun > 0
         ? "Дүн дутуу холбогдсон байна"
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
@@ -199,7 +199,7 @@ function tulburTootsoo({ token }) {
     if (
       data?.kholbosonGereeniiId &&
       data?.kholbosonDun ===
-        data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
+      data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
     ) {
       message.info("Гүйлгээ гэрээнд холбогдсон байна.");
       return;
@@ -391,7 +391,7 @@ function tulburTootsoo({ token }) {
           },
           {
             title: "НӨАТУС",
-            width: "4.5rem",
+            width: "5rem",
             align: "center",
             render(a) {
               return (
@@ -404,7 +404,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                        a?.ebarimtAvsanEsekh === true ? (
+                          a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -522,7 +522,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                        a?.ebarimtAvsanEsekh === true ? (
+                          a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -582,16 +582,15 @@ function tulburTootsoo({ token }) {
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
-          Number(bankniiGuilgeeToololt?.kholboson || 0) >
-          0 &&
+        Number(bankniiGuilgeeToololt?.kholboson || 0) >
+        0 &&
         notification.error({
-          message: `Холболт хийгдээгүй ${
-            Number(bankniiGuilgeeToololt?.niit || 0) -
+          message: `Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0) -
             Number(bankniiGuilgeeToololt?.kholboson || 0)
-          } гэрээ байна`,
+            } гэрээ байна`,
         })}
-      <Card className="cardgrid col-span-12 p-5">
-        <div className="grid w-full grid-cols-12 gap-4">
+      <Card className="cardgrid col-span-12 md:p-5">
+        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
             {
@@ -607,17 +606,16 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${
-                  mur.utga === songogdsonTurul
-                    ? "bg-green-50 dark:bg-gray-900"
-                    : ""
-                }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${mur.utga === songogdsonTurul
+                  ? "bg-green-50 dark:bg-gray-900"
+                  : ""
+                  }`}
                 onClick={() => turulSongyo(mur.utga)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full rounded-xl">
+                <div className="h-full w-[65vw] sm:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -641,131 +639,135 @@ function tulburTootsoo({ token }) {
           })}
         </div>
         <div
-          className="mt-5 flex w-full flex-row"
+          className="mt-5 flex w-full flex-col md:flex-row"
           data-aos="zoom-out-up"
           data-aos-duration="1000"
           data-aos-delay="200"
         >
-          <RangePicker
-            style={{ marginBottom: "20px" }}
-            value={ekhlekhOgnoo}
-            onChange={setEkhlekhOgnoo}
-          />
-          {ajiltan?.erkh === "Admin" && (
-            <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
-              {["orlogo", "zarlaga"].map((text) => (
-                <div
-                  className={`cursor-pointer rounded-md p-2 ${
-                    khuulgaTurul === text
+          <div className="flex">
+            <RangePicker
+              style={{ marginBottom: "20px" }}
+              value={ekhlekhOgnoo}
+              onChange={setEkhlekhOgnoo}
+            />
+            {ajiltan?.erkh === "Admin" && (
+              <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
+                {["orlogo", "zarlaga"].map((text) => (
+                  <div
+                    className={`cursor-pointer rounded-md p-2 ${khuulgaTurul === text
                       ? "dark bg-green-500 text-gray-50"
                       : ""
-                  }`}
-                  onClick={() => setKhuulgaTurul(text)}
-                >
-                  {text === "orlogo" ? "Орлого" : "Зарлага"}
-                </div>
-              ))}
-            </div>
-          )}
-          <div className="ml-4 w-40">
-            <Select
-              placeholder="Данс"
-              style={{ width: "100%" }}
-              onChange={dansSongoy}
-              value={songogdsonDans?.dugaar}
-            >
-              {dansGaralt?.jagsaalt?.map((a) => (
-                <Select.Option key={a.dugaar} value={a.dugaar}>
-                  <div>{a.dugaar}</div>
-                </Select.Option>
-              ))}
-            </Select>
-          </div>
-
-          {songogdsonDans && (
-            <div className="ml-5 flex flex-row space-x-2 p-1 font-medium">
-              Үлдэгдэл:{" "}
-              {uldegdel ? (
-                songogdsonDans?.bank === "tdb" ? (
-                  uldegdel
-                ) : (
-                  formatNumber(uldegdel)
-                )
-              ) : (
-                <Spin />
-              )}{" "}
-              {songogdsonDans.currency}
-            </div>
-          )}
-          <div className="ml-auto">
-            <Popover
-              content={() => (
-                <div className="flex w-32 flex-col">
-                  <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
-                    onClick={() => {
-                      const { Excel } = require("antd-table-saveas-excel");
-                      const excelExport = new Excel();
-                      excelExport
-                        .addSheet("Дансны хуулга")
-                        .addColumns([
-                          {
-                            title: "Огноо",
-                            dataIndex: "TxDt",
-                            render(date) {
-                              return moment(date).format("YYYY-MM-DD");
-                            },
-                          },
-                          {
-                            title: "Цаг",
-                            dataIndex: "TxTime",
-                            render(a) {
-                              if (_.isString(a)) return `${a}`;
-                              return "";
-                            },
-                          },
-                          {
-                            title: "Гүйлгээний утга",
-                            dataIndex: "TxAddInf",
-                          },
-                          {
-                            title: "Гүйлгээний дүн",
-                            showSorterTooltip: false,
-                            sorter: () => 0,
-                            dataIndex: "Amt",
-                            render(a) {
-                              return a;
-                            },
-                          },
-                          {
-                            title: "Шилжүүлсэн данс",
-                            dataIndex: "CtAcntOrg",
-                          },
-                          {
-                            title: "Талбай",
-                            dataIndex: "kholbosonTalbainId",
-                          },
-                        ])
-                        .addDataSource(dansniiKhuulgaGaralt?.jagsaalt || [])
-                        .saveAs("Дансны хуулга.xlsx");
-                    }}
+                      }`}
+                    onClick={() => setKhuulgaTurul(text)}
                   >
-                    <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
-                  </a>
-                </div>
-              )}
-              placement="bottom"
-              trigger="click"
-            >
-              <Button
-                type="primary"
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                    {text === "orlogo" ? "Орлого" : "Зарлага"}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="flex w-full md:pt-1">
+            <div className="md:ml-4 w-40">
+              <Select
+                placeholder="Данс"
+                style={{ width: "100%" }}
+                onChange={dansSongoy}
+                value={songogdsonDans?.dugaar}
               >
-                <span>Excel</span>
-                <DownOutlined width={5} />
-              </Button>
-            </Popover>
+                {dansGaralt?.jagsaalt?.map((a) => (
+                  <Select.Option key={a.dugaar} value={a.dugaar}>
+                    <div>{a.dugaar}</div>
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
+
+            {songogdsonDans && (
+              <div className="ml-5 md:flex hidden flex-row space-x-2 p-1 font-medium">
+                Үлдэгдэл:{" "}
+                {uldegdel ? (
+                  songogdsonDans?.bank === "tdb" ? (
+                    uldegdel
+                  ) : (
+                    formatNumber(uldegdel)
+                  )
+                ) : (
+                  <Spin />
+                )}{" "}
+                {songogdsonDans.currency}
+              </div>
+            )}
+
+            <div className="ml-auto">
+              <Popover
+                content={() => (
+                  <div className="flex w-32 flex-col">
+                    <a
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
+                      onClick={() => {
+                        const { Excel } = require("antd-table-saveas-excel");
+                        const excelExport = new Excel();
+                        excelExport
+                          .addSheet("Дансны хуулга")
+                          .addColumns([
+                            {
+                              title: "Огноо",
+                              dataIndex: "TxDt",
+                              render(date) {
+                                return moment(date).format("YYYY-MM-DD");
+                              },
+                            },
+                            {
+                              title: "Цаг",
+                              dataIndex: "TxTime",
+                              render(a) {
+                                if (_.isString(a)) return `${a}`;
+                                return "";
+                              },
+                            },
+                            {
+                              title: "Гүйлгээний утга",
+                              dataIndex: "TxAddInf",
+                            },
+                            {
+                              title: "Гүйлгээний дүн",
+                              showSorterTooltip: false,
+                              sorter: () => 0,
+                              dataIndex: "Amt",
+                              render(a) {
+                                return a;
+                              },
+                            },
+                            {
+                              title: "Шилжүүлсэн данс",
+                              dataIndex: "CtAcntOrg",
+                            },
+                            {
+                              title: "Талбай",
+                              dataIndex: "kholbosonTalbainId",
+                            },
+                          ])
+                          .addDataSource(dansniiKhuulgaGaralt?.jagsaalt || [])
+                          .saveAs("Дансны хуулга.xlsx");
+                      }}
+                    >
+                      <DownloadOutlined style={{ fontSize: "18px" }} />
+                      <label>Татах</label>
+                    </a>
+                  </div>
+                )}
+                placement="bottom"
+                trigger="click"
+              >
+                <Button
+                  type="primary"
+                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                >
+                  <span>Excel</span>
+                  <DownOutlined width={5} />
+                </Button>
+              </Popover>
+            </div>
           </div>
         </div>
         <div
@@ -807,6 +809,7 @@ function tulburTootsoo({ token }) {
         </div>
         <CardList
           keyValue="guilgeeTuukh"
+          cardListTuluv={"utas"}
           className="block overflow-auto md:hidden"
           jagsaalt={dansniiKhuulgaGaralt?.jagsaalt}
           Component={DansniiKhuulgaTile}
@@ -816,7 +819,7 @@ function tulburTootsoo({ token }) {
             total: dansniiKhuulgaGaralt?.jagsaalt?.niitMur,
             showSizeChanger: true,
             onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setKhuudaslalt((kh) => ({
+              setDansniiKhuulgaKhuudaslalt((kh) => ({
                 ...kh,
                 khuudasniiDugaar,
                 khuudasniiKhemjee,

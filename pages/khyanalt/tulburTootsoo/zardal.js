@@ -469,6 +469,7 @@ function ZardalTable({
     <Table
       bordered
       size="small"
+      scroll={{ y: "calc(100vh - 20rem)" }}
       dataSource={garalt?.jagsaalt}
       columns={columns}
       rowClassName={rowClassName}
@@ -570,7 +571,7 @@ function zardal({ token }) {
     <Admin
       title="Зардлын жагсаалт"
       khuudasniiNer="zardal"
-      className="p-0 md:p-4"
+      className="p-4"
       onSearch={(search) =>
         setZardalKhuudaslalt((a) => ({
           ...a,
@@ -582,17 +583,17 @@ function zardal({ token }) {
       loading={isValidating}
     >
       <div className="col-span-12 space-y-5">
-        <div className="flex w-full flex-row">
+        <div className="flex flex-col md:mt-0 w-full md:flex-row">
           <div data-aos="fade-right" data-aos-duration="1000">
-            <DatePicker.RangePicker value={ognoo} onChange={setOgnoo} />
+            <DatePicker.RangePicker className="w-full md:w-auto" value={ognoo} onChange={setOgnoo} />
           </div>
           <button
             style={{
               backgroundColor: "#209669",
               display: "flex",
-              justifyContent: "end",
+              justifyContent: "center",
             }}
-            className="dropdown-toggle btn box mt-8 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
+            className="dropdown-toggle btn box mt-3 ml-auto w-full  bg-green-500 px-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 md:mt-0 md:w-auto"
             aria-expanded="false"
             onClick={() => zardalBurtgekh()}
             data-aos="fade-left"
@@ -653,6 +654,7 @@ function zardal({ token }) {
               dataIndex: "ner",
               ellipsis: true,
               align: "center",
+              width: "65vw"
             },
             {
               title: "Дүн",
