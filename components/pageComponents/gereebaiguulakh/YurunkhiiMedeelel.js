@@ -315,7 +315,7 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-delay="300" className="flex w-full justify-end gap-2 ">
-        <p className="mt-1">Байгууллага эсэх:</p>
+        <p className="mt-1 dark:text-gray-200">Байгууллага эсэх:</p>
         <Form.Item
           name="baiguullagaEsekh"
           valuePropName="checked"
