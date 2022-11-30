@@ -827,8 +827,23 @@ input:-webkit-autofill {
   height: 100%;
 }
 
-.ant-picker-panel-container {
-  @apply w-[85vw] md:w-auto overflow-x-auto overflow-hidden 
+.ant-picker-panels {
+  @apply flex md:flex-row p-1 flex-col justify-center
+}
+@media only screen and (max-width: 768px) {
+.ant-picker-header-next-btn {
+   visibility:visible !important
+}
+.ant-picker-header-prev-btn {
+  visibility:visible !important
+}
+.ant-picker-header-super-next-btn {
+  visibility:visible !important
+}
+
+.ant-picker-header-super-prev-btn {
+  visibility:visible !important
+}
 }
 
 .ant-input-suffix > .anticon {

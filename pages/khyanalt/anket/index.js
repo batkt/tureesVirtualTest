@@ -247,7 +247,7 @@ function Anket({ token }) {
       khuudasniiNer="anket"
       tsonkhniiId={"62ea0d2b7c54f8189bdca54c"}
     >
-      <div className="col-span-12 p-3 md:p-5">
+      <div className="col-span-12 p-3 md:p-5 pt-0 lg:py-0">
         <Drawer
           title={"Анкет илгээх"}
           width={global.innerWidth < 768 ? "90vw" : "50vw"}
@@ -263,9 +263,9 @@ function Anket({ token }) {
             />
           )}
         </Drawer>
-        <div>
+        <div className="absolute hidden lg:flex top-3 right-3 z-50">
           <Button
-            className="absolute right-3 z-50"
+
             style={{ backgroundColor: "#209669", color: "#ffffff" }}
             icon={<SendOutlined />}
             onClick={() => {
@@ -330,13 +330,13 @@ function Anket({ token }) {
                 </div>
               </div>
               <div className="box col-span-12 overflow-auto p-5 py-5 pt-3 md:col-span-8 xl:col-span-9">
-                <span className="px-5 font-medium dark:text-gray-100">
+                <span className=" lg:px-5 font-medium dark:text-gray-100">
                   Анкетын загвар үүсгэх
                 </span>
                 <Form
                   ref={formRef}
                   form={form}
-                  className="px-5 pt-5"
+                  className="lg:px-5 pt-5"
                   name="dynamic_form_item"
                   autoComplete={"off"}
                   onFinish={(v) => {
@@ -405,10 +405,9 @@ function Anket({ token }) {
                             >
                               Асуулт нэмэх
                             </Button>
-                            <Form.ErrorList errors={errors} />
                           </Form.Item>
                           <div
-                            className="-my-5 grid w-full gap-5 overflow-y-auto py-5 pl-5 pr-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                            className="-my-8 grid w-full gap-2 lg:gap-5 hideScroll pl-1 pr-1 overflow-y-auto py-5 lg:pl-5 lg:pr-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
                             style={{ maxHeight: "50vh" }}
                             id={"form-container"}
                           >
@@ -417,7 +416,7 @@ function Anket({ token }) {
                                 className="rounded-md border py-4 px-2 shadow-lg "
                                 key={fieldKey.key}
                               >
-                                <div className="relative mb-2 space-y-3">
+                                <div className="relative space-y-3">
                                   <Form.Item
                                     name={[name, "asuult"]}
                                     fieldKey={[fieldKey, "asuult"]}
@@ -428,9 +427,9 @@ function Anket({ token }) {
                                         message: "Асуулт оруулна уу!",
                                       },
                                     ]}
-                                    //validateTrigger={["onChange", "onBlur"]}
+                                  //validateTrigger={["onChange", "onBlur"]}
 
-                                    noStyle
+
                                   >
                                     <Input
                                       placeholder={`Асуулт ${name + 1}`}
@@ -447,7 +446,7 @@ function Anket({ token }) {
                                     name={[name, "turul"]}
                                     fieldKey={[fieldKey, "turul"]}
                                     {...restField}
-                                    noStyle
+
                                   >
                                     <Select
                                       placeholder="Хариултын төрөл"
@@ -463,9 +462,9 @@ function Anket({ token }) {
                                     />
                                   </Form.Item>
                                   {fields.length > 1 ? (
-                                    <div className="absolute -top-10 -right-6 rounded-full bg-white dark:bg-gray-900">
+                                    <div className="absolute -top-11 lg:-top-10 -right-3 lg:-right-6 rounded-full bg-white dark:bg-gray-900">
                                       <CloseCircleOutlined
-                                        className="dynamic-delete-button text-3xl text-black text-opacity-60  dark:text-white dark:text-opacity-50"
+                                        className="dynamic-delete-button text-3xl text-black text-opacity-60 dark:text-white dark:text-opacity-50"
                                         onClick={() => remove(name)}
                                       />
                                     </div>
@@ -539,62 +538,87 @@ function Anket({ token }) {
                   </Form.Item>
                 </Form>
               </div>
+              <div className="col-span-12 box p-5 lg:hidden">
+                <Button
+                  type="primary"
+                  style={{ width: "100%" }}
+                  icon={<SendOutlined />}
+                  onClick={() => {
+                    setAnketIlgeekh(true);
+                  }}
+                >
+                  Анкет илгээх
+                </Button>
+              </div>
             </div>
           </TabPane>
           <TabPane
             key="2"
             tab={<span className="text-base font-medium">Жагсаалт</span>}
           >
-            <div className="px-5 pb-2">
-              <div className="text-lg font-medium">
+            <div className="col-span-12 box mb-5 p-5 lg:hidden">
+              <Button
+                type="primary"
+                style={{ width: "100%" }}
+                icon={<SendOutlined />}
+                onClick={() => {
+                  setAnketIlgeekh(true);
+                }}
+              >
+                Анкет илгээх
+              </Button>
+            </div>
+            <div className="px-2 lg:px-5 col-span-12 box py-2">
+              <div className="px-1 lg:px-0 text-md font-medium pb-4">
                 Анкетын хариултын жагсаалт
               </div>
-            </div>
-            <div className="col-span-12 rounded-md bg-white p-5 dark:bg-gray-900">
-              <Table
-                className="hidden lg:block"
-                dataSource={asuult?.jagsaalt}
-                bordered
-                size="small"
-                columns={columns}
-                expandable={{
-                  expandedRowRender: (record) => (
-                    <Khariultuud record={record} />
-                  ),
-                  rowExpandable: (record) => record.name !== "Not Expandable",
-                }}
-                rowKey={(row) => row._id}
-                pagination={{
-                  current: khariult?.khuudasniiDugaar,
-                  pageSize: khariult?.khuudasniiKhemjee,
-                  total: khariult?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    khariult.setKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-              />
-              <CardList
-                keyValue="anket"
-                className="block overflow-auto lg:hidden"
-                jagsaalt={asuult?.jagsaalt}
-                Component={AnketTile}
-                pagination={{
-                  current: asuult?.khuudasniiDugaar,
-                  pageSize: asuult?.khuudasniiKhemjee,
-                  total: asuult?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    asuult?.setKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-              />
+
+              <div className="lg:p-5 dark:bg-gray-900">
+                <Table
+                  className="hidden lg:block"
+                  dataSource={asuult?.jagsaalt}
+                  bordered
+                  size="small"
+                  columns={columns}
+                  expandable={{
+                    expandedRowRender: (record) => (
+                      <Khariultuud record={record} />
+                    ),
+                    rowExpandable: (record) => record.name !== "Not Expandable",
+                  }}
+                  rowKey={(row) => row._id}
+                  pagination={{
+                    current: khariult?.khuudasniiDugaar,
+                    pageSize: khariult?.khuudasniiKhemjee,
+                    total: khariult?.niitMur,
+                    showSizeChanger: true,
+                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      khariult.setKhuudaslalt((kh) => ({
+                        ...kh,
+                        khuudasniiDugaar,
+                        khuudasniiKhemjee,
+                      })),
+                  }}
+                />
+                <CardList
+                  keyValue="anket"
+                  className="block overflow-auto px-2 lg:hidden"
+                  jagsaalt={asuult?.jagsaalt}
+                  Component={AnketTile}
+                  pagination={{
+                    current: asuult?.khuudasniiDugaar,
+                    pageSize: asuult?.khuudasniiKhemjee,
+                    total: asuult?.niitMur,
+                    showSizeChanger: true,
+                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      asuult?.setKhuudaslalt((kh) => ({
+                        ...kh,
+                        khuudasniiDugaar,
+                        khuudasniiKhemjee,
+                      })),
+                  }}
+                />
+              </div>
             </div>
           </TabPane>
         </Tabs>

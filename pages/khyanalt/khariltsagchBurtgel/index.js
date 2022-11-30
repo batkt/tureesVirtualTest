@@ -1001,7 +1001,7 @@ function AjiltanBurtgel({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[40vw] md:w-auto rounded-xl">
+                <div className="h-full w-[67vw] md:w-auto rounded-xl">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>

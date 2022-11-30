@@ -186,13 +186,14 @@ function index({ token }) {
           <div className="px-3 text-justify">
             {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
               <div className="grid grid-cols-12 text-center md:flex">
-                <span className="pr-2 col-span-12"> Ажлын цаг дуусхад</span>
-
-                <span className="px-1 col-span-6">{timeLeft.hours} цаг</span>
-
-                <span className="px-1 col-span-6">{timeLeft.minutes} мин</span>
-
-                <span className="px-1 col-span-12">{timeLeft.seconds} сек</span>
+                <span className="pr-2 col-span-12"> Ажлын цаг дуусахад</span>
+                <div className="col-span-12 flex justify-center">
+                  <span className="px-1">{timeLeft.hours}</span>
+                  <p>:</p>
+                  <span className="px-1">{timeLeft.minutes}</span>
+                  <p>:</p>
+                  <span className="px-1">{timeLeft.seconds}</span>
+                </div>
                 <span className="pl-1 col-span-12">дутуу байна</span>
               </div>
             ) : timeLeft === "Тооцоолж байна" ? (
