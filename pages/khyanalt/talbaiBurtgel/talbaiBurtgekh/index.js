@@ -483,7 +483,7 @@ function talbaiBurtgekh({ token }) {
     >
       <Card
         size="small"
-        className="col-span-12 overflow-auto mb-14 md:mb-0 md:col-span-12 xl:col-span-12"
+        className="col-span-12 mb-14 md:mb-0 md:col-span-12 xl:col-span-12"
       >
         <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
