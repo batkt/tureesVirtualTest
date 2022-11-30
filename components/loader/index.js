@@ -8,7 +8,7 @@ export default function Loader() {
           <div className="absolute top-3 h-6 w-6 rounded-full bg-green-600 lg:-right-[10px]  lg:-top-5" />
         </div>
       </div>
-      <div className="z-20 flex h-44 w-44 items-center justify-center overflow-hidden rounded-full bg-white bg-green-600 p-2  shadow-xl dark:bg-gray-900 dark:bg-gray-800 lg:h-[15vw] lg:w-[15vw]">
+      <div className="z-20 flex h-44 w-44 items-center justify-center overflow-hidden rounded-full bg-green-600 p-2  shadow-xl dark:bg-gray-900 dark:bg-gray-800 lg:h-[15vw] lg:w-[15vw]">
         <img src="/rent.ico" draggable={false} />
       </div>
     </div>
