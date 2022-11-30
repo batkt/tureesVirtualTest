@@ -52,7 +52,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
   }
   return (
     <>
-      <div className="flex flex-row md:ml-44 gap-3 justify-end">
+      <div className="flex flex-row justify-end gap-3 md:ml-44">
         <Form.Item
           className="w-full pl-2"
           wrapperCol={{ offset: 0 }}
@@ -102,9 +102,11 @@ const YurunkhiiMedeele = ({
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
   zagvarRef,
+  currentForm,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
+
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
     value.baiguullagaEsekh
   );
@@ -174,6 +176,11 @@ const YurunkhiiMedeele = ({
 
   useEffect(() => {
     Aos.init({ once: true });
+  });
+
+  useEffect(() => {
+    console.log("currentForm aa", currentForm);
+    currentForm = form;
   });
 
   useEffect(() => {
@@ -258,7 +265,11 @@ const YurunkhiiMedeele = ({
       }}
       onFinish={onFinish}
     >
-      <div data-aos="fade-right" className="md:hidden mb-5" data-aos-delay="200">
+      <div
+        data-aos="fade-right"
+        className="mb-5 md:hidden"
+        data-aos-delay="200"
+      >
         <Select
           ref={zagvarRef}
           id={gereeniiZagvariinId}
@@ -314,12 +325,13 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      <div data-aos="fade-right" data-aos-delay="300" className="flex w-full justify-end gap-2 ">
+      <div
+        data-aos="fade-right"
+        data-aos-delay="300"
+        className="flex w-full justify-end gap-2 "
+      >
         <p className="mt-1">Байгууллага эсэх:</p>
-        <Form.Item
-          name="baiguullagaEsekh"
-          valuePropName="checked"
-        >
+        <Form.Item name="baiguullagaEsekh" valuePropName="checked">
           <Switch
             onChange={(v) => {
               const khariltsagch = {
@@ -460,100 +472,93 @@ const YurunkhiiMedeele = ({
             />
           </Form.Item>
         </div>
-      )
-      }
-      {
-        baiguullagaEsekh && (
-          <div data-aos="fade-right" data-aos-delay="400">
-            <Form.Item
-              hidden={!baiguullagaEsekh}
-              name="zakhirliinNer"
-              label={"Захирлын нэр"}
-              rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
-            >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder="Нэр"
-                prefix={<SolutionOutlined />}
-              />
-            </Form.Item>
-          </div>
-        )
-      }
-      {
-        !baiguullagaEsekh && (
-          <div data-aos="fade-right" data-aos-delay="700">
-            <Form.Item
-              name="utas"
-              rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
-              hidden={baiguullagaEsekh}
-              label={"Утас"}
-            >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder="Утас"
-                prefix={<SolutionOutlined />}
-              />
-            </Form.Item>
-          </div>
-        )
-      }
-      {
-        baiguullagaEsekh && (
-          <div data-aos="fade-right" data-aos-delay="700">
-            <Form.Item
-              hidden={!baiguullagaEsekh}
-              name="utas"
-              rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
-              label={"Утас"}
-            >
-              <Input
-                onKeyUp={focuser}
-                allowClear
-                placeholder="Утас"
-                prefix={<SolutionOutlined />}
-              />
-            </Form.Item>
-          </div>
-        )
-      }
-      {
-        !baiguullagaEsekh && (
-          <div data-aos="fade-right" data-aos-delay="800">
-            <Form.Item name="mail" hidden={baiguullagaEsekh} label={"И-мэйл хаяг"}>
-              <Input
-                onKeyUp={focuser}
-                type="email"
-                placeholder="И-мэйл хаяг"
-                allowClear
-                prefix={<MailOutlined />}
-              />
-            </Form.Item>
-          </div>
-        )
-      }
-      {
-        baiguullagaEsekh && (
-          <div data-aos="fade-right" data-aos-delay="800">
-            <Form.Item
-              name="mail"
-              hidden={!baiguullagaEsekh}
-              rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
-              label={"И-мэйл хаяг"}
-            >
-              <Input
-                onKeyUp={focuser}
-                type="email"
-                placeholder="И-мэйл хаяг"
-                allowClear
-                prefix={<MailOutlined />}
-              />
-            </Form.Item>
-          </div>
-        )
-      }
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="400">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="zakhirliinNer"
+            label={"Захирлын нэр"}
+            rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
+          >
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              placeholder="Нэр"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="700">
+          <Form.Item
+            name="utas"
+            rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
+            hidden={baiguullagaEsekh}
+            label={"Утас"}
+          >
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              placeholder="Утас"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="700">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="utas"
+            rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
+            label={"Утас"}
+          >
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              placeholder="Утас"
+              prefix={<SolutionOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item
+            name="mail"
+            hidden={baiguullagaEsekh}
+            label={"И-мэйл хаяг"}
+          >
+            <Input
+              onKeyUp={focuser}
+              type="email"
+              placeholder="И-мэйл хаяг"
+              allowClear
+              prefix={<MailOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item
+            name="mail"
+            hidden={!baiguullagaEsekh}
+            rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
+            label={"И-мэйл хаяг"}
+          >
+            <Input
+              onKeyUp={focuser}
+              type="email"
+              placeholder="И-мэйл хаяг"
+              allowClear
+              prefix={<MailOutlined />}
+            />
+          </Form.Item>
+        </div>
+      )}
       <div data-aos="fade-right" data-aos-delay="900">
         <Form.List name="segmentuud" className=" ">
           {(fields, { add, remove }) => (
@@ -702,7 +707,7 @@ const YurunkhiiMedeele = ({
           </Button>
         </div>
       </Form.Item>
-    </Form >
+    </Form>
   );
 };
 

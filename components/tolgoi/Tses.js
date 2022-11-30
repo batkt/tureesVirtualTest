@@ -48,18 +48,21 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
               <Link href={a.href} key={a.href}>
                 <a>
                   <li
-                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${open ? "ml-0" : "ml-56"
-                      } p-2 text-white ${a.khuudasniiNer === khuudasniiNer
+                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
+                      open ? "ml-0" : "ml-56"
+                    } p-2 text-white ${
+                      a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""
-                      }`}
+                    }`}
                   >
                     <div className={"flex flex-row px-1"}>
                       <div
-                        className={`${a.khuudasniiNer === khuudasniiNer
-                          ? "font-medium text-green-500"
-                          : ""
-                          } flex flex-row whitespace-nowrap`}
+                        className={`${
+                          a.khuudasniiNer === khuudasniiNer
+                            ? "font-medium text-green-500"
+                            : ""
+                        } flex flex-row whitespace-nowrap`}
                       >
                         <div className={`mr-2`}>{a.icon}</div>
                         {a.ner}
@@ -96,6 +99,7 @@ function NTses({
   baiguullaga,
   ajiltan,
   barilgaSoliyo,
+  onChangeBarilga,
   barilgiinId,
 }) {
   const barilguud = baiguullaga?.barilguud?.filter(
@@ -123,8 +127,11 @@ function NTses({
                 <div className="relative mt-2 inline-block">
                   <select
                     defaultValue={barilgiinId}
-                    onChange={({ target }) => barilgaSoliyo(target.value)}
-                    className="focus:outline-none focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 dark:bg-gray-800"
+                    onChange={({ target }) => {
+                      onChangeBarilga && onChangeBarilga();
+                      barilgaSoliyo(target.value);
+                    }}
+                    className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800"
                   >
                     {barilguud?.map((a) => (
                       <option key={a?._id} className="" value={a?._id}>

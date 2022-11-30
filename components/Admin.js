@@ -36,7 +36,8 @@ function Admin({
   loading,
   setNeesenEsekh,
   setTurulZagvar,
-  fixedZagvarNeegdsenEsekh
+  fixedZagvarNeegdsenEsekh,
+  onChangeBarilga,
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -55,7 +56,7 @@ function Admin({
     barilgiinId,
   } = useAuth();
   const khuudasnuud = useErkh(ajiltan);
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   function onClickSearch() {
     if (mSearch) {
@@ -84,19 +85,27 @@ function Admin({
     (a) =>
       !!ajiltan?.barilguud?.find((b) => b === a._id) ||
       ajiltan?.erkh === "Admin"
-  )
+  );
 
   return (
-    <div onClick={() => { visible === true && setVisible(false); !!setTurulZagvar && fixedZagvarNeegdsenEsekh === true && setTurulZagvar(false) }} className="md:flex relative overflow-hidden min-h-screen w-screen md:flex-row bg-green-600 dark:bg-gray-900 px-3 pb-5 md:px-6 md:py-4">
+    <div
+      onClick={() => {
+        visible === true && setVisible(false);
+        !!setTurulZagvar &&
+          fixedZagvarNeegdsenEsekh === true &&
+          setTurulZagvar(false);
+      }}
+      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
+    >
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Updater />
-      <div className="flex justify-between items-center py-4">
+      <div className="flex items-center justify-between py-4">
         {dedKhuudas && (
           <button
-            className="flex h-8 w-8 items-center md:hidden justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+            className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:hidden"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
             }
@@ -147,9 +156,27 @@ function Admin({
         {!dedKhuudas && (
           <button
             className="border-none outline-none md:hidden"
-            onClick={() => { setVisible(!visible); !!setNeesenEsekh && setNeesenEsekh(!visible) }}
+            onClick={() => {
+              setVisible(!visible);
+              !!setNeesenEsekh && setNeesenEsekh(!visible);
+            }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 w-8 h-8 -rotate-90 text-white"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white"
+            >
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
           </button>
         )}
       </div>
@@ -162,6 +189,7 @@ function Admin({
           ajiltniiJagsaalt={ajiltniiJagsaalt}
           ajiltanNemya={ajiltanNemya}
           setToken={setToken}
+          onChangeBarilga={onChangeBarilga}
           ajiltanKhasya={ajiltanKhasya}
           barilgaSoliyo={barilgaSoliyo}
           barilgiinId={barilgiinId}
@@ -176,17 +204,20 @@ function Admin({
       )}
       <h2
         id="garchig"
-        className=" flex -mt-4 ml-3 text-base md:hidden font-semibold text-white "
-      >{title}</h2>
+        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
+      >
+        {title}
+      </h2>
       <div
-        className={`bg-gray-100 dark:bg-gray-800 rounded-3xl md:px-2 ${dedKhuudas ? "w-full" : "main"
-          }`}
+        className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
+          dedKhuudas ? "w-full" : "main"
+        }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
           <div className="flex">
             {dedKhuudas && (
               <button
-                className="md:flex hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2  focus:ring-blue-600 focus:ring-opacity-50"
+                className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:flex"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
                 }
@@ -199,12 +230,12 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" md:flex items-center justify-center text-base  hidden font-semibold  text-green-800 dark:text-white "
+              className=" hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-white md:flex "
             >
               {title}
             </h2>
           </div>
-          <div className="flex justify-between w-full md:w-auto flex-row md:space-x-3 lg:space-x-6">
+          <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
             {tsonkhniiId && (
               <div className="hidden h-8 items-center justify-center md:flex ">
                 <Zaavar token={token} id={tsonkhniiId} />
@@ -280,7 +311,9 @@ function Admin({
                   onClick={onClickSearch}
                 />
               </>
-            ) : <div></div>}
+            ) : (
+              <div></div>
+            )}
             <div className="flex gap-[5px]">
               <Tooltip
                 placement="bottom"
@@ -288,9 +321,23 @@ function Admin({
                   <div>Лицензийн хугацаа дуусахад {license()} хоног үлдлээ</div>
                 }
               >
-                <div className="flex items-center gap-1 ml-1 text-base md:hidden">
+                <div className="ml-1 flex items-center gap-1 text-base md:hidden">
                   {license()}:
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock d-block mx-auto"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-clock d-block mx-auto"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
                 </div>
               </Tooltip>
               <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
@@ -303,7 +350,11 @@ function Admin({
           {children}
         </div>
       </div>
-      <div className={`fixed z-50 bottom-[1.7rem] ${visible === true ? "-right-full" : "right-5"} transition-all md:hidden duration-500 dark:bg-gray-900 bg-green-600 px-3 py-5 shadow-md rounded-3xl flex h-8 items-center justify-center`}>
+      <div
+        className={`fixed bottom-[1.7rem] z-50 ${
+          visible === true ? "-right-full" : "right-5"
+        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
+      >
         <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
           Dark Mode
         </div>
