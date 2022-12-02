@@ -133,7 +133,7 @@ function GereeBaiguulakh({ token }) {
         });
       }
       if (
-        (gereeniiZagvar?.turGereeEsekh !== true && data.baritsaaAvakhDun) ||
+        (gereeniiZagvar?.turGereeEsekh !== true && !data.baritsaaAvakhDun) ||
         !data.talbainIdnuud ||
         !data.sariinTurees ||
         !data.talbainKhemjee ||
