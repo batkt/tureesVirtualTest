@@ -353,6 +353,32 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="200">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="register"
+            label={"Регистр"}
+            rules={[
+              {
+                required: true,
+                len: 7,
+                pattern: new RegExp("(\\d{7})"),
+                message: "Регистр бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              maxLength={7}
+              placeholder="Регистр"
+              prefix={<SolutionOutlined />}
+              onChange={onChangeRegister}
+            />
+          </Form.Item>
+        </div>
+      )}
+      {baiguullagaEsekh && (
         <div data-aos="fade-right">
           <Form.Item
             name="ner"
@@ -391,32 +417,6 @@ const YurunkhiiMedeele = ({
               onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
               allowClear
               maxLength={10}
-              placeholder="Регистр"
-              prefix={<SolutionOutlined />}
-              onChange={onChangeRegister}
-            />
-          </Form.Item>
-        </div>
-      )}
-      {baiguullagaEsekh && (
-        <div data-aos="fade-right" data-aos-delay="200">
-          <Form.Item
-            hidden={!baiguullagaEsekh}
-            name="register"
-            label={"Регистр"}
-            rules={[
-              {
-                required: true,
-                len: 7,
-                pattern: new RegExp("(\\d{7})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              onKeyUp={focuser}
-              allowClear
-              maxLength={7}
               placeholder="Регистр"
               prefix={<SolutionOutlined />}
               onChange={onChangeRegister}
