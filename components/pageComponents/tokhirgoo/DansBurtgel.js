@@ -109,7 +109,7 @@ function DansBurtgel(
             Хаан банк
           </Select.Option>
           <Select.Option key="tdb" value="tdb">
-            Худалдаа хөгжилийн банк
+            Худалдаа хөгжлийн банк
           </Select.Option>
         </Select>
       </Form.Item>
