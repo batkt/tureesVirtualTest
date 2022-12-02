@@ -102,7 +102,6 @@ const YurunkhiiMedeele = ({
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
   zagvarRef,
-  currentForm,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
@@ -178,10 +177,12 @@ const YurunkhiiMedeele = ({
     Aos.init({ once: true });
   });
 
+
   useEffect(() => {
-    console.log("currentForm aa", currentForm);
-    currentForm = form;
-  });
+    if (barilgiinId !== value.barilgiinId) {
+      form.resetFields()
+    }
+  }, [barilgiinId])
 
   useEffect(() => {
     form.getFieldInstance("register").focus();
@@ -335,16 +336,17 @@ const YurunkhiiMedeele = ({
           <Switch
             onChange={(v) => {
               const khariltsagch = {
-                register: "",
-                ner: "",
-                utas: "",
-                ovog: "",
-                mail: "",
-                zakhirliinOvog: "",
-                zakhirliinNer: "",
+                register: undefined,
+                ner: undefined,
+                utas: undefined,
+                ovog: undefined,
+                mail: undefined,
+                zakhirliinOvog: undefined,
+                zakhirliinNer: undefined,
               };
 
               form.setFieldsValue(khariltsagch);
+              onChange({ ...value, ...khariltsagch })
               setBaiguullagaEsekh(v);
             }}
           />

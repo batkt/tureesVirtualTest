@@ -68,7 +68,7 @@ function Chart({
   return (
     <div className="box col-span-12 p-2 md:col-span-6">
       <div className="flex w-full flex-col space-y-1 pb-5 md:flex-row md:justify-between md:space-y-0">
-        <div className="flex space-x-1 md:flex-row">
+        <div className="flex gap-1 flex-col md:flex-row">
           <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
             {tailanguud.map((a) => (
               <Select.Option key={a.service} value={a.service}>
