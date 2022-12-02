@@ -102,11 +102,10 @@ function GereeBaiguulakh({ token }) {
         !data.register ||
         !data.utas ||
         (data.baiguullagaEsekh === true
-          ? !data.zakhirliinNer ||
-          !data.zakhirliinOvog ||
-          !data.baiguullagiinNer ||
-          !data.mail
-          : !data.ner || !data.ovog || !gereeniiZagvar)
+          ? (!data.zakhirliinNer ||
+            !data.zakhirliinOvog ||
+            !data.ner)
+          : (!data.ner || !data.ovog)) || !gereeniiZagvar
       ) {
         utgaShalgakh.push(0)
         notification.warning({
