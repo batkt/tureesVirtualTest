@@ -69,14 +69,14 @@ function EbarimtMedeelel({ token }) {
     {
       too:
         ebarimtiinToololt !== undefined
-          ? formatNumber(ebarimtiinToololt.avakhToo)
+          ? formatNumber(ebarimtiinToololt.avakhToo, 0)
           : 0,
       utga: "Баримт авах тоо",
     },
     {
       too:
         ebarimtiinToololt !== undefined
-          ? formatNumber(ebarimtiinToololt.avakhDun)
+          ? formatNumber(ebarimtiinToololt.avakhDun, 0)
           : 0,
       utga: "Баримт авах дүн",
     },
@@ -89,21 +89,21 @@ function EbarimtMedeelel({ token }) {
     {
       too:
         ebarimtiinToololt !== undefined
-          ? formatNumber(ebarimtiinToololt.ilgeesenDun)
+          ? formatNumber(ebarimtiinToololt.ilgeesenDun, 0)
           : 0,
       utga: "Баримт авсан дүн",
     },
     {
       too:
         ebarimtiinToololt !== undefined
-          ? formatNumber(ebarimtiinToololt.butsaasanToo)
+          ? formatNumber(ebarimtiinToololt.butsaasanToo, 0)
           : 0,
       utga: "Буцаалт хийгдсэн тоо",
     },
     {
       too:
         ebarimtiinToololt !== undefined
-          ? formatNumber(ebarimtiinToololt.butsaasanDun)
+          ? formatNumber(ebarimtiinToololt.butsaasanDun, 0)
           : 0,
       utga: "Буцаалт хийгдсэн дүн",
     },
