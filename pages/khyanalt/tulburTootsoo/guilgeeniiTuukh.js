@@ -538,7 +538,7 @@ function guilgeeniiTuukh({ token }) {
       </Button>,
     ];
     modal({
-      title: "",
+      title: "Барьцаа",
       icon: <FileExcelOutlined />,
       content: (
         <BaritsaaUdirdlaga
@@ -571,7 +571,7 @@ function guilgeeniiTuukh({ token }) {
       </Button>,
     ];
     modal({
-      title: "",
+      title: "Гүйлгээ хийх",
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKhiikh
@@ -590,7 +590,7 @@ function guilgeeniiTuukh({ token }) {
 
   function nekhemjlelIlgeekh(data) {
     modal({
-      title: "",
+      title: "Нэхэмжлэл илгээх",
       icon: <FileExcelOutlined />,
       content: (
         <NekhemjlelIlgeekh
@@ -668,7 +668,7 @@ function guilgeeniiTuukh({ token }) {
       loading={isValidating}
       setNeesenEsekh={setNeesenEsekh}
     >
-      <Card className="cardgrid col-span-12 md:p-5">
+      <Card className="cardgrid col-span-12 md:p-2">
         <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {[
             {
@@ -973,6 +973,7 @@ function guilgeeniiTuukh({ token }) {
         </div>
         <CardList
           neesenEsekh={neesenEsekh}
+          tileProps={{ GereeniiUldegdel, turul, khuulgaKharya, nekhemjlelIlgeekh, guilgeeKhiiya, baritsaaUdirdya }}
           cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"

@@ -112,7 +112,7 @@ function BaritsaaUdirdlaga(
     ];
     modal({
       title: "Барьцаа төлбөрийн хуулга",
-      width: "40vw",
+      width: "750px",
       icon: <OrderedListOutlined />,
       content: (
         <BaritsaaKhuulga

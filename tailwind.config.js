@@ -7,6 +7,7 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      maxHeight: { maxScrollH: "calc(100vh - 20rem)", },
       height: {
         scrollH: "calc(100vh - 15.5rem)",
         H7HalfRem: "calc(100vh - 8.5rem)",

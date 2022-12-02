@@ -2,10 +2,7 @@ import {
   Button,
   Checkbox,
   message,
-  Select,
   Switch,
-  Tooltip,
-  Transfer,
 } from "antd";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
@@ -44,8 +41,8 @@ function index({ token, data }) {
   };
 
   return (
-    <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5">
-      <div className="box col-span-12 flex flex-row items-center p-2">
+    <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5 pb-10 lg:pb-0">
+      <div className="box col-span-12 lg:flex flex-row items-center p-2">
         <div className="flex font-medium">
           <div className="flex flex-col gap-3">
             <div className="flex gap-3 text-xl text-black text-opacity-70 dark:text-white dark:text-opacity-70">
@@ -56,7 +53,7 @@ function index({ token, data }) {
                 Нэр: <p className="ml-2">{data?.ner}</p>
               </div>
             </div>
-            <div className="flex flex-row items-center space-x-3 border-t-2 pt-3 font-medium">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-3 border-t-2 pt-3 font-medium">
               <div>Барилга сонгох:</div>
               <div className="flex flex-wrap gap-5">
                 {barilguud?.map((a) => (
@@ -83,41 +80,41 @@ function index({ token, data }) {
           </div>
         </div>
 
-        <div className="ml-auto mr-2">
-          <Button type="primary" onClick={khadgalya}>
+        <div className="ml-auto py-3 lg:w-auto flex w-full mr-2">
+          <Button className="w-full" type="primary" onClick={khadgalya}>
             Хадгалах
           </Button>
         </div>
       </div>
-      <div className="box col-span-6 p-2">
+      <div className="box col-span-12 lg:col-span-6 p-2">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-1 pt-5 pb-2 space-x-2">
-          <Checkbox checked={!tsonknuud?.filter((a) => !a.nuuya).find((mur)=>{
-              return !targetKeys?.find(a=>a === mur.key)
-            })} onChange={(e)=>setTargetKeys(e.target.checked ? tsonknuud?.filter((a) => !a.nuuya).map(a=>a.key) : []) }/> 
+          <Checkbox checked={!tsonknuud?.filter((a) => !a.nuuya).find((mur) => {
+            return !targetKeys?.find(a => a === mur.key)
+          })} onChange={(e) => setTargetKeys(e.target.checked ? tsonknuud?.filter((a) => !a.nuuya).map(a => a.key) : [])} />
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             Цонхны эрх
           </h2>
         </div>
         {
-          tsonknuud?.filter((a) => !a.nuuya)?.map((mur,index)=>{
+          tsonknuud?.filter((a) => !a.nuuya)?.map((mur, index) => {
             return (
               <div key={`${mur.key}-${index}`} className='flex flex-row space-x-2 p-1'>
-                <Checkbox checked={!!targetKeys?.find(a=>a === mur.key)} onChange={e=>{
-                  if(e.target.checked === true){
+                <Checkbox checked={!!targetKeys?.find(a => a === mur.key)} onChange={e => {
+                  if (e.target.checked === true) {
                     targetKeys.push(mur.key)
-                  }else{
-                    targetKeys.splice(targetKeys.indexOf(mur.key),1)
+                  } else {
+                    targetKeys.splice(targetKeys.indexOf(mur.key), 1)
                   }
-                  
+
                   setTargetKeys([...targetKeys])
-                }}/>
+                }} />
                 <div>{mur.ner}</div>
               </div>
             )
           })
         }
       </div>
-      <div className="box col-span-6 p-2">
+      <div className="box col-span-12 lg:col-span-6 p-2">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             Цонхны эрхийн тохиргоо

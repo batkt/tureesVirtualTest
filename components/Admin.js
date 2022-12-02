@@ -199,7 +199,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" md:flex items-center justify-center text-base  hidden font-semibold  text-green-800 dark:text-white "
+              className=" md:flex items-center justify-center text-base ml-3  hidden font-semibold  text-green-800 dark:text-white "
             >
               {title}
             </h2>

@@ -616,6 +616,11 @@ function AjiltanBurtgel({ token }) {
           className="block overflow-auto md:hidden"
           jagsaalt={ajilchdiinGaralt?.jagsaalt}
           Component={AjiltanTile}
+          tileProps={{
+            zasya,
+            tokhiruulya,
+            ajiltanUstgay
+          }}
           pagination={{
             current: ajilchdiinGaralt?.khuudasniiDugaar,
             pageSize: ajilchdiinGaralt?.khuudasniiKhemjee,
