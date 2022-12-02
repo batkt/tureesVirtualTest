@@ -215,10 +215,12 @@ function GuilgeeKhiikh(
       <div className="flex w-full">
         <Radio.Group
           onChange={(e) => {
-            setTurul(e.target.value), setDun("");
+            setTurul(e.target.value);
+            setDun("");
+            setTailbar("");
           }}
           value={turul}
-          className="grid w-full sm:flex justify-between grid-cols-2"
+          className="grid w-full grid-cols-2 justify-between sm:flex"
         >
           <Radio value={"voucher"}>Ваучераар</Radio>
           <Radio value={"avlaga"}>Авлага</Radio>
