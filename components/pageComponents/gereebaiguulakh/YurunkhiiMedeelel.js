@@ -177,12 +177,11 @@ const YurunkhiiMedeele = ({
     Aos.init({ once: true });
   });
 
-
   useEffect(() => {
     if (barilgiinId !== value.barilgiinId) {
-      form.resetFields()
+      form.resetFields();
     }
-  }, [barilgiinId])
+  }, [barilgiinId]);
 
   useEffect(() => {
     form.getFieldInstance("register").focus();
@@ -343,10 +342,11 @@ const YurunkhiiMedeele = ({
                 mail: undefined,
                 zakhirliinOvog: undefined,
                 zakhirliinNer: undefined,
+                baiguullagaEsekh: v,
               };
 
               form.setFieldsValue(khariltsagch);
-              onChange({ ...value, ...khariltsagch })
+              onChange({ ...value, ...khariltsagch });
               setBaiguullagaEsekh(v);
             }}
           />
