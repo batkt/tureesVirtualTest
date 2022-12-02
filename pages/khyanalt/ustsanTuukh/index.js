@@ -127,7 +127,7 @@ function UstsanTuukh() {
       };
     } else {
       return {
-        baiguullagiinId: barilgiinId,
+        "object.barilgiinId": barilgiinId,
         ajiltniiId: ajiltankhaikh,
         class: turul,
         createdAt: shuukhOgnoo
