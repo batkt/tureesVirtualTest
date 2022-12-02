@@ -111,6 +111,9 @@ function DansBurtgel(
           <Select.Option key="tdb" value="tdb">
             Худалдаа хөгжлийн банк
           </Select.Option>
+          <Select.Option key="golomt" value="golomt">
+            Голомт банк
+          </Select.Option>
         </Select>
       </Form.Item>
       <Form.Item label="Дансны дугаар" name="dugaar">
