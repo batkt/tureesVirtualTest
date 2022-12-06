@@ -85,8 +85,8 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
     if (
       mur.aldangiinUldegdel > (mur.tulsunAldangi || 0) &&
       (mur.tulsunAldangi || 0) <
-        Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) -
-          guilgee.kholbosonDun
+      Number(dans.bank === "tdb" ? guilgee.Amt : guilgee.amount) -
+      guilgee.kholbosonDun
     ) {
       aldaa.push(
         `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү`
@@ -351,8 +351,8 @@ function GuilgeeNiiluulekh(
     if (
       "baritsaaTulbur" === talbar &&
       guilgeeniiDun - sum >
-        (gereenuud[index]?.baritsaaAvakhDun || 0) -
-          (gereenuud[index]?.baritsaaniiUldegdel || 0)
+      (gereenuud[index]?.baritsaaAvakhDun || 0) -
+      (gereenuud[index]?.baritsaaniiUldegdel || 0)
     ) {
       let baritsaadun =
         (gereenuud[index]?.baritsaaAvakhDun || 0) -
@@ -382,7 +382,7 @@ function GuilgeeNiiluulekh(
     <div className="flex w-full flex-col space-y-2">
       <div className="space-y-2 px-2">
         <div className="flex justify-between">
-          <span className="text-xl dark:text-gray-100">
+          <span className="text-sm font-medium lg:text-xl dark:text-gray-100">
             Гүйлгээний мэдээлэл
           </span>
           <span className="dark:text-gray-200">
@@ -390,15 +390,15 @@ function GuilgeeNiiluulekh(
           </span>
         </div>
         <div className="grid w-full grid-cols-4 rounded-md border border-gray-400 bg-gray-100 p-2">
-          <div>{data.CtAcct || data.relatedAccount}</div>
-          <div>{data.CtActnName}</div>
-          <div className="text-center ">
+          <div className="col-span-4 lg:col-span-1">{data.CtAcct || data.relatedAccount}</div>
+          <div className="col-span-4 lg:col-span-1">{data.CtActnName}</div>
+          <div className="text-center col-span-2 lg:col-span-1">
             {moment(data.TxDt || data.tranDate).format("YYYY-MM-DD")}
           </div>
-          <div className="text-right text-red-600">
+          <div className="text-right col-span-2 lg:col-span-1 text-red-600">
             {formatNumber(guilgeeniiDun)}
           </div>
-          <div className="relative col-span-4 flex justify-between rounded-md">
+          <div className="relative col-span-4 flex mt-2 lg:mt-0 justify-between rounded-md">
             <Input
               ref={inputRef}
               className="rounded-md pr-7"
@@ -437,8 +437,8 @@ function GuilgeeNiiluulekh(
             </div>
           )}
         </div>
-        <div className="text-xl dark:text-gray-200">Гүйлгээ холбох</div>
-        <div className="grid grid-cols-2 ">
+        <div className="font-medium lg:text-xl dark:text-gray-200">Гүйлгээ холбох</div>
+        <div className="lg:grid flex flex-col-reverse gap-3 grid-cols-2 ">
           <Popover
             placement="bottom"
             title="Гэрээний жагсаалт"
@@ -479,7 +479,7 @@ function GuilgeeNiiluulekh(
             key={`${index}geree-kholbolt`}
             className="space-y-2 rounded-md border border-gray-400 p-2"
           >
-            <div className="flex w-full justify-between text-right text-xl dark:text-gray-200">
+            <div className="flex w-full justify-between text-right text-base font-medium lg:text-xl dark:text-gray-200">
               <span>
                 {geree?.talbainDugaar} -- {geree?.register} -- {geree?.ner}
               </span>
@@ -495,7 +495,7 @@ function GuilgeeNiiluulekh(
                   })
                 }
               >
-                <span className="h-10 w-10 p-1 text-red-500">
+                <span className="h-10 w-10 text-2xl p-1 text-red-500">
                   <CloseCircleOutlined />
                 </span>
               </Popconfirm>
@@ -523,31 +523,31 @@ function GuilgeeNiiluulekh(
             {(geree?.baritsaaAvakhDun || 0) -
               (geree?.baritsaaniiUldegdel || 0) >
               0 && (
-              <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Барьцааны үлдэгдэл</div>
-                <div>
-                  {formatNumber(
-                    (geree?.baritsaaAvakhDun || 0) -
+                <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
+                  <div className="col-span-4">Барьцааны үлдэгдэл</div>
+                  <div>
+                    {formatNumber(
+                      (geree?.baritsaaAvakhDun || 0) -
                       (geree.baritsaaniiUldegdel || 0),
-                    2
-                  )}
+                      2
+                    )}
+                  </div>
+                  <div>{geree.talbainDugaar}</div>
+                  <div className="text-right">
+                    <input
+                      className="w-full rounded-md border bg-gray-200 px-2 text-right"
+                      placeholder="Барьцаа дүн"
+                      value={formatter(geree.baritsaaTulbur)}
+                      onDoubleClick={({ target }) =>
+                        onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
+                      }
+                      onChange={({ target }) => {
+                        onChangeKholbokhDun(target, index, "baritsaaTulbur");
+                      }}
+                    />
+                  </div>
                 </div>
-                <div>{geree.talbainDugaar}</div>
-                <div className="text-right">
-                  <input
-                    className="w-full rounded-md border bg-gray-200 px-2 text-right"
-                    placeholder="Барьцаа дүн"
-                    value={formatter(geree.baritsaaTulbur)}
-                    onDoubleClick={({ target }) =>
-                      onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
-                    }
-                    onChange={({ target }) => {
-                      onChangeKholbokhDun(target, index, "baritsaaTulbur");
-                    }}
-                  />
-                </div>
-              </div>
-            )}
+              )}
             {geree && (
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
                 <div className="col-span-4">Түрээсийн үлдэгдэл</div>
@@ -577,13 +577,13 @@ function GuilgeeNiiluulekh(
       </div>
       <Divider />
       <div className="grid w-full grid-cols-2 divide-x-2 px-2">
-        <div className="flex justify-between pr-2">
+        <div className="flex flex-col lg:flex-row justify-between pr-2">
           <div className="dark:text-gray-200">Холбосон дүн:</div>
           <div className="text-right text-xl text-green-600">
             {formatNumber(guilgeeniiDun - zuruuDun)}
           </div>
         </div>
-        <div className="flex justify-between pl-2">
+        <div className="flex flex-col lg:flex-row justify-between pl-2">
           <div className="dark:text-gray-200">Холбоогүй дүн:</div>
           <div className="text-right text-xl text-red-600">
             {formatNumber(zuruuDun)}
