@@ -122,241 +122,245 @@ function tulburTootsoo({ token }) {
 
   const nekhemjlekhuud = useMemo(() => {
     if (barimt && songogdsonGereenuud)
-      return songogdsonGereenuud?.filter(a => !!nekhemjleliinJagsaalt?.find((n) => n._id === a))?.map((a, i) => {
-        var zagvar = _.cloneDeep(
-          nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
-        );
-        const medeelel = _.cloneDeep(
-          nekhemjleliinJagsaalt.find((n) => n._id === a)
-        );
-
-        const barilga = baiguullaga.barilguud.find(
-          (a) => a._id === medeelel?.barilgiinId
-        );
-
-        if (!!zagvar?.nekhemjlekh) {
-          medeelel.eneSardTulukhUsgeer = numberToWords(
-            medeelel?.eneSardTulukhDun *
-            (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
-            { fixed: 2, suffix: "n" },
-            "төгрөг",
-            "мөнгө"
+      return songogdsonGereenuud
+        ?.filter((a) => !!nekhemjleliinJagsaalt?.find((n) => n._id === a))
+        ?.map((a, i) => {
+          var zagvar = _.cloneDeep(
+            nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
+          );
+          const medeelel = _.cloneDeep(
+            nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
 
-          medeelel.niitUldegdelUsgeer = numberToWords(
-            medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
-            { fixed: 2, suffix: "n" },
-            "төгрөг",
-            "мөнгө"
-          );
-          medeelel.talbainNiitUneUsgeer = numberToWords(
-            medeelel?.talbainNiitUne * (medeelel?.talbainNiitUne < 0 ? -1 : 1),
-            { fixed: 2, suffix: "n" },
-            "төгрөг",
-            "мөнгө"
+          const barilga = baiguullaga.barilguud.find(
+            (a) => a._id === medeelel?.barilgiinId
           );
 
-          medeelel.mungunDunUsgeer = numberToWords(
-            medeelel?.sariinTurees,
-            { fixed: 2, suffix: "n" },
-            "төгрөг",
-            "мөнгө"
-          );
-          const dans = dansGaralt?.jagsaalt?.find(
-            (a) => a.dugaar === songogdsonDans
-          );
-          medeelel.dans = dans?.dugaar;
-          medeelel.bank =
-            dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
-          medeelel.dansniiNer = dans?.dansniiNer;
-          medeelel.aldangiinUldegdel =
-            formatNumber(medeelel.aldangiinUldegdel) || "";
-          medeelel.albanTushaal = medeelel.albanTushaal || "";
-          medeelel.khayag = medeelel.khayag || "";
-          medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
-          medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
-          medeelel.khayag = medeelel.khayag || "";
-          medeelel.talbainNegjUneUsgeer = medeelel.talbainNegjUneUsgeer || "";
-          medeelel.talbainNiitUneUsgeer = medeelel.talbainNiitUneUsgeer || "";
-          medeelel.zoriulalt = medeelel.zoriulalt || "";
-          medeelel.khungulukhKhugatsaa = medeelel.khungulukhKhugatsaa || "";
-          medeelel.nemeltNekhemjlekh.tailbar =
-            medeelel.nemeltNekhemjlekh.tailbar || "";
-          medeelel.nemeltNekhemjlekh.tulukhDun =
-            medeelel.nemeltNekhemjlekh.tulukhDun || "";
-          medeelel.nemeltNekhemjlekh.ognoo =
-            medeelel.nemeltNekhemjlekh.ognoo || "";
-          medeelel.nemeltNekhemjlekh = medeelel.nemeltNekhemjlekh || "";
-          medeelel.zardliinDun = formatNumber(medeelel.zardliinDun) || "";
-
-          medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
-          medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
-          medeelel.niitUldegdelNuat = (medeelel.niitUldegdel / 1.1) * 0.1;
-          medeelel.niitUldegdelNuatgui = formatNumber(
-            medeelel.niitUldegdel - medeelel.niitUldegdelNuat
-          );
-          medeelel.niitUldegdelNuat = formatNumber(medeelel.niitUldegdelNuat);
-          medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
-          medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
-          medeelel.talbainNiitUneNuat = (medeelel.talbainNiitUne / 1.1) * 0.1;
-          medeelel.talbainNiitUneNuatgui = formatNumber(
-            medeelel.talbainNiitUne - medeelel.talbainNiitUneNuat
-          );
-          medeelel.talbainNiitUneNuat = formatNumber(
-            medeelel.talbainNiitUneNuat
-          );
-          medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
-
-          medeelel.gariinUseg = renderToString(
-            <span style={{ position: "absolute" }}>
-              <img
-                src={`https://turees.zevtabs.mn/api/file?path=gariinUseg/${barilga.gariinUseg}`}
-                style={{
-                  width: 100,
-                  height: 50,
-                  transform: "translate(10%, -30%)",
-                }}
-              />
-            </span>
-          );
-          medeelel.tamga = renderToString(
-            <span style={{ position: "absolute", zIndex: 1 }}>
-              <img
-                src={`https://turees.zevtabs.mn/api/file?path=tamga/${barilga.tamga}`}
-                style={{
-                  width: 115,
-                  height: 100,
-                  transform: "translate(-10%, -50%)",
-                  opacity: 0.65,
-                }}
-              />
-            </span>
-          );
-          medeelel.umnukhSariinUrTulbur = formatNumber(
-            medeelel.umnukhSariinUrTulbur
-          );
-
-          medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");
-
-          medeelel.niitAshiglaltiinZardal = formatNumber(
-            medeelel.niitAshiglaltiinZardal
-          );
-
-          medeelel.sar = moment().format("MM");
-          medeelel.ekhlekhOn = moment().format("YYYY");
-          medeelel.ekhelkhSar = moment().format("MM");
-          medeelel.ekhlekhUdur = moment().format("DD");
-          medeelel.duusakhOn = moment().format("YYYY");
-          medeelel.duusakhSar = moment().format("MM");
-          medeelel.duusakhUdur = moment().format("DD");
-
-          medeelel.nekhemjlekhiinDugaar =
-            moment().format("YY") + "/" + (dugaarlalt + i);
-
-          for (const [key, value] of Object.entries(medeelel)) {
-            if (key !== "nemeltNekhemjlekh")
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;${key}&gt;`, "g"),
-                value
-              );
-          }
-
-          medeelel?.zardluud?.map((a) => {
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
-              a.khemjikhNegj || ""
+          if (!!zagvar?.nekhemjlekh) {
+            medeelel.eneSardTulukhUsgeer = numberToWords(
+              medeelel?.eneSardTulukhDun *
+                (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
             );
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
-              formatNumber(a.tulukhDun || 0)
+            medeelel.niitUldegdelUsgeer = numberToWords(
+              medeelel?.niitUldegdel * (medeelel?.niitUldegdel < 0 ? -1 : 1),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            );
+            medeelel.talbainNiitUneUsgeer = numberToWords(
+              medeelel?.talbainNiitUne *
+                (medeelel?.talbainNiitUne < 0 ? -1 : 1),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
             );
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
-              formatNumber(a.tariff || 0)
+            medeelel.mungunDunUsgeer = numberToWords(
+              medeelel?.sariinTurees,
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            );
+            const dans = dansGaralt?.jagsaalt?.find(
+              (a) => a.dugaar === songogdsonDans
+            );
+            medeelel.dans = dans?.dugaar;
+            medeelel.bank =
+              dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+            medeelel.dansniiNer = dans?.dansniiNer;
+            medeelel.aldangiinUldegdel =
+              formatNumber(medeelel.aldangiinUldegdel) || "";
+            medeelel.albanTushaal = medeelel.albanTushaal || "";
+            medeelel.khayag = medeelel.khayag || "";
+            medeelel.zakhirliinOvog = medeelel.zakhirliinOvog || "";
+            medeelel.zakhirliinNer = medeelel.zakhirliinNer || "";
+            medeelel.khayag = medeelel.khayag || "";
+            medeelel.talbainNegjUneUsgeer = medeelel.talbainNegjUneUsgeer || "";
+            medeelel.talbainNiitUneUsgeer = medeelel.talbainNiitUneUsgeer || "";
+            medeelel.zoriulalt = medeelel.zoriulalt || "";
+            medeelel.khungulukhKhugatsaa = medeelel.khungulukhKhugatsaa || "";
+            medeelel.nemeltNekhemjlekh.tailbar =
+              medeelel.nemeltNekhemjlekh.tailbar || "";
+            medeelel.nemeltNekhemjlekh.tulukhDun =
+              medeelel.nemeltNekhemjlekh.tulukhDun || "";
+            medeelel.nemeltNekhemjlekh.ognoo =
+              medeelel.nemeltNekhemjlekh.ognoo || "";
+            medeelel.nemeltNekhemjlekh = medeelel.nemeltNekhemjlekh || "";
+            medeelel.zardliinDun = formatNumber(medeelel.zardliinDun) || "";
+
+            medeelel.sariinTurees = formatNumber(medeelel.sariinTurees);
+            medeelel.eneSardTulukhDun = formatNumber(medeelel.eneSardTulukhDun);
+            medeelel.niitUldegdelNuat = (medeelel.niitUldegdel / 1.1) * 0.1;
+            medeelel.niitUldegdelNuatgui = formatNumber(
+              medeelel.niitUldegdel - medeelel.niitUldegdelNuat
+            );
+            medeelel.niitUldegdelNuat = formatNumber(medeelel.niitUldegdelNuat);
+            medeelel.niitUldegdel = formatNumber(medeelel.niitUldegdel);
+            medeelel.talbainNegjUne = formatNumber(medeelel.talbainNegjUne);
+            medeelel.talbainNiitUneNuat = (medeelel.talbainNiitUne / 1.1) * 0.1;
+            medeelel.talbainNiitUneNuatgui = formatNumber(
+              medeelel.talbainNiitUne - medeelel.talbainNiitUneNuat
+            );
+            medeelel.talbainNiitUneNuat = formatNumber(
+              medeelel.talbainNiitUneNuat
+            );
+            medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+
+            medeelel.gariinUseg = renderToString(
+              <span style={{ position: "absolute" }}>
+                <img
+                  src={`https://turees.zevtabs.mn/api/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  style={{
+                    width: 100,
+                    height: 50,
+                    transform: "translate(10%, -30%)",
+                  }}
+                />
+              </span>
+            );
+            medeelel.tamga = renderToString(
+              <span style={{ position: "absolute", zIndex: 1 }}>
+                <img
+                  src={`https://turees.zevtabs.mn/api/file?path=tamga/${barilga.tamga}`}
+                  style={{
+                    width: 115,
+                    height: 100,
+                    transform: "translate(-10%, -50%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
+            medeelel.umnukhSariinUrTulbur = formatNumber(
+              medeelel.umnukhSariinUrTulbur
             );
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
-              formatNumber(a.negj || 0)
-            );
-          });
+            medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");
 
-          ashiglaltiinZardal?.jagsaalt?.map((a) => {
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
-              ""
+            medeelel.niitAshiglaltiinZardal = formatNumber(
+              medeelel.niitAshiglaltiinZardal
             );
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
-              0
-            );
+            medeelel.sar = moment().format("MM");
+            medeelel.ekhlekhOn = moment().format("YYYY");
+            medeelel.ekhelkhSar = moment().format("MM");
+            medeelel.ekhlekhUdur = moment().format("DD");
+            medeelel.duusakhOn = moment().format("YYYY");
+            medeelel.duusakhSar = moment().format("MM");
+            medeelel.duusakhUdur = moment().format("DD");
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
-              0
-            );
+            medeelel.nekhemjlekhiinDugaar =
+              moment().format("YY") + "/" + (dugaarlalt + i);
 
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
-              0
-            );
-          });
-
-          if (medeelel?.zardluud.length > 0) {
-            const niitZardliinDun = medeelel?.zardluud.reduce(
-              (a, b) => a + b.tulukhDun,
-              0
-            );
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
-              formatNumber(niitZardliinDun || 0)
-            );
-            let niitZardliinNoutiinDun = (niitZardliinDun / 1.1) * 0.1;
-            let niitZardliinNoutguiDun =
-              niitZardliinDun - niitZardliinNoutiinDun;
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;niitZardliinNuatguiDun&gt;`, "g"),
-              formatNumber(niitZardliinNoutguiDun || 0)
-            );
-
-            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-              new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
-              formatNumber(niitZardliinNoutiinDun || 0)
-            );
-          }
-          let nemeltNekhemjlekh = "";
-          if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
-            medeelel.nemeltNekhemjlekh.forEach((a, index) => {
-              let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${2 + (index + 1)
-                }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
-              a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
-              a.tulukhDun = formatNumber(a.tulukhDun);
-              for (const [key, value] of Object.entries(a)) {
-                mur = mur?.replace(
-                  new RegExp(`&lt;nemeltNekhemjlekh.${key}&gt;`, "g"),
+            for (const [key, value] of Object.entries(medeelel)) {
+              if (key !== "nemeltNekhemjlekh")
+                zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                  new RegExp(`&lt;${key}&gt;`, "g"),
                   value
                 );
-              }
-              nemeltNekhemjlekh += mur;
+            }
+
+            medeelel?.zardluud?.map((a) => {
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
+                a.khemjikhNegj || ""
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
+                formatNumber(a.tulukhDun || 0)
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+                formatNumber(a.tariff || 0)
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+                formatNumber(a.negj || 0)
+              );
             });
+
+            ashiglaltiinZardal?.jagsaalt?.map((a) => {
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
+                ""
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
+                0
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
+                0
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
+                0
+              );
+            });
+
+            if (medeelel?.zardluud.length > 0) {
+              const niitZardliinDun = medeelel?.zardluud.reduce(
+                (a, b) => a + b.tulukhDun,
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
+                formatNumber(niitZardliinDun || 0)
+              );
+              let niitZardliinNoutiinDun = (niitZardliinDun / 1.1) * 0.1;
+              let niitZardliinNoutguiDun =
+                niitZardliinDun - niitZardliinNoutiinDun;
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;niitZardliinNuatguiDun&gt;`, "g"),
+                formatNumber(niitZardliinNoutguiDun || 0)
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
+                formatNumber(niitZardliinNoutiinDun || 0)
+              );
+            }
+            let nemeltNekhemjlekh = "";
+            if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
+              medeelel.nemeltNekhemjlekh.forEach((a, index) => {
+                let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${
+                  2 + (index + 1)
+                }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
+                a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
+                a.tulukhDun = formatNumber(a.tulukhDun);
+                for (const [key, value] of Object.entries(a)) {
+                  mur = mur?.replace(
+                    new RegExp(`&lt;nemeltNekhemjlekh.${key}&gt;`, "g"),
+                    value
+                  );
+                }
+                nemeltNekhemjlekh += mur;
+              });
+            }
+            zagvar.nekhemjlekhr = zagvar?.nekhemjlekh?.replace(
+              new RegExp(
+                `<tr><td colspan="12" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh&gt;</span>​​<br></div></td></tr>`
+              ),
+              nemeltNekhemjlekh
+            );
           }
-          zagvar.nekhemjlekhr = zagvar?.nekhemjlekh?.replace(
-            new RegExp(
-              `<tr><td colspan="12" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh&gt;</span>​​<br></div></td></tr>`
-            ),
-            nemeltNekhemjlekh
-          );
-        }
-        return {
-          zagvar: zagvar?.nekhemjlekh,
-          mail: medeelel?.mail,
-          khuudasniiKhemjee: zagvar?.khuudasniiKhemjee,
-          chiglel: zagvar?.chiglel,
-        };
-      });
+          return {
+            zagvar: zagvar?.nekhemjlekh,
+            mail: medeelel?.mail,
+            khuudasniiKhemjee: zagvar?.khuudasniiKhemjee,
+            chiglel: zagvar?.chiglel,
+          };
+        });
     return [];
   }, [
     barimt,
@@ -432,7 +436,7 @@ function tulburTootsoo({ token }) {
     (a) => a._id === barimt
   )?.nekhemjlekh;
 
-  async function msgIlgeeye() {
+  function msgIlgeeye() {
     var msgnuud = [];
     songogdsonGereenuud.map((mur) => {
       var nekhemjlekh = _.cloneDeep(
@@ -440,7 +444,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -454,14 +458,14 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh.talbainNiitUneUsgeer *
-        (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
+          (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -542,7 +546,7 @@ function tulburTootsoo({ token }) {
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
-        if (data && data[0].Result === "SUCCESS") {
+        if (data[0].Result === "SUCCESS") {
           notification.success({ message: "SMS Амжилттай илгээлээ" });
         }
       })
@@ -550,7 +554,6 @@ function tulburTootsoo({ token }) {
         aldaaBarigch(e);
       });
   }
-
   function mailIlgeeye() {
     if (!barimt) {
       message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
@@ -575,7 +578,7 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -589,7 +592,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -674,7 +677,6 @@ function tulburTootsoo({ token }) {
         aldaaBarigch(e);
       });
   }
-
   async function appIlgeeye() {
     if (songogdsonGereenuud.length > 0) {
       setWaiting(true);
@@ -687,7 +689,7 @@ function tulburTootsoo({ token }) {
           );
           medeelel.eneSardTulukhUsgeer = numberToWords(
             medeelel?.eneSardTulukhDun *
-            (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
             { fixed: 2, suffix: "n" },
             "төгрөг",
             "мөнгө"
@@ -804,7 +806,7 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -818,7 +820,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -945,7 +947,7 @@ function tulburTootsoo({ token }) {
     <Admin
       title="Нэхэмжлэл"
       khuudasniiNer="nekhemjlel"
-      className="p-0 pb-12 md:pb-0 md:p-4"
+      className="p-0 pb-12 md:p-4 md:pb-0"
       onSearch={(search) => {
         setNekhemjlelKhuudaslalt((a) => ({
           ...a,
@@ -963,12 +965,13 @@ function tulburTootsoo({ token }) {
         <Spin spinning={loading}>
           <div
             className={`grid w-full
-            ${nekhemjlekhuud?.find(
-              (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait"
-            )
+            ${
+              nekhemjlekhuud?.find(
+                (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait"
+              )
                 ? ""
                 : "grid-cols-2"
-              } `}
+            } `}
             ref={printRef}
           >
             {nekhemjlekhuud?.map((nekhemjlekh, i) => {
@@ -986,8 +989,8 @@ function tulburTootsoo({ token }) {
             data-aos="zoom-in-left"
             data-aos-duration="1000"
           >
-            <div className="md:ml-auto flex w-full md:w-auto flex-col md:flex-row mb-3 gap-2">
-              <div className="flex w-full gap-2 justify-between">
+            <div className="mb-3 flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row">
+              <div className="flex w-full justify-between gap-2">
                 <DatePicker
                   className="w-1/2 lg:w-auto"
                   clearIcon
@@ -1008,7 +1011,7 @@ function tulburTootsoo({ token }) {
                   ))}
                 </Select>
               </div>
-              <div className="flex w-full gap-2 justify-between">
+              <div className="flex w-full justify-between gap-2">
                 <Select
                   className="w-1/2 lg:w-auto"
                   allowClear
@@ -1054,7 +1057,7 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
-              <div className="justify-end hidden md:flex gap-2">
+              <div className="hidden justify-end gap-2 md:flex">
                 {turul === "Mail" ? (
                   <Button
                     hidden={turul !== "Mail"}
@@ -1072,12 +1075,12 @@ function tulburTootsoo({ token }) {
           </div>
           <div className="grid grid-cols-8 gap-2">
             <div
-              className="col-span-8 md:col-span-2 rounded-md lg:p-2"
+              className="col-span-8 rounded-md md:col-span-2 lg:p-2"
               data-aos="fade-left"
               data-aos-duration="1000"
               data-aos-delay="500"
             >
-              <div className="border rounded-md shadow-md p-2 mb-3">
+              <div className="mb-3 rounded-md border p-2 shadow-md">
                 <div
                   className="grid grid-cols-3 gap-1  font-medium"
                   role="tablist"
@@ -1085,8 +1088,11 @@ function tulburTootsoo({ token }) {
                   {["Mail", "SMS", "App"].map((mur) => (
                     <div
                       key={mur}
-                      className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${turul === mur ? "bg-green-500 text-white" : "border-x hover:bg-green-500"
-                        }`}
+                      className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${
+                        turul === mur
+                          ? "bg-green-500 text-white"
+                          : "border-x hover:bg-green-500"
+                      }`}
                       onClick={() => turulSongokh(mur)}
                     >
                       {mur}
@@ -1094,7 +1100,7 @@ function tulburTootsoo({ token }) {
                   ))}
                 </div>
               </div>
-              <div className="flex w-full gap-1 justify-between lg:justify-end">
+              <div className="flex w-full justify-between gap-1 lg:justify-end">
                 {turul === "Mail" ? (
                   <div className="w-1/3 lg:hidden">
                     <Button
@@ -1110,7 +1116,10 @@ function tulburTootsoo({ token }) {
                   ""
                 )}
                 <div className="w-1/3 lg:hidden">
-                  <Button className="w-full" onClick={send}>Илгээх</Button></div>
+                  <Button className="w-full" onClick={send}>
+                    Илгээх
+                  </Button>
+                </div>
                 <Button
                   className="w-1/3 lg:w-auto"
                   type="primary"
@@ -1118,11 +1127,12 @@ function tulburTootsoo({ token }) {
                     turul === "SMS"
                       ? smsZagvarNemya()
                       : turul === "App"
-                        ? smsZagvarNemya()
-                        : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
+                      ? smsZagvarNemya()
+                      : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
                 >
-                  Загвар <p className="lg:hidden ml-1"> +</p> <p className="hidden lg:flex ml-1"> үүсгэх</p>
+                  Загвар <p className="ml-1 lg:hidden"> +</p>{" "}
+                  <p className="ml-1 hidden lg:flex"> үүсгэх</p>
                 </Button>
               </div>
               <div className="my-4 space-y-2">
@@ -1154,8 +1164,8 @@ function tulburTootsoo({ token }) {
                           turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
                             : router.push(
-                              `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
-                            )
+                                `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
+                              )
                         }
                       >
                         <EditOutlined
