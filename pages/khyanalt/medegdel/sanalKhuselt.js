@@ -5,27 +5,31 @@ import Aos from "aos";
 import useSanalGomdol from "hooks/medegdel/useSanalGomdol";
 import moment from "moment";
 import { Image, Popconfirm, DatePicker, notification } from "antd";
-import uilchilgee, { url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import local from "antd/lib/date-picker/locale/mn_MN";
 import { useRouter } from "next/router";
+import { useAuth } from "services/auth";
 const { RangePicker } = DatePicker;
 
 function index({ token }) {
+  const { barilgiinId } = useAuth();
+  console.log(barilgiinId);
   const [turul, setTurul] = useState("sanal");
   const [khariltsagch, setKhariltsagch] = useState();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState();
   const router = useRouter();
   const query = useMemo(() => {
     return {
+      barilgiinId: barilgiinId,
       turul,
       createdAt: ekhlekhOgnoo
         ? {
-          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-        }
+            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
         : undefined,
     };
-  }, [ekhlekhOgnoo, turul]);
+  }, [ekhlekhOgnoo, turul, barilgiinId]);
 
   const sanal = useSanalGomdol(token, undefined, query);
 
@@ -34,10 +38,24 @@ function index({ token }) {
   });
 
   function sanalGomdolAvakh() {
-    uilchilgee(token).post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id });
-    notification.success({ message: "Хүлээн авлаа" });
-    router.reload();
+    uilchilgee(token)
+      .post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id })
+      .then(({ data }) => {
+        if (data === "OK") {
+          notification.success({ message: "Хүлээн авлаа" });
+          sanal.sonorduulgaMutate();
+        }
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+      });
   }
+  useEffect(() => {
+    if (!!khariltsagch) {
+      setKhariltsagch(sanal.jagsaalt.find((a) => a._id === khariltsagch._id));
+    }
+  }, [sanal]);
+
   function turulSongokh(status) {
     setTurul(status.utga);
     setKhariltsagch(undefined);
@@ -47,16 +65,16 @@ function index({ token }) {
     <Admin
       khuudasniiNer="sanalKhuselt"
       title="Санал хүсэлт"
-      className={"gap-5 sm:p-6 p-2 pb-14 md:pb-0"}
+      className={"gap-5 p-2 pb-14 sm:p-6 md:pb-0"}
       onSearch={(search) =>
         sanal.setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
     >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-2xl xl:rounded-l-2xl bg-white p-4 md:p-8 dark:bg-gray-900 xl:col-span-5"
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-5 xl:rounded-l-2xl"
       >
-        <div className="mb-2 grid md:grid-cols-2 gap-x-5 px-2 ">
+        <div className="mb-2 grid gap-x-5 px-2 md:grid-cols-2 ">
           <RangePicker
             locale={local}
             size="middle"
@@ -74,25 +92,27 @@ function index({ token }) {
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
               data-aos-anchor-placement="top-bottom"
-              className={`cursor-pointer rounded-lg p-1 text-center ${turul === status.utga
-                ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
-                : "text-gray-50"
-                }`}
+              className={`cursor-pointer rounded-lg p-1 text-center ${
+                turul === status.utga
+                  ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
+                  : "text-gray-50"
+              }`}
             >
               {status.ner}
             </div>
           ))}
         </div>
         {turul === "sanal" ? (
-          <div className="scrollbar-hidden overflow-y-auto text-xs h-scrollH">
+          <div className="scrollbar-hidden h-scrollH overflow-y-auto text-xs">
             {sanal?.sonorduulga?.jagsaalt.map((mur, i) =>
               mur.turul === "sanal" ? (
                 <div
                   key={i}
-                  className={` ${khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-200 transition-all"
-                    : i % 2 === 0 && "bg-gray-100"
-                    } `}
+                  className={` ${
+                    khariltsagch?._id === mur?._id
+                      ? "rounded-l-full bg-green-100 shadow-lg transition-all dark:bg-green-200"
+                      : i % 2 === 0 && "bg-gray-100"
+                  } `}
                 >
                   <div
                     className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
@@ -105,7 +125,7 @@ function index({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                            1
+                          1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -149,10 +169,11 @@ function index({ token }) {
             {sanal?.sonorduulga?.jagsaalt.map((mur) =>
               mur.turul === "gomdol" ? (
                 <div
-                  className={` ${khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
-                    : ""
-                    } `}
+                  className={` ${
+                    khariltsagch?._id === mur?._id
+                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                      : ""
+                  } `}
                 >
                   <div
                     className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
@@ -165,7 +186,7 @@ function index({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                            1
+                          1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -185,7 +206,7 @@ function index({ token }) {
                             {mur.title}
                           </div>
                         </div>
-                        {mur.tuluv === "0" ? (
+                        {mur.tuluv !== 0 ? (
                           <div className="font-semibold text-green-400">
                             Хүлээн авсан
                           </div>
@@ -207,20 +228,27 @@ function index({ token }) {
         )}
       </div>
       {!!khariltsagch ? (
-        <div className="col-span-12 xl:col-span-7 h-[40vh] xl:h-auto rounded-r-lg bg-green-50 ">
-          <div className="flex w-full items-center gap-3 px-5 pt-2">
+        <div className="col-span-12 h-[40vh] rounded-r-lg bg-green-50 xl:col-span-7 xl:h-auto ">
+          <div className="flex w-full items-center gap-3 px-5 pt-2  ">
             <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
               <img src="/profile.svg" className="h-10 w-10 rounded-full" />
             </div>
-            <div className="relative w-10/12  rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
-              <div className="flex flex-row flex-wrap items-center justify-between">
-                <div className="mb-3 font-medium">
-                  {khariltsagch.khariltsagchiinNer}
+            <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+              <div className="col-span-12 grid grid-cols-12">
+                <div className=" col-span-6 flex flex-col justify-center ">
+                  <div className="mb-3 flex items-center justify-between text-base font-medium">
+                    {khariltsagch.khariltsagchiinNer}
+                  </div>
+                  <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
+                    <p>Гарчиг:</p>
+                    <div>{khariltsagch.title}</div>
+                  </div>
                 </div>
-                <div className=" flex  flex-col">
+                <div className=" col-span-6 flex flex-col items-end justify-center ">
                   <div
-                    className={`mb-3  ${khariltsagch?.tuluv === -1 ? "hidden" : "flex"
-                      }`}
+                    className={`mb-3  ${
+                      khariltsagch?.tuluv === -1 ? "hidden" : "flex"
+                    }`}
                   >
                     <Popconfirm
                       disabled={khariltsagch?.tuluv === 2}
@@ -230,8 +258,9 @@ function index({ token }) {
                       onConfirm={() => sanalGomdolAvakh(khariltsagch._id)}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full font-bold bg-${0 === khariltsagch?.tuluv ? "red" : "green"
-                          }-500 py-1 px-3 font-medium text-gray-50`}
+                        className={`text-md cursor-pointer rounded-full font-bold bg-${
+                          0 === khariltsagch?.tuluv ? "red" : "green"
+                        }-500 py-1 px-3 font-medium text-gray-50`}
                       >
                         {0 !== khariltsagch?.tuluv
                           ? "Хүлээж aвсан"
@@ -239,15 +268,17 @@ function index({ token }) {
                       </div>
                     </Popconfirm>
                   </div>
-                  <div className="flex  items-center justify-end gap-2 overflow-hidden text-gray-400">
-                    {moment(khariltsagch.ognoo).format("YYYY-MM-DD HH:mm")}
+                  <div className="flex  items-center justify-between gap-2 overflow-hidden text-gray-400">
+                    <div>
+                      {moment(khariltsagch.ognoo).format("YYYY-MM-DD HH:mm")}
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between">
+              <div className="col-span-12 flex justify-between">
                 <div className="w-full">
-                  <div className="w-[90%] ">{khariltsagch.message}</div>
-                  <div className="mt-3">
+                  <div className="mt-3">{khariltsagch.message}</div>
+                  <div className="mt-3 gap-3">
                     {khariltsagch.zurguud.map((a) => (
                       <Image
                         width={100}
@@ -262,7 +293,7 @@ function index({ token }) {
         </div>
       ) : (
         <div
-          className="box col-span-12 xl:col-span-7 h-[40vh] xl:h-full flex items-center"
+          className="box col-span-12 flex h-[40vh] items-center xl:col-span-7 xl:h-full"
           data-aos="fade-left"
           data-aos-duration="1000"
         >

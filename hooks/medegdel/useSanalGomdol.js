@@ -18,7 +18,7 @@ const fetcher = (
         ...khuudaslalt,
         query: {
           khariltsagchiinId,
-          $or: [{ message: { $regex: search, $options: "i" } }],
+          $or: [{ khariltsagchiinNer: { $regex: search, $options: "i" } }],
           ...query,
         },
         order: { createdAt: -1, ...order },
