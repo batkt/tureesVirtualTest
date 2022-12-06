@@ -110,12 +110,9 @@ function DansBurtgel(
           </Select.Option>
           <Select.Option key="tdb" value="tdb">
             Худалдаа хөгжлийн банк
-<<<<<<< HEAD
-=======
           </Select.Option>
           <Select.Option key="golomt" value="golomt">
             Голомт банк
->>>>>>> bc2385e7fa47eaf53031b23348c6daba39f419be
           </Select.Option>
         </Select>
       </Form.Item>
