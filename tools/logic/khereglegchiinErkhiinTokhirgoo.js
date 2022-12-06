@@ -3,6 +3,7 @@ import { BiCommentError } from "react-icons/bi";
 import { BiBellPlus } from "react-icons/bi";
 import { BsGraphUp } from "react-icons/bs";
 import { MdOutlineAnalytics } from "react-icons/md";
+import { FiHome } from "react-icons/fi";
 
 export const tsonknuud = [
   {
@@ -232,6 +233,13 @@ export function ekhniiTsonkhruuOchyo(ajiltan) {
 
 const khuudasnuud = [
   {
+    ner: "Хяналт",
+    khuudasniiNer: "barilgaBurtgel",
+    href: "/khyanalt/barilgaBurtgel",
+    icon: <FiHome className="text-2xl" />,
+    align: "center",
+  },
+  {
     ner: "Гэрээ",
     khuudasniiNer: "geree",
     href: "/khyanalt/geree",
@@ -261,7 +269,20 @@ const khuudasnuud = [
         khuudasniiNer: "gereeBurtgel",
         href: "/khyanalt/geree/gereeBurtgel",
         icon: (
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder d-block mx-auto"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-folder d-block mx-auto"
+          >
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+          </svg>
         ),
       },
       {
@@ -312,27 +333,6 @@ const khuudasnuud = [
     ],
   },
 
-  {
-    ner: "Барилга",
-    khuudasniiNer: "barilgaBurtgel",
-    href: "/khyanalt/barilgaBurtgel",
-    icon: (
-      <svg
-        width="24"
-        height="24"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1.5"
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-        />
-      </svg>
-    ),
-  },
   {
     ner: "Талбай бүртгэл",
     khuudasniiNer: "talbaiBurtgekh",
