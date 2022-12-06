@@ -209,9 +209,8 @@ function Admin({
         {title}
       </h2>
       <div
-        className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
-          dedKhuudas ? "w-full" : "main"
-        }`}
+        className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${dedKhuudas ? "w-full" : "main"
+          }`}
       >
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
           <div className="flex">
@@ -230,7 +229,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-white md:flex "
+              className=" md:flex items-center justify-center text-base ml-3  hidden font-semibold  text-green-800 dark:text-white "
             >
               {title}
             </h2>
@@ -351,9 +350,8 @@ function Admin({
         </div>
       </div>
       <div
-        className={`fixed bottom-[1.7rem] z-50 ${
-          visible === true ? "-right-full" : "right-5"
-        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
+        className={`fixed bottom-[1.7rem] z-50 ${visible === true ? "-right-full" : "right-5"
+          } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
       >
         <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
           Dark Mode

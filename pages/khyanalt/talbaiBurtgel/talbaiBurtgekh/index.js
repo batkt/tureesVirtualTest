@@ -673,7 +673,7 @@ function talbaiBurtgekh({ token }) {
         >
           <p className="font-medium py-2 md:hidden">Талбайн жагсаалт</p>
           <CardList
-            tileProps={{ talbaiUstgay, }}
+            tileProps={{ talbaiUstgay, barilgiinId }}
             keyValue="talbai"
             cardListTuluv={"utas"}
             neesenEsekh={neesenEsekh}

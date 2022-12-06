@@ -313,10 +313,10 @@ function ZakhialgaNemekh({ token }) {
       className="p-4"
       loading={waiting}
     >
-      <div className=" relative col-span-12 grid grid-cols-12 ">
+      <div className=" relative col-span-12 flex flex-col-reverse lg:grid grid-cols-12 ">
         <div
           style={{ height: "calc(100vh - 7rem)" }}
-          className="col-span-9 overflow-auto p-10"
+          className="col-span-12 lg:col-span-9 overflow-auto p-10"
         >
           {!ashiglaltiinZardal?.isValidating && (
             <SunEditor
@@ -345,7 +345,7 @@ function ZakhialgaNemekh({ token }) {
             />
           )}
         </div>
-        <div className="col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
+        <div className="col-span-12 lg:col-span-3 rounded-xl bg-white p-10 dark:bg-gray-900">
           <div className="space-y-2">
             <Form.Item name="_id" noStyle />
             <Input

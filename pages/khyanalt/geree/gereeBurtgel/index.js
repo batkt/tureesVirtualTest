@@ -410,14 +410,23 @@ function ZakhialgiinKhyanalt() {
   });
 
   useEffect(() => {
-    if (JSON.stringify(order) !== JSON.stringify({ createdAt: -1 }))
+    if (JSON.stringify(shuult.utga) !== JSON.stringify("Хэвийн"
+    )) {
+      setURLSearchParam("cardShuult", JSON.stringify(shuult.utga));
+    }
+    if (JSON.stringify(order) !== JSON.stringify({ createdAt: -1 })) {
       setURLSearchParam("orderID", JSON.stringify(order));
-  }, [order]);
+    }
+  }, [order, shuult]);
 
   useEffect(() => {
     const url = new URLSearchParams(window.location.search);
     if (url !== undefined) {
       if (!!url.get("orderID")) setOrder({ ...JSON.parse(url.get("orderID")) });
+      if (!!url.get("cardShuult")) {
+        const cardShuult = JSON.parse(url.get("cardShuult"))
+        setShuult(khyanaltiinDun.find((e) => e.utga === cardShuult))
+      }
     }
   }, []);
 

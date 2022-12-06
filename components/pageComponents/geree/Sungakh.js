@@ -7,15 +7,14 @@ const moment = require("moment");
 const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
   const [sar, setSar] = React.useState(1);
   const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(
-    moment(data?.duusakhOgnoo).add(1, "month")
+    moment(data?.duusakhOgnoo).add(1, data?.turGereeEsekh === true ? "day" : "month")
   );
-
   React.useEffect(() => {
-    setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar, "month"));
+    setDuusakhOgnoo(moment(data?.duusakhOgnoo).add(sar, data?.turGereeEsekh === true ? "day" : "month"));
   }, [sar]);
   function garya() {
     if (
-      moment(data?.duusakhOgnoo).add(1, "month").format("YYYY-MM-DD") !=
+      moment(data?.duusakhOgnoo).add(1, data?.turGereeEsekh === true ? "day" : "month").format("YYYY-MM-DD") !=
       moment(duusakhOgnoo).format("YYYY-MM-DD")
     )
       Modal.confirm({
@@ -99,7 +98,7 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
           <div>{formatNumber(data?.uldegdel)}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Сунгах сар:</div>
+          <div className="text-right">{data?.turGereeEsekh === true ? "Сунгах өдөр:" : "Сунгах сар:"}</div>
           <InputNumber
             id="sungakhSar"
             onKeyUp={focuser}

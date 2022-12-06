@@ -538,7 +538,7 @@ function guilgeeniiTuukh({ token }) {
       </Button>,
     ];
     modal({
-      title: "",
+      title: "Барьцаа",
       icon: <FileExcelOutlined />,
       content: (
         <BaritsaaUdirdlaga
@@ -571,7 +571,7 @@ function guilgeeniiTuukh({ token }) {
       </Button>,
     ];
     modal({
-      title: "",
+      title: "Гүйлгээ хийх",
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKhiikh
@@ -590,7 +590,7 @@ function guilgeeniiTuukh({ token }) {
 
   function nekhemjlelIlgeekh(data) {
     modal({
-      title: "",
+      title: "Нэхэмжлэл илгээх",
       icon: <FileExcelOutlined />,
       content: (
         <NekhemjlelIlgeekh
@@ -668,11 +668,11 @@ function guilgeeniiTuukh({ token }) {
       loading={isValidating}
       setNeesenEsekh={setNeesenEsekh}
     >
-      <Card className="cardgrid col-span-12 md:p-5">
+      <Card className="cardgrid col-span-12 md:p-2">
         <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0),
+              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0, 0),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -680,7 +680,7 @@ function guilgeeniiTuukh({ token }) {
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр буюу энэ сарыг тооцоогүй болно.",
             },
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0),
+              too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0, 0),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
@@ -688,7 +688,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0, 0
               ),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -697,7 +697,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0
+                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0, 0
               ),
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -706,7 +706,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0
+                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0, 0
               ),
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -715,7 +715,7 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0
+                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0, 0
               ),
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -973,6 +973,7 @@ function guilgeeniiTuukh({ token }) {
         </div>
         <CardList
           neesenEsekh={neesenEsekh}
+          tileProps={{ GereeniiUldegdel, turul, khuulgaKharya, nekhemjlelIlgeekh, guilgeeKhiiya, baritsaaUdirdya }}
           cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"

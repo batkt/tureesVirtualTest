@@ -35,8 +35,6 @@ import _ from "lodash";
 import { modal } from "components/ant/Modal";
 import Tulbur from "components/pageComponents/eBarimt/Tulbur";
 import useUldegdel from "hooks/khuulga/useUldegdel";
-import DansniiKhuulgaTile from "components/pageComponents/tulbur/DansniiKhuulgaTile";
-import CardList from "components/cardList";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Aos from "aos";
@@ -244,7 +242,7 @@ function tulburTootsoo({ token }) {
     ];
     modal({
       title: "",
-      width: "50%",
+      width: "780px",
       icon: <FileExcelOutlined />,
       content: (
         <ZardalKholbokh
@@ -340,6 +338,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний утга",
+          width: "20rem",
           dataIndex: "TxAddInf",
         },
         {
@@ -457,6 +456,7 @@ function tulburTootsoo({ token }) {
         },
         {
           title: "Гүйлгээний утга",
+          width: "20rem",
           dataIndex: "description",
         },
         {
@@ -771,7 +771,7 @@ function tulburTootsoo({ token }) {
           </div>
         </div>
         <div
-          className="mt-5 hidden overflow-auto md:block"
+          className="mt-5 overflow-auto "
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="500"
@@ -807,25 +807,6 @@ function tulburTootsoo({ token }) {
             )}
           />
         </div>
-        <CardList
-          keyValue="guilgeeTuukh"
-          cardListTuluv={"utas"}
-          className="block overflow-auto md:hidden"
-          jagsaalt={dansniiKhuulgaGaralt?.jagsaalt}
-          Component={DansniiKhuulgaTile}
-          pagination={{
-            current: dansniiKhuulgaGaralt?.jagsaalt?.khuudasniiDugaar,
-            pageSize: dansniiKhuulgaGaralt?.jagsaalt?.khuudasniiKhemjee,
-            total: dansniiKhuulgaGaralt?.jagsaalt?.niitMur,
-            showSizeChanger: true,
-            onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-              setDansniiKhuulgaKhuudaslalt((kh) => ({
-                ...kh,
-                khuudasniiDugaar,
-                khuudasniiKhemjee,
-              })),
-          }}
-        />
       </Card>
     </Admin>
   );

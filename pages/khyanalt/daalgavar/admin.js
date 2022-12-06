@@ -134,6 +134,14 @@ function index({ token }) {
     return timeLeft;
   };
 
+  function FormatNumberLength(num, length) {
+    var r = "" + num;
+    while (r.length < length) {
+      r = "0" + r;
+    }
+    return r;
+  }
+
   useEffect(() => {
     if (id) {
       setDaalgavar(task?.jagsaalt?.find((mur) => id === mur._id));
@@ -188,11 +196,11 @@ function index({ token }) {
               <div className="grid grid-cols-12 text-center md:flex">
                 <span className="pr-2 col-span-12"> Ажлын цаг дуусахад</span>
                 <div className="col-span-12 flex justify-center">
-                  <span className="px-1">{timeLeft.hours}</span>
+                  <span className="px-1">{FormatNumberLength(timeLeft.hours, 2)}</span>
                   <p>:</p>
-                  <span className="px-1">{timeLeft.minutes}</span>
+                  <span className="px-1">{FormatNumberLength(timeLeft.minutes, 2)}</span>
                   <p>:</p>
-                  <span className="px-1">{timeLeft.seconds}</span>
+                  <span className="px-1">{FormatNumberLength(timeLeft.seconds, 2)}</span>
                 </div>
                 <span className="pl-1 col-span-12">дутуу байна</span>
               </div>

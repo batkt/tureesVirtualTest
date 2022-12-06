@@ -61,10 +61,9 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
 
   return (
     <>
-      <div className="flex flex-row justify-end ">
+      <div className="flex lg:pl-[33%] gap-2 lg:gap-0 flex-row justify-end ">
         <Form.Item
-          className="w-full "
-          wrapperCol={{ span: 12, offset: 12 }}
+          className="w-2/4 lg:w-full"
           {...restField}
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
@@ -82,8 +81,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
           </Select>
         </Form.Item>
         <Form.Item
-          className="w-2/4 "
-          wrapperCol={{ span: 22, offset: 1 }}
+          className="w-2/4 lg:w-full"
           {...restField}
           name={[name, "utga"]}
           fieldKey={[fieldKey, "utga"]}
@@ -98,7 +96,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
             ))}
           </Select>
         </Form.Item>
-        <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
+        <CloseCircleOutlined className="pt-2 text-base" onClick={() => remove(name)} />
       </div>
     </>
   );
@@ -120,7 +118,7 @@ function KhurunguudCard({
   const uneRef = useRef();
 
   return (
-    <Card>
+    <Card className="shadow-md">
       <div key={key}>
         <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
           <CloseCircleOutlined
@@ -130,7 +128,7 @@ function KhurunguudCard({
           />
         </div>
         <div className=" grid grid-cols-12">
-          <div className="col-span-2 row-span-2 flex items-center justify-center">
+          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-2 row-span-2 flex items-center justify-center">
             <Form.Item
               {...restField}
               name={[name, "zurgiinId"]}
@@ -156,8 +154,7 @@ function KhurunguudCard({
                     .classList.remove("hidden");
                   document.getElementById(
                     `${name}-image`
-                  ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${
-                    e.fileList[e.fileList.length - 1]?.response?.id
+                  ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${e.fileList[e.fileList.length - 1]?.response?.id
                   }`;
                 }}
               >
@@ -187,7 +184,7 @@ function KhurunguudCard({
               </Upload>
             </Form.Item>
           </div>
-          <div className="col-span-5 flex flex-col justify-center ">
+          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-5 flex flex-col justify-center ">
             <Form.Item
               {...restField}
               label="Нэр"
@@ -239,7 +236,7 @@ function KhurunguudCard({
               />
             </Form.Item>
           </div>
-          <div className="col-span-5 flex flex-col justify-center ">
+          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-5 flex flex-col justify-center ">
             <Form.Item
               {...restField}
               label="Үнэ"
@@ -591,7 +588,7 @@ function TalbaiBurtgekh({ token }) {
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
-      className="p-0 md:p-4"
+      className="p-3 pb-11 lg:pb-0 md:p-4"
       dedKhuudas
       loading={waiting}
     >
@@ -606,8 +603,7 @@ function TalbaiBurtgekh({ token }) {
         className="col-span-12 grid grid-cols-12 gap-6"
       >
         <div
-          className="box overflow-y-scroll p-5 md:col-span-6  xl:col-span-4"
-          style={{ maxHeight: "calc(100vh - 7rem)" }}
+          className="box overflow-y-scroll p-5 col-span-12 md:col-span-6  xl:col-span-4 lg:max-h-screen"
         >
           <div>
             <div data-aos="fade-right" data-aos-duration="1000">
@@ -778,20 +774,19 @@ function TalbaiBurtgekh({ token }) {
                           />
                         </div>
                       ))}
-                      <Form.Item
-                        className=""
-                        wrapperCol={{ span: 15, offset: 8 }}
+                      <div
+                        className="flex w-full sm:px-6 sm:pl-[33%] pb-5 justify-end"
                       >
                         <Button
                           icon={<PlusOutlined />}
-                          className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                          className="h-8 rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                           type="dashed"
                           onClick={() => add()}
                           block
                         >
                           Ялгах утга оруулах
                         </Button>
-                      </Form.Item>
+                      </div>
                     </>
                   )}
                 </Form.List>
@@ -806,10 +801,9 @@ function TalbaiBurtgekh({ token }) {
                   onChange={(e) => onChange("tailbar", e.target.value)}
                 ></TextArea>
               </Form.Item>
-              <div className="flex justify-center space-x-5">
-                <Form.Item
-                  className="w-full pl-1"
-                  wrapperCol={{ span: 12, offset: 12 }}
+              <div className="flex md:pl-[33%] w-full justify-end space-x-5">
+                <div
+                  className="w-full"
                 >
                   <Button onClick={showDrawer} type="primary">
                     <span className="mr-2 text-white">
@@ -842,33 +836,32 @@ function TalbaiBurtgekh({ token }) {
                       />
                     )}
                   </Drawer>
-                </Form.Item>
-                <Form.Item
-                  className="w-2/4 "
-                  wrapperCol={{ span: 1, offset: 7 }}
+                </div>
+                <div
+                  className="w-2/4"
                 >
                   <Button
+                    className="w-full"
                     id="talbaiBurtgekhButton"
                     onClick={() => formRef.current.submit()}
                     type="primary"
                   >
                     Хадгалах
                   </Button>
-                </Form.Item>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div
-          className="box col-span-12 overflow-y-scroll p-5 md:col-span-12  xl:col-span-8"
-          style={{ maxHeight: "calc(100vh - 7rem)" }}
+          className="box col-span-12 p-5 md:col-span-12  xl:col-span-8"
         >
           <Divider className="pb-5">Хөрөнгийн бүртгэл</Divider>
           <div className="">
-            <div className="">
-              <Form.List name="khurunguud">
-                {(fields, { add, remove }) => (
-                  <>
+            <Form.List name="khurunguud">
+              {(fields, { add, remove }) => (
+                <>
+                  <div className={`overflow-y-scroll space-y-4 max-h-maxScrollH ${fields.length > 0 && "py-5 pb-10 px-3 lg:px-10"}`}>
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <KhurunguudCard
                         key={key}
@@ -882,22 +875,22 @@ function TalbaiBurtgekh({ token }) {
                         formRef={formRef}
                       />
                     ))}
-                    <div className="-mt-4 flex justify-center gap-5 px-2">
-                      <Button
-                        className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-                        type="dashed"
-                        onClick={() => add()}
-                        id={"khurunguBurtgekh"}
-                        block
-                        icon={<PlusOutlined />}
-                      >
-                        Хөрөнгө бүртгэх
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </Form.List>
-            </div>
+                  </div>
+                  <div className="-mt-4 flex justify-center gap-5 px-2">
+                    <Button
+                      className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                      type="dashed"
+                      onClick={() => add()}
+                      id={"khurunguBurtgekh"}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Хөрөнгө бүртгэх
+                    </Button>
+                  </div>
+                </>
+              )}
+            </Form.List>
           </div>
         </div>
       </Form>

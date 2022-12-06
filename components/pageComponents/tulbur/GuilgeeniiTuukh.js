@@ -182,34 +182,34 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="grid grid-cols-12 border-b border-gray-200 bg-gray-200 p-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <div>Огноо</div>
-          <div>Түрээс</div>
-          <div>Төлөх дүн</div>
-          <div>Хямдрал</div>
-          <div>Төлсөн алданги</div>
-          <div>Төлсөн дүн</div>
-          <div>Үлдэгдэл</div>
+        <div className="grid grid-cols-12 border-b divide-white divide-x min-w-[88rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+          <div className="min-w-[8rem] p-1">Огноо</div>
+          <div className="min-w-[8rem] p-1">Түрээс</div>
+          <div className="min-w-[8rem] p-1">Төлөх дүн</div>
+          <div className="min-w-[8rem] p-1">Хямдрал</div>
+          <div className="min-w-[8rem] p-1">Төлсөн алданги</div>
+          <div className="min-w-[8rem] p-1">Төлсөн дүн</div>
+          <div className="min-w-[8rem] p-1">Үлдэгдэл</div>
 
-          <div>Ажилтан</div>
-          <div>Хэлбэр</div>
-          <div>Бүртгсэн огноо</div>
-          <div className="col-span-2">Тайлбар</div>
+          <div className="min-w-[8rem] p-1">Ажилтан</div>
+          <div className="min-w-[8rem] p-1">Хэлбэр</div>
+          <div className="min-w-[8rem] p-1">Бүртгсэн огноо</div>
+          <div className="min-w-[8rem] p-1">Тайлбар</div>
         </div>
-        <div className="overflow-y-auto overflownone" >
+        <div className=" overflownone" >
           {guilgeeniiTuukh
             ?.map((a, i) => (
-              <div className="grid grid-cols-12 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <div className="p-1">
+              <div className="grid grid-cols-12 divide-x min-w-[88rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <div className="p-1 min-w-[8rem]">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </div>
-                <div className="p-1">{formatNumber(a.undsenDun, 2)}</div>
-                <div className="p-1">{formatNumber(a.tulukhDun, 2)}</div>
-                <div className="p-1">{formatNumber(a.khyamdral, 2)}</div>
-                <div className="p-1">{formatNumber(a.tulsunAldangi, 2)}</div>
-                <div className="p-1">{formatNumber(a.tulsunDun, 2)}</div>
+                <div className="p-1 min-w-[8rem]">{formatNumber(a.undsenDun, 2)}</div>
+                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulukhDun, 2)}</div>
+                <div className="p-1 min-w-[8rem]">{formatNumber(a.khyamdral, 2)}</div>
+                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulsunAldangi, 2)}</div>
+                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulsunDun, 2)}</div>
                 <div
-                  className={`p-1 ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                  className={`p-1 min-w-[8rem] ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
                   {formatNumber(
@@ -218,19 +218,19 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                   )}
                 </div>
 
-                <div className="p-1">{a.guilgeeKhiisenAjiltniiNer}</div>
-                <div className="p-1">
+                <div className="p-1 min-w-[8rem]">{a.guilgeeKhiisenAjiltniiNer}</div>
+                <div className="p-1 min-w-[8rem]">
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
                       : "Банк"
                     : turulAvya(a.turul)}
                 </div>
-                <div className="flex justify-between p-1">
+                <div className="flex min-w-[8rem] justify-between p-1">
                   {a.guilgeeKhiisenOgnoo &&
                     moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
                 </div>
-                <div className="flex justify-between p-1 col-span-2">
+                <div className="flex min-w-[8rem] justify-between p-1 col-span-2">
                   {a.tailbar}
                   {(ajiltan?.erkh === "Admin" || !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                     (a) => a === barilgiinId

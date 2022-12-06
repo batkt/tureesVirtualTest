@@ -102,7 +102,6 @@ const YurunkhiiMedeele = ({
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
   zagvarRef,
-  currentForm,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
@@ -179,9 +178,10 @@ const YurunkhiiMedeele = ({
   });
 
   useEffect(() => {
-    console.log("currentForm aa", currentForm);
-    currentForm = form;
-  });
+    if (barilgiinId !== value.barilgiinId) {
+      form.resetFields();
+    }
+  }, [barilgiinId]);
 
   useEffect(() => {
     form.getFieldInstance("register").focus();
@@ -335,21 +335,49 @@ const YurunkhiiMedeele = ({
           <Switch
             onChange={(v) => {
               const khariltsagch = {
-                register: "",
-                ner: "",
-                utas: "",
-                ovog: "",
-                mail: "",
-                zakhirliinOvog: "",
-                zakhirliinNer: "",
+                register: undefined,
+                ner: undefined,
+                utas: undefined,
+                ovog: undefined,
+                mail: undefined,
+                zakhirliinOvog: undefined,
+                zakhirliinNer: undefined,
+                baiguullagaEsekh: v,
               };
 
               form.setFieldsValue(khariltsagch);
+              onChange({ ...value, ...khariltsagch });
               setBaiguullagaEsekh(v);
             }}
           />
         </Form.Item>
       </div>
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="200">
+          <Form.Item
+            hidden={!baiguullagaEsekh}
+            name="register"
+            label={"Регистр"}
+            rules={[
+              {
+                required: true,
+                len: 7,
+                pattern: new RegExp("(\\d{7})"),
+                message: "Регистр бүртгэнэ үү!",
+              },
+            ]}
+          >
+            <Input
+              onKeyUp={focuser}
+              allowClear
+              maxLength={7}
+              placeholder="Регистр"
+              prefix={<SolutionOutlined />}
+              onChange={onChangeRegister}
+            />
+          </Form.Item>
+        </div>
+      )}
       {baiguullagaEsekh && (
         <div data-aos="fade-right">
           <Form.Item
@@ -389,32 +417,6 @@ const YurunkhiiMedeele = ({
               onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
               allowClear
               maxLength={10}
-              placeholder="Регистр"
-              prefix={<SolutionOutlined />}
-              onChange={onChangeRegister}
-            />
-          </Form.Item>
-        </div>
-      )}
-      {baiguullagaEsekh && (
-        <div data-aos="fade-right" data-aos-delay="200">
-          <Form.Item
-            hidden={!baiguullagaEsekh}
-            name="register"
-            label={"Регистр"}
-            rules={[
-              {
-                required: true,
-                len: 7,
-                pattern: new RegExp("(\\d{7})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              onKeyUp={focuser}
-              allowClear
-              maxLength={7}
               placeholder="Регистр"
               prefix={<SolutionOutlined />}
               onChange={onChangeRegister}

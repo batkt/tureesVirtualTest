@@ -84,17 +84,17 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
   }, []);
 
   return (
-    <div className="flex flex-col space-y-2">
-      <div className="grid grid-cols-5 border-b border-gray-200 bg-gray-200 p-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-        <div>№</div>
-        <div>Огноо</div>
-        <div>Орлого</div>
-        <div>Зарлага</div>
-        <div>Тайлбар</div>
+    <div className="flex overflow-auto flex-col space-y-2">
+      <div className="grid grid-cols-5 min-w-[700px] border-b border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+        <div className="p-1">№</div>
+        <div className="p-1">Огноо</div>
+        <div className="p-1">Орлого</div>
+        <div className="p-1">Зарлага</div>
+        <div className="p-1">Тайлбар</div>
       </div>
       {baritsaaKhuulga
         ?.map((a, i) => (
-          <div className="grid grid-cols-5 border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+          <div className="grid grid-cols-5 border-b min-w-[700px] border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
             <div className="p-1">{i + 1}</div>
             <div className="p-1">{moment(a.ognoo).format("YYYY-MM-DD")}</div>
             <div className="p-1">{formatNumber(a.orlogo, 0)}</div>

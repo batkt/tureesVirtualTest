@@ -69,7 +69,7 @@ function AjiltanBurtgel({ token }) {
     ajildOrsonOgnoo: moment(),
   });
   const [waiting, setWaiting] = useState(false);
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
 
   useEffect(() => {
     document.getElementById("input1").focus();
@@ -187,9 +187,7 @@ function AjiltanBurtgel({ token }) {
     formRef.current.setFieldsValue({ ...data });
     setAjiltanState(data);
   }
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   function ajiltanUstgay(mur) {
     if (ajiltan._id === mur._id) {
@@ -296,7 +294,6 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="200"
           >
             <Form.Item
-
               name="register"
               rules={[
                 {
@@ -355,7 +352,6 @@ function AjiltanBurtgel({ token }) {
             data-aos-delay="400"
           >
             <Form.Item
-
               name="utas"
               rules={[
                 {
@@ -366,7 +362,6 @@ function AjiltanBurtgel({ token }) {
               ]}
             >
               <Input
-
                 autoComplete="off"
                 className="appearance-none"
                 type="number"
@@ -462,11 +457,11 @@ function AjiltanBurtgel({ token }) {
                 !!ajiltanState._id
                   ? undefined
                   : [
-                    {
-                      required: true,
-                      message: "Нэвтрэх нууц үг бүртгэнэ үү!",
-                    },
-                  ]
+                      {
+                        required: true,
+                        message: "Нэвтрэх нууц үг бүртгэнэ үү!",
+                      },
+                    ]
               }
             >
               <Input.Password
@@ -478,7 +473,7 @@ function AjiltanBurtgel({ token }) {
                 prefix={<SecurityScanOutlined style={iconColor} />}
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item className="flex justify-end">
               <Button
                 id="khadgalyaButton"
                 onClick={() => formRef.current.submit()}
@@ -490,7 +485,7 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 mb-16 md:mb-0 p-5 md:col-span-6 xl:col-span-9">
+      <div className="box col-span-12 mb-16 p-5 md:col-span-6 md:mb-0 xl:col-span-9">
         <div
           className="hidden md:block"
           data-aos="fade-down-left"
@@ -523,7 +518,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -616,6 +611,11 @@ function AjiltanBurtgel({ token }) {
           className="block overflow-auto md:hidden"
           jagsaalt={ajilchdiinGaralt?.jagsaalt}
           Component={AjiltanTile}
+          tileProps={{
+            zasya,
+            tokhiruulya,
+            ajiltanUstgay,
+          }}
           pagination={{
             current: ajilchdiinGaralt?.khuudasniiDugaar,
             pageSize: ajilchdiinGaralt?.khuudasniiKhemjee,
