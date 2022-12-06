@@ -105,11 +105,14 @@ function Khyanalt({ token }) {
     ["ner", "ovog", "utas"]
   );
   const { order } = useOrder({ createdAt: -1 });
+  const shaardlagaQuery = useMemo(() => {
+    return { turul: "shaardlaga" };
+  }, [turul]);
   const { sonorduulga, sonorduulgaMutate, jagsaalt, nextSonorduulga } =
     useSanalGomdol(
       turul === "App" && token,
       khariltsagch?.khariltsagchiinId,
-      undefined,
+      shaardlagaQuery,
       order
     );
   useEffect(() => {
@@ -187,8 +190,8 @@ function Khyanalt({ token }) {
                     });
                     setContent("");
                     setTitle("");
-                    setZurag()
-                    sonorduulgaMutate()
+                    setZurag();
+                    sonorduulgaMutate();
                   }
                 });
               return;
@@ -234,8 +237,8 @@ function Khyanalt({ token }) {
                   });
                   setContent("");
                   setTitle("");
-                  setZurag()
-                  sonorduulgaMutate()
+                  setZurag();
+                  sonorduulgaMutate();
                 }
               })
               .catch((e) => {
@@ -266,7 +269,7 @@ function Khyanalt({ token }) {
 
   function send() {
     if (!!title) {
-      appIlgeeye()
+      appIlgeeye();
     } else {
       notification.warning({ message: "Гарчиг заавал оруулна уу!" });
     }
@@ -307,7 +310,7 @@ function Khyanalt({ token }) {
   function khariltsagchSongokh(mur) {
     if (khariltsagch === null) {
       setKhariltsagch(mur);
-    } else setKhariltsagch(null)
+    } else setKhariltsagch(null);
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
     index !== -1
       ? songogdsonKhariltsagch.splice(index, 1)
@@ -318,7 +321,7 @@ function Khyanalt({ token }) {
     <Admin
       title="Шаардлага"
       khuudasniiNer="shaardlaga"
-      className=" overflow-hidden pb-14 md:pb-0 p-5 md:p-4 lg:h-auto"
+      className=" overflow-hidden p-5 pb-14 md:p-4 md:pb-0 lg:h-auto"
       onSearch={(search) =>
         khariltsagchiinMedeelel.setKhuudaslalt((a) => ({ ...a, search }))
       }
@@ -380,13 +383,14 @@ function Khyanalt({ token }) {
             </Checkbox>
           </div>
 
-          <div className="hideScroll h-medegdelHariltsagchPhone lg:h-scrollH overflow-y-auto ">
+          <div className="hideScroll h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
-                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${khariltsagch?._id === mur?._id
-                  ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
-                  : ""
-                  } `}
+                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
+                  khariltsagch?._id === mur?._id
+                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
+                    : ""
+                } `}
                 onClick={() => khariltsagchSongokh(mur)}
               >
                 <div>
@@ -433,7 +437,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-        <div className="box flex col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem h-full flex-col">
+        <div className="box col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem">
           {songogdsonKhariltsagch.length <= 1 ? (
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {khariltsagch && (
@@ -451,7 +455,7 @@ function Khyanalt({ token }) {
                         ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
                           10) %
                           2 <
-                          1
+                        1
                           ? "/profileFemale.svg"
                           : "/profile.svg"
                       }
@@ -462,9 +466,25 @@ function Khyanalt({ token }) {
                       {khariltsagch?.ner}
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-
-                      {khariltsagch?.utas}{" "}
-                      <span className="mx-1">•</span> {turul}
+                      {khariltsagch?.utas.length > 0 ? (
+                        (console.log(khariltsagch.utas),
+                        (
+                          <div className="flex gap-1 ">
+                            {khariltsagch?.utas.map((a, i) => (
+                              <div key={i}>
+                                {a}
+                                {i !== khariltsagch.utas.length - 1 && ","}
+                              </div>
+                            ))}
+                            <span className="mx-1">•</span> {turul}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="flex">
+                          <div>{khariltsagch?.utas}</div>
+                          <span className="mx-1">•</span> {turul}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -480,8 +500,9 @@ function Khyanalt({ token }) {
                 style={{ height: "calc(100vh - 28rem)" }}
               >
                 <div
-                  className={`box h-full items-center flex ${turulZagvar ? "hidden" : "lg:flex"
-                    }`}
+                  className={`box flex h-full items-center ${
+                    turulZagvar ? "hidden" : "lg:flex"
+                  }`}
                   data-aos="fade-left"
                   data-aos-duration="1000"
                 >
@@ -496,7 +517,10 @@ function Khyanalt({ token }) {
                     </div>
                     <div className="mt-3">
                       <div className="font-medium">Өдрийн мэнд</div>
-                      <p>Сонгогдсон {songogdsonKhariltsagch.length} харилцагч байна.</p>
+                      <p>
+                        Сонгогдсон {songogdsonKhariltsagch.length} харилцагч
+                        байна.
+                      </p>
                       <div className="mt-1 text-gray-600 dark:text-gray-300">
                         Та шаардлага илгээнэ үү.
                       </div>
@@ -511,7 +535,7 @@ function Khyanalt({ token }) {
                 onScroll={(e) => {
                   if (
                     e.target.scrollHeight + e.target.scrollTop - 1 <
-                    e.target.clientHeight &&
+                      e.target.clientHeight &&
                     !!jagsaalt
                   ) {
                     nextSonorduulga();
@@ -577,9 +601,7 @@ function Khyanalt({ token }) {
             data-aos-duration="1000"
           >
             <Input
-              rules={[
-                { required: true, message: "Гарчиг заавал оруулна уу!" },
-              ]}
+              rules={[{ required: true, message: "Гарчиг заавал оруулна уу!" }]}
               className="space-y-3"
               placeholder="Гарчиг"
               value={title}
@@ -605,20 +627,12 @@ function Khyanalt({ token }) {
                 <div className="flex flex-row space-x-1">
                   <div className="flex flex-row space-x-1">
                     {!zurag && (
-                      <Button icon={<UploadOutlined />}>
-                        зураг оруулах
-                      </Button>
+                      <Button icon={<UploadOutlined />}>зураг оруулах</Button>
                     )}
-                    <img
-                      ref={ref}
-                      width={200}
-                      src=""
-                      className="hidden"
-                    />
+                    <img ref={ref} width={200} src="" className="hidden" />
                     {!!zurag && <Button icon={<EditOutlined />}></Button>}
                   </div>
                 </div>
-
               </Upload>
               <ZagvarUusgekh
                 change={setContent}
@@ -632,8 +646,9 @@ function Khyanalt({ token }) {
               <label className="font-medium">{turul} Илгээх</label>
               <div
                 onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
-                  } flex flex-none items-center justify-center rounded-full text-white`}
+                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                  loading ? "200" : "600"
+                } flex flex-none items-center justify-center rounded-full text-white`}
               >
                 {loading ? (
                   <Spin size="small" />
@@ -660,7 +675,7 @@ function Khyanalt({ token }) {
         </div>
       ) : (
         <div
-          className={`box col-span-12 xl:col-span-9 lg:col-span-6 h-[40vh] lg:h-full flex items-center`}
+          className={`box col-span-12 flex h-[40vh] items-center lg:col-span-6 lg:h-full xl:col-span-9`}
           data-aos="fade-left"
           data-aos-duration="1000"
         >

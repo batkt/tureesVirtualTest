@@ -242,7 +242,7 @@ function tulburTootsoo({ token }) {
     ];
     modal({
       title: "",
-      width: "50%",
+      width: "780px",
       icon: <FileExcelOutlined />,
       content: (
         <ZardalKholbokh

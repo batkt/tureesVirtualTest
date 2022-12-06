@@ -63,12 +63,12 @@ function IlgeesenToo({
   const { data, mutate } = useSWR(
     turul === "SMS"
       ? [
-        "msgIlgeesenTooAvya",
-        barilgiinId,
-        baiguullagiinId,
-        ekhlekhOgnoo,
-        duusakhOgnoo,
-      ]
+          "msgIlgeesenTooAvya",
+          barilgiinId,
+          baiguullagiinId,
+          ekhlekhOgnoo,
+          duusakhOgnoo,
+        ]
       : null,
     (url, barilgiinId, baiguullagiinId) =>
       createMethod(url, token, {
@@ -82,7 +82,7 @@ function IlgeesenToo({
     mutate();
   }, [msjTuukh]);
   return (
-    <div className="ml-6 flex text-center flex-col-reverse xl:flex-col xl:text-center">
+    <div className="ml-6 flex flex-col-reverse text-center xl:flex-col xl:text-center">
       <span>{text}</span> <span className=" font-medium ">{data || 0}</span>
     </div>
   );
@@ -130,7 +130,7 @@ function Khyanalt({ token }) {
     token,
     turul
   );
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
 
   const query = useMemo(() => {
     return {
@@ -169,9 +169,9 @@ function Khyanalt({ token }) {
 
   useEffect(() => {
     if (neesenEsekh === true) {
-      setTurulZagvar(false)
+      setTurulZagvar(false);
     }
-  }, [neesenEsekh])
+  }, [neesenEsekh]);
 
   const ingeekhmSms = useMemo(() => {
     if (!khariltsagch) return msj;
@@ -577,22 +577,25 @@ function Khyanalt({ token }) {
       setTurulZagvar={setTurulZagvar}
       setNeesenEsekh={setNeesenEsekh}
       fixedZagvarNeegdsenEsekh={turulZagvar}
-      className=" overflow-hidden p-5 pb-12 md:pb-0 md:p-4 lg:h-auto"
+      className=" overflow-hidden p-5 pb-12 md:p-4 md:pb-0 lg:h-auto"
       onSearch={(search) =>
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
       loading={waiting}
     >
-      <div className="col-span-12 box xl:col-span-3">
+      <div className="box col-span-12 xl:col-span-3">
         <div className="p-2" data-aos="fade-right" data-aos-duration="1000">
-          <div className="border rounded-md shadow-md p-2">
+          <div className="rounded-md border p-2 shadow-md">
             <div className="grid grid-cols-3 gap-1 font-medium" role="tablist">
               {["SMS", "App", "Mail"].map((mur) => (
                 <div
                   key={mur}
-                  className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${turul === mur ? "bg-green-500 text-white" : "border-x hover:bg-green-500"
-                    }`}
+                  className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${
+                    turul === mur
+                      ? "bg-green-500 text-white"
+                      : "border-x hover:bg-green-500"
+                  }`}
                   onClick={() => turulSongokh(mur)}
                 >
                   {mur}
@@ -602,7 +605,7 @@ function Khyanalt({ token }) {
           </div>
         </div>
         <div
-          className="border rounded-md mx-2 shadow-md mt-2 grid grid-cols-12 items-center space-x-3 p-2 pl-3"
+          className="mx-2 mt-2 grid grid-cols-12 items-center space-x-3 rounded-md border p-2 pl-3 shadow-md"
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="100"
@@ -646,7 +649,7 @@ function Khyanalt({ token }) {
 
         {turul === "SMS" ? (
           <div
-            className="border my-4 rounded-md mx-2 shadow-md flex flex-row items-center justify-between p-2 px-10"
+            className="my-4 mx-2 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="100"
@@ -682,16 +685,35 @@ function Khyanalt({ token }) {
             </div>
           </div>
         ) : null}
-        <div onClick={(e) => { e.stopPropagation(); setTurulZagvar(!turulZagvar) }} className={`text-2xl p-2 border bg-green-600 text-white rounded-full fixed transition-all duration-300  z-50 md:hidden ${turulZagvar === true ? "top-[10vh] right-[2vw]" : neesenEsekh ? "top-[100vh] right-full" : "top-[25vh] right-5"}`}>
-
-          {turulZagvar !== true ? <SnippetsOutlined /> : <EyeInvisibleOutlined />}
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setTurulZagvar(!turulZagvar);
+          }}
+          className={`fixed z-50 rounded-full border bg-green-600 p-2 text-2xl text-white transition-all  duration-300 md:hidden ${
+            turulZagvar === true
+              ? "top-[10vh] right-[2vw]"
+              : neesenEsekh
+              ? "top-[100vh] right-full"
+              : "top-[25vh] right-5"
+          }`}
+        >
+          {turulZagvar !== true ? (
+            <SnippetsOutlined />
+          ) : (
+            <EyeInvisibleOutlined />
+          )}
         </div>
         <div
-          className={`mt-5 bg-white md:bg-transparent md:shadow-none z-40 duration-300 border-2 border-green-500 fixed md:static md:w-auto md:border-none transition-all shadow-md rounded-md ${turulZagvar === true ? " right-[5vw] w-[90vw] top-[10vh] " : " -right-full w-[90vw] top-[30vh] "
-            } flex-col p-2 font-medium  `}
+          className={`fixed z-40 mt-5 rounded-md border-2 border-green-500 bg-white shadow-md transition-all duration-300 md:static md:w-auto md:border-none md:bg-transparent md:shadow-none ${
+            turulZagvar === true
+              ? " right-[5vw] top-[10vh] w-[90vw] "
+              : " -right-full top-[30vh] w-[90vw] "
+          } flex-col p-2 font-medium  `}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex px-1 pb-2"><p>{turul} загвар</p>
+          <div className="flex px-1 pb-2">
+            <p>{turul} загвар</p>
 
             <button
               className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
@@ -699,8 +721,8 @@ function Khyanalt({ token }) {
                 turul === "SMS"
                   ? smsZagvarNemya()
                   : turul === "App"
-                    ? smsZagvarNemya()
-                    : router.push("/khyanalt/medegdel/mailMedegdel/new")
+                  ? smsZagvarNemya()
+                  : router.push("/khyanalt/medegdel/mailMedegdel/new")
               }
             >
               Загвар үүсгэх
@@ -714,7 +736,7 @@ function Khyanalt({ token }) {
                 {a.turul === turul ? (
                   <div
                     key={a.ner}
-                    className="intro-x border rounded-md shadow-md relative mt-2 flex cursor-pointer items-center p-2"
+                    className="intro-x relative mt-2 flex cursor-pointer items-center rounded-md border p-2 shadow-md"
                     onClick={() => zagvarSongokh(a)}
                   >
                     <div className="image-fit mr-1 h-8 w-8 flex-none ">
@@ -742,8 +764,8 @@ function Khyanalt({ token }) {
                           turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
                             : router.push(
-                              `/khyanalt/medegdel/mailMedegdel/${a._id}`
-                            )
+                                `/khyanalt/medegdel/mailMedegdel/${a._id}`
+                              )
                         }
                       >
                         <EditOutlined style={{ color: "#85C1E9" }} />
@@ -813,10 +835,11 @@ function Khyanalt({ token }) {
               <div>
                 {!!mur._id ? (
                   <div
-                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
-                      : ""
-                      } `}
+                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
+                      khariltsagch?._id === mur?._id
+                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
+                        : ""
+                    } `}
                     key={mur?._id}
                     onClick={() => khariltsagchSongokh(mur)}
                   >
@@ -851,7 +874,7 @@ function Khyanalt({ token }) {
                         src={
                           ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
                             2 <
-                            1
+                          1
                             ? "/profileFemale.svg"
                             : "/profile.svg"
                         }
@@ -871,7 +894,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-        <div className="box flex col-span-12 mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem h-full flex-col">
+        <div className="box col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
           {songogdsonKhariltsagch.length < 2 ? (
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {khariltsagch && (
@@ -889,7 +912,7 @@ function Khyanalt({ token }) {
                         ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
                           10) %
                           2 <
-                          1
+                        1
                           ? "/profileFemale.svg"
                           : "/profile.svg"
                       }
@@ -929,18 +952,20 @@ function Khyanalt({ token }) {
                   {msjTuukh?.jagsaalt.map((a) => {
                     return (
                       <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
-                          ? "ml-auto rounded-br-none bg-green-500"
-                          : "rounded-bl-none"
-                          }`}
+                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                          a.turul === "medegdel"
+                            ? "ml-auto rounded-br-none bg-green-500"
+                            : "rounded-bl-none"
+                        }`}
                       >
                         <span className="w-full break-words text-justify text-white ">
                           {a.msg}
                         </span>
 
                         <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
-                            }`}
+                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                            a.kharsanEsekh === true ? "" : "hidden"
+                          }`}
                         >
                           <svg
                             width="20px"
@@ -985,18 +1010,20 @@ function Khyanalt({ token }) {
                   {medegdelAvya?.jagsaalt.map((a) => {
                     return (
                       <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${a.turul === "medegdel"
-                          ? "ml-auto rounded-br-none bg-green-500"
-                          : "rounded-bl-none"
-                          }`}
+                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                          a.turul === "medegdel"
+                            ? "ml-auto rounded-br-none bg-green-500"
+                            : "rounded-bl-none"
+                        }`}
                       >
                         <span className="w-full break-words text-justify text-white ">
                           {a.message}
                         </span>
 
                         <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${a.kharsanEsekh === true ? "" : "hidden"
-                            }`}
+                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                            a.kharsanEsekh === true ? "" : "hidden"
+                          }`}
                         >
                           <svg
                             width="20px"
@@ -1071,9 +1098,7 @@ function Khyanalt({ token }) {
                       onChange={(v) => setZurag(v.file.response)}
                     >
                       <div className="flex flex-row space-x-1">
-                        <Button icon={<UploadOutlined />}>
-                          зураг оруулах
-                        </Button>
+                        <Button icon={<UploadOutlined />}>зураг оруулах</Button>
                       </div>
                     </Upload>
                   </div>
@@ -1093,8 +1118,9 @@ function Khyanalt({ token }) {
               <label className="font-medium">{turul} Илгээх</label>
               <div
                 onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
-                  } flex flex-none items-center justify-center rounded-full text-white`}
+                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
+                  loading ? "200" : "600"
+                } flex flex-none items-center justify-center rounded-full text-white`}
               >
                 {loading ? (
                   <Spin size="small" />
@@ -1121,8 +1147,9 @@ function Khyanalt({ token }) {
         </div>
       ) : (
         <div
-          className={`box hidden mt-0 min-h-[70vh] lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem h-full items-center xl:flex ${turulZagvar ? "hidden" : "lg:flex"
-            }`}
+          className={`box mt-0 hidden h-full min-h-[70vh] items-center lg:col-span-6 lg:mt-0 xl:col-span-6 xl:flex xl:h-H7HalfRem ${
+            turulZagvar ? "hidden" : "lg:flex"
+          }`}
           data-aos="fade-left"
           data-aos-duration="1000"
         >
