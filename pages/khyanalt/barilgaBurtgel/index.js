@@ -26,10 +26,8 @@ import { Pie, Doughnut } from "react-chartjs-2";
 import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
-import locale from "antd/lib/date-picker/locale/en_US";
+import locale from "antd/lib/date-picker/locale/mn_MN";
 import { GoPrimitiveDot } from "react-icons/go";
-
-moment.locale("mn");
 
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
@@ -146,7 +144,7 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: 100,
-        utga: "Нийт байгууллага",
+        utga: "Нийт Барилга",
       },
       {
         too: formatNumber(barilgaToololt?.data?.tulsunDun),
@@ -223,7 +221,6 @@ function BarilgaBurtgel({ token }) {
   function barilgaBurtgel(id) {
     router.push(`/khyanalt/barilgaBurtgel/${id}`);
   }
-
   const [value, setValue] = useState({
     startDate: new Date(),
     endDate: new Date().setMonth(11),
@@ -514,7 +511,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
               );
             })}
-            <div className="t-2 col-span-12 hidden md:block">
+            <div className=" col-span-12 hidden md:block">
               <CardList
                 keyValue="barilga"
                 className="block overflow-auto md:hidden"
@@ -531,7 +528,7 @@ function BarilgaBurtgel({ token }) {
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
                   Авлагын тайлан
                 </div>
-                <div className=" col-span-12  flex items-center justify-center md:col-span-6  ">
+                <div className=" col-span-12  flex items-center justify-center md:col-span-6 xl:col-span-5 ">
                   <Datepicker value={value} onChange={handleValueChange} />
                 </div>
               </div>
@@ -747,7 +744,13 @@ function BarilgaBurtgel({ token }) {
                     <div className="flex w-24 flex-col space-y-2">
                       <a
                         className="ant-dropdown-link flex items-center justify-between rounded-lg  p-2 hover:bg-green-100  dark:text-white dark:hover:bg-gray-700   "
-                        onClick={() => barilgaBurtgel(a._id)}
+                        onClick={() =>
+                          barilgaBurtgel(
+                            baiguullaga.barilguud.findIndex(
+                              (mur) => mur._id === a._id
+                            )
+                          )
+                        }
                       >
                         <EditOutlined className="text-xl text-green-400" />
                         <label className="hover:text-black"> Засах</label>
