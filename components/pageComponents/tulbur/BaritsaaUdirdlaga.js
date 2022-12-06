@@ -52,7 +52,11 @@ function BaritsaaUdirdlaga(
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та барьцааны дүн оруулна уу" });
+          notification.warning({ message: "Барьцааны дүн оруулна уу" });
+          return;
+        }
+        if (!ognoo) {
+          notification.warning({ message: "Барьцааны Огноо оруулна уу" });
           return;
         }
 
@@ -182,7 +186,7 @@ function BaritsaaUdirdlaga(
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
-        <Radio.Group onChange={(e) => setTurul(e.target.value)} value={turul}>
+        <Radio.Group onChange={(e) => { setTurul(e.target.value); setOgnoo(moment()) }} value={turul}>
           <Radio value={"tululkh"}>Барьцаа төлөх</Radio>
           <Radio value={"ashiglakh"}>Барьцаа ашиглах</Radio>
         </Radio.Group>

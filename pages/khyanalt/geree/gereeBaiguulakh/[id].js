@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Admin from "components/Admin";
 import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import readMethod from "tools/function/crud/readMethod";
-import { Button, message, Modal, Select, Steps } from "antd";
+import { Button, message, Modal, notification, Select, Steps } from "antd";
 import { useAuth } from "services/auth";
 import YurunkhiiMedeelel from "components/pageComponents/gereebaiguulakh/YurunkhiiMedeelel";
 import Zardal from "components/pageComponents/gereebaiguulakh/Zardal";
@@ -51,6 +51,7 @@ function GereeBaiguulakh({ token, data }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const router = useRouter();
   const [current, setCurrent] = React.useState(0);
+  const [dutuuAlkham, setDutuuAlkham] = useState([]);
   const [khadgalakhGeree, setKhagalakhGeree] = React.useState(
     _.cloneDeep(data) || {
       ognoo: new Date(),
@@ -98,6 +99,64 @@ function GereeBaiguulakh({ token, data }) {
   }, [current]);
 
   function khadgalya(data) {
+    var utgaShalgakh = []
+    if (
+      !data.dans ||
+      !data.gereeniiDugaar ||
+      !data.register ||
+      !data.utas ||
+      (data.baiguullagaEsekh === true
+        ? (!data.zakhirliinNer ||
+          !data.zakhirliinOvog ||
+          !data.ner)
+        : (!data.ner || !data.ovog)) || !gereeniiZagvar
+    ) {
+      utgaShalgakh.push(0)
+      notification.warning({
+        message: "Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!",
+      });
+    }
+    if (
+      !data.duusakhOgnoo ||
+      !data.duusakhOn ||
+      !data.duusakhSar ||
+      !data.duusakhUdur ||
+      !data.ekhelkhSar ||
+      !data.ekhlekhOn ||
+      !data.ekhlekhUdur ||
+      !data.khugatsaa ||
+      !data.tulukhUdur ||
+      !data.gereeniiOgnoo ||
+      !khadgalakhGeree?.tulukhUdur ||
+      !khadgalakhGeree?.khugatsaa
+    ) {
+      utgaShalgakh.push(1);
+      notification.warning({
+        message: "Гэрээний хугацаагаа бүрэн оруулна уу!",
+      });
+    }
+    if (
+      (gereeniiZagvar?.turGereeEsekh !== true && !data.baritsaaAvakhDun) ||
+      !data.talbainIdnuud ||
+      !data.sariinTurees ||
+      !data.talbainKhemjee ||
+      !data.talbainNiitUne
+    ) {
+      utgaShalgakh.push(2);
+      notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });
+    }
+    if (
+      gereeniiZagvar?.turGereeEsekh !== true &&
+      data.baritsaaAvakhEsekh === true &&
+      !data.baritsaaBairshuulakhKhugatsaa
+    ) {
+      utgaShalgakh.push(4)
+      notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
+    }
+    if (utgaShalgakh.length > 0) {
+      setDutuuAlkham(utgaShalgakh)
+      return;
+    }
     setWaiting(true);
     data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
     data.baiguullagiinNer = baiguullaga.ner;
@@ -256,6 +315,8 @@ function GereeBaiguulakh({ token, data }) {
 
   const onChange = (value) => {
     setCurrent(value);
+    const find = dutuuAlkham.filter((a) => a !== value);
+    setDutuuAlkham(find);
   };
 
   function onBack() {
@@ -282,7 +343,9 @@ function GereeBaiguulakh({ token, data }) {
         <div className="px-10">
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
-              <Step value={index} key={item.title} title={item.title} />
+              <Step status={
+                dutuuAlkham?.find((a) => a === index) === index && "error"
+              } value={index} key={item.title} title={item.title} />
             ))}
           </Steps>
         </div>

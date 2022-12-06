@@ -78,20 +78,6 @@ function GereeBaiguulakh({ token }) {
       zagvarRef.current.focus();
       return;
     }
-    if (current === 1) {
-      if (!khadgalakhGeree?.tulukhUdur) {
-        notification.warning({
-          message: "Төлөлт хийх өдөр заавал оруулна уу!",
-        });
-        return;
-      }
-      if (!khadgalakhGeree?.khugatsaa) {
-        notification.warning({
-          message: "Гэрээний хугацаа заавал оруулна уу!",
-        });
-        return;
-      }
-    }
 
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
@@ -147,7 +133,7 @@ function GereeBaiguulakh({ token }) {
         !data.baritsaaBairshuulakhKhugatsaa
       ) {
         utgaShalgakh.push(4)
-        notification.warning({ message: "барицаа хугацаа оруулна уу!" });
+        notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
       }
       if (utgaShalgakh.length > 0) {
         setDutuuAlkham(utgaShalgakh)
@@ -237,14 +223,7 @@ function GereeBaiguulakh({ token }) {
       zagvarRef.current.focus();
       return;
     }
-    if (current === 1 && index > current) {
-      if (!khadgalakhGeree?.tulukhUdur) {
-        notification.warning({
-          message: "Төлөлт хийх өдөр заавал оруулна уу!",
-        });
-        return;
-      }
-    }
+
     setCurrent(index);
     const find = dutuuAlkham.filter((a) => a !== index);
     setDutuuAlkham(find);

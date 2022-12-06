@@ -31,7 +31,7 @@ function Khuulga({ data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId }
   }, []);
 
   return (
-    <div className="flex h-[76vh] flex-col space-y-2 overflow-y-auto">
+    <div className="flex flex-col space-y-2 overflow-x-auto" style={{ height: "calc(100vh - 12rem)" }}>
       <GuilgeeniiTuukh
         ajiltan={ajiltan}
         barilgiinId={barilgiinId}

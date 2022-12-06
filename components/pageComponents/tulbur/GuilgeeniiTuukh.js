@@ -182,7 +182,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="grid grid-cols-12 border-b divide-white divide-x min-w-[88rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+        <div className="grid grid-cols-12 pr-1 border-b divide-white divide-x min-w-[88rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
           <div className="min-w-[8rem] p-1">Огноо</div>
           <div className="min-w-[8rem] p-1">Түрээс</div>
           <div className="min-w-[8rem] p-1">Төлөх дүн</div>
@@ -196,7 +196,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           <div className="min-w-[8rem] p-1">Бүртгсэн огноо</div>
           <div className="min-w-[8rem] p-1">Тайлбар</div>
         </div>
-        <div className=" overflownone" >
+        <div className=" overflownone min-w-[88.3rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
           {guilgeeniiTuukh
             ?.map((a, i) => (
               <div className="grid grid-cols-12 divide-x min-w-[88rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">

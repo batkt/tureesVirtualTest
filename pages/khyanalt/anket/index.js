@@ -208,7 +208,7 @@ function Anket({ token }) {
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() => anketRef.current.khaaya()}
         >
-          OK
+          Хаах
         </Button>
       </Space>,
     ];
