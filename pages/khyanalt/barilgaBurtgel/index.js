@@ -47,82 +47,6 @@ function BarilgaBurtgel({ token }) {
         .catch(aldaaBarigch),
     { revalidateOnFocus: false }
   );
-  const columns = useMemo(
-    () => [
-      {
-        title: "Нэр",
-        dataIndex: "ner",
-        key: "ner",
-        render: (text) => <a>{text}</a>,
-        ellipsis: true,
-        align: "center",
-      },
-      {
-        title: "Хаяг",
-        dataIndex: "khayag",
-        key: "khayag",
-        ellipsis: true,
-      },
-      {
-        title: "Давхар",
-        dataIndex: "davkharuud",
-        render: (a) => <>{a.length}</>,
-        width: "6rem",
-        align: "center",
-      },
-      {
-        title: (
-          <label>
-            Талбай м <sup> 2</sup>
-          </label>
-        ),
-        key: "burtgesen",
-        dataIndex: "niitTalbai",
-        render: (niitTalbai) => formatNumber(niitTalbai),
-        width: "7rem",
-        align: "center",
-      },
-      {
-        title: "Бүртгэсэн",
-        key: "burtgesen",
-        dataIndex: "burtgesen",
-        render: () => <>{"Админ"}</>,
-        ellipsis: true,
-        align: "center",
-      },
-      {
-        title: () => <SettingOutlined />,
-        fixed: "right",
-        className: "text-center",
-        align: "center",
-        width: "3rem",
-        render: (text, row, index) => (
-          <div className="flex flex-row justify-center">
-            <Popover
-              content={() => (
-                <div className="flex w-24 flex-col space-y-2">
-                  <a
-                    className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100  dark:text-white dark:hover:bg-gray-700  "
-                    onClick={() => barilgaBurtgel(index)}
-                  >
-                    <EditOutlined style={{ fontSize: "18px" }} />
-                    <label> Засах</label>
-                  </a>
-                </div>
-              )}
-              placement="bottom"
-              trigger="click"
-            >
-              <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
-                <MoreOutlined style={{ fontSize: "18px" }} />
-              </a>
-            </Popover>
-          </div>
-        ),
-      },
-    ],
-    []
-  );
 
   const khyanaltiinDun = useMemo(() => {
     return [
@@ -522,8 +446,8 @@ function BarilgaBurtgel({ token }) {
             </div>
           </div>
 
-          <div className=" grid grid-cols-12 md:space-x-6  ">
-            <div className="col-span-12  space-y-2 md:col-span-6  ">
+          <div className=" grid h-full grid-cols-12   md:space-x-6 ">
+            <div className="col-span-12  space-y-2   md:col-span-6 ">
               <div className="  grid grid-cols-12 ">
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
                   Авлагын тайлан
@@ -534,8 +458,8 @@ function BarilgaBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-              <div className="box flex h-[41vh] flex-col p-4">
-                <div className=" h-[37vh]">
+              <div className="box flex h-full  items-center justify-start p-2 ">
+                <div className="h-[88%] w-full ">
                   <canvas id="line-chart"></canvas>
                 </div>
               </div>
@@ -546,7 +470,7 @@ function BarilgaBurtgel({ token }) {
                   Авлагын тайлан
                 </div>
               </div>
-              <div className="box flex flex-col justify-start p-4 pt-8 ">
+              <div className="box flex h-full flex-col justify-start p-4 pt-8 ">
                 <div>
                   <Pie
                     data={avlaga}
@@ -555,7 +479,7 @@ function BarilgaBurtgel({ token }) {
                     height={50}
                   />
                 </div>
-                <div className="flex  h-full items-stretch justify-between pt-10">
+                <div className="flex  h-full items-center justify-between ">
                   <div className="space-y-4">
                     {avlagiinChartSalbaraarAvya.data?.options?.labels.map(
                       (a, index) => (
@@ -575,7 +499,7 @@ function BarilgaBurtgel({ token }) {
                     )}
                   </div>
                   <div className="space-y-4">
-                    {orlogiinChartSalbaraarAvya?.data?.series.map(
+                    {avlagiinChartSalbaraarAvya?.data?.series.map(
                       (a, index) => (
                         <div
                           key={index}
@@ -594,14 +518,13 @@ function BarilgaBurtgel({ token }) {
                 </div>
               </div>
             </div>
-
-            <div className="col-span-12 space-y-2 md:col-span-3">
+            <div className="col-span-12 space-y-2  md:col-span-3 ">
               <div className="  grid grid-cols-12 ">
                 <div className=" col-span-12 flex h-10 items-center justify-start text-lg ">
                   Орлогын тайлан
                 </div>
               </div>
-              <div className="box flex   flex-col justify-start p-4 pt-10 ">
+              <div className="box flex  h-full  flex-col justify-start p-4 pt-10 ">
                 <div>
                   <Doughnut
                     data={orlogo}
@@ -610,7 +533,7 @@ function BarilgaBurtgel({ token }) {
                     height={50}
                   />
                 </div>
-                <div className="flex  h-full items-stretch justify-between pt-8  ">
+                <div className="flex  h-full items-center justify-between  ">
                   <div className="space-y-4">
                     {orlogiinChartSalbaraarAvya.data?.options?.labels.map(
                       (a, index) => (
@@ -636,7 +559,7 @@ function BarilgaBurtgel({ token }) {
                           key={index}
                           className="flex justify-end  font-bold text-green-700"
                           style={{
-                            color: `#${avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                            color: `#${orlogiinChartSalbaraarAvya?.data?.backgroundColor.find(
                               (a, i) => i === index
                             )}`,
                           }}
