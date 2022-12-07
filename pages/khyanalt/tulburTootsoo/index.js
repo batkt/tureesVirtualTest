@@ -387,16 +387,16 @@ function tulburTootsoo({ token }) {
             ellipsis: true,
             align: "center",
             width: "5rem",
-            render(a) {
-              if (a.length > 1) {
+            render(data) {
+              if (data.length > 1) {
                 return <Tooltip placement="top"
                   title={
-                    <div className="flex truncate justify-center">{a.map((a, i) => <div key={i} className={`${a.length - 1 !== i && "pr-1"}`}>{a}{a.length - 1 !== i && ","}</div>)}</div>
-                  }><div className="flex truncate justify-center">{a.map((a, i) => <div key={i} className={`${a.length - 1 !== i && "pr-1"}`}>{a}{a.length - 1 !== i && ","}</div>)}</div></Tooltip>
+                    <div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div>
+                  }><div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div></Tooltip>
               } else return <Tooltip placement="top"
                 title={
-                  <div>{a}</div>
-                }><div>{a}</div></Tooltip>
+                  <div>{data}</div>
+                }><div>{data}</div></Tooltip>
             }
           },
           {

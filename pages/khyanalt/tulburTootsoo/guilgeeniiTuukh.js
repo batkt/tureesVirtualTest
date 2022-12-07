@@ -316,6 +316,17 @@ function guilgeeniiTuukh({ token }) {
         ellipsis: true,
         align: "center",
         width: "7rem",
+        render(data) {
+          if (data.length > 1) {
+            return <Tooltip placement="top"
+              title={
+                <div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div>
+              }><div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div></Tooltip>
+          } else return <Tooltip placement="top"
+            title={
+              <div>{data}</div>
+            }><div>{data}</div></Tooltip>
+        }
       },
       {
         title: "Үлдэгдэл",
