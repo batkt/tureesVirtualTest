@@ -776,7 +776,7 @@ function talbaiBurtgekh({ token }) {
                 ellipsis: true,
                 align: "center",
                 render: (talbainNiitUne) => {
-                  return formatNumber(talbainNiitUne || 0), 0;
+                  return formatNumber(talbainNiitUne || 0);
                 },
                 showSorterTooltip: false,
                 defaultSortOrder: "descend",
@@ -788,7 +788,7 @@ function talbaiBurtgekh({ token }) {
                 dataIndex: "niitAshiglaltiinZardal",
                 align: "center",
                 render: (data) => {
-                  return formatNumber(data, 0) + "₮";
+                  return formatNumber(data) + "₮";
                 },
                 showSorterTooltip: false,
                 defaultSortOrder: "descend",
@@ -800,7 +800,7 @@ function talbaiBurtgekh({ token }) {
                 dataIndex: "tureesiinTulbur",
                 align: "center",
                 render: (data) => {
-                  return formatNumber(data, 0, 0) + "₮";
+                  return formatNumber(data) + "₮";
                 },
                 showSorterTooltip: false,
                 defaultSortOrder: "descend",
@@ -905,7 +905,7 @@ function talbaiBurtgekh({ token }) {
                                   dataIndex: "une",
                                   align: "center",
                                   render: (data) => {
-                                    return formatNumber(data, 0) + "₮";
+                                    return formatNumber(data) + "₮";
                                   },
                                 },
                                 {
@@ -913,7 +913,7 @@ function talbaiBurtgekh({ token }) {
                                   dataIndex: "niit",
                                   align: "center",
                                   render: (data) => {
-                                    return formatNumber(data, 0) + "₮";
+                                    return formatNumber(data) + "₮";
                                   },
                                 },
                               ]}
