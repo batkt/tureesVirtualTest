@@ -365,6 +365,7 @@ function tulburTootsoo() {
                 data-aos-duration="1000"
               >
                 <Form
+                  onFinish={khungulultKhadgalya}
                   form={form}
                   autoComplete={"off"}
                   ref={formRef}
@@ -480,8 +481,7 @@ function tulburTootsoo() {
                     <Form.Item>
                       <Button
                         id="khungulultKhadgalya"
-                        htmlType="submit"
-                        onClick={khungulultKhadgalya}
+                        onClick={() => form.submit()}
                         type="primary"
                       >
                         <span className="text-white">Хадгалах</span>
