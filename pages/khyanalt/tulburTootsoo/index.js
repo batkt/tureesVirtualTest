@@ -387,6 +387,17 @@ function tulburTootsoo({ token }) {
             ellipsis: true,
             align: "center",
             width: "5rem",
+            render(a) {
+              if (a.length > 1) {
+                return <Tooltip placement="top"
+                  title={
+                    <div className="flex truncate justify-center">{a.map((a, i) => <div key={i} className={`${a.length - 1 !== i && "pr-1"}`}>{a}{a.length - 1 !== i && ","}</div>)}</div>
+                  }><div className="flex truncate justify-center">{a.map((a, i) => <div key={i} className={`${a.length - 1 !== i && "pr-1"}`}>{a}{a.length - 1 !== i && ","}</div>)}</div></Tooltip>
+              } else return <Tooltip placement="top"
+                title={
+                  <div>{a}</div>
+                }><div>{a}</div></Tooltip>
+            }
           },
           {
             title: "НӨАТУС",

@@ -87,13 +87,12 @@ function tulburTootsoo() {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  function bugdiigSongokh() {
-    setRowKeys((keys) =>
-      keys.length === gereeniiMedeelel?.jagsaalt.length
-        ? []
-        : gereeniiMedeelel?.jagsaalt.map((r) => r._id)
-    );
-  }
+
+  useEffect(() => {
+    if (form.getFieldValue("turul") === "Бүгд") {
+      setRowKeys(gereeniiMedeelel?.jagsaalt.map((r) => r._id))
+    }
+  }, [shuult, form])
 
   useEffect(() => {
     khungulukhDunTootsoolyo();
@@ -108,13 +107,15 @@ function tulburTootsoo() {
         query: { davkhar: value, tuluv: { $nin: -1 } },
       });
     } else {
+      setShuult({ query: { tuluv: { $ne: -1 } } })
     }
     setRowKeys([]);
     setSongogdsonGereenuud([]);
   }
   function nukhtulSongokh(value) {
     if (value === "Бүгд") {
-      bugdiigSongokh();
+      setShuult({ query: { tuluv: { $ne: -1 } } });
+      form.setFieldValue("davkhar", []);
     } else {
       setRowKeys([]);
       setSongogdsonGereenuud([]);
@@ -179,8 +180,122 @@ function tulburTootsoo() {
   }
   function tseverlekh() {
     formRef.current.resetFields();
-    setShuult();
+    setShuult({ query: { tuluv: { $ne: -1 } } });
+    setRowKeys([]);
   }
+
+  const columns = useMemo(() => {
+    return [
+      {
+        title: "Огноо",
+        dataIndex: "createdAt",
+        ellipsis: true,
+        align: "center",
+        width: "7rem",
+        render: (data) => {
+          return moment(data).format("YYYY-MM-DD hh:mm:ss");
+        },
+      },
+      {
+        title: "Хөнгөлөлт %",
+        dataIndex: "khungulukhKhuvi",
+        ellipsis: true,
+        width: "7rem",
+        align: "center",
+      },
+      {
+        title: "Хугацаа",
+        width: "7rem",
+        dataIndex: "ognoonuud",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return moment(data && data[0])
+            .add(-1, "d")
+            .format("YYYY-MM-DD");
+        },
+      },
+      {
+        title: "Төлөх дүн",
+        summary: true,
+        width: "7rem",
+        dataIndex: "tulukhDun",
+        align: "center",
+        render: (data) => {
+          return formatNumber(data) + "₮";
+        },
+      },
+      {
+        title: "Хөнгөлөх дүн",
+        summary: true,
+        width: "7rem",
+        dataIndex: "khungulultiinDun",
+        align: "center",
+        render: (data) => {
+          return formatNumber(data) + "₮";
+        },
+      },
+      {
+        title: "Төлсөн дүн",
+        width: "7rem",
+        summary: true,
+        dataIndex: "khungulsunDun",
+        align: "center",
+        render: (data) => {
+          return formatNumber(data) + "₮";
+        },
+      },
+      {
+        title: "Төрөл",
+        width: "7rem",
+        dataIndex: "turul",
+        ellipsis: true,
+        align: "center",
+      },
+      {
+        title: "Шалтгаан",
+        width: "7rem",
+        dataIndex: "shaltgaan",
+        ellipsis: true,
+        align: "center",
+      },
+      {
+        title: "Ажилтан",
+        width: "7rem",
+        dataIndex: "guilgeeKhiisenAjiltniiNer",
+        align: "center",
+        showSorterTooltip: false,
+        sorter: true,
+      },
+      {
+        title: () => <SettingOutlined />,
+        width: "60px",
+        align: "center",
+        render(data) {
+          return (
+            <Popconfirm
+              title="хөнгөлөлт устгах уу?"
+              okText="Тийм"
+              cancelText="Үгүй"
+              onConfirm={() => ustgaya(data)}
+            >
+              <Button
+                danger
+                size="small"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                shape="circle"
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
+          );
+        },
+      },
+    ]
+  })
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -291,7 +406,7 @@ function tulburTootsoo() {
                         formRef.current.getFieldInstance("davkhar").focus();
                       }}
                     >
-                      <Option value="Давхараар">Давхараар</Option>
+                      <Option value="Давхраар">Давхраар</Option>
                       <Option value="Бүгд">Бүгд</Option>
                     </Select>
                   </Form.Item>
@@ -474,6 +589,9 @@ function tulburTootsoo() {
                   size="small"
                   rowClassName="hover:bg-blue-100"
                   dataSource={khungulultTuukh?.jagsaalt}
+                  summary={() => <Table.Summary fixed> {!!columns && !!khungulultTuukh && <Table.Summary.Row>
+                    {columns?.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : ""}`} index={index} align='right'>{mur.summary ? formatNumber(khungulultTuukh?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}{mur.summary && "₮"}</Table.Summary.Cell>)}
+                  </Table.Summary.Row>}</Table.Summary>}
                   pagination={{
                     current: khungulultTuukh?.khuudasniiDugaar,
                     pageSize: 100,
@@ -489,113 +607,7 @@ function tulburTootsoo() {
                   scroll={{ y: "calc(100vh - 26rem)" }}
                   rowKey={(row) => row._id}
                   className="t-head"
-                  columns={[
-                    {
-                      title: "Огноо",
-                      dataIndex: "createdAt",
-                      ellipsis: true,
-                      align: "center",
-                      width: "7rem",
-                      render: (data) => {
-                        return moment(data).format("YYYY-MM-DD hh:mm:ss");
-                      },
-                    },
-                    {
-                      title: "Хөнгөлөлт %",
-                      dataIndex: "khungulukhKhuvi",
-                      ellipsis: true,
-                      width: "7rem",
-                      align: "center",
-                    },
-                    {
-                      title: "Хугацаа",
-                      width: "7rem",
-                      dataIndex: "ognoonuud",
-                      ellipsis: true,
-                      align: "center",
-                      render: (data) => {
-                        return moment(data && data[0])
-                          .add(-1, "d")
-                          .format("YYYY-MM-DD");
-                      },
-                    },
-                    {
-                      title: "Төлөх дүн",
-                      width: "7rem",
-                      dataIndex: "tulukhDun",
-                      align: "center",
-                      render: (data) => {
-                        return formatNumber(data) + "₮";
-                      },
-                    },
-                    {
-                      title: "Хөнгөлөх дүн",
-                      width: "7rem",
-                      dataIndex: "khungulultiinDun",
-                      align: "center",
-                      render: (data) => {
-                        return formatNumber(data) + "₮";
-                      },
-                    },
-                    {
-                      title: "Төлсөн дүн",
-                      width: "7rem",
-                      dataIndex: "khungulsunDun",
-                      align: "center",
-                      render: (data) => {
-                        return formatNumber(data) + "₮";
-                      },
-                    },
-                    {
-                      title: "Төрөл",
-                      width: "7rem",
-                      dataIndex: "turul",
-                      ellipsis: true,
-                      align: "center",
-                    },
-                    {
-                      title: "Шалтгаан",
-                      width: "7rem",
-                      dataIndex: "shaltgaan",
-                      ellipsis: true,
-                      align: "center",
-                    },
-                    {
-                      title: "Ажилтан",
-                      width: "7rem",
-                      dataIndex: "guilgeeKhiisenAjiltniiNer",
-                      align: "center",
-                      showSorterTooltip: false,
-                      sorter: true,
-                    },
-                    {
-                      title: () => <SettingOutlined />,
-                      width: "60px",
-                      align: "center",
-                      render(data) {
-                        return (
-                          <Popconfirm
-                            title="хөнгөлөлт устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
-                            onConfirm={() => ustgaya(data)}
-                          >
-                            <Button
-                              danger
-                              size="small"
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                              }}
-                              shape="circle"
-                              icon={<DeleteOutlined />}
-                            />
-                          </Popconfirm>
-                        );
-                      },
-                    },
-                  ]}
+                  columns={columns}
                 />
               </div>
             </div>
