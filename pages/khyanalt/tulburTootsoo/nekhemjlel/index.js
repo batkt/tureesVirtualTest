@@ -241,9 +241,8 @@ function tulburTootsoo({ token }) {
 
             medeelel.khevlesenOgnoo = moment(ognoo).format("YYYY-MM-DD");
 
-            medeelel.niitAshiglaltiinZardal = formatNumber(
-              medeelel.niitAshiglaltiinZardal
-            );
+            medeelel.niitAshiglaltiinZardal =
+              formatNumber(medeelel.niitAshiglaltiinZardal) || "";
 
             medeelel.sar = moment().format("MM");
             medeelel.ekhlekhOn = moment().format("YYYY");
@@ -513,9 +512,8 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
-      nekhemjlekh.niitAshiglaltiinZardal = formatNumber(
-        nekhemjlekh.niitAshiglaltiinZardal
-      );
+      nekhemjlekh.niitAshiglaltiinZardal =
+        formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
 
       nekhemjlekh.sar = moment().format("MM");
       nekhemjlekh.ekhlekhOn = moment().format("YYYY");
@@ -641,9 +639,8 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
-      nekhemjlekh.niitAshiglaltiinZardal = formatNumber(
-        nekhemjlekh.niitAshiglaltiinZardal
-      );
+      nekhemjlekh.niitAshiglaltiinZardal =
+        formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
 
       nekhemjlekh.sar = moment().format("MM");
       nekhemjlekh.ekhlekhOn = moment().format("YYYY");
@@ -751,9 +748,8 @@ function tulburTootsoo({ token }) {
 
           medeelel.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
-          medeelel.niitAshiglaltiinZardal = formatNumber(
-            medeelel.niitAshiglaltiinZardal
-          );
+          medeelel.niitAshiglaltiinZardal =
+            formatNumber(medeelel.niitAshiglaltiinZardal) || "";
 
           medeelel.sar = moment().format("MM");
           medeelel.ekhlekhOn = moment().format("YYYY");
@@ -864,9 +860,8 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
-      nekhemjlekh.niitAshiglaltiinZardal = formatNumber(
-        nekhemjlekh.niitAshiglaltiinZardal
-      );
+      nekhemjlekh.niitAshiglaltiinZardal =
+        formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
 
       nekhemjlekh.sar = moment().format("MM");
       nekhemjlekh.ekhlekhOn = moment().format("YYYY");
