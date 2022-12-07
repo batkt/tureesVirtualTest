@@ -182,34 +182,35 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           <div>Гүйлгээний түүх</div>
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
-        <div className="grid grid-cols-12 pr-1 border-b divide-white divide-x min-w-[88rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <div className="min-w-[8rem] p-1">Огноо</div>
-          <div className="min-w-[8rem] p-1">Түрээс</div>
-          <div className="min-w-[8rem] p-1">Төлөх дүн</div>
-          <div className="min-w-[8rem] p-1">Хямдрал</div>
-          <div className="min-w-[8rem] p-1">Төлсөн алданги</div>
-          <div className="min-w-[8rem] p-1">Төлсөн дүн</div>
-          <div className="min-w-[8rem] p-1">Үлдэгдэл</div>
+        <div className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+          <div className="min-w-[8rem] overflow-hidden p-1">Огноо</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Түрээс</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Төлөх дүн</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Хямдрал</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Төлсөн алданги</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Төлсөн дүн</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Үлдэгдэл</div>
 
-          <div className="min-w-[8rem] p-1">Ажилтан</div>
-          <div className="min-w-[8rem] p-1">Хэлбэр</div>
-          <div className="min-w-[8rem] p-1">Бүртгсэн огноо</div>
-          <div className="min-w-[8rem] p-1">Тайлбар</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Ажилтан</div>
+          <div className="min-w-[8rem] overflow-hidden p-1">Хэлбэр</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 w-full">Тайлбар</div>
+          <div className="min-w-[10rem] text-center p-1">Бүртгсэн огноо</div>
+          <div className="min-w-[3rem] border-none p-1"></div>
         </div>
-        <div className=" overflownone min-w-[88.3rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
+        <div className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
           {guilgeeniiTuukh
             ?.map((a, i) => (
-              <div className="grid grid-cols-12 divide-x min-w-[88rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <div className="p-1 min-w-[8rem]">
+              <div className="flex divide-x min-w-[93rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <div className="p-1 min-w-[8rem] overflow-hidden">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </div>
-                <div className="p-1 min-w-[8rem]">{formatNumber(a.undsenDun, 2)}</div>
-                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulukhDun, 2)}</div>
-                <div className="p-1 min-w-[8rem]">{formatNumber(a.khyamdral, 2)}</div>
-                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulsunAldangi, 2)}</div>
-                <div className="p-1 min-w-[8rem]">{formatNumber(a.tulsunDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.undsenDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulukhDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.khyamdral, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulsunAldangi, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulsunDun, 2)}</div>
                 <div
-                  className={`p-1 min-w-[8rem] ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                  className={`p-1 min-w-[8rem] overflow-hidden ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
                   {formatNumber(
@@ -218,20 +219,22 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                   )}
                 </div>
 
-                <div className="p-1 min-w-[8rem]">{a.guilgeeKhiisenAjiltniiNer}</div>
-                <div className="p-1 min-w-[8rem]">
+                <div className="p-1 min-w-[8rem] overflow-hidden">{a.guilgeeKhiisenAjiltniiNer}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden">
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
                       : "Банк"
                     : turulAvya(a.turul)}
                 </div>
-                <div className="flex min-w-[8rem] justify-between p-1">
+                <div className="flex min-w-[8rem] overflow-hidden w-full justify-between p-1">
+                  {a.tailbar}
+                </div>
+                <div className="flex min-w-[10rem] text-center justify-center p-1 ">
                   {a.guilgeeKhiisenOgnoo &&
                     moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
                 </div>
-                <div className="flex min-w-[8rem] justify-between p-1 col-span-2">
-                  {a.tailbar}
+                <div className="flex min-w-[3rem] border-none justify-center">
                   {(ajiltan?.erkh === "Admin" || !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                     (a) => a === barilgiinId
                   )) && (a.turul === "avlaga" ||
@@ -242,18 +245,16 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                     a.turul === "aldangi" ||
                     a.turul === "zalruulga" ||
                     a.turul === "baritsaa") && (
-                      <div className="contents justify-between">
-                        <Popconfirm
-                          title="Төлөлт устгах уу?"
-                          okText="Тийм"
-                          cancelText="Үгүй"
-                          onConfirm={() => tulultUstgaya(a)}
-                        >
-                          <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
-                            <DeleteOutlined />
-                          </div>
-                        </Popconfirm>
-                      </div>
+                      <Popconfirm
+                        title="Төлөлт устгах уу?"
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => tulultUstgaya(a)}
+                      >
+                        <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
+                          <DeleteOutlined />
+                        </div>
+                      </Popconfirm>
                     )}
                 </div>
               </div>
