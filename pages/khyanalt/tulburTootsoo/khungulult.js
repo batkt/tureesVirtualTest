@@ -90,7 +90,7 @@ function tulburTootsoo() {
 
   useEffect(() => {
     if (form.getFieldValue("turul") === "Бүгд") {
-      setRowKeys(gereeniiMedeelel?.jagsaalt.map((r) => r._id))
+      onSelectChange(gereeniiMedeelel?.jagsaalt.map((r) => r._id), gereeniiMedeelel?.jagsaalt)
     }
   }, [shuult, form])
 
@@ -108,9 +108,9 @@ function tulburTootsoo() {
       });
     } else {
       setShuult({ query: { tuluv: { $ne: -1 } } })
+      setRowKeys([]);
+      setSongogdsonGereenuud([]);
     }
-    setRowKeys([]);
-    setSongogdsonGereenuud([]);
   }
   function nukhtulSongokh(value) {
     if (value === "Бүгд") {
