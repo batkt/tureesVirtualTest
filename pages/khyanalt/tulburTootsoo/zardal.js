@@ -249,6 +249,7 @@ function ZardalMur({
               okText="Тийм"
               cancelText="Үгүй"
               onConfirm={() => guilgeeUstgaya(a._id)}
+              className="h-5 w-5"
             >
               <div className="box flex w-8 cursor-pointer items-center justify-center">
                 <CloseOutlined style={{ display: "flex" }} />
@@ -429,11 +430,11 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
                 return (
                   <div className="flex items-center justify-center">
                     <Popconfirm
+                      placement="left"
                       title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => guilgeeUstgaya(a._id)}
-                      className="h-5 w-5"
                     >
                       <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
                         <DeleteOutlined />
@@ -583,9 +584,13 @@ function zardal({ token }) {
       loading={isValidating}
     >
       <div className="col-span-12 space-y-5">
-        <div className="flex flex-col md:mt-0 w-full md:flex-row">
+        <div className="flex w-full flex-col md:mt-0 md:flex-row">
           <div data-aos="fade-right" data-aos-duration="1000">
-            <DatePicker.RangePicker className="w-full md:w-auto" value={ognoo} onChange={setOgnoo} />
+            <DatePicker.RangePicker
+              className="w-full md:w-auto"
+              value={ognoo}
+              onChange={setOgnoo}
+            />
           </div>
           <button
             style={{
@@ -654,7 +659,7 @@ function zardal({ token }) {
               dataIndex: "ner",
               ellipsis: true,
               align: "center",
-              width: "65vw"
+              width: "65vw",
             },
             {
               title: "Дүн",
