@@ -158,12 +158,6 @@ const Tulbur = ({
               <Form.Item
                 name="baritsaaBairshuulakhKhugatsaa"
                 label="Хугацаа"
-                rules={[
-                  {
-                    required: true,
-                    message: "Барьцаа байршуулах хугацаа бүртгэнэ үү!",
-                  },
-                ]}
               >
                 <InputNumber
                   onKeyUp={focuser}
