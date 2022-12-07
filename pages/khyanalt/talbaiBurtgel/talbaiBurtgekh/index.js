@@ -119,7 +119,7 @@ function talbaiBurtgekh({ token }) {
   const { talbainToololt } = useTalbainToololt(token);
 
   const [open, setOpen] = useState(false);
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
 
   const showDrawer = () => {
     setOpen(true);
@@ -483,23 +483,24 @@ function talbaiBurtgekh({ token }) {
     >
       <Card
         size="small"
-        className="col-span-12 mb-14 md:mb-0 md:col-span-12 xl:col-span-12"
+        className="col-span-12 mb-14 md:col-span-12 md:mb-0 xl:col-span-12"
       >
-        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`zoom-in h-20 cursor-pointer rounded-xl relative sm:col-span-12 lg:col-span-3 border-2 border-green-600 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50 dark:bg-gray-900"
-                  : ""
-                  }`}
+                className={`zoom-in relative h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50 dark:bg-gray-900"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full  w-[70vw] sm:w-auto rounded-xl">
+                <div className="h-full  w-[70vw] rounded-xl sm:w-auto">
                   <div className="rounded-xl p-3">
                     <div className="flex justify-between">
                       <div>
@@ -511,8 +512,8 @@ function talbaiBurtgekh({ token }) {
                         </div>
                       </div>
                       <div>
-                        <div className="text-xs flex top-2 right-2 text-green-600 absolute">
-                          Нийт м²: {mur.mk}
+                        <div className="absolute top-2 right-2 flex text-xs text-green-600">
+                          Нийт м²: {formatNumber(mur.mk)}
                         </div>
                       </div>
                     </div>
@@ -524,7 +525,7 @@ function talbaiBurtgekh({ token }) {
         </div>
 
         <div
-          className="ml-auto md:flex p-5 place-content-end"
+          className="ml-auto place-content-end p-5 md:flex"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="200"
@@ -567,7 +568,7 @@ function talbaiBurtgekh({ token }) {
             </Drawer>
           </div>
           <div
-            className="flex gap-4 justify-between place-content-end "
+            className="flex place-content-end justify-between gap-4 "
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="200"
@@ -671,7 +672,7 @@ function talbaiBurtgekh({ token }) {
           data-aos-anchor-placement="top-bottom"
           className="mt-5 md:mt-0"
         >
-          <p className="font-medium py-2 md:hidden">Талбайн жагсаалт</p>
+          <p className="py-2 font-medium md:hidden">Талбайн жагсаалт</p>
           <CardList
             tileProps={{ talbaiUstgay, barilgiinId }}
             keyValue="talbai"
@@ -724,7 +725,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,

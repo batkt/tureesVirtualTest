@@ -97,6 +97,7 @@ function Khyanalt({ token }) {
 
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
+  console.log(davkhar);
   const [content, setContent] = useState();
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
@@ -119,11 +120,12 @@ function Khyanalt({ token }) {
       barilgiinId,
     };
   }, [barilgiinId]);
-
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
     token,
     khariltsagchiinQuery,
-    davkhar,
+    davkhar?.length < 1 || davkhar === null
+      ? undefined
+      : (davkhar = { $in: davkhar }),
     tuluv
   );
   const { mailiinZagvarGaralt, mailiinZagvarMutate } = useMailiinZagvar(
@@ -151,6 +153,7 @@ function Khyanalt({ token }) {
   const khariltsagchiinMsjTuukhKharakh = useMemo(() => {
     return { barilgiinId: barilgiinId, dugaar: khariltsagch?.utas };
   });
+
   const msjTuukh = useJagsaalt(
     "/msgTuukh",
     khariltsagchiinMsjTuukhKharakh,
@@ -391,7 +394,7 @@ function Khyanalt({ token }) {
       });
     }
   }
-
+  console.log(khariltsagch);
   async function mailIlgeeye() {
     if (!!title) {
       if (content !== " " || content !== "") {
@@ -399,7 +402,9 @@ function Khyanalt({ token }) {
         if (songogdsonKhariltsagch?.length > 0) {
           songogdsonKhariltsagch.forEach((a) => {
             var zagvar = content;
-            a.ovog = a.ovog || "";
+            if (a.turul === "ААН") {
+              a.ovog = "";
+            }
             a.ner = a.ner || "";
             a.register = a.register || "";
             a.utas = a.utas || "";
@@ -631,9 +636,10 @@ function Khyanalt({ token }) {
           </div>
           <div className="col-span-6">
             <Select
-              placeholder="Давхар"
-              onChange={setDavkhar}
+              mode="multiple"
               allowClear
+              placeholder="Давхрууд сонгох"
+              onChange={setDavkhar}
               style={{ width: "100%" }}
             >
               {baiguullaga?.barilguud
@@ -882,7 +888,22 @@ function Khyanalt({ token }) {
                     </div>
                     <div className="flex w-full justify-between">
                       <div className="text-xs">{mur?.ner}</div>
-                      <div className="text-xs">{mur?.utas}</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                        {mur?.utas.length > 0 ? (
+                          <div className="flex gap-1 ">
+                            {mur?.utas.map((a, i) => (
+                              <div key={i}>
+                                {a}
+                                {i !== mur.utas.length - 1 && ","}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex">
+                            <div>{mur?.utas}</div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -923,10 +944,22 @@ function Khyanalt({ token }) {
                       {khariltsagch?.ner}
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
-                      {turul === "Mail"
-                        ? khariltsagch?.mail
-                        : khariltsagch?.utas}{" "}
-                      <span className="mx-1">•</span> {turul}
+                      {khariltsagch?.utas.length > 0 ? (
+                        <div className="flex gap-1 ">
+                          {khariltsagch?.utas.map((a, i) => (
+                            <div key={i}>
+                              {a}
+                              {i !== khariltsagch.utas.length - 1 && ","}
+                            </div>
+                          ))}
+                          <span className="mx-1">•</span> {turul}
+                        </div>
+                      ) : (
+                        <div className="flex">
+                          <div>{khariltsagch?.utas}</div>
+                          <span className="mx-1">•</span> {turul}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
