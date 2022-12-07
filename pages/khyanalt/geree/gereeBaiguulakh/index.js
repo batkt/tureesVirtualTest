@@ -129,8 +129,9 @@ function GereeBaiguulakh({ token }) {
       if (
         gereeniiZagvar?.turGereeEsekh !== true &&
         data.baritsaaAvakhEsekh === true &&
-        !data.baritsaaBairshuulakhKhugatsaa
+        data.baritsaaBairshuulakhKhugatsaa === (undefined || null)
       ) {
+        console.log(data.baritsaaBairshuulakhKhugatsaa)
         utgaShalgakh.push(4)
         notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
       }
