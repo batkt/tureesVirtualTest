@@ -308,15 +308,14 @@ function Khyanalt({ token }) {
 
   //#endregion
   function khariltsagchSongokh(mur) {
-    if (khariltsagch === null) {
-      setKhariltsagch(mur);
-    } else setKhariltsagch(null);
+    setKhariltsagch(mur);
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
     index !== -1
       ? songogdsonKhariltsagch.splice(index, 1)
       : songogdsonKhariltsagch.push(mur);
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
+
   return (
     <Admin
       title="Шаардлага"
@@ -328,7 +327,7 @@ function Khyanalt({ token }) {
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
     >
       <div
-        className="col-span-12 lg:col-span-6 xl:col-span-3 "
+        className="col-span-12 lg:col-span-6 xl:col-span-3"
         data-aos="fade-up"
         data-aos-duration="1000"
       >
@@ -365,17 +364,15 @@ function Khyanalt({ token }) {
             </svg>
           </div>
 
-          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-2 rounded-md p-2  ">
+          <div className=" mt-2  flex cursor-pointer flex-row items-center space-x-4 space-y-2 rounded-md p-2 ">
             <Checkbox
               checked={
-                khariltsagchiinMedeelel?.jagsaalt?.length ===
+                khariltsagchiinMedeelel.jagsaalt?.length ===
                 songogdsonKhariltsagch.length
               }
               onChange={(e) => {
                 if (e.target.checked === true)
-                  setSongogdsonKhariltsagch([
-                    ...khariltsagchiinMedeelel?.jagsaalt,
-                  ]);
+                  setSongogdsonKhariltsagch([...jagsaalt]);
                 else setSongogdsonKhariltsagch([]);
               }}
             >
@@ -383,60 +380,85 @@ function Khyanalt({ token }) {
             </Checkbox>
           </div>
 
-          <div className="hideScroll h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH ">
+          <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
-              <div
-                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
-                  khariltsagch?._id === mur?._id
-                    ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
-                    : ""
-                } `}
-                onClick={() => khariltsagchSongokh(mur)}
-              >
-                <div>
-                  <Checkbox
-                    checked={
-                      songogdsonKhariltsagch.findIndex(
-                        (a) => a._id === mur._id
-                      ) !== -1
-                    }
-                    onChange={(e) => {
-                      e.target.checked;
-                      if (e.target.checked == true) {
-                        songogdsonKhariltsagch.push(mur);
-                      } else {
-                        const index = songogdsonKhariltsagch.findIndex(
-                          (a) => a._id === mur._id
-                        );
-                        if (index !== -1) {
-                          songogdsonKhariltsagch.splice(index, 1);
+              <div>
+                {!!mur._id ? (
+                  <div
+                    className={`flex cursor-pointer flex-row items-center space-x-4  rounded-md p-2 ${
+                      khariltsagch?._id === mur?._id
+                        ? "rounded-l-full bg-green-100 shadow-lg  dark:bg-green-500 "
+                        : ""
+                    } `}
+                    key={mur?._id}
+                    onClick={() => khariltsagchSongokh(mur)}
+                  >
+                    <div>
+                      <Checkbox
+                        checked={
+                          songogdsonKhariltsagch.findIndex(
+                            (a) => a._id === mur._id
+                          ) !== -1
                         }
-                      }
-                      setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
-                    }}
-                  />
-                </div>
-                <div className="image-fit relative h-10 w-10 flex-none rounded-full ">
-                  <img
-                    alt="profileZurag"
-                    className="rounded-full"
-                    src={
-                      ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
-                        ? "/profileFemale.svg"
-                        : "/profile.svg"
-                    }
-                  />
-                </div>
-                <div className="flex w-full justify-between truncate text-center text-xs text-gray-600 ">
-                  <div> {mur?.ner}</div>
-                  <div>{mur?.utas}</div>
-                </div>
+                        onChange={(e) => {
+                          if (e.target.checked == true) {
+                            songogdsonKhariltsagch.push(mur);
+                          } else {
+                            const index = songogdsonKhariltsagch.findIndex(
+                              (a) => a._id === mur._id
+                            );
+                            if (index !== -1) {
+                              songogdsonKhariltsagch.splice(index, 1);
+                            }
+                          }
+                          setSongogdsonKhariltsagch([
+                            ...songogdsonKhariltsagch,
+                          ]);
+                        }}
+                      />
+                    </div>
+                    <div className="image-fit relative h-10 w-10 flex-none rounded-full">
+                      <img
+                        alt="profileZurag"
+                        className="rounded-full"
+                        src={
+                          ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
+                            2 <
+                          1
+                            ? "/profileFemale.svg"
+                            : "/profile.svg"
+                        }
+                      />
+                    </div>
+                    <div className="flex w-full justify-between">
+                      <div className="text-xs">{mur?.ner}</div>
+                      <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                        {mur?.utas.length > 0 ? (
+                          <div className="flex gap-1 ">
+                            {mur?.utas.map((a, i) => (
+                              <div key={i}>
+                                {a}
+                                {i !== mur.utas.length - 1 && ","}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex">
+                            <div>{mur?.utas}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             ))}
           </div>
         </div>
       </div>
-      {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
+      {khariltsagch || songogdsonKhariltsagch.length > 1 ? (
         <div className="box col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem">
           {songogdsonKhariltsagch.length <= 1 ? (
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
@@ -467,18 +489,15 @@ function Khyanalt({ token }) {
                     </div>
                     <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                       {khariltsagch?.utas.length > 0 ? (
-                        (console.log(khariltsagch.utas),
-                        (
-                          <div className="flex gap-1 ">
-                            {khariltsagch?.utas.map((a, i) => (
-                              <div key={i}>
-                                {a}
-                                {i !== khariltsagch.utas.length - 1 && ","}
-                              </div>
-                            ))}
-                            <span className="mx-1">•</span> {turul}
-                          </div>
-                        ))
+                        <div className="flex gap-1 ">
+                          {khariltsagch?.utas.map((a, i) => (
+                            <div key={i}>
+                              {a}
+                              {i !== khariltsagch.utas.length - 1 && ","}
+                            </div>
+                          ))}
+                          <span className="mx-1">•</span> {turul}
+                        </div>
                       ) : (
                         <div className="flex">
                           <div>{khariltsagch?.utas}</div>
