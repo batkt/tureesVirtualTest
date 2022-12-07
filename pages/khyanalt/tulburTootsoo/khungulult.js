@@ -220,7 +220,7 @@ function tulburTootsoo() {
         summary: true,
         width: "7rem",
         dataIndex: "tulukhDun",
-        align: "center",
+        align: "right",
         render: (data) => {
           return formatNumber(data) + "₮";
         },
@@ -230,7 +230,7 @@ function tulburTootsoo() {
         summary: true,
         width: "7rem",
         dataIndex: "khungulultiinDun",
-        align: "center",
+        align: "right",
         render: (data) => {
           return formatNumber(data) + "₮";
         },
@@ -240,7 +240,7 @@ function tulburTootsoo() {
         width: "7rem",
         summary: true,
         dataIndex: "khungulsunDun",
-        align: "center",
+        align: "right",
         render: (data) => {
           return formatNumber(data) + "₮";
         },
