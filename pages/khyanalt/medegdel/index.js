@@ -94,10 +94,8 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
-
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
-  console.log(davkhar);
   const [content, setContent] = useState();
   const [ner, setNer] = useState();
   const [msj, onTextChange] = useState("");
@@ -108,7 +106,6 @@ function Khyanalt({ token }) {
   /**Илгээх төрөл
    * enum {buunuur | davkharaar | avlagaar | gantsaar}
    *  */
-  const [ilgeekhTurul, setIlgeekhTurul] = useState("gantsaar");
   const [tuluv, setTuluv] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const ref = useRef(null);
@@ -159,16 +156,6 @@ function Khyanalt({ token }) {
     khariltsagchiinMsjTuukhKharakh,
     order
   );
-
-  useEffect(() => {
-    setKhariltsagch(null);
-    if (ilgeekhTurul !== "davkharaar") setDavkhar(null);
-  }, [ilgeekhTurul]);
-
-  useEffect(() => {
-    setKhariltsagch(null);
-    setDavkhar(null);
-  }, [turul]);
 
   useEffect(() => {
     if (neesenEsekh === true) {
@@ -394,7 +381,6 @@ function Khyanalt({ token }) {
       });
     }
   }
-  console.log(khariltsagch);
   async function mailIlgeeye() {
     if (!!title) {
       if (content !== " " || content !== "") {
@@ -545,6 +531,11 @@ function Khyanalt({ token }) {
     }
   }
 
+  function davkharuudSongokh(e) {
+    setDavkhar(e);
+  }
+  console.log(davkhar);
+
   function turulSongokh(mur) {
     setSongogdsonKhariltsagch([]);
     setTurul(mur);
@@ -639,7 +630,7 @@ function Khyanalt({ token }) {
               mode="multiple"
               allowClear
               placeholder="Давхрууд сонгох"
-              onChange={setDavkhar}
+              onChange={(e) => davkharuudSongokh(e)}
               style={{ width: "100%" }}
             >
               {baiguullaga?.barilguud
