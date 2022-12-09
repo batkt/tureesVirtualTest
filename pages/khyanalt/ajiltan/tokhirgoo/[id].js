@@ -44,7 +44,7 @@ function index({ token, data }) {
     <Admin title={"Ажилтны эрхийн тохиргоо"} dedKhuudas className="p-5 pb-10 lg:pb-0">
       <div className="box col-span-12 lg:flex flex-row items-center p-2">
         <div className="flex font-medium">
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col xl:flex-row gap-3">
             <div className="flex gap-3 text-xl text-black text-opacity-70 dark:text-white dark:text-opacity-70">
               <div className="flex">
                 Овог: <p className="ml-2">{data?.ovog}</p>
@@ -53,7 +53,7 @@ function index({ token, data }) {
                 Нэр: <p className="ml-2">{data?.ner}</p>
               </div>
             </div>
-            <div className="flex flex-col lg:flex-row lg:items-center gap-3 border-t-2 pt-3 font-medium">
+            <div className="flex flex-col lg:flex-row lg:items-center gap-3 border-t-2 xl:border-t-0 xl:border-l-2 pt-3 px-3  font-medium">
               <div>Барилга сонгох:</div>
               <div className="flex flex-wrap gap-5">
                 {barilguud?.map((a) => (
@@ -78,12 +78,6 @@ function index({ token, data }) {
               </div>
             </div>
           </div>
-        </div>
-
-        <div className="ml-auto py-3 lg:w-auto flex w-full mr-2">
-          <Button className="w-full" type="primary" onClick={khadgalya}>
-            Хадгалах
-          </Button>
         </div>
       </div>
       <div className="box col-span-12 lg:col-span-6 p-2">
@@ -170,6 +164,11 @@ function index({ token, data }) {
             </div>
           </div>
         ))}
+      </div>
+      <div className="ml-auto col-span-12 py-3 lg:w-36 flex w-full mr-2">
+        <Button className="w-full" type="primary" onClick={khadgalya}>
+          Хадгалах
+        </Button>
       </div>
     </Admin>
   );

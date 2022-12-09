@@ -326,100 +326,92 @@ function index({ token }) {
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
       >
-        {((!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
-          (!!daalgavar?.file && daalgavar?.file?.length > 0)) && (
-            <div
-              className="flex w-full items-center gap-3 px-5 pt-2"
-              style={{ height: "20%" }}
-            >
-              <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
-                <img
-                  src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
-                  className="h-10 w-10 rounded-full"
-                />
-              </div>
-              <div className="relative w-10/12  rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
-                <div className="flex flex-row flex-wrap items-center justify-between">
-                  <div className="font-medium">Захирал</div>
-                  <div className="flex">
-                    <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
-                      {moment(daalgavar.ognoo).format("YYYY/MM/DD HH:mm")}
-                    </div>
-                    <div
-                      className={`ml-5 ${daalgavar?.tuluv === -1 ? "hidden" : "flex"
-                        }`}
-                    >
-                      <Popconfirm
-                        disabled={daalgavar?.tuluv === 2}
-                        title={`Та даалгавар цуцлах уу?`}
-                        okText="Тийм"
-                        cancelText="Үгүй"
-                        onConfirm={() => daalgavarTsutslakh()}
-                      >
-                        <div
-                          className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
-                            ? "red"
-                            : 1 === daalgavar?.tuluv
-                              ? "yellow"
-                              : "green"
-                            }-500 py-1 px-3 font-medium text-gray-50`}
-                        >
-                          {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
-                        </div>
-                      </Popconfirm>
-                    </div>
-                    <div
-                      className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${daalgavar?.tuluv === -1 ? "flex" : "hidden"
-                        }`}
-                    >
-                      Цуцлагдсан
-                    </div>
-                  </div>
+        <div
+          className="flex w-full items-center gap-3 px-5 pt-2"
+          style={{ height: "10rem" }}
+        >
+          <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
+            <img
+              src="https://365webresources.com/wp-content/uploads/2016/09/FREE-PROFILE-AVATARS.png"
+              className="h-10 w-10 rounded-full"
+            />
+          </div>
+          <div className="relative w-10/12  rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+            <div className="flex flex-row flex-wrap items-center justify-between">
+              <div className="font-medium">Захирал</div>
+              <div className="flex">
+                <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
+                  {moment(daalgavar?.ognoo).format("YYYY/MM/DD HH:mm")}
                 </div>
-                <div className="flex w-full py-2">{daalgavar?.tailbar}</div>
-                <div className="flex justify-between">
-                  <div className="w-1/2">
-                    {daalgavar.file?.map((mur) => (
-                      <div className=" flex">
-                        <audio className="" controls key={mur}>
-                          <source
-                            src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                            type="audio/ogg"
-                          />
-                          <source
-                            src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
-                            type="audio/mpeg"
-                          />
-                          Your browser does not support the audio element.
-                        </audio>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex w-1/2 items-center justify-end gap-2 overflow-hidden">
-                    <Image.PreviewGroup>
-                      {daalgavar.zurguud?.map((mur) => (
-                        <Image
-                          key={mur}
-                          alt={mur}
-                          height="2rem"
-                          width="2rem"
-                          src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
-                        />
-                      ))}
-                    </Image.PreviewGroup>
-                  </div>
+                <div
+                  className={`ml-5 ${daalgavar?.tuluv === -1 ? "hidden" : "flex"
+                    }`}
+                >
+                  <Popconfirm
+                    disabled={daalgavar?.tuluv === 2}
+                    title={`Та даалгавар цуцлах уу?`}
+                    okText="Тийм"
+                    cancelText="Үгүй"
+                    onConfirm={() => daalgavarTsutslakh()}
+                  >
+                    <div
+                      className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
+                        ? "red"
+                        : 1 === daalgavar?.tuluv
+                          ? "yellow"
+                          : "green"
+                        }-500 py-1 px-3 font-medium text-gray-50`}
+                    >
+                      {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
+                    </div>
+                  </Popconfirm>
+                </div>
+                <div
+                  className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${daalgavar?.tuluv === -1 ? "flex" : "hidden"
+                    }`}
+                >
+                  Цуцлагдсан
                 </div>
               </div>
             </div>
-          )}
+            <div className="flex w-full py-2">{daalgavar?.tailbar}</div>
+            <div className="flex justify-between">
+              <div className="w-1/2">
+                {daalgavar?.file?.map((mur) => (
+                  <div className=" flex">
+                    <audio className="" controls key={mur}>
+                      <source
+                        src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                        type="audio/ogg"
+                      />
+                      <source
+                        src={`${url}/fileAvya/${ajiltan.baiguullagiinId}/${mur}`}
+                        type="audio/mpeg"
+                      />
+                      Your browser does not support the audio element.
+                    </audio>
+                  </div>
+                ))}
+              </div>
+              <div className="flex w-1/2 items-center justify-end gap-2 overflow-hidden">
+                <Image.PreviewGroup>
+                  {daalgavar?.zurguud?.map((mur) => (
+                    <Image
+                      key={mur}
+                      alt={mur}
+                      height="2rem"
+                      width="2rem"
+                      src={`${url}/zuragAvya/jpg/${ajiltan.baiguullagiinId}/${mur}`}
+                    />
+                  ))}
+                </Image.PreviewGroup>
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           className="w-full min-w-0 max-w-6xl space-y-5 overflow-y-scroll p-8"
-          style={
-            (!!daalgavar?.zurguud && daalgavar?.zurguud?.length > 0) ||
-              (!!daalgavar?.file && daalgavar?.file?.length > 0)
-              ? { height: "70%" }
-              : { height: "90%" }
-          }
+          style={{ height: "calc(100vh - 22rem)" }}
           ref={messageEl}
           onScroll={(e) => {
             if (e.currentTarget.scrollTop === 0 && !!daalgavriinSetgegdel.data)
