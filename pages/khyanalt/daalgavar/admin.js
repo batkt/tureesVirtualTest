@@ -312,6 +312,7 @@ function index({ token }) {
         token={token}
         onRefresh={task.refresh}
         onClose={() => setShowResults(false)}
+        ajiltan={ajiltan}
       />
 
       {/* chat */}

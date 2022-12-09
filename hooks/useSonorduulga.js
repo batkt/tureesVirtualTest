@@ -20,10 +20,7 @@ const fetcher = (
         query: {
           baiguullagiinId,
           barilgiinId,
-          khuleenAvagchiinId:{$in:[ajiltniiId,barilgiinId]},
-          "object.ajiltniiId": {
-            $ne: ajiltniiId,
-          },
+          khuleenAvagchiinId: { $in: [ajiltniiId, barilgiinId] },
         },
         order: { createdAt: -1 },
       },
@@ -49,7 +46,7 @@ const tooFetcher = (
           ajiltniiId: {
             $ne: "nevtersenAjiltniiId",
           },
-          khariltsagchiinId:{$exists:false}
+          khariltsagchiinId: { $exists: false }
         },
         order: { createdAt: -1 },
       },
@@ -69,13 +66,13 @@ function useSonorduulga(token) {
   const { data, mutate } = useSWR(
     !!token && !!baiguullaga?._id
       ? [
-          "/sonorduulga",
-          token,
-          baiguullaga?._id,
-          barilgiinId,
-          ajiltan?._id,
-          khuudaslalt,
-        ]
+        "/sonorduulga",
+        token,
+        baiguullaga?._id,
+        barilgiinId,
+        ajiltan?._id,
+        khuudaslalt,
+      ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
@@ -83,12 +80,12 @@ function useSonorduulga(token) {
   const too = useSWR(
     !!token && !!baiguullaga?._id
       ? [
-          "/sonorduulga/tooAvya",
-          token,
-          baiguullaga?._id,
-          barilgiinId,
-          khuudaslalt,
-        ]
+        "/sonorduulga/tooAvya",
+        token,
+        baiguullaga?._id,
+        barilgiinId,
+        khuudaslalt,
+      ]
       : null,
     tooFetcher,
     { revalidateOnFocus: false }
@@ -104,7 +101,7 @@ function useSonorduulga(token) {
           function onClose() {
             notification.close(key);
           }
-          if (ajiltan._id !== sonorduulga.ajiltniiId) {
+          if (ajiltan._id === sonorduulga.khuleenAvagchiinId) {
             notification.open({
               key: key,
               message: (

@@ -10,7 +10,7 @@ import { Button, notification, Upload } from "antd";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import AjiltanNemekh from "./ajiltanNemekh";
-import uilchilgee, { url } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import TextArea from "antd/lib/input/TextArea";
 
 const ognoonuud = new Array(30)
@@ -83,14 +83,14 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
     daalgavar.tuluv = 0;
     uilchilgee(token)
       .post("/daalgavarOruulya", daalgavar)
-      .then((res) => {
+      .then(({ data }) => {
         if (data === "Amjilttai") {
-          onRefresh();
+          notification.success({ message: "Даалгавар амжилттай бүртгэгдлээ" });
           setDaalgavar({});
+          onRefresh();
           onClose();
-          notification.info({ message: "Даалгавар амжилттай бүртгэгдлээ" });
         }
-      });
+      }).catch(aldaaBarigch);
   }
 
   return (
