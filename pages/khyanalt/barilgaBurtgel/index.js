@@ -303,7 +303,6 @@ function BarilgaBurtgel({ token }) {
                 data.datasets[tooltipitem.datasetIndex].data[
                   tooltipitem.index
                 ].toLocaleString();
-
               if (Chart.helpers.isArray(dataLabel)) {
                 dataLabel = dataLabel.slice();
                 dataLabel[0] += value;
@@ -436,8 +435,8 @@ function BarilgaBurtgel({ token }) {
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
                   Орлогын тайлан салбараар
                 </div>
-                <div className=" col-span-12  flex items-end justify-end md:col-span-6 xl:col-span-6">
-                  <div>
+                <div className=" col-span-12  flex items-end justify-end  md:col-span-6 xl:col-span-6">
+                  <div className="w-[90%]">
                     <Datepicker value={value} onChange={handleValueChange} />
                   </div>
                 </div>
