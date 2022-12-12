@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import _ from "lodash";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import { useAuth } from "services/auth";
+import formatNumber from "tools/function/formatNumber";
 
 const DynamicPlot = dynamic(import("react-plotly.js"), {
   ssr: false,
@@ -142,6 +143,40 @@ function Tailan({ token }) {
 
     if (tailan?.tailanGaralt?.length > 0) {
       tailan?.tailanGaralt.forEach((tmur) => {
+        tmur.aldangiinUldegdel = formatNumber(tmur.aldangiinUldegdel) || 0;
+        tmur.baiguullagiinNer = tmur.baiguullagiinNer || "";
+        tmur.baritsaaAvakhDun = formatNumber(tmur.baritsaaAvakhDun) || 0;
+        tmur.baritsaaAvakhKhugatsa = tmur.baritsaaAvakhKhugatsa || "";
+        tmur.baritsaaBairshuulakhKhugatsaa =
+          tmur.baritsaaBairshuulakhKhugatsaa || "";
+        tmur.baritsaaniiUldegdel = formatNumber(tmur.baritsaaniiUldegdel) || 0;
+        tmur.khariltsagchiinKhayag = tmur.khariltsagchiinKhayag || "";
+        tmur.dans = tmur.dans || "";
+        tmur.daraagiinTulukhOgnoo = tmur.daraagiinTulukhOgnoo || "";
+        tmur.davkhar = tmur.davkhar || "";
+        tmur.duusakhOgnoo = tmur.duusakhOgnoo || "";
+        tmur.gereeniiDugaar = tmur.gereeniiDugaar || "";
+        tmur.gereeniiOgnoo = tmur.gereeniiOgnoo || "";
+        tmur.idevkhiteiEsekh = tmur.idevkhiteiEsekh || 0;
+        tmur.khugatsaa = tmur.khugatsaa || "";
+        tmur.khungulukhEsekh = tmur.khungulukhEsekh || "";
+        tmur.mail = tmur.mail || "";
+        tmur.ner = tmur.ner || "";
+        tmur.ovog = tmur.ovog || "";
+        tmur.register = tmur.register || "";
+        tmur.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
+        tmur.segmentuud = tmur.segmentuud || "";
+        tmur.talbainDugaar = tmur.talbainDugaar || "";
+        tmur.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
+        tmur.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
+        tmur.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
+        tmur.tulukhUdur = tmur.tulukhUdur || "";
+        tmur.tuluv = tmur.tuluv || "";
+        tmur.turul = tmur.turul || "";
+        tmur.uldegdel = formatNumber(tmur.uldegdel) || 0;
+        tmur.utas = tmur.utas || 0;
+        tmur.zardluud = tmur.zardluud || 0;
+
         let mur = {};
         Object.entries(tmur).map((v) => {
           if (_.isObject(v[1]) || _.isArray(v[1])) tmur[v[0]] = "";
