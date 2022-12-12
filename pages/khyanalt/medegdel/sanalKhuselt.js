@@ -9,15 +9,16 @@ import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import local from "antd/lib/date-picker/locale/mn_MN";
 import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
+import useJagsaalt from "hooks/useJagsaalt";
+import { map } from "lodash";
 const { RangePicker } = DatePicker;
 
 function index({ token }) {
   const { barilgiinId } = useAuth();
-  console.log(barilgiinId);
   const [turul, setTurul] = useState("sanal");
-  const [khariltsagch, setKhariltsagch] = useState();
+
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState();
-  const router = useRouter();
+
   const query = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
@@ -33,28 +34,42 @@ function index({ token }) {
 
   const sanal = useSanalGomdol(token, undefined, query);
 
+  const khariltsagchQuery = useMemo(() => {
+    return {
+      barilgiinId,
+      _id: sanal.jagsaalt.map((a) => a.khariltsagchiinId),
+    };
+  }, [barilgiinId, sanal]);
+  const khariltsagchiinMedeelel = useJagsaalt(
+    "/khariltsagch",
+    khariltsagchQuery,
+    undefined,
+    undefined,
+    ["ner", "ovog", "utas"]
+  );
+  const [khariltsagch, setKhariltsagch] = useState();
+  const sanalGomdolTuukh = sanal.jagsaalt.map((a) =>
+    a.khariltsagchiinId === khariltsagch?._id ? a : ""
+  );
+
   useEffect(() => {
     Aos.init({ duration: 1000 }, { once: true });
   });
 
-  function sanalGomdolAvakh() {
+  function sanalGomdolAvakh(mur) {
     uilchilgee(token)
-      .post(`/sanalKhuleenAvlaa`, { id: khariltsagch._id })
+      .post(`/sanalKhuleenAvlaa`, { id: mur._id })
       .then(({ data }) => {
         if (data === "OK") {
           notification.success({ message: "Хүлээн авлаа" });
           sanal.sonorduulgaMutate();
+          khariltsagchiinMedeelel.mutate();
         }
       })
       .catch((e) => {
         aldaaBarigch(e);
       });
   }
-  useEffect(() => {
-    if (!!khariltsagch) {
-      setKhariltsagch(sanal.jagsaalt.find((a) => a._id === khariltsagch._id));
-    }
-  }, [sanal]);
 
   function turulSongokh(status) {
     setTurul(status.utga);
@@ -72,7 +87,7 @@ function index({ token }) {
     >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-5 xl:rounded-l-2xl"
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl"
       >
         <div className="mb-2 grid gap-x-5 px-2 md:grid-cols-2 ">
           <RangePicker
@@ -102,198 +117,126 @@ function index({ token }) {
             </div>
           ))}
         </div>
-        {turul === "sanal" ? (
-          <div className="scrollbar-hidden h-scrollH overflow-y-auto text-xs">
-            {sanal?.sonorduulga?.jagsaalt.map((mur, i) =>
-              mur.turul === "sanal" ? (
-                <div
-                  key={i}
-                  className={` ${
-                    khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-100 shadow-lg transition-all dark:bg-green-200"
-                      : i % 2 === 0 && "bg-gray-100"
-                  } `}
-                >
-                  <div
-                    className={`flex cursor-pointer flex-row items-center space-x-2 space-y-3 rounded-md`}
-                    onClick={() => setKhariltsagch(mur)}
-                  >
-                    <div className="image-fit bg-blackrounded-full relative ml-3 h-12 w-12 flex-none">
-                      <img
-                        alt="Rubick"
-                        className="rounded-full"
-                        src={
-                          ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
-                            2 <
-                          1
-                            ? "/profileFemale.svg"
-                            : "/profile.svg"
-                        }
-                      />
-                    </div>
-                    <div className="grid w-full grid-cols-2 text-xs">
-                      <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div>{mur?.khariltsagchiinNer}</div>
-                        <div style={{ width: "40%" }}>
-                          <div
-                            style={{
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {mur.title}
-                          </div>
-                        </div>
-                        {mur.tuluv !== 0 ? (
-                          <div className="font-semibold text-green-400">
-                            Хүлээн авсан
-                          </div>
-                        ) : (
-                          <div className="text-red-500">Хүлээн аваагүй</div>
-                        )}
-                      </div>
-                      <div className="col-span-1 flex items-center justify-end pr-3 text-sm">
-                        {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
+        <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto text-xs lg:h-scrollH">
+          {khariltsagchiinMedeelel?.jagsaalt.map((mur) => (
+            <div
+              className={` ${
+                khariltsagch?._id === mur?._id
+                  ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
+                  : ""
+              } `}
+            >
+              <div
+                className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
+                onClick={() => setKhariltsagch(mur)}
+              >
+                <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
+                  <img
+                    alt="Rubick"
+                    className="rounded-full"
+                    src={
+                      ((mur.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
+                        ? "/profileFemale.svg"
+                        : "/profile.svg"
+                    }
+                  />
+                </div>
+                <div className="grid w-full grid-cols-2 text-xs">
+                  <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
+                    <div>{mur?.ner}</div>
+                    <div style={{ width: "40%" }}>
+                      <div
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {mur.title}
                       </div>
                     </div>
+                    {/* {mur.tuluv !== 0 ? (
+                      <div className="font-semibold text-green-400">
+                        Хүлээн авсан
+                      </div>
+                    ) : (
+                      <div className="text-red-500">Хүлээн аваагүй</div>
+                    )} */}
+                  </div>
+                  <div className="col-span-1 flex items-center justify-end pr-3  text-sm">
+                    {mur.utas}
                   </div>
                 </div>
-              ) : (
-                ""
-              )
-            )}
-          </div>
-        ) : (
-          <div className="scrollbar-hidden mt-5 h-medegdelHariltsagchPhone overflow-y-auto text-xs lg:h-scrollH">
-            {sanal?.sonorduulga?.jagsaalt.map((mur) =>
-              mur.turul === "gomdol" ? (
-                <div
-                  className={` ${
-                    khariltsagch?._id === mur?._id
-                      ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
-                      : ""
-                  } `}
-                >
-                  <div
-                    className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
-                    onClick={() => setKhariltsagch(mur)}
-                  >
-                    <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
-                      <img
-                        alt="Rubick"
-                        className="rounded-full"
-                        src={
-                          ((mur.register?.replace(/^\D+/g, "") % 100) / 10) %
-                            2 <
-                          1
-                            ? "/profileFemale.svg"
-                            : "/profile.svg"
-                        }
-                      />
-                    </div>
-                    <div className="grid w-full grid-cols-2 text-xs">
-                      <div className=" col-span-1 flex w-full flex-col pl-2 text-sm text-gray-600">
-                        <div>{mur?.khariltsagchiinNer}</div>
-                        <div style={{ width: "40%" }}>
-                          <div
-                            style={{
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
-                            {mur.title}
-                          </div>
-                        </div>
-                        {mur.tuluv !== 0 ? (
-                          <div className="font-semibold text-green-400">
-                            Хүлээн авсан
-                          </div>
-                        ) : (
-                          <div className="text-red-500">Хүлээн аваагүй</div>
-                        )}
-                      </div>
-                      <div className="col-span-1 flex items-center justify-end pr-3  text-sm">
-                        {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )
-            )}
-          </div>
-        )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       {!!khariltsagch ? (
-        <div className="col-span-12 h-[40vh] rounded-r-lg bg-green-50 xl:col-span-7 xl:h-auto ">
-          <div className="flex w-full items-center gap-3 px-5 pt-2  ">
-            <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
-              <img src="/profile.svg" className="h-10 w-10 rounded-full" />
-            </div>
-            <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
-              <div className="col-span-12 grid grid-cols-12">
-                <div className=" col-span-6 flex flex-col justify-center ">
-                  <div className="mb-3 flex items-center justify-between text-base font-medium">
-                    {khariltsagch.khariltsagchiinNer}
+        <div className="col-span-12 h-[40vh] rounded-r-lg bg-green-50 xl:col-span-8 xl:h-auto ">
+          {sanalGomdolTuukh.map((mur) => (
+            <div className="flex w-full items-center gap-3 px-5 pt-2  ">
+              <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
+                <img src="/profile.svg" className="h-10 w-10 rounded-full" />
+              </div>
+              <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+                <div className="col-span-12 grid grid-cols-12">
+                  <div className=" col-span-6 flex flex-col justify-center ">
+                    <div className="mb-3 flex items-center justify-between text-base font-medium">
+                      {mur.khariltsagchiinNer}
+                    </div>
+                    <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
+                      <p>Гарчиг:</p>
+                      <div>{mur.title}</div>
+                    </div>
                   </div>
-                  <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
-                    <p>Гарчиг:</p>
-                    <div>{khariltsagch.title}</div>
+                  <div className=" col-span-6 flex flex-col items-end justify-center ">
+                    <div
+                      className={`mb-3  ${
+                        mur?.tuluv === -1 ? "hidden" : "flex"
+                      }`}
+                    >
+                      <Popconfirm
+                        disabled={mur?.tuluv === 2}
+                        title={`Хүлээн авах уу?`}
+                        okText="Тийм"
+                        cancelText="Үгүй"
+                        onConfirm={() => sanalGomdolAvakh(mur)}
+                      >
+                        <div
+                          className={`text-md cursor-pointer rounded-full font-bold bg-${
+                            0 === mur?.tuluv ? "red" : "green"
+                          }-500 py-1 px-3 font-medium text-gray-50`}
+                        >
+                          {0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах"}
+                        </div>
+                      </Popconfirm>
+                    </div>
+                    <div className="flex  items-center justify-between gap-2 overflow-hidden text-gray-400">
+                      <div>{moment(mur?.ognoo).format("YYYY-MM-DD HH:mm")}</div>
+                    </div>
                   </div>
                 </div>
-                <div className=" col-span-6 flex flex-col items-end justify-center ">
-                  <div
-                    className={`mb-3  ${
-                      khariltsagch?.tuluv === -1 ? "hidden" : "flex"
-                    }`}
-                  >
-                    <Popconfirm
-                      disabled={khariltsagch?.tuluv === 2}
-                      title={`Хүлээн авах уу?`}
-                      okText="Тийм"
-                      cancelText="Үгүй"
-                      onConfirm={() => sanalGomdolAvakh(khariltsagch._id)}
-                    >
-                      <div
-                        className={`text-md cursor-pointer rounded-full font-bold bg-${
-                          0 === khariltsagch?.tuluv ? "red" : "green"
-                        }-500 py-1 px-3 font-medium text-gray-50`}
-                      >
-                        {0 !== khariltsagch?.tuluv
-                          ? "Хүлээж aвсан"
-                          : "Хүлээж авах"}
-                      </div>
-                    </Popconfirm>
-                  </div>
-                  <div className="flex  items-center justify-between gap-2 overflow-hidden text-gray-400">
-                    <div>
-                      {moment(khariltsagch.ognoo).format("YYYY-MM-DD HH:mm")}
+                <div className="col-span-12 flex justify-between">
+                  <div className="w-full">
+                    <div className="mt-3">{mur?.message}</div>
+                    <div className="mt-3 gap-3">
+                      {mur.zurguud.map((a) => (
+                        <Image
+                          width={100}
+                          src={`${url}/file?path=sanalkhuselt/${a}`}
+                        />
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="col-span-12 flex justify-between">
-                <div className="w-full">
-                  <div className="mt-3">{khariltsagch.message}</div>
-                  <div className="mt-3 gap-3">
-                    {khariltsagch.zurguud.map((a) => (
-                      <Image
-                        width={100}
-                        src={`${url}/file?path=sanalkhuselt/${a}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
+          ))}
         </div>
       ) : (
         <div
-          className="box col-span-12 flex h-[40vh] items-center xl:col-span-7 xl:h-full"
+          className="box col-span-12 flex h-[40vh] items-center xl:col-span-8 xl:h-full"
           data-aos="fade-left"
           data-aos-duration="1000"
         >

@@ -167,26 +167,15 @@ function BarilgaBurtgel({ token }) {
   );
 
   const avalgiinChartUngu =
-    avlagiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => `#${a}`);
+    avlagiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => a);
 
   const orolgiinChartUngu =
-    orlogiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => `#${a}`);
+    orlogiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => a);
 
   React.useEffect(() => {
     var config = {
       type: "line",
-      data: {
-        labels: lineChart?.data?.options?.xaxis.categories.map((a) => a) || [],
-        datasets: lineChart?.data?.series.map((a) => {
-          return {
-            label: a.name,
-            backgroundColor: "#05976C",
-            borderColor: "#05976C",
-            data: a?.data.map((a) => Number(a)),
-            fill: false,
-          };
-        }),
-      },
+      data: lineChart.data,
       options: {
         animations: {
           tension: {
@@ -209,16 +198,16 @@ function BarilgaBurtgel({ token }) {
           position: "bottom",
         },
         tooltips: {
-          mode: "index",
+          mode: "nearest",
           intersect: false,
           callbacks: {
             label: function (tooltipitem, data) {
               var dataLabel = data.labels[tooltipitem.index];
               var value =
                 ": " +
-                data.datasets[tooltipitem.datasetIndex].data[
-                  tooltipitem.index
-                ].toLocaleString();
+                data.datasets[tooltipitem.datasetIndex].data[tooltipitem.index]
+                  .toLocaleString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
               if (Chart.helpers.isArray(dataLabel)) {
                 dataLabel = dataLabel.slice();
@@ -229,10 +218,6 @@ function BarilgaBurtgel({ token }) {
               return dataLabel;
             },
           },
-        },
-        hover: {
-          mode: "nearest",
-          intersect: true,
         },
         scales: {
           xAxes: [
@@ -291,7 +276,6 @@ function BarilgaBurtgel({ token }) {
     var ctx = document.getElementById("line-chart").getContext("2d");
     window.myLine = new Chart(ctx, config);
   }, [lineChart]);
-
   const avlaga = useMemo(() => {
     return {
       labels:
@@ -450,7 +434,7 @@ function BarilgaBurtgel({ token }) {
             <div className="col-span-12  space-y-2   md:col-span-6 ">
               <div className="  grid grid-cols-12 ">
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
-                  Авлагын тайлан
+                  Орлогын тайлан салбараар
                 </div>
                 <div className=" col-span-12  flex items-end justify-end md:col-span-6 xl:col-span-6">
                   <div>
@@ -459,7 +443,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
               </div>
               <div className="box flex h-full  items-center justify-start p-2 ">
-                <div className="h-[88%] w-full ">
+                <div className="h-[80%] w-full ">
                   <canvas id="line-chart"></canvas>
                 </div>
               </div>
@@ -487,9 +471,10 @@ function BarilgaBurtgel({ token }) {
                           <div key={index}>
                             <GoPrimitiveDot
                               style={{
-                                color: `#${avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                  (a, i) => i === index
-                                )}`,
+                                color:
+                                  avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                                    (a, i) => i === index
+                                  ),
                               }}
                             />
                           </div>
@@ -505,9 +490,10 @@ function BarilgaBurtgel({ token }) {
                           key={index}
                           className="flex justify-end  font-bold text-green-700"
                           style={{
-                            color: `#${avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                              (a, i) => i === index
-                            )}`,
+                            color:
+                              avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                                (a, i) => i === index
+                              ),
                           }}
                         >
                           {formatNumber(a, 2)}
@@ -541,9 +527,10 @@ function BarilgaBurtgel({ token }) {
                           <div key={index}>
                             <GoPrimitiveDot
                               style={{
-                                color: `#${orlogiinChartSalbaraarAvya.data.backgroundColor.find(
-                                  (a, i) => i === index
-                                )}`,
+                                color:
+                                  orlogiinChartSalbaraarAvya.data.backgroundColor.find(
+                                    (a, i) => i === index
+                                  ),
                               }}
                             />
                           </div>
@@ -559,9 +546,10 @@ function BarilgaBurtgel({ token }) {
                           key={index}
                           className="flex justify-end  font-bold text-green-700"
                           style={{
-                            color: `#${orlogiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                              (a, i) => i === index
-                            )}`,
+                            color:
+                              orlogiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                                (a, i) => i === index
+                              ),
                           }}
                         >
                           {formatNumber(a, 2)}

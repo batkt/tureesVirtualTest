@@ -117,7 +117,6 @@ function UstsanTuukh() {
         baiguullagiinId: barilgiinId,
         ajiltniiId: ajiltankhaikh,
         "object.turul": turul,
-
         createdAt: shuukhOgnoo
           ? {
               $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -565,7 +564,8 @@ function UstsanTuukh() {
             <>
               <div>
                 {moment(
-                  tailbar.object.createdAt || tailbar.object.guilgeeKhiisenOgnoo
+                  tailbar?.object?.createdAt ||
+                    tailbar?.object?.guilgeeKhiisenOgnoo
                 ).format("YYYY-MM-DD")}
               </div>
             </>
