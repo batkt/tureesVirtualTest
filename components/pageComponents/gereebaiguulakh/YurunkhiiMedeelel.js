@@ -1,4 +1,4 @@
-import { Form, Input, Switch, Button, Upload, message, Select } from "antd";
+import { Form, Input, Switch, Button, Upload, Select, Dropdown, Empty } from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
@@ -7,12 +7,14 @@ import {
   PlusOutlined,
   CloseCircleOutlined,
 } from "@ant-design/icons";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import uilchilgee, { url, aldaaBarigch } from "services/uilchilgee";
 import FormLavlakh from "components/FormLavlakh";
 import { useEffect } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useAuth } from "services/auth";
+import KhariltsagchiinLavlakh from "./KhariltsagchiinLavlakh";
 
 var timeout = null;
 
@@ -110,6 +112,8 @@ const YurunkhiiMedeele = ({
     value.baiguullagaEsekh
   );
 
+
+
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
       ner: undefined,
@@ -183,9 +187,6 @@ const YurunkhiiMedeele = ({
     }
   }, [barilgiinId]);
 
-  useEffect(() => {
-    form.getFieldInstance("register").focus();
-  }, []);
 
   const focuser = useCallback(
     (e) => {
@@ -334,6 +335,7 @@ const YurunkhiiMedeele = ({
         <Form.Item name="baiguullagaEsekh" valuePropName="checked">
           <Switch
             onChange={(v) => {
+              setBaiguullagaEsekh(v);
               const khariltsagch = {
                 register: undefined,
                 ner: undefined,
@@ -342,47 +344,38 @@ const YurunkhiiMedeele = ({
                 mail: undefined,
                 zakhirliinOvog: undefined,
                 zakhirliinNer: undefined,
-                baiguullagaEsekh: v,
               };
-
               form.setFieldsValue(khariltsagch);
               onChange({ ...value, ...khariltsagch });
-              setBaiguullagaEsekh(v);
             }}
           />
         </Form.Item>
       </div>
-      {baiguullagaEsekh && (
-        <div data-aos="fade-right" data-aos-delay="200">
-          <Form.Item
-            hidden={!baiguullagaEsekh}
-            name="register"
-            label={"Регистр"}
-            rules={[
-              {
-                required: true,
-                len: 7,
-                pattern: new RegExp("(\\d{7})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              onKeyUp={focuser}
-              allowClear
-              maxLength={7}
-              placeholder="Регистр"
-              prefix={<SolutionOutlined />}
-              onChange={onChangeRegister}
-            />
-          </Form.Item>
-        </div>
-      )}
+      <div data-aos="fade-right" data-aos-delay="200">
+        <Form.Item
+          name="register"
+          label={"Регистр"}
+          rules={[
+            {
+              required: true,
+              len: baiguullagaEsekh ? 7 : 10,
+              pattern: baiguullagaEsekh ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+              message: "Регистр бүртгэнэ үү!",
+            },
+          ]}
+        >
+          <KhariltsagchiinLavlakh
+            focuser={focuser}
+            baiguullaga={baiguullaga}
+            barilgiinId={barilgiinId}
+            onChangeRegister={onChangeRegister}
+            baiguullagaEsekh={baiguullagaEsekh} />
+        </Form.Item>
+      </div>
       {baiguullagaEsekh && (
         <div data-aos="fade-right">
           <Form.Item
             name="ner"
-            hidden={!baiguullagaEsekh}
             label={"Байгууллага нэр"}
             rules={[
               { required: true, message: "Байгууллага нэр бүртгэнэ үү!" },
@@ -398,36 +391,8 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!baiguullagaEsekh && (
-        <div data-aos="fade-right" data-aos-delay="100">
-          <Form.Item
-            hidden={baiguullagaEsekh}
-            name="register"
-            label={"Регистр"}
-            rules={[
-              {
-                required: true,
-                len: 10,
-                pattern: new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                message: "Регистр бүртгэнэ үү!",
-              },
-            ]}
-          >
-            <Input
-              onKeyUp={focuser}
-              onInput={(e) => (e.target.value = e.target.value.toUpperCase())}
-              allowClear
-              maxLength={10}
-              placeholder="Регистр"
-              prefix={<SolutionOutlined />}
-              onChange={onChangeRegister}
-            />
-          </Form.Item>
-        </div>
-      )}
-      {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
-            hidden={baiguullagaEsekh}
             rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
             name="ovog"
             label={"Овог"}
@@ -444,7 +409,6 @@ const YurunkhiiMedeele = ({
       {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="600">
           <Form.Item
-            hidden={baiguullagaEsekh}
             name="ner"
             rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
             label={"Нэр"}
@@ -461,7 +425,6 @@ const YurunkhiiMedeele = ({
       {baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="300">
           <Form.Item
-            hidden={!baiguullagaEsekh}
             name="zakhirliinOvog"
             label={"Захирлын овог"}
             rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
@@ -478,7 +441,6 @@ const YurunkhiiMedeele = ({
       {baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="400">
           <Form.Item
-            hidden={!baiguullagaEsekh}
             name="zakhirliinNer"
             label={"Захирлын нэр"}
             rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
@@ -497,7 +459,6 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="utas"
             rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
-            hidden={baiguullagaEsekh}
             label={"Утас"}
           >
             <Input
@@ -512,7 +473,6 @@ const YurunkhiiMedeele = ({
       {baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item
-            hidden={!baiguullagaEsekh}
             name="utas"
             rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
             label={"Утас"}
@@ -530,7 +490,6 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            hidden={baiguullagaEsekh}
             label={"И-мэйл хаяг"}
           >
             <Input
@@ -547,7 +506,6 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
-            hidden={!baiguullagaEsekh}
             rules={[{ required: true, message: "И-мэйл хаяг бүртгэнэ үү!" }]}
             label={"И-мэйл хаяг"}
           >
@@ -625,9 +583,8 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      <div data-aos="fade-right" data-aos-delay="500">
+      {baiguullagaEsekh && <div data-aos="fade-right" data-aos-delay="500">
         <Form.Item
-          hidden={!baiguullagaEsekh}
           name="gerchilgeeniiZurag"
           label={"Гэрчилгээний хуулбар"}
           valuePropName="fileList"
@@ -648,11 +605,10 @@ const YurunkhiiMedeele = ({
             </Button>
           </Upload>
         </Form.Item>
-      </div>
-      <div data-aos="fade-right" data-aos-delay="1000">
+      </div>}
+      {!baiguullagaEsekh && <div data-aos="fade-right" data-aos-delay="1000">
         <Form.Item
           label={"Хавсаргал"}
-          hidden={baiguullagaEsekh}
           className="w-full"
         >
           <Form.Item
@@ -696,7 +652,7 @@ const YurunkhiiMedeele = ({
             </Upload>
           </Form.Item>
         </Form.Item>
-      </div>
+      </div>}
       <Form.Item wrapperCol={{ span: 24 }}>
         <div className="flex w-full justify-end">
           <Button
