@@ -208,7 +208,6 @@ function BarilgaBurtgel({ token }) {
                 data.datasets[tooltipitem.datasetIndex].data[tooltipitem.index]
                   .toLocaleString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
               if (Chart.helpers.isArray(dataLabel)) {
                 dataLabel = dataLabel.slice();
                 dataLabel[0] += value;

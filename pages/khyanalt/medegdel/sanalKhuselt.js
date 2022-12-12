@@ -173,9 +173,12 @@ function index({ token }) {
         </div>
       </div>
       {!!khariltsagch ? (
-        <div className="col-span-12 h-[40vh] rounded-r-lg bg-green-50 xl:col-span-8 xl:h-auto ">
+        <div
+          style={{ height: "calc(100vh - 8rem)" }}
+          className="col-span-12 overflow-y-auto rounded-r-lg bg-green-50 xl:col-span-8  xl:rounded-2xl "
+        >
           {sanalGomdolTuukh.map((mur) => (
-            <div className="flex w-full items-center gap-3 px-5 pt-2  ">
+            <div className="flex w-full items-center gap-3 px-5 pt-2 ">
               <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
                 <img src="/profile.svg" className="h-10 w-10 rounded-full" />
               </div>
@@ -221,7 +224,7 @@ function index({ token }) {
                   <div className="w-full">
                     <div className="mt-3">{mur?.message}</div>
                     <div className="mt-3 gap-3">
-                      {mur.zurguud.map((a) => (
+                      {mur?.zurguud?.map((a) => (
                         <Image
                           width={100}
                           src={`${url}/file?path=sanalkhuselt/${a}`}
