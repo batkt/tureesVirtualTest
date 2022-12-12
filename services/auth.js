@@ -91,6 +91,9 @@ export const AuthProvider = ({ children }) => {
           .then(({ data, status }) => {
             if (status === 200) {
               if (!!data) {
+                if (data.result.erkh !== "Admin" && data.result.tsonkhniiErkhuud.length < 1) {
+                  return message.error("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна")
+                }
                 setCookie(null, "tureestoken", data.token, {
                   maxAge: 30 * 24 * 60 * 60,
                   path: "/",

@@ -118,8 +118,8 @@ function KhuviinMedeelel({
                         ? `${url}/ajiltniiZuragAvya/${a?.baiguullagiinId}/${a?.zurgiinNer}`
                         : ((a?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 <
                           1
-                        ? "/profileFemale.svg"
-                        : "/profile.svg"
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
                     }
                     className="rounded-full"
                   />
@@ -143,9 +143,8 @@ function KhuviinMedeelel({
             </div>
           ))}
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!ajiltniiTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!ajiltniiTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={ajiltniiTokhirgooKhadgalya}>
               Хадгалах
@@ -294,9 +293,8 @@ function KhuviinMedeelel({
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               Хадгалах
@@ -380,9 +378,7 @@ function KhuviinMedeelel({
                   </Upload>
                 </Form.Item>
               </Form>
-              <Button onClick={khadgalakh} type="primary">
-                Хадгалах
-              </Button>
+
               <Image
                 width={200}
                 preview={{
@@ -404,6 +400,11 @@ function KhuviinMedeelel({
                 }}
               />
             </div>
+          </div>
+          <div className="w-full flex px-3 pb-3 justify-end">
+            <Button onClick={khadgalakh} type="primary">
+              Хадгалах
+            </Button>
           </div>
         </div>
       </div>

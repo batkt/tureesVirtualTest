@@ -1,13 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
+function hrefAvya(turul, _id, daalgavriinId, ajiltan, object) {
+  var href = "";
+  if (ajiltan.erkh === "Admin") {
+    if (!!object.daalgavriinId) {
+      href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
+    } else
+      href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
+  } else if (!!object.daalgavriinId) {
+    href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
+  } else
+    href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
+  return href;
+}
+
 function Daalgavar({ onClose, token, ...object }) {
   const { turul, tailbar, duusakhOgnoo, ajiltniiNer, _id } = object || {};
-
   function sonorduulgaKharlaa() {
+    const href = hrefAvya(turul, _id, daalgavriinId, ajiltan, object);
+    window.location.href = href;
     uilchilgee(token).post("/sanalKharlaa", { id: _id }).catch(aldaaBarigch);
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onClose();
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <div

@@ -99,7 +99,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
                   </div>
                 </div>
               </div>
-              <div className="mt-3">
+              <div className="mt-3 w-full flex justify-end">
                 <Button type="primary" onClick={khadgalakh}>
                   Хадгалах
                 </Button>
@@ -116,11 +116,11 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
                       ajiltan?.zurgiinNer
                         ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                         : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) /
-                            10) %
-                            2 <
+                          10) %
+                          2 <
                           1
-                        ? "/profileFemale.svg"
-                        : "/profile.svg"
+                          ? "/profileFemale.svg"
+                          : "/profile.svg"
                     }
                   />
                   <div className="tooltip bg-theme-6 absolute right-0 top-0 -mr-2 -mt-2 flex h-5 w-5 items-center justify-center rounded-full text-white">

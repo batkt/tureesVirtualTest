@@ -880,12 +880,18 @@ function AjiltanBurtgel({ token }) {
                             required: true,
                             pattern: new RegExp("(^[0-9]+$)"),
                             message: "Дугаар оруулна уу",
+                          },
+                          {
+                            required: true,
+                            max: 8,
                             min: 8,
                             message: "Дугаараа шалгана уу",
-                          },
+                          }
                         ]}
                       >
                         <Input
+                          minLength={8}
+                          maxLength={8}
                           type="number"
                           className="appearance-none"
                           placeholder={"Утасны дугаар " + (field.name + 1)}

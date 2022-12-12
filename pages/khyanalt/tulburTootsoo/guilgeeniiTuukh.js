@@ -667,6 +667,18 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
+  const excelColumns = useMemo(() => {
+    var forExcel = []
+    columns.forEach((a) => {
+      var title = a.title; var dataIndex = a.dataIndex; const render = a.render; if (a.title !== "№" && a.title !== "Үйлдэл") {
+        (a.dataIndex === "tuluvluguut" || a.dataIndex === "sariinTurees" || a.dataIndex === "talbainNiitUne" || a.dataIndex === "aldangiinUldegdel" || a.dataIndex === "daraagiinTulukhOgnoo" || a.dataIndex === "gereeniiOgnoo")
+          ? forExcel.push({ title, dataIndex, render })
+          : forExcel.push({ title, dataIndex, })
+      }
+    })
+    return forExcel
+  }, [columns])
+
   //#endregion
 
   return (
@@ -899,52 +911,7 @@ function guilgeeniiTuukh({ token }) {
                       const excelExport = new Excel();
                       excelExport
                         .addSheet("Гүйлгээний түүх")
-                        .addColumns([
-                          {
-                            title: "Гэрээний дугаар",
-                            dataIndex: "gereeniiDugaar",
-                          },
-                          {
-                            title: "Талбай",
-                            dataIndex: "talbainDugaar",
-                          },
-                          {
-                            title: "Давхар",
-                            dataIndex: "davkhar",
-                          },
-                          {
-                            title: "Түрээслэгч",
-                            dataIndex: "ner",
-                          },
-                          {
-                            title: "Утас",
-                            dataIndex: "utas",
-                          },
-                          {
-                            title: "Үлдэгдэл",
-                            dataIndex: "uldegdel",
-                            render(a) {
-                              return formatNumber(a);
-                            },
-                          },
-                          {
-                            title: "Гэрээний огноо",
-                            dataIndex: "gereeniiOgnoo",
-                            width: "15rem",
-                            align: "center",
-                            render(a) {
-                              return moment(a).format("YYYY-MM-DD");
-                            },
-                          },
-                          {
-                            title: "Дуусах огноо",
-                            dataIndex: "duusakhOgnoo",
-
-                            render(a) {
-                              return moment(a).format("YYYY-MM-DD");
-                            },
-                          },
-                        ])
+                        .addColumns(excelColumns)
                         .addDataSource(gereeniiMedeelel?.jagsaalt)
                         .saveAs("Гүйлгээний түүх.xlsx");
                     }}
