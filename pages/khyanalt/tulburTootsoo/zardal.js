@@ -665,7 +665,7 @@ function zardal({ token }) {
               title: "Дүн",
               dataIndex: "davkhar",
               ellipsis: true,
-              align: "left",
+              align: "center",
               width: "10rem",
               render(text, row) {
                 return (

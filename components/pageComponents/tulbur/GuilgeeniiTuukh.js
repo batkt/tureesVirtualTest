@@ -183,19 +183,19 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
         </div>
         <div className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <div className="min-w-[8rem] overflow-hidden p-1">Огноо</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Түрээс</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Төлөх дүн</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Хямдрал</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Төлсөн алданги</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Төлсөн дүн</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Үлдэгдэл</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Огноо</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Түрээс</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлөх дүн</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Хямдрал</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлсөн алданги</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлсөн дүн</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Үлдэгдэл</div>
 
-          <div className="min-w-[8rem] overflow-hidden p-1">Ажилтан</div>
-          <div className="min-w-[8rem] overflow-hidden p-1">Хэлбэр</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 w-full">Тайлбар</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Ажилтан</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Хэлбэр</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 w-full text-center">Тайлбар</div>
           <div className="min-w-[10rem] text-center p-1">Бүртгсэн огноо</div>
-          <div className="min-w-[3rem] border-none p-1"></div>
+          <div className="min-w-[3rem] border-none p-1 text-center"></div>
         </div>
         <div className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
           {guilgeeniiTuukh
