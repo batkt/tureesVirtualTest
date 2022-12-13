@@ -90,7 +90,11 @@ const turluud = [
   },
   {
     turul: "aldangi",
-    text: "Алдаги",
+    text: "Алданги",
+  },
+  {
+    turul: "dans",
+    text: "Данс",
   },
 ];
 
@@ -232,7 +236,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2) || 0}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
             );
@@ -253,7 +257,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2) || 0}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
             );
@@ -276,7 +280,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2)}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
             );
@@ -297,7 +301,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2)}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
             );
@@ -320,7 +324,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2)}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
             );
@@ -341,7 +345,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2)}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
             );
@@ -364,7 +368,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2)}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
             );
@@ -385,7 +389,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2)}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
             );
@@ -408,7 +412,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2)}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
             );
@@ -429,7 +433,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2)}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
             );
@@ -452,7 +456,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2)}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
             );
@@ -473,7 +477,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2)}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
             );
@@ -496,7 +500,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulukhDun.object.tulukhDun, 2) || 0}
+                  {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
             );
@@ -517,7 +521,7 @@ function UstsanTuukh() {
                       : "text-red-500"
                   }`}
                 >
-                  {formatNumber(tulsunDun.object.tulsunDun, 2) || 0}
+                  {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
             );
