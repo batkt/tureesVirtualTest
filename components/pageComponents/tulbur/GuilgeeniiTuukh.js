@@ -201,16 +201,16 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           {guilgeeniiTuukh
             ?.map((a, i) => (
               <div className="flex divide-x min-w-[93rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <div className="p-1 min-w-[8rem] overflow-hidden">
+                <div className="p-1 min-w-[8rem] text-center overflow-hidden">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.undsenDun, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulukhDun, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.khyamdral, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulsunAldangi, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">{formatNumber(a.tulsunDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.undsenDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulukhDun, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.khyamdral, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunAldangi, 2)}</div>
+                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunDun, 2)}</div>
                 <div
-                  className={`p-1 min-w-[8rem] overflow-hidden ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                  className={`p-1 min-w-[8rem] overflow-hidden text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
                   {formatNumber(

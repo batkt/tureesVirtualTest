@@ -311,9 +311,10 @@ function tulburTootsoo({ token }) {
         {
           title: "Огноо",
           dataIndex: "TxDt",
+          align: "center",
           width: "7rem",
           render(date) {
-            return moment(date).format("YYYY-MM-DD");
+            return moment(date).format("YYYY-MM-DD")
           },
           showSorterTooltip: false,
           sorter: {
@@ -444,6 +445,7 @@ function tulburTootsoo({ token }) {
             multiple: 1,
           },
           dataIndex: "tranDate",
+          align: "center",
           width: "7rem",
           render(date) {
             return moment(date).format("YYYY-MM-DD");
@@ -723,6 +725,7 @@ function tulburTootsoo({ token }) {
                           .addColumns([
                             {
                               title: "Огноо",
+                              align: "center",
                               dataIndex: "TxDt",
                               render(date) {
                                 return moment(date).format("YYYY-MM-DD");
