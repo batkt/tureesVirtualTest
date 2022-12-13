@@ -341,6 +341,9 @@ function tulburTootsoo({ token }) {
           title: "Гүйлгээний утга",
           width: "20rem",
           dataIndex: "TxAddInf",
+          render(a) {
+            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
+          }
         },
         {
           title: "Гүйлгээний дүн",
@@ -471,6 +474,9 @@ function tulburTootsoo({ token }) {
           title: "Гүйлгээний утга",
           width: "20rem",
           dataIndex: "description",
+          render(a) {
+            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
+          }
         },
         {
           title: "Гүйлгээний дүн",
