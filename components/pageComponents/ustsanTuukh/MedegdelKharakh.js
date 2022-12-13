@@ -1,6 +1,7 @@
 import React, { useEffect, useImperativeHandle } from "react";
 import { Form, Modal } from "antd";
 import moment from "moment";
+import formatNumber from "tools/function/formatNumber";
 function MedegdelKharakh({ data, destroy }, ref) {
   const [form] = Form.useForm();
 
@@ -74,7 +75,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
                   : "text-red-500"
               }`}
             >
-              {data.object.tulsunAldangi}
+              {formatNumber(data.object.tulsunAldangi)}
             </div>
           </div>
         ) : (
@@ -90,7 +91,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
                   : "text-red-500"
               }`}
             >
-              {data.object.tulsunDun}
+              {formatNumber(data.object.tulsunDun, 0)}
             </div>
           </div>
         ) : (
@@ -106,7 +107,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
                   : "text-red-500"
               }`}
             >
-              {data.object.tulukhAldangi}
+              {formatNumber(data.object.tulukhAldangi)}
             </div>
           </div>
         ) : (
@@ -122,7 +123,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
                   : "text-red-500"
               }`}
             >
-              {data.object.tulukhDun}
+              {formatNumber(data.object.tulukhDun, 0)}
             </div>
           </div>
         ) : (

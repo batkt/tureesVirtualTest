@@ -440,7 +440,7 @@ function BarilgaBurtgel({ token }) {
                   </div>
                 </div>
               </div>
-              <div className="box flex h-full  items-center justify-start p-2 ">
+              <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
                   <canvas id="line-chart"></canvas>
                 </div>

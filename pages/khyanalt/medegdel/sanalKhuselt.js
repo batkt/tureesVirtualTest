@@ -186,11 +186,11 @@ function index({ token }) {
                 <div className="col-span-12 grid grid-cols-12">
                   <div className=" col-span-6 flex flex-col justify-center ">
                     <div className="mb-3 flex items-center justify-between text-base font-medium">
-                      {mur.khariltsagchiinNer}
+                      {mur?.khariltsagchiinNer}
                     </div>
                     <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
                       <p>Гарчиг:</p>
-                      <div>{mur.title}</div>
+                      <div>{mur?.title}</div>
                     </div>
                   </div>
                   <div className=" col-span-6 flex flex-col items-end justify-center ">
@@ -200,7 +200,7 @@ function index({ token }) {
                       }`}
                     >
                       <Popconfirm
-                        disabled={mur?.tuluv === 2}
+                        disabled={mur?.tuluv === 1}
                         title={`Хүлээн авах уу?`}
                         okText="Тийм"
                         cancelText="Үгүй"
