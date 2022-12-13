@@ -65,8 +65,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
     </div>
@@ -81,18 +82,33 @@ function TableGuilgee({
   onChange,
 }) {
   function UilgelAvya({ garalt, columns }) {
-    const [uldegdel, setUldegdel] = useState(0)
+    const [uldegdel, setUldegdel] = useState(0);
     useEffect(() => {
       setTimeout(() => {
-        setUldegdel(uldegdel + 1)
+        setUldegdel(uldegdel + 1);
       }, 500);
-    }, [garalt, setLoadingIndex, columns])
+    }, [garalt, setLoadingIndex, columns]);
 
     return (
       <Table.Summary.Row>
-        {columns.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : "font-bold"}`} index={index} align='right'>{mur.summary ? formatNumber(garalt?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}</Table.Summary.Cell>)}
+        {columns.map((mur, index) => (
+          <Table.Summary.Cell
+            className={`${mur.summary !== true ? "border-none" : "font-bold"}`}
+            index={index}
+            align="right"
+          >
+            {mur.summary
+              ? formatNumber(
+                  garalt?.jagsaalt?.reduce(
+                    (a, b) => a + (b[mur.dataIndex] || 0),
+                    0
+                  )
+                )
+              : ""}
+          </Table.Summary.Cell>
+        ))}
       </Table.Summary.Row>
-    )
+    );
   }
   return (
     <Table
@@ -124,7 +140,12 @@ function TableGuilgee({
           }));
         },
       }}
-      summary={() => <Table.Summary fixed> <UilgelAvya garalt={garalt} columns={columns} /> </Table.Summary>}
+      summary={() => (
+        <Table.Summary fixed>
+          {" "}
+          <UilgelAvya garalt={garalt} columns={columns} />{" "}
+        </Table.Summary>
+      )}
     />
   );
 }
@@ -151,7 +172,7 @@ function guilgeeniiTuukh({ token }) {
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
   ]);
   const [turul, setTurul] = React.useState("");
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
   const [davkhar, setDavkhar] = React.useState(undefined);
 
@@ -318,15 +339,43 @@ function guilgeeniiTuukh({ token }) {
         width: "7rem",
         render(data) {
           if (data.length > 1) {
-            return <Tooltip placement="top"
-              title={
-                <div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div>
-              }><div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div></Tooltip>
-          } else return <Tooltip placement="top"
-            title={
-              <div>{data}</div>
-            }><div>{data}</div></Tooltip>
-        }
+            return (
+              <Tooltip
+                placement="top"
+                title={
+                  <div className="flex justify-center truncate">
+                    {data.map((a, i) => (
+                      <div
+                        key={i}
+                        className={`${data.length - 1 !== i && "pr-1"}`}
+                      >
+                        {a}
+                        {data.length - 1 !== i && ","}
+                      </div>
+                    ))}
+                  </div>
+                }
+              >
+                <div className="flex justify-center truncate">
+                  {data.map((a, i) => (
+                    <div
+                      key={i}
+                      className={`${data.length - 1 !== i && "pr-1"}`}
+                    >
+                      {a}
+                      {data.length - 1 !== i && ","}
+                    </div>
+                  ))}
+                </div>
+              </Tooltip>
+            );
+          } else
+            return (
+              <Tooltip placement="top" title={<div>{data}</div>}>
+                <div>{data}</div>
+              </Tooltip>
+            );
+        },
       },
       {
         title: "Үлдэгдэл",
@@ -491,12 +540,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -668,16 +717,24 @@ function guilgeeniiTuukh({ token }) {
   }
 
   const excelColumns = useMemo(() => {
-    var forExcel = []
+    var forExcel = [];
     columns.forEach((a) => {
-      var title = a.title; var dataIndex = a.dataIndex; const render = a.render; if (a.title !== "№" && a.title !== "Үйлдэл") {
-        (a.dataIndex === "tuluvluguut" || a.dataIndex === "sariinTurees" || a.dataIndex === "talbainNiitUne" || a.dataIndex === "aldangiinUldegdel" || a.dataIndex === "daraagiinTulukhOgnoo" || a.dataIndex === "gereeniiOgnoo")
+      var title = a.title;
+      var dataIndex = a.dataIndex;
+      const render = a.render;
+      if (a.title !== "№" && a.title !== "Үйлдэл") {
+        a.dataIndex === "tuluvluguut" ||
+        a.dataIndex === "sariinTurees" ||
+        a.dataIndex === "talbainNiitUne" ||
+        a.dataIndex === "aldangiinUldegdel" ||
+        a.dataIndex === "daraagiinTulukhOgnoo" ||
+        a.dataIndex === "gereeniiOgnoo"
           ? forExcel.push({ title, dataIndex, render })
-          : forExcel.push({ title, dataIndex, })
+          : forExcel.push({ title, dataIndex });
       }
-    })
-    return forExcel
-  }, [columns])
+    });
+    return forExcel;
+  }, [columns]);
 
   //#endregion
 
@@ -692,10 +749,13 @@ function guilgeeniiTuukh({ token }) {
       setNeesenEsekh={setNeesenEsekh}
     >
       <Card className="cardgrid col-span-12 md:p-2">
-        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
           {[
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "avlaga.0.dun") || 0, 0),
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
+                0
+              ),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "avlaga",
               utga: "Хуримтлагдсан авлага",
@@ -703,7 +763,10 @@ function guilgeeniiTuukh({ token }) {
                 "Өмнө сарын төлбөрийн үлдэгдлүүдийн нийлбэр буюу энэ сарыг тооцоогүй болно.",
             },
             {
-              too: formatNumber(_.get(guilgeeniiToololt, "voucher.0.dun") || 0, 0),
+              too: formatNumber(
+                _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
+                0
+              ),
               selectedColor: "bg-green-50 dark:bg-gray-900",
               turul: "voucher",
               utga: "Ваучер төлөлт",
@@ -711,7 +774,8 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0, 0
+                _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
+                0
               ),
               turul: "tsutslagdsanAvlaga",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -720,7 +784,8 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0, 0
+                _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
+                0
               ),
               turul: "eneSardTulukh",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -729,7 +794,8 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0, 0
+                _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
+                0
               ),
               turul: "eneSardTulsun",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -738,7 +804,8 @@ function guilgeeniiTuukh({ token }) {
             },
             {
               too: formatNumber(
-                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0, 0
+                _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
+                0
               ),
               turul: "khungulult",
               selectedColor: "bg-green-50 dark:bg-gray-900",
@@ -749,15 +816,16 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
                 <Tooltip title={<div>{mur.tailbar}</div>}>
-                  <div className="h-full w-[65vw] sm:w-auto rounded-xl">
+                  <div className="h-full w-[65vw] rounded-xl sm:w-auto">
                     <div className="rounded-xl p-3">
                       <div className="flex">
                         <div>
@@ -824,7 +892,7 @@ function guilgeeniiTuukh({ token }) {
               </Select>
             </div>
           </div>
-          <div className="ml-auto w-full md:w-auto flex place-content-end">
+          <div className="ml-auto flex w-full place-content-end md:w-auto">
             <div className="hidden md:flex">
               <BaganiinSongolt
                 shineBagana={shineBagana}
@@ -885,6 +953,7 @@ function guilgeeniiTuukh({ token }) {
                     render(a) {
                       return moment(a).format("YYYY-MM-DD");
                     },
+                    sorter: () => 0,
                   },
                   {
                     title: "Алдангийн үлдэгдэл",
@@ -951,7 +1020,14 @@ function guilgeeniiTuukh({ token }) {
         </div>
         <CardList
           neesenEsekh={neesenEsekh}
-          tileProps={{ GereeniiUldegdel, turul, khuulgaKharya, nekhemjlelIlgeekh, guilgeeKhiiya, baritsaaUdirdya }}
+          tileProps={{
+            GereeniiUldegdel,
+            turul,
+            khuulgaKharya,
+            nekhemjlelIlgeekh,
+            guilgeeKhiiya,
+            baritsaaUdirdya,
+          }}
           cardListTuluv={"utas"}
           keyValue="guilgeeTuukh"
           className="block overflow-auto md:hidden"
