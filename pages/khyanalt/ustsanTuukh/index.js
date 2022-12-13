@@ -92,6 +92,10 @@ const turluud = [
     turul: "aldangi",
     text: "Алданги",
   },
+  {
+    turul: "dans",
+    text: "Данс",
+  },
 ];
 
 function UstsanTuukh() {
