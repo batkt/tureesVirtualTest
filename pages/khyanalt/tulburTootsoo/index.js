@@ -311,9 +311,10 @@ function tulburTootsoo({ token }) {
         {
           title: "Огноо",
           dataIndex: "TxDt",
+          align: "center",
           width: "7rem",
           render(date) {
-            return moment(date).format("YYYY-MM-DD");
+            return moment(date).format("YYYY-MM-DD")
           },
           showSorterTooltip: false,
           sorter: {
@@ -340,6 +341,9 @@ function tulburTootsoo({ token }) {
           title: "Гүйлгээний утга",
           width: "20rem",
           dataIndex: "TxAddInf",
+          render(a) {
+            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
+          }
         },
         {
           title: "Гүйлгээний дүн",
@@ -444,6 +448,7 @@ function tulburTootsoo({ token }) {
             multiple: 1,
           },
           dataIndex: "tranDate",
+          align: "center",
           width: "7rem",
           render(date) {
             return moment(date).format("YYYY-MM-DD");
@@ -469,6 +474,9 @@ function tulburTootsoo({ token }) {
           title: "Гүйлгээний утга",
           width: "20rem",
           dataIndex: "description",
+          render(a) {
+            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
+          }
         },
         {
           title: "Гүйлгээний дүн",
@@ -723,6 +731,7 @@ function tulburTootsoo({ token }) {
                           .addColumns([
                             {
                               title: "Огноо",
+                              align: "center",
                               dataIndex: "TxDt",
                               render(date) {
                                 return moment(date).format("YYYY-MM-DD");

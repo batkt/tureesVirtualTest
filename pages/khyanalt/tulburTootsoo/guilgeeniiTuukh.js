@@ -90,7 +90,7 @@ function TableGuilgee({
 
     return (
       <Table.Summary.Row>
-        {columns.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : ""}`} index={index} align='right'>{mur.summary ? formatNumber(garalt?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}</Table.Summary.Cell>)}
+        {columns.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : "font-bold"}`} index={index} align='right'>{mur.summary ? formatNumber(garalt?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}</Table.Summary.Cell>)}
       </Table.Summary.Row>
     )
   }
