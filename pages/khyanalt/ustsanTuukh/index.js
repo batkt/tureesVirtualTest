@@ -90,7 +90,7 @@ const turluud = [
   },
   {
     turul: "aldangi",
-    text: "Алдаги",
+    text: "Алданги",
   },
 ];
 
