@@ -1,14 +1,34 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { DatePicker, Table } from "antd";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
+import useJagsaalt from "hooks/useJagsaalt";
 
-function NevtreltiinTuukh({ token }) {
-  const [loading, setLoading] = useState(false);
+const order = { createdAt: -1 };
+
+function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
   ])
+  const query = useMemo(() => {
+    return {
+      ajiltniiId: ajiltan._id,
+      baiguullagiinId: baiguullaga._id,
+      createdAt: ognoo
+        ? {
+          $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
+        : undefined,
+    };
+  }, [ognoo, baiguullaga._id, ajiltan._id]);
+
+  const data = useJagsaalt("/nevtreltiinTuukh", query, order)
+
+  useEffect(() => {
+    data.setKhuudaslalt((e) => ({ ...e, khuudasniiKhemjee: 10 }))
+  }, [])
 
   const columns = useMemo(() => [
     {
@@ -16,40 +36,42 @@ function NevtreltiinTuukh({ token }) {
       width: "3rem",
       align: "center",
       render: (text, record, index) =>
-        (khariult?.khuudasniiDugaar || 0) * (khariult?.khuudasniiKhemjee || 0) -
-        (khariult?.khuudasniiKhemjee || 0) +
+        (data?.khuudasniiDugaar || 0) * (data?.khuudasniiKhemjee || 0) -
+        (data?.khuudasniiKhemjee || 0) +
         index +
         1,
     },
     {
       title: "Огноо",
-      dataIndex: "",
+      dataIndex: "ognoo",
       ellipsis: true,
       align: "center",
+      render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
     },
     {
       title: "Веб хөтөч",
-      dataIndex: "",
+      dataIndex: "browser",
       ellipsis: true,
       align: "center",
     },
     {
-      title: "Хаанаас",
-      dataIndex: "",
+      title: "Ажилтны нэр",
+      dataIndex: "ajiltniiNer",
       ellipsis: true,
       align: "center",
     },
     {
       title: "Төхөөрөмж",
-      dataIndex: "",
+      dataIndex: "uildliinSystem",
       ellipsis: true,
       align: "center",
     },
     {
       title: "IP",
-      dataIndex: "",
+      dataIndex: "ip",
       ellipsis: true,
       align: "center",
+      render() { return "..." }
     },
   ]);
 
@@ -69,7 +91,19 @@ function NevtreltiinTuukh({ token }) {
             />
           </div>
           <div className="box p-5">
-            <Table bordered size="small" scroll={{ y: "calc( 100vh - 12rem )" }} columns={columns} />
+            <Table bordered size="small" dataSource={data?.jagsaalt} scroll={{ y: "calc( 100vh - 12rem )" }} columns={columns}
+              pagination={{
+                current: data?.khuudasniiDugaar,
+                pageSize: data?.khuudasniiKhemjee,
+                total: data?.niitMur,
+                showSizeChanger: true,
+                onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                  data.setKhuudaslalt((kh) => ({
+                    ...kh,
+                    khuudasniiDugaar,
+                    khuudasniiKhemjee,
+                  })),
+              }} />
           </div>
         </div>
       </div>
