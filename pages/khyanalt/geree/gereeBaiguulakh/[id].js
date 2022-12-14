@@ -136,9 +136,7 @@ function GereeBaiguulakh({ token, data }) {
       });
     }
     if (
-      !data.talbainIdnuud ||
-      (gereeniiZagvar.turGereeEsekh !== true && (!data.talbainKhemjee ||
-        !data.sariinTurees || !data.talbainNiitUne))
+      !data.talbainIdnuud || !data.talbainKhemjee
     ) {
       utgaShalgakh.push(2);
       notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });
