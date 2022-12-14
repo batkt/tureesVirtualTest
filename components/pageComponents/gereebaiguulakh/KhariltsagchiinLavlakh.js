@@ -16,8 +16,8 @@ const KhariltsagchiinLavlakh = ({
   baiguullaga,
   barilgiinId,
   focuser,
+  khadgalsabRegister,
 }) => {
-
   const [register, setRegister] = useState(null)
   const [dropDownNeekhEsekh, setDropDownNeekhEsekh] = useState(false);
   const searchKeys = ["ner", "register"];
@@ -29,6 +29,16 @@ const KhariltsagchiinLavlakh = ({
     };
   }, [baiguullaga, barilgiinId, baiguullagaEsekh]);
   const khariltsagchiinGaralt = useJagsaalt("/khariltsagch", kharitsagchQuery, undefined, undefined, searchKeys);
+
+  useEffect(() => {
+    setRegister(null)
+  }, [baiguullagaEsekh])
+
+  useEffect(() => {
+    if (!!khadgalsabRegister) {
+      setRegister(khadgalsabRegister)
+    }
+  }, [])
 
   function onScroll(e) {
     if (
@@ -60,17 +70,13 @@ const KhariltsagchiinLavlakh = ({
     }))
   }
 
-  useEffect(() => {
-    setRegister(null)
-  }, [baiguullagaEsekh])
-
   return (
     <Dropdown trigger={"click"}
       open={dropDownNeekhEsekh}
       onOpenChange={() => setDropDownNeekhEsekh(!dropDownNeekhEsekh)}
       overlay={
         <div
-          className="bg-white divide-y py-1 drop-shadow-2xl shadow-lg px-2"
+          className="bg-white dark:bg-gray-700 dark:text-gray-200 divide-y py-1 drop-shadow-2xl shadow-lg px-2"
           style={{ maxHeight: "30vh", overflow: "auto" }}
           onScroll={onScroll}
         >

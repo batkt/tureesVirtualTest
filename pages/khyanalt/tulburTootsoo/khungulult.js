@@ -29,6 +29,33 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import createMethod from "tools/function/crud/createMethod";
 import formatNumber from "tools/function/formatNumber";
 import Aos from "aos";
+import { modal } from "components/ant/Modal";
+
+
+const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
+  const [tailbar, setTailbar] = useState("");
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        confirm(tailbar);
+        destroy();
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [tailbar]
+  );
+  return (
+    <div>
+      <Input.TextArea
+        value={tailbar}
+        onChange={({ target }) => setTailbar(target?.value)}
+      />
+    </div>
+  );
+});
 
 function tulburTootsoo() {
   useEffect(() => {
@@ -38,6 +65,7 @@ function tulburTootsoo() {
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
   const formRef = useRef();
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
+  const tailbarRef = React.useRef(null);
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $ne: -1 } },
   });
@@ -167,16 +195,34 @@ function tulburTootsoo() {
     }
   }
   function ustgaya(mur) {
-    uilchilgee(token)
-      .post("/khungulultUstgaya", {
-        id: mur?._id,
-      })
-      .then(({ data }) => {
-        if (data !== undefined) {
-          khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success("Устгагдлаа");
-        }
-      });
+    const footer = [
+      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+        Устгах
+      </Button>,
+    ];
+    modal({
+      title: "Хөнгөлөлт устгах шалтгаан",
+      icon: <DeleteOutlined />,
+      content: (
+        <Tailbar
+          ref={tailbarRef}
+          confirm={(tailbar) =>
+            uilchilgee(token)
+              .post("/khungulultUstgaya", {
+                id: mur?._id, tailbar
+              })
+              .then(({ data }) => {
+                if (data !== undefined) {
+                  khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+                  message.success("Устгагдлаа");
+                }
+              })
+          }
+        />
+      ),
+      footer,
+    });
   }
   function tseverlekh() {
     formRef.current.resetFields();
@@ -274,7 +320,7 @@ function tulburTootsoo() {
         render(data) {
           return (
             <Popconfirm
-              title="хөнгөлөлт устгах уу?"
+              title="Хөнгөлөлт устгах уу?"
               okText="Тийм"
               cancelText="Үгүй"
               onConfirm={() => ustgaya(data)}
@@ -590,7 +636,7 @@ function tulburTootsoo() {
                   rowClassName="hover:bg-blue-100"
                   dataSource={khungulultTuukh?.jagsaalt}
                   summary={() => <Table.Summary fixed> {!!columns && !!khungulultTuukh && <Table.Summary.Row>
-                    {columns?.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : ""}`} index={index} align='right'>{mur.summary ? formatNumber(khungulultTuukh?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}{mur.summary && "₮"}</Table.Summary.Cell>)}
+                    {columns?.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : "font-bold"}`} index={index} align='right'>{mur.summary ? formatNumber(khungulultTuukh?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}{mur.summary && "₮"}</Table.Summary.Cell>)}
                   </Table.Summary.Row>}</Table.Summary>}
                   pagination={{
                     current: khungulultTuukh?.khuudasniiDugaar,

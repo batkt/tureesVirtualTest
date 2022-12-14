@@ -170,7 +170,7 @@ const YurunkhiiMedeele = ({
               }
               form.setFieldsValue(onookhKhariltsagch);
               onChange({ ...value, ...onookhKhariltsagch });
-            }
+            } else { form.setFieldValue("register", target.value); onChange({ ...value, register: target.value }) }
           })
           .catch(aldaaBarigch);
       }, 300);
@@ -365,6 +365,7 @@ const YurunkhiiMedeele = ({
           ]}
         >
           <KhariltsagchiinLavlakh
+            khadgalsabRegister={value.register}
             focuser={focuser}
             baiguullaga={baiguullaga}
             barilgiinId={barilgiinId}

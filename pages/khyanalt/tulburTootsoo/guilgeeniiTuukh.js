@@ -205,8 +205,8 @@ function guilgeeniiTuukh({ token }) {
           title: "Ваучерын дүн",
           width: "7rem",
           summary: true,
-          align: "right",
-          render: (v) => formatNumber(v),
+          align: "center",
+          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
         });
         break;
       case "khungulult":
@@ -216,8 +216,8 @@ function guilgeeniiTuukh({ token }) {
           title: "Хөнгөлөлт",
           summary: true,
           width: "6rem",
-          align: "right",
-          render: (v) => formatNumber(v),
+          align: "center",
+          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
         });
         break;
       case "eneSardTulsun":
@@ -227,8 +227,8 @@ function guilgeeniiTuukh({ token }) {
           title: "Төлсөн дүн",
           summary: true,
           width: "7rem",
-          align: "right",
-          render: (v) => formatNumber(v),
+          align: "center",
+          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
         });
         break;
       default:
@@ -404,10 +404,10 @@ function guilgeeniiTuukh({ token }) {
       jagsaalt.push({
         title: "Төлөвлөгөөт",
         dataIndex: "tuluvluguut",
-        align: "right",
+        align: "center",
         summary: true,
         render: (tuluvluguut) => {
-          return formatNumber(tuluvluguut || 0);
+          return <div className="w-full text-right">{formatNumber(tuluvluguut || 0)}</div>
         },
         ellipsis: true,
         width: "7rem",
@@ -912,19 +912,19 @@ function guilgeeniiTuukh({ token }) {
                     width: "8rem",
                     dataIndex: "sariinTurees",
                     summary: true,
-                    align: "right",
+                    align: "center",
                     render: (a) => {
-                      return formatNumber(a || 0);
+                      return <div className="w-full text-right">{formatNumber(a || 0)}</div>
                     },
                   },
                   {
                     title: "Талбайн үнэ",
                     width: "8rem",
-                    align: "right",
+                    align: "center",
                     summary: true,
                     dataIndex: "talbainNiitUne",
                     render: (a) => {
-                      return formatNumber(a || 0);
+                      return <div className="w-full text-right">{formatNumber(a || 0)}</div>
                     },
                   },
                   {
@@ -959,12 +959,12 @@ function guilgeeniiTuukh({ token }) {
                     title: "Алдангийн үлдэгдэл",
                     dataIndex: "aldangiinUldegdel",
                     className: "text-center",
-                    align: "right",
+                    align: "center",
                     ellipsis: true,
                     width: "7rem",
                     summary: true,
                     render: (aldangiinUldegdel) => {
-                      return formatNumber(aldangiinUldegdel || 0);
+                      return <div className="w-full text-right">{formatNumber(aldangiinUldegdel || 0)}</div>
                     },
                   },
                 ]}

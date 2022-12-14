@@ -272,8 +272,8 @@ function EbarimtMedeelel({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Утас",
-                dataIndex: "utas",
+                title: "Регистр",
+                dataIndex: "customerNo",
                 ellipsis: true,
                 align: "center",
               },
@@ -289,6 +289,7 @@ function EbarimtMedeelel({ token }) {
                 title: "ДДТД",
                 dataIndex: "billId",
                 width: "300px",
+                align: "center",
               },
               {
                 title: "Дүн",

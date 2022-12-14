@@ -588,11 +588,11 @@ function ZakhialgiinKhyanalt() {
       {
         title: "Ажилтан",
         dataIndex: "burtgesenAjiltaniiNer",
-        align: "left",
+        align: "center",
         ellipsis: true,
         width: "7rem",
         render: () => {
-          return "Админ";
+          return <div className="w-full text-left">Админ</div>
         },
       },
       {
@@ -1182,14 +1182,14 @@ function ZakhialgiinKhyanalt() {
                   width: "6rem",
                 },
                 {
-                  title: "Алдангийн үлдэгдэл",
+                  title: "Алданги",
                   dataIndex: "aldangiinUldegdel",
                   className: "text-center",
-                  align: "right",
+                  align: "center",
                   ellipsis: true,
                   width: "7rem",
                   render: (aldangiinUldegdel) => {
-                    return formatNumber(aldangiinUldegdel || 0);
+                    return <div className="w-full text-right">{formatNumber(aldangiinUldegdel || 0)}</div>
                   },
                 },
               ]}

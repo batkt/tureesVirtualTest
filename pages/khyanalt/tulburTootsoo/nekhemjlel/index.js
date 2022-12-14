@@ -139,7 +139,7 @@ function tulburTootsoo({ token }) {
           if (!!zagvar?.nekhemjlekh) {
             medeelel.eneSardTulukhUsgeer = numberToWords(
               medeelel?.eneSardTulukhDun *
-                (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
               { fixed: 2, suffix: "n" },
               "төгрөг",
               "мөнгө"
@@ -153,7 +153,7 @@ function tulburTootsoo({ token }) {
             );
             medeelel.talbainNiitUneUsgeer = numberToWords(
               medeelel?.talbainNiitUne *
-                (medeelel?.talbainNiitUne < 0 ? -1 : 1),
+              (medeelel?.talbainNiitUne < 0 ? -1 : 1),
               { fixed: 2, suffix: "n" },
               "төгрөг",
               "мөнгө"
@@ -332,9 +332,8 @@ function tulburTootsoo({ token }) {
             let nemeltNekhemjlekh = "";
             if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
               medeelel.nemeltNekhemjlekh.forEach((a, index) => {
-                let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${
-                  2 + (index + 1)
-                }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
+                let mur = `<tr><td><div style="text-align: center"><span class="se-custom-tag">${2 + (index + 1)
+                  }</span>​​<br /></div></td><td colspan="4" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.tailbar&gt;</span>​​<br /></div></td><td colspan="5" rowspan="1"><div>​<span class="se-custom-tag">&lt;nemeltNekhemjlekh.ognoo&gt;</span>​​<br /></div></td><td colspan="2" rowspan="1"><div style="text-align: right"><span class="se-custom-tag">&lt;nemeltNekhemjlekh.tulukhDun&gt;</span>​​<br /></div></td></tr>`;
                 a.ognoo = moment(a.ognoo).format("YYYY-MM-DD");
                 a.tulukhDun = formatNumber(a.tulukhDun);
                 for (const [key, value] of Object.entries(a)) {
@@ -443,7 +442,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -457,14 +456,14 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh.talbainNiitUneUsgeer *
-          (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
+        (nekhemjlekh.talbainNiitUneUsgeer < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -576,7 +575,7 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -590,7 +589,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -686,7 +685,7 @@ function tulburTootsoo({ token }) {
           );
           medeelel.eneSardTulukhUsgeer = numberToWords(
             medeelel?.eneSardTulukhDun *
-              (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
+            (medeelel?.eneSardTulukhDun < 0 ? -1 : 1),
             { fixed: 2, suffix: "n" },
             "төгрөг",
             "мөнгө"
@@ -802,7 +801,7 @@ function tulburTootsoo({ token }) {
 
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
-          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+        (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -816,7 +815,7 @@ function tulburTootsoo({ token }) {
       );
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
-          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+        (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
         { fixed: 2, suffix: "n" },
         "төгрөг",
         "мөнгө"
@@ -960,13 +959,12 @@ function tulburTootsoo({ token }) {
         <Spin spinning={loading}>
           <div
             className={`grid w-full
-            ${
-              nekhemjlekhuud?.find(
-                (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait"
-              )
+            ${nekhemjlekhuud?.find(
+              (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait"
+            )
                 ? ""
                 : "grid-cols-2"
-            } `}
+              } `}
             ref={printRef}
           >
             {nekhemjlekhuud?.map((nekhemjlekh, i) => {
@@ -1083,11 +1081,10 @@ function tulburTootsoo({ token }) {
                   {["Mail", "SMS", "App"].map((mur) => (
                     <div
                       key={mur}
-                      className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${
-                        turul === mur
-                          ? "bg-green-500 text-white"
-                          : "border-x hover:bg-green-500"
-                      }`}
+                      className={`flex-1 cursor-pointer rounded-md py-2 text-center transition-colors ${turul === mur
+                        ? "bg-green-500 text-white"
+                        : "border-x hover:bg-green-500"
+                        }`}
                       onClick={() => turulSongokh(mur)}
                     >
                       {mur}
@@ -1122,8 +1119,8 @@ function tulburTootsoo({ token }) {
                     turul === "SMS"
                       ? smsZagvarNemya()
                       : turul === "App"
-                      ? smsZagvarNemya()
-                      : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
+                        ? smsZagvarNemya()
+                        : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
                 >
                   Загвар <p className="ml-1 lg:hidden"> +</p>{" "}
@@ -1159,8 +1156,8 @@ function tulburTootsoo({ token }) {
                           turul === "SMS" || turul === "App"
                             ? smsZagvarNemya(a)
                             : router.push(
-                                `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
-                              )
+                              `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
+                            )
                         }
                       >
                         <EditOutlined
@@ -1233,13 +1230,13 @@ function tulburTootsoo({ token }) {
                 }}
                 columns={[
                   {
-                    title: "Гэрээ №",
+                    title: "Гэрээ ",
                     dataIndex: "gereeniiDugaar",
                     width: "7rem",
                     align: "center",
                   },
                   {
-                    title: "Талбай №",
+                    title: "Талбай ",
                     showSorterTooltip: false,
                     sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
                     dataIndex: "talbainDugaar",

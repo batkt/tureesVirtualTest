@@ -187,7 +187,7 @@ function AjiltanBurtgel({ token }) {
     formRef.current.setFieldsValue({ ...data });
     setAjiltanState(data);
   }
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   function ajiltanUstgay(mur) {
     if (ajiltan._id === mur._id) {
@@ -457,11 +457,11 @@ function AjiltanBurtgel({ token }) {
                 !!ajiltanState._id
                   ? undefined
                   : [
-                      {
-                        required: true,
-                        message: "Нэвтрэх нууц үг бүртгэнэ үү!",
-                      },
-                    ]
+                    {
+                      required: true,
+                      message: "Нэвтрэх нууц үг бүртгэнэ үү!",
+                    },
+                  ]
               }
             >
               <Input.Password
@@ -518,19 +518,19 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (ajilchdiinGaralt?.khuudasniiDugaar || 0) *
-                    (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
+                  (ajilchdiinGaralt?.khuudasniiKhemjee || 0) -
                   (ajilchdiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
               },
-              { title: "Нэр", dataIndex: "ner", ellipsis: true },
+              { title: "Нэр", align: "center", dataIndex: "ner", ellipsis: true, render(a) { return <div className="w-full text-left">{a}</div> } },
               {
                 title: "Регистр",
                 dataIndex: "register",
                 ellipsis: true,
                 align: "center",
               },
-              { title: "Хаяг", dataIndex: "khayag", ellipsis: true },
+              { title: "Хаяг", dataIndex: "khayag", ellipsis: true, align: "center", render(a) { return <div className="w-full text-left">{a}</div> } },
               {
                 title: "Утас",
                 dataIndex: "utas",

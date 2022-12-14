@@ -20,9 +20,12 @@ import SegmentTokhirgo from "components/pageComponents/tokhirgoo/SegmentTokhirgo
 
 import { useMemo, useState } from "react";
 import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
+import Baaz from "components/pageComponents/tokhirgoo/Baaz";
+import { DatabaseOutlined, HistoryOutlined } from "@ant-design/icons";
+import NevtreltiinTuukh from "components/pageComponents/tokhirgoo/NevtreltiinTuukh";
 
 function AjiltanBurtgel({ token }) {
-  const { ajiltan, ajiltanMutate, baiguullaga,  barilgiinId, baiguullagaMutate } = useAuth();
+  const { ajiltan, ajiltanMutate, baiguullaga, barilgiinId, baiguullagaMutate } = useAuth();
   const [songogdsonTsonkhniiIndex, setSongogdsonTsonkhniiIndex] = useState(0);
 
   const tokhirgoo = useMemo(() => {
@@ -197,7 +200,7 @@ function AjiltanBurtgel({ token }) {
             </svg>
           ),
           text: "И-Баримт",
-          tsonkh:EBarimt
+          tsonkh: EBarimt
         },
         {
           icon: (
@@ -341,6 +344,24 @@ function AjiltanBurtgel({ token }) {
           text: "Төрөлжүүлэх",
           tsonkh: SegmentTokhirgo
         },
+        // {
+        //   icon: (
+        //     <div className="flex text-base mr-2 items-center justify-center">
+        //       <HistoryOutlined />
+        //     </div>
+        //   ),
+        //   text: "Нэвтрэлтийн түүх",
+        //   tsonkh: NevtreltiinTuukh
+        // },
+        // {
+        //   icon: (
+        //     <div className="flex text-base mr-2 items-center justify-center">
+        //       <DatabaseOutlined />
+        //     </div>
+        //   ),
+        //   text: "Бааз",
+        //   tsonkh: Baaz
+        // },
       ];
     else
       return [
@@ -386,11 +407,11 @@ function AjiltanBurtgel({ token }) {
           tsonkh: NuutsUgSolikh
         },
       ];
-  }, [ajiltan, baiguullaga,barilgiinId]);
+  }, [ajiltan, baiguullaga, barilgiinId]);
 
-  const Tsonkh = useMemo(()=>{
+  const Tsonkh = useMemo(() => {
     return tokhirgoo[songogdsonTsonkhniiIndex].tsonkh
-  },[tokhirgoo,songogdsonTsonkhniiIndex])
+  }, [tokhirgoo, songogdsonTsonkhniiIndex])
 
   return (
     <Admin
@@ -398,7 +419,7 @@ function AjiltanBurtgel({ token }) {
       khuudasniiNer="tokhirgoo"
       className="grid grid-cols-12 gap-6 px-4 pb-5"
     >
-      <div className="xxl:col-span-3 col-span-12 mt-5 flex flex-col-reverse lg:col-span-3 lg:block">
+      <div className="xl:col-span-3 col-span-12 mt-5 flex flex-col-reverse lg:col-span-3 lg:block">
         <div className="box mt-5 lg:mt-0">
           <div className="relative flex items-center p-5">
             <div className="image-fit h-12 w-12">
@@ -408,10 +429,10 @@ function AjiltanBurtgel({ token }) {
                   ajiltan?.zurgiinNer
                     ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                     : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) %
-                        2 <
+                      2 <
                       1
-                    ? "/profileFemale.svg"
-                    : "/profile.svg"
+                      ? "/profileFemale.svg"
+                      : "/profile.svg"
                 }
                 className="h-12 w-12 rounded-full ring-2 ring-green-600 ring-opacity-50"
               />
@@ -422,11 +443,10 @@ function AjiltanBurtgel({ token }) {
             </div>
           </div>
           <div className="dark:border-dark-5 border-t border-gray-200 p-5 text-green-600">
-            {tokhirgoo?.map((mur,index) => (
+            {tokhirgoo?.map((mur, index) => (
               <div
-                className={`mt-5 flex cursor-pointer items-center ${
-                  index === songogdsonTsonkhniiIndex ? "font-medium" : ""
-                } `}
+                className={`mt-5 flex cursor-pointer items-center ${index === songogdsonTsonkhniiIndex ? "font-medium" : ""
+                  } `}
                 onClick={() => setSongogdsonTsonkhniiIndex(index)}
               >
                 {mur.icon} {mur.text}
@@ -435,8 +455,8 @@ function AjiltanBurtgel({ token }) {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-12 md:col-span-12  space-x-5 lg:col-span-9">
-        {ajiltan && <Tsonkh {...{ ajiltan, ajiltanMutate, baiguullaga,barilgiinId, baiguullagaMutate,token }}/>}
+      <div className="col-span-12 grid grid-cols-12 md:col-span-12 gap-5 lg:col-span-9">
+        {ajiltan && <Tsonkh {...{ ajiltan, ajiltanMutate, baiguullaga, barilgiinId, baiguullagaMutate, token }} />}
       </div>
     </Admin>
   );
