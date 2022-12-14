@@ -344,24 +344,24 @@ function AjiltanBurtgel({ token }) {
           text: "Төрөлжүүлэх",
           tsonkh: SegmentTokhirgo
         },
-        {
-          icon: (
-            <div className="flex text-base mr-2 items-center justify-center">
-              <HistoryOutlined />
-            </div>
-          ),
-          text: "Нэвтрэлтийн түүх",
-          tsonkh: NevtreltiinTuukh
-        },
-        {
-          icon: (
-            <div className="flex text-base mr-2 items-center justify-center">
-              <DatabaseOutlined />
-            </div>
-          ),
-          text: "Бааз",
-          tsonkh: Baaz
-        },
+        // {
+        //   icon: (
+        //     <div className="flex text-base mr-2 items-center justify-center">
+        //       <HistoryOutlined />
+        //     </div>
+        //   ),
+        //   text: "Нэвтрэлтийн түүх",
+        //   tsonkh: NevtreltiinTuukh
+        // },
+        // {
+        //   icon: (
+        //     <div className="flex text-base mr-2 items-center justify-center">
+        //       <DatabaseOutlined />
+        //     </div>
+        //   ),
+        //   text: "Бааз",
+        //   tsonkh: Baaz
+        // },
       ];
     else
       return [
