@@ -96,6 +96,11 @@ const turluud = [
     turul: "dans",
     text: "Данс",
   },
+  {
+    turul: "khungulult",
+    text: "Хөнгөлөлт",
+  },
+
 ];
 
 function UstsanTuukh() {
@@ -123,9 +128,9 @@ function UstsanTuukh() {
         "object.turul": turul,
         createdAt: shuukhOgnoo
           ? {
-              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-            }
+            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
           : undefined,
       };
     } else {
@@ -135,9 +140,9 @@ function UstsanTuukh() {
         class: turul,
         createdAt: shuukhOgnoo
           ? {
-              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-            }
+            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
           : undefined,
       };
     }
@@ -230,11 +235,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -251,11 +255,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -274,11 +277,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -295,11 +297,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -318,11 +319,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -339,11 +339,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -362,11 +361,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -383,11 +381,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -406,11 +403,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -427,11 +423,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -450,11 +445,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -471,11 +465,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -494,11 +487,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulukhDun.object.tulukhDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulukhDun.object.tulukhDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -515,11 +507,10 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${
-                    tulsunDun.object.tulsunDun > 0
-                      ? "text-green-600 "
-                      : "text-red-500"
-                  }`}
+                  className={`${tulsunDun.object.tulsunDun > 0
+                    ? "text-green-600 "
+                    : "text-red-500"
+                    }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -569,7 +560,7 @@ function UstsanTuukh() {
               <div>
                 {moment(
                   tailbar?.object?.createdAt ||
-                    tailbar?.object?.guilgeeKhiisenOgnoo
+                  tailbar?.object?.guilgeeKhiisenOgnoo
                 ).format("YYYY-MM-DD")}
               </div>
             </>
@@ -631,6 +622,9 @@ function UstsanTuukh() {
               break;
             case "mailiinZagvar":
               text = "И-мэйл загвар";
+              break;
+            case "khungulult":
+              text = "Хөнгөлөлт";
               break;
             default:
               text = mur;
