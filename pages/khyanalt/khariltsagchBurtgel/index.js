@@ -72,20 +72,34 @@ function checkUtas(utasnuud, utga) {
 
 const query = { turul: "khariltsagch" };
 
-function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
+function YalgakhUtga({
+  khariltsagchState,
+  fieldKey,
+  name,
+  remove,
+  ...restField
+}) {
   const segment = useJagsaalt("/segment", query);
   const [turul, setTurul] = useState();
-  const [songosonSegment, setSongosonSegment] = useState();
+  const [songosonSegment] = useState({
+    ner: undefined,
+    utga: undefined,
+  });
 
   function solikh(value) {
     setTurul(segment.jagsaalt.find((a) => a.ner === value));
-    shineSolikh("ner", value);
+    songosonSegment.ner = value;
   }
   function solikhtTurul(value) {
-    shineSolikh("utga", value);
+    songosonSegment.utga = value;
+    shineSolikh();
   }
-  function shineSolikh(talbar, utga) {
-    setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
+  function shineSolikh() {
+    shine2();
+  }
+
+  function shine2() {
+    khariltsagchState.segmentuud.push(songosonSegment);
   }
 
   return (
@@ -105,8 +119,10 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
             onChange={solikh}
             filterOption={(o) => o}
           >
-            {segment?.jagsaalt.map((mur) => (
-              <Select.Option value={mur?.ner}>{mur?.ner}</Select.Option>
+            {segment?.jagsaalt.map((mur, i) => (
+              <Select.Option key={i} value={mur?.ner}>
+                {mur?.ner}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
@@ -121,8 +137,10 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
             placeholder="Утга"
             onChange={solikhtTurul}
           >
-            {turul?.utguud?.map((a) => (
-              <Select.Option value={a}>{a}</Select.Option>
+            {turul?.utguud?.map((a, i) => (
+              <Select.Option key={i} value={a}>
+                {a}
+              </Select.Option>
             ))}
           </Select>
         </Form.Item>
@@ -173,6 +191,7 @@ function AjiltanBurtgel({ token }) {
     ovog: undefined,
     register: undefined,
     khayag: undefined,
+    segmentuud: [],
     utas: [],
     email: undefined,
     turul: undefined,
@@ -180,7 +199,7 @@ function AjiltanBurtgel({ token }) {
     temdeglel: undefined,
     baiguullagiinId: ajiltan?.baiguullagiinId,
   });
-  const [neesenEsekh, setNeesenEsekh] = useState(false)
+  const [neesenEsekh, setNeesenEsekh] = useState(false);
   useEffect(() => {
     barilgiinId;
     setKhariltsagchKhuudaslalt((a) => ({
@@ -294,27 +313,10 @@ function AjiltanBurtgel({ token }) {
   ];
 
   const { Option } = Select;
-
   const nuutsUgModalKhaah = () => {
     setNuutsUgKhariltsagch(false);
   };
-
-  const segment = useJagsaalt("/segment");
-  const [turul, setTurul] = useState();
-  const [songosonSegment, setSongosonSegment] = useState();
-  const [utasKhariltsagchNmekh, setUtasKhariltsagchNmekh] = useState(false)
-
-  function solikh(value) {
-    setTurul(segment.jagsaalt.find((a) => a.ner === value));
-    shineSolikh("ner", value);
-  }
-  function solikhtTurul(value) {
-    shineSolikh("utga", value);
-  }
-
-  function shineSolikh(talbar, utga) {
-    setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
-  }
+  const [utasKhariltsagchNmekh, setUtasKhariltsagchNmekh] = useState(false);
 
   function onChange(talbar, utga) {
     setkhariltsagchState((a) => ({ ...a, [talbar]: utga }));
@@ -350,7 +352,6 @@ function AjiltanBurtgel({ token }) {
     setWaiting(true);
     khariltsagchState.baiguullagiinId = ajiltan?.baiguullagiinId;
     khariltsagchState.barilgiinId = barilgiinId;
-
     if (khariltsagchState.zasakhEsekh === true) {
       updateMethod("khariltsagch", token, khariltsagchState)
         .then(({ data }) => {
@@ -618,8 +619,22 @@ function AjiltanBurtgel({ token }) {
       tsonkhniiId="61c2c6731c2830c4e6f90c9d"
       loading={waiting || isValidating}
     >
-      {utasKhariltsagchNmekh && <div className="col-span-12 -mb-4 mx-5 md:hidden"><Button type="primary" onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} className="w-full  "><EyeInvisibleOutlined className="text-xl" /></Button></div>}
-      <div className={`box col-span-12 p-5 md:col-span-6 xl:col-span-3  ${utasKhariltsagchNmekh === true ? "" : "hidden md:block"}`}>
+      {utasKhariltsagchNmekh && (
+        <div className="col-span-12 mx-5 -mb-4 md:hidden">
+          <Button
+            type="primary"
+            onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)}
+            className="w-full  "
+          >
+            <EyeInvisibleOutlined className="text-xl" />
+          </Button>
+        </div>
+      )}
+      <div
+        className={`box col-span-12 p-5 md:col-span-6 xl:col-span-3  ${
+          utasKhariltsagchNmekh === true ? "" : "hidden md:block"
+        }`}
+      >
         <Form
           autoComplete={"off"}
           ref={formRef}
@@ -826,6 +841,7 @@ function AjiltanBurtgel({ token }) {
                     <div key={key}>
                       <YalgakhUtga
                         key={key}
+                        khariltsagchState={khariltsagchState}
                         name={name}
                         fieldKey={fieldKey}
                         {...restField}
@@ -848,7 +864,6 @@ function AjiltanBurtgel({ token }) {
               )}
             </Form.List>
           </div>
-
           <div
             data-aos="fade-right"
             data-aos-duration="800"
@@ -886,7 +901,7 @@ function AjiltanBurtgel({ token }) {
                             max: 8,
                             min: 8,
                             message: "Дугаараа шалгана уу",
-                          }
+                          },
                         ]}
                       >
                         <Input
@@ -992,22 +1007,23 @@ function AjiltanBurtgel({ token }) {
           </div>
         </Form>
       </div>
-      <div className="box col-span-12 mb-16 md:mb-0 p-5 md:col-span-6 xl:col-span-9">
-        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
+      <div className="box col-span-12 mb-16 p-5 md:col-span-6 md:mb-0 xl:col-span-9">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
-                  ? "bg-green-50 dark:bg-gray-800"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
+                  JSON.stringify(query) === JSON.stringify(mur.query)
+                    ? "bg-green-50 dark:bg-gray-800"
+                    : ""
+                }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="zoom-out-left"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[67vw] md:w-auto rounded-xl">
+                <div className="h-full w-[67vw] rounded-xl md:w-auto">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -1036,10 +1052,16 @@ function AjiltanBurtgel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="300"
         >
-          <div className="md:ml-auto items-center justify-between md:justify-end w-full flex">
+          <div className="flex w-full items-center justify-between md:ml-auto md:justify-end">
             <div className=" md:hidden ">
-              <Button type="primary"
-                style={{ marginTop: "10px" }} onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)} >Харилцагч нэмэх</Button></div>
+              <Button
+                type="primary"
+                style={{ marginTop: "10px" }}
+                onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)}
+              >
+                Харилцагч нэмэх
+              </Button>
+            </div>
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
@@ -1169,7 +1191,7 @@ function AjiltanBurtgel({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (khariltsagchiinGaralt?.khuudasniiDugaar || 0) *
-                  (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
+                    (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) -
                   (khariltsagchiinGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -1348,7 +1370,7 @@ function AjiltanBurtgel({ token }) {
                               className: "text-center",
                               render: (text, record, index) =>
                                 (jagsaaltTuukh?.khuudasniiDugaar || 0) *
-                                (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
+                                  (jagsaaltTuukh?.khuudasniiKhemjee || 0) -
                                 (jagsaaltTuukh?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
@@ -1513,7 +1535,7 @@ function AjiltanBurtgel({ token }) {
             </Form>
           </Modal>
         </div>
-        <p className="font-medium py-2 md:hidden">Харилцагчийн жагсаалт</p>
+        <p className="py-2 font-medium md:hidden">Харилцагчийн жагсаалт</p>
         <CardList
           keyValue=""
           cardListTuluv={"utas"}
@@ -1521,7 +1543,12 @@ function AjiltanBurtgel({ token }) {
           className="block overflow-auto md:hidden"
           jagsaalt={khariltsagchiinGaralt?.jagsaalt}
           Component={KhariltsagchTile}
-          tileProps={{ khariltsagchUstgay, zasya, setUtasKhariltsagchNmekh, setNuutsUgKhariltsagch }}
+          tileProps={{
+            khariltsagchUstgay,
+            zasya,
+            setUtasKhariltsagchNmekh,
+            setNuutsUgKhariltsagch,
+          }}
           pagination={{
             current: khariltsagchiinGaralt?.khuudasniiDugaar,
             pageSize: khariltsagchiinGaralt?.khuudasniiKhemjee,
