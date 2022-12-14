@@ -202,7 +202,7 @@ function tulburTootsoo() {
       </Button>,
     ];
     modal({
-      title: "Төлөлт устгах шалтгаан",
+      title: "Хөнгөлөлт устгах шалтгаан",
       icon: <DeleteOutlined />,
       content: (
         <Tailbar
@@ -320,7 +320,7 @@ function tulburTootsoo() {
         render(data) {
           return (
             <Popconfirm
-              title="хөнгөлөлт устгах уу?"
+              title="Хөнгөлөлт устгах уу?"
               okText="Тийм"
               cancelText="Үгүй"
               onConfirm={() => ustgaya(data)}
