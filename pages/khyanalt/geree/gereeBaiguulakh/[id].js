@@ -137,9 +137,8 @@ function GereeBaiguulakh({ token, data }) {
     }
     if (
       !data.talbainIdnuud ||
-      !data.sariinTurees ||
-      !data.talbainKhemjee ||
-      !data.talbainNiitUne
+      (gereeniiZagvar.turGereeEsekh !== true && (!data.talbainKhemjee ||
+        !data.sariinTurees || !data.talbainNiitUne))
     ) {
       utgaShalgakh.push(2);
       notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });

@@ -54,7 +54,7 @@ const Tulbur = ({
       );
     });
 
-    if (!!value.talbainNiitUne && !!value.khugatsaa)
+    if (!!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
           dun: value.talbainNiitUne,

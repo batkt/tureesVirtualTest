@@ -213,11 +213,11 @@ const YurunkhiiMedeele = ({
       message.warning("Талбай бүртгэнэ үү!");
       return
     };
-    if (value.talbainNiitUne === 0) {
+    if (value.talbainNiitUne === undefined) {
       message.warning("Талбайн үнэ бүртгэнэ үү!");
       return
     }
-    if (value.talbainKhemjee === 0) {
+    if (value.talbainKhemjee === undefined) {
       message.warning("Талбайн хэмжээ бүртгэнэ үү!");
       return
     }
