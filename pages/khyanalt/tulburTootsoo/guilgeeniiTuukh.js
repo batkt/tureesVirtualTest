@@ -65,9 +65,8 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${
-        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-      }`}
+      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+        }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
     </div>
@@ -99,11 +98,11 @@ function TableGuilgee({
           >
             {mur.summary
               ? formatNumber(
-                  garalt?.jagsaalt?.reduce(
-                    (a, b) => a + (b[mur.dataIndex] || 0),
-                    0
-                  )
+                garalt?.jagsaalt?.reduce(
+                  (a, b) => a + (b[mur.dataIndex] || 0),
+                  0
                 )
+              )
               : ""}
           </Table.Summary.Cell>
         ))}
@@ -540,12 +539,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                        (row.baritsaaAvakhDun || 0) -
+                        (row.baritsaaniiUldegdel || 0)
+                      )} дутуу`
                       : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        row.baritsaaniiUldegdel
+                      )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -724,11 +723,11 @@ function guilgeeniiTuukh({ token }) {
       const render = a.render;
       if (a.title !== "№" && a.title !== "Үйлдэл") {
         a.dataIndex === "tuluvluguut" ||
-        a.dataIndex === "sariinTurees" ||
-        a.dataIndex === "talbainNiitUne" ||
-        a.dataIndex === "aldangiinUldegdel" ||
-        a.dataIndex === "daraagiinTulukhOgnoo" ||
-        a.dataIndex === "gereeniiOgnoo"
+          a.dataIndex === "sariinTurees" ||
+          a.dataIndex === "talbainNiitUne" ||
+          a.dataIndex === "aldangiinUldegdel" ||
+          a.dataIndex === "daraagiinTulukhOgnoo" ||
+          a.dataIndex === "gereeniiOgnoo"
           ? forExcel.push({ title, dataIndex, render })
           : forExcel.push({ title, dataIndex });
       }
@@ -816,9 +815,8 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
-                  turul === mur?.turul ? mur.selectedColor : ""
-                }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
+                  }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
@@ -941,8 +939,9 @@ function guilgeeniiTuukh({ token }) {
                     title: "Түрээслэгч",
                     dataIndex: "ner",
                     ellipsis: true,
-                    align: "left",
+                    align: "center",
                     width: "8rem",
+                    render(a) { return <div className="text-left">{a}</div> }
                   },
                   {
                     title: "Гэрээний огноо",
@@ -956,7 +955,7 @@ function guilgeeniiTuukh({ token }) {
                     sorter: () => 0,
                   },
                   {
-                    title: "Алдангийн үлдэгдэл",
+                    title: "Алданги",
                     dataIndex: "aldangiinUldegdel",
                     className: "text-center",
                     align: "center",

@@ -1244,7 +1244,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Дараагийн төлөх огноо",
+                    title: "Дараагийн төлөх",
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) =>
@@ -1260,7 +1260,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Өмнөх хуримтлагдсан өр төлбөр",
+                    title: "Хуримтлагдсан",
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) =>
@@ -1273,7 +1273,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Энэ сард төлөх дүн",
+                    title: "Энэ сард төлөх",
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
@@ -1285,7 +1285,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Нийт үлдэгдэл",
+                    title: "Үлдэгдэл",
                     width: "7rem",
                     showSorterTooltip: false,
                     sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
