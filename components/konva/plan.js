@@ -1,10 +1,9 @@
-import { Select, Form } from "antd";
 import useJagsaalt from "hooks/useJagsaalt";
 import _ from "lodash";
-import React, { Component, useEffect, useMemo } from "react";
+import React, { Component, useMemo } from "react";
 import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
-import uilchilgee, { url } from "services/uilchilgee";
-import { bairshilKhurvuuljAvakh, undur, urgun } from ".";
+import { url } from "services/uilchilgee";
+import { undur, urgun } from ".";
 
 class URLImage extends React.Component {
   state = {
@@ -206,11 +205,7 @@ class App extends Component {
       state: { pointer },
       props,
     } = this;
-    const talbainuud = props.talbainuud.filter(
-      (mur) => mur.davkhar === props.davkhar
-    );
-
-    console.log(talbainuud);
+    const talbainuud = props.talbainuud;
 
     return (
       <div>

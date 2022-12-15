@@ -1,24 +1,16 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React from "react";
 import uilchilgee, { url } from "services/uilchilgee";
 import PlanKharakh from "components/konva/plan";
 import { Button } from "antd";
 import { modal } from "components/ant/Modal";
 import { CloseCircleOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { useAuth } from "services/auth";
-import useJagsaalt from "hooks/useJagsaalt";
 import { bairshilKhurvuuljAvakh } from ".";
+import _ from "lodash";
 
-function tailan(token, points) {
+function tailan({ token, points }) {
   const ref = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
-  const query = useMemo(() => {
-    return {
-      barilgiinId: barilgiinId,
-      "bairshil.1": { $exists: true },
-    };
-  }, [barilgiinId]);
-  const { data, jagsaalt, mutate } = useJagsaalt("/talbai", query, undefined);
-  jagsaalt.map((mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil)));
   const planzuragiinId = baiguullaga?.barilguud.find(
     (a) => a._id === barilgiinId
   );
@@ -28,37 +20,54 @@ function tailan(token, points) {
     mutate();
   }
   function zuragKharakh(a) {
-    modal({
-      className: " top-0",
-      width: "100%",
-      footer: <Button onClick={() => khaakh}>Хаах</Button>,
-      title: [
-        <div className=" flex justify-between">
-          <div className="flex items-center justify-start bg-gray-50">
-            Дэлгэрэнгүй Мэдээлэл
-          </div>
-          <div
-            className="text-2xl hover:scale-105 hover:text-red-300"
-            onClick={() => khaakh()}
-          >
-            <CloseCircleOutlined />
-          </div>
-        </div>,
-      ],
-      icon: <FileExcelOutlined />,
-      content: (
-        <PlanKharakh
-          ref={ref}
-          davkhar={a.davkhar}
-          plan={a.planZurag}
-          baiguullaga={baiguullaga}
-          barilgiinId={barilgiinId}
-          token={token}
-          points={points}
-          talbainuud={jagsaalt}
-        />
-      ),
-    });
+    uilchilgee(token)
+      .get("/talbai", {
+        params: {
+          khuudasniiKhemjee: 1000,
+          davkhar: a.davkhar,
+          query: JSON.stringify({
+            barilgiinId: barilgiinId,
+            "bairshil.1": { $exists: true },
+          }),
+        },
+      })
+      .then(({ data }) => {
+        if (data?.jagsaalt) {
+          data?.jagsaalt.map(
+            (mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
+          );
+          modal({
+            className: " top-0",
+            width: "100%",
+            footer: <Button onClick={() => khaakh}>Хаах</Button>,
+            title: [
+              <div className=" flex justify-between">
+                <div className="flex items-center justify-start bg-gray-50">
+                  Дэлгэрэнгүй Мэдээлэл
+                </div>
+                <div
+                  className="text-2xl hover:scale-105 hover:text-red-300"
+                  onClick={() => khaakh()}
+                >
+                  <CloseCircleOutlined />
+                </div>
+              </div>,
+            ],
+            icon: <FileExcelOutlined />,
+            content: (
+              <PlanKharakh
+                ref={ref}
+                plan={a.planZurag}
+                baiguullaga={baiguullaga}
+                barilgiinId={barilgiinId}
+                token={token}
+                points={points}
+                talbainuud={data?.jagsaalt}
+              />
+            ),
+          });
+        }
+      });
   }
   return (
     <div className="wrap grid  grid-cols-3 gap-3 bg-gray-50 p-8">
