@@ -247,7 +247,7 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-80 space-y-1 dark:text-gray-200">
+      <div className="relative w-72 space-y-1 dark:text-gray-200">
         <div
           onClick={() => setVisible(false)}
           className="absolute right-0 -top-10 text-xl dark:text-gray-200"
@@ -284,9 +284,9 @@ function GuilgeeNiiluulekh(
                 .catch(aldaaBarigch);
             }}
           >
-            <div>{mur.talbainDugaar}</div>
-            <div>{mur.register}</div>
-            <div>{mur.ner}</div>
+            <div className="px-2 truncate">{mur.talbainDugaar}</div>
+            <div className="px-2">{mur.register}</div>
+            <div className="px-2">{mur.ner}</div>
           </div>
         ))}
       </div>
@@ -448,6 +448,7 @@ function GuilgeeNiiluulekh(
             onVisibleChange={(v) => setVisible(v)}
           >
             <input
+              autoComplete="off"
               id="gereeSongokh"
               onFocus={() =>
                 setTimeout(() => {
