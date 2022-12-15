@@ -4,6 +4,8 @@ import uilchilgee from "services/uilchilgee";
 import { Button, DatePicker, Table } from "antd";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
+import useJagsaalt from "hooks/useJagsaalt";
+import formatNumber from "tools/function/formatNumber";
 
 function Baaz({ token }) {
   const [loading, setLoading] = useState(false);
@@ -11,6 +13,9 @@ function Baaz({ token }) {
     moment().startOf("month"),
     moment().endOf("month"),
   ]);
+
+  const backAwsanTuukh = useJagsaalt("/backTuukh")
+
   function backTatya() {
     setLoading(true);
     uilchilgee(token)
@@ -35,28 +40,30 @@ function Baaz({ token }) {
       width: "3rem",
       align: "center",
       render: (text, record, index) =>
-        (khariult?.khuudasniiDugaar || 0) * (khariult?.khuudasniiKhemjee || 0) -
-        (khariult?.khuudasniiKhemjee || 0) +
+        (backAwsanTuukh?.khuudasniiDugaar || 0) * (backAwsanTuukh?.khuudasniiKhemjee || 0) -
+        (backAwsanTuukh?.khuudasniiKhemjee || 0) +
         index +
         1,
     },
     {
       title: "Огноо",
-      dataIndex: "",
+      dataIndex: "ognoo",
       ellipsis: true,
       align: "center",
+      render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
     },
     {
       title: "Ажилтан",
-      dataIndex: "",
+      dataIndex: "ajiltniiNer",
       ellipsis: true,
       align: "center",
     },
     {
       title: "Хэмжээ",
-      dataIndex: "",
+      dataIndex: "khemjee",
       ellipsis: true,
       align: "center",
+      render(a) { return <div>{formatNumber(a)} /mb/</div> }
     },
   ]);
 
@@ -103,7 +110,7 @@ function Baaz({ token }) {
             />
           </div>
           <div className="box p-5">
-            <Table bordered size="small" scroll={{ y: "calc( 100vh - 12rem )" }} columns={columns} />
+            <Table bordered size="small" dataSource={backAwsanTuukh?.jagsaalt} scroll={{ y: "calc( 100vh - 21rem )" }} columns={columns} />
           </div>
         </div>
       </div>

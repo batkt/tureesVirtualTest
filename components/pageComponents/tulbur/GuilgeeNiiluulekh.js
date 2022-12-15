@@ -4,6 +4,7 @@ import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import {
   Divider,
+  Dropdown,
   Input,
   Modal,
   notification,
@@ -137,7 +138,7 @@ function GuilgeeNiiluulekh(
     undefined,
     query,
     undefined,
-    10
+    5
   );
   useEffect(() => {
     inputRef.current.focus();
@@ -247,16 +248,10 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-72 space-y-1 dark:text-gray-200">
-        <div
-          onClick={() => setVisible(false)}
-          className="absolute right-0 -top-10 text-xl dark:text-gray-200"
-        >
-          <CloseCircleOutlined />
-        </div>
+      <div className="relative w-72 p-3 bg-white dark:bg-gray-900 shadow-xl drop-shadow-xl space-y-1 dark:text-gray-200">
         {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
-            className="grid cursor-pointer grid-cols-3 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
             key={`gereeniisongolt${i}`}
             onClick={() => {
               if (gereenuud.find((a) => a._id === mur._id)) {
@@ -439,13 +434,13 @@ function GuilgeeNiiluulekh(
         </div>
         <div className="font-medium lg:text-xl dark:text-gray-200">Гүйлгээ холбох</div>
         <div className="lg:grid flex flex-col-reverse gap-3 grid-cols-2 ">
-          <Popover
+          <Dropdown
             placement="bottom"
             title="Гэрээний жагсаалт"
-            content={content}
-            visible={visible}
+            overlay={content}
+            open={visible}
             trigger="click"
-            onVisibleChange={(v) => setVisible(v)}
+            onOpenChange={(v) => setVisible(v)}
           >
             <input
               autoComplete="off"
@@ -459,7 +454,7 @@ function GuilgeeNiiluulekh(
               placeholder="Гэрээ сонгох"
               onChange={onChange}
             />
-          </Popover>
+          </Dropdown>
           <div className="flex items-center justify-end">
             <label className="pr-2 text-sm font-bold text-gray-600">
               Хаагдсан гэрээ холбох эсэх{" "}

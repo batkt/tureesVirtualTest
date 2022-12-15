@@ -91,7 +91,7 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
             />
           </div>
           <div className="box p-5">
-            <Table bordered size="small" dataSource={data?.jagsaalt} scroll={{ y: "calc( 100vh - 12rem )" }} columns={columns}
+            <Table bordered size="small" dataSource={data?.jagsaalt} scroll={{ y: "calc( 100vh - 21rem )" }} columns={columns}
               pagination={{
                 current: data?.khuudasniiDugaar,
                 pageSize: data?.khuudasniiKhemjee,
