@@ -3,11 +3,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 import PlanKharakh from "components/konva/plan";
 import { Button } from "antd";
 import { modal } from "components/ant/Modal";
-import {
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-  FileExcelOutlined,
-} from "@ant-design/icons";
+import { CloseCircleOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
 import { bairshilKhurvuuljAvakh } from ".";
@@ -21,26 +17,21 @@ function tailan(token, points) {
       "bairshil.1": { $exists: true },
     };
   }, [barilgiinId]);
-  const select = {
-    bairshil: 1,
-    _id: 1,
-    idevkhiteiEsekh: 1,
-    kod: 1,
-    talbainKhemjee: 1,
-    talbainNiitUne: 1,
-    davkhar: 1,
-  };
-  const talbainuud = useJagsaalt("/talbai", query, undefined, select);
-  talbainuud.jagsaalt.map(
-    (mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
-  );
+  const { data, jagsaalt, mutate } = useJagsaalt("/talbai", query, undefined);
+  jagsaalt.map((mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil)));
   const planzuragiinId = baiguullaga?.barilguud.find(
     (a) => a._id === barilgiinId
   );
 
+  function khaakh() {
+    ref.current.destroy();
+    mutate();
+  }
   function zuragKharakh(a) {
     modal({
-      footer: <Button onClick={() => ref.current.destroy()}>Хаах</Button>,
+      className: " top-0",
+      width: "100%",
+      footer: <Button onClick={() => khaakh}>Хаах</Button>,
       title: [
         <div className=" flex justify-between">
           <div className="flex items-center justify-start bg-gray-50">
@@ -48,7 +39,7 @@ function tailan(token, points) {
           </div>
           <div
             className="text-2xl hover:scale-105 hover:text-red-300"
-            onClick={() => ref.current.destroy()}
+            onClick={() => khaakh()}
           >
             <CloseCircleOutlined />
           </div>
@@ -64,14 +55,13 @@ function tailan(token, points) {
           barilgiinId={barilgiinId}
           token={token}
           points={points}
-          talbainuud={talbainuud.jagsaalt}
+          talbainuud={jagsaalt}
         />
       ),
-      width: "100vw",
     });
   }
   return (
-    <div className="grid grid-cols-3 gap-3 bg-gray-50 p-8">
+    <div className="wrap grid  grid-cols-3 gap-3 bg-gray-50 p-8">
       {planzuragiinId?.davkharuud.map((a) => (
         <div className="col-span-1  space-y-2 p-2 hover:scale-105 hover:border-2 hover:border-green-300 hover:shadow-2xl">
           <div className="flex justify-center font-bold">
@@ -83,11 +73,9 @@ function tailan(token, points) {
             className="w-full "
             src={`${url}/zuragAvya/plan/${baiguullaga?._id}/${a?.planZurag}`}
           />
-          <div>
-            {talbainuud.jagsaalt.map((mur) => {
-              <div>{mur.davkhar}</div>;
-            })}
-          </div>
+          {/* {jagsaalt.map((mur) =>
+            mur.davkhar === a.davkhar ? <div>{mur.davkhar}</div> : ""
+          )} */}
         </div>
       ))}
     </div>

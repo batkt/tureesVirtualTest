@@ -185,10 +185,22 @@ class App extends Component {
     isFinished: !!this.props.points?.length || false,
   };
 
+  escDarakh = (e) => {
+    if (e.key === "Escape") {
+      this.props.destroy();
+    }
+  };
+  componentDidMount() {
+    document.addEventListener("keyup", this.escDarakh);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keyup", this.escDarakh);
+  }
+
   destroy() {
     this.props.destroy();
   }
-
   render() {
     const {
       state: { pointer },
@@ -197,6 +209,8 @@ class App extends Component {
     const talbainuud = props.talbainuud.filter(
       (mur) => mur.davkhar === props.davkhar
     );
+
+    console.log(talbainuud);
 
     return (
       <div>
@@ -213,7 +227,7 @@ class App extends Component {
           </div>
         </div>
 
-        <Stage width={urgun} height={undur}>
+        <Stage width={urgun} height={undur - 75}>
           <Layer>
             {props.plan && (
               <URLImage
