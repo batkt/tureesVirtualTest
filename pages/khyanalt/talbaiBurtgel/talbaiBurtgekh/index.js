@@ -490,11 +490,10 @@ function talbaiBurtgekh({ token }) {
             return (
               <div
                 key={index}
-                className={`zoom-in relative h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${
-                  JSON.stringify(query) === JSON.stringify(mur.query)
-                    ? "bg-green-50 dark:bg-gray-900"
-                    : ""
-                }`}
+                className={`zoom-in relative h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-3 ${JSON.stringify(query) === JSON.stringify(mur.query)
+                  ? "bg-green-50 dark:bg-gray-900"
+                  : ""
+                  }`}
                 onClick={() => setQuery(mur.query)}
                 data-aos="fade-left"
                 data-aos-duration="1000"
@@ -725,7 +724,7 @@ function talbaiBurtgekh({ token }) {
                 className: "text-center",
                 render: (text, record, index) =>
                   (talbainiiGaralt?.khuudasniiDugaar || 0) *
-                    (talbainiiGaralt?.khuudasniiKhemjee || 0) -
+                  (talbainiiGaralt?.khuudasniiKhemjee || 0) -
                   (talbainiiGaralt?.khuudasniiKhemjee || 0) +
                   index +
                   1,
@@ -813,6 +812,8 @@ function talbaiBurtgekh({ token }) {
                 dataIndex: "tailbar",
                 ellipsis: true,
                 width: "4.5rem",
+                align: "center",
+                render(a) { return <div className="text-left">{a}</div> }
               },
 
               {
