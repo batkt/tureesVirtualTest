@@ -287,21 +287,15 @@ class App extends Component {
 
               return (
                 <Group key={mur._id + "text"}>
-                  <Rect
-                    x={x - (mur.kod.length / 2) * 15}
-                    y={y - 15}
-                    width={65}
-                    height={26}
-                    fill="white"
-                    stroke={1}
-                    opacity={0.9}
-                  />
                   <Text
-                    x={x - (mur.kod.length / 2) * 10}
+                    x={x - (mur.kod.length * 4) / 2}
                     y={y - 15 / 2}
+                    fontStyle="bold"
                     text={mur.kod}
+                    stroke="white"
+                    strokeWidth={0.3}
                     fill={"black"}
-                    fontSize={15}
+                    fontSize={10}
                     align="center"
                   />
                 </Group>
