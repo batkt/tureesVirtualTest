@@ -1,6 +1,5 @@
 import {
   CloseCircleOutlined,
-  MinusCircleOutlined,
   PlusOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
@@ -61,7 +60,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
 
   return (
     <>
-      <div className="flex lg:pl-[33%] gap-2 lg:gap-0 flex-row justify-end ">
+      <div className="flex flex-row justify-end gap-2 lg:gap-0 lg:pl-[33%] ">
         <Form.Item
           className="w-2/4 lg:w-full"
           {...restField}
@@ -96,7 +95,10 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
             ))}
           </Select>
         </Form.Item>
-        <CloseCircleOutlined className="pt-2 text-base" onClick={() => remove(name)} />
+        <CloseCircleOutlined
+          className="pt-2 text-base"
+          onClick={() => remove(name)}
+        />
       </div>
     </>
   );
@@ -114,6 +116,7 @@ function KhurunguudCard({
   ...restField
 }) {
   const niitUneRef = useRef();
+
   const tooRef = useRef();
   const uneRef = useRef();
 
@@ -128,7 +131,7 @@ function KhurunguudCard({
           />
         </div>
         <div className=" grid grid-cols-12">
-          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-2 row-span-2 flex items-center justify-center">
+          <div className="col-span-12 row-span-2 flex items-center justify-center -space-y-4 lg:col-span-2 lg:space-y-0">
             <Form.Item
               {...restField}
               name={[name, "zurgiinId"]}
@@ -154,7 +157,8 @@ function KhurunguudCard({
                     .classList.remove("hidden");
                   document.getElementById(
                     `${name}-image`
-                  ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${e.fileList[e.fileList.length - 1]?.response?.id
+                  ).src = `${url}/zuragAvya/khurungu/${baiguullaga._id}/${
+                    e.fileList[e.fileList.length - 1]?.response?.id
                   }`;
                 }}
               >
@@ -184,7 +188,7 @@ function KhurunguudCard({
               </Upload>
             </Form.Item>
           </div>
-          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-5 flex flex-col justify-center ">
+          <div className="col-span-12 flex flex-col justify-center -space-y-4 lg:col-span-5 lg:space-y-0 ">
             <Form.Item
               {...restField}
               label="Нэр"
@@ -236,7 +240,7 @@ function KhurunguudCard({
               />
             </Form.Item>
           </div>
-          <div className="col-span-12 -space-y-4 lg:space-y-0 lg:col-span-5 flex flex-col justify-center ">
+          <div className="col-span-12 flex flex-col justify-center -space-y-4 lg:col-span-5 lg:space-y-0 ">
             <Form.Item
               {...restField}
               label="Үнэ"
@@ -350,25 +354,31 @@ function TalbaiBurtgekh({ token }) {
   });
 
   function onChange(talbar, utga) {
-    if (talbar === "talbainNegjUne") {
-      let value = Number(utga) * Number(talbaiState.talbainKhemjee);
-      if (
-        (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
-          _.isNumber(utga) &&
-          value) ||
-        0
-      ) {
-        talbaiState.talbainNiitUne = value.toFixed(2);
-        formRef.current.setFieldsValue({
-          talbainNiitUne: talbaiState.talbainNiitUne,
-        });
-        talbaiState.tureesiinTulbur =
-          Number(talbaiState.niitAshiglaltiinZardal || 0) +
-          Number(talbaiState.talbainNiitUne || 0);
-        formRef.current.setFieldsValue({
-          tureesiinTulbur: talbaiState.tureesiinTulbur,
-        });
+    if (!talbaiState?.talbainNegjUne) {
+      if (talbar === "talbainNegjUne") {
+        let value = Number(utga) * Number(talbaiState.talbainKhemjee);
+        if (
+          (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
+            _.isNumber(utga) &&
+            value) ||
+          0
+        ) {
+          talbaiState.talbainNiitUne = value.toFixed(2);
+          formRef.current.setFieldsValue({
+            talbainNiitUne: talbaiState.talbainNiitUne,
+          });
+          talbaiState.tureesiinTulbur =
+            Number(talbaiState.niitAshiglaltiinZardal || 0) +
+            Number(talbaiState.talbainNiitUne || 0);
+          formRef.current.setFieldsValue({
+            tureesiinTulbur: talbaiState.tureesiinTulbur,
+          });
+        }
       }
+    } else {
+      formRef.current.setFieldsValue({
+        talbainNiitUne: (talbaiState.talbainNiitUne = 0),
+      });
     }
     if (talbar === "ashiglaltiinZardal") {
       talbaiState.niitAshiglaltiinZardal = (
@@ -588,7 +598,7 @@ function TalbaiBurtgekh({ token }) {
       title="Талбай бүртгэл"
       khuudasniiNer="talbaiBurtgekh"
       tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
-      className="p-3 pb-11 lg:pb-0 md:p-4"
+      className="p-3 pb-11 md:p-4 lg:pb-0"
       dedKhuudas
       loading={waiting}
     >
@@ -602,9 +612,7 @@ function TalbaiBurtgekh({ token }) {
         initialValues={{ ...data, remember: true }}
         className="col-span-12 grid grid-cols-12 gap-6"
       >
-        <div
-          className="box overflow-y-scroll p-5 col-span-12 md:col-span-6  xl:col-span-4 lg:max-h-screen"
-        >
+        <div className="box col-span-12 overflow-y-scroll p-5 md:col-span-6  lg:max-h-screen xl:col-span-4">
           <div>
             <div data-aos="fade-right" data-aos-duration="1000">
               <Form.Item
@@ -774,9 +782,7 @@ function TalbaiBurtgekh({ token }) {
                           />
                         </div>
                       ))}
-                      <div
-                        className="flex w-full sm:px-6 sm:pl-[33%] pb-5 justify-end"
-                      >
+                      <div className="flex w-full justify-end pb-5 sm:px-6 sm:pl-[33%]">
                         <Button
                           icon={<PlusOutlined />}
                           className="h-8 rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
@@ -801,10 +807,8 @@ function TalbaiBurtgekh({ token }) {
                   onChange={(e) => onChange("tailbar", e.target.value)}
                 ></TextArea>
               </Form.Item>
-              <div className="flex md:pl-[33%] w-full justify-end space-x-5">
-                <div
-                  className="w-full"
-                >
+              <div className="flex w-full justify-end space-x-5 md:pl-[33%]">
+                <div className="w-full">
                   <Button onClick={showDrawer} type="primary">
                     <span className="mr-2 text-white">
                       <SettingOutlined />
@@ -837,9 +841,7 @@ function TalbaiBurtgekh({ token }) {
                     )}
                   </Drawer>
                 </div>
-                <div
-                  className="w-2/4"
-                >
+                <div className="w-2/4">
                   <Button
                     className="w-full"
                     id="talbaiBurtgekhButton"
@@ -853,15 +855,17 @@ function TalbaiBurtgekh({ token }) {
             </div>
           </div>
         </div>
-        <div
-          className="box col-span-12 p-5 md:col-span-12  xl:col-span-8"
-        >
+        <div className="box col-span-12 p-5 md:col-span-12  xl:col-span-8">
           <Divider className="pb-5">Хөрөнгийн бүртгэл</Divider>
           <div className="">
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
                 <>
-                  <div className={`overflow-y-scroll space-y-4 max-h-maxScrollH ${fields.length > 0 && "py-5 pb-10 px-3 lg:px-10"}`}>
+                  <div
+                    className={`max-h-maxScrollH space-y-4 overflow-y-scroll ${
+                      fields.length > 0 && "py-5 px-3 pb-10 lg:px-10"
+                    }`}
+                  >
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <KhurunguudCard
                         key={key}

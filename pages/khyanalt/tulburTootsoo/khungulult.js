@@ -31,7 +31,6 @@ import formatNumber from "tools/function/formatNumber";
 import Aos from "aos";
 import { modal } from "components/ant/Modal";
 
-
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
   React.useImperativeHandle(
@@ -74,9 +73,9 @@ function tulburTootsoo() {
     return {
       createdAt: ekhlekhOgnoo
         ? {
-          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-        }
+            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+          }
         : undefined,
     };
   }, [ekhlekhOgnoo]);
@@ -118,9 +117,12 @@ function tulburTootsoo() {
 
   useEffect(() => {
     if (form.getFieldValue("turul") === "Бүгд") {
-      onSelectChange(gereeniiMedeelel?.jagsaalt.map((r) => r._id), gereeniiMedeelel?.jagsaalt)
+      onSelectChange(
+        gereeniiMedeelel?.jagsaalt.map((r) => r._id),
+        gereeniiMedeelel?.jagsaalt
+      );
     }
-  }, [shuult, form])
+  }, [shuult, form]);
 
   useEffect(() => {
     khungulukhDunTootsoolyo();
@@ -135,7 +137,7 @@ function tulburTootsoo() {
         query: { davkhar: value, tuluv: { $nin: -1 } },
       });
     } else {
-      setShuult({ query: { tuluv: { $ne: -1 } } })
+      setShuult({ query: { tuluv: { $ne: -1 } } });
       setRowKeys([]);
       setSongogdsonGereenuud([]);
     }
@@ -210,11 +212,15 @@ function tulburTootsoo() {
           confirm={(tailbar) =>
             uilchilgee(token)
               .post("/khungulultUstgaya", {
-                id: mur?._id, tailbar
+                id: mur?._id,
+                tailbar,
               })
               .then(({ data }) => {
                 if (data !== undefined) {
-                  khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
+                  khungulultTuukhMutate(
+                    (s) => ({ ...s, jagsaalt: s.jagsaalt }),
+                    true
+                  );
                   message.success("Устгагдлаа");
                 }
               })
@@ -340,8 +346,8 @@ function tulburTootsoo() {
           );
         },
       },
-    ]
-  })
+    ];
+  });
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -389,7 +395,7 @@ function tulburTootsoo() {
     <Admin
       title="Хөнгөлөлт"
       khuudasniiNer="khungulult"
-      className="p-0 pb-12 px-3 md:px-4 md:pb-0 md:p-4"
+      className="p-0 px-3 pb-12 md:p-4 md:px-4 md:pb-0"
       onSearch={(search) => {
         setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }));
         setGereeniiKhuudaslalt((a) => ({
@@ -553,6 +559,15 @@ function tulburTootsoo() {
                   dataSource={gereeniiMedeelel?.jagsaalt}
                   columns={[
                     {
+                      title: "Түрээслэгч",
+                      dataIndex: "ner",
+                      className: "text-center",
+                      align: "center",
+                      width: "5rem",
+                      showSorterTooltip: false,
+                      sorter: (a, b) => a.ner?.localeCompare(b.ner),
+                    },
+                    {
                       title: "Гэрээ",
                       dataIndex: "gereeniiDugaar",
                       className: "text-center",
@@ -635,9 +650,36 @@ function tulburTootsoo() {
                   size="small"
                   rowClassName="hover:bg-blue-100"
                   dataSource={khungulultTuukh?.jagsaalt}
-                  summary={() => <Table.Summary fixed> {!!columns && !!khungulultTuukh && <Table.Summary.Row>
-                    {columns?.map((mur, index) => <Table.Summary.Cell className={`${mur.summary !== true ? "border-none" : "font-bold"}`} index={index} align='right'>{mur.summary ? formatNumber(khungulultTuukh?.jagsaalt?.reduce((a, b) => a + (b[mur.dataIndex] || 0), 0)) : ''}{mur.summary && "₮"}</Table.Summary.Cell>)}
-                  </Table.Summary.Row>}</Table.Summary>}
+                  summary={() => (
+                    <Table.Summary fixed>
+                      {" "}
+                      {!!columns && !!khungulultTuukh && (
+                        <Table.Summary.Row>
+                          {columns?.map((mur, index) => (
+                            <Table.Summary.Cell
+                              className={`${
+                                mur.summary !== true
+                                  ? "border-none"
+                                  : "font-bold"
+                              }`}
+                              index={index}
+                              align="right"
+                            >
+                              {mur.summary
+                                ? formatNumber(
+                                    khungulultTuukh?.jagsaalt?.reduce(
+                                      (a, b) => a + (b[mur.dataIndex] || 0),
+                                      0
+                                    )
+                                  )
+                                : ""}
+                              {mur.summary && "₮"}
+                            </Table.Summary.Cell>
+                          ))}
+                        </Table.Summary.Row>
+                      )}
+                    </Table.Summary>
+                  )}
                   pagination={{
                     current: khungulultTuukh?.khuudasniiDugaar,
                     pageSize: 100,
