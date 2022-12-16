@@ -222,7 +222,7 @@ class App extends Component {
           </div>
         </div>
 
-        <Stage width={urgun} height={undur - 75}>
+        <Stage width={urgun} height={undur}>
           <Layer>
             {props.plan && (
               <URLImage

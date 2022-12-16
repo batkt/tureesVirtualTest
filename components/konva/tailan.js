@@ -17,15 +17,14 @@ function tailan({ token, points }) {
 
   function khaakh() {
     ref.current.destroy();
-    mutate();
   }
   function zuragKharakh(a) {
     uilchilgee(token)
       .get("/talbai", {
         params: {
           khuudasniiKhemjee: 1000,
-          davkhar: a.davkhar,
           query: JSON.stringify({
+            davkhar: a.davkhar,
             barilgiinId: barilgiinId,
             "bairshil.1": { $exists: true },
           }),
@@ -39,7 +38,8 @@ function tailan({ token, points }) {
           modal({
             className: " top-0",
             width: "100%",
-            footer: <Button onClick={() => khaakh}>Хаах</Button>,
+            height: "100%",
+            footer: <Button onClick={() => khaakh()}>Хаах</Button>,
             title: [
               <div className=" flex justify-between">
                 <div className="flex items-center justify-start bg-gray-50">

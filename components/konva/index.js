@@ -14,7 +14,7 @@ import {
 import uilchilgee, { url } from "services/uilchilgee";
 
 export const undur = window.innerHeight - 155 - 75;
-export const urgun = window.innerWidth - 50;
+export const urgun = window.innerWidth - 75;
 
 export function bairshilKhurvuuljAvakh(points) {
   const data =
