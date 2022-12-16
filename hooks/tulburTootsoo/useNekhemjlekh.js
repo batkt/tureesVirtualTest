@@ -32,12 +32,13 @@ const fetcher = (
         query: {
           ...queryAvya(davkhar, ilgeekhTurul),
           $or: [
+            { ner: { $regex: search, $options: "i" } },
             { register: { $regex: search, $options: "i" } },
             { talbainDugaar: { $regex: search, $options: "i" } },
             { gereeniiDugaar: { $regex: search, $options: "i" } },
             { utas: { $regex: search, $options: "i" } },
           ],
-          _id
+          _id,
         },
         ...khuudaslalt,
       },
@@ -52,7 +53,14 @@ const fetcher = (
     })
     .catch(aldaaBarigch);
 
-function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul, mbarilgiinId, _id) {
+function useNekhemjlekh(
+  token,
+  ognoo,
+  davkhar,
+  ilgeekhTurul,
+  mbarilgiinId,
+  _id
+) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setNekhemjlelKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -63,15 +71,15 @@ function useNekhemjlekh(token, ognoo, davkhar, ilgeekhTurul, mbarilgiinId, _id) 
   const { data, mutate, isValidating } = useSWR(
     !!token
       ? [
-        "/eneSardTulukhJagsaaltAvya",
-        token,
-        ognoo,
-        khuudaslalt,
-        davkhar,
-        (barilgiinId || mbarilgiinId),
-        ilgeekhTurul,
-        _id
-      ]
+          "/eneSardTulukhJagsaaltAvya",
+          token,
+          ognoo,
+          khuudaslalt,
+          davkhar,
+          barilgiinId || mbarilgiinId,
+          ilgeekhTurul,
+          _id,
+        ]
       : null,
     fetcher,
     { revalidateOnFocus: false }
