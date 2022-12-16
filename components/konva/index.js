@@ -1,11 +1,20 @@
 import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
-import { Stage, Layer, Line, Image, Circle, Group, Rect, Text } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Line,
+  Image,
+  Circle,
+  Group,
+  Rect,
+  Text,
+} from "react-konva";
 import uilchilgee, { url } from "services/uilchilgee";
 
-export const undur = window.innerHeight - 155;
-export const urgun = window.innerWidth - 50;
+export const undur = window.innerHeight - 155 - 75;
+export const urgun = window.innerWidth - 75;
 
 export function bairshilKhurvuuljAvakh(points) {
   const data =
@@ -84,11 +93,26 @@ function Drawer(props) {
     const barilga = props.baiguullaga?.barilguud?.find(
       (a) => a._id === props.barilgiinId
     );
-    uilchilgee(props.token).get('/talbai', { params: { query: { _id: { $nin: props._id }, davkhar: props.davkhar, barilgiinId: barilga?._id, "bairshil.1": { '$exists': true } }, select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 }, khuudasniiKhemjee: 1000 } }).then(({ data }) => {
-      data.jagsaalt.map(mur => mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
-      setTalbainuud(data.jagsaalt)
-    })
-  }, [])
+    uilchilgee(props.token)
+      .get("/talbai", {
+        params: {
+          query: {
+            _id: { $nin: props._id },
+            davkhar: props.davkhar,
+            barilgiinId: barilga?._id,
+            "bairshil.1": { $exists: true },
+          },
+          select: { bairshil: 1, _id: 1, idevkhiteiEsekh: 1, kod: 1 },
+          khuudasniiKhemjee: 1000,
+        },
+      })
+      .then(({ data }) => {
+        data.jagsaalt.map(
+          (mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
+        );
+        setTalbainuud(data.jagsaalt);
+      });
+  }, []);
 
   const getMousePos = (stage) => {
     return [stage.getPointerPosition().x, stage.getPointerPosition().y];
@@ -162,13 +186,13 @@ function Drawer(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex  space-x-3 pb-3 justify-end">
+      <div className="flex  justify-end space-x-3 pb-3">
         <div className="flex space-x-3 border-2 border-dashed p-1">
-          <div className="h-5 bg-green-400 w-5 border-2"></div>
+          <div className="h-5 w-5 border-2 bg-green-400"></div>
           <div> Идэвхтэй</div>
         </div>
         <div className="flex space-x-3 border-2 border-dashed p-1">
-          <div className="h-5 bg-red-400 w-5 border-2"></div>
+          <div className="h-5 w-5 border-2 bg-red-400"></div>
           <div>Идэвхгүй </div>
         </div>
       </div>
@@ -185,38 +209,53 @@ function Drawer(props) {
             src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
           />
           {talbainuud?.map((mur) => {
-            const flattenedPoints = mur.bairshil
-              .reduce((a, b) => a.concat(b), []);
+            const flattenedPoints = mur.bairshil.reduce(
+              (a, b) => a.concat(b),
+              []
+            );
             return (
               <Line
                 key={mur._id}
                 points={flattenedPoints}
                 stroke="black"
-                fill={mur.idevkhiteiEsekh ? 'lightgreen' : 'red'}
+                fill={mur.idevkhiteiEsekh ? "lightgreen" : "red"}
                 opacity={0.3}
                 strokeWidth={5}
                 closed={true}
               />
-
-            )
+            );
           })}
           {talbainuud?.map((mur) => {
-            const x = mur.bairshil?.reduce((a, b) => { return a + b[0] }, 0) / mur.bairshil.length
-            const y = mur.bairshil?.reduce((a, b) => { return a + b[1] }, 0) / mur.bairshil.length
+            const x =
+              mur.bairshil?.reduce((a, b) => {
+                return a + b[0];
+              }, 0) / mur.bairshil.length;
+            const y =
+              mur.bairshil?.reduce((a, b) => {
+                return a + b[1];
+              }, 0) / mur.bairshil.length;
             return (
-              <Group  >
-                <Rect x={x - (mur.kod.length / 2 * 15)} y={y - (15)} width={50} height={26} fill="white" stroke={1} opacity={0.9} />
+              <Group>
+                <Rect
+                  x={x - (mur.kod.length / 2) * 15}
+                  y={y - 15}
+                  width={50}
+                  height={26}
+                  fill="white"
+                  stroke={1}
+                  opacity={0.9}
+                />
                 <Text
-                  key={mur._id + 'text'}
-                  x={x - (mur.kod.length / 2 * 10)}
-                  y={y - (15 / 2)}
+                  key={mur._id + "text"}
+                  x={x - (mur.kod.length / 2) * 10}
+                  y={y - 15 / 2}
                   text={mur.kod}
-                  fill={'black'}
+                  fill={"black"}
                   fontSize={15}
                   align="center"
                 />
               </Group>
-            )
+            );
           })}
           <Line
             points={flattenedPoints}
@@ -227,41 +266,38 @@ function Drawer(props) {
             closed={isFinished}
           />
 
-          {
-            points.map((point, index) => {
-              const width = 6;
-              const x = point[0];
-              const y = point[1];
+          {points.map((point, index) => {
+            const width = 6;
+            const x = point[0];
+            const y = point[1];
 
-              return (
-                <Circle
-                  key={`${index}circle`}
-                  x={x}
-                  y={y}
-                  width={width}
-                  height={width}
-                  fill="white"
-                  stroke="black"
-                  strokeWidth={3}
-                  onDragStart={handleDragStartPoint}
-                  onDragEnd={(e) => handleDragEndPoint(e, index)}
-                  onDblClick={() => setIsFinished(true)}
-                  draggable
-                  strokeHitEnabled
-                  hitStrokeWidth={12}
-                  onMouseOver={
-                    index === 0 ? handleMouseOverStartPoint : undefined
-                  }
-                  onMouseOut={index === 0 ? handleMouseOutStartPoint : undefined}
-                />
-              );
-            })
-          }
-
+            return (
+              <Circle
+                key={`${index}circle`}
+                x={x}
+                y={y}
+                width={width}
+                height={width}
+                fill="white"
+                stroke="black"
+                strokeWidth={3}
+                onDragStart={handleDragStartPoint}
+                onDragEnd={(e) => handleDragEndPoint(e, index)}
+                onDblClick={() => setIsFinished(true)}
+                draggable
+                strokeHitEnabled
+                hitStrokeWidth={12}
+                onMouseOver={
+                  index === 0 ? handleMouseOverStartPoint : undefined
+                }
+                onMouseOut={index === 0 ? handleMouseOutStartPoint : undefined}
+              />
+            );
+          })}
         </Layer>
       </Stage>
 
-      <div className="flex space-x-3 justify-between items-center">
+      <div className="flex items-center justify-between space-x-3">
         <div className=" space-x-3 space-y-2 ">
           <Button
             style={{ backgroundColor: "#209669", color: "#ffffff" }}
@@ -278,8 +314,8 @@ function Drawer(props) {
               setIsMouseOverStartPoint(false);
             }}
           >
-            <ClearOutlined className="dark:text-white pr-2" />
-            <p className="dark:text-white" >Шинээр зурах</p>
+            <ClearOutlined className="pr-2 dark:text-white" />
+            <p className="dark:text-white">Шинээр зурах</p>
           </Button>
         </div>
       </div>

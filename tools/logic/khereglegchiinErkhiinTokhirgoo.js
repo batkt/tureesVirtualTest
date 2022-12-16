@@ -227,7 +227,7 @@ export function undsenKhuudasOlyo(url) {
 
 export function ekhniiTsonkhruuOchyo(ajiltan) {
   if (ajiltan?.erkh === "Admin")
-    window.location.href = "/khyanalt/geree/gereeBurtgel";
+    window.location.href = "/khyanalt/barilgaBurtgel";
   else window.location.href = ajiltan.tsonkhniiErkhuud[0];
 }
 

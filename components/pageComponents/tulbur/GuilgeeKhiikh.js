@@ -50,7 +50,6 @@ function GuilgeeKhiikh(
     undefined,
     token
   );
-
   React.useImperativeHandle(
     ref,
     () => ({
@@ -283,13 +282,17 @@ function GuilgeeKhiikh(
           id="select2"
           placeholder="Зардлын төрөл"
         >
-          {zardal.jagsaalt?.map((mur) => (
-            <Select.Option key={mur._id} value={mur._id}>
-              <div>
-                {mur.ner}/{mur.turul}
-              </div>
-            </Select.Option>
-          ))}
+          {zardal.jagsaalt?.map((mur) =>
+            mur.turul !== "1м2" ? (
+              <Select.Option key={mur._id} value={mur._id}>
+                <div>
+                  {mur.ner}/{mur.turul}
+                </div>
+              </Select.Option>
+            ) : (
+              ""
+            )
+          )}
         </Select>
       )}
       {negjUne && turul === "ahiglalt" && (

@@ -20,8 +20,8 @@ import {
   DownOutlined,
   ExclamationOutlined,
   FileExcelOutlined,
-  QuestionOutlined,
 } from "@ant-design/icons";
+import { TbEqualNot } from "react-icons/tb";
 import moment from "moment";
 import useDans from "hooks/useDans";
 import formatNumber from "tools/function/formatNumber";
@@ -51,12 +51,15 @@ function iconAvya(a, bank) {
     (a?.magadlaltaiGereenuud?.length > 0 &&
       !(a?.kholbosonGereeniiId?.length > 0))
   ) {
-    Icon = QuestionOutlined;
+    Icon = TbEqualNot;
     color = "yellow";
     tailbar =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-        a?.kholbosonDun > 0
-        ? "Дүн дутуу холбогдсон байна"
+      a?.kholbosonDun > 0
+        ? `${formatNumber(
+            a.amount || a.Amt - a.kholbosonDun || 0,
+            0
+          )} ₮ дутуу холбогдсон байна`
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
     a?.kholbosonGereeniiId &&
@@ -197,7 +200,7 @@ function tulburTootsoo({ token }) {
     if (
       data?.kholbosonGereeniiId &&
       data?.kholbosonDun ===
-      data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
+        data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
     ) {
       message.info("Гүйлгээ гэрээнд холбогдсон байна.");
       return;
@@ -314,7 +317,7 @@ function tulburTootsoo({ token }) {
           align: "center",
           width: "7rem",
           render(date) {
-            return moment(date).format("YYYY-MM-DD")
+            return moment(date).format("YYYY-MM-DD");
           },
           showSorterTooltip: false,
           sorter: {
@@ -343,8 +346,12 @@ function tulburTootsoo({ token }) {
           align: "center",
           dataIndex: "TxAddInf",
           render(a) {
-            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
-          }
+            return (
+              <Tooltip title={<div>{a}</div>}>
+                <div className="flex w-full truncate">{a}</div>
+              </Tooltip>
+            );
+          },
         },
         {
           title: "Гүйлгээний дүн",
@@ -394,15 +401,43 @@ function tulburTootsoo({ token }) {
             width: "5rem",
             render(data) {
               if (data.length > 1) {
-                return <Tooltip placement="top"
-                  title={
-                    <div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div>
-                  }><div className="flex truncate justify-center">{data.map((a, i) => <div key={i} className={`${data.length - 1 !== i && "pr-1"}`}>{a}{data.length - 1 !== i && ","}</div>)}</div></Tooltip>
-              } else return <Tooltip placement="top"
-                title={
-                  <div>{data}</div>
-                }><div>{data}</div></Tooltip>
-            }
+                return (
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <div className="flex justify-center truncate">
+                        {data.map((a, i) => (
+                          <div
+                            key={i}
+                            className={`${data.length - 1 !== i && "pr-1"}`}
+                          >
+                            {a}
+                            {data.length - 1 !== i && ","}
+                          </div>
+                        ))}
+                      </div>
+                    }
+                  >
+                    <div className="flex justify-center truncate">
+                      {data.map((a, i) => (
+                        <div
+                          key={i}
+                          className={`${data.length - 1 !== i && "pr-1"}`}
+                        >
+                          {a}
+                          {data.length - 1 !== i && ","}
+                        </div>
+                      ))}
+                    </div>
+                  </Tooltip>
+                );
+              } else
+                return (
+                  <Tooltip placement="top" title={<div>{data}</div>}>
+                    <div>{data}</div>
+                  </Tooltip>
+                );
+            },
           },
           {
             title: "НӨАТУС",
@@ -419,7 +454,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -477,8 +512,12 @@ function tulburTootsoo({ token }) {
           align: "center",
           dataIndex: "description",
           render(a) {
-            return <Tooltip title={<div>{a}</div>}><div className="truncate flex w-full">{a}</div></Tooltip>
-          }
+            return (
+              <Tooltip title={<div>{a}</div>}>
+                <div className="flex w-full truncate">{a}</div>
+              </Tooltip>
+            );
+          },
         },
         {
           title: "Гүйлгээний дүн",
@@ -543,7 +582,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -603,15 +642,16 @@ function tulburTootsoo({ token }) {
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
-        Number(bankniiGuilgeeToololt?.kholboson || 0) >
-        0 &&
+          Number(bankniiGuilgeeToololt?.kholboson || 0) >
+          0 &&
         notification.error({
-          message: `Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0) -
+          message: `Холболт хийгдээгүй ${
+            Number(bankniiGuilgeeToololt?.niit || 0) -
             Number(bankniiGuilgeeToololt?.kholboson || 0)
-            } гэрээ байна`,
+          } гэрээ байна`,
         })}
       <Card className="cardgrid col-span-12 md:p-5">
-        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:py-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
             {
@@ -627,16 +667,17 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${mur.utga === songogdsonTurul
-                  ? "bg-green-50 dark:bg-gray-900"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${
+                  mur.utga === songogdsonTurul
+                    ? "bg-green-50 dark:bg-gray-900"
+                    : ""
+                }`}
                 onClick={() => turulSongyo(mur.utga)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <div className="h-full w-[65vw] sm:w-auto rounded-xl">
+                <div className="h-full w-[65vw] rounded-xl sm:w-auto">
                   <div className="rounded-xl p-3">
                     <div className="flex">
                       <div>
@@ -675,10 +716,11 @@ function tulburTootsoo({ token }) {
               <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
                 {["orlogo", "zarlaga"].map((text) => (
                   <div
-                    className={`cursor-pointer rounded-md p-2 ${khuulgaTurul === text
-                      ? "dark bg-green-500 text-gray-50"
-                      : ""
-                      }`}
+                    className={`cursor-pointer rounded-md p-2 ${
+                      khuulgaTurul === text
+                        ? "dark bg-green-500 text-gray-50"
+                        : ""
+                    }`}
                     onClick={() => setKhuulgaTurul(text)}
                   >
                     {text === "orlogo" ? "Орлого" : "Зарлага"}
@@ -688,7 +730,7 @@ function tulburTootsoo({ token }) {
             )}
           </div>
           <div className="flex w-full md:pt-1">
-            <div className="md:ml-4 w-40">
+            <div className="w-40 md:ml-4">
               <Select
                 placeholder="Данс"
                 style={{ width: "100%" }}
@@ -704,7 +746,7 @@ function tulburTootsoo({ token }) {
             </div>
 
             {songogdsonDans && (
-              <div className="ml-5 md:flex hidden flex-row space-x-2 p-1 font-medium">
+              <div className="ml-5 hidden flex-row space-x-2 p-1 font-medium md:flex">
                 Үлдэгдэл:{" "}
                 {uldegdel ? (
                   songogdsonDans?.bank === "tdb" ? (

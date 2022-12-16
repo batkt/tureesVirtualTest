@@ -1,10 +1,9 @@
-import { Select, Form } from "antd";
 import useJagsaalt from "hooks/useJagsaalt";
 import _ from "lodash";
-import React, { Component, useEffect, useMemo } from "react";
+import React, { Component, useMemo } from "react";
 import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
-import uilchilgee, { url } from "services/uilchilgee";
-import { bairshilKhurvuuljAvakh, undur, urgun } from ".";
+import { url } from "services/uilchilgee";
+import { undur, urgun } from ".";
 
 class URLImage extends React.Component {
   state = {
@@ -185,18 +184,28 @@ class App extends Component {
     isFinished: !!this.props.points?.length || false,
   };
 
+  escDarakh = (e) => {
+    if (e.key === "Escape") {
+      this.props.destroy();
+    }
+  };
+  componentDidMount() {
+    document.addEventListener("keyup", this.escDarakh);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keyup", this.escDarakh);
+  }
+
   destroy() {
     this.props.destroy();
   }
-
   render() {
     const {
       state: { pointer },
       props,
     } = this;
-    const talbainuud = props.talbainuud.filter(
-      (mur) => mur.davkhar === props.davkhar
-    );
+    const talbainuud = props.talbainuud;
 
     return (
       <div>
@@ -278,21 +287,15 @@ class App extends Component {
 
               return (
                 <Group key={mur._id + "text"}>
-                  <Rect
-                    x={x - (mur.kod.length / 2) * 15}
-                    y={y - 15}
-                    width={65}
-                    height={26}
-                    fill="white"
-                    stroke={1}
-                    opacity={0.9}
-                  />
                   <Text
-                    x={x - (mur.kod.length / 2) * 10}
+                    x={x - (mur.kod.length * 4) / 2}
                     y={y - 15 / 2}
+                    fontStyle="bold"
                     text={mur.kod}
+                    stroke="white"
+                    strokeWidth={0.3}
                     fill={"black"}
-                    fontSize={15}
+                    fontSize={13}
                     align="center"
                   />
                 </Group>

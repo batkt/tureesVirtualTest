@@ -22,8 +22,6 @@ import {
   DownOutlined,
   PrinterOutlined,
   CloseCircleOutlined,
-  FileTextOutlined,
-  FileDoneOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -45,6 +43,8 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
+import { CiFilter } from "react-icons/ci";
+
 //#endregion
 
 function GereeniiUldegdel({ ugugdul, token }) {
@@ -65,8 +65,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
     </div>
@@ -98,11 +99,11 @@ function TableGuilgee({
           >
             {mur.summary
               ? formatNumber(
-                garalt?.jagsaalt?.reduce(
-                  (a, b) => a + (b[mur.dataIndex] || 0),
-                  0
+                  garalt?.jagsaalt?.reduce(
+                    (a, b) => a + (b[mur.dataIndex] || 0),
+                    0
+                  )
                 )
-              )
               : ""}
           </Table.Summary.Cell>
         ))}
@@ -170,6 +171,8 @@ function guilgeeniiTuukh({ token }) {
     moment(moment().startOf("month").format("YYYY-MM-DD 00:00:00")),
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
   ]);
+  const [tulukhOgnoo, setTulukhOgnoo] = React.useState();
+  console.log(tulukhOgnoo);
   const [turul, setTurul] = React.useState("");
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
@@ -205,7 +208,9 @@ function guilgeeniiTuukh({ token }) {
           width: "7rem",
           summary: true,
           align: "center",
-          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
         });
         break;
       case "khungulult":
@@ -216,7 +221,9 @@ function guilgeeniiTuukh({ token }) {
           summary: true,
           width: "6rem",
           align: "center",
-          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
         });
         break;
       case "eneSardTulsun":
@@ -227,7 +234,9 @@ function guilgeeniiTuukh({ token }) {
           summary: true,
           width: "7rem",
           align: "center",
-          render: (v) => <div className="w-full text-right">{formatNumber(v)}</div>
+          render: (v) => (
+            <div className="w-full text-right">{formatNumber(v)}</div>
+          ),
         });
         break;
       default:
@@ -267,8 +276,14 @@ function guilgeeniiTuukh({ token }) {
           $ne: -1,
         },
       };
+    if (query && !!tulukhOgnoo) {
+      query.daraagiinTulukhOgnoo = {
+        $lte: tulukhOgnoo.format("YYYY-MM-DD 23:59:59"),
+        $gte: tulukhOgnoo.format("YYYY-MM-DD 00:00:00"),
+      };
+    }
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar, barilgiinId]);
+  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo]);
 
   const {
     data,
@@ -376,6 +391,7 @@ function guilgeeniiTuukh({ token }) {
             );
         },
       },
+
       {
         title: "Үлдэгдэл",
         width: "calc(18rem - 10rem)",
@@ -397,6 +413,48 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
         sorter: (a, b) => Number(a.uldegdel || 0) - Number(b.uldegdel || 0),
       },
+      {
+        width: "9rem",
+        align: "center",
+        title: () => (
+          <div className="flex justify-center">
+            <div
+              className=" flex w-full
+             justify-end"
+            >
+              Төлөх огноо
+            </div>
+            <div className="flex h-full w-[50%] items-center justify-end">
+              <Popover
+                placement="bottom"
+                trigger="click"
+                Tooltip={false}
+                content={() => (
+                  <div>
+                    <DatePicker
+                      allowClear
+                      onChange={(v) => {
+                        setTulukhOgnoo(v);
+                        setLoadingIndex(0);
+                      }}
+                      placeholder="Төлөх Огноо Хайх"
+                    />
+                  </div>
+                )}
+              >
+                <a className="hover:scale-150 ">
+                  <CiFilter className="text-lg text-green-600" />
+                </a>
+              </Popover>
+            </div>
+          </div>
+        ),
+        dataIndex: "daraagiinTulukhOgnoo",
+        render(a) {
+          return moment(a).format("YYYY-MM-DD");
+        },
+        sorter: false,
+      },
     ];
 
     if (turul == "eneSardTulukh") {
@@ -406,7 +464,11 @@ function guilgeeniiTuukh({ token }) {
         align: "center",
         summary: true,
         render: (tuluvluguut) => {
-          return <div className="w-full text-right">{formatNumber(tuluvluguut || 0)}</div>
+          return (
+            <div className="w-full text-right">
+              {formatNumber(tuluvluguut || 0)}
+            </div>
+          );
         },
         ellipsis: true,
         width: "7rem",
@@ -539,12 +601,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -723,11 +785,11 @@ function guilgeeniiTuukh({ token }) {
       const render = a.render;
       if (a.title !== "№" && a.title !== "Үйлдэл") {
         a.dataIndex === "tuluvluguut" ||
-          a.dataIndex === "sariinTurees" ||
-          a.dataIndex === "talbainNiitUne" ||
-          a.dataIndex === "aldangiinUldegdel" ||
-          a.dataIndex === "daraagiinTulukhOgnoo" ||
-          a.dataIndex === "gereeniiOgnoo"
+        a.dataIndex === "sariinTurees" ||
+        a.dataIndex === "talbainNiitUne" ||
+        a.dataIndex === "aldangiinUldegdel" ||
+        a.dataIndex === "daraagiinTulukhOgnoo" ||
+        a.dataIndex === "gereeniiOgnoo"
           ? forExcel.push({ title, dataIndex, render })
           : forExcel.push({ title, dataIndex });
       }
@@ -815,8 +877,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
@@ -897,22 +960,17 @@ function guilgeeniiTuukh({ token }) {
                 setShineBagana={setShineBagana}
                 columns={[
                   {
-                    width: "9rem",
-                    align: "center",
-                    title: " Төлөх огноо",
-                    dataIndex: "daraagiinTulukhOgnoo",
-                    render(a) {
-                      return moment(a).format("YYYY-MM-DD");
-                    },
-                  },
-                  {
                     title: "Сарын түрээс",
                     width: "8rem",
                     dataIndex: "sariinTurees",
                     summary: true,
                     align: "center",
                     render: (a) => {
-                      return <div className="w-full text-right">{formatNumber(a || 0)}</div>
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(a || 0)}
+                        </div>
+                      );
                     },
                   },
                   {
@@ -922,7 +980,11 @@ function guilgeeniiTuukh({ token }) {
                     summary: true,
                     dataIndex: "talbainNiitUne",
                     render: (a) => {
-                      return <div className="w-full text-right">{formatNumber(a || 0)}</div>
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(a || 0)}
+                        </div>
+                      );
                     },
                   },
                   {
@@ -941,7 +1003,9 @@ function guilgeeniiTuukh({ token }) {
                     ellipsis: true,
                     align: "center",
                     width: "8rem",
-                    render(a) { return <div className="text-left">{a}</div> }
+                    render(a) {
+                      return <div className="text-left">{a}</div>;
+                    },
                   },
                   {
                     title: "Гэрээний огноо",
@@ -963,7 +1027,11 @@ function guilgeeniiTuukh({ token }) {
                     width: "7rem",
                     summary: true,
                     render: (aldangiinUldegdel) => {
-                      return <div className="w-full text-right">{formatNumber(aldangiinUldegdel || 0)}</div>
+                      return (
+                        <div className="w-full text-right">
+                          {formatNumber(aldangiinUldegdel || 0)}
+                        </div>
+                      );
                     },
                   },
                 ]}
