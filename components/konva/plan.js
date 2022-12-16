@@ -295,7 +295,7 @@ class App extends Component {
                     stroke="white"
                     strokeWidth={0.3}
                     fill={"black"}
-                    fontSize={10}
+                    fontSize={13}
                     align="center"
                   />
                 </Group>
