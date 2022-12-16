@@ -1,5 +1,6 @@
 import {
   CloseCircleOutlined,
+  MinusCircleOutlined,
   PlusOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
@@ -116,7 +117,6 @@ function KhurunguudCard({
   ...restField
 }) {
   const niitUneRef = useRef();
-
   const tooRef = useRef();
   const uneRef = useRef();
 
@@ -354,31 +354,25 @@ function TalbaiBurtgekh({ token }) {
   });
 
   function onChange(talbar, utga) {
-    if (!talbaiState?.talbainNegjUne) {
-      if (talbar === "talbainNegjUne") {
-        let value = Number(utga) * Number(talbaiState.talbainKhemjee);
-        if (
-          (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
-            _.isNumber(utga) &&
-            value) ||
-          0
-        ) {
-          talbaiState.talbainNiitUne = value.toFixed(2);
-          formRef.current.setFieldsValue({
-            talbainNiitUne: talbaiState.talbainNiitUne,
-          });
-          talbaiState.tureesiinTulbur =
-            Number(talbaiState.niitAshiglaltiinZardal || 0) +
-            Number(talbaiState.talbainNiitUne || 0);
-          formRef.current.setFieldsValue({
-            tureesiinTulbur: talbaiState.tureesiinTulbur,
-          });
-        }
+    if (talbar === "talbainNegjUne") {
+      let value = Number(utga) * Number(talbaiState.talbainKhemjee);
+      if (
+        (_.isNumber(Number(talbaiState.talbainNegjUne)) &&
+          _.isNumber(utga) &&
+          value) ||
+        0
+      ) {
+        talbaiState.talbainNiitUne = value.toFixed(2);
+        formRef.current.setFieldsValue({
+          talbainNiitUne: talbaiState.talbainNiitUne,
+        });
+        talbaiState.tureesiinTulbur =
+          Number(talbaiState.niitAshiglaltiinZardal || 0) +
+          Number(talbaiState.talbainNiitUne || 0);
+        formRef.current.setFieldsValue({
+          tureesiinTulbur: talbaiState.tureesiinTulbur,
+        });
       }
-    } else {
-      formRef.current.setFieldsValue({
-        talbainNiitUne: (talbaiState.talbainNiitUne = 0),
-      });
     }
     if (talbar === "ashiglaltiinZardal") {
       talbaiState.niitAshiglaltiinZardal = (
