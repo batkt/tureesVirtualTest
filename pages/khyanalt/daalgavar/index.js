@@ -41,6 +41,10 @@ function index({ token }) {
     }),
     [ajiltan, tuluv]
   );
+  useEffect(() => {
+    task.mutate();
+    setDaalgavar();
+  }, [tuluv])
 
   const task = useJagsaalt(ajiltan && "/daalgavar", query, order);
 
@@ -161,9 +165,9 @@ function index({ token }) {
         <div className="w-full overflow-y-scroll" style={{ height: "70vh" }}>
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`my-1 flex w-full cursor-pointer flex-row space-x-2 rounded-lg bg-gray-50 p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
+              className={`my-1 flex w-full cursor-pointer flex-row space-x-2 rounded-lg  p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
                 ? "bg-green-100 dark:bg-green-700"
-                : ""
+                : "bg-gray-50"
                 }`}
               key={`${index}-daalgavar`}
               onClick={() => {

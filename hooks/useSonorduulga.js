@@ -105,7 +105,7 @@ function useSonorduulga(token) {
             notification.open({
               key: key,
               message: (
-                <Sonorduulga token={token} {...sonorduulga} onClose={onClose} />
+                <Sonorduulga token={token} ajiltan={ajiltan} {...sonorduulga} onClose={onClose} />
               ),
               closeIcon: () => null,
               duration: 100000,

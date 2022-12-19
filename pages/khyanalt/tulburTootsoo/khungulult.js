@@ -73,9 +73,9 @@ function tulburTootsoo() {
     return {
       createdAt: ekhlekhOgnoo
         ? {
-            $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+          $gte: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+          $lte: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+        }
         : undefined,
     };
   }, [ekhlekhOgnoo]);
@@ -165,6 +165,13 @@ function tulburTootsoo() {
       });
       return;
     }
+    if (baiguullaga.tokhirgoo.bukhAjiltanKhungulultOruulakhEsekh === false) {
+      setWaiting(false);
+      notification.warning({
+        message: "Хөнгөлөлт оруулах эрх хаагдсан байна.",
+      });
+      return;
+    }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
       ugugdul.ognoonuud = [
@@ -177,6 +184,9 @@ function tulburTootsoo() {
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
         (x) => (x._id = x._id)
       );
+      if (baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi) {
+        setWaiting(false); notification.warning({ message: "Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!" }); return
+      }
 
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
@@ -657,21 +667,20 @@ function tulburTootsoo() {
                         <Table.Summary.Row>
                           {columns?.map((mur, index) => (
                             <Table.Summary.Cell
-                              className={`${
-                                mur.summary !== true
-                                  ? "border-none"
-                                  : "font-bold"
-                              }`}
+                              className={`${mur.summary !== true
+                                ? "border-none"
+                                : "font-bold"
+                                }`}
                               index={index}
                               align="right"
                             >
                               {mur.summary
                                 ? formatNumber(
-                                    khungulultTuukh?.jagsaalt?.reduce(
-                                      (a, b) => a + (b[mur.dataIndex] || 0),
-                                      0
-                                    )
+                                  khungulultTuukh?.jagsaalt?.reduce(
+                                    (a, b) => a + (b[mur.dataIndex] || 0),
+                                    0
                                   )
+                                )
                                 : ""}
                               {mur.summary && "₮"}
                             </Table.Summary.Cell>

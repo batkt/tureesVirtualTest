@@ -21,6 +21,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
   const ajitanRef = React.useRef(null);
   const { barilgiinId, baiguullaga } = useAuth();
   const [daalgavar, setDaalgavar] = React.useState({});
+  const [zuragnuud, setZuragnuud] = useState([])
 
   function onChange(k, v) {
     setDaalgavar((a) => ({ ...a, [k]: v }));
@@ -87,20 +88,20 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
         if (data === "Amjilttai") {
           notification.success({ message: "Даалгавар амжилттай бүртгэгдлээ" });
           setDaalgavar({});
+          setZuragnuud([]);
           onRefresh();
           onClose();
         }
       }).catch(aldaaBarigch);
   }
-
   return (
     <div
-      data-aos="flip-right"
+      data-aos="fade-right"
       data-aos-delay="200"
       data-aos-anchor-placement="top-bottom"
       className={`relative col-span-12 space-y-10 rounded-2xl md:rounded-none md:rounded-r-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
     >
-      <div className="text-center text-xl font-medium">Даалгавар бүртгэх</div>
+      <div className="text-left text-xl font-medium">Даалгаварын хугацааг сонгоно уу.</div>
       <div className="flex justify-between gap-2 overflow-x-scroll p-2 lg:justify-center xl:justify-between">
         {ognoonuud.map((ognoo) => (
           <div
@@ -116,7 +117,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           </div>
         ))}
       </div>
-      <div className="text-2xl font-medium">Ажилтан сонгоно уу</div>
+      <div className="text-xl font-medium">Ажилтан сонгоно уу.</div>
       <div className="flex flex-col gap-5">
         <div
           onClick={ajiltanSongokh}
@@ -128,7 +129,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               <div className="text-lg font-medium">
                 Ажилтан{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
               </div>
-              <div>Та ажилтангаа сонгоно уу</div>
+              <div>Даалгавар илгээх ажилтан сонгоно уу</div>
             </div>
           </div>
           <div>
@@ -142,13 +143,16 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           listType="picture"
           action={`${url}/zuragKhadgalya`}
           method="POST"
+          fileList={zuragnuud}
           data={{ turul: "jpg" }}
           headers={{ Authorization: `bearer ${token}` }}
-          onChange={(v) =>
+          onChange={(v) => {
+            setZuragnuud(v.fileList)
             onChange(
               "zurguud",
               v.fileList.map((v) => v.response?.id)
             )
+          }
           }
           className="flex w-2/3 flex-col rounded-full"
         >
@@ -173,6 +177,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             minRows: 1,
             maxRows: 4,
           }}
+          value={daalgavar.tailbar}
           className="mt-10 h-24 w-full border-2 p-3 "
           placeholder="Даалгавар"
           type="text"

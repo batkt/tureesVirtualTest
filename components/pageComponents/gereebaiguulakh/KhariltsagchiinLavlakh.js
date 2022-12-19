@@ -25,7 +25,7 @@ const KhariltsagchiinLavlakh = ({
     return {
       barilgiinId: barilgiinId,
       baiguullagiinId: baiguullaga?._id,
-      turul: baiguullagaEsekh ? "ААН" : "Иргэн"
+      turul: baiguullagaEsekh === true ? "ААН" : "Иргэн"
     };
   }, [baiguullaga, barilgiinId, baiguullagaEsekh]);
   const khariltsagchiinGaralt = useJagsaalt("/khariltsagch", kharitsagchQuery, undefined, undefined, searchKeys);
@@ -44,7 +44,7 @@ const KhariltsagchiinLavlakh = ({
     if (
       e.target.scrollHeight - e.target.scrollTop - 1 < e.target.clientHeight &&
       !!khariltsagchiinGaralt &&
-      khariltsagchiinGaralt?.data?.jagsaalt.length === 20
+      khariltsagchiinGaralt?.data?.jagsaalt.length === 20 && khariltsagchiinGaralt.khuudaslalt.khuudasniiDugaar < khariltsagchiinGaralt?.data?.niitKhuudas
     ) {
       khariltsagchiinGaralt.setKhuudaslalt((kh) => ({
         ...kh,
