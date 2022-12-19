@@ -15,7 +15,6 @@ import router from "next/router";
 import CardList from "components/cardList";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
 import Aos from "aos";
-import formatNumber from "tools/function/formatNumber";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import moment from "moment";
@@ -28,6 +27,7 @@ import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraa
 import useLineChart from "hooks/tailan/useLineChart";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import { GoPrimitiveDot } from "react-icons/go";
+import formatNumber from "tools/function/formatNumber";
 
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
@@ -36,6 +36,8 @@ function BarilgaBurtgel({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   const [ognoo, setOgnoo] = useState(new Date());
+  const [nariivchlal, setNariivchlal] = useState("month");
+
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token] : null,
     (url, token) =>
@@ -153,17 +155,34 @@ function BarilgaBurtgel({ token }) {
   const handleValueChange = (newValue) => {
     setValue(newValue);
   };
+  const [lineOgnoo, setLineOgnoo] = useState([
+    moment().startOf("month"),
+    moment().endOf("month"),
+  ]);
+  const query = useMemo(() => {
+    return {
+      nariivchlal,
+      ekhlekhOgnoo: lineOgnoo && lineOgnoo[0].format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: lineOgnoo && lineOgnoo[1].format("YYYY-MM-DD 23:59:59"),
+    };
+  }, [lineOgnoo, nariivchlal]);
 
-  const lineChart = useLineChart("orlogiinChartSalbarKhugatsaagaarAvya", token);
+  const lineChart = useLineChart(
+    "orlogiinChartSalbarKhugatsaagaarAvya",
+    token,
+    query
+  );
 
   const avlagiinChartSalbaraarAvya = useAvlagiinChartSalbaraar(
     "avlagiinChartSalbaraarAvya",
-    token
+    token,
+    query
   );
 
   const orlogiinChartSalbaraarAvya = useOrlogiinChartSalbaraarAvya(
     "orlogiinChartSalbaraarAvya",
-    token
+    token,
+    query
   );
 
   const avalgiinChartUngu =
@@ -427,17 +446,40 @@ function BarilgaBurtgel({ token }) {
               />
             </div>
           </div>
-
+          <div className=" flex gap-2">
+            <div className=" w-[24%]">
+              <Datepicker
+                placeholder="Эхлэх огноо - Дуусах огноо"
+                value={{ startDate: lineOgnoo[0], endDate: lineOgnoo[1] }}
+                onChange={({ startDate, endDate }) =>
+                  setLineOgnoo([moment(startDate), moment(endDate)])
+                }
+              />
+            </div>
+            <div className=" w-[10%]">
+              <select
+                className="h-full w-full rounded-lg p-2"
+                placeholder="График төрөл сонгох"
+                value={nariivchlal}
+                onChange={setNariivchlal}
+              >
+                {[
+                  { val: "day", lab: "Өдөр" },
+                  { val: "month", lab: "Сар" },
+                  { val: "year", lab: "Жил" },
+                ].map((a) => (
+                  <option key={a.val} value={a.val}>
+                    {a.lab}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div className=" grid h-full grid-cols-12   md:space-x-6 ">
             <div className="col-span-12  space-y-2   md:col-span-6 ">
               <div className="  grid grid-cols-12 ">
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
                   Орлогын тайлан салбараар
-                </div>
-                <div className=" col-span-12  flex items-end justify-end  md:col-span-6 xl:col-span-6">
-                  <div className="w-[90%]">
-                    <Datepicker value={value} onChange={handleValueChange} />
-                  </div>
                 </div>
               </div>
               <div className="box flex h-full items-center justify-start p-2 ">
@@ -446,13 +488,13 @@ function BarilgaBurtgel({ token }) {
                 </div>
               </div>
             </div>
-            <div className="col-span-12 space-y-2 md:col-span-3  ">
+            <div className="col-span-12  space-y-2 md:col-span-3  ">
               <div className="  grid grid-cols-12 ">
-                <div className=" col-span-12 flex h-10 items-center justify-start text-lg">
+                <div className=" col-span-12 flex  items-center justify-start text-xl">
                   Авлагын тайлан
                 </div>
               </div>
-              <div className="box flex h-full flex-col justify-start p-4 pt-8 ">
+              <div className="box flex h-full flex-col justify-start p-4">
                 <div>
                   <Pie
                     data={avlaga}
@@ -504,11 +546,11 @@ function BarilgaBurtgel({ token }) {
             </div>
             <div className="col-span-12 space-y-2  md:col-span-3 ">
               <div className="  grid grid-cols-12 ">
-                <div className=" col-span-12 flex h-10 items-center justify-start text-lg ">
+                <div className=" col-span-12 flex items-center justify-start text-xl ">
                   Орлогын тайлан
                 </div>
               </div>
-              <div className="box flex  h-full  flex-col justify-start p-4 pt-10 ">
+              <div className="box flex  h-full  flex-col justify-start p-4  ">
                 <div>
                   <Doughnut
                     data={orlogo}

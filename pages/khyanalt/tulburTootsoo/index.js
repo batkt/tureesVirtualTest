@@ -20,6 +20,7 @@ import {
   DownOutlined,
   ExclamationOutlined,
   FileExcelOutlined,
+  QuestionOutlined,
 } from "@ant-design/icons";
 import { TbEqualNot } from "react-icons/tb";
 import moment from "moment";
@@ -51,13 +52,17 @@ function iconAvya(a, bank) {
     (a?.magadlaltaiGereenuud?.length > 0 &&
       !(a?.kholbosonGereeniiId?.length > 0))
   ) {
-    Icon = TbEqualNot;
+    Icon =
+      a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
+      a?.kholbosonDun > 0
+        ? TbEqualNot
+        : QuestionOutlined;
     color = "yellow";
     tailbar =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0
         ? `${formatNumber(
-            a.amount || a.Amt - a.kholbosonDun || 0,
+            a?.amount - a?.kholbosonDun || a?.Amt - a?.kholbosonDun || 0,
             0
           )} ₮ дутуу холбогдсон байна`
         : "Холбох боломжтой гэрээнүүд байна";
@@ -69,7 +74,6 @@ function iconAvya(a, bank) {
     color = "green";
     tailbar = "Гүйлгээ холбогдсон байна";
   }
-
   return (
     <Tooltip title={tailbar}>
       <div className={`text-${color}-500 flex items-center justify-center`}>
