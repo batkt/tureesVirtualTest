@@ -39,7 +39,6 @@ function tailan({ token, points }) {
             className: " top-0",
             width: "100%",
             height: "100%",
-            footer: <Button onClick={() => khaakh()}>Хаах</Button>,
             title: [
               <div className=" flex justify-between">
                 <div className="flex items-center justify-start bg-gray-50">
@@ -65,6 +64,7 @@ function tailan({ token, points }) {
                 talbainuud={data?.jagsaalt}
               />
             ),
+            footer: [],
           });
         }
       });
