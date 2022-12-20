@@ -28,7 +28,7 @@ import useLineChart from "hooks/tailan/useLineChart";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import { GoPrimitiveDot } from "react-icons/go";
 import formatNumber from "tools/function/formatNumber";
-
+import local from "antd/lib/date-picker/locale/mn_MN";
 function BarilgaBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
@@ -448,17 +448,14 @@ function BarilgaBurtgel({ token }) {
           </div>
           <div className=" flex gap-2">
             <div className=" w-[24%]">
-              <Datepicker
-                placeholder="Эхлэх огноо - Дуусах огноо"
-                value={{ startDate: lineOgnoo[0], endDate: lineOgnoo[1] }}
-                onChange={({ startDate, endDate }) =>
-                  setLineOgnoo([moment(startDate), moment(endDate)])
-                }
+              <DatePicker.RangePicker
+                locale={local}
+                value={lineOgnoo}
+                onChange={setLineOgnoo}
               />
             </div>
-            <div className=" w-[10%]">
-              <select
-                className="h-full w-full rounded-lg p-2"
+            <div className=" w-[20%]">
+              <Select
                 placeholder="График төрөл сонгох"
                 value={nariivchlal}
                 onChange={setNariivchlal}
@@ -468,11 +465,11 @@ function BarilgaBurtgel({ token }) {
                   { val: "month", lab: "Сар" },
                   { val: "year", lab: "Жил" },
                 ].map((a) => (
-                  <option key={a.val} value={a.val}>
+                  <Select.Option key={a.val} value={a.val}>
                     {a.lab}
-                  </option>
+                  </Select.Option>
                 ))}
-              </select>
+              </Select>
             </div>
           </div>
           <div className=" grid h-full grid-cols-12   md:space-x-6 ">
