@@ -241,7 +241,10 @@ function index({ token }) {
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
       >
-
+        <div className={`absolute justify-center top-0 cursor-default left-0 rounded-2xl flex-col w-full h-full text-white bg-black dark:bg-white dark:bg-opacity-20 bg-opacity-30 z-50 items-center ${daalgavar?.tuluv === -1 ? "flex" : "hidden"}`}>
+          {!!daalgavar?.tsutsalsanOgnoo && <p className="text-xl z-50 font-medium">{moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}</p>}
+          {!!daalgavar?.tsutsalsanShaltgaan && <p className="text-xl w-4/6 text-center z-50 font-medium">{daalgavar?.tsutsalsanShaltgaan} гэсэн шалтгаанаар</p>}
+          <div className="2xl:text-8xl text-red-500 border-red-500 rounded-md font-black border-8 -rotate-12">ЦУЦЛАГДСАН</div></div>
         <div
           className="flex w-full items-center gap-3 px-5 pt-2"
           style={{ height: "10rem" }}
@@ -389,7 +392,7 @@ function index({ token }) {
           </div>
         </div>
         <div className=" bottom-3 w-full" style={{ height: "10%" }}>
-          <div className="flex w-full flex-row px-5 py-2">
+          <div className={`flex w-full flex-row px-5 py-2 ${daalgavar?.tuluv === -1 && "hidden"}`}>
             <div className="w-full px-2">
               <TextArea
                 autoSize={{

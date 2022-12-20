@@ -537,6 +537,7 @@ function ZakhialgiinKhyanalt() {
     var jagsaalt = [
       {
         title: "Гэрээ",
+        fixed: "left",
         dataIndex: "gereeniiDugaar",
         align: "center",
         ellipsis: true,
@@ -566,6 +567,7 @@ function ZakhialgiinKhyanalt() {
 
       {
         title: "Нэр",
+        fixed: "left",
         dataIndex: "ner",
         align: "left",
         ellipsis: true,
@@ -577,6 +579,7 @@ function ZakhialgiinKhyanalt() {
 
       {
         title: "Регистр",
+        fixed: "left",
         dataIndex: "register",
         align: "center",
         ellipsis: true,
@@ -1166,6 +1169,13 @@ function ZakhialgiinKhyanalt() {
                   align: "center",
                   ellipsis: true,
                   width: "5rem",
+                },
+                {
+                  title: "Төлөлт хийх өдөр",
+                  dataIndex: "tulukhUdur",
+                  align: "center",
+                  ellipsis: true,
+                  width: "10rem",
                 },
                 {
                   title: "Утас",
