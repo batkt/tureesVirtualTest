@@ -20,7 +20,7 @@ import { useRouter } from "next/router";
 const order = { updatedAt: -1 };
 
 function index({ token }) {
-  const [tuluv, setTuluv] = React.useState("Идэвхитэй");
+  const [tuluv, setTuluv] = React.useState("Идэвхтэй");
   const [daalgavar, setDaalgavar] = React.useState();
   const [setgegdel, setSetgegdel] = React.useState();
   const { ajiltan, barilgiinId } = useAuth();
@@ -30,12 +30,17 @@ function index({ token }) {
 
   const query = React.useMemo(
     () => ({
+      barilgiinId: barilgiinId,
       ajiltniiId: ajiltan?.erkh === "Admin" ? undefined : ajiltan?._id,
       baiguullagiinId: ajiltan?.baiguullagiinId,
-      tuluv: tuluv === "Идэвхитэй" ? [0, 1] : tuluv === "Дууссан" ? 2 : -1,
+      tuluv: tuluv === "Идэвхтэй" ? [0, 1] : tuluv === "Дууссан" ? 2 : -1,
     }),
-    [ajiltan, tuluv]
+    [ajiltan, tuluv, barilgiinId]
   );
+  useEffect(() => {
+    task.mutate();
+    setDaalgavar();
+  }, [tuluv, barilgiinId])
 
   const task = useJagsaalt(ajiltan && "/daalgavar", query, order);
 
@@ -214,7 +219,7 @@ function index({ token }) {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 font-medium dark:bg-green-700 sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
-          {["Идэвхитэй", "Дууссан", "Цуцлагдсан"].map((status, index) => (
+          {["Идэвхтэй", "Дууссан", "Цуцлагдсан"].map((status, index) => (
             <div
               key={index}
               onClick={() => setTuluv(status)}
@@ -243,9 +248,9 @@ function index({ token }) {
         >
           {task?.jagsaalt?.map((mur, index) => (
             <div
-              className={`my-1 flex w-full cursor-pointer flex-row items-center space-x-2 rounded-lg bg-gray-50 p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
+              className={`my-1 flex w-full cursor-pointer flex-row items-center space-x-2 rounded-lg p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
                 ? "bg-green-100 dark:bg-green-700"
-                : ""
+                : "bg-gray-50"
                 }`}
               key={`${index}-daalgavar`}
               onClick={() => {
@@ -320,7 +325,7 @@ function index({ token }) {
       <div
         className={`col-span-12 ${daalgavar ? "block" : "hidden"
           } relative gap-5 rounded-2xl md:rounded-none md:rounded-r-2xl bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
-        data-aos="flip-right"
+        data-aos="fade-right"
         style={{ height: "calc(100vh - 8rem)" }}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"

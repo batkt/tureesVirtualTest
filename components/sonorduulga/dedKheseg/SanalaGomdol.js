@@ -49,7 +49,7 @@ function Zakhialga({ onClose, token, ...object }) {
         <div className="mt-1 text-gray-600">
           {moment(createdAt).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1 text-gray-600">{message}</div>
+        <div className="mt-1 text-gray-600 truncate max-h-24 max-w-xs">{message}</div>
       </div>
       <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">
         <a

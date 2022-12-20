@@ -2,24 +2,24 @@ import React, { useEffect } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-function hrefAvya(turul, _id, daalgavriinId, ajiltan, object) {
+function hrefAvya(turul, _id, ajiltan, object) {
   var href = "";
-  if (ajiltan.erkh === "Admin") {
+  if (ajiltan?.erkh === "Admin") {
     if (!!object.daalgavriinId) {
-      href = `/khyanalt/daalgavar/admin?id=${daalgavriinId}`;
+      href = `/khyanalt/daalgavar/admin?id=${object.daalgavriinId}`;
     } else
       href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
-  } else if (!!object.daalgavriinId) {
-    href = `/khyanalt/daalgavar?id=${daalgavriinId}`;
+  } else if (!!object._id) {
+    href = `/khyanalt/daalgavar?id=${object._id}`;
   } else
     href = `/khyanalt/medegdel/sanalKhuselt?id=${object.khariltsagchiinId}`;
   return href;
 }
 
-function Daalgavar({ onClose, token, ...object }) {
-  const { turul, tailbar, duusakhOgnoo, ajiltniiNer, _id } = object || {};
+function Daalgavar({ onClose, token, ajiltan, ...object }) {
+  const { turul, tailbar, duusakhOgnoo, _id } = object || {};
   function sonorduulgaKharlaa() {
-    const href = hrefAvya(turul, _id, daalgavriinId, ajiltan, object);
+    const href = hrefAvya(turul, _id, ajiltan, object);
     window.location.href = href;
     uilchilgee(token).post("/sanalKharlaa", { id: _id }).catch(aldaaBarigch);
   }
@@ -40,17 +40,15 @@ function Daalgavar({ onClose, token, ...object }) {
       <div className="mr-2 flex"></div>
       <div className="md:mr-40">
         <div className="font-medium">
-          {turul}
-          {ajiltniiNer}
+          <div className="text-center rounded-md w-36 bg-red-400 px-2 text-white">
+            Даалгавар
+          </div>
         </div>
         <div className="mt-1 text-gray-600">
           {moment(duusakhOgnoo).format("YYYY-MM-DD")}
         </div>
-        <div className="mt-1  flex flex-row space-x-10 text-gray-600">
+        <div className="mt-1 truncate max-h-24 max-w-xs space-x-10 text-gray-600">
           {tailbar}
-          <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
-            Даалгавар
-          </div>
         </div>
       </div>
       <div className="dark:border-dark-5 absolute top-0 bottom-0 right-0 hidden flex-col border-l border-gray-200 md:flex">

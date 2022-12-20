@@ -101,6 +101,7 @@ function useJagsaalt(url, query, order, select, searchKeys, supToken) {
     onSearch,
     isValidating,
     setKhuudaslalt,
+    khuudaslalt,
   };
 }
 
