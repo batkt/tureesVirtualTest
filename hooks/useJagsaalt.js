@@ -58,11 +58,13 @@ function useJagsaalt(url, query, order, select, searchKeys, supToken) {
 
   function next() {
     if (!!data)
-      setKhuudaslalt((a) => {
-        a.jagsaalt = [...a.jagsaalt, ...(data?.jagsaalt || [])];
-        a.khuudasniiDugaar += 1;
-        return { ...a };
-      });
+      if (khuudaslalt?.khuudasniiDugaar < data?.niitKhuudas) {
+        setKhuudaslalt((a) => {
+          a.jagsaalt = [...a.jagsaalt, ...(data?.jagsaalt || [])];
+          a.khuudasniiDugaar += 1;
+          return { ...a };
+        });
+      }
   }
 
   function refresh() {

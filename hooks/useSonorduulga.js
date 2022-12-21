@@ -101,7 +101,8 @@ function useSonorduulga(token) {
           function onClose() {
             notification.close(key);
           }
-          if (sonorduulga?.turul === "daalgavar") {
+          sonorduulgaId = sonorduulga?._id;
+          if (sonorduulga?.turul === "daalgavar" || sonorduulga?.turul === "setgegdel") {
             if (ajiltan._id === sonorduulga.khuleenAvagchiinId) {
               notification.open({
                 key: key,
@@ -116,13 +117,12 @@ function useSonorduulga(token) {
             notification.open({
               key: key,
               message: (
-                <Sonorduulga token={token} ajiltan={ajiltan} {...sonorduulga} onClose={onClose} />
+                <Sonorduulga token={token} {...sonorduulga} onClose={onClose} />
               ),
               closeIcon: () => null,
               duration: 100000,
             });
           }
-          sonorduulgaId = sonorduulga?._id;
         }
       });
     }
