@@ -30,7 +30,7 @@ import DunZasvar from "components/pageComponents/nekhemjlel/DunZasvar";
 import { modal } from "components/ant/Modal";
 import { useAuth } from "services/auth";
 import deleteMethod from "tools/function/crud/deleteMethod";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import Aos from "aos";
 import { renderToString } from "react-dom/server";
 import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
@@ -213,7 +213,7 @@ function tulburTootsoo({ token }) {
             medeelel.gariinUseg = renderToString(
               <span style={{ position: "absolute" }}>
                 <img
-                  src={`https://turees.zevtabs.mn/api/file?path=gariinUseg/${barilga.gariinUseg}`}
+                  src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
                   style={{
                     width: 100,
                     height: 50,
@@ -225,7 +225,7 @@ function tulburTootsoo({ token }) {
             medeelel.tamga = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
-                  src={`https://turees.zevtabs.mn/api/file?path=tamga/${barilga.tamga}`}
+                  src={`${url}/file?path=tamga/${barilga.tamga}`}
                   style={{
                     width: 115,
                     height: 100,
