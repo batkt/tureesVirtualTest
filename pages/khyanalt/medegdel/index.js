@@ -534,10 +534,8 @@ function Khyanalt({ token }) {
   function davkharuudSongokh(e) {
     setDavkhar(e);
   }
-  console.log(davkhar);
 
   function turulSongokh(mur) {
-    setSongogdsonKhariltsagch([]);
     setTurul(mur);
     setContent("");
     setTitle("");
@@ -959,134 +957,97 @@ function Khyanalt({ token }) {
           ) : (
             ""
           )}
-          {songogdsonKhariltsagch.length > 2 ? (
-            ""
+          {songogdsonKhariltsagch.length > 1 ? (
+            <div
+              className={`box mt-0 hidden h-full min-h-[70vh] items-center lg:col-span-6 lg:mt-0 xl:col-span-6 xl:flex xl:h-H7HalfRem ${
+                turulZagvar ? "hidden" : "lg:flex"
+              }`}
+              data-aos="fade-left"
+              data-aos-duration="1000"
+            >
+              <div className="mx-auto text-center">
+                <div className="flex justify-center">
+                  <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                    <img alt="ProfileZurag" src="/profile.svg" />
+                  </div>
+                  <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                    <img alt="ProfileZurag" src="/profileFemale.svg" />
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <div className="font-medium">Өдрийн мэнд</div>
+                  <div className="mt-1 text-gray-600 dark:text-gray-300">
+                    Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : (
             <div
               className="w-full"
               data-aos="fade-left"
               data-aos-duration="1000"
             >
-              {turul === "SMS" ? (
-                <div
-                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                  style={{ maxHeight: "calc(100vh - 32rem)" }}
-                  onScroll={onScroll}
-                >
-                  {msjTuukh?.jagsaalt.map((a) => {
-                    return (
+              <div
+                className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                style={{ maxHeight: "calc(100vh - 32rem)" }}
+                onScroll={onScroll}
+              >
+                {medegdelAvya?.jagsaalt.map((a) => {
+                  return (
+                    <div
+                      className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
+                        a.turul === "medegdel"
+                          ? "ml-auto rounded-br-none bg-green-500"
+                          : "rounded-bl-none"
+                      }`}
+                    >
+                      <span className="w-full break-words text-justify text-white ">
+                        {a.message}
+                      </span>
+
                       <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                          a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
+                        className={`absolute right-2 h-5 w-5 fill-current text-white ${
+                          a.kharsanEsekh === true ? "" : "hidden"
                         }`}
                       >
-                        <span className="w-full break-words text-justify text-white ">
-                          {a.msg}
-                        </span>
-
-                        <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                            a.kharsanEsekh === true ? "" : "hidden"
-                          }`}
+                        <svg
+                          width="20px"
+                          height="20px"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
                         >
-                          <svg
-                            width="20px"
-                            height="20px"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M16 7L12 11"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                        </span>
+                          <path
+                            d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                          <path
+                            d="M16 7L12 11"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                          <path
+                            d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                          />
+                        </svg>
                       </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div
-                  className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
-                  style={{ maxHeight: "calc(100vh - 32rem)" }}
-                  onScroll={onScroll}
-                >
-                  {medegdelAvya?.jagsaalt.map((a) => {
-                    return (
-                      <div
-                        className={`relative my-5 flex w-full flex-col rounded-xl border border-green-200 bg-green-500 p-3  ${
-                          a.turul === "medegdel"
-                            ? "ml-auto rounded-br-none bg-green-500"
-                            : "rounded-bl-none"
-                        }`}
-                      >
-                        <span className="w-full break-words text-justify text-white ">
-                          {a.message}
-                        </span>
-
-                        <div
-                          className={`absolute right-2 h-5 w-5 fill-current text-white ${
-                            a.kharsanEsekh === true ? "" : "hidden"
-                          }`}
-                        >
-                          <svg
-                            width="20px"
-                            height="20px"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M16 7L12 11"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                            <path
-                              d="M7 12L11.5757 16.5757C11.8101 16.8101 12.1899 16.8101 12.4243 16.5757L22 7"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
-                          {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
-                        </span>
-                        <span className="absolute right-0 -bottom-5 text-gray-500">
-                          Мэдэгдэл
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                      <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
+                        {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
+                      </span>
+                      <span className="absolute right-0 -bottom-5 text-gray-500">
+                        Мэдэгдэл
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
           <div

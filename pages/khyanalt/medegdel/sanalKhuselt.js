@@ -175,61 +175,65 @@ function index({ token }) {
       {!!khariltsagch ? (
         <div
           style={{ height: "calc(100vh - 8rem)" }}
-          className="col-span-12 overflow-y-auto rounded-r-lg bg-green-50 dark:bg-gray-900  xl:col-span-8  xl:rounded-2xl "
+          className="col-span-12 space-y-3 overflow-y-auto rounded-r-lg bg-green-50 px-5  dark:bg-gray-900 xl:col-span-8 xl:rounded-2xl"
         >
           {sanalGomdolTuukh.map((mur) => (
-            <div className="flex w-full items-center gap-3 px-5 pt-2 ">
-              <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
-                <img src="/profile.svg" className="h-10 w-10 rounded-full" />
-              </div>
-              <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-700 sm:w-full">
-                <div className="col-span-12 grid grid-cols-12">
-                  <div className=" col-span-6 flex flex-col justify-center ">
-                    <div className="mb-3 flex items-center justify-between text-base font-medium">
-                      {mur?.khariltsagchiinNer}
-                    </div>
-                    <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
-                      <p>Гарчиг:</p>
-                      <div>{mur?.title}</div>
-                    </div>
-                  </div>
-                  <div className=" col-span-6 flex flex-col items-end justify-center ">
-                    <div
-                      className={`mb-3  ${
-                        mur?.tuluv === -1 ? "hidden" : "flex"
-                      }`}
-                    >
-                      <Popconfirm
-                        disabled={mur?.tuluv === 1}
-                        title={`Хүлээн авах уу?`}
-                        okText="Тийм"
-                        cancelText="Үгүй"
-                        onConfirm={() => sanalGomdolAvakh(mur)}
-                      >
-                        <div
-                          className={`text-md cursor-pointer rounded-full font-bold bg-${
-                            0 === mur?.tuluv ? "red" : "green"
-                          }-500 py-1 px-3 font-medium text-gray-50`}
-                        >
-                          {0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах"}
-                        </div>
-                      </Popconfirm>
-                    </div>
-                    <div className="flex  items-center justify-between gap-2 overflow-hidden text-gray-400">
-                      <div>{moment(mur?.ognoo).format("YYYY-MM-DD HH:mm")}</div>
-                    </div>
-                  </div>
+            <div>
+              <div className="flex w-full items-center gap-3 px-5 pt-2 ">
+                <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
+                  <img src="/profile.svg" className="h-10 w-10 rounded-full" />
                 </div>
-                <div className="col-span-12 flex justify-between">
-                  <div className="w-full">
-                    <div className="mt-3">{mur?.message}</div>
-                    <div className="mt-3 gap-3">
-                      {mur?.zurguud?.map((a) => (
-                        <Image
-                          width={100}
-                          src={`${url}/file?path=sanalkhuselt/${a}`}
-                        />
-                      ))}
+                <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-700 sm:w-full">
+                  <div className="col-span-12 grid grid-cols-12">
+                    <div className=" col-span-6 flex flex-col justify-center ">
+                      <div className="mb-3 flex items-center justify-between text-base font-medium">
+                        {mur?.khariltsagchiinNer}
+                      </div>
+                      <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
+                        <p>Гарчиг:</p>
+                        <div>{mur?.title}</div>
+                      </div>
+                    </div>
+                    <div className=" col-span-6 flex flex-col items-end justify-center ">
+                      <div
+                        className={`mb-3  ${
+                          mur?.tuluv === -1 ? "hidden" : "flex"
+                        }`}
+                      >
+                        <Popconfirm
+                          disabled={mur?.tuluv === 1}
+                          title={`Хүлээн авах уу?`}
+                          okText="Тийм"
+                          cancelText="Үгүй"
+                          onConfirm={() => sanalGomdolAvakh(mur)}
+                        >
+                          <div
+                            className={`text-md cursor-pointer rounded-full font-bold bg-${
+                              0 === mur?.tuluv ? "red" : "green"
+                            }-500 py-1 px-3 font-medium text-gray-50`}
+                          >
+                            {0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах"}
+                          </div>
+                        </Popconfirm>
+                      </div>
+                      <div className="flex  items-center justify-between gap-2 overflow-hidden text-gray-400">
+                        <div>
+                          {moment(mur?.ognoo).format("YYYY-MM-DD HH:mm")}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-span-12 flex justify-between">
+                    <div className="w-full">
+                      <div className="mt-3">{mur?.message}</div>
+                      <div className="mt-3 gap-3">
+                        {mur?.zurguud?.map((a) => (
+                          <Image
+                            width={100}
+                            src={`${url}/file?path=sanalkhuselt/${a}`}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

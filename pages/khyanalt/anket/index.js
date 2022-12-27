@@ -540,11 +540,11 @@ function Anket({ token }) {
                       )}
                     </Form.List>
                   </div>
-                  <Form.Item wrapperCol={6}>
+                  <Form.Item className="flex justify-end">
                     <Button
                       type="primary"
                       onClick={() => form.submit()}
-                      className="absolute -bottom-8 right-0 w-full"
+                      className="w-full"
                     >
                       Хадгалах
                     </Button>
