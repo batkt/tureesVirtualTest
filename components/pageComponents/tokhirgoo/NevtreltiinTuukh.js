@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { DatePicker, Table } from "antd";
+import { DatePicker, Table, Tooltip } from "antd";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import useJagsaalt from "hooks/useJagsaalt";
@@ -36,14 +36,15 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
       width: "3rem",
       align: "center",
       render: (text, record, index) =>
-        (data?.khuudasniiDugaar || 0) * (data?.khuudasniiKhemjee || 0) -
-        (data?.khuudasniiKhemjee || 0) +
+        (data?.data?.khuudasniiDugaar || 0) * (data?.data?.khuudasniiKhemjee || 0) -
+        (data?.data?.khuudasniiKhemjee || 0) +
         index +
         1,
     },
     {
       title: "Огноо",
       dataIndex: "ognoo",
+      width: "9rem",
       ellipsis: true,
       align: "center",
       render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
@@ -52,29 +53,43 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
       title: "Веб хөтөч",
       dataIndex: "browser",
       ellipsis: true,
+      width: "8rem",
       align: "center",
     },
     {
       title: "Ажилтны нэр",
       dataIndex: "ajiltniiNer",
       ellipsis: true,
+      width: "7rem",
       align: "center",
     },
     {
+      title: "Байршил",
+      dataIndex: "bairshilKhot",
+      width: "10rem",
+      ellipsis: true,
+      align: "center",
+      render(a, b) {
+        return <Tooltip title={
+          <div className="flex text-center">{b.bairshilKhot}{!!b.bairshilKhot && !!b.bairshilUls && <p>,</p>} {b.bairshilUls}</div>
+        }><div className="flex text-center justify-center gap-1">{b.bairshilKhot}{!!b.bairshilKhot && !!b.bairshilUls && <p>,</p>} {b.bairshilUls}</div></Tooltip>
+      }
+    },
+    {
       title: "Төхөөрөмж",
+      width: "8rem",
       dataIndex: "uildliinSystem",
       ellipsis: true,
       align: "center",
     },
     {
       title: "IP",
+      width: "7rem",
       dataIndex: "ip",
       ellipsis: true,
       align: "center",
-      render() { return "..." }
     },
   ]);
-
   return (
     <>
       <div className="col-span-12 mt-5 ">
@@ -93,9 +108,9 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
           <div className="box p-5">
             <Table bordered size="small" dataSource={data?.jagsaalt} scroll={{ y: "calc( 100vh - 21rem )" }} columns={columns}
               pagination={{
-                current: data?.khuudasniiDugaar,
-                pageSize: data?.khuudasniiKhemjee,
-                total: data?.niitMur,
+                current: data?.data?.khuudasniiDugaar,
+                pageSize: data?.data?.khuudasniiKhemjee,
+                total: data?.data?.niitMur,
                 showSizeChanger: true,
                 onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                   data.setKhuudaslalt((kh) => ({

@@ -386,28 +386,27 @@ function Khyanalt({ token }) {
           <div className="hideScroll h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH ">
             {khariltsagchiinMedeelel?.jagsaalt?.map((mur) => (
               <div
-                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${
-                  khariltsagch?._id === mur?._id
+                className={`flex cursor-pointer flex-row items-center space-x-4 rounded-md p-2 ${khariltsagch?._id === mur?._id
                     ? "rounded-l-full bg-green-100 shadow-lg dark:bg-green-500 "
                     : ""
-                } `}
+                  } `}
                 onClick={() => khariltsagchSongokh(mur)}
               >
                 <div>
                   <Checkbox
                     checked={
-                      songogdsonKhariltsagch.findIndex(
+                      !!songogdsonKhariltsagch.find(
                         (a) => a._id === mur._id
-                      ) !== -1
+                      )
                     }
                     onChange={(e) => {
                       e.target.checked;
                       if (e.target.checked == true) {
                         songogdsonKhariltsagch.push(mur);
                       } else {
-                        const index = songogdsonKhariltsagch.findIndex(
-                          (a) => a._id === mur._id
-                        );
+                        setSongogdsonKhariltsagch(songogdsonKhariltsagch.filter(
+                          (a) => a._id !== mur._id
+                        ));
                         if (index !== -1) {
                           songogdsonKhariltsagch.splice(index, 1);
                         }
@@ -455,7 +454,7 @@ function Khyanalt({ token }) {
                         ((khariltsagch.register.replace(/^\D+/g, "") % 100) /
                           10) %
                           2 <
-                        1
+                          1
                           ? "/profileFemale.svg"
                           : "/profile.svg"
                       }
@@ -468,17 +467,17 @@ function Khyanalt({ token }) {
                     <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                       {khariltsagch?.utas.length > 0 ? (
                         (console.log(khariltsagch.utas),
-                        (
-                          <div className="flex gap-1 ">
-                            {khariltsagch?.utas.map((a, i) => (
-                              <div key={i}>
-                                {a}
-                                {i !== khariltsagch.utas.length - 1 && ","}
-                              </div>
-                            ))}
-                            <span className="mx-1">•</span> {turul}
-                          </div>
-                        ))
+                          (
+                            <div className="flex gap-1 ">
+                              {khariltsagch?.utas.map((a, i) => (
+                                <div key={i}>
+                                  {a}
+                                  {i !== khariltsagch.utas.length - 1 && ","}
+                                </div>
+                              ))}
+                              <span className="mx-1">•</span> {turul}
+                            </div>
+                          ))
                       ) : (
                         <div className="flex">
                           <div>{khariltsagch?.utas}</div>
@@ -500,9 +499,8 @@ function Khyanalt({ token }) {
                 style={{ height: "calc(100vh - 28rem)" }}
               >
                 <div
-                  className={`box flex h-full items-center ${
-                    turulZagvar ? "hidden" : "lg:flex"
-                  }`}
+                  className={`box flex h-full items-center ${turulZagvar ? "hidden" : "lg:flex"
+                    }`}
                   data-aos="fade-left"
                   data-aos-duration="1000"
                 >
@@ -535,7 +533,7 @@ function Khyanalt({ token }) {
                 onScroll={(e) => {
                   if (
                     e.target.scrollHeight + e.target.scrollTop - 1 <
-                      e.target.clientHeight &&
+                    e.target.clientHeight &&
                     !!jagsaalt
                   ) {
                     nextSonorduulga();
@@ -646,9 +644,8 @@ function Khyanalt({ token }) {
               <label className="font-medium">{turul} Илгээх</label>
               <div
                 onClick={send}
-                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
-                  loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
+                className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${loading ? "200" : "600"
+                  } flex flex-none items-center justify-center rounded-full text-white`}
               >
                 {loading ? (
                   <Spin size="small" />

@@ -31,7 +31,14 @@ const KhariltsagchiinLavlakh = ({
   const khariltsagchiinGaralt = useJagsaalt("/khariltsagch", kharitsagchQuery, undefined, undefined, searchKeys);
 
   useEffect(() => {
-    setRegister(null)
+    setRegister(null);
+    khariltsagchiinGaralt.mutate();
+    khariltsagchiinGaralt.setKhuudaslalt((a) => ({
+      ...a,
+      jagsaalt: [],
+      khuudasniiKhemjee: 20,
+      khuudasniiDugaar: 1,
+    }))
   }, [baiguullagaEsekh])
 
   useEffect(() => {

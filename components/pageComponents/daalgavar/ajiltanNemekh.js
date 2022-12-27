@@ -4,7 +4,7 @@ import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { Select, notification, Modal } from "antd";
 
 function ajiltanNemekh(
-  { token, destroy, onChange, baiguullaga, setDaalgavar },
+  { token, destroy, baiguullaga, setDaalgavar, daalgavar },
   ref
 ) {
   const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token, baiguullaga?._id);
@@ -69,6 +69,7 @@ function ajiltanNemekh(
     <Select
       id="ajiltanSongokhInput"
       placeholder="Ажилтан"
+      defaultValue={daalgavar?.ajiltniiId}
       style={{ width: "100%" }}
       onChange={(e) =>
         setSongogdsonAjiltan(

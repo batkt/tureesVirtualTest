@@ -43,6 +43,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       icon: <FileExcelOutlined />,
       content: (
         <AjiltanNemekh
+          daalgavar={daalgavar}
           ref={ajitanRef}
           token={token}
           onFinish={onRefresh}

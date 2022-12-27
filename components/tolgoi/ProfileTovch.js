@@ -130,60 +130,60 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   ajiltniiNer,
                   ajiltniiId,
                 } = mur?.object || {};
-                if (mur.khuleenAvagchiinId !== ajiltan._id) {
-                  return (
-                    <Menu.Item
-                      key={`sonorduulga${i}`}
-                      onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
-                      className={`${mur.kharsanEsekh
-                        ? "kharsanSonorduulga opacity-70"
-                        : "kharaaguiSonorduulga"
-                        }`}
+                if (turul === "setgegdel" && ajiltniiId === ajiltan._id) {
+                  return
+                } else return (
+                  <Menu.Item
+                    key={`sonorduulga${i}`}
+                    onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
+                    className={`${mur.kharsanEsekh
+                      ? "kharsanSonorduulga opacity-70"
+                      : "kharaaguiSonorduulga"
+                      }`}
+                  >
+                    <Link
+                      href={{
+                        pathname: hrefAvya(mur, ajiltan),
+                        query: { id: idAwyaa(mur) },
+                      }}
                     >
-                      <Link
-                        href={{
-                          pathname: hrefAvya(mur, ajiltan),
-                          query: { id: idAwyaa(mur) },
-                        }}
-                      >
-                        <div className="relative  flex cursor-pointer items-center justify-between">
-                          <div className="flex" style={{ maxWidth: `2.5rem` }}>
-                            <Tooltip title={khariltsagchiinNer}>
-                              <img
-                                alt={khariltsagchiinNer}
-                                className={`zoom-in h-10 w-10 rounded-full bg-white`}
-                                src={"/profile.svg"}
-                              />
-                            </Tooltip>
-                            {!mur.kharsanEsekh && (
-                              <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
-                            )}
-                          </div>
-                          <div className="ml-2 w-60 overflow-hidden">
-                            <div className="flex w-full items-center">
+                      <div className="relative  flex cursor-pointer items-center justify-between">
+                        <div className="flex" style={{ maxWidth: `2.5rem` }}>
+                          <Tooltip title={khariltsagchiinNer}>
+                            <img
+                              alt={khariltsagchiinNer}
+                              className={`zoom-in h-10 w-10 rounded-full bg-white`}
+                              src={"/profile.svg"}
+                            />
+                          </Tooltip>
+                          {!mur.kharsanEsekh && (
+                            <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                          )}
+                        </div>
+                        <div className="ml-2 w-60 overflow-hidden">
+                          <div className="flex w-full items-center">
+                            {mur.turul === "daalgavar" ? (
+                              <div className="rounded-md bg-red-400 px-2 text-white">
+                                Даалгавар
+                              </div>
+                            ) :
                               <a className="mr-5 font-medium">
                                 {khariltsagchiinNer || ajiltniiNer}
-                              </a>
-                              <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
-                                {moment(mur.createdAt).format(
-                                  "YYYY-MM-DD HH:mm:ss"
-                                )}
-                              </div>
-                            </div>
-                            <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
-                              <div>{message || tailbar}</div>
-                              {mur.turul === "daalgavar" && (
-                                <div className="ml-auto rounded-md bg-red-400 px-2 text-white">
-                                  Даалгавар
-                                </div>
+                              </a>}
+                            <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
+                              {moment(mur.createdAt).format(
+                                "YYYY-MM-DD HH:mm:ss"
                               )}
                             </div>
                           </div>
+                          <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
+                            <div>{message || tailbar}</div>
+                          </div>
                         </div>
-                      </Link>
-                    </Menu.Item>
-                  );
-                }
+                      </div>
+                    </Link>
+                  </Menu.Item>
+                );
               })}
               {!!sonorduulga && !(sonorduulga?.jagsaalt?.length > 0) && (
                 <Menu.Item>

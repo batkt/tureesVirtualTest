@@ -11,11 +11,37 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { useAuth } from "services/auth";
 import uilchilgee, { url } from "services/uilchilgee";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
-import { Image, notification, Popconfirm } from "antd";
+import { Button, Image, Input, notification, Popconfirm } from "antd";
 import Aos from "aos";
 import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh";
 import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
+import { modal } from "components/ant/Modal";
+
+const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
+  const [tsutsalsanShaltgaan, setTsutsalsanShaltgaan] = useState("");
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        confirm(tsutsalsanShaltgaan);
+        destroy();
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [tsutsalsanShaltgaan]
+  );
+  return (
+    <div>
+      <Input.TextArea
+        value={tsutsalsanShaltgaan}
+        onChange={({ target }) => setTsutsalsanShaltgaan(target?.value)}
+      />
+    </div>
+  );
+});
 
 const order = { updatedAt: -1 };
 
@@ -27,6 +53,8 @@ function index({ token }) {
   const inputRef = React.useRef();
   const ChatRef = React.useRef();
   const messageEl = React.useRef(null);
+  const tailbarRef = React.useRef(null);
+
 
   const query = React.useMemo(
     () => ({
@@ -57,12 +85,32 @@ function index({ token }) {
   );
 
   function daalgavarTsutslakh() {
-    uilchilgee(token)
-      .post("/daalgavarTsutsalya", { id: daalgavar._id })
-      .then(({ data }) => {
-        if (data === "Amjilttai") setDaalgavar(undefined);
-      })
-      .finally(() => task.mutate());
+    const footer = [
+      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+        Устгах
+      </Button>,
+    ];
+    modal({
+      title: "Даалгавар цуцлах шалтгаан",
+      content: (
+        <TsutsalsanShaltgaan
+          ref={tailbarRef}
+          confirm={(tsutsalsanShaltgaan) =>
+            uilchilgee(token)
+              .post("/daalgavarTsutsalya", { id: daalgavar._id, tsutsalsanShaltgaan })
+              .then(({ data }) => {
+                if (data === "Amjilttai") {
+                  notification.success({ message: "Даалгавар цуцлагдлаа" })
+                  setDaalgavar(undefined)
+                }
+              })
+              .finally(() => task.mutate())
+          }
+        />
+      ),
+      footer,
+    });
   }
 
   useEffect(() => {
@@ -101,6 +149,7 @@ function index({ token }) {
         if (response.data === "Amjilttai") {
           task.mutate();
           daalgavriinSetgegdel.mutate();
+          daalgavriinSetgegdel.refresh();
           setSetgegdel("");
         }
       });
@@ -321,7 +370,6 @@ function index({ token }) {
       />
 
       {/* chat */}
-
       <div
         className={`col-span-12 ${daalgavar ? "block" : "hidden"
           } relative gap-5 rounded-2xl md:rounded-none md:rounded-r-2xl bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
@@ -331,6 +379,10 @@ function index({ token }) {
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
       >
+        <div className={`absolute justify-center top-0 left-0 rounded-2xl flex-col w-full h-full text-white bg-black dark:bg-white dark:bg-opacity-20 bg-opacity-30 z-50 items-center ${daalgavar?.tuluv === -1 ? "flex" : "hidden"}`}>
+          {!!daalgavar?.tsutsalsanOgnoo && <p className="text-xl z-50 font-medium">{moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}</p>}
+          {!!daalgavar?.tsutsalsanShaltgaan && <p className="text-xl w-4/6 text-center z-50 font-medium">{daalgavar?.tsutsalsanShaltgaan} гэсэн шалтгаанаар</p>}
+          <div className="2xl:text-8xl md:text-6xl text-4xl text-red-500 border-red-500 rounded-md font-black border-8 -rotate-12">ЦУЦЛАГДСАН</div></div>
         <div
           className="flex w-full items-center gap-3 px-5 pt-2"
           style={{ height: "10rem" }}
@@ -379,7 +431,7 @@ function index({ token }) {
                 </div>
               </div>
             </div>
-            <div className="flex w-full py-2">{daalgavar?.tailbar}</div>
+            <div className=" w-full break-words py-2">{daalgavar?.tailbar}</div>
             <div className="flex justify-between">
               <div className="w-1/2">
                 {daalgavar?.file?.map((mur) => (
@@ -470,7 +522,7 @@ function index({ token }) {
           </div>
         </div>
         <div className=" bottom-3 w-full" style={{ height: "10%" }}>
-          <div className="flex w-full flex-row px-5 py-2">
+          <div className={`flex w-full flex-row px-5 py-2 ${daalgavar?.tuluv === -1 && "hidden"}`}>
             <div className="w-full px-2">
               <TextArea
                 autoSize={{

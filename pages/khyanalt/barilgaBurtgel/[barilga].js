@@ -528,7 +528,7 @@ function GereeBaiguulakh({ token }) {
           width={200}
           preview={{
             visible: !!kharakhZurgiinZam,
-            src: `https://turees.zevtabs.mn/api/file?path=${kharakhZurgiinZam}`,
+            src: `${url}/file?path=${kharakhZurgiinZam}`,
             onVisibleChange: (value) => {
               setKharakhZurgiinZam(undefined);
             },
