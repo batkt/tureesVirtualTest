@@ -496,7 +496,7 @@ function Khyanalt({ token }) {
           <div>
             {songogdsonKhariltsagch.length > 1 ? (
               <div
-                className="col-span-12 space-y-10 overflow-auto  rounded-r-xl bg-white pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{ height: "calc(100vh - 28rem)" }}
               >
                 <div
@@ -530,7 +530,7 @@ function Khyanalt({ token }) {
               </div>
             ) : (
               <div
-                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl bg-white px-10 pb-10 lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{ maxHeight: "calc(100vh - 32rem)" }}
                 onScroll={(e) => {
                   if (
@@ -545,7 +545,7 @@ function Khyanalt({ token }) {
                 {jagsaalt?.map((mur) =>
                   mur.khariltsagchiinId === khariltsagch?._id ? (
                     <div className="my-5 flex w-full items-center ">
-                      <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-gray-800 sm:w-full">
+                      <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-[#121826] sm:w-full">
                         <div className="flex flex-row flex-wrap items-center justify-between  ">
                           <div className="text-sm text-green-600">
                             Гарчиг: {mur.title}
@@ -641,7 +641,7 @@ function Khyanalt({ token }) {
               />
             </div>
           </div>
-          <div className="flex w-full items-center justify-end space-x-2">
+          <div className="flex w-full items-center justify-end space-x-2 p-2">
             <div className="flex items-center justify-between space-x-3">
               <label className="font-medium">{turul} Илгээх</label>
               <div

@@ -786,8 +786,8 @@ function Khyanalt({ token }) {
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
               type="text"
-              className="block w-full rounded-md border border-slate-300 bg-white px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none
-              focus:ring-1 focus:ring-[#8aaaef] "
+              className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
+              focus:ring-[#8aaaef] dark:bg-gray-500 "
               placeholder="Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/"
               onChange={({ target }) => {
                 clearTimeout(timeout);

@@ -58,7 +58,7 @@ function Khariultuud(record) {
         align: "center",
         render: (text, record, index) =>
           (khariult?.khuudasniiDugaar || 0) *
-          (khariult?.khuudasniiKhemjee || 0) -
+            (khariult?.khuudasniiKhemjee || 0) -
           (khariult?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -247,7 +247,7 @@ function Anket({ token }) {
       khuudasniiNer="anket"
       tsonkhniiId={"62ea0d2b7c54f8189bdca54c"}
     >
-      <div className="col-span-12 p-3 md:p-5 pt-0 lg:py-0">
+      <div className="col-span-12 p-3 pt-0 md:p-5 lg:py-0">
         <Drawer
           title={"Анкет илгээх"}
           width={global.innerWidth < 768 ? "90vw" : "50vw"}
@@ -263,9 +263,8 @@ function Anket({ token }) {
             />
           )}
         </Drawer>
-        <div className="absolute hidden lg:flex top-3 right-3 z-50">
+        <div className="absolute top-3 right-3 z-50 hidden lg:flex">
           <Button
-
             style={{ backgroundColor: "#209669", color: "#ffffff" }}
             icon={<SendOutlined />}
             onClick={() => {
@@ -278,12 +277,24 @@ function Anket({ token }) {
         <Tabs>
           <TabPane
             key="1"
-            tab={<span className="text-base font-medium">Асуумж</span>}
+            tab={
+              <span
+                className="text-base font-medium"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="300"
+              >
+                Асуумж
+              </span>
+            }
           >
-            <div className="md:grid flex flex-col-reverse grid-cols-12 gap-5">
+            <div className="flex grid-cols-12 flex-col-reverse gap-5 md:grid">
               <div
                 className="box relative col-span-12 p-4 py-5 pt-3 md:col-span-4 xl:col-span-3"
                 style={{ height: "80vh" }}
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="300"
               >
                 <span className="font-medium dark:text-gray-100">
                   Анкетын загварууд
@@ -329,14 +340,19 @@ function Anket({ token }) {
                   })}
                 </div>
               </div>
-              <div className="box col-span-12 overflow-auto p-5 py-5 pt-3 md:col-span-8 xl:col-span-9">
-                <span className=" lg:px-5 font-medium dark:text-gray-100">
+              <div
+                className="box col-span-12 overflow-auto p-5 py-5 pt-3 md:col-span-8 xl:col-span-9"
+                data-aos="fade-left"
+                data-aos-duration="1000"
+                data-aos-delay="300"
+              >
+                <span className=" font-medium dark:text-gray-100 lg:px-5">
                   Анкетын загвар үүсгэх
                 </span>
                 <Form
                   ref={formRef}
                   form={form}
-                  className="lg:px-5 pt-5"
+                  className="pt-5 lg:px-5"
                   name="dynamic_form_item"
                   autoComplete={"off"}
                   onFinish={(v) => {
@@ -407,7 +423,7 @@ function Anket({ token }) {
                             </Button>
                           </Form.Item>
                           <div
-                            className="-my-8 grid w-full gap-2 lg:gap-5 hideScroll pl-1 pr-1 overflow-y-auto py-5 lg:pl-5 lg:pr-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+                            className="hideScroll -my-8 grid w-full gap-2 overflow-y-auto py-5 pl-1 pr-1 lg:grid-cols-2 lg:gap-5 lg:pl-5 lg:pr-8 xl:grid-cols-3 2xl:grid-cols-4"
                             style={{ maxHeight: "50vh" }}
                             id={"form-container"}
                           >
@@ -427,9 +443,7 @@ function Anket({ token }) {
                                         message: "Асуулт оруулна уу!",
                                       },
                                     ]}
-                                  //validateTrigger={["onChange", "onBlur"]}
-
-
+                                    //validateTrigger={["onChange", "onBlur"]}
                                   >
                                     <Input
                                       placeholder={`Асуулт ${name + 1}`}
@@ -446,7 +460,6 @@ function Anket({ token }) {
                                     name={[name, "turul"]}
                                     fieldKey={[fieldKey, "turul"]}
                                     {...restField}
-
                                   >
                                     <Select
                                       placeholder="Хариултын төрөл"
@@ -462,7 +475,7 @@ function Anket({ token }) {
                                     />
                                   </Form.Item>
                                   {fields.length > 1 ? (
-                                    <div className="absolute -top-11 lg:-top-10 -right-3 lg:-right-6 rounded-full bg-white dark:bg-gray-900">
+                                    <div className="absolute -top-11 -right-3 rounded-full bg-white dark:bg-gray-900 lg:-top-10 lg:-right-6">
                                       <CloseCircleOutlined
                                         className="dynamic-delete-button text-3xl text-black text-opacity-60 dark:text-white dark:text-opacity-50"
                                         onClick={() => remove(name)}
@@ -538,7 +551,7 @@ function Anket({ token }) {
                   </Form.Item>
                 </Form>
               </div>
-              <div className="col-span-12 box p-5 lg:hidden">
+              <div className="box col-span-12 p-5 lg:hidden">
                 <Button
                   type="primary"
                   style={{ width: "100%" }}
@@ -554,9 +567,18 @@ function Anket({ token }) {
           </TabPane>
           <TabPane
             key="2"
-            tab={<span className="text-base font-medium">Жагсаалт</span>}
+            tab={
+              <span
+                className="text-base font-medium"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-delay="300"
+              >
+                Жагсаалт
+              </span>
+            }
           >
-            <div className="col-span-12 box mb-5 p-5 lg:hidden">
+            <div className="box col-span-12 mb-5 p-5 lg:hidden">
               <Button
                 type="primary"
                 style={{ width: "100%" }}
@@ -568,12 +590,12 @@ function Anket({ token }) {
                 Анкет илгээх
               </Button>
             </div>
-            <div className="px-2 lg:px-5 col-span-12 box py-2">
-              <div className="px-1 lg:px-0 text-md font-medium pb-4">
+            <div className="box col-span-12 px-2 py-2 lg:px-5">
+              <div className="text-md px-1 pb-4 font-medium lg:px-0">
                 Анкетын хариултын жагсаалт
               </div>
 
-              <div className="lg:p-5 dark:bg-gray-900">
+              <div className="dark:bg-gray-900 lg:p-5">
                 <Table
                   className="hidden lg:block"
                   dataSource={asuult?.jagsaalt}

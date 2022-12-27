@@ -9,14 +9,10 @@ import CardList from "components/cardList";
 import UstsanTuukhTile from "components/pageComponents/ustsanTuukh/UstsanTuukhTile";
 import formatNumber from "tools/function/formatNumber";
 import { useAuth } from "services/auth";
-import {
-  EditOutlined,
-  EyeOutlined,
-  FileExcelOutlined,
-} from "@ant-design/icons";
-import { ImFileText2 } from "react-icons/im";
+import { EyeOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import DelgerenguiKharakh from "components/pageComponents/ustsanTuukh/MedegdelKharakh";
+import Aos from "aos";
 
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
@@ -100,7 +96,6 @@ const turluud = [
     turul: "khungulult",
     text: "Хөнгөлөлт",
   },
-
 ];
 
 function UstsanTuukh() {
@@ -128,9 +123,9 @@ function UstsanTuukh() {
         "object.turul": turul,
         createdAt: shuukhOgnoo
           ? {
-            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+            }
           : undefined,
       };
     } else {
@@ -140,9 +135,9 @@ function UstsanTuukh() {
         class: turul,
         createdAt: shuukhOgnoo
           ? {
-            $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
-          }
+              $gte: moment(shuukhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(shuukhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
+            }
           : undefined,
       };
     }
@@ -235,10 +230,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -255,10 +251,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -277,10 +274,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -297,10 +295,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -319,10 +318,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -339,10 +339,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -361,10 +362,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -381,10 +383,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
@@ -403,10 +406,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
@@ -423,10 +427,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -445,10 +450,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -465,10 +471,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -487,10 +494,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulukhDun.object.tulukhDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulukhDun.object.tulukhDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
@@ -507,10 +515,11 @@ function UstsanTuukh() {
             return (
               <>
                 <div
-                  className={`${tulsunDun.object.tulsunDun > 0
-                    ? "text-green-600 "
-                    : "text-red-500"
-                    }`}
+                  className={`${
+                    tulsunDun.object.tulsunDun > 0
+                      ? "text-green-600 "
+                      : "text-red-500"
+                  }`}
                 >
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
@@ -560,7 +569,7 @@ function UstsanTuukh() {
               <div>
                 {moment(
                   tailbar?.object?.createdAt ||
-                  tailbar?.object?.guilgeeKhiisenOgnoo
+                    tailbar?.object?.guilgeeKhiisenOgnoo
                 ).format("YYYY-MM-DD")}
               </div>
             </>
@@ -724,7 +733,9 @@ function UstsanTuukh() {
       setShuukhOgnoo(undefined);
     } else setShuukhOgnoo([moment(e[0]), moment(e[1])]);
   }
-
+  useEffect(() => {
+    Aos.init({ once: true });
+  });
   return (
     <Admin
       title="Устгасан түүх"
@@ -740,14 +751,23 @@ function UstsanTuukh() {
       className="p-0 md:p-4"
     >
       <Card className="col-span-12 rounded-md bg-white dark:bg-gray-900">
-        <div className="flex flex-col-reverse gap-3 sm:flex-row">
+        <div
+          className="flex flex-col-reverse gap-3 sm:flex-row"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="300"
+        >
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
             value={shuukhOgnoo}
             onChange={ognooShuultOnChange}
           />
-          <div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="600"
+          >
             <Select
               className="w-full sm:w-36"
               placeholder="Ажилтан"
@@ -761,7 +781,11 @@ function UstsanTuukh() {
               ))}
             </Select>
           </div>
-          <div>
+          <div
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="900"
+          >
             <Select
               className="w-full sm:w-36"
               placeholder="Төрөл"
@@ -775,6 +799,9 @@ function UstsanTuukh() {
           </div>
         </div>
         <Table
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          data-aos-delay="300"
           bordered
           size="small"
           className="hidden overflow-auto md:block"

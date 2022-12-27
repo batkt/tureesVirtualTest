@@ -87,7 +87,7 @@ function index({ token }) {
     >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-2xl bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl"
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl  bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl"
       >
         <div className="mb-2 grid gap-x-5 px-2 md:grid-cols-2 ">
           <RangePicker
@@ -175,14 +175,14 @@ function index({ token }) {
       {!!khariltsagch ? (
         <div
           style={{ height: "calc(100vh - 8rem)" }}
-          className="col-span-12 overflow-y-auto rounded-r-lg bg-green-50 xl:col-span-8  xl:rounded-2xl "
+          className="col-span-12 overflow-y-auto rounded-r-lg bg-green-50 dark:bg-gray-900  xl:col-span-8  xl:rounded-2xl "
         >
           {sanalGomdolTuukh.map((mur) => (
             <div className="flex w-full items-center gap-3 px-5 pt-2 ">
               <div className="h-11 w-11 min-w-max rounded-full  bg-gray-300 dark:bg-gray-800">
                 <img src="/profile.svg" className="h-10 w-10 rounded-full" />
               </div>
-              <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
+              <div className="box relative  grid  w-10/12 grid-cols-12 rounded-lg  p-3 pb-8 pt-3 dark:bg-gray-700 sm:w-full">
                 <div className="col-span-12 grid grid-cols-12">
                   <div className=" col-span-6 flex flex-col justify-center ">
                     <div className="mb-3 flex items-center justify-between text-base font-medium">
@@ -255,7 +255,7 @@ function index({ token }) {
             <div className="mt-3">
               <div className="font-medium">Өдрийн мэнд</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та санал хүсэлт илгээх харилцагчаа сонгоно уу.
+                Та харилцагчаа сонгоно уу.
               </div>
             </div>
           </div>
