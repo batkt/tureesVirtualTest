@@ -38,7 +38,6 @@ function KhuviinMedeelel({
   const [gariinUsegKharakhZam, setGariinUsegKharakhZam] = useState(false);
   const [gereeTokhirgoo, setGereeTokhirgoo] = useState(null);
 
-
   const gereeTokhirgooKhadgalya = () => {
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: gereeTokhirgoo })
@@ -84,8 +83,8 @@ function KhuviinMedeelel({
   }
   return (
     <>
-      <div className="col-span-12 xl:gap-5 grid grid-cols-1 xl:grid-cols-3">
-        <div className="box pb-20 relative col-span-2 mt-5">
+      <div className="col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5">
+        <div className="box relative col-span-2 mt-5 pb-20">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               Нийтээр тохируулах
@@ -225,8 +224,9 @@ function KhuviinMedeelel({
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
-              }`}
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pt-2 pb-2 ${
+              !!gereeTokhirgoo ? "flex" : "hidden"
+            }`}
           >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               Хадгалах
@@ -234,7 +234,7 @@ function KhuviinMedeelel({
           </div>
         </div>
 
-        <div className="box pb-10 relative mt-5 lg:mt-5">
+        <div className="box relative mt-5 pb-10 lg:mt-5">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               Тамга болон гарын үсэг
@@ -315,7 +315,7 @@ function KhuviinMedeelel({
                 width={200}
                 preview={{
                   visible: !!kharakhZurgiinZam,
-                  src: `https://turees.zevtabs.mn/api/file?path=${kharakhZurgiinZam}`,
+                  src: `${url}/file?path=${kharakhZurgiinZam}`,
                   onVisibleChange: (value) => {
                     setKharakhZurgiinZam(undefined);
                   },
@@ -325,7 +325,7 @@ function KhuviinMedeelel({
                 width={200}
                 preview={{
                   visible: !!gariinUsegKharakhZam,
-                  src: `https://turees.zevtabs.mn/api/file?path=${gariinUsegKharakhZam}`,
+                  src: `${url}/file?path=${gariinUsegKharakhZam}`,
                   onVisibleChange: (value) => {
                     setGariinUsegKharakhZam(undefined);
                   },
@@ -333,7 +333,7 @@ function KhuviinMedeelel({
               />
             </div>
           </div>
-          <div className="w-full absolute right-2 bottom-3 flex px-3 pb-3 justify-end">
+          <div className="absolute right-2 bottom-3 flex w-full justify-end px-3 pb-3">
             <Button onClick={khadgalakh} type="primary">
               Хадгалах
             </Button>
