@@ -37,7 +37,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
 
   return (
     <>
-      <div>
+      <div className="dark:text-gray-400">
         <div>
           {!!data.object.ner ? (
             <div className="flex w-full justify-between ">

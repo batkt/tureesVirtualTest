@@ -801,7 +801,7 @@ function TalbaiBurtgekh({ token }) {
                   onChange={(e) => onChange("tailbar", e.target.value)}
                 ></TextArea>
               </Form.Item>
-              <div className="flex w-full justify-end space-x-5 md:pl-[33%]">
+              <div className="flex w-full justify-end space-x-5 pr-[4%] md:pl-[33%] ">
                 <div className="w-full">
                   <Button onClick={showDrawer} type="primary">
                     <span className="mr-2 text-white">
@@ -835,7 +835,7 @@ function TalbaiBurtgekh({ token }) {
                     )}
                   </Drawer>
                 </div>
-                <div className="w-2/4">
+                <div className=" w-2/4 ">
                   <Button
                     className="w-full"
                     id="talbaiBurtgekhButton"

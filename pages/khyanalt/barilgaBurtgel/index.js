@@ -36,7 +36,7 @@ function BarilgaBurtgel({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   const [ognoo, setOgnoo] = useState(new Date());
-  const [nariivchlal, setNariivchlal] = useState("month");
+  const [nariivchlal, setNariivchlal] = useState("day");
 
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token] : null,
@@ -196,6 +196,16 @@ function BarilgaBurtgel({ token }) {
       type: "line",
       data: lineChart.data,
       options: {
+        responsive: {
+          "height < 128": {
+            legend: {
+              display: false,
+            },
+          },
+        },
+        animationEnabled: true,
+        maintainAspectRatio: true,
+
         animations: {
           tension: {
             duration: 1000,
@@ -206,7 +216,6 @@ function BarilgaBurtgel({ token }) {
           },
         },
         maintainAspectRatio: false,
-        responsive: true,
         title: {
           display: false,
           text: "Sales Charts",
@@ -625,7 +634,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Дууссан ажил</div>
               </div>
-              <div>21нд</div>
+              {/* <div>21нд</div> */}
             </div>
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
@@ -634,7 +643,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Идэвхтэй ажил</div>
               </div>
-              <div>26нд</div>
+              {/* <div>26нд</div> */}
             </div>
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
@@ -643,7 +652,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Цуцлагдсан</div>
               </div>
-              <div>30нд</div>
+              {/* <div>30нд</div> */}
             </div>
           </div>
         </div>

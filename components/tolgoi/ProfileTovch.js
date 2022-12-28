@@ -97,7 +97,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
   }
 
   return (
-    <div className="flex h-8 gap-1 items-center justify-end md:gap-3">
+    <div className="flex h-8 items-center justify-end gap-1 md:gap-3">
       <Drawer
         placement={"right"}
         closable={false}
@@ -131,59 +131,68 @@ function ProfileTovch({ ajiltan, garya, token }) {
                   ajiltniiId,
                 } = mur?.object || {};
                 if (turul === "setgegdel" && ajiltniiId === ajiltan._id) {
-                  return
-                } else return (
-                  <Menu.Item
-                    key={`sonorduulga${i}`}
-                    onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
-                    className={`${mur.kharsanEsekh
-                      ? "kharsanSonorduulga opacity-70"
-                      : "kharaaguiSonorduulga"
+                  return;
+                } else
+                  return (
+                    <Menu.Item
+                      key={`sonorduulga${i}`}
+                      onClick={() => sonorduulgaKharlaa(_id, mur?._id)}
+                      className={`${
+                        mur.kharsanEsekh
+                          ? "kharsanSonorduulga opacity-70"
+                          : "kharaaguiSonorduulga"
                       }`}
-                  >
-                    <Link
-                      href={{
-                        pathname: hrefAvya(mur, ajiltan),
-                        query: { id: idAwyaa(mur) },
-                      }}
                     >
-                      <div className="relative  flex cursor-pointer items-center justify-between">
-                        <div className="flex" style={{ maxWidth: `2.5rem` }}>
-                          <Tooltip title={khariltsagchiinNer}>
-                            <img
-                              alt={khariltsagchiinNer}
-                              className={`zoom-in h-10 w-10 rounded-full bg-white`}
-                              src={"/profile.svg"}
-                            />
-                          </Tooltip>
-                          {!mur.kharsanEsekh && (
-                            <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
-                          )}
-                        </div>
-                        <div className="ml-2 w-60 overflow-hidden">
-                          <div className="flex w-full items-center">
-                            {mur.turul === "daalgavar" ? (
-                              <div className="rounded-md bg-red-400 px-2 text-white">
-                                Даалгавар
-                              </div>
-                            ) :
-                              <a className="mr-5 font-medium">
+                      <Link
+                        href={{
+                          pathname: hrefAvya(mur, ajiltan),
+                          query: { id: idAwyaa(mur) },
+                        }}
+                      >
+                        <div className="relative  flex cursor-pointer items-center justify-between">
+                          <div className="flex" style={{ maxWidth: `2.5rem` }}>
+                            <Tooltip title={khariltsagchiinNer}>
+                              <img
+                                alt={khariltsagchiinNer}
+                                className={`zoom-in h-10 w-10 rounded-full bg-white`}
+                                src={"/profile.svg"}
+                              />
+                            </Tooltip>
+                            {!mur.kharsanEsekh && (
+                              <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
+                            )}
+                          </div>
+                          <div className="ml-2 w-60 overflow-hidden">
+                            <div className="flex w-full items-center ">
+                              <a className="mr-2 font-medium">
                                 {khariltsagchiinNer || ajiltniiNer}
-                              </a>}
-                            <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
-                              {moment(mur.createdAt).format(
-                                "YYYY-MM-DD HH:mm:ss"
-                              )}
+                              </a>
+                              <div className="rounded-md bg-red-400 px-2 text-white">
+                                {mur.turul === "daalgavar"
+                                  ? "Даалгавар"
+                                  : mur.turul === "sanal"
+                                  ? "Санал"
+                                  : mur.turul === "gomdol"
+                                  ? "Гомдол"
+                                  : mur.turul === "medegdel"
+                                  ? "Мэдэгдэл"
+                                  : ""}
+                              </div>
+
+                              <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
+                                {moment(mur.createdAt).format(
+                                  "YYYY-MM-DD HH:mm:ss"
+                                )}
+                              </div>
+                            </div>
+                            <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
+                              <div>{message || tailbar}</div>
                             </div>
                           </div>
-                          <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
-                            <div>{message || tailbar}</div>
-                          </div>
                         </div>
-                      </div>
-                    </Link>
-                  </Menu.Item>
-                );
+                      </Link>
+                    </Menu.Item>
+                  );
               })}
               {!!sonorduulga && !(sonorduulga?.jagsaalt?.length > 0) && (
                 <Menu.Item>
@@ -266,8 +275,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
               ajiltan?.zurgiinNer
                 ? `${url}/ajiltniiZuragAvya/${ajiltan?.baiguullagiinId}/${ajiltan?.zurgiinNer}`
                 : ((ajiltan?.register?.replace(/^\D+/g, "") % 100) / 10) % 2 < 1
-                  ? "/profileFemale.svg"
-                  : "/profile.svg"
+                ? "/profileFemale.svg"
+                : "/profile.svg"
             }
             className="h-8 w-8 rounded-full bg-gray-200 p-1 shadow-xl"
           />

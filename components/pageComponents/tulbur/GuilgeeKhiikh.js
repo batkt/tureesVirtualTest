@@ -211,7 +211,7 @@ function GuilgeeKhiikh(
 
   return (
     <div className="flex flex-col space-y-2">
-      <div className="flex w-full">
+      <div className="flex w-full pb-4 ">
         <Radio.Group
           onChange={(e) => {
             setTurul(e.target.value);

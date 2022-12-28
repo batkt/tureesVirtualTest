@@ -211,10 +211,12 @@ function tulburTootsoo({ token }) {
     }
 
     const footer = [
-      <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
-        Хадгалах
-      </Button>,
+      <div className="pr-[1%]">
+        <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
+        <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
+          Хадгалах
+        </Button>
+      </div>,
     ];
     modal({
       title: "",
@@ -242,10 +244,13 @@ function tulburTootsoo({ token }) {
     }
 
     const footer = [
-      <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>,
-      <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
-        Хадгалах
-      </Button>,
+      <div className="pr-[1%]">
+        <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>,
+        <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
+          Хадгалах
+        </Button>
+        ,
+      </div>,
     ];
     modal({
       title: "",

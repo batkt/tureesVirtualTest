@@ -582,7 +582,7 @@ function UstsanTuukh() {
         dataIndex: "class",
         align: "left",
         ellipsis: true,
-        width: "2rem",
+        width: "3rem",
         showSorterTooltip: false,
         render: (mur) => {
           var text;
@@ -635,6 +635,10 @@ function UstsanTuukh() {
             case "khungulult":
               text = "Хөнгөлөлт";
               break;
+            case "ashiglaltiinZardluud":
+              text = "Ашиглалтын зардал";
+              break;
+
             default:
               text = mur;
               break;
