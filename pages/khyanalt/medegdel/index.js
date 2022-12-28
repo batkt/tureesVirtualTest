@@ -959,7 +959,7 @@ function Khyanalt({ token }) {
           )}
           {songogdsonKhariltsagch.length > 1 ? (
             <div
-              className={`box mt-0 hidden h-full min-h-[70vh] items-center lg:col-span-6 lg:mt-0 xl:col-span-6 xl:flex xl:h-H7HalfRem ${
+              className={`box mt-0 hidden h-full min-h-[60vh] items-center lg:col-span-6 lg:mt-0 xl:col-span-6 xl:flex xl:h-H7HalfRem ${
                 turulZagvar ? "hidden" : "lg:flex"
               }`}
               data-aos="fade-left"

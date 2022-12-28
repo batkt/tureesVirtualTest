@@ -456,14 +456,14 @@ function BarilgaBurtgel({ token }) {
             </div>
           </div>
           <div className=" flex gap-2">
-            <div className=" w-[24%]">
+            <div className="">
               <DatePicker.RangePicker
                 locale={local}
                 value={lineOgnoo}
                 onChange={setLineOgnoo}
               />
             </div>
-            <div className=" w-[20%]">
+            <div className=" ">
               <Select
                 placeholder="График төрөл сонгох"
                 value={nariivchlal}

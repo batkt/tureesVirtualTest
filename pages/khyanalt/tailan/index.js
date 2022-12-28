@@ -68,7 +68,7 @@ function Chart({
   return (
     <div className="box col-span-12 p-2 md:col-span-6">
       <div className="flex w-full flex-col space-y-1 pb-5 md:flex-row md:justify-between md:space-y-0">
-        <div className="flex gap-1 flex-col md:flex-row">
+        <div className="flex flex-col gap-1 md:flex-row">
           <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
             {tailanguud.map((a) => (
               <Select.Option key={a.service} value={a.service}>
@@ -133,10 +133,17 @@ function Chart({
                       size="small"
                       trailColor={a.ungu}
                       strokeColor={a.ungu}
-                      percent={(
-                        (a.dun * 100) /
-                        tailanGaralt?.jagsaalt.reduce((a, b) => a + b.dun, 0)
-                      ).toFixed(0)}
+                      percent={
+                        a.dun > 0
+                          ? (
+                              (a.dun * 100) /
+                              tailanGaralt?.jagsaalt.reduce(
+                                (a, b) => a + b.dun || 0,
+                                0
+                              )
+                            ).toFixed(0)
+                          : 0
+                      }
                     />
                   </div>
                 </div>
@@ -217,7 +224,7 @@ function AjiltanBurtgel({ token }) {
           setWaiting={setWaiting}
           token={token}
           defaultTurul="line"
-          defaultTailan="borluulaltiinTailanAvya"
+          defaultTailan="ashigiinTailanAvya"
         />
       </div>
     </Admin>
