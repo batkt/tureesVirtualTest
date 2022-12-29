@@ -34,7 +34,7 @@ function BarilgaBurtgel({ token }) {
   ]);
   const barilgaToololt = useSWR(
     !!token ? ["khyanakhSambariinUgugdul", token, lineOgnoo] : null,
-    (url, token, ognoo) =>
+    (url, token, lineOgnoo) =>
       createMethod(url, token, {
         ekhlekhOgnoo: lineOgnoo[0].startOf().format("YYYY-MM-DD 00:00:00"),
         duusakhOgnoo: lineOgnoo[1].endOf().format("YYYY-MM-DD 23:59:59"),
@@ -366,7 +366,7 @@ function BarilgaBurtgel({ token }) {
               <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
                   <Line
-                    data={lineChart.data}
+                    data={lineChart.data || []}
                     responsive={{
                       "height < 128": {
                         legend: {
@@ -385,7 +385,6 @@ function BarilgaBurtgel({ token }) {
                         loop: true,
                       },
                     }}
-                    maintainAspectRatio={false}
                     title={{
                       display: false,
                       text: "Sales Charts",
@@ -614,7 +613,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Дууссан ажил</div>
               </div>
-              {/* <div>21нд</div> */}
+              <div>33</div>
             </div>
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
@@ -623,7 +622,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Идэвхтэй ажил</div>
               </div>
-              {/* <div>26нд</div> */}
+              <div>18</div>
             </div>
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
@@ -632,7 +631,7 @@ function BarilgaBurtgel({ token }) {
                 </div>
                 <div>Цуцлагдсан</div>
               </div>
-              {/* <div>30нд</div> */}
+              <div>10</div>
             </div>
           </div>
         </div>
