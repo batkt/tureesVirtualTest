@@ -1,16 +1,11 @@
 import Admin from "components/Admin";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import { useMemo, useEffect, useState } from "react";
-import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
-import { Button, Table, Popover, Calendar, Select, DatePicker } from "antd";
-import {
-  PlusOutlined,
-  SettingOutlined,
-  MoreOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
-import _, { random } from "lodash";
+import { Button, Popover, Calendar, Select, DatePicker } from "antd";
+import { PlusOutlined, MoreOutlined, EditOutlined } from "@ant-design/icons";
+import _ from "lodash";
 import router from "next/router";
 import CardList from "components/cardList";
 import BarilgaTile from "components/pageComponents/barilga/BarilgaTile";
@@ -18,10 +13,9 @@ import Aos from "aos";
 import useSWR from "swr";
 import createMethod from "tools/function/crud/createMethod";
 import moment from "moment";
-import Datepicker from "react-tailwindcss-datepicker";
 import React from "react";
 import Chart from "chart.js";
-import { Pie, Doughnut } from "react-chartjs-2";
+import { Pie, Doughnut, Line } from "react-chartjs-2";
 import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
@@ -191,118 +185,6 @@ function BarilgaBurtgel({ token }) {
   const orolgiinChartUngu =
     orlogiinChartSalbaraarAvya?.data?.backgroundColor.map((a) => a);
 
-  React.useEffect(() => {
-    var config = {
-      type: "line",
-      data: lineChart.data,
-      options: {
-        responsive: {
-          "height < 128": {
-            legend: {
-              display: false,
-            },
-          },
-        },
-        animationEnabled: true,
-        maintainAspectRatio: true,
-
-        animations: {
-          tension: {
-            duration: 1000,
-            easing: "linear",
-            from: 1,
-            to: 0,
-            loop: true,
-          },
-        },
-        maintainAspectRatio: false,
-        title: {
-          display: false,
-          text: "Sales Charts",
-          fontColor: "black",
-        },
-        legend: {
-          align: "end",
-          position: "bottom",
-        },
-        tooltips: {
-          mode: "nearest",
-          intersect: false,
-          callbacks: {
-            label: function (tooltipitem, data) {
-              var dataLabel = data.labels[tooltipitem.index];
-              var value =
-                ": " +
-                data.datasets[tooltipitem.datasetIndex].data[tooltipitem.index]
-                  .toLocaleString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-              if (Chart.helpers.isArray(dataLabel)) {
-                dataLabel = dataLabel.slice();
-                dataLabel[0] += value;
-              } else {
-                dataLabel += value;
-              }
-              return dataLabel;
-            },
-          },
-        },
-        scales: {
-          xAxes: [
-            {
-              display: true,
-              scaleLabel: {
-                display: false,
-                labelString: "Month",
-                fontColor: "gray",
-              },
-              gridLines: {
-                display: false,
-                borderDash: [2],
-                borderDashOffset: [2],
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
-              },
-            },
-          ],
-
-          yAxes: [
-            {
-              ticks: {
-                fontColor: "gray",
-                beginAtZero: true,
-                userCallback: function (value, index, values) {
-                  value = value.toString();
-                  value = value.split(/(?=(?:...)*$)/);
-                  value = value.join(",");
-                  return "" + value;
-                },
-              },
-
-              display: true,
-              scaleLabel: {
-                beginAtZero: true,
-                display: false,
-                labelString: "Value",
-                fontColor: "gray",
-              },
-              gridLines: {
-                beginAtZero: true,
-                borderDash: [3],
-                borderDashOffset: [3],
-                drawBorder: false,
-                color: "gray",
-                zeroLineColor: "gray",
-                zeroLineBorderDash: [2],
-                zeroLineBorderDashOffset: [2],
-              },
-            },
-          ],
-        },
-      },
-    };
-    var ctx = document.getElementById("line-chart").getContext("2d");
-    window.myLine = new Chart(ctx, config);
-  }, [lineChart]);
   const avlaga = useMemo(() => {
     return {
       labels:
@@ -490,7 +372,112 @@ function BarilgaBurtgel({ token }) {
               </div>
               <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
-                  <canvas id="line-chart"></canvas>
+                  <Line
+                    data={lineChart.data}
+                    responsive={{
+                      "height < 128": {
+                        legend: {
+                          display: false,
+                        },
+                      },
+                    }}
+                    animationEnabled={true}
+                    maintainAspectRatio={true}
+                    animations={{
+                      tension: {
+                        duration: 1000,
+                        easing: "linear",
+                        from: 1,
+                        to: 0,
+                        loop: true,
+                      },
+                    }}
+                    maintainAspectRatio={false}
+                    title={{
+                      display: false,
+                      text: "Sales Charts",
+                      fontColor: "black",
+                    }}
+                    legend={{
+                      align: "end",
+                      position: "bottom",
+                    }}
+                    tooltips={{
+                      mode: "nearest",
+                      intersect: false,
+                      callbacks: {
+                        label: function (tooltipitem, data) {
+                          var dataLabel = data.labels[tooltipitem.index];
+                          var value =
+                            ": " +
+                            data.datasets[tooltipitem.datasetIndex].data[
+                              tooltipitem.index
+                            ]
+                              .toLocaleString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                          if (Chart.helpers.isArray(dataLabel)) {
+                            dataLabel = dataLabel.slice();
+                            dataLabel[0] += value;
+                          } else {
+                            dataLabel += value;
+                          }
+                          return dataLabel;
+                        },
+                      },
+                    }}
+                    scales={{
+                      xAxes: [
+                        {
+                          display: true,
+                          scaleLabel: {
+                            display: false,
+                            labelString: "Month",
+                            fontColor: "gray",
+                          },
+                          gridLines: {
+                            display: false,
+                            borderDash: [2],
+                            borderDashOffset: [2],
+                            zeroLineBorderDash: [2],
+                            zeroLineBorderDashOffset: [2],
+                          },
+                        },
+                      ],
+
+                      yAxes: [
+                        {
+                          ticks: {
+                            fontColor: "gray",
+                            beginAtZero: true,
+                            userCallback: function (value, index, values) {
+                              value = value.toString();
+                              value = value.split(/(?=(?:...)*$)/);
+                              value = value.join(",");
+                              return "" + value;
+                            },
+                          },
+
+                          display: true,
+                          scaleLabel: {
+                            beginAtZero: true,
+                            display: false,
+                            labelString: "Value",
+                            fontColor: "gray",
+                          },
+                          gridLines: {
+                            beginAtZero: true,
+                            borderDash: [3],
+                            borderDashOffset: [3],
+                            drawBorder: false,
+                            color: "gray",
+                            zeroLineColor: "gray",
+                            zeroLineBorderDash: [2],
+                            zeroLineBorderDashOffset: [2],
+                          },
+                        },
+                      ],
+                    }}
+                  />
                 </div>
               </div>
             </div>
