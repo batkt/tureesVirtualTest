@@ -960,23 +960,43 @@ function Khyanalt({ token }) {
           {songogdsonKhariltsagch.length > 1 ? (
             <div
               className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-              style={{ height: "calc(100vh - 32rem)" }}
-              data-aos="fade-left"
-              data-aos-duration="1000"
+              style={{
+                height: ` ${
+                  turul === "App"
+                    ? "calc(100vh - 26rem)"
+                    : turul === "SMS"
+                    ? "calc(100vh - 21rem)"
+                    : turul === "Mail"
+                    ? "calc(100vh - 24rem)"
+                    : ""
+                } `,
+              }}
             >
-              <div className="mx-auto text-center">
-                <div className="flex justify-center">
-                  <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
-                    <img alt="ProfileZurag" src="/profile.svg" />
+              <div
+                className={`box flex h-full items-center ${
+                  turulZagvar ? "hidden" : "lg:flex"
+                }`}
+                data-aos="fade-left"
+                data-aos-duration="1000"
+              >
+                <div className="mx-auto text-center">
+                  <div className="flex justify-center">
+                    <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
+                      <img alt="ProfileZurag" src="/profile.svg" />
+                    </div>
+                    <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
+                      <img alt="ProfileZurag" src="/profileFemale.svg" />
+                    </div>
                   </div>
-                  <div className="image-fit z-0 -ml-5 h-16 w-16 flex-none overflow-hidden rounded-full">
-                    <img alt="ProfileZurag" src="/profileFemale.svg" />
-                  </div>
-                </div>
-                <div className="mt-3">
-                  <div className="font-medium">Өдрийн мэнд</div>
-                  <div className="mt-1 text-gray-600 dark:text-gray-300">
-                    Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
+                  <div className="mt-3">
+                    <div className="font-medium">Өдрийн мэнд</div>
+                    <p>
+                      Сонгогдсон {songogdsonKhariltsagch.length} харилцагч
+                      байна.
+                    </p>
+                    <div className="mt-1 text-gray-600 dark:text-gray-300">
+                      Та шаардлага илгээнэ үү.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -989,7 +1009,17 @@ function Khyanalt({ token }) {
             >
               <div
                 className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                style={{ maxHeight: "calc(100vh - 32rem)" }}
+                style={{
+                  maxHeight: ` ${
+                    turul === "App"
+                      ? "calc(100vh - 28rem)"
+                      : turul === "SMS"
+                      ? "calc(100vh - 23rem)"
+                      : turul === "Mail"
+                      ? "calc(100vh - 26rem)"
+                      : ""
+                  } `,
+                }}
                 onScroll={onScroll}
               >
                 {medegdelAvya?.jagsaalt.map((a) => {
@@ -1050,27 +1080,31 @@ function Khyanalt({ token }) {
             </div>
           )}
           <div
-            className="w-full p-2"
+            className="w-full space-y-2 p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
             {turul !== "SMS" && (
-              <Input
-                className="space-y-3"
-                placeholder="Гарчиг"
-                value={!!ner ? ner : title}
-                onChange={({ target }) => setTitle(target.value)}
-              />
+              <div>
+                <Input
+                  className="space-y-3"
+                  placeholder="Гарчиг"
+                  value={!!ner ? ner : title}
+                  onChange={({ target }) => setTitle(target.value)}
+                />
+              </div>
             )}
 
             {turul !== "App" ? (
-              <ZagvarUusgekh
-                change={setContent}
-                value={content}
-                onTextChange={onTextChange}
-              />
+              <div>
+                <ZagvarUusgekh
+                  change={setContent}
+                  value={content}
+                  onTextChange={onTextChange}
+                />
+              </div>
             ) : (
-              <div className="space-y-2">
+              <div className=" space-y-2">
                 <div className="flex items-center space-x-3">
                   <div>
                     <Upload
