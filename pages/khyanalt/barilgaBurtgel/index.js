@@ -24,20 +24,20 @@ import { GoPrimitiveDot } from "react-icons/go";
 import formatNumber from "tools/function/formatNumber";
 import local from "antd/lib/date-picker/locale/mn_MN";
 function BarilgaBurtgel({ token }) {
-  useEffect(() => {
-    Aos.init({ once: true });
-  });
   const { baiguullaga, barilgiinId } = useAuth();
-  const barilga = baiguullaga?.barilguud?.find((a) => a._id === barilgiinId);
   const [ognoo, setOgnoo] = useState(new Date());
   const [nariivchlal, setNariivchlal] = useState("day");
 
+  const [lineOgnoo, setLineOgnoo] = useState([
+    moment().startOf("month"),
+    moment().endOf("month"),
+  ]);
   const barilgaToololt = useSWR(
-    !!token ? ["khyanakhSambariinUgugdul", token] : null,
-    (url, token) =>
+    !!token ? ["khyanakhSambariinUgugdul", token, lineOgnoo] : null,
+    (url, token, ognoo) =>
       createMethod(url, token, {
-        ekhlekhOgnoo: moment().startOf().format("YYYY-MM-DD 00:00:00"),
-        duusakhOgnoo: moment().endOf().format("YYYY-MM-DD 23:59:59"),
+        ekhlekhOgnoo: lineOgnoo[0].startOf().format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: lineOgnoo[1].endOf().format("YYYY-MM-DD 23:59:59"),
       })
         .then(({ data }) => data)
         .catch(aldaaBarigch),
@@ -141,18 +141,11 @@ function BarilgaBurtgel({ token }) {
   function barilgaBurtgel(id) {
     router.push(`/khyanalt/barilgaBurtgel/${id}`);
   }
-  const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date().setMonth(11),
+
+  useEffect(() => {
+    Aos.init({ once: true });
   });
 
-  const handleValueChange = (newValue) => {
-    setValue(newValue);
-  };
-  const [lineOgnoo, setLineOgnoo] = useState([
-    moment().startOf("month"),
-    moment().endOf("month"),
-  ]);
   const query = useMemo(() => {
     return {
       nariivchlal,
@@ -678,13 +671,11 @@ function BarilgaBurtgel({ token }) {
                 <div className="font-bold">{a.ner}</div>
                 <div>{a.register}</div>
               </div>
-              <div className="col-span-3  flex items-center justify-center ">
+              <div className="col-span-4  flex items-center justify-center ">
                 {formatNumber(a?.niitTalbai)}м<sup> 2</sup>
               </div>
-              <div className="col-span-1 flex items-center justify-end">
-                {a?.davkharuud?.length}
-              </div>
-              <div className=" col-span-1 flex items-center justify-end">
+
+              <div className=" col-span-1 ml-auto flex items-center justify-end">
                 <Popover
                   content={() => (
                     <div className="flex w-24 flex-col space-y-2">
