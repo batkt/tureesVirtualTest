@@ -45,6 +45,7 @@ function ZaaltZasvar({
       setOptions={{
         plugins: custom,
         buttonList: [...buttonList.formatting, ["undsen"], ...buttonListCustom],
+        resizingBar: false,
       }}
       showToolbar={true}
       ref={editorRef}

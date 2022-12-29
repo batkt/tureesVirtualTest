@@ -904,7 +904,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-        <div className="box col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
+        <div className="box relative col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-6 xl:h-H7HalfRem">
           {songogdsonKhariltsagch.length < 2 ? (
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {khariltsagch && (
@@ -959,9 +959,8 @@ function Khyanalt({ token }) {
           )}
           {songogdsonKhariltsagch.length > 1 ? (
             <div
-              className={`box mt-0 hidden h-full  items-center lg:col-span-6 lg:mt-0 xl:col-span-6 xl:flex  ${
-                turulZagvar ? "hidden" : "lg:flex"
-              }`}
+              className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+              style={{ height: "calc(100vh - 32rem)" }}
               data-aos="fade-left"
               data-aos-duration="1000"
             >
@@ -989,7 +988,7 @@ function Khyanalt({ token }) {
               data-aos-duration="1000"
             >
               <div
-                className="mt-0 flex h-full w-full flex-col-reverse overflow-y-auto p-5 lg:mt-0"
+                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{ maxHeight: "calc(100vh - 32rem)" }}
                 onScroll={onScroll}
               >
@@ -1051,7 +1050,7 @@ function Khyanalt({ token }) {
             </div>
           )}
           <div
-            className="mt-auto w-full p-2"
+            className="w-full p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
@@ -1071,7 +1070,7 @@ function Khyanalt({ token }) {
                 onTextChange={onTextChange}
               />
             ) : (
-              <div className="py-5">
+              <div className="space-y-2">
                 <div className="flex items-center space-x-3">
                   <div>
                     <Upload
@@ -1088,16 +1087,17 @@ function Khyanalt({ token }) {
                     </Upload>
                   </div>
                 </div>
-
-                <ZagvarUusgekh
-                  change={setContent}
-                  value={content}
-                  onTextChange={onTextChange}
-                />
+                <div>
+                  <ZagvarUusgekh
+                    change={setContent}
+                    value={content}
+                    onTextChange={onTextChange}
+                  />
+                </div>
               </div>
             )}
           </div>
-          <div className="flex w-full items-center justify-between space-x-2 p-2">
+          <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
             <div className="text-xs font-semibold">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
               <label className="font-medium">{turul} Илгээх</label>

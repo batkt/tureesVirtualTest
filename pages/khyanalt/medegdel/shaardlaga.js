@@ -437,7 +437,7 @@ function Khyanalt({ token }) {
         </div>
       </div>
       {khariltsagch || songogdsonKhariltsagch.length > 0 ? (
-        <div className="box col-span-12 mt-0 flex h-full min-h-[70vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem">
+        <div className=" box relative col-span-12 mt-0 flex h-full min-h-[80vh] flex-col lg:col-span-6 lg:mt-0 xl:col-span-9 xl:h-H7HalfRem ">
           {songogdsonKhariltsagch.length <= 1 ? (
             <div className="dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 py-4 sm:flex-row">
               {khariltsagch && (
@@ -490,7 +490,7 @@ function Khyanalt({ token }) {
           ) : (
             ""
           )}
-          <div>
+          <div className="">
             {songogdsonKhariltsagch.length > 1 ? (
               <div
                 className="col-span-12 space-y-10 overflow-auto rounded-r-xl  bg-white pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
@@ -528,7 +528,7 @@ function Khyanalt({ token }) {
             ) : (
               <div
                 className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
-                style={{ maxHeight: "calc(100vh - 32rem)" }}
+                style={{ maxHeight: "calc(100vh - 29rem)" }}
                 onScroll={(e) => {
                   if (
                     e.target.scrollHeight + e.target.scrollTop - 1 <
@@ -593,53 +593,47 @@ function Khyanalt({ token }) {
           </div>
 
           <div
-            className="w-full  space-y-3 px-3"
+            className=" w-full p-2"
             data-aos="fade-right"
             data-aos-duration="1000"
           >
-            <Input
-              rules={[{ required: true, message: "Гарчиг заавал оруулна уу!" }]}
-              className="space-y-3"
-              placeholder="Гарчиг"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-            <div className="space-y-3">
-              <Upload
-                showUploadList={false}
-                multiple={false}
-                name="file"
-                maxCount={1}
-                action={`${url}/upload`}
-                method="POST"
-                onChange={(v) => setZurag(v.file.response)}
-                beforeUpload={(file) => {
-                  function handleChange(img) {
-                    getBase64(img, (img) => (ref.current.src = img));
-                    ref.current.classList.remove("hidden");
-                  }
-                  return beforeUpload(file, handleChange);
-                }}
-              >
-                <div className="flex flex-row space-x-1">
-                  <div className="flex flex-row space-x-1">
-                    {!zurag && (
-                      <Button icon={<UploadOutlined />}>зураг оруулах</Button>
-                    )}
-                    <img ref={ref} width={200} src="" className="hidden" />
-                    {!!zurag && <Button icon={<EditOutlined />}></Button>}
-                  </div>
-                </div>
-              </Upload>
+            {turul !== "App" ? (
               <ZagvarUusgekh
                 change={setContent}
                 value={content}
                 onTextChange={onTextChange}
               />
-            </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="flex items-center space-x-3">
+                  <div>
+                    <Upload
+                      showUploadList={false}
+                      multiple={false}
+                      name="file"
+                      action={`${url}/upload`}
+                      method="POST"
+                      onChange={(v) => setZurag(v.file.response)}
+                    >
+                      <div className="flex flex-row space-x-1">
+                        <Button icon={<UploadOutlined />}>зураг оруулах</Button>
+                      </div>
+                    </Upload>
+                  </div>
+                </div>
+                <div className="">
+                  <ZagvarUusgekh
+                    change={setContent}
+                    value={content}
+                    onTextChange={onTextChange}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex w-full items-center justify-end space-x-2 p-2">
-            <div className="flex items-center justify-between space-x-3">
+          <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
+            <div className="text-xs font-semibold">{msj.length}/160</div>
+            <div className="flex items-center justify-between space-x-3 bg-fixed ">
               <label className="font-medium">{turul} Илгээх</label>
               <div
                 onClick={send}
