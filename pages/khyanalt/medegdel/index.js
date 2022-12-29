@@ -1008,15 +1008,15 @@ function Khyanalt({ token }) {
               data-aos-duration="1000"
             >
               <div
-                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-auto rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
+                className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-y-scroll rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{
                   maxHeight: ` ${
                     turul === "App"
-                      ? "calc(100vh - 28rem)"
+                      ? "calc(100vh - 31rem)"
                       : turul === "SMS"
-                      ? "calc(100vh - 23rem)"
-                      : turul === "Mail"
                       ? "calc(100vh - 26rem)"
+                      : turul === "Mail"
+                      ? "calc(100vh - 28.5rem)"
                       : ""
                   } `,
                 }}
