@@ -248,7 +248,7 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-[21rem] space-y-1 bg-white p-3 shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200">
+      <div className=" relative space-y-1 bg-white p-3  shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200 lg:absolute lg:left-0 lg:w-[180%]">
         {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
