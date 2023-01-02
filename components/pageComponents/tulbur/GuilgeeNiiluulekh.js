@@ -248,7 +248,7 @@ function GuilgeeNiiluulekh(
 
   const content = useMemo(
     () => (
-      <div className="relative w-72 space-y-1 bg-white p-3 shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200">
+      <div className="relative w-[21rem] space-y-1 bg-white p-3 shadow-xl drop-shadow-xl dark:bg-gray-900 dark:text-gray-200">
         {gereeniiMedeelel?.jagsaalt?.map((mur, i) => (
           <div
             className="grid cursor-pointer grid-cols-3 gap-2 rounded-md border border-gray-400 p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -439,6 +439,7 @@ function GuilgeeNiiluulekh(
         </div>
         <div className="flex grid-cols-2 flex-col-reverse gap-3 lg:grid ">
           <Dropdown
+            className="w-[100%]"
             placement="bottom"
             title="Гэрээний жагсаалт"
             overlay={content}
@@ -454,7 +455,7 @@ function GuilgeeNiiluulekh(
                   setVisible(true);
                 }, 300)
               }
-              className="rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200"
+              className=" rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200 lg:w-[114%]"
               placeholder="Гэрээ сонгох"
               onChange={onChange}
             />
