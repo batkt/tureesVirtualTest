@@ -108,8 +108,10 @@ function BarilgaBurtgel({ token }) {
       },
       {
         too:
+          0 ||
           barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0) +
-          "/" +
+            "/" +
+            0 ||
           barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too,
         icon: (
           <svg
@@ -129,10 +131,10 @@ function BarilgaBurtgel({ token }) {
           </svg>
         ),
         khuvi: (
-          (100 *
+          (100 * 0 ||
             barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too) /
-          barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
-        ).toFixed(0),
+            0 || barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
+        )?.toFixed(0),
         utga: "Түрээслэгч",
       },
     ];
