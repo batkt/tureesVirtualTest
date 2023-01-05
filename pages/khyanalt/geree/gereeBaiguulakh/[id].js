@@ -65,7 +65,7 @@ function GereeBaiguulakh({ token, data }) {
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
   const [waiting, setWaiting] = useState(false);
-  const [gereekharakhTovch, setGereekharakhTovch] = useState(false)
+  const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
 
   const next = (data) => {
     if (current < 4) {
@@ -99,19 +99,18 @@ function GereeBaiguulakh({ token, data }) {
   }, [current]);
 
   function khadgalya(data) {
-    var utgaShalgakh = []
+    var utgaShalgakh = [];
     if (
       !data.dans ||
       !data.gereeniiDugaar ||
       !data.register ||
       !data.utas ||
       (data.baiguullagaEsekh === true
-        ? (!data.zakhirliinNer ||
-          !data.zakhirliinOvog ||
-          !data.ner)
-        : (!data.ner || !data.ovog)) || !gereeniiZagvar
+        ? !data.zakhirliinNer || !data.zakhirliinOvog || !data.ner
+        : !data.ner || !data.ovog) ||
+      !gereeniiZagvar
     ) {
-      utgaShalgakh.push(0)
+      utgaShalgakh.push(0);
       notification.warning({
         message: "Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!",
       });
@@ -135,9 +134,7 @@ function GereeBaiguulakh({ token, data }) {
         message: "Гэрээний хугацаагаа бүрэн оруулна уу!",
       });
     }
-    if (
-      !data.talbainIdnuud || !data.talbainKhemjee
-    ) {
+    if (!data.talbainIdnuud || !data.talbainKhemjee) {
       utgaShalgakh.push(2);
       notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });
     }
@@ -146,11 +143,11 @@ function GereeBaiguulakh({ token, data }) {
       data.baritsaaAvakhEsekh === true &&
       data.baritsaaBairshuulakhKhugatsaa === (undefined || null)
     ) {
-      utgaShalgakh.push(4)
+      utgaShalgakh.push(4);
       notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
     }
     if (utgaShalgakh.length > 0) {
-      setDutuuAlkham(utgaShalgakh)
+      setDutuuAlkham(utgaShalgakh);
       return;
     }
     setWaiting(true);
@@ -180,7 +177,7 @@ function GereeBaiguulakh({ token, data }) {
           setKhagalakhGeree({});
           router.back();
           setTimeout(() => {
-            window.location.reload()
+            window.location.reload();
           }, 600);
           message.success("Амжилттай хадгаллаа");
         }
@@ -233,17 +230,19 @@ function GereeBaiguulakh({ token, data }) {
         content: `Та гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
-        onOk: (() => {
-          router.back(), setTimeout(() => {
-            window.location.reload()
-          }, 600)
-        }),
+        onOk: () => {
+          router.back(),
+            setTimeout(() => {
+              window.location.reload();
+            }, 600);
+        },
       });
     else {
-      router.back(), setTimeout(() => {
-        window.location.reload()
-      }, 600);
-    };
+      router.back(),
+        setTimeout(() => {
+          window.location.reload();
+        }, 600);
+    }
   }
 
   useEffect(() => {
@@ -318,9 +317,8 @@ function GereeBaiguulakh({ token, data }) {
   function onBack() {
     router.back();
     setTimeout(() => {
-      window.location.reload()
+      window.location.reload();
     }, 600);
-
   }
 
   return (
@@ -339,9 +337,14 @@ function GereeBaiguulakh({ token, data }) {
         <div className="px-10">
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
-              <Step status={
-                dutuuAlkham?.find((a) => a === index) === index && "error"
-              } value={index} key={item.title} title={item.title} />
+              <Step
+                status={
+                  dutuuAlkham?.find((a) => a === index) === index && "error"
+                }
+                value={index}
+                key={item.title}
+                title={item.title}
+              />
             ))}
           </Steps>
         </div>
@@ -371,12 +374,36 @@ function GereeBaiguulakh({ token, data }) {
               </Button>
             )}
           </div>
-          {!!gereeniiZagvar && <div className={`${gereekharakhTovch !== true ? "bottom-20 right-5" : "bottom-[72vh] right-1"} fixed transition-all md:hidden duration-300 text-2xl border-2 z-50 bg-green-600 text-white rounded-full p-2`}>
-            {gereekharakhTovch !== true ? <FileTextOutlined onClick={(e) => { e.stopPropagation(); setGereekharakhTovch(true) }} /> :
-              <EyeInvisibleOutlined onClick={(e) => { e.stopPropagation(), setGereekharakhTovch(false) }} />}
-          </div>}
+          {!!gereeniiZagvar && (
+            <div
+              className={`${
+                gereekharakhTovch !== true
+                  ? "bottom-20 right-5"
+                  : "bottom-[72vh] right-1"
+              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
+            >
+              {gereekharakhTovch !== true ? (
+                <FileTextOutlined
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setGereekharakhTovch(true);
+                  }}
+                />
+              ) : (
+                <EyeInvisibleOutlined
+                  onClick={(e) => {
+                    e.stopPropagation(), setGereekharakhTovch(false);
+                  }}
+                />
+              )}
+            </div>
+          )}
           <div
-            className={`col-span-12 mt-3 fixed transition-all duration-300 w-[91vw] md:w-auto top-40 ${gereekharakhTovch !== true ? " -right-full" : " right-4"} border-2 md:border-0 border-green-600 md:static bg-gray-50 p-2 dark:bg-gray-900 ${gereekharakhTovch !== true ? "md:block hidden" : ""} lg:col-span-6 2xl:col-span-8`}
+            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${
+              gereekharakhTovch !== true ? " -right-full" : " right-4"
+            } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${
+              gereekharakhTovch !== true ? "hidden md:block" : ""
+            } lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
@@ -389,7 +416,7 @@ function GereeBaiguulakh({ token, data }) {
                 showSearch
                 id={gereeniiZagvariinId}
                 placeholder="Гэрээний загвар сонгох"
-                className="w-full hidden md:block"
+                className="hidden w-full md:block"
                 size="large"
                 value={null}
                 filterOption={(o) => o}
@@ -442,14 +469,14 @@ function GereeBaiguulakh({ token, data }) {
                       mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                         ? "erunkhiiMedeelel"
                         : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                          ? "gereeniiKhugatsaa"
-                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                            ? "tureesiinTalbai"
-                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                              ? "baritsaaBurtgel"
-                              : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                                ? "tulburToostoo"
-                                : ""
+                        ? "gereeniiKhugatsaa"
+                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                        ? "tureesiinTalbai"
+                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                        ? "baritsaaBurtgel"
+                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                        ? "tulburToostoo"
+                        : ""
                     }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -460,10 +487,11 @@ function GereeBaiguulakh({ token, data }) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className={`${mur.zaalt?.includes("table")
-                            ? "sun-editor-editable"
-                            : ""
-                            } ml-5 w-full p-0`}
+                          className={`${
+                            mur.zaalt?.includes("table")
+                              ? "sun-editor-editable"
+                              : ""
+                          } ml-5 w-full p-0`}
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>

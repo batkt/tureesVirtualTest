@@ -41,6 +41,7 @@ function Tile({ zasya, token, ...a }) {
                   <label>Засах</label>
                 </a>
                 <Popconfirm
+                  title="Устгахдаа итгэлтэй байна уу ?"
                   okText="Тийм"
                   cancelText="Үгүй"
                   onConfirm={() => segmentUstgaya()}
