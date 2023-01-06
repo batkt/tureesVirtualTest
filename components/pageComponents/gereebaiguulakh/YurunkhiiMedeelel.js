@@ -1,4 +1,13 @@
-import { Form, Input, Switch, Button, Upload, Select, Dropdown, Empty } from "antd";
+import {
+  Form,
+  Input,
+  Switch,
+  Button,
+  Upload,
+  Select,
+  Dropdown,
+  Empty,
+} from "antd";
 import {
   UploadOutlined,
   SolutionOutlined,
@@ -112,8 +121,6 @@ const YurunkhiiMedeele = ({
     value.baiguullagaEsekh
   );
 
-
-
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
       ner: undefined,
@@ -170,7 +177,10 @@ const YurunkhiiMedeele = ({
               }
               form.setFieldsValue(onookhKhariltsagch);
               onChange({ ...value, ...onookhKhariltsagch });
-            } else { form.setFieldValue("register", target.value); onChange({ ...value, register: target.value }) }
+            } else {
+              form.setFieldValue("register", target.value);
+              onChange({ ...value, register: target.value });
+            }
           })
           .catch(aldaaBarigch);
       }, 300);
@@ -186,7 +196,6 @@ const YurunkhiiMedeele = ({
       form.resetFields();
     }
   }, [barilgiinId]);
-
 
   const focuser = useCallback(
     (e) => {
@@ -359,7 +368,9 @@ const YurunkhiiMedeele = ({
             {
               required: true,
               len: baiguullagaEsekh ? 7 : 10,
-              pattern: baiguullagaEsekh ? new RegExp("(\\d{7})") : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
+              pattern: baiguullagaEsekh
+                ? new RegExp("(\\d{7})")
+                : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
               message: "Регистр бүртгэнэ үү!",
             },
           ]}
@@ -370,7 +381,8 @@ const YurunkhiiMedeele = ({
             baiguullaga={baiguullaga}
             barilgiinId={barilgiinId}
             onChangeRegister={onChangeRegister}
-            baiguullagaEsekh={baiguullagaEsekh} />
+            baiguullagaEsekh={baiguullagaEsekh}
+          />
         </Form.Item>
       </div>
       {baiguullagaEsekh && (
@@ -489,10 +501,7 @@ const YurunkhiiMedeele = ({
       )}
       {!baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item
-            name="mail"
-            label={"И-мэйл хаяг"}
-          >
+          <Form.Item name="mail" label={"И-мэйл хаяг"}>
             <Input
               onKeyUp={focuser}
               type="email"
@@ -535,7 +544,7 @@ const YurunkhiiMedeele = ({
                   />
                 </div>
               ))}
-              <Form.Item className="md:ml-44" wrapperCol={{ offset: 0 }}>
+              <Form.Item className="" wrapperCol={{ offset: 10 }}>
                 <Button
                   icon={<PlusOutlined />}
                   className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
@@ -584,39 +593,14 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      {baiguullagaEsekh && <div data-aos="fade-right" data-aos-delay="500">
-        <Form.Item
-          name="gerchilgeeniiZurag"
-          label={"Гэрчилгээний хуулбар"}
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          extra="Гэрчилгээний хуулбар"
-        >
-          <Upload
-            multiple={false}
-            name="file"
-            listType="picture"
-            action={`${url}/zuragKhadgalya`}
-            method="POST"
-            data={{ turul: "gerchilgeeniiZurag" }}
-            headers={{ Authorization: `bearer ${token}` }}
-          >
-            <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
-              Файл сонгох
-            </Button>
-          </Upload>
-        </Form.Item>
-      </div>}
-      {!baiguullagaEsekh && <div data-aos="fade-right" data-aos-delay="1000">
-        <Form.Item
-          label={"Хавсаргал"}
-          className="w-full"
-        >
+      {baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
-            name="zuvshuurliinZurag"
+            name="gerchilgeeniiZurag"
+            label={"Гэрчилгээний хуулбар"}
             valuePropName="fileList"
             getValueFromEvent={normFile}
-            extra="Зөвшөөрлийн бичгийн хуулбар"
+            extra="Гэрчилгээний хуулбар"
           >
             <Upload
               multiple={false}
@@ -624,7 +608,7 @@ const YurunkhiiMedeele = ({
               listType="picture"
               action={`${url}/zuragKhadgalya`}
               method="POST"
-              data={{ turul: "zuvshuurliinZurag" }}
+              data={{ turul: "gerchilgeeniiZurag" }}
               headers={{ Authorization: `bearer ${token}` }}
             >
               <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
@@ -632,28 +616,60 @@ const YurunkhiiMedeele = ({
               </Button>
             </Upload>
           </Form.Item>
-          <Form.Item
-            name="unemlekhniiZurag"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-            extra="Иргэний үнэмлэхний хуулбар"
-          >
-            <Upload
-              multiple={false}
-              name="file"
-              listType="picture"
-              action={`${url}/zuragKhadgalya`}
-              method="POST"
-              data={{ turul: "unemlekhniiZurag" }}
-              headers={{ Authorization: `bearer ${token}` }}
+        </div>
+      )}
+      {!baiguullagaEsekh && (
+        <div data-aos="fade-right" data-aos-delay="1000">
+          <Form.Item label={"Хавсаргал"} className="w-full">
+            <Form.Item
+              name="zuvshuurliinZurag"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              extra="Зөвшөөрлийн бичгийн хуулбар"
             >
-              <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
-                Файл сонгох
-              </Button>
-            </Upload>
+              <Upload
+                multiple={false}
+                name="file"
+                listType="picture"
+                action={`${url}/zuragKhadgalya`}
+                method="POST"
+                data={{ turul: "zuvshuurliinZurag" }}
+                headers={{ Authorization: `bearer ${token}` }}
+              >
+                <Button
+                  className="dark:text-gray-300"
+                  icon={<UploadOutlined />}
+                >
+                  Файл сонгох
+                </Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item
+              name="unemlekhniiZurag"
+              valuePropName="fileList"
+              getValueFromEvent={normFile}
+              extra="Иргэний үнэмлэхний хуулбар"
+            >
+              <Upload
+                multiple={false}
+                name="file"
+                listType="picture"
+                action={`${url}/zuragKhadgalya`}
+                method="POST"
+                data={{ turul: "unemlekhniiZurag" }}
+                headers={{ Authorization: `bearer ${token}` }}
+              >
+                <Button
+                  className="dark:text-gray-300"
+                  icon={<UploadOutlined />}
+                >
+                  Файл сонгох
+                </Button>
+              </Upload>
+            </Form.Item>
           </Form.Item>
-        </Form.Item>
-      </div>}
+        </div>
+      )}
       <Form.Item wrapperCol={{ span: 24 }}>
         <div className="flex w-full justify-end">
           <Button

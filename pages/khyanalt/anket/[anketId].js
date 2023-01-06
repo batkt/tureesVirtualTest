@@ -98,7 +98,7 @@ function AnketBuglukh({ data, token }) {
                             ) : (
                               <Input
                                 width={"100%"}
-                                placeholder="Энд хариултаа бичинэ үү"
+                                placeholder="Энд хариултаа бичнэ үү"
                               />
                             )}
                           </Form.Item>
