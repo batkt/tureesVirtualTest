@@ -35,7 +35,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
         id="ajiltanSongokhButton"
         onClick={() => ajitanRef.current.khadgalya()}
       >
-        сонгох
+        Cонгох
       </Button>,
     ];
     modal({
