@@ -236,7 +236,7 @@ function index({ token }) {
                               </svg>
                               Засах
                             </div>
-                            <div>
+                            <div onClick={(e) => e.stopPropagation()}>
                               <Popconfirm
                                 title="Загвар устгах уу?"
                                 okText="Тийм"
@@ -255,10 +255,6 @@ function index({ token }) {
                                       "Гэрээний загвар устгагдлаа"
                                     );
                                   });
-                                }}
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
                                 }}
                               >
                                 <svg
