@@ -4,7 +4,7 @@ import { SolutionOutlined } from "@ant-design/icons";
 import uilchilgee from "services/uilchilgee";
 import moment from "moment";
 
-function AppTokhirgoo({ token, baiguullaga }) {
+function AppTokhirgoo({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
   const [idvekhtei, setIdvekhgui] = useState(
     !!baiguullaga?.tokhirgoo?.khereglegchEkhlekhOgnoo
   );
@@ -24,6 +24,7 @@ function AppTokhirgoo({ token, baiguullaga }) {
         if (data === "Amjilttai") {
           notification.success({ message: "Амжилттай засагдлаа" });
           setIdvekhgui(true);
+          setSongogdsonTsonkhniiIndex(11);
         }
       });
   }

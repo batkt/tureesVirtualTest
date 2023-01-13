@@ -23,6 +23,38 @@
   }
 }
 
+.pvtAxisContainer, .pvtVals {
+  @apply dark:bg-gray-900 dark:border-gray-600 !important;
+}
+
+.pvtDropdownCurrent {
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+}
+
+.pvtAxisContainer li span.pvtAttr {
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+}
+
+.pvtDropdownMenu {
+  @apply dark:bg-gray-800 dark:text-gray-200 !important;
+}
+
+.pvtDropdownActiveValue {
+  @apply dark:bg-gray-900 !important;
+}
+
+.pvtFilterBox {
+  @apply dark:bg-gray-800 dark:text-gray-200;
+}
+
+.pvtFilterBox h4 {
+  @apply dark:text-gray-200;
+}
+
+.pvtCheckContainer p.selected {
+  @apply dark:bg-gray-900;
+}
+
 .ant-collapse
   > .ant-collapse-item
   > .ant-collapse-header

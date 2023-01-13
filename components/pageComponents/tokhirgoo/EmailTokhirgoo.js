@@ -4,7 +4,7 @@ import uilchilgee, { url } from "services/uilchilgee";
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 
-function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
+function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
   const [form] = Form.useForm();
   const [emailTokhirgoo, setEmailTokhirgoo] = useState(null);
 
@@ -15,6 +15,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate }) {
         if (data === "Amjilttai") {
           notification.success({ message: "Амжилттай засагдлаа" });
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(6)
         }
       });
   }

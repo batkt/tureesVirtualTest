@@ -9,7 +9,8 @@ function KhuviinMedeelel({
   token,
   baiguullaga,
   baiguullagaMutate,
-  barilgiinId
+  barilgiinId,
+  setSongogdsonTsonkhniiIndex
 }) {
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
@@ -27,6 +28,7 @@ function KhuviinMedeelel({
           notification.success({ message: "Амжилттай засагдлаа" });
           setKhungulultiinTokhirgoo(null);
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(2)
         }
       });
   };

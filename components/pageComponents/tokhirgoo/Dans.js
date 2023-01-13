@@ -65,7 +65,7 @@ function DansTile({ data, dansMutate, zasya, token }) {
   );
 }
 
-function Dans({ token, baiguullaga }) {
+function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
   const { barilgiinId } = useAuth();
   const ref = React.useRef(null);
   const { dansGaralt, dansMutate } = useDans(token, baiguullaga?._id);
@@ -148,6 +148,7 @@ function Dans({ token, baiguullaga }) {
         updateMethod("dans", token, { ...mur, ...corp }).then(({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
             notification.success({ message: "Амжилттай хадгаллаа" });
+            setSongogdsonTsonkhniiIndex(9);
           }
         })
       );
@@ -246,15 +247,14 @@ function Dans({ token, baiguullaga }) {
               />
             ))}
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!!!(
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!!!(
                 khanbankCoprporate?.corporateNevtrekhNer ||
                 khanbankCoprporate?.corporateNuutsUg ||
                 khanbankCoprporate?.corporateGuilgeeniiNuutsUg
               )
                 ? "flex"
                 : "hidden"
-            }`}
+              }`}
           >
             <Button type="primary" onClick={() => dansKhadgalya("khanbank")}>
               Хадгалах
@@ -384,15 +384,14 @@ function Dans({ token, baiguullaga }) {
               />
             ))}
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!(
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!(
                 tdbCoprporate?.corporateNevtrekhNer ||
                 tdbCoprporate?.corporateNuutsUg ||
                 tdbCoprporate?.corporateGuilgeeniiNuutsUg
               )
                 ? "flex"
                 : "hidden"
-            }`}
+              }`}
           >
             <Button type="primary" onClick={() => dansKhadgalya("tdb")}>
               Хадгалах

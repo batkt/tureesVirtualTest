@@ -7,7 +7,7 @@ import getBase64 from "tools/function/getBase64";
 
 const { TextArea } = Input;
 
-function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
+function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setSongogdsonTsonkhniiIndex }) {
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -24,6 +24,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
       if (status === 200 && "Amjilttai" === data) {
         message.success("Амжилттай заслаа");
         ajiltanMutate({ ...ajiltanObject });
+        setSongogdsonTsonkhniiIndex(1)
       }
     });
   }

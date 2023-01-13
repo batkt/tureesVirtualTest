@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, InputNumber, notification, Switch } from "antd";
 import uilchilgee from "services/uilchilgee";
 
-function EBarimt({ token, baiguullaga, baiguullagaMutate }) {
+function EBarimt({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
   const [gereeTokhirgoo, setGereeTokhirgoo] = useState(null);
 
   const gereeTokhirgooKhadgalya = () => {
@@ -13,6 +13,7 @@ function EBarimt({ token, baiguullaga, baiguullagaMutate }) {
           notification.success({ message: "Амжилттай засагдлаа" });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(7)
         }
       });
   };
@@ -68,9 +69,8 @@ function EBarimt({ token, baiguullaga, baiguullagaMutate }) {
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               Хадгалах

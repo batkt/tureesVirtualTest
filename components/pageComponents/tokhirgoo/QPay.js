@@ -4,7 +4,7 @@ import useDans from "hooks/useDans";
 import updateMethod from "tools/function/crud/updateMethod";
 import Password from "antd/lib/input/Password";
 
-function QPay({ token, baiguullaga, baiguullagaMutate }) {
+function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
   const [qpayTokhirgoo, setQpayTokhirgoo] = useState(null);
   const [dansTokhirgoo, setDansTokhirgoo] = useState(null);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
@@ -23,6 +23,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate }) {
         ({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
             notification.success({ message: "Амжилттай хадгаллаа" });
+            setSongogdsonTsonkhniiIndex(8)
           }
         }
       )
@@ -35,6 +36,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate }) {
         ({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
             notification.success({ message: "Амжилттай хадгаллаа" });
+            setSongogdsonTsonkhniiIndex(8)
           }
         }
       )
@@ -89,9 +91,8 @@ function QPay({ token, baiguullaga, baiguullagaMutate }) {
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!qpayTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!qpayTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={undseneerKhadgalya}>
               Хадгалах
@@ -150,9 +151,8 @@ function QPay({ token, baiguullaga, baiguullagaMutate }) {
             </div>
           ))}
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!dansTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!dansTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={dansKhadgalya}>
               Хадгалах

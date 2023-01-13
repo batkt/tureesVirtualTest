@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Input, notification } from "antd";
 import uilchilgee from "services/uilchilgee";
 
-function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
+function Medegdel({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
   const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(null);
 
   const khungulultiinTokhirgooKhadgalya = () => {
@@ -13,6 +13,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
           notification.success({ message: "Амжилттай засагдлаа" });
           setMedegdelTokhirgoo(null);
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(5)
         }
       });
   };
@@ -66,9 +67,8 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate }) {
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${
-              !!medegdelTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!medegdelTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={khungulultiinTokhirgooKhadgalya}>
               Хадгалах

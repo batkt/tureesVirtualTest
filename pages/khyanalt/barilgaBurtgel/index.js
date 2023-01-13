@@ -110,8 +110,8 @@ function BarilgaBurtgel({ token }) {
         too:
           0 ||
           barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0) +
-            "/" +
-            0 ||
+          "/" +
+          0 ||
           barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too,
         icon: (
           <svg
@@ -133,7 +133,7 @@ function BarilgaBurtgel({ token }) {
         khuvi: (
           (100 * 0 ||
             barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too) /
-            0 || barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
+          0 || barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
         )?.toFixed(0),
         utga: "Түрээслэгч",
       },
@@ -288,9 +288,8 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${
-                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                            } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                              } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
@@ -367,6 +366,7 @@ function BarilgaBurtgel({ token }) {
               </div>
               <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
+                  {console.log(lineChart)}
                   <Line
                     data={lineChart.data || []}
                     responsive={{
@@ -396,28 +396,30 @@ function BarilgaBurtgel({ token }) {
                       align: "end",
                       position: "bottom",
                     }}
-                    tooltips={{
-                      mode: "nearest",
-                      intersect: false,
-                      callbacks: {
-                        label: function (tooltipitem, data) {
-                          var dataLabel = data.labels[tooltipitem.index];
-                          var value =
-                            ": " +
-                            data.datasets[tooltipitem.datasetIndex].data[
-                              tooltipitem.index
-                            ]
-                              .toLocaleString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                          if (Chart.helpers.isArray(dataLabel)) {
-                            dataLabel = dataLabel.slice();
-                            dataLabel[0] += value;
-                          } else {
-                            dataLabel += value;
-                          }
-                          return dataLabel;
+                    options={{
+                      tooltips: {
+                        mode: "nearest",
+                        intersect: false,
+                        callbacks: {
+                          label: function (tooltipitem, data) {
+                            var dataLabel = data.labels[tooltipitem.index];
+                            var value =
+                              ": " +
+                              data.datasets[tooltipitem.datasetIndex].data[
+                                tooltipitem.index
+                              ]
+                                .toLocaleString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            if (Chart.helpers.isArray(dataLabel)) {
+                              dataLabel = dataLabel.slice();
+                              dataLabel[0] += value;
+                            } else {
+                              dataLabel += value;
+                            }
+                            return dataLabel;
+                          },
                         },
-                      },
+                      }
                     }}
                     scales={{
                       xAxes: [

@@ -456,7 +456,7 @@ function AjiltanBurtgel({ token }) {
         </div>
       </div>
       <div className="col-span-12 grid grid-cols-12 md:col-span-12 gap-5 lg:col-span-9">
-        {ajiltan && <Tsonkh {...{ ajiltan, ajiltanMutate, baiguullaga, barilgiinId, baiguullagaMutate, token }} />}
+        {ajiltan && <Tsonkh {...{ ajiltan, ajiltanMutate, baiguullaga, barilgiinId, baiguullagaMutate, token, setSongogdsonTsonkhniiIndex }} />}
       </div>
     </Admin>
   );

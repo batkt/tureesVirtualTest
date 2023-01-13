@@ -21,6 +21,7 @@ function KhuviinMedeelel({
   barilgiinId,
   baiguullaga,
   baiguullagaMutate,
+  setSongogdsonTsonkhniiIndex,
 }) {
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
@@ -46,6 +47,7 @@ function KhuviinMedeelel({
           notification.success({ message: "Амжилттай засагдлаа" });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(3)
         }
       });
   };
@@ -68,6 +70,7 @@ function KhuviinMedeelel({
           });
         notification.success({ message: "Амжилттай хадгаллаа" });
         baiguullagaMutate();
+        setSongogdsonTsonkhniiIndex(3)
       } else notification.warning({ message: "Алдаа гарлаа" });
     });
   }
@@ -224,9 +227,8 @@ function KhuviinMedeelel({
             </div>
           </div>
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pt-2 pb-2 ${
-              !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
+              }`}
           >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               Хадгалах

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Button, Input, notification } from "antd";
 import uilchilgee from "services/uilchilgee";
 
-function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
+function Zogsool({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
   const [zogsoolTokhirgoo, setZogsoolTokhirgoo] = useState(null);
 
   useEffect(() => {
@@ -23,6 +23,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
         if (data === "Amjilttai") {
           notification.success({ message: "Амжилттай засагдлаа" });
           baiguullagaMutate();
+          setSongogdsonTsonkhniiIndex(10);
         }
       });
   }
@@ -31,11 +32,11 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate }) {
     if (!zogsoolTokhirgoo) return false;
     return (
       baiguullaga?.tokhirgoo?.zogsooliinMinut !==
-        zogsoolTokhirgoo["zogsooliinMinut"] ||
+      zogsoolTokhirgoo["zogsooliinMinut"] ||
       baiguullaga?.tokhirgoo?.zogsooliinDun !==
-        zogsoolTokhirgoo["zogsooliinDun"] ||
+      zogsoolTokhirgoo["zogsooliinDun"] ||
       baiguullaga?.tokhirgoo?.zogsooliinKhungulukhMinut !==
-        zogsoolTokhirgoo["zogsooliinKhungulukhMinut"]
+      zogsoolTokhirgoo["zogsooliinKhungulukhMinut"]
     );
   }, [zogsoolTokhirgoo, baiguullaga]);
 
