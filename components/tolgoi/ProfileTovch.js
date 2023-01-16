@@ -149,7 +149,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
                           query: { id: idAwyaa(mur) },
                         }}
                       >
-                        <div className="relative  flex cursor-pointer items-center justify-between">
+                        <div className="relative  flex cursor-pointer items-center justify-between space-x-2">
                           <div className="flex" style={{ maxWidth: `2.5rem` }}>
                             <Tooltip title={khariltsagchiinNer}>
                               <img
@@ -162,31 +162,45 @@ function ProfileTovch({ ajiltan, garya, token }) {
                               <div className="bg-theme-9 absolute left-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"></div>
                             )}
                           </div>
-                          <div className="ml-2 w-60 overflow-hidden">
-                            <div className="flex w-full items-center ">
-                              <a className="mr-2 font-medium">
+                          <div className="grid w-60 grid-cols-2 overflow-hidden">
+                            <div className="col-span-1">
+                              <a className="font-medium">
                                 {khariltsagchiinNer || ajiltniiNer}
                               </a>
-                              <div className="rounded-md bg-red-400 px-2 text-white">
-                                {mur.turul === "daalgavar"
-                                  ? "Даалгавар"
-                                  : mur.turul === "sanal"
-                                  ? "Санал"
-                                  : mur.turul === "gomdol"
-                                  ? "Гомдол"
-                                  : mur.turul === "medegdel"
-                                  ? "Мэдэгдэл"
-                                  : ""}
+                              <div
+                                className=" z-50 flex w-[70px]  flex-row overflow-hidden  whitespace-nowrap text-gray-600  dark:text-gray-300  "
+                                style={{ textOverflow: "ellipsis" }}
+                              >
+                                <div>{message || tailbar}</div>
                               </div>
-
-                              <div className="ml-auto whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
+                            </div>
+                            <div className="col-span-1 space-y-2">
+                              <div className=" whitespace-nowrap text-xs text-gray-500 dark:text-gray-300">
                                 {moment(mur.createdAt).format(
                                   "YYYY-MM-DD HH:mm:ss"
                                 )}
                               </div>
-                            </div>
-                            <div className="mt-0.5 flex w-full flex-row text-gray-600 dark:text-gray-300">
-                              <div>{message || tailbar}</div>
+                              <div>
+                                {mur.turul === "daalgavar" ? (
+                                  <div className="flex justify-center rounded-md bg-green-500 px-2 text-white ">
+                                    Даалгавар
+                                  </div>
+                                ) : mur.turul === "sanal" ? (
+                                  <div className="flex justify-center rounded-md bg-yellow-500 px-2 text-white ">
+                                    Санал
+                                  </div>
+                                ) : mur.turul === "gomdol" ? (
+                                  <div className="flex justify-center rounded-md bg-red-500 px-2 text-white ">
+                                    Гомдол
+                                  </div>
+                                ) : mur.turul === "medegdel" ? (
+                                  <div className="flex justify-center rounded-md bg-blue-500 px-2 text-white ">
+                                    Мэдэгдэл
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
