@@ -58,7 +58,7 @@ function Khariultuud(record) {
         align: "center",
         render: (text, record, index) =>
           (khariult?.khuudasniiDugaar || 0) *
-            (khariult?.khuudasniiKhemjee || 0) -
+          (khariult?.khuudasniiKhemjee || 0) -
           (khariult?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -66,8 +66,16 @@ function Khariultuud(record) {
     ];
 
     record?.record?.asuultuud?.forEach((mur) =>
-      returnValue.push({ title: mur.asuult, dataIndex: mur.asuult })
+      returnValue.push({ title: mur.asuult, dataIndex: mur.asuult, width: "15rem" })
     );
+    returnValue.push({
+      title: "Анкет ирсэн огноо",
+      width: "12rem",
+      align: "center",
+      dataIndex: "createdAt",
+      render: (data) =>
+        moment(data).format("YYYY-MM-DD HH:mm")
+    })
 
     return returnValue;
   }, [khariult]);
@@ -87,12 +95,12 @@ function Khariultuud(record) {
   return (
     <div className="col-span-12 rounded-md bg-white p-5 dark:bg-gray-900">
       <Table
-        scroll={{ x: "calc(100vw - 31rem)" }}
+        scroll={{ x: "calc(100vw - 15rem)" }}
         dataSource={dataSource}
         bordered
         size="small"
         columns={columns2}
-        tableLayout={khariult?.jagsaalt?.length > 0 ? "auto" : "fixed"}
+        tableLayout={"fixed"}
         rowKey={(row) => row._id}
         pagination={{
           current: khariult?.khuudasniiDugaar,
@@ -443,7 +451,7 @@ function Anket({ token }) {
                                         message: "Асуулт оруулна уу!",
                                       },
                                     ]}
-                                    //validateTrigger={["onChange", "onBlur"]}
+                                  //validateTrigger={["onChange", "onBlur"]}
                                   >
                                     <Input
                                       placeholder={`Асуулт ${name + 1}`}
