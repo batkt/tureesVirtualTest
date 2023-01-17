@@ -12,6 +12,9 @@ function getSearch(search, bank) {
         $options: "i",
       },
     },
+    {
+      kholbosonTalbainId: { $regex: search, $options: "i" },
+    },
   ];
   fallback.push({
     [`${bank === "tdb" ? "CtAcntOrg" : "relatedAccount"}`]: {
