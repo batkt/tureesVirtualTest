@@ -65,8 +65,9 @@ function GereeniiUldegdel({ ugugdul, token }) {
   ugugdul.mutate = mutate;
   return (
     <div
-      className={`text-right font-medium ${data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-        }`}
+      className={`text-right font-medium ${
+        data?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+      }`}
     >
       {isValidating ? <Spin size="small" /> : formatNumber(data?.uldegdel, 2)}
     </div>
@@ -98,11 +99,11 @@ function TableGuilgee({
           >
             {mur.summary
               ? formatNumber(
-                garalt?.jagsaalt?.reduce(
-                  (a, b) => a + (b[mur.dataIndex] || 0),
-                  0
+                  garalt?.jagsaalt?.reduce(
+                    (a, b) => a + (b[mur.dataIndex] || 0),
+                    0
+                  )
                 )
-              )
               : ""}
           </Table.Summary.Cell>
         ))}
@@ -415,6 +416,7 @@ function guilgeeniiTuukh({ token }) {
       {
         width: "9rem",
         align: "center",
+        excelHeader: "Төлөх огноо",
         title: () => (
           <div className="flex justify-center">
             <div
@@ -600,12 +602,12 @@ function guilgeeniiTuukh({ token }) {
                   title={
                     khuvi < 100
                       ? `Барьцаа ${formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                        (row.baritsaaniiUldegdel || 0)
-                      )} дутуу`
+                          (row.baritsaaAvakhDun || 0) -
+                            (row.baritsaaniiUldegdel || 0)
+                        )} дутуу`
                       : `${formatNumber(
-                        row.baritsaaniiUldegdel
-                      )} барьцаа төлөгдсөн байна`
+                          row.baritsaaniiUldegdel
+                        )} барьцаа төлөгдсөн байна`
                   }
                 >
                   <Progress
@@ -784,13 +786,17 @@ function guilgeeniiTuukh({ token }) {
       const render = a.render;
       if (a.title !== "№" && a.title !== "Үйлдэл") {
         a.dataIndex === "tuluvluguut" ||
-          a.dataIndex === "sariinTurees" ||
-          a.dataIndex === "talbainNiitUne" ||
-          a.dataIndex === "aldangiinUldegdel" ||
-          a.dataIndex === "daraagiinTulukhOgnoo" ||
-          a.dataIndex === "gereeniiOgnoo"
-          ? forExcel.push({ title, dataIndex, render })
-          : forExcel.push({ title, dataIndex });
+        a.dataIndex === "sariinTurees" ||
+        a.dataIndex === "talbainNiitUne" ||
+        a.dataIndex === "aldangiinUldegdel" ||
+        a.dataIndex === "daraagiinTulukhOgnoo" ||
+        a.dataIndex === "gereeniiOgnoo"
+          ? forExcel.push({
+              title: a.excelHeader || a.title,
+              dataIndex,
+              render,
+            })
+          : forExcel.push({ title: a.excelHeader || a.title, dataIndex });
       }
     });
     return forExcel;
@@ -876,8 +882,9 @@ function guilgeeniiTuukh({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${turul === mur?.turul ? mur.selectedColor : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 hover:bg-green-600 hover:bg-opacity-25 sm:col-span-12 lg:col-span-2 ${
+                  turul === mur?.turul ? mur.selectedColor : ""
+                }`}
                 onClick={() => onChangeTurul(mur?.turul)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
