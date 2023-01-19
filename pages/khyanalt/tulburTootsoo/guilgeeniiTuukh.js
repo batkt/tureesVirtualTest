@@ -809,7 +809,7 @@ function guilgeeniiTuukh({ token }) {
       setNeesenEsekh={setNeesenEsekh}
     >
       <Card className="cardgrid col-span-12 md:p-2">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-2 md:gap-6 2xl:grid-cols-12">
           {[
             {
               too: formatNumber(
