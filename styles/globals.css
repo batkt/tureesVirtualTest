@@ -224,16 +224,9 @@ audio::-webkit-media-controls-volume-control-container {
   transition-duration: 0.15s;
   transition-duration: 0.2s;
 }
-
-.sun-editor-editable p {
-  margin: 0 !important;
+.sun-editor-editable {
+  padding: 0 !important;
 }
-
-.sun-editor-editable table td,
-.sun-editor-editable table th {
-  padding: 0.1em !important;
-}
-
 .ant-badge-dot.ant-scroll-number {
   right: 5px;
   top: 2px;

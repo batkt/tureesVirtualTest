@@ -168,14 +168,14 @@ function ZakhialgaNemekh({ token }) {
       <div className="col-span-12 p-4 lg:col-span-9 xl:col-span-10 justify-center flex">
         <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
           style={{ width: "210mm" }}>
-          <div className="flex w-full flex-row justify-between">
+          <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
                 className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
-                    "Гэрээний загварын баруун толгой",
+                    "Гэрээний загварын зүүн толгой",
                 }}
               />
               <div
@@ -193,7 +193,7 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
-                    "Гэрээний загварын зүүн толгой",
+                    "Гэрээний загварын баруун толгой",
                 }}
               />
               <div
@@ -213,7 +213,7 @@ function ZakhialgaNemekh({ token }) {
                 className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <div
-                  className="w-full"
+                  className="w-full sun-editor-editable"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
                 <div className="absolute -top-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
@@ -232,6 +232,44 @@ function ZakhialgaNemekh({ token }) {
               </div>
             );
           })}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="group relative">
+              <div
+                className="rounded-md border border-dashed border-gray-600 p-2"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    gereeniiZagvar.zuunKhul ||
+                    "Гэрээний загварын зүүн хөл",
+                }}
+              />
+              <div
+                className="absolute -top-2 -right-2 hidden group-hover:block"
+                onClick={() =>
+                  docZasya("zuunKhul", gereeniiZagvar.zuunKhul || "")
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+              </div>
+            </div>
+            <div className="group relative">
+              <div
+                className="rounded-md border border-dashed border-gray-600 p-2"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    gereeniiZagvar.baruunKhul ||
+                    "Гэрээний загварын баруун хөл",
+                }}
+              />
+              <div
+                className="absolute -top-2 -right-2 hidden group-hover:block"
+                onClick={() =>
+                  docZasya("baruunKhul", gereeniiZagvar.baruunKhul || "")
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div className="col-span-12 lg:col-span-3 xl:col-span-2">

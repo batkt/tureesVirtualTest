@@ -187,6 +187,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           plugins: { ...plugins, ...custom },
           buttonList: [
             ...formatting,
+            ["align"],
             [
               "undsen",
               "khugatsaa",
@@ -250,6 +251,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           buttonList: [
             ...formatting,
             ["table", "align", "fontSize", "font"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
           ],
         }}
         showToolbar={true}
