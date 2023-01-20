@@ -17,22 +17,21 @@ function Kharakh({ data, print }, ref) {
   }, []);
 
   return (
-    <div className="w-full space-y-2 p-5" ref={ref}>
+    <div className="w-full flex flex-col space-y-1 p-[0] pr-[14mm] pl-[24mm] bg-white"
+      style={{ width: "210mm" }} ref={ref}>
       {gereeniiZagvar?.ner && (
-        <>
-          <div className="flex flex-row justify-between">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: gereeniiZagvar?.zuunTolgoi,
-              }}
-            />
-            <div
-              dangerouslySetInnerHTML={{
-                __html: gereeniiZagvar?.baruunTolgoi,
-              }}
-            />
-          </div>
-        </>
+        <div className="grid grid-cols-2 gap-4">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: gereeniiZagvar?.zuunTolgoi,
+            }}
+          />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: gereeniiZagvar?.baruunTolgoi,
+            }}
+          />
+        </div>
       )}
       {gereeniiZagvar?.dedKhesguud?.map((mur, index) => {
         return (
@@ -44,9 +43,8 @@ function Kharakh({ data, print }, ref) {
               <>
                 <div className="text-center">{mur.kharagdakhDugaar}</div>
                 <div
-                  className={`${
-                    mur.zaalt?.includes("table") ? "sun-editor-editable" : ""
-                  } ml-5 w-full p-0`}
+                  className={`${mur.zaalt?.includes("table") ? "sun-editor-editable" : ""
+                    } ml-5 w-full p-0`}
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
               </>
@@ -59,6 +57,20 @@ function Kharakh({ data, print }, ref) {
           </div>
         );
       })}
+      {gereeniiZagvar?.ner && (
+        <div className="grid grid-cols-2 gap-4">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: gereeniiZagvar?.zuunKhul,
+            }}
+          />
+          <div
+            dangerouslySetInnerHTML={{
+              __html: gereeniiZagvar?.baruunKhul,
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

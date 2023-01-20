@@ -472,10 +472,11 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className="w-full space-y-2">
+            <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
+              style={{ width: "210mm" }}>
               {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                 <>
-                  <div className="flex flex-row justify-between">
+                  <div className="grid grid-cols-2 gap-4">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: alkhamiinGereeniiZagvar?.zuunTolgoi,

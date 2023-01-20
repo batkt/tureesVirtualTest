@@ -376,11 +376,10 @@ function GereeBaiguulakh({ token, data }) {
           </div>
           {!!gereeniiZagvar && (
             <div
-              className={`${
-                gereekharakhTovch !== true
+              className={`${gereekharakhTovch !== true
                   ? "bottom-20 right-5"
                   : "bottom-[72vh] right-1"
-              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
+                } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
             >
               {gereekharakhTovch !== true ? (
                 <FileTextOutlined
@@ -399,11 +398,9 @@ function GereeBaiguulakh({ token, data }) {
             </div>
           )}
           <div
-            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${
-              gereekharakhTovch !== true ? " -right-full" : " right-4"
-            } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${
-              gereekharakhTovch !== true ? "hidden md:block" : ""
-            } lg:col-span-6 2xl:col-span-8`}
+            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${gereekharakhTovch !== true ? " -right-full" : " right-4"
+              } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${gereekharakhTovch !== true ? "hidden md:block" : ""
+              } lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
@@ -445,10 +442,11 @@ function GereeBaiguulakh({ token, data }) {
                 })}
               </Select>
             )}
-            <div className="w-full space-y-2">
+            <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
+              style={{ width: "210mm" }}>
               {current === 0 && gereeniiZagvar?.ner && (
                 <>
-                  <div className="flex flex-row justify-between">
+                  <div className="grid grid-cols-2 gap-4">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: gereeniiZagvar?.zuunTolgoi,
@@ -469,14 +467,14 @@ function GereeBaiguulakh({ token, data }) {
                       mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                         ? "erunkhiiMedeelel"
                         : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                        ? "gereeniiKhugatsaa"
-                        : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                        ? "tureesiinTalbai"
-                        : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                        ? "baritsaaBurtgel"
-                        : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                        ? "tulburToostoo"
-                        : ""
+                          ? "gereeniiKhugatsaa"
+                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                            ? "tureesiinTalbai"
+                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                              ? "baritsaaBurtgel"
+                              : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                ? "tulburToostoo"
+                                : ""
                     }
                     key={`alkhamiinGereeniiZagvar${index}`}
                     className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -487,11 +485,10 @@ function GereeBaiguulakh({ token, data }) {
                           {mur.kharagdakhDugaar}
                         </div>
                         <div
-                          className={`${
-                            mur.zaalt?.includes("table")
+                          className={`${mur.zaalt?.includes("table")
                               ? "sun-editor-editable"
                               : ""
-                          } ml-5 w-full p-0`}
+                            } ml-5 w-full p-0`}
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
                       </>

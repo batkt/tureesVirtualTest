@@ -98,7 +98,7 @@ function index({ token }) {
         <div className="flex flex-col-reverse items-center sm:flex-row">
           <Drawer
             title={kharuulakhGeree?.gereeniiDugaar}
-            width={global.innerWidth < 768 ? "100vw" : "50vw"}
+            width={"230mm"}
             onClose={() => setKharuulakhGeree(null)}
             visible={!!kharuulakhGeree}
             footer={

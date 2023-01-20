@@ -94,10 +94,11 @@ function GereeBaiguulakh() {
   const { geree, ...gereeniiZagvar } = data || {};
 
   return (
-    <div className="w-full space-y-2 p-5">
+    <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
+      style={{ width: "210mm" }}>
       {gereeniiZagvar?.ner && (
         <>
-          <div className="flex flex-row justify-between">
+          <div className="grid grid-cols-2 gap-4">
             <div
               dangerouslySetInnerHTML={{
                 __html: gereeniiZagvar?.zuunTolgoi,
@@ -108,18 +109,6 @@ function GereeBaiguulakh() {
                 __html: gereeniiZagvar?.baruunTolgoi,
               }}
             />
-          </div>
-          <div className="flex flex-row justify-between">
-            <div>
-              {moment(geree.ognoo).format("YYYY")} он{" "}
-              {moment(geree.ognoo).format("MM")} сар{" "}
-              {moment(geree.ognoo).format("DD")} өдөр
-            </div>
-            <div>№:{geree.gereeniiDugaar}</div>
-            <div>Улаанбаатар хот</div>
-          </div>
-          <div className="w-full text-center font-medium">
-            АЖЛЫН БАЙРНЫ ТҮРЭЭСИЙН ГЭРЭЭ
           </div>
         </>
       )}
@@ -146,6 +135,22 @@ function GereeBaiguulakh() {
           </div>
         );
       })}
+      {gereeniiZagvar?.ner && (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: gereeniiZagvar?.zuunKhul,
+              }}
+            />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: gereeniiZagvar?.baruunKhul,
+              }}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }
