@@ -11,11 +11,7 @@ import {
   SolutionOutlined,
 } from "@ant-design/icons";
 
-import dynamic from "next/dynamic";
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -39,7 +35,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" }
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" },
 ];
 
 const talbainiiTalbaruud = [
@@ -98,11 +94,13 @@ function NekhemjlekhZasvar({
   buttonListCustom = [],
   otherProps,
 }) {
-  const editorRef = React.useRef();
+  const editorRef = React.createRef();
 
   useEffect(() => {
-    onTextChange && onTextChange(editorRef.current.editor.getText());
+    onTextChange && onTextChange(editorRef.current?.editor?.getText());
   }, [value]);
+
+  const SunEditor = React.useMemo(() => require("suneditor-react").default, []);
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
