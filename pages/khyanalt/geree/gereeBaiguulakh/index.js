@@ -472,65 +472,67 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
-              style={{ width: "210mm" }}>
-              {current === 0 && alkhamiinGereeniiZagvar?.ner && (
-                <>
-                  <div className="grid grid-cols-2 gap-4">
+            <div className="w-full flex justify-center">
+              <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
+                style={{ width: "210mm" }}>
+                {current === 0 && alkhamiinGereeniiZagvar?.ner && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
+                        }}
+                      />
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: alkhamiinGereeniiZagvar?.baruunTolgoi,
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+                {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
+                  return (
                     <div
-                      dangerouslySetInnerHTML={{
-                        __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
-                      }}
-                    />
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: alkhamiinGereeniiZagvar?.baruunTolgoi,
-                      }}
-                    />
-                  </div>
-                </>
-              )}
-              {alkhamiinGereeniiZagvar?.dedKhesguud?.map((mur, index) => {
-                return (
-                  <div
-                    id={
-                      mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
-                        ? "erunkhiiMedeelel"
-                        : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                          ? "gereeniiKhugatsaa"
-                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                            ? "tureesiinTalbai"
-                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                              ? "baritsaaBurtgel"
-                              : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                                ? "tulburToostoo"
-                                : ""
-                    }
-                    key={`alkhamiinGereeniiZagvar${index}`}
-                    className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    {mur.kharagdakhDugaar ? (
-                      <>
-                        <div className="text-center">
-                          {mur.kharagdakhDugaar}
-                        </div>
+                      id={
+                        mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
+                          ? "erunkhiiMedeelel"
+                          : mur.khamaarakhKheseg === "Гэрээний хугацаа"
+                            ? "gereeniiKhugatsaa"
+                            : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                              ? "tureesiinTalbai"
+                              : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                                ? "baritsaaBurtgel"
+                                : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                                  ? "tulburToostoo"
+                                  : ""
+                      }
+                      key={`alkhamiinGereeniiZagvar${index}`}
+                      className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      {mur.kharagdakhDugaar ? (
+                        <>
+                          <div className="text-center">
+                            {mur.kharagdakhDugaar}
+                          </div>
+                          <div
+                            className={`${mur.zaalt?.includes("table")
+                              ? "sun-editor-editable"
+                              : ""
+                              } ml-5 w-full p-0`}
+                            dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                          />
+                        </>
+                      ) : (
                         <div
-                          className={`${mur.zaalt?.includes("table")
-                            ? "sun-editor-editable"
-                            : ""
-                            } ml-5 w-full p-0`}
+                          className="w-full text-center"
                           dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                         />
-                      </>
-                    ) : (
-                      <div
-                        className="w-full text-center"
-                        dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                      />
-                    )}
-                  </div>
-                );
-              })}
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

@@ -5,7 +5,6 @@ import { aldaaBarigch } from "services/uilchilgee"
 import _ from "lodash"
 import compareFields from "tools/function/compareFields"
 import dynamic from "next/dynamic";
-import 'suneditor/dist/css/suneditor.min.css';
 import { formatting } from "./ZaaltZasvar"
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -130,7 +129,7 @@ const formItemLayout = {
 
 function index({ token, baiguullaga, destroy }, ref) {
   const editorRef = React.useRef()
-  const plugins = React.useMemo(() => require('suneditor/src/plugins').default, [])
+  const plugins = React.useMemo(() => require('suneditor/src/plugins')?.default || {}, [])
   const [form] = Form.useForm()
   const [zaalt, setZaalt] = React.useState("")
 

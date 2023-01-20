@@ -6,8 +6,6 @@ import { Button, Form, Input, message, Radio, Select } from "antd";
 import _ from "lodash";
 import { useAuth } from "services/auth";
 import readMethod from "tools/function/crud/readMethod";
-import SunEditor from "suneditor-react";
-import "suneditor/dist/css/suneditor.min.css";
 import { customPlugin } from "components/pageComponents/geree/zagvar/ZaaltOruulakh";
 import { renderToString } from "react-dom/server";
 import {
@@ -22,6 +20,10 @@ import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
+import dynamic from "next/dynamic";
+const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+});
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },

@@ -11,7 +11,6 @@ import {
 } from "@ant-design/icons";
 import { Input, Modal, Select } from "antd";
 import dynamic from "next/dynamic";
-import 'suneditor/dist/css/suneditor.min.css';
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -103,7 +102,7 @@ const tulburiinTalbaruud = [
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef();
-  const plugins = React.useMemo(() => require('suneditor/src/plugins').default, [])
+  const plugins = React.useMemo(() => require('suneditor/src/plugins')?.default || {}, [])
   const [utga, setUtga] = React.useState(value);
 
   function garya() {

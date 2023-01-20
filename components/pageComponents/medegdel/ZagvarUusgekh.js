@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { renderToString } from "react-dom/server";
-import SunEditor, { buttonList } from "suneditor-react";
 import _ from "lodash";
 import { customPlugin } from "../geree/zagvar/ZaaltOruulakh";
 import { SolutionOutlined } from "@ant-design/icons";
-
+import dynamic from "next/dynamic";
+import { formatting } from "../geree/zagvar/ZaaltZasvar";
+const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+});
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
@@ -44,7 +47,7 @@ function ZaaltZasvar({
       setContents={value}
       setOptions={{
         plugins: custom,
-        buttonList: [...buttonList.formatting, ["undsen"], ...buttonListCustom],
+        buttonList: [...formatting, ["undsen"], ...buttonListCustom],
         resizingBar: false,
       }}
       showToolbar={true}
