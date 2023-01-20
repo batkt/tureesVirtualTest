@@ -98,6 +98,7 @@ function ZakhialgaNemekh({ token }) {
       setGereeniiZagvar(value);
     }
     modal({
+      width: "182mm",
       title: "Заалт засах",
       icon: <FileExcelOutlined />,
       content: (
@@ -164,8 +165,9 @@ function ZakhialgaNemekh({ token }) {
       dedKhuudas
       className="p-4"
     >
-      <div className="box col-span-12 p-4 lg:col-span-9 xl:col-span-10">
-        <div className="flex w-full flex-col space-y-1">
+      <div className="col-span-12 p-4 lg:col-span-9 xl:col-span-10 justify-center flex">
+        <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
+          style={{ width: "210mm" }}>
           <div className="flex w-full flex-row justify-between">
             <div className="group relative">
               <div
@@ -210,23 +212,10 @@ function ZakhialgaNemekh({ token }) {
                 key={mur._id}
                 className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
-                {mur.kharagdakhDugaar ? (
-                  <>
-                    <div className="text-center">{mur.kharagdakhDugaar}</div>
-                    <div
-                      className={`${mur.zaalt?.includes("table")
-                        ? "sun-editor-editable"
-                        : ""
-                        } ml-5 w-full p-0`}
-                      dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                    />
-                  </>
-                ) : (
-                  <div
-                    className="w-full text-center"
-                    dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                  />
-                )}
+                <div
+                  className="w-full"
+                  dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                />
                 <div className="absolute -top-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
                   <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
                     <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />

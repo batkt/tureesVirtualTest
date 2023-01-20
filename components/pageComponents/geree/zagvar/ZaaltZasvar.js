@@ -1,6 +1,5 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import SunEditor, { buttonList } from "suneditor-react";
 import _ from "lodash";
 import { customPlugin } from "./ZaaltOruulakh";
 import {
@@ -11,6 +10,43 @@ import {
   SolutionOutlined,
 } from "@ant-design/icons";
 import { Input, Modal, Select } from "antd";
+import dynamic from "next/dynamic";
+import 'suneditor/dist/css/suneditor.min.css';
+const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+});
+
+export const basic = [
+  ["font", "fontSize"],
+  ["fontColor"],
+  ["horizontalRule"],
+  ["link", "image"],
+];
+
+export const complex = [
+  ["undo", "redo"],
+  ["font", "fontSize", "formatBlock"],
+  ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+  ["removeFormat"],
+  "/",
+  ["fontColor", "hiliteColor"],
+  ["outdent", "indent"],
+  ["align", "horizontalRule", "list", "table"],
+  ["link", "image", "video"],
+  ["fullScreen", "showBlocks", "codeView"],
+  ["preview", "print"],
+  ["save", "template"],
+];
+
+export const formatting = [
+  ["undo", "redo"],
+  ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+  ["removeFormat"],
+  ["outdent", "indent"],
+  ["fullScreen", "showBlocks", "codeView"],
+  ["preview", "print"],
+];
+
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -67,6 +103,7 @@ const tulburiinTalbaruud = [
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef();
+  const plugins = React.useMemo(() => require('suneditor/src/plugins').default, [])
   const [utga, setUtga] = React.useState(value);
 
   function garya() {
@@ -146,10 +183,10 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         onChange={setUtga}
         defaultValue={utga}
         setOptions={{
-          plugins: custom,
           height: 200,
+          plugins: { ...plugins, ...custom },
           buttonList: [
-            ...buttonList.formatting,
+            ...formatting,
             [
               "undsen",
               "khugatsaa",
@@ -208,12 +245,11 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         onChange={(v) => setUtga((a) => ({ ...a, zaalt: v }))}
         defaultValue={utga?.zaalt}
         setOptions={{
-          plugins: custom,
+          plugins: { ...plugins, ...custom },
           height: 200,
           buttonList: [
-            ...buttonList.formatting,
+            ...formatting,
             ["table", "align", "fontSize", "font"],
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
           ],
         }}
         showToolbar={true}

@@ -1,10 +1,16 @@
 import React, { useCallback, useEffect } from "react"
-import SunEditor, { buttonList } from "suneditor-react"
 import { Form, Input, Select } from "antd"
 import createMethod from "tools/function/crud/createMethod"
 import { aldaaBarigch } from "services/uilchilgee"
 import _ from "lodash"
 import compareFields from "tools/function/compareFields"
+import dynamic from "next/dynamic";
+import 'suneditor/dist/css/suneditor.min.css';
+import { formatting } from "./ZaaltZasvar"
+const SunEditor = dynamic(() => import("suneditor-react"), {
+  ssr: false,
+});
+
 
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -124,6 +130,7 @@ const formItemLayout = {
 
 function index({ token, baiguullaga, destroy }, ref) {
   const editorRef = React.useRef()
+  const plugins = React.useMemo(() => require('suneditor/src/plugins').default, [])
   const [form] = Form.useForm()
   const [zaalt, setZaalt] = React.useState("")
 
@@ -220,9 +227,9 @@ function index({ token, baiguullaga, destroy }, ref) {
         onChange={setZaalt}
         defaultValue={zaalt}
         setOptions={{
-          plugins: [plugin],
+          plugins: { ...plugins, ...plugin },
           height: 200,
-          buttonList: [...buttonList.formatting, ["custom_example"]],
+          buttonList: [...formatting, ["custom_example"]],
         }}
         showToolbar={true}
         ref={editorRef}
