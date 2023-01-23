@@ -17,7 +17,6 @@ import { useEffect } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 
-
 const { Step } = Steps;
 
 const steps = [
@@ -81,19 +80,18 @@ function GereeBaiguulakh({ token }) {
 
     if (current < 4) setCurrent(current + 1);
     if (!!data) {
-      var utgaShalgakh = []
+      var utgaShalgakh = [];
       if (
         !data.dans ||
         !data.gereeniiDugaar ||
         !data.register ||
         !data.utas ||
         (data.baiguullagaEsekh === true
-          ? (!data.zakhirliinNer ||
-            !data.zakhirliinOvog ||
-            !data.ner)
-          : (!data.ner || !data.ovog)) || !gereeniiZagvar
+          ? !data.zakhirliinNer || !data.zakhirliinOvog || !data.ner
+          : !data.ner || !data.ovog) ||
+        !gereeniiZagvar
       ) {
-        utgaShalgakh.push(0)
+        utgaShalgakh.push(0);
         notification.warning({
           message: "Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!",
         });
@@ -117,9 +115,7 @@ function GereeBaiguulakh({ token }) {
           message: "Гэрээний хугацаагаа бүрэн оруулна уу!",
         });
       }
-      if (
-        !data.talbainIdnuud || !data.talbainKhemjee
-      ) {
+      if (!data.talbainIdnuud || !data.talbainKhemjee) {
         utgaShalgakh.push(2);
         notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });
       }
@@ -128,12 +124,12 @@ function GereeBaiguulakh({ token }) {
         data.baritsaaAvakhEsekh === true &&
         data.baritsaaBairshuulakhKhugatsaa === (undefined || null)
       ) {
-        console.log(data.baritsaaBairshuulakhKhugatsaa)
-        utgaShalgakh.push(4)
+        console.log(data.baritsaaBairshuulakhKhugatsaa);
+        utgaShalgakh.push(4);
         notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
       }
       if (utgaShalgakh.length > 0) {
-        setDutuuAlkham(utgaShalgakh)
+        setDutuuAlkham(utgaShalgakh);
         return;
       }
       data.turul = data?.baiguullagaEsekh ? "ААН" : "Иргэн";
@@ -326,11 +322,11 @@ function GereeBaiguulakh({ token }) {
         gereeniiDugaar: `ГД${moment(new Date()).format("YYMMDD")}`,
         baritsaaAvakhKhugatsaa: 1,
         baritsaaAvakhSar: _.get(baiguullaga, "tokhirgoo.baritsaaAvakhSar"),
-        barilgiinId: barilgiinId
-      })
-      setCurrent(0)
+        barilgiinId: barilgiinId,
+      });
+      setCurrent(0);
     }
-  }, [barilgiinId])
+  }, [barilgiinId]);
 
   const prev = () => {
     if (current > 0) setCurrent(current - 1);
@@ -404,10 +400,11 @@ function GereeBaiguulakh({ token }) {
           </div>
           {!!gereeniiZagvar && (
             <div
-              className={`${gereekharakhTovch !== true
-                ? "bottom-20 right-5"
-                : "bottom-[72vh] right-1"
-                } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
+              className={`${
+                gereekharakhTovch !== true
+                  ? "bottom-20 right-5"
+                  : "bottom-[72vh] right-1"
+              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
             >
               {gereekharakhTovch !== true ? (
                 <FileTextOutlined
@@ -426,9 +423,11 @@ function GereeBaiguulakh({ token }) {
             </div>
           )}
           <div
-            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${gereekharakhTovch !== true ? " -right-full" : " right-4"
-              } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${gereekharakhTovch !== true ? "hidden md:block" : ""
-              } lg:col-span-6 2xl:col-span-8`}
+            className={`fixed top-40 col-span-12 mt-3 w-[91vw] transition-all duration-300 md:w-auto ${
+              gereekharakhTovch !== true ? " -right-full" : " right-4"
+            } border-2 border-green-600 bg-gray-50 p-2 dark:bg-gray-900 md:static md:border-0 ${
+              gereekharakhTovch !== true ? "hidden md:block" : ""
+            } lg:col-span-6 2xl:col-span-8`}
             style={{
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
@@ -472,9 +471,11 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className="w-full flex justify-center">
-              <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
-                style={{ width: "210mm" }}>
+            <div className="flex w-full justify-center">
+              <div
+                className="flex w-full flex-col space-y-1 bg-white p-[15mm] pr-[14mm] pl-[24mm] text-black"
+                style={{ width: "210mm" }}
+              >
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
@@ -498,37 +499,22 @@ function GereeBaiguulakh({ token }) {
                         mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
                           ? "erunkhiiMedeelel"
                           : mur.khamaarakhKheseg === "Гэрээний хугацаа"
-                            ? "gereeniiKhugatsaa"
-                            : mur.khamaarakhKheseg === "Түрээсийн талбай"
-                              ? "tureesiinTalbai"
-                              : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
-                                ? "baritsaaBurtgel"
-                                : mur.khamaarakhKheseg === "Төлбөр тооцоо"
-                                  ? "tulburToostoo"
-                                  : ""
+                          ? "gereeniiKhugatsaa"
+                          : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                          ? "tureesiinTalbai"
+                          : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                          ? "baritsaaBurtgel"
+                          : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                          ? "tulburToostoo"
+                          : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
                     >
-                      {mur.kharagdakhDugaar ? (
-                        <>
-                          <div className="text-center">
-                            {mur.kharagdakhDugaar}
-                          </div>
-                          <div
-                            className={`${mur.zaalt?.includes("table")
-                              ? "sun-editor-editable"
-                              : ""
-                              } ml-5 w-full p-0`}
-                            dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                          />
-                        </>
-                      ) : (
-                        <div
-                          className="w-full text-center"
-                          dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                        />
-                      )}
+                      <div
+                        className="w-full"
+                        dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                      />
                     </div>
                   );
                 })}
