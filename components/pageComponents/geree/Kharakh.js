@@ -17,8 +17,11 @@ function Kharakh({ data, print }, ref) {
   }, []);
 
   return (
-    <div className="w-full flex flex-col space-y-1 p-[0] pr-[14mm] pl-[24mm] bg-white"
-      style={{ width: "210mm" }} ref={ref}>
+    <div
+      className="flex w-full flex-col space-y-1 bg-white p-[0] pr-[14mm] pl-[24mm] text-black"
+      style={{ width: "210mm" }}
+      ref={ref}
+    >
       {gereeniiZagvar?.ner && (
         <div className="grid grid-cols-2 gap-4">
           <div
@@ -37,23 +40,12 @@ function Kharakh({ data, print }, ref) {
         return (
           <div
             key={`alkhamiinGereeniiZagvar${index}`}
-            className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-900 "
+            className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100 "
           >
-            {mur.kharagdakhDugaar ? (
-              <>
-                <div className="text-center">{mur.kharagdakhDugaar}</div>
-                <div
-                  className={`${mur.zaalt?.includes("table") ? "sun-editor-editable" : ""
-                    } ml-5 w-full p-0`}
-                  dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                />
-              </>
-            ) : (
-              <div
-                className="w-full text-center"
-                dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-              />
-            )}
+            <div
+              className="w-full"
+              dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+            />
           </div>
         );
       })}

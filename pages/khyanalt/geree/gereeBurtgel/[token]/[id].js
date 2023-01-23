@@ -94,8 +94,10 @@ function GereeBaiguulakh() {
   const { geree, ...gereeniiZagvar } = data || {};
 
   return (
-    <div className="w-full flex flex-col space-y-1 p-[15mm] pr-[14mm] pl-[24mm] bg-white"
-      style={{ width: "210mm" }}>
+    <div
+      className="flex w-full flex-col space-y-1 bg-white p-[15mm] pr-[14mm] pl-[24mm] text-black"
+      style={{ width: "210mm" }}
+    >
       {gereeniiZagvar?.ner && (
         <>
           <div className="grid grid-cols-2 gap-4">
@@ -116,22 +118,12 @@ function GereeBaiguulakh() {
         return (
           <div
             key={`alkhamiinGereeniiZagvar${index}`}
-            className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-100"
           >
-            {mur.kharagdakhDugaar ? (
-              <>
-                <div className="text-center">{mur.kharagdakhDugaar}</div>
-                <div
-                  className="break-word ml-5 text-justify"
-                  dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-                />
-              </>
-            ) : (
-              <div
-                className="break-word w-full text-center font-medium"
-                dangerouslySetInnerHTML={{ __html: mur.zaalt }}
-              />
-            )}
+            <div
+              className="w-full"
+              dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+            />
           </div>
         );
       })}
