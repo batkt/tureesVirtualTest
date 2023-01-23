@@ -1,20 +1,20 @@
-import React, { useCallback, useEffect } from "react"
-import { Form, Input, Select } from "antd"
-import createMethod from "tools/function/crud/createMethod"
-import { aldaaBarigch } from "services/uilchilgee"
-import _ from "lodash"
-import compareFields from "tools/function/compareFields"
+import React, { useCallback, useEffect } from "react";
+import { Form, Input, Select } from "antd";
+import createMethod from "tools/function/crud/createMethod";
+import { aldaaBarigch } from "services/uilchilgee";
+import _ from "lodash";
+import compareFields from "tools/function/compareFields";
 import dynamic from "next/dynamic";
-import { formatting } from "./ZaaltZasvar"
+import { formatting } from "./ZaaltZasvar";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
-
 
 const talbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
   { ner: "Байгууллага нэр", talbar: "baiguullagiinNer" },
+  { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
@@ -43,7 +43,7 @@ const talbaruud = [
     ner: "Барьцаа байршуулах хугацаа",
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
-]
+];
 
 export var customPlugin = ({
   name = "custom_example",
@@ -73,26 +73,26 @@ export var customPlugin = ({
   add: function (core, targetElement) {
     // Generate submenu HTML
     // Always bind "core" when calling a plugin function
-    let listDiv = this.setSubmenu.call(core)
+    let listDiv = this.setSubmenu.call(core);
 
     // You must bind "core" object when registering an event.
     /** add event listeners */
-    var self = this
+    var self = this;
     listDiv.querySelectorAll(".se-btn-list").forEach(function (btn) {
-      btn.addEventListener("click", self.onClick.bind(core))
-    })
+      btn.addEventListener("click", self.onClick.bind(core));
+    });
 
     // @Required
     // You must add the "submenu" element using the "core.initMenuTarget" method.
     /** append target button menu */
-    core.initMenuTarget(this.name, targetElement, listDiv)
+    core.initMenuTarget(this.name, targetElement, listDiv);
   },
 
   setSubmenu: function () {
-    const listDiv = this.util.createElement("DIV")
+    const listDiv = this.util.createElement("DIV");
     // @Required
     // A "se-submenu" class is required for the top level element.
-    listDiv.className = "se-submenu se-list-layer"
+    listDiv.className = "se-submenu se-list-layer";
     listDiv.innerHTML =
       '<div class="se-list-inner se-list-font-size"><ul class="se-list-basic">' +
       songokhTalbaruud
@@ -101,22 +101,22 @@ export var customPlugin = ({
             `<li><button type="button" class="se-btn-list" value="&lt;${a.talbar}&gt;">{${a.ner}}</button></li>`
         )
         .join("") +
-      "</ul></div>"
+      "</ul></div>";
 
-    return listDiv
+    return listDiv;
   },
   onClick: function (e) {
-    const value = e.target.value
-    const node = this.util.createElement("span")
-    this.util.addClass(node, "se-custom-tag")
-    node.textContent = value
+    const value = e.target.value;
+    const node = this.util.createElement("span");
+    this.util.addClass(node, "se-custom-tag");
+    node.textContent = value;
 
-    this.insertNode(node)
-    const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace)
-    node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling)
-    this.submenuOff()
+    this.insertNode(node);
+    const zeroWidthSpace = this.util.createTextNode(this.util.zeroWidthSpace);
+    node.parentNode.insertBefore(zeroWidthSpace, node.nextSibling);
+    this.submenuOff();
   },
-})
+});
 
 const formItemLayout = {
   labelCol: {
@@ -125,84 +125,86 @@ const formItemLayout = {
   wrapperCol: {
     span: 14,
   },
-}
+};
 
 function index({ token, baiguullaga, destroy }, ref) {
-  const editorRef = React.useRef()
-  const plugins = React.useMemo(() => require('suneditor/src/plugins')?.default || {}, [])
-  const [form] = Form.useForm()
-  const [zaalt, setZaalt] = React.useState("")
+  const editorRef = React.useRef();
+  const plugins = React.useMemo(
+    () => require("suneditor/src/plugins")?.default || {},
+    []
+  );
+  const [form] = Form.useForm();
+  const [zaalt, setZaalt] = React.useState("");
 
   function garya() {
-    const values = form.getFieldsValue()
-    if (compareFields(values, {}, ['kharagdakhDugaar']))
+    const values = form.getFieldsValue();
+    if (compareFields(values, {}, ["kharagdakhDugaar"]))
       Modal.confirm({
         content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
-        onOk: destroy
-      })
-    else
-      destroy();
+        onOk: destroy,
+      });
+    else destroy();
   }
 
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
-        e.preventDefault()
-        garya()
+        e.preventDefault();
+        garya();
       }
     }
-    form.getFieldInstance('kharagdakhDugaar').focus()
+    form.getFieldInstance("kharagdakhDugaar").focus();
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, [])
+  }, []);
 
   const onFinish = (values) => {
-    if (zaalt === "") return
-    values["zaalt"] = zaalt
-    values["baiguullagiinNer"] = baiguullaga.ner
-    values["baiguullagiinId"] = baiguullaga._id
+    if (zaalt === "") return;
+    values["zaalt"] = zaalt;
+    values["baiguullagiinNer"] = baiguullaga.ner;
+    values["baiguullagiinId"] = baiguullaga._id;
     createMethod("gereeniiZaalt", token, values)
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          form.resetFields()
-          destroy()
+          form.resetFields();
+          destroy();
         }
       })
-      .catch(aldaaBarigch)
-  }
+      .catch(aldaaBarigch);
+  };
 
   const focuser = useCallback((e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
+    if (e.key === "Enter") {
+      e.preventDefault();
       switch (e.target.id) {
-        case 'kharagdakhDugaar':
-          form.getFieldInstance('khamaarakhKheseg').focus()
+        case "kharagdakhDugaar":
+          form.getFieldInstance("khamaarakhKheseg").focus();
           break;
         default:
           break;
       }
     }
-  }, [])
+  }, []);
 
   React.useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        onFinish(form.getFieldsValue())
+        onFinish(form.getFieldsValue());
       },
       khaaya() {
-        destroy()
+        destroy();
       },
     }),
     [form, zaalt]
-  )
+  );
 
   const plugin = React.useMemo(
     () => customPlugin({ songokhTalbaruud: talbaruud }),
     []
-  )
+  );
 
   return (
     <Form form={form} {...formItemLayout}>
@@ -234,7 +236,7 @@ function index({ token, baiguullaga, destroy }, ref) {
         ref={editorRef}
       />
     </Form>
-  )
+  );
 }
 
-export default React.forwardRef(index)
+export default React.forwardRef(index);

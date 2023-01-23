@@ -46,10 +46,10 @@ export const formatting = [
   ["preview", "print"],
 ];
 
-
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
+  { ner: "Гэрээний дугаар", talbar: "gereeniiDugaar" },
   { ner: "Гэрээний огноо", talbar: "gereeniiOgnoo" },
   { ner: "Төрөл", talbar: "turul" },
   { ner: "Регистр", talbar: "register" },
@@ -71,7 +71,7 @@ const khugatsaaniiTalbaruud = [
   { ner: "Дуусах он", talbar: "duusakhOn" },
   { ner: "Дуусах сар", talbar: "duusakhSar" },
   { ner: "Дуусах өдөр", talbar: "duusakhUdur" },
-  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" }
+  { ner: "Төлөлт хийгдэх огноо", talbar: "tulukhUdur" },
 ];
 
 const talbainiiTalbaruud = [
@@ -102,7 +102,10 @@ const tulburiinTalbaruud = [
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
   const editorRef = React.useRef();
-  const plugins = React.useMemo(() => require('suneditor/src/plugins')?.default || {}, [])
+  const plugins = React.useMemo(
+    () => require("suneditor/src/plugins")?.default || {},
+    []
+  );
   const [utga, setUtga] = React.useState(value);
 
   function garya() {
@@ -111,22 +114,21 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
         content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
         okText: "Тийм",
         cancelText: "Үгүй",
-        onOk: destroy
-      })
-    else
-      destroy();
+        onOk: destroy,
+      });
+    else destroy();
   }
 
   React.useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
-        e.preventDefault()
-        garya()
+        e.preventDefault();
+        garya();
       }
     }
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
-  }, [])
+  }, []);
 
   React.useImperativeHandle(
     ref,
@@ -195,7 +197,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
               "tulbur",
               "table",
               "fontSize",
-              "font"
+              "font",
             ],
           ],
         }}
