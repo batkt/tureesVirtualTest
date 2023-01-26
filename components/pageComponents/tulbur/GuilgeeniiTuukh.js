@@ -64,6 +64,7 @@ const turulAvya = (turul) => {
   else if (turul === "barter") return "Бартер";
   else if (turul === "baritsaa") return "Барьцаа";
   else if (turul === "zalruulga") return "Залруулга";
+  else if (turul === "qpay") return "QPay";
 };
 
 function useGuilgee(token, gereeniiId, ognoo) {
@@ -220,7 +221,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                 </div>
 
                 <div className="p-1 min-w-[8rem] overflow-hidden">{a.guilgeeKhiisenAjiltniiNer}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden">
+                <div className="p-1 text-center min-w-[8rem] overflow-hidden">
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
@@ -244,7 +245,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                     a.turul === "khyamdral" ||
                     a.turul === "aldangi" ||
                     a.turul === "zalruulga" ||
-                    a.turul === "baritsaa") && (
+                    a.turul === "baritsaa" ||
+                    a.turul === "qpay") && (
                       <Popconfirm
                         title="Төлөлт устгах уу?"
                         okText="Тийм"
