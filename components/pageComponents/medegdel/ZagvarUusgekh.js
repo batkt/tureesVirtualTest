@@ -3,11 +3,8 @@ import { renderToString } from "react-dom/server";
 import _ from "lodash";
 import { customPlugin } from "../geree/zagvar/ZaaltOruulakh";
 import { SolutionOutlined } from "@ant-design/icons";
-import dynamic from "next/dynamic";
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
-const SunEditor = dynamic(() => import("suneditor-react"), {
-  ssr: false,
-});
+
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
@@ -17,6 +14,8 @@ const undsenTalbaruud = [
   { ner: "Хаяг", talbar: "khayag" },
 ];
 
+var instance = null;
+
 function ZaaltZasvar({
   value,
   change,
@@ -24,11 +23,11 @@ function ZaaltZasvar({
   buttonListCustom = [],
   otherProps,
 }) {
-  const editorRef = React.useRef();
-
   useEffect(() => {
-    onTextChange && onTextChange(editorRef.current.editor.getText());
+    onTextChange && onTextChange(instance?.getText());
   }, [value]);
+
+  const SunEditor = React.useMemo(() => require("suneditor-react").default, []);
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
@@ -44,6 +43,9 @@ function ZaaltZasvar({
     <SunEditor
       onChange={change}
       defaultValue={value}
+      getSunEditorInstance={(e) => {
+        instance = e;
+      }}
       setContents={value}
       setOptions={{
         plugins: custom,
@@ -51,7 +53,6 @@ function ZaaltZasvar({
         resizingBar: false,
       }}
       showToolbar={true}
-      ref={editorRef}
       {...otherProps}
     />
   );

@@ -13,6 +13,8 @@ import {
 
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
 
+var instance = null;
+
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
@@ -94,10 +96,8 @@ function NekhemjlekhZasvar({
   buttonListCustom = [],
   otherProps,
 }) {
-  const editorRef = React.createRef();
-
   useEffect(() => {
-    onTextChange && onTextChange(editorRef.current?.editor?.getText());
+    onTextChange && onTextChange(instance?.getText());
   }, [value]);
 
   const SunEditor = React.useMemo(() => require("suneditor-react").default, []);
@@ -177,8 +177,10 @@ function NekhemjlekhZasvar({
           ...buttonListCustom,
         ],
       }}
+      getSunEditorInstance={(e) => {
+        instance = e;
+      }}
       showToolbar={true}
-      ref={editorRef}
       {...otherProps}
     />
   );
