@@ -100,7 +100,10 @@ function NekhemjlekhZasvar({
     onTextChange && onTextChange(instance?.getText());
   }, [value]);
 
-  const SunEditor = React.useMemo(() => require("suneditor-react").default, []);
+  const SunEditor = React.useMemo(
+    () => typeof window !== "undefined" && require("suneditor-react").default,
+    []
+  );
 
   const custom = React.useMemo(() => {
     const undsen = customPlugin({
@@ -155,35 +158,36 @@ function NekhemjlekhZasvar({
       nekhemjlelNemelt,
     ];
   }, []);
-
-  return (
-    <SunEditor
-      onChange={change}
-      defaultValue={value}
-      setContents={value}
-      setOptions={{
-        plugins: custom,
-        buttonList: [
-          ...formatting,
-          [
-            "undsen",
-            "khugatsaa",
-            "talbai",
-            "baritsaa",
-            "tulbur",
-            "nekhemjlel",
-            "nekhemjlekhiinNemelt",
+  if (SunEditor)
+    return (
+      <SunEditor
+        onChange={change}
+        defaultValue={value}
+        setContents={value}
+        setOptions={{
+          plugins: custom,
+          buttonList: [
+            ...formatting,
+            [
+              "undsen",
+              "khugatsaa",
+              "talbai",
+              "baritsaa",
+              "tulbur",
+              "nekhemjlel",
+              "nekhemjlekhiinNemelt",
+            ],
+            ...buttonListCustom,
           ],
-          ...buttonListCustom,
-        ],
-      }}
-      getSunEditorInstance={(e) => {
-        instance = e;
-      }}
-      showToolbar={true}
-      {...otherProps}
-    />
-  );
+        }}
+        getSunEditorInstance={(e) => {
+          instance = e;
+        }}
+        showToolbar={true}
+        {...otherProps}
+      />
+    );
+  return <div />;
 }
 
 export default NekhemjlekhZasvar;
