@@ -45,7 +45,11 @@ function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
   let tailbar = "Гүйлгээ холбогдоогүй байна";
-  if (bank === "tdb" ? (a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")) : (a?.description.includes("QPAY") || a?.description.includes("qpay"))) {
+  if (
+    bank === "tdb"
+      ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
+      : a?.description.includes("QPAY") || a?.description.includes("qpay")
+  ) {
     Icon = CheckOutlined;
     color = "green";
     tailbar = "Гүйлгээ холбогдсон байна";
@@ -57,17 +61,17 @@ function iconAvya(a, bank) {
   ) {
     Icon =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-        a?.kholbosonDun > 0
+      a?.kholbosonDun > 0
         ? TbEqualNot
         : QuestionOutlined;
     color = "yellow";
     tailbar =
       a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
-        a?.kholbosonDun > 0
+      a?.kholbosonDun > 0
         ? `${formatNumber(
-          a?.amount - a?.kholbosonDun || a?.Amt - a?.kholbosonDun || 0,
-          0
-        )} ₮ дутуу холбогдсон байна`
+            a?.amount - a?.kholbosonDun || a?.Amt - a?.kholbosonDun || 0,
+            0
+          )} ₮ дутуу холбогдсон байна`
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
     a?.kholbosonGereeniiId &&
@@ -205,40 +209,51 @@ function tulburTootsoo({ token }) {
 
   function guilgeeKholbyo(data) {
     if (
-      data?.kholbosonGereeniiId &&
-        data?.kholbosonDun ===
-        data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]
-        || songogdsonDans?.bank === "tdb" ? (data?.TxAddInf.includes("QPAY") || data?.TxAddInf.includes("qpay")) : (data?.description.includes("QPAY") || data?.description.includes("qpay"))
+      data.kholbosonDun - data.amount === 0 ||
+      data.balance - data.kholbosonDun === 0
     ) {
-      message.info("Гүйлгээ гэрээнд холбогдсон байна.");
-      return;
+      notification.success({
+        message: "Гүйлгээ холбогдсон байна",
+      });
+    } else {
+      if (
+        (data?.kholbosonGereeniiId &&
+          data?.kholbosonDun ===
+            data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]) ||
+        songogdsonDans?.bank === "tdb"
+          ? data?.TxAddInf?.includes("QPAY") || data?.TxAddInf?.includes("qpay")
+          : data?.description.includes("QPAY") ||
+            data?.description.includes("qpay")
+      ) {
+        message.info("Гүйлгээ гэрээнд холбогдсон байна.");
+        return;
+      }
+      const footer = [
+        <div className="pr-[1%]">
+          <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
+          <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
+            Хадгалах
+          </Button>
+        </div>,
+      ];
+      modal({
+        title: "",
+        width: "50rem",
+        icon: <FileExcelOutlined />,
+        content: (
+          <GuilgeeKholbokh
+            dans={songogdsonDans}
+            data={data}
+            barilgiinId={barilgiinId}
+            ref={refGuilgee}
+            token={token}
+            baiguullagiinId={baiguullaga?._id}
+            onFinish={refreshData}
+          />
+        ),
+        footer,
+      });
     }
-
-    const footer = [
-      <div className="pr-[1%]">
-        <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
-        <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
-          Хадгалах
-        </Button>
-      </div>,
-    ];
-    modal({
-      title: "",
-      width: "50rem",
-      icon: <FileExcelOutlined />,
-      content: (
-        <GuilgeeKholbokh
-          dans={songogdsonDans}
-          data={data}
-          barilgiinId={barilgiinId}
-          ref={refGuilgee}
-          token={token}
-          baiguullagiinId={baiguullaga?._id}
-          onFinish={refreshData}
-        />
-      ),
-      footer,
-    });
   }
 
   function zardalKholbyo(data) {
@@ -467,7 +482,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -595,7 +610,7 @@ function tulburTootsoo({ token }) {
                         className={`text-500 flex items-center justify-center`}
                       >
                         {a?.kholbosonGereeniiId &&
-                          a?.ebarimtAvsanEsekh === true ? (
+                        a?.ebarimtAvsanEsekh === true ? (
                           <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
@@ -655,12 +670,13 @@ function tulburTootsoo({ token }) {
     >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
-        Number(bankniiGuilgeeToololt?.kholboson || 0) >
-        0 &&
+          Number(bankniiGuilgeeToololt?.kholboson || 0) >
+          0 &&
         notification.error({
-          message: `Холболт хийгдээгүй ${Number(bankniiGuilgeeToololt?.niit || 0) -
+          message: `Холболт хийгдээгүй ${
+            Number(bankniiGuilgeeToololt?.niit || 0) -
             Number(bankniiGuilgeeToololt?.kholboson || 0)
-            } гэрээ байна`,
+          } гэрээ байна`,
         })}
       <Card className="cardgrid col-span-12 md:p-5">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
@@ -679,10 +695,11 @@ function tulburTootsoo({ token }) {
             return (
               <div
                 key={`${index}toololt`}
-                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${mur.utga === songogdsonTurul
-                  ? "bg-green-50 dark:bg-gray-900"
-                  : ""
-                  }`}
+                className={`zoom-in col-span-12 cursor-pointer rounded-xl border-2 border-green-600 md:col-span-6 lg:col-span-3 ${
+                  mur.utga === songogdsonTurul
+                    ? "bg-green-50 dark:bg-gray-900"
+                    : ""
+                }`}
                 onClick={() => turulSongyo(mur.utga)}
                 data-aos="zoom-out-up"
                 data-aos-duration="1000"
@@ -727,10 +744,11 @@ function tulburTootsoo({ token }) {
               <div className="ml-4 mb-5 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
                 {["orlogo", "zarlaga"].map((text) => (
                   <div
-                    className={`cursor-pointer rounded-md p-2 ${khuulgaTurul === text
-                      ? "dark bg-green-500 text-gray-50"
-                      : ""
-                      }`}
+                    className={`cursor-pointer rounded-md p-2 ${
+                      khuulgaTurul === text
+                        ? "dark bg-green-500 text-gray-50"
+                        : ""
+                    }`}
                     onClick={() => setKhuulgaTurul(text)}
                   >
                     {text === "orlogo" ? "Орлого" : "Зарлага"}
