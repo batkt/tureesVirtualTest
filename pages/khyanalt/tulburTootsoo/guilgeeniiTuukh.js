@@ -172,7 +172,6 @@ function guilgeeniiTuukh({ token }) {
     moment(moment().endOf("month").format("YYYY-MM-DD 23:59:59")),
   ]);
   const [tulukhOgnoo, setTulukhOgnoo] = React.useState();
-  console.log(tulukhOgnoo);
   const [turul, setTurul] = React.useState("");
   const [neesenEsekh, setNeesenEsekh] = useState(false);
   const [loadingIndex, setLoadingIndex] = React.useState(0);
