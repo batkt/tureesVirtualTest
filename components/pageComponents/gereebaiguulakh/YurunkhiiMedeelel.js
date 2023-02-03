@@ -117,10 +117,6 @@ const YurunkhiiMedeele = ({
   const [form] = Form.useForm();
   const formRef = useRef();
 
-  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
-    value.baiguullagaEsekh
-  );
-
   function onChangeRegister({ target }) {
     var onookhKhariltsagch = {
       ner: undefined,
@@ -141,7 +137,7 @@ const YurunkhiiMedeele = ({
                 barilgiinId,
                 baiguullagiinId: baiguullaga._id,
                 register: target.value,
-                turul: baiguullagaEsekh ? "ААН" : "Иргэн",
+                turul: value.baiguullagaEsekh ? "ААН" : "Иргэн",
               },
               select: {
                 ner: 1,
@@ -157,7 +153,7 @@ const YurunkhiiMedeele = ({
             if (data?.jagsaalt.length > 0) {
               const { ner, utas, ovog, mail, zakhirliinOvog, zakhirliinNer } =
                 data?.jagsaalt[0];
-              if (baiguullagaEsekh) {
+              if (value.baiguullagaEsekh) {
                 var onookhKhariltsagch = {
                   utas,
                   zakhirliinOvog,
@@ -204,7 +200,7 @@ const YurunkhiiMedeele = ({
         switch (e.target.id) {
           case "validate_other_gereeniiDugaar":
             {
-              if (baiguullagaEsekh === true) {
+              if (value.baiguullagaEsekh === true) {
                 form.getFieldInstance("ner").focus();
               } else {
                 form.getFieldInstance("register").focus();
@@ -213,7 +209,7 @@ const YurunkhiiMedeele = ({
             break;
           case "validate_other_register":
             {
-              if (baiguullagaEsekh === true) {
+              if (value.baiguullagaEsekh === true) {
                 form.getFieldInstance("zakhirliinOvog").focus();
               } else {
                 form.getFieldInstance("ovog").focus();
@@ -231,7 +227,7 @@ const YurunkhiiMedeele = ({
             break;
           case "validate_other_ner":
             {
-              if (baiguullagaEsekh === true) {
+              if (value.baiguullagaEsekh === true) {
                 form.getFieldInstance("register").focus();
               } else {
                 form.getFieldInstance("utas").focus();
@@ -254,7 +250,7 @@ const YurunkhiiMedeele = ({
         }
       }
     },
-    [baiguullagaEsekh]
+    [value.baiguullagaEsekh]
   );
 
   function onFinish() {
@@ -344,7 +340,6 @@ const YurunkhiiMedeele = ({
         <Form.Item name="baiguullagaEsekh" valuePropName="checked">
           <Switch
             onChange={(v) => {
-              setBaiguullagaEsekh(v);
               const khariltsagch = {
                 register: undefined,
                 ner: undefined,
@@ -355,7 +350,7 @@ const YurunkhiiMedeele = ({
                 zakhirliinNer: undefined,
               };
               form.setFieldsValue(khariltsagch);
-              onChange({ ...value, ...khariltsagch });
+              onChange({ ...value, ...khariltsagch, baiguullagaEsekh: v });
             }}
           />
         </Form.Item>
@@ -367,8 +362,8 @@ const YurunkhiiMedeele = ({
           rules={[
             {
               required: true,
-              len: baiguullagaEsekh ? 7 : 10,
-              pattern: baiguullagaEsekh
+              len: value.baiguullagaEsekh ? 7 : 10,
+              pattern: value.baiguullagaEsekh
                 ? new RegExp("(\\d{7})")
                 : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
               message: "Регистр бүртгэнэ үү!",
@@ -381,11 +376,11 @@ const YurunkhiiMedeele = ({
             baiguullaga={baiguullaga}
             barilgiinId={barilgiinId}
             onChangeRegister={onChangeRegister}
-            baiguullagaEsekh={baiguullagaEsekh}
+            baiguullagaEsekh={value.baiguullagaEsekh}
           />
         </Form.Item>
       </div>
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right">
           <Form.Item
             name="ner"
@@ -403,7 +398,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {!baiguullagaEsekh && (
+      {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
             rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
@@ -419,7 +414,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {!baiguullagaEsekh && (
+      {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="600">
           <Form.Item
             name="ner"
@@ -435,7 +430,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="300">
           <Form.Item
             name="zakhirliinOvog"
@@ -451,7 +446,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="400">
           <Form.Item
             name="zakhirliinNer"
@@ -467,7 +462,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {!baiguullagaEsekh && (
+      {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item
             name="utas"
@@ -483,7 +478,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item
             name="utas"
@@ -499,7 +494,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {!baiguullagaEsekh && (
+      {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item name="mail" label={"И-мэйл хаяг"}>
             <Input
@@ -512,7 +507,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
             name="mail"
@@ -593,7 +588,7 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      {baiguullagaEsekh && (
+      {value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
             name="gerchilgeeniiZurag"
@@ -618,7 +613,7 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      {!baiguullagaEsekh && (
+      {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="1000">
           <Form.Item label={"Хавсаргал"} className="w-full">
             <Form.Item
