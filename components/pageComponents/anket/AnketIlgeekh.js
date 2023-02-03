@@ -35,10 +35,14 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
       uilchilgee(token)
         .post(`/msgIlgeeye`, {
           barilgiinId,
+          baiguullagiinId: data?.find((a) => a._id === songogdsonAnket)
+            ?.baiguullagiinId,
           msgnuud: [
             {
               to: utasniiDugaar,
-              text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${songogdsonAnket}`,
+              text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${
+                data?.find((a) => a._id === songogdsonAnket)?.baiguullagiinId
+              }/${songogdsonAnket}`,
             },
           ],
         })

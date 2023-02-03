@@ -141,13 +141,14 @@ function AnketBuglukh({ data, token }) {
 export const getServerSideProps = async (ctx, ugudulAvchirya) => {
   try {
     let session = await parseCookies(ctx);
+    console.log(ctx);
     let data = null;
     if (!!ctx?.query?.anketId)
-      data = await readMethod(
-        "asuultAvya",
-        session?.tureestoken,
-        ctx.query.anketId
-      ).then((a) => a.data);
+      data = await uilchilgee(session?.tureestoken)
+        .get(`/asuultAvya/${ctx.query.anketId}`, {
+          params: { baiguullagiinId: ctx.query.baiguullagiinId },
+        })
+        .then((a) => a.data);
 
     return {
       props: { token: session.tureestoken, data },

@@ -58,7 +58,7 @@ function Khariultuud(record) {
         align: "center",
         render: (text, record, index) =>
           (khariult?.khuudasniiDugaar || 0) *
-          (khariult?.khuudasniiKhemjee || 0) -
+            (khariult?.khuudasniiKhemjee || 0) -
           (khariult?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -66,16 +66,19 @@ function Khariultuud(record) {
     ];
 
     record?.record?.asuultuud?.forEach((mur) =>
-      returnValue.push({ title: mur.asuult, dataIndex: mur.asuult, width: "15rem" })
+      returnValue.push({
+        title: mur.asuult,
+        dataIndex: mur.asuult,
+        width: "15rem",
+      })
     );
     returnValue.push({
       title: "Анкет ирсэн огноо",
       width: "12rem",
       align: "center",
       dataIndex: "createdAt",
-      render: (data) =>
-        moment(data).format("YYYY-MM-DD HH:mm")
-    })
+      render: (data) => moment(data).format("YYYY-MM-DD HH:mm"),
+    });
 
     return returnValue;
   }, [khariult]);
@@ -123,7 +126,7 @@ const { TabPane } = Tabs;
 const str = "A";
 
 function Anket({ token }) {
-  const { ajiltan, barilgiinId } = useAuth();
+  const { ajiltan, barilgiinId, baiguullaga } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
     moment(new Date()).format("YYYY-MM-DD 00:00:00"),
     moment(new Date()).format("YYYY-MM-DD 23:59:59"),
@@ -181,6 +184,7 @@ function Anket({ token }) {
 
   function anketBurtgey(v) {
     v.barilgiinId = barilgiinId;
+    v.baiguullagiinId = baiguullaga._id;
     uilchilgee(token)
       .post("/asuult", v)
       .then(({ data }) => {
@@ -451,7 +455,7 @@ function Anket({ token }) {
                                         message: "Асуулт оруулна уу!",
                                       },
                                     ]}
-                                  //validateTrigger={["onChange", "onBlur"]}
+                                    //validateTrigger={["onChange", "onBlur"]}
                                   >
                                     <Input
                                       placeholder={`Асуулт ${name + 1}`}
