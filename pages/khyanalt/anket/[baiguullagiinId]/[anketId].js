@@ -3,9 +3,8 @@ import { Button, Form, Input, notification, Radio } from "antd";
 import { parseCookies } from "nookies";
 import { useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
-import readMethod from "tools/function/crud/readMethod";
 
-function AnketBuglukh({ data, token }) {
+function AnketBuglukh({ data }) {
   const [form] = Form.useForm();
   const [garakhScreen, setGarakhScreen] = useState(false);
 
@@ -25,7 +24,7 @@ function AnketBuglukh({ data, token }) {
     anketIlgeeye(khariult);
   };
   function anketIlgeeye(khariult) {
-    uilchilgee(token)
+    uilchilgee()
       .post("/surveyKhadgalya", khariult)
       .then(({ data }) => {
         if (data === "Amjilttai") {
@@ -140,18 +139,15 @@ function AnketBuglukh({ data, token }) {
 
 export const getServerSideProps = async (ctx, ugudulAvchirya) => {
   try {
-    let session = await parseCookies(ctx);
-    console.log(ctx);
+
     let data = null;
-    if (!!ctx?.query?.anketId)
-      data = await uilchilgee(session?.tureestoken)
-        .get(`/asuultAvya/${ctx.query.anketId}`, {
-          params: { baiguullagiinId: ctx.query.baiguullagiinId },
-        })
+    if (!!ctx?.query?.anketId && ctx.query.baiguullagiinId)
+      data = await uilchilgee()
+        .get(`/asuultAvya/${ctx.query.baiguullagiinId}/${ctx.query.anketId}`)
         .then((a) => a.data);
 
     return {
-      props: { token: session.tureestoken, data },
+      props: { data },
     };
   } catch (error) {
     return {

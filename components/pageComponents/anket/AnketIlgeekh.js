@@ -12,7 +12,7 @@ import FormLavlakh from "components/FormLavlakh";
 import React, { useCallback, useEffect, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
+const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga }, ref) => {
   const [songogdsonAnket, setSongogdsonAnket] = useState();
   const [utasniiDugaar, setUtasniiDugaar] = useState();
   const [email, setEmail] = useState();
@@ -35,14 +35,12 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
       uilchilgee(token)
         .post(`/msgIlgeeye`, {
           barilgiinId,
-          baiguullagiinId: data?.find((a) => a._id === songogdsonAnket)
-            ?.baiguullagiinId,
+          baiguullagiinId: baiguullaga?._id,
           msgnuud: [
             {
               to: utasniiDugaar,
-              text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${
-                data?.find((a) => a._id === songogdsonAnket)?.baiguullagiinId
-              }/${songogdsonAnket}`,
+              text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id
+                }/${songogdsonAnket}`,
             },
           ],
         })
@@ -73,11 +71,12 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
       }
       uilchilgee(token)
         .post(`/mailOlnoorIlgeeye`, {
+          baiguullagiinId: baiguullaga._id,
           mailuud: [
             {
               mail: email,
-              subject: "test",
-              content: `Ta daraakh kholboosoor orj anket bogolnuu: <a href="https://turees.zevtabs.mn/khyanalt/anket/${songogdsonAnket}">https://turees.zevtabs.mn/khyanalt/anket/${songogdsonAnket}</a>`,
+              subject: "Анкет",
+              content: `Та <a style="text-decoration: underline; font-size:20px" href="https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${songogdsonAnket}">энд</a> дарж анкет илгээнэ үү.`,
             },
           ],
         })

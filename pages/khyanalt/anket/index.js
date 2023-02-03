@@ -58,7 +58,7 @@ function Khariultuud(record) {
         align: "center",
         render: (text, record, index) =>
           (khariult?.khuudasniiDugaar || 0) *
-            (khariult?.khuudasniiKhemjee || 0) -
+          (khariult?.khuudasniiKhemjee || 0) -
           (khariult?.khuudasniiKhemjee || 0) +
           index +
           1,
@@ -269,6 +269,7 @@ function Anket({ token }) {
           {anketIlgeekh === true && (
             <AnketIlgeekh
               ref={ilgeekhRef}
+              baiguullaga={baiguullaga}
               token={token}
               data={asuult.jagsaalt}
               barilgiinId={barilgiinId}
@@ -455,7 +456,7 @@ function Anket({ token }) {
                                         message: "Асуулт оруулна уу!",
                                       },
                                     ]}
-                                    //validateTrigger={["onChange", "onBlur"]}
+                                  //validateTrigger={["onChange", "onBlur"]}
                                   >
                                     <Input
                                       placeholder={`Асуулт ${name + 1}`}
