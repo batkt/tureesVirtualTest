@@ -22,6 +22,7 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
     ilgeekhOgogdol.ajiltniiId = ajiltan?._id
     ilgeekhOgogdol.baiguullagiinId = ajiltan?.baiguullagiinId
     ilgeekhOgogdol.baiguullagiinNer = ajiltan?.baiguullagiinNer
+    ilgeekhOgogdol.utas = ajiltan?.utas
     ilgeekhOgogdol.turul = "DotoodSystemes"
         uilchilgee()
         .post("https://zevtabs.mn/api/kholbooBarikhKhadgalya", ilgeekhOgogdol)
