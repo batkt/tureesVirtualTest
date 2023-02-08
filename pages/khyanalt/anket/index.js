@@ -105,7 +105,6 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
         },
       ]}
         name={[name, "khariultuud"]}
-        fieldKey={[fieldKey, "khariultuud"]}
       >
         {(fields, { add, remove }, { errors }) => (
           <>
@@ -119,8 +118,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                 <Form.Item
                   key={khfieldKey.key}
                   rules={[{ required: true, message: "Хариулт оруулна уу!" }]}
-                  fieldKey={[khfieldKey]}name={[khname, "khariult"]}
-                  
+                  fieldKey={[khfieldKey]}
+                  name={khname}                
                   {...restField}
                 >
                   <div className="relative pr-8">
@@ -131,7 +130,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                         ) + khname
                       )}`}
                       style={{ width: "100%" }}
-                      defaultValue=""
+                      
                     />
                     <MinusCircleOutlined
                       className="dynamic-delete-button absolute right-2 top-0 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
