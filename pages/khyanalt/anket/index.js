@@ -1,5 +1,6 @@
 import {
   Button,
+  DatePicker,
   Drawer,
   Form,
   Input,
@@ -155,11 +156,16 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
     </Form.Item>
   )
 }
-function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye }) {
+function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) {  
   const query = useMemo(() => {
     let asuultiinId = a._id;
-    return { asuultiinId };
-  }, [a, khariult]);
+    return { asuultiinId, ognoo :ognoo
+      ? {
+        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      }
+      : undefined, };
+  }, [a, khariult, ognoo]);
   const khariult = useJagsaalt("/khariult", query, {ognoo: -1});
   const [kharakh, setKharakh] = useState(false)
   return (
@@ -208,7 +214,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye }) {
       </div>
       <div className="flex w-full px-5 items-center justify-between">
         <div
-          className={`flex flex-col w-full items-center transition-all justify-end rounded-b-xl overflow-hidden border border-t-0 border-green-600 bg-green-600 bg-opacity-5 p-1 shadow-lg dark:text-gray-200`} style={{ height: kharakh === false ? "1.5rem" : khariult.jagsaalt.length > 0 ? `${khariult.jagsaalt.length * 4 < 16 ? khariult.jagsaalt.length * 4 : 16}rem` : "3.5rem" }}>
+          className={`flex flex-col w-full items-center transition-all justify-end rounded-b-xl overflow-hidden border border-t-0 border-green-600 bg-green-600 bg-opacity-5 p-1 shadow-lg dark:text-gray-200`} style={{ height: kharakh === false ? "1.5rem" : khariult.jagsaalt.length > 0 ? `${khariult.jagsaalt.length * 4 < 16 ? khariult.jagsaalt.length * 4 + 0.5 : 16 }rem` : "3.5rem" }}>            
           {khariult.jagsaalt.length > 0 ? <div className={` ${kharakh === true ? "visible opacity-200 transition-all delay-100" : "invisible opacity-0"} w-full h-full overflow-y-auto py-2 space-y-3 px-5`}>
             {khariult.jagsaalt.map((a, i) => {
               return <div onClick={(e) => { e.stopPropagation(); setData({ asuultuud: a.khariultuud, ner: a.asuultiinNer, turul: a.asuultiinTurul, _id: a._id }); }} className={`flex w-full cursor-pointer justify-between py-1 p-2 border rounded-md ${data?._id === a._id ? "bg-blue-200" : "bg-white"}  border-green-600`} key={i}><p>{i + 1}.</p> <p>{moment(a.ognoo).format("YYYY-MM-DD HH:mm:ss")}</p></div>
@@ -226,10 +232,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye }) {
 
 function Anket({ token }) {
   const { ajiltan, barilgiinId, baiguullaga } = useAuth();
-  const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([
-    moment(new Date()).format("YYYY-MM-DD 00:00:00"),
-    moment(new Date()).format("YYYY-MM-DD 23:59:59"),
-  ]);
+  const [ognoo, setOgnoo] = useState(undefined);
   const query = { barilgiinId: barilgiinId };
   const [data, setData] = useState(undefined)
 
@@ -388,10 +391,21 @@ function Anket({ token }) {
             <span className="font-medium dark:text-gray-100">
               Анкетын загварууд
             </span>
+            <div className="w-full px-5 mt-5">
+        <DatePicker.RangePicker
+        onClick={(e)=> e.stopPropagation()}
+              className="w-full flex  rounded-md md:w-auto"
+              size="middle"
+              allowClear={true}
+              placeholder={["Эхлэх огноо", "Дуусах огноо"]}
+              value={ognoo}
+              onChange={setOgnoo}
+            />
+        </div>
             <div className="mt-5 flex flex-col gap-5 overflow-y-auto pb-10" style={{ height: "calc( 100vh - 14rem )" }}>
               {asuult?.data?.jagsaalt?.map((a) => {
                 return (
-                  <AnketiinZagvar a={a} anketIlgeeye={anketIlgeeye} setData={setData} data={data} anketUstgay={anketUstgay} />
+                  <AnketiinZagvar  ognoo={ognoo} a={a} anketIlgeeye={anketIlgeeye} setData={setData} data={data} anketUstgay={anketUstgay} />
                 );
               })}
             </div>

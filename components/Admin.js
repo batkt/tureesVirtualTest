@@ -2,11 +2,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Loader from "./loader";
-import { Switch, Tooltip } from "antd";
+import { Button, Drawer, Switch, Tooltip } from "antd";
 import {
   CalendarOutlined,
   CloseOutlined,
   LeftOutlined,
+  QuestionOutlined,
 } from "@ant-design/icons";
 import { useAuth } from "../services/auth";
 import NTses from "./tolgoi/Tses";
@@ -20,6 +21,14 @@ import MSearch from "./tolgoi/MSearch";
 import moment from "moment";
 import Updater from "./Updater";
 import Zaavar from "./Zaavar";
+import { GoArrowLeft } from "react-icons/go";
+import { BsBoxArrowLeft } from "react-icons/bs";
+import { TbArrowBarLeft } from "react-icons/tb";
+import Tuslamj from "./tolgoi/tuslamj";
+import { FiSend } from "react-icons/fi";
+import { SiAnydesk } from "react-icons/si";
+import { modal } from "./ant/Modal";
+import SanalKhuseltIlgeekh from "./tolgoi/SanalKhuseltIlgeekh";
 
 var timeout = null;
 
@@ -41,8 +50,8 @@ function Admin({
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
+  const [showTuslamj, setShowTuslamj] = useState(false);
   const router = useRouter();
-
   const {
     ajiltan,
     token,
@@ -56,8 +65,31 @@ function Admin({
     barilgiinId,
   } = useAuth();
   const khuudasnuud = useErkh(ajiltan);
+  const sanalKhuseltRef = React.useRef(null)
   const [visible, setVisible] = useState(false);
-
+  const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)
+  function getOS() {
+    var userAgent = navigator.userAgent,
+        platform = navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
+        os = null;
+  
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = '/anydeskMacOs.dmg';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'https://apps.apple.com/us/app/anydesk/id1176131273';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = '/AnyDeskWindows.exe';
+    } else if (/Android/.test(userAgent)) {
+      os = 'https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid';
+    } else if (!os && /Linux/.test(platform)) {
+      os = 'https://anydesk.com/en/downloads/linux';
+    }
+  
+    return os;
+  }
   function onClickSearch() {
     if (mSearch) {
       const search = document.getElementById("search");
@@ -73,6 +105,25 @@ function Admin({
     }
 
     setMSearch(!mSearch);
+  }
+  function showSanalKhuselt(ajiltan) {
+    const footer = [
+      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>Хаах</Button>,
+      <Button className="space-x-2" icon={<FiSend/>} type="primary" onClick={() => sanalKhuseltRef.current.ilgeeye()}>
+        Илгээх
+      </Button>,
+    ];
+    modal({
+      title: "Системтэй холбоотой санал хүсэлт илгээх",
+      icon: <FiSend />,
+      content: (
+        <SanalKhuseltIlgeekh
+        ref={sanalKhuseltRef}
+        ajiltan={ajiltan}
+        />
+      ),
+      footer,
+    });
   }
 
   function license() {
@@ -91,12 +142,58 @@ function Admin({
     <div
       onClick={() => {
         visible === true && setVisible(false);
+        showSidehelpBar === true && setShowSidehelpBar(false);
         !!setTurulZagvar &&
           fixedZagvarNeegdsenEsekh === true &&
           setTurulZagvar(false);
       }}
       className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
     >
+       <Drawer
+        placement={"right"}
+        closable={false}
+        onClose={() => setShowTuslamj(false)}
+        visible={showTuslamj}
+        key={"righttuslamj"}
+        width={600}
+        bodyStyle={{ padding: "10px 0" }}
+      >
+        <Tuslamj />
+      </Drawer>
+      <div onClick={(e)=> e.stopPropagation()} className={`absolute transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : " delay-200 -right-[10.5rem]"}`}>
+        <div onClick={()=> setShowSidehelpBar(!showSidehelpBar)} className={`text-2xl ${showSidehelpBar ? "bg-white dark:border-green-500  dark:bg-gray-800 dark:text-green-500 text-black" : " bg-yellow-500 text-white"} transition-all  border  border-r-0 cursor-pointer h-11 w-10 rounded-l-lg flex justify-center items-center`}><TbArrowBarLeft className="transition-all duration-200" style={{rotate: showSidehelpBar ? "180deg" : "0deg"}}/></div>
+        <div className={`overflow-hidden ${showSidehelpBar ? "h-48 delay-200 rounded-l-lg dark:bg-gray-800 border-r-0 bg-white" : "h-11 border-none dark:bg-gray-900 bg-green-600"} transition-all pl-3 flex py-5 flex-col w-48 border dark:border-green-500`}>
+          <div className={`w-full h-full flex flex-col justify-between ${showSidehelpBar ? "delay-200 visible opacity-100" : "opacity-0 invisible"}`}>
+        <div
+              className={`border group border-r-0 dark:border-green-500 hover:bg-green-100 dark:hover:bg-opacity-30 dark:hover:bg-green-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg `}
+              onClick={() => {setShowTuslamj(true); setShowSidehelpBar(false)}}
+            >
+              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black `}>
+              <div className="bg-green-600 group-hover:bg-green-500 transition-colors text-white p-2 border rounded-md"><QuestionOutlined /></div>
+                <div className="font-medium">Тусламж</div>
+              </div>
+            </div>
+            <div
+              className={`border group border-r-0 dark:border-green-500 hover:bg-yellow-100 dark:hover:bg-opacity-30 dark:hover:bg-yellow-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg `}
+              onClick={() => {showSanalKhuselt(ajiltan); setShowSidehelpBar(false)}}
+            >
+              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
+                <div className="bg-yellow-600 group-hover:bg-yellow-500 transition-colors text-white p-2 border rounded-md"><FiSend /></div>
+                <div className="font-medium">Санал хүсэлт</div>
+              </div>
+            </div>
+            <div
+              className={`border group border-r-0 dark:border-green-500 hover:bg-red-100 dark:hover:bg-opacity-30 dark:hover:bg-red-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg ${showSidehelpBar ? "visible opacity-100" : "opacity-0 invisible"}`}
+              onClick={() => { window.location.assign(getOS());; setShowSidehelpBar(false)}}
+            >
+              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
+                <div className="bg-red-600 group-hover:bg-red-500 transition-colors text-white p-2 border rounded-md"><SiAnydesk /></div>
+                <div className="font-medium">AnyDesk татах</div>
+              </div>
+            </div>
+            </div>
+        </div>
+      </div>
       <Head>
         <title>{title}</title>
         <link rel="icon" href="/favicon.ico" />
@@ -131,7 +228,7 @@ function Admin({
               <select
                 defaultValue={barilgiinId}
                 onChange={({ target }) => barilgaSoliyo(target.value)}
-                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-white"
+                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
               >
                 {barilguud?.map((a) => (
                   <option key={a?._id} className="" value={a?._id}>
@@ -230,7 +327,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-white md:flex "
+              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
             >
               {title}
             </h2>
@@ -340,7 +437,7 @@ function Admin({
                   </svg>
                 </div>
               </Tooltip>
-              <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} />
+              <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} showSanalKhuselt={showSanalKhuselt} setShowTuslamj={setShowTuslamj}/>
             </div>
           </div>
         </div>

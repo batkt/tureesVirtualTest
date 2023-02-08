@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
-import Tuslamj from "./tuslamj";
 import { FiSend } from "react-icons/fi";
 import SanalKhuseltIlgeekh from "./SanalKhuseltIlgeekh";
 import { modal } from "components/ant/Modal";
@@ -68,7 +67,7 @@ function hrefAvya(mur, ajiltan) {
   return href;
 }
 
-function ProfileTovch({ ajiltan, garya, token }) {
+function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt }) {
   const {
     sonorduulga,
     sonorduulgaMutate,
@@ -83,8 +82,8 @@ function ProfileTovch({ ajiltan, garya, token }) {
       .then(() => sonorduulgaMutate())
       .catch(aldaaBarigch);
   }
-  const [showTuslamj, setShowTuslamj] = useState(false);
-  const sanalKhuseltRef = React.useRef(null)
+  
+  
 
   function onScroll(e) {
     if (
@@ -100,39 +99,10 @@ function ProfileTovch({ ajiltan, garya, token }) {
     }
   }
 
-  function showSanalKhuselt(ajiltan) {
-    const footer = [
-      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>Хаах</Button>,
-      <Button className="space-x-2" icon={<FiSend/>} type="primary" onClick={() => sanalKhuseltRef.current.ilgeeye()}>
-        Илгээх
-      </Button>,
-    ];
-    modal({
-      title: "Системтэй холбоотой санал хүсэлт илгээх",
-      icon: <FiSend />,
-      content: (
-        <SanalKhuseltIlgeekh
-        ref={sanalKhuseltRef}
-        ajiltan={ajiltan}
-        />
-      ),
-      footer,
-    });
-  }
 
   return (
     <div className="flex h-8 items-center justify-end gap-1 md:gap-3">
-      <Drawer
-        placement={"right"}
-        closable={false}
-        onClose={() => setShowTuslamj(false)}
-        visible={showTuslamj}
-        key={"righttuslamj"}
-        width={600}
-        bodyStyle={{ padding: "10px 0" }}
-      >
-        <Tuslamj />
-      </Drawer>
+     
       <Dropdown
         trigger="click"
         overlay={
