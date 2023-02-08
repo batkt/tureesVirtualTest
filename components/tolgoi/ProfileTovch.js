@@ -3,13 +3,16 @@ import {
   QuestionOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Badge, Dropdown, Menu, Tooltip, Empty, Drawer } from "antd";
+import { Badge, Dropdown, Menu, Tooltip, Empty, Drawer, Button } from "antd";
 import Link from "next/link";
 import React, { useState } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import useSonorduulga from "hooks/useSonorduulga";
 import Tuslamj from "./tuslamj";
+import { FiSend } from "react-icons/fi";
+import SanalKhuseltIlgeekh from "./SanalKhuseltIlgeekh";
+import { modal } from "components/ant/Modal";
 
 function idAwyaa(mur) {
   var id = undefined;
@@ -81,6 +84,7 @@ function ProfileTovch({ ajiltan, garya, token }) {
       .catch(aldaaBarigch);
   }
   const [showTuslamj, setShowTuslamj] = useState(false);
+  const sanalKhuseltRef = React.useRef(null)
 
   function onScroll(e) {
     if (
@@ -94,6 +98,26 @@ function ProfileTovch({ ajiltan, garya, token }) {
         jagsaalt: [...kh.jagsaalt, ...sonorduulga?.jagsaalt],
       }));
     }
+  }
+
+  function showSanalKhuselt(ajiltan) {
+    const footer = [
+      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>Хаах</Button>,
+      <Button className="space-x-2" icon={<FiSend/>} type="primary" onClick={() => sanalKhuseltRef.current.ilgeeye()}>
+        Илгээх
+      </Button>,
+    ];
+    modal({
+      title: "Системтэй холбоотой санал хүсэлт илгээх",
+      icon: <FiSend />,
+      content: (
+        <SanalKhuseltIlgeekh
+        ref={sanalKhuseltRef}
+        ajiltan={ajiltan}
+        />
+      ),
+      footer,
+    });
   }
 
   return (
@@ -268,6 +292,16 @@ function ProfileTovch({ ajiltan, garya, token }) {
               <div className="flex w-44 items-center space-x-2 text-white">
                 <QuestionOutlined />
                 <span>Тусламж</span>
+              </div>
+            </Menu.Item>
+            <Menu.Item
+              key="2"
+              className="profileMenuItem"
+              onClick={() => showSanalKhuselt(ajiltan)}
+            >
+              <div className="flex w-44 items-center space-x-2 text-white">
+                <FiSend />
+                <span>Санал хүсэлт</span>
               </div>
             </Menu.Item>
             <Menu.Divider />

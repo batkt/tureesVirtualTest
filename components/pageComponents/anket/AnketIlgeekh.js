@@ -12,88 +12,100 @@ import FormLavlakh from "components/FormLavlakh";
 import React, { useCallback, useEffect, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
-  const [songogdsonAnket, setSongogdsonAnket] = useState();
+const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) => {
   const [utasniiDugaar, setUtasniiDugaar] = useState();
   const [email, setEmail] = useState();
   const [value, setValue] = useState(1);
-
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
-
-  function ilgeeye() {
-    if (
-      value === 2 &&
-      utasniiDugaar !== undefined &&
-      songogdsonAnket !== undefined
-    ) {
-      if (utasniiDugaar.length < 8) {
-        notification.warning({ message: "Утасны дугаараа бүрэн оруулна уу!" });
-        return;
-      }
-      uilchilgee(token)
-        .post(`/msgIlgeeye`, {
-          barilgiinId,
-          baiguullagiinId: data?.find((a) => a._id === songogdsonAnket)
-            ?.baiguullagiinId,
-          msgnuud: [
-            {
-              to: utasniiDugaar,
-              text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${
-                data?.find((a) => a._id === songogdsonAnket)?.baiguullagiinId
-              }/${songogdsonAnket}`,
-            },
-          ],
-        })
-        .then(({ data }) => {
-          if (data && data[0].Result === "SUCCESS") {
-            notification.success({ message: "SMS Амжилттай илгээлээ" });
-            setEmail("");
-            setSongogdsonAnket("");
-            setUtasniiDugaar("");
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      ilgeekh(){
+        if (
+          value === 2 &&
+          utasniiDugaar !== undefined
+        ) {
+          if (utasniiDugaar.length < 8) {
+            notification.warning({ message: "Утасны дугаараа бүрэн оруулна уу!" });
+            return;
           }
-        })
-        .catch((e) => {
-          aldaaBarigch(e);
-        });
-    } else if (
-      value === 1 &&
-      email !== undefined &&
-      songogdsonAnket !== undefined
-    ) {
-      var filter =
-        /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-      if (!filter.test(email)) {
-        notification.warning({
-          message: "email хаягаа шалгаад дахин оролдоно уу!",
-        });
-        return;
-      }
-      uilchilgee(token)
-        .post(`/mailOlnoorIlgeeye`, {
-          mailuud: [
-            {
-              mail: email,
-              subject: "test",
-              content: `Ta daraakh kholboosoor orj anket bogolnuu: <a href="https://turees.zevtabs.mn/khyanalt/anket/${songogdsonAnket}">https://turees.zevtabs.mn/khyanalt/anket/${songogdsonAnket}</a>`,
-            },
-          ],
-        })
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
-            setEmail("");
-            setSongogdsonAnket("");
-            setUtasniiDugaar("");
+          uilchilgee(token)
+            .post(`/msgIlgeeye`, {
+              barilgiinId,
+              baiguullagiinId: baiguullaga?._id,
+              msgnuud: [
+                {
+                  to: utasniiDugaar,
+                  text: `Ta daraakh kholboosoor orj anket bogolnuu: https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id
+                    }/${data._id}`,
+                },
+              ],
+            })
+            .then(({ data }) => {
+              if (data && data[0].Result === "SUCCESS") {
+                notification.success({ message: "SMS Амжилттай илгээлээ" });
+                setEmail("");
+                setUtasniiDugaar("");
+                destroy();
+              }
+            })
+            .catch((e) => {
+              aldaaBarigch(e);
+            });
+        } else if (
+          value === 1 &&
+          email !== undefined
+        ) {
+          var filter =
+            /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    
+          if (!filter.test(email)) {
+            notification.warning({
+              message: "email хаягаа шалгаад дахин оролдоно уу!",
+            });
+            return;
           }
-        })
-        .catch((e) => {
-          aldaaBarigch(e);
-        });
-    } else notification.warning({ message: "мэдээллээ бүрэн оруулна уу!" });
-  }
+          uilchilgee(token)
+            .post(`/mailOlnoorIlgeeye`, {
+              baiguullagiinId: baiguullaga._id,
+              mailuud: [
+                {
+                  mail: email,
+                  subject: "Анкет",
+                  content: `Та <a style="text-decoration: underline; font-size:20px" href="https://turees.zevtabs.mn/khyanalt/anket/${baiguullaga?._id}/${data._id}">энд</a> дарж анкет илгээнэ үү.`,
+                },
+              ],
+            })
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+                setEmail("");
+                setUtasniiDugaar("");
+                destroy();
+              }
+            })
+            .catch((e) => {
+              aldaaBarigch(e);
+            });
+        } else notification.warning({ message: "мэдээллээ бүрэн оруулна уу!" });
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [value, utasniiDugaar, baiguullaga, data, email]
+  );
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
+
   function onchangeDugaar(e) {
     setUtasniiDugaar(e.target.value);
   }
@@ -123,7 +135,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
       <div className="flex w-full gap-5 py-3 ">
         <div>Илгээх төрөл:</div>
         <div>
-          <Radio.Group onChange={onChange} value={value}>
+          <Radio.Group onChange={(v)=> setValue(v.target.value)} value={value}>
             <Radio value={1}>И-мэйл</Radio>
 
             <Radio value={2}>Утас</Radio>
@@ -136,16 +148,9 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
           id="zagvarSongokhInput"
           className="w-full"
           placeholder="Анкетын загвар сонгoно уу"
-          onChange={(v) => {
-            setSongogdsonAnket(v);
-            if (value === 1) {
-              document.getElementById("input1").focus();
-            } else document.getElementById("input2").focus();
-          }}
-          value={songogdsonAnket}
-          options={data.map((mur) => {
-            return { label: mur.ner, value: mur._id };
-          })}
+          disabled={true}
+          value={data._id}
+        options={[{ label: data.ner, value: data._id }]}
         ></Select>
       </div>
       {value === 2 ? (
@@ -175,17 +180,6 @@ const AnketIlgeekh = ({ data, token, barilgiinId }, ref) => {
           />
         </div>
       )}
-
-      <div className="flex w-full gap-1 py-3">
-        <Button
-          id="anketIlgeekhButton"
-          type="primary"
-          icon={<SendOutlined />}
-          onClick={ilgeeye}
-        >
-          Анкет илгээх
-        </Button>
-      </div>
     </div>
   );
 };
