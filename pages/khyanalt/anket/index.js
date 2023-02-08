@@ -70,12 +70,6 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
           />
         </Form.Item>
         <Form.Item
-          rules={[
-            {
-              required: true,
-              message: "Төрөл сонгоно уу!",
-            },
-          ]}
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
           {...restField}
@@ -103,10 +97,15 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
           </div>
         ) : null}
       </div>
-      {hide === false && <Form.List
+      {hide === false && <div className="mt-5"><Form.List
+      rules={[
+        {
+          required: true,
+          message: "Хариулт оруулна уу!",
+        },
+      ]}
         name={[name, "khariultuud"]}
         fieldKey={[fieldKey, "khariultuud"]}
-        noStyle
       >
         {(fields, { add, remove }, { errors }) => (
           <>
@@ -119,13 +118,12 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
               ) => (
                 <Form.Item
                   key={khfieldKey.key}
-                  rules={[{ required: true }]}
-                  fieldKey={[khfieldKey]}
-                  name={[khname]}
-                  noStyle
+                  rules={[{ required: true, message: "Хариулт оруулна уу!" }]}
+                  fieldKey={[khfieldKey]}name={[khname, "khariult"]}
+                  
                   {...restField}
                 >
-                  <div className="relative py-2 pr-8">
+                  <div className="relative pr-8">
                     <Input
                       placeholder={`Хариулт ${String.fromCharCode(
                         str.charCodeAt(
@@ -133,6 +131,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                         ) + khname
                       )}`}
                       style={{ width: "100%" }}
+                      defaultValue=""
                     />
                     <MinusCircleOutlined
                       className="dynamic-delete-button absolute right-2 top-0 text-xl text-black text-opacity-50 dark:text-white dark:text-opacity-50"
@@ -143,16 +142,19 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
               )
             )}
             <Button
-              className="mt-3 dark:bg-gray-800 dark:text-white "
+              className=" dark:bg-gray-800 dark:text-white "
               style={{ width: "100%" }}
+              type={"sideKick"}
               onClick={() => add([name])}
-              icon={<PlusOutlined />}
+              icon={<PlusOutlined className="text-xs"/>}
             >
               Хариулт оруулах
             </Button>
+            <Form.ErrorList errors={errors} />
           </>
         )}
-      </Form.List>}
+        
+      </Form.List></div>}
     </Form.Item>
   )
 }
@@ -217,7 +219,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
           className={`flex flex-col w-full items-center transition-all justify-end rounded-b-xl overflow-hidden border border-t-0 border-green-600 bg-green-600 bg-opacity-5 p-1 shadow-lg dark:text-gray-200`} style={{ height: kharakh === false ? "1.5rem" : khariult.jagsaalt.length > 0 ? `${khariult.jagsaalt.length * 4 < 16 ? khariult.jagsaalt.length * 4 + 0.5 : 16 }rem` : "3.5rem" }}>            
           {khariult.jagsaalt.length > 0 ? <div className={` ${kharakh === true ? "visible opacity-200 transition-all delay-100" : "invisible opacity-0"} w-full h-full overflow-y-auto py-2 space-y-3 px-5`}>
             {khariult.jagsaalt.map((a, i) => {
-              return <div onClick={(e) => { e.stopPropagation(); setData({ asuultuud: a.khariultuud, ner: a.asuultiinNer, turul: a.asuultiinTurul, _id: a._id }); }} className={`flex w-full cursor-pointer justify-between py-1 p-2 border rounded-md ${data?._id === a._id ? "bg-blue-200" : "bg-white"}  border-green-600`} key={i}><p>{i + 1}.</p> <p>{moment(a.ognoo).format("YYYY-MM-DD HH:mm:ss")}</p></div>
+              return <div onClick={(e) => { e.stopPropagation(); setData({ asuultuud: a.khariultuud, ner: a.asuultiinNer, _id: a._id }); }} className={`flex w-full cursor-pointer justify-between py-1 p-2 border rounded-md ${data?._id === a._id ? "bg-blue-200" : "bg-white"}  border-green-600`} key={i}><p>{i + 1}.</p> <p>{moment(a.ognoo).format("YYYY-MM-DD HH:mm:ss")}</p></div>
             })}
           </div> : <div className={`w-full h-full flex justify-center items-center transition-opacity delay-200 ${kharakh === true ? "visible opacity-100" : "invisible opacity-0"}`}>Анкет ирээгүй байна</div>}
           <div className="w-full flex justify-center transition-all group-hover:animate-pulse relative">
@@ -232,7 +234,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
 
 function Anket({ token }) {
   const { ajiltan, barilgiinId, baiguullaga } = useAuth();
-  const [ognoo, setOgnoo] = useState(undefined);
+  const [ognoo, setOgnoo] = useState([moment(new Date()).subtract( 1,"months"), moment(new Date())]);
   const query = { barilgiinId: barilgiinId };
   const [data, setData] = useState(undefined)
 
@@ -242,42 +244,6 @@ function Anket({ token }) {
   const formRef = useRef();
   const ilgeekhRef = React.useRef();
 
-
-  const khariult = useJagsaalt(ajiltan && "/khariult");
-
-  const columns = useMemo(() => [
-    {
-      title: "№",
-      width: "3rem",
-      align: "center",
-      render: (text, record, index) =>
-        (khariult?.khuudasniiDugaar || 0) * (khariult?.khuudasniiKhemjee || 0) -
-        (khariult?.khuudasniiKhemjee || 0) +
-        index +
-        1,
-    },
-    {
-      title: "Асуултын нэр",
-      dataIndex: "ner",
-      ellipsis: true,
-      align: "center",
-    },
-    {
-      title: "Асуултын төрөл",
-      dataIndex: "turul",
-      ellipsis: true,
-      align: "center",
-    },
-    {
-      title: "Огноо",
-      dataIndex: "createdAt",
-      ellipsis: true,
-      align: "center",
-      render: (a) => {
-        return moment(a).format("YYYY-MM-DD");
-      },
-    },
-  ]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -356,9 +322,6 @@ function Anket({ token }) {
       e.preventDefault();
       switch (e.target.id) {
         case "dynamic_form_item_ner":
-          form.getFieldInstance("turul").focus();
-          break;
-        case "dynamic_form_item_turul":
           document.getElementById("asuultNemekhButton").focus();
           break;
         default:
@@ -433,7 +396,7 @@ function Anket({ token }) {
               }}
             >
               <div>
-                <div className="grid-cols-2 gap-3 pr-5 lg:grid">
+                <div className="grid-cols-1 gap-3 pr-5 lg:grid">
                   <Form.Item name="_id" hidden></Form.Item>
                   <Form.Item name="barilgiinId" hidden></Form.Item>
                   <Form.Item
@@ -452,18 +415,6 @@ function Anket({ token }) {
                       placeholder="Анкетын нэр"
                     />
                   </Form.Item>
-                  <Form.Item
-                    className="w-full"
-                    name="turul"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Төрөл сонгоно уу!",
-                      },
-                    ]}
-                  >
-                    <Input onKeyUp={focuser} placeholder="Төрөл" />
-                  </Form.Item>
                 </div>
                 <Form.List
                   rules={[
@@ -478,7 +429,7 @@ function Anket({ token }) {
                     <>
                       <Form.Item className="pr-5 pb-3">
                         <Button
-                          type="dashed"
+                          type="default"
                           id="asuultNemekhButton"
                           onClick={() => {
                             add();
@@ -490,10 +441,11 @@ function Anket({ token }) {
                           }}
                           className="dark:bg-gray-800 dark:text-white"
                           style={{ width: "100%" }}
-                          icon={<PlusOutlined />}
+                          icon={<PlusOutlined className="text-xs"/>}                          
                         >
                           Асуулт нэмэх
                         </Button>
+                        <Form.ErrorList errors={errors} />
                       </Form.Item>
                       <div
                         className=" -my-8 grid pr-5 w-full gap-2 overflow-y-auto py-5 grid-cols-1"
@@ -508,7 +460,7 @@ function Anket({ token }) {
                   )}
                 </Form.List>
               </div>
-              <Form.Item className="flex justify-end pr-2">
+              <Form.Item className="flex justify-end pr-5">
                 <Button
                   type="primary"
                   onClick={() => form.submit()}

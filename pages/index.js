@@ -6,7 +6,8 @@ import moment from "moment";
 import { useAuth } from "../services/auth";
 import { destroyCookie } from "nookies";
 import Aos from "aos";
-
+import "../services/i18n";
+import { useTranslation } from "react-i18next";
 const { Password } = Input;
 
 export function useThemeValue() {
@@ -32,6 +33,7 @@ function Ajiltan() {
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
+  const { t } = useTranslation();
 
   return (
     <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">

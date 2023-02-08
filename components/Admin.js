@@ -29,6 +29,7 @@ import { FiSend } from "react-icons/fi";
 import { SiAnydesk } from "react-icons/si";
 import { modal } from "./ant/Modal";
 import SanalKhuseltIlgeekh from "./tolgoi/SanalKhuseltIlgeekh";
+import { useTranslation } from "react-i18next";
 
 var timeout = null;
 
@@ -68,6 +69,7 @@ function Admin({
   const sanalKhuseltRef = React.useRef(null)
   const [visible, setVisible] = useState(false);
   const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)
+  const { i18n } = useTranslation();
   function getOS() {
     var userAgent = navigator.userAgent,
         platform = navigator.platform,
@@ -358,6 +360,21 @@ function Admin({
                 onClick={() => setTheme(themeValue ? "light" : "dark")}
               />
             </div>
+            {/* <div className="flex w-6 hover:scale-105 transition-all gap-2">
+              {i18n.language === "en" ? (
+                <img
+                  onClick={() => i18n.changeLanguage("mn")}
+                  className={`object-contain cursor-pointer transition-all w-full`}
+                  src="/MN.png"
+                />
+              ) : (
+                <img
+                  onClick={() => i18n.changeLanguage("en")}
+                  className={`object-contain cursor-pointer transition-all w-full`}
+                  src="/UK.png"
+                />
+              )}
+            </div> */}
             <div className="hidden items-center justify-center md:flex">
               Лиценз- {license()}
             </div>

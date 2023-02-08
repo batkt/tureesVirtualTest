@@ -4,6 +4,7 @@ import "antd/dist/antd.css";
 import "../styles/globals.css";
 import "suneditor/dist/css/suneditor.min.css";
 import "aos/dist/aos.css";
+import "../services/i18n";
 
 function MyApp({ Component, pageProps }) {
   return (

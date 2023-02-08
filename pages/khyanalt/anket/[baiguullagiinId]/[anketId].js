@@ -14,7 +14,6 @@ function AnketBuglukh({ data }) {
       baiguullagiinId: data.baiguullagiinId,
       barilgiinId: data.barilgiinId,
       asuultiinNer: data.ner,
-      asuultiinTurul: data.turul,
       ognoo: new Date(),
       khariultuud: values.asuultuud.map(({ asuult, khariult }) => ({
         asuult,
