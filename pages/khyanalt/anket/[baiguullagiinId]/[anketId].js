@@ -15,8 +15,9 @@ function AnketBuglukh({ data }) {
       barilgiinId: data.barilgiinId,
       asuultiinNer: data.ner,
       ognoo: new Date(),
-      khariultuud: values.asuultuud.map(({ asuult, khariult }) => ({
+      khariultuud: values.asuultuud.map(({ asuult, khariult, turul }) => ({
         asuult,
+        turul,
         khariult,
       })),
     };
@@ -56,16 +57,16 @@ function AnketBuglukh({ data }) {
               {(fields) => (
                 <>
                   <div className="flex flex-col">
-                    {fields.map((key, name, fieldKey, ...restField) => (
+                    {fields.map(({key, name, fieldKey, ...restField}) => (
                       <div
                         className="px-6 pb-3 dark:text-gray-300"
-                        key={fieldKey.key}
+                        key={key}
                       >
                         <div className="flex gap-1 text-base">
                           <p className="font-medium">{name + 1}.</p>
                           {data.asuultuud[name].asuult}
                         </div>
-                        <div className="flex flex-wrap gap-2 py-2 dark:text-gray-200 sm:px-10">
+                        <div className="flex flex-col gap-2 py-2 dark:text-gray-200 sm:px-10">
                           <Form.Item
                             {...restField}
                             hidden
@@ -86,9 +87,9 @@ function AnketBuglukh({ data }) {
                             ]}
                           >
                             {data.asuultuud[name].turul === "songokh" ? (
-                              <Radio.Group>
-                                {data.asuultuud[name].khariultuud?.map((a) => (
-                                  <Radio key={a + name} value={a}>
+                              <Radio.Group className="flex flex-col">
+                                {data.asuultuud[name].khariultuud?.map((a, i) => (
+                                  <Radio key={i} value={a}>
                                     {a}
                                   </Radio>
                                 ))}
