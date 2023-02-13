@@ -21,6 +21,7 @@ import useEBarimtMedeelel from "hooks/useEBarimtMedeelel";
 import { useBarimtToollolt } from "hooks/useEBarimt";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 //#endregion
@@ -29,6 +30,7 @@ function EbarimtMedeelel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
+  const { t } = useTranslation()
   const { ajiltan, barilgiinId } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
 
@@ -177,7 +179,7 @@ function EbarimtMedeelel({ token }) {
                         <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
-                        <div className="text-sm text-gray-500">{mur.utga}</div>
+                        <div className="text-sm text-gray-500">{t(mur.utga)}</div>
                       </div>
                     </div>
                   </div>
@@ -222,7 +224,7 @@ function EbarimtMedeelel({ token }) {
               onClick={ebarimtIlgeeye}
               className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
             >
-              <Spin spinning={loading}>{loading ? "" : "Татварт илгээх"} </Spin>
+              <Spin spinning={loading}>{loading ? "" : t("Татварт илгээх")} </Spin>
             </Button>
           </div>
         </div>
@@ -256,7 +258,7 @@ function EbarimtMedeelel({ token }) {
             className="t-head"
             columns={[
               {
-                title: "Огноо",
+                title: t("Огноо"),
                 dataIndex: "date",
                 ellipsis: true,
                 align: "center",
@@ -267,7 +269,7 @@ function EbarimtMedeelel({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Гэрээний дугаар",
+                title: t("Гэрээний дугаар"),
                 dataIndex: "gereeniiDugaar",
                 ellipsis: true,
                 align: "center",
@@ -275,13 +277,13 @@ function EbarimtMedeelel({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Регистр",
+                title: t("Регистр"),
                 dataIndex: "customerNo",
                 ellipsis: true,
                 align: "center",
               },
               {
-                title: "Талбайн дугаар",
+                title: t("Талбайн дугаар"),
                 dataIndex: "talbainDugaar",
                 ellipsis: true,
                 align: "center",
@@ -289,13 +291,13 @@ function EbarimtMedeelel({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "ДДТД",
+                title: t("ДДТД"),
                 dataIndex: "billId",
                 width: "300px",
                 align: "center",
               },
               {
-                title: "Дүн",
+                title: t("Дүн"),
                 dataIndex: "cashAmount",
                 ellipsis: true,
                 align: "center",

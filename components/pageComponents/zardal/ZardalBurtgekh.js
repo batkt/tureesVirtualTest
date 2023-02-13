@@ -22,6 +22,7 @@ function ZardalMur({
   defaultZam = "",
   index,
   realZam,
+  t
 }) {
   const zam = defaultZam || "";
   const [showDed, setShowDed] = useState(true);
@@ -41,7 +42,7 @@ function ZardalMur({
         >
           <Input
             id="zardalMurInput"
-            placeholder="Нэр"
+            placeholder={t("Нэр")}
             value={zardal.ner}
             style={{ width: "100%" }}
             onChange={(e) => onChangeZardal(e, zam)}
@@ -78,6 +79,7 @@ function ZardalMur({
             murUstgaya={murUstgaya}
             dedBulegNemekh={dedBulegNemekh}
             onChangeZardal={onChangeZardal}
+            t={t}
           />
         </div>
       )}
@@ -97,6 +99,7 @@ function Zardal({
   murUstgaya,
   onChangeZardal,
   zam,
+  t
 }) {
   return (
     <div className="w-full space-y-4">
@@ -116,6 +119,7 @@ function Zardal({
           onChangeZardal={onChangeZardal}
           realZam={zam}
           defaultZam={zam + `.${i}`}
+          t={t}
         />
       ))}
     </div>
@@ -123,7 +127,7 @@ function Zardal({
 }
 
 function ZardalBurtgekh(
-  { data = {}, barilgiinId, token, destroy, onRefresh },
+  { data = {}, barilgiinId, token, destroy, onRefresh, t },
   ref
 ) {
   const [zardal, setZardal] = useState(data);
@@ -182,7 +186,7 @@ function ZardalBurtgekh(
 
   function dedBulegNemekh(zam) {
     _.set(zardal, zam + (zam === "" ? "" : ".") + "dedKhesguud", [
-      { ner: "Зардалын төрөл" },
+      { ner: t("Зардалын төрөл") },
     ]);
     setZardal({ ...zardal });
   }
@@ -199,7 +203,7 @@ function ZardalBurtgekh(
       zardal,
       zam + (zam === "" ? "" : ".") + "dedKhesguud"
     );
-    jagsaalt.push({ ner: "Зардалын төрөл" });
+    jagsaalt.push({ ner: t("Зардалын төрөл") });
     _.set(zardal, zam + (zam === "" ? "" : ".") + "dedKhesguud", jagsaalt);
     setZardal({ ...zardal });
   }
@@ -213,6 +217,7 @@ function ZardalBurtgekh(
       zardalNemekh={zardalNemekh}
       murUstgaya={murUstgaya}
       onChangeZardal={onChangeZardal}
+      t={t}
     />
   );
 }

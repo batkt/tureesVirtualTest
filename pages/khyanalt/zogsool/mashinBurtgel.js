@@ -20,8 +20,10 @@ import MashinBurtgel from "components/pageComponents/zogsool/MashinBurtgel";
 import useOrder from "tools/function/useOrder";
 import moment from "moment";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 function mashinBurtgel({ token }) {
+  const { t } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const mashinref = useRef(null);
@@ -169,7 +171,7 @@ function mashinBurtgel({ token }) {
                     <div className="text-3xl font-bold text-green-600">
                       {a.too || 0}
                     </div>
-                    <div className="text-base text-gray-500">{a.name}</div>
+                    <div className="text-base text-gray-500">{t(a.name)}</div>
                   </div>
                 </div>
               </div>
@@ -191,7 +193,7 @@ function mashinBurtgel({ token }) {
               icon={<PlusOutlined />}
               onClick={() => mashinBurtgekh()}
             >
-              Машин нэмэх
+              {t("Машин нэмэх")}
             </Button>
 
             <Popover
@@ -202,7 +204,7 @@ function mashinBurtgel({ token }) {
                     onClick={mashinOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}
@@ -245,7 +247,7 @@ function mashinBurtgel({ token }) {
                 1,
             },
             {
-              title: "Бүртгэсэн",
+              title: t("Бүртгэсэн"),
               dataIndex: "createdAt",
               ellipsis: true,
               align: "center",
@@ -256,33 +258,34 @@ function mashinBurtgel({ token }) {
               sorter: () => 0,
             },
             {
-              title: "Нэр",
+              title: t("Нэр"),
               align: "left",
               dataIndex: "ezemshigchiinNer",
               showSorterTooltip: false,
               sorter: () => 0,
             },
             {
-              title: "Регистр",
+              title: t("Регистр"),
+              width: "8rem",
               align: "center",
               dataIndex: "ezemshigchiinRegister",
               showSorterTooltip: false,
               sorter: () => 0,
             },
             {
-              title: "Утас",
+              title: t("Утас"),
               align: "center",
               dataIndex: "ezemshigchiinUtas",
             },
             {
-              title: "Дугаар",
+              title: t("Дугаар"),
               align: "center",
               dataIndex: "dugaar",
               showSorterTooltip: false,
               sorter: () => 0,
             },
             {
-              title: "Төрөл",
+              title: t("Төрөл"),
               align: "center",
               dataIndex: "turul",
               showSorterTooltip: false,

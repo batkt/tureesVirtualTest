@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Loader from "./loader";
 import { Button, Drawer, Switch, Tooltip } from "antd";
 import {
@@ -69,7 +69,7 @@ function Admin({
   const sanalKhuseltRef = React.useRef(null)
   const [visible, setVisible] = useState(false);
   const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   function getOS() {
     var userAgent = navigator.userAgent,
         platform = navigator.platform,
@@ -92,6 +92,100 @@ function Admin({
   
     return os;
   }
+
+  const ner = useMemo(()=> {
+    var utga = undefined
+    switch (title) {
+      case "Хяналт":
+        utga = "Dashboard"
+        break;
+        case "Хяналтын цонх":
+        utga = "Хяналтын цонх"
+        break;
+        case "Гэрээ":
+        utga = "Contracts"
+        break;
+        case "Гэрээний жагсаалт":
+          utga = "ContractList"
+          break;
+          case "Гэрээ байгуулах":
+            utga = "SingContractExecutingAContract"
+            break;
+            case "Гэрээний загвар":
+              utga = "ContractDrafts"
+              break;
+              case "Талбай бүртгэл":
+                utga = "AreaRegisteration"
+                break;
+                case "Ажилтан бүртгэл":
+                  utga = "UserRegisteration"
+                  break;
+                  case "Харилцагч":
+                    utga = "Tenant"
+                    break;
+                    case "Мэдэгдэл":
+                    utga = "Announcement"
+                    break;
+                    case "Шаардлага":
+                    utga = "Requirement"
+                    break;
+                    case "Санал хүсэлт":
+                    utga = "Feedback"
+                    break;
+                    case "Төлбөр тооцоо":
+                    utga = "Payment"
+                    break;
+                    case "Дансны хуулга":
+                    utga = "AccountStatement"
+                    break;
+                    case "Гүйлгээний түүх":
+                    utga = "TransactionHistory"
+                    break;
+                    case "Нэхэмжлэл":
+                    utga = "Invoice"
+                    break;
+                    case "Зардал":
+                    utga = "Costs"
+                    break;
+                    case "И-баримт":
+                    utga = "E-Barimt"
+                    break;
+                    case "Зогсоол":
+                    utga = "Park"
+                    break;
+                    case "Жагсаалт":
+                    utga = "List"
+                    break;
+                    case "Машин бүртгэл":
+                    utga = "VehicleRegistration"
+                    break;
+                    case "Анкет":
+                    utga = "application"
+                    break;
+                    case "Тайлан":
+                    utga = "Statement"
+                    break;
+                    case "График":
+                    utga = "Graphic"
+                    break;
+                    case "Аналитик":
+                    utga = "Analytics"
+                    break;
+                    case "Даалгавар":
+                    utga = "Tasks"
+                    break;
+                    case "Устгасан түүх":
+                    utga = "DeletedHistory"
+                    break;
+
+    
+      default:
+        utga = title
+        break;
+    }
+    return utga
+  },[title])
+
   function onClickSearch() {
     if (mSearch) {
       const search = document.getElementById("search");
@@ -162,8 +256,8 @@ function Admin({
       >
         <Tuslamj />
       </Drawer>
-      <div onClick={(e)=> e.stopPropagation()} className={`absolute transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : " delay-200 -right-[10.5rem]"}`}>
-        <div onClick={()=> setShowSidehelpBar(!showSidehelpBar)} className={`text-2xl ${showSidehelpBar ? "bg-white dark:border-green-500  dark:bg-gray-800 dark:text-green-500 text-black" : " bg-yellow-500 text-white"} transition-all  border  border-r-0 cursor-pointer h-11 w-10 rounded-l-lg flex justify-center items-center`}><TbArrowBarLeft className="transition-all duration-200" style={{rotate: showSidehelpBar ? "180deg" : "0deg"}}/></div>
+      <div onClick={(e)=> e.stopPropagation()} className={`fixed transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : " delay-200 -right-[10.5rem]"}`}>
+        <div onClick={()=> setShowSidehelpBar(!showSidehelpBar)} className={`text-2xl ${showSidehelpBar ? "bg-white dark:border-green-500 dark:bg-gray-800 text-green-500" : " bg-yellow-500 text-white"} transition-all  border  border-r-0 cursor-pointer h-11 w-10 rounded-l-lg flex justify-center items-center`}><TbArrowBarLeft className="transition-all duration-200" style={{rotate: showSidehelpBar ? "180deg" : "0deg"}}/></div>
         <div className={`overflow-hidden ${showSidehelpBar ? "h-48 delay-200 rounded-l-lg dark:bg-gray-800 border-r-0 bg-white" : "h-11 border-none dark:bg-gray-900 bg-green-600"} transition-all pl-3 flex py-5 flex-col w-48 border dark:border-green-500`}>
           <div className={`w-full h-full flex flex-col justify-between ${showSidehelpBar ? "delay-200 visible opacity-100" : "opacity-0 invisible"}`}>
         <div
@@ -197,7 +291,7 @@ function Admin({
         </div>
       </div>
       <Head>
-        <title>{title}</title>
+        <title>{t(`${ner}`)}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Updater />
@@ -305,7 +399,7 @@ function Admin({
         id="garchig"
         className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
       >
-        {title}
+        {t(`${ner}`)}
       </h2>
       <div
         className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
@@ -331,7 +425,7 @@ function Admin({
               id="garchig"
               className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
             >
-              {title}
+              {t(`${ner}`)}
             </h2>
           </div>
           <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">
@@ -360,7 +454,7 @@ function Admin({
                 onClick={() => setTheme(themeValue ? "light" : "dark")}
               />
             </div>
-            {/* <div className="flex w-6 hover:scale-105 transition-all gap-2">
+            <div className="flex w-6 hover:scale-105 transition-all gap-2">
               {i18n.language === "en" ? (
                 <img
                   onClick={() => i18n.changeLanguage("mn")}
@@ -374,9 +468,9 @@ function Admin({
                   src="/UK.png"
                 />
               )}
-            </div> */}
+            </div>
             <div className="hidden items-center justify-center md:flex">
-              Лиценз- {license()}
+              {t("loginlicense")}- {license()}
             </div>
             {!hideSearch ? (
               <>

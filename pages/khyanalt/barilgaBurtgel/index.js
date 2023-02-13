@@ -23,7 +23,9 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import { GoPrimitiveDot } from "react-icons/go";
 import formatNumber from "tools/function/formatNumber";
 import local from "antd/lib/date-picker/locale/mn_MN";
+import { useTranslation } from "react-i18next";
 function BarilgaBurtgel({ token }) {
+  const { t, i18n } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
   const [ognoo, setOgnoo] = useState(new Date());
   const [nariivchlal, setNariivchlal] = useState("day");
@@ -314,7 +316,7 @@ function BarilgaBurtgel({ token }) {
                         {mur.too}
                       </div>
                       <div className="mt-1 text-base text-gray-600 dark:text-gray-200">
-                        {mur.utga}
+                        {t(mur.utga)}
                       </div>
                     </div>
                   </div>
@@ -351,7 +353,7 @@ function BarilgaBurtgel({ token }) {
                   { val: "year", lab: "Жил" },
                 ].map((a) => (
                   <Select.Option key={a.val} value={a.val}>
-                    {a.lab}
+                    {t(a.lab)}
                   </Select.Option>
                 ))}
               </Select>
@@ -361,7 +363,7 @@ function BarilgaBurtgel({ token }) {
             <div className="col-span-12  space-y-2   md:col-span-6 ">
               <div className="  grid grid-cols-12 ">
                 <div className="  col-span-6 flex items-center  text-xl text-gray-600  dark:text-gray-200  ">
-                  Орлогын тайлан салбараар
+                  {t("Орлогын тайлан салбараар")}
                 </div>
               </div>
               <div className="box flex h-full items-center justify-start p-2 ">
@@ -480,7 +482,7 @@ function BarilgaBurtgel({ token }) {
             <div className="col-span-12  space-y-2 md:col-span-3  ">
               <div className="  grid grid-cols-12 ">
                 <div className=" col-span-12 flex  items-center justify-start text-xl">
-                  Авлагын тайлан
+                  {t("Авлагын тайлан")}
                 </div>
               </div>
               <div className="box flex h-full flex-col justify-start p-4">
@@ -536,7 +538,7 @@ function BarilgaBurtgel({ token }) {
             <div className="col-span-12 space-y-2  md:col-span-3 ">
               <div className="  grid grid-cols-12 ">
                 <div className=" col-span-12 flex items-center justify-start text-xl ">
-                  Орлогын тайлан
+                  {t("Орлогын тайлан")}
                 </div>
               </div>
               <div className="box flex  h-full  flex-col justify-start p-4  ">
@@ -604,7 +606,7 @@ function BarilgaBurtgel({ token }) {
             <Calendar
               fullscreen={false}
               mode="month"
-              locale={locale}
+              locale={i18n.language === "mn" && locale}
               onChange={setOgnoo}
             />
           </div>
@@ -615,7 +617,7 @@ function BarilgaBurtgel({ token }) {
                 <div className="flex items-center">
                   <GoPrimitiveDot className="text-2xl text-green-500 " />
                 </div>
-                <div>Дууссан ажил</div>
+                <div>{t("Дууссан ажил")}</div>
               </div>
               <div>33</div>
             </div>
@@ -624,7 +626,7 @@ function BarilgaBurtgel({ token }) {
                 <div className="flex items-center">
                   <GoPrimitiveDot className="text-2xl text-yellow-500 " />
                 </div>
-                <div>Идэвхтэй ажил</div>
+                <div>{t("Идэвхтэй ажил")}</div>
               </div>
               <div>18</div>
             </div>
@@ -633,7 +635,7 @@ function BarilgaBurtgel({ token }) {
                 <div className="flex items-center">
                   <GoPrimitiveDot className="text-2xl text-red-500 " />
                 </div>
-                <div>Цуцлагдсан</div>
+                <div>{t("Цуцлагдсан")}</div>
               </div>
               <div>10</div>
             </div>
@@ -646,7 +648,7 @@ function BarilgaBurtgel({ token }) {
               onClick={() => barilgaBurtgel("new")}
               icon={<PlusOutlined />}
             >
-              Нэмэх
+              {t("Нэмэх")}
             </Button>
           </div>
         </div>

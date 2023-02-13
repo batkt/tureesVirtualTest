@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import uilchilgee, { url } from "services/uilchilgee";
 import moment from "moment";
 import compareFields from "tools/function/compareFields";
+import { useTranslation } from "react-i18next";
 
 var ankhniiUtga = {
   bairshil: undefined,
@@ -49,6 +50,7 @@ const formItemLayout = {
 const format = "HH:mm";
 
 function GereeBaiguulakh({ token }) {
+  const { t } = useTranslation()
   const { baiguullaga, baiguullagaMutate } = useAuth();
   const router = useRouter();
   const { barilga } = router.query;
@@ -302,7 +304,7 @@ function GereeBaiguulakh({ token }) {
           {...formItemLayout}
           onValuesChange={onChange}
         >
-          <Form.Item label="Лого" name="logo">
+          <Form.Item label={t("Лого")} name="logo">
             <Upload
               multiple={false}
               // name="file"
@@ -312,7 +314,7 @@ function GereeBaiguulakh({ token }) {
             >
               <div className="flex flex-row space-x-1">
                 {!logoMedeelel?.logo && (
-                  <Button icon={<UploadOutlined />}>Лого зураг оруулах</Button>
+                  <Button icon={<UploadOutlined />}>{t("Лого зураг оруулах")}</Button>
                 )}
                 {!!logoMedeelel?.logo && (
                   <Button
@@ -334,7 +336,7 @@ function GereeBaiguulakh({ token }) {
           <Form.Item
             rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
             name="ner"
-            label="Нэр"
+            label={t("Нэр")}
           >
             <Input onKeyUp={focuser} />
           </Form.Item>
@@ -343,7 +345,7 @@ function GereeBaiguulakh({ token }) {
               { required: true, message: "Барилгын Регистр оруулна уу!" },
             ]}
             name="register"
-            label="Регистр"
+            label={t("Регистр")}
           >
             <Input onKeyUp={focuser} />
           </Form.Item>
@@ -355,7 +357,7 @@ function GereeBaiguulakh({ token }) {
               },
             ]}
             name="davkhar"
-            label="Давхар"
+            label={t("Давхар")}
           >
             <InputNumber
               onKeyUp={focuser}
@@ -376,7 +378,7 @@ function GereeBaiguulakh({ token }) {
               },
             ]}
             name="bdavkhar"
-            label="B Давхар"
+            label={t("B Давхар")}
           >
             <InputNumber
               onKeyUp={focuser}
@@ -399,7 +401,7 @@ function GereeBaiguulakh({ token }) {
             name="niitTalbai"
             label={
               <div className="text-black dark:text-gray-400">
-                Нийт м<sup>2</sup>
+                {t("Нийт м")}<sup>2</sup>
               </div>
             }
           >
@@ -410,11 +412,11 @@ function GereeBaiguulakh({ token }) {
               { required: true, message: "Барилгын Нээх цаг оруулна уу!" },
             ]}
             name="neekhTsag"
-            label="Нээх цаг"
+            label={t("Нээх цаг")}
           >
             <TimePicker
               onChange={() => form.getFieldInstance("khaakhTsag").focus()}
-              placeholder="Нээх цаг"
+              placeholder={t("Нээх цаг")}
               style={{ width: "100%" }}
               format={format}
             />
@@ -424,11 +426,11 @@ function GereeBaiguulakh({ token }) {
               { required: true, message: "Барилгын Хаах цаг оруулна уу!" },
             ]}
             name="khaakhTsag"
-            label="Хаах цаг"
+            label={t("Хаах цаг")}
           >
             <TimePicker
               onChange={() => form.getFieldInstance("khayag").focus()}
-              placeholder="Хаах цаг"
+              placeholder={t("Хаах цаг")}
               style={{ width: "100%" }}
               format={format}
             />
@@ -436,11 +438,11 @@ function GereeBaiguulakh({ token }) {
           <Form.Item
             rules={[{ required: true, message: "Барилгын Хаяг оруулна уу!" }]}
             name="khayag"
-            label="Хаяг"
+            label={t("Хаяг")}
           >
             <Input.TextArea onKeyDown={focuser} />
           </Form.Item>
-          <Form.Item name="bairshil" label="Байршил">
+          <Form.Item name="bairshil" label={t("Байршил")}>
             <LocationPicker />
           </Form.Item>
           <Form.Item className="flex w-full justify-end">
@@ -449,7 +451,7 @@ function GereeBaiguulakh({ token }) {
               onClick={() => form.submit()}
               type="primary"
             >
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </Form.Item>
         </Form>
@@ -459,11 +461,11 @@ function GereeBaiguulakh({ token }) {
           size="small"
           pagination={{ pageSize: 100 }}
           columns={[
-            { title: "Давхар", dataIndex: "davkhar" },
+            { title: t("Давхар"), dataIndex: "davkhar" },
             {
               title: (
                 <label>
-                  Давхарын м<sup>2</sup>
+                  {t("Давхарын м")}<sup>2</sup>
                 </label>
               ),
               dataIndex: "talbai",
@@ -482,7 +484,7 @@ function GereeBaiguulakh({ token }) {
               },
             },
             {
-              title: "План зураг",
+              title: t("План зураг"),
               dataIndex: "planZurag",
               render(planZurag, mur, index) {
                 return (

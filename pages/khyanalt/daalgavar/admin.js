@@ -17,6 +17,7 @@ import DaalgavarNemekh from "components/pageComponents/daalgavar/DaalgavarNemekh
 import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
 import { modal } from "components/ant/Modal";
+import { useTranslation } from "react-i18next";
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tsutsalsanShaltgaan, setTsutsalsanShaltgaan] = useState("");
@@ -46,6 +47,7 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
 const order = { updatedAt: -1 };
 
 function index({ token }) {
+  const { t, i18n } = useTranslation()
   const [tuluv, setTuluv] = React.useState("Идэвхтэй");
   const [daalgavar, setDaalgavar] = React.useState();
   const [setgegdel, setSetgegdel] = React.useState();
@@ -85,9 +87,9 @@ function index({ token }) {
 
   function daalgavarTsutslakh() {
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        Устгах
+        {t("Устгах")}
       </Button>,
     ];
     modal({
@@ -226,30 +228,31 @@ function index({ token }) {
       >
         <div className="flex w-full items-center justify-between rounded-xl bg-green-500 py-1 px-3 font-medium text-white dark:bg-green-700">
           <div>
-            <div className="text-2xl ">Өнөөдөр</div>
+            <div className="text-2xl ">{t("Өнөөдөр")}</div>
             <div>
               {task?.data?.jagsaalt.length
                 ? task?.data?.jagsaalt.length + 0
                 : "0"}{" "}
-              даалгавар
+              {t("Даалгавар")}
             </div>
           </div>
           <div
             onClick={Nemekh}
             className="flex h-5/6 cursor-pointer items-center rounded-xl bg-white px-5 font-bold  text-green-500 transition-colors duration-500 hover:bg-gray-200 hover:text-black dark:text-green-700"
           >
-            Нэмэх
+            {t("Нэмэх")}
           </div>
         </div>
         <div className="flex w-full items-center justify-between self-center py-2 font-medium">
           <div className="w-20 rounded-2xl bg-green-500 py-2 text-center text-white">
             <div className="text-xl">{moment().format("DD")}</div>
-            <div>{moment().format("MM")} сар</div>
+            <div>{moment().format(i18n.language === "mn" ? "MM" : "MMM")} {i18n.language === "mn" && "сар"}</div>
           </div>
           <div className="px-3 text-justify">
             {timeLeft?.hours || timeLeft?.minutes || timeLeft?.seconds ? (
               <div className="grid grid-cols-12 text-center md:flex">
-                <span className="col-span-12 pr-2"> Ажлын цаг дуусахад</span>
+                {t("Ажлын цаг дуусахад дутуу байна", {tsag: FormatNumberLength(timeLeft.hours, 2), minut: FormatNumberLength(timeLeft.minutes, 2), second: FormatNumberLength(timeLeft.seconds, 2)})}
+                {/* <span className="col-span-12 pr-2"> Ажлын цаг дуусахад</span>
                 <div className="col-span-12 flex justify-center">
                   <span className="px-1">
                     {FormatNumberLength(timeLeft.hours, 2)}
@@ -263,17 +266,17 @@ function index({ token }) {
                     {FormatNumberLength(timeLeft.seconds, 2)}
                   </span>
                 </div>
-                <span className="col-span-12 pl-1">дутуу байна</span>
+                <span className="col-span-12 pl-1">дутуу байна</span> */}
               </div>
             ) : timeLeft === "Тооцоолж байна" ? (
               <p className="animate-pulse">{timeLeft}...</p>
             ) : (
-              <p>Ажлын цаг дууссан байна</p>
+              <p>{("Ажлын цаг дууссан байна")}</p>
             )}
           </div>
           <div className="w-20 rounded-2xl bg-green-500 py-2 text-center text-white">
             <div className="text-xl">{moment().format("DD")}</div>
-            <div>{moment().format("MM")} сар</div>
+            <div>{moment().format(i18n.language === "mn" ? "MM" : "MMM")} {i18n.language === "mn" && "сар"}</div>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-5 rounded-xl bg-green-500 p-2 font-medium dark:bg-green-700 sm:text-lg lg:text-sm xl:text-base 2xl:text-xl">
@@ -289,7 +292,7 @@ function index({ token }) {
                   : "text-gray-50"
               }`}
             >
-              {status}
+              {t(status)}
             </div>
           ))}
         </div>
@@ -355,12 +358,12 @@ function index({ token }) {
                       }-500`}
                     >
                       {mur.tuluv === 1
-                        ? "Хүлээн авсан"
+                        ? t("Хүлээн авсан")
                         : mur.tuluv === 2
-                        ? "Дууссан"
+                        ? t("Дууссан")
                         : mur.tuluv === -1
-                        ? "Цуцлагдсан"
-                        : "Эхлээгүй"}
+                        ? t("Цуцлагдсан")
+                        : t("Эхлээгүй")}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
                   </div>
@@ -375,6 +378,8 @@ function index({ token }) {
       </div>
       {/* Nemekh */}
       <DaalgavarNemekh
+      t={t}
+      i18n={i18n}
         className={` ${showResults ? "block" : "hidden"}`}
         token={token}
         onRefresh={task.refresh}
@@ -409,7 +414,7 @@ function index({ token }) {
             </p>
           )}
           <div className="-rotate-12 rounded-md border-8 border-red-500 text-4xl font-black text-red-500 md:text-6xl 2xl:text-8xl">
-            ЦУЦЛАГДСАН
+          {t("Цуцлагдсан")}
           </div>
         </div>
         <div className="flex w-full items-center gap-3 px-5 pt-2 ">
@@ -421,7 +426,7 @@ function index({ token }) {
           </div>
           <div className=" w-10/12 rounded-lg bg-white p-3 selection:pt-3 dark:bg-gray-800 sm:w-full">
             <div className="flex flex-row flex-wrap items-center justify-between">
-              <div className="font-medium">Захирал</div>
+              <div className="font-medium">{t("Захирал")}</div>
               <div className="flex">
                 <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
                   {moment(daalgavar?.ognoo).format("YYYY/MM/DD HH:mm")}
@@ -447,7 +452,7 @@ function index({ token }) {
                           : "green"
                       }-500 py-1 px-3 font-medium text-gray-50`}
                     >
-                      {2 === daalgavar?.tuluv ? "Дууссан" : "Цуцлах"}
+                      {2 === daalgavar?.tuluv ? t("Дууссан") : t("Цуцлах")}
                     </div>
                   </Popconfirm>
                 </div>
@@ -456,7 +461,7 @@ function index({ token }) {
                     daalgavar?.tuluv === -1 ? "flex" : "hidden"
                   }`}
                 >
-                  Цуцлагдсан
+                  {t("Цуцлагдсан")}
                 </div>
               </div>
             </div>

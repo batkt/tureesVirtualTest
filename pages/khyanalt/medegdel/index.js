@@ -38,6 +38,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
 import next from "next";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
+import { useTranslation } from "react-i18next";
 
 //#endregion
 
@@ -94,6 +95,7 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
+  const { t } = useTranslation()
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
@@ -614,11 +616,11 @@ function Khyanalt({ token }) {
             >
               {[
                 { key: true, v: "Идэвхтэй" },
-                { key: false, v: "Идэвхгүй " },
-                { key: undefined, v: "Бүгд " },
+                { key: false, v: "Идэвхгүй" },
+                { key: undefined, v: "Бүгд" },
               ].map((a) => (
                 <Select.Option key={a.key} value={a.key}>
-                  {a.v}
+                  {t(a.v)}
                 </Select.Option>
               ))}
             </Select>
@@ -627,7 +629,7 @@ function Khyanalt({ token }) {
             <Select
               mode="multiple"
               allowClear
-              placeholder="Давхрууд сонгох"
+              placeholder={t("Давхар сонгох")}
               onChange={(e) => davkharuudSongokh(e)}
               style={{ width: "100%" }}
             >
@@ -651,7 +653,7 @@ function Khyanalt({ token }) {
           >
             <div>
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
-                SMS илгээсэн
+                {t("SMS илгээсэн")}
               </p>
             </div>
             <div>
@@ -662,7 +664,7 @@ function Khyanalt({ token }) {
                 ekhlekhOgnoo={dateCount.yearStart}
                 duusakhOgnoo={dateCount.yearEnd}
                 token={token}
-                text="Нийт"
+                text={t("Нийт")}
                 turul={turul}
               />
             </div>
@@ -674,7 +676,7 @@ function Khyanalt({ token }) {
                 ekhlekhOgnoo={dateCount.monthStart}
                 duusakhOgnoo={dateCount.monthEnd}
                 token={token}
-                text="Энэ сард"
+                text={t("Энэ сард")}
                 turul={turul}
               />
             </div>
@@ -708,7 +710,7 @@ function Khyanalt({ token }) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex px-1 pb-2">
-            <p>{turul} загвар</p>
+            <p>{turul} {t("загвар")}</p>
 
             <button
               className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
@@ -720,7 +722,7 @@ function Khyanalt({ token }) {
                   : router.push("/khyanalt/medegdel/mailMedegdel/new")
               }
             >
-              Загвар үүсгэх
+              {t("Загвар үүсгэх")}
             </button>
           </div>
           <div
@@ -822,7 +824,7 @@ function Khyanalt({ token }) {
                 else setSongogdsonKhariltsagch([]);
               }}
             >
-              <p className="pl-3">Бүгдийг сонгох</p>
+              <p className="pl-3">{t("Бүгдийг сонгох")}</p>
             </Checkbox>
           </div>
           <div className="scrollbar-hidden h-medegdelHariltsagchPhone overflow-y-auto lg:h-scrollH">
@@ -840,6 +842,7 @@ function Khyanalt({ token }) {
                   >
                     <div>
                       <Checkbox
+                      onClick={(e)=> e.stopPropagation()}
                         checked={
                           songogdsonKhariltsagch.findIndex(
                             (a) => a._id === mur._id
@@ -989,13 +992,13 @@ function Khyanalt({ token }) {
                     </div>
                   </div>
                   <div className="mt-3">
-                    <div className="font-medium">Өдрийн мэнд</div>
+                    <div className="font-medium">{t("Өдрийн мэнд")}</div>
                     <p>
-                      Сонгогдсон {songogdsonKhariltsagch.length} харилцагч
-                      байна.
+                      {t("Сонгогдсон харилцагч байна.", {count: songogdsonKhariltsagch.length})}
                     </p>
+                    {console.log(songogdsonKhariltsagch)}
                     <div className="mt-1 text-gray-600 dark:text-gray-300">
-                      Та шаардлага илгээнэ үү.
+                      {t("Та шаардлага илгээнэ үү.")}
                     </div>
                   </div>
                 </div>
@@ -1071,7 +1074,7 @@ function Khyanalt({ token }) {
                         {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                       </span>
                       <span className="absolute right-0 -bottom-5 text-gray-500">
-                        Мэдэгдэл
+                        {t("Announcement")}
                       </span>
                     </div>
                   );
@@ -1134,7 +1137,7 @@ function Khyanalt({ token }) {
           <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
             <div className="text-xs font-semibold">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
-              <label className="font-medium">{turul} Илгээх</label>
+              <label className="font-medium">{turul} {t("Илгээх")}</label>
               <div
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
@@ -1182,9 +1185,9 @@ function Khyanalt({ token }) {
               </div>
             </div>
             <div className="mt-3">
-              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="font-medium">{t("Өдрийн мэнд")}</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та мэдэгдэл илгээх харилцагчаа сонгоно уу.
+                {t("Та мэдэгдэл илгээх харилцагчаа сонгоно уу.")}
               </div>
             </div>
           </div>

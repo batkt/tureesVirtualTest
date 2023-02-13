@@ -9,6 +9,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useTranslation } from "react-i18next";
 
 const KhariltsagchiinLavlakh = ({
   onChangeRegister,
@@ -18,6 +19,7 @@ const KhariltsagchiinLavlakh = ({
   focuser,
   khadgalsabRegister,
 }) => {
+  const { t } = useTranslation()
   const [register, setRegister] = useState(null)
   const [dropDownNeekhEsekh, setDropDownNeekhEsekh] = useState(false);
   const searchKeys = ["ner", "register"];
@@ -109,7 +111,7 @@ const KhariltsagchiinLavlakh = ({
         allowClear
         maxLength={baiguullagaEsekh ? 7 : 10}
         value={register}
-        placeholder="Регистр"
+        placeholder={t("Регистр")}
         prefix={<SolutionOutlined />}
         onChange={(e) => { onChangeRegister(e); setRegister(e.target.value); khariltsagchKhaikh(e.target.value) }}
       />

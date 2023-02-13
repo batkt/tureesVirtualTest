@@ -39,6 +39,7 @@ import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
 import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useTranslation } from "react-i18next";
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
@@ -50,7 +51,7 @@ function tulburTootsoo({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const ref = useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
-
+  const { t } = useTranslation()
   const [davkhar, setDavkhar] = React.useState();
   const [turul, setTurul] = useState("Mail");
   const [barimt, setBarimt] = useState();
@@ -94,12 +95,12 @@ function tulburTootsoo({ token }) {
 
   function smsZagvarNemya(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
-        Бүртгэл нэмэх
+        {t("Бүртгэл нэмэх")}
       </Button>,
     ];
     modal({
@@ -902,11 +903,11 @@ function tulburTootsoo({ token }) {
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => dunZasvarRef.current.khadgalya()}
       >
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Нэхэмжлэл засвар",
+      title: t("Нэхэмжлэл засвар"),
       icon: <FileExcelOutlined />,
       content: (
         <DunZasvar
@@ -989,13 +990,13 @@ function tulburTootsoo({ token }) {
                 <DatePicker
                   className="w-1/2 lg:w-auto"
                   clearIcon
-                  placeholder="Огноо сонгох"
+                  placeholder={t("Огноо сонгох")}
                   value={ognoo}
                   onChange={setOgnoo}
                 />
                 <Select
                   className="w-1/2 lg:w-auto"
-                  placeholder="Данс сонгох"
+                  placeholder={t("Данс сонгох")}
                   value={songogdsonDans}
                   onChange={setDans}
                 >
@@ -1010,7 +1011,7 @@ function tulburTootsoo({ token }) {
                 <Select
                   className="w-1/2 lg:w-auto"
                   allowClear
-                  placeholder="Давхар сонгох"
+                  placeholder={t("Давхар сонгох")}
                   onChange={(v) => {
                     setDavkhar(v);
                     setSongogdsonGereenuud([]);
@@ -1026,7 +1027,7 @@ function tulburTootsoo({ token }) {
                 </Select>
                 <Select
                   className="w-1/2 lg:w-[200px]"
-                  placeholder="Төрөл сонгох"
+                  placeholder={t("Төрөл сонгох")}
                   value={barimt}
                   onChange={(content) => {
                     setBarimt(content);
@@ -1059,12 +1060,12 @@ function tulburTootsoo({ token }) {
                     type="primary"
                     onClick={hevlekh}
                   >
-                    Хэвлэх
+                    {t("Хэвлэх")}
                   </Button>
                 ) : (
                   ""
                 )}
-                <Button onClick={send}>Илгээх</Button>
+                <Button onClick={send}>{t("Илгээх")}</Button>
               </div>
             </div>
           </div>
@@ -1104,7 +1105,7 @@ function tulburTootsoo({ token }) {
                       type="primary"
                       onClick={hevlekh}
                     >
-                      Хэвлэх
+                      {t("Хэвлэх")}
                     </Button>
                   </div>
                 ) : (
@@ -1112,7 +1113,7 @@ function tulburTootsoo({ token }) {
                 )}
                 <div className="w-1/3 lg:hidden">
                   <Button className="w-full" onClick={send}>
-                    Илгээх
+                    {t("Илгээх")}
                   </Button>
                 </div>
                 <Button
@@ -1126,8 +1127,7 @@ function tulburTootsoo({ token }) {
                       : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
                   }
                 >
-                  Загвар <p className="ml-1 lg:hidden"> +</p>{" "}
-                  <p className="ml-1 hidden lg:flex"> үүсгэх</p>
+                  {t("Загвар үүсгэх")}
                 </Button>
               </div>
               <div className="my-4 space-y-2">
@@ -1233,19 +1233,19 @@ function tulburTootsoo({ token }) {
                 }}
                 columns={[
                   {
-                    title: "Түрээслэгч",
+                    title: t("Түрээслэгч"),
                     dataIndex: "ner",
                     width: "7rem",
                     align: "center",
                   },
                   {
-                    title: "Гэрээ ",
+                    title: t("Гэрээ"),
                     dataIndex: "gereeniiDugaar",
                     width: "7rem",
                     align: "center",
                   },
                   {
-                    title: "Талбай ",
+                    title: t("Талбай"),
                     showSorterTooltip: false,
                     sorter: (a, b) => a.talbainDugaar - b.talbainDugaar,
                     dataIndex: "talbainDugaar",
@@ -1253,7 +1253,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Дараагийн төлөх",
+                    title: t("Дараагийн төлөх"),
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) =>
@@ -1269,7 +1269,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Хуримтлагдсан",
+                    title: t("Хуримтлагдсан"),
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) =>
@@ -1282,7 +1282,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Энэ сард төлөх",
+                    title: t("Энэ сард төлөх"),
                     showSorterTooltip: false,
                     width: "7rem",
                     sorter: (a, b) => a.eneSardTulukhDun - b.eneSardTulukhDun,
@@ -1294,7 +1294,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Үлдэгдэл",
+                    title: t("Үлдэгдэл"),
                     width: "7rem",
                     showSorterTooltip: false,
                     sorter: (a, b) => a.niitUldegdel - b.niitUldegdel,
@@ -1306,7 +1306,7 @@ function tulburTootsoo({ token }) {
                     align: "center",
                   },
                   {
-                    title: "Төлөв",
+                    title: t("Төлөв"),
                     width: "4rem",
                     dataIndex: "tuluv",
                     align: "center",

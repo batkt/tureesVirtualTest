@@ -12,6 +12,7 @@ import useSonorduulga from "hooks/useSonorduulga";
 import { FiSend } from "react-icons/fi";
 import SanalKhuseltIlgeekh from "./SanalKhuseltIlgeekh";
 import { modal } from "components/ant/Modal";
+import { useTranslation } from "react-i18next";
 
 function idAwyaa(mur) {
   var id = undefined;
@@ -75,7 +76,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
     setKhuudaslalt,
     kharaaguiToo,
   } = useSonorduulga(token, ajiltan?._id);
-
+const { t } = useTranslation()
   function sonorduulgaKharlaa(id, sonorduulgaId) {
     uilchilgee(token)
       .post("/sanalKharlaa", { id, sonorduulgaId })
@@ -107,7 +108,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
         trigger="click"
         overlay={
           <Menu>
-            <Menu.Item>Сонордуулга</Menu.Item>
+            <Menu.Item>{t("Сонордуулга")}</Menu.Item>
             <Menu.Divider />
 
             <div
@@ -140,7 +141,7 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
                       <Link
                         href={{
                           pathname: hrefAvya(mur, ajiltan),
-                          query: { id: idAwyaa(mur) },
+                          query: { id: idAwyaa(mur), notificationTurul:mur?.turul },
                         }}
                       >
                         <div className="relative  flex cursor-pointer items-center justify-between space-x-2">
@@ -177,19 +178,19 @@ function ProfileTovch({ ajiltan, garya, token, setShowTuslamj, showSanalKhuselt 
                               <div>
                                 {mur.turul === "daalgavar" ? (
                                   <div className="flex justify-center rounded-md bg-green-500 px-2 text-white ">
-                                    Даалгавар
+                                    {t("Даалгавар")}
                                   </div>
                                 ) : mur.turul === "sanal" ? (
                                   <div className="flex justify-center rounded-md bg-yellow-500 px-2 text-white ">
-                                    Санал
+                                    {t("Санал")}
                                   </div>
                                 ) : mur.turul === "gomdol" ? (
                                   <div className="flex justify-center rounded-md bg-red-500 px-2 text-white ">
-                                    Гомдол
+                                    {t("Гомдол")}
                                   </div>
                                 ) : mur.turul === "medegdel" ? (
                                   <div className="flex justify-center rounded-md bg-blue-500 px-2 text-white ">
-                                    Мэдэгдэл
+                                    {t("Мэдэгдэл")}
                                   </div>
                                 ) : (
                                   ""

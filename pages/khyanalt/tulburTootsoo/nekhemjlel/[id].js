@@ -21,6 +21,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
 import dynamic from "next/dynamic";
+import { useTranslation } from "react-i18next";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -129,6 +130,7 @@ function getSize(khemjee, orientation) {
 }
 
 function ZakhialgaNemekh({ token }) {
+  const { t } = useTranslation()
   const router = useRouter();
   const { id } = router.query;
   const [nekhemjlelZagvar, setNekhemjlelZagvar] = React.useState({
@@ -353,7 +355,7 @@ function ZakhialgaNemekh({ token }) {
             <Input
               value={nekhemjlelZagvar.ner}
               onChange={inputOnchange}
-              placeholder="Нэр"
+              placeholder={t("Нэр")}
             />
             <Form.Item
               label="Нэхэмжлэхийн загвар"
@@ -390,7 +392,7 @@ function ZakhialgaNemekh({ token }) {
                   marginTop: "20px",
                 }}
               >
-                Хадгалах
+                {t("Хадгалах")}
               </Button>
             </Form.Item>
           </div>

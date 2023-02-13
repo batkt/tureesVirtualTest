@@ -14,6 +14,7 @@ import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { EditOutlined, EyeOutlined, UploadOutlined } from "@ant-design/icons";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 function KhuviinMedeelel({
   ajiltan = {},
@@ -23,6 +24,7 @@ function KhuviinMedeelel({
   baiguullagaMutate,
   setSongogdsonTsonkhniiIndex,
 }) {
+  const { t } = useTranslation()
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
     ajiltan?.baiguullagiinId
@@ -90,13 +92,13 @@ function KhuviinMedeelel({
         <div className="box relative col-span-2 mt-5 pb-20">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Нийтээр тохируулах
+              {t("Нийтээр тохируулах")}
             </h2>
           </div>
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Гэрээ автоматаар сунгах</div>
+                <div className="font-medium">{t("Гэрээ автоматаар сунгах")}</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto">
@@ -117,7 +119,7 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Гэрээ нийтээр засвар оруулах</div>
+                <div className="font-medium">{t("Гэрээ нийтээр засвар оруулах")}</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto">
@@ -139,9 +141,9 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Барьцаа авах /сараар/</div>
+                <div className="font-medium">{t("Барьцаа авах /сараар/")}</div>
                 <div className="text-gray-600">
-                  Гэрээ байгуулсны дараа сараар тооцож барьцаа авна
+                  {t("Гэрээ байгуулсны дараа сараар тооцож барьцаа авна")}
                 </div>
               </div>
               <div className="ml-auto">
@@ -161,9 +163,9 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Барьцаа хөрөнгө авах эсэх</div>
+                <div className="font-medium">{t("Барьцаа хөрөнгө авах эсэх")}</div>
                 <div className="text-gray-600">
-                  Гэрээ байгуулахад барьцаа хөрөнгө авах эсэх
+                  {t("Гэрээ байгуулахад барьцаа хөрөнгө авах эсэх")}
                 </div>
               </div>
               <div className="ml-auto">
@@ -182,9 +184,9 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Алдангийн хувь</div>
+                <div className="font-medium">{t("Алдангийн хувь")}</div>
                 <div className="text-gray-600">
-                  Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь
+                  {t("Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь")}
                 </div>
               </div>
               <div className="ml-auto">
@@ -205,10 +207,9 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Алданги чөлөөлөх хоног</div>
+                <div className="font-medium">{t("Алданги чөлөөлөх хоног")}</div>
                 <div className="text-gray-600">
-                  Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож
-                  эхлэх хоног
+                  {t("Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног")}
                 </div>
               </div>
               <div className="ml-auto">
@@ -231,7 +232,7 @@ function KhuviinMedeelel({
               }`}
           >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>
@@ -239,7 +240,7 @@ function KhuviinMedeelel({
         <div className="box relative mt-5 pb-10 lg:mt-5">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Тамга болон гарын үсэг
+              {t("Тамга болон гарын үсэг")}
             </h2>
           </div>
           <div className="flex justify-between p-5 ">
@@ -258,7 +259,7 @@ function KhuviinMedeelel({
                     <div className="flex flex-row space-x-1">
                       {!barilga?.tamga && (
                         <Button icon={<UploadOutlined />}>
-                          Тамга зураг оруулах
+                          {t("Тамга зураг оруулах")}
                         </Button>
                       )}
                       {!!barilga?.tamga && (
@@ -268,7 +269,7 @@ function KhuviinMedeelel({
                             tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
                           }
                         >
-                          Тамга зураг харах
+                          {t("Тамга зураг харах")}
                         </Button>
                       )}
                       {!!barilga?.tamga && (
@@ -289,7 +290,7 @@ function KhuviinMedeelel({
                     <div className="flex flex-row space-x-1">
                       {!barilga?.gariinUseg && (
                         <Button icon={<UploadOutlined />}>
-                          Гарын үсэг зураг оруулах
+                          {t("Гарын үсэг зураг оруулах")}
                         </Button>
                       )}
                       {!!barilga?.gariinUseg && (
@@ -302,7 +303,7 @@ function KhuviinMedeelel({
                             )
                           }
                         >
-                          Гарын үсэг зураг харах
+                          {t("Гарын үсэг зураг харах")}
                         </Button>
                       )}
                       {!!barilga?.gariinUseg && (
@@ -337,7 +338,7 @@ function KhuviinMedeelel({
           </div>
           <div className="absolute right-2 bottom-3 flex w-full justify-end px-3 pb-3">
             <Button onClick={khadgalakh} type="primary">
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>

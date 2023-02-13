@@ -57,9 +57,9 @@ import Aos from "aos";
 import { renderToString } from "react-dom/server";
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
 //#endregion
-
 function GereeSegmentTile({ zasya, token, ...a }) {
   return (
     <div className="box dark:text-white">
@@ -74,121 +74,6 @@ function GereeSegmentTile({ zasya, token, ...a }) {
     </div>
   );
 }
-
-const sheet = [
-  {
-    title: "Бүртгэсэн",
-    dataIndex: "createdAt",
-    ellipsis: true,
-    className: "text-center",
-    align: "center",
-    render(date) {
-      return moment(date).format("YYYY-MM-DD HH:mm");
-    },
-  },
-  {
-    title: "Гэрээ",
-    dataIndex: "gereeniiDugaar",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-  },
-  {
-    title: "Нэр",
-    dataIndex: "ner",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-  },
-  {
-    title: "Регистр",
-    dataIndex: "register",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-  },
-  {
-    title: "Талбай",
-    dataIndex: "talbainDugaar",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-  },
-
-  {
-    title: "Төрөл",
-    dataIndex: "turul",
-    align: "center",
-    className: "text-center",
-    ellipsis: true,
-  },
-
-  {
-    title: "Талбай /м2/",
-    dataIndex: "talbainKhemjee",
-    align: "center",
-    className: "text-center",
-    ellipsis: true,
-    render: (talbainKhemjee) => {
-      return `${talbainKhemjee} м2`;
-    },
-    showSorterTooltip: false,
-  },
-  {
-    title: "Төлбөр",
-    dataIndex: "sariinTurees",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-    render: (sariinTurees) => {
-      return formatNumber(sariinTurees || 0);
-    },
-    showSorterTooltip: false,
-  },
-
-  {
-    title: "Эхлэх",
-    dataIndex: "gereeniiOgnoo",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-    render: (data) => {
-      return moment(data).format("YYYY-MM-DD");
-    },
-  },
-  {
-    title: "Дуусах хоног",
-    dataIndex: "duusakhOgnoo",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-    render: (duusakhOgnoo) => {
-      return moment(duusakhOgnoo).diff(moment(new Date()), "days");
-    },
-  },
-  {
-    title: "Дуусах",
-    dataIndex: "duusakhOgnoo",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-    render: (data) => {
-      return moment(data).format("YYYY-MM-DD");
-    },
-    showSorterTooltip: false,
-    sortOrder: "descend",
-  },
-  {
-    title: "Ажилтан",
-    dataIndex: "burtgesenAjiltaniiNer",
-    className: "text-center",
-    align: "center",
-    ellipsis: true,
-    render: () => {
-      return "Админ";
-    },
-  },
-];
 
 function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
   uilchilgee(token)
@@ -208,6 +93,7 @@ function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
 
 const Tailbar = React.forwardRef(
   ({ token, destroy, confirm, data, service }, ref) => {
+    const { t } = useTranslation()
     const [shaltgaan, setTailbar] = React.useState("");
     const [duusakhOgnoo, setDuusakhOgnoo] = React.useState(moment());
     const [sergeekhOgnoo, setSergeekhOgnoo] = React.useState(moment());
@@ -280,7 +166,7 @@ const Tailbar = React.forwardRef(
         <div className="w-full space-y-1 font-medium">
           <div className="flex w-full flex-row justify-between">
             <div className="text-right">
-              {service === "/gereeSergeeye" ? "Сэргээх огноо:" : "Эхлэх огноо:"}
+              {t(service === "/gereeSergeeye" ? "Сэргээх огноо" : "Эхлэх огноо")}:
             </div>
             {service === "/gereeSergeeye" ? (
               <DatePicker value={sergeekhOgnoo} onChange={setSergeekhOgnoo} />
@@ -289,7 +175,7 @@ const Tailbar = React.forwardRef(
             )}
           </div>
           <div className="flex w-full flex-row justify-between">
-            <div className="text-right">Дуусах огноо:</div>
+            <div className="text-right">{t("Дуусах огноо")}:</div>
             {service === "/gereeSergeeye" ? (
               <DatePicker value={duusakhOgnoo} onChange={setDuusakhOgnoo} />
             ) : (
@@ -369,6 +255,7 @@ function setURLSearchParam(key, value) {
 
 function ZakhialgiinKhyanalt() {
   //#region const
+  const { t, i18n } = useTranslation()
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [shuult, setShuult] = React.useState({
     utga: "Хэвийн",
@@ -408,6 +295,121 @@ function ZakhialgiinKhyanalt() {
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  const sheet = [
+    {
+      title: t("Бүртгэсэн"),
+      dataIndex: "createdAt",
+      ellipsis: true,
+      className: "text-center",
+      align: "center",
+      render(date) {
+        return moment(date).format("YYYY-MM-DD HH:mm");
+      },
+    },
+    {
+      title: t("Гэрээ"),
+      dataIndex: "gereeniiDugaar",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+    },
+    {
+      title: t("Нэр"),
+      dataIndex: "ner",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+    },
+    {
+      title: t("Регистр"),
+      dataIndex: "register",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+    },
+    {
+      title: t("Талбай"),
+      dataIndex: "talbainDugaar",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+    },
+  
+    {
+      title: t("Төрөл"),
+      dataIndex: "turul",
+      align: "center",
+      className: "text-center",
+      ellipsis: true,
+    },
+  
+    {
+      title: t("Талбай /м2/"),
+      dataIndex: "talbainKhemjee",
+      align: "center",
+      className: "text-center",
+      ellipsis: true,
+      render: (talbainKhemjee) => {
+        return `${talbainKhemjee} м2`;
+      },
+      showSorterTooltip: false,
+    },
+    {
+      title: t("Төлбөр"),
+      dataIndex: "sariinTurees",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+      render: (sariinTurees) => {
+        return formatNumber(sariinTurees || 0);
+      },
+      showSorterTooltip: false,
+    },
+  
+    {
+      title: t("Эхлэх"),
+      dataIndex: "gereeniiOgnoo",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+      render: (data) => {
+        return moment(data).format("YYYY-MM-DD");
+      },
+    },
+    {
+      title: "Дуусах хоног",
+      dataIndex: "duusakhOgnoo",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+      render: (duusakhOgnoo) => {
+        return moment(duusakhOgnoo).diff(moment(new Date()), "days");
+      },
+    },
+    {
+      title: t("Дуусах"),
+      dataIndex: "duusakhOgnoo",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+      render: (data) => {
+        return moment(data).format("YYYY-MM-DD");
+      },
+      showSorterTooltip: false,
+      sortOrder: "descend",
+    },
+    {
+      title: "Ажилтан",
+      dataIndex: "burtgesenAjiltaniiNer",
+      className: "text-center",
+      align: "center",
+      ellipsis: true,
+      render: () => {
+        return "Админ";
+      },
+    },
+  ];
 
   useEffect(() => {
     if (JSON.stringify(shuult.utga) !== JSON.stringify("Хэвийн")) {
@@ -538,10 +540,13 @@ function ZakhialgiinKhyanalt() {
     }
     return utga;
   }
+  useEffect(()=> {
+    setShineBagana([])
+  },[i18n.language])
   const columns = useMemo(() => {
     var jagsaalt = [
       {
-        title: "Гэрээ",
+        title: t("Гэрээ"),
         fixed: "left",
         dataIndex: "gereeniiDugaar",
         align: "center",
@@ -571,7 +576,7 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: "Нэр",
+        title: t("Нэр"),
         fixed: "left",
         dataIndex: "ner",
         align: "left",
@@ -583,7 +588,7 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: "Регистр",
+        title: t("Регистр"),
         fixed: "left",
         dataIndex: "register",
         align: "center",
@@ -594,7 +599,7 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
-        title: "Ажилтан",
+        title: t("Ажилтан"),
         dataIndex: "burtgesenAjiltaniiNer",
         align: "center",
         ellipsis: true,
@@ -604,7 +609,7 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Эхлэх",
+        title: t("Эхлэх"),
         dataIndex: "gereeniiOgnoo",
         align: "center",
         ellipsis: true,
@@ -615,7 +620,7 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах",
+        title: t(shuult.utga === "Цуцласан" ? "Цуцлагдсан" : "Дуусах"),
         dataIndex:
           shuult.utga === "Цуцласан" ? "gereeniiTuukhuud" : "duusakhOgnoo",
         align: "center",
@@ -637,7 +642,7 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
-        title: "Талбай",
+        title: t("Талбай"),
         dataIndex: "talbainDugaar",
         align: "center",
         ellipsis: true,
@@ -647,7 +652,7 @@ function ZakhialgiinKhyanalt() {
         sorter: () => 0,
       },
       {
-        title: "Төлбөр",
+        title: t("Төлбөр"),
         dataIndex: "sariinTurees",
         align: "right",
         ellipsis: true,
@@ -661,7 +666,7 @@ function ZakhialgiinKhyanalt() {
       },
 
       {
-        title: "Ангилал",
+        title: t("Ангилал"),
         dataIndex: "segmentuud",
         width: "5rem",
         align: "center",
@@ -696,7 +701,7 @@ function ZakhialgiinKhyanalt() {
         },
       },
       {
-        title: "Өдөр",
+        title: t("Өдөр"),
         dataIndex: "duusakhOgnoo",
         align: "center",
         ellipsis: true,
@@ -841,7 +846,7 @@ function ZakhialgiinKhyanalt() {
         ),
       },
     ];
-  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana, order]);
+  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana, order, t]);
 
   function refresh() {
     gereeniiMedeelelMutate();
@@ -851,13 +856,13 @@ function ZakhialgiinKhyanalt() {
   function gereeTsutsalya(data) {
     setGereeniiTokhirgoo(null);
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        Цуцлах
+        {t("Цуцлах")}
       </Button>,
     ];
     modal({
-      title: "Цуцалсан шалтгаан",
+      title: t("Цуцалсан шалтгаан"),
       icon: <MinusCircleOutlined />,
       content: (
         <Tailbar
@@ -875,14 +880,14 @@ function ZakhialgiinKhyanalt() {
   function gereeSergeeye(data) {
     setGereeniiTokhirgoo(null);
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        Сэргээх
+        {t("Сэргээх")}
       </Button>,
     ];
     modal({
       width: "20vw",
-      title: "Сэргээх шалтгаан",
+      title: t("Сэргээх шалтгаан"),
       icon: <MinusCircleOutlined />,
       content: (
         <Tailbar
@@ -900,14 +905,14 @@ function ZakhialgiinKhyanalt() {
   function gereeSungaya(data) {
     setGereeniiTokhirgoo(null);
     const footer = [
-      <Button onClick={() => sungaltRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => sungaltRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => sungaltRef.current.khadgalya()}>
-        Сунгах
+        {t("Сунгах")}
       </Button>,
     ];
     modal({
       width: global.innerWidth < 768 ? "90vw" : "20vw",
-      title: "Гэрээ сунгах",
+      title: t("Гэрээ сунгах"),
       icon: <MinusCircleOutlined />,
       content: (
         <Sungakh
@@ -995,7 +1000,7 @@ function ZakhialgiinKhyanalt() {
   function gereeOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
       </Space>,
     ];
     modal({
@@ -1096,7 +1101,7 @@ function ZakhialgiinKhyanalt() {
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
-                          {mur.utga}
+                          {t(mur.utga)}
                         </div>
                       </div>
                       <div className="ml-auto">
@@ -1138,7 +1143,7 @@ function ZakhialgiinKhyanalt() {
               setShineBagana={setShineBagana}
               columns={[
                 {
-                  title: "Талбай /м2/",
+                  title: t("Талбай /м2/"),
                   dataIndex: "talbainKhemjee",
                   align: "center",
                   ellipsis: true,
@@ -1150,7 +1155,7 @@ function ZakhialgiinKhyanalt() {
                   sorter: () => 0,
                 },
                 {
-                  title: "Бүртгэсэн",
+                  title: t("Бүртгэсэн"),
                   dataIndex: "createdAt",
                   ellipsis: true,
                   width: "8rem",
@@ -1162,42 +1167,42 @@ function ZakhialgiinKhyanalt() {
                   sorter: () => 0,
                 },
                 {
-                  title: "Хугацаа",
+                  title: t("Хугацаа"),
                   dataIndex: "khugatsaa",
                   align: "center",
                   ellipsis: true,
                   width: "6rem",
                 },
                 {
-                  title: "Давхар",
+                  title: t("Давхар"),
                   dataIndex: "davkhar",
                   align: "center",
                   ellipsis: true,
                   width: "5rem",
                 },
                 {
-                  title: "Төлөлт хийх өдөр",
+                  title: t("Төлөлт хийх өдөр"),
                   dataIndex: "tulukhUdur",
                   align: "center",
                   ellipsis: true,
                   width: "10rem",
                 },
                 {
-                  title: "Утас",
+                  title: t("Утас"),
                   dataIndex: "utas",
                   align: "center",
                   ellipsis: true,
                   width: "6rem",
                 },
                 {
-                  title: "Төрөл",
+                  title: t("Төрөл"),
                   dataIndex: "turul",
                   align: "center",
                   ellipsis: true,
                   width: "6rem",
                 },
                 {
-                  title: "Алданги",
+                  title: t("Алданги"),
                   dataIndex: "aldangiinUldegdel",
                   className: "text-center",
                   align: "center",
@@ -1248,7 +1253,7 @@ function ZakhialgiinKhyanalt() {
         </div>
         <div className="mt-6 flex gap-5 font-medium">
           <div className="flex items-center gap-1">
-            Үндсэн гэрээ :{" "}
+            {t("Үндсэн гэрээ")} :{" "}
             <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
             (
             {gereeToollolt !== undefined
@@ -1257,7 +1262,7 @@ function ZakhialgiinKhyanalt() {
             )
           </div>
           <div className="flex items-center gap-1">
-            Түр гэрээ :{" "}
+            {t("Түр гэрээ")} :{" "}
             <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />
             (
             {gereeToollolt !== undefined

@@ -29,7 +29,7 @@ const formItemLayout = {
 const query = {};
 const searchKeys = ["ner"];
 
-const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id }) => {
+const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id ,t}) => {
   const [valueState, setValueState] = useState(undefined);
   function onValueChange(v) {
     onChange(ashiglaltiinZardal?.jagsaalt.find((a) => a._id === v));
@@ -39,7 +39,7 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id }) => {
   return (
     <Select
       id={id}
-      placeholder="Зардал сонгох"
+      placeholder={t("Зардал сонгох")}
       filterOption={false}
       value={valueState}
       onChange={onValueChange}
@@ -165,6 +165,7 @@ const Zardal = ({
   value,
   barilgiinId,
   formSubmit,
+  t
 }) => {
   const [form] = Form.useForm();
   useEffect(() => {
@@ -240,11 +241,12 @@ const Zardal = ({
     >
       <div className="space-y-5">
         <div className="text-lg font-medium dark:text-white">
-          Ашиглагдах зардлаа сонгоно уу
+          {t("Ашиглагдах зардлаа сонгоно уу")}
         </div>
 
         <div className="w-full bg-white">
           <SongokhKheseg
+          t={t}
             id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}
@@ -279,14 +281,14 @@ const Zardal = ({
               icon={<ArrowLeftOutlined />}
               className="dark:text-white dark:hover:text-black"
             >
-              Түрээсийн талбай
+              {t("Түрээсийн талбай")}
             </Button>
             <Button
               type="primary"
               htmlType="submit"
               icon={<ArrowRightOutlined />}
             >
-              Төлбөр тооцоо
+              {t("Төлбөр тооцоо")}
             </Button>
           </div>
         </Form.Item>

@@ -11,9 +11,11 @@ import { useRouter } from "next/router";
 import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
 import { map } from "lodash";
+import { useTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 
 function index({ token }) {
+  const { t } = useTranslation()
   const { barilgiinId } = useAuth();
   const [turul, setTurul] = useState("sanal");
 
@@ -33,6 +35,11 @@ function index({ token }) {
   }, [ekhlekhOgnoo, turul, barilgiinId]);
 
   const sanal = useSanalGomdol(token, undefined, query);
+
+  const router = useRouter();
+  const { id, notificationTurul } = router.query;
+
+   
 
   const khariltsagchQuery = useMemo(() => {
     return {
@@ -75,6 +82,18 @@ function index({ token }) {
     setTurul(status.utga);
     setKhariltsagch(undefined);
   }
+  useEffect(() => {
+    if (notificationTurul) {
+      setTurul(notificationTurul)
+    }
+  }, [id, notificationTurul]);
+
+  useEffect(() => {
+    if (id) {
+      setKhariltsagch(khariltsagchiinMedeelel?.jagsaalt?.find((mur) => id === mur._id));
+    }
+  }, [id, khariltsagchiinMedeelel.jagsaalt]);
+  
 
   return (
     <Admin
@@ -89,8 +108,10 @@ function index({ token }) {
         style={{ height: "calc(100vh - 8rem)" }}
         className="col-span-12 flex flex-col space-y-5 rounded-2xl  bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl"
       >
-        <div className="mb-2 grid gap-x-5 px-2 md:grid-cols-2 ">
+        <div className="mb-2 w-full grid gap-x-5 px-2">
           <RangePicker
+           className="w-full flex"
+          placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
             locale={local}
             size="middle"
             onChange={setEkhlekhOgnoo}
@@ -113,7 +134,7 @@ function index({ token }) {
                   : "text-gray-50"
               }`}
             >
-              {status.ner}
+              {t(status.ner)}
             </div>
           ))}
         </div>
@@ -190,7 +211,7 @@ function index({ token }) {
                         {mur?.khariltsagchiinNer}
                       </div>
                       <div className="flex  items-center  gap-2 overflow-hidden  font-bold ">
-                        <p>Гарчиг:</p>
+                        <p>{t("Гарчиг")}:</p>
                         <div>{mur?.title}</div>
                       </div>
                     </div>
@@ -257,9 +278,9 @@ function index({ token }) {
               </div>
             </div>
             <div className="mt-3">
-              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="font-medium">{t("Өдрийн мэнд")}</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та харилцагчаа сонгоно уу.
+                {t("Та харилцагчаа сонгоно уу.")}
               </div>
             </div>
           </div>

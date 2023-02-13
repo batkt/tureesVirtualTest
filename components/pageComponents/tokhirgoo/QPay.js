@@ -3,8 +3,10 @@ import { Button, Input, notification } from "antd";
 import useDans from "hooks/useDans";
 import updateMethod from "tools/function/crud/updateMethod";
 import Password from "antd/lib/input/Password";
+import { useTranslation } from "react-i18next";
 
 function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
+  const { t } = useTranslation()
   const [qpayTokhirgoo, setQpayTokhirgoo] = useState(null);
   const [dansTokhirgoo, setDansTokhirgoo] = useState(null);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
@@ -49,13 +51,13 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              QPay тохиргоо
+              {t("QPay тохиргоо")}
             </h2>
           </div>
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Qpay Нэвтрэх нэр</div>
+                <div className="font-medium">{t("Qpay Нэвтрэх нэр")}</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto w-1/3">
@@ -74,7 +76,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Qpay Нэвтрэх нууц үг</div>
+                <div className="font-medium">{t("Qpay Нэвтрэх нууц үг")}</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto w-1/3">
@@ -95,7 +97,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
               }`}
           >
             <Button type="primary" onClick={undseneerKhadgalya}>
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>
@@ -104,28 +106,28 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Данс тохиргоо
+              {t("Данс тохиргоо")}
             </h2>
           </div>
           {dansGaralt?.jagsaalt?.map((dans) => (
             <div className="box">
               <div className="grid grid-cols-5 gap-2 p-5">
                 <div className="">
-                  <div className="font-medium">Данс</div>
+                  <div className="font-medium">{t("Данс")}</div>
                   <div>{dans.dugaar}</div>
                 </div>
                 <div className="">
-                  <div className="font-medium">Дансны нэр</div>
+                  <div className="font-medium">{t("Дансны нэр")}</div>
                   <div>{dans.dansniiNer}</div>
                 </div>
                 <div className="">
-                  <div className="font-medium">Валют</div>
+                  <div className="font-medium">{t("Валют")}</div>
                   <div>{dans.valyut}</div>
                 </div>
                 <div className="col-span-2">
                   <Input
                     defaultValue={dans?.qpayInvoiceCode}
-                    placeholder="Нэхэмжлэхийн дугаар"
+                    placeholder={t("Нэхэмжлэхийн дугаар")}
                     onChange={({ target }) =>
                       setDansTokhirgoo((a) => {
                         const index = a?.findIndex((a) => a._id === dans._id);

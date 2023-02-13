@@ -31,6 +31,8 @@ import createMethod from "tools/function/crud/createMethod";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
 import compareFields from "tools/function/compareFields";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
@@ -71,7 +73,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
           <Select
             style={{ width: "100%" }}
             className=" "
-            placeholder="Төрөл"
+            placeholder={t("Төрөл")}
             name="ner"
             onChange={solikh}
           >
@@ -88,7 +90,7 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
         >
           <Select
             style={{ width: "100%" }}
-            placeholder="Утга"
+            placeholder={t("Утга")}
             onChange={solikhtTurul}
           >
             {turul?.utguud?.map((a) => (
@@ -114,6 +116,7 @@ function KhurunguudCard({
   data,
   baiguullaga,
   formRef,
+  t,
   ...restField
 }) {
   const niitUneRef = useRef();
@@ -170,7 +173,7 @@ function KhurunguudCard({
                   }
                   id={`${name}-upload-image`}
                 >
-                  Зураг оруулах
+                  {t("Зураг оруулах")}
                 </div>
                 <img
                   className={
@@ -191,7 +194,7 @@ function KhurunguudCard({
           <div className="col-span-12 flex flex-col justify-center -space-y-4 lg:col-span-5 lg:space-y-0 ">
             <Form.Item
               {...restField}
-              label="Нэр"
+              label={t("Нэр")}
               name={[name, "ner"]}
               fieldKey={[fieldKey, "ner"]}
               rules={[
@@ -208,12 +211,12 @@ function KhurunguudCard({
                   }
                 }}
                 style={{ width: "100%" }}
-                placeholder="Нэр"
+                placeholder={t("Нэр")}
               />
             </Form.Item>
             <Form.Item
               {...restField}
-              label="Тоо"
+              label={t("Тоо")}
               name={[name, "too"]}
               fieldKey={[fieldKey, "too"]}
               rules={[
@@ -235,7 +238,7 @@ function KhurunguudCard({
                   formRef.current?.setFieldsValue(ads);
                 }}
                 style={{ width: "100%" }}
-                placeholder="Тоо ширхэг"
+                placeholder={t("Тоо ширхэг")}
                 ref={tooRef}
               />
             </Form.Item>
@@ -243,7 +246,7 @@ function KhurunguudCard({
           <div className="col-span-12 flex flex-col justify-center -space-y-4 lg:col-span-5 lg:space-y-0 ">
             <Form.Item
               {...restField}
-              label="Үнэ"
+              label={t("Үнэ")}
               name={[name, "une"]}
               fieldKey={[fieldKey, "une"]}
               rules={[
@@ -266,7 +269,7 @@ function KhurunguudCard({
                   formRef.current?.setFieldsValue(ads);
                 }}
                 style={{ width: "100%" }}
-                placeholder="Нэгж үнэ"
+                placeholder={t("Нэгж үнэ")}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
@@ -275,7 +278,7 @@ function KhurunguudCard({
             </Form.Item>
             <Form.Item
               {...restField}
-              label="Нийт"
+              label={t("Нийт")}
               name={[name, "niit"]}
               fieldKey={[fieldKey, "niit"]}
               rules={[
@@ -293,7 +296,7 @@ function KhurunguudCard({
                   }
                 }}
                 style={{ width: "100%" }}
-                placeholder="Нийт үнэ"
+                placeholder={t("Нийт үнэ")}
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
@@ -312,6 +315,7 @@ function TalbaiBurtgekh({ token }) {
     Aos.init({ once: true });
   });
   const router = useRouter();
+  const { t } = useTranslation()
   const query = router.query;
   const data = JSON.parse(query.data || "{}");
   const barilgiinId = query.barilgiinId;
@@ -611,7 +615,7 @@ function TalbaiBurtgekh({ token }) {
             <div data-aos="fade-right" data-aos-duration="1000">
               <Form.Item
                 name="kod"
-                label="Дугаар"
+                label={t("Дугаар")}
                 rules={[
                   {
                     required: true,
@@ -624,7 +628,7 @@ function TalbaiBurtgekh({ token }) {
                   type="text"
                   allowClear
                   style={{ width: "100%" }}
-                  placeholder="Дугаар"
+                  placeholder={t("Дугаар")}
                   value={talbaiState.kod}
                   onChange={(e) => onChange("kod", e.target.value)}
                 ></Input>
@@ -636,7 +640,7 @@ function TalbaiBurtgekh({ token }) {
               data-aos-delay="100"
             >
               <Form.Item
-                label="Хэмжээ"
+                label={t("Хэмжээ")}
                 name="talbainKhemjee"
                 rules={[
                   {
@@ -662,7 +666,7 @@ function TalbaiBurtgekh({ token }) {
             >
               <Form.Item
                 name="talbainNegjUne"
-                label="Нэгж үнэ"
+                label={t("Нэгж үнэ")}
                 rules={[
                   {
                     required: true,
@@ -673,7 +677,7 @@ function TalbaiBurtgekh({ token }) {
                 <InputNumber
                   onKeyUp={focuser}
                   style={{ width: "100%" }}
-                  placeholder="Нэгж үнэ"
+                  placeholder={t("Нэгж үнэ")}
                   value={talbaiState.talbainNegjUne}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -690,7 +694,7 @@ function TalbaiBurtgekh({ token }) {
             >
               <Form.Item
                 name="talbainNiitUne"
-                label="Нийт үнэ"
+                label={t("Нийт үнэ")}
                 rules={[
                   {
                     required: true,
@@ -701,7 +705,7 @@ function TalbaiBurtgekh({ token }) {
                 <InputNumber
                   onKeyUp={focuser}
                   style={{ width: "100%" }}
-                  placeholder="Нийт үнэ"
+                  placeholder={t("Нийт үнэ")}
                   value={talbaiState.talbainNiitUne}
                   formatter={(value) =>
                     `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -719,7 +723,7 @@ function TalbaiBurtgekh({ token }) {
             >
               <Form.Item
                 name="davkhar"
-                label="Давхар"
+                label={t("Давхар")}
                 rules={[
                   {
                     required: true,
@@ -729,7 +733,7 @@ function TalbaiBurtgekh({ token }) {
               >
                 <Select
                   style={{ width: "100%" }}
-                  placeholder="Давхар"
+                  placeholder={t("Давхар")}
                   value={talbaiState.davkhar}
                   onChange={(e) => {
                     onChange("davkhar", e);
@@ -748,7 +752,7 @@ function TalbaiBurtgekh({ token }) {
               </Form.Item>
               <Form.Item
                 name="niitiinTalbaiEsekh"
-                label="Нийтийн талбай эсэх"
+                label={t("Нийтийн талбай эсэх")}
                 hidden={data.idevkhiteiEsekh && !data.niitiinTalbaiEsekh}
               >
                 <Switch
@@ -784,19 +788,19 @@ function TalbaiBurtgekh({ token }) {
                           onClick={() => add()}
                           block
                         >
-                          Ялгах утга оруулах
+                          {t("Ялгах утга оруулах")}
                         </Button>
                       </div>
                     </>
                   )}
                 </Form.List>
               </div>
-              <Form.Item name="tailbar" label="Тайлбар">
+              <Form.Item name="tailbar" label={t("Тайлбар")}>
                 <TextArea
                   onKeyDown={focuser}
                   style={{ width: "100%" }}
                   rows={4}
-                  placeholder="Тайлбар"
+                  placeholder={t("Тайлбар")}
                   value={talbaiState.tailbar}
                   onChange={(e) => onChange("tailbar", e.target.value)}
                 ></TextArea>
@@ -807,11 +811,11 @@ function TalbaiBurtgekh({ token }) {
                     <span className="mr-2 text-white">
                       <SettingOutlined />
                     </span>
-                    <span className="text-white ">План зураг тохируулах</span>
+                    <span className="text-white ">{t("План зураг тохируулах")}</span>
                   </Button>
                   <Drawer
                     width={"100vw"}
-                    title="План зураг тохируулах"
+                    title={t("План зураг тохируулах")}
                     placement="left"
                     onClose={onClose}
                     visible={open}
@@ -842,7 +846,7 @@ function TalbaiBurtgekh({ token }) {
                     onClick={() => formRef.current.submit()}
                     type="primary"
                   >
-                    Хадгалах
+                    {t("Хадгалах")}
                   </Button>
                 </div>
               </div>
@@ -850,7 +854,7 @@ function TalbaiBurtgekh({ token }) {
           </div>
         </div>
         <div className="box col-span-12 p-5 md:col-span-12  xl:col-span-8">
-          <Divider className="pb-5">Хөрөнгийн бүртгэл</Divider>
+          <Divider className="pb-5">{t("Хөрөнгийн бүртгэл")}</Divider>
           <div className="">
             <Form.List name="khurunguud">
               {(fields, { add, remove }) => (
@@ -862,6 +866,7 @@ function TalbaiBurtgekh({ token }) {
                   >
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <KhurunguudCard
+                      t={t}
                         key={key}
                         name={name}
                         fieldKey={fieldKey}
@@ -883,7 +888,7 @@ function TalbaiBurtgekh({ token }) {
                       block
                       icon={<PlusOutlined />}
                     >
-                      Хөрөнгө бүртгэх
+                     {t("Хөрөнгө бүртгэх")}
                     </Button>
                   </div>
                 </>

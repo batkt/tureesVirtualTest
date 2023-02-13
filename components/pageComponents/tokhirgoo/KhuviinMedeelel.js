@@ -4,10 +4,12 @@ import moment from "moment";
 import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
+import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
 function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setSongogdsonTsonkhniiIndex }) {
+  const { t } = useTranslation()
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -36,7 +38,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
       <div className="box lg:mt-5">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-            Хувийн мэдээлэл
+            {t("Хувийн мэдээлэл")}
           </h2>
         </div>
         <div className="p-5">
@@ -45,13 +47,13 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">Овог</label>
+                    <label className="form-label">{t("Овог")}</label>
                     <Input defaultValue={ajiltan.ovog} disabled />
                   </div>
                 </div>
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">Нэр</label>
+                    <label className="form-label">{t("Нэр")}</label>
                     <Input defaultValue={ajiltan.ner} disabled />
                   </div>
                 </div>
@@ -59,13 +61,13 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">Регистр</label>
+                    <label className="form-label">{t("Регистр")}</label>
                     <Input defaultValue={ajiltan.register} disabled />
                   </div>
                 </div>
                 <div className="col-span-12 xl:col-span-6">
                   <div className="mt-3">
-                    <label className="form-label">Ажилд орсон огноо</label>
+                    <label className="form-label">{t("Ажилд орсон огноо")}</label>
                     <Input
                       defaultValue={moment(ajiltan.ajildOrsonOgnoo).format(
                         "YYYY-MM-DD"
@@ -78,7 +80,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="xxl:col-span-6 col-span-12">
                   <div className="mt-3">
-                    <label className="form-label">Утасны дугаар</label>
+                    <label className="form-label">{t("Утасны дугаар")}</label>
                     <Input
                       name="utas"
                       placeholder="Input text"
@@ -99,7 +101,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               </div>
               <div className="mt-3">
                 <Button type="primary" onClick={khadgalakh}>
-                  Хадгалах
+                  {t("Хадгалах")}
                 </Button>
               </div>
             </div>
@@ -141,7 +143,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                   </div>
                 </div>
                 <div className="relative mx-auto mt-5 cursor-pointer">
-                  <Button type="primary">Зураг солих</Button>
+                  <Button type="primary">{t("Зураг солих")}</Button>
                   <input
                     type="file"
                     name="zurag"

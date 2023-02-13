@@ -38,6 +38,7 @@ import { useRouter } from "next/router";
 import CardList from "components/cardList";
 import AjiltanTile from "components/pageComponents/ajiltan/AjiltanTile";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 const iconColor = { fontSize: "18px" };
 
@@ -48,7 +49,7 @@ function AjiltanBurtgel({ token }) {
   const formRef = useRef();
   const zurag = useRef();
   const empty = useRef();
-
+  const { t } = useTranslation()
   const router = useRouter();
   const { ajiltan, barilgiinId } = useAuth();
   const {
@@ -254,7 +255,7 @@ function AjiltanBurtgel({ token }) {
                 autoFocus={true}
                 type="text"
                 allowClear
-                placeholder="Овог"
+                placeholder={t("Овог")}
                 value={ajiltanState.ovog}
                 prefix={<UserOutlined style={iconColor} />}
                 onChange={(e) => onChange("ovog", e.target.value)}
@@ -281,7 +282,7 @@ function AjiltanBurtgel({ token }) {
                 onKeyUp={focuser}
                 type="text"
                 allowClear
-                placeholder="Нэр"
+                placeholder={t("Нэр")}
                 value={ajiltanState.ner}
                 prefix={<UserOutlined style={iconColor} />}
                 onChange={(e) => onChange("ner", e.target.value)}
@@ -310,7 +311,7 @@ function AjiltanBurtgel({ token }) {
                 onKeyUp={focuser}
                 allowClear
                 maxLength={10}
-                placeholder="Регистр"
+                placeholder={t("Регистр")}
                 value={ajiltanState.register}
                 onChange={(e) =>
                   onChange("register", e?.target?.value?.toUpperCase())
@@ -339,7 +340,7 @@ function AjiltanBurtgel({ token }) {
                 id="input4"
                 onKeyUp={focuser}
                 allowClear
-                placeholder="Хаяг"
+                placeholder={t("Хаяг")}
                 value={ajiltanState.khayag}
                 onChange={(e) => onChange("khayag", e.target.value)}
                 prefix={<HomeOutlined style={iconColor} />}
@@ -368,7 +369,7 @@ function AjiltanBurtgel({ token }) {
                 id="input5"
                 onKeyUp={focuser}
                 allowClear
-                placeholder="Утас"
+                placeholder={t("Утас")}
                 value={ajiltanState.utas}
                 onChange={(e) => onChange("utas", e.target.value)}
                 prefix={<PhoneOutlined style={iconColor} />}
@@ -393,7 +394,7 @@ function AjiltanBurtgel({ token }) {
               <DatePicker
                 id="input6"
                 style={{ width: "100%" }}
-                placeholder="Ажилд орсон огноо"
+                placeholder={t("Ажилд орсон огноо")}
                 onChange={(v) => {
                   onChange("ajildOrsonOgnoo", v);
                   document.getElementById("input7").focus();
@@ -421,7 +422,7 @@ function AjiltanBurtgel({ token }) {
                 id="input7"
                 onKeyDown={focuser}
                 allowClear
-                placeholder="Албан тушаал"
+                placeholder={t("Албан тушаал")}
                 value={ajiltanState.albanTushaal}
                 onChange={(e) => onChange("albanTushaal", e.target.value)}
                 prefix={<ContactsOutlined style={iconColor} />}
@@ -429,7 +430,7 @@ function AjiltanBurtgel({ token }) {
             </Form.Item>
           </div>
           <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="900">
-            <Divider orientation="left">Нэвтрэх нэр нууц үг</Divider>
+            <Divider orientation="left">{t("Нэвтрэх нэр нууц үг")}</Divider>
             <Form.Item
               autoComplete="off"
               name="nevtrekhNer"
@@ -444,7 +445,7 @@ function AjiltanBurtgel({ token }) {
                 autoComplete="off"
                 onKeyDown={focuser}
                 id="input8"
-                placeholder="Нэвтрэх нэр"
+                placeholder={t("Нэвтрэх нэр")}
                 value={ajiltanState.nevtrekhNer}
                 onChange={(e) => onChange("nevtrekhNer", e.target.value)}
                 prefix={<MailOutlined style={iconColor} />}
@@ -467,7 +468,7 @@ function AjiltanBurtgel({ token }) {
               <Input.Password
                 onKeyDown={focuser}
                 id="input9"
-                placeholder="Нууц үг"
+                placeholder={t("Нууц үг")}
                 value={ajiltanState.nuutsUg}
                 onChange={(e) => onChange("nuutsUg", e.target.value)}
                 prefix={<SecurityScanOutlined style={iconColor} />}
@@ -479,7 +480,7 @@ function AjiltanBurtgel({ token }) {
                 onClick={() => formRef.current.submit()}
                 type="primary"
               >
-                Хадгалах
+                {t("Хадгалах")}
               </Button>
             </Form.Item>
           </div>
@@ -523,22 +524,22 @@ function AjiltanBurtgel({ token }) {
                   index +
                   1,
               },
-              { title: "Нэр", align: "center", dataIndex: "ner", ellipsis: true, render(a) { return <div className="w-full text-left">{a}</div> } },
+              { title: t("Нэр"), align: "center", dataIndex: "ner", ellipsis: true, render(a) { return <div className="w-full text-left">{a}</div> } },
               {
-                title: "Регистр",
+                title: t("Регистр"),
                 dataIndex: "register",
                 ellipsis: true,
                 align: "center",
               },
-              { title: "Хаяг", dataIndex: "khayag", ellipsis: true, align: "center", render(a) { return <div className="w-full text-left">{a}</div> } },
+              { title: t("Хаяг"), dataIndex: "khayag", ellipsis: true, align: "center", render(a) { return <div className="w-full text-left">{a}</div> } },
               {
-                title: "Утас",
+                title: t("Утас"),
                 dataIndex: "utas",
                 ellipsis: true,
                 align: "center",
               },
               {
-                title: "Ажилд орсон огноо",
+                title: t("Ажилд орсон огноо"),
                 dataIndex: "ajildOrsonOgnoo",
                 ellipsis: true,
                 align: "center",
@@ -568,14 +569,14 @@ function AjiltanBurtgel({ token }) {
                               onClick={() => zasya(data)}
                             >
                               <EditOutlined style={{ fontSize: "18px" }} />
-                              <label>Засах</label>
+                              <label>{t("Засах")}</label>
                             </a>
                             <a
                               className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                               onClick={() => tokhiruulya(data)}
                             >
                               <SettingOutlined style={{ fontSize: "18px" }} />
-                              <label>Эрх</label>
+                              <label>{t("Эрх")}</label>
                             </a>
                             <Popconfirm
                               title="Ажилтан устгах уу?"
@@ -587,7 +588,7 @@ function AjiltanBurtgel({ token }) {
                                 <DeleteOutlined
                                   style={{ fontSize: "18px", color: "red" }}
                                 />
-                                <label>Устгах</label>
+                                <label>{t("Устгах")}</label>
                               </a>
                             </Popconfirm>
                           </div>
@@ -603,7 +604,7 @@ function AjiltanBurtgel({ token }) {
             ]}
           />
         </div>
-        <p className="font-medium md:hidden">Ажилтны жагсаалт</p>
+        <p className="font-medium md:hidden">{t("Ажилтны жагсаалт")}</p>
         <CardList
           neesenEsekh={neesenEsekh}
           keyValue="ajiltan"

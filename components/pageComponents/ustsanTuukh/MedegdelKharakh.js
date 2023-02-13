@@ -2,7 +2,9 @@ import React, { useEffect, useImperativeHandle } from "react";
 import { Form, Modal } from "antd";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
+import { useTranslation } from "react-i18next";
 function MedegdelKharakh({ data, destroy }, ref) {
+  const { t } = useTranslation()
   const [form] = Form.useForm();
 
   useImperativeHandle(
@@ -41,24 +43,24 @@ function MedegdelKharakh({ data, destroy }, ref) {
         <div>
           {!!data.object.ner ? (
             <div className="flex w-full justify-between ">
-              <div> Нэр:</div>
+              <div> {t("Нэр")}:</div>
               <div> {data.object.ner} </div>
             </div>
           ) : (
             <div className="flex justify-between">
-              <div> Тайлбар:</div>
+              <div> {t("Тайлбар")}:</div>
               <div> {data.object.tailbar}</div>{" "}
             </div>
           )}
         </div>
 
         <div className="flex justify-between">
-          <div>Хийсэн ажилтан: </div>
+          <div>{t("Хийсэн ажилтан")}: </div>
           <div>{data.object.guilgeeKhiisenAjiltniiNer || data.ajiltniiNer}</div>
         </div>
 
         <div className="flex justify-between">
-          <div>Хийсэн огноо:</div>
+          <div>{t("Хийсэн огноо")}:</div>
           <div>
             {moment(
               data.object.guilgeeKhiisenOgnoo || data.object.createdAt
@@ -67,7 +69,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
         </div>
         {data.object.tulsunAldangi ? (
           <div className="flex justify-between">
-            <div>Төлсөн алдаги :</div>
+            <div>{t("Төлсөн алдаги")} :</div>
             <div
               className={`${
                 data.object.tulsunAldangi > 0
@@ -83,7 +85,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
         )}
         {data.object.tulsunDun ? (
           <div className="flex justify-between">
-            <div>Төлсөн дүн :</div>
+            <div>{t("Төлсөн дүн")} :</div>
             <div
               className={`${
                 data.object.tulsunDun > 0
@@ -99,7 +101,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
         )}
         {data.object.tulukhAldangi ? (
           <div className="flex justify-between">
-            <div>Төлөх алдаги :</div>
+            <div>{t("Төлөх алдаги")} :</div>
             <div
               className={`${
                 data.object.tulukhAldangi > 0
@@ -115,7 +117,7 @@ function MedegdelKharakh({ data, destroy }, ref) {
         )}
         {data.object.tulukhDun ? (
           <div className="flex justify-between">
-            <div> Төлөх дүн: </div>
+            <div> {t("Төлөх дүн")}: </div>
             <div
               className={`${
                 data.object.tulukhDun > 0

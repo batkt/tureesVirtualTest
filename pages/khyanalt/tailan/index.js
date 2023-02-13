@@ -11,6 +11,7 @@ import { useAuth } from "services/auth";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 const tailanguud = [
   {
@@ -38,6 +39,7 @@ function Chart({
   defaultTailan = "guitsetgeliinTailanAvya",
   setWaiting,
 }) {
+  const { t } = useTranslation()
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
@@ -69,15 +71,15 @@ function Chart({
     <div className="box col-span-12 p-2 md:col-span-6">
       <div className="flex w-full flex-col space-y-1 pb-5 md:flex-row md:justify-between md:space-y-0">
         <div className="flex flex-col gap-1 md:flex-row">
-          <Select placeholder="Тайлан" onChange={setTailan} value={tailan}>
+          <Select placeholder={t("Тайлан")} onChange={setTailan} value={tailan}>
             {tailanguud.map((a) => (
               <Select.Option key={a.service} value={a.service}>
-                {a.ner}
+                {t(a.ner)}
               </Select.Option>
             ))}
           </Select>
           <Select
-            placeholder="График төрөл сонгох"
+            placeholder={t("График төрөл сонгох")}
             value={tailanTurul}
             onChange={setTailanTurul}
           >
@@ -87,12 +89,12 @@ function Chart({
               { val: "barHorizontal", lab: "Багана/хэвтээ/" },
             ].map((a) => (
               <Select.Option key={a.val} value={a.val}>
-                {a.lab}
+                {t(a.lab)}
               </Select.Option>
             ))}
           </Select>
           <Select
-            placeholder="График төрөл сонгох"
+            placeholder={t("График төрөл сонгох")}
             value={nariivchlal}
             onChange={setNariivchlal}
           >
@@ -102,21 +104,22 @@ function Chart({
               { val: "year", lab: "Жил" },
             ].map((a) => (
               <Select.Option key={a.val} value={a.val}>
-                {a.lab}
+                {t(a.lab)}
               </Select.Option>
             ))}
           </Select>
         </div>
         <DatePicker.RangePicker
+        placeholder={[t("Эхлэх огноо"), t("Дуусах огноо")]}
           locale={local}
           value={ognoo}
           onChange={setOgnoo}
         />
       </div>
-      {tailanTurul === "line" && <LineChart data={tailanGaralt || {}} />}
-      {tailanTurul === "bar" && <VerticarlBarChart data={tailanGaralt || {}} />}
+      {tailanTurul === "line" && <LineChart t={t} data={tailanGaralt || {}} />}
+      {tailanTurul === "bar" && <VerticarlBarChart t={t} data={tailanGaralt || {}} />}
       {tailanTurul === "barHorizontal" && (
-        <HorizontalBarChart data={tailanGaralt || {}} />
+        <HorizontalBarChart t={t} data={tailanGaralt || {}} />
       )}
       <div className="flex flex-col items-center space-y-2">
         <div className="table w-full">
@@ -125,7 +128,7 @@ function Chart({
               key={`${defaultTailan}${a.ner}`}
               className="table-row rounded-md font-normal"
             >
-              <div className="table-cell w-1/12 p-1">{a.ner}</div>
+              <div className="table-cell w-1/12 p-1">{t(a.ner)}</div>
               <div className="table-cell w-9/12 p-1">
                 <div className="flex w-full flex-row items-center space-x-2">
                   <div className="w-full">
@@ -171,12 +174,13 @@ function AjiltanBurtgel({ token }) {
     <Admin
       title="Тайлан"
       khuudasniiNer="tailan"
-      className="p-0 md:p-4"
+      className="p-0 md:p-2"
       tsonkhniiId={"61c2c75d1c2830c4e6f90ce9"}
       loading={waiting}
     >
+      <div className="grid col-span-12 grid-cols-12 gap-5 overflow-y-auto md:p-2" style={{height: "calc( 100vh - 7rem )"}}>
       <div
-        className="box col-span-12 p-2 md:col-span-6"
+        className="box col-span-12 p-2 md:col-span-6"        
         data-aos="fade-down-right"
         data-aos-duration="1000"
       >
@@ -226,6 +230,7 @@ function AjiltanBurtgel({ token }) {
           defaultTurul="line"
           defaultTailan="ashigiinTailanAvya"
         />
+      </div>
       </div>
     </Admin>
   );

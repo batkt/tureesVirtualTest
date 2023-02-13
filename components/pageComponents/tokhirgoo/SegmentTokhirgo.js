@@ -12,6 +12,7 @@ import SegmentBurtgekh from "./SegmentBurtgekh";
 import useJagsaalt from "hooks/useJagsaalt";
 import CardList from "components/cardList";
 import deleteMethod from "tools/function/crud/deleteMethod";
+import { useTranslation } from "react-i18next";
 
 function Tile({ zasya, token, ...a }) {
   const segment = useJagsaalt("/segment");
@@ -66,17 +67,18 @@ function Tile({ zasya, token, ...a }) {
 
 function segmentiinTokhirgoo({ token }) {
   const ref = React.useRef(null);
+  const { t } = useTranslation()
   const segment = useJagsaalt("/segment");
 
   function segmentBurtegye(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Ялгаж бүртгэх",
+      title: t("Ялгаж бүртгэх"),
       icon: <PlusOutlined />,
       content: (
         <SegmentBurtgekh
@@ -97,7 +99,7 @@ function segmentiinTokhirgoo({ token }) {
           className="dark:border-dark-5 flex items-center  justify-end border-b border-gray-200 px-5 pt-5 pb-2"
           onClick={() => segmentBurtegye()}
         >
-          <Button type="primary">Ялгаж бүртгэх</Button>
+          <Button type="primary">{t("Ялгаж бүртгэх")}</Button>
         </div>
         <div hidden={!segment.jagsaalt}>
           <CardList

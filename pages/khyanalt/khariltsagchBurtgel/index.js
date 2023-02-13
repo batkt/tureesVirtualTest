@@ -58,6 +58,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import { TbBoxMultiple } from "react-icons/tb";
 import { GiBackwardTime } from "react-icons/gi";
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
+import { useTranslation } from "react-i18next";
 
 const iconColor = { fontSize: "18px" };
 
@@ -77,6 +78,7 @@ function YalgakhUtga({
   fieldKey,
   name,
   remove,
+  t,
   ...restField
 }) {
   const segment = useJagsaalt("/segment", query);
@@ -114,7 +116,7 @@ function YalgakhUtga({
           <Select
             style={{ width: "100%" }}
             className=" "
-            placeholder="Нэр"
+            placeholder={t("Нэр")}
             name="ner"
             onChange={solikh}
             filterOption={(o) => o}
@@ -134,7 +136,7 @@ function YalgakhUtga({
         >
           <Select
             style={{ width: "100%" }}
-            placeholder="Утга"
+            placeholder={t("Утга")}
             onChange={solikhtTurul}
           >
             {turul?.utguud?.map((a, i) => (
@@ -169,6 +171,7 @@ function AjiltanBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
+  const { t } = useTranslation()
   const formRef = useRef();
   const excelref = useRef();
   const [resetForm] = Form.useForm();
@@ -655,7 +658,7 @@ function AjiltanBurtgel({ token }) {
                 autoFocus={true}
                 style={{ width: "100%" }}
                 value={khariltsagchState.turul}
-                placeholder={"Төрөл сонгох"}
+                placeholder={t("Төрөл сонгох")}
                 onChange={turulSongokh}
               >
                 <Option value="Иргэн">Иргэн</Option>
@@ -682,7 +685,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
-                  placeholder="Овог"
+                  placeholder={t("Овог")}
                   value={khariltsagchState.ovog}
                   prefix={<UserOutlined style={iconColor} />}
                   onChange={(e) => onChange("ovog", e.target.value)}
@@ -708,7 +711,7 @@ function AjiltanBurtgel({ token }) {
                 onKeyUp={focuser}
                 type="text"
                 allowClear
-                placeholder="Нэр"
+                placeholder={t("Нэр")}
                 value={khariltsagchState.ner}
                 prefix={<UserOutlined style={iconColor} />}
                 onChange={(e) => onChange("ner", e.target.value)}
@@ -738,7 +741,7 @@ function AjiltanBurtgel({ token }) {
                 onKeyUp={focuser}
                 allowClear
                 maxLength={10}
-                placeholder="Регистр"
+                placeholder={t("Регистр")}
                 value={khariltsagchState.register}
                 onChange={(e) =>
                   onChange("register", e?.target?.value?.toUpperCase())
@@ -768,7 +771,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
-                  placeholder="Захирлын Овог"
+                  placeholder={t("Захирлын Овог")}
                   value={khariltsagchState.zakhirliinOvog}
                   prefix={<UserOutlined style={iconColor} />}
                   onChange={(e) => onChange("zakhirliinOvog", e.target.value)}
@@ -795,7 +798,7 @@ function AjiltanBurtgel({ token }) {
                   onKeyUp={focuser}
                   type="text"
                   allowClear
-                  placeholder="Захирлын нэр"
+                  placeholder={t("Захирлын нэр")}
                   value={khariltsagchState.zakhirliinNer}
                   prefix={<UserOutlined style={iconColor} />}
                   onChange={(e) => onChange("zakhirliinNer", e.target.value)}
@@ -821,7 +824,7 @@ function AjiltanBurtgel({ token }) {
               <Input
                 onKeyUp={focuser}
                 allowClear
-                placeholder="Хаяг"
+                placeholder={t("Хаяг")}
                 value={khariltsagchState.khayag}
                 onChange={(e) => onChange("khayag", e.target.value)}
                 prefix={<HomeOutlined style={iconColor} />}
@@ -840,6 +843,7 @@ function AjiltanBurtgel({ token }) {
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div key={key}>
                       <YalgakhUtga
+                      t={t}
                         key={key}
                         khariltsagchState={khariltsagchState}
                         name={name}
@@ -857,7 +861,7 @@ function AjiltanBurtgel({ token }) {
                       onClick={() => add()}
                       block
                     >
-                      Ялгах утга оруулах
+                      {t("Ялгах утга оруулах")}
                     </Button>
                   </Form.Item>
                 </>
@@ -909,7 +913,7 @@ function AjiltanBurtgel({ token }) {
                           maxLength={8}
                           type="number"
                           className="appearance-none"
-                          placeholder={"Утасны дугаар " + (field.name + 1)}
+                          placeholder={t("Утасны дугаар") + " " + (field.name + 1)}
                           onChange={({ target }) => {
                             setkhariltsagchState((a) => {
                               _.set(a, "utas." + field.name, target.value);
@@ -940,7 +944,7 @@ function AjiltanBurtgel({ token }) {
                       onClick={() => add()}
                       block
                     >
-                      Утасны дугаар нэмэх
+                      {t("Утасны дугаар нэмэх")}
                     </Button>
                     <Form.ErrorList errors={errors} />
                   </Form.Item>
@@ -965,7 +969,7 @@ function AjiltanBurtgel({ token }) {
               <Input
                 onKeyUp={focuser}
                 type="email"
-                placeholder="И-мэйл хаяг"
+                placeholder={t("И-мэйл")}
                 value={khariltsagchState.email}
                 onChange={(e) => onChange("mail", e.target.value)}
                 prefix={<MailOutlined style={iconColor} />}
@@ -982,7 +986,7 @@ function AjiltanBurtgel({ token }) {
                 onKeyDown={focuser}
                 style={{ width: "100%" }}
                 rows={4}
-                placeholder="Тэмдэглэл"
+                placeholder={t("Тэмдэглэл")}
                 onChange={(e) => onChange("temdeglel", e.target.value)}
               ></TextArea>
             </Form.Item>
@@ -1001,7 +1005,7 @@ function AjiltanBurtgel({ token }) {
                 }}
                 type={"primary"}
               >
-                Хадгалах
+                {t("Хадгалах")}
               </Button>
             </Form.Item>
           </div>
@@ -1031,7 +1035,7 @@ function AjiltanBurtgel({ token }) {
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
-                          {mur.utga}
+                          {t(mur.utga)}
                         </div>
                       </div>
                       <div className="ml-auto">
@@ -1059,7 +1063,7 @@ function AjiltanBurtgel({ token }) {
                 style={{ marginTop: "10px" }}
                 onClick={() => setUtasKhariltsagchNmekh(!utasKhariltsagchNmekh)}
               >
-                Харилцагч нэмэх
+                {t("Харилцагч нэмэх")}
               </Button>
             </div>
             <Popover
@@ -1070,7 +1074,7 @@ function AjiltanBurtgel({ token }) {
                     onClick={talbaiOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>Оруулах</label>
+                    <label>{t("Оруулах")}</label>
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
@@ -1081,7 +1085,7 @@ function AjiltanBurtgel({ token }) {
                         .addSheet("харилцагч")
                         .addColumns([
                           {
-                            title: "Төрөл",
+                            title: t("Төрөл"),
                             dataIndex: "turul",
                             align: "center",
                             ellipsis: true,
@@ -1090,33 +1094,33 @@ function AjiltanBurtgel({ token }) {
                                 <Tag
                                   color={turul === "Иргэн" ? "blue" : "orange"}
                                 >
-                                  {turul}
+                                  {t(turul)}
                                 </Tag>
                               );
                             },
                           },
                           {
-                            title: "Регистр",
+                            title: t("Регистр"),
                             dataIndex: "register",
                             ellipsis: true,
                           },
-                          { title: "Нэр", dataIndex: "ner", ellipsis: true },
+                          { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
                           {
-                            title: "Хаяг",
+                            title: t("Хаяг"),
                             dataIndex: "khayag",
                             ellipsis: true,
                             width: "5rem",
                           },
 
                           {
-                            title: "И-мэйл",
+                            title: t("И-мэйл"),
                             dataIndex: "mail",
                             ellipsis: true,
                             width: "5rem",
                             align: "center",
                           },
                           {
-                            title: "Төлөв",
+                            title: t("Төлөв"),
                             dataIndex: "tuluv",
                             ellipsis: true,
                             align: "center",
@@ -1125,7 +1129,7 @@ function AjiltanBurtgel({ token }) {
                             },
                           },
                           {
-                            title: "Бүртгэгдсэн",
+                            title: t("Бүртгэгдсэн"),
                             dataIndex: "createdAt",
                             ellipsis: true,
                             render: (data) => {
@@ -1138,7 +1142,7 @@ function AjiltanBurtgel({ token }) {
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}
@@ -1196,7 +1200,7 @@ function AjiltanBurtgel({ token }) {
                   1,
               },
               {
-                title: "Төрөл",
+                title: t("Төрөл"),
                 width: "4rem",
                 dataIndex: "turul",
                 align: "center",
@@ -1216,7 +1220,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Регистр",
+                title: t("Регистр"),
                 dataIndex: "register",
                 width: "6rem",
                 align: "center",
@@ -1224,14 +1228,14 @@ function AjiltanBurtgel({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Нэр",
+                title: t("Нэр"),
                 width: "8rem",
                 dataIndex: "ner",
                 showSorterTooltip: false,
                 sorter: () => 0,
               },
               {
-                title: "Утас",
+                title: t("Утас"),
                 dataIndex: "utas",
                 width: "5rem",
                 align: "center",
@@ -1241,7 +1245,7 @@ function AjiltanBurtgel({ token }) {
               },
 
               {
-                title: "Төлөв",
+                title: t("Төлөв"),
                 width: "5rem",
                 dataIndex: "idevkhiteiEsekh",
                 align: "center",
@@ -1255,7 +1259,7 @@ function AjiltanBurtgel({ token }) {
                       }
                       color={idevkhiteiEsekh === true ? "green" : "red"}
                     >
-                      {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
+                      {t(idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй")}
                     </Tag>
                   );
                 },
@@ -1264,7 +1268,7 @@ function AjiltanBurtgel({ token }) {
               },
 
               {
-                title: "Бүртгэгдсэн",
+                title: t("Бүртгэгдсэн"),
                 dataIndex: "createdAt",
                 width: "6rem",
                 align: "center",
@@ -1273,7 +1277,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Ангилал",
+                title: t("Ангилал"),
                 dataIndex: "segmentuud",
                 width: "5rem",
                 align: "center",
@@ -1308,7 +1312,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "И-мэйл",
+                title: t("И-мэйл"),
                 dataIndex: "mail",
                 width: "4.5rem",
                 align: "center",
@@ -1326,7 +1330,7 @@ function AjiltanBurtgel({ token }) {
                 },
               },
               {
-                title: "Хаяг",
+                title: t("Хаяг"),
                 dataIndex: "khayag",
                 width: "3.5rem",
                 align: "center",
@@ -1345,7 +1349,7 @@ function AjiltanBurtgel({ token }) {
               },
 
               {
-                title: "Түүх",
+                title: t("Түүх"),
                 align: "center",
                 width: "3.5rem",
                 render: (data) => {
@@ -1375,12 +1379,12 @@ function AjiltanBurtgel({ token }) {
                                 1,
                             },
                             {
-                              title: "Талбай",
+                              title: t("Талбай"),
                               dataIndex: "talbainDugaar",
                               ellipsis: true,
                             },
                             {
-                              title: "Эхлэх",
+                              title: t("Эхлэх"),
                               dataIndex: "gereeniiOgnoo",
                               ellipsis: true,
                               render: (gereeniiOgnoo) => {
@@ -1390,7 +1394,7 @@ function AjiltanBurtgel({ token }) {
                               },
                             },
                             {
-                              title: "Дуусах",
+                              title: t("Дуусах"),
                               dataIndex: "duusakhOgnoo",
                               ellipsis: true,
                               render: (duusakhOgnoo) => {
@@ -1400,17 +1404,17 @@ function AjiltanBurtgel({ token }) {
                               },
                             },
                             {
-                              title: "Хугацаа",
+                              title: t("Хугацаа"),
                               dataIndex: "khugatsaa",
                               ellipsis: true,
                             },
                             {
-                              title: "Хэмжээ/m2/",
+                              title: t("Хэмжээ/m2/"),
                               dataIndex: "talbainKhemjee",
                               ellipsis: true,
                             },
                             {
-                              title: "Сарын түрээс",
+                              title: t("Сарын түрээс"),
                               dataIndex: "sariinTurees",
                               ellipsis: true,
                               render: (sariinTurees) => {
@@ -1418,7 +1422,7 @@ function AjiltanBurtgel({ token }) {
                               },
                             },
                             {
-                              title: "Нийт үнэ",
+                              title: t("Нийт үнэ"),
                               dataIndex: "talbainNiitUne",
                               ellipsis: true,
                               render: (talbainNiitUne) => {
@@ -1468,7 +1472,7 @@ function AjiltanBurtgel({ token }) {
                                 className="text-green-600"
                                 style={{ fontSize: "18px" }}
                               />
-                              <label className="text-green-600">Нууц үг</label>
+                              <label className="text-green-600">{t("Нууц үг")}</label>
                             </a>
                           </Popconfirm>
                           <Popconfirm
@@ -1482,7 +1486,7 @@ function AjiltanBurtgel({ token }) {
                                 className="text-red-600"
                                 style={{ fontSize: "18px" }}
                               />
-                              <label className="text-red-600">Устгах</label>
+                              <label className="text-red-600">{t("Устгах")}</label>
                             </a>
                           </Popconfirm>
                         </div>
@@ -1534,7 +1538,7 @@ function AjiltanBurtgel({ token }) {
             </Form>
           </Modal>
         </div>
-        <p className="py-2 font-medium md:hidden">Харилцагчийн жагсаалт</p>
+        <p className="py-2 font-medium md:hidden">{t("Харилцагчийн жагсаалт")}</p>
         <CardList
           keyValue=""
           cardListTuluv={"utas"}

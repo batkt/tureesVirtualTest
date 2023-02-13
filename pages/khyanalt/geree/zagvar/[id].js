@@ -18,6 +18,7 @@ import ZaaltZasvar from "components/pageComponents/geree/zagvar/ZaaltZasvar";
 import _ from "lodash";
 import { aldaaBarigch } from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
+import { t } from "i18next";
 
 var defaultUtga = {
   dedKhesguud: [{ zaalt: "new" }],
@@ -83,12 +84,12 @@ function ZakhialgaNemekh({ token }) {
 
   function docZasya(key, value) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => ref.current.khadgalya()}
       >
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
 
@@ -99,7 +100,7 @@ function ZakhialgaNemekh({ token }) {
     }
     modal({
       width: "182mm",
-      title: "Заалт засах",
+      title: t("Заалт засах"),
       icon: <FileExcelOutlined />,
       content: (
         <ZaaltZasvar ref={ref} token={token} value={value} change={change} />
@@ -175,7 +176,7 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
-                    "Гэрээний загварын зүүн толгой",
+                    t("Гэрээний загварын зүүн толгой"),
                 }}
               />
               <div
@@ -193,7 +194,7 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
-                    "Гэрээний загварын баруун толгой",
+                    t("Гэрээний загварын баруун толгой"),
                 }}
               />
               <div
@@ -239,7 +240,7 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunKhul ||
-                    "Гэрээний загварын зүүн хөл",
+                    t("Гэрээний загварын зүүн хөл"),
                 }}
               />
               <div
@@ -257,7 +258,7 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunKhul ||
-                    "Гэрээний загварын баруун хөл",
+                    t("Гэрээний загварын баруун хөл"),
                 }}
               />
               <div
@@ -284,10 +285,10 @@ function ZakhialgaNemekh({ token }) {
                 },
               ]}
             >
-              <Input placeholder="Гэрээний загварын нэр" />
+              <Input placeholder={t("Гэрээний загварын нэр")} />
             </Form.Item>
             <div className="flex gap-2 justify-end">
-              <p className="mt-1">Түр гэрээ эсэх :</p>
+              <p className="mt-1">{t("Түр гэрээ эсэх")} :</p>
               <Form.Item
                 name="turGereeEsekh"
                 valuePropName="checked"
@@ -302,7 +303,7 @@ function ZakhialgaNemekh({ token }) {
                 onClick={() => form.submit()}
                 loading={towchTuluv}
               >
-                Хадгалах
+                {t("Хадгалах")}
               </Button>
             </Form.Item>
           </Form>

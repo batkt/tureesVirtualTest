@@ -1,13 +1,105 @@
 import Aos from "aos";
 import _ from "lodash";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { url } from "services/uilchilgee";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
+  const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
   );
+
+  const ner = useMemo(() => {
+    var utga = undefined
+    switch (mur.ner) {
+      case "Хяналт":
+        utga = "Dashboard"
+        break;
+      case "Гэрээ":
+        utga = "Contracts"
+        break;
+      case "Гэрээний жагсаалт":
+        utga = "ContractList"
+        break;
+      case "Гэрээ байгуулах":
+        utga = "SingContractExecutingAContract"
+        break;
+      case "Гэрээний загвар":
+        utga = "ContractDrafts"
+        break;
+      case "Талбай бүртгэл":
+        utga = "AreaRegisteration"
+        break;
+      case "Ажилтан бүртгэл":
+        utga = "UserRegisteration"
+        break;
+      case "Харилцагч":
+        utga = "Tenant"
+        break;
+      case "Мэдэгдэл":
+        utga = "Announcement"
+        break;
+      case "Шаардлага":
+        utga = "Requirement"
+        break;
+      case "Санал хүсэлт":
+        utga = "Feedback"
+        break;
+      case "Төлбөр тооцоо":
+        utga = "Payment"
+        break;
+      case "Дансны хуулга":
+        utga = "AccountStatement"
+        break;
+      case "Гүйлгээний түүх":
+        utga = "TransactionHistory"
+        break;
+      case "Нэхэмжлэл":
+        utga = "Invoice"
+        break;
+      case "Зардал":
+        utga = "Costs"
+        break;
+      case "И-баримт":
+        utga = "E-Barimt"
+        break;
+      case "Зогсоол":
+        utga = "Park"
+        break;
+      case "Жагсаалт":
+        utga = "List"
+        break;
+      case "Машин бүртгэл":
+        utga = "VehicleRegistration"
+        break;
+      case "Анкет":
+        utga = "application"
+        break;
+      case "Тайлан":
+        utga = "Statement"
+        break;
+      case "График":
+        utga = "Graphic"
+        break;
+      case "Аналитик":
+        utga = "Analytics"
+        break;
+      case "Даалгавар":
+        utga = "Tasks"
+        break;
+      case "Устгасан түүх":
+        utga = "DeletedHistory"
+        break;
+
+
+      default:
+        utga = mur.ner
+        break;
+    }
+    return utga
+  }, [mur])
 
   if (mur.sub) {
     return (
@@ -17,7 +109,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
             </div>
-            {mur.ner}
+            {t(`${ner}`)}
             <div
               className={`transform ${open ? "rotate-180" : ""} ml-auto`}
               style={{ transitionDuration: ".1s" }}
@@ -44,28 +136,73 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
           className={`sub-menu flex flex-col transition-all duration-500`}
         >
           {mur.sub.map((a) => {
+            var utga = undefined
+            switch (a.ner) {
+              case "Гэрээний жагсаалт":
+                utga = "ContractList"
+                break;
+              case "Мэдэгдэл":
+                utga = "Announcement"
+                break;
+              case "Гэрээ байгуулах":
+                utga = "SingContractExecutingAContract"
+                break;
+              case "Гэрээний загвар":
+                utga = "ContractDrafts"
+                break;
+              case "Шаардлага":
+                utga = "Requirement"
+                break;
+              case "Санал хүсэлт":
+                utga = "Feedback"
+                break;
+              case "Дансны хуулга":
+                utga = "AccountStatement"
+                break;
+              case "Гүйлгээний түүх":
+                utga = "TransactionHistory"
+                break;
+              case "Нэхэмжлэл":
+                utga = "Invoice"
+                break;
+              case "Зардал":
+                utga = "Costs"
+                break;
+              case "Жагсаалт":
+                utga = "List"
+                break;
+              case "Машин бүртгэл":
+                utga = "VehicleRegistration"
+                break;
+              case "График":
+                utga = "Graphic"
+                break;
+              case "Аналитик":
+                utga = "Analytics"
+                break;
+              default:
+                utga = mur.ner
+                break;
+            }
             return (
               <Link href={a.href} key={a.href}>
                 <a>
                   <li
-                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
-                      open ? "ml-0" : "ml-56"
-                    } p-2 text-white ${
-                      a.khuudasniiNer === khuudasniiNer
+                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${open ? "ml-0" : "ml-56"
+                      } p-2 text-white ${a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""
-                    }`}
+                      }`}
                   >
                     <div className={"flex flex-row px-1"}>
                       <div
-                        className={`${
-                          a.khuudasniiNer === khuudasniiNer
+                        className={`${a.khuudasniiNer === khuudasniiNer
                             ? "font-medium text-green-500"
                             : ""
-                        } flex flex-row whitespace-nowrap`}
+                          } flex flex-row whitespace-nowrap`}
                       >
                         <div className={`mr-2`}>{a.icon}</div>
-                        {a.ner}
+                        {t(`${utga}`)}
                       </div>
                     </div>
                   </li>
@@ -85,7 +222,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
             <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
             </div>
-            {mur.ner}
+            {t(`${ner}`)}
           </div>
         </li>
       </a>
@@ -155,6 +292,7 @@ function NTses({
             </div>
           </div>
         </li>
+        <div style={{height: "calc( 100vh - 12rem )"}} className="overflow-y-auto">
         {khuudasnuud.map((mur) => (
           <MenuItem
             key={mur.href}
@@ -163,6 +301,7 @@ function NTses({
             khuudasniiNer={khuudasniiNer}
           />
         ))}
+        </div>
       </ul>
     </nav>
   );

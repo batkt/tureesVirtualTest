@@ -11,9 +11,11 @@ import {
 } from "tools/logic/khereglegchiinErkhiinTokhirgoo";
 import { useAuth } from "services/auth";
 import _ from "lodash";
+import { useTranslation } from "react-i18next";
 
 function index({ token, data }) {
   const router = useRouter();
+  const { t } = useTranslation()
   const [targetKeys, setTargetKeys] = useState(data?.tsonkhniiErkhuud || []);
   const [tokhirgoo, setTokhirgoo] = useState(data?.tokhirgoo || {});
   const { baiguullaga } = useAuth();
@@ -46,14 +48,14 @@ function index({ token, data }) {
           <div className="flex flex-col gap-3 xl:flex-row">
             <div className="flex items-center gap-3 text-lg text-black text-opacity-70 dark:text-white dark:text-opacity-70">
               <div className="flex">
-                Овог: <p className="ml-2">{data?.ovog}</p>
+                {t("Овог")}: <p className="ml-2">{data?.ovog}</p>
               </div>
               <div className="flex">
-                Нэр: <p className="ml-2">{data?.ner}</p>
+                {t("Нэр")}: <p className="ml-2">{data?.ner}</p>
               </div>
             </div>
             <div className="flex flex-col  items-center gap-3   px-3 font-medium lg:flex-row xl:border-t-0  xl:border-l-2">
-              <div>Барилга сонгох:</div>
+              <div>{t("Барилга сонгох")}:</div>
               <div className="flex flex-wrap gap-5">
                 {barilguud?.map((a) => (
                   <div
@@ -98,7 +100,7 @@ function index({ token, data }) {
             }
           />
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-            Цонхны эрх
+            {t("Цонхны эрх")}
           </h2>
         </div>
         {tsonknuud
@@ -129,7 +131,7 @@ function index({ token, data }) {
       <div className="box col-span-12 p-2 lg:col-span-6">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-            Цонхны эрхийн тохиргоо
+            {t("Цонхны эрхийн тохиргоо")}
           </h2>
         </div>
         {[
@@ -157,9 +159,9 @@ function index({ token, data }) {
           <div className="box" key={mur.ner}>
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{mur.ner}</div>
+                <div className="font-medium">{t(mur.ner)}</div>
                 <div className="text-gray-600 dark:text-gray-300">
-                  {mur.tailbar}
+                  {t(mur.tailbar)}
                 </div>
               </div>
               <div className="ml-auto">
@@ -185,7 +187,7 @@ function index({ token, data }) {
       </div>
       <div className="col-span-12 ml-auto mr-2 flex w-full py-3 lg:w-36">
         <Button className="w-full" type="primary" onClick={khadgalya}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </div>
     </Admin>

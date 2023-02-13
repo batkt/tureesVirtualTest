@@ -285,7 +285,7 @@ function togloom1({ token }) {
   return (
     <Admin
       title="Тоглоомын төв"
-      khuudasniiNer="togloom1"
+      khuudasniiNer="togloomTuv"
       className="p-0 md:p-4"
     >
       <Card size="small" className="col-span-12 overflow-auto">

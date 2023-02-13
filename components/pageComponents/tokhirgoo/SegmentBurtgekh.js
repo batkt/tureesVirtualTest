@@ -5,6 +5,7 @@ import createMethod from 'tools/function/crud/createMethod';
 import updateMethod from 'tools/function/crud/updateMethod';
 import { aldaaBarigch } from 'services/uilchilgee';
 import compareFields from 'tools/function/compareFields';
+import { useTranslation } from 'react-i18next';
 
 const formItemLayout = {
     labelCol: {
@@ -24,7 +25,7 @@ const formItemLayoutWithOutLabel = {
 };
 
 function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
-
+const { t } = useTranslation();
     const [form] = Form.useForm();
 
     function garya() {
@@ -95,16 +96,16 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
 
     return (
         <Form form={form} autoComplete="off" initialValues={data} {...formItemLayout} >
-            <Form.Item label='Төрөл' name="turul">
+            <Form.Item label={t('Төрөл')} name="turul">
                 <Select onKeyUp={focuser}>
-                    <Select.Option key='khariltsagch' value='khariltsagch'>Харилцагч</Select.Option>
-                    <Select.Option key='talbai' value='talbai'>Талбай</Select.Option>
-                    <Select.Option key='geree' value='geree'>Гэрээ</Select.Option>
+                    <Select.Option key='khariltsagch' value='khariltsagch'>{t("Харилцагч")}</Select.Option>
+                    <Select.Option key='talbai' value='talbai'>{t("Талбай")}</Select.Option>
+                    <Select.Option key='geree' value='geree'>{t("Гэрээ")}</Select.Option>
                 </Select>
             </Form.Item>
             <Form.Item
                 name="ner"
-                label="Нэр"
+                label={t("Нэр")}
                 rules={[
                     {
                         required: true,
@@ -120,7 +121,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                         {fields.map((field, index) => (
                             <Form.Item
                                 {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
-                                label={index === 0 ? "Утгууд" : ""}
+                                label={index === 0 ? t("Утгууд") : ""}
                                 required={false}
                                 key={field.key}
                             >
@@ -136,7 +137,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                                     ]}
                                     noStyle
                                 >
-                                    <Input placeholder="Утга" className='relative w-[85%]' />
+                                    <Input placeholder={t("Утга")} className='relative w-[85%]' />
                                 </Form.Item>
 
                                 {fields.length > 1 ? (
@@ -157,7 +158,7 @@ function SegmentBurtgekh({ data, destroy, token, refresh }, ref) {
                                     <PlusOutlined />
                                 }
                             >
-                                Утга нэмэх
+                                {t("Утга нэмэх")}
                             </Button>
                             <Form.ErrorList errors={errors} />
                         </Form.Item>

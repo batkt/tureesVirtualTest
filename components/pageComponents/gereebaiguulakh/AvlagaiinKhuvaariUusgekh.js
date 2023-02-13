@@ -4,7 +4,7 @@ import moment from "moment";
 import Aos from "aos";
 import formatNumber from "tools/function/formatNumber";
 
-function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
+function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
   return (
     <div className="w-full">
       <div className="space-y-2 divide-y-2">
@@ -27,7 +27,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
               width: "0.5rem",
             },
             {
-              title: "Огноо",
+              title: t("Огноо"),
               dataIndex: "ognoo",
               ellipsis: true,
               width: "2.5rem",
@@ -37,7 +37,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
               },
             },
             {
-              title: "Төлөх дүн (₮)",
+              title: [t("Төлөх дүн") ,"(₮)"],
               dataIndex: "tulukhDun",
               ellipsis: true,
               width: "1.5rem",
@@ -48,7 +48,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul }) {
               },
             },
             {
-              title: "Тайлбар",
+              title: t("Тайлбар"),
               dataIndex: "tailbar",
               ellipsis: true,
               width: "1.5rem",

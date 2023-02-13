@@ -23,8 +23,10 @@ import EBarimt from "components/pageComponents/tokhirgoo/EBarimt";
 import Baaz from "components/pageComponents/tokhirgoo/Baaz";
 import { DatabaseOutlined, HistoryOutlined } from "@ant-design/icons";
 import NevtreltiinTuukh from "components/pageComponents/tokhirgoo/NevtreltiinTuukh";
+import { useTranslation } from "react-i18next";
 
 function AjiltanBurtgel({ token }) {
+  const { t } = useTranslation()
   const { ajiltan, ajiltanMutate, baiguullaga, barilgiinId, baiguullagaMutate } = useAuth();
   const [songogdsonTsonkhniiIndex, setSongogdsonTsonkhniiIndex] = useState(0);
 
@@ -449,7 +451,7 @@ function AjiltanBurtgel({ token }) {
                   } `}
                 onClick={() => setSongogdsonTsonkhniiIndex(index)}
               >
-                {mur.icon} {mur.text}
+                {mur.icon} {t(mur.text)}
               </div>
             ))}
           </div>

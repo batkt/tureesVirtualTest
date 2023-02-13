@@ -7,8 +7,10 @@ import ZardalBurtgel from "./ZardalBurtgel";
 import { modal } from "components/ant/Modal";
 import formatNumber from "tools/function/formatNumber";
 import deleteMethod from "tools/function/crud/deleteMethod";
+import { useTranslation } from "react-i18next";
 
 function AshiglaltiinZardal({ baiguullaga, token }) {
+  const { t } = useTranslation()
   const { barilgiinId } = useAuth();
   const khuvisakhQuery = useMemo(() => ({ barilgiinId,turul:{$nin:['Дурын','Тогтмол']} }), [barilgiinId]);
   const togtmolQuery = useMemo(() => ({ barilgiinId,turul:{$in:['Дурын','Тогтмол']}}), [barilgiinId]);
@@ -18,13 +20,13 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
 
   function zardalBurtgeye(data,togtmolEsekh) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Зардал бүртгэл",
+      title: t("Зардал бүртгэл"),
       icon: <PlusOutlined />,
       content: (
         <ZardalBurtgel
@@ -53,13 +55,13 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Хувьсах зардал
+              {t("Хувьсах зардал")}
             </h2>
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
               onClick={() => zardalBurtgeye()}
             >
-              <Tooltip title="Нэмэх">
+              <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
             </div>
@@ -81,7 +83,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                       onConfirm={() => ustgaya(mur)}
                     >
                       <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
-                        <Tooltip title="Устгах">
+                        <Tooltip title={t("Устгах")}>
                           <DeleteOutlined size={20} />
                         </Tooltip>
                       </div>
@@ -90,7 +92,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                       className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
                       onClick={() => zardalBurtgeye(mur)}
                     >
-                      <Tooltip title="Засах">
+                      <Tooltip title={t("Засах")}>
                         <EditOutlined />
                       </Tooltip>
                     </div>
@@ -105,13 +107,13 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Тогтмол зардал
+              {t("Тогтмол зардал")}
             </h2>
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
               onClick={() => zardalBurtgeye(undefined,true)}
             >
-              <Tooltip title="Нэмэх">
+              <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
             </div>
@@ -142,7 +144,7 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                       className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
                       onClick={() => zardalBurtgeye(mur,true)}
                     >
-                      <Tooltip title="Засах">
+                      <Tooltip title={t("Засах")}>
                         <EditOutlined />
                       </Tooltip>
                     </div>

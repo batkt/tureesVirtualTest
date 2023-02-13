@@ -15,8 +15,9 @@ import { useAuth } from "services/auth";
 import { modal } from "components/ant/Modal";
 import DansBurtgel from "./DansBurtgel";
 import updateMethod from "tools/function/crud/updateMethod";
+import { useTranslation } from "react-i18next";
 
-function DansTile({ data, dansMutate, zasya, token }) {
+function DansTile({ data, dansMutate, zasya, token, t }) {
   function ustgaya() {
     deleteMethod("dans", token, data?._id).then(
       ({ data }) => data === "Amjilttai" && dansMutate()
@@ -27,15 +28,15 @@ function DansTile({ data, dansMutate, zasya, token }) {
     <div className="box w-full">
       <div className="grid w-full grid-cols-4 items-center justify-between gap-2 p-5">
         <div className="">
-          <div className="font-medium">Данс</div>
+          <div className="font-medium">{t("Данс")}</div>
           <div>{data.dugaar}</div>
         </div>
         <div className="">
-          <div className="font-medium">Дансны нэр</div>
+          <div className="font-medium">{t("Дансны нэр")}</div>
           <div>{data.dansniiNer}</div>
         </div>
         <div className="">
-          <div className="font-medium">Валют</div>
+          <div className="font-medium">{t("Валют")}</div>
           <div>{data.valyut}</div>
         </div>
         <div className="ml-auto flex space-x-2">
@@ -46,7 +47,7 @@ function DansTile({ data, dansMutate, zasya, token }) {
             onConfirm={() => ustgaya()}
           >
             <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
-              <Tooltip title="Устгах">
+              <Tooltip title={t("Устгах")}>
                 <DeleteOutlined size={20} />
               </Tooltip>
             </div>
@@ -55,7 +56,7 @@ function DansTile({ data, dansMutate, zasya, token }) {
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white"
             onClick={() => zasya(data)}
           >
-            <Tooltip title="Засах">
+            <Tooltip title={t("Засах")}>
               <EditOutlined />
             </Tooltip>
           </div>
@@ -66,6 +67,7 @@ function DansTile({ data, dansMutate, zasya, token }) {
 }
 
 function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
+  const { t } = useTranslation()
   const { barilgiinId } = useAuth();
   const ref = React.useRef(null);
   const { dansGaralt, dansMutate } = useDans(token, baiguullaga?._id);
@@ -118,13 +120,13 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
 
   function dansBurtgeye(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Дансны бүртгэл",
+      title: t("Дансны бүртгэл"),
       icon: <PlusOutlined />,
       content: (
         <DansBurtgel
@@ -160,7 +162,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Дансны бүртгэл
+              {t("Дансны бүртгэл")}
             </h2>
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
@@ -171,18 +173,18 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
                 })
               }
             >
-              <Tooltip title="Нэмэх">
+              <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
             </div>
           </div>
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Хаан банк
+              {t("Хаан банк")}
             </h2>
             <div className="space-x-2">
               <label className="mr-auto text-base font-semibold dark:text-gray-200">
-                Corporate ашиглах эсэх
+                {t("Corporate ашиглах эсэх")}
               </label>
               <Switch
                 checked={khanbankCoprporate?.corporateAshiglakhEsekh || false}
@@ -204,11 +206,11 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
             >
               <Form.Item
                 hidden={khanbankCoprporate?.corporateAshiglakhEsekh !== true}
-                label="Нэвтрэх нэр"
+                label={t("Нэвтрэх нэр")}
                 name="corporateNevtrekhNer"
               >
                 <Input
-                  placeholder="Нууцлагдсан мэдээлэл"
+                  placeholder={t("Нууцлагдсан мэдээлэл")}
                   onChange={({ target }) =>
                     setKhanBankCorporate((a) => ({
                       ...a,
@@ -219,11 +221,11 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
               </Form.Item>
               <Form.Item
                 hidden={khanbankCoprporate?.corporateAshiglakhEsekh !== true}
-                label="Нэвтрэх нууц үг"
+                label={t("Нэвтрэх нууц үг")}
                 name="corporateNuutsUg"
               >
                 <Input.Password
-                  placeholder="Нууцлагдсан мэдээлэл"
+                  placeholder={t("Нууцлагдсан мэдээлэл")}
                   onChange={({ target }) =>
                     setKhanBankCorporate((a) => ({
                       ...a,
@@ -238,6 +240,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
             ?.filter((a) => a.bank === "khanbank")
             .map((mur) => (
               <DansTile
+              t={t}
                 className="box"
                 key={mur._id}
                 data={mur}
@@ -257,7 +260,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
               }`}
           >
             <Button type="primary" onClick={() => dansKhadgalya("khanbank")}>
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>
@@ -266,7 +269,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Дансны бүртгэл
+              {t("Дансны бүртгэл")}
             </h2>
             <div
               className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 fill-current p-2 text-white"
@@ -274,18 +277,18 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
                 dansBurtgeye({ ...(tdbCoprporate || {}), bank: "tdb" })
               }
             >
-              <Tooltip title="Нэмэх">
+              <Tooltip title={t("Нэмэх")}>
                 <PlusOutlined />
               </Tooltip>
             </div>
           </div>
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Худалдаа хөгжлийн банк
+              {t("Худалдаа хөгжлийн банк")}
             </h2>
             <div className="space-x-2">
               <label className="mr-auto text-base font-semibold dark:text-gray-200">
-                Corporate ашиглах эсэх
+                {t("Corporate ашиглах эсэх")}
               </label>
               <Switch
                 checked={tdbCoprporate?.corporateAshiglakhEsekh || false}
@@ -304,11 +307,11 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
             >
               <Form.Item
                 hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true}
-                label="Нэвтрэх нэр"
+                label={t("Нэвтрэх нэр")}
                 name="corporateNevtrekhNer"
               >
                 <Input
-                  placeholder="Нууцлагдсан мэдээлэл"
+                  placeholder={t("Нууцлагдсан мэдээлэл")}
                   onChange={({ target }) =>
                     setTdbCorporate((a) => ({
                       ...a,
@@ -319,11 +322,11 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
               </Form.Item>
               <Form.Item
                 hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true}
-                label="Нэвтрэх нууц үг"
+                label={t("Нэвтрэх нууц үг")}
                 name="corporateNuutsUg"
               >
                 <Input.Password
-                  placeholder="Нууцлагдсан мэдээлэл"
+                  placeholder={t("Нууцлагдсан мэдээлэл")}
                   onChange={({ target }) =>
                     setTdbCorporate((a) => ({
                       ...a,
@@ -334,11 +337,11 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
               </Form.Item>
               <Form.Item
                 hidden={tdbCoprporate?.corporateAshiglakhEsekh !== true}
-                label="Гүйлгээний нууц үг"
+                label={t("Гүйлгээний нууц үг")}
                 name="corporateGuilgeeniiNuutsUg"
               >
                 <Input.Password
-                  placeholder="Нууцлагдсан мэдээлэл"
+                  placeholder={t("Нууцлагдсан мэдээлэл")}
                   onChange={({ target }) =>
                     setTdbCorporate((a) => ({
                       ...a,
@@ -375,6 +378,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
             ?.filter((a) => a.bank === "tdb")
             .map((mur) => (
               <DansTile
+              t={t}
                 className="box"
                 key={mur._id}
                 data={mur}
@@ -394,7 +398,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
               }`}
           >
             <Button type="primary" onClick={() => dansKhadgalya("tdb")}>
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>

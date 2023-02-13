@@ -3,11 +3,13 @@ import { Form, InputNumber, Select, Input, notification, Modal } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import compareFields from "tools/function/compareFields";
+import { useTranslation } from "react-i18next";
 
 function ZardalBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token,togtmolEsekh, refresh },
   ref
 ) {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [hideTariff,setHideTariff] = useState(false)
 
@@ -87,20 +89,20 @@ function ZardalBurtgel(
       wrapperCol={{ span: 14 }}
     >
       <Form.Item hidden name="_id"></Form.Item>
-      <Form.Item label="Нэр" name="ner">
+      <Form.Item label={t("Нэр")} name="ner">
         <Input onKeyUp={focuser}/>
       </Form.Item>
-      <Form.Item label="Нэгж" name="turul">
+      <Form.Item label={t("Нэгж")} name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> { 
             form.getFieldInstance('tariff').focus()
             form.getFieldInstance('tariff').select()
             setHideTariff(v === 'Дурын')
           }}>
           <Select.Option key="Тогтмол" value="Тогтмол">
-            Тогтмол
+            {t("Тогтмол")}
           </Select.Option>
           <Select.Option key="Дурын" value="Дурын">
-            Дурын
+            {t("Дурын")}
           </Select.Option>
         </Select> : <Select onKeyUp={focuser}>
           <Select.Option key="кВт" value="кВт">
@@ -114,7 +116,7 @@ function ZardalBurtgel(
           </Select.Option>
         </Select>}
       </Form.Item>
-     <Form.Item label="Тариф" name="tariff" hidden={hideTariff}> 
+     <Form.Item label={t("Тариф")} name="tariff" hidden={hideTariff}> 
         <InputNumber
           min={0}
           style={{ width: "100%" }}

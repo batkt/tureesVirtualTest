@@ -42,9 +42,11 @@ import { useAuth } from "services/auth";
 import useJagsaalt from "hooks/useJagsaalt";
 import { modal } from "components/ant/Modal";
 import AnketIlgeekh from "components/pageComponents/anket/AnketIlgeekh";
+import { useTranslation } from "react-i18next";
 
 const str = "A";
 function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
+  const { t } = useTranslation()
   const [hide, setHide] = React.useState(true);
   return (
     <Form.Item
@@ -65,7 +67,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
         //validateTrigger={["onChange", "onBlur"]}
         >
           <Input
-            placeholder={`Асуулт ${name + 1}`}
+            placeholder={t("Асуулт", {count: name + 1})}
             style={{ width: "100%" }}
           />
         </Form.Item>
@@ -78,8 +80,8 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
             placeholder="Хариултын төрөл"
             defaultValue={"boglokh"}
             options={[
-              { label: "Бөглөх", value: "boglokh" },
-              { label: "Сонгох", value: "songokh" },
+              { label: t("Бөглөх"), value: "boglokh" },
+              { label: t("Сонгох"), value: "songokh" },
             ]}
             onChange={(e) =>
               e === "songokh"
@@ -145,7 +147,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
               onClick={() => add()}
               icon={<PlusOutlined className="text-xs"/>}
             >
-              Хариулт оруулах
+              {t("Хариулт оруулах")}
             </Button>
             <Form.ErrorList errors={errors} />
           </>
@@ -230,6 +232,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
 }
 
 function Anket({ token }) {
+  const { t } = useTranslation()
   const { ajiltan, barilgiinId, baiguullaga } = useAuth();
   const [ognoo, setOgnoo] = useState([moment(new Date()).subtract( 1,"months"), moment(new Date())]);
   const query = { barilgiinId: barilgiinId };
@@ -286,7 +289,7 @@ function Anket({ token }) {
           type="sideKick"
           onClick={() => ilgeekhRef.current.khaaya()}
         >
-          Хаах
+          {t("Хаах")}
         </Button>
         <Button
           id="anketIlgeekhButton"
@@ -294,7 +297,7 @@ function Anket({ token }) {
           icon={<SendOutlined />}
           onClick={() => ilgeekhRef.current.ilgeekh()}
         >
-          Анкет илгээх
+          {t("Анкет илгээх")}
         </Button>
       </Space>,
     ];
@@ -353,7 +356,7 @@ function Anket({ token }) {
             data-aos-delay="300"
           >
             <span className="font-medium dark:text-gray-100">
-              Анкетын загварууд
+              {t("Анкетын загварууд")}
             </span>
             <div className="w-full px-5 mt-5">
         <DatePicker.RangePicker
@@ -381,7 +384,7 @@ function Anket({ token }) {
             data-aos-delay="300"
           >
             <span className=" font-medium dark:text-gray-100 lg:px-5">
-              Анкетын загвар үүсгэх
+              {t("Анкетын загвар үүсгэх")}
             </span>
             <Form
               ref={formRef}
@@ -413,7 +416,7 @@ function Anket({ token }) {
                     <Input
                       autoFocus={true}
                       onKeyUp={focuser}
-                      placeholder="Анкетын нэр"
+                      placeholder={t("Анкетын нэр")}
                     />
                   </Form.Item>
                 </div>
@@ -444,7 +447,7 @@ function Anket({ token }) {
                           style={{ width: "100%" }}
                           icon={<PlusOutlined className="text-xs"/>}                          
                         >
-                          Асуулт нэмэх
+                          {t("Асуулт нэмэх")}
                         </Button>
                         <Form.ErrorList errors={errors} />
                       </Form.Item>
@@ -467,17 +470,17 @@ function Anket({ token }) {
                   onClick={() => form.submit()}
                   className="w-full"
                 >
-                  Хадгалах
+                  {t("Хадгалах")}
                 </Button>
               </Form.Item>
             </Form>
           </div>
           <div className="relative block h-full col-span-5 rounded-lg bg-white pt-3 overflow-y-auto dark:bg-gray-900 " style={{ height: "calc( 100vh - 8rem)" }}>
             <header className="border-b font-medium pb-5 dark:text-gray-100 lg:px-5 ">
-              Анкет харах хэсэг
+              {t("Анкет харах хэсэг")}
             </header>
             <header className="border-b px-6 text-black dark:text-white py-1 text-opacity-40 dark:text-opacity-40 text-xl font-medium uppercase">
-              {data?.ner || "Анкетын загварын нэр"}
+              {data?.ner || t("Анкетын загварын нэр")}
             </header>
             <Form
               disabled={true}

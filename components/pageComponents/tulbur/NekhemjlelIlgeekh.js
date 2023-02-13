@@ -13,7 +13,7 @@ import useNekhemjlekhDugaarlalt from "hooks/tulburTootsoo/useNekhemjlekhDugaarla
 
 const ilgeekhTurul = "davkharaar";
 
-function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
+function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
   const { dansGaralt } = useDans(token, data?.baiguullagiinId);
   const printRef = React.useRef(null);
   const [songogdsonDans, setDans] = React.useState();
@@ -253,15 +253,15 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy }, ref) {
         ))}
       </Select>
       <div className="flex w-full justify-between">
-        <Button onClick={khaaya}>Хаах</Button>
+        <Button onClick={khaaya}>{t("Хаах")}</Button>
         <div className="flex gap-2">
-          <Button onClick={hevlekh}>Хэвлэх</Button>
+          <Button onClick={hevlekh}>{t("Хэвлэх")}</Button>
           <Button
             type="primary"
             id="nekhemjlelIlgeekhButton"
             onClick={maileerIlgeekh}
           >
-            Нэхэмжлэл илгээх
+            {t("Нэхэмжлэл илгээх")}
           </Button>
         </div>
       </div>

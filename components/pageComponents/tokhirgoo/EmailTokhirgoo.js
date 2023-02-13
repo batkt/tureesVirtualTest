@@ -3,8 +3,10 @@ import { Button, Input, InputNumber, notification, Switch, Form } from "antd";
 import uilchilgee, { url } from "services/uilchilgee";
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import { useTranslation } from "react-i18next";
 
 function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
+  const { t } = useTranslation()
   const [form] = Form.useForm();
   const [emailTokhirgoo, setEmailTokhirgoo] = useState(null);
 
@@ -37,7 +39,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Нэхэмжлэл и-мэйлээр илгээх тохиргоо
+              {t("Нэхэмжлэл и-мэйлээр илгээх тохиргоо")}
             </h2>
           </div>
 
@@ -56,7 +58,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                 onFinish={tokhirgooKhadgalakh}
               >
                 <Form.Item
-                  label="И-мэйл хаяг"
+                  label={t("И-мэйл хаяг")}
                   name="mailNevtrekhNer"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
@@ -75,7 +77,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label="Нэвтрэх нууц үг"
+                  label={t("Нэвтрэх нууц үг")}
                   name="mailPassword"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
@@ -93,7 +95,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                   <Input.Password />
                 </Form.Item>
                 <Form.Item
-                  label="Хост"
+                  label={t("Хост")}
                   name="mailHost"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
@@ -105,7 +107,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label="Порт"
+                  label={t("Порт")}
                   name="mailPort"
                   onChange={({ target }) =>
                     setEmailTokhirgoo((a) => ({
@@ -118,7 +120,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                 </Form.Item>
                 <div className="flex w-full justify-end">
                   <Button type="primary" htmlType="submit">
-                    Хадгалах
+                    {t("Хадгалах")}
                   </Button>
                 </div>
               </Form>

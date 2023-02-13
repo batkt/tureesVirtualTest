@@ -113,6 +113,7 @@ const YurunkhiiMedeele = ({
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
   zagvarRef,
+  t,
 }) => {
   const [form] = Form.useForm();
   const formRef = useRef();
@@ -280,7 +281,7 @@ const YurunkhiiMedeele = ({
           ref={zagvarRef}
           id={gereeniiZagvariinId}
           showSearch
-          placeholder="Гэрээний загвар сонгох"
+          placeholder={t("Гэрээний загвар сонгох")}
           className="w-full "
           size="middle"
           value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}
@@ -358,7 +359,7 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item
           name="register"
-          label={"Регистр"}
+          label={t("Регистр")}
           rules={[
             {
               required: true,
@@ -403,12 +404,12 @@ const YurunkhiiMedeele = ({
           <Form.Item
             rules={[{ required: true, message: "Овог бүртгэнэ үү!" }]}
             name="ovog"
-            label={"Овог"}
+            label={t("Овог")}
           >
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Овог"
+              placeholder={t("Овог")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -419,12 +420,12 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="ner"
             rules={[{ required: true, message: "Нэр бүртгэнэ үү!" }]}
-            label={"Нэр"}
+            label={t("Нэр")}
           >
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Нэр"
+              placeholder={t("Нэр")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -456,7 +457,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Нэр"
+              placeholder={t("Нэр")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -467,12 +468,12 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="utas"
             rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
-            label={"Утас"}
+            label={t("Утас")}
           >
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Утас"
+              placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -483,12 +484,12 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="utas"
             rules={[{ required: true, message: "Утас бүртгэнэ үү!" }]}
-            label={"Утас"}
+            label={t("Утас")}
           >
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Утас"
+              placeholder={t("Утас")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -547,7 +548,7 @@ const YurunkhiiMedeele = ({
                   onClick={() => add()}
                   block
                 >
-                  Ялгах утга оруулах
+                  {t("Ялгах утга оруулах")}
                 </Button>
               </Form.Item>
             </>
@@ -558,7 +559,7 @@ const YurunkhiiMedeele = ({
         <Form.Item
           name="dans"
           rules={[{ required: true, message: "Төлөлт хийх данс бүртгэнэ үү!" }]}
-          label={"Төлөлт хийх данс"}
+          label={t("Төлөлт хийх данс")}
         >
           <FormLavlakh
             selectId={"dans"}
@@ -615,12 +616,12 @@ const YurunkhiiMedeele = ({
       )}
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="1000">
-          <Form.Item label={"Хавсаргал"} className="w-full">
+          <Form.Item label={t("Хавсаргал")} className="w-full">
             <Form.Item
               name="zuvshuurliinZurag"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              extra="Зөвшөөрлийн бичгийн хуулбар"
+              extra={t("Зөвшөөрлийн бичгийн хуулбар")}
             >
               <Upload
                 multiple={false}
@@ -643,7 +644,7 @@ const YurunkhiiMedeele = ({
               name="unemlekhniiZurag"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              extra="Иргэний үнэмлэхний хуулбар"
+              extra={t("Иргэний үнэмлэхний хуулбар")}
             >
               <Upload
                 multiple={false}
@@ -673,7 +674,7 @@ const YurunkhiiMedeele = ({
             onClick={(e) => form.submit()}
             icon={<ArrowRightOutlined />}
           >
-            Гэрээний хугацаа
+            {t("Гэрээний хугацаа")}
           </Button>
         </div>
       </Form.Item>

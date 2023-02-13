@@ -99,6 +99,7 @@ const YurunkhiiMedeele = ({
   gereeniiZagvar,
   barilgiinId,
   formSubmit,
+  t,
 }) => {
   const [form] = Form.useForm();
 
@@ -253,7 +254,7 @@ const YurunkhiiMedeele = ({
             gereeniiZagvar?.turGereeEsekh === true &&
             value?.talbainuud?.length > 0
           }
-          label="Талбай"
+          label={t("Талбай")}
         >
           <TalbaiSongolt
             value={""}
@@ -284,7 +285,7 @@ const YurunkhiiMedeele = ({
                     } divide-x-2 py-1`}
                 >
                   <div className="flex items-center justify-center text-center">
-                    Давхар
+                    {t("Давхар")}
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
                     <div className="flex items-center justify-center text-center">
@@ -363,11 +364,11 @@ const YurunkhiiMedeele = ({
       >
         <div className="divide-y-2 border">
           <div className="grid grid-cols-12 divide-x-2">
-            <div className="col-span-4 text-center">Давхар</div>
+            <div className="col-span-4 text-center">{t("Давхар")}</div>
             <div className="col-span-4 text-center">
               м<sup>2</sup>
             </div>
-            <div className="col-span-4 text-center">Нийт төлбөр</div>
+            <div className="col-span-4 text-center">{t("Нийт төлбөр")}</div>
           </div>
           <div className="grid grid-cols-12 divide-x-2">
             <div className="col-span-4 text-center text-base font-medium">
@@ -382,8 +383,8 @@ const YurunkhiiMedeele = ({
           </div>
         </div>
       </div>
-      <Form.Item label="Зориулалт" name={"zoriulalt"}>
-        <Input placeholder="Ашиглах зориулалт" />
+      <Form.Item label={t("Зориулалт")} name={"zoriulalt"}>
+        <Input placeholder={t("Ашиглах зориулалт")} />
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
@@ -397,7 +398,7 @@ const YurunkhiiMedeele = ({
             icon={<ArrowLeftOutlined />}
             className="dark:text-gray-200 dark:hover:text-gray-800"
           >
-            Гэрээний хугацаа
+            {t("Гэрээний хугацаа")}
           </Button>
           <Button
             type="primary"
@@ -405,7 +406,7 @@ const YurunkhiiMedeele = ({
             onClick={() => form.submit()}
             icon={<ArrowRightOutlined />}
           >
-            Зардал бүртгэл
+            {t("Зардал бүртгэл")}
           </Button>
         </div>
       </Form.Item>

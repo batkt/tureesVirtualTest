@@ -16,6 +16,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import compareFields from "tools/function/compareFields";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Step } = Steps;
 
@@ -48,6 +49,7 @@ const steps = [
 ];
 
 function GereeBaiguulakh({ token, data }) {
+  const { t } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
   const router = useRouter();
   const [current, setCurrent] = React.useState(0);
@@ -343,7 +345,7 @@ function GereeBaiguulakh({ token, data }) {
                 }
                 value={index}
                 key={item.title}
-                title={item.title}
+                title={t(item.title)}
               />
             ))}
           </Steps>
@@ -351,6 +353,7 @@ function GereeBaiguulakh({ token, data }) {
         <div className="mt-3 grid grid-cols-12 gap-6">
           <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
+            t={t}
               next={next}
               prev={prev}
               onChange={setKhagalakhGeree}
@@ -435,9 +438,9 @@ function GereeBaiguulakh({ token, data }) {
                       <div className="flex justify-between">
                         <p>{mur.ner}</p>
                         <p className="text-gray-500">
-                          {mur.turGereeEsekh === true
-                            ? "/Түр гэрээ/"
-                            : "/Үндсэн гэрээ/"}
+                          /{mur.turGereeEsekh === true
+                            ? t("Түр гэрээ")
+                            : t("Үндсэн гэрээ")}/
                         </p>
                       </div>
                     </Select.Option>

@@ -30,6 +30,7 @@ import createMethod from "tools/function/crud/createMethod";
 import formatNumber from "tools/function/formatNumber";
 import Aos from "aos";
 import { modal } from "components/ant/Modal";
+import { useTranslation } from "react-i18next";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -60,6 +61,7 @@ function tulburTootsoo() {
   useEffect(() => {
     Aos.init({ once: true });
   });
+  const { t, i18n } = useTranslation()
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
   const formRef = useRef();
@@ -249,7 +251,7 @@ function tulburTootsoo() {
   const columns = useMemo(() => {
     return [
       {
-        title: "Огноо",
+        title: t("Огноо"),
         dataIndex: "createdAt",
         ellipsis: true,
         align: "center",
@@ -259,14 +261,14 @@ function tulburTootsoo() {
         },
       },
       {
-        title: "Хөнгөлөлт %",
+        title: t("Хөнгөлөлт %"),
         dataIndex: "khungulukhKhuvi",
         ellipsis: true,
         width: "7rem",
         align: "center",
       },
       {
-        title: "Хугацаа",
+        title: t("Хугацаа"),
         width: "7rem",
         dataIndex: "ognoonuud",
         ellipsis: true,
@@ -278,7 +280,7 @@ function tulburTootsoo() {
         },
       },
       {
-        title: "Төлөх дүн",
+        title: t("Төлөх дүн"),
         summary: true,
         width: "7rem",
         dataIndex: "tulukhDun",
@@ -288,7 +290,7 @@ function tulburTootsoo() {
         },
       },
       {
-        title: "Хөнгөлөх дүн",
+        title: t("Хөнгөлөх дүн"),
         summary: true,
         width: "7rem",
         dataIndex: "khungulultiinDun",
@@ -298,7 +300,7 @@ function tulburTootsoo() {
         },
       },
       {
-        title: "Төлсөн дүн",
+        title: t("Төлсөн дүн"),
         width: "7rem",
         summary: true,
         dataIndex: "khungulsunDun",
@@ -308,21 +310,21 @@ function tulburTootsoo() {
         },
       },
       {
-        title: "Төрөл",
+        title: t("Төрөл"),
         width: "7rem",
         dataIndex: "turul",
         ellipsis: true,
         align: "center",
       },
       {
-        title: "Шалтгаан",
+        title: t("Шалтгаан"),
         width: "7rem",
         dataIndex: "shaltgaan",
         ellipsis: true,
         align: "center",
       },
       {
-        title: "Ажилтан",
+        title: t("Ажилтан"),
         width: "7rem",
         dataIndex: "guilgeeKhiisenAjiltniiNer",
         align: "center",
@@ -419,7 +421,7 @@ function tulburTootsoo() {
     >
       <div className="col-span-12">
         <Tabs size="large" onChange={(v) => setSongogdsonNuur(v)}>
-          <Tabs.TabPane tab="Хөнгөлөлт оруулах" key="1">
+          <Tabs.TabPane tab={t("Хөнгөлөлт оруулах")} key="1">
             <div className="grid w-full grid-cols-12 gap-6">
               <div
                 className="col-span-12 rounded-md border border-solid border-green-300 bg-white p-5 dark:bg-gray-900 md:col-span-8 xl:col-span-3"
@@ -443,7 +445,7 @@ function tulburTootsoo() {
                 >
                   <Form.Item
                     name="ognoonuud"
-                    label="Хөнгөлөх сар"
+                    label={t("Хөнгөлөх сар")}
                     rules={[
                       {
                         required: true,
@@ -455,28 +457,28 @@ function tulburTootsoo() {
                       style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
-                      placeholder="Сар"
+                      placeholder={t("Сар")}
                       onChange={() =>
                         formRef.current.getFieldInstance("turul").focus()
                       }
                     />
                   </Form.Item>
-                  <Form.Item name="turul" label="Нөхцөл">
+                  <Form.Item name="turul" label={t("Нөхцөл")}>
                     <Select
-                      placeholder="Нөхцөл"
+                      placeholder={t("Нөхцөл")}
                       onChange={(v) => {
                         nukhtulSongokh(v);
                         formRef.current.getFieldInstance("davkhar").focus();
                       }}
                     >
-                      <Option value="Давхраар">Давхраар</Option>
-                      <Option value="Бүгд">Бүгд</Option>
+                      <Option value="Давхраар">{t("Давхраар")}</Option>
+                      <Option value="Бүгд">{t("Бүгд")}</Option>
                     </Select>
                   </Form.Item>
-                  <Form.Item name="davkhar" label="Давхар">
+                  <Form.Item name="davkhar" label={t("Давхар")}>
                     <Select
                       mode="multiple"
-                      placeholder="Давхар"
+                      placeholder={t("Давхар")}
                       onChange={handleChange}
                       disabled={
                         form?.getFieldValue("turul") === "Бүгд" ? true : false
@@ -492,36 +494,36 @@ function tulburTootsoo() {
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Хөнгөлөх хувь" name="khungulukhKhuvi">
+                  <Form.Item label={t("Хөнгөлөх хувь")} name="khungulukhKhuvi">
                     <Input
                       onKeyDown={focuser}
                       type={"number"}
-                      placeholder="Хөнгөлөх хувь"
+                      placeholder={t("Хөнгөлөх хувь")}
                       onChange={khungulukhDunTootsoolyo}
                     />
                   </Form.Item>
-                  <Form.Item label="Шалтгаан" name="shaltgaan">
+                  <Form.Item label={t("Шалтгаан")} name="shaltgaan">
                     <Input.TextArea
                       onKeyDown={focuser}
-                      placeholder="Шалтгаан"
+                      placeholder={t("Шалтгаан")}
                     />
                   </Form.Item>
                   <div className="flex-column mt-12 grid text-base dark:text-gray-50">
                     <div className="flex justify-between">
-                      Нийт талбайн тоо :<a>{tootsoolol.niitTalbai}</a>
+                      {t("Нийт талбайн тоо")} :<a>{tootsoolol.niitTalbai}</a>
                     </div>
                     <div className="flex justify-between">
-                      Нийт түрээсийн орлого :
+                      {t("Нийт түрээсийн орлого")} :
                       <a>{formatNumber(tootsoolol.niitSariinTurees || 0)}</a>
                     </div>
                     <div className="flex justify-between">
-                      Нийт хөнгөлөгдсөн дүн :
+                      {t("Нийт хөнгөлөгдсөн дүн")} :
                       <a className="text-red-400">
                         {formatNumber(tootsoolol.khunglugdsunDun || 0)}
                       </a>
                     </div>
                     <div className="flex justify-between">
-                      Нийт төлөх дүн :
+                      {t("Нийт төлөх дүн")} :
                       <a className="text-green-500">
                         {formatNumber(tootsoolol.niitTulukhDun || 0)}
                       </a>
@@ -536,7 +538,7 @@ function tulburTootsoo() {
                         className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
                       >
                         <span className="text-red-400 dark:text-red-400">
-                          Цэвэрлэх
+                          {t("Цэвэрлэх")}
                         </span>
                       </Button>
                     </Form.Item>
@@ -546,7 +548,7 @@ function tulburTootsoo() {
                         onClick={() => form.submit()}
                         type="primary"
                       >
-                        <span className="text-white">Хадгалах</span>
+                        <span className="text-white">{t("Хадгалах")}</span>
                       </Button>
                     </Form.Item>
                   </div>
@@ -569,7 +571,7 @@ function tulburTootsoo() {
                   dataSource={gereeniiMedeelel?.jagsaalt}
                   columns={[
                     {
-                      title: "Түрээслэгч",
+                      title: t("Түрээслэгч"),
                       dataIndex: "ner",
                       className: "text-center",
                       align: "center",
@@ -578,7 +580,7 @@ function tulburTootsoo() {
                       sorter: (a, b) => a.ner?.localeCompare(b.ner),
                     },
                     {
-                      title: "Гэрээ",
+                      title: t("Гэрээ"),
                       dataIndex: "gereeniiDugaar",
                       className: "text-center",
                       align: "center",
@@ -588,7 +590,7 @@ function tulburTootsoo() {
                         a.gereeniiDugaar?.localeCompare(b.gereeniiDugaar),
                     },
                     {
-                      title: "Талбай",
+                      title: t("Талбай"),
                       dataIndex: "talbainDugaar",
                       className: "text-center",
                       align: "center",
@@ -598,7 +600,7 @@ function tulburTootsoo() {
                         a.talbainDugaar?.localeCompare(b.talbainDugaar),
                     },
                     {
-                      title: "Давхар",
+                      title: t("Давхар"),
                       dataIndex: "davkhar",
                       align: "center",
                       width: "5rem",
@@ -608,7 +610,7 @@ function tulburTootsoo() {
                         Number(a.davkhar || 0) - Number(b.davkhar || 0),
                     },
                     {
-                      title: "Талбай /м2/",
+                      title: t("Талбай /м2/"),
                       dataIndex: "talbainKhemjee",
                       align: "center",
                       width: "7rem",
@@ -623,7 +625,7 @@ function tulburTootsoo() {
                         Number(b.talbainKhemjee || 0),
                     },
                     {
-                      title: "Төлбөр",
+                      title: t("Төлбөр"),
                       dataIndex: "sariinTurees",
                       className: "text-center",
                       width: "7rem",
@@ -642,7 +644,7 @@ function tulburTootsoo() {
               </div>
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Хөнгөлөлт түүх" key="2">
+          <Tabs.TabPane tab={t("Хөнгөлөлт түүх")} key="2">  
             <div className="grid w-full grid-cols-12 gap-6">
               <div className="box col-span-12 p-5 md:col-span-8 xl:col-span-12">
                 <div className="mt-5 flex w-full flex-row justify-between">

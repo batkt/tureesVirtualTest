@@ -50,6 +50,7 @@ import { MdOutlineInventory } from "react-icons/md";
 import { GiBackwardTime } from "react-icons/gi";
 import { TbBoxMultiple } from "react-icons/tb";
 import { ImFileEmpty, ImFileText2 } from "react-icons/im";
+import { useTranslation } from "react-i18next";
 
 const Tailan = dynamic(() => import("components/konva/tailan"), { ssr: false });
 
@@ -117,7 +118,7 @@ function talbaiBurtgekh({ token }) {
   });
 
   const { talbainToololt } = useTalbainToololt(token);
-
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false);
   const [neesenEsekh, setNeesenEsekh] = useState(false);
 
@@ -507,12 +508,12 @@ function talbaiBurtgekh({ token }) {
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
-                          {mur.utga}
+                          {t(mur.utga)}
                         </div>
                       </div>
                       <div>
                         <div className="absolute top-2 right-2 flex text-xs text-green-600">
-                          Нийт м²: {formatNumber(mur.mk)}
+                          {t("Нийт м")}²: {formatNumber(mur.mk)}
                         </div>
                       </div>
                     </div>
@@ -542,7 +543,7 @@ function talbaiBurtgekh({ token }) {
               style={{ marginTop: "10px" }}
               icon={<PictureOutlined style={{ fontSize: "16px" }} />}
             >
-              <span>План зураг харах</span>
+              <span>{t("План зураг харах")}</span>
             </Button>
             <Drawer
               width={"100vw"}
@@ -584,7 +585,7 @@ function talbaiBurtgekh({ token }) {
                 style={{ marginTop: "10px" }}
                 icon={<PlusOutlined style={{ fontSize: "16px" }} />}
               >
-                <span>Нэмэх</span>
+                <span>{t("Нэмэх")}</span>
               </Button>
             </Link>
 
@@ -596,7 +597,7 @@ function talbaiBurtgekh({ token }) {
                     onClick={talbaiOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>Оруулах</label>
+                    <label>{t("Оруулах")}</label>
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
@@ -607,20 +608,20 @@ function talbaiBurtgekh({ token }) {
                         .addSheet("түрээсийн талбай")
                         .addColumns([
                           {
-                            title: "Дугаар",
+                            title: t("Дугаар"),
                             dataIndex: "kod",
                           },
                           {
-                            title: "Давхар",
+                            title: t("Давхар"),
                             dataIndex: "davkhar",
                           },
                           {
-                            title: "Талбай/м2/",
+                            title: t("Талбай/м2/"),
                             dataIndex: "talbainKhemjee",
                           },
 
                           {
-                            title: "Нийт үнэ/₮/",
+                            title: t("Нийт үнэ/₮/"),
                             dataIndex: "talbainNiitUne",
 
                             render: (talbainNiitUne) => {
@@ -628,15 +629,15 @@ function talbaiBurtgekh({ token }) {
                             },
                           },
                           {
-                            title: "Зардал",
+                            title: t("Зардал"),
                             dataIndex: "niitAshiglaltiinZardal",
                           },
                           {
-                            title: "Төлбөр",
+                            title: t("Төлбөр"),
                             dataIndex: "tureesiinTulbur",
                           },
                           {
-                            title: "Тайлбар",
+                            title: t("Тайлбар"),
                             dataIndex: "tailbar",
                           },
                         ])
@@ -645,7 +646,7 @@ function talbaiBurtgekh({ token }) {
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}
@@ -731,7 +732,7 @@ function talbaiBurtgekh({ token }) {
                 width: "1rem",
               },
               {
-                title: "Бүртгэсэн Огноо",
+                title: t("Бүртгэсэн Огноо"),
                 dataIndex: "createdAt",
                 ellipsis: true,
                 width: "2.5rem",
@@ -741,7 +742,7 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Дугаар",
+                title: t("Дугаар"),
                 dataIndex: "kod",
                 ellipsis: true,
                 width: "1.5rem",
@@ -750,7 +751,7 @@ function talbaiBurtgekh({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Давхар",
+                title: t("Давхар"),
                 dataIndex: "davkhar",
                 ellipsis: true,
                 width: "1.2rem",
@@ -760,7 +761,7 @@ function talbaiBurtgekh({ token }) {
                 defaultSortOrder: "descend",
               },
               {
-                title: "Талбай/м2/",
+                title: t("Талбай/м2/"),
                 dataIndex: "talbainKhemjee",
                 align: "center",
                 ellipsis: true,
@@ -770,7 +771,7 @@ function talbaiBurtgekh({ token }) {
                 sorter: () => 0,
               },
               {
-                title: "Нийт үнэ/₮/",
+                title: t("Нийт үнэ/₮/"),
                 dataIndex: "talbainNiitUne",
                 ellipsis: true,
                 align: "center",
@@ -783,7 +784,7 @@ function talbaiBurtgekh({ token }) {
                 width: "2.5rem",
               },
               {
-                title: "Зардал",
+                title: t("Зардал"),
                 dataIndex: "niitAshiglaltiinZardal",
                 align: "center",
                 render: (data) => {
@@ -795,7 +796,7 @@ function talbaiBurtgekh({ token }) {
                 width: "2rem",
               },
               {
-                title: "Төлбөр",
+                title: t("Төлбөр"),
                 dataIndex: "tureesiinTulbur",
                 align: "center",
                 render: (data) => {
@@ -808,7 +809,7 @@ function talbaiBurtgekh({ token }) {
               },
 
               {
-                title: "Тайлбар",
+                title: t("Тайлбар"),
                 dataIndex: "tailbar",
                 ellipsis: true,
                 width: "4.5rem",
@@ -817,7 +818,7 @@ function talbaiBurtgekh({ token }) {
               },
 
               {
-                title: "Төлөв",
+                title: t("Төлөв"),
                 dataIndex: "idevkhiteiEsekh",
                 ellipsis: true,
                 width: "2rem",
@@ -834,13 +835,13 @@ function talbaiBurtgekh({ token }) {
                       }
                       color={idevkhiteiEsekh === true ? "green" : "red"}
                     >
-                      {idevkhiteiEsekh === true ? "Идэвхтэй" : "Идэвхгүй"}
+                      {idevkhiteiEsekh === true ? t("Идэвхтэй") : t("Идэвхгүй")}
                     </Tag>
                   );
                 },
               },
               {
-                title: "Ангилал",
+                title: t("Ангилал"),
                 dataIndex: "segmentuud",
                 ellipsis: true,
                 width: "1.5rem",
@@ -876,7 +877,7 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Хөрөнгө",
+                title: t("Хөрөнгө"),
                 align: "center",
                 ellipsis: true,
                 width: "1.5rem",
@@ -933,7 +934,7 @@ function talbaiBurtgekh({ token }) {
                 },
               },
               {
-                title: "Түүх",
+                title: t("Түүх"),
                 width: "1.5rem",
                 align: "center",
                 render: (data) => {
@@ -956,41 +957,41 @@ function talbaiBurtgekh({ token }) {
                                 dataIndex: "gereeniiDugaar",
                               },
                               {
-                                title: "Овог",
+                                title: t("Овог"),
                                 dataIndex: "ovog",
                               },
                               {
-                                title: "Нэр",
+                                title: t("Нэр"),
                                 dataIndex: "ner",
                               },
                               {
-                                title: "Регистр",
+                                title: t("Регистр"),
                                 dataIndex: "register",
                               },
                               {
-                                title: "Төрөл",
+                                title: t("Төрөл"),
                                 dataIndex: "turul",
                               },
                               {
-                                title: "Гэрээний огноо",
+                                title: t("Гэрээний огноо"),
                                 dataIndex: "gereeniiOgnoo",
                                 render: (data) => {
                                   return moment(data).format("YYYY-MM-DD");
                                 },
                               },
                               {
-                                title: "Дуусах огноо",
+                                title: t("Дуусах огноо"),
                                 dataIndex: "duusakhOgnoo",
                                 render: (data) => {
                                   return moment(data).format("YYYY-MM-DD");
                                 },
                               },
                               {
-                                title: "Хугацаа",
+                                title: t("Хугацаа"),
                                 dataIndex: "khugatsaa",
                               },
                               {
-                                title: "Сарын түрээс",
+                                title: t("Сарын түрээс"),
                                 dataIndex: "sariinTurees",
                                 align: "center",
                                 render: (data) => {

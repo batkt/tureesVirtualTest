@@ -35,6 +35,7 @@ import formatNumber from "tools/function/formatNumber";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
   const { data, mutate } = useSWR(
@@ -52,6 +53,7 @@ const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
 };
 
 const useDansniiKhuulga = (token, barilgiinId, zardliinBulgiinId, ognoo) => {
+
   const [khuudaslalt, setDansniiKhuulgaKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 100,
@@ -190,7 +192,7 @@ function ZardalMur({
                   onClick={() => zardalUstgaya(zardal)}
                 >
                   <DeleteOutlined />
-                  <span>Устгах</span>
+                  <span>{t("Устгах")}</span>
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
@@ -198,7 +200,7 @@ function ZardalMur({
                   onClick={() => zardalBurtgekh(zardal)}
                 >
                   <EditOutlined />
-                  <span>Засах</span>
+                  <span>{t("Засах")}</span>
                 </Menu.Item>
               </Menu>
             }
@@ -214,6 +216,7 @@ function ZardalMur({
       {showDed && zardal.dedKhesguud && (
         <div className="w-full pl-12">
           <Zardal
+          t={t}
             zardaluud={zardal.dedKhesguud}
             token={token}
             barilgiinId={barilgiinId}
@@ -270,11 +273,13 @@ function Zardal({
   baiguullagiinId,
   zardalBurtgekh,
   zardalUstgaya,
+  t
 }) {
   return (
     <div className={`w-full space-y-4 ${parent ? "zardalkhusnegt" : ""}`}>
       {zardaluud?.map((a, i) => (
         <ZardalMur
+        t={t}
           key={a?._id}
           zardal={a}
           index={i}
@@ -505,6 +510,7 @@ function ZardalTable({
 }
 
 function zardal({ token }) {
+  const { t } = useTranslation()
   const { barilgiinId, baiguullaga } = useAuth();
   const zardalRef = useRef(null);
   const [ognoo, setOgnoo] = useState([moment(), moment()]);
@@ -519,18 +525,19 @@ function zardal({ token }) {
   function zardalBurtgekh(data) {
     const footer = [
       <Space>
-        <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => zardalRef.current.khaaya()}>{t("Хаах")}</Button>
         <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
     modal({
-      title: "Зардлын бүлэг үүсгэх",
+      title: t("Зардлын бүлэг үүсгэх"),
       icon: <FileExcelOutlined />,
       width: 850,
       content: (
         <ZardalBurtgekh
+        t={t}
           ref={zardalRef}
           token={token}
           onRefresh={onRefresh}
@@ -621,7 +628,7 @@ function zardal({ token }) {
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </span>
-            <span>Зардал бүртгэх</span>
+            <span>{t("Зардал бүртгэх")}</span>
           </button>
         </div>
       </div>
@@ -655,14 +662,14 @@ function zardal({ token }) {
               render: (text, record, index) => index + 1,
             },
             {
-              title: "Зардлын бүлэг",
+              title: t("Зардлын бүлэг"),
               dataIndex: "ner",
               ellipsis: true,
               align: "center",
               width: "65vw",
             },
             {
-              title: "Дүн",
+              title: t("Дүн"),
               dataIndex: "davkhar",
               ellipsis: true,
               align: "center",
@@ -700,7 +707,7 @@ function zardal({ token }) {
                               className=""
                               style={{ fontSize: "18px", color: "green" }}
                             />
-                            <label>Засах</label>
+                            <label>{t("Засах")}</label>
                           </a>
                           <Popconfirm
                             className=""
@@ -714,7 +721,7 @@ function zardal({ token }) {
                                 className="px-3"
                                 style={{ fontSize: "18px", color: "red" }}
                               />
-                              <label>Устгах</label>
+                              <label>{t("Устгах")}</label>
                             </a>
                           </Popconfirm>
                         </div>

@@ -13,6 +13,7 @@ import { EyeOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import DelgerenguiKharakh from "components/pageComponents/ustsanTuukh/MedegdelKharakh";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 const order = { createdAt: -1 };
@@ -99,6 +100,7 @@ const turluud = [
 ];
 
 function UstsanTuukh() {
+  const { t } = useTranslation()
   const { barilgiinId } = useAuth();
   const [ajiltankhaikh, setAjiltankhaikh] = useState();
   const [turul, setTurul] = useState();
@@ -545,9 +547,9 @@ function UstsanTuukh() {
   const ajiltan = useJagsaalt("/ajiltan");
 
   function medeelelKharakh(mur) {
-    const footer = [<Button onClick={() => ref.current.khaaya()}>Хаах</Button>];
+    const footer = [<Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>];
     modal({
-      title: "Дэлгэрэнгүй Мэдээлэл",
+      title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
       content: <DelgerenguiKharakh ref={ref} data={mur} />,
       width: "22vw",
@@ -558,7 +560,7 @@ function UstsanTuukh() {
   const columns = useMemo(() => {
     return [
       {
-        title: "Огноо",
+        title: t("Огноо"),
         align: "center",
         ellipsis: true,
         width: "3rem",
@@ -578,7 +580,7 @@ function UstsanTuukh() {
       },
 
       {
-        title: "Төрөл",
+        title: t("Төрөл"),
         dataIndex: "class",
         align: "left",
         ellipsis: true,
@@ -609,7 +611,7 @@ function UstsanTuukh() {
               text = "Харилцагч";
               break;
             case "asuult":
-              text = "Асуулт";
+              text = "АсуултT";
               break;
             case "nekhemjlekhiinZagvar":
               text = "Нэхэмжлэл загвар";
@@ -643,12 +645,12 @@ function UstsanTuukh() {
               text = mur;
               break;
           }
-          return text;
+          return t(text);
         },
         sorter: () => 0,
       },
       {
-        title: "Устгасан шалтгаан",
+        title: t("Устгасан шалтгаан"),
         align: "left",
         ellipsis: true,
         width: "5rem",
@@ -663,7 +665,7 @@ function UstsanTuukh() {
       },
       ...turulColumns,
       {
-        title: "Хийсэн",
+        title: t("Хийсэн"),
         align: "left",
         ellipsis: true,
         width: "3rem",
@@ -681,7 +683,7 @@ function UstsanTuukh() {
       },
 
       {
-        title: "Устгасан",
+        title: t("Устгасан"),
         dataIndex: "ajiltniiNer",
         align: "left",
         ellipsis: true,
@@ -690,7 +692,7 @@ function UstsanTuukh() {
         sorter: () => 0,
       },
       {
-        title: "Устгасан онгоо ",
+        title: t("Устгасан онгоо"),
         dataIndex: "createdAt",
         align: "center",
         ellipsis: true,
@@ -702,7 +704,7 @@ function UstsanTuukh() {
         },
       },
       {
-        title: "Тайлбар",
+        title: t("Тайлбар"),
         width: "2rem",
         dataIndex: "tuluv",
         align: "center",
@@ -774,7 +776,7 @@ function UstsanTuukh() {
           >
             <Select
               className="w-full sm:w-36"
-              placeholder="Ажилтан"
+              placeholder={t("Ажилтан")}
               onChange={(v) => setAjiltankhaikh(v)}
               allowClear
             >
@@ -792,12 +794,12 @@ function UstsanTuukh() {
           >
             <Select
               className="w-full sm:w-36"
-              placeholder="Төрөл"
+              placeholder={t("Төрөл")}
               onChange={(v) => setTurul(v)}
               allowClear
             >
               {turluud.map((a) => (
-                <Select.Option value={a.turul}>{a.text}</Select.Option>
+                <Select.Option value={a.turul}>{t(a.text)}</Select.Option>
               ))}
             </Select>
           </div>

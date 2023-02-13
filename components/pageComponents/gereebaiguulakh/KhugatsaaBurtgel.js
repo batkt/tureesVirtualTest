@@ -25,6 +25,7 @@ const YurunkhiiMedeele = ({
   value,
   gereeniiZagvar,
   formSubmit,
+  t,
 }) => {
   const [form] = Form.useForm();
 
@@ -108,12 +109,12 @@ const YurunkhiiMedeele = ({
         <Form.Item
           rules={[{ required: true, message: "Гэрээ хийх огноо бүртгэнэ үү!" }]}
           name="gereeniiOgnoo"
-          label="Гэрээ хийх огноо"
+          label={t("Гэрээ хийх огноо")}
         >
           <DatePicker
             style={{ width: "100%" }}
             allowClear={false}
-            placeholder="Гэрээ хийх огноо"
+            placeholder={t("Гэрээ хийх огноо")}
             prefix={<SolutionOutlined />}
             onChange={() => form.getFieldInstance("khugatsaa").focus()}
           />
@@ -123,7 +124,7 @@ const YurunkhiiMedeele = ({
         <Form.Item
           rules={[{ required: true, message: "Гэрээний хугацаа бүртгэнэ үү!" }]}
           name="khugatsaa"
-          label="Гэрээний хугацаа"
+          label={t("Гэрээний хугацаа")}
           required
         >
           <InputNumber
@@ -135,18 +136,18 @@ const YurunkhiiMedeele = ({
             max={100}
             min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            placeholder={`Гэрээний хугацаа ${gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
-              }`}
+            placeholder={t(`Гэрээний хугацаа ${gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
+              }`)}
           />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item
           rules={[{ required: true, message: "Төлөлт хийх өдөр бүртгэнэ үү!" }]}
-          label="Төлөлт хийх өдөр"
+          label={t("Төлөлт хийх өдөр")}
           extra={
             gereeniiZagvar?.turGereeEsekh !== true &&
-            "Төлөлт хийх огноо сар бүрийн / өдөр"
+            t("Төлөлт хийх огноо сар бүрийн / өдөр")
           }
           name="tulukhUdur"
           required
@@ -156,14 +157,14 @@ const YurunkhiiMedeele = ({
               style={{ width: "100%" }}
               disabled
               allowClear
-              placeholder="Төлөлт хийх огноо"
+              placeholder={t("Төлөлт хийх огноо")}
               prefix={<SolutionOutlined />}
             />
           ) : (
             <Select
               onChange={() => form.getFieldInstance("duusakhOgnoo").focus()}
               defaultValue={_.get(value, "tulukhUdur.0")}
-              placeholder="Төлөлт хийх огноо сар бүрийн / өдөр"
+              placeholder={t("Төлөлт хийх огноо сар бүрийн / өдөр")}
               prefix={<SolutionOutlined />}
             >
               {new Array(31).fill("").map((a, i) => (
@@ -178,8 +179,8 @@ const YurunkhiiMedeele = ({
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
         <Form.Item
           name="duusakhOgnoo"
-          label="Гэрээ дуусах хугацаа"
-          extra="Төлөлт хийх огноо сар бүрийн / өдөр"
+          label={t("Гэрээ дуусах хугацаа")}
+          extra={t("Төлөлт хийх огноо сар бүрийн / өдөр")}
           rules={[
             { required: true, message: "Гэрээ дуусах хугацаа бүртгэнэ үү!" },
           ]}
@@ -203,7 +204,7 @@ const YurunkhiiMedeele = ({
               icon={<ArrowLeftOutlined />}
               className="dark:text-gray-200 dark:hover:text-gray-800"
             >
-              Ерөнхий мэдээлэл
+              {t("Ерөнхий мэдээлэл")}
             </Button>
             <Button
               id="tureesinTalbaiButton"
@@ -211,7 +212,7 @@ const YurunkhiiMedeele = ({
               onClick={() => form.submit()}
               icon={<ArrowRightOutlined />}
             >
-              Түрээсийн талбай
+              {t("Түрээсийн талбай")}
             </Button>
           </div>
         </Form.Item>

@@ -39,6 +39,7 @@ import useUldegdel from "hooks/khuulga/useUldegdel";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Aos from "aos";
+import { useTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
@@ -110,7 +111,7 @@ function iconAvyaZardal(a, bank) {
   );
 }
 
-function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
+function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul, t }) {
   const { data } = useSWR(
     !!token && !!dansniiDugaar && !!barilgiinId
       ? [token, dansniiDugaar, barilgiinId, ognoo, turul]
@@ -129,12 +130,13 @@ function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul }) {
   );
   return (
     <div className="font-medium dark:bg-gray-900 dark:text-white">
-      Гүйлгээний нийт дүн: {formatNumber(_.get(data, "0.dun"))}
+      {t("Гүйлгээний нийт дүн")}: {formatNumber(_.get(data, "0.dun"))}
     </div>
   );
 }
 
 function tulburTootsoo({ token }) {
+  const { t } = useTranslation()
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -230,9 +232,9 @@ function tulburTootsoo({ token }) {
       }
       const footer = [
         <div className="pr-[1%]">
-          <Button onClick={() => refGuilgee.current.khaaya()}>Хаах</Button>,
+          <Button onClick={() => refGuilgee.current.khaaya()}>{t("Хаах")}</Button>,
           <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
-            Хадгалах
+            {("Хадгалах")}
           </Button>
         </div>,
       ];
@@ -264,9 +266,9 @@ function tulburTootsoo({ token }) {
 
     const footer = [
       <div className="pr-[1%]">
-        <Button onClick={() => zardalRef.current.khaaya()}>Хаах</Button>,
+        <Button onClick={() => zardalRef.current.khaaya()}>{t("Хаах")}</Button>,
         <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
         ,
       </div>,
@@ -340,7 +342,7 @@ function tulburTootsoo({ token }) {
     if (songogdsonDans?.bank === "tdb") {
       baganuud = [
         {
-          title: "Огноо",
+          title: t("Огноо"),
           dataIndex: "TxDt",
           align: "center",
           width: "7rem",
@@ -354,7 +356,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Цаг",
+          title: t("Цаг"),
           showSorterTooltip: false,
           sorter: {
             compare: () => 0,
@@ -369,7 +371,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Гүйлгээний утга",
+          title: t("Гүйлгээний утга"),
           width: "20rem",
           align: "center",
           dataIndex: "TxAddInf",
@@ -382,7 +384,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Гүйлгээний дүн",
+          title: t("Гүйлгээний дүн"),
           sorter: () => 0,
           dataIndex: "Amt",
           ellipsis: true,
@@ -394,7 +396,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Шилжүүлсэн данс",
+          title: t("Шилжүүлсэн данс"),
           align: "center",
           dataIndex: "CtAcntOrg",
           ellipsis: true,
@@ -405,7 +407,7 @@ function tulburTootsoo({ token }) {
         baganuud = [
           ...baganuud,
           {
-            title: "Төлөв",
+            title: t("Төлөв"),
             width: "4rem",
             align: "center",
             render(a) {
@@ -422,7 +424,7 @@ function tulburTootsoo({ token }) {
             },
           },
           {
-            title: "Талбай",
+            title: t("Талбай"),
             dataIndex: "kholbosonTalbainId",
             ellipsis: true,
             align: "center",
@@ -505,7 +507,7 @@ function tulburTootsoo({ token }) {
     } else if (songogdsonDans?.bank === "khanbank") {
       baganuud = [
         {
-          title: "Огноо",
+          title: t("Огноо"),
           showSorterTooltip: false,
           sorter: {
             compare: () => 0,
@@ -519,7 +521,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Цаг",
+          title: t("Цаг"),
           showSorterTooltip: false,
           sorter: {
             compare: () => 0,
@@ -535,7 +537,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Гүйлгээний утга",
+          title: t("Гүйлгээний утга"),
           width: "20rem",
           align: "center",
           dataIndex: "description",
@@ -548,7 +550,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Гүйлгээний дүн",
+          title: t("Гүйлгээний дүн"),
           showSorterTooltip: false,
           sorter: () => 0,
           dataIndex: "amount",
@@ -561,7 +563,7 @@ function tulburTootsoo({ token }) {
           },
         },
         {
-          title: "Шилжүүлсэн данс",
+          title: t("Шилжүүлсэн данс"),
           align: "center",
           dataIndex: "relatedAccount",
           ellipsis: true,
@@ -589,7 +591,7 @@ function tulburTootsoo({ token }) {
             },
           },
           {
-            title: "Талбай",
+            title: t("Талбай"),
             dataIndex: "kholbosonTalbainId",
             ellipsis: true,
             align: "center",
@@ -713,7 +715,7 @@ function tulburTootsoo({ token }) {
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
-                          {mur.utga}
+                          {t(mur.utga)}
                         </div>
                       </div>
                       <div className="ml-auto">
@@ -751,7 +753,7 @@ function tulburTootsoo({ token }) {
                     }`}
                     onClick={() => setKhuulgaTurul(text)}
                   >
-                    {text === "orlogo" ? "Орлого" : "Зарлага"}
+                    {t(text === "orlogo" ? "Орлого" : "Зарлага")}
                   </div>
                 ))}
               </div>
@@ -760,7 +762,7 @@ function tulburTootsoo({ token }) {
           <div className="flex w-full md:pt-1">
             <div className="w-40 md:ml-4">
               <Select
-                placeholder="Данс"
+                placeholder={t("Данс")}
                 style={{ width: "100%" }}
                 onChange={dansSongoy}
                 value={songogdsonDans?.dugaar}
@@ -775,7 +777,7 @@ function tulburTootsoo({ token }) {
 
             {songogdsonDans && (
               <div className="ml-5 hidden flex-row space-x-2 p-1 font-medium md:flex">
-                Үлдэгдэл:{" "}
+                {t("Үлдэгдэл")}:{" "}
                 {uldegdel ? (
                   songogdsonDans?.bank === "tdb" ? (
                     uldegdel
@@ -802,7 +804,7 @@ function tulburTootsoo({ token }) {
                           .addSheet("Дансны хуулга")
                           .addColumns([
                             {
-                              title: "Огноо",
+                              title: t("Огноо"),
                               align: "center",
                               dataIndex: "TxDt",
                               render(date) {
@@ -810,7 +812,7 @@ function tulburTootsoo({ token }) {
                               },
                             },
                             {
-                              title: "Цаг",
+                              title: t("Цаг"),
                               dataIndex: "TxTime",
                               render(a) {
                                 if (_.isString(a)) return `${a}`;
@@ -818,11 +820,11 @@ function tulburTootsoo({ token }) {
                               },
                             },
                             {
-                              title: "Гүйлгээний утга",
+                              title: t("Гүйлгээний утга"),
                               dataIndex: "TxAddInf",
                             },
                             {
-                              title: "Гүйлгээний дүн",
+                              title: t("Гүйлгээний дүн"),
                               showSorterTooltip: false,
                               sorter: () => 0,
                               dataIndex: "Amt",
@@ -831,11 +833,11 @@ function tulburTootsoo({ token }) {
                               },
                             },
                             {
-                              title: "Шилжүүлсэн данс",
+                              title: t("Шилжүүлсэн данс"),
                               dataIndex: "CtAcntOrg",
                             },
                             {
-                              title: "Талбай",
+                              title: t("Талбай"),
                               dataIndex: "kholbosonTalbainId",
                             },
                           ])
@@ -844,7 +846,7 @@ function tulburTootsoo({ token }) {
                       }}
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />
-                      <label>Татах</label>
+                      <label>{t("Татах")}</label>
                     </a>
                   </div>
                 )}
@@ -890,6 +892,7 @@ function tulburTootsoo({ token }) {
             rowKey={(a) => a._id}
             footer={() => (
               <GuilgeeniiDun
+              t={t}
                 token={token}
                 barilgiinId={barilgiinId}
                 dansniiDugaar={songogdsonDans?.dugaar}

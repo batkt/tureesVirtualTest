@@ -34,6 +34,7 @@ import useOrder from "tools/function/useOrder";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useRouter } from "next/router";
 import getBase64 from "tools/function/getBase64";
+import { useTranslation } from "react-i18next";
 
 //#endregion
 export function uldegdeliinTurulKhurvuulya(turul) {
@@ -60,6 +61,7 @@ function Khyanalt({ token }) {
     Aos.init({ once: true });
   });
   const { barilgiinId } = useAuth();
+  const { t } = useTranslation()
   const [turul, setTurul] = useState("App");
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
@@ -378,7 +380,7 @@ function Khyanalt({ token }) {
                 else setSongogdsonKhariltsagch([]);
               }}
             >
-              <p className="pl-3">Бүгдийг сонгох</p>
+              <p className="pl-3">{t("Бүгдийг сонгох")}</p>
             </Checkbox>
           </div>
 
@@ -513,13 +515,12 @@ function Khyanalt({ token }) {
                       </div>
                     </div>
                     <div className="mt-3">
-                      <div className="font-medium">Өдрийн мэнд</div>
+                      <div className="font-medium">{t("Өдрийн мэнд")}</div>
                       <p>
-                        Сонгогдсон {songogdsonKhariltsagch.length} харилцагч
-                        байна.
+                        {t("Сонгогдсон харилцагч байна.", { count: songogdsonKhariltsagch.length})}
                       </p>
                       <div className="mt-1 text-gray-600 dark:text-gray-300">
-                        Та шаардлага илгээнэ үү.
+                        {t("Та шаардлага илгээнэ үү.")}
                       </div>
                     </div>
                   </div>
@@ -545,24 +546,24 @@ function Khyanalt({ token }) {
                       <div className="relative w-10/12  rounded-lg bg-green-50 p-2  dark:bg-[#121826] sm:w-full">
                         <div className="flex flex-row flex-wrap items-center justify-between  ">
                           <div className="text-sm text-green-600">
-                            Гарчиг: {mur.title}
+                            {t("Гарчиг")}: {mur.title}
                           </div>
                           {mur?.tuluv === 0 ? (
                             <div className="rounded-lg border-[1px] bg-red-500 p-1 text-white">
                               {" "}
-                              Хүлээж аваагүй{" "}
+                              {t("Хүлээж аваагүй")}{" "}
                             </div>
                           ) : (
                             <div className="rounded-lg border-[1px] bg-green-400 p-1 text-white ">
                               {" "}
-                              Хүлээж авсан{" "}
+                              {t("Хүлээж авсан")}{" "}
                             </div>
                           )}
                         </div>
                         <div className="flex">
                           <div className="w-full">
                             <div className="font-semibold">
-                              Шаардлага: {mur.message}
+                              {t("Шаардлага")}: {mur.message}
                             </div>
 
                             <div>
@@ -600,7 +601,7 @@ function Khyanalt({ token }) {
             <Input
               rules={[{ required: true, message: "Гарчиг заавал оруулна уу!" }]}
               className="space-y-3"
-              placeholder="Гарчиг"
+              placeholder={t("Гарчиг")}
               value={title}
               onChange={({ target }) => setTitle(target.value)}
             />
@@ -624,7 +625,7 @@ function Khyanalt({ token }) {
                 <div className="flex flex-row space-x-1">
                   <div className="flex flex-row space-x-1">
                     {!zurag && (
-                      <Button icon={<UploadOutlined />}>зураг оруулах</Button>
+                      <Button icon={<UploadOutlined />}>{t("Зураг оруулах")}</Button>
                     )}
                     <img ref={ref} width={200} src="" className="hidden" />
                     {!!zurag && <Button icon={<EditOutlined />}></Button>}
@@ -641,7 +642,7 @@ function Khyanalt({ token }) {
           <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
             <div className="text-xs font-semibold">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3 bg-fixed ">
-              <label className="font-medium">{turul} Илгээх</label>
+              <label className="font-medium">{turul} {t("Илгээх")}</label>
               <div
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
@@ -687,9 +688,9 @@ function Khyanalt({ token }) {
               </div>
             </div>
             <div className="mt-3">
-              <div className="font-medium">Өдрийн мэнд</div>
+              <div className="font-medium">{t("Өдрийн мэнд")}</div>
               <div className="mt-1 text-gray-600 dark:text-gray-300">
-                Та шаардлага илгээх харилцагчаа сонгоно уу.
+                {t("Та шаардлага илгээх харилцагчаа сонгоно уу.")}
               </div>
             </div>
           </div>

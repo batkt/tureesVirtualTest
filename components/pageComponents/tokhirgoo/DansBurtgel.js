@@ -16,11 +16,13 @@ import {
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import compareFields from "tools/function/compareFields";
+import { useTranslation } from "react-i18next";
 
 function DansBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, dansMutate },
   ref
 ) {
+  const { t } = useTranslation()
   const [form] = Form.useForm();
   const [bank, setBank] = useState(data?.bank);
 
@@ -103,26 +105,26 @@ function DansBurtgel(
       wrapperCol={{ span: 14 }}
     >
       <Form.Item hidden name="_id"></Form.Item>
-      <Form.Item label="Банкны нэр" name="bank">
+      <Form.Item label={t("Банкны нэр")} name="bank">
         <Select onSelect={setBank} onKeyUp={focuser}>
           <Select.Option key="khanbank" value="khanbank">
-            Хаан банк
+            {t("Хаан банк")}
           </Select.Option>
           <Select.Option key="tdb" value="tdb">
-            Худалдаа хөгжлийн банк
+            {t("Худалдаа хөгжлийн банк")}
           </Select.Option>
           <Select.Option key="golomt" value="golomt">
-            Голомт банк
+            {t("Голомт банк")}
           </Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item label="Дансны дугаар" name="dugaar">
+      <Form.Item label={t("Дансны дугаар")} name="dugaar">
         <InputNumber style={{ width: "100%" }} min={0} onKeyUp={focuser} />
       </Form.Item>
-      <Form.Item label="Дансны нэр" name="dansniiNer">
+      <Form.Item label={t("Дансны нэр")} name="dansniiNer">
         <Input onKeyUp={focuser} />
       </Form.Item>
-      <Form.Item label="Валют" name="valyut">
+      <Form.Item label={t("Валют")} name="valyut">
         <Select onKeyUp={focuser}>
           <Select.Option key="MNT" value="MNT">
             MNT

@@ -3,10 +3,12 @@ import { DatePicker, Table, Tooltip } from "antd";
 import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useTranslation } from "react-i18next";
 
 const order = { createdAt: -1 };
 
 function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
+  const { t } = useTranslation()
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
@@ -42,7 +44,7 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
         1,
     },
     {
-      title: "Огноо",
+      title: t("Огноо"),
       dataIndex: "ognoo",
       width: "9rem",
       ellipsis: true,
@@ -50,21 +52,21 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
       render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
     },
     {
-      title: "Веб хөтөч",
+      title: t("Веб хөтөч"),
       dataIndex: "browser",
       ellipsis: true,
       width: "8rem",
       align: "center",
     },
     {
-      title: "Ажилтны нэр",
+      title: t("Ажилтны нэр"),
       dataIndex: "ajiltniiNer",
       ellipsis: true,
       width: "7rem",
       align: "center",
     },
     {
-      title: "Байршил",
+      title: t("Байршил"),
       dataIndex: "bairshilKhot",
       width: "10rem",
       ellipsis: true,
@@ -76,7 +78,7 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
       }
     },
     {
-      title: "Төхөөрөмж",
+      title: t("Төхөөрөмж"),
       width: "8rem",
       dataIndex: "uildliinSystem",
       ellipsis: true,
@@ -96,7 +98,7 @@ function NevtreltiinTuukh({ token, baiguullaga, ajiltan, }) {
         <div className="intro-y box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Нэвтрэлтийн түүх
+              {t("Нэвтрэлтийн түүх")}
             </h2>
             <DatePicker.RangePicker
               className="w-full md:w-auto"

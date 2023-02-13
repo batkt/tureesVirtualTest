@@ -44,6 +44,7 @@ import BaganiinSongolt from "components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
+import { useTranslation } from "react-i18next";
 
 //#endregion
 
@@ -81,6 +82,7 @@ function TableGuilgee({
   setLoadingIndex,
   onChange,
 }) {
+
   function UilgelAvya({ garalt, columns }) {
     const [uldegdel, setUldegdel] = useState(0);
     useEffect(() => {
@@ -160,6 +162,7 @@ const searchKeys = [
 ];
 
 function guilgeeniiTuukh({ token }) {
+  const { t, i18n } = useTranslation()
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -203,7 +206,7 @@ function guilgeeniiTuukh({ token }) {
         sericeName = `/vouchertaiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
         turulColumns.push({
           dataIndex: "voucherDun",
-          title: "Ваучерын дүн",
+          title: t("Ваучерын дүн"),
           width: "7rem",
           summary: true,
           align: "center",
@@ -216,7 +219,7 @@ function guilgeeniiTuukh({ token }) {
         sericeName = `/khungulultteiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
         turulColumns.push({
           dataIndex: "khungulult",
-          title: "Хөнгөлөлт",
+          title: t("Хөнгөлөлт"),
           summary: true,
           width: "6rem",
           align: "center",
@@ -229,7 +232,7 @@ function guilgeeniiTuukh({ token }) {
         sericeName = `/guitsetgelteiJagsaaltAvya/${ekhlekhOgnoo}/${duusakhOgnoo}`;
         turulColumns.push({
           dataIndex: "tulsunDun",
-          title: "Төлсөн дүн",
+          title: t("Төлсөн дүн"),
           summary: true,
           width: "7rem",
           align: "center",
@@ -282,8 +285,10 @@ function guilgeeniiTuukh({ token }) {
       };
     }
     return { sericeName, query, turulColumns };
-  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo]);
-
+  }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo, t]);
+useEffect(()=> {
+  setShineBagana([])
+},[i18n.language])
   const {
     data,
     mutate,
@@ -332,11 +337,11 @@ function guilgeeniiTuukh({ token }) {
       {
         width: "7rem",
         align: "center",
-        title: "Регистр",
+        title: t("Регистр"),
         dataIndex: "register",
       },
       {
-        title: "Талбай",
+        title: t("Талбай"),
         dataIndex: "talbainDugaar",
         ellipsis: true,
         align: "center",
@@ -345,7 +350,7 @@ function guilgeeniiTuukh({ token }) {
         sorter: () => 0,
       },
       {
-        title: "Утас",
+        title: t("Утас"),
         dataIndex: "utas",
         ellipsis: true,
         align: "center",
@@ -392,7 +397,7 @@ function guilgeeniiTuukh({ token }) {
       },
 
       {
-        title: "Үлдэгдэл",
+        title: t("Үлдэгдэл"),
         width: "calc(18rem - 10rem)",
         dataIndex: "uldegdel",
         align: "center",
@@ -415,14 +420,14 @@ function guilgeeniiTuukh({ token }) {
       {
         width: "9rem",
         align: "center",
-        excelHeader: "Төлөх огноо",
+        excelHeader: t("Төлөх огноо"),
         title: () => (
           <div className="flex justify-center">
             <div
               className=" flex w-full
              justify-end"
             >
-              Төлөх огноо
+              {t("Төлөх огноо")}
             </div>
             <div className="flex h-full w-[50%] items-center justify-end">
               <Popover
@@ -480,7 +485,7 @@ function guilgeeniiTuukh({ token }) {
       ...shineBagana,
       ...turulColumns,
       {
-        title: "Үйлдэл",
+        title: t("Үйлдэл"),
         width: "10rem",
         align: "center",
         dataIndex: "baritsaaniiUldegdel",
@@ -501,7 +506,7 @@ function guilgeeniiTuukh({ token }) {
                 className=" text-green-500 hover:scale-110"
               >
                 <Tooltip
-                  title="Нэхэмжлэл илгээх"
+                  title={t("Нэхэмжлэл илгээх")}
                   className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
@@ -534,7 +539,7 @@ function guilgeeniiTuukh({ token }) {
                 className="fill-current  text-green-500 hover:scale-110"
               >
                 <Tooltip
-                  title="Хуулга"
+                  title={t("Хуулга")}
                   className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
@@ -558,7 +563,7 @@ function guilgeeniiTuukh({ token }) {
                 className="fill-current  text-green-500  hover:scale-125"
               >
                 <Tooltip
-                  title="Гүйлгээ хийх"
+                  title={t("Гүйлгээ хийх")}
                   className="flex w-full items-center  justify-center px-[6px] "
                 >
                   <svg
@@ -625,7 +630,7 @@ function guilgeeniiTuukh({ token }) {
         showSorterTooltip: false,
       },
     ];
-  }, [gereeniiMedeelel, loadingIndex, shineBagana, turulColumns]);
+  }, [gereeniiMedeelel, loadingIndex, shineBagana, turulColumns, t]);
 
   //#endregion
   //#region handlers
@@ -649,17 +654,17 @@ function guilgeeniiTuukh({ token }) {
   function baritsaaUdirdya(data) {
     var baritsaaUdirdanKhadgalyaaId = "baritsaaUdirdanKhadgalyaaId";
     const footer = [
-      <Button onClick={() => baritsaaref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => baritsaaref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         type="primary"
         id={baritsaaUdirdanKhadgalyaaId}
         onClick={() => baritsaaref.current.khadgalya()}
       >
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Барьцаа",
+      title: t("Барьцаа"),
       icon: <FileExcelOutlined />,
       content: (
         <BaritsaaUdirdlaga
@@ -682,17 +687,17 @@ function guilgeeniiTuukh({ token }) {
     }
     var khadgalyaButtonId = "khadgalyaButtonId";
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         type="primary"
         id={khadgalyaButtonId}
         onClick={() => ref.current.khadgalya()}
       >
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: "Гүйлгээ хийх",
+      title: t("Гүйлгээ хийх"),
       icon: <FileExcelOutlined />,
       content: (
         <GuilgeeKhiikh
@@ -711,10 +716,11 @@ function guilgeeniiTuukh({ token }) {
 
   function nekhemjlelIlgeekh(data) {
     modal({
-      title: "Нэхэмжлэл илгээх",
+      title: t("Нэхэмжлэл илгээх"),
       icon: <FileExcelOutlined />,
       content: (
         <NekhemjlelIlgeekh
+          t={t}
           data={data}
           ref={ref}
           token={token}
@@ -747,17 +753,17 @@ function guilgeeniiTuukh({ token }) {
         onClick={() => ref.current.khevlekh()}
         icon={<PrinterOutlined />}
       >
-        Хэвлэх
+        {t("Хэвлэх")}
       </Button>,
       <Button
         onClick={() => ref.current.khaaya()}
         icon={<CloseCircleOutlined />}
       >
-        Хаах
+        {t("Хаах")}
       </Button>,
     ];
     modal({
-      title: "Хуулга",
+      title: t("Хуулга"),
       icon: <FileExcelOutlined />,
       width: "90vw",
       style: { top: 20 },
@@ -889,7 +895,7 @@ function guilgeeniiTuukh({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               >
-                <Tooltip title={<div>{mur.tailbar}</div>}>
+                <Tooltip title={<div>{t(mur.tailbar)}</div>}>
                   <div className="h-full w-[65vw] rounded-xl sm:w-auto">
                     <div className="rounded-xl p-3">
                       <div className="flex">
@@ -898,7 +904,7 @@ function guilgeeniiTuukh({ token }) {
                             {mur.too}
                           </div>
                           <div className="text-base text-gray-500">
-                            {mur.utga}
+                            {t(mur.utga)}
                           </div>
                         </div>
                         <div className="ml-auto flex flex-col text-center">
@@ -946,7 +952,7 @@ function guilgeeniiTuukh({ token }) {
               clearIcon={false}
             />
             <div className="ml-5">
-              <Select placeholder="Давхар" onChange={setDavkhar} allowClear>
+              <Select placeholder={t("Давхар")} onChange={setDavkhar} allowClear>
                 {baiguullaga?.barilguud
                   ?.find((a) => a._id === barilgiinId)
                   ?.davkharuud.map((a) => (
@@ -964,7 +970,7 @@ function guilgeeniiTuukh({ token }) {
                 setShineBagana={setShineBagana}
                 columns={[
                   {
-                    title: "Сарын түрээс",
+                    title: t("Сарын түрээс"),
                     width: "8rem",
                     dataIndex: "sariinTurees",
                     summary: true,
@@ -978,7 +984,7 @@ function guilgeeniiTuukh({ token }) {
                     },
                   },
                   {
-                    title: "Талбайн үнэ",
+                    title: t("Талбайн үнэ"),
                     width: "8rem",
                     align: "center",
                     summary: true,
@@ -992,7 +998,7 @@ function guilgeeniiTuukh({ token }) {
                     },
                   },
                   {
-                    title: "Давхар",
+                    title: t("Давхар"),
                     dataIndex: "davkhar",
                     ellipsis: true,
                     align: "center",
@@ -1002,7 +1008,7 @@ function guilgeeniiTuukh({ token }) {
                     sorter: () => 0,
                   },
                   {
-                    title: "Түрээслэгч",
+                    title: t("Түрээслэгч"),
                     dataIndex: "ner",
                     ellipsis: true,
                     align: "center",
@@ -1012,7 +1018,7 @@ function guilgeeniiTuukh({ token }) {
                     },
                   },
                   {
-                    title: "Гэрээний огноо",
+                    title: t("Гэрээний огноо"),
                     width: "11rem",
                     dataIndex: "gereeniiOgnoo",
                     ellipsis: true,
@@ -1023,7 +1029,7 @@ function guilgeeniiTuukh({ token }) {
                     sorter: () => 0,
                   },
                   {
-                    title: "Алданги",
+                    title: t("Алданги"),
                     dataIndex: "aldangiinUldegdel",
                     className: "text-center",
                     align: "center",
@@ -1057,7 +1063,7 @@ function guilgeeniiTuukh({ token }) {
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}

@@ -16,6 +16,7 @@ import Aos from "aos";
 import { useEffect } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const { Step } = Steps;
 
@@ -48,6 +49,7 @@ const steps = [
 ];
 
 function GereeBaiguulakh({ token }) {
+  const { t } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
   useEffect(() => {
     Aos.init({ once: true });
@@ -370,7 +372,7 @@ function GereeBaiguulakh({ token }) {
                 }
                 value={index}
                 key={item.title}
-                title={item.title}
+                title={t(item.title)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
@@ -381,6 +383,7 @@ function GereeBaiguulakh({ token }) {
         <div className="mt-3 grid grid-cols-12 gap-6 md:col-span-12">
           <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
+            t={t}
               next={next}
               current={current}
               prev={prev}
@@ -461,9 +464,9 @@ function GereeBaiguulakh({ token }) {
                       <div className="flex justify-between">
                         <p>{mur.ner}</p>
                         <p className="text-gray-500">
-                          {mur.turGereeEsekh === true
-                            ? "/Түр гэрээ/"
-                            : "/Үндсэн гэрээ/"}
+                          /{mur.turGereeEsekh === true
+                            ? t("Түр гэрээ")
+                            : t("Үндсэн гэрээ")}/
                         </p>
                       </div>
                     </Select.Option>

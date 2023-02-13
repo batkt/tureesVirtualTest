@@ -17,7 +17,7 @@ const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
 
-function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
+function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }) {
   const ajitanRef = React.useRef(null);
   const { barilgiinId, baiguullaga } = useAuth();
   const [daalgavar, setDaalgavar] = React.useState({});
@@ -29,20 +29,21 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
 
   function ajiltanSongokh() {
     const footer = [
-      <Button onClick={() => ajitanRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ajitanRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         type="primary"
         id="ajiltanSongokhButton"
         onClick={() => ajitanRef.current.khadgalya()}
       >
-        Cонгох
+        {t("Cонгох")}
       </Button>,
     ];
     modal({
-      title: "Ажилтан сонгох",
+      title: t("Ажилтан сонгох"),
       icon: <FileExcelOutlined />,
       content: (
         <AjiltanNemekh
+        t={t}
           daalgavar={daalgavar}
           ref={ajitanRef}
           token={token}
@@ -102,7 +103,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
       data-aos-anchor-placement="top-bottom"
       className={`relative col-span-12 space-y-10 rounded-2xl md:rounded-none md:rounded-r-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
     >
-      <div className="text-left text-xl font-medium">Даалгаварын хугацааг сонгоно уу.</div>
+      <div className="text-left text-xl font-medium">{t("Даалгаварын хугацааг сонгоно уу.")}</div>
       <div className="flex justify-between gap-2 overflow-x-scroll p-2 lg:justify-center xl:justify-between">
         {ognoonuud.map((ognoo) => (
           <div
@@ -114,11 +115,11 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
               } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
-            <div className="w-16">{moment(ognoo).format("MM")} сар</div>
+            <div className="w-16">{moment(ognoo).format(i18n.language === "mn" ? "MM" : "MMM")} {i18n.language === "mn" && "сар"}</div>
           </div>
         ))}
       </div>
-      <div className="text-xl font-medium">Ажилтан сонгоно уу.</div>
+      <div className="text-xl font-medium">{t("Ажилтан сонгоно уу.")}</div>
       <div className="flex flex-col gap-5">
         <div
           onClick={ajiltanSongokh}
@@ -128,9 +129,9 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <UserOutlined className="text-xl" />
             <div>
               <div className="text-lg font-medium">
-                Ажилтан{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
+                {t("Ажилтан")}{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
               </div>
-              <div>Даалгавар илгээх ажилтан сонгоно уу</div>
+              <div>{t("Даалгавар илгээх ажилтан сонгоно уу")}</div>
             </div>
           </div>
           <div>
@@ -161,8 +162,8 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
             <div className="flex gap-5">
               <FileImageOutlined className="text-xl" />
               <div>
-                <div className="text-lg font-medium">Зураг</div>
-                <div>Та зураг сонгоно уу</div>
+                <div className="text-lg font-medium">{t("Зураг")}</div>
+                <div>{t("Та зураг сонгоно уу")}</div>
               </div>
             </div>
             <div>
@@ -180,7 +181,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           }}
           value={daalgavar.tailbar}
           className="mt-10 h-24 w-full border-2 p-3 "
-          placeholder="Даалгавар"
+          placeholder={t("Даалгавар")}
           type="text"
           onChange={(e) => onChange("tailbar", e.target.value)}
         ></TextArea>
@@ -190,7 +191,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose }) {
           className="rounded-xl bg-green-500 py-1 px-24 text-lg font-medium text-white"
           onClick={khadgalakh}
         >
-          Хадгалах
+          {t("Хадгалах")}
         </button>
       </div>
     </div>

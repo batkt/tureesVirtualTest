@@ -31,10 +31,10 @@ function converter(key) {
       ret = "Барьцаа авах дүн";
       break;
     case "baritsaaAvakhKhugatsa":
-      ret = "Барьцаа  авах хугацаа";
+      ret = "Барьцаа авах хугацаа";
       break;
     case "baritsaaBairshuulakhKhugatsaa":
-      ret = "Барьцаа  байршуулах хугацаа";
+      ret = "Барьцаа байршуулах хугацаа";
       break;
     case "baritsaaniiUldegdel":
       ret = "Барьцааны үлдэгдэл";

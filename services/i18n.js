@@ -11,12 +11,12 @@ i18next
     .init({
 
         lng: "mn",
-
         interpolation: {
 
             escapeValue: false,
 
         },
+        debug:true
     });
 
 export default i18next;

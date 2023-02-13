@@ -1,8 +1,10 @@
 import React from "react";
 import { Menu, Checkbox, Popover, Button } from "antd";
 import { UnorderedListOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
+  const { t } = useTranslation()
   React.useEffect(() => {
     const baganuud = localStorage.getItem("bagana-" + window.location.href);
     if (!!baganuud) setShineBagana(columns.filter(a => {
@@ -63,7 +65,7 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
           type="primary"
           icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
         >
-          <span>Багана</span>
+          <span>{t("Багана")}</span>
         </Button>
       </Popover>
     </div>

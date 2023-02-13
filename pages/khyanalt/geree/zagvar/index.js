@@ -14,9 +14,11 @@ import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOru
 import GereeKharakh from "components/pageComponents/geree/Kharakh";
 import Aos from "aos";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function index({ token }) {
   const { ajiltan, baiguullaga, barilgiinId } = useAuth();
+  const { t } = useTranslation();
   const [kharuulakhGeree, setKharuulakhGeree] = React.useState();
   const ref = React.useRef();
   const excelref = React.useRef();
@@ -120,7 +122,7 @@ function index({ token }) {
               className=" font-medium dark:text-gray-200"
               onClick={() => router.push("/khyanalt/geree/zagvar/new")}
             >
-              Шинэ гэрээний загвар үүсгэх
+              {t("Шинэ гэрээний загвар үүсгэх")}
             </Button>
             <Dropdown
               overlay={
@@ -131,7 +133,7 @@ function index({ token }) {
                     onClick={zaaltOruulakh}
                   >
                     <UserAddOutlined />
-                    <span>Заалт нэмэх</span>
+                    <span>{t("Заалт нэмэх")}</span>
                   </Menu.Item>
                   <Menu.Item
                     key="Заалт Excel-ээс оруулах"
@@ -139,7 +141,7 @@ function index({ token }) {
                     onClick={zaaltOruulakhExcel}
                   >
                     <UserAddOutlined />
-                    <span>Заалт Excel-ээс оруулах</span>
+                    <span>{t("Заалт Excel-ээс оруулах")}</span>
                   </Menu.Item>
                   <Menu.Item
                     key="Заалт Excel-ээс оруулах"
@@ -147,7 +149,7 @@ function index({ token }) {
                     onClick={zagvarOruulakhExcel}
                   >
                     <UserAddOutlined />
-                    <span>Гэрээний загвар Excel-ээс оруулах</span>
+                    <span>{t("Гэрээний загвар Excel-ээс оруулах")}</span>
                   </Menu.Item>
                 </Menu>
               }

@@ -33,7 +33,8 @@ function Ajiltan() {
   useEffect(() => {
     Aos.init({ once: true });
   }, []);
-  const { t } = useTranslation();
+
+  const { t, i18n } = useTranslation();
 
   return (
     <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
@@ -61,7 +62,7 @@ function Ajiltan() {
                 data-aos="fade-right"
                 data-aos-duration="3000"
               >
-                Түрээсийн удирдлагын систем
+                {t("loginGarchig")}
               </div>
             </div>
           </div>
@@ -81,14 +82,14 @@ function Ajiltan() {
                   <div data-aos="fade-up" data-aos-delay="500">
                     <Form.Item name="nevtrekhNer">
                       <Input
-                        placeholder="Нэвтрэх нэр"
+                        placeholder={t("loginNevtrekhNer")}
                         className="login-input"
                       />
                     </Form.Item>
                   </div>
                   <div data-aos="fade" data-aos-delay="300">
                     <Form.Item name="nuutsUg">
-                      <Password placeholder="Нууц үг" className="login-input" />
+                      <Password placeholder={t("loginNuutsug")} className="login-input" />
                     </Form.Item>
                   </div>
                 </Form>
@@ -108,10 +109,10 @@ function Ajiltan() {
                       className="cursor-pointer select-none"
                       htmlFor="remember-me"
                     >
-                      Намайг сана
+                      {t("loginNamaigSana")}
                     </label>
                   </div>
-                  <a href="">Нууц үг сэргээх?</a>
+                  <a href="">{t("loginNuutsugS")}</a>
                 </div>
 
                 <button
@@ -136,13 +137,27 @@ function Ajiltan() {
                       />
                     </svg>
                   </span>
-                  Нэвтрэх
+                 {t("loginNevtrekh")}
                 </button>
                 <div className="mt-24 text-center xl:hidden">
-                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
-                  хуулиар баталгаажсан.
+                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("loginCopyRight")}
                 </div>
               </div>
+            <div className="flex fixed w-10 top-6 right-10 hover:scale-105 transition-all gap-2">
+              {i18n.language === "en" ? (
+                <img
+                  onClick={() => i18n.changeLanguage("mn")}
+                  className={`object-contain cursor-pointer transition-all w-full`}
+                  src="/MN.png"
+                />
+              ) : (
+                <img
+                  onClick={() => i18n.changeLanguage("en")}
+                  className={`object-contain cursor-pointer transition-all w-full`}
+                  src="/UK.png"
+                />
+              )}
+            </div>
               <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 flex h-12 w-40 cursor-pointer items-center justify-center rounded-full border bg-white shadow-md dark:bg-gray-900">
                 <div className="mr-4 text-gray-700 dark:text-gray-300">
                   Dark Mode
@@ -153,8 +168,7 @@ function Ajiltan() {
                 />
               </div>
               <div className="fixed bottom-0 hidden xl:block">
-                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. Бүх эрх
-                хуулиар баталгаажсан.
+                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("loginCopyRight")}
               </div>
             </div>
           </div>

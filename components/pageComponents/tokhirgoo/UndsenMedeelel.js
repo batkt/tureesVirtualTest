@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Button, Input, message } from "antd";
-import moment from "moment";
 import { url } from "services/uilchilgee";
 import updateMethod from "tools/function/crud/updateMethod";
 import getBase64 from "tools/function/getBase64";
+import { useTranslation } from "react-i18next";
 
 const { TextArea } = Input;
 
 function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setSongogdsonTsonkhniiIndex }) {
+  const { t } = useTranslation()
   const [state, setstate] = useState(ajiltan);
   const zuragRef = useRef(null);
 
@@ -39,7 +40,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
       <div className="box lg:mt-5">
         <div className="dark:border-dark-5 flex items-center border-b border-gray-200 p-5">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-            Хувийн мэдээлэл
+            {t("Хувийн мэдээлэл")}
           </h2>
         </div>
         <div className="p-5">
@@ -48,10 +49,10 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               <div className="grid grid-cols-12 gap-x-5">
                 <div className="xxl:col-span-6 col-span-12">
                   <div className="mt-3">
-                    <label className="form-label">Овог</label>
+                    <label className="form-label">{t("Овог")}</label>
                     <Input
                       name="ovog"
-                      placeholder="Овог"
+                      placeholder={t("Овог")}
                       defaultValue={ajiltan.ovog}
                       onChange={(e) => onChange(e, "ovog")}
                     />
@@ -59,10 +60,10 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
                 <div className="xxl:col-span-6 col-span-12">
                   <div className="mt-3">
-                    <label className="form-label">Нэр</label>
+                    <label className="form-label">{t("Нэр")}</label>
                     <Input
                       name="ner"
-                      placeholder="Нэр"
+                      placeholder={t("Нэр")}
                       defaultValue={ajiltan.ner}
                       onChange={(e) => onChange(e, "ner")}
                     />
@@ -70,7 +71,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
                 <div className="xxl:col-span-6 col-span-12">
                   <div className="mt-3">
-                    <label className="form-label">Нэвтрэх нэр</label>
+                    <label className="form-label">{t("Нэвтрэх нэр")}</label>
                     <Input
                       name="nevtrekhNer"
                       placeholder="Нэвтрэх нэр"
@@ -81,19 +82,19 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
                 <div className="col-span-12">
                   <div className="mt-3">
-                    <label className="form-label">Шинэ нууц үг</label>
+                    <label className="form-label">{t("Шинэ нууц үг")}</label>
                     <Input.Password
                       className="form-control"
-                      placeholder="Шинэ нууц үг"
+                      placeholder={t("Шинэ нууц үг")}
                       name="shineNuutsUg"
                       onChange={(e) => onChange(e, "shineNuutsUg")}
                     />
                   </div>
                   <div className="mt-3">
-                    <label className="form-label">Шинэ нууц үг давтан</label>
+                    <label className="form-label">{t("Шинэ нууц үг давтан")}</label>
                     <Input.Password
                       className="form-control"
-                      placeholder="Шинэ нууц үг давтан"
+                      placeholder={t("Шинэ нууц үг давтан")}
                       name="shineNuutsUgDavtan"
                       onChange={(e) => onChange(e, "shineNuutsUgDavtan")}
                     />
@@ -102,7 +103,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               </div>
               <div className="mt-3 w-full flex justify-end">
                 <Button type="primary" onClick={khadgalakh}>
-                  Хадгалах
+                  {t("Хадгалах")}
                 </Button>
               </div>
             </div>
@@ -145,7 +146,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                 </div>
                 <div className="relative mx-auto mt-5 cursor-pointer">
                   <Button type="primary" className="w-full">
-                    Зураг солих
+                    {t("Зураг солих")}
                   </Button>
                   <input
                     type="file"

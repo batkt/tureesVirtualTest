@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
+import { t } from "i18next";
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -109,7 +110,7 @@ const Tulbur = ({
       onFinish={onFinish}
     >
       <div data-aos="fade-right" data-aos-duration="1000">
-        <Form.Item label="Түрээсийн төлбөр" style={{ marginBottom: 10 }}>
+        <Form.Item label={t("Түрээсийн төлбөр")} style={{ marginBottom: 10 }}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(value.sariinTurees)}
           </div>
@@ -138,11 +139,11 @@ const Tulbur = ({
           </div>
           {value.baritsaaAvakhEsekh === true && (
             <div data-aos="fade-right" data-aos-duration="1000">
-              <Form.Item label="Барьцаа дүн">
+              <Form.Item label={t("Барьцаа дүн")}>
                 <InputNumber
                   value={value.baritsaaAvakhDun}
                   disabled
-                  placeholder="Барьцаа дүн"
+                  placeholder={t("Барьцаа дүн")}
                   style={{ width: "100%" }}
                   formatter={(value) => formatNumber(`${value}`)}
                 />
@@ -157,11 +158,11 @@ const Tulbur = ({
             >
               <Form.Item
                 name="baritsaaBairshuulakhKhugatsaa"
-                label="Хугацаа"
+                label={t("Хугацаа")}
               >
                 <InputNumber
                   onKeyUp={focuser}
-                  placeholder="Барьцаа байршуулах хугацаа"
+                  placeholder={t("Барьцаа байршуулах хугацаа")}
                   style={{ width: "100%" }}
                   min={0}
                 />
@@ -171,7 +172,7 @@ const Tulbur = ({
         </div>
       ) : null}
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
-        <Form.Item label="Нийт дүн" style={{ marginBottom: 10 }}>
+        <Form.Item label={t("Нийт дүн")} style={{ marginBottom: 10 }}>
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
@@ -188,7 +189,7 @@ const Tulbur = ({
       <Divider />
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item name="avlaga" noStyle>
-          <AvlagiinKhuvaariUusgekh ugugdul={khuvaari} />
+          <AvlagiinKhuvaariUusgekh t={t} ugugdul={khuvaari} />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
@@ -199,7 +200,7 @@ const Tulbur = ({
               icon={<ArrowLeftOutlined />}
               className="dark:text-gray-200 dark:hover:text-gray-800"
             >
-              Зардал бүртгэл
+              {t("Зардал бүртгэл")}
             </Button>
             {!zasvar && (
               <Button
@@ -208,7 +209,7 @@ const Tulbur = ({
                 onClick={() => form.submit()}
                 icon={<SaveOutlined />}
               >
-                Хадгалах
+                {t("Хадгалах")}
               </Button>
             )}
           </div>
