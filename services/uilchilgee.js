@@ -3,6 +3,7 @@ import axios from "axios";
 import socketIOClient from "socket.io-client";
 import _ from "lodash";
 import getConfig from "next/config";
+import { t } from "i18next";
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
 export const url = publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
@@ -17,15 +18,15 @@ export const aldaaBarigch = (e) => {
     window.location.href = "/";
   } else if (!!e?.response?.data?.aldaa)
     notification.error({
-      description: e?.response?.data?.aldaa,
-      message: "Алдаа",
+      description: t(e?.response?.data?.aldaa),
+      message: t("Алдаа"),
     });
   else if (!!e?.response?.errors)
     notification.error({
-      description: JSON.stringify(e?.response?.errors),
-      message: "Алдаа",
+      description: t(JSON.stringify(e?.response?.errors)),
+      message: t("Алдаа"),
     });
-  else notification.error({ description: JSON.stringify(e), message: "Алдаа" });
+  else notification.error({ description: t(JSON.stringify(e)), message: t("Алдаа") });
 };
 
 /*axios.interceptors.response.use(function (response) {

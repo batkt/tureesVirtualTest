@@ -546,7 +546,7 @@ function tulburTootsoo({ token }) {
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {
         if (data[0].Result === "SUCCESS") {
-          notification.success({ message: "SMS Амжилттай илгээлээ" });
+          notification.success({ message: t("SMS Амжилттай илгээлээ") });
         }
       })
       .catch((e) => {
@@ -666,7 +666,7 @@ function tulburTootsoo({ token }) {
       .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
           setLoading(false);
         }
       })
@@ -929,7 +929,7 @@ function tulburTootsoo({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setWaiting(false);
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
           nekhemjlekhiinZagvarMutate();
         }
       })

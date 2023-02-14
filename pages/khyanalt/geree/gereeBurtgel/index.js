@@ -104,8 +104,8 @@ const Tailbar = React.forwardRef(
         khadgalya() {
           if (shaltgaan === "") {
             notification.warning({
-              message: "Анхаар",
-              description: "Шалтгаан аа бичнэ үү",
+              message: t("Анхаар"),
+              description: t("Шалтгаан аа бичнэ үү"),
             });
             return;
           }
@@ -790,12 +790,12 @@ function ZakhialgiinKhyanalt() {
                           );
                         else
                           notification.warning({
-                            message: "Таньд гэрээ засах эрх байхгүй байна.",
+                            message: t("Таньд гэрээ засах эрх байхгүй байна."),
                           });
                       }}
                     >
                       <EditOutlined style={{ fontSize: "18px" }} />
-                      <label> Засах</label>
+                      <label> {t("Засах")}</label>
                     </a>
                   )}
                   {shuult.utga !== "Цуцласан" && (
@@ -804,7 +804,7 @@ function ZakhialgiinKhyanalt() {
                       onClick={() => gereeSungaya(data)}
                     >
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
-                      <label> Сунгах</label>
+                      <label> {t("Сунгах")}</label>
                     </a>
                   )}
                   {shuult.utga !== "Цуцласан" && (
@@ -816,7 +816,7 @@ function ZakhialgiinKhyanalt() {
                     >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
-                        <label> Цуцлах</label>
+                        <label> {t("Цуцлах")}</label>
                       </a>
                     </Popconfirm>
                   )}
@@ -829,7 +829,7 @@ function ZakhialgiinKhyanalt() {
                     >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <RedoOutlined style={{ fontSize: "18px" }} />
-                        <label> Сэргээх</label>
+                        <label> {t("Сэргээх")}</label>
                       </a>
                     </Popconfirm>
                   )}
@@ -1061,7 +1061,7 @@ function ZakhialgiinKhyanalt() {
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
               onClick={handlePrint}
             >
-              Хэвлэх
+              {t("Хэвлэх")}
             </Button>
           </div>
         }

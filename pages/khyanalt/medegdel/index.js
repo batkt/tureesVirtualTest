@@ -264,7 +264,7 @@ function Khyanalt({ token }) {
                     turul: "medegdel",
                   });
                   notification.success({
-                    message: "Notification Амжилттай илгээлээ",
+                    message: t("Notification Амжилттай илгээлээ"),
                   });
                   onTextChange("");
                   setContent("");
@@ -286,22 +286,22 @@ function Khyanalt({ token }) {
               });
           } else {
             notification.warning({
-              message: "Гарчиг заавал оруулна уу",
+              message: t("Гарчиг заавал оруулна уу"),
             });
           }
         } else {
           notification.warning({
-            message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
+            message: t("Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна"),
           });
         }
       } else {
         notification.warning({
-          message: "Мэдэгдэл оруулна уу",
+          message: t("Мэдэгдэл оруулна уу"),
         });
       }
     } else {
       notification.warning({
-        message: "Гарчиг оруулна уу",
+        message: t("Гарчиг оруулна уу"),
       });
     }
   }
@@ -309,7 +309,7 @@ function Khyanalt({ token }) {
   async function msgIlgeeye() {
     if (content !== "") {
       if (loading) {
-        message.warning("Хүсэлт илгээгдсэн байна");
+        message.warning(t("Хүсэлт илгээгдсэн байна"));
         return;
       }
       var msgnuud = [];
@@ -353,11 +353,11 @@ function Khyanalt({ token }) {
             text: ingeekhmSms,
           });
       } else {
-        message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
+        message.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
         return;
       }
       if (!(msgnuud.length > 0)) {
-        message.warning("Илгээх мэдээлэл байхгүй байна");
+        message.warning(t("Илгээх мэдээлэл байхгүй байна"));
         return;
       }
 
@@ -366,7 +366,7 @@ function Khyanalt({ token }) {
         .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
         .then(({ data }) => {
           if (data && data[0].Result === "SUCCESS") {
-            notification.success({ message: "SMS Амжилттай илгээлээ" });
+            notification.success({ message: t("SMS Амжилттай илгээлээ") });
             setContent("");
             setTitle("");
             msjTuukh.mutate();
@@ -379,7 +379,7 @@ function Khyanalt({ token }) {
         });
     } else {
       notification.warning({
-        message: "Мэдэгдэл оруулна уу",
+        message: t("Мэдэгдэл оруулна уу"),
       });
     }
   }
@@ -418,7 +418,7 @@ function Khyanalt({ token }) {
           .post(`/mailOlnoorIlgeeye`, { subject: title, mailuud })
           .then(({ data }) => {
             if (data === "Amjilttai") {
-              notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+              notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
               setContent("");
               setTitle("");
               setNer("");
@@ -432,12 +432,12 @@ function Khyanalt({ token }) {
           });
       } else {
         notification.warning({
-          message: "Мэдэгдэл оруулна уу",
+          message: t("Мэдэгдэл оруулна уу"),
         });
       }
     } else {
       notification.warning({
-        message: "Гарчиг оруулна уу",
+        message: t("Гарчиг оруулна уу"),
       });
     }
   }
@@ -491,7 +491,7 @@ function Khyanalt({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setWaiting(false);
-          notification.success({ message: "Устгагдлаа" });
+          notification.success({ message: t("Устгагдлаа") });
           mailiinZagvarMutate();
         }
       })

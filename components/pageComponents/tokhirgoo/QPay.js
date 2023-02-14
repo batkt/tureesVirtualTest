@@ -24,7 +24,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
       updateMethod("dans", token, { ...mur, ...qpayTokhirgoo }).then(
         ({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
-            notification.success({ message: "Амжилттай хадгаллаа" });
+            notification.success({ message: t("Амжилттай хадгаллаа") });
             setSongogdsonTsonkhniiIndex(8)
           }
         }
@@ -37,7 +37,7 @@ function QPay({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiInd
       updateMethod("dans", token, { ...mur, ...qpayTokhirgoo }).then(
         ({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
-            notification.success({ message: "Амжилттай хадгаллаа" });
+            notification.success({ message: t("Амжилттай хадгаллаа") });
             setSongogdsonTsonkhniiIndex(8)
           }
         }

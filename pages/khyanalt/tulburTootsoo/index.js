@@ -40,6 +40,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 const { RangePicker } = DatePicker;
 
 function iconAvya(a, bank) {
@@ -53,7 +54,7 @@ function iconAvya(a, bank) {
   ) {
     Icon = CheckOutlined;
     color = "green";
-    tailbar = "Гүйлгээ холбогдсон байна";
+    tailbar = t("Гүйлгээ холбогдсон байна");
   } else if (
     (a?.kholbosonDun < a[`${bank === "tdb" ? "Amt" : "amount"}`] &&
       a?.kholbosonDun > 0) ||
@@ -80,7 +81,7 @@ function iconAvya(a, bank) {
   ) {
     Icon = CheckOutlined;
     color = "green";
-    tailbar = "Гүйлгээ холбогдсон байна";
+    tailbar = t("Гүйлгээ холбогдсон байна");
   }
   return (
     <Tooltip title={tailbar}>
@@ -94,12 +95,12 @@ function iconAvya(a, bank) {
 function iconAvyaZardal(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
-  let tailbar = "Гүйлгээ холбогдоогүй байна";
+  let tailbar = t("Гүйлгээ холбогдоогүй байна");
 
   if (!!a.zardliinBulgiinId) {
     Icon = CheckOutlined;
     color = "green";
-    tailbar = "Гүйлгээ холбогдсон байна";
+    tailbar = t("Гүйлгээ холбогдсон байна");
   }
 
   return (
@@ -215,7 +216,7 @@ function tulburTootsoo({ token }) {
       data.balance - data.kholbosonDun === 0
     ) {
       notification.success({
-        message: "Гүйлгээ холбогдсон байна",
+        message: t("Гүйлгээ холбогдсон байна"),
       });
     } else {
       if (
@@ -227,14 +228,14 @@ function tulburTootsoo({ token }) {
           : data?.description.includes("QPAY") ||
             data?.description.includes("qpay")
       ) {
-        message.info("Гүйлгээ гэрээнд холбогдсон байна.");
+        message.info(t("Гүйлгээ гэрээнд холбогдсон байна."));
         return;
       }
       const footer = [
         <div className="pr-[1%]">
           <Button onClick={() => refGuilgee.current.khaaya()}>{t("Хаах")}</Button>,
           <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
-            {("Хадгалах")}
+            {t("Хадгалах")}
           </Button>
         </div>,
       ];
@@ -260,7 +261,7 @@ function tulburTootsoo({ token }) {
 
   function zardalKholbyo(data) {
     if (!!data?.zardliinBulgiinId) {
-      message.info("Зардал холбогдсон байна.");
+      message.info(t("Зардал холбогдсон байна."));
       return;
     }
 
@@ -302,7 +303,7 @@ function tulburTootsoo({ token }) {
       modal({
         title: (
           <div className="flex w-full flex-row justify-between">
-            <div>Түрээсийн төлбөрийн и-баримт</div>
+            <div>{t("Түрээсийн төлбөрийн и-баримт")}</div>
           </div>
         ),
         content: (

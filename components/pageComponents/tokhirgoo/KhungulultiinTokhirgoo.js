@@ -27,7 +27,7 @@ function KhuviinMedeelel({
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: khungulultiinTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           setKhungulultiinTokhirgoo(null);
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(2)

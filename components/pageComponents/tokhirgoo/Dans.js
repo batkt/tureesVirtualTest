@@ -149,7 +149,7 @@ function Dans({ token, baiguullaga, setSongogdsonTsonkhniiIndex }) {
       .map((mur, index, array) =>
         updateMethod("dans", token, { ...mur, ...corp }).then(({ data }) => {
           if (data === "Amjilttai" && array.length - 1 === index) {
-            notification.success({ message: "Амжилттай хадгаллаа" });
+            notification.success({ message: t("Амжилттай хадгаллаа") });
             setSongogdsonTsonkhniiIndex(9);
           }
         })

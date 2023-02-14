@@ -250,22 +250,22 @@ function Khyanalt({ token }) {
               });
           } else {
             notification.warning({
-              message: "Гарчиг заавал оруулна уу",
+              message: t("Гарчиг заавал оруулна уу"),
             });
           }
         } else {
           notification.warning({
-            message: "Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна",
+            message: t("Мэдэгдэл илгээх үсгийн тоо хэтэрсэн байна"),
           });
         }
       } else {
         notification.warning({
-          message: "Мэдэгдэл оруулна уу",
+          message: t("Мэдэгдэл оруулна уу"),
         });
       }
     } else {
       notification.warning({
-        message: "Гарчиг оруулна уу",
+        message: t("Гарчиг оруулна уу"),
       });
     }
   }
@@ -274,7 +274,7 @@ function Khyanalt({ token }) {
     if (!!title) {
       appIlgeeye();
     } else {
-      notification.warning({ message: "Гарчиг заавал оруулна уу!" });
+      notification.warning({ message: t("Гарчиг заавал оруулна уу!") });
     }
   }
   function seen() {

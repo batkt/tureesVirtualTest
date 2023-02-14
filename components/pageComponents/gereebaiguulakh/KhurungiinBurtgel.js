@@ -171,7 +171,7 @@ const YurunkhiiMedeele = ({
       notification.warning({
         message: (
           <div>
-            <b>{v.kod}</b> талбай нь гэрээн дээр сонгогдсон байна.
+            <b>{v.kod}</b> {t("талбай нь гэрээн дээр сонгогдсон байна.")}
           </div>
         ),
       });

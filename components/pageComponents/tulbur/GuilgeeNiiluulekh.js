@@ -21,6 +21,7 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { t } from "i18next";
 
 var timeout = null;
 
@@ -158,14 +159,14 @@ function GuilgeeNiiluulekh(
         );
         if (aldaa.length > 0) {
           notification.warning({
-            message: "Анхаар",
+            message: t("Анхаар"),
             description: aldaa.join(","),
           });
           return;
         }
         if (undsenGuilgee.length === 0 && baritsaa.length === 0) {
           notification.warning({
-            message: "Анхаар гүйлгээний дүн холбоно уу!",
+            message: t("Анхаар гүйлгээний дүн холбоно уу!"),
             description: aldaa.join(","),
           });
           return;
@@ -177,15 +178,15 @@ function GuilgeeNiiluulekh(
           );
           if (baritsaaniiGuilgee.aldaa.length > 0) {
             notification.warning({
-              message: "Анхаар",
+              message: t("Анхаар"),
               description: baritsaaniiGuilgee.aldaa.join(","),
             });
             return;
           }
           if (undsenGuilgee.length === 0) {
             notification.success({
-              message: "Амжилттай",
-              description: "Гүйлгээ амжилттай холбогдлоо",
+              message: t("Амжилттай"),
+              description: t("Гүйлгээ амжилттай холбогдлоо"),
             });
             _.isFunction(onFinish) && onFinish();
             destroy();
@@ -202,8 +203,8 @@ function GuilgeeNiiluulekh(
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 notification.success({
-                  message: "Амжилттай",
-                  description: "Гүйлгээ амжилттай холбогдлоо",
+                  message: t("Амжилттай"),
+                  description: t("Гүйлгээ амжилттай холбогдлоо"),
                 });
                 _.isFunction(onFinish) && onFinish();
                 destroy();
@@ -256,8 +257,8 @@ function GuilgeeNiiluulekh(
             onClick={() => {
               if (gereenuud.find((a) => a._id === mur._id)) {
                 notification.warning({
-                  message: "Анхаар",
-                  description: "Гэрээ сонгогдсон байна",
+                  message: t("Анхаар"),
+                  description: t("Гэрээ сонгогдсон байна"),
                 });
                 return;
               }
@@ -324,8 +325,8 @@ function GuilgeeNiiluulekh(
     if (sum + _.toNumber(parser(target.value)) > guilgeeniiDun) {
       target.value = formatter(guilgeeniiDun - sum);
       notification.warning({
-        message: "Анхаар",
-        description: "Гүйлгээний дүнгээс холбох дүн илүү гарсан байна",
+        message: t("Анхаар"),
+        description: t("Гүйлгээний дүнгээс холбох дүн илүү гарсан байна"),
       });
     }
     setGereenuud((a) => {
@@ -378,7 +379,7 @@ function GuilgeeNiiluulekh(
       <div className="space-y-2 ">
         <div className="flex justify-between">
           <span className="text-sm font-medium dark:text-gray-100 lg:text-xl">
-            Гүйлгээний мэдээлэл
+            {t("Гүйлгээний мэдээлэл")}
           </span>
           <span className="dark:text-gray-200">
             {moment().format("YYYY-MM-DD")}
@@ -426,22 +427,22 @@ function GuilgeeNiiluulekh(
           {data.kholbosonDun > 0 && (
             <div className="col-span-4 flex justify-between">
               <span>
-                Холбогдсон талбай:
+                {t("Холбогдсон талбай")}:
                 {data.kholbosonTalbainId &&
                   [...new Set(data.kholbosonTalbainId)].join(",")}
               </span>
-              <span>Холбогдсон дүн:{formatNumber(data.kholbosonDun || 0)}</span>
+              <span>{t("Холбогдсон дүн")}:{formatNumber(data.kholbosonDun || 0)}</span>
             </div>
           )}
         </div>
         <div className="font-medium dark:text-gray-200 lg:text-xl">
-          Гүйлгээ холбох
+          {t("Гүйлгээ холбох")}
         </div>
         <div className="flex grid-cols-2 flex-col-reverse gap-3 lg:grid ">
           <Dropdown
             className="w-[100%]"
             placement="bottom"
-            title="Гэрээний жагсаалт"
+            title={t("Гэрээний жагсаалт")}
             overlay={content}
             open={visible}
             trigger="click"
@@ -462,13 +463,13 @@ function GuilgeeNiiluulekh(
           </Dropdown>
           <div className="flex items-center justify-end">
             <label className="pr-2 text-sm font-bold text-gray-600">
-              Хаагдсан гэрээ холбох эсэх{" "}
+              {t("Хаагдсан гэрээ холбох эсэх")}{" "}
             </label>
-            <Tooltip title="Хаагдсан гэрээ холбох эсэх">
+            <Tooltip title={t("Хаагдсан гэрээ холбох эсэх")}>
               <Switch
                 checked={khaagdsanGereeEsekh}
                 onChange={setKhaagdsanGereeEsekh}
-                title="Хаагдсан гэрээ холбох эсэх"
+                title={t("Хаагдсан гэрээ холбох эсэх")}
               />
             </Tooltip>
           </div>
@@ -503,7 +504,7 @@ function GuilgeeNiiluulekh(
             </div>
             {(geree?.aldangiinUldegdel || 0) > 0 && (
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Алдангийн үлдэгдэл</div>
+                <div className="col-span-4">{t("Алдангийн үлдэгдэл")}</div>
                 <div>{formatNumber(geree?.aldangiinUldegdel || 0, 2)}</div>
                 <div>{geree.talbainDugaar}</div>
                 <div className="text-right">
@@ -525,7 +526,7 @@ function GuilgeeNiiluulekh(
               (geree?.baritsaaniiUldegdel || 0) >
               0 && (
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Барьцааны үлдэгдэл</div>
+                <div className="col-span-4">{t("Барьцааны үлдэгдэл")}</div>
                 <div>
                   {formatNumber(
                     (geree?.baritsaaAvakhDun || 0) -
@@ -537,7 +538,7 @@ function GuilgeeNiiluulekh(
                 <div className="text-right">
                   <input
                     className="w-full rounded-md border bg-gray-200 px-2 text-right"
-                    placeholder="Барьцаа дүн"
+                    placeholder={t("Барьцаа дүн")}
                     value={formatter(geree.baritsaaTulbur)}
                     onDoubleClick={({ target }) =>
                       onDoubleClickKholbokhDun(target, index, "baritsaaTulbur")
@@ -551,7 +552,7 @@ function GuilgeeNiiluulekh(
             )}
             {geree && (
               <div className="grid w-full grid-cols-3 rounded-md border border-gray-400 bg-gray-100 p-1">
-                <div className="col-span-4">Түрээсийн үлдэгдэл</div>
+                <div className="col-span-4">{t("Түрээсийн үлдэгдэл")}</div>
                 <div
                   className={`text-${geree.uldegdel > 0 ? "red" : "green"}-500`}
                 >
@@ -561,7 +562,7 @@ function GuilgeeNiiluulekh(
                 <div className="text-right text-green-600">
                   <input
                     className="w-full rounded-md border bg-gray-200 px-2 text-right"
-                    placeholder="Төлөх дүн"
+                    placeholder={t("Төлөх дүн")}
                     value={formatter(geree.tureesiinTulbur)}
                     onDoubleClick={({ target }) =>
                       onDoubleClickKholbokhDun(target, index, "tureesiinTulbur")
@@ -579,13 +580,13 @@ function GuilgeeNiiluulekh(
       <Divider />
       <div className="grid w-full grid-cols-2 divide-x-2 px-2">
         <div className="flex flex-col justify-between pr-2 lg:flex-row">
-          <div className="dark:text-gray-200">Холбосон дүн:</div>
+          <div className="dark:text-gray-200">{t("Холбосон дүн")}:</div>
           <div className="text-right text-xl text-green-600">
             {formatNumber(guilgeeniiDun - zuruuDun)}
           </div>
         </div>
         <div className="flex flex-col justify-between pl-2 lg:flex-row">
-          <div className="dark:text-gray-200">Холбоогүй дүн:</div>
+          <div className="dark:text-gray-200">{t("Холбоогүй дүн")}:</div>
           <div className="text-right text-xl text-red-600">
             {formatNumber(zuruuDun)}
           </div>

@@ -3,6 +3,7 @@ import { Form, Input, Upload, Modal, message } from "antd";
 import getBase64 from "tools/function/getBase64";
 import uilchilgee, { url } from "../../../services/uilchilgee";
 import otoFormData from "tools/function/otoFormData";
+import { t } from "i18next";
 const { TextArea } = Input;
 const { confirm } = Modal;
 
@@ -21,12 +22,12 @@ const BarilgaBurtgekh = forwardRef(
             .then(({ data }) => {
               if (data === "Amjilttai") {
                 message.destroy();
-                message.success("Амжилттай хадгаллаа");
+                message.success(t("Амжилттай хадгаллаа"));
                 salbarMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }));
                 destroy();
               } else {
                 message.destroy();
-                message.warning("Алдаа гарлаа");
+                message.warning(t("Алдаа гарлаа"));
               }
             });
         },
@@ -34,7 +35,7 @@ const BarilgaBurtgekh = forwardRef(
           if (readonly) destroy();
           else
             confirm({
-              title: "Анхаар",
+              title: t("Анхаар"),
               okText: "Тийм",
               cancelText: "Үгүй",
               content: "Та хадгалахгүй гарахдаа итгэлтэй байна уу",
@@ -99,27 +100,27 @@ const BarilgaBurtgekh = forwardRef(
                 id="string-utga"
                 className={`${ugugdul?.zurgiinNer ? "hidden" : ""}`}
               >
-                Лого оруулах
+                {t("Лого оруулах")}
               </span>
             </Upload>
           </Form.Item>
         )}
         <Form.Item
-          label="Байгууллагын нэр"
+          label={t("Байгууллагын нэр")}
           name="ner"
-          rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}
+          rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
         >
           <Input disabled={readonly} />
         </Form.Item>
         <Form.Item
-          label="Утас"
+          label={t("Утас")}
           name="utas"
-          rules={[{ required: true, message: "Утас заавал оруулна уу!" }]}
+          rules={[{ required: true, message: t("Утас заавал оруулна уу!") }]}
         >
           <Input disabled={readonly} type={"tel"} />
         </Form.Item>
         <Form.Item
-          label="Хаяг"
+          label={t("Хаяг")}
           name="khayag"
           rules={[{ required: true, message: "Хаяг заавал оруулна уу!" }]}
         >

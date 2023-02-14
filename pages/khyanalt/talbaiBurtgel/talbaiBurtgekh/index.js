@@ -402,7 +402,7 @@ function talbaiBurtgekh({ token }) {
         if (data === "Amjilttai") {
           setWaiting(false);
           talbainiiJagsaaltMutate();
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
         }
       })
       .catch((e) => {

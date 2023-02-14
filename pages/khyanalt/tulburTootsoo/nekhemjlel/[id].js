@@ -272,7 +272,7 @@ function ZakhialgaNemekh({ token }) {
       method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })

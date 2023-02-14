@@ -61,22 +61,22 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
   function khadgalakh() {
     if (!daalgavar.duusakhOgnoo) {
       notification.warn({
-        description: "Дуусах Огноо сонгоно уу !",
-        message: "Анхаар",
+        description: t("Дуусах Огноо сонгоно уу !"),
+        message: t("Анхаар"),
       });
       return;
     }
     if (!daalgavar.ajiltniiNer) {
       notification.warn({
-        description: "Ажилтан сонгоно уу !",
-        message: "Анхаар",
+        description: t("Ажилтан сонгоно уу !"),
+        message: t("Анхаар"),
       });
       return;
     }
     if (!daalgavar.tailbar) {
       notification.warn({
-        description: "Даалгавар хэсэгт сэтгэгдэлээ оруулна уу !",
-        message: "Анхаар",
+        description: t("Даалгавар хэсэгт сэтгэгдэлээ оруулна уу !"),
+        message: t("Анхаар"),
       });
       return;
     }

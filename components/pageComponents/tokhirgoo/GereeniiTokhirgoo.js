@@ -46,7 +46,7 @@ function KhuviinMedeelel({
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: gereeTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(3)
@@ -70,10 +70,10 @@ function KhuviinMedeelel({
             filename: gariinUseg,
             path: "gariinUseg",
           });
-        notification.success({ message: "Амжилттай хадгаллаа" });
+        notification.success({ message: t("Амжилттай хадгаллаа") });
         baiguullagaMutate();
         setSongogdsonTsonkhniiIndex(3)
-      } else notification.warning({ message: "Алдаа гарлаа" });
+      } else notification.warning({ message: t("Алдаа гарлаа") });
     });
   }
   function tamgaZuragKharakh(e, path) {

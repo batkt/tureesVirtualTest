@@ -17,6 +17,7 @@ import formatNumber from "tools/function/formatNumber";
 import BaritsaaKhuulga from "./BaritsaaKhuulga";
 import { OrderedListOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
+import { t } from "i18next";
 
 function labelTurul(guilgeeTurul) {
   var text;
@@ -52,17 +53,17 @@ function BaritsaaUdirdlaga(
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Барьцааны дүн оруулна уу" });
+          notification.warning({ message: t("Барьцааны дүн оруулна уу") });
           return;
         }
         if (!ognoo) {
-          notification.warning({ message: "Барьцааны Огноо оруулна уу" });
+          notification.warning({ message: t("Барьцааны Огноо оруулна уу") });
           return;
         }
 
         if (turul === "ashiglakh" && dun > data?.baritsaaniiUldegdel) {
           notification.warning({
-            message: "Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!",
+            message: t("Барьцаа үлдэгдлээс их дүнгээр гүйлгээ хийж болохгүй!"),
           });
           setDun(data?.baritsaaniiUldegdel);
           return;
@@ -73,7 +74,7 @@ function BaritsaaUdirdlaga(
           dun > (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
         ) {
           notification.warning({
-            message: "Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!",
+            message: t("Барьцаа төлөх дүнгээс их дүнгээр гүйлгээ хийж болохгүй!"),
           });
           setDun(
             (data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0)
@@ -82,7 +83,7 @@ function BaritsaaUdirdlaga(
         }
 
         if (turul === "ashiglakh" && !tailbar) {
-          notification.warning({ message: "Тайлбар оруулна уу!" });
+          notification.warning({ message: t("Тайлбар оруулна уу!") });
           return;
         }
 
@@ -100,7 +101,7 @@ function BaritsaaUdirdlaga(
           .post("/baritsaaniiGuilgeeKhiie", baritsaaniiGuilgee)
           .then(() => {
             notification.success({
-              message: "Амжилттай",
+              message: t("Амжилттай"),
             });
             _.isFunction(onFinish) && onFinish();
             destroy();
@@ -187,8 +188,8 @@ function BaritsaaUdirdlaga(
     <div className="flex flex-col space-y-2">
       <div className="flex justify-center">
         <Radio.Group onChange={(e) => { setTurul(e.target.value); setOgnoo(moment()) }} value={turul}>
-          <Radio value={"tululkh"}>Барьцаа төлөх</Radio>
-          <Radio value={"ashiglakh"}>Барьцаа ашиглах</Radio>
+          <Radio value={"tululkh"}>{t("Барьцаа төлөх")}</Radio>
+          <Radio value={"ashiglakh"}>{t("Барьцаа ашиглах")}</Radio>
         </Radio.Group>
       </div>
       <Divider />
@@ -219,7 +220,7 @@ function BaritsaaUdirdlaga(
         value={dun}
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        placeholder="Дүн"
+        placeholder={t("Дүн")}
         style={{ width: "100%" }}
         onChange={setDun}
         onDoubleClick={() =>
@@ -233,12 +234,12 @@ function BaritsaaUdirdlaga(
       <Input.TextArea
         onKeyDown={focuser}
         id="textArea"
-        placeholder="Тайлбар"
+        placeholder={t("Тайлбар")}
         value={tailbar}
         onChange={(e) => setTailbar(e.target.value)}
       />
       <div onClick={tuukhKharya}>
-        <a className="dark:text-gray-200">Барьцааны хуулга</a>
+        <a className="dark:text-gray-200">{t("Барьцааны хуулга")}</a>
       </div>
     </div>
   );

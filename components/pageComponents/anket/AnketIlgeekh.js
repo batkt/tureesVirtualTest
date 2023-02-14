@@ -44,7 +44,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             })
             .then(({ data }) => {
               if (data && data[0].Result === "SUCCESS") {
-                notification.success({ message: "SMS Амжилттай илгээлээ" });
+                notification.success({ message: t("SMS Амжилттай илгээлээ") });
                 setEmail("");
                 setUtasniiDugaar("");
                 destroy();
@@ -79,7 +79,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             })
             .then(({ data }) => {
               if (data === "Amjilttai") {
-                notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+                notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
                 setEmail("");
                 setUtasniiDugaar("");
                 destroy();
@@ -88,7 +88,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             .catch((e) => {
               aldaaBarigch(e);
             });
-        } else notification.warning({ message: "мэдээллээ бүрэн оруулна уу!" });
+        } else notification.warning({ message: t("мэдээллээ бүрэн оруулна уу!") });
       },
       khaaya() {
         destroy();

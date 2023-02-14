@@ -49,7 +49,7 @@ function ZardalBurtgel(
         method("ashiglaltiinZardluud", token, { ...data, ...ugugdul }).then(
           ({ data }) => {
             if (data === "Amjilttai") {
-              notification.success({ message: "Амжилттай хадгаллаа" });
+              notification.success({ message: t("Амжилттай хадгаллаа") });
               refresh();
               destroy();
             }

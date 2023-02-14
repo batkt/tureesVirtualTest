@@ -4,6 +4,7 @@ import _ from "lodash";
 import React, { useEffect, useMemo, useState } from "react";
 import formatNumber from "../../../tools/function/formatNumber";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { t } from "i18next";
 
 function ZardalKholbokh(
   { data, token, baiguullagiinId, barilgiinId, onFinish, destroy, dans },
@@ -31,7 +32,7 @@ function ZardalKholbokh(
           .post("/zardalKhuvaarilya", { guilgeeniiId: data?._id, zardliinId })
           .then(({ data }) => {
             if (data === "Amjilttai") {
-              notification.success({ message: "Амжилттай" });
+              notification.success({ message: t("Амжилттай") });
               _.isFunction(onFinish) && onFinish();
               destroy();
             }
@@ -75,14 +76,14 @@ function ZardalKholbokh(
 
   return (
     <div className="flex w-full flex-col space-y-4 dark:text-gray-100">
-      <label className="text-lg font-medium">Гүйлгээний мэдээлэл</label>
+      <label className="text-lg font-medium">{t("Гүйлгээний мэдээлэл")}</label>
       <div className="grid grid-cols-2">
         <div className="space-x-2 p-2">
-          <span className="font-medium">Данс:</span>
+          <span className="font-medium">{t("Данс")}:</span>
           <span>{data?.dansniiDugaar}</span>
         </div>
         <div className="space-x-2 p-2 text-right">
-          <span className="font-medium">Гүйлгээний дүн:</span>
+          <span className="font-medium">{t("Гүйлгээний дүн")}:</span>
           <span>
             {formatNumber(
               data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`],
@@ -92,7 +93,7 @@ function ZardalKholbokh(
           </span>
         </div>
         <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
-          <div className="font-medium">Тайлбар:</div>
+          <div className="font-medium">{t("Тайлбар")}:</div>
           <div>
             {data[`${dans?.bank === "tdb" ? "TxAddInf" : "description"}`]}
           </div>
@@ -107,7 +108,7 @@ function ZardalKholbokh(
         style={{ width: "100%" }}
         dropdownMenuColumnStyle={{ maxWidth: "20rem" }}
         changeOnSelect
-        placeholder="Зардал сонгох"
+        placeholder={t("Зардал сонгох")}
       />
     </div>
   );

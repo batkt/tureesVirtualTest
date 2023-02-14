@@ -11,7 +11,7 @@ const { t } = useTranslation()
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: gereeTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(7)

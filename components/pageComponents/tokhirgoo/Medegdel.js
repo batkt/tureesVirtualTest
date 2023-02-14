@@ -12,7 +12,7 @@ function Medegdel({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhni
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           setMedegdelTokhirgoo(null);
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(5)

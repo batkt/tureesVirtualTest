@@ -189,7 +189,7 @@ const Zardal = ({
       notification.warning({
         message: (
           <div>
-            <b>{v.ner}</b> зардал нь гэрээн дээр сонгогдсон байна.
+            <b>{v.ner}</b> {t("зардал нь гэрээн дээр сонгогдсон байна.")}
           </div>
         ),
       });

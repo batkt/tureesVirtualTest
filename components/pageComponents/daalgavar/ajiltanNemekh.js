@@ -20,8 +20,8 @@ function ajiltanNemekh(
       khadgalya() {
         if (!songogdsonAjiltan) {
           notification.warn({
-            description: "Ажилтан сонгоно уу !",
-            message: "Анхаар",
+            description: t("Ажилтан сонгоно уу !"),
+            message: t("Анхаар"),
           });
           return;
         }

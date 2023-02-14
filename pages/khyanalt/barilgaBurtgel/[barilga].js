@@ -224,9 +224,9 @@ function GereeBaiguulakh({ token }) {
             path: "logo",
           });
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай хадгаллаа" });
+          notification.success({ message: t("Амжилттай хадгаллаа") });
           router.back();
-        } else notification.warning({ message: "Алдаа гарлаа" });
+        } else notification.warning({ message: t("Алдаа гарлаа") });
       })
       .finally(() => baiguullagaMutate());
   }

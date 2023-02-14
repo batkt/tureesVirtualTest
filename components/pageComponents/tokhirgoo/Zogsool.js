@@ -23,7 +23,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhnii
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: zogsoolTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(10);
         }

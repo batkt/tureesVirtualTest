@@ -266,7 +266,7 @@ function Admin({
             >
               <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black `}>
               <div className="bg-green-600 group-hover:bg-green-500 transition-colors text-white p-2 border rounded-md"><QuestionOutlined /></div>
-                <div className="font-medium">Тусламж</div>
+                <div className="font-medium">{t("Тусламж")}</div>
               </div>
             </div>
             <div
@@ -275,7 +275,7 @@ function Admin({
             >
               <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
                 <div className="bg-yellow-600 group-hover:bg-yellow-500 transition-colors text-white p-2 border rounded-md"><FiSend /></div>
-                <div className="font-medium">Санал хүсэлт</div>
+                <div className="font-medium">{t("Feedback")}</div>
               </div>
             </div>
             <div
@@ -284,7 +284,7 @@ function Admin({
             >
               <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
                 <div className="bg-red-600 group-hover:bg-red-500 transition-colors text-white p-2 border rounded-md"><SiAnydesk /></div>
-                <div className="font-medium">AnyDesk татах</div>
+                <div className="font-medium">{t("AnyDesk татах")}</div>
               </div>
             </div>
             </div>

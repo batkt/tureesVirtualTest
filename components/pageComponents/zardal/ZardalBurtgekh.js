@@ -140,7 +140,7 @@ function ZardalBurtgekh(
         const method = zardal?._id ? updateMethod : createMethod;
         method("zardal", token, zardal).then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             onRefresh && onRefresh();
             destroy();
           }

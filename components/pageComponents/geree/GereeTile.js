@@ -4,6 +4,7 @@ import moment from "moment"
 import React, { useState } from "react"
 import formatNumber from "tools/function/formatNumber"
 import router from "next/router";
+import { t } from "i18next"
 
 function GereeTile({
   ovog,
@@ -39,7 +40,7 @@ function GereeTile({
             }}
           >
             <EyeOutlined style={{ fontSize: "18px" }} />{" "}
-            <label> Харах</label>
+            <label> {t("Харах")}</label>
           </a>
           {tileProps.shuult?.utga !== "Цуцласан" && (
             <a
@@ -59,12 +60,12 @@ function GereeTile({
                   );
                 else
                   notification.warning({
-                    message: "Таньд гэрээ засах эрх байхгүй байна.",
+                    message: t("Таньд гэрээ засах эрх байхгүй байна."),
                   });
               }}
             >
               <EditOutlined style={{ fontSize: "18px" }} />
-              <label> Засах</label>
+              <label> {t("Засах")}</label>
             </a>
           )}
           {tileProps.shuult?.utga !== "Цуцласан" && (
@@ -78,7 +79,7 @@ function GereeTile({
               }}
             >
               <FieldTimeOutlined style={{ fontSize: "18px" }} />
-              <label> Сунгах</label>
+              <label> {t("Сунгах")}</label>
             </a>
           )}
           {tileProps.shuult?.utga !== "Цуцласан" && (
@@ -95,7 +96,7 @@ function GereeTile({
               setPopoverKharakh(false);
             }}>
               <MinusCircleOutlined style={{ fontSize: "18px" }} />
-              <label> Цуцлах</label>
+              <label> {t("Цуцлах")}</label>
             </a>
           )}
           {tileProps.shuult?.utga === "Цуцласан" && (
@@ -111,7 +112,7 @@ function GereeTile({
               setPopoverKharakh(false);
             }}>
               <RedoOutlined style={{ fontSize: "18px" }} />
-              <label> Сэргээх</label>
+              <label> {t("Сэргээх")}</label>
             </a>
           )}
         </div>

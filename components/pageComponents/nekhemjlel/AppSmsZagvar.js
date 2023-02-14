@@ -4,6 +4,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 
 import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
+import { t } from "i18next";
 
 function ZagvarForm({ value, onChange }) {
   return <ZagvarUusgekh value={value} change={onChange} />;
@@ -30,12 +31,12 @@ function AppSmsZagvar(
           }).then(({ data }) => {
             if (data === "Amjilttai") {
               setWaiting(false);
-              message.success("Амжилттай хадгаллаа");
+              message.success(t("Амжилттай хадгаллаа"));
               onRefresh();
               destroy();
             }
           });
-        } else notification.warning({ message: "Нэр заавал оруулна уу!" });
+        } else notification.warning({ message: t("Нэр заавал оруулна уу!") });
       },
       khaaya() {
         destroy();
@@ -49,9 +50,9 @@ function AppSmsZagvar(
     <Form autoComplete="off" form={form} initialValues={data}>
       <Form.Item
         name="ner"
-        rules={[{ required: true, message: "Нэр заавал оруулна уу!" }]}
+        rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
       >
-        <Input placeholder="Нэр" />
+        <Input placeholder={t("Нэр")} />
       </Form.Item>
       <Form.Item name="nekhemjlekh">
         <ZagvarForm />

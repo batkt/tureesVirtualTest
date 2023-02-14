@@ -39,7 +39,7 @@ function Ajiltan() {
   return (
     <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
       <Head>
-        <title>Нэвтрэх хуудас</title>
+        <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="container sm:px-10">

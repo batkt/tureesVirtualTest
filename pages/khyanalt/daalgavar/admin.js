@@ -105,7 +105,7 @@ function index({ token }) {
               })
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  notification.success({ message: "Даалгавар цуцлагдлаа" });
+                  notification.success({ message: t("Даалгавар цуцлагдлаа") });
                   setDaalgavar(undefined);
                 }
               })
@@ -136,8 +136,8 @@ function index({ token }) {
   function setgegdelBichie() {
     if (!setgegdel || setgegdel === "" || setgegdel.length < 2) {
       notification.warning({
-        message: "Анхаар",
-        description: "Сэтгэгдэлээ бичиж оруулна уу",
+        message: t("Анхаар"),
+        description: t("Сэтгэгдэлээ бичиж оруулна уу"),
       });
       return;
     }

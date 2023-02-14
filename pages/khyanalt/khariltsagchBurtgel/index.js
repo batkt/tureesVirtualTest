@@ -347,8 +347,8 @@ function AjiltanBurtgel({ token }) {
   function khariltsagchBurtgekh() {
     if (!khariltsagchState.utas || khariltsagchState.utas?.length < 1) {
       notification.warn({
-        description: "Утасны дугаар оруулна уу !",
-        message: "Анхаар",
+        description: t("Утасны дугаар оруулна уу !"),
+        message: t("Анхаар"),
       });
       return;
     }
@@ -407,8 +407,8 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             notification.success({
-              message: "Мэдэгдэл",
-              description: "Нууц үг амжилттай шинэчлэгдлээ",
+              message: t("Мэдэгдэл"),
+              description: t("Нууц үг амжилттай шинэчлэгдлээ"),
             });
             setNuutsUgKhariltsagch(false);
             resetForm.resetFields();
@@ -421,7 +421,7 @@ function AjiltanBurtgel({ token }) {
     } else
       notification.warning({
         message: "Мэдэгдэл",
-        description: "Нууц үг таарсангүй",
+        description: t("Нууц үг таарсангүй"),
       });
   }
 
@@ -441,7 +441,7 @@ function AjiltanBurtgel({ token }) {
           setWaiting(false);
           khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
           khariltsagchToololtMutate();
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
         }
       })
       .catch((e) => {

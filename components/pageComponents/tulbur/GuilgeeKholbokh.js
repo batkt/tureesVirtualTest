@@ -16,6 +16,7 @@ import uilchilgee, { aldaaBarigch } from "../../../services/uilchilgee";
 import moment from "moment";
 import { MinusCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import useSWR from "swr";
+import { t } from "i18next";
 
 function GereeniiUldegdel({ ugugdul, token, barilgiinId }) {
   const { data } = useSWR(
@@ -76,7 +77,7 @@ function GuilgeeKholbokh(
           (olnoorKholbokhEsekh && !tulult.filter((a) => !!a.gereeniiId)) ||
           (!olnoorKholbokhEsekh && !geree)
         ) {
-          notification.warning({ message: "Та гэрээгээ сонгоно уу" });
+          notification.warning({ message: t("Та гэрээгээ сонгоно уу") });
           return;
         }
         let niitDun = data?.kholbosonDun || 0;
@@ -85,13 +86,13 @@ function GuilgeeKholbokh(
         });
         if (olnoorKholbokhEsekh && niitDun - (data?.kholbosonDun || 0) === 0) {
           notification.warning({
-            message: "Төлөх дүн оруулна уу",
+            message: t("Төлөх дүн оруулна уу"),
           });
           return;
         }
         if (niitDun > data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`]) {
           notification.warning({
-            message: "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна",
+            message: t("Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна"),
           });
           return;
         }
@@ -131,7 +132,7 @@ function GuilgeeKholbokh(
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        message: "Амжилттай",
+                        message: t("Амжилттай"),
                       });
                       _.isFunction(onFinish) && onFinish();
                       destroy();
@@ -178,7 +179,7 @@ function GuilgeeKholbokh(
                       .then(({ data }) => {
                         if (data === "Amjilttai") {
                           notification.success({
-                            message: "Амжилттай",
+                            message: t("Амжилттай"),
                           });
                           _.isFunction(onFinish) && onFinish();
                           destroy();
@@ -226,7 +227,7 @@ function GuilgeeKholbokh(
                   .then(({ data }) => {
                     if (data === "Amjilttai") {
                       notification.success({
-                        message: "Амжилттай",
+                        message: t("Амжилттай"),
                       });
                       _.isFunction(onFinish) && onFinish();
                       destroy();
@@ -308,15 +309,15 @@ function GuilgeeKholbokh(
       {magadlaltaiGereenuud?.length > 0 && (
         <div>
           <div className="py-2 text-lg font-medium">
-            Санал болгох гэрээ сонгох
+            {t("Санал болгох гэрээ сонгох")}
           </div>
           <div className="grid grid-cols-12 gap-1 p-2">
             <div className="col-span-2"></div>
             <div className="col-span-3"></div>
             <div className="col-span-2"></div>
-            <div className="col-span-1 text-center font-bold">Талбай</div>
-            <div className="col-span-2 text-right font-bold">Үлдэгдэл</div>
-            <div className="col-span-2 text-right font-bold">Барьцаа</div>
+            <div className="col-span-1 text-center font-bold">{t("Талбай")}</div>
+            <div className="col-span-2 text-right font-bold">{t("Үлдэгдэл")}</div>
+            <div className="col-span-2 text-right font-bold">{t("Барьцаа")}</div>
           </div>
           {magadlaltaiGereenuud.map((a, i) => (
             <div
@@ -352,7 +353,7 @@ function GuilgeeKholbokh(
       )}
 
       <div className="flex flex-row items-center justify-between">
-        <label className="text-lg font-medium">Гүйлгээнд талбай холбох</label>
+        <label className="text-lg font-medium">{t("Гүйлгээнд талбай холбох")}</label>
         <Tooltip title="Олон гэрээнд холбох эсэх?">
           <Switch
             checked={olnoorKholbokhEsekh}
@@ -381,15 +382,15 @@ function GuilgeeKholbokh(
               <Select.Option key={mur._id} value={mur._id}>
                 <div className="grid grid-cols-5">
                   <div className="flex flex-row space-x-2">
-                    <label>Нэр:</label>
+                    <label>{t("Нэр")}:</label>
                     <div>{mur.ner}</div>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <label>Регистр:</label>
+                    <label>{t("Регистр")}:</label>
                     <div>{mur.register}</div>
                   </div>
                   <div className="flex flex-row space-x-2">
-                    <label>Талбай:</label>
+                    <label>{t("Талбай")}:</label>
                     <div>{mur.talbainDugaar}</div>
                   </div>
                   <GereeniiUldegdel
@@ -419,8 +420,8 @@ function GuilgeeKholbokh(
       {olnoorKholbokhEsekh && (
         <div className="space-y-1">
           <div className="grid grid-cols-3 font-medium">
-            <div className="col-span-2">Гэрээ</div>
-            <div>Төлөх дүн</div>
+            <div className="col-span-2">{t("Гэрээ")}</div>
+            <div>{t("Төлөх дүн")}</div>
           </div>
           {tulult?.map((a, i) => (
             <div className="grid grid-cols-3" key={`geree-${i}`}>
@@ -445,7 +446,7 @@ function GuilgeeKholbokh(
                       <Select.Option key={mur._id} value={mur._id}>
                         <div className="flex flex-row justify-between">
                           <div className="flex flex-row space-x-2">
-                            <label>Талбай:</label>
+                            <label>{t("Талбай")}:</label>
                             <div>{mur.talbainDugaar}</div>
                           </div>
                           <div className="flex flex-row">
@@ -493,14 +494,14 @@ function GuilgeeKholbokh(
           ))}
         </div>
       )}
-      <label className="text-lg font-medium">Гүйлгээний мэдээлэл</label>
+      <label className="text-lg font-medium">{t("Гүйлгээний мэдээлэл")}</label>
       <div className="grid grid-cols-2">
         <div className="space-x-2 p-2">
-          <span className="font-medium">Данс:</span>
+          <span className="font-medium">{t("Данс")}:</span>
           <span>{data?.dansniiDugaar}</span>
         </div>
         <div className="space-x-2 p-2 text-right">
-          <span className="font-medium">Гүйлгээний дүн:</span>
+          <span className="font-medium">{t("Гүйлгээний дүн")}:</span>
           <span>
             {formatNumber(
               data[`${dans?.bank === "tdb" ? "Amt" : "amount"}`],
@@ -510,29 +511,29 @@ function GuilgeeKholbokh(
           </span>
         </div>
         <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
-          <div className="font-medium">Тайлбар:</div>
+          <div className="font-medium">{t("Тайлбар")}:</div>
           <div>
             {data[`${dans?.bank === "tdb" ? "TxAddInf" : "description"}`]}
           </div>
         </div>
         {!!data?.kholbosonDun && (
           <div className="col-span-2 flex flex-row space-x-2 border-t p-2">
-            <div className="font-medium">Холбогдсон дүн:</div>
+            <div className="font-medium">{t("Холбогдсон дүн")}:</div>
             <div>{formatNumber(data?.kholbosonDun, 2)}</div>
           </div>
         )}
         <div>
           <label className="text-sm font-bold text-gray-600">
-            Хаагдсан гэрээ холбох эсэх{" "}
+            {t("Хаагдсан гэрээ холбох эсэх")}{" "}
           </label>
-          <Tooltip title="Хаагдсан гэрээ холбох эсэх">
+          <Tooltip title={t("Хаагдсан гэрээ холбох эсэх")}>
             <Switch
               checked={khaagdsanGereeEsekh}
               onChange={(v) => {
                 setKhaagdsanGereeEsekh(v);
                 setGeree(null);
               }}
-              title="Хаагдсан гэрээ холбох эсэх"
+              title={t("Хаагдсан гэрээ холбох эсэх")}
             />
           </Tooltip>
         </div>

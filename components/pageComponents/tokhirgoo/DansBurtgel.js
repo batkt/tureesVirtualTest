@@ -62,7 +62,7 @@ function DansBurtgel(
 
         method("dans", token, { ...data, ...ugugdul }).then(({ data }) => {
           if (data === "Amjilttai") {
-            notification.success({ message: "Амжилттай хадгаллаа" });
+            notification.success({ message: t("Амжилттай хадгаллаа") });
             dansMutate();
             destroy();
           }

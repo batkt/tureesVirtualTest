@@ -114,7 +114,7 @@ function GereeBaiguulakh({ token, data }) {
     ) {
       utgaShalgakh.push(0);
       notification.warning({
-        message: "Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!",
+        message: t("Гэрээ болон Ерөнхий мэдээллээ бүрэн оруулна уу!"),
       });
     }
     if (
@@ -133,12 +133,12 @@ function GereeBaiguulakh({ token, data }) {
     ) {
       utgaShalgakh.push(1);
       notification.warning({
-        message: "Гэрээний хугацаагаа бүрэн оруулна уу!",
+        message: t("Гэрээний хугацаагаа бүрэн оруулна уу!"),
       });
     }
     if (!data.talbainIdnuud || !data.talbainKhemjee) {
       utgaShalgakh.push(2);
-      notification.warning({ message: "Талбай мэдээллээ оруулна уу!" });
+      notification.warning({ message: t("Талбай мэдээллээ оруулна уу!") });
     }
     if (
       gereeniiZagvar?.turGereeEsekh !== true &&
@@ -146,7 +146,7 @@ function GereeBaiguulakh({ token, data }) {
       data.baritsaaBairshuulakhKhugatsaa === (undefined || null)
     ) {
       utgaShalgakh.push(4);
-      notification.warning({ message: "барьцаа хугацаа оруулна уу!" });
+      notification.warning({ message: t("барьцаа хугацаа оруулна уу!") });
     }
     if (utgaShalgakh.length > 0) {
       setDutuuAlkham(utgaShalgakh);
@@ -181,7 +181,7 @@ function GereeBaiguulakh({ token, data }) {
           setTimeout(() => {
             window.location.reload();
           }, 600);
-          message.success("Амжилттай хадгаллаа");
+          message.success(t("Амжилттай хадгаллаа"));
         }
       });
   }

@@ -163,14 +163,14 @@ function tulburTootsoo() {
     ) {
       setWaiting(false);
       notification.warning({
-        message: "Таньд гэрээ хөнгөлөх эрх байхгүй байна.",
+        message: t("Таньд гэрээ хөнгөлөх эрх байхгүй байна."),
       });
       return;
     }
     if (baiguullaga.tokhirgoo.bukhAjiltanKhungulultOruulakhEsekh === false) {
       setWaiting(false);
       notification.warning({
-        message: "Хөнгөлөлт оруулах эрх хаагдсан байна.",
+        message: t("Хөнгөлөлт оруулах эрх хаагдсан байна."),
       });
       return;
     }
@@ -233,7 +233,7 @@ function tulburTootsoo() {
                     (s) => ({ ...s, jagsaalt: s.jagsaalt }),
                     true
                   );
-                  message.success("Устгагдлаа");
+                  message.success(t("Устгагдлаа"));
                 }
               })
           }

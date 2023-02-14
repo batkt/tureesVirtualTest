@@ -3,6 +3,7 @@ import { Form, Input, message } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee from "services/uilchilgee";
+import { t } from "i18next";
 
 function TsagBurtgel(
   { data, barilgiinId, token, destroy, onRefresh, mashinBurtgekhButtonId },
@@ -21,7 +22,7 @@ function TsagBurtgel(
         const method = data?._id ? updateMethod : createMethod;
         method("mashin", token, data).then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             onRefresh && onRefresh();
             destroy();
           }

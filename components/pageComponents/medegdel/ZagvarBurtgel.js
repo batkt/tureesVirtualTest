@@ -4,6 +4,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "./ZagvarUusgekh";
 import compareFields from "tools/function/compareFields";
+import { t } from "i18next";
 
 function ZagvarForm({ value, onChange }) {
   return <ZagvarUusgekh value={value} change={onChange} />;
@@ -54,12 +55,12 @@ function ZagvarBurtgel(
           }).then(({ data }) => {
             if (data === "Amjilttai") {
               setWaiting(false);
-              message.success("Амжилттай хадгаллаа");
+              message.success(t("Амжилттай хадгаллаа"));
               onRefresh();
               destroy();
             }
           });
-        } else notification.warning({ message: "Нэр заавал оруулна уу!" });
+        } else notification.warning({ message: t("Нэр заавал оруулна уу!") });
       },
       khaaya() {
         destroy();
@@ -72,7 +73,7 @@ function ZagvarBurtgel(
   return (
     <Form autoComplete="off" form={form} initialValues={data}>
       <Form.Item name="ner">
-        <Input placeholder="Нэр" />
+        <Input placeholder={t("Нэр")} />
       </Form.Item>
       <Form.Item name="mail">
         <ZagvarForm />

@@ -68,7 +68,7 @@ function index({ token }) {
       .post(`/sanalKhuleenAvlaa`, { id: mur._id })
       .then(({ data }) => {
         if (data === "OK") {
-          notification.success({ message: "Хүлээн авлаа" });
+          notification.success({ message: t("Хүлээн авлаа") });
           sanal.sonorduulgaMutate();
           khariltsagchiinMedeelel.mutate();
         }

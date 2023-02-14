@@ -1,5 +1,6 @@
 import { SendOutlined } from "@ant-design/icons";
 import { Button, Form, Input, notification, Radio } from "antd";
+import { t } from "i18next";
 import { parseCookies } from "nookies";
 import { useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
@@ -29,7 +30,7 @@ function AnketBuglukh({ data }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setGarakhScreen(true);
-          notification.success({ message: "Анкет Амжилттай илгээлээ" });
+          notification.success({ message: t("Анкет Амжилттай илгээлээ") });
         }
       })
       .catch((e) => {

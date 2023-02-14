@@ -15,7 +15,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: emailTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(6)
         }

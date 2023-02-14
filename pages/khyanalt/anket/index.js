@@ -273,7 +273,7 @@ function Anket({ token }) {
       .then(({ data }) => {
         if (data === "Amjilttai") {
           asuult.mutate();
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
           setData(undefined)
         }
       })

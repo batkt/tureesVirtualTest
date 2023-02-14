@@ -58,7 +58,7 @@ function ZakhialgaNemekh({ token }) {
       createMethod("gereeniiZagvar", token, values)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })
@@ -71,7 +71,7 @@ function ZakhialgaNemekh({ token }) {
       updateMethod("gereeniiZagvar", token, gereeniiZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })

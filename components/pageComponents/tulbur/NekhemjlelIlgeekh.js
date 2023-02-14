@@ -132,7 +132,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
       .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+          notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
           setLoading(false);
           destroy();
         }
@@ -197,7 +197,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
         uilchilgee(token)
           .then(() => {
             notification.success({
-              message: "Амжилттай",
+              message: t("Амжилттай"),
             });
             destroy();
           })

@@ -36,6 +36,7 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 const useZardaliinDun = (token, barilgiinId, idnuud, ognoo) => {
   const { data, mutate } = useSWR(
@@ -154,7 +155,7 @@ function ZardalMur({
       .post("/zardalTsutslaya", { guilgeeniiId })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай устгалаа." });
+          notification.success({ message: t("Амжилттай устгалаа.") });
           dansniiKhuulgaMutate();
         }
       });
@@ -323,7 +324,7 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
       .post("/zardalTsutslaya", { guilgeeniiId })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Амжилттай устгалаа." });
+          notification.success({ message: t("Амжилттай устгалаа.") });
           dansniiKhuulgaMutate();
           sergeeya();
         }
@@ -354,13 +355,13 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
                 render: (text, record, index) => index + 1,
               },
               {
-                title: "Дэд бүлэг",
+                title: t("Дэд бүлэг"),
                 dataIndex: "ner",
                 ellipsis: true,
                 align: "center",
               },
               {
-                title: "Дүн",
+                title: t("Дүн"),
                 dataIndex: "davkhar",
                 ellipsis: true,
                 align: "left",
@@ -394,20 +395,20 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
               render: (text, record, index) => index + 1,
             },
             {
-              title: "Хүлээн авагчийн дансны нэр",
+              title: t("Хүлээн авагчийн дансны нэр"),
               dataIndex: "CtActnName",
               ellipsis: true,
               align: "center",
             },
             {
-              title: "Дансны дугаар",
+              title: t("Дансны дугаар"),
               dataIndex: "dansniiDugaar",
               ellipsis: true,
               align: "center",
               width: "10rem",
             },
             {
-              title: "Огноо",
+              title: t("Огноо"),
               dataIndex: "TxDt",
               ellipsis: true,
               align: "center",
@@ -417,7 +418,7 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
               },
             },
             {
-              title: "Дүн",
+              title: t("Дүн"),
               dataIndex: "Amt",
               ellipsis: true,
               align: "left",
@@ -436,7 +437,7 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
                   <div className="flex items-center justify-center">
                     <Popconfirm
                       placement="left"
-                      title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
+                      title={t("Холбогдсон зардал устгахдаа итгэлтэй байна уу?")}
                       okText="Тийм"
                       cancelText="Үгүй"
                       onConfirm={() => guilgeeUstgaya(a._id)}

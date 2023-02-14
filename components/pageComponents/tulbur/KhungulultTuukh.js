@@ -10,6 +10,7 @@ import formatNumber from "tools/function/formatNumber";
 import React, { useMemo, useState, useEffect } from "react";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
 import Aos from "aos";
+import { t } from "i18next";
 
 const { RangePicker } = DatePicker;
 //#endregion
@@ -47,7 +48,7 @@ function KhungulultTuukh({ token }) {
       .then(({ data }) => {
         if (data !== undefined) {
           khungulultTuukhMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
         }
       });
   }

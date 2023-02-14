@@ -6,6 +6,7 @@ import { useMailiinZagvarWithoutAuth } from "hooks/useMailiinZagvar";
 import useMedegdel from "hooks/medegdel/useMedegdel";
 import { toWords } from "mon_num";
 import formatNumber from "tools/function/formatNumber";
+import { t } from "i18next";
 
 
 function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
@@ -42,7 +43,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
     }
     async function mailIlgeeye() {
         if ( !data?.mail) {
-            notification.warning({ message: "Гэрээнд и-мэйл бүртгэгдээгүй байна" });
+            notification.warning({ message: t("Гэрээнд и-мэйл бүртгэгдээгүй байна") });
             return;
           }
           const mailuud = [];
@@ -59,7 +60,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
           .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Mail мэдэгдэл"  })
           .then(({ data }) => {
             if (data === "Amjilttai") {
-              notification.success({ message: "И-мэйл Амжилттай илгээлээ" });
+              notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
               setContent("");
               setTitle("");
             }
@@ -157,7 +158,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
           .post(`/msgIlgeeye`, {msgnuud })
           .then(({ data }) => {
             
-              notification.success({ message: "SMS Амжилттай илгээлээ" });
+              notification.success({ message: t("SMS Амжилттай илгээлээ") });
               setContent("");
               setTitle("");
             }
@@ -180,7 +181,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
                 uilchilgee(token)
                     .then(() => {
                         notification.success({
-                            message: "Амжилттай",
+                            message: t("Амжилттай"),
                         });
                         destroy();
                     })
@@ -210,7 +211,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
                 </div>
             </div>
             <div data-aos="fade-right" data-aos-duration="1000">
-                <Select placeholder="Загварын төрөл" onChange={setBarimt} className="w-full rounded-md">
+                <Select placeholder={t("Загварын төрөл")} onChange={setBarimt} className="w-full rounded-md">
                     {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
                         <Select.Option key={a._id} value={a.mail} >
                             {a.ner}
@@ -219,8 +220,8 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
                 </Select>
                 <div data-aos="fade-right" data-aos-duration="1000" className="  w-full  flex justify-end flex-row">
                     <div className="space-x-3 space-y-3"> 
-                    <Button onClick={khaaya}>Хаах</Button>
-                    <Button type="primary" onClick={send} >Илгээх</Button>
+                    <Button onClick={khaaya}>{t("Хаах")}</Button>
+                    <Button type="primary" onClick={send} >{t("Илгээх")}</Button>
                     </div>
                 </div>
             </div>

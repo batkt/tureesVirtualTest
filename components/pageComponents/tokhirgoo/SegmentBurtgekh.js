@@ -61,7 +61,7 @@ const { t } = useTranslation();
                 method("segment", token, { ...data, ...utga }).then(
                     ({ data }) => {
                         if (data === "Amjilttai") {
-                            notification.success({ message: "Амжилттай хадгаллаа" });
+                            notification.success({ message: t("Амжилттай хадгаллаа") });
                             refresh();
                             destroy();
                         }

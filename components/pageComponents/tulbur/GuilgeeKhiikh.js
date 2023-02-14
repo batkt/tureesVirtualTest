@@ -16,6 +16,7 @@ import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
+import { t } from "i18next";
 
 function GuilgeeKhiikh(
   { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId },
@@ -59,7 +60,7 @@ function GuilgeeKhiikh(
       },
       khadgalya() {
         if (!dun) {
-          notification.warning({ message: "Та дүн оруулна уу" });
+          notification.warning({ message: t("Та дүн оруулна уу") });
           return;
         }
 
@@ -69,7 +70,7 @@ function GuilgeeKhiikh(
           case "busad":
             if (!busadTurul) {
               notification.warning({
-                message: "Та гүйлгээний төрөлөө сонгоно уу",
+                message: t("Та гүйлгээний төрөлөө сонгоно уу"),
               });
               return;
             }
@@ -124,7 +125,7 @@ function GuilgeeKhiikh(
           })
           .then(() => {
             notification.success({
-              message: "Амжилттай",
+              message: t("Амжилттай"),
             });
             _.isFunction(data.mutate) && data.mutate();
             _.isFunction(onFinish) && onFinish();
@@ -151,7 +152,7 @@ function GuilgeeKhiikh(
       default:
         break;
     }
-    return text;
+    return t(text);
   }
 
   function garya() {
@@ -221,10 +222,10 @@ function GuilgeeKhiikh(
           value={turul}
           className="grid w-full grid-cols-2 justify-between sm:flex"
         >
-          <Radio value={"voucher"}>Ваучераар</Radio>
-          <Radio value={"avlaga"}>Авлага</Radio>
-          <Radio value={"ahiglalt"}>Ашиглалт</Radio>
-          <Radio value={"busad"}>Бусад </Radio>
+          <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
+          <Radio value={"avlaga"}>{t("Авлага")}</Radio>
+          <Radio value={"ahiglalt"}>{t("Ашиглалт")}</Radio>
+          <Radio value={"busad"}>{t("Бусад")} </Radio>
         </Radio.Group>
       </div>
       <Divider />
@@ -260,14 +261,14 @@ function GuilgeeKhiikh(
             document.getElementById("guilgeeDunInputNumber").focus();
           }}
         >
-          <Option value="barter">Бартер</Option>
-          <Option value="zalruulga">Залруулга</Option>
-          <Option value="aldangi">Алданги</Option>
+          <Option value="barter">{t("Бартер")}</Option>
+          <Option value="zalruulga">{t("Залруулга")}</Option>
+          <Option value="aldangi">{t("Алданги")}</Option>
         </Select>
       )}
       {busadTurul === "aldangi" && (
         <div>
-          Алдангийн үлдэгдэл: {formatNumber(data?.aldangiinUldegdel, 2)}
+          {t("Алдангийн үлдэгдэл")}: {formatNumber(data?.aldangiinUldegdel, 2)}
         </div>
       )}
       {turul === "ahiglalt" && (
@@ -280,7 +281,7 @@ function GuilgeeKhiikh(
             document.getElementById("guilgeeDunInputNumber").focus();
           }}
           id="select2"
-          placeholder="Зардлын төрөл"
+          placeholder={t("Зардлын төрөл")}
         >
           {zardal.jagsaalt?.map((mur) =>
             mur.turul !== "1м2" ? (
@@ -297,7 +298,7 @@ function GuilgeeKhiikh(
       )}
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нэгж үнэ: {formatNumber(negjUne, 2)}
+          {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
         </div>
       )}
       <InputNumber
@@ -313,14 +314,14 @@ function GuilgeeKhiikh(
       />
       {negjUne && turul === "ahiglalt" && (
         <div className="p-2 dark:text-gray-100">
-          Нийт үнэ: {formatNumber(negjUne * dun || 0, 2)}
+          {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
         </div>
       )}
       {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
           onKeyDown={focuser}
           id="textArea"
-          placeholder="Тайлбар"
+          placeholder={t("Тайлбар")}
           value={tailbar}
           onChange={(e) => setTailbar(e.target.value)}
         />
@@ -329,7 +330,7 @@ function GuilgeeKhiikh(
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">
-            <label>Нэхэмжлэх дээр харах эсэх:</label>
+            <label>{t("Нэхэмжлэх дээр харах эсэх")}:</label>
             <Switch
               checked={nekhemjlekhDeerKharagdakh}
               onChange={setNekhemjlekhDeerKharagdakh}

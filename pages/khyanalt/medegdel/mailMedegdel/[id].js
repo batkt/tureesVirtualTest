@@ -15,6 +15,7 @@ import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { aldaaBarigch } from "services/uilchilgee";
 import dynamic from "next/dynamic";
+import { t } from "i18next";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -91,7 +92,7 @@ function ZakhialgaNemekh({ token }) {
       method("mailiinZagvar", token, mailiinZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             router.back();
           }
         })

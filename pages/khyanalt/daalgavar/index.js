@@ -19,6 +19,7 @@ import { Image, notification, Popconfirm } from "antd";
 import Aos from "aos";
 import TextArea from "antd/lib/input/TextArea";
 import { useRouter } from "next/router";
+import { t } from "i18next";
 
 const order = { updatedAt: -1 };
 
@@ -109,8 +110,8 @@ function index({ token }) {
   function setgegdelBichie() {
     if (!setgegdel) {
       notification.warning({
-        message: "Анхаар",
-        description: "Сэтгэгдэлээ бичиж оруулна уу",
+        message: t("Анхаар"),
+        description: t("Сэтгэгдэлээ бичиж оруулна уу"),
       });
       return;
     }
@@ -195,7 +196,7 @@ function index({ token }) {
               <div className="w-full">
                 <div className="flex w-full flex-row justify-between">
                   <span className="font-medium text-gray-700 dark:text-gray-100">
-                    {moment(mur.duusakhOgnoo).diff(moment(), "h")} цаг
+                    {moment(mur.duusakhOgnoo).diff(moment(), "h")} {t("цаг")}
                   </span>
                   <span className="ml-auto">
                     {moment(mur.ognoo).format("YYYY-MM-DD HH:mm")}
@@ -212,12 +213,12 @@ function index({ token }) {
                         }-500`}
                     >
                       {mur.tuluv === 1
-                        ? "Хүлээн авсан"
+                        ? t("Хүлээн авсан")
                         : mur.tuluv === 2
-                          ? "Дууссан"
+                          ? t("Дууссан")
                           : mur.tuluv === -1
-                            ? "Цуцлагдсан"
-                            : "Эхлээгүй"}
+                            ? t("Цуцлагдсан")
+                            : t("Эхлээгүй")}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
                   </div>
@@ -244,7 +245,7 @@ function index({ token }) {
         <div className={`absolute justify-center top-0 cursor-default left-0 rounded-2xl flex-col w-full h-full text-white bg-black dark:bg-white dark:bg-opacity-20 bg-opacity-30 z-50 items-center ${daalgavar?.tuluv === -1 ? "flex" : "hidden"}`}>
           {!!daalgavar?.tsutsalsanOgnoo && <p className="text-xl z-50 font-medium">{moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}</p>}
           {!!daalgavar?.tsutsalsanShaltgaan && <p className="text-xl w-4/6 text-center z-50 font-medium">{daalgavar?.tsutsalsanShaltgaan} гэсэн шалтгаанаар</p>}
-          <div className="2xl:text-8xl text-red-500 border-red-500 rounded-md font-black border-8 -rotate-12">ЦУЦЛАГДСАН</div></div>
+          <div className="2xl:text-8xl text-red-500 border-red-500 rounded-md font-black border-8 -rotate-12">{("Цуцлагдсан")}</div></div>
         <div
           className="flex w-full items-center gap-3 px-5 pt-2"
           style={{ height: "10rem" }}
@@ -257,7 +258,7 @@ function index({ token }) {
           </div>
           <div className="relative w-10/12 rounded-lg bg-white p-3 pb-8 pt-3 dark:bg-gray-800 sm:w-full">
             <div className="flex flex-row flex-wrap items-center justify-between">
-              <div className="font-medium">Захирал</div>
+              <div className="font-medium">{t("Захирал")}</div>
               <div className="flex">
                 <div className="absolute bottom-1 right-2 text-black opacity-30 dark:text-white">
                   {moment().format("YYYY/MM/DD HH:mm")}
@@ -287,10 +288,10 @@ function index({ token }) {
                         }-500 py-1 px-3 font-medium text-gray-50`}
                     >
                       {0 === daalgavar?.tuluv
-                        ? "Хүлээж авах"
+                        ? t("Хүлээж авах")
                         : 1 === daalgavar?.tuluv
-                          ? "Хийгдэж байна"
-                          : "Дууссан"}
+                          ? t("Хийгдэж байна")
+                          : t("Дууссан")}
                     </div>
                   </Popconfirm>
                 </div>

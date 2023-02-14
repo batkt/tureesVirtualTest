@@ -9,6 +9,7 @@ import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
+import { t } from "i18next";
 
 function MashinBurtgel(
   { data, barilgiinId, token, destroy, onRefresh, mashinBurtgekhButtonId },
@@ -29,7 +30,7 @@ function MashinBurtgel(
         const method = data?._id ? updateMethod : createMethod;
         method("mashin", token, data).then(({ data }) => {
           if (data === "Amjilttai") {
-            message.success("Амжилттай хадгаллаа");
+            message.success(t("Амжилттай хадгаллаа"));
             onRefresh && onRefresh();
             destroy();
           }
@@ -114,10 +115,10 @@ function MashinBurtgel(
       wrapperCol={{ span: 24 }}
     >
       <Form.Item name="_id" noStyle />
-      <Form.Item label="Төрөл" name="turul">
+      <Form.Item label={t("Төрөл")} name="turul">
         <Select
           onChange={() => form.getFieldInstance("ezemshigchiinUtas").focus()}
-          placeholder="Төрөл"
+          placeholder={t("Төрөл")}
         >
           {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
             <Select.Option key={a} value={a}>
@@ -126,17 +127,17 @@ function MashinBurtgel(
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Утас" name="ezemshigchiinUtas">
+      <Form.Item label={t("Утас")} name="ezemshigchiinUtas">
         <Input onKeyUp={focuser} placeholder="Утас" onChange={gereeAvya} />
       </Form.Item>
-      <Form.Item label="Машины дугаар" name="dugaar">
-        <Input onKeyUp={focuser} placeholder="Машины дугаар" />
+      <Form.Item label={t("Машины дугаар")} name="dugaar">
+        <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
       </Form.Item>
-      <Form.Item label="Нэр" name="ezemshigchiinNer">
-        <Input onKeyUp={focuser} placeholder="Нэр" />
+      <Form.Item label={t("Нэр")} name="ezemshigchiinNer">
+        <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item label="Регистр" name="ezemshigchiinRegister">
-        <Input onKeyUp={focuser} placeholder="Регистр" />
+      <Form.Item label={t("Регистр")} name="ezemshigchiinRegister">
+        <Input onKeyUp={focuser} placeholder={t("Регистр")} />
       </Form.Item>
     </Form>
   );

@@ -201,7 +201,7 @@ function AjiltanBurtgel({ token }) {
         if (data !== undefined || data !== null) {
           setWaiting(false);
           ajiltniiJagsaaltMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
-          message.success("Устгагдлаа");
+          message.success(t("Устгагдлаа"));
         }
       })
       .catch((e) => {

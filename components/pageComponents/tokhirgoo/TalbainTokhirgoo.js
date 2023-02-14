@@ -3,6 +3,7 @@ import { Button, InputNumber, notification, Switch } from "antd";
 import uilchilgee, { url } from "services/uilchilgee";
 
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import { t } from "i18next";
 
 function KhuviinMedeelel({
   ajiltan = {},
@@ -27,7 +28,7 @@ function KhuviinMedeelel({
       .then(({ data }) => {
         if (data === "Amjilttai") {
           ajiltniiJagsaaltMutate();
-          notification.success({ message: "Амжилттай засагдлаа" });
+          notification.success({ message: t("Амжилттай засагдлаа") });
           setAjiltniiTokhirgoo(null);
         }
       });
