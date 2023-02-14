@@ -62,7 +62,7 @@ function Ajiltan() {
                 data-aos="fade-right"
                 data-aos-duration="3000"
               >
-                {t("loginGarchig")}
+                {t("Түрээсийн удирдлагын систем")}
               </div>
             </div>
           </div>
@@ -82,14 +82,14 @@ function Ajiltan() {
                   <div data-aos="fade-up" data-aos-delay="500">
                     <Form.Item name="nevtrekhNer">
                       <Input
-                        placeholder={t("loginNevtrekhNer")}
+                        placeholder={t("Нэвтрэх нэр")}
                         className="login-input"
                       />
                     </Form.Item>
                   </div>
                   <div data-aos="fade" data-aos-delay="300">
                     <Form.Item name="nuutsUg">
-                      <Password placeholder={t("loginNuutsug")} className="login-input" />
+                      <Password placeholder={t("Нууц үг")} className="login-input" />
                     </Form.Item>
                   </div>
                 </Form>
@@ -109,10 +109,10 @@ function Ajiltan() {
                       className="cursor-pointer select-none"
                       htmlFor="remember-me"
                     >
-                      {t("loginNamaigSana")}
+                      {t("Намайг сана")}
                     </label>
                   </div>
-                  <a href="">{t("loginNuutsugS")}</a>
+                  <a href="">{t("Нууц үг сэргээх")}</a>
                 </div>
 
                 <button
@@ -137,10 +137,10 @@ function Ajiltan() {
                       />
                     </svg>
                   </span>
-                 {t("loginNevtrekh")}
+                 {t("Нэвтрэх")}
                 </button>
                 <div className="mt-24 text-center xl:hidden">
-                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("loginCopyRight")}
+                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("Бүх эрх хуулиар баталгаажсан")}
                 </div>
               </div>
             <div className="flex fixed w-10 top-6 right-10 hover:scale-105 transition-all gap-2">
@@ -168,7 +168,7 @@ function Ajiltan() {
                 />
               </div>
               <div className="fixed bottom-0 hidden xl:block">
-                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("loginCopyRight")}
+                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("Бүх эрх хуулиар баталгаажсан")}
               </div>
             </div>
           </div>

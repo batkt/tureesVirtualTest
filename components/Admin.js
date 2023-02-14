@@ -470,7 +470,7 @@ function Admin({
               )}
             </div>
             <div className="hidden items-center justify-center md:flex">
-              {t("loginlicense")}- {license()}
+              {t("Лиценз")}- {license()}
             </div>
             {!hideSearch ? (
               <>
