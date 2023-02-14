@@ -146,13 +146,13 @@ function Ajiltan() {
             <div className="flex fixed w-10 top-6 right-10 hover:scale-105 transition-all gap-2">
               {i18n.language === "en" ? (
                 <img
-                  onClick={() => i18n.changeLanguage("mn")}
+                  onClick={() => {i18n.changeLanguage("mn"); window.localStorage.setItem('Localelanguage', "mn")}}
                   className={`object-contain cursor-pointer transition-all w-full`}
                   src="/MN.png"
                 />
               ) : (
                 <img
-                  onClick={() => i18n.changeLanguage("en")}
+                  onClick={() => {i18n.changeLanguage("en"); window.localStorage.setItem('Localelanguage', "en")}}
                   className={`object-contain cursor-pointer transition-all w-full`}
                   src="/UK.png"
                 />

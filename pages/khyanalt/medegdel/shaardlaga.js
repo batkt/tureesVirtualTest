@@ -599,7 +599,7 @@ function Khyanalt({ token }) {
             data-aos-duration="1000"
           >
             <Input
-              rules={[{ required: true, message: "Гарчиг заавал оруулна уу!" }]}
+              rules={[{ required: true, message: t("Гарчиг заавал оруулна уу!") }]}
               className="space-y-3"
               placeholder={t("Гарчиг")}
               value={title}

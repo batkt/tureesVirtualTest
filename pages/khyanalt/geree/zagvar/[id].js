@@ -281,7 +281,7 @@ function ZakhialgaNemekh({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Гэрээний загварын нэр оруулна уу",
+                  message: t("Гэрээний загварын нэр оруулна уу"),
                 },
               ]}
             >

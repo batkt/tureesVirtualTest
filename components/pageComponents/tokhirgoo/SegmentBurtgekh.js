@@ -109,7 +109,7 @@ const { t } = useTranslation();
                 rules={[
                     {
                         required: true,
-                        message: 'Нэр өгнө үү',
+                        message: t("Нэр өгнө үү"),
                     },
                 ]}
             >
@@ -132,7 +132,7 @@ const { t } = useTranslation();
                                         {
                                             required: true,
                                             whitespace: true,
-                                            message: "Та утга нэмэх юм уу энэ хэсгийг устагна уу.",
+                                            message: t("Та утга нэмэх юм уу энэ хэсгийг устагна уу."),
                                         },
                                     ]}
                                     noStyle

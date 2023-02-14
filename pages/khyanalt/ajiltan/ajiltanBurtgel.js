@@ -244,7 +244,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Овог бүртгэнэ үү!",
+                  message: t("Овог бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -272,7 +272,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Нэр бүртгэнэ үү!",
+                  message: t("Нэр заавал оруулна уу!"),
                 },
               ]}
             >
@@ -301,7 +301,7 @@ function AjiltanBurtgel({ token }) {
                   required: true,
                   len: 10,
                   pattern: new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                  message: "Регистр бүртгэнэ үү!",
+                  message: t("Регистр бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -331,7 +331,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Хаяг бүртгэнэ үү!",
+                  message: t("Хаяг бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -358,7 +358,7 @@ function AjiltanBurtgel({ token }) {
                 {
                   min: 8,
                   required: true,
-                  message: "Утас бүртгэнэ үү!",
+                  message: t("Утасны дугаар оруулна уу !"),
                 },
               ]}
             >
@@ -387,7 +387,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Ажилд орсон огноо бүртгэнэ үү!",
+                  message: t("Ажилд орсон огноо бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -413,7 +413,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Албан тушаал бүртгэнэ үү!",
+                  message: t("Албан тушаал бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -437,7 +437,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Нэвтрэх нэр оруулан уу",
+                  message: t("Нэвтрэх нэр оруулан уу"),
                 },
               ]}
             >
@@ -460,7 +460,7 @@ function AjiltanBurtgel({ token }) {
                   : [
                     {
                       required: true,
-                      message: "Нэвтрэх нууц үг бүртгэнэ үү!",
+                      message: t("Нэвтрэх нууц үг бүртгэнэ үү!"),
                     },
                   ]
               }

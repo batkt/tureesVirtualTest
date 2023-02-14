@@ -83,7 +83,7 @@ function AnketBuglukh({ data }) {
                             rules={[
                               {
                                 required: true,
-                                message: "Анкетаа бүрэн бөгөлнө үү",
+                                message: t("Анкетаа бүрэн бөгөлнө үү"),
                               },
                             ]}
                           >
@@ -98,7 +98,7 @@ function AnketBuglukh({ data }) {
                             ) : (
                               <Input
                                 width={"100%"}
-                                placeholder="Энд хариултаа бичнэ үү"
+                                placeholder={t("Энд хариултаа бичнэ үү")}
                               />
                             )}
                           </Form.Item>
@@ -116,7 +116,7 @@ function AnketBuglukh({ data }) {
                 style={{ backgroundColor: "#209669", color: "#ffffff" }}
                 icon={<SendOutlined />}
               >
-                Илгээх
+                {t("Илгээх")}
               </Button>
             </footer>
           </Form>
@@ -129,7 +129,7 @@ function AnketBuglukh({ data }) {
               <img src="/success.png"></img>
             </div>
             <p className="px-5 text-xl font-medium">
-              Таны мэдээлэл амжилттай илгээгдлээ, баярлалаа
+              {t("Таны мэдээлэл амжилттай илгээгдлээ, баярлалаа")}
             </p>
           </div>
         </div>

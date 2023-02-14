@@ -200,7 +200,7 @@ function KhurunguudCard({
               rules={[
                 {
                   required: true,
-                  message: "Нэр бүртгэнэ үү",
+                  message: t("Нэр бүртгэнэ үү"),
                 },
               ]}
             >
@@ -222,7 +222,7 @@ function KhurunguudCard({
               rules={[
                 {
                   required: true,
-                  message: "Тоо ширхэг бүртгэнэ үү",
+                  message: t("Тоо ширхэг бүртгэнэ үү"),
                 },
               ]}
             >
@@ -252,7 +252,7 @@ function KhurunguudCard({
               rules={[
                 {
                   required: true,
-                  message: "Үнэ бүртгэнэ үү",
+                  message: t("Үнэ бүртгэнэ үү"),
                 },
               ]}
             >
@@ -284,7 +284,7 @@ function KhurunguudCard({
               rules={[
                 {
                   required: false,
-                  message: "Нийт бүртгэнэ үү",
+                  message: t("Нийт бүртгэнэ үү"),
                 },
               ]}
             >
@@ -619,7 +619,7 @@ function TalbaiBurtgekh({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Дугаар бүртгэнэ үү!",
+                    message: t("Дугаар бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -645,7 +645,7 @@ function TalbaiBurtgekh({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Талбайн хэмжээ бүртгэнэ үү!",
+                    message: t("Талбайн хэмжээ бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -653,7 +653,7 @@ function TalbaiBurtgekh({ token }) {
                   onKeyUp={focuser}
                   style={{ width: "100%" }}
                   allowClear
-                  placeholder="Талбайн хэмжээ/м2/"
+                  placeholder={t("Талбайн хэмжээ/м2/")}
                   value={talbaiState.talbainKhemjee}
                   onChange={(v) => onChange("talbainKhemjee", v)}
                 ></InputNumber>
@@ -670,7 +670,7 @@ function TalbaiBurtgekh({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Нэгж үнэ бүртгэнэ үү!",
+                    message: t("Нэгж үнэ бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -698,7 +698,7 @@ function TalbaiBurtgekh({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Нийт үнэ бүртгэнэ үү!",
+                    message: t("Нийт үнэ бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -727,7 +727,7 @@ function TalbaiBurtgekh({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Давхар бүртгэнэ үү!",
+                    message: t("Давхар бүртгэнэ үү!"),
                   },
                 ]}
               >

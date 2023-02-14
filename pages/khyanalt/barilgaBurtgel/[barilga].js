@@ -334,7 +334,7 @@ function GereeBaiguulakh({ token }) {
           </Form.Item>
 
           <Form.Item
-            rules={[{ required: true, message: "Барилгын нэр оруулна уу!" }]}
+            rules={[{ required: true, message: t("Барилгын нэр оруулна уу!") }]}
             name="ner"
             label={t("Нэр")}
           >
@@ -342,7 +342,7 @@ function GereeBaiguulakh({ token }) {
           </Form.Item>
           <Form.Item
             rules={[
-              { required: true, message: "Барилгын Регистр оруулна уу!" },
+              { required: true, message: t("Барилгын Регистр оруулна уу!") },
             ]}
             name="register"
             label={t("Регистр")}
@@ -353,7 +353,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               {
                 required: true,
-                message: "Барилгын Давхарын тоо оруулна уу!",
+                message: t("Барилгын Давхарын тоо оруулна уу!"),
               },
             ]}
             name="davkhar"
@@ -374,7 +374,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               {
                 required: true,
-                message: "Барилгын B Давхарын тоо оруулна уу!",
+                message: t("Барилгын B Давхарын тоо оруулна уу!"),
               },
             ]}
             name="bdavkhar"
@@ -395,7 +395,7 @@ function GereeBaiguulakh({ token }) {
             rules={[
               {
                 required: true,
-                message: "Барилгын талбайн хэмжээ оруулна уу!",
+                message: t("Барилгын талбайн хэмжээ оруулна уу!"),
               },
             ]}
             name="niitTalbai"
@@ -409,7 +409,7 @@ function GereeBaiguulakh({ token }) {
           </Form.Item>
           <Form.Item
             rules={[
-              { required: true, message: "Барилгын Нээх цаг оруулна уу!" },
+              { required: true, message: t("Барилгын Нээх цаг оруулна уу!") },
             ]}
             name="neekhTsag"
             label={t("Нээх цаг")}
@@ -423,7 +423,7 @@ function GereeBaiguulakh({ token }) {
           </Form.Item>
           <Form.Item
             rules={[
-              { required: true, message: "Барилгын Хаах цаг оруулна уу!" },
+              { required: true, message: t("Барилгын Хаах цаг оруулна уу!") },
             ]}
             name="khaakhTsag"
             label={t("Хаах цаг")}
@@ -436,7 +436,7 @@ function GereeBaiguulakh({ token }) {
             />
           </Form.Item>
           <Form.Item
-            rules={[{ required: true, message: "Барилгын Хаяг оруулна уу!" }]}
+            rules={[{ required: true, message: t("Барилгын Хаяг оруулна уу!") }]}
             name="khayag"
             label={t("Хаяг")}
           >

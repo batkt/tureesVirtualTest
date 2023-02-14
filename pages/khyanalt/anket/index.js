@@ -61,7 +61,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
           rules={[
             {
               required: true,
-              message: "Асуулт оруулна уу!",
+              message: t("Асуулт оруулна уу!"),
             },
           ]}
         //validateTrigger={["onChange", "onBlur"]}
@@ -77,7 +77,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
           {...restField}
         >
           <Select
-            placeholder="Хариултын төрөл"
+            placeholder={t("Хариултын төрөл")}
             defaultValue={"boglokh"}
             options={[
               { label: t("Бөглөх"), value: "boglokh" },
@@ -103,7 +103,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
       rules={[
         {
           required: true,
-          message: "Хариулт оруулна уу!",
+          message: t("Хариулт оруулна уу!"),
         },
       ]}
         name={[name ,"khariultuud"]}
@@ -121,7 +121,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
                   name={field.name}  
                     fieldId={field.key}   
                   {...field.restField}
-                  rules={[{ required: true, message: "Хариулт оруулна уу!" }]}
+                  rules={[{ required: true, message: t("Хариулт оруулна уу!") }]}
                 >
                   <div className="relative pr-8">
                     <Input
@@ -409,7 +409,7 @@ function Anket({ token }) {
                     rules={[
                       {
                         required: true,
-                        message: "Нэр оруулна уу!",
+                        message: t("Нэр оруулна уу!"),
                       },
                     ]}
                   >
@@ -424,7 +424,7 @@ function Anket({ token }) {
                   rules={[
                     {
                       required: true,
-                      message: "Асуулт оруулна уу!",
+                      message: t("Асуулт оруулна уу!"),
                     },
                   ]}
                   name="asuultuud"

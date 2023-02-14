@@ -107,7 +107,7 @@ const YurunkhiiMedeele = ({
     >
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item
-          rules={[{ required: true, message: "Гэрээ хийх огноо бүртгэнэ үү!" }]}
+          rules={[{ required: true, message: t("Гэрээ хийх огноо бүртгэнэ үү!") }]}
           name="gereeniiOgnoo"
           label={t("Гэрээ хийх огноо")}
         >
@@ -122,7 +122,7 @@ const YurunkhiiMedeele = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
         <Form.Item
-          rules={[{ required: true, message: "Гэрээний хугацаа бүртгэнэ үү!" }]}
+          rules={[{ required: true, message: t("Гэрээний хугацаа бүртгэнэ үү!") }]}
           name="khugatsaa"
           label={t("Гэрээний хугацаа")}
           required
@@ -143,7 +143,7 @@ const YurunkhiiMedeele = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item
-          rules={[{ required: true, message: "Төлөлт хийх өдөр бүртгэнэ үү!" }]}
+          rules={[{ required: true, message: t("Төлөлт хийх өдөр бүртгэнэ үү!") }]}
           label={t("Төлөлт хийх өдөр")}
           extra={
             gereeniiZagvar?.turGereeEsekh !== true &&
@@ -182,7 +182,7 @@ const YurunkhiiMedeele = ({
           label={t("Гэрээ дуусах хугацаа")}
           extra={t("Төлөлт хийх огноо сар бүрийн / өдөр")}
           rules={[
-            { required: true, message: "Гэрээ дуусах хугацаа бүртгэнэ үү!" },
+            { required: true, message: t("Гэрээ дуусах хугацаа бүртгэнэ үү!") },
           ]}
         >
           <DatePicker

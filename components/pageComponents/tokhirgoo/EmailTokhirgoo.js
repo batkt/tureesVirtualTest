@@ -70,7 +70,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                     {
                       type: "email",
                       required: true,
-                      message: "gmail хаяг оруулна уу",
+                      message: t("gmail хаяг оруулна уу"),
                     },
                   ]}
                 >
@@ -88,7 +88,7 @@ function EmailTokhirgoo({ token, baiguullaga, baiguullagaMutate, setSongogdsonTs
                   rules={[
                     {
                       required: true,
-                      message: "Нууц үг оруулна уу",
+                      message: t("Нууц үг оруулна уу"),
                     },
                   ]}
                 >

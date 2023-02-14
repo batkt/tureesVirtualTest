@@ -75,7 +75,7 @@ const BarilgaBurtgekh = forwardRef(
             rules={[
               {
                 required: ugugdul?.zurgiinNer ? false : true,
-                message: "Лого заавал оруулна уу!",
+                message: t("Лого заавал оруулна уу!"),
               },
             ]}
           >
@@ -122,7 +122,7 @@ const BarilgaBurtgekh = forwardRef(
         <Form.Item
           label={t("Хаяг")}
           name="khayag"
-          rules={[{ required: true, message: "Хаяг заавал оруулна уу!" }]}
+          rules={[{ required: true, message: t("Хаяг заавал оруулна уу!") }]}
         >
           <TextArea disabled={readonly} />
         </Form.Item>

@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useRef, useState } from "react";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
+import { t } from "i18next";
 
 const formItemLayout = {
   labelCol: {
@@ -53,10 +54,10 @@ const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id ,t}) => {
       <div value={1} disabled className="flex w-full border-b">
         <div className="flex">
           <div className="w-1/2 border-r bg-green-400 bg-opacity-10 text-center font-medium text-gray-600 dark:text-gray-200">
-            Зардлын нэршил
+            {t("Зардлын нэршил")}
           </div>
           <div className="w-1/2 bg-blue-600 bg-opacity-5 text-center font-medium text-gray-600 dark:text-gray-200">
-            Нэгж, Үнэ
+            {t("Нэгж")}, {t("Үнэ")}
           </div>
         </div>
       </div>
@@ -109,7 +110,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
               rules={[
                 {
                   required: true,
-                  message: "Тариф оруулна уу!",
+                  message: t("Тариф оруулна уу!"),
                 },
               ]}
             >
@@ -148,7 +149,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
           onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
         >
           <div className="flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">
-            <Tooltip title="Устгах">
+            <Tooltip title={t("Устгах")}>
               <CloseCircleOutlined size={20} />
             </Tooltip>
           </div>

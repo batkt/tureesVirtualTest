@@ -650,7 +650,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Төрөл сонгоно уу!",
+                  message: t("Төрөл сонгоно уу!"),
                 },
               ]}
             >
@@ -677,7 +677,7 @@ function AjiltanBurtgel({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Овог бүртгэнэ үү!",
+                    message: t("Овог бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -703,7 +703,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Нэр бүртгэнэ үү!",
+                  message: t("Нэр заавал оруулна уу!"),
                 },
               ]}
             >
@@ -733,7 +733,7 @@ function AjiltanBurtgel({ token }) {
                     formNuukh === "ААН"
                       ? new RegExp("(\\d{7})")
                       : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
-                  message: "Регистр бүртгэнэ үү!",
+                  message: t("Регистр бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -763,7 +763,7 @@ function AjiltanBurtgel({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Захирлын Овог бүртгэнэ үү!",
+                    message: t("Захирлын Овог бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -790,7 +790,7 @@ function AjiltanBurtgel({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: "Захирлын нэр бүртгэнэ үү!",
+                    message: t("Захирлын нэр бүртгэнэ үү!"),
                   },
                 ]}
               >
@@ -817,7 +817,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "Хаяг бүртгэнэ үү!",
+                  message: t("Хаяг бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -880,7 +880,7 @@ function AjiltanBurtgel({ token }) {
                   validator: async (_, names) => {
                     if (!names || names.length < 1) {
                       return Promise.reject(
-                        new Error("Утасны дугаар бүртгэнэ үү")
+                        new Error(t("Утасны дугаар оруулна уу !"))
                       );
                     }
                   },
@@ -897,14 +897,10 @@ function AjiltanBurtgel({ token }) {
                         rules={[
                           {
                             required: true,
-                            pattern: new RegExp("(^[0-9]+$)"),
-                            message: "Дугаар оруулна уу",
-                          },
-                          {
-                            required: true,
                             max: 8,
                             min: 8,
-                            message: "Дугаараа шалгана уу",
+                            pattern: new RegExp("(^[0-9]+$)"),
+                            message: t("Утасны дугаар оруулна уу !"),
                           },
                         ]}
                       >
@@ -962,7 +958,7 @@ function AjiltanBurtgel({ token }) {
               rules={[
                 {
                   required: true,
-                  message: "И-мейл хаяг бүртгэнэ үү!",
+                  message: t("И-мейл хаяг бүртгэнэ үү!"),
                 },
               ]}
             >
@@ -1125,7 +1121,7 @@ function AjiltanBurtgel({ token }) {
                             ellipsis: true,
                             align: "center",
                             render: () => {
-                              return <Tag color="green">Идэвхтэй</Tag>;
+                              return <Tag color="green">{t("Идэвхтэй")}</Tag>;
                             },
                           },
                           {
@@ -1502,7 +1498,7 @@ function AjiltanBurtgel({ token }) {
             ]}
           />
           <Modal
-            title="Нууц үг сэргээх"
+            title={t("Нууц үг сэргээх")}
             open={!!nuutsUgKhariltsagch}
             onOk={() => nuutsUgSolikh(nuutsUgKhariltsagch)}
             onCancel={nuutsUgModalKhaah}
@@ -1516,19 +1512,19 @@ function AjiltanBurtgel({ token }) {
               ref={formRef}
             >
               <Form.Item
-                label="Нууц үг сэргээх"
+                label={t("Нууц үг сэргээх")}
                 name="sergesenNuutsUg"
                 onChange={(e) => shineNuutsUgSolikh("nuutsUg", e.target.value)}
                 rules={[
                   {
                     required: true,
-                    message: "Нууц үг оруулна уу!",
+                    message: t("Нууц үг оруулна уу!"),
                   },
                 ]}
               >
                 <Input.Password style={{ width: "100%" }} />
               </Form.Item>
-              <Form.Item label="Нууц үг давтан оруулах" name="davtanNuutsUg">
+              <Form.Item label={t("Нууц үг давтан оруулах")} name="davtanNuutsUg">
                 <Input.Password
                   onChange={(e) =>
                     shineNuutsUgSolikh("davtanNuutsUg", e.target.value)

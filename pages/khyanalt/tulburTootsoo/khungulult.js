@@ -449,7 +449,7 @@ function tulburTootsoo() {
                     rules={[
                       {
                         required: true,
-                        message: "Хөнгөлөх сар бүртгэнэ үү!",
+                        message: t("Хөнгөлөх сар бүртгэнэ үү!"),
                       },
                     ]}
                   >

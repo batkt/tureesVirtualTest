@@ -2,6 +2,7 @@ import React, { useImperativeHandle } from "react";
 import { Form, Input, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import uilchilgee from "services/uilchilgee";
+import { t } from "i18next";
 function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
   const [form] = Form.useForm();
   useImperativeHandle(
@@ -43,11 +44,11 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
       form={form}
       onFinish={()=>sanalYwuulya()}
     >
-      <Form.Item rules={[{required: true, message:"Гарчиг бичнэ үү."}]} name={"garchig"}>
+      <Form.Item rules={[{required: true, message: t("Гарчиг бичнэ үү.")}]} name={"garchig"}>
         <Input placeholder="Гарчиг" />
       </Form.Item>
-      <Form.Item rules={[{required: true, message:"Санал хүсэлтээ энд бичнэ үү."}]} name={"tailbar"}>
-        <TextArea placeholder="Санал хүсэлтээ бичнэ үү." />
+      <Form.Item rules={[{required: true, message: t("Санал хүсэлтээ энд бичнэ үү.")}]} name={"tailbar"}>
+        <TextArea placeholder={t("Санал хүсэлтээ бичнэ үү.")} />
       </Form.Item>
     </Form>
   );
