@@ -208,18 +208,18 @@ const YurunkhiiMedeele = ({
 
   function onFinish() {
     if (value.talbainuud === undefined) {
-      message.warning("Талбай бүртгэнэ үү!");
+      message.warning(t("Талбай бүртгэнэ үү!"));
       return
     } else if (value.talbainuud.length <= 0) {
-      message.warning("Талбай бүртгэнэ үү!");
+      message.warning(t("Талбай бүртгэнэ үү!"));
       return
     };
     if (value.talbainNiitUne === undefined) {
-      message.warning("Талбайн үнэ бүртгэнэ үү!");
+      message.warning(t("Талбайн үнэ бүртгэнэ үү!"));
       return
     }
     if (value.talbainKhemjee === undefined) {
-      message.warning("Талбайн хэмжээ бүртгэнэ үү!");
+      message.warning(t("Талбайн хэмжээ бүртгэнэ үү!"));
       return
     }
     next();
@@ -276,7 +276,7 @@ const YurunkhiiMedeele = ({
               key={talbai?._id}
               className="group relative space-y-2 rounded-md border border-gray-400 bg-gray-50 p-2 pb-5 shadow-md dark:bg-gray-800 dark:text-gray-300"
             >
-              <div className="text-xl font-medium">Код:{talbai.kod}</div>
+              <div className="text-xl font-medium">{t("Код")}:{talbai.kod}</div>
               <div className="divide-y-2 border">
                 <div
                   className={`grid ${gereeniiZagvar?.turGereeEsekh
