@@ -250,7 +250,7 @@ const { t } = useTranslation()
                 <a>
                   <div className="flex w-44 items-center space-x-2 text-white dark:text-gray-100">
                     <SettingOutlined />
-                    <span>Тохиргоо</span>
+                    <span>{t("Тохиргоо")}</span>
                   </div>
                 </a>
               </Link>
@@ -262,7 +262,7 @@ const { t } = useTranslation()
             >
               <div className="flex w-44 items-center space-x-2 text-white">
                 <QuestionOutlined />
-                <span>Тусламж</span>
+                <span>{t("Тусламж")}</span>
               </div>
             </Menu.Item>
             <Menu.Item
@@ -272,14 +272,14 @@ const { t } = useTranslation()
             >
               <div className="flex w-44 items-center space-x-2 text-white">
                 <FiSend />
-                <span>Санал хүсэлт</span>
+                <span>{t("Feedback")}</span>
               </div>
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item key="3" onClick={garya} className="profileMenuItem">
               <div className="flex w-44 items-center space-x-2 text-white">
                 <LogoutOutlined />
-                <span>Гарах</span>
+                <span>{t("Гарах")}</span>
               </div>
             </Menu.Item>
           </Menu>

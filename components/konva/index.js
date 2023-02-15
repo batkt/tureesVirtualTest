@@ -1,5 +1,6 @@
 import { ClearOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button } from "antd";
+import { t } from "i18next";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Stage,
@@ -305,7 +306,7 @@ function Drawer(props) {
               props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
             }
           >
-            <SaveOutlined /> Хадгалах
+            <SaveOutlined /> {t("Хадгалах")}
           </Button>
           <Button
             onClick={() => {
@@ -315,7 +316,7 @@ function Drawer(props) {
             }}
           >
             <ClearOutlined className="pr-2 dark:text-white" />
-            <p className="dark:text-white">Шинээр зурах</p>
+            <p className="dark:text-white">{t("Шинээр зурах")}</p>
           </Button>
         </div>
       </div>

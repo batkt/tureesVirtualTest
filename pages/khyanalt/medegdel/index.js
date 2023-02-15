@@ -458,16 +458,16 @@ function Khyanalt({ token }) {
 
   function smsZagvarNemya(data) {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => ref.current.khadgalya(setWaiting(true))}
       >
-        Хадгалах
+        {t("Хадгалах")}
       </Button>,
     ];
     modal({
-      title: `${turul} Загвар үүсгэх`,
+      title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
       content: (
         <ZagvarBurtgel

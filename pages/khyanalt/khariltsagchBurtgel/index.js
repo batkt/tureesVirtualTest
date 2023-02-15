@@ -661,8 +661,8 @@ function AjiltanBurtgel({ token }) {
                 placeholder={t("Төрөл сонгох")}
                 onChange={turulSongokh}
               >
-                <Option value="Иргэн">Иргэн</Option>
-                <Option value="ААН">ААН</Option>
+                <Option value="Иргэн">{t("Иргэн")}</Option>
+                <Option value="ААН">{t("ААН")}</Option>
               </Select>
             </Form.Item>
           </div>

@@ -40,7 +40,7 @@ function KhuviinMedeelel({
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Талбайн m2-н үнэ засах
+              {t("Талбайн m2-н үнэ засах")}
             </h2>
           </div>
           {ajilchdiinGaralt?.jagsaalt?.map((a) => (
@@ -86,7 +86,7 @@ function KhuviinMedeelel({
             }`}
           >
             <Button type="primary" onClick={ajiltniiTokhirgooKhadgalya}>
-              Хадгалах
+              {t("Хадгалах")}
             </Button>
           </div>
         </div>
@@ -95,7 +95,7 @@ function KhuviinMedeelel({
         <div className="box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Талбайн m2 үнэ оруулах
+              {t("Талбайн m2 үнэ оруулах")}
             </h2>
           </div>
           <div className="box">

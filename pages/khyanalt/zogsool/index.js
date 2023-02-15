@@ -126,9 +126,9 @@ function Zogsool({ token }) {
   function mashinOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
         <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];

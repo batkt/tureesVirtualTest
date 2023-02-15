@@ -10,6 +10,7 @@
   "Нууц үг": "Password",
   "Нэвтрэх нэр": "Username",
   "Нэвтрэх нэр оруулан уу": "Enter a username!",
+  "Хайлт": "Search",
   
   "Dashboard" : "Dashboard",
 "Contracts" : "Contracts",
@@ -381,6 +382,7 @@
 "Төрөлжүүлэх": "Diversify",
 "Нэвтрэлтийн түүх": "Login history",
 "Тохиргоо": "Settings",
+"Гарах": "Log out",
 
 "Хувийн мэдээлэл": "Personal information",
 "Шинэ нууц үг": "New password",

@@ -82,9 +82,9 @@ function mashinBurtgel({ token }) {
   function mashinOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
         <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
@@ -111,13 +111,13 @@ function mashinBurtgel({ token }) {
     var mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
     const footer = [
       <Space>
-        <Button onClick={() => mashinref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           type="primary"
           id={mashinBurtgekhButtonId}
           onClick={() => mashinref.current.khadgalya()}
         >
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
