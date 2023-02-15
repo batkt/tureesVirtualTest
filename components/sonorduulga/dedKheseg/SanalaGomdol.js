@@ -3,6 +3,7 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useAjiltan from "hooks/useAjiltan";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 function hrefAvya(turul, _id, daalgavriinId, ajiltan, object) {
   var href = "";
@@ -22,6 +23,7 @@ function Zakhialga({ onClose, token, ...object }) {
   const { turul, message, khariltsagchiinNer, createdAt, _id, daalgavriinId } =
     object || {};
   const { ajiltan } = useAjiltan(token);
+  const { t } = useTranslation()
 
   function sonorduulgaKharlaa() {
     const href = hrefAvya(turul, _id, daalgavriinId, ajiltan, object);
@@ -56,14 +58,14 @@ function Zakhialga({ onClose, token, ...object }) {
           className="text-theme-1 dark:border-dark-5 flex flex-1 items-center justify-center border-b border-gray-200 px-6 font-medium dark:text-gray-500"
           onClick={sonorduulgaKharlaa}
         >
-          Дэлгэрэнгүй
+          {t("Дэлгэрэнгүй")}
         </a>
         <a
           data-dismiss="notification"
           className="flex flex-1 items-center justify-center px-6 font-medium text-gray-600"
           onClick={onClose}
         >
-          Хаах
+          {t("Хаах")}
         </a>
       </div>
     </div>

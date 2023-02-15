@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { useTranslation } from "react-i18next";
 
 function hrefAvya(turul, _id, ajiltan, object) {
   var href = "";
@@ -18,6 +19,7 @@ function hrefAvya(turul, _id, ajiltan, object) {
 
 function Daalgavar({ onClose, token, ajiltan, ...object }) {
   const { turul, tailbar, duusakhOgnoo, _id } = object || {};
+  const { t } = useTranslation()
   function sonorduulgaKharlaa() {
     const href = hrefAvya(turul, _id, ajiltan, object);
     window.location.href = href;
@@ -41,7 +43,7 @@ function Daalgavar({ onClose, token, ajiltan, ...object }) {
       <div className="md:mr-40">
         <div className="font-medium">
           <div className="text-center rounded-md w-36 bg-red-400 px-2 text-white">
-            Даалгавар
+            {t("Даалгавар")}
           </div>
         </div>
         <div className="mt-1 text-gray-600">
@@ -59,14 +61,14 @@ function Daalgavar({ onClose, token, ajiltan, ...object }) {
             sonorduulgaKharlaa();
           }}
         >
-          Дэлгэрэнгүй
+          {t("Дэлгэрэнгүй")}
         </a>
         <a
           data-dismiss="notification"
           className="flex flex-1 items-center justify-center px-6 font-medium text-gray-600"
           onClick={onClose}
         >
-          Хаах
+          {t("Хаах")}
         </a>
       </div>
     </div>
