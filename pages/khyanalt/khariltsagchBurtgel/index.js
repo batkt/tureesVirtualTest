@@ -171,7 +171,7 @@ function AjiltanBurtgel({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const formRef = useRef();
   const excelref = useRef();
   const [resetForm] = Form.useForm();
@@ -843,7 +843,7 @@ function AjiltanBurtgel({ token }) {
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div key={key}>
                       <YalgakhUtga
-                      t={t}
+                        t={t}
                         key={key}
                         khariltsagchState={khariltsagchState}
                         name={name}
@@ -909,7 +909,9 @@ function AjiltanBurtgel({ token }) {
                           maxLength={8}
                           type="number"
                           className="appearance-none"
-                          placeholder={t("Утасны дугаар") + " " + (field.name + 1)}
+                          placeholder={
+                            t("Утасны дугаар") + " " + (field.name + 1)
+                          }
                           onChange={({ target }) => {
                             setkhariltsagchState((a) => {
                               _.set(a, "utas." + field.name, target.value);
@@ -1117,11 +1119,15 @@ function AjiltanBurtgel({ token }) {
                           },
                           {
                             title: t("Төлөв"),
-                            dataIndex: "tuluv",
+                            dataIndex: "idevkhiteiEsekh",
                             ellipsis: true,
                             align: "center",
-                            render: () => {
-                              return <Tag color="green">{t("Идэвхтэй")}</Tag>;
+                            render: (idevkhiteiEsekh) => {
+                              return t(
+                                idevkhiteiEsekh === true
+                                  ? "Идэвхтэй"
+                                  : "Идэвхгүй"
+                              );
                             },
                           },
                           {
@@ -1468,7 +1474,9 @@ function AjiltanBurtgel({ token }) {
                                 className="text-green-600"
                                 style={{ fontSize: "18px" }}
                               />
-                              <label className="text-green-600">{t("Нууц үг")}</label>
+                              <label className="text-green-600">
+                                {t("Нууц үг")}
+                              </label>
                             </a>
                           </Popconfirm>
                           <Popconfirm
@@ -1482,7 +1490,9 @@ function AjiltanBurtgel({ token }) {
                                 className="text-red-600"
                                 style={{ fontSize: "18px" }}
                               />
-                              <label className="text-red-600">{t("Устгах")}</label>
+                              <label className="text-red-600">
+                                {t("Устгах")}
+                              </label>
                             </a>
                           </Popconfirm>
                         </div>
@@ -1524,7 +1534,10 @@ function AjiltanBurtgel({ token }) {
               >
                 <Input.Password style={{ width: "100%" }} />
               </Form.Item>
-              <Form.Item label={t("Нууц үг давтан оруулах")} name="davtanNuutsUg">
+              <Form.Item
+                label={t("Нууц үг давтан оруулах")}
+                name="davtanNuutsUg"
+              >
                 <Input.Password
                   onChange={(e) =>
                     shineNuutsUgSolikh("davtanNuutsUg", e.target.value)
@@ -1534,7 +1547,9 @@ function AjiltanBurtgel({ token }) {
             </Form>
           </Modal>
         </div>
-        <p className="py-2 font-medium md:hidden">{t("Харилцагчийн жагсаалт")}</p>
+        <p className="py-2 font-medium md:hidden">
+          {t("Харилцагчийн жагсаалт")}
+        </p>
         <CardList
           keyValue=""
           cardListTuluv={"utas"}
