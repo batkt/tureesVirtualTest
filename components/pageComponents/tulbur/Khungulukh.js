@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from 'moment'
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { t } from "i18next";
 
 function Table({data,updateMyData}) {
   return (
@@ -115,11 +116,11 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
   return (
     <div className="flex flex-col space-y-2">
       <div className='flex flex-row space-x-2 items-center'>
-        <label>Хөнгөлөх сар</label>
+        <label>{t("Хөнгөлөх сар")}</label>
         <DatePicker disabledDate={disabledDate} picker='month' placeholder='сар' onChange={setSar}/>
       </div>
       <Divider/>
-      <label>Хөнгөлөлт оруулах</label>
+      <label>{t("Хөнгөлөлт оруулах")}</label>
       <Table
         className='mt-2'
         data={jagsaalt}

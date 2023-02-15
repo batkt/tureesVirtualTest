@@ -1129,7 +1129,7 @@ function ZakhialgiinKhyanalt() {
           >
             <DatePicker.RangePicker
               className="w-full sm:w-auto"
-              locale={locale}
+              locale={i18n.language === "mn" && locale}
             />
           </div>
           <div
@@ -1226,14 +1226,14 @@ function ZakhialgiinKhyanalt() {
                     onClick={gereeOruulakhExcel}
                   >
                     <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>Оруулах</label>
+                    <label>{t("Оруулах")}</label>
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={excelTatakh}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
-                    <label>Татах</label>
+                    <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}

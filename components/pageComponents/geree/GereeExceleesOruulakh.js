@@ -6,6 +6,7 @@ import useGereeniiZagvar from "hooks/useGereeniiZagvar";
 import local from "antd/lib/date-picker/locale/mn_MN";
 import _ from "lodash";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 function GereeExceleesOruulakh(
   {
     token,
@@ -23,6 +24,7 @@ function GereeExceleesOruulakh(
   const [zagvariinId, setGereeniiZagvar] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
+  const { t, i18n } = useTranslation()
 
   const { gereeniiZagvarGaralt } = useGereeniiZagvar(
     token,
@@ -71,9 +73,9 @@ function GereeExceleesOruulakh(
   return (
     <div>
       <div className="grid w-full grid-cols-2 gap-4">
-        <DatePicker.MonthPicker locale={local} onChange={setOgnoo} />
+        <DatePicker.MonthPicker locale={i18n.language === "mn" && local} onChange={setOgnoo} />
         <Select
-          placeholder="Гэрээний загвар"
+          placeholder={t("Гэрээний загвар")}
           onChange={setGereeniiZagvar}
           style={{ width: "100%" }}
         >
@@ -137,7 +139,7 @@ function GereeExceleesOruulakh(
           className="cursor-pointer font-medium text-blue-600"
           onClick={zagvarAvya}
         >
-          Загвар татах
+          {t("Загвар татах")}
         </a>
       )}
     </div>

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
+import { t } from "i18next";
 const { DatePicker, InputNumber, message, Modal } = require("antd");
 const moment = require("moment");
 
@@ -80,21 +81,21 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
     <div className="w-full space-y-2">
       <div className="w-full space-y-2 font-medium">
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Эхлэх огноо:</div>
+          <div className="text-right">{t("Эхлэх огноо")}:</div>
           <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Дуусах огноо:</div>
+          <div className="text-right">{t("Дуусах огноо")}:</div>
           <div>{moment(data?.duusakhOgnoo).format("YYYY-MM-DD")}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Ашигласан хоног:</div>
+          <div className="text-right">{t("Ашигласан хоног")}:</div>
           <div>
             {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
           </div>
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Авлагын дүн:</div>
+          <div className="text-right">{t("Авлагын дүн")}:</div>
           <div>{formatNumber(data?.uldegdel)}</div>
         </div>
         <div className="flex w-full flex-row justify-between">
@@ -108,7 +109,7 @@ const Sungakh = React.forwardRef(({ token, destroy, confirm, data }, ref) => {
           />
         </div>
         <div className="flex w-full flex-row justify-between">
-          <div className="text-right">Дуусгах огноо:</div>
+          <div className="text-right">{t("Дуусгах огноо")}:</div>
           <DatePicker
             id="ognoo"
             allowClear={false}
