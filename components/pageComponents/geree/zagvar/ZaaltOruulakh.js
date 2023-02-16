@@ -6,6 +6,7 @@ import _ from "lodash";
 import compareFields from "tools/function/compareFields";
 import dynamic from "next/dynamic";
 import { formatting } from "./ZaaltZasvar";
+import { t } from "i18next";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -140,9 +141,9 @@ function index({ token, baiguullaga, destroy }, ref) {
     const values = form.getFieldsValue();
     if (compareFields(values, {}, ["kharagdakhDugaar"]))
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -208,7 +209,7 @@ function index({ token, baiguullaga, destroy }, ref) {
 
   return (
     <Form form={form} {...formItemLayout}>
-      <Form.Item label="Харагдах дугаар" name="kharagdakhDugaar">
+      <Form.Item label={t("Харагдах дугаар")} name="kharagdakhDugaar">
         <Input onKeyUp={focuser} />
       </Form.Item>
       <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
@@ -220,7 +221,7 @@ function index({ token, baiguullaga, destroy }, ref) {
             "Барьцаа бүртгэл",
             "Төлбөр тооцоо",
           ].map((a) => (
-            <Select.Option value={a}>{a}</Select.Option>
+            <Select.Option value={a}>{t(a)}</Select.Option>
           ))}
         </Select>
       </Form.Item>

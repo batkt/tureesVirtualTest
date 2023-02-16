@@ -42,8 +42,8 @@ function DansTile({ data, dansMutate, zasya, token, t }) {
         <div className="ml-auto flex space-x-2">
           <Popconfirm
             title={`${data.dugaar} данс устгах уу?`}
-            okText="Тийм"
-            cancelText="Үгүй"
+            okText={t("Тийм")}
+            cancelText={t("Үгүй")}
             onConfirm={() => ustgaya()}
           >
             <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">

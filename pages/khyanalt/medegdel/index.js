@@ -653,7 +653,7 @@ function Khyanalt({ token }) {
           >
             <div>
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
-                {t("SMS илгээсэн")}
+                SMS
               </p>
             </div>
             <div>
@@ -747,8 +747,8 @@ function Khyanalt({ token }) {
                     <div className="ml-auto flex flex-row space-x-2">
                       <Popconfirm
                         title="Загвар устгах уу?"
-                        okText="Тийм"
-                        cancelText="Үгүй"
+                        okText={t("Тийм")}
+                        cancelText={t("Үгүй")}
                         onConfirm={() => zagvarUstgaya(a)}
                       >
                         <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
@@ -788,7 +788,7 @@ function Khyanalt({ token }) {
               type="text"
               className="block w-full rounded-md border border-slate-300 bg-white  px-3 py-1 text-sm shadow-sm focus:border-[#8aaaef] focus:outline-none focus:ring-1
               focus:ring-[#8aaaef] dark:bg-gray-500 "
-              placeholder="Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/"
+              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {

@@ -8,9 +8,9 @@ function AjiltanNemekh({ ajiltanNemya }) {
     const ref = useRef()
     function ajiltanNemyaKharuulya() {
         const footer = [
-            <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+            <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
             <Button type="primary" onClick={() => ref.current.khadgalya()}>
-                Бүртгэл нэмэх
+                {t("Бүртгэл нэмэх")}
             </Button>,
         ];
         modal({

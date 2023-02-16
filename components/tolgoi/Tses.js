@@ -156,6 +156,9 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
               case "Санал хүсэлт":
                 utga = "Feedback"
                 break;
+                case "Хөнгөлөлт":
+                  utga = "Хөнгөлөлт"
+                  break;
               case "Дансны хуулга":
                 utga = "AccountStatement"
                 break;

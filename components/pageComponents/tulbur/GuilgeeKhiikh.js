@@ -16,7 +16,7 @@ import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 function GuilgeeKhiikh(
   { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId },
@@ -28,6 +28,7 @@ function GuilgeeKhiikh(
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
+  const { t, i18n} = useTranslation()
 
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
@@ -152,7 +153,7 @@ function GuilgeeKhiikh(
       default:
         break;
     }
-    return t(text);
+    return text;
   }
 
   function garya() {
@@ -164,9 +165,9 @@ function GuilgeeKhiikh(
       busadTurul !== undefined
     )
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -229,11 +230,11 @@ function GuilgeeKhiikh(
         </Radio.Group>
       </div>
       <Divider />
-      <label>{labelTurul(turul)}</label>
+      <label>{t(labelTurul(turul))}</label>
       {turul === "avlaga" && (
         <DatePicker.MonthPicker
           id="dataPicker1"
-          locale={locale}
+          locale={i18n.language === "mn" && locale}
           value={ognoo}
           onChange={(v) => {
             setOgnoo(v);
@@ -244,7 +245,7 @@ function GuilgeeKhiikh(
       {turul === "ahiglalt" && (
         <DatePicker
           id="dataPicker2"
-          locale={locale}
+          locale={i18n.language === "mn" && locale}
           value={ognoo}
           onChange={(v) => {
             setOgnoo(v);
@@ -255,7 +256,7 @@ function GuilgeeKhiikh(
       {turul === "busad" && (
         <Select
           id="select"
-          placeholder="Гүйлгээ хийх төрөл"
+          placeholder={t("Гүйлгээ хийх төрөл")}
           onChange={(v) => {
             setBusadTurul(v);
             document.getElementById("guilgeeDunInputNumber").focus();
@@ -306,7 +307,7 @@ function GuilgeeKhiikh(
         id="guilgeeDunInputNumber"
         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
         parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        placeholder={turul === "ahiglalt" ? "Нэгж" : "Дүн"}
+        placeholder={t(turul === "ahiglalt" ? "Нэгж" : "Дүн")}
         style={{ width: "100%", textAlign: "center" }}
         value={dun}
         onChange={(v) => setDun(v)}

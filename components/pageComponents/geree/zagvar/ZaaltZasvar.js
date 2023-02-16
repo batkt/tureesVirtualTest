@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Input, Modal, Select } from "antd";
 import dynamic from "next/dynamic";
+import { t } from "i18next";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -111,9 +112,9 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
   function garya() {
     if (utga !== value)
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -209,11 +210,11 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
     <React.Fragment>
       <div className="flex w-full flex-row">
         <span className="mr-3 w-1/3 text-right dark:text-gray-200">
-          Харагдах дугаар:
+          {t("Харагдах дугаар")}:
         </span>
         <div className="w-2/3">
           <Input
-            placeholder="Харагдах дугаар"
+            placeholder={t("Харагдах дугаар")}
             value={utga?.kharagdakhDugaar}
             onChange={({ target }) =>
               setUtga((a) => ({ ...a, kharagdakhDugaar: target.value }))
@@ -223,10 +224,10 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       </div>
       <div className="mt-5 flex w-full flex-row">
         <span className="mr-3 w-1/3 text-right dark:text-gray-200">
-          Хамаарагдах хэсэг:
+          {t("Хамаарагдах хэсэг")}:
         </span>
         <Select
-          placeholder="Хамаарагдах хэсэг"
+          placeholder={t("Хамаарагдах хэсэг")}
           className="w-2/3"
           value={utga?.khamaarakhKheseg}
           onChange={(v) => setUtga((a) => ({ ...a, khamaarakhKheseg: v }))}
@@ -238,7 +239,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
             "Барьцаа бүртгэл",
             "Төлбөр тооцоо",
           ].map((a) => (
-            <Select.Option value={a}>{a}</Select.Option>
+            <Select.Option value={a}>{t(a)}</Select.Option>
           ))}
         </Select>
       </div>

@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import moment from "moment";
+import { t } from "i18next";
 
 function UstsanTuukhTile(props) {
   const turul = props.class;
@@ -64,7 +65,7 @@ function UstsanTuukhTile(props) {
         <div className="font-bold dark:text-gray-100">{props.turluud}</div>
 
         <div className="ml-auto text-sm font-medium text-gray-600 dark:text-gray-200">
-          {turulMemo}
+          {t(turulMemo)}
         </div>
       </div>
       <div className="flex w-full flex-row dark:text-gray-100">

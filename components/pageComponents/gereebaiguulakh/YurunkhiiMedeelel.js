@@ -46,7 +46,7 @@ const normFile = (e) => {
 
 const query = { turul: "geree" };
 
-function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
+function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
   const segment = useJagsaalt("/segment", query);
   const [turul, setTurul] = useState();
   const [songosonSegment, setSongosonSegment] = useState();
@@ -71,9 +71,9 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
         >
-          <Select style={{ width: "100%" }} placeholder="Нэр" onChange={solikh}>
+          <Select style={{ width: "100%" }} placeholder={t("Нэр")} onChange={solikh}>
             {segment?.jagsaalt?.map((mur) => (
-              <Select.Option value={mur?.ner}>{mur?.ner}</Select.Option>
+              <Select.Option value={mur?.ner}>{t(mur?.ner)}</Select.Option>
             ))}
           </Select>
         </Form.Item>
@@ -86,11 +86,11 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
         >
           <Select
             style={{ width: "100%" }}
-            placeholder="Утга"
+            placeholder={t("Утга")}
             onChange={solikhtTurul}
           >
             {turul?.utguud?.map((a) => (
-              <Select.Option value={a}>{a}</Select.Option>
+              <Select.Option value={a}>{t(a)}</Select.Option>
             ))}
           </Select>
         </Form.Item>
@@ -533,6 +533,7 @@ const YurunkhiiMedeele = ({
                 <div key={key}>
                   <YalgakhUtga
                     key={key}
+                    t={t}
                     name={name}
                     fieldKey={fieldKey}
                     {...restField}
@@ -593,10 +594,10 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
             name="gerchilgeeniiZurag"
-            label={"Гэрчилгээний хуулбар"}
+            label={t("Гэрчилгээний хуулбар")}
             valuePropName="fileList"
             getValueFromEvent={normFile}
-            extra="Гэрчилгээний хуулбар"
+            extra={t("Гэрчилгээний хуулбар")}
           >
             <Upload
               multiple={false}
@@ -608,7 +609,7 @@ const YurunkhiiMedeele = ({
               headers={{ Authorization: `bearer ${token}` }}
             >
               <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
-                Файл сонгох
+                {t("Файл сонгох")}
               </Button>
             </Upload>
           </Form.Item>
@@ -636,7 +637,7 @@ const YurunkhiiMedeele = ({
                   className="dark:text-gray-300"
                   icon={<UploadOutlined />}
                 >
-                  Файл сонгох
+                  {t("Файл сонгох")}
                 </Button>
               </Upload>
             </Form.Item>
@@ -659,7 +660,7 @@ const YurunkhiiMedeele = ({
                   className="dark:text-gray-300"
                   icon={<UploadOutlined />}
                 >
-                  Файл сонгох
+                  {t("Файл сонгох")}
                 </Button>
               </Upload>
             </Form.Item>

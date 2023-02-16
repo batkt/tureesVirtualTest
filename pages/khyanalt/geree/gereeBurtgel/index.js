@@ -137,9 +137,9 @@ const Tailbar = React.forwardRef(
     function garya() {
       if (shaltgaan !== "")
         Modal.confirm({
-          content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-          okText: "Тийм",
-          cancelText: "Үгүй",
+          content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+          okText: t("Тийм"),
+          cancelText: t("Үгүй"),
           onOk: destroy,
         });
       else destroy();
@@ -773,7 +773,7 @@ function ZakhialgiinKhyanalt() {
                     onClick={() => gereeKharya(data)}
                   >
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
-                    <label> Харах</label>
+                    <label> {t("Харах")}</label>
                   </a>
                   {shuult.utga !== "Цуцласан" && (
                     <a
@@ -810,8 +810,8 @@ function ZakhialgiinKhyanalt() {
                   {shuult.utga !== "Цуцласан" && (
                     <Popconfirm
                       title="Цуцлахдаа итгэлтэй байна уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => gereeTsutsalya(data)}
                     >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
@@ -823,8 +823,8 @@ function ZakhialgiinKhyanalt() {
                   {shuult.utga === "Цуцласан" && (
                     <Popconfirm
                       title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => gereeSergeeye(data)}
                     >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">

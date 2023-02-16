@@ -77,9 +77,9 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                   <div className="ml-auto">{formatNumber(mur.tariff,2)}</div>
                   <div className="ml-5 flex space-x-2">
                     <Popconfirm
-                      title={`${mur.ner} зардал устгах уу?`}
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      title={t("зардал устгах уу?", {ner: mur.ner})}
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => ustgaya(mur)}
                     >
                       <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">
@@ -124,14 +124,14 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                 <div className="flex items-center p-5">
                   <div className="border-l-2 border-green-500 pl-4">
                     <div className="font-medium">{mur.ner}</div>
-                    <div className="text-gray-600">{mur.turul}</div>
+                    <div className="text-gray-600">{t(mur.turul)}</div>
                   </div>
                   <div className="ml-auto">{formatNumber(mur.tariff,2)}</div>
                   <div className="ml-5 flex space-x-2">
                     <Popconfirm
-                      title={`${mur.ner} зардал устгах уу?`}
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      title={t("зардал устгах уу?", {ner: mur.ner})}
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => ustgaya(mur,true)}
                     >
                       <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white">

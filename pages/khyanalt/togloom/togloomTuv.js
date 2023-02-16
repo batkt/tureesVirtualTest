@@ -23,6 +23,7 @@ import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import MashinBurtgel from "components/pageComponents/togloom/TsagBurtgel";
+import { t } from "i18next";
 
 function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
   message.loading("Өгөгдөл боловсруулж байна та түр хүлээнэ!", 100000);
@@ -126,9 +127,9 @@ function togloom1({ token }) {
   function mashinOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
         <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
@@ -165,7 +166,7 @@ function togloom1({ token }) {
           1,
       },
       {
-        title: "Нэр",
+        title: t("Нэр"),
         align: "center",
         dataIndex: "car_number",
         showSorterTooltip: false,
@@ -174,7 +175,7 @@ function togloom1({ token }) {
     ];
     if (turul === "Түрээслэгч") {
       col.push({
-        title: "Талбай",
+        title: t("Талбай"),
         align: "center",
         dataIndex: "mashin",
         showSorterTooltip: false,
@@ -184,7 +185,7 @@ function togloom1({ token }) {
         },
       });
       col.push({
-        title: "Гэрээ",
+        title: t("Гэрээ"),
         align: "center",
         dataIndex: "mashin",
         showSorterTooltip: false,
@@ -197,7 +198,7 @@ function togloom1({ token }) {
     return [
       ...col,
       {
-        title: "Орсон",
+        title: t("Орсон"),
         align: "center",
         dataIndex: "check_in_time",
         showSorterTooltip: false,
@@ -207,7 +208,7 @@ function togloom1({ token }) {
         },
       },
       {
-        title: "Гарсан",
+        title: t("Гарсан"),
         align: "center",
         dataIndex: "check_out_time",
         showSorterTooltip: false,
@@ -217,14 +218,14 @@ function togloom1({ token }) {
         },
       },
       {
-        title: "Хугацаа",
+        title: t("Хугацаа"),
         align: "center",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "khugatsaa",
       },
       {
-        title: "Төлбөр",
+        title: t("Төлбөр"),
         align: "right",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -255,13 +256,13 @@ function togloom1({ token }) {
     var mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
     const footer = [
       <Space>
-        <Button onClick={() => mashinref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           type="primary"
           id={mashinBurtgekhButtonId}
           onClick={() => mashinref.current.khadgalya()}
         >
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
@@ -336,7 +337,7 @@ function togloom1({ token }) {
             data-aos-delay="300"
           >
             <div className="flex flex-row space-x-2 p-1 text-xs font-medium md:text-base">
-              Тоглоомын орлого : {formatNumber(zogsooliinMedeelel?.data)}₮
+              {t("Тоглоомын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}₮
             </div>
             <div className="space-x-2">
               <Button
@@ -344,7 +345,7 @@ function togloom1({ token }) {
                 icon={<PlusOutlined />}
                 onClick={() => mashinBurtgekh()}
               >
-                нэмэх
+                {t("нэмэх")}
               </Button>
               <Popover
                 content={() => (
@@ -354,14 +355,14 @@ function togloom1({ token }) {
                       onClick={mashinOruulakhExcel}
                     >
                       <UploadOutlined style={{ fontSize: "18px" }} />
-                      <label>Оруулах</label>
+                      <label>{t("Оруулах")}</label>
                     </a>
                     <a
                       className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                       onClick={excelTatakh}
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />
-                      <label>Татах</label>
+                      <label>{t("Татах")}</label>
                     </a>
                   </div>
                 )}

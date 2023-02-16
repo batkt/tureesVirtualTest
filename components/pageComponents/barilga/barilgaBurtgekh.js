@@ -36,9 +36,9 @@ const BarilgaBurtgekh = forwardRef(
           else
             confirm({
               title: t("Анхаар"),
-              okText: "Тийм",
-              cancelText: "Үгүй",
-              content: "Та хадгалахгүй гарахдаа итгэлтэй байна уу",
+              okText: t("Тийм"),
+              cancelText: t("Үгүй"),
+              content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
               onOk: destroy,
             });
         },

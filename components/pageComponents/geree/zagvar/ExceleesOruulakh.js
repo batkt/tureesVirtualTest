@@ -3,6 +3,7 @@ import { message, Upload } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import uilchilgee, { url } from "services/uilchilgee";
 import _ from "lodash";
+import { t } from "i18next";
 
 function index(
   {
@@ -82,8 +83,8 @@ function index(
         <p className="ant-upload-drag-icon">
           <InboxOutlined />
         </p>
-        <p className="ant-upload-text">{garchig}</p>
-        <p className="ant-upload-hint">{tailbar}</p>
+        <p className="ant-upload-text">{t(garchig)}</p>
+        <p className="ant-upload-hint">{t(tailbar)}</p>
       </Upload>
       {aldaa && (
         <div
@@ -100,7 +101,7 @@ function index(
           target="_blank"
           onClick={zagvarAvya}
         >
-          Загвар татах
+          {t("Загвар татах")}
         </a>
       )}
     </div>

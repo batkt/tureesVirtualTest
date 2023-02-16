@@ -224,8 +224,8 @@ function index({ token }) {
                         <Popconfirm
                           disabled={mur?.tuluv === 1}
                           title={`Хүлээн авах уу?`}
-                          okText="Тийм"
-                          cancelText="Үгүй"
+                          okText={t("Тийм")}
+                          cancelText={t("Үгүй")}
                           onConfirm={() => sanalGomdolAvakh(mur)}
                         >
                           <div

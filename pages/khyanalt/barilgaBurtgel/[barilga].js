@@ -259,9 +259,9 @@ function GereeBaiguulakh({ token }) {
       ])
     )
       Modal.confirm({
-        content: `Та гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: router.back,
       });
     else router.back();
@@ -294,7 +294,7 @@ function GereeBaiguulakh({ token }) {
     >
       <div className="box col-span-12 p-5 md:col-span-6 xl:col-span-4">
         <div className="mb-5 text-lg font-medium">
-          <label>Барилга бүртгэл</label>
+          <label>{t("Барилга бүртгэл")}</label>
         </div>
         <Form
           autoComplete={"off"}
@@ -323,7 +323,7 @@ function GereeBaiguulakh({ token }) {
                       logoZuragKharakh(e, `logo/${logoMedeelel.logo}`)
                     }
                   >
-                    Тамга зураг харах
+                    {t("Тамга зураг харах")}
                   </Button>
                 )}
                 {!!logoMedeelel?.logo && (
@@ -472,7 +472,7 @@ function GereeBaiguulakh({ token }) {
               render(utga, mur, index) {
                 return (
                   <InputNumber
-                    placeholder="м2"
+                    placeholder={t("м2")}
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
@@ -506,7 +506,7 @@ function GereeBaiguulakh({ token }) {
                     <div className="flex flex-row space-x-2">
                       {!planZurag && (
                         <Button icon={<UploadOutlined />}>
-                          План зураг оруулах
+                          {t("План зураг оруулах")}
                         </Button>
                       )}
                       {!!planZurag && (
@@ -514,7 +514,7 @@ function GereeBaiguulakh({ token }) {
                           icon={<EyeOutlined />}
                           onClick={(e) => planZuragKharakh(e, planZurag)}
                         >
-                          План зураг харах
+                          {t("План зураг харах")}
                         </Button>
                       )}
                       {!!planZurag && <Button icon={<EditOutlined />}></Button>}

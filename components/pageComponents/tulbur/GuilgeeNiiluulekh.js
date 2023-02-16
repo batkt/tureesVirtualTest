@@ -223,9 +223,9 @@ function GuilgeeNiiluulekh(
       guilgeeniiTailbar !== data.description
     )
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -487,8 +487,8 @@ function GuilgeeNiiluulekh(
               </span>
               <Popconfirm
                 title={`${geree?.talbainDugaar} талбайн мөр бичилт устгах уу?`}
-                okText="Тийм"
-                cancelText="Үгүй"
+                okText={t("Тийм")}
+                cancelText={t("Үгүй")}
                 trigger={"click"}
                 onConfirm={() =>
                   setGereenuud((a) => {

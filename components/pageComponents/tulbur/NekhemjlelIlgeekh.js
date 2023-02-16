@@ -162,9 +162,9 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
   function garya() {
     if (songogdsonDans !== undefined || barimt !== undefined)
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -225,7 +225,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
       />
       <Select
         id="dansniiTurul"
-        placeholder="Дансны төрөл"
+        placeholder={t("Дансны төрөл")}
         onChange={(v) => {
           setDans(v);
           document.getElementById("nekhemjlekhTurul").focus();
@@ -240,7 +240,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
 
       <Select
         id="nekhemjlekhTurul"
-        placeholder="Нэхэмжлэхийн төрөл"
+        placeholder={t("Нэхэмжлэхийн төрөл")}
         onChange={(v) => {
           setBarimt(v);
           document.getElementById("nekhemjlelIlgeekhButton").focus();

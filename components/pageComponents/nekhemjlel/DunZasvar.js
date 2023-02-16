@@ -1,6 +1,7 @@
 import React, { useEffect, useImperativeHandle } from "react";
 import { Form, Input, InputNumber, Modal } from "antd";
 import formatNumber from "tools/function/formatNumber";
+import { t } from "i18next";
 function DunZasvar(
   {
     data,
@@ -36,9 +37,9 @@ function DunZasvar(
 
   function garya() {
     Modal.confirm({
-      content: `Та гарахдаа итгэлтэй байна уу?`,
-      okText: "Тийм",
-      cancelText: "Үгүй",
+      content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
       onOk: destroy,
     });
   }
@@ -63,7 +64,7 @@ function DunZasvar(
       autoComplete={"off"}
     >
       <Form.Item
-        label="Өмнөх хуримтлагдсан өр төлбөр"
+        label={t("Өмнөх хуримтлагдсан өр төлбөр")}
         name="umnukhSariinUrTulbur"
       >
         <InputNumber
@@ -74,7 +75,7 @@ function DunZasvar(
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
-      <Form.Item label="Энэ сард төлөх дүн" name="eneSardTulukhDun">
+      <Form.Item label={t("Энэ сард төлөх дүн")} name="eneSardTulukhDun">
         <InputNumber
           className="w-[200px]"
           formatter={(value) =>

@@ -142,10 +142,9 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
           </div>
         )}
         <Popconfirm
-          title={`${value?.zardluud && value?.zardluud[i]?.ner
-            } зардал устгах уу?`}
-          okText="Тийм"
-          cancelText="Үгүй"
+          title={t("зардал устгах уу?", {ner: value?.zardluud && value?.zardluud[i]?.ner})}
+          okText={t("Тийм")}
+          cancelText={t("Үгүй")}
           onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
         >
           <div className="flex h-8 w-8 cursor-pointer items-center justify-start rounded-full fill-current p-2 text-xl text-black dark:text-red-600">

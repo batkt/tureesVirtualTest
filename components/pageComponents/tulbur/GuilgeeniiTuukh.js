@@ -8,6 +8,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import { useReactToPrint } from "react-to-print";
 import _ from "lodash";
+import { t } from "i18next";
 
 const fetcher = (url, token, gereeniiId, ognoo) =>
   axios(token)
@@ -117,7 +118,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
         .catch(aldaaBarigch);
     else {
       const footer = [
-        <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+        <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
         <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
           Устгах
         </Button>,
@@ -180,22 +181,22 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     <div className="">
       <div ref={printRef}>
         <div className="print mb-2 p-2">
-          <div>Гүйлгээний түүх</div>
-          <div className="ml-auto">Талбайн дугаар:{data?.talbainDugaar}</div>
+          <div>{t("Гүйлгээний түүх")}</div>
+          <div className="ml-auto">{t("Талбайн дугаар")}:{data?.talbainDugaar}</div>
         </div>
         <div className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Огноо</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Түрээс</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлөх дүн</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Хямдрал</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлсөн алданги</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Төлсөн дүн</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Үлдэгдэл</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Огноо")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Түрээс")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлөх дүн")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хямдрал")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн алданги")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн дүн")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Үлдэгдэл")}</div>
 
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Ажилтан</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">Хэлбэр</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 w-full text-center">Тайлбар</div>
-          <div className="min-w-[10rem] text-center p-1">Бүртгсэн огноо</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Ажилтан")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хэлбэр")}</div>
+          <div className="min-w-[8rem] overflow-hidden p-1 w-full text-center">{t("Тайлбар")}</div>
+          <div className="min-w-[10rem] text-center p-1">{t("Бүртгсэн огноо")}</div>
           <div className="min-w-[3rem] border-none p-1 text-center"></div>
         </div>
         <div className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
@@ -225,7 +226,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
-                      : "Банк"
+                      : t("Банк")
                     : turulAvya(a.turul)}
                 </div>
                 <div className="flex min-w-[8rem] overflow-hidden w-full justify-between p-1">
@@ -249,8 +250,8 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                     a.turul === "qpay") && (
                       <Popconfirm
                         title="Төлөлт устгах уу?"
-                        okText="Тийм"
-                        cancelText="Үгүй"
+                        okText={t("Тийм")}
+                        cancelText={t("Үгүй")}
                         onConfirm={() => tulultUstgaya(a)}
                       >
                         <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">

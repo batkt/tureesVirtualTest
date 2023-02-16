@@ -6,6 +6,7 @@ import formatNumber from "tools/function/formatNumber";
 import useSWR from "swr";
 import { message, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
+import { t } from "i18next";
 
 const fetcher = (url, token, gereeniiId) =>
   axios(token)
@@ -87,10 +88,10 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
     <div className="flex overflow-auto flex-col space-y-2">
       <div className="grid grid-cols-5 min-w-[700px] border-b border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
         <div className="p-1">№</div>
-        <div className="p-1">Огноо</div>
-        <div className="p-1">Орлого</div>
-        <div className="p-1">Зарлага</div>
-        <div className="p-1">Тайлбар</div>
+        <div className="p-1">{t("Огноо")}</div>
+        <div className="p-1">{t("Орлого")}</div>
+        <div className="p-1">{t("Зарлага")}</div>
+        <div className="p-1">{t("Тайлбар")}</div>
       </div>
       {baritsaaKhuulga
         ?.map((a, i) => (
@@ -105,8 +106,8 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
                 <div className="contents justify-between">
                   <Popconfirm
                     title="Төлөлт устгах уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
                     onConfirm={() => baritsaaniiGuilgeeUstgaya(a)}
                   >
                     <div className="hide-on-print ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">

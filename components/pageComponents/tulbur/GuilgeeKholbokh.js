@@ -118,8 +118,8 @@ function GuilgeeKholbokh(
               content: `${formatNumber(
                 baritsaaAvakhDun
               )}₮ барьцааг төлбөрт суутгах уу?`,
-              okText: "Тийм",
-              cancelText: "Үгүй",
+              okText: t("Тийм"),
+              cancelText: t("Үгүй"),
               onOk: () => {
                 uilchilgee(token)
                   .post("/baritsaaniiGuilgeeKhiie", {
@@ -143,8 +143,8 @@ function GuilgeeKholbokh(
               onCancel: () => {
                 Modal.confirm({
                   content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
-                  okText: "Тийм",
-                  cancelText: "Үгүй",
+                  okText: t("Тийм"),
+                  cancelText: t("Үгүй"),
                   onOk: () => {
                     let guilgeenuud = [];
                     if (olnoorKholbokhEsekh)
@@ -193,8 +193,8 @@ function GuilgeeKholbokh(
           } else {
             Modal.confirm({
               content: `${data.dansniiDugaar} гүйлгээг холбохдоо итгэлтэй байна уу?`,
-              okText: "Тийм",
-              cancelText: "Үгүй",
+              okText: t("Тийм"),
+              cancelText: t("Үгүй"),
               onOk: () => {
                 let guilgeenuud = [];
                 if (olnoorKholbokhEsekh)

@@ -226,7 +226,7 @@ function GuilgeeTuukhTile({
 
   function delgerenguiKharakh() {
     const footer = [
-      <Button onClick={() => delgerenguiRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => delgerenguiRef.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
       title: ``,

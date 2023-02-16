@@ -5,6 +5,7 @@ import React from "react"
 import formatNumber from "tools/function/formatNumber"
 import moment from "moment";
 import { useRouter } from "next/router";
+import { t } from "i18next";
 
 const Delegrengui = React.forwardRef(({ destroy,
   talbainKhemjee,
@@ -26,31 +27,31 @@ const Delegrengui = React.forwardRef(({ destroy,
   return (
     <div className="space-y-5 ">
       <div className="dark:text-gray-200">
-        <h1 className="font-medium dark:text-gray-300 text-base border-b">Талбайн мэдээлэл</h1>
+        <h1 className="font-medium dark:text-gray-300 text-base border-b">{t("Талбайн мэдээлэл")}</h1>
         <div className="dark:text-gray-200">
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Бүртгэсэн Огноо:</p> <p>{moment(ugugdul.createdAt).format("YYYY-MM-DD hh:mm")}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Давхар:</p> <p>{davkhar}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Талбай/м2/:</p> <p>{talbainKhemjee}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Нийт үнэ/₮/:</p> <p>{formatNumber(talbainNiitUne)}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Зардал:</p> <p>{ugugdul.niitAshiglaltiinZardal}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Төлбөр:</p> <p>{formatNumber(ugugdul.tureesiinTulbur)}₮</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Тайлбар:</p> <p>{ugugdul.tailbar || "хоосон"}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Төлөв:</p> <p>{ugugdul.idevkhiteiEsekh ? "Идэвхтэй" : "Идэвхгүй"}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Талбайн төрөл:</p> <p>{ugugdul.niitiinTalbaiEsekh ? "Нийтийн талбай" : "Үндсэн"}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Бүртгэсэн Огноо")}:</p> <p>{moment(ugugdul.createdAt).format("YYYY-MM-DD hh:mm")}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Давхар")}:</p> <p>{davkhar}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Талбай/м2/")}:</p> <p>{talbainKhemjee}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Нийт үнэ/₮/")}:</p> <p>{formatNumber(talbainNiitUne)}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Зардал")}:</p> <p>{ugugdul.niitAshiglaltiinZardal}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Төлбөр")}:</p> <p>{formatNumber(ugugdul.tureesiinTulbur)}₮</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Тайлбар")}:</p> <p>{ugugdul.tailbar || "хоосон"}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Төлөв")}:</p> <p>{ugugdul.idevkhiteiEsekh ? "Идэвхтэй" : "Идэвхгүй"}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Талбайн төрөл")}:</p> <p>{ugugdul.niitiinTalbaiEsekh ? "Нийтийн талбай" : "Үндсэн"}</p></div>
         </div>
       </div>
       <div className="flex w-full gap-2 justify-between">
         {console.log(ugugdul)}
-        <Button onClick={() => zasakhLink()} className="w-full" icon={<EditOutlined style={{ fontSize: "18px" }} />}>Засах</Button>
+        <Button onClick={() => zasakhLink()} className="w-full" icon={<EditOutlined style={{ fontSize: "18px" }} />}>{t("Засах")}</Button>
         <Popconfirm
           title="Харилцагч устгах уу?"
-          okText="Тийм"
-          cancelText="Үгүй"
+          okText={t("Тийм")}
+          cancelText={t("Үгүй")}
           onConfirm={() => { tileProps?.talbaiUstgay(ugugdul), destroy() }}
         >
           <Button className="w-full" icon={<DeleteOutlined
             style={{ fontSize: "18px", color: "red" }}
-          />}>Устгах</Button>
+          />}>{t("Устгах")}</Button>
         </Popconfirm>
       </div>
     </div>
@@ -89,10 +90,10 @@ function TalbaiTile({
 
   function delgerenguiKharakh() {
     const footer = [
-      <Button onClick={() => delgerenguiRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => delgerenguiRef.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
-      title: `Талбайн Дугаар: ${kod}`,
+      title: `${t("Талбайн Дугаар")}: ${kod}`,
       icon: <FileExcelOutlined />,
       content: (
         <Delegrengui

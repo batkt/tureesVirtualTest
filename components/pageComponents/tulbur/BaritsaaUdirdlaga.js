@@ -17,7 +17,7 @@ import formatNumber from "tools/function/formatNumber";
 import BaritsaaKhuulga from "./BaritsaaKhuulga";
 import { OrderedListOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 function labelTurul(guilgeeTurul) {
   var text;
@@ -39,6 +39,7 @@ function BaritsaaUdirdlaga(
   const khuulgaRef = React.useRef(null);
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment());
+  const { t, i18n } = useTranslation()
   const [turul, setTurul] = useState("tululkh");
   const [tulukhUldegdel, setTulukhUldegdel] = useState((data.baritsaaAvakhDun || 0) - (data.baritsaaniiUldegdel || 0))
   const [ashiglakhUldegdel, setAshiglakhUldegdel] = useState(data.baritsaaniiUldegdel)
@@ -113,10 +114,10 @@ function BaritsaaUdirdlaga(
 
   function tuukhKharya() {
     const footer = [
-      <Button onClick={() => khuulgaRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => khuulgaRef.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
-      title: "Барьцаа төлбөрийн хуулга",
+      title: t("Барьцаа төлбөрийн хуулга"),
       width: "750px",
       icon: <OrderedListOutlined />,
       content: (
@@ -138,9 +139,9 @@ function BaritsaaUdirdlaga(
   function garya() {
     if (dun !== 0 || tailbar !== "")
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -194,7 +195,7 @@ function BaritsaaUdirdlaga(
       </div>
       <Divider />
       <div className="flex flex-row dark:text-gray-200">
-        <div>{labelTurul(turul)}</div>
+        <div>{t(labelTurul(turul))}</div>
         <div className="ml-auto">
           {formatNumber(
             turul === "ashiglakh"
@@ -205,7 +206,7 @@ function BaritsaaUdirdlaga(
       </div>
       {turul === "ashiglakh" && (
         <DatePicker
-          locale={locale}
+          locale={i18n.language === "mn" && locale}
           value={ognoo}
           onChange={(v) => {
             setOgnoo(v);

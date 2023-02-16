@@ -1,5 +1,6 @@
 import { DeleteOutlined, EditOutlined, SettingOutlined } from "@ant-design/icons";
 import { Popconfirm, Popover, Tag } from "antd";
+import { t } from "i18next";
 import React from "react";
 
 function AjiltanTile({ ovog, ner, utas, register, albanTushaal, mail, tileProps, ...ugugdul }) {
@@ -14,26 +15,26 @@ function AjiltanTile({ ovog, ner, utas, register, albanTushaal, mail, tileProps,
             onClick={() => tileProps.zasya({ ...ugugdul, ovog, ner, utas, register, albanTushaal, mail, })}
           >
             <EditOutlined style={{ fontSize: "18px" }} />
-            <label>Засах</label>
+            <label>{t("Засах")}</label>
           </a>
           <a
             className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
             onClick={() => tileProps.tokhiruulya({ ...ugugdul, ovog, ner, utas, register, albanTushaal, mail, })}
           >
             <SettingOutlined style={{ fontSize: "18px" }} />
-            <label>Эрх</label>
+            <label>{t("Эрх")}</label>
           </a>
           <Popconfirm
             title="Ажилтан устгах уу?"
-            okText="Тийм"
-            cancelText="Үгүй"
+            okText={t("Тийм")}
+            cancelText={t("Үгүй")}
             onConfirm={() => tileProps.ajiltanUstgay({ ...ugugdul, ovog, ner, utas, register, albanTushaal, mail, })}
           >
             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
               <DeleteOutlined
                 style={{ fontSize: "18px", color: "red" }}
               />
-              <label>Устгах</label>
+              <label>{t("Устгах")}</label>
             </a>
           </Popconfirm>
         </div>

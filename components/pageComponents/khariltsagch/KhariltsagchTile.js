@@ -3,6 +3,7 @@ import { Button, Popconfirm } from "antd";
 import { modal } from "components/ant/Modal";
 import React from "react"
 import moment from "moment";
+import { t } from "i18next";
 
 
 const Delegrengui = React.forwardRef(({ destroy,
@@ -21,36 +22,36 @@ const Delegrengui = React.forwardRef(({ destroy,
   return (
     <div className="space-y-5 dark:text-gray-200">
       <div>
-        <h1 className="font-medium dark:text-gray-300 text-base border-b">Харилцагчийн мэдээлэл</h1>
+        <h1 className="font-medium dark:text-gray-300 text-base border-b">{t("Харилцагчийн мэдээлэл")}</h1>
         <div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Бүртгэгдсэн Огноо:</p> <p>{moment(ugugdul.createdAt).format("YYYY-MM-DD hh:mm")}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Овог:</p> <p>{ovog}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Төрөл:</p> <p>{turul}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Регистр:</p> <p>{register}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Нэр:</p> <p>{ner}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Утас:</p> <p>{utas}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">И-мэйл:</p> <p>{mail}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Төлөв:</p> <p>{ugugdul.idevkhiteiEsekh ? "Идэвхтэй" : "Идэвхгүй"}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Хаяг:</p> <p>{ugugdul.khayg}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Бүртгэгдсэн Огноо")}:</p> <p>{moment(ugugdul.createdAt).format("YYYY-MM-DD hh:mm")}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Овог")}:</p> <p>{ovog}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Төрөл")}:</p> <p>{turul}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Регистр")}:</p> <p>{register}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Нэр")}:</p> <p>{ner}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Утас")}:</p> <p>{utas}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("И-мэйл")}:</p> <p>{mail}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Төлөв")}:</p> <p>{ugugdul.idevkhiteiEsekh ? "Идэвхтэй" : "Идэвхгүй"}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Хаяг")}:</p> <p>{ugugdul.khayg}</p></div>
         </div>
       </div>
       <div className="flex w-full gap-2 justify-between">
         <Popconfirm
           title="Харилцагч устгах уу?"
-          okText="Тийм"
-          cancelText="Үгүй"
+          okText={t("Тийм")}
+          cancelText={t("Үгүй")}
           onConfirm={() => { tileProps?.khariltsagchUstgay(ugugdul), destroy() }}
         >
           <Button className="w-full" icon={<DeleteOutlined
             style={{ fontSize: "18px", color: "red" }}
-          />}>Устгах</Button>
+          />}>{t("Устгах")}</Button>
         </Popconfirm>
-        <Button onClick={() => { tileProps?.zasya({ ovog, ner, utas, register, turul, mail, ...ugugdul }), destroy(), tileProps.setUtasKhariltsagchNmekh(true) }} className="w-full" icon={<EditOutlined style={{ fontSize: "18px" }} />}>Засах</Button>
+        <Button onClick={() => { tileProps?.zasya({ ovog, ner, utas, register, turul, mail, ...ugugdul }), destroy(), tileProps.setUtasKhariltsagchNmekh(true) }} className="w-full" icon={<EditOutlined style={{ fontSize: "18px" }} />}>{t("Засах")}</Button>
       </div>
       <Popconfirm
         title="Нууц үг сэргээх үү?"
-        okText="Тийм"
-        cancelText="Үгүй"
+        okText={t("Тийм")}
+        cancelText={t("Үгүй")}
         onConfirm={() => tileProps?.setNuutsUgKhariltsagch({ ovog, ner, utas, register, turul, mail, ...ugugdul })}
       >
         <Button className="w-full" icon={<RedoOutlined
@@ -58,7 +59,7 @@ const Delegrengui = React.forwardRef(({ destroy,
           style={{ fontSize: "18px" }}
         />}>
 
-          <label className="text-green-600">Нууц үг</label>
+          <label className="text-green-600">{t("Нууц үг")}</label>
         </Button>
       </Popconfirm>
     </div>
@@ -70,7 +71,7 @@ function KhariltsagchTile({ ovog, ner, utas, register, turul, mail, tileProps, .
 
   function delgerenguiKharakh() {
     const footer = [
-      <Button onClick={() => delgerenguiRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => delgerenguiRef.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
       title: `${ovog} ${ner}`,

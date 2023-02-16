@@ -89,8 +89,8 @@ function GereeTile({
               e.stopPropagation();
               Modal.confirm({
                 content: `Цуцлахдаа итгэлтэй байна уу?`,
-                okText: "Тийм",
-                cancelText: "Үгүй",
+                okText: t("Тийм"),
+                cancelText: t("Үгүй"),
                 onOk: () => tileProps.gereeTsutsalya(ugugdul),
               })
               setPopoverKharakh(false);
@@ -105,8 +105,8 @@ function GereeTile({
               e.stopPropagation();
               Modal.confirm({
                 content: `Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?`,
-                okText: "Тийм",
-                cancelText: "Үгүй",
+                okText: t("Тийм"),
+                cancelText: t("Үгүй"),
                 onOk: () => tileProps.gereeSergeeye(ugugdul),
               })
               setPopoverKharakh(false);

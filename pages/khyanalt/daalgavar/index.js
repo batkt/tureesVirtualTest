@@ -275,8 +275,8 @@ function index({ token }) {
                         ? "дуусгах"
                         : ""
                       } уу?`}
-                    okText="Тийм"
-                    cancelText="Үгүй"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
                     onConfirm={() => batlakh()}
                   >
                     <div

@@ -210,9 +210,9 @@ function tulburTootsoo() {
   }
   function ustgaya(mur) {
     const footer = [
-      <Button onClick={() => tailbarRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        Устгах
+        {t("Устгах")}
       </Button>,
     ];
     modal({
@@ -339,8 +339,8 @@ function tulburTootsoo() {
           return (
             <Popconfirm
               title="Хөнгөлөлт устгах уу?"
-              okText="Тийм"
-              cancelText="Үгүй"
+              okText={t("Тийм")}
+              cancelText={t("Үгүй")}
               onConfirm={() => ustgaya(data)}
             >
               <Button

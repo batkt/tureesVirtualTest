@@ -695,7 +695,7 @@ function BarilgaBurtgel({ token }) {
                         }
                       >
                         <EditOutlined className="text-xl text-green-400" />
-                        <label className="hover:text-black"> Засах</label>
+                        <label className="hover:text-black"> {t("Засах")}</label>
                       </a>
                     </div>
                   )}

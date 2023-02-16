@@ -210,13 +210,13 @@ function Admin({
   }
   function showSanalKhuselt(ajiltan) {
     const footer = [
-      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button className="space-x-2" icon={<FiSend/>} type="primary" onClick={() => sanalKhuseltRef.current.ilgeeye()}>
-        Илгээх
+        {t("Илгээх")}
       </Button>,
     ];
     modal({
-      title: "Системтэй холбоотой санал хүсэлт илгээх",
+      title: t("Системтэй холбоотой санал хүсэлт илгээх"),
       icon: <FiSend />,
       content: (
         <SanalKhuseltIlgeekh
@@ -262,7 +262,7 @@ function Admin({
       >
         <Tuslamj />
       </Drawer>
-      <div onClick={(e)=> e.stopPropagation()} className={`fixed transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : " delay-200 -right-[10.5rem]"}`}>
+      <div onClick={(e)=> e.stopPropagation()} className={`fixed transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : `${visible === true ? "-right-full md:-right-[10.5rem]": "-right-[11.25rem] md:-right-[10.5rem]"} delay-200 `}`}>
         <div onClick={()=> setShowSidehelpBar(!showSidehelpBar)} className={`text-2xl ${showSidehelpBar ? "bg-white dark:border-green-500 dark:bg-gray-800 text-green-500" : " bg-yellow-500 text-white"} transition-all  border  border-r-0 cursor-pointer h-11 w-10 rounded-l-lg flex justify-center items-center`}><TbArrowBarLeft className="transition-all duration-200" style={{rotate: showSidehelpBar ? "180deg" : "0deg"}}/></div>
         <div className={`overflow-hidden ${showSidehelpBar ? "h-48 delay-200 rounded-l-lg dark:bg-gray-800 border-r-0 bg-white" : "h-11 border-none dark:bg-gray-900 bg-green-600"} transition-all pl-3 flex py-5 flex-col w-48 border dark:border-green-500`}>
           <div className={`w-full h-full flex flex-col justify-between ${showSidehelpBar ? "delay-200 visible opacity-100" : "opacity-0 invisible"}`}>

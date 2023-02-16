@@ -104,7 +104,7 @@ function tulburTootsoo({ token }) {
       </Button>,
     ];
     modal({
-      title: `${turul} Загвар үүсгэх`,
+      title: `${turul} ${t("Загвар үүсгэх")}`,
       icon: <FileExcelOutlined />,
       content: (
         <AppSmsZagvar
@@ -889,7 +889,7 @@ function tulburTootsoo({ token }) {
           else if (!!data?.failureCount) khariu.failureCount += 1;
 
           notification.success({
-            message: `Notification Амжилттай илгээлээ`,
+            message: t("Notification Амжилттай илгээлээ"),
           });
         });
       return;
@@ -898,7 +898,7 @@ function tulburTootsoo({ token }) {
 
   function nekhemjlelZasya(mur, index) {
     const footer = [
-      <Button onClick={() => dunZasvarRef.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => dunZasvarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => dunZasvarRef.current.khadgalya()}
@@ -1142,8 +1142,8 @@ function tulburTootsoo({ token }) {
                       <div style={{ marginLeft: "auto" }}>
                         <Popconfirm
                           title="Загвар устгах уу?"
-                          okText="Тийм"
-                          cancelText="Үгүй"
+                          okText={t("Тийм")}
+                          cancelText={t("Үгүй")}
                           onConfirm={() => zagvarUstgaya(a)}
                         >
                           <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
@@ -1179,8 +1179,8 @@ function tulburTootsoo({ token }) {
                         <div style={{ marginLeft: "auto" }}>
                           <Popconfirm
                             title="Загвар устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
                             onConfirm={() => zagvarUstgaya(a)}
                           >
                             <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">

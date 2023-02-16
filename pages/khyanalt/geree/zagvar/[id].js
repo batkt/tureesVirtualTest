@@ -119,8 +119,8 @@ function ZakhialgaNemekh({ token }) {
           </span>
         </div>
       ),
-      okText: "Тийм",
-      cancelText: "Үгүй",
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
       onOk: () => {
         gereeniiZagvar.dedKhesguud.splice(key, 1);
         let value = _.cloneDeep(gereeniiZagvar);
@@ -132,9 +132,9 @@ function ZakhialgaNemekh({ token }) {
     const values = form.getFieldsValue();
     if (defaultUtga.dedKhesguud !== gereeniiZagvar.dedKhesguud || compareFields(defaultUtga, values, ["turGereeEsekh", "ner"]))
       Modal.confirm({
-        content: `Та гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: router.back,
       });
     else router.back();

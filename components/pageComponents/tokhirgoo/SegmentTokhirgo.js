@@ -13,6 +13,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import CardList from "components/cardList";
 import deleteMethod from "tools/function/crud/deleteMethod";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 function Tile({ zasya, token, ...a }) {
   const segment = useJagsaalt("/segment");
@@ -39,17 +40,17 @@ function Tile({ zasya, token, ...a }) {
                   onClick={() => zasya(a)}
                 >
                   <EditOutlined style={{ fontSize: "18px" }} />
-                  <label>Засах</label>
+                  <label>{t("Засах")}</label>
                 </a>
                 <Popconfirm
                   title="Устгахдаа итгэлтэй байна уу ?"
-                  okText="Тийм"
-                  cancelText="Үгүй"
+                  okText={t("Тийм")}
+                  cancelText={t("Үгүй")}
                   onConfirm={() => segmentUstgaya()}
                 >
                   <div className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100">
                     <DeleteOutlined className="text-lg text-red-500" />
-                    <label className=" text-red-500">Устгах</label>
+                    <label className=" text-red-500">{t("Устгах")}</label>
                   </div>
                 </Popconfirm>
               </div>

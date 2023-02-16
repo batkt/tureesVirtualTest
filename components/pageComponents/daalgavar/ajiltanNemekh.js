@@ -39,9 +39,9 @@ function ajiltanNemekh(
   function garya() {
     if (songogdsonAjiltan !== undefined)
       Modal.confirm({
-        content: `Та гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();

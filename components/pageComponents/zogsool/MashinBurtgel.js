@@ -55,9 +55,9 @@ function MashinBurtgel(
       ])
     )
       Modal.confirm({
-        content: `Та хадгалахгүй гарахдаа итгэлтэй байна уу?`,
-        okText: "Тийм",
-        cancelText: "Үгүй",
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
         onOk: destroy,
       });
     else destroy();
@@ -128,7 +128,7 @@ function MashinBurtgel(
         </Select>
       </Form.Item>
       <Form.Item label={t("Утас")} name="ezemshigchiinUtas">
-        <Input onKeyUp={focuser} placeholder="Утас" onChange={gereeAvya} />
+        <Input onKeyUp={focuser} placeholder={t("Утас")} onChange={gereeAvya} />
       </Form.Item>
       <Form.Item label={t("Машины дугаар")} name="dugaar">
         <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />

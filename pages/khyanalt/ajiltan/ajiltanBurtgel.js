@@ -580,8 +580,8 @@ function AjiltanBurtgel({ token }) {
                             </a>
                             <Popconfirm
                               title="Ажилтан устгах уу?"
-                              okText="Тийм"
-                              cancelText="Үгүй"
+                              okText={t("Тийм")}
+                              cancelText={t("Үгүй")}
                               onConfirm={() => ajiltanUstgay(data)}
                             >
                               <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">

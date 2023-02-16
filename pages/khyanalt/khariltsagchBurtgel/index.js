@@ -577,12 +577,12 @@ function AjiltanBurtgel({ token }) {
   function talbaiOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>,
         <Button
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() => excelref.current.khaaya()}
         >
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
         ,
       </Space>,
@@ -598,7 +598,7 @@ function AjiltanBurtgel({ token }) {
           barilgiinId={barilgiinId}
           zam="khariltsagchTatya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
-          tailbar="Харилцагч загварын excel файл"
+          tailbar={"Харилцагч загварын excel файл"}
           zagvariinZam="khariltsagchZagvarAvya"
         />
       ),
@@ -1455,12 +1455,12 @@ function AjiltanBurtgel({ token }) {
                             onClick={() => zasya(data)}
                           >
                             <EditOutlined style={{ fontSize: "18px" }} />
-                            <label>Засах</label>
+                            <label>{t("Засах")}</label>
                           </a>
                           <Popconfirm
-                            title="Нууц үг сэргээх үү?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
+                            title={t("Нууц үг сэргээх үү?")}
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
                             onConfirm={() => setNuutsUgKhariltsagch(data)}
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
@@ -1472,9 +1472,9 @@ function AjiltanBurtgel({ token }) {
                             </a>
                           </Popconfirm>
                           <Popconfirm
-                            title="Харилцагч устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
+                            title={t("Харилцагч устгах уу?")}
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
                             onConfirm={() => khariltsagchUstgay(data)}
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
@@ -1502,8 +1502,8 @@ function AjiltanBurtgel({ token }) {
             open={!!nuutsUgKhariltsagch}
             onOk={() => nuutsUgSolikh(nuutsUgKhariltsagch)}
             onCancel={nuutsUgModalKhaah}
-            okText="Сэргээх"
-            cancelText="Цуцлах"
+            okText={t("Сэргээх")}
+            cancelText={t("Цуцлах")}
           >
             <Form
               autoComplete={"off"}

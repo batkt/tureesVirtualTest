@@ -439,8 +439,8 @@ function index({ token }) {
                   <Popconfirm
                     disabled={daalgavar?.tuluv === 2}
                     title={`Та даалгавар цуцлах уу?`}
-                    okText="Тийм"
-                    cancelText="Үгүй"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
                     onConfirm={() => daalgavarTsutslakh()}
                   >
                     <div

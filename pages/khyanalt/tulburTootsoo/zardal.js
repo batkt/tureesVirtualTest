@@ -250,8 +250,8 @@ function ZardalMur({
             </div>
             <Popconfirm
               title="Холбогдсон зардал устгахдаа итгэлтэй байна уу?"
-              okText="Тийм"
-              cancelText="Үгүй"
+              okText={t("Тийм")}
+              cancelText={t("Үгүй")}
               onConfirm={() => guilgeeUstgaya(a._id)}
               className="h-5 w-5"
             >
@@ -438,8 +438,8 @@ function ZardalExpander({ mur, token, barilgiinId, ognoo, onRefresh }) {
                     <Popconfirm
                       placement="left"
                       title={t("Холбогдсон зардал устгахдаа итгэлтэй байна уу?")}
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => guilgeeUstgaya(a._id)}
                     >
                       <div className="hide-on-print flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border p-1 text-red-500">
@@ -568,8 +568,8 @@ function zardal({ token }) {
           <strong>{data.ner}</strong> зардал устгахдаа итгэлтэй байна уу?
         </div>
       ),
-      okText: "Тийм",
-      cancelText: "Үгүй",
+      okText: t("Тийм"),
+      cancelText: t("Үгүй"),
     });
   }
   useEffect(() => {
@@ -713,8 +713,8 @@ function zardal({ token }) {
                           <Popconfirm
                             className=""
                             title="Та зардал устгах гэж байна үргэлжлүүлэх үү?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
                             onConfirm={() => zardalUstgaya(mur)}
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">

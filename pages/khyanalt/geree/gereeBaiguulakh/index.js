@@ -442,7 +442,7 @@ function GereeBaiguulakh({ token }) {
                 ref={zagvarRef}
                 id={gereeniiZagvariinId}
                 showSearch
-                placeholder="Гэрээний загвар сонгох"
+                placeholder={t("Гэрээний загвар сонгох")}
                 className="hidden w-full md:block"
                 size="large"
                 value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}

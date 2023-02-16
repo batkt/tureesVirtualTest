@@ -314,8 +314,8 @@ function EbarimtMedeelel({ token }) {
                   return (
                     <Popconfirm
                       title="ebarimt устгах уу?"
-                      okText="Тийм"
-                      cancelText="Үгүй"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
                       onConfirm={() => ebarimtUstgaya(data)}
                     >
                       <Button

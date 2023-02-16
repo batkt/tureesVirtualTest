@@ -438,12 +438,12 @@ function talbaiBurtgekh({ token }) {
   function talbaiOruulakhExcel() {
     const footer = [
       <Space>
-        <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
           onClick={() => talbainiiJagsaaltMutate().finally(() => duusgakh())}
         >
-          Хадгалах
+          {t("Хадгалах")}
         </Button>
       </Space>,
     ];
@@ -547,7 +547,7 @@ function talbaiBurtgekh({ token }) {
             </Button>
             <Drawer
               width={"100vw"}
-              title="Нэгдсэн План зураг"
+              title={t("Нэгдсэн План зураг")}
               placement="right"
               onClose={onClose}
               visible={open}
@@ -642,7 +642,7 @@ function talbaiBurtgekh({ token }) {
                           },
                         ])
                         .addDataSource(talbainiiGaralt?.jagsaalt)
-                        .saveAs("түрээсийн талбай.xlsx");
+                        .saveAs(`${t("түрээсийн талбай")}.xlsx`);
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
@@ -672,7 +672,7 @@ function talbaiBurtgekh({ token }) {
           data-aos-anchor-placement="top-bottom"
           className="mt-5 md:mt-0"
         >
-          <p className="py-2 font-medium md:hidden">Талбайн жагсаалт</p>
+          <p className="py-2 font-medium md:hidden">{t("Талбайн жагсаалт")}</p>
           <CardList
             tileProps={{ talbaiUstgay, barilgiinId }}
             keyValue="talbai"
@@ -894,16 +894,16 @@ function talbaiBurtgekh({ token }) {
                               dataSource={data?.khurunguud}
                               columns={[
                                 {
-                                  title: "Нэр",
+                                  title: t("Нэр"),
                                   dataIndex: "ner",
                                 },
                                 {
-                                  title: "Тоо",
+                                  title: t("Тоо"),
                                   dataIndex: "too",
                                   align: "center",
                                 },
                                 {
-                                  title: "Үнэ",
+                                  title: t("Үнэ"),
                                   dataIndex: "une",
                                   align: "center",
                                   render: (data) => {
@@ -911,7 +911,7 @@ function talbaiBurtgekh({ token }) {
                                   },
                                 },
                                 {
-                                  title: "Нийт",
+                                  title: t("Нийт"),
                                   dataIndex: "niit",
                                   align: "center",
                                   render: (data) => {
@@ -953,7 +953,7 @@ function talbaiBurtgekh({ token }) {
                             dataSource={gereeniiMedeelel?.jagsaalt}
                             columns={[
                               {
-                                title: "Гэрээ №",
+                                title: `${t("Гэрээ")} №`,
                                 dataIndex: "gereeniiDugaar",
                               },
                               {
@@ -1041,20 +1041,20 @@ function talbaiBurtgekh({ token }) {
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
                               <EditOutlined style={{ fontSize: "18px" }} />
-                              <label>Засах</label>
+                              <label>{t("Засах")}</label>
                             </a>
                           </Link>
                           <Popconfirm
                             title="Талбай устгах уу?"
-                            okText="Тийм"
-                            cancelText="Үгүй"
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
                             onConfirm={() => talbaiUstgay(data)}
                           >
                             <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
                               <DeleteOutlined
                                 style={{ fontSize: "18px", color: "red" }}
                               />
-                              <label>Устгах</label>
+                              <label>{t("Устгах")}</label>
                             </a>
                           </Popconfirm>
                         </div>

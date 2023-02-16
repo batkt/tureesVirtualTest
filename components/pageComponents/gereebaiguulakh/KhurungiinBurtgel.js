@@ -343,8 +343,8 @@ const YurunkhiiMedeele = ({
               <div className="absolute top-0  right-2 flex items-center justify-center rounded-full bg-gray-100  text-lg dark:bg-gray-800">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
-                  okText="Тийм"
-                  cancelText="Үгүй"
+                  okText={t("Тийм")}
+                  cancelText={t("Үгүй")}
                   onConfirm={() => talbaiUstgaya(index)}
                 >
                   <div className="cursor-pointer text-3xl text-gray-400 transition-colors duration-300 hover:text-red-500 dark:text-gray-200 dark:hover:text-red-600">

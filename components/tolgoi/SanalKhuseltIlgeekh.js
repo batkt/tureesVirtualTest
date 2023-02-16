@@ -45,7 +45,7 @@ function SanalKhuseltIlgeekh({ destroy, ajiltan }, ref) {
       onFinish={()=>sanalYwuulya()}
     >
       <Form.Item rules={[{required: true, message: t("Гарчиг бичнэ үү.")}]} name={"garchig"}>
-        <Input placeholder="Гарчиг" />
+        <Input placeholder={t("Гарчиг")} />
       </Form.Item>
       <Form.Item rules={[{required: true, message: t("Санал хүсэлтээ энд бичнэ үү.")}]} name={"tailbar"}>
         <TextArea placeholder={t("Санал хүсэлтээ бичнэ үү.")} />

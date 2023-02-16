@@ -158,6 +158,7 @@ function AsuultOruulakh({ name, fieldKey, restField, fields, remove }) {
   )
 }
 function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) {  
+  const { t } = useTranslation()
   const query = useMemo(() => {
     let asuultiinId = a._id;
     return { asuultiinId, ognoo :ognoo
@@ -200,8 +201,8 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
               e.stopPropagation();
               anketUstgay(a);
             }}
-            okText="Тийм"
-            cancelText="Үгүй"
+            okText={t("Тийм")}
+            cancelText={t("Үгүй")}
           >
             <Button
               className="bg-white text-red-400 hover:text-red-600 dark:bg-gray-900"
@@ -220,7 +221,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
             {khariult.jagsaalt.map((b, i) => {
               return <div onClick={(e) => { e.stopPropagation(); setData({...a, khariultuud: b.khariultuud, ner: b.asuultiinNer, _id: b._id }); }} className={`flex w-full cursor-pointer justify-between py-1 p-2 border rounded-md ${data?._id === b._id ? "bg-blue-200" : "bg-white"}  border-green-600`} key={i}><p>{i + 1}.</p> <p>{moment(b.ognoo).format("YYYY-MM-DD HH:mm:ss")}</p></div>
             })}
-          </div> : <div className={`w-full h-full flex justify-center items-center transition-opacity delay-200 ${kharakh === true ? "visible opacity-100" : "invisible opacity-0"}`}>Анкет ирээгүй байна</div>}
+          </div> : <div className={`w-full h-full flex justify-center items-center transition-opacity delay-200 ${kharakh === true ? "visible opacity-100" : "invisible opacity-0"}`}>{t("Анкет ирээгүй байна")}</div>}
           <div className="w-full flex justify-center transition-all group-hover:animate-pulse relative">
             <DoubleRightOutlined className="transition-all cursor-pointer" style={{ rotate: kharakh === true ? "-90deg" : "90deg" }} />
             <div className={`absolute right-2 transition-all -bottom-1 ${khariult.jagsaalt.length > 0 ? "text-pink-500 font-medium" : "text-gray-400"}`}>{khariult.jagsaalt.length}</div>

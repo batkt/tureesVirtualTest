@@ -338,7 +338,7 @@ function Khyanalt({ token }) {
             <input
               type="text"
               className="w-full rounded-md bg-gray-100 px-2  py-1 dark:bg-gray-700"
-              placeholder="Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/"
+              placeholder={t("Хайх /Нэр, Регистр, Утас, Гэрээ, Талбай/")}
               onChange={({ target }) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(function () {

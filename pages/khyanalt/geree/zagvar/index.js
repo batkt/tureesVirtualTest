@@ -29,9 +29,9 @@ function index({ token }) {
 
   function zaaltOruulakh() {
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
-        Бүртгэл нэмэх
+        {t("Бүртгэл нэмэх")}
       </Button>,
     ];
     modal({
@@ -46,7 +46,7 @@ function index({ token }) {
 
   function zaaltOruulakhExcel() {
     const footer = [
-      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
       title: "",
@@ -67,7 +67,7 @@ function index({ token }) {
 
   function zagvarOruulakhExcel() {
     const footer = [
-      <Button onClick={() => excelref.current.khaaya()}>Хаах</Button>,
+      <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>,
     ];
     modal({
       title: "",
@@ -105,7 +105,7 @@ function index({ token }) {
             visible={!!kharuulakhGeree}
             footer={
               <Button type="primary" onClick={() => setKharuulakhGeree(null)}>
-                Хаах
+                {t("Хаах")}
               </Button>
             }
           >
@@ -203,7 +203,7 @@ function index({ token }) {
                     {a.ner}
                   </div>
                   <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
-                    {a.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ"}
+                    {t(a.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ")}
                   </div>
                   <div className="dropdown absolute top-0 right-0 mr-2 mt-2 ml-auto">
                     <Dropdown
@@ -236,13 +236,13 @@ function index({ token }) {
                                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                               </svg>
-                              Засах
+                              {t("Засах")}
                             </div>
                             <div onClick={(e) => e.stopPropagation()}>
                               <Popconfirm
-                                title="Загвар устгах уу?"
-                                okText="Тийм"
-                                cancelText="Үгүй"
+                                title={t("Загвар устгах уу?")}
+                                okText={t("Тийм")}
+                                cancelText={t("Үгүй")}
                                 className=" dark:bg-dark-1 dark:hover: bg-dark-2 hover: flex cursor-pointer items-center rounded-md bg-white p-2 text-white transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
                                 onConfirm={(e) => {
                                   e.preventDefault();
@@ -254,7 +254,7 @@ function index({ token }) {
                                   ).then(() => {
                                     gereeniiZagvarMutate();
                                     message.success(
-                                      "Гэрээний загвар устгагдлаа"
+                                      t("Гэрээний загвар устгагдлаа")
                                     );
                                   });
                                 }}
@@ -274,7 +274,7 @@ function index({ token }) {
                                   <polyline points="3 6 5 6 21 6"></polyline>
                                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                                 </svg>
-                                <p className="text-red-600">Устгах</p>
+                                <p className="text-red-600">{t("Устгах")}</p>
                               </Popconfirm>
                             </div>
                           </div>
