@@ -357,7 +357,7 @@ function GuilgeeNiiluulekh(
     }
 
     if (sum < guilgeeniiDun) {
-      target.value = formatter(guilgeeniiDun - sum);
+      target.value = formatNumber(guilgeeniiDun - sum);
       setGereenuud((a) => {
         _.set(a, `${index}.${talbar}`, _.toNumber(parser(target.value)));
         return [...a];
