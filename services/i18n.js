@@ -15,7 +15,7 @@ i18next
             escapeValue: false,
 
         },
-        debug:true
+        
     });
 
 export default i18next;

@@ -7,9 +7,11 @@ import _ from "lodash";
 import { useAuth } from "services/auth";
 import Faq from "./faq";
 import useJagsaalt from "hooks/useJagsaalt";
+import { useTranslation } from "react-i18next";
 
 
 function Tuslamj() {
+  const { t, i18n } = useTranslation()
   const [songogdsonAlkham, setSongogdsonAlkham] = useState(0);
   const [daragdsanTokhirgooMedeelel, setDaragdsanTokhirgooMedeelel] =
     useState(0);
@@ -28,7 +30,7 @@ function Tuslamj() {
         <Tabs.TabPane
           className="h-[100vh]"
           tab={
-            <span className="text-base font-medium">Нэвтрүүлэлтийн алхам</span>
+            <span className="text-base font-medium">{t("Нэвтрүүлэлтийн алхам")}</span>
           }
           key="1"
         >
@@ -80,7 +82,7 @@ function Tuslamj() {
                         : "left-0 top-10 rounded-sm p-0 px-0 py-0 pr-0"
                         }`}
                     >
-                      {mur.garchig}
+                      {i18n.language === "mn" ? mur?.garchig : mur.garchigEN}
                     </h1>
                     <p
                       className={`text-white ${songogdsonAlkham === index + 1
@@ -88,7 +90,7 @@ function Tuslamj() {
                         : "opacity-100"
                         }`}
                     >
-                      {mur.tailbar}
+                      {i18n.language === "mn" ? mur?.tailbar: mur?.tailbarEN }
                     </p>
                   </div>
                   {index + 1 !== tuslamj?.data?.length && index % 2 === 0 && (
@@ -153,7 +155,7 @@ function Tuslamj() {
                               : "invisible h-0 opacity-0"
                               }`}
                           >
-                            {a.tailbar}
+                            {i18n.language === "mn" ? a?.tailbar : a?.tailbarEN}
                           </div>
                         </div>
                       );
@@ -164,7 +166,7 @@ function Tuslamj() {
                           className="w-full space-y-3 rounded-md border py-2 px-5 shadow-xl dark:bg-gray-900 dark:shadow-lg dark:shadow-white"
                         >
                           <div className="w-full text-center font-medium dark:text-gray-200">
-                            {a.garchig}
+                            {i18n.language === "mn" ? a?.garchig : a?.garchigEN}
                           </div>
                           <div className="px-3">
                             {a.turul === "video" ? (
@@ -190,7 +192,7 @@ function Tuslamj() {
                             )}
                           </div>
                           <p className="px-2 pb-2 dark:text-gray-200">
-                            {a.tailbar}
+                            {i18n.language === "mn" ? a?.tailbar : a?.tailbarEN}
                           </p>
                         </div>
                       );
@@ -201,7 +203,7 @@ function Tuslamj() {
           </div>
         </Tabs.TabPane>
         <Tabs.TabPane
-          tab={<span className="text-base font-medium">Түгээмэл асуулт</span>}
+          tab={<span className="text-base font-medium">{t("Түгээмэл асуулт")}</span>}
           className="h-[100vh]"
           key="2"
         >

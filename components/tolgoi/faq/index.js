@@ -3,8 +3,10 @@ import Admin from "components/Admin";
 import useJagsaalt from "hooks/useJagsaalt";
 import { Collapse } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 
 function tugeemelAsuult() {
+  const { t, i18n } = useTranslation();
   const { Panel } = Collapse;
   const faq = useJagsaalt("https://zevtabs.mn/api/faqavya/rent");
 
@@ -25,9 +27,9 @@ function tugeemelAsuult() {
           )}
           ghost
         >
-          <Panel header={mur?.asuult} className="font-semibold" key="1">
+          <Panel header={i18n.language === "mn" ? mur?.asuult : mur?.asuultEN} className="font-semibold" key="1">
             <div className="px-16 pb-2 font-normal dark:text-gray-200">
-              {mur?.khariult}
+              {i18n.language === "mn" ? mur?.khariult : mur?.khariultEN}
             </div>
           </Panel>
           <hr />
