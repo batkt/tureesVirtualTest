@@ -27,7 +27,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
           utasniiDugaar !== undefined
         ) {
           if (utasniiDugaar.length < 8) {
-            notification.warning({ message: "Утасны дугаараа бүрэн оруулна уу!" });
+            notification.warning({ message: t("Утасны дугаараа бүрэн оруулна уу!") });
             return;
           }
           uilchilgee(token)
@@ -62,7 +62,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
     
           if (!filter.test(email)) {
             notification.warning({
-              message: "email хаягаа шалгаад дахин оролдоно уу!",
+              message: t("email хаягаа шалгаад дахин оролдоно уу!"),
             });
             return;
           }

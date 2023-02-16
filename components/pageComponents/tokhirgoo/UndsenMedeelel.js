@@ -23,7 +23,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
 
     updateMethod("ajiltan", token, ajiltanObject).then(({ data, status }) => {
       if (status === 200 && "Amjilttai" === data) {
-        message.success("Амжилттай заслаа");
+        message.success(t("Амжилттай засагдлаа"));
         ajiltanMutate({ ...ajiltanObject });
         setSongogdsonTsonkhniiIndex(1)
       }

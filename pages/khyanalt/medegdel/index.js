@@ -211,7 +211,7 @@ function Khyanalt({ token }) {
                   else if (!!data?.failureCount) khariu.failureCount += 1;
                   if (index === array.length - 1) {
                     notification.success({
-                      message: `Notification Амжилттай илгээлээ`,
+                      message: t("Notification Амжилттай илгээлээ"),
                     });
                     setLoading(false);
                     onTextChange("");

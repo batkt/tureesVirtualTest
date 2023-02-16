@@ -2,6 +2,7 @@ import { DeleteOutlined, EditOutlined, FileExcelOutlined } from "@ant-design/ico
 import { Button, Progress, Tag } from "antd"
 import { Tooltip } from "chart.js"
 import { modal } from "components/ant/Modal"
+import { t } from "i18next"
 import moment from "moment"
 import React from "react"
 import formatNumber from "tools/function/formatNumber"
@@ -40,23 +41,23 @@ const Delegrengui = React.forwardRef(({ destroy,
   return (
     <div className="space-y-5">
       <div className="dark:text-gray-200">
-        <h1 className="font-medium text-base dark:text-gray-300 border-b">Гүйлгээний мэдээлэл</h1>
+        <h1 className="font-medium text-base dark:text-gray-300 border-b">{t("Гүйлгээний мэдээлэл")}</h1>
         <div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Төлөх огноо:</p> <p>{moment(ugugdul.daraagiinTulukhOgnoo).format("YYYY-MM-DD, hh:mm")}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Регистр:</p> <p>{ugugdul.register}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Талбай:</p> <p>{talbainDugaar}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Утас:</p> <p>{formatNumber(utas)}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Үлдэгдэл:</p> <p>{ugugdul.uldegdel}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Сарын түрээс:</p> <p>{formatNumber(sariinTurees)}₮</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Талбайн үнэ:</p> <p>{formatNumber(ugugdul.talbainNiitUne)}₮</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Давхар:</p> <p>{ugugdul.davkhar}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Түрээслэгч:</p> <p>{ner}</p></div>
-          <div className="flex justify-between border-b p-1"><p className="font-medium ">Гэрээний огноо:</p> <p>{moment(gereeniiOgnoo).format("YYYY-MM-DD, hh:mm")}</p></div>
-          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">Алдангийн үлдэгдэл:</p> <p>{formatNumber(ugugdul.aldangiinUldegdel)}</p></div>
-          {tileProps?.turul === "voucher" && <div className="flex justify-between border-b p-1"><p className="font-medium ">Ваучерын дүн:</p> <p>{formatNumber(ugugdul.voucherDun)}</p></div>}
-          {tileProps?.turul === "khungulult" && <div className="flex justify-between border-b p-1"><p className="font-medium ">Хөнгөлөлт:</p> <p>{formatNumber(ugugdul.khungulult)}</p></div>}
-          {tileProps?.turul === "eneSardTulsun" && <div className="flex justify-between border-b p-1"><p className="font-medium ">Төлсөн дүн:</p> <p>{formatNumber(ugugdul.tulsunDun)}</p></div>}
-          {tileProps?.turul === "eneSardTulukh" && <div className="flex justify-between border-b p-1"><p className="font-medium ">Төлөвлөгөөт:</p> <p>{formatNumber(ugugdul.tuluvluguut)}</p></div>}
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Төлөх огноо")}:</p> <p>{moment(ugugdul.daraagiinTulukhOgnoo).format("YYYY-MM-DD, hh:mm")}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Регистр")}:</p> <p>{ugugdul.register}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Талбай")}:</p> <p>{talbainDugaar}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Утас")}:</p> <p>{formatNumber(utas)}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Үлдэгдэл")}:</p> <p>{ugugdul.uldegdel}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Сарын түрээс")}:</p> <p>{formatNumber(sariinTurees)}₮</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Талбайн үнэ")}:</p> <p>{formatNumber(ugugdul.talbainNiitUne)}₮</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Давхар")}:</p> <p>{ugugdul.davkhar}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Түрээслэгч")}:</p> <p>{ner}</p></div>
+          <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Гэрээний огноо")}:</p> <p>{moment(gereeniiOgnoo).format("YYYY-MM-DD, hh:mm")}</p></div>
+          <div className="flex justify-between border-b p-1 bg-green-500 bg-opacity-10"><p className="font-medium ">{t("Алдангийн үлдэгдэл")}:</p> <p>{formatNumber(ugugdul.aldangiinUldegdel)}</p></div>
+          {tileProps?.turul === "voucher" && <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Ваучерын дүн")}:</p> <p>{formatNumber(ugugdul.voucherDun)}</p></div>}
+          {tileProps?.turul === "khungulult" && <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Хөнгөлөлт")}:</p> <p>{formatNumber(ugugdul.khungulult)}</p></div>}
+          {tileProps?.turul === "eneSardTulsun" && <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Төлсөн дүн")}:</p> <p>{formatNumber(ugugdul.tulsunDun)}</p></div>}
+          {tileProps?.turul === "eneSardTulukh" && <div className="flex justify-between border-b p-1"><p className="font-medium ">{t("Төлөвлөгөөт")}:</p> <p>{formatNumber(ugugdul.tuluvluguut)}</p></div>}
         </div>
       </div>
       <div className="flex w-full gap-2 justify-between">

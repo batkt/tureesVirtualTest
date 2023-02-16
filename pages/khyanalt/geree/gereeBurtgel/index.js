@@ -184,7 +184,7 @@ const Tailbar = React.forwardRef(
           </div>
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
-              <div className="text-right">Ашигласан хоног:</div>
+              <div className="text-right">{t("Ашигласан хоног")}:</div>
               <div>
                 {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
               </div>
@@ -192,7 +192,7 @@ const Tailbar = React.forwardRef(
           )}
           {service !== "/gereeSergeeye" && (
             <div className="flex w-full flex-row justify-between">
-              <div className="text-right">Авлагын дүн:</div>
+              <div className="text-right">{t("Авлагын дүн")}:</div>
               <div>{formatNumber(data?.uldegdel)}</div>
             </div>
           )}
@@ -605,7 +605,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "7rem",
         render: () => {
-          return <div className="w-full text-left">Админ</div>;
+          return <div className="w-full text-left">{t("Админ")}</div>;
         },
       },
       {

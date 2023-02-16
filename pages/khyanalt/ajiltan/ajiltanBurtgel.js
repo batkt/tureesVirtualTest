@@ -145,7 +145,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success("Бүртгэл амжилттай хийгдлээ");
+            message.success(t("Бүртгэл амжилттай хийгдлээ"));
             formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),
@@ -162,7 +162,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success("Бүртгэл амжилттай хийгдлээ");
+            message.success(t("Бүртгэл амжилттай хийгдлээ"));
             formRef.current.resetFields();
             ajiltniiJagsaaltMutate(
               (s) => ({ ...s, jagsaalt: s.jagsaalt }),

@@ -457,7 +457,7 @@ function GuilgeeNiiluulekh(
                 }, 300)
               }
               className=" rounded-md border border-gray-400 p-1 px-2 dark:text-gray-200 lg:w-[114%]"
-              placeholder="Гэрээ сонгох"
+              placeholder={t("Гэрээ сонгох")}
               onChange={onChange}
             />
           </Dropdown>

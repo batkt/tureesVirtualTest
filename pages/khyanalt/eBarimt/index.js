@@ -143,7 +143,7 @@ function EbarimtMedeelel({ token }) {
           setWaiting(false);
           eBarimtMutate();
           message.success(
-            `${mur.billId} дугаартай баримт амжилттай ebarimt -с устгагдлаа`
+            t("дугаартай баримт амжилттай ebarimt -с устгагдлаа", {dugaar: mur.billId})
           );
         }
       })
@@ -211,7 +211,7 @@ function EbarimtMedeelel({ token }) {
             data-aos-delay="300"
           >
             <Button
-              title="Сүүлд илгээгдсэн огноо"
+              title={t("Сүүлд илгээгдсэн огноо")}
               className="dark:bg-gray-800 dark:text-white  "
             >
               {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(

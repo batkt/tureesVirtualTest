@@ -2,6 +2,7 @@ import { Button, notification } from "antd";
 import socketIOClient from "socket.io-client";
 import { useEffect, useState } from "react";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { t } from "i18next";
 
 export const url = "https://zevtabs.mn";
 
@@ -26,10 +27,10 @@ function Updater() {
               <InfoCircleOutlined />
             </div>
           ),
-          message: "Мэдэгдэл",
+          message: t("Мэдэгдэл"),
           description: (
             <div style={{ maxWidth: "20rem" }} className="break-words">
-              Системд шинэчлэлт хийгдсэн байна. Та шинэчлэлт хийх үү!
+              {t("Системд шинэчлэлт хийгдсэн байна. Та шинэчлэлт хийх үү!")}
               <div>
                 <Button
                   style={{ marginTop: 0, marginLeft: "auto" }}
@@ -37,13 +38,13 @@ function Updater() {
                   type="primary"
                   onClick={refreshPage}
                 >
-                  Тийм
+                  {t("Тийм")}
                 </Button>
               </div>
             </div>
           ),
         };
-        notification.info(notif);
+        notification.info(t(notif));
         //setMedegdel(notif)
       }
     });
@@ -57,8 +58,8 @@ function Updater() {
       <div className="flex flex-row space-x-2 rounded-md bg-gray-100 p-2">
         <div className="text-xl">{medegdel.icon}</div>
         <div>
-          <div>{medegdel.message}</div>
-          {medegdel.description}
+          <div>{t(medegdel.message)}</div>
+          {t(medegdel.description)}
         </div>
       </div>
     );

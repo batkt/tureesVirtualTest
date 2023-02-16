@@ -1,4 +1,5 @@
 import useJagsaalt from "hooks/useJagsaalt";
+import { t } from "i18next";
 import _ from "lodash";
 import React, { Component, useMemo } from "react";
 import { Stage, Layer, Line, Image, Text, Group, Rect } from "react-konva";
@@ -84,7 +85,7 @@ function ToolTip({ pointer }) {
       <Text
         x={pointer.x + 30}
         y={pointer.y + 10}
-        text={"Талбайн Дугаар:"}
+        text={`${t("Талбайн Дугаар")}:`}
         fill={"black"}
         fontSize={15}
         fontStyle="bold"
@@ -101,7 +102,7 @@ function ToolTip({ pointer }) {
       <Text
         x={pointer.x + 30}
         y={pointer.y + 30}
-        text={"Талбайн Хэмжээ:"}
+        text={`${t("Талбайн Хэмжээ")}:`}
         fill={"black"}
         fontSize={15}
         fontStyle="bold"
@@ -118,7 +119,7 @@ function ToolTip({ pointer }) {
       <Text
         x={pointer.x + 30}
         y={pointer.y + 50}
-        text={"Талбайн үнэ:"}
+        text={`${t("Талбайн үнэ")}:`}
         fill={"black"}
         fontSize={15}
         fontStyle="bold"
@@ -136,7 +137,7 @@ function ToolTip({ pointer }) {
         <Text
           x={pointer.x + 31}
           y={pointer.y + 70}
-          text={"Гэрээний Дугаар:"}
+          text={`${t("Гэрээний Дугаар")}:`}
           fill={"black"}
           fontSize={15}
           fontStyle="bold"
@@ -157,7 +158,7 @@ function ToolTip({ pointer }) {
         <Text
           x={pointer.x + 30}
           y={pointer.y + 90}
-          text={"Эзэмшигчийн нэр:"}
+          text={`${t("Эзэмшигчийн нэр")}:`}
           fill={"black"}
           fontSize={15}
           fontStyle="bold"
@@ -213,11 +214,11 @@ class App extends Component {
           <div className=" flex h-8 w-full  items-end justify-end space-x-10 pb-1 ">
             <div className="flex">
               <div className="w-5 border-2 bg-green-300 " />
-              <div className="pr-10 pl-2">Идэвхтэй</div>
+              <div className="pr-10 pl-2">{t("Идэвхтэй")}</div>
             </div>
             <div className="flex ">
               <div className="w-5 border-2 bg-red-400 " />
-              <div className="pl-2">Идэвхгүй</div>
+              <div className="pl-2">{t("Идэвхгүй")}</div>
             </div>
           </div>
         </div>

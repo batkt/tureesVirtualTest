@@ -31,7 +31,7 @@ function index({ token, data }) {
       })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          message.success("Бүртгэл амжилттай хийгдлээ");
+          message.success(t("Бүртгэл амжилттай хийгдлээ"));
           router.back();
         }
       });

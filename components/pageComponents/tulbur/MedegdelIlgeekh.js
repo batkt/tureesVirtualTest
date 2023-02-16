@@ -151,7 +151,7 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, }, ref) {
               text: text,
             });
         } else {
-          message.warning("Та SMS илгээх гэрээгээ сонгоно уу");
+          message.warning(t("Та SMS илгээх гэрээгээ сонгоно уу"));
           return;
         }
         uilchilgee(token)

@@ -338,7 +338,7 @@ function tulburTootsoo() {
         render(data) {
           return (
             <Popconfirm
-              title="Хөнгөлөлт устгах уу?"
+              title={t("Хөнгөлөлт устгах уу?")}
               okText={t("Тийм")}
               cancelText={t("Үгүй")}
               onConfirm={() => ustgaya(data)}

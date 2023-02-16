@@ -532,7 +532,7 @@ function Admin({
               <Tooltip
                 placement="bottom"
                 title={
-                  <div>Лицензийн хугацаа дуусахад {license()} хоног үлдлээ</div>
+                  <div>{("Лицензийн хугацаа дуусахад хоног үлдлээ", { khonog: license()})}</div>
                 }
               >
                 <div className="ml-1 flex items-center gap-1 text-base md:hidden">

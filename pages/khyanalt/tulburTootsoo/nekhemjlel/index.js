@@ -372,10 +372,10 @@ function tulburTootsoo({ token }) {
 
   function send() {
     if (!barimt) {
-      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     } else if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning("Гэрээ сонгоно уу");
+      message.warning(t("Гэрээ сонгоно уу"));
       return;
     } else {
       switch (turul) {
@@ -412,15 +412,15 @@ function tulburTootsoo({ token }) {
 
   function hevlekh() {
     if (!songogdsonDans) {
-      message.warning("Данс сонгоно уу");
+      message.warning(t("Данс сонгоно уу"));
       return;
     }
     if (!barimt) {
-      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning("Гэрээ сонгоно уу");
+      message.warning(t("Гэрээ сонгоно уу"));
       return;
     }
     handlePrint();
@@ -555,15 +555,15 @@ function tulburTootsoo({ token }) {
   }
   function mailIlgeeye() {
     if (!barimt) {
-      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (!songogdsonGereenuud || songogdsonGereenuud?.length === 0) {
-      message.warning("Гэрээ сонгоно уу");
+      message.warning(t("Гэрээ сонгоно уу"));
       return;
     }
     if (loading) {
-      message.warning("И-мэйл илгээгдсэн байна");
+      message.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
     const mailuud = [];
@@ -781,7 +781,7 @@ function tulburTootsoo({ token }) {
               else if (!!data?.failureCount) khariu.failureCount += 1;
               if (index === array.length - 1) {
                 notification.success({
-                  message: `Notification Амжилттай илгээлээ`,
+                  message: t("Notification Амжилттай илгээлээ"),
                 });
                 setWaiting(false);
               }

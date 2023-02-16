@@ -110,7 +110,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
         })
         .then(({ data }) => {
           if (data) {
-            message.success("Төлөлт амжилттай устгагдлаа!");
+            message.success(t("Төлөлт амжилттай устгагдлаа!"));
             refreshData();
             guilgeeniiTuukhMutate()
           }
@@ -145,7 +145,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                 })
                 .then(({ data }) => {
                   if (data) {
-                    message.success("Төлөлт амжилттай устгагдлаа!");
+                    message.success(t("Төлөлт амжилттай устгагдлаа!"));
                     uldegdelMutate();
                     guilgeeniiTuukhMutate()
                     refreshData();

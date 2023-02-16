@@ -46,7 +46,7 @@ const { RangePicker } = DatePicker;
 function iconAvya(a, bank) {
   let Icon = ExclamationOutlined;
   let color = "red";
-  let tailbar = "Гүйлгээ холбогдоогүй байна";
+  let tailbar = t("Гүйлгээ холбогдоогүй байна");
   if (
     bank === "tdb"
       ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
@@ -73,7 +73,7 @@ function iconAvya(a, bank) {
         ? `${formatNumber(
             a?.amount - a?.kholbosonDun || a?.Amt - a?.kholbosonDun || 0,
             0
-          )} ₮ дутуу холбогдсон байна`
+          )} ₮ ${t("дутуу холбогдсон байна")}`
         : "Холбох боломжтой гэрээнүүд байна";
   } else if (
     a?.kholbosonGereeniiId &&
@@ -676,10 +676,7 @@ function tulburTootsoo({ token }) {
           Number(bankniiGuilgeeToololt?.kholboson || 0) >
           0 &&
         notification.error({
-          message: `Холболт хийгдээгүй ${
-            Number(bankniiGuilgeeToololt?.niit || 0) -
-            Number(bankniiGuilgeeToololt?.kholboson || 0)
-          } гэрээ байна`,
+          message: t("Холболт хийгдээгүй гэрээ байна", {too: Number(bankniiGuilgeeToololt?.niit || 0) - Number(bankniiGuilgeeToololt?.kholboson || 0)}),
         })}
       <Card className="cardgrid col-span-12 md:p-5">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">

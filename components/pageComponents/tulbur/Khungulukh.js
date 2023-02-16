@@ -90,7 +90,7 @@ function Khungulukh({ data, token, onFinish, destroy }, ref) {
         uilchilgee(token).post('/gereeniiGuilgeeKhadgalya',{
           guilgee:khyamdral
         }).then(({data})=>{
-          notification.success({placement:'bottomRight',message:'Амжилттай'})
+          notification.success({placement:'bottomRight',message: t("Амжилттай")})
           _.isFunction(onFinish) && onFinish();
           destroy();
         }).catch(aldaaBarigch)

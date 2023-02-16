@@ -75,7 +75,7 @@ function GereeBaiguulakh({ token }) {
     useGereeniiZagvar(token, baiguullaga?._id);
   const next = (data) => {
     if (current === 0 && !gereeniiZagvar) {
-      message.warning("Гэрээний загвар сонгоно уу!");
+      message.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
       return;
     }
@@ -214,7 +214,7 @@ function GereeBaiguulakh({ token }) {
 
   function alkhamSoliyo(index) {
     if (current === 0 && !gereeniiZagvar) {
-      message.warning("Гэрээний загвар сонгоно уу!");
+      message.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
       return;
     }

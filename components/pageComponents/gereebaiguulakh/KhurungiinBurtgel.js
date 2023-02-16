@@ -129,8 +129,7 @@ const YurunkhiiMedeele = ({
           notification.warning({
             message: (
               <div>
-                <b>{talbainDugaar}</b> талбай нь <b>{data}</b> гэрээн дээр
-                холбогдсон байна.
+                {("талбай нь гэрээн дээр холбогдсон байна.", {talbainDugaar: talbainDugaar, data })}
               </div>
             ),
           });
@@ -289,14 +288,14 @@ const YurunkhiiMedeele = ({
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
                     <div className="flex items-center justify-center text-center">
-                      сул м<sup>2</sup>
+                      {t("сул м")}
                     </div>
                   )}
                   <div className="flex items-center justify-center text-center">
                     м<sup>2</sup>
                   </div>
                   <div className="flex items-center justify-center text-center">
-                    Түрээсийн төлбөр
+                    {t("Түрээсийн төлбөр")}
                   </div>
                 </div>
                 <div

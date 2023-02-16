@@ -5,6 +5,7 @@ import formatNumber from "tools/function/formatNumber";
 import { InputNumber, Input, Switch } from "antd";
 import axios from "axios";
 import { isString } from "lodash";
+import { t } from "i18next";
 
 function EBarimt({
   eBarimtRef,
@@ -51,7 +52,7 @@ function EBarimt({
       <div className="w-full p-2 dark:text-gray-100">
         {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>Хувь хүн</div>
+            <div>{t("Хувь хүн")}</div>
             <div className="ml-auto">
               <Switch
                 checked={barimtKhevlekhEsekh}
@@ -62,7 +63,7 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>ААН эсэх</div>
+            <div>{t("ААН эсэх")}</div>
             <div className="ml-auto">
               <Switch
                 checked={baiguullagaEsekh}
@@ -73,7 +74,7 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh !== true && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>Татвар төлөгч иргэнд эсэх</div>
+            <div>{t("Татвар төлөгч иргэнд эсэх")}</div>
             <div className="ml-auto">
               <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
             </div>
@@ -81,7 +82,7 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh !== true && baiguullagaEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>ААН регистр</div>
+            <div>{t("ААН регистр")}</div>
             <div className="ml-auto">
               <InputNumber
                 size="small"
@@ -95,7 +96,7 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh !== true && irgenEsekh && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>Иргэний регистр</div>
+            <div>{t("Иргэний регистр")}</div>
             <div className="ml-auto">
               <Input
                 size="small"
@@ -109,13 +110,13 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh === true && (
           <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
-            <div>{irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр</div>
+            <div>{t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр`)}</div>
             <div className="text-base font-medium">{register}</div>
           </div>
         )}
         {baiguullagiinMedeelel?.name && (
           <div className="flex flex-row border-b-2 border-dashed py-2">
-            <div>{irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} нэр</div>
+            <div>{t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} нэр`)}</div>
             <div className="ml-auto text-lg font-medium">
               {baiguullagiinMedeelel?.name}
             </div>
@@ -147,12 +148,12 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td colSpan={6} className="border font-medium">
-                    Борлуулагч
+                    {t("Борлуулагч")}
                   </td>
                 </tr>
                 <tr>
                   <td className="border" colSpan={3}>
-                    Огноо
+                    {t("Огноо")}
                   </td>
                   <td className="border" colSpan={3}>
                     {moment(eBarimt?.date).format("YYYY/MM/DD hh:mm:ss")}
@@ -160,7 +161,7 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td className="border" colSpan={3}>
-                    ТТД
+                    {t("ТТД")}
                   </td>
                   <td className="border" colSpan={3}>
                     {eBarimt?.registerNo}
@@ -168,7 +169,7 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td className="border" colSpan={3}>
-                    ДДТД
+                    {t("ДДТД")}
                   </td>
                   <td className="border" colSpan={3}>
                     {eBarimt?.billId}
@@ -176,7 +177,7 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td className="border" colSpan={3}>
-                    Касс
+                    {t("Касс")}
                   </td>
                   <td className="border" colSpan={3}>
                     {eBarimt?.posNo}
@@ -184,7 +185,7 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td className="border" colSpan={3}>
-                    Кассчин
+                    {t("Кассчин")}
                   </td>
                   <td className="border" colSpan={3}>
                     {ajiltan?.ner}
@@ -194,12 +195,12 @@ function EBarimt({
                   <>
                     <tr>
                       <td className="border" colSpan={6}>
-                        Худалдан авагч
+                        {t("Худалдан авагч")}
                       </td>
                     </tr>
                     <tr>
                       <td className="border" colSpan={1}>
-                        ТТД
+                        {y("ТТД")}
                       </td>
                       <td className="border" colSpan={5}>
                         {register}
@@ -207,7 +208,7 @@ function EBarimt({
                     </tr>
                     <tr>
                       <td className="border" colSpan={1}>
-                        Нэр
+                        {t("Нэр")}
                       </td>
                       <td className="border" colSpan={5}>
                         {baiguullagiinMedeelel?.name}
@@ -222,11 +223,11 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td className="border text-center" colSpan={3}>
-                    Барааны нэр
+                    {t("Барааны нэр")}
                   </td>
-                  <td className="border text-center">Тоо</td>
-                  <td className="border text-center">Нэгж</td>
-                  <td className="border text-center">Дүн</td>
+                  <td className="border text-center">{t("Тоо")}</td>
+                  <td className="border text-center">{t("Нэгж")}</td>
+                  <td className="border text-center">{t("Дүн")}</td>
                 </tr>
                 {eBarimt?.stocks?.map((mur, index) => (
                   <tr key={`${index}-zakhialga`}>
@@ -245,7 +246,7 @@ function EBarimt({
                 {data?.khungulukhKhuvi && (
                   <tr>
                     <td colSpan={5} className="border text-right">
-                      Хөнгөлөлт
+                      {t("Хөнгөлөлт")}
                     </td>
                     <td className="border text-right">
                       {formatNumber(data.niitUndsenDun - data.niitDun)}
@@ -254,7 +255,7 @@ function EBarimt({
                 )}
                 <tr>
                   <td colSpan={5} className="border text-right">
-                    НӨАТ-н дүн
+                    {t("НӨАТ-н дүн")}
                   </td>
                   <td className="border text-right">
                     {formatNumber(eBarimt?.vat, 2)}
@@ -262,7 +263,7 @@ function EBarimt({
                 </tr>
                 <tr>
                   <td colSpan={5} className="border text-right">
-                    Төлөх дүн
+                    {t("Төлөх дүн")}
                   </td>
                   <td className="border text-right">
                     {formatNumber(eBarimt?.amount)}
@@ -271,7 +272,7 @@ function EBarimt({
                 {tulbur?.belen && (
                   <tr>
                     <td colSpan={5} className="border text-right">
-                      Бэлнээр
+                      {t("Бэлнээр")}
                     </td>
                     <td className="border text-right">
                       {formatNumber(tulbur?.belen)}
@@ -281,7 +282,7 @@ function EBarimt({
                 {tulbur?.belenBus && (
                   <tr>
                     <td colSpan={5} className="border text-right">
-                      Бэлэн бусаар
+                      {t("Бэлэн бусаар")}
                     </td>
                     <td className="border text-right">
                       {formatNumber(tulbur?.belenBus)}
@@ -291,7 +292,7 @@ function EBarimt({
                 {tulbur?.khariult && (
                   <tr>
                     <td colSpan={5} className="border text-right">
-                      Хариулт
+                      {t("Хариулт")}
                     </td>
                     <td className="border text-right">
                       {formatNumber(tulbur?.khariult)}
@@ -309,7 +310,7 @@ function EBarimt({
                 {(!baiguullagaEsekh || !irgenEsekh) && (
                   <tr>
                     <td colSpan={4} className="border">
-                      Сугалааны дугаар
+                      {t("Сугалааны дугаар")}
                     </td>
                     <td colSpan={2} className="border">
                       {eBarimt?.lottery}

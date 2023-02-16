@@ -11,6 +11,7 @@ import uilchilgee, { aldaaBarigch } from "./uilchilgee";
 import { ekhniiTsonkhruuOchyo } from "tools/logic/khereglegchiinErkhiinTokhirgoo";
 import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
+import { t } from "i18next";
 const AuthContext = createContext({});
 
 export const useBarilga = () => {
@@ -57,17 +58,17 @@ export const AuthProvider = ({ children }) => {
     setToken(t?.tureestoken);
 
     window.addEventListener("online", () =>
-      message.success("Интернэт ертөнцөд тавтай морил")
+      message.success(t("Интернэт ертөнцөд тавтай морил"))
     );
     window.addEventListener("offline", () =>
-      message.warning("Таны интернэт тасарсан байна")
+      message.warning(t("Таны интернэт тасарсан байна"))
     );
     return () => {
       window.removeEventListener("online", () =>
-        message.success("Интернэт ертөнцөд тавтай морил")
+        message.success(t("Интернэт ертөнцөд тавтай морил"))
       );
       window.removeEventListener("offline", () =>
-        message.warning("Таны интернэт тасарсан байна")
+        message.warning(t("Таны интернэт тасарсан байна"))
       );
     };
   }, []);
@@ -76,11 +77,11 @@ export const AuthProvider = ({ children }) => {
     () => ({
       newterya: async (khereglech) => {
         if (!khereglech.nevtrekhNer) {
-          message.warning("Нэвтрэх нэр талбарыг бөглөнө үү");
+          message.warning(t("Нэвтрэх нэр талбарыг бөглөнө үү"));
           return;
         }
         if (!khereglech.nuutsUg) {
-          message.warning("Нууц үг талбарыг бөглөнө үү");
+          message.warning(t("Нууц үг талбарыг бөглөнө үү"));
           return;
         }
         if (khereglech.namaigsana)
@@ -92,7 +93,7 @@ export const AuthProvider = ({ children }) => {
             if (status === 200) {
               if (!!data) {
                 if (data.result.erkh !== "Admin" && data.result.tsonkhniiErkhuud.length < 1) {
-                  return message.error("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна")
+                  return message.error(t("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна"))
                 }
                 setCookie(null, "tureestoken", data.token, {
                   maxAge: 30 * 24 * 60 * 60,
@@ -103,9 +104,9 @@ export const AuthProvider = ({ children }) => {
                 data?.result?.barilguud?.length > 0 &&
                   barilgaSoliyo(data.result.barilguud[0]);
                 ekhniiTsonkhruuOchyo(data.result);
-                message.success("Тавтай морил");
-              } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");
-            } else message.error("Хэрэглэгчийн мэдээлэл буруу байна");
+                message.success(t("Тавтай морил"));
+              } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
+            } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
           })
           .catch(aldaaBarigch);
       },

@@ -11,6 +11,7 @@ import _ from "lodash";
 import PivotTableUI from "react-pivottable/PivotTableUI";
 import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
+import { t } from "i18next";
 
 const DynamicPlot = dynamic(import("react-plotly.js"), {
   ssr: false,
@@ -70,7 +71,7 @@ function converter(key) {
       ret = "Хөнгөлөх эсэх";
       break;
     case "mail":
-      ret = "Mэйл";
+      ret = "И-мэйл";
       break;
     case "ner":
       ret = "Нэр";
@@ -184,7 +185,7 @@ function Tailan({ token }) {
           else if (moment(v[1], moment.ISO_8601, true).isValid()) {
             tmur[v[0]] = moment(v[1]).format("YYYY-MM-DD");
           }
-          let key = converter(v[0]);
+          let key = t(converter(v[0]));
           if (key) {
             mur[key] = tmur[v[0]];
           }

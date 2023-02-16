@@ -212,7 +212,7 @@ function index({ token, baiguullaga, destroy }, ref) {
       <Form.Item label={t("Харагдах дугаар")} name="kharagdakhDugaar">
         <Input onKeyUp={focuser} />
       </Form.Item>
-      <Form.Item label="Хамаарагдах хэсэг" name="khamaarakhKheseg">
+      <Form.Item label={t("Хамаарагдах хэсэг")} name="khamaarakhKheseg">
         <Select>
           {[
             "Ерөнхий мэдээлэл",

@@ -375,7 +375,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success("Бүртгэл амжилттай хийгдлээ");
+            message.success(t("Бүртгэл амжилттай хийгдлээ"));
             setWaiting(false);
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
@@ -420,7 +420,7 @@ function AjiltanBurtgel({ token }) {
         });
     } else
       notification.warning({
-        message: "Мэдэгдэл",
+        message: t("Мэдэгдэл"),
         description: t("Нууц үг таарсангүй"),
       });
   }

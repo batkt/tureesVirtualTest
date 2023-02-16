@@ -66,7 +66,7 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
       })
       .then(({ data }) => {
         if (data) {
-          message.success("Төлөлт амжилттай устгагдлаа!");
+          message.success(t("Төлөлт амжилттай устгагдлаа!"));
           baritsaaKhuulgaMutate();
           onFinish();
         }

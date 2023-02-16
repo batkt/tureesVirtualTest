@@ -26,11 +26,11 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
       ajiltanObject.nuutsUg = shineNuutsUg;
       updateMethod("ajiltan", token, ajiltanObject).then(({ data, status }) => {
         if (status === 200 && "Amjilttai" === data) {
-          message.success("Амжилттай заслаа");
+          message.success(t("Амжилттай засагдлаа"));
           ajiltanMutate({ ...ajiltanObject });
         }
       });
-    } else message.warning("Мэдээлэл буруу оруулсан байна");
+    } else message.warning(t("Мэдээлэл буруу оруулсан байна"));
   }
 
   return (

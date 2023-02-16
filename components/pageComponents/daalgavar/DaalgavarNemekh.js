@@ -88,7 +88,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
       .post("/daalgavarOruulya", daalgavar)
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: "Даалгавар амжилттай бүртгэгдлээ" });
+          notification.success({ message: t("Даалгавар амжилттай бүртгэгдлээ") });
           setDaalgavar({});
           setZuragnuud([]);
           onRefresh();

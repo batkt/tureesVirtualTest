@@ -23,9 +23,10 @@ import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
-  message.loading("Өгөгдөл боловсруулж байна та түр хүлээнэ!", 100000);
+  message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ!"), 100000);
   uilchilgee(token)
     .get(service, {
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },

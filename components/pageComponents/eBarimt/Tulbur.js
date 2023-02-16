@@ -64,7 +64,7 @@ function Tulbur(
     if (!!eBarimt) handlePrint()
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7 || irgenEsekh === true && register?.toString().length !== 10) {
-        message.warning("Байгууллагын регистр оруулна уу")
+        message.warning(t("Байгууллагын регистр оруулна уу"))
         return
       }
       setLoading(true)

@@ -115,11 +115,11 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
 
   function maileerIlgeekh() {
     if (!barimt) {
-      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     if (loading) {
-      message.warning("И-мэйл илгээгдсэн байна");
+      message.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
     var mailuud = [];
@@ -149,11 +149,11 @@ function GuilgeeKhiikh({ data, token, onFinish, destroy, t }, ref) {
   });
   function hevlekh() {
     if (!songogdsonDans) {
-      message.warning("Данс сонгоно уу");
+      message.warning(t("Данс сонгоно уу"));
       return;
     }
     if (!barimt) {
-      message.warning("Нэхэмжлэхийн төрөл сонгоно уу");
+      message.warning(t("Нэхэмжлэхийн төрөл сонгоно уу"));
       return;
     }
     handlePrint();

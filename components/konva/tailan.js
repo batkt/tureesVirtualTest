@@ -7,6 +7,7 @@ import { CloseCircleOutlined, FileExcelOutlined } from "@ant-design/icons";
 import { useAuth } from "services/auth";
 import { bairshilKhurvuuljAvakh } from ".";
 import _ from "lodash";
+import { t } from "i18next";
 
 function tailan({ token, points }) {
   const ref = React.useRef(null);
@@ -42,7 +43,7 @@ function tailan({ token, points }) {
             title: [
               <div className=" flex justify-between">
                 <div className="flex items-center justify-start bg-gray-50">
-                  Дэлгэрэнгүй Мэдээлэл
+                  {t("Дэлгэрэнгүй Мэдээлэл")}
                 </div>
                 <div
                   className="text-2xl hover:scale-105 hover:text-red-300"

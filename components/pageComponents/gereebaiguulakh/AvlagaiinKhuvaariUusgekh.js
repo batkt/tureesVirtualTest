@@ -65,7 +65,7 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
                   default:
                     break;
                 }
-                return tailbar;
+                return t(tailbar);
               },
             },
           ]}

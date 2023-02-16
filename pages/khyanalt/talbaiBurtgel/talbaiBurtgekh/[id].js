@@ -500,7 +500,7 @@ function TalbaiBurtgekh({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success("Бүртгэл амжилттай хийгдлээ");
+            message.success(t("Бүртгэл амжилттай хийгдлээ"));
             formRef.current.resetFields();
             router.back();
           }

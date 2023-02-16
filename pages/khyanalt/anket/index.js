@@ -257,7 +257,7 @@ function Anket({ token }) {
       .post("/asuult", v)
       .then(({ data }) => {
         if (data !== undefined) {
-          message.success("Анкетын загвар амжилттай бүртгэгдлээ");
+          message.success(t("Анкетын загвар амжилттай бүртгэгдлээ"));
           formRef.current.resetFields();
           asuult.mutate();
           setData(undefined);
@@ -529,7 +529,7 @@ function Anket({ token }) {
                               ) : (
                                 <Input
                                   width={"100%"}
-                                  placeholder="Энд хариултаа бичнэ үү"
+                                  placeholder={t("Энд хариултаа бичнэ үү")}
                                   defaultValue={!!data?.khariultuud ? data?.khariultuud[name]?.khariult : undefined}
                                 />
                               )}

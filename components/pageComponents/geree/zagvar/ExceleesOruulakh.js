@@ -75,7 +75,7 @@ function index(
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
             _.isFunction(onFinish) && onFinish();
-            message.success("Excel -ээс мэдээлэл амжилттай орууллаа");
+            message.success(t("Excel -ээс мэдээлэл амжилттай орууллаа"));
             destroy();
           } else if (!!file.response?.aldaa) setAldaa(file.response?.aldaa);
         }}
