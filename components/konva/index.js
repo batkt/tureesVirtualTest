@@ -172,7 +172,7 @@ function Drawer(props) {
     return (
       <div className="space-y-6 ">
         <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
-          План зураг оруулаагүй байна
+          {t("План зураг оруулаагүй байна")}
         </div>
         <div className="flex justify-center  ">
           <img

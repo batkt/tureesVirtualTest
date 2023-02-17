@@ -114,7 +114,7 @@ function TableGuilgee({
   }
   return (
     <Table
-      scroll={{ y: "calc(94vh - 26rem)" }}
+      scroll={{ y: "calc(100vh - 32rem)" }}
       size="small"
       bordered
       columns={columns}
@@ -464,7 +464,7 @@ useEffect(()=> {
 
     if (turul == "eneSardTulukh") {
       jagsaalt.push({
-        title: "Төлөвлөгөөт",
+        title: t("Төлөвлөгөөт"),
         dataIndex: "tuluvluguut",
         align: "center",
         summary: true,
@@ -605,13 +605,13 @@ useEffect(()=> {
                   className="flex w-full items-center  justify-center px-[6px] "
                   title={
                     khuvi < 100
-                      ? `Барьцаа ${formatNumber(
-                          (row.baritsaaAvakhDun || 0) -
-                            (row.baritsaaniiUldegdel || 0)
-                        )} дутуу`
+                      ? t("Барьцаа дутуу", {too: formatNumber(
+                        (row.baritsaaAvakhDun || 0) -
+                          (row.baritsaaniiUldegdel || 0)
+                      )})
                       : `${formatNumber(
                           row.baritsaaniiUldegdel
-                        )} барьцаа төлөгдсөн байна`
+                        )} ${t("барьцаа төлөгдсөн байна")}`
                   }
                 >
                   <Progress

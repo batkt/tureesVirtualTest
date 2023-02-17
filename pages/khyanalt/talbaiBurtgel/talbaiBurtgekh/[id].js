@@ -200,7 +200,7 @@ function KhurunguudCard({
               rules={[
                 {
                   required: true,
-                  message: t("Нэр бүртгэнэ үү"),
+                  message: t("Нэр бүртгэнэ үү!"),
                 },
               ]}
             >

@@ -91,7 +91,7 @@ function guilgeeBurduulya(gereenuud, dans, guilgee) {
           guilgee.kholbosonDun
     ) {
       aldaa.push(
-        `${mur.talbainDugaar} талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү`
+        t("талбайн холбох гүйлгээний алдангийн дүнг түрүүлж төлнө үү", {too: mur.talbainDugaar}) 
       );
     }
   });

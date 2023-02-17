@@ -67,9 +67,9 @@ const talbainiiTalbaruud = [
 ];
 
 const baritsaaniiTalbaruud = [
-  { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
+  { ner: t("Барьцаа авах дүн"), talbar: "baritsaaAvakhDun" },
   {
-    ner: "Барьцаа байршуулах хугацаа",
+    ner: t("Барьцаа байршуулах хугацаа"),
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
 ];
@@ -189,21 +189,21 @@ function ZakhialgaNemekh({ token }) {
     const tulbur = customPlugin({
       songokhTalbaruud: tulburiinTalbaruud,
       name: "tulbur",
-      title: "Төлбөр",
+      title: t("Төлбөр"),
       button: renderToString(<DollarCircleOutlined />),
     });
 
     const nekhemjlel = customPlugin({
       songokhTalbaruud: nekhemjlekhiinTalbaruud,
       name: "nekhemjlel",
-      title: "Нэхэмжлэл",
+      title: t("Нэхэмжлэл"),
       button: renderToString(<DollarCircleOutlined />),
     });
 
     const nekhemjlelNemelt = customPlugin({
       songokhTalbaruud: nekhemjlekhiinNemelt,
       name: "nekhemjlekhiinNemelt",
-      title: "Нэхэмжлэхийн бусад авлага",
+      title: t("Нэхэмжлэхийн бусад авлага"),
       button: renderToString(<DollarCircleOutlined />),
     });
 
@@ -280,7 +280,7 @@ function ZakhialgaNemekh({ token }) {
           aldaaBarigch(e);
           setWaiting(false);
         });
-    } else message.warning("Нэр оруулна уу!");
+    } else message.warning(t("Нэр оруулна уу!"));
   }
   function onChange(e) {
     setNekhemjlelZagvar((nekhemjlelZagvar) => ({

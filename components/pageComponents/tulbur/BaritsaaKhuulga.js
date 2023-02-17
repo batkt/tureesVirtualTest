@@ -105,7 +105,7 @@ function BaritsaaKhuulga({ data, token, onFinish, destroy, tulukhUldegdel, ashig
               {
                 <div className="contents justify-between">
                   <Popconfirm
-                    title="Төлөлт устгах уу?"
+                    title={t("Төлөлт устгах уу?")}
                     okText={t("Тийм")}
                     cancelText={t("Үгүй")}
                     onConfirm={() => baritsaaniiGuilgeeUstgaya(a)}

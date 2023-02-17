@@ -106,13 +106,13 @@ function ZardalBurtgel(
           </Select.Option>
         </Select> : <Select onKeyUp={focuser}>
           <Select.Option key="кВт" value="кВт">
-            кВт
+            {t("кВт")}
           </Select.Option>
           <Select.Option key="1м3" value="1м3">
-            1м<sup>3</sup>
+            1{t("м")}<sup>3</sup>
           </Select.Option>
           <Select.Option key="1м2" value="1м2">
-            1м<sup>2</sup>
+            1{t("м")}<sup>2</sup>
           </Select.Option>
         </Select>}
       </Form.Item>

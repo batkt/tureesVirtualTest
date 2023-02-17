@@ -223,7 +223,7 @@ function index({ token }) {
                       >
                         <Popconfirm
                           disabled={mur?.tuluv === 1}
-                          title={`Хүлээн авах уу?`}
+                          title={t("Хүлээн авах уу?")}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
                           onConfirm={() => sanalGomdolAvakh(mur)}
@@ -233,7 +233,7 @@ function index({ token }) {
                               0 === mur?.tuluv ? "red" : "green"
                             }-500 py-1 px-3 font-medium text-gray-50`}
                           >
-                            {0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах"}
+                            {t(0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах")}
                           </div>
                         </Popconfirm>
                       </div>

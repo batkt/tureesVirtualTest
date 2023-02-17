@@ -871,7 +871,7 @@ function tulburTootsoo({ token }) {
           <Table
             bordered
             size="small"
-            scroll={{ y: "calc(100vh - 30rem)" }}
+            scroll={{ y: "calc(100vh - 34rem)" }}
             columns={columns}
             dataSource={dansniiKhuulgaGaralt?.jagsaalt}
             onChange={(p, f, s) => sorterCompare(s, setOrder)}

@@ -249,7 +249,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                     a.turul === "baritsaa" ||
                     a.turul === "qpay") && (
                       <Popconfirm
-                        title="Төлөлт устгах уу?"
+                        title={t("Төлөлт устгах уу?")}
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
                         onConfirm={() => tulultUstgaya(a)}

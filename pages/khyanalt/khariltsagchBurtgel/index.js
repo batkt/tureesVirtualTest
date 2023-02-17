@@ -1216,7 +1216,7 @@ function AjiltanBurtgel({ token }) {
                       }
                       color={turul === "Иргэн" ? "blue" : "orange"}
                     >
-                      {turul}
+                      {t(turul)}
                     </Tag>
                   );
                 },

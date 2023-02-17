@@ -90,15 +90,15 @@ const talbainiiTalbaruud = [
 const baritsaaniiTalbaruud = [
   { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
   {
-    ner: "Барьцаа байршуулах хугацаа",
+    ner: t("Барьцаа байршуулах хугацаа"),
     talbar: "baritsaaBairshuulakhKhugatsaa",
   },
 ];
 
 const tulburiinTalbaruud = [
-  { ner: "Хөнгөлөх хугацаа", talbar: "khungulukhKhugatsaa" },
-  { ner: "Сарын түрээс", talbar: "sariinTurees" },
-  { ner: "Мөнгөн дүн үсгээр", talbar: "mungunDunUsgeer" },
+  { ner: t("Хөнгөлөх хугацаа"), talbar: "khungulukhKhugatsaa" },
+  { ner: t("Сарын түрээс"), talbar: "sariinTurees" },
+  { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
 ];
 
 function ZaaltZasvar({ destroy, value, change }, ref) {
@@ -155,25 +155,25 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
     const khugatsaa = customPlugin({
       songokhTalbaruud: khugatsaaniiTalbaruud,
       name: "khugatsaa",
-      title: "Хугацаа",
+      title: t("Хугацаа"),
       button: renderToString(<ClockCircleOutlined />),
     });
     const baritsaa = customPlugin({
       songokhTalbaruud: talbainiiTalbaruud,
       name: "talbai",
-      title: "Түрээсийн талбай",
+      title: t("Түрээсийн талбай"),
       button: renderToString(<BankOutlined />),
     });
     const talbai = customPlugin({
       songokhTalbaruud: baritsaaniiTalbaruud,
       name: "baritsaa",
-      title: "Барьцаа",
+      title: t("Барьцаа"),
       button: renderToString(<LockOutlined />),
     });
     const tulbur = customPlugin({
       songokhTalbaruud: tulburiinTalbaruud,
       name: "tulbur",
-      title: "Төлбөр",
+      title: t("Төлбөр"),
       button: renderToString(<DollarCircleOutlined />),
     });
     return [undsen, khugatsaa, baritsaa, talbai, tulbur];

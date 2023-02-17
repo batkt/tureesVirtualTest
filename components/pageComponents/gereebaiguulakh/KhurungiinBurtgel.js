@@ -292,7 +292,7 @@ const YurunkhiiMedeele = ({
                     </div>
                   )}
                   <div className="flex items-center justify-center text-center">
-                    м<sup>2</sup>
+                    {t("м")}<sup>2</sup>
                   </div>
                   <div className="flex items-center justify-center text-center">
                     {t("Түрээсийн төлбөр")}
@@ -365,7 +365,7 @@ const YurunkhiiMedeele = ({
           <div className="grid grid-cols-12 divide-x-2">
             <div className="col-span-4 text-center">{t("Давхар")}</div>
             <div className="col-span-4 text-center">
-              м<sup>2</sup>
+            {t("м")}<sup>2</sup>
             </div>
             <div className="col-span-4 text-center">{t("Нийт төлбөр")}</div>
           </div>

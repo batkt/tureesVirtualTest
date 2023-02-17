@@ -385,7 +385,7 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right">
           <Form.Item
             name="ner"
-            label={"Байгууллага нэр"}
+            label={t("Байгууллага нэр")}
             rules={[
               { required: true, message: t("Байгууллага нэр бүртгэнэ үү!") },
             ]}
@@ -393,7 +393,7 @@ const YurunkhiiMedeele = ({
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Байгууллага нэр"
+              placeholder={t("Байгууллага нэр")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -435,13 +435,13 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="300">
           <Form.Item
             name="zakhirliinOvog"
-            label={"Захирлын овог"}
+            label={t("Захирлын овог")}
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
           >
             <Input
               onKeyUp={focuser}
               allowClear
-              placeholder="Овог"
+              placeholder={t("Овог")}
               prefix={<SolutionOutlined />}
             />
           </Form.Item>
@@ -451,7 +451,7 @@ const YurunkhiiMedeele = ({
         <div data-aos="fade-right" data-aos-delay="400">
           <Form.Item
             name="zakhirliinNer"
-            label={"Захирлын нэр"}
+            label={t("Захирлын нэр")}
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
           >
             <Input
@@ -497,11 +497,11 @@ const YurunkhiiMedeele = ({
       )}
       {!value.baiguullagaEsekh && (
         <div data-aos="fade-right" data-aos-delay="800">
-          <Form.Item name="mail" label={"И-мэйл хаяг"}>
+          <Form.Item name="mail" label={t("И-мэйл хаяг")}>
             <Input
               onKeyUp={focuser}
               type="email"
-              placeholder="И-мэйл хаяг"
+              placeholder={t("И-мэйл хаяг")}
               allowClear
               prefix={<MailOutlined />}
             />
@@ -513,12 +513,12 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
-            label={"И-мэйл хаяг"}
+            label={t("И-мэйл хаяг")}
           >
             <Input
               onKeyUp={focuser}
               type="email"
-              placeholder="И-мэйл хаяг"
+              placeholder={t("И-мэйл хаяг")}
               allowClear
               prefix={<MailOutlined />}
             />

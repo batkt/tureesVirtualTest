@@ -126,7 +126,7 @@ const Tulbur = ({
             className="ml-auto"
           >
             <Form.Item
-              label="Барьцаа хөрөнгө авах эсэх"
+              label={t("Барьцаа хөрөнгө авах эсэх")}
               name="baritsaaAvakhEsekh"
             >
               <Switch
