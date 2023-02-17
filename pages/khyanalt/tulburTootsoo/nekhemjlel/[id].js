@@ -22,6 +22,7 @@ import { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
