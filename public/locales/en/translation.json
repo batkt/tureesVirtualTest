@@ -667,8 +667,17 @@
 "Нэхэмжлэхийн төрөл сонгоно уу": "Select an invoice type",
 "И-мэйл илгээгдсэн байна": "Email has been sent",
 "Email хаягаа шалгаад дахин оролдоно уу!": "Please check your email address and try again!",
-"Гэрээ сонгоно уу": "Select the contracts",
+"Гэрээ сонгоно уу": "Select a contract",
 "Талбайн Хэмжээ": "Area size",
-"Эзэмшигчийн нэр": "Эзэмшигчийн нэр",
-"дугаартай баримт амжилттай ebarimt -с устгагдлаа": "{{dugaar}} дугаартай баримт амжилттай ebarimt -с устгагдлаа"
+"Эзэмшигчийн нэр": "Owner name",
+"дугаартай баримт амжилттай ebarimt -с устгагдлаа": "Barimt number {{dugaar}} was successfully removed from ebarimt",
+"Excel -ээс мэдээлэл амжилттай орууллаа":	"Data has been successfully imported from Excel",
+"Байгууллагын регистр оруулна уу":	"Enter the corporate register",
+"Гэрээний мэдээлэл Excel -ээс амжилттай орууллаа": "Contract information has been successfully imported from Excel",
+"Гэрээ амжилттай сунгалаа": "The contract was successfully extended",
+"Төлөлт амжилттай устгагдлаа!": "Payment successfully deleted!",
+"Мэдээлэл буруу оруулсан байна": "The information was entered incorrectly",
+"Та SMS илгээх гэрээгээ сонгоно уу": "Select a contract for sending SMS",
+"Анкетын загвар амжилттай бүртгэгдлээ": "Survey template has been successfully registered",
+"Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна": "User authorize is not configured"
 }
