@@ -163,7 +163,6 @@ function BarilgaBurtgel({ token }) {
     token,
     query
   );
-
   const avlagiinChartSalbaraarAvya = useAvlagiinChartSalbaraar(
     "avlagiinChartSalbaraarAvya",
     token,
@@ -368,7 +367,6 @@ function BarilgaBurtgel({ token }) {
               </div>
               <div className="box flex h-full items-center justify-start p-2 ">
                 <div className="h-[80%] w-full ">
-                  {console.log(lineChart)}
                   <Line
                     data={lineChart.data || []}
                     responsive={{
@@ -557,12 +555,12 @@ function BarilgaBurtgel({ token }) {
                         <div className="flex items-center space-x-2">
                           <div key={index}>
                             <GoPrimitiveDot
-                              style={{
-                                color:
-                                  orlogiinChartSalbaraarAvya.data.backgroundColor.find(
-                                    (a, i) => i === index
-                                  ),
-                              }}
+                            style={{
+                              color:
+                                avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                                  (a, i) => i === index
+                                ),
+                            }}
                             />
                           </div>
                           <div>{a}</div>
