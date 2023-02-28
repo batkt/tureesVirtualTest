@@ -13,7 +13,7 @@ import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
 import useJagsaalt from "hooks/useJagsaalt";
-import { Button, DatePicker,  notification,  Popconfirm,  Select } from "antd";
+import { Button, DatePicker,  notification,  Popconfirm,  Select, Tooltip } from "antd";
 import { DeleteOutlined, EditOutlined, FileExcelOutlined, PlusOutlined } from "@ant-design/icons";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import TailanZagvar from "components/pageComponents/tailan/TailanZagvar";
@@ -105,7 +105,7 @@ function converter(key) {
       ret = "Талбайн нэгж үнэ";
       break;
     case "talbainNiitUne":
-      ret = "Тайлан нийт үнэ";
+      ret = "Талбайн нийт үнэ";
       break;
     case "tulukhUdur":
       ret = "Төлөх өдөр";
@@ -141,14 +141,15 @@ function Tailan({ token }) {
   const query = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
-      ekhlekhOgnoo: ognoo[0].format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: ognoo[1].format("YYYY-MM-DD 00:00:00"),
+      ekhlekhOgnoo: !!ognoo ? ognoo[0].format("YYYY-MM-DD 00:00:00") : undefined,
+      duusakhOgnoo: !!ognoo ? ognoo[1].format("YYYY-MM-DD 00:00:00") : undefined,
     };
   }, [ognoo, barilgiinId]);
 
   const tailan = useTailan(service, token, query);
   const [table, setTable] = useState({});
   const [SSR, setSSR] = useState(false);
+  const [selectValue, setSelectValue] = useState(null)
   const ref = useRef(null);
   const zagvarQuery = useMemo(() => {
     return {
@@ -265,7 +266,7 @@ function Tailan({ token }) {
       className="p-0 md:p-4"
       tsonkhniiId={"630448aaa612b4cdd5f1fc08"}
     >
-      <div className="col-span-12 flex flex-col gap-3 md:flex-row">
+      <div className="col-span-12 flex flex-col items-center gap-3 md:flex-row">
         <DatePicker.RangePicker
           className="w-full md:w-auto"
           locale={locale}
@@ -274,17 +275,21 @@ function Tailan({ token }) {
         />
         <div className="">
           <Select
-          value={null}
-            style={{ width: "11rem" }}
+          allowClear 
+          value={selectValue}
+            style={{ minWidth: "11rem" }}
             placeholder="Тайлангийн загвар"
-            onSelect={(v) => {              
-              setTable({ ...zagvar.jagsaalt.find((a) => a._id === v)?.object });
+            onChange={(v) => {      
+              setSelectValue(v)        
+              setTable(v === undefined ? {} : { ...zagvar.jagsaalt.find((a) => a._id === v)?.object });
             }}
           >
             {zagvar.jagsaalt.map((mur) => (
               <Select.Option value={mur._id} key={mur._id}>
                 <div className="flex flex-row">
-                  <div>{mur.ner}</div>
+                  <Tooltip title={<div>{mur.ner}</div>}>
+                  <div className="truncate">{mur.ner}</div>
+                  </Tooltip>
                   <div
                     onClick={(e) => {
                       e.preventDefault();
@@ -310,6 +315,8 @@ function Tailan({ token }) {
                               description: "Амжилттай устгалаа",
                             });
                             zagvar.refresh();
+                            setSelectValue(null);
+                            setTable({});
                           }                          
                         }
                       );
@@ -328,7 +335,7 @@ function Tailan({ token }) {
                 </div>
               </Select.Option>
             ))}
-          </Select>
+          </Select>          
         </div>
         <Button
         className="bg-white"
