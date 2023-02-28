@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useLayoutEffect, useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
 import TableRenderers from "react-pivottable/TableRenderers";
 import "react-pivottable/pivottable.css";
 import useTailan from "hooks/tailan/useTailan";
@@ -12,6 +12,13 @@ import PivotTableUI from "react-pivottable/PivotTableUI";
 import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
+import useJagsaalt from "hooks/useJagsaalt";
+import { Button, DatePicker,  notification,  Popconfirm,  Select } from "antd";
+import { DeleteOutlined, EditOutlined, FileExcelOutlined, PlusOutlined } from "@ant-design/icons";
+import locale from "antd/lib/date-picker/locale/mn_MN";
+import TailanZagvar from "components/pageComponents/tailan/TailanZagvar";
+import { modal } from "components/ant/Modal";
+import deleteMethod from "tools/function/crud/deleteMethod";
 
 const DynamicPlot = dynamic(import("react-plotly.js"), {
   ssr: false,
@@ -125,18 +132,31 @@ function converter(key) {
 }
 
 function Tailan({ token }) {
-  const { barilgiinId } = useAuth();
+  const { barilgiinId, baiguullaga } = useAuth();
 
-  const query = useMemo(
-    () => ({
-      barilgiinId,
-    }),
-    [barilgiinId]
-  );
+  const [ognoo, setOgnoo] = useState([
+    moment().startOf("month"),
+    moment().endOf("month"),
+  ]);
+  const query = useMemo(() => {
+    return {
+      barilgiinId: barilgiinId,
+      ekhlekhOgnoo: ognoo[0].format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: ognoo[1].format("YYYY-MM-DD 00:00:00"),
+    };
+  }, [ognoo, barilgiinId]);
 
   const tailan = useTailan(service, token, query);
   const [table, setTable] = useState({});
   const [SSR, setSSR] = useState(false);
+  const ref = useRef(null);
+  const zagvarQuery = useMemo(() => {
+    return {
+      turul: "analytik",
+    };
+  }, []);
+
+  const zagvar = useJagsaalt("/tailangiinZagvar", zagvarQuery);
 
   const data = useMemo(() => {
     let array = [];
@@ -207,6 +227,37 @@ function Tailan({ token }) {
     setSSR(typeof window === "undefined");
   }, []);
 
+  function zagvarBurtgeye(data) {
+    if (!!data.object) {
+      data.object.data = undefined;
+      data.object.tailanGaralt = undefined;
+      data.object.isValidating = undefined;
+      data.object.unusedOrientationCutoff = undefined;
+    }
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>Хаах</Button>,
+      <Button type="primary" onClick={() => ref.current.khadgalya()}>
+        Хадгалах
+      </Button>,
+    ];
+    modal({
+      title: "Загвар бүртгэл",
+      icon: <PlusOutlined />,
+      content: (
+        <TailanZagvar
+          ref={ref}
+          data={data}
+          setTable={setTable}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullagiinId={baiguullaga?._id}
+          refresh={zagvar.refresh}
+        />
+      ),
+      footer,
+    });
+  }
+
   return (
     <Admin
       title="Тайлан"
@@ -214,7 +265,96 @@ function Tailan({ token }) {
       className="p-0 md:p-4"
       tsonkhniiId={"630448aaa612b4cdd5f1fc08"}
     >
-      <div className="ag-theme-alpine col-span-12 h-[88vh] overflow-auto">
+      <div className="col-span-12 flex flex-col gap-3 md:flex-row">
+        <DatePicker.RangePicker
+          className="w-full md:w-auto"
+          locale={locale}
+          value={ognoo}
+          onChange={setOgnoo}
+        />
+        <div className="">
+          <Select
+          value={null}
+            style={{ width: "11rem" }}
+            placeholder="Тайлангийн загвар"
+            onSelect={(v) => {              
+              setTable({ ...zagvar.jagsaalt.find((a) => a._id === v)?.object });
+            }}
+          >
+            {zagvar.jagsaalt.map((mur) => (
+              <Select.Option value={mur._id} key={mur._id}>
+                <div className="flex flex-row">
+                  <div>{mur.ner}</div>
+                  <div
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      zagvarBurtgeye(mur);
+                    }}
+                    className="ml-auto rounded-md px-1 text-yellow-500 hover:bg-yellow-400 hover:text-white"
+                  >
+                    <EditOutlined />
+                  </div>
+                  <Popconfirm
+                    title="Гэрээний загвар устгах уу?"
+                    okText="Тийм"
+                    cancelText="Үгүй"
+                    onConfirm={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      deleteMethod("tailangiinZagvar", token, mur._id).then(
+                        ({data}) => {
+                          if (data === "Amjilttai") {
+                            notification.success({
+                              message: "Амжилттай",
+                              description: "Амжилттай устгалаа",
+                            });
+                            zagvar.refresh();
+                          }                          
+                        }
+                      );
+                    }}
+                  >
+                    <div
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="ml-1 rounded-md px-1 text-red-500 hover:bg-red-400 hover:text-white"
+                    >
+                      <DeleteOutlined />
+                    </div>
+                  </Popconfirm>
+                </div>
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
+        <Button
+        className="bg-white"
+          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
+        >
+          Загвар бүртгэх
+        </Button>
+        <Button
+        className="bg-white"
+          icon={<FileExcelOutlined />}
+          onClick={() => {
+            const { Excel } = require("antd-table-saveas-excel");
+            const excel = new Excel();
+            excel
+              .addSheet("Аналитик тайлан")
+              .addColumns(
+                table.rows.map((mur) => {
+                  return { title: mur, dataIndex: mur };
+                })
+              )
+              .addDataSource(data)
+              .saveAs("Аналитик тайлан.xlsx");
+          }}
+        >Excel</Button>
+      </div>
+      <div className="ag-theme-alpine col-span-12 overflow-auto" style={{height: "calc( 100vh - 12rem )"}}>
         {!SSR && !!PlotlyRenderers && (
           <PivotTableUI
             data={data}
