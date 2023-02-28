@@ -202,7 +202,7 @@ function EBarimt({
                     </tr>
                     <tr>
                       <td className="border" colSpan={1}>
-                        {y("ТТД")}
+                        {t("ТТД")}
                       </td>
                       <td className="border" colSpan={5}>
                         {register}
