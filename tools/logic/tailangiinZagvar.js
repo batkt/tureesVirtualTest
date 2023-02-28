@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React, { useMemo } from 'react';
 import formatNumber from 'tools/function/formatNumber'
 export function useTailangiinZagvar(zagvar) {
@@ -38,7 +39,7 @@ export function useTailangiinZagvar(zagvar) {
                         Cell: ({ row }) => {
                             return row.index + 1
                         },
-                        Footer: <>Нийт</>
+                        Footer: <>{t("Нийт")}</>
                     },
                     {
                         Header: 'Захиалгын тоо',
@@ -138,7 +139,7 @@ export function useTailangiinZagvar(zagvar) {
                         Cell: ({ row }) => {
                             return row.index + 1
                         },
-                        Footer: <>Нийт</>
+                        Footer: <>{t("Нийт")}</>
                     },
                     {
                         Header: 'Ажилчдын нэр',

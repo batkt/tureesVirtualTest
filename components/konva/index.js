@@ -190,11 +190,11 @@ function Drawer(props) {
       <div className="flex  justify-end space-x-3 pb-3">
         <div className="flex space-x-3 border-2 border-dashed p-1">
           <div className="h-5 w-5 border-2 bg-green-400"></div>
-          <div> Идэвхтэй</div>
+          <div> {t("Идэвхтэй")}</div>
         </div>
         <div className="flex space-x-3 border-2 border-dashed p-1">
           <div className="h-5 w-5 border-2 bg-red-400"></div>
-          <div>Идэвхгүй </div>
+          <div>{t("Идэвхгүй")} </div>
         </div>
       </div>
       <Stage

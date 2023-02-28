@@ -6,6 +6,7 @@ import moment from "moment";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import useJagsaalt from "hooks/useJagsaalt";
 import formatNumber from "tools/function/formatNumber";
+import { t } from "i18next";
 
 function Baaz({ token }) {
   const [loading, setLoading] = useState(false);
@@ -46,20 +47,20 @@ function Baaz({ token }) {
         1,
     },
     {
-      title: "Огноо",
+      title: t("Огноо"),
       dataIndex: "ognoo",
       ellipsis: true,
       align: "center",
       render(a) { return moment(a).format("YYYY-MM-DD, HH:mm") }
     },
     {
-      title: "Ажилтан",
+      title: t("Ажилтан"),
       dataIndex: "ajiltniiNer",
       ellipsis: true,
       align: "center",
     },
     {
-      title: "Хэмжээ",
+      title: t("Хэмжээ"),
       dataIndex: "khemjee",
       ellipsis: true,
       align: "center",
@@ -73,14 +74,14 @@ function Baaz({ token }) {
         <div className="intro-y box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Мэдээллийн сан
+              {t("Мэдээллийн сан")}
             </h2>
           </div>
           <div className="box"></div>
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">Системийн өгөгдөл</div>
+                <div className="font-medium">{t("Системийн өгөгдөл")}</div>
                 <div className="text-gray-600"></div>
               </div>
               <div className="ml-auto">
@@ -89,7 +90,7 @@ function Baaz({ token }) {
                   icon={<DownloadOutlined />}
                   onClick={backTatya}
                 >
-                  Татах
+                  {t("Татах")}
                 </Button>
               </div>
             </div>
@@ -100,7 +101,7 @@ function Baaz({ token }) {
         <div className="intro-y box mt-5 lg:mt-0">
           <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
-              Татсан түүх
+              {t("Татсан түүх")}
             </h2>
             <DatePicker.RangePicker
               className="w-full md:w-auto"

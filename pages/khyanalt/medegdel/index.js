@@ -1119,7 +1119,7 @@ function Khyanalt({ token }) {
                       onChange={(v) => setZurag(v.file.response)}
                     >
                       <div className="flex flex-row space-x-1">
-                        <Button icon={<UploadOutlined />}>зураг оруулах</Button>
+                        <Button icon={<UploadOutlined />}>{t("Зураг оруулах")}</Button>
                       </div>
                     </Upload>
                   </div>
