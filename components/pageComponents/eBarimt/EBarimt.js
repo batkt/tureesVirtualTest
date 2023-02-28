@@ -110,7 +110,9 @@ function EBarimt({
         )}
         {eBarimtAutomataarShivikh === true && (
           <div className="flex flex-row justify-between border-b-2 border-dashed py-2">
-            <div>{t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр`)}</div>
+            <div>
+              {t(`${irgenEsekh ? "Татвар төлөгч иргэн" : "ААН"} регистр`)}
+            </div>
             <div className="text-base font-medium">{register}</div>
           </div>
         )}
@@ -200,7 +202,7 @@ function EBarimt({
                     </tr>
                     <tr>
                       <td className="border" colSpan={1}>
-                        {y("ТТД")}
+                        {t("ТТД")}
                       </td>
                       <td className="border" colSpan={5}>
                         {register}
@@ -321,7 +323,9 @@ function EBarimt({
                   <td colSpan={6}>
                     <div className="flex w-full justify-center p-5">
                       <div className="h-40 w-40">
-                        <QRCode value={eBarimt?.qrData} size={160} />
+                        {eBarimt?.qrData && (
+                          <QRCode value={eBarimt?.qrData} size={160} />
+                        )}
                       </div>
                     </div>
                   </td>
