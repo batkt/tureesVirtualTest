@@ -165,50 +165,51 @@ function Tailan({ token }) {
 
     if (tailan?.tailanGaralt?.length > 0) {
       tailan?.tailanGaralt.forEach((tmur) => {
-        tmur.aldangiinUldegdel = formatNumber(tmur.aldangiinUldegdel) || 0;
-        tmur.baiguullagiinNer = tmur.baiguullagiinNer || "";
-        tmur.baritsaaAvakhDun = formatNumber(tmur.baritsaaAvakhDun) || 0;
-        tmur.baritsaaAvakhKhugatsa = tmur.baritsaaAvakhKhugatsa || "";
-        tmur.baritsaaBairshuulakhKhugatsaa =
+        let murutga = Object.assign({},tmur)
+        murutga.aldangiinUldegdel = formatNumber(tmur.aldangiinUldegdel) || 0;
+        murutga.baiguullagiinNer = tmur.baiguullagiinNer || "";
+        murutga.baritsaaAvakhDun = formatNumber(tmur.baritsaaAvakhDun) || 0;
+        murutga.baritsaaAvakhKhugatsa = tmur.baritsaaAvakhKhugatsa || "";
+        murutga.baritsaaBairshuulakhKhugatsaa =
           tmur.baritsaaBairshuulakhKhugatsaa || "";
-        tmur.baritsaaniiUldegdel = formatNumber(tmur.baritsaaniiUldegdel) || 0;
-        tmur.khariltsagchiinKhayag = tmur.khariltsagchiinKhayag || "";
-        tmur.dans = tmur.dans || "";
-        tmur.daraagiinTulukhOgnoo = tmur.daraagiinTulukhOgnoo || "";
-        tmur.davkhar = tmur.davkhar || "";
-        tmur.duusakhOgnoo = tmur.duusakhOgnoo || "";
-        tmur.gereeniiDugaar = tmur.gereeniiDugaar || "";
-        tmur.gereeniiOgnoo = tmur.gereeniiOgnoo || "";
-        tmur.idevkhiteiEsekh = tmur.idevkhiteiEsekh || 0;
-        tmur.khugatsaa = tmur.khugatsaa || "";
-        tmur.khungulukhEsekh = tmur.khungulukhEsekh || "";
-        tmur.mail = tmur.mail || "";
-        tmur.ner = tmur.ner || "";
-        tmur.ovog = tmur.ovog || "";
-        tmur.register = tmur.register || "";
-        tmur.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
-        tmur.segmentuud = tmur.segmentuud || "";
-        tmur.talbainDugaar = tmur.talbainDugaar || "";
-        tmur.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
-        tmur.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
-        tmur.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
-        tmur.tulukhUdur = tmur.tulukhUdur || "";
-        tmur.tuluv = tmur.tuluv || "";
-        tmur.turul = tmur.turul || "";
-        tmur.uldegdel = formatNumber(tmur.uldegdel) || 0;
-        tmur.utas = tmur.utas || 0;
-        tmur.zardluud = tmur.zardluud || 0;
+          murutga.baritsaaniiUldegdel = formatNumber(tmur.baritsaaniiUldegdel) || 0;
+          murutga.khariltsagchiinKhayag = tmur.khariltsagchiinKhayag || "";
+          murutga.dans = tmur.dans || "";
+          murutga.daraagiinTulukhOgnoo = tmur.daraagiinTulukhOgnoo || "";
+          murutga.davkhar = tmur.davkhar || "";
+          murutga.duusakhOgnoo = tmur.duusakhOgnoo || "";
+          murutga.gereeniiDugaar = tmur.gereeniiDugaar || "";
+          murutga.gereeniiOgnoo = tmur.gereeniiOgnoo || "";
+          murutga.idevkhiteiEsekh = tmur.idevkhiteiEsekh || 0;
+          murutga.khugatsaa = tmur.khugatsaa || "";
+          murutga.khungulukhEsekh = tmur.khungulukhEsekh || "";
+          murutga.mail = tmur.mail || "";
+          murutga.ner = tmur.ner || "";
+          murutga.ovog = tmur.ovog || "";
+          murutga.register = tmur.register || "";
+          murutga.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
+          murutga.segmentuud = tmur.segmentuud || "";
+          murutga.talbainDugaar = tmur.talbainDugaar || "";
+          murutga.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
+          murutga.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
+          murutga.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
+          murutga.tulukhUdur = tmur.tulukhUdur || "";
+          murutga.tuluv = tmur.tuluv || "";
+          murutga.turul = tmur.turul || "";
+          murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
+          murutga.utas = tmur.utas || 0;
+          murutga.zardluud = tmur.zardluud || 0;
 
         let mur = {};
-        Object.entries(tmur).map((v) => {
-          if (_.isObject(v[1]) || _.isArray(v[1])) tmur[v[0]] = "";
-          else if (_.isNumber(v[1])) tmur[v[0]] = v[1];
+        Object.entries(murutga).map((v) => {
+          if (_.isObject(v[1]) || _.isArray(v[1])) murutga[v[0]] = "";
+          else if (_.isNumber(v[1])) murutga[v[0]] = v[1];
           else if (moment(v[1], moment.ISO_8601, true).isValid()) {
-            tmur[v[0]] = moment(v[1]).format("YYYY-MM-DD");
+            murutga[v[0]] = moment(v[1]).format("YYYY-MM-DD");
           }
           let key = t(converter(v[0]));
           if (key) {
-            mur[key] = tmur[v[0]];
+            mur[key] = murutga[v[0]];
           }
         });
         array.push(mur);
