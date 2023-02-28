@@ -4,7 +4,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
 
 function TailanZagvar(
-  { data, destroy, baiguullagiinId, barilgiinId, token, refresh, setTable },
+  { data, destroy, baiguullagiinId, barilgiinId, token, refresh, setTable, setSelectValue },
   ref
 ) {
   const [form] = Form.useForm();
@@ -27,6 +27,7 @@ function TailanZagvar(
               });
               refresh();
               setTable({});
+              setSelectValue(null);
               destroy();
             }
           }

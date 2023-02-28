@@ -249,6 +249,7 @@ function Tailan({ token }) {
           ref={ref}
           data={data}
           setTable={setTable}
+          setSelectValue={setSelectValue}
           token={token}
           barilgiinId={barilgiinId}
           baiguullagiinId={baiguullaga?._id}
@@ -294,7 +295,7 @@ function Tailan({ token }) {
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      zagvarBurtgeye(mur);
+                      zagvarBurtgeye({...mur, object: table});
                     }}
                     className="ml-auto rounded-md px-1 text-yellow-500 hover:bg-yellow-400 hover:text-white"
                   >
