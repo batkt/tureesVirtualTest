@@ -22,7 +22,7 @@ import useOrder from "tools/function/useOrder";
 import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
-import MashinBurtgel from "components/pageComponents/togloom/TsagBurtgel";
+import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
 import { t } from "i18next";
 
 function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
@@ -252,14 +252,14 @@ function togloom1({ token }) {
       "Зогсоол"
     );
   }
-  function mashinBurtgekh(data) {
-    var mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
+  function khuukhedBurtgekh(data) {
+    var khuukhedBurtgekhButtonId = "khuukhedBurtgekhButtonId";
     const footer = [
       <Space>
         <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           type="primary"
-          id={mashinBurtgekhButtonId}
+          id={khuukhedBurtgekhButtonId}
           onClick={() => mashinref.current.khadgalya()}
         >
           {t("Хадгалах")}
@@ -270,8 +270,8 @@ function togloom1({ token }) {
       title: "",
       icon: <FileExcelOutlined />,
       content: (
-        <MashinBurtgel
-          mashinBurtgekhButtonId={mashinBurtgekhButtonId}
+        <KhuukhedBurtgel
+          khuukhedBurtgekhButtonId={khuukhedBurtgekhButtonId}
           ref={mashinref}
           token={token}
           onRefresh={onRefresh}
@@ -337,13 +337,14 @@ function togloom1({ token }) {
             data-aos-delay="300"
           >
             <div className="flex flex-row space-x-2 p-1 text-xs font-medium md:text-base">
-              {t("Тоглоомын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}₮
+              {t("Тоглоомын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}
+              ₮
             </div>
             <div className="space-x-2">
               <Button
                 type="primary"
                 icon={<PlusOutlined />}
-                onClick={() => mashinBurtgekh()}
+                onClick={() => khuukhedBurtgekh()}
               >
                 {t("нэмэх")}
               </Button>
