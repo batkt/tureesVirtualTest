@@ -193,18 +193,18 @@ function Tailan({ token }) {
           murutga.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
           murutga.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
           murutga.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
-          murutga.tulukhUdur = tmur.tulukhUdur || "";
+          murutga.tulukhUdur = tmur.tulukhUdur[0] || "";
           murutga.tuluv = tmur.tuluv || "";
           murutga.turul = tmur.turul || "";
           murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
-          murutga.utas = tmur.utas || 0;
+          murutga.utas = tmur.utas[0] || 0;
           murutga.zardluud = tmur.zardluud || 0;
 
         let mur = {};
         Object.entries(murutga).map((v) => {
           if (_.isObject(v[1]) || _.isArray(v[1])) murutga[v[0]] = "";
           else if (_.isNumber(v[1])) murutga[v[0]] = v[1];
-          else if (moment(v[1], moment.ISO_8601, true).isValid()) {
+          else if (moment(v[1], moment.ISO_8601, true).isValid() && murutga[v[0]].length > 10) {
             murutga[v[0]] = moment(v[1]).format("YYYY-MM-DD");
           }
           let key = t(converter(v[0]));
@@ -278,6 +278,7 @@ function Tailan({ token }) {
         <div className="">
           <Select
           allowClear 
+
           value={selectValue}
             style={{ minWidth: "11rem" }}
             placeholder="Тайлангийн загвар"
@@ -288,20 +289,18 @@ function Tailan({ token }) {
           >
             {zagvar.jagsaalt.map((mur) => (
               <Select.Option value={mur._id} key={mur._id}>
-                <div className="flex flex-row">
+                <div className="flex flex-row justify-between">
                   <Tooltip title={<div>{mur.ner}</div>}>
                   <div className="truncate">{mur.ner}</div>
                   </Tooltip>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      zagvarBurtgeye({...mur, object: table});
+                  {selectValue === mur._id && <div
+                    onClick={() => {
+                      zagvarBurtgeye({...mur, object: table});                      
                     }}
                     className="ml-auto rounded-md px-1 text-yellow-500 hover:bg-yellow-400 hover:text-white"
                   >
                     <EditOutlined />
-                  </div>
+                  </div>}
                   <Popconfirm
                     title="Гэрээний загвар устгах уу?"
                     okText="Тийм"
@@ -340,13 +339,13 @@ function Tailan({ token }) {
           </Select>          
         </div>
         <Button
-        className="bg-white"
+        className="bg-white dark:bg-gray-900"
           onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
         >
           Загвар бүртгэх
         </Button>
         <Button
-        className="bg-white"
+        className="bg-white dark:bg-gray-900"
           icon={<FileExcelOutlined />}
           onClick={() => {
             const { Excel } = require("antd-table-saveas-excel");
@@ -362,6 +361,9 @@ function Tailan({ token }) {
               .saveAs("Аналитик тайлан.xlsx");
           }}
         >Excel</Button>
+        {selectValue && (zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) && (
+          <Button onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})} className="bg-white dark:bg-gray-900">Хадгалах</Button>
+        )}
       </div>
       <div className="ag-theme-alpine col-span-12 overflow-auto" style={{height: "calc( 100vh - 12rem )"}}>
         {!SSR && !!PlotlyRenderers && (

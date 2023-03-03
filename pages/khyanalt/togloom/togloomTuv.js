@@ -3,19 +3,20 @@ import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import { Button, Card, DatePicker, message, Popover, Space, Table } from "antd";
 import {
+  CheckCircleOutlined,
+  DollarCircleOutlined,
   DownloadOutlined,
   DownOutlined,
   FileExcelOutlined,
+  PaperClipOutlined,
   PlusOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
-import useZogsool, { useZogsoolToololt } from "hooks/useZogsool";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
-import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useOrder from "tools/function/useOrder";
@@ -24,28 +25,12 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
 import { t } from "i18next";
+import useJagsaalt from "hooks/useJagsaalt";
+import { useToololt } from "hooks/useToololt";
+import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 
-function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
-  message.loading("Өгөгдөл боловсруулж байна та түр хүлээнэ!", 100000);
-  uilchilgee(token)
-    .get(service, {
-      params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
-    })
-    .then(({ data }) => {
-      const { Excel } = require("antd-table-saveas-excel");
-      const excel = new Excel();
-      excel
-        .addSheet(sheetName)
-        .addColumns(sheet)
-        .addDataSource(data?.jagsaalt)
-        .saveAs(sheetName + ".xlsx");
-    })
-    // .catch(aldaaBarigch)
-    .finally(() => message.destroy());
-}
-
-function togloom1({ token }) {
-  const { baiguullaga, barilgiinId } = useAuth();
+function togloom1() {  
+  const { token, baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
@@ -53,154 +38,148 @@ function togloom1({ token }) {
   ]);
   const mashinref = useRef(null);
   const [turul, setTurul] = useState(undefined);
+  const tulburRef = React.useRef(null)
 
-  const { zogsoolToololt, zogsoolToololtMutate } = useZogsoolToololt(
+  const { toololt, toololtMutate } = useToololt(
+    "/togloomiinToololtAvya",
     token,
     ognoo
   );
 
-  const zogsooliinMedeelel = useSWR(
-    ["/zogsooliinDunAvya", token, ognoo],
-    (url, token, ognoo) =>
-      uilchilgee(token)
-        .post(url, {
-          ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        })
-        .then((a) => a.data)
-    // .catch(aldaaBarigch)
+  const togloomiinDun = useToololt(
+    "/togloomiinDunAvya",
+    token,
+    ognoo
   );
-
-  const { order, onChangeTable } = useOrder({ check_in_time: -1 });
+  const { order, onChangeTable } = useOrder({ ognoo: -1 });
 
   const query = useMemo(() => {
     return {
-      check_in_time: ognoo
+      ognoo: ognoo
         ? {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
-      turul: turul === "Үйлчлүүлэгч" ? null : turul,
     };
   }, [ognoo, turul]);
 
-  const { zogsoolGaralt, setZogsoolKhuudaslalt, zogsoolMutate, isValidating } =
-    useZogsool(token, baiguullaga?._id, query, order);
+  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query);
 
-  const toololt = useMemo(
+  const toololtGaralt = useMemo(
     () => [
       {
         name: "Нийт",
-        too: formatNumber(zogsoolToololt?.find((a) => a._id === null)?.too, 0),
+        too: toololt?.reduce((a, b) => a + b?.too, 0),
       },
       {
         name: "Идвэхтэй",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Түрээслэгч")?.too,
+          toololt?.find((a) => a._id === "Түрээслэгч")?.too,
           0
         ),
       },
       {
         name: "Сунгасан",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Гэрээт")?.too,
+          toololt?.find((a) => a._id === "Гэрээт")?.too,
           0
         ),
       },
       {
         name: "Цуцалсан",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Дотоод")?.too,
+          toololt?.find((a) => a._id === "Дотоод")?.too,
           0
         ),
       },
     ],
-    [zogsoolToololt, zogsoolGaralt]
+    [toololt]
   );
 
   function onRefresh() {
-    zogsoolToololtMutate();
-    zogsoolMutate();
+    toololtMutate();
+    togloominTuviinGaralt.mutate()
   }
 
-  function mashinOruulakhExcel() {
-    const footer = [
-      <Space>
-        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
-        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
-          {t("Хадгалах")}
-        </Button>
-      </Space>,
-    ];
+  function tulburTulyu(data) {
     modal({
-      title: "",
-      icon: <FileExcelOutlined />,
+      title: (
+        <div className="w-full flex flex-row justify-between">
+          <div>Тооцоо хийх</div>
+          <div className="mr-5">{data.ner}</div>
+        </div>
+      ),
       content: (
-        <ExceleesOruulakh
-          ref={excelref}
+        <Tulbur
+          ref={tulburRef}
+          data={data}
           token={token}
-          onFinish={onRefresh}
-          barilgiinId={barilgiinId}
-          zam="mashiniiExcelTatya"
-          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
-          tailbar="Машины мэдээлэл оруулах excel файл"
-          zagvariinZam="mashiniiExcelAvya"
+          baiguullaga={baiguullaga}
         />
       ),
-      footer,
+      footer: false,
     });
   }
+
   const columns = useMemo(() => {
-    const col = [
+    return [
       {
         title: "№",
         align: "center",
         dataIndex: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
-          (zogsoolGaralt?.khuudasniiDugaar || 0) *
-            (zogsoolGaralt?.khuudasniiKhemjee || 0) -
-          (zogsoolGaralt?.khuudasniiKhemjee || 0) +
+          (togloominTuviinGaralt?.khuudasniiDugaar || 0) *
+            (togloominTuviinGaralt?.khuudasniiKhemjee || 0) -
+          (togloominTuviinGaralt?.khuudasniiKhemjee || 0) +
           index +
           1,
       },
       {
-        title: t("Нэр"),
+        title: t("Овог"),
         align: "center",
-        dataIndex: "car_number",
+        dataIndex: "ovog",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
-    ];
-    if (turul === "Түрээслэгч") {
-      col.push({
-        title: t("Талбай"),
-        align: "center",
-        dataIndex: "mashin",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render(m) {
-          return m?.ezemshigchiinTalbainDugaar;
-        },
-      });
-      col.push({
-        title: t("Гэрээ"),
-        align: "center",
-        dataIndex: "mashin",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render(m) {
-          return m?.gereeniiDugaar;
-        },
-      });
-    }
-    return [
-      ...col,
       {
-        title: t("Орсон"),
+        title: t("Нэр"),
         align: "center",
-        dataIndex: "check_in_time",
+        dataIndex: "ner",
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Нас"),
+        align: "center",
+        dataIndex: "nas",
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Хүйс"),
+        align: "center",
+        dataIndex: "khuis",
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
+      },
+      {
+        title: t("Хугацаа /мин/"),
+        align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        dataIndex: "khugatsaa",
+      },
+      {
+        title: t("Эхлэх цаг"),
+        align: "center",
+        dataIndex: "ekhlekhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v) {
@@ -208,9 +187,9 @@ function togloom1({ token }) {
         },
       },
       {
-        title: t("Гарсан"),
+        title: t("Дуусах цаг"),
         align: "center",
-        dataIndex: "check_out_time",
+        dataIndex: "duusakhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v) {
@@ -218,22 +197,80 @@ function togloom1({ token }) {
         },
       },
       {
-        title: t("Хугацаа"),
+        width: "10rem",
+        title: "Төлбөр",
         align: "center",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "khugatsaa",
-      },
-      {
-        title: t("Төлбөр"),
-        align: "right",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "tulbur",
-        render(v) {
-          return formatNumber(v);
+        ellipsis: true,
+        render: (data) => {
+          return (
+            (data?.tulburTulsunEsekh !== true ||
+              data?.ebarimtAvsanEsekh !== true) ? (
+              <div className="flex justify-center">
+                <Button
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor:
+                    data?.tulburTulsunEsekh !== true ? "#FF8505" : "#253985",
+                  }}
+                  // type={`${data?.tulbur === [] ? "primary" : "warning"}`}
+                  size="small"
+                  // danger={data?.tuluv === "3"}
+                  // icon={<DollarCircleOutlined className="text-white" />}
+                  onClick={() => tulburTulyu(data)}
+                >
+                  {data?.tulburTulsunEsekh !== true ? (
+                    <div className="text-white flex  justify-center items-center space-x-2">
+                      <div className="flex justify-center items-center">
+                        <DollarCircleOutlined />
+                      </div>
+                      <div className="flex justify-center items-center">
+                        Төлбөр
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-white flex  justify-center items-center space-x-2 ">
+                      <div className="flex justify-center items-center">
+                        <PaperClipOutlined />
+                      </div>
+                      <div className="flex justify-center items-center">
+                        И-Баримт
+                      </div>
+                    </div>
+                  )}
+                </Button>
+              </div>
+            )
+            : (
+              <div className="flex justify-center">
+                <Button
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#0CB20C",
+                    
+                  }}
+                  // type={`${data?.tulbur === [] ? "primary" : "warning"}`}
+                  size="small"
+                  // danger={data?.tuluv === "3"}
+                  // icon={<DollarCircleOutlined className="text-white" />}
+                >
+                    <div className="text-white flex  justify-center items-center space-x-2">
+                      <div className="flex justify-center items-center">
+                      <CheckCircleOutlined />
+                      </div>
+                      <div className="flex justify-center items-center">
+                    Дууссан
+                      </div>
+                    </div>
+                </Button>
+              </div>
+            )
+          );
         },
-      },
+      },      
     ];
   }, [turul]);
 
@@ -241,17 +278,6 @@ function togloom1({ token }) {
     Aos.init({ once: true });
   });
 
-  function excelTatakh() {
-    excelTatajAvya(
-      token,
-      "/zogsool",
-      zogsoolGaralt.niitMur,
-      columns,
-      query,
-      order,
-      "Зогсоол"
-    );
-  }
   function khuukhedBurtgekh(data) {
     var khuukhedBurtgekhButtonId = "khuukhedBurtgekhButtonId";
     const footer = [
@@ -291,7 +317,7 @@ function togloom1({ token }) {
     >
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
-          {toololt.map((a, i) => (
+          {toololtGaralt.map((a, i) => (
             <div
               key={i}
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
@@ -337,7 +363,7 @@ function togloom1({ token }) {
             data-aos-delay="300"
           >
             <div className="flex flex-row space-x-2 p-1 text-xs font-medium md:text-base">
-              {t("Тоглоомын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}
+              {t("Тоглоомын орлого")} : {togloomiinDun.toololt?.reduce((a, b) => a + b.too, 0) || 0}
               ₮
             </div>
             <div className="space-x-2">
@@ -347,37 +373,7 @@ function togloom1({ token }) {
                 onClick={() => khuukhedBurtgekh()}
               >
                 {t("нэмэх")}
-              </Button>
-              <Popover
-                content={() => (
-                  <div className="flex w-32 flex-col space-y-2">
-                    <a
-                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                      onClick={mashinOruulakhExcel}
-                    >
-                      <UploadOutlined style={{ fontSize: "18px" }} />
-                      <label>{t("Оруулах")}</label>
-                    </a>
-                    <a
-                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                      onClick={excelTatakh}
-                    >
-                      <DownloadOutlined style={{ fontSize: "18px" }} />
-                      <label>{t("Татах")}</label>
-                    </a>
-                  </div>
-                )}
-                placement="bottom"
-                trigger="click"
-              >
-                <Button
-                  type="primary"
-                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-                >
-                  <span>Excel</span>
-                  <DownOutlined width={5} />
-                </Button>
-              </Popover>
+              </Button>              
             </div>
           </div>
         </div>
@@ -389,9 +385,7 @@ function togloom1({ token }) {
         >
           <Table
             className="mt-8 hidden overflow-auto md:block"
-            tableLayout="auto"
-            loading={!zogsoolGaralt}
-            dataSource={zogsoolGaralt?.jagsaalt}
+            dataSource={togloominTuviinGaralt?.jagsaalt}
             scroll={{ y: "calc(100vh - 30rem)" }}
             size="small"
             bordered
@@ -399,9 +393,9 @@ function togloom1({ token }) {
             columns={columns}
             onChange={onChangeTable}
             pagination={{
-              current: zogsoolGaralt?.khuudasniiDugaar,
-              pageSize: zogsoolGaralt?.khuudasniiKhemjee,
-              total: zogsoolGaralt?.niitMur,
+              current: togloominTuviinGaralt?.khuudasniiDugaar,
+              pageSize: togloominTuviinGaralt?.khuudasniiKhemjee,
+              total: togloominTuviinGaralt?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 setZogsoolKhuudaslalt((kh) => ({
@@ -415,7 +409,7 @@ function togloom1({ token }) {
             cardListTuluv={"utas"}
             keyValue="uilchluulegch"
             className="block overflow-auto md:hidden"
-            jagsaalt={zogsoolGaralt?.jagsaalt}
+            jagsaalt={togloominTuviinGaralt?.jagsaalt}
             Component={UilchluulegchTile}
           />
         </div>

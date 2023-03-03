@@ -1,21 +1,24 @@
-import React, { useImperativeHandle, useState } from "react";
+import React, { useEffect, useImperativeHandle, useState } from "react";
 import { Form, Input, message, Select, TimePicker, InputNumber } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
+import moment from "moment"
 
 function TsagBurtgel(
-  { data, barilgiinId, token, destroy, onRefresh, mashinBurtgekhButtonId },
+  { data, barilgiinId, token, destroy, onRefresh },
   ref
 ) {
   const [form] = Form.useForm();
+  const [tsag, setTsag] = useState({ekhlekhtsag: moment(Date.now()), duusakhTsag: undefined})
 
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
         const data = form.getFieldsValue();
+        data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00")
         data.barilgiinId = barilgiinId;
         const method = data?._id ? updateMethod : createMethod;
         method("togloomiinTuv", token, data).then(({ data }) => {
@@ -30,8 +33,17 @@ function TsagBurtgel(
         destroy();
       },
     }),
-    [form, {}]
+    [form, tsag, {}]
   );
+
+  function khugatsaaTootsoloy(khugatsaa) {
+    setTsag({ekhlekhtsag: moment(Date.now()), duusakhTsag: moment(Date.now()).add(khugatsaa, "minute")})
+  }
+
+  useEffect(()=> {
+    form.setFieldValue("ekhlekhTsag", tsag.ekhlekhtsag);
+    form.setFieldValue("duusakhTsag", tsag.duusakhTsag)
+  },[tsag])
 
   return (
     <Form
@@ -49,8 +61,8 @@ function TsagBurtgel(
       </Form.Item>
       <Form.Item label="Хүйс" name="khuis">
         <Select placeholder="Эрэгтэй">
-          {["Эрэгтэй", "Эмэгтэй"].map((a) => (
-            <Select.Option value={a}>{t(a)}</Select.Option>
+          {[{utga:"Эрэгтэй", v:1}, {utga:"Эмэгтэй", v:0}].map((a) => (
+            <Select.Option key={a.v} value={a.v}>{t(a.utga)}</Select.Option>
           ))}
         </Select>
       </Form.Item>
@@ -61,13 +73,13 @@ function TsagBurtgel(
         <Input placeholder="Утас" autoComplete="off" />
       </Form.Item>
       <Form.Item label="Тоглох цаг /Мин/" name="khugatsaa">
-        <Input placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
+        <InputNumber className="w-40" onChange={(v)=> khugatsaaTootsoloy(v)} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Эхлэх цаг" name="ekhlekhOgnoo">
-        <Input placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
+      <Form.Item label="Эхлэх цаг" name="ekhlekhTsag">
+        <TimePicker value={tsag.ekhlekhtsag} className="w-40" onChange={(v)=> setTsag({...tsag, ekhlekhtsag:v})} showSecond={false} placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Дуусах цаг" name="duusakhOgnoo">
-        <Input placeholder="Дуусах цаг /Мин/ " autoComplete="off" />
+      <Form.Item label="Дуусах цаг" name="duusakhTsag">
+        <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v)=> setTsag({...tsag, duusakhTsag:v})} autoComplete="off" />
       </Form.Item>
     </Form>
   );

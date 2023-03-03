@@ -828,7 +828,7 @@ const khuudasnuud = [
   //     {
   //       ner: "Тоглоомын төв",
   //       khuudasniiNer: "togloomTuv",
-  //       href: "/khyanalt/togloom/togloom1",
+  //       href: "/khyanalt/togloom/togloomTuv",
   //       icon: <TbLego style={{ width: "24", height: "24" }} />,
   //     },
   //   ],
