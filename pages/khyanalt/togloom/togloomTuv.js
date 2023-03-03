@@ -33,8 +33,8 @@ function togloom1() {
   const { token, baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
-    moment().startOf("month"),
-    moment().endOf("month"),
+    moment(),
+    moment(),
   ]);
   const mashinref = useRef(null);
   const [turul, setTurul] = useState(undefined);
@@ -73,26 +73,19 @@ function togloom1() {
         too: toololt?.reduce((a, b) => a + b?.too, 0),
       },
       {
-        name: "Идвэхтэй",
+        name: "Тоглож байгаа",
         too: formatNumber(
           toololt?.find((a) => a._id === "Түрээслэгч")?.too,
           0
         ),
       },
       {
-        name: "Сунгасан",
+        name: "Цаг дууссан",
         too: formatNumber(
           toololt?.find((a) => a._id === "Гэрээт")?.too,
           0
         ),
-      },
-      {
-        name: "Цуцалсан",
-        too: formatNumber(
-          toololt?.find((a) => a._id === "Дотоод")?.too,
-          0
-        ),
-      },
+      },      
     ],
     [toololt]
   );
@@ -107,7 +100,7 @@ function togloom1() {
       title: (
         <div className="w-full flex flex-row justify-between">
           <div>Тооцоо хийх</div>
-          <div className="mr-5">{data.ner}</div>
+          <div className="mr-5">{data?.ovog.charAt(0)}.{data?.ner}</div>
         </div>
       ),
       content: (
@@ -172,6 +165,7 @@ function togloom1() {
       {
         title: t("Хугацаа /мин/"),
         align: "center",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "khugatsaa",
@@ -179,6 +173,7 @@ function togloom1() {
       {
         title: t("Эхлэх цаг"),
         align: "center",
+        width: "10rem",
         dataIndex: "ekhlekhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -189,11 +184,23 @@ function togloom1() {
       {
         title: t("Дуусах цаг"),
         align: "center",
+        width: "10rem",
         dataIndex: "duusakhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v) {
           return v && moment(v).format("YYYY-MM-DD HH:mm");
+        },
+      },
+      {
+        title: "Нийт дүн",
+        align: "center",
+        width: "10rem",
+        dataIndex: "niitDun",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        render(v) {
+          return v && formatNumber(v);
         },
       },
       {
@@ -220,7 +227,7 @@ function togloom1() {
                   // icon={<DollarCircleOutlined className="text-white" />}
                   onClick={() => tulburTulyu(data)}
                 >
-                  {data?.tulburTulsunEsekh !== true ? (
+                  {data?.tuluv === 0 ? (
                     <div className="text-white flex  justify-center items-center space-x-2">
                       <div className="flex justify-center items-center">
                         <DollarCircleOutlined />
@@ -320,7 +327,7 @@ function togloom1() {
           {toololtGaralt.map((a, i) => (
             <div
               key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 lg:col-span-3 ${
+              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 ${
                 a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
               onClick={() => setTurul(a.name)}
@@ -352,6 +359,7 @@ function togloom1() {
             <DatePicker.RangePicker
               className="w-full md:w-auto"
               size="middle"
+              allowClear={false}
               value={ognoo}
               onChange={setOgnoo}
             />

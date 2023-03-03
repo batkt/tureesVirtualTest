@@ -192,7 +192,7 @@ function Tulbur(
                 data?.niitDun -
                 tulbur
                   .filter((a) => a.turul !== "khariult")
-                  .reduce((a, b) => a + b.dun, 0)
+                  .reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
             </div>

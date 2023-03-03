@@ -2,7 +2,6 @@ import React, { useEffect, useImperativeHandle, useState } from "react";
 import { Form, Input, message, Select, TimePicker, InputNumber } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import moment from "moment"
 
@@ -71,6 +70,9 @@ function TsagBurtgel(
       </Form.Item>
       <Form.Item label="Утас" name="utas">
         <Input placeholder="Утас" autoComplete="off" />
+      </Form.Item>
+      <Form.Item label="Дүн" name="niitDun">
+        <InputNumber placeholder="Дүн" min="1" className="w-40" />
       </Form.Item>
       <Form.Item label="Тоглох цаг /Мин/" name="khugatsaa">
         <InputNumber className="w-40" onChange={(v)=> khugatsaaTootsoloy(v)} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
