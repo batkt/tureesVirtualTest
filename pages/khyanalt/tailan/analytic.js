@@ -268,7 +268,8 @@ function Tailan({ token }) {
       className="p-0 md:p-4"
       tsonkhniiId={"630448aaa612b4cdd5f1fc08"}
     >
-      <div className="col-span-12 flex flex-col items-center gap-3 md:flex-row">
+      <div className="col-span-12 flex flex-col justify-between items-center gap-3 md:flex-row">
+        <div className=" flex gap-3">
         <DatePicker.RangePicker
           className="w-full md:w-auto"
           locale={locale}
@@ -292,23 +293,38 @@ function Tailan({ token }) {
                 <div className="flex flex-row justify-between">
                   <Tooltip title={<div>{mur.ner}</div>}>
                   <div className="truncate">{mur.ner}</div>
-                  </Tooltip>
-                  {selectValue === mur._id && <div
-                    onClick={() => {
-                      zagvarBurtgeye({...mur, object: table});                      
-                    }}
-                    className="ml-auto rounded-md px-1 text-yellow-500 hover:bg-yellow-400 hover:text-white"
-                  >
-                    <EditOutlined />
-                  </div>}
-                  <Popconfirm
+                  </Tooltip>                  
+                </div>
+              </Select.Option>
+            ))}
+          </Select>          
+        </div>
+        {!selectValue ? <Button
+        icon={<PlusOutlined/>}
+        className="bg-white dark:bg-gray-900"
+          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
+        >
+          Загвар бүртгэх
+        </Button>
+        : (
+          <div className="flex items-center gap-3">
+            <div className="font-medium">Сонгогдсон загвар:</div>
+          <Button className={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) ? "bg-white dark:bg-gray-900 group hover:bg-yellow-100 hover:text-black" : "bg-green-600 hover:bg-green-500 group dark:hover:bg-green-100 text-white hover:text-white"} 
+          icon={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) && <div            
+            className="rounded-md pr-1 text-yellow-500 group-hover:text-black"
+          >
+            <EditOutlined />
+          </div>} onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})}>
+            {(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) 
+            ?"Хадгалах" : "Засах"}</Button>
+            <Popconfirm
                     title="Гэрээний загвар устгах уу?"
                     okText="Тийм"
                     cancelText="Үгүй"
                     onConfirm={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      deleteMethod("tailangiinZagvar", token, mur._id).then(
+                      deleteMethod("tailangiinZagvar", token, zagvar.jagsaalt.find((a) => a._id === selectValue)?._id).then(
                         ({data}) => {
                           if (data === "Amjilttai") {
                             notification.success({
@@ -322,28 +338,18 @@ function Tailan({ token }) {
                         }
                       );
                     }}
-                  >
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="ml-1 rounded-md px-1 text-red-500 hover:bg-red-400 hover:text-white"
+                  >                    
+                    <Button className="bg-white dark:bg-gray-900 group hover:bg-red-400 hover:text-white" icon={<div
+                      className="rounded-md pr-1 text-red-500 group-hover:text-white"
                     >
-                      <DeleteOutlined />
-                    </div>
+                      <DeleteOutlined />                      
+                    </div>}>Устгах</Button>
                   </Popconfirm>
-                </div>
-              </Select.Option>
-            ))}
-          </Select>          
+            
+            </div>
+        )}
         </div>
-        <Button
-        className="bg-white dark:bg-gray-900"
-          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
-        >
-          Загвар бүртгэх
-        </Button>
+        <div>
         <Button
         className="bg-white dark:bg-gray-900"
           icon={<FileExcelOutlined />}
@@ -360,10 +366,8 @@ function Tailan({ token }) {
               .addDataSource(data)
               .saveAs("Аналитик тайлан.xlsx");
           }}
-        >Excel</Button>
-        {selectValue && (zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) && (
-          <Button onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})} className="bg-white dark:bg-gray-900">Хадгалах</Button>
-        )}
+        >Excel татах</Button>
+        </div>        
       </div>
       <div className="ag-theme-alpine col-span-12 overflow-auto" style={{height: "calc( 100vh - 12rem )"}}>
         {!SSR && !!PlotlyRenderers && (
