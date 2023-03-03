@@ -275,8 +275,9 @@ function Tailan({ token }) {
           locale={locale}
           value={ognoo}
           onChange={setOgnoo}
-        />
-        <div className="">
+        />        
+        <div className="flex gap-3 items-center">
+        {!!selectValue && <div className="font-medium">Сонгогдсон загвар:</div>}
           <Select
           allowClear 
 
@@ -307,17 +308,8 @@ function Tailan({ token }) {
           Загвар бүртгэх
         </Button>
         : (
-          <div className="flex items-center gap-3">
-            <div className="font-medium">Сонгогдсон загвар:</div>
-          <Button className={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) ? "bg-white dark:bg-gray-900 group hover:bg-yellow-100 hover:text-black" : "bg-green-600 hover:bg-green-500 group dark:hover:bg-green-100 text-white hover:text-white"} 
-          icon={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) && <div            
-            className="rounded-md pr-1 text-yellow-500 group-hover:text-black"
-          >
-            <EditOutlined />
-          </div>} onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})}>
-            {(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) 
-            ?"Хадгалах" : "Засах"}</Button>
-            <Popconfirm
+          <div className="flex items-center gap-3">      
+          <Popconfirm
                     title="Гэрээний загвар устгах уу?"
                     okText="Тийм"
                     cancelText="Үгүй"
@@ -344,7 +336,16 @@ function Tailan({ token }) {
                     >
                       <DeleteOutlined />                      
                     </div>}>Устгах</Button>
-                  </Popconfirm>
+                  </Popconfirm>      
+          <Button className={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) ? "bg-white dark:bg-gray-900 group hover:bg-yellow-100 hover:text-black" : "bg-green-600 hover:bg-green-500 group dark:hover:bg-green-100 text-white hover:text-white"} 
+          icon={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) && <div            
+            className="rounded-md pr-1 text-yellow-500 group-hover:text-black"
+          >
+            <EditOutlined />
+          </div>} onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})}>
+            {(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) 
+            ?"Хадгалах" : "Засах"}</Button>
+            
             
             </div>
         )}
