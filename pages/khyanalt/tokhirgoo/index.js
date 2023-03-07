@@ -24,6 +24,8 @@ import Baaz from "components/pageComponents/tokhirgoo/Baaz";
 import { DatabaseOutlined, HistoryOutlined } from "@ant-design/icons";
 import NevtreltiinTuukh from "components/pageComponents/tokhirgoo/NevtreltiinTuukh";
 import { useTranslation } from "react-i18next";
+import TogloominTuv from "components/pageComponents/tokhirgoo/TogloominTuv";
+import { TbLego } from "react-icons/tb";
 
 function AjiltanBurtgel({ token }) {
   const { t } = useTranslation()
@@ -354,6 +356,15 @@ function AjiltanBurtgel({ token }) {
           ),
           text: "Нэвтрэлтийн түүх",
           tsonkh: NevtreltiinTuukh
+        },
+        {
+          icon: (
+            <div className="flex text-base mr-2 items-center justify-center">
+            <TbLego/>
+            </div>
+          ),
+          text: "Тоглоомын төв",
+          tsonkh: TogloominTuv
         },
         // {
         //   icon: (

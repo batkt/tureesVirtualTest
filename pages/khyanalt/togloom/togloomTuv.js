@@ -1,15 +1,17 @@
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, message, Popover, Space, Table } from "antd";
+import { Button, Card, DatePicker, Input, message, Popconfirm, Popover, Space, Table } from "antd";
 import {
   CheckCircleOutlined,
   DollarCircleOutlined,
   DownloadOutlined,
   DownOutlined,
   FileExcelOutlined,
+  MoreOutlined,
   PaperClipOutlined,
   PlusOutlined,
+  SettingOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
@@ -28,6 +30,83 @@ import { t } from "i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useToololt } from "hooks/useToololt";
 import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
+import TextArea from "antd/lib/input/TextArea";
+
+const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
+  const [shaltgaan, setTsutsalsanShaltgaan] = useState("");
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        confirm(shaltgaan);
+        destroy();
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [shaltgaan]
+  );
+  return (
+    <div>
+      <Input.TextArea
+        value={shaltgaan}
+        onChange={({ target }) => setTsutsalsanShaltgaan(target?.value)}
+      />
+    </div>
+  );
+});
+
+function DuusakhTsagAvii({v}) {
+  const tsagTootsoolur = () => {
+    const today = moment(new Date()).format("YYYYMMDD");
+    const duusakhUdur = moment(v).format("YYYYMMDD");
+    const odooginTsag = Number(moment(new Date()).format("HH")) * 60 * 60 + Number(moment(new Date()).format("mm")) * 60 + Number(moment(new Date()).format("ss"));
+    const duusakhTsag = Number(moment(v).format("HH")) * 60 * 60 + Number(moment(v).format("mm")) * 60 + Number(moment(v).format("ss"))
+    
+    const difference = duusakhTsag - odooginTsag;
+    let timeLeft = "Дууссан";
+    if (Number(today) <= Number(duusakhUdur)) {
+    if (difference > 0) {      
+      var tsag = Math.floor(difference / 60 / 60)
+      var minut = Math.floor((difference - (tsag * 60 * 60)) / 60)
+      var second = Math.floor((difference - (tsag * 60 * 60) - (minut * 60)))
+      timeLeft = {
+        hours: tsag,
+        minutes: minut,
+        seconds: second,
+      };
+    }
+    }
+
+    return timeLeft;
+  };
+
+  function FormatNumberLength(num, length) {
+    var r = "" + num;
+    while (r.length < length) {
+      r = "0" + r;
+    }
+    return r;
+  }
+
+  const [timeLeft, setTimeLeft] = useState("Тооцоолж байна");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeLeft(tsagTootsoolur());
+    }, 1000);
+  });
+
+  if (timeLeft === "Тооцоолж байна") {
+   return <div className="animate-pulse">Тооцоолж байна</div> 
+  } else if (timeLeft === "Дууссан") {
+    return <div>Дууссан</div>
+  } else
+  return (
+    <div>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
+  )
+}
 
 function togloom1() {  
   const { token, baiguullaga, barilgiinId } = useAuth();
@@ -53,6 +132,38 @@ function togloom1() {
   );
   const { order, onChangeTable } = useOrder({ ognoo: -1 });
 
+  function tsutslakh(data) {
+    console.log(token)
+    const footer = [
+      <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
+        {t("Устгах")}
+      </Button>,
+    ];
+    modal({
+      title: "Цуцлах шалтгаан",
+      content: (
+        <TsutsalsanShaltgaan
+          ref={tailbarRef}
+          confirm={(shaltgaan) =>
+            uilchilgee(token)
+              .post("/togloomTsutslaya", {
+                id: data._id,
+                shaltgaan,
+              })
+              .then(({ data }) => {
+                if (data === "Amjilttai") {
+                  message.success("Цуцлагдлаа");
+                }
+              })
+              .finally(() => onRefresh())
+          }
+        />
+      ),
+      footer,
+    });
+  }
+
   const query = useMemo(() => {
     return {
       ognoo: ognoo
@@ -65,24 +176,39 @@ function togloom1() {
   }, [ognoo, turul]);
 
   const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query);
+  const tailbarRef = React.useRef(null)
 
   const toololtGaralt = useMemo(
     () => [
       {
         name: "Нийт",
-        too: toololt?.reduce((a, b) => a + b?.too, 0),
+        too: toololt?.length > 0 && (toololt[0]?.tsutsalsan + toololt[0]?.tulsun + toololt[0]?.tuluugui)
       },
       {
-        name: "Тоглож байгаа",
+        name: "Эхэлсэн",
         too: formatNumber(
-          toololt?.find((a) => a._id === "Түрээслэгч")?.too,
+          toololt?.length > 0 && toololt[0]?.ekhlesen,
           0
         ),
       },
       {
-        name: "Цаг дууссан",
+        name: "Цуцалсан",
         too: formatNumber(
-          toololt?.find((a) => a._id === "Гэрээт")?.too,
+          toololt?.length > 0 && toololt[0]?.tsutsalsan,
+          0
+        ),
+      },
+      {
+        name: "Төлсөн",
+        too: formatNumber(
+          toololt?.length > 0 && toololt[0]?.tulsun,
+          0
+        ),
+      },
+      {
+        name: "Төлөөгүй",
+        too: formatNumber(
+          toololt?.length > 0 && toololt[0].tuluugui,
           0
         ),
       },      
@@ -93,14 +219,14 @@ function togloom1() {
   function onRefresh() {
     toololtMutate();
     togloominTuviinGaralt.mutate()
-  }
+  }  
 
   function tulburTulyu(data) {
     modal({
       title: (
         <div className="w-full flex flex-row justify-between">
           <div>Тооцоо хийх</div>
-          <div className="mr-5">{data?.ovog.charAt(0)}.{data?.ner}</div>
+          <div className="mr-5">{data?.ovog?.charAt(0)}.{data?.ner}</div>
         </div>
       ),
       content: (
@@ -135,7 +261,6 @@ function togloom1() {
         dataIndex: "ovog",
         width: "10rem",
         showSorterTooltip: false,
-        sorter: () => 0,
       },
       {
         title: t("Нэр"),
@@ -177,7 +302,7 @@ function togloom1() {
         dataIndex: "ekhlekhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
-        render(v) {
+        render:(v) => {
           return moment(v).format("YYYY-MM-DD HH:mm");
         },
       },
@@ -188,8 +313,8 @@ function togloom1() {
         dataIndex: "duusakhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
-        render(v) {
-          return v && moment(v).format("YYYY-MM-DD HH:mm");
+        render:(v) => {
+          return v && <DuusakhTsagAvii v={v}/>;
         },
       },
       {
@@ -199,7 +324,7 @@ function togloom1() {
         dataIndex: "niitDun",
         showSorterTooltip: false,
         sorter: () => 0,
-        render(v) {
+        render:(v) => {
           return v && formatNumber(v);
         },
       },
@@ -277,9 +402,48 @@ function togloom1() {
             )
           );
         },
-      },      
+      },
+      {
+        title: () => <SettingOutlined />,
+        ellipsis: true,
+        width: "3rem",
+        align: "center",
+        render: (data) => (
+          <div className="flex flex-row justify-center">
+            <Popover
+              placement="bottom"
+              trigger="click"
+              content={() => (
+                <div className="flex flex-col space-y-2">
+                  <Popconfirm
+                    disabled={data?.tuluv === - 1}
+                    title={`Та цуцлахдаа итгэлтэй байна уу?`}
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={() => tsutslakh(data)}
+                  >
+                    <div
+                      className={`text-md cursor-pointer rounded-full bg-${
+                        -1 === data?.tuluv
+                          ? "blue"
+                          : "yellow"
+                      }-500 py-1 px-3 font-medium text-gray-50`}
+                    >
+                      {-1 === data?.tuluv ? t("Цуцлагдсан") : t("Цуцлах")}
+                    </div>
+                  </Popconfirm>
+                </div>
+              )}
+            >
+              <a className=" flex items-center justify-center  hover:scale-150">
+                <MoreOutlined style={{ fontSize: "18px" }} />
+              </a>
+            </Popover>
+          </div>
+        ),
+      },     
     ];
-  }, [turul]);
+  }, [turul, token]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -300,7 +464,7 @@ function togloom1() {
       </Space>,
     ];
     modal({
-      title: "",
+      title: "Хүүхдийн цаг бүртгэл",
       icon: <FileExcelOutlined />,
       content: (
         <KhuukhedBurtgel
@@ -323,11 +487,11 @@ function togloom1() {
       className="p-0 md:p-4"
     >
       <Card size="small" className="col-span-12 overflow-auto">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-10">
           {toololtGaralt.map((a, i) => (
             <div
               key={i}
-              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-4 ${
+              className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-2 ${
                 a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
               onClick={() => setTurul(a.name)}
