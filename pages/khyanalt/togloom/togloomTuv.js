@@ -179,6 +179,7 @@ function togloom1() {
   const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query);
   const tailbarRef = React.useRef(null)
 
+
   const toololtGaralt = useMemo(
     () => [
       {
@@ -622,7 +623,7 @@ function togloom1() {
               total: togloominTuviinGaralt?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setZogsoolKhuudaslalt((kh) => ({
+                togloominTuviinGaralt.setKhuudaslalt((kh) => ({
                   ...kh,
                   khuudasniiDugaar,
                   khuudasniiKhemjee,
