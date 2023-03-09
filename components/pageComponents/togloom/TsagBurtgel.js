@@ -39,6 +39,9 @@ function TsagBurtgel(
 
   function onFinish(formData) {
     const data = formData;
+    if (!data.turul) {
+      data.turul= "Үйлчлүүлэгч"
+    }
         data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00")
         data.barilgiinId = barilgiinId;
         const method = data?._id ? updateMethod : createMethod;
@@ -131,6 +134,12 @@ function TsagBurtgel(
       </Form.Item>
       <Form.Item  label="Дүн" name="niitDun">
         <InputNumber disabled={true} placeholder="Дүн" min="1" className="w-40" />
+      </Form.Item>
+      <Form.Item  label="Төрөл" name="turul">
+        <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
+          <Select.Option key={"Үйлчлүүлэгч"}>Үйлчлүүлэгч</Select.Option>
+          <Select.Option key={"Гишүүн"}>Гишүүн</Select.Option>
+        </Select>
       </Form.Item>
     </Form>
   );

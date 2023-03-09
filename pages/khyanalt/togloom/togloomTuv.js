@@ -109,14 +109,15 @@ function DuusakhTsagAvii({v}) {
 }
 
 function togloom1() {  
-  const { token, baiguullaga, barilgiinId } = useAuth();
+  const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+ 
   const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
     moment(),
     moment(),
   ]);
   const mashinref = useRef(null);
-  const [turul, setTurul] = useState(undefined);
+  const [turul, setTurul] = useState({a: "tuluv", b: undefined});
   const tulburRef = React.useRef(null)
 
   const { toololt, toololtMutate } = useToololt(
@@ -133,7 +134,6 @@ function togloom1() {
   const { order, onChangeTable } = useOrder({ ognoo: -1 });
 
   function tsutslakh(data) {
-    console.log(token)
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
@@ -172,6 +172,7 @@ function togloom1() {
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
         : undefined,
+      [turul.a]: turul.b,
     };
   }, [ognoo, turul]);
 
@@ -182,35 +183,68 @@ function togloom1() {
     () => [
       {
         name: "Нийт",
-        too: toololt?.length > 0 && (toololt[0]?.tsutsalsan + toololt[0]?.tulsun + toololt[0]?.tuluugui)
+        too: toololt?.length > 0 && (toololt[0]?.tsutsalsan + toololt[0]?.tulsun + toololt[0]?.tuluugui + toololt[0]?.ekhlesen),
+        shuult: {a: "tuluv", b: undefined}
       },
       {
         name: "Эхэлсэн",
         too: formatNumber(
-          toololt?.length > 0 && toololt[0]?.ekhlesen,
+          toololt?.length > 0 ? toololt[0]?.ekhlesen: 0,
           0
         ),
+        shuult: {a: "$and", b:  [
+          {
+            ekhlekhTsag:{$lte:new Date()}
+          },
+          {
+            duusakhTsag:{$gt: new Date()}
+          },
+        ],}
       },
       {
         name: "Цуцалсан",
         too: formatNumber(
-          toololt?.length > 0 && toololt[0]?.tsutsalsan,
+          toololt?.length > 0 ? toololt[0]?.tsutsalsan : 0,
           0
         ),
+        shuult: {a: "tuluv", b: -1}
       },
       {
         name: "Төлсөн",
         too: formatNumber(
-          toololt?.length > 0 && toololt[0]?.tulsun,
+          toololt?.length > 0 ? toololt[0]?.tulsun : 0,
           0
         ),
+        shuult: {a: "$and", b: [
+          {
+            duusakhTsag: {$lte: new Date()},
+          },
+          {
+            tulburTulsunEsekh: {$eq: true},
+          },
+        ],}
       },
       {
         name: "Төлөөгүй",
         too: formatNumber(
-          toololt?.length > 0 && toololt[0].tuluugui,
+          toololt?.length > 0 ? toololt[0].tuluugui : 0,
           0
         ),
+        shuult: {a: "$and", b: [
+          {
+            duusakhTsag : {$lte: new Date()},
+          },
+          {
+            $or: [
+              {
+                tulburTulsunEsekh: {$eq: false},
+              },
+              {
+                tulburTulsunEsekh: {$not: {$eq: true}},
+              },
+            ],
+          },
+        ],}
       },      
     ],
     [toololt]
@@ -235,6 +269,9 @@ function togloom1() {
           data={data}
           token={token}
           baiguullaga={baiguullaga}
+          barilgiinId={barilgiinId}
+          ajiltan={ajiltan}
+          onRefresh={onRefresh}
         />
       ),
       footer: false,
@@ -274,7 +311,7 @@ function togloom1() {
         title: t("Нас"),
         align: "center",
         dataIndex: "nas",
-        width: "10rem",
+        width: "4rem",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -282,10 +319,18 @@ function togloom1() {
         title: t("Хүйс"),
         align: "center",
         dataIndex: "khuis",
-        width: "10rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
         render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
+      },
+      {
+        title: t("Утас"),
+        align: "center",
+        dataIndex: "utas",
+        width: "8rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
       },
       {
         title: t("Хугацаа /мин/"),
@@ -307,14 +352,14 @@ function togloom1() {
         },
       },
       {
-        title: t("Дуусах цаг"),
+        title: t("Төлөв"),
         align: "center",
         width: "10rem",
         dataIndex: "duusakhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
-        render:(v) => {
-          return v && <DuusakhTsagAvii v={v}/>;
+        render:(v, data) => {
+          return data.tuluv === -1 ? <div>Цуцлагдсан</div> : v && <DuusakhTsagAvii v={v}/>;
         },
       },
       {
@@ -408,8 +453,15 @@ function togloom1() {
         ellipsis: true,
         width: "3rem",
         align: "center",
-        render: (data) => (
-          <div className="flex flex-row justify-center">
+        render: (data, v) => {
+          const today = moment(new Date()).format("YYYYMMDD");
+          const duusakhUdur = moment(v.duusakhTsag).format("YYYYMMDD");
+          const odooginTsag = Number(moment(new Date()).format("HH")) * 60 * 60 + Number(moment(new Date()).format("mm")) * 60 + Number(moment(new Date()).format("ss"));
+          const duusakhTsag = Number(moment(v.duusakhTsag).format("HH")) * 60 * 60 + Number(moment(v.duusakhTsag).format("mm")) * 60 + Number(moment(v.duusakhTsag).format("ss"))
+          const difference = duusakhTsag - odooginTsag;
+    if (Number(today) <= Number(duusakhUdur)) {
+    if (difference > 0) {
+         return <div className="flex flex-row justify-center">
             <Popover
               placement="bottom"
               trigger="click"
@@ -439,11 +491,11 @@ function togloom1() {
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
             </Popover>
-          </div>
-        ),
+          </div>}}
+        },
       },     
     ];
-  }, [turul, token]);
+  }, [turul, token, baiguullaga, barilgiinId, ajiltan]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -494,7 +546,7 @@ function togloom1() {
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-2 ${
                 a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
-              onClick={() => setTurul(a.name)}
+              onClick={() => setTurul(a.shuult)}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}

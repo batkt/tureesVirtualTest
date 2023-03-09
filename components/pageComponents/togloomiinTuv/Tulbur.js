@@ -1,4 +1,4 @@
-import { Steps, Button, Spin, message } from "antd";
+import { Steps, Button, Spin, message, Switch, Form } from "antd";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -12,7 +12,7 @@ import { useEffect } from "react";
 //#endregion
 
 function Tulbur(
-  { destroy, data, token, ajiltan, baiguullaga },
+  { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
   ref
 ) {
   const [alkham, setAlkham] = React.useState(
@@ -21,12 +21,12 @@ function Tulbur(
   const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
-
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(false);
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
+  const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined})
 
   const eBarimtRef = React.useRef(null);
 
@@ -77,7 +77,7 @@ function Tulbur(
   function batalgaajuulya(turul, val) {
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
-      guilgeeniiTuukhKhadgalya(tulbur, () => setAlkham(2));
+      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
       setTulbur(tulbur);
     } else if (data?.niitDun === tulbur.reduce((a, b) => a + b.dun, 0))
       setAlkham(2);
@@ -88,22 +88,26 @@ function Tulbur(
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
     setTulbur([...tulbur]);
     if (data?.niitDun === tulbur.reduce((a, b) => a + b.dun, 0)) {
-      guilgeeniiTuukhKhadgalya(tulbur, () => setAlkham(2));
+      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
       setAlkham(2);
     }
   }
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
+    var index = tulbur.findIndex(a=> a.turul === "khunglukh")
+    tulbur[index].tailbar = khunglult.tailbar
     tulbur.forEach((a) => {
       a.ognoo = new Date();
-      (a.zakhialgiinDugaar = data.zakhialgiinDugaar),
-        (a.baiguullagiinId = ajiltan.baiguullagiinId),
-        (a.burtgesenAjiltan = ajiltan.burtgesenAjiltan),
-        (a.burtgesenAjiltaniiNer = ajiltan.burtgesenAjiltaniiNer);
+        (a.baiguullagiinId = baiguullaga?._id),
+        (a.barilgiinId = barilgiinId),
+        (a.burtgesenAjiltan = ajiltan._id),
+        (a.burtgesenAjiltaniiNer = ajiltan.ner),
+        (a.togloominId = data._id)
     });
     uilchilgee(token)
-      .post("/guilgeeniiTuukhKhadgalya", { tulbur })
-      .then(callback);
+      .post("/togloomiinTulburTulye", { tulbur, id:data._id })
+      .then(callback)
+      .catch(aldaaBarigch);
   }
 
   function batalgaajuulaltKhiiya() {
@@ -145,7 +149,7 @@ function Tulbur(
         return a + b.dun;
       }, 0)
     )
-      guilgeeniiTuukhKhadgalya(tulbur, () => setAlkham(2));
+      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
   }
 
   function khaaya() {
@@ -165,8 +169,8 @@ function Tulbur(
 
   return (
     <div className="w-full h-full">
-      <div className="pb-2 px-10">
-        <Steps current={alkham}>
+      <div className="pb-2">
+        <Steps className="hidden" current={alkham}>
           <Steps.Step
             key="Төлбөр төлөх"
             subTitle={<span className="dark:text-gray-200">Төлбөр төлөх</span>}
@@ -201,6 +205,8 @@ function Tulbur(
         <KhuvaajTulukh
           tulbur={tulbur}
           data={data}
+          khunglult={khunglult}
+          setKhunglult={setKhunglult}
           setTulbur={setTulbur}
           batalgaajuulya={batalgaajuulya}
           ajiltan={ajiltan}
@@ -283,7 +289,7 @@ function Tulbur(
         setIrgenEsekh={setIrgenEsekh}
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
-      />
+      />     
       <div className="flex flex-row justify-between mt-5">
         <Button type="primary" danger onClick={khaaya}>
           Хаах

@@ -1,17 +1,19 @@
-import { InputNumber } from "antd";
+import { Form, Input, InputNumber, Switch } from "antd";
+import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect } from "react";
 
-function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
+function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult }) {
   const belenRef = React.useRef();
   const khariltsakhRef = React.useRef();
   const zeelRef = React.useRef();
-
+  const khunglukhRef = React.useRef();
   const khaanRef = React.useRef();
   const tdbRef = React.useRef();
   const khasRef = React.useRef();
   const golomtRef = React.useRef();
   const kapitronRef = React.useRef();
   const turRef = React.useRef();
+  const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
 
   const value = React.useMemo(() => {
     const belen = tulbur.find((a) => a.turul === "belen")?.dun;
@@ -97,6 +99,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
         burtgesenAjiltan: ajiltan?._id,
         burtgesenAjiltaniiNer: ajiltan?.ner,
       };
+      if (e.target.name === "khunglukh") {
+        setKhunglult({...khunglult, khungulukhDun: tulukhDun})
+      }
       const index = tulbur.findIndex((a) => a.turul === e.target.name);
       if (index !== -1)
         tulbur[index] = {
@@ -145,13 +150,59 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
   ];
 
   return (
-    <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4`}>
+    <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4 overflow-y-auto`} style={{maxHeight: "calc( 100vh - 26rem )"}}>
+      <div className="col-span-3">
+        <Form.Item labelCol={{ flex: '110px'}} label="Хөнгөлөх эсэх"> 
+        <Switch checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
+        </Form.Item>
+        {khungulukhEsekh === true && <div className="font-medium text-lg space-y-2">          
+          <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
+          <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
+          Хөнгөлөх дүн
+          </div>
+          <InputNumber
+            autoComplete="off"
+            min={0}
+            ref={khunglukhRef}
+            value={khunglult.khungulukhDun}
+            name="khunglukh"
+            onDoubleClick={onDoubleClick}
+            onKeyDown={onKeyDown}
+            onChange={(v) => {setKhunglult({...khunglult, khungulukhDun: v}); onChangeDun(v, "khunglukh")}}
+            style={{ width: "25%" }}
+            max={
+              data?.niitDun -
+              tulbur
+                .filter((a) => a.turul !== "khunglukh")
+                .reduce((a, b) => a + b.dun, 0)
+            }
+            formatter={(value) =>
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+          />
+        </div>
+        <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
+          <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
+           Тайлбар
+          </div>
+          <Input
+            autoComplete="off"
+            value={khunglult.tailbar}
+            name="tailbar"
+            onChange={(v) => {setKhunglult({...khunglult, tailbar: v.target.value})}}
+            style={{ width: "25%" }}
+          />
+        </div>
+        </div>}
+      </div>
       <div className="col-span-3 flex flex-col text-center cursor-pointer font-medium text-lg">
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
             Бэлэн
           </div>
           <InputNumber
+          min={0} 
             autoComplete="off"
             ref={belenRef}
             value={value.belen}
@@ -172,6 +223,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
             Харилцах
           </div>
           <InputNumber
+          min={0}
             autoComplete="off"
             ref={khariltsakhRef}
             value={value.khariltsakh}
@@ -200,6 +252,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
           <InputNumber
             autoComplete="off"
             ref={zeelRef}
+            min={0}
             value={value.zeel}
             name="zeel"
             onDoubleClick={onDoubleClick}
@@ -228,6 +281,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
               <InputNumber
                 autoComplete="off"
                 ref={mur.ref}
+                min={0}
                 value={value[mur.talbar]}
                 name={mur.talbar}
                 onDoubleClick={onDoubleClick}
@@ -248,7 +302,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan }) {
             </div>
           </div>
         ))}
-      </div>
+      </div>      
     </div>
   );
 }

@@ -114,7 +114,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         </div>
         <Button icon={<PlusOutlined/>} className="mt-5 w-full" type="dashed" onClick={() => {
           setAjliinUdur({...ajliinUdur, tariffuud: [...ajliinUdur.tariffuud, {}]})
-        }}>tariff нэмэх</Button>
+        }}>Тариф нэмэх</Button>
         <div className="space-y-3 my-5 overflow-y-auto py-2" style={{maxHeight: "calc( 100vh - 80vh )"}}>
           {ajliinUdur.tariffuud?.map((a, i) => {
             return <div className="flex bg-green-50 relative shadow-md  w-full border rounded-md justify-between px-10 py-2 gap-5" key={i}>
@@ -149,7 +149,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         </div>
         <Button icon={<PlusOutlined/>} type="dashed" className="mt-5 w-full" onClick={() => {
           setAmraltiinUdur({...amraltiinUdur, tariffuud: [...amraltiinUdur.tariffuud, {}]})
-        }}>tariff нэмэх</Button>
+        }}>Тариф нэмэх</Button>
         <div className="space-y-3 my-5 overflow-y-auto py-2" style={{maxHeight: "calc( 100vh - 80vh )"}}>
           {amraltiinUdur.tariffuud.map((a, i) => {
             return <div className="flex bg-green-50 relative shadow-md  w-full border rounded-md justify-between px-10 py-2 gap-5" key={i}>
@@ -164,10 +164,10 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
     <div className="col-span-4 p-5 pr-0">
       <div className="box p-5 py-2 divide-y">
         <div className="flex justify-between items-center py-2">
-          Ажлын өдөр үндсэн tariff: <InputNumber value={ajliinUdur.undsenTariff} onChange={(v)=> setAjliinUdur({...ajliinUdur, undsenTariff: v})} className=""/>
+          Ажлын өдөр үндсэн Тариф: <InputNumber value={ajliinUdur.undsenTariff} onChange={(v)=> setAjliinUdur({...ajliinUdur, undsenTariff: v})} className=""/>
         </div>
         <div className="flex justify-between items-center py-2">
-          Амралтын өдөр үндсэн tariff: <InputNumber value={amraltiinUdur.undsenTariff} onChange={(v)=> setAmraltiinUdur({...amraltiinUdur, undsenTariff: v})} className=""/>
+          Амралтын өдөр үндсэн Тариф: <InputNumber value={amraltiinUdur.undsenTariff} onChange={(v)=> setAmraltiinUdur({...amraltiinUdur, undsenTariff: v})} className=""/>
         </div>       
       </div>
       <div className="flex justify-end mt-5 box px-5 items-center py-2">
