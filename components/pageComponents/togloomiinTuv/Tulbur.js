@@ -95,7 +95,7 @@ function Tulbur(
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
     var index = tulbur.findIndex(a=> a.turul === "khunglukh")
-    if (index > 0) {
+    if (index > -1) {
       tulbur[index].tailbar = khunglult.tailbar
     }
     
