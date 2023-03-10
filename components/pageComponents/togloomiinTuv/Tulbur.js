@@ -28,6 +28,7 @@ function Tulbur(
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined})
+  const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
 
   const eBarimtRef = React.useRef(null);
 
@@ -75,7 +76,7 @@ function Tulbur(
     }
   }
 
-  function batalgaajuulya(turul, val) {
+  function batalgaajuulya(turul, val) {    
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
       guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
@@ -95,6 +96,17 @@ function Tulbur(
   }
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
+    if (khungulukhEsekh === true) {
+      if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
+        message.warn("Хөнгөлөх дүн оруулна уу")
+        return
+      }
+      if (!khunglult.tailbar || khunglult.tailbar === "") {
+        message.warn("Хөнгөлөх шалтгаан оруулна уу")
+        return
+      }
+      
+    }
     var index = tulbur.findIndex(a=> a.turul === "khunglukh")
     if (index > -1) {
       tulbur[index].tailbar = khunglult.tailbar
@@ -214,6 +226,8 @@ function Tulbur(
           setTulbur={setTulbur}
           batalgaajuulya={batalgaajuulya}
           ajiltan={ajiltan}
+          khungulukhEsekh={khungulukhEsekh}
+          setKhungulukhEsekh={setKhungulukhEsekh}
         />
         {khaanbank && tulbur.find((a) => a.turul === "khaan") && (
           <div className="col-span-3 flex flex-col items-center space-y-2 relative mt-5">

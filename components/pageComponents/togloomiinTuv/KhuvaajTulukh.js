@@ -2,7 +2,7 @@ import { Form, Input, InputNumber, Switch } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect } from "react";
 
-function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult }) {
+function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult, khungulukhEsekh, setKhungulukhEsekh }) {
   const belenRef = React.useRef();
   const khariltsakhRef = React.useRef();
   const zeelRef = React.useRef();
@@ -13,7 +13,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
   const golomtRef = React.useRef();
   const kapitronRef = React.useRef();
   const turRef = React.useRef();
-  const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
+  
 
   const value = React.useMemo(() => {
     const belen = tulbur.find((a) => a.turul === "belen")?.dun;

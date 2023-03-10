@@ -1,12 +1,13 @@
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, Input, message, Popconfirm, Popover, Space, Table } from "antd";
+import { Button, Card, DatePicker, Input, message, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import {
   CheckCircleOutlined,
   DollarCircleOutlined,
   DownloadOutlined,
   DownOutlined,
+  EyeOutlined,
   FileExcelOutlined,
   MoreOutlined,
   PaperClipOutlined,
@@ -32,7 +33,6 @@ import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 import TextArea from "antd/lib/input/TextArea";
 import { useTranslation } from "react-i18next";
 
-const order1 = {createdAt: -1}
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
   const [shaltgaan, setTsutsalsanShaltgaan] = useState("");
@@ -103,7 +103,7 @@ function DuusakhTsagAvii({v}) {
   if (timeLeft === "Тооцоолж байна") {
    return <div className="animate-pulse">Тооцоолж байна</div> 
   } else if (timeLeft === "Дууссан") {
-    return <div className="bg-red-500 text-white font-medium border rounded-lg">Дууссан</div>
+    return <div className="bg-red-500 text-white font-medium border cursor-default rounded-lg">Дууссан</div>
   } else
   return (
     <div>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
@@ -114,7 +114,6 @@ function togloom1() {
   const { t, i18n } = useTranslation()
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
  
-  const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
     moment(),
     moment(),
@@ -134,7 +133,7 @@ function togloom1() {
     token,
     ognoo
   );
-  const { order, onChangeTable } = useOrder({ ognoo: -1 });
+  const { order, onChangeTable } = useOrder({createdAt: -1});
 
   function tsutslakh(data) {
     const footer = [
@@ -179,7 +178,7 @@ function togloom1() {
     };
   }, [ognoo, turul]);
 
-  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order1);
+  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order);
   const tailbarRef = React.useRef(null)
 
 
@@ -250,9 +249,17 @@ function togloom1() {
                 tulburTulsunEsekh: {$not: {$eq: true}},
               },
             ],
-          },
+          },          
         ],}
-      },      
+      },  
+      {
+        name: "Хөнгөлсөн",
+        too: formatNumber(
+          toololt?.length > 0 ? toololt[0]?.khungulsun : 0,
+          0
+        ),
+        shuult: {a: "khungulsunEsekh", b: true}
+      },    
     ],
     [toololt]
   );
@@ -291,7 +298,6 @@ function togloom1() {
       {
         title: "№",
         align: "center",
-        dataIndex: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
           (togloominTuviinGaralt?.data?.khuudasniiDugaar || 0) *
@@ -314,7 +320,6 @@ function togloom1() {
         dataIndex: "ner",
         width: "10rem",
         showSorterTooltip: false,
-        sorter: () => 0,
         render:(v)=> <div className="w-full text-left">{v}</div>
       },
       {
@@ -331,7 +336,6 @@ function togloom1() {
         dataIndex: "khuis",
         width: "8rem",
         showSorterTooltip: false,
-        sorter: () => 0,
         render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
       },
       {
@@ -340,12 +344,11 @@ function togloom1() {
         dataIndex: "utas",
         width: "8rem",
         showSorterTooltip: false,
-        sorter: () => 0,
       },
       {
         title: t("Хугацаа /мин/"),
         align: "center",
-        width: "10rem",
+        width: "8rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "khugatsaa",
@@ -353,7 +356,7 @@ function togloom1() {
       {
         title: t("Эхлэх цаг"),
         align: "center",
-        width: "10rem",
+        width: "9rem",
         dataIndex: "ekhlekhTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -367,23 +370,33 @@ function togloom1() {
         width: "10rem",
         dataIndex: "duusakhTsag",
         showSorterTooltip: false,
-        sorter: () => 0,
         render:(v, data) => {
-          return data.tuluv === -1 ? <div className="bg-gray-500 text-white font-medium border rounded-lg">Цуцлагдсан</div> : v && <DuusakhTsagAvii v={v}/>;
+          return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover> : v && <DuusakhTsagAvii v={v}/>;
         },
       },
       {
-        title: t("Нийт дүн"),
+        title: t("нийт дүн"),
         align: "center",
-        width: "10rem",
+        width: "7rem",
         dataIndex: "niitDun",
         showSorterTooltip: false,
-        sorter: () => 0,
+        sorter:()=> 0,
         render:(v) => {
           return v && <div className="w-full text-right">{formatNumber(v, 0)}</div>
         },
       },
       {
+        title: t("Хөнгөлсөн дүн"),
+        align: "center",
+        width: "8.5rem",
+        showSorterTooltip: false,
+        render:(v, data) => {
+          const khunglukh = data?.tulbur?.find(a=> a.turul === "khunglukh")
+           return <div className="w-full flex items-center">{!!khunglukh?.tailbar && <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{khunglukh?.tailbar}</div></div>} ><div className="w-full flex justify-center text-lg text-blue-500"><EyeOutlined className="cursor-pointer"/></div></Popover>} <div className="w-full text-right">{khunglukh ? formatNumber(khunglukh.dun, 0) : 0}</div></div>
+        },
+      },    
+      {
+        fixed: "right",
         width: "10rem",
         title: t("Төлбөр"),
         align: "center",
@@ -461,6 +474,7 @@ function togloom1() {
       {
         title: () => <SettingOutlined />,
         ellipsis: true,
+        fixed: "right",
         width: "3rem",
         align: "center",
         render: (data, v) => {
@@ -541,6 +555,7 @@ function togloom1() {
       footer,
     });
   }
+
   return (
     <Admin
       title="Тоглоомын төв"
@@ -548,7 +563,7 @@ function togloom1() {
       className="p-0 md:p-4"
     >
       <Card size="small" className="col-span-12 overflow-auto">
-        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-10">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {toololtGaralt.map((a, i) => (
             <div
               key={i}
@@ -613,6 +628,76 @@ function togloom1() {
                   
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                    onClick={() => {
+                      const { Excel } = require("antd-table-saveas-excel");
+                      const excelExport = new Excel();
+                      excelExport
+                        .addSheet("Тоглоомын төв")
+                        .addColumns([                      
+                          {
+                            title: t("Овог"),
+                            dataIndex: "ovog",
+                            ellipsis: true,
+                          },
+                          { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
+                          {
+                            title: t("Нэр"),
+                            dataIndex: "ner",
+                            ellipsis: true,
+                            width: "5rem",
+                          },
+                          {
+                            title: t("Нас"),
+                            dataIndex: "nas",
+                            ellipsis: true,
+                            width: "5rem",
+                            align: "center",
+                          },
+                          {
+                            title: t("Хүйс"),
+                            dataIndex: "khuis",
+                            ellipsis: true,
+                            align: "center",        
+                            render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>                
+                          },
+                          {
+                            title: t("Утас"),
+                            dataIndex: "utas",
+                            ellipsis: true,
+                            align: "center"
+                          },
+                          {
+                            title: t("Хугацаа /мин/"),
+                            dataIndex: "khugatsaa",
+                            ellipsis: true,
+                            align: "center",
+                          },
+                          {
+                            title: t("Эхлэх цаг"),
+                            dataIndex: "ekhlekhTsag",
+                            ellipsis: true,
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: t("Дуусах цаг"),
+                            dataIndex: "duusakhTsag",
+                            ellipsis: true,
+                            
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: t("нийт дүн"),
+                            dataIndex: "niitDun",
+                            ellipsis: true,
+                          },
+                        ])
+                        .addDataSource(togloominTuviinGaralt?.jagsaalt)
+                        .saveAs("Тоглоомын төв.xlsx");
+                    }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
@@ -625,7 +710,7 @@ function togloom1() {
             >
               <Button
                 type="primary"
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}                
               >
                 <span>Excel</span>
                 <DownOutlined width={5} />
@@ -645,7 +730,7 @@ function togloom1() {
             dataSource={togloominTuviinGaralt?.jagsaalt}
             scroll={{ y: "calc(100vh - 30rem)" }}
             size="small"
-            bordered
+            bordered            
             rowKey={(row) => row._id}
             columns={columns}
             onChange={onChangeTable}
