@@ -26,11 +26,11 @@ import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
-import { t } from "i18next";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useToololt } from "hooks/useToololt";
 import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 import TextArea from "antd/lib/input/TextArea";
+import { useTranslation } from "react-i18next";
 
 const order1 = {createdAt: -1}
 
@@ -111,6 +111,7 @@ function DuusakhTsagAvii({v}) {
 }
 
 function togloom1() {  
+  const { t, i18n } = useTranslation()
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
  
   const excelref = useRef(null);
@@ -372,7 +373,7 @@ function togloom1() {
         },
       },
       {
-        title: "Нийт дүн",
+        title: t("Нийт дүн"),
         align: "center",
         width: "10rem",
         dataIndex: "niitDun",
@@ -384,7 +385,7 @@ function togloom1() {
       },
       {
         width: "10rem",
-        title: "Төлбөр",
+        title: t("Төлбөр"),
         align: "center",
         ellipsis: true,
         render: (data) => {
@@ -504,7 +505,7 @@ function togloom1() {
         },
       },     
     ];
-  }, [turul, token, baiguullaga, barilgiinId, ajiltan, togloominTuviinGaralt]);
+  }, [turul, token, baiguullaga, barilgiinId, ajiltan, togloominTuviinGaralt, t]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -552,9 +553,9 @@ function togloom1() {
             <div
               key={i}
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-2 ${
-                a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
+                a.name === turul?.name ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
-              onClick={() => setTurul(a.shuult)}
+              onClick={() => setTurul({...a.shuult, name:a.name})}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}
@@ -565,7 +566,7 @@ function togloom1() {
                     <div className="text-3xl font-bold text-green-600">
                       {a.too || 0}
                     </div>
-                    <div className="text-base text-gray-500">{a.name}</div>
+                    <div className="text-base text-gray-500">{t(`${a.name}`)}</div>
                   </div>
                 </div>
               </div>

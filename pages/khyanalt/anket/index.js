@@ -196,7 +196,7 @@ function AnketiinZagvar({ a, setData, anketUstgay, data, anketIlgeeye, ognoo }) 
           />
           <Popconfirm
             placement="right"
-            title={"Та анкетын загвар устгах гэж байна!"}
+            title={t("Та анкетын загвар устгах гэж байна!")}
             onConfirm={(e) => {
               e.stopPropagation();
               anketUstgay(a);

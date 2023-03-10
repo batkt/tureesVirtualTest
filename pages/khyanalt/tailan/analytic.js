@@ -305,7 +305,7 @@ function Tailan({ token }) {
         className="bg-white dark:bg-gray-900"
           onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
         >
-          Загвар бүртгэх
+          {t("Загвар бүртгэх")}
         </Button>
         : (
           <div className="flex items-center gap-3">      

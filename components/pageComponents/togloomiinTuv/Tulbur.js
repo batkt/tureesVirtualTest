@@ -9,6 +9,7 @@ import EBarimt from "./EBarimt";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useEffect } from "react";
+import { t } from "i18next";
 //#endregion
 
 function Tulbur(
@@ -264,7 +265,7 @@ function Tulbur(
           {!!(tulbur.find((a) => a.turul === "khariult")?.dun || 0) > 0 && (
             <div className="table-row">
               <div className="table-cell p-2 border-dashed border-b-2 dark:text-gray-200">
-                Хариулт
+                {t("Хариулт")}
               </div>
               <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
                 {formatNumber(tulbur.find((a) => a.turul === "khariult").dun)}₮

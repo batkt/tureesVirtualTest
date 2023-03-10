@@ -2,6 +2,7 @@ import { Button, Tag } from "antd";
 import React, { useMemo, useState } from "react";
 import moment from "moment";
 import useJagsaalt from "hooks/useJagsaalt";
+import { t } from "i18next";
 
 function AnketTile({ turul, ner, createdAt, _id }) {
   const query = useMemo(() => {
@@ -54,11 +55,11 @@ function AnketTile({ turul, ner, createdAt, _id }) {
                     </div>
                     <div className="flex flex-wrap justify-between border-b">
                       <div className="flex items-center">
-                        Асуулт:
+                        {t("Асуулт")}:
                         <div className="ml-1 h-3 w-3 rounded-full bg-green-600" />
                       </div>
                       <div className="flex items-center">
-                        Хариулт:
+                        {t("Хариулт")}:
                         <div className="ml-1 h-3 w-3 rounded-full bg-blue-500" />
                       </div>
                     </div>

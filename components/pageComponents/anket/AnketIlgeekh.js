@@ -88,13 +88,13 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             .catch((e) => {
               aldaaBarigch(e);
             });
-        } else notification.warning({ message: t("мэдээллээ бүрэн оруулна уу!") });
+        } else notification.warning({ message: t("Мэдээллээ бүрэн оруулна уу!") });
       },
       khaaya() {
         destroy();
       },
     }),
-    [value, utasniiDugaar, baiguullaga, data, email]
+    [value, utasniiDugaar, baiguullaga, data, email,]
   );
   useEffect(() => {
     function keyUp(e) {
@@ -163,7 +163,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             value={utasniiDugaar}
             minlength="8"
             required
-            placeholder="Утасны дугаар оруулна уу"
+            placeholder={t("Утасны дугаар оруулна уу !")}
             type={"number"}
             onChange={onchangeDugaar}
             onKeyUp={focuser}
@@ -176,7 +176,7 @@ const AnketIlgeekh = ({ data, token, barilgiinId, baiguullaga, destroy }, ref) =
             id="input1"
             value={email}
             type="url"
-            placeholder="И-мэйл оруулна уу"
+            placeholder={t("И-мэйл оруулна уу")}
             onChange={(v) => setEmail(v.target.value)}
             onKeyUp={focuser}
           />

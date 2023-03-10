@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import { InputNumber, Input, Switch } from "antd";
 import uilchilgee from "services/uilchilgee";
+import { t } from "i18next";
 
 function EBarimt({
   alkham,
@@ -281,7 +282,7 @@ function EBarimt({
                   {tulbur?.khariult && (
                     <tr>
                       <td colSpan={5} className="text-right border">
-                        Хариулт
+                        {t("Хариулт")}
                       </td>
                       <td className="border text-right">
                         {formatNumber(tulbur?.khariult)}
