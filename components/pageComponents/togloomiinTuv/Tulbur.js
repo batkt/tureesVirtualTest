@@ -95,7 +95,10 @@ function Tulbur(
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
     var index = tulbur.findIndex(a=> a.turul === "khunglukh")
-    tulbur[index].tailbar = khunglult.tailbar
+    if (index > 0) {
+      tulbur[index].tailbar = khunglult.tailbar
+    }
+    
     tulbur.forEach((a) => {
       a.ognoo = new Date();
         (a.baiguullagiinId = baiguullaga?._id),
