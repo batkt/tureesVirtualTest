@@ -101,7 +101,7 @@ function DuusakhTsagAvii({v}) {
   if (timeLeft === "Тооцоолж байна") {
    return <div className="animate-pulse">Тооцоолж байна</div> 
   } else if (timeLeft === "Дууссан") {
-    return <div>Дууссан</div>
+    return <div className="bg-red-500 text-white font-medium border rounded-lg">Дууссан</div>
   } else
   return (
     <div>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
@@ -236,6 +236,9 @@ function togloom1() {
             duusakhTsag : {$lte: new Date()},
           },
           {
+            tuluv : {$ne: -1}
+          },
+          {
             $or: [
               {
                 tulburTulsunEsekh: {$eq: false},
@@ -253,7 +256,8 @@ function togloom1() {
 
   function onRefresh() {
     toololtMutate();
-    togloominTuviinGaralt.mutate()
+    togloomiinDun.toololtMutate();
+    togloominTuviinGaralt.mutate();
   }  
 
   function tulburTulyu(data) {
@@ -287,9 +291,9 @@ function togloom1() {
         dataIndex: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
-          (togloominTuviinGaralt?.khuudasniiDugaar || 0) *
-            (togloominTuviinGaralt?.khuudasniiKhemjee || 0) -
-          (togloominTuviinGaralt?.khuudasniiKhemjee || 0) +
+          (togloominTuviinGaralt?.data?.khuudasniiDugaar || 0) *
+            (togloominTuviinGaralt?.data?.khuudasniiKhemjee || 0) -
+          (togloominTuviinGaralt?.data?.khuudasniiKhemjee || 0) +
           index +
           1,
       },
@@ -299,6 +303,7 @@ function togloom1() {
         dataIndex: "ovog",
         width: "10rem",
         showSorterTooltip: false,
+        render:(v)=> <div className="w-full text-left">{v}</div>
       },
       {
         title: t("Нэр"),
@@ -307,6 +312,7 @@ function togloom1() {
         width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
+        render:(v)=> <div className="w-full text-left">{v}</div>
       },
       {
         title: t("Нас"),
@@ -360,7 +366,7 @@ function togloom1() {
         showSorterTooltip: false,
         sorter: () => 0,
         render:(v, data) => {
-          return data.tuluv === -1 ? <div>Цуцлагдсан</div> : v && <DuusakhTsagAvii v={v}/>;
+          return data.tuluv === -1 ? <div className="bg-gray-500 text-white font-medium border rounded-lg">Цуцлагдсан</div> : v && <DuusakhTsagAvii v={v}/>;
         },
       },
       {
@@ -371,7 +377,7 @@ function togloom1() {
         showSorterTooltip: false,
         sorter: () => 0,
         render:(v) => {
-          return v && formatNumber(v);
+          return v && <div className="w-full text-right">{formatNumber(v, 0)}</div>
         },
       },
       {
@@ -381,7 +387,7 @@ function togloom1() {
         ellipsis: true,
         render: (data) => {
           return (
-            (data?.tulburTulsunEsekh !== true ||
+           data.tuluv !== -1 && (data?.tulburTulsunEsekh !== true ||
               data?.ebarimtAvsanEsekh !== true) ? (
               <div className="flex justify-center">
                 <Button
@@ -496,7 +502,7 @@ function togloom1() {
         },
       },     
     ];
-  }, [turul, token, baiguullaga, barilgiinId, ajiltan]);
+  }, [turul, token, baiguullaga, barilgiinId, ajiltan, togloominTuviinGaralt]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -532,7 +538,6 @@ function togloom1() {
       footer,
     });
   }
-
   return (
     <Admin
       title="Тоглоомын төв"
@@ -588,8 +593,8 @@ function togloom1() {
             data-aos-delay="300"
           >
             <div className="flex flex-row space-x-2 p-1 text-xs font-medium md:text-base">
-              {t("Тоглоомын орлого")} : {togloomiinDun.toololt?.reduce((a, b) => a + b.too, 0) || 0}
-              ₮
+              {t("Тоглоомын орлого")} : {!!togloomiinDun?.toololt ? formatNumber(togloomiinDun?.toololt[0]?.dun) : 0}
+               ₮
             </div>
             <div className="space-x-2">
               <Button
@@ -597,8 +602,32 @@ function togloom1() {
                 icon={<PlusOutlined />}
                 onClick={() => khuukhedBurtgekh()}
               >
-                {t("нэмэх")}
-              </Button>              
+                {t("Бүртгэл")}
+              </Button>         
+              <Popover
+              content={() => (
+                <div className="flex w-32 flex-col">
+                  
+                  <a
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                  >
+                    <DownloadOutlined style={{ fontSize: "18px" }} />
+                    <label>{t("Татах")}</label>
+                  </a>
+                </div>
+              )}
+              style={{ padding: 0 }}
+              placement="bottom"
+              trigger="click"
+            >
+              <Button
+                type="primary"
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+                <span>Excel</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>     
             </div>
           </div>
         </div>
@@ -618,9 +647,9 @@ function togloom1() {
             columns={columns}
             onChange={onChangeTable}
             pagination={{
-              current: togloominTuviinGaralt?.khuudasniiDugaar,
-              pageSize: togloominTuviinGaralt?.khuudasniiKhemjee,
-              total: togloominTuviinGaralt?.niitMur,
+              current: togloominTuviinGaralt?.data?.khuudasniiDugaar,
+              pageSize: togloominTuviinGaralt?.data?.khuudasniiKhemjee,
+              total: togloominTuviinGaralt?.data?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 togloominTuviinGaralt.setKhuudaslalt((kh) => ({

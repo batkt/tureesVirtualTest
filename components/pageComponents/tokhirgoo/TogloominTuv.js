@@ -117,10 +117,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         }}>Тариф нэмэх</Button>
         <div className="space-y-3 my-5 overflow-y-auto py-2" style={{maxHeight: "calc( 100vh - 80vh )"}}>
           {ajliinUdur.tariffuud?.map((a, i) => {
-            return <div className="flex bg-green-50 relative shadow-md  w-full border rounded-md justify-between px-10 py-2 gap-5" key={i}>
+            return <div className="grid grid-cols-4 items-center bg-green-50 relative shadow-md  w-full border rounded-md justify-between 2xl:pr-20 px-10 py-2 gap-5" key={i}>
               <div onClick={() => setAjliinUdur({...ajliinUdur, tariffuud: ajliinUdur.tariffuud.filter((a, index) => index !== i)})} className="flex absolute right-2 top-3 hover:text-red-500 transition-all text-lg"><CloseCircleOutlined /></div>
-              <InputNumber value={ajliinUdur.tariffuud[i]?.minut} onChange={(v) => { ajliinUdur.tariffuud[i].minut = v; setAjliinUdur({...ajliinUdur}) }} className="w-full" placeholder="Минут" />
-              <InputNumber value={ajliinUdur.tariffuud[i]?.tariff} onChange={(v) => { ajliinUdur.tariffuud[i].tariff = v; setAjliinUdur({...ajliinUdur}) }} className="w-full" placeholder="tariffuud" />
+              <label className="w-40 text-end">Минут хүртэл:</label><InputNumber value={ajliinUdur.tariffuud[i]?.minut} onChange={(v) => { ajliinUdur.tariffuud[i].minut = v; setAjliinUdur({...ajliinUdur}) }} className="w-full" placeholder="Минут" />
+              <label className="w-40 text-end">Тариф/₮/:</label><InputNumber formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={ajliinUdur.tariffuud[i]?.tariff} onChange={(v) => { ajliinUdur.tariffuud[i].tariff = v; setAjliinUdur({...ajliinUdur}) }} className="w-full" placeholder="Тариф" />
             </div>
           })}
         </div>
@@ -152,10 +155,13 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         }}>Тариф нэмэх</Button>
         <div className="space-y-3 my-5 overflow-y-auto py-2" style={{maxHeight: "calc( 100vh - 80vh )"}}>
           {amraltiinUdur.tariffuud.map((a, i) => {
-            return <div className="flex bg-green-50 relative shadow-md  w-full border rounded-md justify-between px-10 py-2 gap-5" key={i}>
+            return <div className="grid grid-cols-4 bg-green-50 items-center relative shadow-md  w-full border rounded-md justify-between 2xl:pr-20 px-10 py-2 gap-5" key={i}>
               <div onClick={() => setAmraltiinUdur({...amraltiinUdur, tariffuud: amraltiinUdur.tariffuud.filter((a, index) => index !== i)})} className="flex absolute right-2 top-3 hover:text-red-500 transition-all text-lg"><CloseCircleOutlined /></div>
-              <InputNumber value={amraltiinUdur.tariffuud[i]?.minut} onChange={(v) => { amraltiinUdur.tariffuud[i].minut = v; setAmraltiinUdur({...amraltiinUdur}) }} className="w-full" placeholder="Минут" />
-              <InputNumber value={amraltiinUdur.tariffuud[i]?.tariff} onChange={(v) => { amraltiinUdur.tariffuud[i].tariff = v; setAmraltiinUdur({...amraltiinUdur}) }} className="w-full" placeholder="tariffuud" />
+              <label className="text-end">Минут хүртэл:</label><InputNumber value={amraltiinUdur.tariffuud[i]?.minut} onChange={(v) => { amraltiinUdur.tariffuud[i].minut = v; setAmraltiinUdur({...amraltiinUdur}) }} className="w-full" placeholder="Минут" />
+              <label className="w-40 text-end">Тариф/₮/:</label><InputNumber formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={amraltiinUdur.tariffuud[i]?.tariff} onChange={(v) => { amraltiinUdur.tariffuud[i].tariff = v; setAmraltiinUdur({...amraltiinUdur}) }} className="w-full" placeholder="tariffuud" />
             </div>
           })}
         </div>
@@ -164,10 +170,16 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
     <div className="col-span-4 p-5 pr-0">
       <div className="box p-5 py-2 divide-y">
         <div className="flex justify-between items-center py-2">
-          Ажлын өдөр үндсэн Тариф: <InputNumber value={ajliinUdur.undsenTariff} onChange={(v)=> setAjliinUdur({...ajliinUdur, undsenTariff: v})} className=""/>
+          Ажлын өдөр үндсэн Тариф/₮/: <InputNumber formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={ajliinUdur.undsenTariff} onChange={(v)=> setAjliinUdur({...ajliinUdur, undsenTariff: v})} className=""/>
         </div>
         <div className="flex justify-between items-center py-2">
-          Амралтын өдөр үндсэн Тариф: <InputNumber value={amraltiinUdur.undsenTariff} onChange={(v)=> setAmraltiinUdur({...amraltiinUdur, undsenTariff: v})} className=""/>
+          Амралтын өдөр үндсэн Тариф/₮/: <InputNumber formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={amraltiinUdur.undsenTariff} onChange={(v)=> setAmraltiinUdur({...amraltiinUdur, undsenTariff: v})} className=""/>
         </div>       
       </div>
       <div className="flex justify-end mt-5 box px-5 items-center py-2">

@@ -189,7 +189,7 @@ export const tsonknuud = [
   },
   {
     ner: "Тоглоомын төв",
-    key: "/khyanalt/togloom",
+    key: "/khyanalt/togloom/togloomTuv",
   },
   {
     key: "/khyanalt/tailan",

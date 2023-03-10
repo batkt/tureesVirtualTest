@@ -103,7 +103,7 @@ function TsagBurtgel(
                         message: t("Нас бүртгэнэ үү!"),
                       },
                     ]} label="Нас" name="nas">
-        <InputNumber placeholder="Нас" min="1" max="12" />
+        <InputNumber className="w-40" placeholder="Нас" min="1" max="12" />
       </Form.Item>
       <Form.Item rules={[
                       {
@@ -112,7 +112,19 @@ function TsagBurtgel(
                       },
                     ]} label="Утас" name="utas">
         <Input placeholder="Утас" autoComplete="off" />
-      </Form.Item>      
+      </Form.Item> 
+      <Form.Item rules={[
+                      {
+                        required: true,
+                        message: t("Асран хамгаалагч бүртгэнэ үү!"),
+                      },
+                    ]}  label="Асран хамгаалагч" name="asragchiinTurul">
+        <Select placeholder="Асран хамгаалагч">
+          {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a)=> {
+            return <Select.Option key={a}>{a}</Select.Option>
+          })}        
+        </Select>
+      </Form.Item>     
       <Form.Item rules={[
                       {
                         required: true,
@@ -133,14 +145,17 @@ function TsagBurtgel(
         <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v)=> setTsag({...tsag, duusakhTsag:v})} autoComplete="off" />
       </Form.Item>
       <Form.Item  label="Дүн" name="niitDun">
-        <InputNumber disabled={true} placeholder="Дүн" min="1" className="w-40" />
+        <InputNumber formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} disabled={true} placeholder="Дүн" min="1" className="w-40" />
       </Form.Item>
       <Form.Item  label="Төрөл" name="turul">
         <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
           <Select.Option key={"Үйлчлүүлэгч"}>Үйлчлүүлэгч</Select.Option>
           <Select.Option key={"Гишүүн"}>Гишүүн</Select.Option>
         </Select>
-      </Form.Item>
+      </Form.Item>      
     </Form>
   );
 }
