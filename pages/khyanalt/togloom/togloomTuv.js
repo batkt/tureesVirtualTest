@@ -32,6 +32,8 @@ import { useToololt } from "hooks/useToololt";
 import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 import TextArea from "antd/lib/input/TextArea";
 
+const order1 = {createdAt: -1}
+
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
   const [shaltgaan, setTsutsalsanShaltgaan] = useState("");
   React.useImperativeHandle(
@@ -176,7 +178,7 @@ function togloom1() {
     };
   }, [ognoo, turul]);
 
-  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query);
+  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order1);
   const tailbarRef = React.useRef(null)
 
 
