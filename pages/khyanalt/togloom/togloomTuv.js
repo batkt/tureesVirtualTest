@@ -70,9 +70,7 @@ function DuusakhTsagAvii({v, data}) {
     const difference = duusakhTsag - odooginTsag;
     let timeLeft = "Дууссан";
     if (Number(today) <= Number(duusakhUdur)) {
-    if (difference > 0) {     
-      if(difference < 300 && duussan === false){
-      setDuussan("duhsun") }
+    if (difference > 0) {           
       var tsag = Math.floor(difference / 60 / 60)
       var minut = Math.floor((difference - (tsag * 60 * 60)) / 60)
       var second = Math.floor((difference - (tsag * 60 * 60) - (minut * 60)))
@@ -81,11 +79,13 @@ function DuusakhTsagAvii({v, data}) {
         minutes: minut,
         seconds: second,
       };
+      if(difference < 300 && duussan === false){
+      setDuussan("duhsun") }
     } else if (difference === 0) {
-      setDuussan(true); 
-      notification.warning({ duration: 0, message: "Цаг дууслаа", description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`)});
-           
-    }
+      notification.warning({ duration: 0, message: "Цаг дууслаа", description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`)});           
+    } else if (duussan === "duhsun") {
+      setDuussan(true);
+    } 
     }
 
     return timeLeft;
@@ -113,7 +113,7 @@ function DuusakhTsagAvii({v, data}) {
     setTimeout(() => {
       setTimeLeft(tsagTootsoolur());
     }, 1000);
-  });
+  },[timeLeft]);
 
   if (timeLeft === "Тооцоолж байна") {
    return <div className="animate-pulse">Тооцоолж байна</div> 
