@@ -880,6 +880,21 @@ input:-webkit-autofill {
 .hideScroll::-webkit-scrollbar {
   display: none;
 }
+.menuScrollbar:hover::-webkit-scrollbar-thumb {
+  @apply bg-yellow-500 bg-opacity-100
+}
+.menuScrollbar::-webkit-scrollbar-thumb {
+  @apply bg-white bg-opacity-100 rounded-r-none rounded-full
+}
+
+.menuScrollbar::-webkit-scrollbar-track {
+ @apply bg-white mb-3 -mt-2 rounded-r-none rounded-full;
+}
+
+.menuScrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
 .sub-menu {
   overflow: hidden;
   --tw-bg-opacity: 1;

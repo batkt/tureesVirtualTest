@@ -295,7 +295,7 @@ function NTses({
             </div>
           </div>
         </li>
-        <div style={{height: "calc( 100vh - 12rem )"}} className="overflow-y-auto">
+        <div style={{height: "calc( 100vh - 12rem )"}} className="overflow-y-auto group menuScrollbar">
         {khuudasnuud.map((mur) => (
           <MenuItem
             key={mur.href}
