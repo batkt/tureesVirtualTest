@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Switch } from "antd";
+import { Form, Input, InputNumber, Select, Switch } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect } from "react";
 
@@ -18,7 +18,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
   const value = React.useMemo(() => {
     const belen = tulbur.find((a) => a.turul === "belen")?.dun;
     const khariltsakh = tulbur.find((a) => a.turul === "khariltsakh")?.dun;
-    const zeel = tulbur.find((a) => a.turul === "zeel")?.dun;
+    const bogd = tulbur.find((a) => a.turul === "bogd")?.dun;
     const khaan = tulbur.find((a) => a.turul === "khaan")?.dun;
     const tdb = tulbur.find((a) => a.turul === "tdb")?.dun;
     const khas = tulbur.find((a) => a.turul === "khas")?.dun;
@@ -28,7 +28,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
     return {
       belen,
       khariltsakh,
-      zeel,
+      bogd,
       khaan,
       tdb,
       khas,
@@ -74,7 +74,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           zeelRef.current.focus();
           zeelRef.current.select();
           break;
-        case "zeel":
+        case "bogd":
           khaanRef.current.focus();
           khaanRef.current.select();
           break;
@@ -186,14 +186,20 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
            Тайлбар
           </div>
-          <Input
-            autoComplete="off"
-            value={khunglult.tailbar}
+          <Select
+            value={khunglult.tailbarTurul}
             name="tailbar"
-            onChange={(v) => {setKhunglult({...khunglult, tailbar: v.target.value})}}
-            style={{ width: "25%" }}
-          />
+            onChange={(v) => {setKhunglult({...khunglult, tailbarTurul: v, tailbar: v !== "Бусад" ? v : undefined})}}
+            style={{ width: "35%" }}
+            placeholder="Тайлбар сонгох"
+          >
+            <Select.Option key={"Төрсөн өдөр"}>Төрсөн өдөр</Select.Option>
+            <Select.Option key={"Бусад"}>Бусад</Select.Option>
+          </Select>
         </div>
+        {khunglult.tailbarTurul === "Бусад" && <div>
+          <TextArea value={khunglult.tailbar} placeholder="Тайлбар оруулна уу" onChange={(v)=> {setKhunglult({...khunglult, tailbar: v.target.value})}}/>
+          </div>}
         </div>}
       </div>
       <div className="col-span-3 flex flex-col text-center cursor-pointer font-medium text-lg">
@@ -247,22 +253,22 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
         <div className="w-full border-l border-r h-2 " />
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-            Зээл
+            Богд банк
           </div>
           <InputNumber
             autoComplete="off"
             ref={zeelRef}
             min={0}
-            value={value.zeel}
-            name="zeel"
+            value={value.bogd}
+            name="bogd"
             onDoubleClick={onDoubleClick}
             onKeyDown={onKeyDown}
-            onChange={(v) => onChangeDun(v, "zeel")}
+            onChange={(v) => onChangeDun(v, "bogd")}
             style={{ width: "25%" }}
             max={
               data?.niitDun -
               tulbur
-                .filter((a) => a.turul !== "zeel")
+                .filter((a) => a.turul !== "bogd")
                 .reduce((a, b) => a + b.dun, 0)
             }
             formatter={(value) =>

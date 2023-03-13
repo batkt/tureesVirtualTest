@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, Input, message, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
+import { Button, Card, DatePicker, Input, message, notification, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import {
   CheckCircleOutlined,
   DollarCircleOutlined,
@@ -59,7 +59,8 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
   );
 });
 
-function DuusakhTsagAvii({v}) {
+function DuusakhTsagAvii({v, data}) {
+  const [duussan, setDuussan] = useState(false)
   const tsagTootsoolur = () => {
     const today = moment(new Date()).format("YYYYMMDD");
     const duusakhUdur = moment(v).format("YYYYMMDD");
@@ -69,7 +70,9 @@ function DuusakhTsagAvii({v}) {
     const difference = duusakhTsag - odooginTsag;
     let timeLeft = "Дууссан";
     if (Number(today) <= Number(duusakhUdur)) {
-    if (difference > 0) {      
+    if (difference > 0) {     
+      if(difference < 300 && duussan === false){
+      setDuussan("duhsun") }
       var tsag = Math.floor(difference / 60 / 60)
       var minut = Math.floor((difference - (tsag * 60 * 60)) / 60)
       var second = Math.floor((difference - (tsag * 60 * 60) - (minut * 60)))
@@ -78,11 +81,23 @@ function DuusakhTsagAvii({v}) {
         minutes: minut,
         seconds: second,
       };
+    } else if (difference === 0) {
+      setDuussan(true); 
+      notification.warning({ duration: 0, message: "Цаг дууслаа", description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`)});
+           
     }
     }
 
     return timeLeft;
   };
+
+  useEffect(()=> {
+    if (duussan === true) {
+      setTimeout(() => {
+        setDuussan(false)
+      }, 5000);
+    }    
+  },[duussan])
 
   function FormatNumberLength(num, length) {
     var r = "" + num;
@@ -103,10 +118,10 @@ function DuusakhTsagAvii({v}) {
   if (timeLeft === "Тооцоолж байна") {
    return <div className="animate-pulse">Тооцоолж байна</div> 
   } else if (timeLeft === "Дууссан") {
-    return <div className="bg-red-500 text-white font-medium border cursor-default rounded-lg">Дууссан</div>
+    return <div className={`bg-red-500 ${duussan === true && "animate-bounce-fast "} text-white font-medium border cursor-default rounded-lg`}>Дууссан</div>
   } else
   return (
-    <div>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
+    <div className={`${duussan === "duhsun" ? "bg-yellow-500" : "bg-green-500"} text-white font-medium border cursor-default rounded-lg transition-colors`}>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
   )
 }
 
@@ -371,7 +386,7 @@ function togloom1() {
         dataIndex: "duusakhTsag",
         showSorterTooltip: false,
         render:(v, data) => {
-          return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover> : v && <DuusakhTsagAvii v={v}/>;
+          return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover> : v && <DuusakhTsagAvii v={v} data={data}/>;
         },
       },
       {

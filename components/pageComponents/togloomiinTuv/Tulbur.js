@@ -27,7 +27,7 @@ function Tulbur(
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
-  const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined})
+  const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
 
   const eBarimtRef = React.useRef(null);
