@@ -40,7 +40,7 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        zakhialgaMutate();
+        onRefresh();
         destroy();
       },
     }),
@@ -69,7 +69,7 @@ function Tulbur(
           if (data.success === true) {
             setEBarimt(data);
             handlePrint();
-            zakhialgaMutate();
+            onRefresh();
           }
         })
         .catch(aldaaBarigch);

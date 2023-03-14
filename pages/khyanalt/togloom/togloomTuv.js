@@ -4,6 +4,7 @@ import { useAuth } from "services/auth";
 import { Button, Card, DatePicker, Input, message, notification, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
 import {
   CheckCircleOutlined,
+  CloseCircleOutlined,
   DollarCircleOutlined,
   DownloadOutlined,
   DownOutlined,
@@ -290,7 +291,8 @@ function togloom1() {
       title: (
         <div className="w-full flex flex-row justify-between">
           <div>Тооцоо хийх</div>
-          <div className="mr-5">{data?.ovog?.charAt(0)}.{data?.ner}</div>
+          <div className="flex items-center">{data?.ovog?.charAt(0)}.{data?.ner}
+          <div className="text-xl ml-5 hover:text-red-400" onClick={() => tulburRef.current.khaaya()}><CloseCircleOutlined /></div></div>
         </div>
       ),
       content: (
@@ -541,13 +543,12 @@ function togloom1() {
   });
 
   function khuukhedBurtgekh(data) {
-    var khuukhedBurtgekhButtonId = "khuukhedBurtgekhButtonId";
     const footer = [
       <Space>
         <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           type="primary"
-          id={khuukhedBurtgekhButtonId}
+          id="khuukhedBurtgekhButtonId"
           onClick={() => mashinref.current.khadgalya()}
         >
           {t("Хадгалах")}
@@ -555,11 +556,10 @@ function togloom1() {
       </Space>,
     ];
     modal({
-      title: "Хүүхдийн цаг бүртгэл",
+      title: (<div className="flex w-full justify-between items-center">Хүүхдийн цаг бүртгэл <div className="text-xl hover:text-red-400" onClick={() => mashinref.current.khaaya()}><CloseCircleOutlined /></div></div>),
       icon: <FileExcelOutlined />,
       content: (
         <KhuukhedBurtgel
-          khuukhedBurtgekhButtonId={khuukhedBurtgekhButtonId}
           ref={mashinref}
           token={token}
           onRefresh={onRefresh}

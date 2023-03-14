@@ -43,17 +43,25 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
     if (data?.niitDun < tulbur.reduce((a, b) => a + b.dun, 0)) {
-      const khi = tulbur.findIndex((a) => a.turul === "khariult");
-      if (khi !== -1)
+      const khi = tulbur.findIndex((a) => a.turul === "khariult");      
+      if (khi !== -1){
+        if (tulbur[khi].dun > data?.niitDun) {
+          tulbur.splice(khi, 1)
+        } else
         tulbur[khi] = {
           turul: "khariult",
           dun: tulbur.reduce((a, b) => a + b.dun, 0) - data?.niitDun,
-        };
+        };}
       else
         tulbur.push({
           turul: "khariult",
           dun: tulbur.reduce((a, b) => a + b.dun, 0) - data?.niitDun,
         });
+    } else {
+      const khi = tulbur.findIndex((a) => a.turul === "khariult");
+      if (khi !== -1){
+        tulbur.splice(khi, 1)
+        };
     }
 
     setTulbur([...tulbur]);
