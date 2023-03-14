@@ -308,7 +308,7 @@ function togloom1() {
       content: (
         <Tulbur
           ref={tulburRef}
-          data={data}
+          data={_.cloneDeep(data)}
           token={token}
           baiguullaga={baiguullaga}
           barilgiinId={barilgiinId}
