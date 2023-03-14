@@ -325,7 +325,7 @@ function togloom1() {
       {
         title: "№",
         align: "center",
-        width: "2rem",
+        width: "2.5rem",
         render: (text, record, index) =>
           (togloominTuviinGaralt?.data?.khuudasniiDugaar || 0) *
             (togloominTuviinGaralt?.data?.khuudasniiKhemjee || 0) -
@@ -361,15 +361,22 @@ function togloom1() {
         title: t("Хүйс"),
         align: "center",
         dataIndex: "khuis",
-        width: "8rem",
+        width: "6rem",
         showSorterTooltip: false,
         render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
+      },
+      {
+        title: t("Төрөл"),
+        align: "center",
+        dataIndex: "turul",
+        width: "7rem",
+        showSorterTooltip: false,
       },
       {
         title: t("Утас"),
         align: "center",
         dataIndex: "utas",
-        width: "8rem",
+        width: "6rem",
         showSorterTooltip: false,
       },
       {
