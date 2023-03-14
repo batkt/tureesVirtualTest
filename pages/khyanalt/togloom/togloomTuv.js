@@ -50,6 +50,16 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
     }),
     [shaltgaan]
   );
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
   return (
     <div>
       <Input.TextArea
@@ -155,11 +165,11 @@ function togloom1() {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
-        {t("Устгах")}
+        {t("Цуцлах")}
       </Button>,
     ];
     modal({
-      title: "Цуцлах шалтгаан",
+      title: (<div className="flex w-full justify-between items-center">Цуцлах шалтгаан <div className="text-xl hover:text-red-400" onClick={() => tailbarRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
       content: (
         <TsutsalsanShaltgaan
           ref={tailbarRef}

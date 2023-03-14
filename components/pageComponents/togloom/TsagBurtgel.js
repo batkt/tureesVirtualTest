@@ -27,7 +27,7 @@ function TsagBurtgel(
   );
 
   function khugatsaaTootsoloy(khugatsaa) {
-    setTsag({ekhlekhtsag: moment(Date.now()), duusakhTsag: moment(Date.now()).add(khugatsaa, "minute")})
+    setTsag({ekhlekhtsag: moment(tsag.ekhlekhtsag), duusakhTsag: moment(tsag.ekhlekhtsag).add(khugatsaa, "minute")})
     if (khugatsaa > 0) {
       uilchilgee(token)
       .post("/togloomiinDunBoduulya", {minut: khugatsaa})
@@ -56,6 +56,17 @@ function TsagBurtgel(
           }
         });
   }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -161,8 +172,13 @@ function TsagBurtgel(
                     ]} label="Тоглох цаг /Мин/" name="khugatsaa">
         <InputNumber onKeyDown={focuser} className="w-40" onChange={(v)=> khugatsaaTootsoloy(v)} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Эхлэх цаг" name="ekhlekhTsag">
-        <TimePicker value={tsag.ekhlekhtsag} className="w-40" disabled onChange={(v)=> setTsag({...tsag, ekhlekhtsag:v})} showSecond={false} placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
+      <Form.Item rules={[
+                      {
+                        required: true,
+                        message: t("Эхлэх цаг бүртгэнэ үү!"),
+                      },
+                    ]} label="Эхлэх цаг" name="ekhlekhTsag">
+        <TimePicker value={tsag.ekhlekhtsag} className="w-40" onChange={(v)=> setTsag({ekhlekhtsag: v, duusakhTsag: moment(v).add((form.getFieldValue("khugatsaa") || 0), "minute")})} showSecond={false} placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
       </Form.Item>
       <Form.Item label="Дуусах цаг" name="duusakhTsag">
         <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v)=> setTsag({...tsag, duusakhTsag:v})} autoComplete="off" />
