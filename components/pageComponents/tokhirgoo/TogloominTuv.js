@@ -21,20 +21,26 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
     _id: undefined,
     udur: [],
     tariffuud: [],
-    undsenTariff: undefined
+    undsenTariff: undefined,
+    asragchTariff: undefined
   });
   const [amraltiinUdur, setAmraltiinUdur] = useState({
     _id: undefined,
     udur: [],
     tariffuud: [],
-    undsenTariff: undefined
+    undsenTariff: undefined,
+    asragchTariff: undefined
   });
+
+  const [ asragchTariff, setAsragchTariff ] = useState()
 
   function khadgalakh() {
     var duussan = []
     ajliinUdur.baiguullagiinId = baiguullaga._id;
+    ajliinUdur.asragchTariff = asragchTariff;
     ajliinUdur.barilgiinId = barilgiinId;
     amraltiinUdur.baiguullagiinId = baiguullaga._id;
+    amraltiinUdur.asragchTariff = asragchTariff;
     amraltiinUdur.barilgiinId = barilgiinId;
     if (!!ajliinUdur._id) {
       uilchilgee(token)
@@ -57,8 +63,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
       uilchilgee(token)
       .put(`/togloomiinTariff/${amraltiinUdur._id}`, amraltiinUdur)
       .then(({ data }) => {
-        if (data === "Amjilttai") {
-          message.success("Амжилттай хадгаллаа")
+        if (data === "Amjilttai") {          
         } else {return}
       })
     } else {
@@ -79,6 +84,7 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         if (!!data?.jagsaalt) {
           if (data.jagsaalt.length > 0) {
             setAjliinUdur({...ajliinUdur, udur: data?.jagsaalt[0].udur, tariffuud: data?.jagsaalt[0].tariffuud, _id: data?.jagsaalt[0]._id, undsenTariff: data?.jagsaalt[0].undsenTariff});
+            setAsragchTariff(data?.jagsaalt[0].asragchTariff)
           }          
           if (data.jagsaalt.length > 1) {
             setAmraltiinUdur({...ajliinUdur, udur: data?.jagsaalt[1].udur, tariffuud: data?.jagsaalt[1].tariffuud, _id: data?.jagsaalt[1]._id, undsenTariff: data?.jagsaalt[1].undsenTariff});
@@ -180,8 +186,14 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={amraltiinUdur.undsenTariff} onChange={(v)=> setAmraltiinUdur({...amraltiinUdur, undsenTariff: v})} className=""/>
-        </div>       
-      </div>
+        </div>
+        <div className="flex justify-between items-center py-2">
+          Нэмэлт асран хамгаалагчийн Тариф: <InputNumber  formatter={(value) =>
+                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                } 
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")} value={asragchTariff} onChange={(v)=> setAsragchTariff(v)} className=""/>
+        </div>
+      </div>     
       <div className="flex justify-end mt-5 box px-5 items-center py-2">
           <Button className="w-full" type="primary" onClick={()=> khadgalakh()}> Хадгалах</Button>
         </div>

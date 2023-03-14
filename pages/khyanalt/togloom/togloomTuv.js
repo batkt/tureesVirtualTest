@@ -33,6 +33,7 @@ import { useToololt } from "hooks/useToololt";
 import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 import TextArea from "antd/lib/input/TextArea";
 import { useTranslation } from "react-i18next";
+import BaganiinSongolt from "components/table/BaganiinSongolt";
 
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
@@ -147,6 +148,7 @@ function togloom1() {
   const mashinref = useRef(null);
   const [turul, setTurul] = useState({a: "tuluv", b: undefined});
   const tulburRef = React.useRef(null)
+  const [shineBagana, setShineBagana] = useState([]);
 
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
@@ -321,7 +323,7 @@ function togloom1() {
   }
 
   const columns = useMemo(() => {
-    return [
+    var jagsaalt = [
       {
         title: "№",
         align: "center",
@@ -356,22 +358,7 @@ function togloom1() {
         width: "4rem",
         showSorterTooltip: false,
         sorter: () => 0,
-      },
-      {
-        title: t("Хүйс"),
-        align: "center",
-        dataIndex: "khuis",
-        width: "6rem",
-        showSorterTooltip: false,
-        render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
-      },
-      {
-        title: t("Төрөл"),
-        align: "center",
-        dataIndex: "turul",
-        width: "7rem",
-        showSorterTooltip: false,
-      },
+      },      
       {
         title: t("Утас"),
         align: "center",
@@ -407,7 +394,11 @@ function togloom1() {
         render:(v, data) => {
           return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover> : v && <DuusakhTsagAvii v={v} data={data}/>;
         },
-      },
+      },           
+    ];
+    return [
+      ...jagsaalt,
+      ...shineBagana,
       {
         title: t("нийт дүн"),
         align: "center",
@@ -551,9 +542,8 @@ function togloom1() {
             </Popover>
           </div>}}
         },
-      },     
-    ];
-  }, [turul, token, baiguullaga, barilgiinId, ajiltan, togloominTuviinGaralt, t]);
+      },]
+  }, [turul, token, baiguullaga, barilgiinId, shineBagana, ajiltan, togloominTuviinGaralt, t]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -646,14 +636,60 @@ function togloom1() {
               {t("Тоглоомын орлого")} : {!!togloomiinDun?.toololt ? formatNumber(togloomiinDun?.toololt[0]?.dun) : 0}
                ₮
             </div>
-            <div className="space-x-2">
+            <div className="flex">                  
               <Button
+              style={{ marginRight: "10px" }}
                 type="primary"
                 icon={<PlusOutlined />}
                 onClick={() => khuukhedBurtgekh()}
               >
                 {t("Бүртгэл")}
-              </Button>         
+              </Button>    
+              <BaganiinSongolt
+                shineBagana={shineBagana}
+                setShineBagana={setShineBagana}
+                columns={[
+                  {
+                    title: t("Хүйс"),
+                    align: "center",
+                    dataIndex: "khuis",
+                    width: "6rem",
+                    showSorterTooltip: false,
+                    render:(a)=> <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
+                  },
+                  {
+                    title: t("Төрөл"),
+                    align: "center",
+                    dataIndex: "turul",
+                    width: "7rem",
+                    showSorterTooltip: false,
+                  },
+                  {
+                    title: t("Хэлбэр"),
+                    align: "center",
+                    dataIndex: "khelber",
+                    width: "7rem",
+                    showSorterTooltip: false,
+                    render:(v, data)=> {
+                      const jagsaalt = data?.tulbur.filter(a => a.turul !== "khunglukh")
+                      var utga = undefined
+                      if (jagsaalt.length > 0) {
+                        switch (jagsaalt[0].turul) {                        
+                          case "belen":
+                            utga = "Бэлэн"
+                            break;
+                            case "khariltsakh":
+                              utga = "Харилцах"
+                              break;
+                          default: utga = data?.tulbur[0].turul
+                            break;
+                        }
+                      }
+                     return <div>{utga}</div>
+                    }
+                  },
+                ]}
+              />      
               <Popover
               content={() => (
                 <div className="flex w-32 flex-col">
