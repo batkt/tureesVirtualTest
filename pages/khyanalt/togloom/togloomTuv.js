@@ -768,7 +768,6 @@ function togloom1() {
                               title: t("Нас"),
                               dataIndex: "nas",
                               ellipsis: true,
-                              width: "5rem",
                               align: "center",
                             },
                             {
