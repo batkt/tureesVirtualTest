@@ -823,13 +823,36 @@ function togloom1() {
                               },
                             },
                             {
+                              title: t("Хэлбэр"),
+                              align: "center",
+                              dataIndex: "tulbur",
+                              ellipsis: true,
+                              render: (data) => {
+                                const jagsaalt = data?.filter(a => a.turul !== "khunglukh")
+                                var utga = ""
+                                if (jagsaalt.length > 0) {
+                                  switch (jagsaalt[0].turul) {
+                                    case "belen":
+                                      utga = "Бэлэн"
+                                      break;
+                                    case "khariltsakh":
+                                      utga = "Харилцах"
+                                      break;
+                                    default: utga = data?.tulbur[0].turul
+                                      break;
+                                  }
+                                }
+                                return <div>{utga}</div>
+                              }
+                            },
+                            {
                               title: t("Асран хамгаалагч"),
                               dataIndex: "asragchiinTurul",
                               ellipsis: true,
                               render: (data) => {
                                 return <div>{data?.map((data, index) => <div key={index}>{data}</div>)}</div>
                               }
-                            },
+                            },                            
                           ])
                           .addDataSource(togloominTuviinGaralt?.jagsaalt)
                           .saveAs("Тоглоомын төв.xlsx");
