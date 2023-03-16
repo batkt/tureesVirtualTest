@@ -428,7 +428,7 @@ function togloom1() {
         showSorterTooltip: false,
         render: (v, data) => {
           const khunglukh = data?.tulbur?.find(a => a.turul === "khunglukh")
-          return <div className="w-full flex items-center">{!!khunglukh?.tailbar && <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{khunglukh?.tailbar}</div></div>} ><div className="w-full flex justify-center text-lg text-blue-500"><EyeOutlined className="cursor-pointer" /></div></Popover>} <div className="w-full text-right">{khunglukh ? formatNumber(v, 0) : 0}</div></div>
+          return <div className="w-full flex items-center">{!!khunglukh?.tailbar && <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">{khunglukh?.tailbar}</div></div>} ><div className="w-full flex justify-center text-lg text-blue-500"><EyeOutlined className="cursor-pointer" /></div></Popover>} <div className="w-full text-right">{khunglukh ? formatNumber(v, 0) : 0}</div></div>
         },
       },
       {
