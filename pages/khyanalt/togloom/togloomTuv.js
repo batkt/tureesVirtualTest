@@ -836,6 +836,11 @@ function togloom1() {
                               },
                             },
                             {
+                              title: t("Сунгасан/мин/"),
+                              dataIndex: "sungsanMinut",
+                              render:(data)=> !!data ? data : 0
+                            },
+                            {
                               title: t("Дуусах цаг"),
                               dataIndex: "duusakhTsag",
                               ellipsis: true,
