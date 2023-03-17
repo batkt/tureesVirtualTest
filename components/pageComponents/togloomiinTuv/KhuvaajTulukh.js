@@ -198,10 +198,11 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             value={khunglult.tailbarTurul}
             name="tailbar"
             onChange={(v) => {setKhunglult({...khunglult, tailbarTurul: v, tailbar: v !== "Бусад" ? v : undefined})}}
-            style={{ width: "35%" }}
+            style={{ width: "230px" }}
             placeholder="Тайлбар сонгох"
           >
             <Select.Option key={"Төрсөн өдөр"}>Төрсөн өдөр</Select.Option>
+            <Select.Option key={"Төрсөн өдөр"}>Хөгжлийн бэрхшээлтэй</Select.Option>
             <Select.Option key={"Бусад"}>Бусад</Select.Option>
           </Select>
         </div>

@@ -64,7 +64,7 @@ function TsagBurtgel(
   useEffect(()=> {
     if (khugatsaa > 0 || asragchiinToo.length > 0) {
       uilchilgee(token)
-      .post("/togloomiinDunBoduulya", {minut: khugatsaa, asragchiinToo: asragchiinToo.length})
+      .post("/togloomiinDunBoduulya", {minut: khugatsaa || 0, asragchiinToo: asragchiinToo.length || 0})
       .then(({data})=> {
         if (!!data) {
           form.setFieldValue("niitDun", data?.dun)
@@ -153,6 +153,13 @@ function TsagBurtgel(
                       {
                         required: true,
                         message: t("Утас бүртгэнэ үү!"),
+                      },                      
+                      {
+                        
+                        required:form.getFieldValue("utas")?.length > 0 && true,
+                        min: 8,
+                        max: 8,
+                        message: t("Утасны дугаараа шалгана уу!"),
                       },
                     ]} label="Утас" name="utas">
         <Input onKeyDown={focuser} placeholder="Утас" autoComplete="off" />

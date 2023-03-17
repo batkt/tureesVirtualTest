@@ -56,6 +56,7 @@ function Tulbur(
       }
       const body = {
         zakhialgiinDugaar: id,
+        ebarimtiinTurul: "togloom"
       };
       if (baiguullagaEsekh || irgenEsekh) {
         body.register = register;

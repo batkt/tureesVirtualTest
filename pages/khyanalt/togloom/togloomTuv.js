@@ -77,12 +77,24 @@ function DuusakhTsagAvii({ v, data }) {
     const today = moment(new Date()).format("YYYYMMDD");
     const duusakhUdur = moment(v).format("YYYYMMDD");
     const odooginTsag = Number(moment(new Date()).format("HH")) * 60 * 60 + Number(moment(new Date()).format("mm")) * 60 + Number(moment(new Date()).format("ss"));
+    const ekhlekhTsag = Number(moment(data?.ekhlekhTsag).format("HH")) * 60 * 60 + Number(moment(data?.ekhlekhTsag).format("mm")) * 60 + Number(moment(data?.ekhlekhTsag).format("ss"));
     const duusakhTsag = Number(moment(v).format("HH")) * 60 * 60 + Number(moment(v).format("mm")) * 60 + Number(moment(v).format("ss"))
-
+    
     const difference = duusakhTsag - odooginTsag;
-    let timeLeft = "Дууссан";
+    const difference2 = duusakhTsag - ekhlekhTsag;
+    let timeLeft = "Дууссан";    
     if (Number(today) <= Number(duusakhUdur)) {
-      if (difference > 0) {
+      if (ekhlekhTsag > odooginTsag) {
+        var tsag = Math.floor(difference2 / 60 / 60)
+        var minut = Math.floor((difference2 - (tsag * 60 * 60)) / 60)
+        var second = Math.floor((difference2 - (tsag * 60 * 60) - (minut * 60)))
+        timeLeft = {
+          hours: tsag,
+          minutes: minut,
+          seconds: second,
+          ekhlekhTsagBoloogui: true
+        };
+      } else if (difference > 0) {
         var tsag = Math.floor(difference / 60 / 60)
         var minut = Math.floor((difference - (tsag * 60 * 60)) / 60)
         var second = Math.floor((difference - (tsag * 60 * 60) - (minut * 60)))
@@ -134,10 +146,10 @@ function DuusakhTsagAvii({ v, data }) {
     return <div className={`bg-red-500 ${duussan === true && "animate-bounce-fast "} text-white font-medium border cursor-default rounded-lg`}>Дууссан</div>
   } else
     return (
-      <div className={`${duussan === "duhsun" ? "bg-yellow-500" : "bg-green-500"} text-white font-medium border cursor-default rounded-lg transition-colors`}>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div>
+      <Popover content={timeLeft?.ekhlekhTsagBoloogui === true && <div>{moment(data?.ekhlekhTsag).format("HH:mm")}-аас эхэлнэ</div>}><div className={`${duussan === "duhsun" ? "bg-yellow-500" : timeLeft?.ekhlekhTsagBoloogui === true ? "bg-blue-600" : "bg-green-500"} text-white font-medium border cursor-default rounded-lg transition-colors`}>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div></Popover>
     )
 }
-
+const searchKeys = ["ner", "utas", "ovog"]
 function togloom1() {
   const { t, i18n } = useTranslation()
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -207,7 +219,7 @@ function togloom1() {
     };
   }, [ognoo, turul]);
 
-  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order);
+  const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order, undefined, searchKeys);
   const tailbarRef = React.useRef(null)
 
 
@@ -374,7 +386,7 @@ function togloom1() {
         showSorterTooltip: false,
       },
       {
-        title: t("Хугацаа /мин/"),
+        title: t("Хугацаа/мин/"),
         align: "center",
         width: "8rem",
         showSorterTooltip: false,
@@ -391,6 +403,15 @@ function togloom1() {
         render: (v) => {
           return moment(v).format("YYYY-MM-DD HH:mm");
         },
+      },
+      {
+        title: t("Сунгасан/мин/"),
+        align: "center",
+        width: "8.5rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        dataIndex: "sungsanMinut",
+        render:(data)=> !!data ? data : 0
       },
       {
         title: t("Төлөв"),
@@ -569,6 +590,20 @@ function togloom1() {
                           : "Гаргах"}
                       </div>
                     </Popconfirm>}
+                    {data?.tuluv !== 3 && <Popconfirm
+                      disabled={data?.tuluv === 3}
+                      title={<div>Та үйлчлүүлэгчийн цаг сунгах гэж байна 
+                      <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
+                      onConfirm={() => message.success("Амжилттай сунгалаа")}
+                    >
+                      <div
+                        className={`text-md cursor-pointer rounded-full text-center bg-green-500 py-1 px-3 font-medium text-gray-50`}
+                      >
+                        Сунгах
+                      </div>
+                    </Popconfirm>}
                   </div>
                 )}
               >
@@ -620,6 +655,9 @@ function togloom1() {
     <Admin
       title="Тоглоомын төв"
       khuudasniiNer="togloomTuv"
+      onSearch={(search) =>
+        togloominTuviinGaralt.setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+      }
       className="p-0 md:p-4"
       tsonkhniiId={"64113e5d8505554744a87713"}
     >
