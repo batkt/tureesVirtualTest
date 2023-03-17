@@ -248,7 +248,7 @@ function togloom1() {
         }
       },
       {
-        name: "Цуцалсан",
+        name: "Цуцлагдсан",
         too: formatNumber(
           toololt?.length > 0 ? toololt[0]?.tsutsalsan : 0,
           0
@@ -542,27 +542,24 @@ function togloom1() {
           const difference = Number(String(duusakhUdur) + String(duusakhTsag)) - Number(String(today) + String(odooginTsag));
           const ner = data?.ner
           const ovog = data?.ovog
-          if (data.tulburTulsunEsekh === true || (Number(today) <= Number(duusakhUdur) && difference > 0)) {
+          if (-1 !== data?.tuluv && (data.tulburTulsunEsekh === true || (Number(today) <= Number(duusakhUdur) && difference > 0))) {
             return <div className="flex flex-row justify-center">
               <Popover
+              zIndex={10}              
                 placement="bottom"
-                trigger="click"
+                trigger="hover"
                 content={() => (
                   <div className="flex flex-col space-y-2">
                     {Number(today) <= Number(duusakhUdur) && difference > 0 && <Popconfirm
-                      disabled={data?.tuluv === - 1}
                       title={`Та цуцлахдаа итгэлтэй байна уу?`}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
-                      onConfirm={() => tsutslakh(data)}
+                      onConfirm={() => {tsutslakh(data)}}
                     >
                       <div
-                        className={`text-md cursor-pointer rounded-full bg-${-1 === data?.tuluv
-                            ? "gray"
-                            : "yellow"
-                          }-500 py-1 px-3 font-medium text-gray-50`}
+                        className={`text-md cursor-pointer rounded-full bg-yellow-500 py-1 px-3 font-medium text-gray-50`}
                       >
-                        {-1 === data?.tuluv ? t("Цуцлагдсан") : t("Цуцлах")}
+                        {t("Цуцлах")}
                       </div>
                     </Popconfirm>}
                     {data.tulburTulsunEsekh === true && difference < 1 && <Popconfirm
@@ -590,7 +587,7 @@ function togloom1() {
                           : "Гаргах"}
                       </div>
                     </Popconfirm>}
-                    {data?.tuluv !== 3 && <Popconfirm
+                    {/* {data?.tuluv !== 3 && <Popconfirm
                       disabled={data?.tuluv === 3}
                       title={<div>Та үйлчлүүлэгчийн цаг сунгах гэж байна 
                       <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
@@ -603,7 +600,7 @@ function togloom1() {
                       >
                         Сунгах
                       </div>
-                    </Popconfirm>}
+                    </Popconfirm>} */}
                   </div>
                 )}
               >
