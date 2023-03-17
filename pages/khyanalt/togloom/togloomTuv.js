@@ -596,7 +596,7 @@ function togloom1() {
                       <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
-                      onConfirm={() => message.success("Амжилттай сунгалаа")}
+                      onConfirm={() => message.info("Сунгах үйлдэл тун удахгүй...")}
                     >
                       <div
                         className={`text-md cursor-pointer rounded-full text-center bg-green-500 py-1 px-3 font-medium text-gray-50`}
