@@ -71,7 +71,7 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
   );
 });
 
-function DuusakhTsagAvii({ v, data }) {
+function DuusakhTsagAvii({ v, data, onRefresh }) {
   const [duussan, setDuussan] = useState(false)
   const tsagTootsoolur = () => {
     const today = moment(new Date()).format("YYYYMMDD");
@@ -110,6 +110,7 @@ function DuusakhTsagAvii({ v, data }) {
         notification.warning({ duration: 0, message: "Цаг дууслаа", description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`) });
       } else if (duussan === "duhsun") {
         setDuussan(true);
+        onRefresh()
       }
     }
 
@@ -423,7 +424,7 @@ function togloom1() {
         render: (v, data) => {
           return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover>
             : data.tuluv === 3 ? <div className="bg-green-500 text-white cursor-pointer font-medium border rounded-lg">Гарсан</div>
-              : <DuusakhTsagAvii v={data.duusakhTsag} data={data} />;
+              : <DuusakhTsagAvii v={data.duusakhTsag} data={data} onRefresh={onRefresh}/>;
         },
       },
     ];
