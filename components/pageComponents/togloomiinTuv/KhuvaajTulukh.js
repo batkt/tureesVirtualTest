@@ -1,4 +1,4 @@
-import { Form, Input, InputNumber, Select, Switch } from "antd";
+import { Form, InputNumber, Select, Switch } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import React, { useEffect } from "react";
 
@@ -202,7 +202,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             placeholder="Тайлбар сонгох"
           >
             <Select.Option key={"Төрсөн өдөр"}>Төрсөн өдөр</Select.Option>
-            <Select.Option key={"Төрсөн өдөр"}>Хөгжлийн бэрхшээлтэй</Select.Option>
+            <Select.Option key={"Хөгжлийн бэрхшээлтэй"}>Хөгжлийн бэрхшээлтэй</Select.Option>
             <Select.Option key={"Бусад"}>Бусад</Select.Option>
           </Select>
         </div>

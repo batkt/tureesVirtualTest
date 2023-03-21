@@ -24,16 +24,15 @@ import { useRef, useEffect } from "react";
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useOrder from "tools/function/useOrder";
-import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useToololt } from "hooks/useToololt";
 import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
-import TextArea from "antd/lib/input/TextArea";
 import { useTranslation } from "react-i18next";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
+import { excelTatajAvya } from "../zogsool";
 
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
@@ -873,120 +872,115 @@ function togloom1() {
                     <a
                       className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                       onClick={() => {
-                        const { Excel } = require("antd-table-saveas-excel");
-                        const excelExport = new Excel();
-                        excelExport
-                          .addSheet("Тоглоомын төв")
-                          .addColumns([
-                            {
-                              title: t("Овог"),
-                              dataIndex: "ovog",
-                              ellipsis: true,
+                        excelTatajAvya(token,'togloomiinTuv',togloominTuviinGaralt.data?.niitMur,[
+                          {
+                            title: t("Овог"),
+                            dataIndex: "ovog",
+                            ellipsis: true,
+                          },
+                          { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
+                          {
+                            title: t("Нэр"),
+                            dataIndex: "ner",
+                            ellipsis: true,
+                            width: "5rem",
+                          },
+                          {
+                            title: t("Нас"),
+                            dataIndex: "nas",
+                            ellipsis: true,
+                            align: "center",
+                          },
+                          {
+                            title: t("Хүйс"),
+                            dataIndex: "khuis",
+                            ellipsis: true,
+                            align: "center",
+                            render: (a) => <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
+                          },
+                          {
+                            title: t("Утас"),
+                            dataIndex: "utas",
+                            ellipsis: true,
+                            align: "center"
+                          },
+                          {
+                            title: t("Хугацаа /мин/"),
+                            dataIndex: "khugatsaa",
+                            ellipsis: true,
+                            align: "center",
+                          },
+                          {
+                            title: t("Эхлэх цаг"),
+                            dataIndex: "ekhlekhTsag",
+                            ellipsis: true,                              
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD HH:mm");
                             },
-                            { title: t("Нэр"), dataIndex: "ner", ellipsis: true },
-                            {
-                              title: t("Нэр"),
-                              dataIndex: "ner",
-                              ellipsis: true,
-                              width: "5rem",
-                            },
-                            {
-                              title: t("Нас"),
-                              dataIndex: "nas",
-                              ellipsis: true,
-                              align: "center",
-                            },
-                            {
-                              title: t("Хүйс"),
-                              dataIndex: "khuis",
-                              ellipsis: true,
-                              align: "center",
-                              render: (a) => <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
-                            },
-                            {
-                              title: t("Утас"),
-                              dataIndex: "utas",
-                              ellipsis: true,
-                              align: "center"
-                            },
-                            {
-                              title: t("Хугацаа /мин/"),
-                              dataIndex: "khugatsaa",
-                              ellipsis: true,
-                              align: "center",
-                            },
-                            {
-                              title: t("Эхлэх цаг"),
-                              dataIndex: "ekhlekhTsag",
-                              ellipsis: true,                              
-                              render: (data) => {
-                                return moment(data).format("YYYY-MM-DD HH:mm");
-                              },
-                            },
-                            {
-                              title: t("Сунгасан/мин/"),
-                              dataIndex: "sungsanMinut",
-                              render:(data)=> !!data ? data : 0
-                            },
-                            {
-                              title: t("Дуусах цаг"),
-                              dataIndex: "duusakhTsag",
-                              ellipsis: true,
+                          },
+                          {
+                            title: t("Сунгасан/мин/"),
+                            dataIndex: "sungsanMinut",
+                            render:(data)=> !!data ? data : 0
+                          },
+                          {
+                            title: t("Дуусах цаг"),
+                            dataIndex: "duusakhTsag",
+                            ellipsis: true,
 
-                              render: (data) => {
-                                return moment(data).format("YYYY-MM-DD HH:mm");
-                              },
+                            render: (data) => {
+                              return moment(data).format("YYYY-MM-DD HH:mm");
                             },
-                            {
-                              title: t("нийт дүн"),
-                              dataIndex: "niitDun",
-                              ellipsis: true,
-                              render: (data) => {
-                                return <div style={{textAlign: "right"}}>{formatNumber(data, 0)}</div>;
-                              },
+                          },
+                          {
+                            title: t("нийт дүн"),
+                            dataIndex: "niitDun",
+                            ellipsis: true,
+                            render: (data) => {
+                              return formatNumber(data, 0)
                             },
-                            {
-                              title: t("Хөнгөлсөн дүн"),
-                              dataIndex: "khungulsunDun",
-                              ellipsis: true,
-                              render: (data) => {
-                                return <div className="text-right">{formatNumber(data, 0)}</div>;
-                              },
+                          },
+                          {
+                            title: t("Хөнгөлсөн дүн"),
+                            dataIndex: "khungulsunDun",
+                            ellipsis: true,
+                            render: (data) => {
+                              return formatNumber(data, 0)
                             },
-                            {
-                              title: t("Хэлбэр"),
-                              align: "center",
-                              dataIndex: "tulbur",
-                              ellipsis: true,
-                              render: (data) => {
-                                const jagsaalt = data?.filter(a => a.turul !== "khunglukh")
-                                var utga = ""
-                                if (jagsaalt.length > 0) {
-                                  switch (jagsaalt[0].turul) {
-                                    case "belen":
-                                      utga = "Бэлэн"
-                                      break;
-                                    case "khariltsakh":
-                                      utga = "Харилцах"
-                                      break;
-                                    default: utga = data?.tulbur[0].turul
-                                      break;
-                                  }
+                          },
+                          {
+                            title: t("Хэлбэр"),
+                            align: "center",
+                            dataIndex: "tulbur",
+                            ellipsis: true,
+                            render: (data) => {
+                              const jagsaalt = data?.filter(a => a.turul !== "khunglukh")
+                              var utga = ""
+                              if (jagsaalt?.length > 0) {
+                                switch (jagsaalt[0].turul) {
+                                  case "belen":
+                                    utga = "Бэлэн"
+                                    break;
+                                  case "khariltsakh":
+                                    utga = "Харилцах"
+                                    break;
+                                  default: utga = data?.[0].turul
+                                    break;
                                 }
-                                return <div>{utga}</div>
                               }
-                            },
-                            {
-                              title: t("Асран хамгаалагч"),
-                              dataIndex: "asragchiinTurul",
-                              ellipsis: true,
-                              render: (data) => {
-                                return <div>{data?.map((data, index) => <div key={index}>{data}</div>)}</div>
-                              }
-                            },                            
-                          ])
-                          .addDataSource(togloominTuviinGaralt?.jagsaalt)
-                          .saveAs("Тоглоомын төв.xlsx");
+                              return utga
+                            }
+                          },
+                          {
+                            title: t("Асран хамгаалагч"),
+                            dataIndex: "asragchiinTurul",
+                            ellipsis: true,
+                            render: (data) => {
+                              return data?.map((data) => data)?.join(',')
+                            }
+                          },                            
+                        ],query,order,'Тоглоомын төв')
+                       
                       }}
                     >
                       <DownloadOutlined style={{ fontSize: "18px" }} />

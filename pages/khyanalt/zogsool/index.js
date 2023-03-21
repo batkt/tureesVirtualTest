@@ -25,7 +25,7 @@ import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 
-function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+export function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
   message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ!"), 100000);
   uilchilgee(token)
     .get(service, {
