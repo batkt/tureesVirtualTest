@@ -20,13 +20,13 @@ function Tulbur(
     data?.tulburTulsunEsekh === true ? 2 : 1
   );
   const [khaanbank, setTerminal] = React.useState(false);
-  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
+  const [tulbur, setTulbur] = React.useState((data?.dutuuDun ? [] : data?.tulbur) || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(false);
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
-  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
+  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
 
@@ -82,7 +82,7 @@ function Tulbur(
       tulbur.find((a) => a.turul === "khaan").khariu = val;
       guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
       setTulbur(tulbur);
-    } else if (data?.niitDun === tulbur.reduce((a, b) => a + b.dun, 0))
+    } else if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0))
       setAlkham(2);
   }
 
@@ -90,7 +90,7 @@ function Tulbur(
     setTerminal(false);
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
     setTulbur([...tulbur]);
-    if (data?.niitDun === tulbur.reduce((a, b) => a + b.dun, 0)) {
+    if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0)) {
       guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
       setAlkham(2);
     }
@@ -160,7 +160,7 @@ function Tulbur(
         .catch(aldaaBarigch);
       setTerminal(true);
     } else if (
-      data?.niitDun ===
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
       tulbur.reduce((a, b) => {
         if (b.turul === "khariult") return a - b.dun;
         return a + b.dun;
@@ -210,7 +210,7 @@ function Tulbur(
             </div>
             <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
               {formatNumber(
-                data?.niitDun -
+                (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
                 tulbur
                   .filter((a) => a.turul !== "khariult")
                   .reduce((a, b) => a + b.dun, 0) || 0

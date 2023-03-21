@@ -1,7 +1,7 @@
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, Input, message, notification, Popconfirm, Popover, Space, Table, Tooltip } from "antd";
+import { Button, Card, DatePicker, Input, InputNumber, message, notification, Popconfirm, Popover, Select, Space, Table, TimePicker, Tooltip } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -67,6 +67,72 @@ const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
         value={shaltgaan}
         onChange={({ target }) => setTsutsalsanShaltgaan(target?.value)}
       />
+    </div>
+  );
+});
+
+const TsagSungakh = React.forwardRef(({ data, destroy, confirm, token }, ref) => {
+  const [niitDun, setNiitDun] = useState();
+  const [ khugatsaa, setKhugatsaa ] = useState();
+  const [ ekhlekhTsag, setEkhlekhTsag ] = useState(data?.duusakhTsag);
+  const [ duusakhTsag, setDuusakhTsag ] = useState(data?.duusakhTsag);
+  const [ asragch, setAsragch ] = useState(data?.asragchiinTurul);
+
+
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        confirm(niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data);
+        destroy();
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data]
+  );
+  function onChangeKhugatsaa(v) {
+    setDuusakhTsag(moment(ekhlekhTsag).add("minutes", v))
+    setKhugatsaa(v)
+  }
+
+  useEffect(() => {
+    if (khugatsaa > 0 || asragch.length > 0) {      
+      uilchilgee(token)
+        .post("/togloomiinDunBoduulya", { minut: khugatsaa || 0, asragchiinToo: asragch.length || 0 })
+        .then(({ data }) => {
+          if (!!data) {
+            setNiitDun(data?.dun)
+          } else {setNiitDun(undefined)}
+        })
+    } else {setNiitDun(undefined)}
+  }, [khugatsaa, asragch])
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center"><label className="w-48 text-end pr-4">Асран хамгаалагч:</label><Select className="w-full" mode="multiple" value={asragch} onChange={(v) => {setAsragch(v);} } placeholder="Асран хамгаалагч">
+          {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
+            return <Select.Option key={a}>{a}</Select.Option>
+          })}
+        </Select></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">Хугацаа/мин/:</label><InputNumber className="w-full" placeholder="Сунгах хугацаа/мин/" onChange={(v)=> onChangeKhugatsaa(v)}/></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">Эхлэх цаг/мин/:</label><TimePicker showSecond={false} placeholder="Эхлэх цаг/мин/ " disabled className="w-full" value={moment(ekhlekhTsag)}  autoComplete="off" /></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">Дуусах цаг/мин/:</label><TimePicker showSecond={false} placeholder="Дуусах цаг/мин/ " disabled className="w-full" value={moment(duusakhTsag)} autoComplete="off" /></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">Дүн:</label><InputNumber value={niitDun} formatter={(value) =>
+          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")} disabled={true} placeholder="Дүн" min="1" className="w-full" /></div>
     </div>
   );
 });
@@ -207,6 +273,41 @@ function togloom1() {
       footer,
     });
   }
+  function sungakh(data) {
+    const footer = [
+      <Button onClick={() => sungakhRef.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button type="primary" onClick={() => sungakhRef.current.khadgalya()}>
+        {t("Сунгах")}
+      </Button>,
+    ];
+    modal({
+      title: (<div className="flex w-full justify-between items-center">Цаг сунгах<div className="text-xl hover:text-red-400" onClick={() => sungakhRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
+      content: (
+        <TsagSungakh
+          ref={sungakhRef}
+          token={token}
+          data={data}
+          confirm={(niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data) =>
+            uilchilgee(token)
+              .post("/togloomSungaya", {
+                khugatsaa,
+                niitDun,
+                ekhlekhTsag,
+                duusakhTsag,
+                id: data?._id
+              })
+              .then(({ data }) => {
+                if (data === "Amjilttai") {
+                  message.success("Цуцлагдлаа");
+                }
+              }).catch(aldaaBarigch)
+              .finally(() => onRefresh())
+          }
+        />
+      ),
+      footer,
+    });
+  }
 
   const query = useMemo(() => {
     return {
@@ -222,6 +323,7 @@ function togloom1() {
 
   const togloominTuviinGaralt = useJagsaalt("togloomiinTuv", query, order, undefined, searchKeys);
   const tailbarRef = React.useRef(null)
+  const sungakhRef = React.useRef(null)
 
 
   const toololtGaralt = useMemo(
@@ -478,7 +580,7 @@ function togloom1() {
                   // icon={<DollarCircleOutlined className="text-white" />}
                   onClick={() => tulburTulyu(data)}
                 >
-                  {data?.tuluv === 0 ? (
+                  {data?.tulburTulsunEsekh !== true? (
                     <div className="text-white flex  justify-center items-center space-x-2">
                       <div className="flex justify-center items-center">
                         <DollarCircleOutlined />
@@ -551,7 +653,21 @@ function togloom1() {
                 trigger="hover"
                 content={() => (
                   <div className="flex flex-col space-y-2">
-                    {Number(today) <= Number(duusakhUdur) && difference > 0 && <Popconfirm
+                    {data?.tuluv !== 3 && <Popconfirm
+                      disabled={data?.tuluv === 3}
+                      title={<div>Та үйлчлүүлэгчийн цаг сунгах гэж байна 
+                      <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
+                      onConfirm={() => sungakh(data)}
+                    >
+                      <div
+                        className={`text-md cursor-pointer rounded-full text-center bg-green-500 py-1 px-3 font-medium text-gray-50`}
+                      >
+                        Сунгах
+                      </div>
+                    </Popconfirm>}
+                    {Number(today) <= Number(duusakhUdur) && difference > 0 && data?.tulburTulsunEsekh !== true && <Popconfirm
                       title={`Та цуцлахдаа итгэлтэй байна уу?`}
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
@@ -587,21 +703,7 @@ function togloom1() {
                           ? "Гарсан"
                           : "Гаргах"}
                       </div>
-                    </Popconfirm>}
-                    {/* {data?.tuluv !== 3 && <Popconfirm
-                      disabled={data?.tuluv === 3}
-                      title={<div>Та үйлчлүүлэгчийн цаг сунгах гэж байна 
-                      <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      onConfirm={() => message.info("Сунгах үйлдэл тун удахгүй...")}
-                    >
-                      <div
-                        className={`text-md cursor-pointer rounded-full text-center bg-green-500 py-1 px-3 font-medium text-gray-50`}
-                      >
-                        Сунгах
-                      </div>
-                    </Popconfirm>} */}
+                    </Popconfirm>}                    
                   </div>
                 )}
               >
@@ -621,18 +723,6 @@ function togloom1() {
   });
 
   function khuukhedBurtgekh(data) {
-    const footer = [
-      <Space>
-        <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
-        <Button
-          type="primary"
-          id="khuukhedBurtgekhButtonId"
-          onClick={() => mashinref.current.khadgalya()}
-        >
-          {t("Хадгалах")}
-        </Button>
-      </Space>,
-    ];
     modal({
       title: (<div className="flex w-full justify-between items-center">Хүүхдийн цаг бүртгэл <div className="text-xl hover:text-red-400" onClick={() => mashinref.current.khaaya()}><CloseCircleOutlined /></div></div>),
       icon: <FileExcelOutlined />,
@@ -645,7 +735,7 @@ function togloom1() {
           data={data}
         />
       ),
-      footer,
+      footer: false
     });
   }
 

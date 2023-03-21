@@ -42,20 +42,20 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
     const index = tulbur.findIndex((a) => a.turul === k);
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
-    if (data?.niitDun < tulbur.reduce((a, b) => a + b.dun, 0)) {
+    if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) < tulbur.reduce((a, b) => a + b.dun, 0)) {
       const khi = tulbur.findIndex((a) => a.turul === "khariult");      
       if (khi !== -1){
-        if (tulbur[khi].dun > data?.niitDun) {
+        if (tulbur[khi].dun > (data?.dutuuDun ? data?.dutuuDun : data?.niitDun)) {
           tulbur.splice(khi, 1)
         } else
         tulbur[khi] = {
           turul: "khariult",
-          dun: tulbur.reduce((a, b) => a + b.dun, 0) - data?.niitDun,
+          dun: tulbur.reduce((a, b) => a + b.dun, 0) - (data?.dutuuDun ? data?.dutuuDun : data?.niitDun),
         };}
       else
         tulbur.push({
           turul: "khariult",
-          dun: tulbur.reduce((a, b) => a + b.dun, 0) - data?.niitDun,
+          dun: tulbur.reduce((a, b) => a + b.dun, 0) - (data?.dutuuDun ? data?.dutuuDun : data?.niitDun),
         });
     } else {
       const khi = tulbur.findIndex((a) => a.turul === "khariult");
@@ -95,7 +95,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
 
   function onDoubleClick(e) {
     const tulukhDun =
-      data?.niitDun -
+    (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
       tulbur
         .filter((a) => a.turul !== e.target.name)
         .reduce((a, b) => a + b.dun, 0);
@@ -179,7 +179,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             onChange={(v) => {setKhunglult({...khunglult, khungulukhDun: v}); onChangeDun(v, "khunglukh")}}
             style={{ width: "25%" }}
             max={
-              data?.niitDun -
+              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
               tulbur
                 .filter((a) => a.turul !== "khunglukh")
                 .reduce((a, b) => a + b.dun, 0)
@@ -248,7 +248,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             onChange={(v) => onChangeDun(v, "khariltsakh")}
             style={{ width: "25%" }}
             max={
-              data?.niitDun -
+              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
               tulbur
                 .filter((a) => a.turul !== "khariltsakh")
                 .reduce((a, b) => a + b.dun, 0)
@@ -275,7 +275,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             onChange={(v) => onChangeDun(v, "bogd")}
             style={{ width: "25%" }}
             max={
-              data?.niitDun -
+              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
               tulbur
                 .filter((a) => a.turul !== "bogd")
                 .reduce((a, b) => a + b.dun, 0)
@@ -304,7 +304,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
                 onChange={(v) => onChangeDun(v, mur.talbar)}
                 style={{ width: "25%" }}
                 max={
-                  data?.niitDun -
+                  (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
                   tulbur
                     .filter((a) => a.turul !== mur.talbar)
                     .reduce((a, b) => a + b.dun, 0)
