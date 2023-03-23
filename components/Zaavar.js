@@ -111,9 +111,9 @@ function Zaavar({token,id}) {
     }
     if(!!tsonkh?.zaavar)
     return (
-        <div style={{lineHeight:0}}>
+        <div className='cursor-pointer' style={{lineHeight:0}}>
             <Tooltip title={t("Цонхны заавар")} onClick={zaavarKharya}>
-                <QuestionCircleOutlined />
+            <img className='h-5' src='/infoRently.png'/>
             </Tooltip>
         </div>
     )
