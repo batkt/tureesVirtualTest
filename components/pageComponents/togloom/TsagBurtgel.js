@@ -34,7 +34,6 @@ function TsagBurtgel(
   function khugatsaaTootsoloy(khugatsaa) {
     setTsag({ ekhlekhtsag: moment(tsag.ekhlekhtsag), duusakhTsag: moment(tsag.ekhlekhtsag).add(khugatsaa, "minute") });
     setKhugatsaa(khugatsaa);
-    setLoading(true);
   }
 
   function onFinish(formData) {
@@ -46,17 +45,16 @@ function TsagBurtgel(
     data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00")
     data.barilgiinId = barilgiinId;
     const method = data?._id ? updateMethod : createMethod;
-    method("togloomiinTuv", token, data).then(({ data }) => {
+    method("togloomiinTuvKhadgalya", token, data).then(({ data }) => {
       if (data === "Amjilttai") {
         message.success(t("Амжилттай хадгаллаа"));
         onRefresh && onRefresh();        
         destroy();
-        setLoading(false);
+        ;
       }
     }).catch((e) => {
       aldaaBarigch(e);
-      setLoading(false)
-    });;
+    });
   }
 
   useEffect(() => {
@@ -69,19 +67,6 @@ function TsagBurtgel(
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
-
-  useEffect(() => {
-    if (khugatsaa > 0 || asragchiinToo.length > 0) {      
-      uilchilgee(token)
-        .post("/togloomiinDunBoduulya", { minut: khugatsaa || 0, asragchiinToo: asragchiinToo.length || 0 })
-        .then(({ data }) => {
-          if (!!data) {
-            form.setFieldValue("niitDun", data?.dun)
-            setLoading(false)
-          } else {form.setFieldValue("niitDun", undefined); setLoading(false)}
-        })
-    } else {form.setFieldValue("niitDun", undefined)}
-  }, [khugatsaa, asragchiinToo])
 
   const focuser = useCallback((e) => {
     if (e.key === "Enter") {
@@ -180,7 +165,7 @@ function TsagBurtgel(
           message: t("Асран хамгаалагч бүртгэнэ үү!"),
         },
       ]} label="Асран хамгаалагч" name="asragchiinTurul">
-        <Select mode="multiple" value={asragchiinToo} onChange={(v) => {setAsragchiinToo(v); setLoading(true);} } placeholder="Асран хамгаалагч">
+        <Select mode="multiple" value={asragchiinToo} onChange={(v) => {setAsragchiinToo(v)} } placeholder="Асран хамгаалагч">
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
             return <Select.Option key={a}>{a}</Select.Option>
           })}
@@ -192,7 +177,7 @@ function TsagBurtgel(
           message: t("Тоглох цаг /Мин/ бүртгэнэ үү!"),
         },
       ]} label="Тоглох цаг /Мин/" name="khugatsaa">
-        <InputNumber value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => khugatsaaTootsoloy(v)} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
+        <InputNumber value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => {khugatsaaTootsoloy(v)}} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
       </Form.Item>
       <Form.Item rules={[
         {
@@ -204,13 +189,7 @@ function TsagBurtgel(
       </Form.Item>
       <Form.Item label="Дуусах цаг" name="duusakhTsag">
         <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v) => setTsag({ ...tsag, duusakhTsag: v })} autoComplete="off" />
-      </Form.Item>
-      <Form.Item label="Дүн" name="niitDun">
-        <InputNumber formatter={(value) =>
-          `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-        }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")} disabled={true} placeholder="Дүн" min="1" className="w-40" />
-      </Form.Item>
+      </Form.Item>      
       <Form.Item label="Төрөл" name="turul">
         <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
           <Select.Option key={"Үйлчлүүлэгч"}>Үйлчлүүлэгч</Select.Option>

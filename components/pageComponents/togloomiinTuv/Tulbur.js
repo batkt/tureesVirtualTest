@@ -159,13 +159,7 @@ function Tulbur(
         })
         .catch(aldaaBarigch);
       setTerminal(true);
-    } else if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
-      tulbur.reduce((a, b) => {
-        if (b.turul === "khariult") return a - b.dun;
-        return a + b.dun;
-      }, 0)
-    )
+    }
       guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
   }
 
@@ -212,7 +206,6 @@ function Tulbur(
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
                 tulbur
-                  .filter((a) => a.turul !== "khariult")
                   .reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
@@ -270,23 +263,12 @@ function Tulbur(
               <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
                 {formatNumber(
                   tulbur
-                    .filter((a) => a.turul !== "khariult")
                     .reduce((a, b) => a + b.dun, 0)
                 )}{" "}
                 ₮
               </div>
             </div>
-          )}
-          {!!(tulbur.find((a) => a.turul === "khariult")?.dun || 0) > 0 && (
-            <div className="table-row">
-              <div className="table-cell p-2 border-dashed border-b-2 dark:text-gray-200">
-                {t("Хариулт")}
-              </div>
-              <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
-                {formatNumber(tulbur.find((a) => a.turul === "khariult").dun)}₮
-              </div>
-            </div>
-          )}
+          )}          
         </div>
       </div>
       <EBarimt
@@ -314,7 +296,7 @@ function Tulbur(
           Хаах
         </Button>
         {alkham === 1 && (
-          <Button type="primary" onClick={batalgaajuulaltKhiiya}>
+          <Button type="primary" id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
             Төлбөр төлөх
           </Button>
         )}

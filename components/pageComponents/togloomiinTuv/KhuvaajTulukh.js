@@ -17,6 +17,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
 
   const value = React.useMemo(() => {
     const belen = tulbur.find((a) => a.turul === "belen")?.dun;
+    const khunglukh = tulbur.find((a) => a.turul === "khunglukh")?.dun;
     const khariltsakh = tulbur.find((a) => a.turul === "khariltsakh")?.dun;
     const bogd = tulbur.find((a) => a.turul === "bogd")?.dun;
     const khaan = tulbur.find((a) => a.turul === "khaan")?.dun;
@@ -30,6 +31,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
       khariltsakh,
       bogd,
       khaan,
+      khunglukh,
       tdb,
       khas,
       golomt,
@@ -43,29 +45,23 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
     if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) < tulbur.reduce((a, b) => a + b.dun, 0)) {
-      const khi = tulbur.findIndex((a) => a.turul === "khariult");      
-      if (khi !== -1){
-        if (tulbur[khi].dun > (data?.dutuuDun ? data?.dutuuDun : data?.niitDun)) {
-          tulbur.splice(khi, 1)
-        } else
-        tulbur[khi] = {
-          turul: "khariult",
-          dun: tulbur.reduce((a, b) => a + b.dun, 0) - (data?.dutuuDun ? data?.dutuuDun : data?.niitDun),
-        };}
-      else
-        tulbur.push({
-          turul: "khariult",
-          dun: tulbur.reduce((a, b) => a + b.dun, 0) - (data?.dutuuDun ? data?.dutuuDun : data?.niitDun),
-        });
-    } else {
-      const khi = tulbur.findIndex((a) => a.turul === "khariult");
-      if (khi !== -1){
-        tulbur.splice(khi, 1)
-        };
+      var iluu = tulbur.reduce((a, b) => a + b.dun, 0) - (data?.dutuuDun ? data?.dutuuDun : data?.niitDun)
+      if (index !== -1) tulbur[index] = { turul: k, dun: v - iluu };
+      else tulbur.push({ turul: k, dun: v - iluu }); 
+      document.getElementById("TogloomiinTuvTulburTovch").focus()
     }
-
     setTulbur([...tulbur]);
   }
+
+  useEffect(()=> {
+    if (khungulukhEsekh === false) {
+      const index = tulbur.findIndex((a) => a.turul === "khunglukh");
+      if ( index !== -1) {
+        tulbur.splice(index, 1);
+        setTulbur([...tulbur]);
+      }
+    }
+  },[khungulukhEsekh])
 
   useEffect(() => {
     if (tulburiinKhelber === "khuvaajTulukh") belenRef.current.focus();
@@ -172,18 +168,12 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             autoComplete="off"
             min={0}
             ref={khunglukhRef}
-            value={khunglult.khungulukhDun}
+            value={value.khunglukh}
             name="khunglukh"
             onDoubleClick={onDoubleClick}
             onKeyDown={onKeyDown}
             onChange={(v) => {setKhunglult({...khunglult, khungulukhDun: v}); onChangeDun(v, "khunglukh")}}
-            style={{ width: "25%" }}
-            max={
-              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-              tulbur
-                .filter((a) => a.turul !== "khunglukh")
-                .reduce((a, b) => a + b.dun, 0)
-            }
+            style={{ width: "25%" }}            
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -246,13 +236,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             onDoubleClick={onDoubleClick}
             onKeyDown={onKeyDown}
             onChange={(v) => onChangeDun(v, "khariltsakh")}
-            style={{ width: "25%" }}
-            max={
-              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-              tulbur
-                .filter((a) => a.turul !== "khariltsakh")
-                .reduce((a, b) => a + b.dun, 0)
-            }
+            style={{ width: "25%" }}            
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -273,13 +257,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             onDoubleClick={onDoubleClick}
             onKeyDown={onKeyDown}
             onChange={(v) => onChangeDun(v, "bogd")}
-            style={{ width: "25%" }}
-            max={
-              (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-              tulbur
-                .filter((a) => a.turul !== "bogd")
-                .reduce((a, b) => a + b.dun, 0)
-            }
+            style={{ width: "25%" }}            
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -302,13 +280,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
                 onDoubleClick={onDoubleClick}
                 onKeyDown={onKeyDown}
                 onChange={(v) => onChangeDun(v, mur.talbar)}
-                style={{ width: "25%" }}
-                max={
-                  (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-                  tulbur
-                    .filter((a) => a.turul !== mur.talbar)
-                    .reduce((a, b) => a + b.dun, 0)
-                }
+                style={{ width: "25%" }}               
                 formatter={(value) =>
                   `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
