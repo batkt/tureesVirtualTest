@@ -218,7 +218,7 @@ export const khereglegchiinErkhuud = [
     erkh: "Sankhuu",
     tailbar: "Санхүү",
     tsonkhnuud: [
-      "/khyanalt/togloom",
+      "/khyanalt/togloom/togloomTuv",
       "/khyanalt/tulburTootsoo",
       "/khyanalt/eBarimt",
       "/khyanalt/tulburTootsoo/khungulult",
@@ -795,10 +795,10 @@ const khuudasnuud = [
     ),
   },
   {
-      ner: "Тоглоомын төв",
-      khuudasniiNer: "togloomTuv",
-      href: "/khyanalt/togloom/togloomTuv",
-      icon: <TbLego style={{ width: "24", height: "24" }} />,
+    ner: "Тоглоомын төв",
+    khuudasniiNer: "togloomTuv",
+    href: "/khyanalt/togloom/togloomTuv",
+    icon: <TbLego style={{ width: "24", height: "24" }} />,
     // sub: [
     //   {
     //     ner: "Жагсаалт",
