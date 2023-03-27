@@ -144,7 +144,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
     const odooginTsag = Number(moment(new Date()).format("HH")) * 60 * 60 + Number(moment(new Date()).format("mm")) * 60 + Number(moment(new Date()).format("ss"));
     const ekhlekhTsag = Number(moment(data?.ekhlekhTsag).format("HH")) * 60 * 60 + Number(moment(data?.ekhlekhTsag).format("mm")) * 60 + Number(moment(data?.ekhlekhTsag).format("ss"));
     const duusakhTsag = Number(moment(v).format("HH")) * 60 * 60 + Number(moment(v).format("mm")) * 60 + Number(moment(v).format("ss"))
-    
+
     const difference = duusakhTsag - odooginTsag;
     const difference2 = duusakhTsag - ekhlekhTsag;
     let timeLeft = "Дууссан";    
@@ -204,7 +204,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
     setTimeout(() => {
       setTimeLeft(tsagTootsoolur());
     }, 1000);
-  }, [timeLeft]);
+  }, [timeLeft, v]);
 
   if (timeLeft === "Тооцоолж байна") {
     return <div className="animate-pulse">Тооцоолж байна</div>
@@ -297,7 +297,8 @@ function togloom1() {
               })
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  message.success("Цуцлагдлаа");
+                  message.success("Цаг амжилттай сунагдлаа");
+                  togloominTuviinGaralt.mutate();
                 }
               }).catch(aldaaBarigch)
               .finally(() => onRefresh())
@@ -515,7 +516,7 @@ function togloom1() {
         width: "8.5rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "sungsanMinut",
+        dataIndex: "sungasanMinut",
         render:(data)=> !!data ? data : 0
       },
       {
@@ -718,7 +719,7 @@ function togloom1() {
         }
       }
       ,]
-  }, [turul, token, baiguullaga, barilgiinId, shineBagana, ajiltan, togloominTuviinGaralt, t]);
+  }, [turul, token, baiguullaga, barilgiinId, shineBagana, ajiltan, togloominTuviinGaralt, t, onRefresh]);
 
   useEffect(() => {
     Aos.init({ once: true });
