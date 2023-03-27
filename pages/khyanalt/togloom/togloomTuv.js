@@ -225,7 +225,7 @@ function togloom1() {
     moment(),
   ]);
   const mashinref = useRef(null);
-  const [turul, setTurul] = useState({ a: "tuluv", b: undefined });
+  const [turul, setTurul] = useState({ shuult:{"tuluv": undefined}});
   const tulburRef = React.useRef(null)
   const [shineBagana, setShineBagana] = useState([]);
 
@@ -316,7 +316,7 @@ function togloom1() {
           $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
         }
         : undefined,
-      [turul.a]: turul.b,
+      ...turul.shuult,
     };
   }, [ognoo, turul]);
 
@@ -330,7 +330,7 @@ function togloom1() {
       {
         name: "Нийт",
         too: toololt?.length > 0 && (toololt[0]?.tsutsalsan + toololt[0]?.tulsun + toololt[0]?.tuluugui + toololt[0]?.ekhlesen),
-        shuult: { a: "tuluv", b: undefined }
+        shuult: { "tuluv": undefined }
       },
       {
         name: "Эхэлсэн",
@@ -339,12 +339,15 @@ function togloom1() {
           0
         ),
         shuult: {
-          a: "$and", b: [
+           "$and": [
             {
               ekhlekhTsag: { $lte: new Date() }
             },
             {
               duusakhTsag: { $gt: new Date() }
+            },
+            {
+              tuluv: { $ne: -1 }
             },
           ],
         }
@@ -355,7 +358,7 @@ function togloom1() {
           toololt?.length > 0 ? toololt[0]?.tsutsalsan : 0,
           0
         ),
-        shuult: { a: "tuluv", b: -1 }
+        shuult: { "tuluv": -1 }
       },
       {
         name: "Төлсөн",
@@ -364,7 +367,7 @@ function togloom1() {
           0
         ),
         shuult: {
-          a: "$and", b: [
+           "$and" : [
             {
               duusakhTsag: { $lte: new Date() },
             },
@@ -381,7 +384,7 @@ function togloom1() {
           0
         ),
         shuult: {
-          a: "$and", b: [
+          "$and" : [
             {
               duusakhTsag: { $lte: new Date() },
             },
@@ -407,7 +410,7 @@ function togloom1() {
           toololt?.length > 0 ? toololt[0]?.khungulsun : 0,
           0
         ),
-        shuult: { a: "khungulsunEsekh", b: true }
+        shuult: { "khungulsunEsekh" : true }
       },
     ],
     [toololt]
@@ -755,7 +758,7 @@ function togloom1() {
               key={i}
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 md:col-span-2 ${a.name === turul?.name ? "bg-green-50 dark:bg-gray-900" : ""
                 }`}
-              onClick={() => setTurul({ ...a.shuult, name: a.name })}
+              onClick={() => setTurul({ shuult:a.shuult, name: a.name })}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}

@@ -253,17 +253,17 @@ function EbarimtMedeelel({ token }) {
                 })),
             }}
             onChange={onChangeTable}
-            scroll={{ y: "calc(100vh - 26rem)" }}
+            scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             className="t-head"
             columns={[
               {
                 title: t("Огноо"),
-                dataIndex: "date",
+                dataIndex: "createdAt",
                 ellipsis: true,
                 align: "center",
                 render: (data) => {
-                  return moment(data).format("YYYY-MM-DD hh:mm:ss");
+                  return moment(data).format("YYYY-MM-DD HH:mm:ss");
                 },
                 showSorterTooltip: false,
                 sorter: () => 0,
