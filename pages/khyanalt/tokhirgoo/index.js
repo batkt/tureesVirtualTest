@@ -366,15 +366,15 @@ function AjiltanBurtgel({ token }) {
           text: "Тоглоомын төв",
           tsonkh: TogloominTuv
         },
-        // {
-        //   icon: (
-        //     <div className="flex text-base mr-2 items-center justify-center">
-        //       <DatabaseOutlined />
-        //     </div>
-        //   ),
-        //   text: "Бааз",
-        //   tsonkh: Baaz
-        // },
+        {
+          icon: (
+            <div className="flex text-base mr-2 items-center justify-center">
+              <DatabaseOutlined />
+            </div>
+          ),
+          text: "Бааз",
+          tsonkh: Baaz
+        },
       ];
     else
       return [
