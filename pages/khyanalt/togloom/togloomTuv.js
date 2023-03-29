@@ -33,6 +33,54 @@ import Tulbur from "components/pageComponents/togloomiinTuv/Tulbur";
 import { useTranslation } from "react-i18next";
 import BaganiinSongolt from "components/table/BaganiinSongolt";
 import { excelTatajAvya } from "../zogsool";
+import { t } from "i18next";
+import { ImQrcode } from "react-icons/im";
+import { useQRCode } from "next-qrcode";
+import { useReactToPrint } from "react-to-print";
+
+
+const QrCodeAvakh = React.forwardRef(({ destroy, duusakhTsag , ekhlekhTsag }, ref) => {
+  const khevlekhRef = useRef(null)
+  const { Canvas } = useQRCode();
+  const handlePrint = useReactToPrint({
+    content: () => khevlekhRef.current,
+  });
+
+  React.useImperativeHandle(
+    ref,
+    () => ({
+      khadgalya() {
+        handlePrint()
+        destroy();
+      },
+      khaaya() {
+        destroy();
+      },
+    }),
+    [duusakhTsag]
+  );
+
+  return (
+    <div className="">
+        <div ref={khevlekhRef} className="w-full h-full flex flex-col justify-center gap-10 items-center">
+          <div className="w-[80%] max-w-[400px] text-justify">Уг QRcode нь {moment(ekhlekhTsag).format("YYYY-MM-DD-ны HH:mm")}-аас {moment(duusakhTsag).format("HH:mm")} хүртэл манай тоглоомын төвд хүчинтэй болхийг анхаарна уу!</div>
+          {!!duusakhTsag ? <Canvas
+          text={duusakhTsag}
+          options={{
+            level: 'M',
+            margin: 3,
+            scale: 4,
+            width: 200,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF',
+            },
+          }}
+        />: <div>Хоосон</div> }
+        </div>
+      </div>
+  )
+})
 
 
 const TsutsalsanShaltgaan = React.forwardRef(({ destroy, confirm }, ref) => {
@@ -120,18 +168,18 @@ const TsagSungakh = React.forwardRef(({ data, destroy, confirm, token }, ref) =>
   }, []);
   return (
     <div className="space-y-4">
-      <div className="flex items-center"><label className="w-48 text-end pr-4">Асран хамгаалагч:</label><Select className="w-full" mode="multiple" value={asragch} onChange={(v) => {setAsragch(v);} } placeholder="Асран хамгаалагч">
+      <div className="flex items-center"><label className="w-48 text-end pr-4">{t("Асран хамгаалагч")}:</label><Select className="w-full" mode="multiple" value={asragch} onChange={(v) => {setAsragch(v);} } placeholder="Асран хамгаалагч">
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
-            return <Select.Option key={a}>{a}</Select.Option>
+            return <Select.Option key={a}>{t(a)}</Select.Option>
           })}
         </Select></div>
-      <div className="flex items-center"><label className="w-48 pr-4 text-end">Хугацаа/мин/:</label><InputNumber className="w-full" placeholder="Сунгах хугацаа/мин/" onChange={(v)=> onChangeKhugatsaa(v)}/></div>
-      <div className="flex items-center"><label className="w-48 pr-4 text-end">Эхлэх цаг/мин/:</label><TimePicker showSecond={false} placeholder="Эхлэх цаг/мин/ " disabled className="w-full" value={moment(ekhlekhTsag)}  autoComplete="off" /></div>
-      <div className="flex items-center"><label className="w-48 pr-4 text-end">Дуусах цаг/мин/:</label><TimePicker showSecond={false} placeholder="Дуусах цаг/мин/ " disabled className="w-full" value={moment(duusakhTsag)} autoComplete="off" /></div>
-      <div className="flex items-center"><label className="w-48 pr-4 text-end">Дүн:</label><InputNumber value={niitDun} formatter={(value) =>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">{t("Хугацаа/мин/")}:</label><InputNumber className="w-full" placeholder={t("Сунгах хугацаа/мин/")} onChange={(v)=> onChangeKhugatsaa(v)}/></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">{t("Эхлэх цаг/мин/")}:</label><TimePicker showSecond={false} placeholder={t("Эхлэх цаг/мин/")} disabled className="w-full" value={moment(ekhlekhTsag)}  autoComplete="off" /></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">{t("Дуусах цаг/мин/")}:</label><TimePicker showSecond={false} placeholder={t("Дуусах цаг/мин/")} disabled className="w-full" value={moment(duusakhTsag)} autoComplete="off" /></div>
+      <div className="flex items-center"><label className="w-48 pr-4 text-end">{t("Дүн")}:</label><InputNumber value={niitDun} formatter={(value) =>
           `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
         }
-          parser={(value) => value.replace(/\$\s?|(,*)/g, "")} disabled={true} placeholder="Дүн" min="1" className="w-full" /></div>
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")} disabled={true} placeholder={t("Дүн")} min="1" className="w-full" /></div>
     </div>
   );
 });
@@ -172,7 +220,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
           setDuussan("duhsun")
         }
       } else if (difference === 0) {
-        notification.warning({ duration: 0, message: "Цаг дууслаа", description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`) });
+        notification.warning({ duration: 0, message: t("Цаг дууслаа"), description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`) });
       } else if (duussan === "duhsun") {
         setDuussan(true);
         onRefresh()
@@ -207,9 +255,9 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
   }, [timeLeft, v]);
 
   if (timeLeft === "Тооцоолж байна") {
-    return <div className="animate-pulse">Тооцоолж байна</div>
+    return <div className="animate-pulse">{t("Тооцоолж байна")}</div>
   } else if (timeLeft === "Дууссан") {
-    return <div className={`bg-red-500 ${duussan === true && "animate-bounce-fast "} text-white font-medium border cursor-default rounded-lg`}>Дууссан</div>
+    return <div className={`bg-red-500 ${duussan === true && "animate-bounce-fast "} text-white font-medium border cursor-default rounded-lg`}>{t("Дууссан")}</div>
   } else
     return (
       <Popover content={timeLeft?.ekhlekhTsagBoloogui === true && <div>{moment(data?.ekhlekhTsag).format("HH:mm")}-аас эхэлнэ</div>}><div className={`${duussan === "duhsun" ? "bg-yellow-500" : timeLeft?.ekhlekhTsagBoloogui === true ? "bg-blue-600" : "bg-green-500"} text-white font-medium border cursor-default rounded-lg transition-colors`}>{FormatNumberLength(timeLeft.hours, 2)}:{FormatNumberLength(timeLeft.minutes, 2)}:{FormatNumberLength(timeLeft.seconds, 2)}</div></Popover>
@@ -250,7 +298,7 @@ function togloom1() {
       </Button>,
     ];
     modal({
-      title: (<div className="flex w-full justify-between items-center">Цуцлах шалтгаан <div className="text-xl hover:text-red-400" onClick={() => tailbarRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
+      title: (<div className="flex w-full justify-between items-center">{t("Цуцлах шалтгаан")} <div className="text-xl hover:text-red-400" onClick={() => tailbarRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
       content: (
         <TsutsalsanShaltgaan
           ref={tailbarRef}
@@ -280,7 +328,7 @@ function togloom1() {
       </Button>,
     ];
     modal({
-      title: (<div className="flex w-full justify-between items-center">Цаг сунгах<div className="text-xl hover:text-red-400" onClick={() => sungakhRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
+      title: (<div className="flex w-full justify-between items-center">{t("Цаг сунгах")}<div className="text-xl hover:text-red-400" onClick={() => sungakhRef.current.khaaya()}><CloseCircleOutlined /></div></div>),
       content: (
         <TsagSungakh
           ref={sungakhRef}
@@ -297,7 +345,7 @@ function togloom1() {
               })
               .then(({ data }) => {
                 if (data === "Amjilttai") {
-                  message.success("Цаг амжилттай сунагдлаа");
+                  message.success(t("Цаг амжилттай сунагдлаа"));
                   togloominTuviinGaralt.mutate();
                 }
               }).catch(aldaaBarigch)
@@ -423,11 +471,15 @@ function togloom1() {
     togloominTuviinGaralt.mutate();
   }
 
+  useEffect(()=> {
+    setShineBagana([])
+  },[i18n.language])
+
   function tulburTulyu(data) {
     modal({
       title: (
         <div className="w-full flex flex-row justify-between">
-          <div>Тооцоо хийх</div>
+          <div>{t("Тооцоо хийх")}</div>
           <div className="flex items-center">{data?.ovog?.charAt(0)}.{data?.ner}
             <div className="text-xl ml-5 hover:text-red-400" onClick={() => tulburRef.current.khaaya()}><CloseCircleOutlined /></div></div>
         </div>
@@ -446,6 +498,39 @@ function togloom1() {
       footer: false,
     });
   }
+
+
+  const qrRef = useRef();  
+  
+
+  function qrKhevlekh(duusakhTsag, ekhlekhTsag) {    
+    const today = moment(new Date()).format("YYYYMMDD");
+          const duusakhUdur = moment(duusakhTsag).format("YYYYMMDD");
+          const odooginTsag = Number(moment(new Date()).format("HH")) * 60 * 60 + Number(moment(new Date()).format("mm")) * 60 + Number(moment(new Date()).format("ss"));
+          const duusakhTsag2 = Number(moment(duusakhTsag).format("HH")) * 60 * 60 + Number(moment(duusakhTsag).format("mm")) * 60 + Number(moment(duusakhTsag).format("ss"))
+          const difference = Number(String(duusakhUdur) + String(duusakhTsag2)) - Number(String(today) + String(odooginTsag));
+
+    if (Number(today) <= Number(duusakhUdur)) {
+      if (difference > 0) {
+        const footer = [
+          <Button onClick={() => qrRef.current.khaaya()}>{t("Хаах")}</Button>,
+          <Button onClick={() => qrRef.current.khadgalya()}>{t("Хэвлэх")}</Button>,
+        ];
+        modal({
+          title: `Нэвтрэх QRcode`,
+          icon: <ImQrcode/>,
+          content: (
+            <QrCodeAvakh
+              ref={qrRef}
+              duusakhTsag={duusakhTsag}
+              ekhlekhTsag={ekhlekhTsag}
+            />
+          ),
+          footer,
+        });
+      } else message.warn("Цаг дууссан байна!")
+    } else message.warn("Цаг дууссан байна!")
+  } 
 
   const columns = useMemo(() => {
     var jagsaalt = [
@@ -539,7 +624,7 @@ function togloom1() {
       {
         title: t("нийт дүн"),
         align: "center",
-        width: "7rem",
+        width: "9rem",
         dataIndex: "niitDun",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -551,12 +636,19 @@ function togloom1() {
         title: t("Хөнгөлсөн дүн"),
         dataIndex: "khungulsunDun",
         align: "center",
-        width: "8.5rem",
+        width: "10rem",
         showSorterTooltip: false,
         render: (v, data) => {
           const khunglukh = data?.tulbur?.find(a => a.turul === "khunglukh")
           return <div className="w-full flex items-center">{!!khunglukh?.tailbar && <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">{khunglukh?.tailbar}</div></div>} ><div className="w-full flex justify-center text-lg text-blue-500"><EyeOutlined className="cursor-pointer" /></div></Popover>} <div className="w-full text-right">{khunglukh ? formatNumber(v, 0) : 0}</div></div>
         },
+      },
+      {
+        fixed: "right",
+        width: "5rem",
+        title: "QR",
+        align: "center",
+        render:(a, data)=> <div className="flex w-full justify-center"><div onClick={()=> qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)} className="p-2 bg-gray-200 hover:bg-white transition-all cursor-pointer border-white hover:text-black text-xl rounded-full border-2"><ImQrcode/></div></div>
       },
       {
         fixed: "right",
@@ -589,7 +681,7 @@ function togloom1() {
                         <DollarCircleOutlined />
                       </div>
                       <div className="flex justify-center items-center">
-                        Төлбөр
+                        {t("Төлбөр")}
                       </div>
                     </div>
                   ) : (
@@ -598,7 +690,7 @@ function togloom1() {
                         <PaperClipOutlined />
                       </div>
                       <div className="flex justify-center items-center">
-                        И-Баримт
+                        {t("И-Баримт")}
                       </div>
                     </div>
                   )}
@@ -625,7 +717,7 @@ function togloom1() {
                         <CheckCircleOutlined />
                       </div>
                       <div className="flex justify-center items-center">
-                        Дууссан
+                        {t("Дууссан")}
                       </div>
                     </div>
                   </Button>
@@ -667,7 +759,7 @@ function togloom1() {
                       <div
                         className={`text-md cursor-pointer rounded-full text-center bg-green-500 py-1 px-3 font-medium text-gray-50`}
                       >
-                        Сунгах
+                        {t("Сунгах")}
                       </div>
                     </Popconfirm>}
                     {Number(today) <= Number(duusakhUdur) && difference > 0 && data?.tulburTulsunEsekh !== true && <Popconfirm
@@ -703,8 +795,8 @@ function togloom1() {
                           }-500 py-1 px-3 font-medium text-gray-50`}
                       >
                         {3 === data?.tuluv
-                          ? "Гарсан"
-                          : "Гаргах"}
+                          ? t("Гарсан")
+                          : t("Гаргах")}
                       </div>
                     </Popconfirm>}                    
                   </div>
@@ -727,7 +819,7 @@ function togloom1() {
 
   function khuukhedBurtgekh(data) {
     modal({
-      title: (<div className="flex w-full justify-between items-center">Хүүхдийн цаг бүртгэл <div className="text-xl hover:text-red-400" onClick={() => mashinref.current.khaaya()}><CloseCircleOutlined /></div></div>),
+      title: (<div className="flex w-full justify-between items-center">{t("Хүүхдийн цаг бүртгэл")} <div className="text-xl hover:text-red-400" onClick={() => mashinref.current.khaaya()}><CloseCircleOutlined /></div></div>),
       icon: <FileExcelOutlined />,
       content: (
         <KhuukhedBurtgel
@@ -751,7 +843,7 @@ function togloom1() {
       }
       className="p-0 md:p-4"
       tsonkhniiId={"64113e5d8505554744a87713"}
-    >
+    >      
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {toololtGaralt.map((a, i) => (
@@ -852,7 +944,7 @@ function togloom1() {
                             break;
                         }
                       }
-                      return <div>{utga}</div>
+                      return <div>{t(`${utga}`)}</div>
                     }
                   },
                   {
@@ -972,7 +1064,7 @@ function togloom1() {
                                     break;
                                 }
                               }
-                              return utga
+                              return t(utga)
                             }
                           },
                           {

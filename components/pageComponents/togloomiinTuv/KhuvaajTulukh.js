@@ -1,5 +1,6 @@
 import { Form, InputNumber, Select, Switch } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+import { t } from "i18next";
 import React, { useEffect } from "react";
 
 function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult, khungulukhEsekh, setKhungulukhEsekh }) {
@@ -156,13 +157,13 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
   return (
     <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4 overflow-y-auto`} style={{maxHeight: "calc( 100vh - 26rem )"}}>
       <div className="col-span-3">
-        <Form.Item labelCol={{ flex: '110px'}} label="Хөнгөлөх эсэх"> 
+        <Form.Item labelCol={{ flex: '110px'}} label={t("Хөнгөлөх эсэх")}> 
         <Switch checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
         </Form.Item>
         {khungulukhEsekh === true && <div className="font-medium text-lg space-y-2">          
           <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-          Хөнгөлөх дүн
+          {t("Хөнгөлөх дүн")}
           </div>
           <InputNumber
             autoComplete="off"
@@ -182,29 +183,29 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
         </div>
         <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-           Тайлбар
+           {t("Тайлбар")}
           </div>
           <Select
             value={khunglult.tailbarTurul}
             name="tailbar"
             onChange={(v) => {setKhunglult({...khunglult, tailbarTurul: v, tailbar: v !== "Бусад" ? v : undefined})}}
             style={{ width: "230px" }}
-            placeholder="Тайлбар сонгох"
+            placeholder={t("Тайлбар сонгох")}
           >
-            <Select.Option key={"Төрсөн өдөр"}>Төрсөн өдөр</Select.Option>
-            <Select.Option key={"Хөгжлийн бэрхшээлтэй"}>Хөгжлийн бэрхшээлтэй</Select.Option>
-            <Select.Option key={"Бусад"}>Бусад</Select.Option>
+            <Select.Option key={"Төрсөн өдөр"}>{t("Төрсөн өдөр")}</Select.Option>
+            <Select.Option key={"Хөгжлийн бэрхшээлтэй"}>{t("Хөгжлийн бэрхшээлтэй")}</Select.Option>
+            <Select.Option key={"Бусад"}>{t("Бусад")}</Select.Option>
           </Select>
         </div>
         {khunglult.tailbarTurul === "Бусад" && <div>
-          <TextArea value={khunglult.tailbar} placeholder="Тайлбар оруулна уу" onChange={(v)=> {setKhunglult({...khunglult, tailbar: v.target.value})}}/>
+          <TextArea value={khunglult.tailbar} placeholder={t("Тайлбар оруулна уу")} onChange={(v)=> {setKhunglult({...khunglult, tailbar: v.target.value})}}/>
           </div>}
         </div>}
       </div>
       <div className="col-span-3 flex flex-col text-center cursor-pointer font-medium text-lg">
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-            Бэлэн
+            {t("Бэлэн")}
           </div>
           <InputNumber
           min={0} 
@@ -225,7 +226,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
         <div className="w-full border-l border-r h-2" />
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-            Харилцах
+            {t("Харилцах")}
           </div>
           <InputNumber
           min={0}
@@ -246,7 +247,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
         <div className="w-full border-l border-r h-2 " />
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
-            Богд банк
+            {t("Богд банк")}
           </div>
           <InputNumber
             autoComplete="off"
@@ -269,7 +270,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             <div className="w-full border-l border-r h-2 " />
             <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
               <div className="w-3/4 pl-10 border-b border-t text-left border-l dark:text-gray-200">
-                {mur.ner}
+                {t(`${mur.ner}`)}
               </div>
               <InputNumber
                 autoComplete="off"

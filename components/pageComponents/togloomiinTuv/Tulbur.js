@@ -51,7 +51,7 @@ function Tulbur(
     if (!!eBarimt) handlePrint();
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
-        message.warning("Байгууллагын регистр оруулна уу");
+        message.warning(t("Байгууллагын регистр оруулна уу"));
         return;
       }
       const body = {
@@ -99,11 +99,11 @@ function Tulbur(
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        message.warn("Хөнгөлөх дүн оруулна уу")
+        message.warn(t("Хөнгөлөх дүн оруулна уу"))
         return
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        message.warn("Хөнгөлөх шалтгаан оруулна уу")
+        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"))
         return
       }
       
@@ -184,13 +184,13 @@ function Tulbur(
         <Steps className="hidden" current={alkham}>
           <Steps.Step
             key="Төлбөр төлөх"
-            subTitle={<span className="dark:text-gray-200">Төлбөр төлөх</span>}
+            subTitle={<span className="dark:text-gray-200">{t("Төлбөр төлөх")}</span>}
             onClick={() => setAlkham(1)}
           />
           <Steps.Step
             key="Төлбөрын баримт"
             subTitle={
-              <span className="dark:text-gray-200">Төлбөрын баримт</span>
+              <span className="dark:text-gray-200">{t("Төлбөрын баримт")}</span>
             }
             onClick={() => setAlkham(2)}
           />
@@ -200,7 +200,7 @@ function Tulbur(
         <div className="w-full table text-lg font-medium">
           <div className="table-row">
             <div className="table-cell p-2 border-dashed border-b-2 dark:text-gray-200">
-              Төлөх дүн
+              {t("Төлөх дүн")}
             </div>
             <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
               {formatNumber(
@@ -233,7 +233,7 @@ function Tulbur(
               <Spin
                 style={{ fontSize: "1.5rem" }}
                 size="large"
-                tip="Карт аа уншуулна уу!!"
+                tip={t("Карт аа уншуулна уу!!")}
               />
             </div>
             <div className="flex flex-row space-x-5">
@@ -242,14 +242,14 @@ function Tulbur(
                 onClick={() => setTerminal(false)}
                 icon={<CloseOutlined />}
               >
-                Цуцлах
+                {t("Цуцлах")}
               </Button>
               <Button
                 type="primary"
                 onClick={batalgaajuuljDuusgakh}
                 icon={<CheckOutlined />}
               >
-                Баталгаажуулах
+                {t("Баталгаажуулах")}
               </Button>
             </div>
           </div>
@@ -258,7 +258,7 @@ function Tulbur(
           {tulbur.length > 0 && (
             <div className="table-row">
               <div className="table-cell p-2 border-dashed border-t-2 dark:text-gray-200">
-                Төлсөн дүн
+                {t("Төлсөн дүн")}
               </div>
               <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
                 {formatNumber(
@@ -293,17 +293,17 @@ function Tulbur(
       />     
       <div className="flex flex-row justify-between mt-5">
         <Button type="primary" danger onClick={khaaya}>
-          Хаах
+          {t("Хаах")}
         </Button>
         {alkham === 1 && (
           <Button type="primary" id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
-            Төлбөр төлөх
+            {t("Төлбөр төлөх")}
           </Button>
         )}
 
         {alkham === 2 && barimtKhevlekhEsekh === true && (
           <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
-            Хэвлэх
+            {t("Хэвлэх")}
           </Button>
         )}
       </div>
