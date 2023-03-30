@@ -51,7 +51,7 @@ function TsagBurtgel(
         message.success(t("Амжилттай хадгаллаа"));
         onRefresh && onRefresh();
         destroy();
-        axios.post("localhost:3000/qrBurtgey", {
+        axios.post("http://localhost:3000/qrBurtgey", {
             ekhlekhOgnoo: tsag?.ekhlekhtsag,
             duusakhOgnoo: tsag?.duusakhTsag
           }).then(function (response) {

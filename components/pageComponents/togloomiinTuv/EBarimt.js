@@ -322,7 +322,8 @@ function EBarimt({
               </table>
               <div className="w-full h-full flex flex-col justify-center gap-5 items-center">
           <div className=" text-justify"><div>Эхлэх хугацаа: {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
-          {!!data?.duusakhTsag ? <Canvas
+          <div>
+          {<Canvas
           text={data?.duusakhTsag}
           options={{
             level: 'M',
@@ -334,7 +335,8 @@ function EBarimt({
               light: '#FFFFFF',
             },
           }}
-        />: <div>Хоосон</div> }
+        />}
+        </div>
         <div className="text-center max-w-[400px]">Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!</div>
         </div>
             </div>
