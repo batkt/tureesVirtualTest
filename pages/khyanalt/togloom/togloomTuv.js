@@ -62,21 +62,22 @@ const QrCodeAvakh = React.forwardRef(({ destroy, duusakhTsag , ekhlekhTsag }, re
 
   return (
     <div className="">
-        <div ref={khevlekhRef} className="w-full h-full flex flex-col justify-center gap-10 items-center">
-          <div className="w-[80%] max-w-[400px] text-justify">Уг QRcode нь {moment(ekhlekhTsag).format("YYYY-MM-DD-ны HH:mm")}-аас {moment(duusakhTsag).format("HH:mm")} хүртэл манай тоглоомын төвд хүчинтэй болхийг анхаарна уу!</div>
+        <div ref={khevlekhRef} className="w-full h-full flex flex-col justify-center gap-2 items-center">
+          <div className="w-[80%] max-w-[400px] text-justify"><div>Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
           {!!duusakhTsag ? <Canvas
           text={duusakhTsag}
           options={{
             level: 'M',
             margin: 3,
             scale: 4,
-            width: 200,
+            width: 150,
             color: {
               dark: '#000000',
               light: '#FFFFFF',
             },
           }}
         />: <div>Хоосон</div> }
+        <div className="text-center max-w-[400px]">Энэхүү QR код нь манай тоглоомын төвд дээрх хугацаанд хүчинтэй болохыг анхаарна уу!</div>
         </div>
       </div>
   )
