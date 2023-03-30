@@ -62,22 +62,22 @@ const QrCodeAvakh = React.forwardRef(({ destroy, duusakhTsag , ekhlekhTsag }, re
 
   return (
     <div className="">
-        <div ref={khevlekhRef} className="w-full text-xs h-full flex flex-col justify-center gap-2 items-center">
-          {/* <div className="w-[80%] max-w-[400px] text-justify"><div>Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div> */}
+        <div ref={khevlekhRef} className="w-full h-full flex flex-col justify-center gap-5 items-center">
+          <div className="w-[80%] max-w-[400px] text-justify"><div>Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
           {!!duusakhTsag ? <Canvas
           text={duusakhTsag}
           options={{
             level: 'M',
             margin: 3,
             scale: 4,
-            width: 60,
+            width: 200,
             color: {
               dark: '#000000',
               light: '#FFFFFF',
             },
           }}
         />: <div>Хоосон</div> }
-        {/* <div className="text-center max-w-[400px]">Энэхүү QR код нь манай тоглоомын төвд дээрх хугацаанд хүчинтэй болохыг анхаарна уу!</div> */}
+        <div className="text-center max-w-[400px]">Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!</div>
         </div>
       </div>
   )

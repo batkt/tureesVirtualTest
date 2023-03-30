@@ -5,6 +5,7 @@ import updateMethod from "tools/function/crud/updateMethod";
 import { t } from "i18next";
 import moment from "moment"
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import axios from "axios";
 
 function TsagBurtgel(
   { data, barilgiinId, token, destroy, onRefresh },
@@ -14,7 +15,7 @@ function TsagBurtgel(
   const [tsag, setTsag] = useState({ ekhlekhtsag: moment(Date.now()), duusakhTsag: undefined })
   const [khugatsaa, setKhugatsaa] = useState(undefined)
   const [asragchiinToo, setAsragchiinToo] = useState([])
-  const [ loading, setLoading ] = useState(false)
+  const [loading, setLoading] = useState(false)
 
 
 
@@ -48,8 +49,17 @@ function TsagBurtgel(
     method("togloomiinTuvKhadgalya", token, data).then(({ data }) => {
       if (data === "Amjilttai") {
         message.success(t("Амжилттай хадгаллаа"));
-        onRefresh && onRefresh();        
+        onRefresh && onRefresh();
         destroy();
+        axios.post("localhost:3000/qrBurtgey", {
+            ekhlekhOgnoo: tsag?.ekhlekhtsag,
+            duusakhOgnoo: tsag?.duusakhTsag
+          }).then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         ;
       }
     }).catch((e) => {
@@ -165,7 +175,7 @@ function TsagBurtgel(
           message: t("Асран хамгаалагч бүртгэнэ үү!"),
         },
       ]} label="Асран хамгаалагч" name="asragchiinTurul">
-        <Select mode="multiple" value={asragchiinToo} onChange={(v) => {setAsragchiinToo(v)} } placeholder="Асран хамгаалагч">
+        <Select mode="multiple" value={asragchiinToo} onChange={(v) => { setAsragchiinToo(v) }} placeholder="Асран хамгаалагч">
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
             return <Select.Option key={a}>{a}</Select.Option>
           })}
@@ -177,7 +187,7 @@ function TsagBurtgel(
           message: t("Тоглох цаг /Мин/ бүртгэнэ үү!"),
         },
       ]} label="Тоглох цаг /Мин/" name="khugatsaa">
-        <InputNumber value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => {khugatsaaTootsoloy(v)}} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
+        <InputNumber value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => { khugatsaaTootsoloy(v) }} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
       </Form.Item>
       <Form.Item rules={[
         {
@@ -189,7 +199,7 @@ function TsagBurtgel(
       </Form.Item>
       <Form.Item label="Дуусах цаг" name="duusakhTsag">
         <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v) => setTsag({ ...tsag, duusakhTsag: v })} autoComplete="off" />
-      </Form.Item>      
+      </Form.Item>
       <Form.Item label="Төрөл" name="turul">
         <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
           <Select.Option key={"Үйлчлүүлэгч"}>Үйлчлүүлэгч</Select.Option>
@@ -197,17 +207,17 @@ function TsagBurtgel(
         </Select>
       </Form.Item>
       <div className="flex justify-end">
-      <Space>
-        <Button onClick={() => destroy()}>{t("Хаах")}</Button>
-        <Button
-        loading={loading}
-          type="primary"
-          id="khuukhedBurtgekhButtonId"
-          onClick={() => form.submit()}
-        >
-          {t("Хадгалах")}
-        </Button>
-      </Space>,
+        <Space>
+          <Button onClick={() => destroy()}>{t("Хаах")}</Button>
+          <Button
+            loading={loading}
+            type="primary"
+            id="khuukhedBurtgekhButtonId"
+            onClick={() => form.submit()}
+          >
+            {t("Хадгалах")}
+          </Button>
+        </Space>,
       </div>
     </Form>
   );

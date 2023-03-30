@@ -5,6 +5,7 @@ import formatNumber from "tools/function/formatNumber";
 import { InputNumber, Input, Switch } from "antd";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
+import { useQRCode } from "next-qrcode";
 
 function EBarimt({
   alkham,
@@ -25,6 +26,7 @@ function EBarimt({
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
 }) {
+  const { Canvas } = useQRCode();
   function registerShalgaya(register) {
     setRegister(register);
     setBaiguullaga(null);
@@ -318,6 +320,23 @@ function EBarimt({
                   </tr>
                 </tbody>
               </table>
+              <div className="w-full h-full flex flex-col justify-center gap-5 items-center">
+          <div className=" text-justify"><div>Эхлэх хугацаа: {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
+          {!!data?.duusakhTsag ? <Canvas
+          text={data?.duusakhTsag}
+          options={{
+            level: 'M',
+            margin: 3,
+            scale: 4,
+            width: 200,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF',
+            },
+          }}
+        />: <div>Хоосон</div> }
+        <div className="text-center max-w-[400px]">Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!</div>
+        </div>
             </div>
           </div>
         )}
