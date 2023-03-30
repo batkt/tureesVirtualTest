@@ -62,15 +62,15 @@ const QrCodeAvakh = React.forwardRef(({ destroy, duusakhTsag , ekhlekhTsag }, re
 
   return (
     <div className="">
-        <div ref={khevlekhRef} className="w-full h-full flex flex-col justify-center gap-2 items-center">
-          <div className="w-[80%] max-w-[400px] text-justify"><div>Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
+        <div ref={khevlekhRef} className="w-full text-xs h-full flex flex-col justify-center gap-2 items-center">
+          {/* <div className="w-[80%] max-w-[400px] text-justify"><div>Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div> */}
           {!!duusakhTsag ? <Canvas
           text={duusakhTsag}
           options={{
             level: 'M',
             margin: 3,
             scale: 4,
-            width: 150,
+            width: 80,
             color: {
               dark: '#000000',
               light: '#FFFFFF',
