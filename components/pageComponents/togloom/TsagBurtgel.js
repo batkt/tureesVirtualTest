@@ -16,6 +16,7 @@ function TsagBurtgel(
   const [khugatsaa, setKhugatsaa] = useState(undefined)
   const [asragchiinToo, setAsragchiinToo] = useState([])
   const [loading, setLoading] = useState(false)
+  const [bulegEsekh, setBulegEsekh] = useState(false)
 
 
 
@@ -91,6 +92,9 @@ function TsagBurtgel(
         case "nas":
           form.getFieldInstance("utas").focus();
           break;
+          case "khuukhdiinToo":
+            form.getFieldInstance("utas").focus();
+            break;
         case "utas":
           form.getFieldInstance("asragchiinTurul").focus();
           break;
@@ -108,6 +112,7 @@ function TsagBurtgel(
     form.setFieldValue("duusakhTsag", tsag.duusakhTsag)
   }, [tsag])
 
+
   return (
     <Form
       form={form}
@@ -117,15 +122,26 @@ function TsagBurtgel(
       wrapperCol={{ span: 24 }}
     >
       <Form.Item name="_id" noStyle />
-      <Form.Item rules={[
+      <Form.Item label="Бүлэг хүүхэд">
+        <Switch checked={bulegEsekh} onChange={(v)=> setBulegEsekh(v)}/>
+      </Form.Item>
+      {bulegEsekh === true && <Form.Item rules={[
+        {
+          required: true,
+          message: t("Хүүхдийн тоо бүртгэнэ үү!"),
+        },
+      ]} label="Хүүхдийн тоо" name="khuukhdiinToo">
+        <InputNumber min={2} onKeyDown={focuser} placeholder="Хүүхдийн тоо" className="w-40" />
+        </Form.Item>}
+      {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,
           message: t("Овог бүртгэнэ үү!"),
         },
       ]} label="Овог" name="ovog">
         <Input onKeyDown={focuser} placeholder="Овог" autoComplete="off" />
-      </Form.Item>
-      <Form.Item
+      </Form.Item>}
+      {bulegEsekh === false && <Form.Item
         rules={[
           {
             required: true,
@@ -133,8 +149,8 @@ function TsagBurtgel(
           },
         ]} label="Нэр" name="ner">
         <Input onKeyDown={focuser} placeholder="Нэр" autoComplete="off" />
-      </Form.Item>
-      <Form.Item rules={[
+      </Form.Item>}
+      {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,
           message: t("Хүйс бүртгэнэ үү!"),
@@ -145,15 +161,15 @@ function TsagBurtgel(
             <Select.Option key={a.v} value={a.v}>{t(a.utga)}</Select.Option>
           ))}
         </Select>
-      </Form.Item>
-      <Form.Item rules={[
+      </Form.Item>}
+      {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,
           message: t("Нас бүртгэнэ үү!"),
         },
       ]} label="Нас" name="nas">
         <InputNumber onKeyDown={focuser} className="w-40" placeholder="Нас" min="1" max="12" />
-      </Form.Item>
+      </Form.Item>}
       <Form.Item rules={[
         {
           required: true,
@@ -176,7 +192,7 @@ function TsagBurtgel(
         },
       ]} label="Асран хамгаалагч" name="asragchiinTurul">
         <Select mode="multiple" value={asragchiinToo} onChange={(v) => { setAsragchiinToo(v) }} placeholder="Асран хамгаалагч">
-          {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
+          {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Багш", "Бусад"].map((a) => {
             return <Select.Option key={a}>{a}</Select.Option>
           })}
         </Select>

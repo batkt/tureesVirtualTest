@@ -547,29 +547,33 @@ function togloom1() {
           1,
       },
       {
-        title: t("Овог"),
+        title: t("Хүүхдийн мэдээлэл"),
         align: "center",
-        dataIndex: "ovog",
         width: "10rem",
         showSorterTooltip: false,
-        render: (v) => <div className="w-full text-left">{v}</div>
+        render: (data) => <Popover content={data?.khuukhdiinToo === 1 && <div className="min-w-[210px] border ">{ <div>
+          <div className="flex w-full justify-between bg-green-50 px-2 p-1"><div className="font-medium">Овог:</div> <div>{data?.ovog}</div></div>
+          <div className="flex w-full justify-between p-1 border-y px-2"><div className="font-medium">Нэр:</div> <div>{data?.ner}</div></div>
+          <div className="flex w-full justify-between bg-green-50 px-2 p-1"><div className="font-medium">Нас:</div> <div>{data?.nas}</div></div>
+          </div>}</div>}>
+          <div className={`flex px-3 w-full cursor-default gap-2 justify-center transition-colors text-white font-medium ${data?.khuukhdiinToo > 1 ? "bg-blue-500 hover:bg-blue-400" : "bg-green-500 hover:bg-green-400"} items-center rounded-md`}><div className="w-full text-center">{data?.khuukhdiinToo > 1 ? `Хүүхдийн тоо:` : data?.ner}</div> {data?.khuukhdiinToo > 1 ? <div className="px-1">{data.khuukhdiinToo}</div> : <EyeOutlined className="text-xl"/>}</div></Popover>
       },
-      {
-        title: t("Нэр"),
-        align: "center",
-        dataIndex: "ner",
-        width: "10rem",
-        showSorterTooltip: false,
-        render: (v) => <div className="w-full text-left">{v}</div>
-      },
-      {
-        title: t("Нас"),
-        align: "center",
-        dataIndex: "nas",
-        width: "4rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
+      // {
+      //   title: t("Нэр"),
+      //   align: "center",
+      //   dataIndex: "ner",
+      //   width: "10rem",
+      //   showSorterTooltip: false,
+      //   render: (v) => <div className="w-full text-left">{v}</div>
+      // },
+      // {
+      //   title: t("Нас"),
+      //   align: "center",
+      //   dataIndex: "nas",
+      //   width: "4rem",
+      //   showSorterTooltip: false,
+      //   sorter: () => 0,
+      // },
       {
         title: t("Утас"),
         align: "center",
@@ -649,7 +653,7 @@ function togloom1() {
         width: "5rem",
         title: "QR",
         align: "center",
-        render:(a, data)=> <div className="flex w-full justify-center"><div onClick={()=> qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)} className="p-2 bg-gray-200 hover:bg-white transition-all cursor-pointer border-white hover:text-black text-xl rounded-full border-2"><ImQrcode/></div></div>
+        render:(a, data)=> <div className="flex w-full justify-center"><div onClick={()=> qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)} className="p-1 bg-gray-200 hover:bg-white transition-all cursor-pointer border-white hover:text-black rounded-xl border-2 px-3"><ImQrcode/></div></div>
       },
       {
         fixed: "right",
@@ -741,7 +745,7 @@ function togloom1() {
           const difference = Number(String(duusakhUdur) + String(duusakhTsag)) - Number(String(today) + String(odooginTsag));
           const ner = data?.ner
           const ovog = data?.ovog
-          if (-1 !== data?.tuluv && (data.tulburTulsunEsekh === true || (Number(today) <= Number(duusakhUdur) && difference > 0))) {
+          if (-1 !== data?.tuluv && 3 !== data?.tuluv && (data.tulburTulsunEsekh === true || (Number(today) <= Number(duusakhUdur) && difference > 0))) {
             return <div className="flex flex-row justify-center">
               <Popover
               zIndex={10}              
@@ -749,7 +753,7 @@ function togloom1() {
                 trigger="hover"
                 content={() => (
                   <div className="flex flex-col space-y-2">
-                    {data?.tuluv !== 3 && <Popconfirm
+                    {data?.tuluv !== 3 && data?.khuukhdiinToo === 1 && <Popconfirm
                       disabled={data?.tuluv === 3}
                       title={<div>Та үйлчлүүлэгчийн цаг сунгах гэж байна 
                       <div>үргэлжлүүлэх бол тийм товчийг дарна уу</div></div>}
@@ -971,6 +975,17 @@ function togloom1() {
                       onClick={() => {
                         excelTatajAvya(token,'togloomiinTuv',togloominTuviinGaralt.data?.niitMur,[
                           {
+                            columnWidth: "2rem",
+                            title: "№",
+                            align: "center",                          
+                            render: (text, record, index) =>
+                              (togloominTuviinGaralt?.data?.khuudasniiDugaar || 0) *
+                              (togloominTuviinGaralt?.data?.khuudasniiKhemjee || 0) -
+                              (togloominTuviinGaralt?.data?.khuudasniiKhemjee || 0) +
+                              index +
+                              1,
+                          },
+                          {
                             title: t("Овог"),
                             dataIndex: "ovog",
                             ellipsis: true,
@@ -985,6 +1000,12 @@ function togloom1() {
                           {
                             title: t("Нас"),
                             dataIndex: "nas",
+                            ellipsis: true,
+                            align: "center",
+                          },
+                          {
+                            title: t("Хүүхдийн тоо"),
+                            dataIndex: "khuukhdiinToo",
                             ellipsis: true,
                             align: "center",
                           },
