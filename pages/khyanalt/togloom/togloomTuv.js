@@ -70,14 +70,14 @@ const QrCodeAvakh = React.forwardRef(({ destroy, duusakhTsag , ekhlekhTsag }, re
             level: 'M',
             margin: 3,
             scale: 4,
-            width: 80,
+            width: 60,
             color: {
               dark: '#000000',
               light: '#FFFFFF',
             },
           }}
         />: <div>Хоосон</div> }
-        <div className="text-center max-w-[400px]">Энэхүү QR код нь манай тоглоомын төвд дээрх хугацаанд хүчинтэй болохыг анхаарна уу!</div>
+        {/* <div className="text-center max-w-[400px]">Энэхүү QR код нь манай тоглоомын төвд дээрх хугацаанд хүчинтэй болохыг анхаарна уу!</div> */}
         </div>
       </div>
   )
