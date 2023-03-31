@@ -323,8 +323,8 @@ function EBarimt({
               <div className="w-full border-dashed border-t-2 pt-5 mt-3 border-black h-full flex flex-col justify-center gap-5 items-center">
           <div className=" text-justify"><div>Эхлэх хугацаа: {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
           <div>
-          {<Canvas
-          text={data?.duusakhTsag}
+          {data?.duusakhTsag && <Canvas
+          text={moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")}
           options={{
             level: 'M',
             margin: 3,
