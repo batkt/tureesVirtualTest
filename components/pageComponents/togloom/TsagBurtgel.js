@@ -141,7 +141,7 @@ function TsagBurtgel(
       ]} label="Овог" name="ovog">
         <Input onKeyDown={focuser} placeholder="Овог" autoComplete="off" />
       </Form.Item>}
-      {bulegEsekh === false && <Form.Item
+      <Form.Item
         rules={[
           {
             required: true,
@@ -149,7 +149,7 @@ function TsagBurtgel(
           },
         ]} label="Нэр" name="ner">
         <Input onKeyDown={focuser} placeholder="Нэр" autoComplete="off" />
-      </Form.Item>}
+      </Form.Item>
       {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,

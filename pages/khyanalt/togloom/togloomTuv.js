@@ -556,7 +556,7 @@ function togloom1() {
           <div className="flex w-full justify-between p-1 border-y px-2"><div className="font-medium">Нэр:</div> <div>{data?.ner}</div></div>
           <div className="flex w-full justify-between bg-green-50 px-2 p-1"><div className="font-medium">Нас:</div> <div>{data?.nas}</div></div>
           </div>}</div>}>
-          <div className={`flex px-3 w-full cursor-default gap-2 justify-center transition-colors text-white font-medium ${data?.khuukhdiinToo > 1 ? "bg-blue-500 hover:bg-blue-400" : "bg-green-500 hover:bg-green-400"} items-center rounded-md`}><div className="w-full text-center">{data?.khuukhdiinToo > 1 ? `Хүүхдийн тоо:` : data?.ner}</div> {data?.khuukhdiinToo > 1 ? <div className="px-1">{data.khuukhdiinToo}</div> : <EyeOutlined className="text-xl"/>}</div></Popover>
+          <div className={`flex px-3 w-full cursor-default gap-2 justify-center transition-colors text-white font-medium ${data?.khuukhdiinToo > 1 ? "bg-blue-500 hover:bg-blue-400" : "bg-green-500 hover:bg-green-400"} items-center rounded-md`}><div className="w-full text-center">{data?.ner}</div> {data?.khuukhdiinToo > 1 ? <div className="px-1">{data.khuukhdiinToo}</div> : <EyeOutlined className="text-xl"/>}</div></Popover>
       },
       // {
       //   title: t("Нэр"),
