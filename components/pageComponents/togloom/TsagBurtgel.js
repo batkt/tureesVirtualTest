@@ -53,8 +53,8 @@ function TsagBurtgel(
         onRefresh && onRefresh();
         destroy();
         axios.post("http://localhost:3000/qrBurtgey", {
-            ekhlekhOgnoo: moment(tsag?.ekhlekhtsag).format("YYYYMMDDHHmmss"),
-            duusakhOgnoo: moment(tsag?.duusakhTsag).format("YYYYMMDDHHmmss")
+            ekhlekhOgnoo: tsag?.ekhlekhtsag,
+            duusakhOgnoo: tsag?.duusakhTsag
           }).then(function (response) {
             console.log(response);
           })
