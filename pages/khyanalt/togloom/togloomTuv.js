@@ -779,7 +779,7 @@ function togloom1() {
                         {t("Цуцлах")}
                       </div>
                     </Popconfirm>}
-                    {data.tulburTulsunEsekh === true && difference < 1 && <Popconfirm
+                    {data.tulburTulsunEsekh === true && <Popconfirm
                       disabled={data?.tuluv === 3}
                       title={`Та үйлчлүүлэгчийг гаргахдаа итгэлтэй байна уу?`}
                       okText={t("Тийм")}
