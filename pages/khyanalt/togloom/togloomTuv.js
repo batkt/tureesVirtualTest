@@ -221,7 +221,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
           setDuussan("duhsun")
         }
       } else if (difference === 0) {
-        notification.warning({ duration: 0, message: t("Цаг дууслаа"), description: (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`) });
+        notification.warning({ duration: 0, message: t("Цаг дууслаа"), description: data?.khuukhdiinToo > 1 ? `${data.ner} /${data?.khuukhdiinToo}/ бүлгийн цаг дууссан байна!` : (`${data.ovog} овогтой ${data.ner} цаг дууссан байна!`) });
       } else if (duussan === "duhsun") {
         setDuussan(true);
         onRefresh()

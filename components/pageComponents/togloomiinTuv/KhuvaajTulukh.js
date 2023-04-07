@@ -208,6 +208,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             {t("Бэлэн")}
           </div>
           <InputNumber
+          disabled={!value.belen && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0}
           min={0} 
             autoComplete="off"
             ref={belenRef}
@@ -229,6 +232,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             {t("Харилцах")}
           </div>
           <InputNumber
+          disabled={!value.khariltsakh && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0}
           min={0}
             autoComplete="off"
             ref={khariltsakhRef}
@@ -250,6 +256,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             {t("Богд банк")}
           </div>
           <InputNumber
+          disabled={!value.bogd && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0}
             autoComplete="off"
             ref={zeelRef}
             min={0}
@@ -273,6 +282,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
                 {t(`${mur.ner}`)}
               </div>
               <InputNumber
+              disabled={!value[mur.talbar] && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+                tulbur
+                  .reduce((a, b) => a + b.dun, 0) || 0) === 0}
                 autoComplete="off"
                 ref={mur.ref}
                 min={0}

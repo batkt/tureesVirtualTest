@@ -32,6 +32,7 @@ function Tulbur(
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
+  const [ loading, setLoading ] = React.useState(false)
 
   const eBarimtRef = React.useRef(null);
 
@@ -51,6 +52,7 @@ function Tulbur(
   );
 
   function ebarimtAvya(id) {
+    setLoading(true)
     if (!!eBarimt) handlePrint();
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
@@ -72,6 +74,7 @@ function Tulbur(
         .then(({ data }) => {
           if (data.success === true) {
             setEBarimt(data);
+            setLoading(false)
             onRefresh();
           }
         })
@@ -84,6 +87,14 @@ function Tulbur(
       handlePrint();
     }
   },[eBarimt])
+
+  useEffect(()=> {
+    if (loading === true) {
+      setTimeout(() => {
+        setLoading(false)
+      }, 8000);
+    }
+  },[loading])
 
   function batalgaajuulya(turul, val) {    
     if (turul === "khaan") {
@@ -136,6 +147,18 @@ function Tulbur(
   }
 
   function batalgaajuulaltKhiiya() {
+    if (((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+    tulbur
+      .reduce((a, b) => a + b.dun, 0) || 0) > 0) {
+      message.warn("Төлбөр дутуу байна!")
+      return
+    }
+    if (((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+    tulbur
+      .reduce((a, b) => a + b.dun, 0) || 0) < 0) {
+      message.warn("Төлбөрийн дүнгээс хэтэрсэн байна!")
+      return
+    }
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
     if (dun > 0) {
       axios
@@ -547,7 +570,7 @@ function Tulbur(
         )}
 
         {alkham === 2 && barimtKhevlekhEsekh === true && (
-          <Button type="primary" onClick={() => ebarimtAvya(data?._id)}>
+          <Button type="primary" loading={loading} onClick={() => ebarimtAvya(data?._id)}>
             {t("Хэвлэх")}
           </Button>
         )}
