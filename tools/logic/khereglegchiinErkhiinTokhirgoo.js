@@ -7,6 +7,8 @@ import { FiHome } from "react-icons/fi";
 import { FaSteam } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
 import { TbLego } from "react-icons/tb";
+import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
+
 
 export const tsonknuud = [
   {
@@ -816,7 +818,8 @@ const khuudasnuud = [
   },
 ];
 
-function useErkh(ajiltan) {
+function useErkh(ajiltan, token) {
+  const {khuudasniiJagsaalt} = useKhuudasniiJagsaalt(token)
   if (!ajiltan) return [];
 
   return khuudasnuud

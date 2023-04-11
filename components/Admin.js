@@ -65,7 +65,7 @@ function Admin({
     barilgaSoliyo,
     barilgiinId,
   } = useAuth();
-  const khuudasnuud = useErkh(ajiltan);
+  const khuudasnuud = useErkh(ajiltan, token);
   const sanalKhuseltRef = React.useRef(null)
   const [visible, setVisible] = useState(false);
   const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)

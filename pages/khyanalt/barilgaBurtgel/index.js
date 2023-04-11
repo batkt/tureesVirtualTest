@@ -658,7 +658,7 @@ function BarilgaBurtgel({ token }) {
           data-aos-delay="400"
         >
           {baiguullaga?.barilguud.map((a) => (
-            <div className="my-2 grid grid-cols-12 space-x-3 rounded-md  bg-white hover:shadow-lg    dark:bg-gray-700  md:p-5 md:py-2  ">
+            <div className="my-2 grid grid-cols-12 space-x-3 rounded-md  bg-white hover:shadow-lg dark:bg-gray-700  md:p-5 md:py-2  ">
               <div className="col-span-2 flex items-center justify-start">
                 <img
                   className="h-10 w-10"
