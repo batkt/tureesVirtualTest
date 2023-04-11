@@ -145,7 +145,7 @@ function index({ token, data }) {
               {t("Цонхны эрх")}
             </h2>
           </div>
-          <div className="flex justify-center w-1/3 ">
+          <div className="flex justify-center w-1/2 ">
             <h2 className="text-center text-base font-medium dark:text-gray-200">
               {t("Эрхийн тоо")}
             </h2>
