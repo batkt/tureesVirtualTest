@@ -216,7 +216,7 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
         </ul>
       </div>
     );
-  }
+  } else
   return (
     <Link href={mur.href}>
       <a>
