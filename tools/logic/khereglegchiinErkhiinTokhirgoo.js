@@ -821,11 +821,14 @@ const khuudasnuud = [
 function useErkh(ajiltan, token) {
   const {khuudasniiJagsaalt} = useKhuudasniiJagsaalt(token)
   if (!ajiltan) return [];
-
-  return khuudasnuud.filter(a =>{if (a.href === "/khyanalt/daalgavar/admin") {
-    a.href = "/khyanalt/daalgavar"
-  }; return khuudasniiJagsaalt?.moduluud?.find(b => b.zam === a.href || a.sub)})
-    .map((x) => {
+var erkhteiTsonkhnuud = khuudasnuud.filter(a =>{if (a.href === "/khyanalt/daalgavar/admin") {
+  a.href = "/khyanalt/daalgavar"
+}; return khuudasniiJagsaalt?.moduluud?.find(b => b.zam === a.href || a.sub && a.sub?.find(c=> c.href === b.zam))})
+erkhteiTsonkhnuud.forEach((a)=> {if (a.sub && a.sub.length > 0) {
+  a.sub = a.sub.filter(d=> khuudasniiJagsaalt.moduluud.find(e=> e.zam === d.href))
+}})
+return erkhteiTsonkhnuud
+    ?.map((x) => {
       if (x.href.includes("khyanalt/tokhirgoo")) return x;
       if (ajiltan.erkh === "Admin") {
         if (x.href === "/khyanalt/daalgavar") 
@@ -834,12 +837,7 @@ function useErkh(ajiltan, token) {
       } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
           (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
-        );
-        if (x.sub.length > 0){
-         x.sub = x.sub.filter(a => khuudasniiJagsaalt.moduluud.find(b => b.zam === a.href))
-          .map((y)=> {return y})
-           return x;
-          }
+        )
       } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
         return x;
     })
