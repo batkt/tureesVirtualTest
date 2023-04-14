@@ -158,7 +158,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
     <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4 overflow-y-auto`} style={{maxHeight: "calc( 100vh - 26rem )"}}>
       <div className="col-span-3">
         <Form.Item labelCol={{ flex: '110px'}} label={t("Хөнгөлөх эсэх")}> 
-        <Switch checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
+        <Switch disabled={!value.khunglukh && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0} checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
         </Form.Item>
         {khungulukhEsekh === true && <div className="font-medium text-lg space-y-2">          
           <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
