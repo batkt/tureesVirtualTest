@@ -166,6 +166,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           {t("Хөнгөлөх дүн")}
           </div>
           <InputNumber
+          disabled={!value.khunglukh && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0}
             autoComplete="off"
             min={0}
             ref={khunglukhRef}
