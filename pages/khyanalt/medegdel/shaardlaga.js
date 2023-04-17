@@ -203,7 +203,7 @@ function Khyanalt({ token }) {
         }
         if (msj.length < 3600) {
           if (loading) {
-            message.warning("Хүсэлт илгээгдсэн байна");
+            message.warning(t("Хүсэлт илгээгдсэн байна"));
             return;
           }
           if (!!title) {

@@ -2,6 +2,7 @@ import React, { useImperativeHandle } from "react";
 import { Form, Input, notification } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import createMethod from "tools/function/crud/createMethod";
+import { t } from "i18next";
 
 function TailanZagvar(
   { data, destroy, baiguullagiinId, barilgiinId, token, refresh, setTable, setSelectValue },
@@ -22,7 +23,7 @@ function TailanZagvar(
           ({ data }) => {
             if (data === "Amjilttai") {
               notification.success({
-                description: "Амжилттай хадгаллаа",
+                description: t("Амжилттай хадгаллаа"),
                 message: "Мэдэгдэл",
               });
               refresh();

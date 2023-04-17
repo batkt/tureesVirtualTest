@@ -360,7 +360,7 @@ function AjiltanBurtgel({ token }) {
         .then(({ data }) => {
           if (data !== undefined) {
             setWaiting(false);
-            message.success("Бүртгэл амжилттай засагдлаа");
+            message.success(t("Бүртгэл амжилттай засагдлаа"));
             formRef.current.resetFields();
             khariltsagchMutate((s) => ({ ...s, jagsaalt: s.jagsaalt }), true);
             khariltsagchToololtMutate();

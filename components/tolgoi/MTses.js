@@ -9,90 +9,7 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)    
   )
-    var ner = undefined
-    switch (mur.ner) {
-      case "Хяналт":
-        ner = "Dashboard"
-        break;
-      case "Гэрээ":
-        ner = "Contracts"
-        break;
-      case "Гэрээний жагсаалт":
-        ner = "ContractList"
-        break;
-      case "Гэрээ байгуулах":
-        ner = "SingContractExecutingAContract"
-        break;
-      case "Гэрээний загвар":
-        ner = "ContractDrafts"
-        break;
-      case "Талбай бүртгэл":
-        ner = "AreaRegisteration"
-        break;
-      case "Ажилтан бүртгэл":
-        ner = "UserRegisteration"
-        break;
-      case "Харилцагч":
-        ner = "Tenant"
-        break;
-      case "Мэдэгдэл":
-        ner = "Announcement"
-        break;
-      case "Шаардлага":
-        ner = "Requirement"
-        break;
-      case "Санал хүсэлт":
-        ner = "Feedback"
-        break;
-      case "Төлбөр тооцоо":
-        ner = "Payment"
-        break;
-      case "Дансны хуулга":
-        ner = "AccountStatement"
-        break;
-      case "Гүйлгээний түүх":
-        ner = "TransactionHistory"
-        break;
-      case "Нэхэмжлэл":
-        ner = "Invoice"
-        break;
-      case "Зардал":
-        ner = "Costs"
-        break;
-      case "И-баримт":
-        ner = "E-Barimt"
-        break;
-      case "Зогсоол":
-        ner = "Park"
-        break;
-      case "Жагсаалт":
-        ner = "List"
-        break;
-      case "Машин бүртгэл":
-        ner = "VehicleRegistration"
-        break;
-      case "Анкет":
-        ner = "application"
-        break;
-      case "Тайлан":
-        ner = "Statement"
-        break;
-      case "График":
-        ner = "Graphic"
-        break;
-      case "Аналитик":
-        ner = "Analytics"
-        break;
-      case "Даалгавар":
-        ner = "Tasks"
-        break;
-      case "Устгасан түүх":
-        ner = "DeletedHistory"
-        break;
-      default:
-        ner = mur.ner
-        break;
-    }
+   
   if (mur.sub) {
     return (
       <div className=" ">
@@ -101,7 +18,7 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
             <div className={`mr-4 ${selected ? "text-green-600" : ""}`}>
               {mur.icon}
             </div>
-            {t(`${ner}`)}
+            {t(mur.ner)}
             <div
               className={`transform ${open ? "rotate-180" : ""} ml-auto`}
               style={{ transitionDuration: ".1s" }}
@@ -125,57 +42,6 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
         </li>
         <ul className="rounded-lg overflow-hidden bg-green-500 dark:bg-gray-600 transition-all duration-500" style={{ height: open ? `${2.5 * mur.sub.length}rem` : "0rem" }}>
           {mur.sub.map((a) => {
-            var utga = undefined
-            switch (a.ner) {
-              case "Гэрээний жагсаалт":
-                utga = "ContractList"
-                break;
-              case "Мэдэгдэл":
-                utga = "Announcement"
-                break;
-              case "Гэрээ байгуулах":
-                utga = "SingContractExecutingAContract"
-                break;
-              case "Гэрээний загвар":
-                utga = "ContractDrafts"
-                break;
-              case "Шаардлага":
-                utga = "Requirement"
-                break;
-              case "Санал хүсэлт":
-                utga = "Feedback"
-                break;
-              case "Дансны хуулга":
-                utga = "AccountStatement"
-                break;
-              case "Гүйлгээний түүх":
-                utga = "TransactionHistory"
-                break;
-              case "Нэхэмжлэл":
-                utga = "Invoice"
-                break;
-              case "Зардал":
-                utga = "Costs"
-                break;
-              case "Жагсаалт":
-                utga = "List"
-                break;
-              case "Машин бүртгэл":
-                utga = "VehicleRegistration"
-                break;
-              case "График":
-                utga = "Graphic"
-                break;
-                case "Хөнгөлөлт":
-                  utga = "Хөнгөлөлт"
-                  break;
-              case "Аналитик":
-                utga = "Analytics"
-                break;
-              default:
-                utga = mur.ner
-                break;
-            }
             return (
               <Link href={a.href} key={a.href}>
                 <li
@@ -191,7 +57,7 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
                       } flex flex-row h-full items-center`}
                   >
                     <div className={`mx-3`}>{a.icon}</div>
-                    {t(`${utga}`)}
+                    {t(a.ner)}
                   </div>
                 </li>
               </Link>
@@ -211,7 +77,7 @@ function MenuItem({ mur, selected, khuudasniiNer, t }) {
           >
             {mur.icon}
           </div>
-          {t(`${ner}`)}
+          {t(mur.ner)}
         </div>
       </li>
     </Link>

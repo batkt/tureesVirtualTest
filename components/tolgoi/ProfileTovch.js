@@ -272,7 +272,7 @@ const { t } = useTranslation()
             >
               <div className="flex w-44 items-center space-x-2 text-white">
                 <FiSend />
-                <span>{t("Feedback")}</span>
+                <span>{t("Санал хүсэлт")}</span>
               </div>
             </Menu.Item>
             <Menu.Divider />

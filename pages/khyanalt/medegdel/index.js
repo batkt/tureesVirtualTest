@@ -227,7 +227,7 @@ function Khyanalt({ token }) {
         }
         if (msj.length < 3600) {
           if (loading) {
-            message.warning("Хүсэлт илгээгдсэн байна");
+            message.warning(t("Хүсэлт илгээгдсэн байна"));
             return;
           }
           if (!!title) {
@@ -1074,7 +1074,7 @@ function Khyanalt({ token }) {
                         {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                       </span>
                       <span className="absolute right-0 -bottom-5 text-gray-500">
-                        {t("Announcement")}
+                        {t("Мэдэгдэл")}
                       </span>
                     </div>
                   );

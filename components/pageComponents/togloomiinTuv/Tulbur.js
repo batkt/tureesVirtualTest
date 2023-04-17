@@ -32,6 +32,7 @@ function Tulbur(
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
+  const [ qpayerTulukh, setQpayerTulukh ] = React.useState(false)
   const [ loading, setLoading ] = React.useState(false)
 
   const eBarimtRef = React.useRef(null);
@@ -481,8 +482,11 @@ function Tulbur(
           </div>
         </div>
         <KhuvaajTulukh
+        token={token}
           tulbur={tulbur}
           data={data}
+          qpayerTulukh={qpayerTulukh}
+          setQpayerTulukh={setQpayerTulukh}
           khunglult={khunglult}
           setKhunglult={setKhunglult}
           setTulbur={setTulbur}
@@ -563,7 +567,7 @@ function Tulbur(
         <Button type="primary" danger onClick={khaaya}>
           {t("Хаах")}
         </Button>
-        {alkham === 1 && (
+        {alkham === 1 && !qpayerTulukh && (
           <Button type="primary" id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
             {t("Төлбөр төлөх")}
           </Button>
