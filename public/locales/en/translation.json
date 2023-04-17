@@ -801,5 +801,9 @@
 "Барилгын Хаах цаг оруулна уу!": "Enter closing time!",
 "Барилгын Хаяг оруулна уу!": "Enter the address!",
 "Талбайн excel файл": "Excel file of Area",
-"Хүсэлт илгээгдсэн байна": "Request sent already"
+"Хүсэлт илгээгдсэн байна": "Request sent already",
+"Нууц үг оруулна уу": "Enter the password",
+"gmail хаяг оруулна уу": "Enter the gmail account",
+"Шинэ заалт": "New provision",
+"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?"
 }

@@ -1528,7 +1528,7 @@ function AjiltanBurtgel({ token }) {
                 rules={[
                   {
                     required: true,
-                    message: t("Нууц үг оруулна уу!"),
+                    message: t("Нууц үг оруулна уу"),
                   },
                 ]}
               >
