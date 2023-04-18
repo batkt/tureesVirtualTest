@@ -75,8 +75,10 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
      uilchilgee(token)
      .post("/qpayMerchantGargaya", {dun, zakhialgiinDugaar: `${data?._id}${dun}`})
      .then(({data})=>{
-      onChangeDun(dun, "qpay")
+      if (!!data) {
+        onChangeDun(dun, "qpay")
        setQpayerTulukh(data.khariu); 
+      }
      })
      .catch(aldaaBarigch)
    }
@@ -228,7 +230,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           <TextArea value={khunglult.tailbar} placeholder={t("Тайлбар оруулна уу")} onChange={(v)=> {setKhunglult({...khunglult, tailbar: v.target.value})}}/>
           </div>}
         </div>}
-      </div>}
+      
       <div className="col-span-3 flex flex-col text-center cursor-pointer font-medium text-lg">
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
@@ -329,7 +331,8 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             </div>
           </div>
         ))}
-      </div>      
+      </div>    
+      </div>}  
     </div>
   );
 }

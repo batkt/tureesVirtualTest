@@ -474,7 +474,7 @@ function Tulbur(
             <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-                tulbur
+                tulbur.filter(a => a.turul !== "qpay")
                   .reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
@@ -534,7 +534,7 @@ function Tulbur(
               </div>
               <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
                 {formatNumber(
-                  tulbur
+                  tulbur.filter(a => a.turul !== "qpay")
                     .reduce((a, b) => a + b.dun, 0)
                 )}{" "}
                 ₮
