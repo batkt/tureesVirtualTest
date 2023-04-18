@@ -73,7 +73,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
    }
      
      uilchilgee(token)
-     .post("/qpayGargaya", {dun, zakhialgiinDugaar: `${data?._id}${dun}`})
+     .post("/qpayMerchantGargaya", {dun, zakhialgiinDugaar: `${data?._id}${dun}`})
      .then(({data})=>{
       onChangeDun(dun, "qpay")
        setQpayerTulukh(data.khariu); 
