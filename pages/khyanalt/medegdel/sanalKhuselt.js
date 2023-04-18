@@ -55,8 +55,8 @@ function index({ token }) {
     ["ner", "ovog", "utas"]
   );
   const [khariltsagch, setKhariltsagch] = useState();
-  const sanalGomdolTuukh = sanal.jagsaalt.map((a) =>
-    a.khariltsagchiinId === khariltsagch?._id ? a : ""
+  const sanalGomdolTuukh = sanal.jagsaalt.filter((a) =>
+    a.khariltsagchiinId === khariltsagch?._id
   );
 
   useEffect(() => {

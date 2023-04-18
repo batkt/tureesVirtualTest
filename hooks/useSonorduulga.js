@@ -20,7 +20,20 @@ const fetcher = (
         query: {
           baiguullagiinId,
           barilgiinId,
-          khuleenAvagchiinId: { $in: [ajiltniiId, barilgiinId] },
+          $or :[
+            {baiguullagiinId, barilgiinId
+            },
+            {
+               $and : [
+                  {
+                   khuleenAvagchiinId : ajiltniiId
+                  },
+                  {
+                     turul : {
+                        $in : ["daalgavar","setgegdel"]
+                     }
+                  }]
+            }],
         },
         order: { createdAt: -1 },
       },

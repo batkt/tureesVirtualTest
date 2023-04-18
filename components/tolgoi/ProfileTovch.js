@@ -125,9 +125,6 @@ const { t } = useTranslation()
                   ajiltniiNer,
                   ajiltniiId,
                 } = mur?.object || {};
-                if (turul === "setgegdel" && ajiltniiId === ajiltan._id) {
-                  return;
-                } else
                   return (
                     <Menu.Item
                       key={`sonorduulga${i}`}
@@ -160,13 +157,13 @@ const { t } = useTranslation()
                           <div className="grid w-60 grid-cols-2 overflow-hidden">
                             <div className="col-span-1">
                               <a className="font-medium">
-                                {khariltsagchiinNer || ajiltniiNer}
+                                {khariltsagchiinNer || ajiltniiNer || mur?.title}
                               </a>
                               <div
-                                className=" z-50 flex w-[70px]  flex-row overflow-hidden  whitespace-nowrap text-gray-600  dark:text-gray-300  "
+                                className=" z-50 flex pr-4 flex-row overflow-hidden  whitespace-nowrap text-gray-600  dark:text-gray-300  "
                                 style={{ textOverflow: "ellipsis" }}
                               >
-                                <div>{message || tailbar}</div>
+                                <div className="truncate">{message || tailbar || mur?.message}</div>
                               </div>
                             </div>
                             <div className="col-span-1 space-y-2">
@@ -191,6 +188,10 @@ const { t } = useTranslation()
                                 ) : mur.turul === "medegdel" ? (
                                   <div className="flex justify-center rounded-md bg-blue-500 px-2 text-white ">
                                     {t("Мэдэгдэл")}
+                                  </div>
+                                ) : mur.turul === "shaardlaga" ? (
+                                  <div className="flex justify-center rounded-md bg-blue-500 px-2 text-white ">
+                                    {t("Шаардлага")}
                                   </div>
                                 ) : (
                                   ""
