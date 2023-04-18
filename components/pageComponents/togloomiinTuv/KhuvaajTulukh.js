@@ -1,3 +1,4 @@
+import { QrcodeOutlined } from "@ant-design/icons";
 import { Button, Form, InputNumber, Select, Switch, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { t } from "i18next";
@@ -175,7 +176,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
 
   return (
     <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4 overflow-y-auto`} style={{maxHeight: "calc( 100vh - 26rem )"}}>
-      <div className="flex w-full col-span-3"><Button onClick={()=> {!qpayerTulukh ? qpayAvakh() : (setQpayerTulukh(), onChangeDun(null, "qpay"))}} style={{width: "100%"}}>{!!qpayerTulukh ? t("Буцах") : t("QPay-ээр төлөх")}</Button></div>
+      <div className="flex w-full col-span-3"><Button icon={!qpayerTulukh && <QrcodeOutlined/>} onClick={()=> {!qpayerTulukh ? qpayAvakh() : (setQpayerTulukh(), onChangeDun(null, "qpay"))}} style={{width: "100%"}}>{!!qpayerTulukh ? t("Буцах") : t("QPay-ээр төлөх")}</Button></div>
       {!!qpayerTulukh 
       ? <div className="flex col-span-3 justify-center items-center w-full">
         <img src={qpayerTulukh?.qr_image}/>
