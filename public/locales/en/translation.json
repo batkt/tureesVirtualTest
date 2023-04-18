@@ -654,7 +654,7 @@
 "Хөнгөлөлт устгах уу?": "Delete discount?",
 "Сүүлд илгээгдсэн огноо": "Last sent date",
 "Машины мэдээлэл оруулах excel файл": "Excel file to input vehicle information",
-"Өгөгдөл боловсруулж байна та түр хүлээнэ үү!": "Please wait while processing data!",
+"Өгөгдөл боловсруулж байна та түр хүлээнэ үү!": "Loading data please wait",
 "Бөглөх": "Paragraph",
 "Сонгох": "Multiple choice",
 "Энд хариултаа бичнэ үү": "Write your answer here",

@@ -594,7 +594,7 @@ const khuudasnuud = [
     ],
   },
   {
-    ner: "И-баримт",
+    ner: "И-Баримт",
     khuudasniiNer: "eBarimt",
     href: "/khyanalt/eBarimt",
     icon: (
