@@ -823,7 +823,7 @@ function useErkh(ajiltan, token) {
   if (!ajiltan) return [];
 var erkhteiTsonkhnuud = khuudasnuud.filter(a =>{if (a.href === "/khyanalt/daalgavar/admin") {
   a.href = "/khyanalt/daalgavar"
-}; return khuudasniiJagsaalt?.moduluud?.find(b => b.zam === a.href || a.sub && a.sub?.find(c=> c.href === b.zam))})
+}; return khuudasniiJagsaalt?.moduluud?.find(b => b.zam === a.href || a.sub && a.sub?.find(c=> c.href === b.zam))});
 erkhteiTsonkhnuud.forEach((a)=> {if (a.sub && a.sub.length > 0) {
   a.sub = a.sub.filter(d=> khuudasniiJagsaalt.moduluud.find(e=> e.zam === d.href))
 }})
@@ -836,8 +836,9 @@ return erkhteiTsonkhnuud
         return x;
       } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
-          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
+          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => a === g.href)
         )
+        return x
       } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
         return x;
     })
