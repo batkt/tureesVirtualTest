@@ -839,7 +839,7 @@ return erkhteiTsonkhnuud
           (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => a === g.href)
         )
         return x
-      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
+      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href === a))
         return x;
     })
     .filter((x) => !!x);
