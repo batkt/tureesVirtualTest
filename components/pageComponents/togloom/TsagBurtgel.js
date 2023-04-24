@@ -122,7 +122,7 @@ function TsagBurtgel(
       wrapperCol={{ span: 24 }}
     >
       <Form.Item name="_id" noStyle />
-      <Form.Item label="Бүлэг хүүхэд">
+      <Form.Item label={t("Бүлэг хүүхэд")}>
         <Switch checked={bulegEsekh} onChange={(v)=> setBulegEsekh(v)}/>
       </Form.Item>
       {bulegEsekh === true && <Form.Item rules={[
@@ -130,16 +130,16 @@ function TsagBurtgel(
           required: true,
           message: t("Хүүхдийн тоо бүртгэнэ үү!"),
         },
-      ]} label="Хүүхдийн тоо" name="khuukhdiinToo">
-        <InputNumber min={2} onKeyDown={focuser} placeholder="Хүүхдийн тоо" className="w-40" />
+      ]} label={t("Хүүхдийн тоо")} name="khuukhdiinToo">
+        <InputNumber min={2} onKeyDown={focuser} placeholder={t("Хүүхдийн тоо")} className="w-40" />
         </Form.Item>}
       {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,
           message: t("Овог бүртгэнэ үү!"),
         },
-      ]} label="Овог" name="ovog">
-        <Input onKeyDown={focuser} placeholder="Овог" autoComplete="off" />
+      ]} label={t("Овог")} name="ovog">
+        <Input onKeyDown={focuser} placeholder={t("Овог")} autoComplete="off" />
       </Form.Item>}
       <Form.Item
         rules={[
@@ -147,16 +147,16 @@ function TsagBurtgel(
             required: true,
             message: t("Нэр бүртгэнэ үү!"),
           },
-        ]} label="Нэр" name="ner">
-        <Input onKeyDown={focuser} placeholder="Нэр" autoComplete="off" />
+        ]} label={t("Нэр")} name="ner">
+        <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
       {bulegEsekh === false && <Form.Item rules={[
         {
           required: true,
           message: t("Хүйс бүртгэнэ үү!"),
         },
-      ]} label="Хүйс" name="khuis">
-        <Select onChange={() => form.getFieldInstance("nas").focus()} placeholder="Эрэгтэй">
+      ]} label={t("Хүйс")} name="khuis">
+        <Select onChange={() => form.getFieldInstance("nas").focus()} placeholder={t("Хүйс")}>
           {[{ utga: "Эрэгтэй", v: 1 }, { utga: "Эмэгтэй", v: 0 }].map((a) => (
             <Select.Option key={a.v} value={a.v}>{t(a.utga)}</Select.Option>
           ))}
@@ -167,8 +167,8 @@ function TsagBurtgel(
           required: true,
           message: t("Нас бүртгэнэ үү!"),
         },
-      ]} label="Нас" name="nas">
-        <InputNumber onKeyDown={focuser} className="w-40" placeholder="Нас" min="1" max="12" />
+      ]} label={t("Нас")} name="nas">
+        <InputNumber onKeyDown={focuser} className="w-40" placeholder={t("Нас")} min="1" max="12" />
       </Form.Item>}
       <Form.Item rules={[
         {
@@ -182,16 +182,16 @@ function TsagBurtgel(
           max: 8,
           message: t("Утасны дугаараа шалгана уу!"),
         },
-      ]} label="Утас" name="utas">
-        <Input onKeyDown={focuser} placeholder="Утас" autoComplete="off" />
+      ]} label={t("Утас")} name="utas">
+        <Input onKeyDown={focuser} placeholder={t("Утас")} autoComplete="off" />
       </Form.Item>
       <Form.Item rules={[
         {
           required: true,
           message: t("Асран хамгаалагч бүртгэнэ үү!"),
         },
-      ]} label="Асран хамгаалагч" name="asragchiinTurul">
-        <Select mode="multiple" value={asragchiinToo} onChange={(v) => { setAsragchiinToo(v) }} placeholder="Асран хамгаалагч">
+      ]} label={t("Асран хамгаалагч")} name="asragchiinTurul">
+        <Select mode="multiple" value={asragchiinToo} onChange={(v) => { setAsragchiinToo(v) }} placeholder={t("Асран хамгаалагч")}>
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Багш", "Бусад"].map((a) => {
             return <Select.Option key={a}>{a}</Select.Option>
           })}
@@ -202,24 +202,24 @@ function TsagBurtgel(
           required: true,
           message: t("Тоглох цаг /Мин/ бүртгэнэ үү!"),
         },
-      ]} label="Тоглох цаг /Мин/" name="khugatsaa">
-        <InputNumber value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => { khugatsaaTootsoloy(v) }} placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
+      ]} label={t("Тоглох цаг /Мин/")} name="khugatsaa">
+        <InputNumber max={moment().endOf("day").subtract(119, "minutes").diff(moment(), "minutes")} value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => { khugatsaaTootsoloy(v) }} placeholder={t("Тоглох цаг /Мин/")} autoComplete="off" />
       </Form.Item>
       <Form.Item rules={[
         {
           required: true,
           message: t("Эхлэх цаг бүртгэнэ үү!"),
         },
-      ]} label="Эхлэх цаг" name="ekhlekhTsag">
-        <TimePicker value={tsag.ekhlekhtsag} className="w-40" onChange={(v) => setTsag({ ekhlekhtsag: v, duusakhTsag: moment(v).add((form.getFieldValue("khugatsaa") || 0), "minute") })} showSecond={false} placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
+      ]} label={t("Эхлэх цаг")} name="ekhlekhTsag">
+        <TimePicker value={tsag.ekhlekhtsag} className="w-40" onChange={(v) => setTsag({ ekhlekhtsag: v, duusakhTsag: moment(v).add((form.getFieldValue("khugatsaa") || 0), "minute") })} showSecond={false} placeholder={t("Эхлэх цаг")} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Дуусах цаг" name="duusakhTsag">
-        <TimePicker showSecond={false} placeholder="Дуусах цаг /Мин/ " disabled className="w-40" value={tsag.duusakhTsag} onChange={(v) => setTsag({ ...tsag, duusakhTsag: v })} autoComplete="off" />
+      <Form.Item label={t("Дуусах цаг")} name="duusakhTsag">
+        <TimePicker showSecond={false} placeholder={t("Дуусах цаг")} disabled className="w-40" value={tsag.duusakhTsag} onChange={(v) => setTsag({ ...tsag, duusakhTsag: v })} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Төрөл" name="turul">
+      <Form.Item label={t("Төрөл")} name="turul">
         <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
-          <Select.Option key={"Үйлчлүүлэгч"}>Үйлчлүүлэгч</Select.Option>
-          <Select.Option key={"Гишүүн"}>Гишүүн</Select.Option>
+          <Select.Option key={"Үйлчлүүлэгч"}>{t("Үйлчлүүлэгч")}</Select.Option>
+          <Select.Option key={"Гишүүн"}>{t("Гишүүн")}</Select.Option>
         </Select>
       </Form.Item>
       <div className="flex justify-end">

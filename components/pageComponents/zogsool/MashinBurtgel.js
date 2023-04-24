@@ -122,7 +122,7 @@ function MashinBurtgel(
         >
           {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
             <Select.Option key={a} value={a}>
-              {a}
+              {t(a)}
             </Select.Option>
           ))}
         </Select>

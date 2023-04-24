@@ -156,7 +156,7 @@ function index({ token, data }) {
             ?.filter((a) => !a.nuuya)
             ?.map((mur, index) => {
               return (
-                <div className={`flex ${index % 2 === 0 && "bg-green-50"}`}>
+                <div className={`flex ${index % 2 === 0 && "bg-green-50 dark:bg-green-900"}`}>
                   <div
                     key={`${mur.zam}-${index}`}
                     className="flex w-1/2 flex-row space-x-2 p-1"
@@ -186,7 +186,7 @@ function index({ token, data }) {
                         setTargetKeys([...targetKeys]);
                       }}
                     />
-                    <div>{mur.ner}</div>
+                    <div>{t(mur.ner)}</div>
                   </div>
                   <div className=" w-1/2 border-x justify-center items-center py-2 flex "><div className="border rounded-md border-gray-700 px-6 flex">{mur.bolomjit}</div></div>
                 </div>

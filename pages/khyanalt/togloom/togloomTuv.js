@@ -617,8 +617,8 @@ function togloom1() {
         showSorterTooltip: false,
         sorter: () => 0,
         render: (v, data) => {
-          return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">Тайлбар:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">Цуцлагдсан</div></Popover>
-            : data.tuluv === 3 ? <div className="bg-green-500 text-white cursor-pointer font-medium border rounded-lg">Гарсан</div>
+          return data.tuluv === -1 ? <Popover content={<div className="dark:text-gray-200"><div className="font-medium">{t("Тайлбар")}:</div> <div className="text-center">-{data?.tsutsalsanShaltgaan}</div></div>}><div className="bg-gray-500 text-white cursor-pointer font-medium border rounded-lg">{t("Цуцлагдсан")}</div></Popover>
+            : data.tuluv === 3 ? <div className="bg-green-500 text-white cursor-pointer font-medium border rounded-lg">{t("Гарсан")}</div>
               : <DuusakhTsagAvii v={data.duusakhTsag} data={data} onRefresh={onRefresh}/>;
         },
       },

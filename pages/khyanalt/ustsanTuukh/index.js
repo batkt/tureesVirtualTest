@@ -22,19 +22,19 @@ const searchKeys = ["ajiltniiNer"];
 const turluud = [
   {
     turul: "gereeniiZagvar",
-    text: "ContractDrafts",
+    text: "Гэрээний загвар",
   },
   {
     turul: "talbai",
-    text: "AreaRegisteration",
+    text: "Талбай бүртгэл",
   },
   {
     turul: "ajiltan",
-    text: "UserRegisteration",
+    text: "Ажилтан бүртгэл",
   },
   {
     turul: "khariltsagch",
-    text: "Tenant",
+    text: "Харилцагч",
   },
   {
     turul: "medegdel",
@@ -42,11 +42,11 @@ const turluud = [
   },
   {
     turul: "nekhemjlekhiinZagvar",
-    text: "Invoice",
+    text: "Нэхэмжлэл",
   },
   {
     turul: "zardal",
-    text: "Costs",
+    text: "Зардал",
   },
   {
     turul: "eBarimt",
@@ -54,11 +54,11 @@ const turluud = [
   },
   {
     turul: "zogsool",
-    text: "Park",
+    text: "Зогсоол",
   },
   {
     turul: "anket",
-    text: "application",
+    text: "Анкет",
   },
   {
     turul: "gereeniiGuilgee",

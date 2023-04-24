@@ -32,6 +32,7 @@ function Tulbur(
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
+  const [ qpayerTulukh, setQpayerTulukh ] = React.useState(false)
   const [ loading, setLoading ] = React.useState(false)
 
   const eBarimtRef = React.useRef(null);
@@ -473,7 +474,7 @@ function Tulbur(
             <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-                tulbur
+                tulbur.filter(a => a.turul !== "qpay")
                   .reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
@@ -481,8 +482,11 @@ function Tulbur(
           </div>
         </div>
         <KhuvaajTulukh
+        token={token}
           tulbur={tulbur}
           data={data}
+          qpayerTulukh={qpayerTulukh}
+          setQpayerTulukh={setQpayerTulukh}
           khunglult={khunglult}
           setKhunglult={setKhunglult}
           setTulbur={setTulbur}
@@ -530,7 +534,7 @@ function Tulbur(
               </div>
               <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
                 {formatNumber(
-                  tulbur
+                  tulbur.filter(a => a.turul !== "qpay")
                     .reduce((a, b) => a + b.dun, 0)
                 )}{" "}
                 ₮
@@ -563,7 +567,7 @@ function Tulbur(
         <Button type="primary" danger onClick={khaaya}>
           {t("Хаах")}
         </Button>
-        {alkham === 1 && (
+        {alkham === 1 && !qpayerTulukh && (
           <Button type="primary" id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
             {t("Төлбөр төлөх")}
           </Button>

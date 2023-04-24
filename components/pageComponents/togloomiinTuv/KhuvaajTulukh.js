@@ -1,9 +1,11 @@
-import { Form, InputNumber, Select, Switch } from "antd";
+import { QrcodeOutlined } from "@ant-design/icons";
+import { Button, Form, InputNumber, Select, Switch, message } from "antd";
 import TextArea from "antd/lib/input/TextArea";
 import { t } from "i18next";
 import React, { useEffect } from "react";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 
-function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult, khungulukhEsekh, setKhungulukhEsekh }) {
+function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khunglult, setKhunglult, khungulukhEsekh, setKhungulukhEsekh, qpayerTulukh, setQpayerTulukh, token }) {
   const belenRef = React.useRef();
   const khariltsakhRef = React.useRef();
   const zeelRef = React.useRef();
@@ -63,6 +65,24 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
       }
     }
   },[khungulukhEsekh])
+
+  function qpayAvakh() {
+    var dun = data?.niitDun - tulbur.reduce((a, b) => a + b.dun, 0);
+    if (dun === 0) {
+     message.warning("Төлөх дүн байхгүй байна");
+     return 
+   }
+     
+     uilchilgee(token)
+     .post("/qpayMerchantGargaya", {dun, zakhialgiinDugaar: `${data?._id}${dun}`})
+     .then(({data})=>{
+      if (!!data) {
+        onChangeDun(dun, "qpay")
+       setQpayerTulukh(data.khariu); 
+      }
+     })
+     .catch(aldaaBarigch)
+   }
 
   useEffect(() => {
     if (tulburiinKhelber === "khuvaajTulukh") belenRef.current.focus();
@@ -156,9 +176,16 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
 
   return (
     <div className={`grid grid-cols-3 gap-4 mt-5 border-2 p-4 overflow-y-auto`} style={{maxHeight: "calc( 100vh - 26rem )"}}>
-      <div className="col-span-3">
+      <div className="flex w-full col-span-3"><Button icon={!qpayerTulukh && <QrcodeOutlined/>} onClick={()=> {!qpayerTulukh ? qpayAvakh() : (setQpayerTulukh(), onChangeDun(null, "qpay"))}} style={{width: "100%"}}>{!!qpayerTulukh ? t("Буцах") : t("QPay-ээр төлөх")}</Button></div>
+      {!!qpayerTulukh 
+      ? <div className="flex col-span-3 justify-center items-center w-full">
+        <img src={qpayerTulukh?.qr_image}/>
+      </div> 
+      : <div className="col-span-3">
         <Form.Item labelCol={{ flex: '110px'}} label={t("Хөнгөлөх эсэх")}> 
-        <Switch checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
+        <Switch disabled={!value.khunglukh && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0} checked={khungulukhEsekh} onChange={(v)=> setKhungulukhEsekh(v) }/>
         </Form.Item>
         {khungulukhEsekh === true && <div className="font-medium text-lg space-y-2">          
           <div className="w-full flex flex-row bg-green-100 dark:bg-green-900">
@@ -166,6 +193,9 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           {t("Хөнгөлөх дүн")}
           </div>
           <InputNumber
+          disabled={!value.khunglukh && ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+            tulbur
+              .reduce((a, b) => a + b.dun, 0) || 0) === 0}
             autoComplete="off"
             min={0}
             ref={khunglukhRef}
@@ -201,7 +231,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
           <TextArea value={khunglult.tailbar} placeholder={t("Тайлбар оруулна уу")} onChange={(v)=> {setKhunglult({...khunglult, tailbar: v.target.value})}}/>
           </div>}
         </div>}
-      </div>
+      
       <div className="col-span-3 flex flex-col text-center cursor-pointer font-medium text-lg">
         <div className="w-full flex flex-row bg-gray-100 dark:bg-gray-900">
           <div className="w-3/4 pl-10 text-left border-b border-t border-l dark:text-gray-200">
@@ -302,7 +332,8 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
             </div>
           </div>
         ))}
-      </div>      
+      </div>    
+      </div>}  
     </div>
   );
 }
