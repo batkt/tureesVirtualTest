@@ -275,7 +275,6 @@ function tulburTootsoo() {
         align: "center",
         render: (data) => {
           return moment(data && data[0])
-            .add(-1, "d")
             .format("YYYY-MM-DD");
         },
       },
