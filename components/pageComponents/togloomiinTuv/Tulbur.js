@@ -33,7 +33,11 @@ function Tulbur(
   const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
   const [ qpayerTulukh, setQpayerTulukh ] = React.useState(false)
+  const [songogdTulburiinKhelber, setSongogdsonTulburiinKhelber] = React.useState()
+  const [songogdsonBank, setSongogdsonBank] = React.useState()
+  const [songogdsonBusadTurul, setSongogdsonBusadTurul] = React.useState()
   const [ loading, setLoading ] = React.useState(false)
+  const [tuluv, setTuluv] = React.useState(2)
 
   const eBarimtRef = React.useRef(null);
 
@@ -104,6 +108,7 @@ function Tulbur(
       setTulbur(tulbur);
     } else if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0))
       setAlkham(2);
+     else { setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}
   }
 
   function batalgaajuuljDuusgakh() {
@@ -113,7 +118,7 @@ function Tulbur(
     if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0)) {
       guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
       setAlkham(2);
-    }
+    } else { setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}
   }
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
@@ -132,36 +137,47 @@ function Tulbur(
     if (index > -1) {
       tulbur[index].tailbar = khunglult.tailbar
     }
+
+        if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0)) {
+          tulbur.forEach((a) => {
+            a.ognoo = new Date();
+              (a.baiguullagiinId = baiguullaga?._id),
+              (a.barilgiinId = barilgiinId),
+              (a.burtgesenAjiltan = ajiltan._id),
+              (a.burtgesenAjiltaniiNer = ajiltan.ner),
+              (a.togloominId = data._id)
+          });
+          uilchilgee(token)
+            .post("/togloomiinTulburTulye", { tulbur, id:data._id })
+            .then(callback)
+            .catch(aldaaBarigch);
+        } else callback()
     
-    tulbur.forEach((a) => {
-      a.ognoo = new Date();
-        (a.baiguullagiinId = baiguullaga?._id),
-        (a.barilgiinId = barilgiinId),
-        (a.burtgesenAjiltan = ajiltan._id),
-        (a.burtgesenAjiltaniiNer = ajiltan.ner),
-        (a.togloominId = data._id)
-    });
+    
+  }
+
+  function qpayAvakh() {
+    var dun = data?.niitDun - tulbur.reduce((a, b) => a + b.dun, 0);
+    if (dun === 0) {
+      message.warning("Төлөх дүн байхгүй байна");
+      return
+    }
+
     uilchilgee(token)
-      .post("/togloomiinTulburTulye", { tulbur, id:data._id })
-      .then(callback)
-      .catch(aldaaBarigch);
+      .post("/qpayMerchantGargaya", { dun, zakhialgiinDugaar: `${data?._id}${dun}` })
+      .then(({ data }) => {
+        if (!!data) {
+          onChangeDun(dun, "qpay")
+          setQpayerTulukh(data.khariu);
+        }
+      })
+      .catch((e)=>{aldaaBarigch(e); setLoading(false)})
   }
 
   function batalgaajuulaltKhiiya() {
-    if (((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-    tulbur
-      .reduce((a, b) => a + b.dun, 0) || 0) > 0) {
-      message.warn("Төлбөр дутуу байна!")
-      return
-    }
-    if (((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-    tulbur
-      .reduce((a, b) => a + b.dun, 0) || 0) < 0) {
-      message.warn("Төлбөрийн дүнгээс хэтэрсэн байна!")
-      return
-    }
+    setLoading(true)
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
-    if (dun > 0) {
+    if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
       axios
         .post(
           "http://127.0.0.1:27028",
@@ -186,13 +202,23 @@ function Tulbur(
               data?.response?.response_msg;
             setTulbur(tulbur);
             message.warning(data?.response?.response_msg);
+            setLoading(false)
           }
           setSongogdsonBank(null);
         })
-        .catch(aldaaBarigch);
+        .catch((e)=>{aldaaBarigch(e); setLoading(false)});
       setTerminal(true);
+    } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
+      !qpayerTulukh ? qpayAvakh() : (setQpayerTulukh(), onChangeDun(null, "qpay"), setLoading(false)) 
+    } else {
+      guilgeeniiTuukhKhadgalya(tulbur, ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0) ? () =>{ setAlkham(2); setLoading(false); onRefresh()} : ()=>{ setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}))
+      if (tuluv === 1) {
+        setSongogdsonBusadTurul()
+      }
+      if (tuluv === 2) {
+        setSongogdsonBank()
+      }
     }
-      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
   }
 
   function khaaya() {
@@ -474,7 +500,7 @@ function Tulbur(
             <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-                tulbur.filter(a => a.turul !== "qpay")
+                tulbur
                   .reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
@@ -485,8 +511,16 @@ function Tulbur(
         token={token}
           tulbur={tulbur}
           data={data}
+          songogdsonBusadTurul={songogdsonBusadTurul}
+        setSongogdsonBusadTurul={setSongogdsonBusadTurul}
+        songogdsonBank={songogdsonBank} 
+        setSongogdsonBank={setSongogdsonBank}
+        songogdTulburiinKhelber={songogdTulburiinKhelber}
+        setSongogdsonTulburiinKhelber={setSongogdsonTulburiinKhelber}
           qpayerTulukh={qpayerTulukh}
           setQpayerTulukh={setQpayerTulukh}
+          tuluv={tuluv}
+          setTuluv={setTuluv}
           khunglult={khunglult}
           setKhunglult={setKhunglult}
           setTulbur={setTulbur}
@@ -534,7 +568,7 @@ function Tulbur(
               </div>
               <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
                 {formatNumber(
-                  tulbur.filter(a => a.turul !== "qpay")
+                  tulbur
                     .reduce((a, b) => a + b.dun, 0)
                 )}{" "}
                 ₮
@@ -568,7 +602,7 @@ function Tulbur(
           {t("Хаах")}
         </Button>
         {alkham === 1 && !qpayerTulukh && (
-          <Button type="primary" id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
+          <Button type="primary" loading={loading} id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
             {t("Төлбөр төлөх")}
           </Button>
         )}
