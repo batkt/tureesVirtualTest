@@ -215,7 +215,7 @@ function KhuvaajTulukh({ tulburiinKhelber, data, tulbur, setTulbur, ajiltan, khu
         <div className={`absolute top-0 ${tuluv === 1 ? "right-2/3 bg-blue-600" : tuluv === 2 ? "right-1/3 bg-green-600" : "right-0 bg-purple-600"} w-1/3 duration-200 transition-all rounded-md h-full`} />
         <div onClick={() => { setTuluv(1); }} className={`text-center cursor-pointer transition-all border rounded-md font-medium z-10 flex h-10 justify-center items-center w-1/3 ${tuluv === 1 && "text-lg text-white"}`}>Бусад</div>
         <div onClick={() => { setTuluv(2); }} className={`text-center cursor-pointer transition-all rounded-md border font-medium flex h-10 justify-center items-center z-10 w-1/3 ${tuluv === 2 && "text-lg text-white"}`}>Карт</div>
-        <div onClick={() => { setTuluv(3); }} className={`text-center cursor-pointer transition-all rounded-md border font-medium flex h-10 justify-center items-center z-10 w-1/3 ${tuluv === 3 && "text-lg text-white"}`}>QPay</div>
+        <div onClick={() => { setTuluv(3); }} className={`text-center cursor-pointer transition-all rounded-md border font-medium flex h-10 justify-center items-center z-10 w-1/3 ${tuluv === 3 && "text-lg text-white"}`}>Финтек</div>
       </div>
       {/*tuluv belen*/}
       {tuluv === 1 && <div className="col-span-3 flex flex-col text-center font-medium text-lg">
