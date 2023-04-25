@@ -292,6 +292,7 @@ function camera({ token }) {
   return (
     <Admin
       title="Камер"
+      tsonkhniiId={"64474e3e28c37d7cdda15d01"}
       khuudasniiNer="Camera"
       className="p-0 md:p-4"
       onSearch={(search) =>
