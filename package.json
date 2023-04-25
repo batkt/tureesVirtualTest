@@ -2,7 +2,7 @@
   "name": "turees",
   "version": "1.0.0",
   "private": true,
-  "description": "docker build --platform=linux/amd64 -t batuk0227/turees-web .",
+  "description": "",
   "scripts": {
     "dev": "next dev --port 3000",
     "build": "next build",
