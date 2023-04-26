@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, message } from "antd";
+import { Button, Input, message } from "antd";
 import updateMethod from "tools/function/crud/updateMethod";
 import { useTranslation } from "react-i18next";
 
@@ -69,13 +69,15 @@ function NuutsUgSolikh({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa }) {
               onChange={onChange}
             />
           </div>
-          <button
-            type="button"
+          <div className="flex w-full justify-end">
+          <Button
+            type="primary"
             className="btn btn-primary mt-4"
             onClick={khadgalakh}
           >
             {t("Нууц үг солих")}
-          </button>
+          </Button>
+          </div>
         </div>
       </div>
     </div>
