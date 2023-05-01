@@ -45,7 +45,7 @@ function index({ token }) {
   useEffect(() => {
     task.mutate();
     setDaalgavar();
-  }, [tuluv])
+  }, [tuluv]);
 
   const task = useJagsaalt(ajiltan && "/daalgavar", query, order);
 
@@ -154,10 +154,11 @@ function index({ token }) {
               onClick={() => setTuluv(status)}
               data-aos="fade-down"
               data-aos-delay={1 + status + "00"}
-              className={`cursor-pointer rounded-lg p-1 text-center ${tuluv === status
-                ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
-                : "text-gray-50"
-                }`}
+              className={`cursor-pointer rounded-lg p-1 text-center ${
+                tuluv === status
+                  ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
+                  : "text-gray-50"
+              }`}
             >
               {status}
             </div>
@@ -166,10 +167,11 @@ function index({ token }) {
         <div className="w-full overflow-y-scroll" style={{ height: "70vh" }}>
           {task?.data?.jagsaalt?.map((mur, index) => (
             <div
-              className={`my-1 flex w-full cursor-pointer flex-row space-x-2 rounded-lg  p-2 pl-0 dark:bg-gray-800 ${daalgavar?._id === mur._id
-                ? "bg-green-100 dark:bg-green-700"
-                : "bg-gray-50"
-                }`}
+              className={`my-1 flex w-full cursor-pointer flex-row space-x-2 rounded-lg  p-2 pl-0 dark:bg-gray-800 ${
+                daalgavar?._id === mur._id
+                  ? "bg-green-100 dark:bg-green-700"
+                  : "bg-gray-50"
+              }`}
               key={`${index}-daalgavar`}
               onClick={() => {
                 setDaalgavar(mur);
@@ -184,8 +186,9 @@ function index({ token }) {
                 {1 + index}.
               </div>
               <div
-                className={`h-10 w-10 rounded-lg bg-${mur.started ? "green" : "green"
-                  }-600 text-2xl text-white`}
+                className={`h-10 w-10 rounded-lg bg-${
+                  mur.started ? "green" : "green"
+                }-600 text-2xl text-white`}
               >
                 {mur.tuluv === 1 ? (
                   <HistoryOutlined />
@@ -205,20 +208,21 @@ function index({ token }) {
                 <div className="grid grid-cols-12">
                   <div className="col-span-11">
                     <div
-                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${mur.tuluv === 1
-                        ? "yellow"
-                        : mur.tuluv === 2
+                      className={`text-medium overflow-hidden overflow-ellipsis whitespace-nowrap break-words font-medium text-${
+                        mur.tuluv === 1
+                          ? "yellow"
+                          : mur.tuluv === 2
                           ? "green"
                           : "red"
-                        }-500`}
+                      }-500`}
                     >
                       {mur.tuluv === 1
                         ? t("Хүлээн авсан")
                         : mur.tuluv === 2
-                          ? t("Дууссан")
-                          : mur.tuluv === -1
-                            ? t("Цуцлагдсан")
-                            : t("Эхлээгүй")}
+                        ? t("Дууссан")
+                        : mur.tuluv === -1
+                        ? t("Цуцлагдсан")
+                        : t("Эхлээгүй")}
                     </div>
                     <div className="overflow-hidden overflow-ellipsis whitespace-nowrap break-words"></div>
                   </div>
@@ -234,18 +238,34 @@ function index({ token }) {
       {/* chat */}
 
       <div
-        className={`col-span-12 ${daalgavar ? "block" : "hidden"
-          } relative gap-5 bg-green-50 p-1 rounded-lg dark:bg-gray-900 xl:col-span-7`}
+        className={`col-span-12 ${
+          daalgavar ? "block" : "hidden"
+        } relative gap-5 rounded-lg bg-green-50 p-1 dark:bg-gray-900 xl:col-span-7`}
         data-aos="flip-left"
         style={{ height: "calc(100vh - 7rem)" }}
         data-aos-delay="200"
         data-aos-anchor-placement="top-bottom"
         ref={ChatRef}
       >
-        <div className={`absolute justify-center top-0 cursor-default left-0 rounded-2xl flex-col w-full h-full text-white bg-black dark:bg-white dark:bg-opacity-20 bg-opacity-30 z-50 items-center ${daalgavar?.tuluv === -1 ? "flex" : "hidden"}`}>
-          {!!daalgavar?.tsutsalsanOgnoo && <p className="text-xl z-50 font-medium">{moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}</p>}
-          {!!daalgavar?.tsutsalsanShaltgaan && <p className="text-xl w-4/6 text-center z-50 font-medium">{daalgavar?.tsutsalsanShaltgaan} гэсэн шалтгаанаар</p>}
-          <div className="2xl:text-8xl text-red-500 border-red-500 rounded-md font-black border-8 -rotate-12">{("Цуцлагдсан")}</div></div>
+        <div
+          className={`absolute top-0 left-0 z-50 h-full w-full cursor-default flex-col items-center justify-center rounded-2xl bg-black bg-opacity-30 text-white dark:bg-white dark:bg-opacity-20 ${
+            daalgavar?.tuluv === -1 ? "flex" : "hidden"
+          }`}
+        >
+          {!!daalgavar?.tsutsalsanOgnoo && (
+            <p className="z-50 text-xl font-medium">
+              {moment(daalgavar?.tsutsalsanOgnoo).format("YYYY-MM-DD HH:mm-нд")}
+            </p>
+          )}
+          {!!daalgavar?.tsutsalsanShaltgaan && (
+            <p className="z-50 w-4/6 text-center text-xl font-medium">
+              {daalgavar?.tsutsalsanShaltgaan} гэсэн шалтгаанаар
+            </p>
+          )}
+          <div className="-rotate-12 rounded-md border-8 border-red-500 font-black text-red-500 2xl:text-8xl">
+            {"Цуцлагдсан"}
+          </div>
+        </div>
         <div
           className="flex w-full items-center gap-3 px-5 pt-2"
           style={{ height: "10rem" }}
@@ -264,40 +284,44 @@ function index({ token }) {
                   {moment().format("YYYY/MM/DD HH:mm")}
                 </div>
                 <div
-                  className={`ml-5 ${daalgavar?.tuluv === -1 ? "hidden" : "flex"
-                    }`}
+                  className={`ml-5 ${
+                    daalgavar?.tuluv === -1 ? "hidden" : "flex"
+                  }`}
                 >
                   <Popconfirm
                     disabled={daalgavar?.tuluv === 2}
-                    title={`Та даалгавар ${0 === daalgavar?.tuluv
-                      ? "Хүлээж авах "
-                      : 1 === daalgavar?.tuluv
+                    title={`Та даалгавар ${
+                      0 === daalgavar?.tuluv
+                        ? "Хүлээж авах "
+                        : 1 === daalgavar?.tuluv
                         ? "дуусгах"
                         : ""
-                      } уу?`}
+                    } уу?`}
                     okText={t("Тийм")}
                     cancelText={t("Үгүй")}
                     onConfirm={() => batlakh()}
                   >
                     <div
-                      className={`text-md cursor-pointer rounded-full bg-${0 === daalgavar?.tuluv
-                        ? "red"
-                        : 1 === daalgavar?.tuluv
+                      className={`text-md cursor-pointer rounded-full bg-${
+                        0 === daalgavar?.tuluv
+                          ? "red"
+                          : 1 === daalgavar?.tuluv
                           ? "yellow"
                           : "green"
-                        }-500 py-1 px-3 font-medium text-gray-50`}
+                      }-500 py-1 px-3 font-medium text-gray-50`}
                     >
                       {0 === daalgavar?.tuluv
                         ? t("Хүлээж авах")
                         : 1 === daalgavar?.tuluv
-                          ? t("Хийгдэж байна")
-                          : t("Дууссан")}
+                        ? t("Хийгдэж байна")
+                        : t("Дууссан")}
                     </div>
                   </Popconfirm>
                 </div>
                 <div
-                  className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${daalgavar?.tuluv === -1 ? "flex" : "hidden"
-                    }`}
+                  className={`rounded-2xl bg-red-500 px-3 py-1 text-white ${
+                    daalgavar?.tuluv === -1 ? "flex" : "hidden"
+                  }`}
                 >
                   Цуцлагдсан
                 </div>
@@ -353,10 +377,11 @@ function index({ token }) {
                 {daalgavriinSetgegdel?.jagsaalt
                   ?.map((mur) => (
                     <div
-                      className={`flex ${ajiltan?._id === mur?.ajiltniiId
-                        ? "flex-row-reverse"
-                        : ""
-                        } items-center gap-2`}
+                      className={`flex ${
+                        ajiltan?._id === mur?.ajiltniiId
+                          ? "flex-row-reverse"
+                          : ""
+                      } items-center gap-2`}
                     >
                       <div className="flex h-11 w-11 items-start justify-center rounded-full border-2 border-gray-600 bg-white dark:bg-gray-800">
                         <img
@@ -370,10 +395,11 @@ function index({ token }) {
                       </div>
                       <div
                         key={mur._id + "daalgavriinSetgegdel"}
-                        className={`relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl ${ajiltan?._id === mur?.ajiltniiId
-                          ? "bg-gray-400 dark:bg-gray-500"
-                          : "bg-green-500 dark:bg-green-600"
-                          }  p-5 pt-1 text-white `}
+                        className={`relative my-3 flex w-2/3 flex-col flex-wrap rounded-xl ${
+                          ajiltan?._id === mur?.ajiltniiId
+                            ? "bg-gray-400 dark:bg-gray-500"
+                            : "bg-green-500 dark:bg-green-600"
+                        }  p-5 pt-1 text-white `}
                       >
                         <div className="pb-1 font-medium">
                           {mur.ajiltniiNer}
@@ -393,7 +419,11 @@ function index({ token }) {
           </div>
         </div>
         <div className=" bottom-3 w-full" style={{ height: "10%" }}>
-          <div className={`flex w-full flex-row px-5 py-2 ${daalgavar?.tuluv === -1 && "hidden"}`}>
+          <div
+            className={`flex w-full flex-row px-5 py-2 ${
+              daalgavar?.tuluv === -1 && "hidden"
+            }`}
+          >
             <div className="w-full px-2">
               <TextArea
                 autoSize={{
