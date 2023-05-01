@@ -35,7 +35,7 @@ export default function App({ t, data }) {
           ticks: {
             callback: function (label, index, labels) {
               if (_.isNumber(label)) return formatNumberNershil(label)
-              return label
+              return t(label)
             },
           },
         },
@@ -48,7 +48,7 @@ export default function App({ t, data }) {
           const { datasets } = data
           if (_.isNumber(tooltipItem?.yLabel))
             return (
-              datasets[datasetIndex].label +
+              t(datasets[datasetIndex].label) +
               " " +
               formatNumber(tooltipItem?.value)
             )

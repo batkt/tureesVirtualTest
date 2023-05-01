@@ -2,12 +2,16 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, DatePicker, message, Popover, Space, Table } from "antd";
+import { Button, Card, DatePicker, message, Popover, Space, Table, Carousel } from "antd";
 import {
   DownloadOutlined,
   DownOutlined,
   FileExcelOutlined,
+  LeftOutlined,
+  RightOutlined,
   UploadOutlined,
+  UpOutlined,
+  WalletOutlined
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -26,7 +30,7 @@ import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 
 export function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
-  message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"), 100000);
+  message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ!"), 100000);
   uilchilgee(token)
     .get(service, {
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
@@ -44,7 +48,7 @@ export function excelTatajAvya(token, service, mur, sheet, query, order, sheetNa
     .finally(() => message.destroy());
 }
 
-function Zogsool({ token }) {
+function camera({ token }) {
   const { t, i18n } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
@@ -167,8 +171,18 @@ function Zogsool({ token }) {
           1,
       },
       {
+        title: "Зураг",
+        align: "center",
+        dataIndex: "image",
+        width: "10rem",
+        showSorterTooltip: false,
+        render: () =>
+          <img src="https://placehold.co/150x100/png" alt="placeholder"/>
+      },
+      {
         title: t("Машин"),
         align: "center",
+        width: "10rem",
         dataIndex: "car_number",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -178,6 +192,7 @@ function Zogsool({ token }) {
       col.push({
         title: t("Талбай"),
         align: "center",
+        width: "10rem",
         dataIndex: "mashin",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -188,6 +203,7 @@ function Zogsool({ token }) {
       col.push({
         title: t("Гэрээ"),
         align: "center",
+        width: "10rem",
         dataIndex: "mashin",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -201,6 +217,7 @@ function Zogsool({ token }) {
       {
         title: t("Орсон"),
         align: "center",
+        width: "10rem",
         dataIndex: "check_in_time",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -211,6 +228,7 @@ function Zogsool({ token }) {
       {
         title: t("Гарсан"),
         align: "center",
+        width: "10rem",
         dataIndex: "check_out_time",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -221,6 +239,7 @@ function Zogsool({ token }) {
       {
         title: t("Хугацаа"),
         align: "center",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "khugatsaa",
@@ -228,12 +247,18 @@ function Zogsool({ token }) {
       {
         title: t("Төлбөр"),
         align: "right",
+        width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "tulbur",
         render(v) {
           return formatNumber(v);
         },
+      },{
+        title: t("Тайлбар"),
+        align: "center",
+        ellipsis: true,
+        showSorterTooltip: false,
       },
     ];
   }, [turul, i18n.language]);
@@ -254,18 +279,29 @@ function Zogsool({ token }) {
     );
   }
 
+  const carouselRef = React.useRef(null);
+
+  const handlePrevClick = () => {
+    carouselRef.current.prev();
+  };
+
+  const handleNextClick = () => {
+    carouselRef.current.next();
+  };
+
   return (
     <Admin
-      title="Зогсоол"
-      khuudasniiNer="zogsool"
+      title="Камер"
+      tsonkhniiId={"64474e3e28c37d7cdda15d01"}
+      khuudasniiNer="Camera"
       className="p-0 md:p-4"
       onSearch={(search) =>
         setZogsoolKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      tsonkhniiId="61c2c7481c2830c4e6f90ce1"
       loading={isValidating}
     >
-      <Card size="small" className="col-span-12 overflow-auto">
+    <div className="col-span-12 lg:col-span-8 overflow-auto">
+      <Card size="small" className="col-span-8 overflow-auto">
         <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
           {toololt.map((a, i) => (
             <div
@@ -290,8 +326,143 @@ function Zogsool({ token }) {
             </div>
           ))}
         </div>
+        <div className="relative group">
+      <Carousel dots={false} ref={carouselRef} effect="fade">
+        <div className="xl:!flex gap-4 pt-4">
+          <div className="flex w-full gap-4">
+            <div className="flex justify-center items-center w-full aspect-square border">
+              Image 1
+            </div>
+            <div className="flex flex-col justify-between items-center w-full">
+              <div className="w-full">
+                <p>Дугаар 1</p>
+                <p>Бүртгэл 1</p>
+                <p>Төлөв 1</p>
+                <p>Орсон 1</p>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined/>} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined/>} type="primary">Хаах</Button>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full gap-4">
+           <div className="flex justify-center items-center w-full border aspect-square">
+            Image 1
+            </div>
+            <div className="flex flex-col justify-between w-full">
+              <div className="w-full flex justify-between">
+                <div>
+                  <p>Дугаар 1</p>
+                  <p>Бүртгэл 1</p>
+                  <p>Төлөв 1</p>
+                  <p>Орсон 1</p>
+                </div>
+              </div>
+            <div className="w-fit flex flex-col gap-2 items-center justify-center">
+              <div className="flex justify-center items-center">
+                <Button icon={<WalletOutlined />} type="primary">Төлбөр</Button>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined />} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined />} type="primary">Хаах</Button>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div className="xl:!flex gap-4 pt-4">
+          <div className="flex w-full gap-4">
+            <div className="flex justify-center items-center w-full aspect-square border">
+              Image 2
+            </div>
+            <div className="flex flex-col justify-between items-center w-full">
+              <div className="w-full">
+                <p>Дугаар 2</p>
+                <p>Бүртгэл 2</p>
+                <p>Төлөв 2</p>
+                <p>Орсон 2</p>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined/>} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined/>} type="primary">Хаах</Button>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full gap-4">
+           <div className="flex justify-center items-center w-full border aspect-square">
+            Image 2
+            </div>
+            <div className="flex flex-col justify-between w-full">
+              <div className="w-full flex justify-between">
+                <div>
+                  <p>Дугаар 2</p>
+                  <p>Бүртгэл 2</p>
+                  <p>Төлөв 2</p>
+                  <p>Орсон 2</p>
+                </div>
+              </div>
+            <div className="w-fit flex flex-col gap-2 items-center justify-center">
+              <div className="flex justify-center items-center">
+                <Button icon={<WalletOutlined />} type="primary">Төлбөр</Button>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined />} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined />} type="primary">Хаах</Button>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div className="xl:!flex gap-4 pt-4">
+          <div className="flex w-full gap-4">
+            <div className="flex justify-center items-center w-full aspect-square border">
+              Image 3
+            </div>
+            <div className="flex flex-col justify-between items-center w-full">
+              <div className="w-full">
+                <p>Дугаар 3</p>
+                <p>Бүртгэл 3</p>
+                <p>Төлөв 3</p>
+                <p>Орсон 3</p>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined/>} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined/>} type="primary">Хаах</Button>
+              </div>
+            </div>
+          </div>
+          <div className="flex w-full gap-4">
+           <div className="flex justify-center items-center w-full border aspect-square">
+            Image 3
+            </div>
+            <div className="flex flex-col justify-between w-full">
+              <div className="w-full flex justify-between">
+                <div>
+                  <p>Дугаар 3</p>
+                  <p>Бүртгэл 3</p>
+                  <p>Төлөв 3</p>
+                  <p>Орсон 3</p>
+                </div>
+              </div>
+            <div className="w-fit flex flex-col gap-2 items-center justify-center">
+              <div className="flex justify-center items-center">
+                <Button icon={<WalletOutlined />} type="primary">Төлбөр</Button>
+              </div>
+              <div className="flex gap-2 w-full">
+                <Button icon={<UpOutlined />} type="primary">Нээх</Button>
+                <Button icon={<DownOutlined />} type="primary">Хаах</Button>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        </Carousel>
+          <button className="p-2 absolute top-[50%] left-2 rounded-full border active:border-black group-hover:visible invisible duration-400 ease-in" onClick={handlePrevClick}><LeftOutlined /></button>
+          <button className="p-2 absolute top-[50%] right-2 rounded-full border active:border-black group-hover:visible invisible duration-400 ease-in" onClick={handleNextClick}><RightOutlined/></button>
+          </div>
       </Card>
-      <Card className="col-span-12">
+      <Card className="col-span-8">
         <div className="flex gap-5 flex-col md:flex-row">
           <div
             data-aos="fade-right"
@@ -386,10 +557,22 @@ function Zogsool({ token }) {
           />
         </div>
       </Card>
+      </div>
+      <Card className="row-span-full col-span-12 lg:col-span-4 lg:col-start-9">
+            <div className="w-full">
+              <div className="border 2xl:aspect-[3/2] aspect-square flex justify-center items-center"><p>Camera1</p></div>
+              <div className="grid 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 grid-cols-1">
+                <div className="border aspect-square"><p>Camera2</p></div>
+                <div className="border aspect-square"><p>Camera3</p></div>
+                <div className="border aspect-square"><p>Camera4</p></div>
+                <div className="border aspect-square"><p>Camera5</p></div>
+              </div>
+            </div>
+      </Card>
     </Admin>
   );
 }
 
 export const getServerSideProps = shalgaltKhiikh;
 
-export default Zogsool;
+export default camera;

@@ -1,30 +1,30 @@
-import React, { useImperativeHandle, useState } from "react";
-import { Form, Input, message, Select, TimePicker, InputNumber } from "antd";
+import React, { useCallback, useEffect, useImperativeHandle, useState } from "react";
+import { Form, Input, message, Select, TimePicker, InputNumber, Switch, Space, Button } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
+import moment from "moment"
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import axios from "axios";
 
 function TsagBurtgel(
-  { data, barilgiinId, token, destroy, onRefresh, mashinBurtgekhButtonId },
+  { data, barilgiinId, token, destroy, onRefresh },
   ref
 ) {
   const [form] = Form.useForm();
+  const [tsag, setTsag] = useState({ ekhlekhtsag: moment(Date.now()), duusakhTsag: undefined })
+  const [khugatsaa, setKhugatsaa] = useState(undefined)
+  const [asragchiinToo, setAsragchiinToo] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [bulegEsekh, setBulegEsekh] = useState(false)
+
+
 
   useImperativeHandle(
     ref,
     () => ({
       khadgalya() {
-        const data = form.getFieldsValue();
-        data.barilgiinId = barilgiinId;
-        const method = data?._id ? updateMethod : createMethod;
-        method("togloomiinTuv", token, data).then(({ data }) => {
-          if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
-            onRefresh && onRefresh();
-            destroy();
-          }
-        });
+        form.submit()
       },
       khaaya() {
         destroy();
@@ -33,42 +33,208 @@ function TsagBurtgel(
     [form, {}]
   );
 
+  function khugatsaaTootsoloy(khugatsaa) {
+    setTsag({ ekhlekhtsag: moment(tsag.ekhlekhtsag), duusakhTsag: moment(tsag.ekhlekhtsag).add(khugatsaa, "minute") });
+    setKhugatsaa(khugatsaa);
+  }
+
+  function onFinish(formData) {
+    setLoading(true)
+    const data = formData;
+    if (!data.turul) {
+      data.turul = "Үйлчлүүлэгч"
+    }
+    data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00")
+    data.barilgiinId = barilgiinId;
+    const method = data?._id ? updateMethod : createMethod;
+    method("togloomiinTuvKhadgalya", token, data).then(({ data }) => {
+      if (data === "Amjilttai") {
+        message.success(t("Амжилттай хадгаллаа"));
+        onRefresh && onRefresh();
+        destroy();
+        axios.post("http://localhost:3000/qrBurtgey", {
+            ekhlekhOgnoo: tsag?.ekhlekhtsag,
+            duusakhOgnoo: tsag?.duusakhTsag
+          }).then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+        ;
+      }
+    }).catch((e) => {
+      aldaaBarigch(e);
+    });
+  }
+
+  useEffect(() => {
+    function keyUp(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        destroy();
+      }
+    }
+    document.addEventListener("keyup", keyUp);
+    return () => document.removeEventListener("keyup", keyUp);
+  }, []);
+
+  const focuser = useCallback((e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      switch (e.target.id) {
+        case "ovog":
+          form.getFieldInstance("ner").focus();
+          break;
+        case "ner":
+          form.getFieldInstance("khuis").focus();
+          break;
+        case "nas":
+          form.getFieldInstance("utas").focus();
+          break;
+          case "khuukhdiinToo":
+            form.getFieldInstance("utas").focus();
+            break;
+        case "utas":
+          form.getFieldInstance("asragchiinTurul").focus();
+          break;
+        case "khugatsaa":
+          document.getElementById("khuukhedBurtgekhButtonId").focus();
+          break;
+        default:
+          break;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    form.setFieldValue("ekhlekhTsag", tsag.ekhlekhtsag);
+    form.setFieldValue("duusakhTsag", tsag.duusakhTsag)
+  }, [tsag])
+
+
   return (
     <Form
       form={form}
+      onFinish={onFinish}
       initialValues={data}
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 24 }}
     >
       <Form.Item name="_id" noStyle />
-      <Form.Item label="Овог" name="ovog">
-        <Input placeholder="Овог" autoComplete="off" />
+      <Form.Item label={t("Бүлэг хүүхэд")}>
+        <Switch checked={bulegEsekh} onChange={(v)=> setBulegEsekh(v)}/>
       </Form.Item>
-      <Form.Item label="Нэр" name="ner">
-        <Input placeholder="Нэр" autoComplete="off" />
+      {bulegEsekh === true && <Form.Item rules={[
+        {
+          required: true,
+          message: t("Хүүхдийн тоо бүртгэнэ үү!"),
+        },
+      ]} label={t("Хүүхдийн тоо")} name="khuukhdiinToo">
+        <InputNumber min={2} onKeyDown={focuser} placeholder={t("Хүүхдийн тоо")} className="w-40" />
+        </Form.Item>}
+      {bulegEsekh === false && <Form.Item rules={[
+        {
+          required: true,
+          message: t("Овог бүртгэнэ үү!"),
+        },
+      ]} label={t("Овог")} name="ovog">
+        <Input onKeyDown={focuser} placeholder={t("Овог")} autoComplete="off" />
+      </Form.Item>}
+      <Form.Item
+        rules={[
+          {
+            required: true,
+            message: t("Нэр бүртгэнэ үү!"),
+          },
+        ]} label={t("Нэр")} name="ner">
+        <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Хүйс" name="khuis">
-        <Select placeholder="Эрэгтэй">
-          {["Эрэгтэй", "Эмэгтэй"].map((a) => (
-            <Select.Option value={a}>{t(a)}</Select.Option>
+      {bulegEsekh === false && <Form.Item rules={[
+        {
+          required: true,
+          message: t("Хүйс бүртгэнэ үү!"),
+        },
+      ]} label={t("Хүйс")} name="khuis">
+        <Select onChange={() => form.getFieldInstance("nas").focus()} placeholder={t("Хүйс")}>
+          {[{ utga: "Эрэгтэй", v: 1 }, { utga: "Эмэгтэй", v: 0 }].map((a) => (
+            <Select.Option key={a.v} value={a.v}>{t(a.utga)}</Select.Option>
           ))}
         </Select>
+      </Form.Item>}
+      {bulegEsekh === false && <Form.Item rules={[
+        {
+          required: true,
+          message: t("Нас бүртгэнэ үү!"),
+        },
+      ]} label={t("Нас")} name="nas">
+        <InputNumber onKeyDown={focuser} className="w-40" placeholder={t("Нас")} min="1" max="12" />
+      </Form.Item>}
+      <Form.Item rules={[
+        {
+          required: true,
+          message: t("Утас бүртгэнэ үү!"),
+        },
+        {
+
+          required: form.getFieldValue("utas")?.length > 0 && true,
+          min: 8,
+          max: 8,
+          message: t("Утасны дугаараа шалгана уу!"),
+        },
+      ]} label={t("Утас")} name="utas">
+        <Input onKeyDown={focuser} placeholder={t("Утас")} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Нас" name="nas">
-        <InputNumber placeholder="Нас" min="1" max="12" />
+      <Form.Item rules={[
+        {
+          required: true,
+          message: t("Асран хамгаалагч бүртгэнэ үү!"),
+        },
+      ]} label={t("Асран хамгаалагч")} name="asragchiinTurul">
+        <Select mode="multiple" value={asragchiinToo} onChange={(v) => { setAsragchiinToo(v) }} placeholder={t("Асран хамгаалагч")}>
+          {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Багш", "Бусад"].map((a) => {
+            return <Select.Option key={a}>{a}</Select.Option>
+          })}
+        </Select>
       </Form.Item>
-      <Form.Item label="Утас" name="utas">
-        <Input placeholder="Утас" autoComplete="off" />
+      <Form.Item rules={[
+        {
+          required: true,
+          message: t("Тоглох цаг /Мин/ бүртгэнэ үү!"),
+        },
+      ]} label={t("Тоглох цаг /Мин/")} name="khugatsaa">
+        <InputNumber max={moment().endOf("day").subtract(119, "minutes").diff(moment(), "minutes")} value={khugatsaa} onKeyDown={focuser} className="w-40" onChange={(v) => { khugatsaaTootsoloy(v) }} placeholder={t("Тоглох цаг /Мин/")} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Тоглох цаг /Мин/" name="khugatsaa">
-        <Input placeholder="Тоглох цаг /Мин/ " autoComplete="off" />
+      <Form.Item rules={[
+        {
+          required: true,
+          message: t("Эхлэх цаг бүртгэнэ үү!"),
+        },
+      ]} label={t("Эхлэх цаг")} name="ekhlekhTsag">
+        <TimePicker value={tsag.ekhlekhtsag} className="w-40" onChange={(v) => setTsag({ ekhlekhtsag: v, duusakhTsag: moment(v).add((form.getFieldValue("khugatsaa") || 0), "minute") })} showSecond={false} placeholder={t("Эхлэх цаг")} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Эхлэх цаг" name="ekhlekhOgnoo">
-        <Input placeholder="Эхлэх цаг /Мин/ " autoComplete="off" />
+      <Form.Item label={t("Дуусах цаг")} name="duusakhTsag">
+        <TimePicker showSecond={false} placeholder={t("Дуусах цаг")} disabled className="w-40" value={tsag.duusakhTsag} onChange={(v) => setTsag({ ...tsag, duusakhTsag: v })} autoComplete="off" />
       </Form.Item>
-      <Form.Item label="Дуусах цаг" name="duusakhOgnoo">
-        <Input placeholder="Дуусах цаг /Мин/ " autoComplete="off" />
+      <Form.Item label={t("Төрөл")} name="turul">
+        <Select placeholder="Төрөл" defaultValue={"Үйлчлүүлэгч"}>
+          <Select.Option key={"Үйлчлүүлэгч"}>{t("Үйлчлүүлэгч")}</Select.Option>
+          <Select.Option key={"Гишүүн"}>{t("Гишүүн")}</Select.Option>
+        </Select>
       </Form.Item>
+      <div className="flex justify-end">
+        <Space>
+          <Button onClick={() => destroy()}>{t("Хаах")}</Button>
+          <Button
+            loading={loading}
+            type="primary"
+            id="khuukhedBurtgekhButtonId"
+            onClick={() => form.submit()}
+          >
+            {t("Хадгалах")}
+          </Button>
+        </Space>,
+      </div>
     </Form>
   );
 }

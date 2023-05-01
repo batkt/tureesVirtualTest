@@ -65,7 +65,7 @@ function Admin({
     barilgaSoliyo,
     barilgiinId,
   } = useAuth();
-  const khuudasnuud = useErkh(ajiltan);
+  const khuudasnuud = useErkh(ajiltan, token);
   const sanalKhuseltRef = React.useRef(null)
   const [visible, setVisible] = useState(false);
   const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)
@@ -99,98 +99,7 @@ function Admin({
     }
   },[])
 
-  const ner = useMemo(()=> {
-    var utga = undefined
-    switch (title) {
-      case "Хяналт":
-        utga = "Dashboard"
-        break;
-        case "Хяналтын цонх":
-        utga = "Хяналтын цонх"
-        break;
-        case "Гэрээ":
-        utga = "Contracts"
-        break;
-        case "Гэрээний жагсаалт":
-          utga = "ContractList"
-          break;
-          case "Гэрээ байгуулах":
-            utga = "SingContractExecutingAContract"
-            break;
-            case "Гэрээний загвар":
-              utga = "ContractDrafts"
-              break;
-              case "Талбай бүртгэл":
-                utga = "AreaRegisteration"
-                break;
-                case "Ажилтан бүртгэл":
-                  utga = "UserRegisteration"
-                  break;
-                  case "Харилцагч":
-                    utga = "Tenant"
-                    break;
-                    case "Мэдэгдэл":
-                    utga = "Announcement"
-                    break;
-                    case "Шаардлага":
-                    utga = "Requirement"
-                    break;
-                    case "Санал хүсэлт":
-                    utga = "Feedback"
-                    break;
-                    case "Төлбөр тооцоо":
-                    utga = "Payment"
-                    break;
-                    case "Дансны хуулга":
-                    utga = "AccountStatement"
-                    break;
-                    case "Гүйлгээний түүх":
-                    utga = "TransactionHistory"
-                    break;
-                    case "Нэхэмжлэл":
-                    utga = "Invoice"
-                    break;
-                    case "Зардал":
-                    utga = "Costs"
-                    break;
-                    case "И-баримт":
-                    utga = "E-Barimt"
-                    break;
-                    case "Зогсоол":
-                    utga = "Park"
-                    break;
-                    case "Жагсаалт":
-                    utga = "List"
-                    break;
-                    case "Машин бүртгэл":
-                    utga = "VehicleRegistration"
-                    break;
-                    case "Анкет":
-                    utga = "application"
-                    break;
-                    case "Тайлан":
-                    utga = "Statement"
-                    break;
-                    case "График":
-                    utga = "Graphic"
-                    break;
-                    case "Аналитик":
-                    utga = "Analytics"
-                    break;
-                    case "Даалгавар":
-                    utga = "Tasks"
-                    break;
-                    case "Устгасан түүх":
-                    utga = "DeletedHistory"
-                    break;
-
-    
-      default:
-        utga = title
-        break;
-    }
-    return utga
-  },[title])
+  
 
   function onClickSearch() {
     if (mSearch) {
@@ -281,7 +190,7 @@ function Admin({
             >
               <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
                 <div className="bg-yellow-600 group-hover:bg-yellow-500 transition-colors text-white p-2 border rounded-md"><FiSend /></div>
-                <div className="font-medium">{t("Feedback")}</div>
+                <div className="font-medium">{t("Санал хүсэлт")}</div>
               </div>
             </div>
             <div
@@ -297,7 +206,7 @@ function Admin({
         </div>
       </div>
       <Head>
-        <title>{t(`${ner}`)}</title>
+        <title>{t(title)}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Updater />
@@ -405,7 +314,7 @@ function Admin({
         id="garchig"
         className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
       >
-        {t(`${ner}`)}
+        {t(title)}
       </h2>
       <div
         className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
@@ -431,7 +340,7 @@ function Admin({
               id="garchig"
               className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
             >
-              {t(`${ner}`)}
+              {t(title)}
             </h2>
           </div>
           <div className="flex w-full flex-row justify-between md:w-auto md:space-x-3 lg:space-x-6">

@@ -193,18 +193,18 @@ function Tailan({ token }) {
           murutga.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
           murutga.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
           murutga.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
-          murutga.tulukhUdur = tmur.tulukhUdur || "";
+          murutga.tulukhUdur = tmur.tulukhUdur[0] || "";
           murutga.tuluv = tmur.tuluv || "";
           murutga.turul = tmur.turul || "";
           murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
-          murutga.utas = tmur.utas || 0;
+          murutga.utas = tmur.utas[0] || 0;
           murutga.zardluud = tmur.zardluud || 0;
 
         let mur = {};
         Object.entries(murutga).map((v) => {
           if (_.isObject(v[1]) || _.isArray(v[1])) murutga[v[0]] = "";
           else if (_.isNumber(v[1])) murutga[v[0]] = v[1];
-          else if (moment(v[1], moment.ISO_8601, true).isValid()) {
+          else if (moment(v[1], moment.ISO_8601, true).isValid() && murutga[v[0]].length > 10) {
             murutga[v[0]] = moment(v[1]).format("YYYY-MM-DD");
           }
           let key = t(converter(v[0]));
@@ -268,16 +268,19 @@ function Tailan({ token }) {
       className="p-0 md:p-4"
       tsonkhniiId={"630448aaa612b4cdd5f1fc08"}
     >
-      <div className="col-span-12 flex flex-col items-center gap-3 md:flex-row">
+      <div className="col-span-12 flex flex-col justify-between items-center gap-3 md:flex-row">
+        <div className=" flex gap-3">
         <DatePicker.RangePicker
           className="w-full md:w-auto"
           locale={locale}
           value={ognoo}
           onChange={setOgnoo}
-        />
-        <div className="">
+        />        
+        <div className="flex gap-3 items-center">
+        {!!selectValue && <div className="font-medium">Сонгогдсон загвар:</div>}
           <Select
           allowClear 
+
           value={selectValue}
             style={{ minWidth: "11rem" }}
             placeholder="Тайлангийн загвар"
@@ -288,28 +291,32 @@ function Tailan({ token }) {
           >
             {zagvar.jagsaalt.map((mur) => (
               <Select.Option value={mur._id} key={mur._id}>
-                <div className="flex flex-row">
+                <div className="flex flex-row justify-between">
                   <Tooltip title={<div>{mur.ner}</div>}>
                   <div className="truncate">{mur.ner}</div>
-                  </Tooltip>
-                  <div
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      zagvarBurtgeye({...mur, object: table});
-                    }}
-                    className="ml-auto rounded-md px-1 text-yellow-500 hover:bg-yellow-400 hover:text-white"
-                  >
-                    <EditOutlined />
-                  </div>
-                  <Popconfirm
+                  </Tooltip>                  
+                </div>
+              </Select.Option>
+            ))}
+          </Select>          
+        </div>
+        {!selectValue ? <Button
+        icon={<PlusOutlined/>}
+        className="bg-white dark:bg-gray-900"
+          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
+        >
+          {t("Загвар бүртгэх")}
+        </Button>
+        : (
+          <div className="flex items-center gap-3">      
+          <Popconfirm
                     title="Гэрээний загвар устгах уу?"
                     okText="Тийм"
                     cancelText="Үгүй"
                     onConfirm={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      deleteMethod("tailangiinZagvar", token, mur._id).then(
+                      deleteMethod("tailangiinZagvar", token, zagvar.jagsaalt.find((a) => a._id === selectValue)?._id).then(
                         ({data}) => {
                           if (data === "Amjilttai") {
                             notification.success({
@@ -323,30 +330,29 @@ function Tailan({ token }) {
                         }
                       );
                     }}
-                  >
-                    <div
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="ml-1 rounded-md px-1 text-red-500 hover:bg-red-400 hover:text-white"
+                  >                    
+                    <Button className="bg-white dark:bg-gray-900 group hover:bg-red-400 hover:text-white" icon={<div
+                      className="rounded-md pr-1 text-red-500 group-hover:text-white"
                     >
-                      <DeleteOutlined />
-                    </div>
-                  </Popconfirm>
-                </div>
-              </Select.Option>
-            ))}
-          </Select>          
+                      <DeleteOutlined />                      
+                    </div>}>Устгах</Button>
+                  </Popconfirm>      
+          <Button className={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) ? "bg-white dark:bg-gray-900 group hover:bg-yellow-100 hover:text-black" : "bg-green-600 hover:bg-green-500 group dark:hover:bg-green-100 text-white hover:text-white"} 
+          icon={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) && <div            
+            className="rounded-md pr-1 text-yellow-500 group-hover:text-black"
+          >
+            <EditOutlined />
+          </div>} onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})}>
+            {(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) 
+            ?"Хадгалах" : "Засах"}</Button>
+            
+            
+            </div>
+        )}
         </div>
+        <div>
         <Button
-        className="bg-white"
-          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
-        >
-          Загвар бүртгэх
-        </Button>
-        <Button
-        className="bg-white"
+        className="bg-white dark:bg-gray-900"
           icon={<FileExcelOutlined />}
           onClick={() => {
             const { Excel } = require("antd-table-saveas-excel");
@@ -361,7 +367,8 @@ function Tailan({ token }) {
               .addDataSource(data)
               .saveAs("Аналитик тайлан.xlsx");
           }}
-        >Excel</Button>
+        >Excel татах</Button>
+        </div>        
       </div>
       <div className="ag-theme-alpine col-span-12 overflow-auto" style={{height: "calc( 100vh - 12rem )"}}>
         {!SSR && !!PlotlyRenderers && (

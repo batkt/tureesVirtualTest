@@ -152,7 +152,7 @@ function ZakhialgaNemekh({ token }) {
   }, [gereeniiZagvar, defaultUtga]);
 
   function docNemekh(key, mur) {
-    mur.zaalt = "<b>Шинэ заалт</b>";
+    mur.zaalt = "<b>{t(Шинэ заалт)}</b>";
     gereeniiZagvar.dedKhesguud.splice(key + 1, 0, mur);
     let value = _.cloneDeep(gereeniiZagvar);
     setGereeniiZagvar(value);

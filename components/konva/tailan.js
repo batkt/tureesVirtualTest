@@ -75,7 +75,7 @@ function tailan({ token, points }) {
       {planzuragiinId?.davkharuud.map((a) => (
         <div className="col-span-1  space-y-2 p-2 hover:scale-105 hover:border-2 hover:border-green-300 hover:shadow-2xl">
           <div className="flex justify-center font-bold">
-            {a.davkhar}-р давхар
+            {t("-р давхар", {too: a.davkhar})}
           </div>
           <hr />
           <img

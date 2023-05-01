@@ -4,8 +4,9 @@ import React from "react"
 import { HorizontalBar } from "react-chartjs-2"
 import formatNumberNershil from "tools/function/formatNumberNershil"
 import formatNumber from "tools/function/formatNumber"
+import { t } from "i18next"
 
-export default function App({ t, data }) {
+export default function App({ data }) {
   const options = {
     indexAxis: "y",
     elements: {
@@ -31,7 +32,7 @@ export default function App({ t, data }) {
           ticks: {
             callback: function (label, index, labels) {
               if (_.isNumber(label)) return formatNumberNershil(label)
-              return label
+              return t(label)
             },
           },
         },
@@ -44,7 +45,7 @@ export default function App({ t, data }) {
           const { datasets } = data
           if (_.isNumber(tooltipItem?.xLabel))
             return (
-              datasets[datasetIndex].label +
+              t(datasets[datasetIndex].label) +
               " " +
               formatNumber(tooltipItem?.value)
             )

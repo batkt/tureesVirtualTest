@@ -99,11 +99,6 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                   </div>
                 </div>
               </div>
-              <div className="mt-3">
-                <Button type="primary" onClick={khadgalakh}>
-                  {t("Хадгалах")}
-                </Button>
-              </div>
             </div>
             <div className="mx-auto w-52 xl:mr-0 xl:ml-6">
               <div className="dark:border-dark-5 rounded-md border-2 border-dashed border-gray-200 p-5 shadow-sm">
@@ -142,7 +137,7 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
                     </svg>{" "}
                   </div>
                 </div>
-                <div className="relative mx-auto mt-5 cursor-pointer">
+                <div className="relative mx-auto flex justify-center mt-5 cursor-pointer">
                   <Button type="primary">{t("Зураг солих")}</Button>
                   <input
                     type="file"
@@ -154,6 +149,11 @@ function KhuviinMedeelel({ ajiltan, token, ajiltanMutate, khadgalsniiDaraa, setS
               </div>
             </div>
           </div>
+          <div className="w-full bg-gray-50 py-2 px-1 rounded-md flex justify-end mt-3">
+                <Button type="primary" onClick={khadgalakh}>
+                  {t("Хадгалах")}
+                </Button>
+              </div>
         </div>
       </div>
     </div>

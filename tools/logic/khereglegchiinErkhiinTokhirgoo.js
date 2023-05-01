@@ -7,6 +7,8 @@ import { FiHome } from "react-icons/fi";
 import { FaSteam } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
 import { TbLego } from "react-icons/tb";
+import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
+
 
 export const tsonknuud = [
   {
@@ -189,7 +191,7 @@ export const tsonknuud = [
   },
   {
     ner: "Тоглоомын төв",
-    key: "/khyanalt/togloom",
+    key: "/khyanalt/togloom/togloomTuv",
   },
   {
     key: "/khyanalt/tailan",
@@ -218,7 +220,7 @@ export const khereglegchiinErkhuud = [
     erkh: "Sankhuu",
     tailbar: "Санхүү",
     tsonkhnuud: [
-      "/khyanalt/togloom",
+      "/khyanalt/togloom/togloomTuv",
       "/khyanalt/tulburTootsoo",
       "/khyanalt/eBarimt",
       "/khyanalt/tulburTootsoo/khungulult",
@@ -592,7 +594,7 @@ const khuudasnuud = [
     ],
   },
   {
-    ner: "И-баримт",
+    ner: "И-Баримт",
     khuudasniiNer: "eBarimt",
     href: "/khyanalt/eBarimt",
     icon: (
@@ -681,6 +683,30 @@ const khuudasnuud = [
                 d="m8.83312,11.91732c1.41155,0 2.55556,-1.21507 2.55556,-2.71429c0,-1.49922 -1.14401,-2.71429 -2.55556,-2.71429s-2.55556,1.21507 -2.55556,2.71429c0,1.4971 1.14601,2.71429 2.55556,2.71429zm10.22222,-1.01786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm-8.94445,2.375l-2.55556,0c-1.76493,0 -3.19444,1.5183 -3.19444,3.39286c0,0.37321 0.2875,0.67857 0.63889,0.67857l7.66667,0c0.35283,0 0.63889,-0.30383 0.63889,-0.67857c0,-1.87455 -1.42951,-3.39286 -3.19444,-3.39286zm8.94445,-5.76786l-3.83333,0c-0.52908,0 -0.95833,0.45592 -0.95833,1.01786s0.42925,1.01786 0.95833,1.01786l3.83333,0c0.52908,0 0.95833,-0.45592 0.95833,-1.01786s-0.42726,-1.01786 -0.95833,-1.01786zm1.91667,-5.08929l-17.88889,0c-1.41155,0 -2.55556,1.21507 -2.55556,2.71429l0,13.57143c0,1.49922 1.14401,2.71429 2.55556,2.71429l17.88889,0c1.41155,0 2.55556,-1.21507 2.55556,-2.71429l0,-13.57143c0,-1.49922 -1.14601,-2.71429 -2.55556,-2.71429zm0.63889,16.28571c0,0.37415 -0.28662,0.67857 -0.63889,0.67857l-17.88889,0c-0.35227,0 -0.63889,-0.30442 -0.63889,-0.67857l0,-13.57143c0,-0.37415 0.28662,-0.67857 0.63889,-0.67857l17.88889,0c0.35227,0 0.63889,0.30442 0.63889,0.67857l0,13.57143z"
               />
             </g>
+          </svg>
+        ),
+      },
+      {
+        ner: "Камер",
+        khuudasniiNer: "Camera",
+        href: "/khyanalt/zogsool/camera",
+        icon: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            icon-name="video"
+            data-lucide="video"
+            class="lucide lucide-video mx-auto block"
+          >
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
           </svg>
         ),
       },
@@ -794,63 +820,50 @@ const khuudasnuud = [
       </svg>
     ),
   },
-  // {
-  //   ner: "Тоглоомын төв",
-  //   khuudasniiNer: "",
-  //   href: "/khyanalt/togloom",
-  //   icon: (
-  //     <svg
-  //       xmlns="http://www.w3.org/2000/svg"
-  //       width="24"
-  //       height="24"
-  //       viewBox="0 0 24 24"
-  //       fill="none"
-  //       stroke="currentColor"
-  //       stroke-width="2"
-  //       stroke-linecap="round"
-  //       stroke-linejoin="round"
-  //       icon-name="box"
-  //       data-lucide="box"
-  //       class="lucide lucide-box mx-auto block"
-  //     >
-  //       <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"></path>
-  //       <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-  //       <line x1="12" y1="22.08" x2="12" y2="12"></line>
-  //     </svg>
-  //   ),
-  //   sub: [
-  //     // {
-  //     //   ner: "Жагсаалт",
-  //     //   khuudasniiNer: "togloom2",
-  //     //   href: "/khyanalt/togloom/togloom2",
-  //     //   icon: <FaSteam style={{ width: "24", height: "24" }} />,
-  //     // },
-  //     {
-  //       ner: "Тоглоомын төв",
-  //       khuudasniiNer: "togloomTuv",
-  //       href: "/khyanalt/togloom/togloom1",
-  //       icon: <TbLego style={{ width: "24", height: "24" }} />,
-  //     },
-  //   ],
-  // },
+  {
+    ner: "Тоглоомын төв",
+    khuudasniiNer: "togloomTuv",
+    href: "/khyanalt/togloom/togloomTuv",
+    icon: <TbLego style={{ width: "24", height: "24" }} />,
+    // sub: [
+    //   {
+    //     ner: "Жагсаалт",
+    //     khuudasniiNer: "togloom2",
+    //     href: "/khyanalt/togloom/togloom2",
+    //     icon: <FaSteam style={{ width: "24", height: "24" }} />,
+    //   },
+    //   {
+    //     ner: "Тоглоомын төв",
+    //     khuudasniiNer: "togloomTuv",
+    //     href: "/khyanalt/togloom/togloomTuv",
+    //     icon: <TbLego style={{ width: "24", height: "24" }} />,
+    //   },
+    // ],
+  },
 ];
 
-function useErkh(ajiltan) {
+function useErkh(ajiltan, token) {
+  const {khuudasniiJagsaalt} = useKhuudasniiJagsaalt(token)
   if (!ajiltan) return [];
-
-  return khuudasnuud
-    .map((x) => {
+var erkhteiTsonkhnuud = khuudasnuud.filter(a =>{if (a.href === "/khyanalt/daalgavar/admin") {
+  a.href = "/khyanalt/daalgavar"
+}; return khuudasniiJagsaalt?.moduluud?.find(b => b.zam === a.href || a.sub && a.sub?.find(c=> c.href === b.zam))});
+erkhteiTsonkhnuud.forEach((a)=> {if (a.sub && a.sub.length > 0) {
+  a.sub = a.sub.filter(d=> khuudasniiJagsaalt.moduluud.find(e=> e.zam === d.href))
+}})
+return erkhteiTsonkhnuud
+    ?.map((x) => {
       if (x.href.includes("khyanalt/tokhirgoo")) return x;
       if (ajiltan.erkh === "Admin") {
-        if (x.href === "/khyanalt/daalgavar")
+        if (x.href === "/khyanalt/daalgavar") 
           x.href = "/khyanalt/daalgavar/admin";
         return x;
       } else if (x.sub?.length > 0) {
         x.sub = x.sub.filter(
-          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => g.href.includes(a))
-        );
-        if (x.sub.length > 0) return x;
-      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href.includes(a)))
+          (g) => !!ajiltan?.tsonkhniiErkhuud.find((a) => a === g.href)
+        )
+        return x
+      } else if (!!ajiltan?.tsonkhniiErkhuud.find((a) => x.href === a))
         return x;
     })
     .filter((x) => !!x);
