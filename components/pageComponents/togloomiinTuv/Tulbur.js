@@ -1,4 +1,4 @@
-import { Steps, Button, Spin, message, Switch, Form } from "antd";
+import { Steps, Button, Spin, message, Switch, Form, Modal } from "antd";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -8,12 +8,12 @@ import KhuvaajTulukh from "./KhuvaajTulukh";
 import EBarimt from "./EBarimt";
 import QRCode from "react-qr-code";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
 //#endregion
-
+const { confirm } = Modal;
 function Tulbur(
   { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
   ref
@@ -23,21 +23,29 @@ function Tulbur(
     data?.tulburTulsunEsekh === true ? 2 : 1
   );
   const [khaanbank, setTerminal] = React.useState(false);
-  const [tulbur, setTulbur] = React.useState((data?.dutuuDun ? [] : data?.tulbur) || []);
+  const [tulbur, setTulbur] = React.useState(
+    (data?.dutuuDun ? [] : data?.tulbur) || []
+  );
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(false);
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
   const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
-  const [khunglult, setKhunglult] = React.useState({khungulukhDun: undefined , tailbar: undefined, tailbarTurul: undefined})
+  const [khunglult, setKhunglult] = React.useState({
+    khungulukhDun: undefined,
+    tailbar: undefined,
+    tailbarTurul: undefined,
+  });
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
-  const [ qpayerTulukh, setQpayerTulukh ] = React.useState(false)
-  const [songogdTulburiinKhelber, setSongogdsonTulburiinKhelber] = React.useState()
-  const [songogdsonBank, setSongogdsonBank] = React.useState()
-  const [songogdsonBusadTurul, setSongogdsonBusadTurul] = React.useState()
-  const [ loading, setLoading ] = React.useState(false)
-  const [tuluv, setTuluv] = React.useState(2)
+  const [qpayerTulukh, setQpayerTulukh] = React.useState(false);
+  const [songogdTulburiinKhelber, setSongogdsonTulburiinKhelber] =
+    React.useState();
+  const [songogdsonBank, setSongogdsonBank] = React.useState();
+  const [songogdsonBusadTurul, setSongogdsonBusadTurul] = React.useState();
+  const [loading, setLoading] = React.useState(false);
+  const [tuluv, setTuluv] = React.useState(2);
+  const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
 
   const eBarimtRef = React.useRef(null);
 
@@ -49,15 +57,32 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        onRefresh();
-        destroy();
+        if (
+          (!data?.dutuuDun &&
+            JSON.stringify(data?.tulbur) !== JSON.stringify(tulbur)) ||
+          (!!data?.dutuuDun && tulbur.reduce((a, b) => a + b.dun, 0) !== 0)
+        ) {
+          confirm({
+            title: "Та гарахдаа итгэлтэй байна уу?",
+            okText: "Тийм",
+            cancelText: "Үгүй",
+            content: "Төлбөрийн мэдээлэл хадгалагдахгүй болохыг анхаарна уу!",
+            onOk: () => {
+              onRefresh();
+              destroy();
+            },
+          });
+        } else {
+          onRefresh();
+          destroy();
+        }
       },
     }),
-    []
+    [tulbur]
   );
 
   function ebarimtAvya(id) {
-    setLoading(true)
+    setLoading(true);
     if (!!eBarimt) handlePrint();
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
@@ -66,7 +91,7 @@ function Tulbur(
       }
       const body = {
         id,
-        ebarimtiinTurul: "togloom"
+        ebarimtiinTurul: "togloom",
       };
       if (baiguullagaEsekh || irgenEsekh) {
         body.register = register;
@@ -79,7 +104,7 @@ function Tulbur(
         .then(({ data }) => {
           if (data.success === true) {
             setEBarimt(data);
-            setLoading(false)
+            setLoading(false);
             onRefresh();
           }
         })
@@ -87,95 +112,133 @@ function Tulbur(
     }
   }
 
-  useEffect(()=> {
-    if (!!eBarimt) {      
+  useEffect(() => {
+    if (!!eBarimt) {
       handlePrint();
     }
-  },[eBarimt])
+  }, [eBarimt]);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (loading === true) {
       setTimeout(() => {
-        setLoading(false)
+        setLoading(false);
       }, 8000);
     }
-  },[loading])
+  }, [loading]);
 
-  function batalgaajuulya(turul, val) {    
+  function batalgaajuulya(turul, val) {
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
-      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
+      guilgeeniiTuukhKhadgalya(tulbur, () => {
+        setAlkham(2);
+        onRefresh();
+      });
       setTulbur(tulbur);
-    } else if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0))
+    } else if (
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      tulbur.reduce((a, b) => a + b.dun, 0)
+    )
       setAlkham(2);
-     else { setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}
+    else {
+      setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
+      setLoading(false);
+    }
   }
 
   function batalgaajuuljDuusgakh() {
     setTerminal(false);
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
     setTulbur([...tulbur]);
-    if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0)) {
-      guilgeeniiTuukhKhadgalya(tulbur, () => {setAlkham(2); onRefresh()});
+    if (
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      tulbur.reduce((a, b) => a + b.dun, 0)
+    ) {
+      guilgeeniiTuukhKhadgalya(tulbur, () => {
+        setAlkham(2);
+        onRefresh();
+      });
       setAlkham(2);
-    } else { setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}
+    } else {
+      setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
+      setLoading(false);
+    }
   }
 
   function guilgeeniiTuukhKhadgalya(tulbur, callback) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
-        message.warn(t("Хөнгөлөх дүн оруулна уу"))
-        return
+        message.warn(t("Хөнгөлөх дүн оруулна уу"));
+        return;
       }
       if (!khunglult.tailbar || khunglult.tailbar === "") {
-        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"))
-        return
+        message.warn(t("Хөнгөлөх шалтгаан оруулна уу"));
+        return;
       }
-      
     }
-    var index = tulbur.findIndex(a=> a.turul === "khunglukh")
+    var index = tulbur.findIndex((a) => a.turul === "khunglukh");
     if (index > -1) {
-      tulbur[index].tailbar = khunglult.tailbar
+      tulbur[index].tailbar = khunglult.tailbar;
     }
 
-        if ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0)) {
-          tulbur.forEach((a) => {
-            a.ognoo = new Date();
-              (a.baiguullagiinId = baiguullaga?._id),
-              (a.barilgiinId = barilgiinId),
-              (a.burtgesenAjiltan = ajiltan._id),
-              (a.burtgesenAjiltaniiNer = ajiltan.ner),
-              (a.togloominId = data._id)
-          });
-          uilchilgee(token)
-            .post("/togloomiinTulburTulye", { tulbur, id:data._id })
-            .then(callback)
-            .catch(aldaaBarigch);
-        } else callback()
-    
-    
+    if (
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      tulbur.reduce((a, b) => a + b.dun, 0)
+    ) {
+      tulbur.forEach((a) => {
+        a.ognoo = new Date();
+        (a.baiguullagiinId = baiguullaga?._id),
+          (a.barilgiinId = barilgiinId),
+          (a.burtgesenAjiltan = ajiltan._id),
+          (a.burtgesenAjiltaniiNer = ajiltan.ner),
+          (a.togloominId = data._id);
+      });
+      uilchilgee(token)
+        .post("/togloomiinTulburTulye", { tulbur, id: data._id })
+        .then(callback)
+        .catch(aldaaBarigch);
+    } else callback();
   }
 
-  function qpayAvakh() {
-    var dun = data?.niitDun - tulbur.reduce((a, b) => a + b.dun, 0);
-    if (dun === 0) {
-      message.warning("Төлөх дүн байхгүй байна");
-      return
+  useEffect(() => {
+    if (khuleegdejBuiQpay) {
+      socket().on(`qpay${khuleegdejBuiQpay}`, (qpay) => {
+        console.log(`qpay${khuleegdejBuiQpay}`, qpay);
+        setSongogdsonTulburiinKhelber();
+        setQpayerTulukh("Tulugdsun");
+        message.success("Qpay Амжилттай төлөгдлөө");
+        batalgaajuulaltKhiiya();
+      });
     }
+    return () => {
+      socket().off(`qpay${khuleegdejBuiQpay}`);
+    };
+  }, [khuleegdejBuiQpay]);
 
+  function qpayAvakh() {
+    var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
+    if (!ilgeekhDun || ilgeekhDun <= 0) {
+      message.warning("Төлөх дүн оруулна уу");
+      setLoading(false);
+      return;
+    }
+    setKhuleegdejBuiQpay(`${data?._id}${ilgeekhDun}`);
     uilchilgee(token)
-      .post("/qpayMerchantGargaya", { dun, zakhialgiinDugaar: `${data?._id}${dun}` })
-      .then(({ data }) => {
-        if (!!data) {
-          onChangeDun(dun, "qpay")
-          setQpayerTulukh(data.khariu);
-        }
+      .post("/qpayGargaya", {
+        dun: ilgeekhDun,
+        zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
       })
-      .catch((e)=>{aldaaBarigch(e); setLoading(false)})
+      .then(({ data }) => {
+        setQpayerTulukh(data.khariu);
+        setLoading(false);
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
+        setLoading(false);
+      });
   }
 
   function batalgaajuulaltKhiiya() {
-    setLoading(true)
+    setLoading(true);
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
     if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
       axios
@@ -202,34 +265,46 @@ function Tulbur(
               data?.response?.response_msg;
             setTulbur(tulbur);
             message.warning(data?.response?.response_msg);
-            setLoading(false)
+            setLoading(false);
           }
           setSongogdsonBank(null);
         })
-        .catch((e)=>{aldaaBarigch(e); setLoading(false)});
+        .catch((e) => {
+          aldaaBarigch(e);
+          setLoading(false);
+        });
       setTerminal(true);
     } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
-      !qpayerTulukh ? qpayAvakh() : (setQpayerTulukh(), onChangeDun(null, "qpay"), setLoading(false)) 
+      !qpayerTulukh ? qpayAvakh() : setLoading(false);
     } else {
-      guilgeeniiTuukhKhadgalya(tulbur, ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) === tulbur.reduce((a, b) => a + b.dun, 0) ? () =>{ setAlkham(2); setLoading(false); onRefresh()} : ()=>{ setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1); setLoading(false)}))
+      guilgeeniiTuukhKhadgalya(
+        tulbur,
+        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+          tulbur.reduce((a, b) => a + b.dun, 0)
+          ? () => {
+              setAlkham(2);
+              setLoading(false);
+              onRefresh();
+            }
+          : () => {
+              setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
+              setLoading(false);
+            }
+      );
       if (tuluv === 1) {
-        setSongogdsonBusadTurul()
+        setSongogdsonBusadTurul();
       }
       if (tuluv === 2) {
-        setSongogdsonBank()
+        setSongogdsonBank();
       }
     }
-  }
-
-  function khaaya() {
-    destroy();
   }
 
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        destroy();
+        ref.current.khaaya();
       }
     }
     document.addEventListener("keyup", keyUp);
@@ -237,249 +312,267 @@ function Tulbur(
   }, []);
 
   return (
-    <div className="w-full h-full">
+    <div className="h-full w-full">
       {eBarimt && (
-          <div className="hidden">
-            <div className="p-2" style={{ minWidth: "20rem" }} ref={eBarimtRef}>
-              <table className="w-full">
-                <colgroup>
-                  <col className="w-1/6" />
-                  <col className="w-1/6" />
-                  <col className="w-1/6" />
-                  <col className="w-1/6" />
-                  <col className="w-1/6" />
-                  <col className="w-1/6" />
-                </colgroup>
-                <tbody className="text-xs">
-                  <tr>
-                    <td colSpan={6} className="text-center border">
-                      {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={6} className="text-center border">
-                      {baiguullaga?.ner}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={6} className="font-medium border">
-                      {t("Борлуулагч")}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border" colSpan={3}>
-                      {t("Огноо")}
-                    </td>
-                    <td className="border" colSpan={3}>
-                      {moment(eBarimt?.date).format("YYYY/MM/DD hh:mm:ss")}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border" colSpan={3}>
-                      {t("ТТД")}
-                    </td>
-                    <td className="border" colSpan={3}>
-                      {eBarimt?.registerNo}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border" colSpan={3}>
-                      {t("ДДТД")}
-                    </td>
-                    <td className="border" colSpan={3}>
-                      {eBarimt?.billId}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border" colSpan={3}>
-                      {t("Касс")}
-                    </td>
-                    <td className="border" colSpan={3}>
-                      {eBarimt?.posNo}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border" colSpan={3}>
-                      {t("Кассчин")}
-                    </td>
-                    <td className="border" colSpan={3}>
-                      {ajiltan?.ner}
-                    </td>
-                  </tr>
-                  {baiguullagaEsekh && (
-                    <>
-                      <tr>
-                        <td className="border" colSpan={6}>
-                          {t("Худалдан авагч")}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="border" colSpan={1}>
-                          {t("ТТД")}
-                        </td>
-                        <td className="border" colSpan={5}>
-                          {register}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="border" colSpan={1}>
-                          {t("Нэр")}
-                        </td>
-                        <td className="border" colSpan={5}>
-                          {baiguullagiinMedeelel?.name}
-                        </td>
-                      </tr>
-                    </>
-                  )}
-                  <tr>
-                    <td colSpan={6} className="border">
-                      <br />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border text-center" colSpan={3}>
-                      {t("Барааны нэр")}
-                    </td>
-                    <td className="border text-center">{t("Тоо")}</td>
-                    <td className="border text-center">{t("Нэгж")}</td>
-                    <td className="border text-center">{t("Дүн")}</td>
-                  </tr>
-                  {eBarimt?.stocks?.map((mur, index) => (
-                    <tr key={`${index}-zakhialga`}>
-                      <td colSpan={3} className="border text-right">
-                        {mur.name}
-                      </td>
-                      <td className="border text-right">{mur.qty}</td>
-                      <td className="border text-right">
-                        {formatNumber(mur.unitPrice, 2)}
-                      </td>
-                      <td className="border text-right">
-                        {formatNumber(mur.totalAmount, 2)}
+        <div className="hidden">
+          <div className="p-2" style={{ minWidth: "20rem" }} ref={eBarimtRef}>
+            <table className="w-full">
+              <colgroup>
+                <col className="w-1/6" />
+                <col className="w-1/6" />
+                <col className="w-1/6" />
+                <col className="w-1/6" />
+                <col className="w-1/6" />
+                <col className="w-1/6" />
+              </colgroup>
+              <tbody className="text-xs">
+                <tr>
+                  <td colSpan={6} className="border text-center">
+                    {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={6} className="border text-center">
+                    {baiguullaga?.ner}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={6} className="border font-medium">
+                    {t("Борлуулагч")}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border" colSpan={3}>
+                    {t("Огноо")}
+                  </td>
+                  <td className="border" colSpan={3}>
+                    {moment(eBarimt?.date).format("YYYY/MM/DD hh:mm:ss")}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border" colSpan={3}>
+                    {t("ТТД")}
+                  </td>
+                  <td className="border" colSpan={3}>
+                    {eBarimt?.registerNo}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border" colSpan={3}>
+                    {t("ДДТД")}
+                  </td>
+                  <td className="border" colSpan={3}>
+                    {eBarimt?.billId}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border" colSpan={3}>
+                    {t("Касс")}
+                  </td>
+                  <td className="border" colSpan={3}>
+                    {eBarimt?.posNo}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border" colSpan={3}>
+                    {t("Кассчин")}
+                  </td>
+                  <td className="border" colSpan={3}>
+                    {ajiltan?.ner}
+                  </td>
+                </tr>
+                {baiguullagaEsekh && (
+                  <>
+                    <tr>
+                      <td className="border" colSpan={6}>
+                        {t("Худалдан авагч")}
                       </td>
                     </tr>
-                  ))}
-                  <tr>
-                    <td colSpan={5} className="text-right border">
-                      {t("НӨАТ-гүй дүн")}
+                    <tr>
+                      <td className="border" colSpan={1}>
+                        {t("ТТД")}
+                      </td>
+                      <td className="border" colSpan={5}>
+                        {register}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="border" colSpan={1}>
+                        {t("Нэр")}
+                      </td>
+                      <td className="border" colSpan={5}>
+                        {baiguullagiinMedeelel?.name}
+                      </td>
+                    </tr>
+                  </>
+                )}
+                <tr>
+                  <td colSpan={6} className="border">
+                    <br />
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border text-center" colSpan={3}>
+                    {t("Барааны нэр")}
+                  </td>
+                  <td className="border text-center">{t("Тоо")}</td>
+                  <td className="border text-center">{t("Нэгж")}</td>
+                  <td className="border text-center">{t("Дүн")}</td>
+                </tr>
+                {eBarimt?.stocks?.map((mur, index) => (
+                  <tr key={`${index}-zakhialga`}>
+                    <td colSpan={3} className="border text-right">
+                      {mur.name}
+                    </td>
+                    <td className="border text-right">{mur.qty}</td>
+                    <td className="border text-right">
+                      {formatNumber(mur.unitPrice, 2)}
                     </td>
                     <td className="border text-right">
-                      {formatNumber(data.niitDun / 1.1, 2)}
+                      {formatNumber(mur.totalAmount, 2)}
                     </td>
                   </tr>
-                  {data?.khungulukhKhuvi && (
-                    <tr>
-                      <td colSpan={5} className="text-right border">
-                        {t("Хөнгөлөлт")}
-                      </td>
-                      <td className="border text-right">
-                        {formatNumber(data.niitUndsenDun - data.niitDun)}
-                      </td>
-                    </tr>
-                  )}
+                ))}
+                <tr>
+                  <td colSpan={5} className="border text-right">
+                    {t("НӨАТ-гүй дүн")}
+                  </td>
+                  <td className="border text-right">
+                    {formatNumber(data.niitDun / 1.1, 2)}
+                  </td>
+                </tr>
+                {data?.khungulukhKhuvi && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
-                      {t("НӨАТ-н дүн")}
+                    <td colSpan={5} className="border text-right">
+                      {t("Хөнгөлөлт")}
                     </td>
                     <td className="border text-right">
-                      {formatNumber(eBarimt?.vat, 2)}
+                      {formatNumber(data.niitUndsenDun - data.niitDun)}
                     </td>
                   </tr>
+                )}
+                <tr>
+                  <td colSpan={5} className="border text-right">
+                    {t("НӨАТ-н дүн")}
+                  </td>
+                  <td className="border text-right">
+                    {formatNumber(eBarimt?.vat, 2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={5} className="border text-right">
+                    {t("Төлөх дүн")}
+                  </td>
+                  <td className="border text-right">
+                    {formatNumber(eBarimt?.amount)}
+                  </td>
+                </tr>
+                {tulbur?.belen && (
                   <tr>
-                    <td colSpan={5} className="text-right border">
-                      {t("Төлөх дүн")}
+                    <td colSpan={5} className="border text-right">
+                      {t("Бэлнээр")}
                     </td>
                     <td className="border text-right">
-                      {formatNumber(eBarimt?.amount)}
+                      {formatNumber(tulbur?.belen)}
                     </td>
                   </tr>
-                  {tulbur?.belen && (
-                    <tr>
-                      <td colSpan={5} className="text-right border">
-                        {t("Бэлнээр")}
-                      </td>
-                      <td className="border text-right">
-                        {formatNumber(tulbur?.belen)}
-                      </td>
-                    </tr>
-                  )}
-                  {tulbur?.belenBus && (
-                    <tr>
-                      <td colSpan={5} className="text-right border">
-                        {t("Бэлэн бусаар")}
-                      </td>
-                      <td className="border text-right">
-                        {formatNumber(tulbur?.belenBus)}
-                      </td>
-                    </tr>
-                  )}
-                  {tulbur?.khariult && (
-                    <tr>
-                      <td colSpan={5} className="text-right border">
-                        {t("Хариулт")}
-                      </td>
-                      <td className="border text-right">
-                        {formatNumber(tulbur?.khariult)}
-                      </td>
-                    </tr>
-                  )}
+                )}
+                {tulbur?.belenBus && (
                   <tr>
-                    <td colSpan={4} className="border">{`Е-Баримт ${baiguullagaEsekh ? "" : "уншуулах"
-                      } дүн`}</td>
-                    <td colSpan={2} className="border text-right">
-                      {formatNumber(eBarimt?.amount)}
+                    <td colSpan={5} className="border text-right">
+                      {t("Бэлэн бусаар")}
+                    </td>
+                    <td className="border text-right">
+                      {formatNumber(tulbur?.belenBus)}
                     </td>
                   </tr>
-                  {!baiguullagaEsekh && (
-                    <tr>
-                      <td colSpan={4} className="border">
-                        {t("Сугалааны дугаар")}
-                      </td>
-                      <td colSpan={2} className="border">
-                        {eBarimt?.lottery}
-                      </td>
-                    </tr>
-                  )}
+                )}
+                {tulbur?.khariult && (
                   <tr>
-                    <td colSpan={6}>
-                      <div className="w-full flex justify-center p-5">
-                        <div className="w-40 h-40">
-                          <QRCode value={eBarimt?.qrData} size={160} />
+                    <td colSpan={5} className="border text-right">
+                      {t("Хариулт")}
+                    </td>
+                    <td className="border text-right">
+                      {formatNumber(tulbur?.khariult)}
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td colSpan={4} className="border">{`Е-Баримт ${
+                    baiguullagaEsekh ? "" : "уншуулах"
+                  } дүн`}</td>
+                  <td colSpan={2} className="border text-right">
+                    {formatNumber(eBarimt?.amount)}
+                  </td>
+                </tr>
+                {!baiguullagaEsekh && (
+                  <tr>
+                    <td colSpan={4} className="border">
+                      {t("Сугалааны дугаар")}
+                    </td>
+                    <td colSpan={2} className="border">
+                      {eBarimt?.lottery}
+                    </td>
+                  </tr>
+                )}
+                <tr>
+                  <td colSpan={6}>
+                    <div className="flex w-full justify-center p-5">
+                      <div className="h-40 w-40">
+                        <QRCode value={eBarimt?.qrData} size={160} />
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={6}>
+                    <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
+                      <div className=" text-justify text-xs">
+                        <div>
+                          Эхлэх хугацаа:{" "}
+                          {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+                        </div>{" "}
+                        <div>
+                          Дуусах хугацаа:{" "}
+                          {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={6}>
-                      <div className="w-full border-dashed border-t-2 pt-5 mt-3 border-black h-full flex flex-col justify-center items-center">
-                        <div className=" text-justify text-xs"><div>Эхлэх хугацаа: {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}</div> <div>Дуусах хугацаа: {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}</div></div>
-                        <div className="w-full justify-center flex items-center"><Canvas
-                          text={moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")}
+                      <div className="flex w-full items-center justify-center">
+                        <Canvas
+                          text={moment(data?.duusakhTsag).format(
+                            "YYYYMMDDHHmmss"
+                          )}
                           options={{
-                            level: 'M',
+                            level: "M",
                             margin: 3,
                             scale: 4,
                             width: 200,
                             color: {
-                              dark: '#000000',
-                              light: '#FFFFFF',
+                              dark: "#000000",
+                              light: "#FFFFFF",
                             },
                           }}
                         />
-                        </div>
-                        <div className="text-center text-xs max-w-[400px]">Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!</div>
                       </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+                      <div className="max-w-[400px] text-center text-xs">
+                        Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг
+                        удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        )}
+        </div>
+      )}
       <div className="pb-2">
         <Steps className="hidden" current={alkham}>
           <Steps.Step
             key="Төлбөр төлөх"
-            subTitle={<span className="dark:text-gray-200">{t("Төлбөр төлөх")}</span>}
+            subTitle={
+              <span className="dark:text-gray-200">{t("Төлбөр төлөх")}</span>
+            }
             onClick={() => setAlkham(1)}
           />
           <Steps.Step
@@ -492,31 +585,32 @@ function Tulbur(
         </Steps>
       </div>
       <div className={`${alkham === 1 ? "" : "hidden"}`}>
-        <div className="w-full table text-lg font-medium">
+        <div className="table w-full text-lg font-medium">
           <div className="table-row">
-            <div className="table-cell p-2 border-dashed border-b-2 dark:text-gray-200">
+            <div className="table-cell border-b-2 border-dashed p-2 dark:text-gray-200">
               {t("Төлөх дүн")}
             </div>
-            <div className="table-cell p-2 text-right border-dashed border-b-2 dark:text-gray-200">
+            <div className="table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200">
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
-                tulbur
-                  .reduce((a, b) => a + b.dun, 0) || 0
+                  tulbur.reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮
             </div>
           </div>
         </div>
         <KhuvaajTulukh
-        token={token}
+          khuleegdejBuiQpay={khuleegdejBuiQpay}
+          setKhuleegdejBuiQpay={setKhuleegdejBuiQpay}
+          token={token}
           tulbur={tulbur}
           data={data}
           songogdsonBusadTurul={songogdsonBusadTurul}
-        setSongogdsonBusadTurul={setSongogdsonBusadTurul}
-        songogdsonBank={songogdsonBank} 
-        setSongogdsonBank={setSongogdsonBank}
-        songogdTulburiinKhelber={songogdTulburiinKhelber}
-        setSongogdsonTulburiinKhelber={setSongogdsonTulburiinKhelber}
+          setSongogdsonBusadTurul={setSongogdsonBusadTurul}
+          songogdsonBank={songogdsonBank}
+          setSongogdsonBank={setSongogdsonBank}
+          songogdTulburiinKhelber={songogdTulburiinKhelber}
+          setSongogdsonTulburiinKhelber={setSongogdsonTulburiinKhelber}
           qpayerTulukh={qpayerTulukh}
           setQpayerTulukh={setQpayerTulukh}
           tuluv={tuluv}
@@ -529,8 +623,13 @@ function Tulbur(
           khungulukhEsekh={khungulukhEsekh}
           setKhungulukhEsekh={setKhungulukhEsekh}
         />
+        {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
+          <div className="col-span-3 flex w-full items-center justify-center">
+            <img src={qpayerTulukh?.qr_image} />
+          </div>
+        )}
         {khaanbank && tulbur.find((a) => a.turul === "khaan") && (
-          <div className="col-span-3 flex flex-col items-center space-y-2 relative mt-5">
+          <div className="relative col-span-3 mt-5 flex flex-col items-center space-y-2">
             <img
               src={"https://www.khanbank.com/assets/logos/khanbank-mn.png"}
               className="w-1/2"
@@ -546,35 +645,29 @@ function Tulbur(
               <Button
                 danger
                 onClick={() => setTerminal(false)}
-                icon={<CloseOutlined />}
-              >
+                icon={<CloseOutlined />}>
                 {t("Цуцлах")}
               </Button>
               <Button
                 type="primary"
                 onClick={batalgaajuuljDuusgakh}
-                icon={<CheckOutlined />}
-              >
+                icon={<CheckOutlined />}>
                 {t("Баталгаажуулах")}
               </Button>
             </div>
           </div>
         )}
-        <div className="w-full table text-lg font-medium mt-5">
+        <div className="mt-5 table w-full text-lg font-medium">
           {tulbur.length > 0 && (
             <div className="table-row">
-              <div className="table-cell p-2 border-dashed border-t-2 dark:text-gray-200">
+              <div className="table-cell border-t-2 border-dashed p-2 dark:text-gray-200">
                 {t("Төлсөн дүн")}
               </div>
-              <div className="table-cell p-2 text-right border-dashed border-t-2 dark:text-gray-200">
-                {formatNumber(
-                  tulbur
-                    .reduce((a, b) => a + b.dun, 0)
-                )}{" "}
-                ₮
+              <div className="table-cell border-t-2 border-dashed p-2 text-right dark:text-gray-200">
+                {formatNumber(tulbur.reduce((a, b) => a + b.dun, 0))} ₮
               </div>
             </div>
-          )}          
+          )}
         </div>
       </div>
       <EBarimt
@@ -596,19 +689,26 @@ function Tulbur(
         setIrgenEsekh={setIrgenEsekh}
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
-      />     
-      <div className="flex flex-row justify-between mt-5">
-        <Button type="primary" danger onClick={khaaya}>
+      />
+      <div className="mt-5 flex flex-row justify-between">
+        <Button type="primary" danger onClick={() => ref.current.khaaya()}>
           {t("Хаах")}
         </Button>
         {alkham === 1 && !qpayerTulukh && (
-          <Button type="primary" loading={loading} id="TogloomiinTuvTulburTovch" onClick={batalgaajuulaltKhiiya}>
+          <Button
+            type="primary"
+            loading={loading}
+            id="TogloomiinTuvTulburTovch"
+            onClick={batalgaajuulaltKhiiya}>
             {t("Төлбөр төлөх")}
           </Button>
         )}
 
         {alkham === 2 && barimtKhevlekhEsekh === true && (
-          <Button type="primary" loading={loading} onClick={() => ebarimtAvya(data?._id)}>
+          <Button
+            type="primary"
+            loading={loading}
+            onClick={() => ebarimtAvya(data?._id)}>
             {t("Хэвлэх")}
           </Button>
         )}
