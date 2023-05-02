@@ -24,7 +24,7 @@ function KhuviinMedeelel({
   baiguullagaMutate,
   setSongogdsonTsonkhniiIndex,
 }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { ajilchdiinGaralt, ajiltniiJagsaaltMutate } = useAjiltniiJagsaalt(
     token,
     ajiltan?.baiguullagiinId
@@ -49,7 +49,7 @@ function KhuviinMedeelel({
           notification.success({ message: t("Амжилттай засагдлаа") });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
-          setSongogdsonTsonkhniiIndex(3)
+          setSongogdsonTsonkhniiIndex(3);
         }
       });
   };
@@ -72,7 +72,7 @@ function KhuviinMedeelel({
           });
         notification.success({ message: t("Амжилттай хадгаллаа") });
         baiguullagaMutate();
-        setSongogdsonTsonkhniiIndex(3)
+        setSongogdsonTsonkhniiIndex(3);
       } else notification.warning({ message: t("Алдаа гарлаа") });
     });
   }
@@ -88,20 +88,22 @@ function KhuviinMedeelel({
   }
   return (
     <>
-      <div className="col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5">
-        <div className="box relative col-span-2 mt-5 pb-20">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
-            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
+      <div className='col-span-12 grid grid-cols-1 xl:grid-cols-3 xl:gap-5'>
+        <div className='box relative col-span-2 mt-5 pb-20'>
+          <div className='dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5'>
+            <h2 className='mr-auto text-base font-medium dark:text-gray-200'>
               {t("Нийтээр тохируулах")}
             </h2>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Гэрээ автоматаар сунгах")}</div>
-                <div className="text-gray-600"></div>
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>
+                  {t("Гэрээ автоматаар сунгах")}
+                </div>
+                <div className='text-gray-600'></div>
               </div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Switch
                   defaultChecked={
                     baiguullaga?.tokhirgoo?.gereeAvtomataarSungakhEsekh
@@ -116,13 +118,15 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Гэрээ нийтээр засвар оруулах")}</div>
-                <div className="text-gray-600"></div>
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>
+                  {t("Гэрээ нийтээр засвар оруулах")}
+                </div>
+                <div className='text-gray-600'></div>
               </div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Switch
                   defaultChecked={
                     baiguullaga?.tokhirgoo
@@ -138,15 +142,15 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Барьцаа авах /сараар/")}</div>
-                <div className="text-gray-600">
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>{t("Барьцаа авах /сараар/")}</div>
+                <div className='text-gray-600'>
                   {t("Гэрээ байгуулсны дараа сараар тооцож барьцаа авна")}
                 </div>
               </div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <InputNumber
                   min={0}
                   defaultValue={baiguullaga?.tokhirgoo?.baritsaaAvakhSar}
@@ -160,15 +164,17 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Барьцаа хөрөнгө авах эсэх")}</div>
-                <div className="text-gray-600">
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>
+                  {t("Барьцаа хөрөнгө авах эсэх")}
+                </div>
+                <div className='text-gray-600'>
                   {t("Гэрээ байгуулахад барьцаа хөрөнгө авах эсэх")}
                 </div>
               </div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Switch
                   defaultChecked={baiguullaga?.tokhirgoo?.baritsaaAvakhEsekh}
                   onChange={(v) =>
@@ -181,15 +187,17 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алдангийн хувь")}</div>
-                <div className="text-gray-600">
-                  {t("Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь")}
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>{t("Алдангийн хувь")}</div>
+                <div className='text-gray-600'>
+                  {t(
+                    "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь"
+                  )}
                 </div>
               </div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <InputNumber
                   min={0}
                   max={100}
@@ -204,15 +212,18 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алданги чөлөөлөх хоног")}</div>
-                <div className="text-gray-600">
-                  {t("Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног")}
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>{t("Алданги чөлөөлөх хоног")}</div>
+                <div className='text-gray-600'>
+                  {t(
+                    "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног"
+                  )}
                 </div>
               </div>
-              <div className="ml-auto">
+
+              <div className='ml-auto'>
                 <InputNumber
                   min={0}
                   max={100}
@@ -227,36 +238,50 @@ function KhuviinMedeelel({
               </div>
             </div>
           </div>
+          <div className='box'>
+            <div className='flex items-center p-5'>
+              <div className='border-l-2 border-green-500 pl-4'>
+                <div className='font-medium'>
+                  {t("Гэрээнд 'Акт' ашиглах эсэх")}
+                </div>
+                <div className='text-gray-600'>
+                  {t("Гэрээнд дуусах үед хүлээлцэх актыг идэвхжүүлэх")}
+                </div>
+              </div>
+              <div className='ml-auto'>
+                <Switch />
+              </div>
+            </div>
+          </div>
           <div
-            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
-              }`}
-          >
-            <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
+            className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
+              !!gereeTokhirgoo ? "flex" : "hidden"
+            }`}>
+            <Button type='primary' onClick={gereeTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
           </div>
         </div>
 
-        <div className="box relative mt-5 pb-10 lg:mt-5">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-5">
-            <h2 className="mr-auto text-base font-medium dark:text-gray-200">
+        <div className='box relative mt-5 pb-10 lg:mt-5'>
+          <div className='dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-5 pt-5'>
+            <h2 className='mr-auto text-base font-medium dark:text-gray-200'>
               {t("Тамга болон гарын үсэг")}
             </h2>
           </div>
-          <div className="flex justify-between p-5 ">
+          <div className='flex justify-between p-5 '>
             <div>
-              <Form form={form} autoComplete="off" className="">
-                <Form.Item name="turul">
+              <Form form={form} autoComplete='off' className=''>
+                <Form.Item name='turul'>
                   <Upload
                     showUploadList={false}
                     multiple={false}
-                    name="file"
+                    name='file'
                     action={`${url}/upload`}
-                    method="POST"
+                    method='POST'
                     onChange={(v) => setTamga(v.file.response)}
-                    onChanged={(a) => soligdsonZurag(a.file.response)}
-                  >
-                    <div className="flex flex-row space-x-1">
+                    onChanged={(a) => soligdsonZurag(a.file.response)}>
+                    <div className='flex flex-row space-x-1'>
                       {!barilga?.tamga && (
                         <Button icon={<UploadOutlined />}>
                           {t("Тамга зураг оруулах")}
@@ -267,8 +292,7 @@ function KhuviinMedeelel({
                           icon={<EyeOutlined />}
                           onClick={(e) =>
                             tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
-                          }
-                        >
+                          }>
                           {t("Тамга зураг харах")}
                         </Button>
                       )}
@@ -278,16 +302,15 @@ function KhuviinMedeelel({
                     </div>
                   </Upload>
                 </Form.Item>
-                <Form.Item name="turul">
+                <Form.Item name='turul'>
                   <Upload
                     showUploadList={false}
                     multiple={false}
-                    name="file"
+                    name='file'
                     action={`${url}/upload`}
-                    method="POST"
-                    onChange={(v) => setGariinUseg(v.file.response)}
-                  >
-                    <div className="flex flex-row space-x-1">
+                    method='POST'
+                    onChange={(v) => setGariinUseg(v.file.response)}>
+                    <div className='flex flex-row space-x-1'>
                       {!barilga?.gariinUseg && (
                         <Button icon={<UploadOutlined />}>
                           {t("Гарын үсэг зураг оруулах")}
@@ -301,8 +324,7 @@ function KhuviinMedeelel({
                               e,
                               `gariinUseg/${barilga.gariinUseg}`
                             )
-                          }
-                        >
+                          }>
                           {t("Гарын үсэг зураг харах")}
                         </Button>
                       )}
@@ -336,8 +358,8 @@ function KhuviinMedeelel({
               />
             </div>
           </div>
-          <div className="absolute right-2 bottom-3 flex w-full justify-end px-3 pb-3">
-            <Button onClick={khadgalakh} type="primary">
+          <div className='absolute bottom-3 right-2 flex w-full justify-end px-3 pb-3'>
+            <Button onClick={khadgalakh} type='primary'>
               {t("Хадгалах")}
             </Button>
           </div>

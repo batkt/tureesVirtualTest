@@ -805,5 +805,12 @@
 "Нууц үг оруулна уу": "Enter the password",
 "gmail хаяг оруулна уу": "Enter the gmail account",
 "Шинэ заалт": "New provision",
-"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?"
+"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?",
+"Актын загвар үүсгэх": "Create a new act",
+"Актын загвар сонгох": "Choose an act template",
+"Актын загвар сонгоно уу!": "Choose a template!",
+"Акт": "Act",
+"Гэрээнд 'Акт' ашиглах эсэх": "Whether to use 'Act' in contract",
+"Гэрээнд дуусах үед хүлээлцэх актыг идэвхжүүлэх": "Activating the act of waiting at the end of the contract"
+
 }
