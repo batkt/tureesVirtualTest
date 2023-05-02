@@ -95,8 +95,7 @@ function FormLavlakh({
             document.getElementById(gereeniiZagvariinId)?.focus();
         }}
         loading={!lavlakhGaralt}
-        onSearch={(search) => setLavlakhKhuudaslalt((a) => ({ ...a, search }))}
-      >
+        onSearch={(search) => setLavlakhKhuudaslalt((a) => ({ ...a, search }))}>
         {lavlakhGaralt?.jagsaalt?.map((a) => (
           <Select.Option key={a[valKey]} value={a[valKey]}>
             {a[infoKey]}
