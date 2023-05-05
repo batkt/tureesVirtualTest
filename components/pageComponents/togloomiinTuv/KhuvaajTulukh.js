@@ -183,6 +183,7 @@ function KhuvaajTulukh({
       };
       if (e.target.name === "khunglukh") {
         setKhunglult({ ...khunglult, khungulukhDun: tulukhDun });
+        setKhungulukhEsekh(true)
       }
       const index = tulbur.findIndex((a) => a.turul === e.target.name);
       if (index !== -1)
