@@ -87,6 +87,7 @@ function Tulbur(
     else {
       if (baiguullagaEsekh === true && register?.toString().length !== 7) {
         message.warning(t("Байгууллагын регистр оруулна уу"));
+        setLoading(false);
         return;
       }
       const body = {

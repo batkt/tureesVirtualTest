@@ -49,7 +49,7 @@ const steps = [
 ];
 
 function GereeBaiguulakh({ token }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
   useEffect(() => {
     Aos.init({ once: true });
@@ -343,9 +343,9 @@ function GereeBaiguulakh({ token }) {
   };
   return (
     <Admin
-      khuudasniiNer="gereeBaiguulakh"
-      title="Гэрээ байгуулах"
-      className="grid grid-cols-12 gap-6 p-5"
+      khuudasniiNer='gereeBaiguulakh'
+      title='Гэрээ байгуулах'
+      className='grid grid-cols-12 gap-6 p-5'
       tsonkhniiId={"61c2c5f91c2830c4e6f90c75"}
       loading={waiting}
       setTurulZagvar={setGereekharakhTovch}
@@ -360,10 +360,9 @@ function GereeBaiguulakh({ token }) {
         });
         setGereeniiZagvar(undefined);
         setCurrent(0);
-      }}
-    >
-      <div className="box col-span-12 p-5">
-        <div className="contents px-10">
+      }}>
+      <div className='box col-span-12 p-5'>
+        <div className='contents px-10'>
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
               <Step
@@ -373,17 +372,17 @@ function GereeBaiguulakh({ token }) {
                 value={index}
                 key={item.title}
                 title={t(item.title)}
-                data-aos="zoom-in-up"
-                data-aos-duration="1000"
+                data-aos='zoom-in-up'
+                data-aos-duration='1000'
                 data-aos-delay={1 + index + "00"}
               />
             ))}
           </Steps>
         </div>
-        <div className="mt-3 grid grid-cols-12 gap-6 md:col-span-12">
-          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
+        <div className='mt-3 grid grid-cols-12 gap-6 md:col-span-12'>
+          <div className='col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4'>
             <currentItem.content
-            t={t}
+              t={t}
               next={next}
               current={current}
               prev={prev}
@@ -407,8 +406,7 @@ function GereeBaiguulakh({ token }) {
                 gereekharakhTovch !== true
                   ? "bottom-20 right-5"
                   : "bottom-[72vh] right-1"
-              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
-            >
+              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}>
               {gereekharakhTovch !== true ? (
                 <FileTextOutlined
                   onClick={(e) => {
@@ -435,16 +433,15 @@ function GereeBaiguulakh({ token }) {
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
               scrollBehavior: "smooth",
-            }}
-          >
+            }}>
             {current === 0 && (
               <Select
                 ref={zagvarRef}
                 id={gereeniiZagvariinId}
                 showSearch
                 placeholder={t("Гэрээний загвар сонгох")}
-                className="hidden w-full md:block"
-                size="large"
+                className='hidden w-full md:block'
+                size='large'
                 value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}
                 filterOption={(o) => o}
                 onSearch={(search) =>
@@ -456,17 +453,18 @@ function GereeBaiguulakh({ token }) {
                 }
                 onChange={(v) => {
                   onChangeGereeniiZagvar(v);
-                }}
-              >
+                }}>
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
-                      <div className="flex justify-between">
+                      <div className='flex justify-between'>
                         <p>{mur.ner}</p>
-                        <p className="text-gray-500">
-                          /{mur.turGereeEsekh === true
+                        <p className='text-gray-500'>
+                          /
+                          {mur.turGereeEsekh === true
                             ? t("Түр гэрээ")
-                            : t("Үндсэн гэрээ")}/
+                            : t("Үндсэн гэрээ")}
+                          /
                         </p>
                       </div>
                     </Select.Option>
@@ -474,14 +472,13 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className="flex w-full justify-center">
+            <div className='flex w-full justify-center'>
               <div
-                className="flex w-full flex-col space-y-1 bg-white p-[15mm] pr-[14mm] pl-[24mm] text-black"
-                style={{ width: "210mm" }}
-              >
+                className='flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black'
+                style={{ width: "210mm" }}>
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className='grid grid-cols-2 gap-4'>
                       <div
                         dangerouslySetInnerHTML={{
                           __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
@@ -512,10 +509,9 @@ function GereeBaiguulakh({ token }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
-                    >
+                      className='group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100'>
                       <div
-                        className="w-full"
+                        className='w-full'
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>
