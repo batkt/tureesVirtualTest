@@ -558,7 +558,6 @@ function tulburTootsoo({ token }) {
           ellipsis: true,
           width: "9rem",
           className: "text-right",
-          showSorterTooltip: false,
           render(a) {
             return `${formatNumber(a, 2)}₮`;
           },

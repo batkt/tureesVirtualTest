@@ -347,7 +347,7 @@ function Tulbur(
                     {t("Огноо")}
                   </td>
                   <td className="border" colSpan={3}>
-                    {moment(eBarimt?.date).format("YYYY/MM/DD hh:mm:ss")}
+                    {moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}
                   </td>
                 </tr>
                 <tr>
