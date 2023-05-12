@@ -11,7 +11,7 @@
   "Нэвтрэх нэр": "Username",
   "Нэвтрэх нэр оруулан уу": "Enter a username!",
   "Хайлт": "Search",
-  
+
   "Хяналт" : "Dashboard",
 "Гэрээний жагсаалт" : "Contract list",
 "Гэрээ байгуулах" : "New contract",
@@ -67,7 +67,7 @@
 "Байршил" : "Location",
 "Барилга бүртгэл": "Building registration",
 "Лого зураг оруулах": "Insert logo image",
-"Давхарын м": "Floor m", 
+"Давхарын м": "Floor m",
 "План зураг": "Plan picture",
 "Хадгалах": "Save",
 "Тийм": "Yes",
@@ -90,7 +90,7 @@
 "Эхлэх огноо": "Starting date",
 "Дуусах огноо": "Ending date",
 "Багана": "Column",
-"Гэрээ": "Contract", 
+"Гэрээ": "Contract",
 "Ажилтан": "User",
 "Дуусах": "Ending date",
 "Эхлэх": "Starting date",
@@ -377,7 +377,7 @@
 
 "Устгасан шалтгаан": "Notes for deletion",
 "Хийсэн": "Done",
-"Устгасан": "Deleted", 
+"Устгасан": "Deleted",
 "Устгасан онгоо": "Deleted date",
 "Дэлгэрэнгүй Мэдээлэл": "More Information",
 "Хийсэн ажилтан": "Deleted User",
@@ -558,7 +558,7 @@
 "Таны оруулсан дүн гүйлгээний дүнгээс илүү гарсан байна": "Your deposit exceeds the transaction amount",
 "Анхаар гүйлгээний дүн холбоно уу!": "Warning! Please connect transaction amount!",
 "Гүйлгээ амжилттай холбогдлоо": "Transaction connected successfully",
-"Гэрээ сонгогдсон байна": "The contract is selected already", 
+"Гэрээ сонгогдсон байна": "The contract is selected already",
 "Гүйлгээний дүнгээс холбох дүн илүү гарсан байна": "The amount of the connection exceeds the amount of the transaction",
 "Гэрээнд и-мэйл бүртгэгдээгүй байна": "No e-mail is registered in the contract",
 
@@ -757,7 +757,7 @@
 "Нэмэлт асран хамгаалагчийн Тариф": "Additional carer's tariff",
 "Нэвтрүүлэлтийн алхам": "steps",
 "Түгээмэл асуулт": "Frequently asked questions",
-"Бэлэн": "Cash", 
+"Бэлэн": "Cash",
 "Бүртгэл": "Add",
 "Эрэгтэй": "Male",
 "Эмэгтэй": "Female",
@@ -805,12 +805,5 @@
 "Нууц үг оруулна уу": "Enter the password",
 "gmail хаяг оруулна уу": "Enter the gmail account",
 "Шинэ заалт": "New provision",
-"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?",
-"Актын загвар үүсгэх": "Create a new act",
-"Актын загвар сонгох": "Choose an act template",
-"Актын загвар сонгоно уу!": "Choose a template!",
-"Акт": "Act",
-"Гэрээнд 'Акт' ашиглах эсэх": "Whether to use 'Act' in contract",
-"Гэрээнд дуусах үед хүлээлцэх актыг идэвхжүүлэх": "Activating the act of waiting at the end of the contract"
-
+"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?"
 }
