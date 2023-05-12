@@ -23,6 +23,7 @@ import {
   message,
   Switch,
   Modal,
+  Popconfirm,
 } from "antd";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -60,7 +61,6 @@ function YalgakhUtga({ fieldKey, name, remove, ...restField }) {
   function shineSolikh(talbar, utga) {
     setSongosonSegment((a) => ({ ...a, [talbar]: utga }));
   }
-
   return (
     <>
       <div className="flex flex-row justify-end gap-2 lg:gap-0 lg:pl-[33%] ">
@@ -119,10 +119,10 @@ function KhurunguudCard({
   t,
   ...restField
 }) {
+  console.log(data)
   const niitUneRef = useRef();
   const tooRef = useRef();
   const uneRef = useRef();
-
   return (
     <Card className="shadow-md">
       <div key={key}>
@@ -840,14 +840,30 @@ function TalbaiBurtgekh({ token }) {
                   </Drawer>
                 </div>
                 <div className=" w-2/4 ">
-                  <Button
-                    className="w-full"
-                    id="talbaiBurtgekhButton"
-                    onClick={() => formRef.current.submit()}
-                    type="primary"
+                  {!!gereeteiEsekh && <Popconfirm
+                    title="Гэрээтэй байна. Засварлахдаа итгэлтэй байна уу?"
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={() => {
+                      formRef.current.submit();
+                    }}
                   >
-                    {t("Хадгалах")}
-                  </Button>
+                    <Button
+                      className="w-full"
+                      id="talbaiBurtgekhButton"
+                      type="primary"
+                    >
+                      {t("Хадгалах")}
+                    </Button>
+                  </Popconfirm>}
+                  {!gereeteiEsekh && <Button
+                      className="w-full"
+                      id="talbaiBurtgekhButton"
+                      onClick={() => formRef.current.submit()}
+                      type="primary"
+                    >
+                      {t("Хадгалах")}
+                    </Button>}
                 </div>
               </div>
             </div>

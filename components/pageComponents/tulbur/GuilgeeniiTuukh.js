@@ -86,6 +86,20 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     data?._id,
     ognoo
   );
+  const [sortOrders, setSortOrders] = useState({
+    ognoo: null,
+    turees: null,
+    tulukhDun: null,
+    khyamdral: null,
+    tulsunAldangi: null,
+    tulsunDun: null,
+    uldegdel: null,
+    ajiltan: null,
+    helber: null,
+    tailbar: null,
+    burtgesenOgnoo: null
+  });
+  const [sortColumn, setSortColumn] = useState(null);
   const tailbarRef = React.useRef(null);
   const printRef = React.useRef(null);
   function uldegdelMutate() {
@@ -164,6 +178,37 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     content: () => printRef.current,
   });
 
+  const toggleSortOrder = (column) => {
+    const newSortOrders = { ...sortOrders };
+    newSortOrders[column] = sortOrders[column] === 'asc' ? 'desc' : 'asc';
+    setSortOrders(newSortOrders);
+    setSortColumn(column);
+  };
+
+  const sortedData = React.useMemo(() => {
+    if(!guilgeeniiTuukh){
+      return [];
+    }
+    const khuulsanData = [...guilgeeniiTuukh];
+    khuulsanData.sort((a, b) => {
+      const sortDaraalal = sortOrders[sortColumn];
+      if (sortDaraalal === 'asc') {
+        if (sortColumn === 'ognoo') {
+          return new Date(a[sortColumn]) - new Date(b[sortColumn]);
+        }
+        return a[sortColumn] - b[sortColumn];
+      } else if (sortDaraalal === 'desc') {
+        if (sortColumn === 'ognoo') {
+          return new Date(b[sortColumn]) - new Date(a[sortColumn]);
+        }
+        return b[sortColumn] - a[sortColumn];
+      }
+      return 0;
+    });
+
+    return khuulsanData;
+  }, [guilgeeniiTuukh, sortOrders, sortColumn]);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -179,39 +224,40 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
 
   return (
     <div className="">
-      <div ref={printRef}>
+      <div ref={printRef} className="flex flex-col">
         <div className="print mb-2 p-2">
           <div>{t("Гүйлгээний түүх")}</div>
           <div className="ml-auto">{t("Талбайн дугаар")}:{data?.talbainDugaar}</div>
         </div>
-        <div className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Огноо")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Түрээс")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлөх дүн")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хямдрал")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн алданги")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн дүн")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Үлдэгдэл")}</div>
-
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Ажилтан")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хэлбэр")}</div>
-          <div className="min-w-[8rem] overflow-hidden p-1 w-full text-center">{t("Тайлбар")}</div>
-          <div className="min-w-[10rem] text-center p-1">{t("Бүртгсэн огноо")}</div>
-          <div className="min-w-[3rem] border-none p-1 text-center"></div>
-        </div>
-        <div className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
-          {guilgeeniiTuukh
+        <th className="w-full">
+          <tr className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+            <td onClick={()=>toggleSortOrder("ognoo")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Огноо")}</td>
+            <td onClick={()=>toggleSortOrder("turees")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Түрээс")}</td>
+            <td onClick={()=>toggleSortOrder("tulukhDun")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлөх дүн")}</td>
+            <td onClick={()=>toggleSortOrder("khyamdral")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хямдрал")}</td>
+            <td onClick={()=>toggleSortOrder("tulsunAldangi")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн алданги")}</td>
+            <td onClick={()=>toggleSortOrder("tulsunDun")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн дүн")}</td>
+            <td onClick={()=>toggleSortOrder("uldegdel")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Үлдэгдэл")}</td>
+            <td onClick={()=>toggleSortOrder("ajiltan")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Ажилтан")}</td>
+            <td onClick={()=>toggleSortOrder("helber")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хэлбэр")}</td>
+            <td onClick={()=>toggleSortOrder("tailbar")} className="min-w-[8rem] overflow-hidden p-1 w-full text-center">{t("Тайлбар")}</td>
+            <td onClick={()=>toggleSortOrder("burtgesenOgnoo")} className="min-w-[10rem] text-center p-1">{t("Бүртгсэн огноо")}</td>
+            <td className="min-w-[3rem] border-none p-1 text-center"></td>
+          </tr>
+        </th>
+        <tbody className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
+          {sortedData
             ?.map((a, i) => (
-              <div className="flex divide-x min-w-[93rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <div className="p-1 min-w-[8rem] text-center overflow-hidden">
+              <tr className="flex divide-x min-w-[93rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <td className="p-1 min-w-[8rem] text-center overflow-hidden">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
-                </div>
-                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.undsenDun, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulukhDun, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.khyamdral, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunAldangi, 2)}</div>
-                <div className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunDun, 2)}</div>
-                <div
+                </td>
+                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.undsenDun, 2)}</td>
+                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulukhDun, 2)}</td>
+                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.khyamdral, 2)}</td>
+                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunAldangi, 2)}</td>
+                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunDun, 2)}</td>
+                <td
                   className={`p-1 min-w-[8rem] overflow-hidden text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
                     }`}
                 >
@@ -219,24 +265,24 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
                     2
                   )}
-                </div>
+                </td>
 
-                <div className="p-1 min-w-[8rem] overflow-hidden">{a.guilgeeKhiisenAjiltniiNer}</div>
-                <div className="p-1 text-center min-w-[8rem] overflow-hidden">
+                <td className="p-1 min-w-[8rem] overflow-hidden">{a.guilgeeKhiisenAjiltniiNer}</td>
+                <td className="p-1 text-center min-w-[8rem] overflow-hidden">
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
                       : t("Банк")
                     : turulAvya(a.turul)}
-                </div>
-                <div className="flex min-w-[8rem] overflow-hidden w-full justify-between p-1">
+                </td>
+                <td className="flex min-w-[8rem] overflow-hidden w-full justify-between p-1">
                   {a.tailbar}
-                </div>
-                <div className="flex min-w-[10rem] text-center justify-center p-1 ">
+                </td>
+                <td className="flex min-w-[10rem] text-center justify-center p-1 ">
                   {a.guilgeeKhiisenOgnoo &&
                     moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
-                </div>
-                <div className="flex min-w-[3rem] border-none justify-center">
+                </td>
+                <td className="flex min-w-[3rem] border-none justify-center">
                   {(ajiltan?.erkh === "Admin" || !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
                     (a) => a === barilgiinId
                   )) && (a.turul === "avlaga" ||
@@ -259,11 +305,11 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                         </div>
                       </Popconfirm>
                     )}
-                </div>
-              </div>
+                </td>
+              </tr>
             ))
             .reverse()}
-        </div>
+        </tbody>
       </div>
     </div>
   );
