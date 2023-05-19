@@ -92,8 +92,13 @@ export const AuthProvider = ({ children }) => {
           .then(({ data, status }) => {
             if (status === 200) {
               if (!!data) {
-                if (data.result.erkh !== "Admin" && data.result.tsonkhniiErkhuud.length < 1) {
-                  return message.error(t("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна"))
+                if (
+                  data.result.erkh !== "Admin" &&
+                  data.result.tsonkhniiErkhuud.length < 1
+                ) {
+                  return message.error(
+                    t("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна")
+                  );
                 }
                 setCookie(null, "tureestoken", data.token, {
                   maxAge: 30 * 24 * 60 * 60,
@@ -103,7 +108,7 @@ export const AuthProvider = ({ children }) => {
                 ajiltanMutate(data.result);
                 data?.result?.barilguud?.length > 0 &&
                   barilgaSoliyo(data.result.barilguud[0]);
-                ekhniiTsonkhruuOchyo(data.result);
+                ekhniiTsonkhruuOchyo(data.result, data.token);
                 message.success(t("Тавтай морил"));
               } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
             } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));

@@ -8,6 +8,8 @@ import { FaSteam } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
 import { TbLego } from "react-icons/tb";
 import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { message } from "antd";
 
 export const tsonknuud = [
   {
@@ -236,14 +238,29 @@ export function undsenKhuudasOlyo(url) {
   return tsonknuud.find((a) => url.includes(a.key))?.key;
 }
 
-export function ekhniiTsonkhruuOchyo(ajiltan) {
-  const { khuudasniiJagsaalt } = useKhuudasniiJagsaalt(token);
-  var erkhShalgakh = khuudasniiJagsaalt?.moduluud?.find(
-    (b) => b.zam === "/khyanalt/barilgaBurtgel"
-  );
-  if (ajiltan?.erkh === "Admin" && !!erkhShalgakh)
-    window.location.href = "/khyanalt/barilgaBurtgel";
-  else window.location.href = ajiltan.tsonkhniiErkhuud[0];
+export function ekhniiTsonkhruuOchyo(ajiltan, token) {
+  uilchilgee(token)
+    .post("/erkhiinMedeelelAvya")
+    .then(({ data }) => {
+      var AdminErkhShalgakh = data?.moduluud?.find(
+        (b) => b.zam === "/khyanalt/barilgaBurtgel"
+      );
+      var erkhShalgakh = ajiltan.tsonkhniiErkhuud.filter((element) => {
+        !!data?.moduluud?.find((b) => b.zam === element);
+      });
+
+      if (ajiltan?.erkh === "Admin") {
+        console.log("AdminErkhShalgakh", AdminErkhShalgakh);
+        if (AdminErkhShalgakh !== undefined) {
+          window.location.href = "/khyanalt/barilgaBurtgel";
+        } else window.location.href = data?.moduluud[0]?.zam;
+      } else if (erkhShalgakh.length > 0) {
+        window.location.href = erkhShalgakh[0];
+      } else {
+        message.error("Ажилтны эрхийн тохиргоо хийгдээгүй байна!");
+      }
+    })
+    .catch(aldaaBarigch);
 }
 
 const khuudasnuud = [
