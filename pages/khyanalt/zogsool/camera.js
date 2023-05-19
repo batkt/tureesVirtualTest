@@ -2,30 +2,38 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
-import {Button, Card, DatePicker, Input, Popover, Space, Table, Radio, Modal, TreeSelect} from "antd";
 import {
-  DownOutlined,
+  Button,
+  Card,
+  DatePicker,
+  Input,
+  Popover,
+  Space,
+  Table,
+  Radio,
+  Modal,
+  TreeSelect,
+  message,
+  Tooltip,
+  Drawer
+} from "antd";
+import {
   StarOutlined,
   CameraOutlined,
-  UpOutlined,
-  CarOutlined,
   WalletOutlined,
   SettingOutlined,
-    ExclamationCircleOutlined,
+  ExclamationCircleOutlined,
   MoreOutlined,
   CloseCircleOutlined,
   DollarCircleOutlined,
-  PaperClipOutlined, CheckCircleOutlined,
+  PaperClipOutlined, CheckCircleOutlined, DownloadOutlined, FileExcelOutlined, DownOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
-import useZogsool, { useZogsoolToololt } from "hooks/useZogsool";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
 import useOrder from "tools/function/useOrder";
-import useSWR from "swr";
-import uilchilgee, {aldaaBarigch, url} from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import useUilchluulegch from "../../../hooks/useUilchluulegch";
@@ -33,6 +41,25 @@ import useJagsaalt from "../../../hooks/useJagsaalt";
 import {modal} from "../../../components/ant/Modal";
 import Tulbur from "../../../components/pageComponents/togloomiinTuv/Tulbur";
 import _ from "lodash";
+import updateMethod from "../../../tools/function/crud/updateMethod";
+import {excelTatajAvya} from "./index";
+
+function generateChild(mur) {
+  if(mur?.length > 0)
+    return (
+        mur?.map(a=>({
+          value: !!a?.ner ? a.ner : a.cameraIP,
+          title: !!a?.ner ? a.ner : <b className="text-green-400 hover:text-green-800">Камер-{a.cameraIP}</b>,
+          children: generateChild(!!a?.khaalga ? a.khaalga : a.camera),
+        }))
+    );
+  return ([]);
+}
+
+/**
+ * Эхний байдлаар зөвхөн 1 зогсоол дээр төлбөр тооцхоор шийдлээ
+ * дотороо зогсоолтой тохиолдолд өөрчилнө
+ * */
 
 function camera({ token }) {
   const { t, i18n } = useTranslation()
@@ -47,8 +74,9 @@ function camera({ token }) {
   const { order, onChangeTable } = useOrder({ garsanTsag: -1 });
   const [modalOpen, setModalOpen] = useState({bool:false,item:null,type: ""});
   const [value, setValue] = useState(null);
-  let treesData = [] ;
-
+  const [camerVal, setCamerVal] = useState(null);
+  const [cameraData, setCameraData] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   /*
     const zogsooliinMedeelel = useSWR(
         ["/zogsooliinDunAvya", token, ognoo],
@@ -87,64 +115,18 @@ function camera({ token }) {
   }, [ognoo, jagsaalt]);
   const { uilchluulegchGaralt, setUilchluulegchKhuudaslalt, uilchluulegchMutate, isValidating } = useUilchluulegch(token, baiguullaga?._id, query);
   // console.log('jagsaalt---------', jagsaalt);
+  function onRefresh() {
+    uilchluulegchMutate();
+  }
   useEffect(() => {
     Aos.init({ once: true });
   });
-  useEffect(() => {
-    jagsaalt?.map(mur=>{
-      mur?.khaalga?.map(a=>{
-        a?.camera?.map(b=>{
 
-        })
-      })
-    })
+  useEffect(() => {
+    const aa = generateChild(jagsaalt);
+    setCameraData(aa);
   },[jagsaalt]);
 
-  function onRefresh() {
-    uilchluulegchMutate();
-    // zogsoolMutate();
-  }
-
-  const treeData = [
-    {
-      value: 'parent 1',
-      title: 'parent 1',
-      children: [
-        {
-          value: 'parent 1-0',
-          title: 'parent 1-0',
-          children: [
-            {
-              value: 'leaf1',
-              title: 'leaf1',
-            },
-            {
-              value: 'leaf2',
-              title: 'leaf2',
-            },
-          ],
-        },
-        {
-          value: 'parent 1-1',
-          title: 'parent 1-1',
-          children: [
-            {
-              value: 'leaf3',
-              title: (
-                  <b
-                      style={{
-                        color: '#08c',
-                      }}
-                  >
-                    leaf3
-                  </b>
-              ),
-            },
-          ],
-        },
-      ],
-    },
-  ];
   const columns = useMemo(() => {
     const col = [
       {
@@ -228,13 +210,23 @@ function camera({ token }) {
         },
       },
       {
+        title: t("Хэлбэр"),
+        align: "center",
+        dataIndex: "tuukh",
+        width: "7rem",
+        showSorterTooltip: false,
+        render: (v) => {
+          return v && <div>{t(`${v[0]?.tulburTulsunKhelber}`)}</div>
+        }
+      },
+      {
         title: t("Төлөв"),
         align: "center",
         width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "tuukh",
-        render(v) {
+        render(v, parent) {
           // v[0].tuluv === 0 ?
           return (
               v[0]?.tuluv === 0 ?
@@ -252,7 +244,7 @@ function camera({ token }) {
                             </a>
                             <a
                                 className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                                onClick={() => setModalOpen({bool:true,item:v[0], type: "unegui"})}
+                                onClick={() => setModalOpen({bool:true,item: parent, type: "unegui"})}
                             >
                               <StarOutlined style={{ fontSize: "18px" }} />
                               <label>{t("Үнэгүй")}</label>
@@ -280,35 +272,47 @@ function camera({ token }) {
                     </Button>
                   </Popover>
                   :
-                  v[0]?.ebarimtAvsanEsekh ?
-                      <div className="text-white flex  justify-center items-center space-x-2">
-                        <div className="flex justify-center items-center">
-                          <CheckCircleOutlined />
+                  v[0]?.tuluv < 0 ?
+                      <Tooltip placement="top" title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil} >
+                        <div className="text-white w-max cursor-pointer flex rounded bg-gray-500 justify-center items-center space-x-2 px-3 mx-auto">
+                          <div className="flex justify-center items-center">
+                            <CheckCircleOutlined />
+                          </div>
+                          <div className="flex justify-center items-center">
+                            {t("Үнэгүй")}
+                          </div>
                         </div>
-                        <div className="flex justify-center items-center">
-                          {t("Төлөгдсөн")}
-                        </div>
-                      </div>
+                      </Tooltip>
                       :
-                      <Button
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            backgroundColor: "#253985",
-                          }}
-                          size="small"
-                          onClick={() => tulburTulyu(v[0])}
-                      >
-                        <div className="text-white flex  justify-center items-center space-x-2 ">
-                          <div className="flex justify-center items-center">
-                            <PaperClipOutlined />
+                      v[0]?.ebarimtAvsanEsekh ?
+                          <div className="text-white flex  justify-center items-center space-x-2">
+                            <div className="flex justify-center items-center">
+                              <CheckCircleOutlined />
+                            </div>
+                            <div className="flex justify-center items-center">
+                              {t("Төлөгдсөн")}
+                            </div>
                           </div>
-                          <div className="flex justify-center items-center">
-                            {t("И-Баримт")}
-                          </div>
-                        </div>
-                      </Button>
+                          :
+                          <Button
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                backgroundColor: "#253985",
+                              }}
+                              size="small"
+                              onClick={() => tulburTulyu(v[0])}
+                          >
+                            <div className="text-white flex  justify-center items-center space-x-2 ">
+                              <div className="flex justify-center items-center">
+                                <PaperClipOutlined />
+                              </div>
+                              <div className="flex justify-center items-center">
+                                {t("И-Баримт")}
+                              </div>
+                            </div>
+                          </Button>
           );
         }
       },
@@ -342,40 +346,6 @@ function camera({ token }) {
       },
     ];
   }, [turul, i18n.language]);
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
-  const khadgalakh = () => {
-
-
-    // console.log('radio checked', value, ' ----- ', modalOpen);
-    setModalOpen({bool: false, item: null, type: ''});
-    setValue(null);
-  }
-
-  function tulburTulyu(data) {
-    modal({
-      title: (
-          <div className="w-full flex flex-row justify-between">
-            <div>{t("Тооцоо хийх")}</div>
-            <div className="flex items-center">{data?.ovog?.charAt(0)}.{data?.ner}
-              <div className="text-xl ml-5 hover:text-red-400" onClick={() => tulburRef.current.khaaya()}><CloseCircleOutlined /></div></div>
-          </div>
-      ),
-      content: (
-          <Tulbur
-              ref={tulburRef}
-              data={_.cloneDeep(data)}
-              token={token}
-              baiguullaga={baiguullaga}
-              barilgiinId={barilgiinId}
-              ajiltan={ajiltan}
-              onRefresh={onRefresh}
-          />
-      ),
-      footer: false,
-    });
-  }
 
   const dataSource = [
     {
@@ -459,6 +429,74 @@ function camera({ token }) {
       }
     },
   ];
+  const onChange = (e) => {
+    setValue(e.target.value);
+  };
+  const cameraChange = (e) => {
+    setCamerVal(e)
+  };
+  const khadgalakh = () => {
+    let body = modalOpen.item;
+    if (modalOpen.type==='zurchil'){
+      body.zurchil = value;
+      body.tuukh[0].tuluv = -2;
+    } else {
+      body.tuukh[0].uneguiGarsan = value;
+      body.tuukh[0].tuluv = -1;
+    }
+    updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
+      if (data === "Amjilttai") {
+        message.success(t("Амжилттай хадгаллаа"));
+        onRefresh()
+      }
+    });
+    setModalOpen({bool: false, item: null, type: ''});
+    setValue(null);
+  };
+  const exlCol = () =>{
+    const aa = columns;
+    aa.splice(columns.length-2, 2,
+        {title: t("Төлөв"),
+          sorter: () => 0,
+          dataIndex: "tuukh",
+          render(v) {
+            return (
+                v[0]?.tuluv === 0 ? <div>Төлөөгүй</div>
+                    :
+                    v[0]?.tuluv < 0 ? <div>Үнэгүй</div>
+                        :
+                        v[0]?.ebarimtAvsanEsekh ? <div>Төлөгдсөн</div>
+                            :
+                            <div>И-Баримт</div>
+            );
+          }},
+    );
+    return aa;
+  };
+
+  function tulburTulyu(data) {
+    modal({
+      title: (
+          <div className="w-full flex flex-row justify-between">
+            <div>{t("Тооцоо хийх")}</div>
+            <div className="flex items-center">{data?.ovog?.charAt(0)}.{data?.ner}
+              <div className="text-xl ml-5 hover:text-red-400" onClick={() => tulburRef.current.khaaya()}><CloseCircleOutlined /></div></div>
+          </div>
+      ),
+      content: (
+          <Tulbur
+              ref={tulburRef}
+              data={_.cloneDeep(data)}
+              token={token}
+              baiguullaga={baiguullaga}
+              barilgiinId={barilgiinId}
+              ajiltan={ajiltan}
+              onRefresh={onRefresh}
+          />
+      ),
+      footer: false,
+    });
+  }
 
   return (
       <Admin
@@ -483,24 +521,23 @@ function camera({ token }) {
                       <Button className="mr-3" type="primary">Нээх</Button>
                       <Button className="mr-3" type="primary">Хаах</Button>
                     </div>
-                    {/*<TreeSelect
+                    <TreeSelect
                         showSearch
                         style={{
                           backgroundColor: '#10B981',
                           borderColor: '#10B981',
                         }}
-                        value={value}
+                        value={camerVal}
                         dropdownStyle={{
-                          maxHeight: 400,
+                          maxHeight: 600,
+                          minWidth: 280,
                           overflow: 'auto',
                         }}
                         placeholder="Камер сонгох"
                         allowClear
-                        treeDefaultExpandAll
-                        onChange={onChange}
-                        treeData={treeData}
-                    />*/}
-                    <Button className="box-border" type="primary">Камер сонгох<DownOutlined className="max-h-[32px]"/></Button>
+                        onChange={cameraChange}
+                        treeData={cameraData}
+                    />
                   </div>
                 </div>
                 <div className="w-full">
@@ -512,7 +549,23 @@ function camera({ token }) {
                       <Button className="mr-3" type="primary">Нээх</Button>
                       <Button className="mr-3" type="primary">Хаах</Button>
                     </div>
-                    <Button className="box-border" type="primary">Камер сонгох<DownOutlined className="max-h-[32px]"/></Button>
+                    <TreeSelect
+                        showSearch
+                        style={{
+                          backgroundColor: '#10B981',
+                          borderColor: '#10B981',
+                        }}
+                        value={camerVal}
+                        dropdownStyle={{
+                          maxHeight: 600,
+                          minWidth: 280,
+                          overflow: 'auto',
+                        }}
+                        placeholder="Камер сонгох"
+                        allowClear
+                        onChange={cameraChange}
+                        treeData={cameraData}
+                    />
                   </div>
                 </div>
                 <div> <div className="font-bold text-base">Сүүлийн гүйлгээ</div>
@@ -547,7 +600,57 @@ function camera({ token }) {
                     <div className="flex text-xs md:text-base flex-row space-x-2 p-1 font-medium">
                       {t("Зогсоолын орлого")} : {formatNumber(356700)/*{formatNumber(zogsooliinMedeelel?.data)}*/}₮
                     </div>
-                    <Button icon={<CameraOutlined />} type="primary">Камер</Button>
+                    <div>
+                      <Popover
+                          content={() => (
+                              <div className="flex w-32 flex-col">
+                                <a
+                                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                                    onClick={() => {
+                                      excelTatajAvya(token,'zogsoolUilchluulegch',uilchluulegchGaralt.niitMur, exlCol(), query, order,'Зогсоол')
+                                    }}
+                                >
+                                  <DownloadOutlined style={{ fontSize: "18px" }} />
+                                  <label>{t("Татах")}</label>
+                                </a>
+                              </div>
+                          )}
+                          style={{ padding: 0 }}
+                          placement="bottom"
+                          trigger="click"
+                      >
+                        <Button
+                            type="primary"
+                            className="mr-3"
+                            icon={<FileExcelOutlined />}
+                        >
+                          <span>Excel</span>
+                          <DownOutlined width={5} />
+                        </Button>
+                      </Popover>
+                      <Button icon={<CameraOutlined />} onClick={()=>setDrawerOpen(true)} type="primary">Камер</Button>
+                      <Drawer
+                          width={"100vw"}
+                          title={t("Камер")}
+                          placement="right"
+                          onClose={()=>setDrawerOpen(false)}
+                          visible={drawerOpen}
+                      >
+                        {drawerOpen && (
+                            <Card className="row-span-full col-span-12 lg:col-span-4 lg:col-start-9">
+                              <div className="w-[500px]">
+                                <div className="border 2xl:aspect-[3/2] aspect-square flex justify-center items-center"><p>Camera1</p></div>
+                                <div className="grid 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 grid-cols-1">
+                                  <div className="border aspect-square"><p>Camera2</p></div>
+                                  <div className="border aspect-square"><p>Camera3</p></div>
+                                  <div className="border aspect-square"><p>Camera4</p></div>
+                                  <div className="border aspect-square"><p>Camera5</p></div>
+                                </div>
+                              </div>
+                            </Card>
+                        )}
+                      </Drawer>
+                    </div>
                   </div>
                 </div>
                 <div

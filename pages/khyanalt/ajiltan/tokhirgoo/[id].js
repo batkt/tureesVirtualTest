@@ -44,7 +44,7 @@ function index({ token, data }) {
       console.log(e);
     }
   };
-console.log('------1-----', data);
+// console.log('------1-----', data);
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,

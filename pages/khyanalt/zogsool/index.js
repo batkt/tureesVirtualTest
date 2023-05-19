@@ -14,6 +14,10 @@ import useSWR from "swr";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import { t } from "i18next";
+import useUilchluulegch from "hooks/useUilchluulegch";
+import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
+import useJagsaalt from "hooks/useJagsaalt";
 import {
   DeleteOutlined,
   DownloadOutlined, DownOutlined,
@@ -22,13 +26,32 @@ import {
   SettingOutlined,
   UploadOutlined
 } from "@ant-design/icons";
-import useUilchluulegch from "../../../hooks/useUilchluulegch";
-import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
-import useJagsaalt from "../../../hooks/useJagsaalt";
+
+export function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+  message.loading(t("Өгөгдөл боловсруулж байна та түр хүлээнэ үү!"), 100000);
+  uilchilgee(token)
+      .get(service, {
+        params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
+      })
+      .then(({ data }) => {
+        console.log('-----------1-------sheetName', sheet);
+        // console.log('-----------1-------jagsaalt', data?.jagsaalt);
+        const { Excel } = require("antd-table-saveas-excel");
+        const excel = new Excel();
+        excel
+            .addSheet(sheetName)
+            .addColumns(sheet)
+            .addDataSource(data?.jagsaalt)
+            .saveAs(sheetName + ".xlsx");
+      })
+      .catch(aldaaBarigch)
+      .finally(() => message.destroy());
+}
 
 function Zogsool({ token }) {
   const { t, i18n } = useTranslation()
   const { baiguullaga, barilgiinId } = useAuth();
+  const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
     moment().startOf("month"),
     moment().endOf("month"),
@@ -37,20 +60,20 @@ function Zogsool({ token }) {
   const [zogsoolId, setZogsoolId] = useState(undefined);
 
   const { zogsoolToololt, zogsoolToololtMutate } = useZogsoolToololt(
-    token,
-    ognoo
+      token,
+      ognoo
   );
 
   const zogsooliinMedeelel = useSWR(
-    ["/zogsooliinDunAvya", token, ognoo],
-    (url, token, ognoo) =>
-      uilchilgee(token)
-        .post(url, {
-          ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        })
-        .then((a) => a.data)
-        .catch(aldaaBarigch)
+      ["/zogsooliinDunAvya", token, ognoo],
+      (url, token, ognoo) =>
+          uilchilgee(token)
+              .post(url, {
+                ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              })
+              .then((a) => a.data)
+              .catch(aldaaBarigch)
   );
 
   const { order, onChangeTable } = useOrder({ check_in_time: -1 });
@@ -78,48 +101,48 @@ function Zogsool({ token }) {
       useUilchluulegch(token, baiguullaga?._id, query);
 
   const toololt = useMemo(
-    () => [
-      {
-        name: "Үйлчлүүлэгч",
-        too: formatNumber(zogsoolToololt?.find((a) => a._id === null)?.too, 0),
-      },
-      {
-        name: "Түрээслэгч",
-        too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Түрээслэгч")?.too,
-          0
-        ),
-      },
-      {
-        name: "Гэрээт",
-        too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Гэрээт")?.too,
-          0
-        ),
-      },
-      {
-        name: "Дотоод",
-        too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Дотоод")?.too,
-          0
-        ),
-      },
-      {
-        name: "Зөрчилтэй",
-        too: formatNumber(
-            zogsoolToololt?.find((a) => a._id === "Зөрчилтэй")?.too,
-            0
-        ),
-      },
-      {
-        name: "Бусад",
-        too: formatNumber(
-            zogsoolToololt?.find((a) => a._id === "Бусад")?.too,
-            0
-        ),
-      },
-    ],
-    [zogsoolToololt, uilchluulegchGaralt]
+      () => [
+        {
+          name: "Үйлчлүүлэгч",
+          too: formatNumber(zogsoolToololt?.find((a) => a._id === null)?.too, 0),
+        },
+        {
+          name: "Түрээслэгч",
+          too: formatNumber(
+              zogsoolToololt?.find((a) => a._id === "Түрээслэгч")?.too,
+              0
+          ),
+        },
+        {
+          name: "Гэрээт",
+          too: formatNumber(
+              zogsoolToololt?.find((a) => a._id === "Гэрээт")?.too,
+              0
+          ),
+        },
+        {
+          name: "Дотоод",
+          too: formatNumber(
+              zogsoolToololt?.find((a) => a._id === "Дотоод")?.too,
+              0
+          ),
+        },
+        {
+          name: "Зөрчилтэй",
+          too: formatNumber(
+              zogsoolToololt?.find((a) => a._id === "Зөрчилтэй")?.too,
+              0
+          ),
+        },
+        {
+          name: "Бусад",
+          too: formatNumber(
+              zogsoolToololt?.find((a) => a._id === "Бусад")?.too,
+              0
+          ),
+        },
+      ],
+      [zogsoolToololt, uilchluulegchGaralt]
   );
   const zogsoolChange = (e) => {
     setZogsoolId(e.target.value)
@@ -132,6 +155,33 @@ function Zogsool({ token }) {
     zogsoolToololtMutate();
     uilchluulegchMutate();
   }
+  /*function mashinOruulakhExcel() {
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+        <Button style={{ backgroundColor: "#209669", color: "#ffffff" }}>
+          {t("Хадгалах")}
+        </Button>
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+          <ExceleesOruulakh
+              ref={excelref}
+              token={token}
+              onFinish={onRefresh}
+              barilgiinId={barilgiinId}
+              zam="mashiniiExcelTatya"
+              garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+              tailbar="Машины мэдээлэл оруулах excel файл"
+              zagvariinZam="mashiniiExcelAvya"
+          />
+      ),
+      footer,
+    });
+  }*/
 
   const columns = useMemo(() => {
     const col = [
@@ -205,14 +255,43 @@ function Zogsool({ token }) {
         sorter: () => 0,
       },
       {
+        title: t("Дүн"),
+        align: "right",
+        width: "10rem",
+        showSorterTooltip: false,
+        sorter: () => 0,
+        dataIndex: "tuukh",
+        render(v) {
+          return v && formatNumber(v[0]?.tulukhDun, 0);
+        },
+      },
+      {
+        title: t("Хэлбэр"),
+        align: "center",
+        dataIndex: "tuukh",
+        width: "7rem",
+        showSorterTooltip: false,
+        render: (v) => {
+          return v && <div>{t(`${v[0]?.tulburTulsunKhelber}`)}</div>
+        }
+      },
+      {
         title: t("Төлбөр"),
         align: "right",
         width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "tulbur",
+        dataIndex: "tuukh",
         render(v) {
-          return formatNumber(v);
+          return (
+              v[0]?.tuluv === 0 ? <div>-</div>
+                  :
+                  v[0]?.tuluv < 0 ? <div>Үнэгүй</div>
+                      :
+                      v[0]?.ebarimtAvsanEsekh ? <div>Төлөгдсөн</div>
+                          :
+                          <div>И-Баримт</div>
+          );
         },
       },
       {
@@ -261,69 +340,77 @@ function Zogsool({ token }) {
     Aos.init({ once: true });
   });
 
+  const exlCol = () =>{
+    const aa = columns;
+    aa.splice(columns.length-1, 1
+    );
+    return aa;
+  };
+
   return (
-    <Admin
-      title="Зогсоол"
-      khuudasniiNer="zogsool"
-      className="p-0 md:p-4"
-      onSearch={(search) =>
-        setUilchluulegchKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
-      }
-      tsonkhniiId="61c2c7481c2830c4e6f90ce1"
-      loading={isValidating}
-    >
-      <Card size="small" className="col-span-12 overflow-auto">
-        <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
-          {toololt.map((a, i) => (
-            <div
-              key={i}
-              className={`zoom-in h-20 cursor-pointer rounded-xl border-2 border-green-600  col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-2 ${a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
-                }`}
-              onClick={() => setTurul(a.name)}
-              data-aos="zoom-out-down"
-              data-aos-duration="1000"
-              data-aos-delay={1 + i + "00"}
-            >
-              <div className="h-full w-[67vw] md:w-auto rounded-xl">
-                <div className="rounded-xl p-3">
-                  <div className="flex flex-row items-center space-x-2">
-                    <div className="text-3xl font-bold text-green-600">
-                      {a.too || 0}
+      <Admin
+          title="Зогсоол"
+          khuudasniiNer="zogsool"
+          className="p-0 md:p-4"
+          onSearch={(search) =>
+              setUilchluulegchKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
+          }
+          tsonkhniiId="61c2c7481c2830c4e6f90ce1"
+          loading={isValidating}
+      >
+        <Card size="small" className="col-span-12 overflow-auto">
+          <div className="flex overflow-hidden hideScroll overflow-x-auto py-3 sm:p-0 sm:grid w-full sm:grid-cols-6 gap-4 md:gap-6 border-solid 2xl:grid-cols-12">
+            {toololt.map((a, i) => (
+                <div
+                    key={i}
+                    className={`zoom-in h-20 cursor-pointer rounded-xl border-2 border-green-600  col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-3 xl:col-span-3 2xl:col-span-2 ${a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
+                    }`}
+                    onClick={() => setTurul(a.name)}
+                    data-aos="zoom-out-down"
+                    data-aos-duration="1000"
+                    data-aos-delay={1 + i + "00"}
+                >
+                  <div className="h-full w-[67vw] md:w-auto rounded-xl">
+                    <div className="rounded-xl p-3">
+                      <div className="flex flex-row items-center space-x-2">
+                        <div className="text-3xl font-bold text-green-600">
+                          {a.too || 0}
+                        </div>
+                        <div className="text-base text-gray-500">{t(a.name)}</div>
+                      </div>
                     </div>
-                    <div className="text-base text-gray-500">{t(a.name)}</div>
                   </div>
                 </div>
+            ))}
+          </div>
+        </Card>
+        <Card className="col-span-12">
+          <div className="flex gap-5 flex-col md:flex-row">
+            <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+                className="w-2/5"
+            >
+              <DatePicker.RangePicker
+                  className="w-full md:w-auto"
+                  size="middle"
+                  value={ognoo}
+                  onChange={setOgnoo}
+              />
+            </div>
+            <div
+                className="md:ml-auto mb-5 md:mb-0 w-full justify-between flex items-center"
+                data-aos="fade-left"
+                data-aos-duration="1000"
+                data-aos-delay="200"
+            >
+              <div className="flex text-xs md:text-base flex-row space-x-2 p-1 font-medium">
+                {t("Зогсоолын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}₮
               </div>
             </div>
-          ))}
-        </div>
-      </Card>
-      <Card className="col-span-12">
-        <div className="flex gap-5 flex-col md:flex-row">
-          <div
-            data-aos="fade-right"
-            data-aos-duration="1000"
-            data-aos-delay="100"
-            className="w-2/5"
-          >
-            <DatePicker.RangePicker
-              className="w-full md:w-auto"
-              size="middle"
-              value={ognoo}
-              onChange={setOgnoo}
-            />
-          </div>
-          <div
-            className="md:ml-auto mb-5 md:mb-0 w-full justify-between flex items-center"
-            data-aos="fade-left"
-            data-aos-duration="1000"
-            data-aos-delay="200"
-          >
-            <div className="flex text-xs md:text-base flex-row space-x-2 p-1 font-medium">
-              {t("Зогсоолын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}₮
-            </div>
-          </div>
-          {/*<Radio.Group onChange={zogsoolChange} defaultValue={`${jagsaalt[0]?._id}`} buttonStyle="solid">
+
+            {/*<Radio.Group onChange={zogsoolChange} defaultValue={`${jagsaalt[0]?._id}`} buttonStyle="solid">
             <Radio.Button value={undefined}>Бүгд</Radio.Button>
             {
               jagsaalt?.map((zogsool)=>(
@@ -331,61 +418,93 @@ function Zogsool({ token }) {
               ))
             }
           </Radio.Group>*/}
-          <div
-              className='ml-auto flex place-content-end w-full'
-              data-aos='zoom-in-left'
-              data-aos-duration='1000'
-              data-aos-delay='300'>
-            <Radio.Group onChange={zogsoolChange} type="primary" defaultValue={undefined} buttonStyle="solid">
-            <Radio.Button value={undefined} >Бүгд</Radio.Button>
-            {
-              jagsaalt?.map((zogsool)=>(
-                  <Radio.Button value={`${zogsool._id}`} type="primary">{zogsool.ner}</Radio.Button>
-              ))
-            }
-          </Radio.Group>
+            <div
+                className='ml-auto flex place-content-end w-full'
+                data-aos='zoom-in-left'
+                data-aos-duration='1000'
+                data-aos-delay='300'>
+              <Radio.Group className="mr-3" onChange={zogsoolChange} type="primary" defaultValue={undefined} buttonStyle="solid">
+                <Radio.Button value={undefined} >Бүгд</Radio.Button>
+                {
+                  jagsaalt?.map((zogsool)=>(
+                      <Radio.Button value={`${zogsool._id}`} type="primary">{zogsool.ner}</Radio.Button>
+                  ))
+                }
+              </Radio.Group>
+              <Popover
+                  content={() => (
+                      <div className="flex w-32 flex-col space-y-2">
+                        {/*<a
+                          className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                          onClick={mashinOruulakhExcel}
+                      >
+                        <UploadOutlined style={{ fontSize: "18px" }} />
+                        <label>{t("Оруулах")}</label>
+                      </a>*/}
+                        <a
+                            className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                            onClick={() => {
+                              excelTatajAvya(token,'zogsoolUilchluulegch',uilchluulegchGaralt.niitMur, exlCol(), query, order,'Зогсоол')
+                            }}
+                        >
+                          <DownloadOutlined style={{ fontSize: "18px" }} />
+                          <label>{t("Татах")}</label>
+                        </a>
+                      </div>
+                  )}
+                  placement="bottom"
+                  trigger="click"
+              >
+                <Button
+                    type="primary"
+                    icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                >
+                  <span>Excel</span>
+                  <DownOutlined width={5} />
+                </Button>
+              </Popover>
+            </div>
           </div>
-        </div>
-        <div
-          data-aos="fade-left"
-          data-aos-duration="1000"
-          data-aos-delay="400"
-          data-aos-anchor-placement="top-bottom"
-        >
-          <Table
-            className="mt-8 hidden overflow-auto md:block"
-            tableLayout="auto"
-            loading={!uilchluulegchGaralt}
-            dataSource={uilchluulegchGaralt?.jagsaalt}
-            scroll={{ y: "calc(100vh - 30rem)" }}
-            size="small"
-            bordered
-            rowKey={(row) => row._id}
-            columns={columns}
-            onChange={onChangeTable}
-            pagination={{
-              current: uilchluulegchGaralt?.khuudasniiDugaar,
-              pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
-              total: uilchluulegchGaralt?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setUilchluulegchKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
-          />
-          <CardList
-            cardListTuluv={"utas"}
-            keyValue="uilchluulegch"
-            className="block overflow-auto md:hidden"
-            jagsaalt={uilchluulegchGaralt?.jagsaalt}
-            Component={UilchluulegchTile}
-          />
-        </div>
-      </Card>
-    </Admin>
+          <div
+              data-aos="fade-left"
+              data-aos-duration="1000"
+              data-aos-delay="400"
+              data-aos-anchor-placement="top-bottom"
+          >
+            <Table
+                className="mt-8 hidden overflow-auto md:block"
+                tableLayout="auto"
+                loading={!uilchluulegchGaralt}
+                dataSource={uilchluulegchGaralt?.jagsaalt}
+                scroll={{ y: "calc(100vh - 30rem)" }}
+                size="small"
+                bordered
+                rowKey={(row) => row._id}
+                columns={columns}
+                onChange={onChangeTable}
+                pagination={{
+                  current: uilchluulegchGaralt?.khuudasniiDugaar,
+                  pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
+                  total: uilchluulegchGaralt?.niitMur,
+                  showSizeChanger: true,
+                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                      setUilchluulegchKhuudaslalt((kh) => ({
+                        ...kh,
+                        khuudasniiDugaar,
+                        khuudasniiKhemjee,
+                      })),
+                }}
+            />
+            <CardList
+                cardListTuluv={"utas"}
+                keyValue="uilchluulegch"
+                className="block overflow-auto md:hidden"
+                jagsaalt={uilchluulegchGaralt?.jagsaalt}
+                Component={UilchluulegchTile}
+            />
+          </div>
+        </Card>
+      </Admin>
   );
 }
 
