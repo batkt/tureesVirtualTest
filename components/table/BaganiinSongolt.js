@@ -3,14 +3,22 @@ import { Menu, Checkbox, Popover, Button } from "antd";
 import { UnorderedListOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
-const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
-  const { t } = useTranslation()
+const BaganiinSongolt = ({
+  columns,
+  shineBagana,
+  setShineBagana,
+  ButtonStyle,
+}) => {
+  const { t } = useTranslation();
   React.useEffect(() => {
     const baganuud = localStorage.getItem("bagana-" + window.location.href);
-    if (!!baganuud) setShineBagana(columns.filter(a => {
-      let parsedBaganuud = JSON.parse(baganuud)
-      return parsedBaganuud.find(b => b === a.dataIndex)
-    }));
+    if (!!baganuud)
+      setShineBagana(
+        columns.filter((a) => {
+          let parsedBaganuud = JSON.parse(baganuud);
+          return parsedBaganuud.find((b) => b === a.dataIndex);
+        })
+      );
   }, []);
 
   function baganaNemekh(e, mur) {
@@ -30,7 +38,7 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
 
     localStorage.setItem(
       "bagana-" + window.location.href,
-      JSON.stringify(jagsaalt.map(a => a.dataIndex))
+      JSON.stringify(jagsaalt.map((a) => a.dataIndex))
     );
     setShineBagana([...jagsaalt]);
   }
@@ -47,8 +55,7 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
                     checked={
                       !!shineBagana.find((a) => a.dataIndex === mur.dataIndex)
                     }
-                    onClick={(e) => baganaNemekh(e, mur)}
-                  >
+                    onClick={(e) => baganaNemekh(e, mur)}>
                     {mur.title}
                   </Checkbox>
                 </Menu.Item>
@@ -58,13 +65,12 @@ const BaganiinSongolt = ({ columns, shineBagana, setShineBagana }) => {
         )}
         style={{ padding: 0 }}
         placement="bottom"
-        trigger="click"
-      >
+        trigger="click">
         <Button
+          className={ButtonStyle}
           style={{ marginRight: "10px" }}
           type="primary"
-          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
-        >
+          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}>
           <span>{t("Багана")}</span>
         </Button>
       </Popover>
