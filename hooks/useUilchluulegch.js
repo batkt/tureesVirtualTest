@@ -31,15 +31,6 @@ const fetcher = (
     query = {},
     order
 ) => {
-    const  dd = {
-        ...khuudaslalt,
-        query: {
-            baiguullagiinId,
-            ...query,
-        },
-        order,
-    };
-    // console.log('url----- ', url, ' params ', dd);
     return axios(token)
         .get(url, {
             params: {
@@ -53,8 +44,7 @@ const fetcher = (
         })
         .then((res) => res.data)
         .catch(aldaaBarigch);
-}
-
+};
 
 function useUilchluulegch(token, baiguullagiinId, query, order) {
     const { barilgiinId } = useAuth();
