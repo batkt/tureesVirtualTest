@@ -109,7 +109,6 @@ export const AuthProvider = ({ children }) => {
                 data?.result?.barilguud?.length > 0 &&
                   barilgaSoliyo(data.result.barilguud[0]);
                 ekhniiTsonkhruuOchyo(data.result, data.token);
-                message.success(t("Тавтай морил"));
               } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
             } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
           })

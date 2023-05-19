@@ -10,6 +10,7 @@ import { TbLego } from "react-icons/tb";
 import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { message } from "antd";
+import { t } from "i18next";
 
 export const tsonknuud = [
   {
@@ -248,13 +249,19 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
       var erkhShalgakh = ajiltan.tsonkhniiErkhuud.filter((element) => {
         return data?.moduluud?.find((b) => b.zam === element);
       });
-      console.log(erkhShalgakh, ajiltan.tsonkhniiErkhuud, data?.moduluud);
       if (ajiltan?.erkh === "Admin") {
         console.log("AdminErkhShalgakh", AdminErkhShalgakh);
         if (AdminErkhShalgakh !== undefined) {
+          message.success(t("Тавтай морил"));
           window.location.href = "/khyanalt/barilgaBurtgel";
-        } else window.location.href = data?.moduluud[0]?.zam;
+        } else if (data?.moduluud?.length > 0) {
+          message.success(t("Тавтай морил"));
+          window.location.href = data?.moduluud[0]?.zam;
+        } else {
+          message.warn("Байгууллагын эрхийн тохиргоог шалгуулна уу!");
+        }
       } else if (erkhShalgakh.length > 0) {
+        message.success(t("Тавтай морил"));
         window.location.href = erkhShalgakh[0];
       } else {
         message.error("Ажилтны эрхийн тохиргоо хийгдээгүй байна!");
@@ -841,6 +848,7 @@ const khuudasnuud = [
 
 function useErkh(ajiltan, token) {
   const { khuudasniiJagsaalt } = useKhuudasniiJagsaalt(token);
+  console.log("khuudasniiJagsaalt", khuudasniiJagsaalt);
   if (!ajiltan) return [];
   var erkhteiTsonkhnuud = khuudasnuud.filter((a) => {
     if (a.href === "/khyanalt/daalgavar/admin") {
