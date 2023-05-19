@@ -246,9 +246,9 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
         (b) => b.zam === "/khyanalt/barilgaBurtgel"
       );
       var erkhShalgakh = ajiltan.tsonkhniiErkhuud.filter((element) => {
-        !!data?.moduluud?.find((b) => b.zam === element);
+        return data?.moduluud?.find((b) => b.zam === element);
       });
-
+      console.log(erkhShalgakh, ajiltan.tsonkhniiErkhuud, data?.moduluud);
       if (ajiltan?.erkh === "Admin") {
         console.log("AdminErkhShalgakh", AdminErkhShalgakh);
         if (AdminErkhShalgakh !== undefined) {
