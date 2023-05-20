@@ -66,40 +66,39 @@ function Admin({
     barilgiinId,
   } = useAuth();
   const khuudasnuud = useErkh(ajiltan, token);
-  const sanalKhuseltRef = React.useRef(null)
+  const sanalKhuseltRef = React.useRef(null);
   const [visible, setVisible] = useState(false);
-  const [ showSidehelpBar, setShowSidehelpBar ] = useState(false)
+  const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
   function getOS() {
     var userAgent = navigator.userAgent,
-        platform = navigator.platform,
-        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-        iosPlatforms = ['iPhone', 'iPad', 'iPod'],
-        os = null;
-  
+      platform = navigator.platform,
+      macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"],
+      windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"],
+      iosPlatforms = ["iPhone", "iPad", "iPod"],
+      os = null;
+
     if (macosPlatforms.indexOf(platform) !== -1) {
-      os = '/anydeskMacOs.dmg';
+      os = "/anydeskMacOs.dmg";
     } else if (iosPlatforms.indexOf(platform) !== -1) {
-      os = 'https://apps.apple.com/us/app/anydesk/id1176131273';
+      os = "https://apps.apple.com/us/app/anydesk/id1176131273";
     } else if (windowsPlatforms.indexOf(platform) !== -1) {
-      os = '/AnyDeskWindows.exe';
+      os = "/AnyDeskWindows.exe";
     } else if (/Android/.test(userAgent)) {
-      os = 'https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid';
+      os =
+        "https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid";
     } else if (!os && /Linux/.test(platform)) {
-      os = 'https://anydesk.com/en/downloads/linux';
+      os = "https://anydesk.com/en/downloads/linux";
     }
-  
+
     return os;
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     if (window) {
-      i18n.changeLanguage(window.localStorage.getItem('Localelanguage'))
+      i18n.changeLanguage(window.localStorage.getItem("Localelanguage"));
     }
-  },[])
-
-  
+  }, []);
 
   function onClickSearch() {
     if (mSearch) {
@@ -119,20 +118,21 @@ function Admin({
   }
   function showSanalKhuselt(ajiltan) {
     const footer = [
-      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button className="space-x-2" icon={<FiSend/>} type="primary" onClick={() => sanalKhuseltRef.current.ilgeeye()}>
+      <Button onClick={() => sanalKhuseltRef.current.khaaya()}>
+        {t("Хаах")}
+      </Button>,
+      <Button
+        className="space-x-2"
+        icon={<FiSend />}
+        type="primary"
+        onClick={() => sanalKhuseltRef.current.ilgeeye()}>
         {t("Илгээх")}
       </Button>,
     ];
     modal({
       title: t("Системтэй холбоотой санал хүсэлт илгээх"),
       icon: <FiSend />,
-      content: (
-        <SanalKhuseltIlgeekh
-        ref={sanalKhuseltRef}
-        ajiltan={ajiltan}
-        />
-      ),
+      content: <SanalKhuseltIlgeekh ref={sanalKhuseltRef} ajiltan={ajiltan} />,
       footer,
     });
   }
@@ -158,51 +158,105 @@ function Admin({
           fixedZagvarNeegdsenEsekh === true &&
           setTurulZagvar(false);
       }}
-      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
-    >
-       <Drawer
+      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4">
+      <Drawer
         placement={"right"}
         closable={false}
         onClose={() => setShowTuslamj(false)}
         visible={showTuslamj}
         key={"righttuslamj"}
         width={600}
-        bodyStyle={{ padding: "10px 0" }}
-      >
+        bodyStyle={{ padding: "10px 0" }}>
         <Tuslamj />
       </Drawer>
-      <div onClick={(e)=> e.stopPropagation()} className={`fixed transition-all h-48 flex items-center z-50 top-1/3 ${showSidehelpBar ? "right-0" : `${visible === true ? "-right-full md:-right-[10.5rem]": "-right-[11.25rem] md:-right-[10.5rem]"} delay-200 `}`}>
-        <div onClick={()=> setShowSidehelpBar(!showSidehelpBar)} className={`text-2xl ${showSidehelpBar ? "bg-white dark:border-green-500 dark:bg-gray-800 text-green-500" : " bg-yellow-500 text-white"} transition-all  border  border-r-0 cursor-pointer h-11 w-10 rounded-l-lg flex justify-center items-center`}><TbArrowBarLeft className="transition-all duration-200" style={{rotate: showSidehelpBar ? "180deg" : "0deg"}}/></div>
-        <div className={`overflow-hidden ${showSidehelpBar ? "h-48 delay-200 rounded-l-lg dark:bg-gray-800 border-r-0 bg-white" : "h-11 border-none dark:bg-gray-900 bg-green-600"} transition-all pl-3 flex py-5 flex-col w-48 border dark:border-green-500`}>
-          <div className={`w-full h-full flex flex-col justify-between ${showSidehelpBar ? "delay-200 visible opacity-100" : "opacity-0 invisible"}`}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className={`fixed top-1/3 z-50 flex h-48 items-center transition-all ${
+          showSidehelpBar
+            ? "right-0"
+            : `${
+                visible === true
+                  ? "-right-full md:-right-[10.5rem]"
+                  : "-right-[11.25rem] md:-right-[10.5rem]"
+              } delay-200 `
+        }`}>
         <div
-              className={`border group border-r-0 dark:border-green-500 hover:bg-green-100 dark:hover:bg-opacity-30 dark:hover:bg-green-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg `}
-              onClick={() => {setShowTuslamj(true); setShowSidehelpBar(false)}}
-            >
-              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black `}>
-              <div className="bg-green-600 group-hover:bg-green-500 transition-colors text-white p-2 border rounded-md"><QuestionOutlined /></div>
+          onClick={() => setShowSidehelpBar(!showSidehelpBar)}
+          className={`text-2xl ${
+            showSidehelpBar
+              ? "bg-white text-green-500 dark:border-green-500 dark:bg-gray-800"
+              : " bg-yellow-500 text-white"
+          } flex  h-11  w-10 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 transition-all`}>
+          <TbArrowBarLeft
+            className="transition-all duration-200"
+            style={{ rotate: showSidehelpBar ? "180deg" : "0deg" }}
+          />
+        </div>
+        <div
+          className={`overflow-hidden ${
+            showSidehelpBar
+              ? "h-48 rounded-l-lg border-r-0 bg-white delay-200 dark:bg-gray-800"
+              : "h-11 border-none bg-green-600 dark:bg-gray-900"
+          } flex w-48 flex-col border py-5 pl-3 transition-all dark:border-green-500`}>
+          <div
+            className={`flex h-full w-full flex-col justify-between ${
+              showSidehelpBar
+                ? "visible opacity-100 delay-200"
+                : "invisible opacity-0"
+            }`}>
+            <div
+              className={`group cursor-pointer rounded-l-lg border border-r-0 transition-all hover:scale-105 hover:bg-green-100 dark:border-green-500 dark:hover:bg-green-600 dark:hover:bg-opacity-30 `}
+              onClick={() => {
+                setShowTuslamj(true);
+                setShowSidehelpBar(false);
+              }}>
+              <div
+                className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 `}>
+                <div className="rounded-md border bg-green-600 p-2 text-white transition-colors group-hover:bg-green-500">
+                  <QuestionOutlined />
+                </div>
                 <div className="font-medium">{t("Тусламж")}</div>
               </div>
             </div>
             <div
-              className={`border group border-r-0 dark:border-green-500 hover:bg-yellow-100 dark:hover:bg-opacity-30 dark:hover:bg-yellow-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg `}
-              onClick={() => {showSanalKhuselt(ajiltan); setShowSidehelpBar(false)}}
-            >
-              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
-                <div className="bg-yellow-600 group-hover:bg-yellow-500 transition-colors text-white p-2 border rounded-md"><FiSend /></div>
+              className={`group cursor-pointer rounded-l-lg border border-r-0 transition-all hover:scale-105 hover:bg-yellow-100 dark:border-green-500 dark:hover:bg-yellow-600 dark:hover:bg-opacity-30 `}
+              onClick={() => {
+                showSanalKhuselt(ajiltan);
+                setShowSidehelpBar(false);
+              }}>
+              <div
+                className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 ${
+                  showSidehelpBar
+                    ? "visible opacity-100 delay-200"
+                    : "invisible opacity-0"
+                }`}>
+                <div className="rounded-md border bg-yellow-600 p-2 text-white transition-colors group-hover:bg-yellow-500">
+                  <FiSend />
+                </div>
                 <div className="font-medium">{t("Санал хүсэлт")}</div>
               </div>
             </div>
             <div
-              className={`border group border-r-0 dark:border-green-500 hover:bg-red-100 dark:hover:bg-opacity-30 dark:hover:bg-red-600 transition-all hover:scale-105 cursor-pointer rounded-l-lg ${showSidehelpBar ? "visible opacity-100" : "opacity-0 invisible"}`}
-              onClick={() => { window.location.assign(getOS());; setShowSidehelpBar(false)}}
-            >
-              <div className={`flex p-1 w-44 items-center space-x-2 dark:text-gray-200 text-black ${showSidehelpBar ? "visible delay-200 opacity-100" : "opacity-0 invisible"}`}>
-                <div className="bg-red-600 group-hover:bg-red-500 transition-colors text-white p-2 border rounded-md"><SiAnydesk /></div>
+              className={`group cursor-pointer rounded-l-lg border border-r-0 transition-all hover:scale-105 hover:bg-red-100 dark:border-green-500 dark:hover:bg-red-600 dark:hover:bg-opacity-30 ${
+                showSidehelpBar ? "visible opacity-100" : "invisible opacity-0"
+              }`}
+              onClick={() => {
+                window.location.assign(getOS());
+                setShowSidehelpBar(false);
+              }}>
+              <div
+                className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 ${
+                  showSidehelpBar
+                    ? "visible opacity-100 delay-200"
+                    : "invisible opacity-0"
+                }`}>
+                <div className="rounded-md border bg-red-600 p-2 text-white transition-colors group-hover:bg-red-500">
+                  <SiAnydesk />
+                </div>
                 <div className="font-medium">{t("AnyDesk татах")}</div>
               </div>
             </div>
-            </div>
+          </div>
         </div>
       </div>
       <Head>
@@ -216,8 +270,7 @@ function Admin({
             className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:hidden"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
-            }
-          >
+            }>
             <LeftOutlined
               style={{ fontSize: "15px" }}
               className="flex items-center justify-center text-gray-50"
@@ -239,8 +292,7 @@ function Admin({
               <select
                 defaultValue={barilgiinId}
                 onChange={({ target }) => barilgaSoliyo(target.value)}
-                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
-              >
+                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200">
                 {barilguud?.map((a) => (
                   <option key={a?._id} className="" value={a?._id}>
                     {a?.ner}
@@ -251,8 +303,7 @@ function Admin({
                 <svg
                   className="h-4 w-4 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                  viewBox="0 0 20 20">
                   <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
               </div>
@@ -267,8 +318,7 @@ function Admin({
             onClick={() => {
               setVisible(!visible);
               !!setNeesenEsekh && setNeesenEsekh(!visible);
-            }}
-          >
+            }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -279,8 +329,7 @@ function Admin({
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white"
-            >
+              className="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white">
               <line x1="18" y1="20" x2="18" y2="10"></line>
               <line x1="12" y1="20" x2="12" y2="4"></line>
               <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -312,15 +361,13 @@ function Admin({
       )}
       <h2
         id="garchig"
-        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
-      >
+        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden ">
         {t(title)}
       </h2>
       <div
         className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
           dedKhuudas ? "w-full" : "main"
-        }`}
-      >
+        }`}>
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
           <div className="flex">
             {dedKhuudas && (
@@ -328,8 +375,7 @@ function Admin({
                 className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:flex"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
-                }
-              >
+                }>
                 <LeftOutlined
                   style={{ fontSize: "15px" }}
                   className="flex items-center justify-center dark:text-gray-50"
@@ -338,8 +384,7 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
-            >
+              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex ">
               {t(title)}
             </h2>
           </div>
@@ -369,17 +414,23 @@ function Admin({
                 onClick={() => setTheme(themeValue ? "light" : "dark")}
               />
             </div>
-            <div className="flex w-6 hover:scale-105 transition-all gap-2">
+            <div className="flex w-6 gap-2 transition-all hover:scale-105">
               {i18n.language === "en" ? (
                 <img
-                  onClick={() => {i18n.changeLanguage("mn"); window.localStorage.setItem('Localelanguage', "mn")}}
-                  className={`object-contain cursor-pointer transition-all w-full`}
+                  onClick={() => {
+                    i18n.changeLanguage("mn");
+                    window.localStorage.setItem("Localelanguage", "mn");
+                  }}
+                  className={`w-full cursor-pointer object-contain transition-all`}
                   src="/MN.png"
                 />
               ) : (
                 <img
-                  onClick={() => {i18n.changeLanguage("en"); window.localStorage.setItem('Localelanguage', "en")}}
-                  className={`object-contain cursor-pointer transition-all w-full`}
+                  onClick={() => {
+                    i18n.changeLanguage("en");
+                    window.localStorage.setItem("Localelanguage", "en");
+                  }}
+                  className={`w-full cursor-pointer object-contain transition-all`}
                   src="/UK.png"
                 />
               )}
@@ -391,8 +442,7 @@ function Admin({
               <>
                 <div
                   id="search"
-                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
-                >
+                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56">
                   <input
                     onChange={({ target }) => {
                       if (!!onSearch) {
@@ -422,8 +472,7 @@ function Admin({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
-                    >
+                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4">
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
@@ -441,9 +490,13 @@ function Admin({
               <Tooltip
                 placement="bottom"
                 title={
-                  <div>{("Лицензийн хугацаа дуусахад хоног үлдлээ", { khonog: license()})}</div>
-                }
-              >
+                  <div>
+                    {
+                      ("Лицензийн хугацаа дуусахад хоног үлдлээ",
+                      { khonog: license() })
+                    }
+                  </div>
+                }>
                 <div className="ml-1 flex items-center gap-1 text-base md:hidden">
                   {license()}:
                   <svg
@@ -456,14 +509,19 @@ function Admin({
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-clock d-block mx-auto"
-                  >
+                    className="feather feather-clock d-block mx-auto">
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
                 </div>
               </Tooltip>
-              <ProfileTovch ajiltan={ajiltan} garya={garya} token={token} showSanalKhuselt={showSanalKhuselt} setShowTuslamj={setShowTuslamj}/>
+              <ProfileTovch
+                ajiltan={ajiltan}
+                garya={garya}
+                token={token}
+                showSanalKhuselt={showSanalKhuselt}
+                setShowTuslamj={setShowTuslamj}
+              />
             </div>
           </div>
         </div>
@@ -474,10 +532,9 @@ function Admin({
         </div>
       </div>
       <div
-        className={`fixed bottom-[1.7rem] z-50 ${
+        className={`fixed bottom-[1.7rem] z-40 ${
           visible === true ? "-right-full" : "right-5"
-        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
-      >
+        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}>
         <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
           Dark Mode
         </div>
