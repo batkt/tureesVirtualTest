@@ -367,7 +367,7 @@ function camera({ token }) {
   }, [turul, i18n.language]);
 
   const dataSource = [
-    {
+    /*{
       key: "1",
       ognoo: "2023-05-11 09:37",
       utga: "Гүйлгээний утга",
@@ -420,7 +420,7 @@ function camera({ token }) {
       ognoo: "2023-05-11 09:37",
       utga: "Бэлэн",
       dun: 5500,
-    },
+    },*/
   ];
 
   const baganuud = [
@@ -719,14 +719,14 @@ function camera({ token }) {
                   className="text-red-400"
                 />
               </div>
-              {/*<Table
+              <Table
                 pagination={false}
                 className="mt-3 overflow-auto"
                 scroll={{ y: "calc(100vh / 3.5)" }}
                 size="small"
                 dataSource={dataSource}
                 columns={baganuud}
-              />*/}
+              />
             </div>
           </div>
           <Card className="col-span-12 mt-2">
