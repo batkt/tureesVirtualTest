@@ -719,14 +719,14 @@ function camera({ token }) {
                   className="text-red-400"
                 />
               </div>
-              <Table
+              {/*<Table
                 pagination={false}
                 className="mt-3 overflow-auto"
                 scroll={{ y: "calc(100vh / 3.5)" }}
                 size="small"
                 dataSource={dataSource}
                 columns={baganuud}
-              />
+              />*/}
             </div>
           </div>
           <Card className="col-span-12 mt-2">
