@@ -434,12 +434,14 @@ function camera({ token }) {
     {
       title: "Огноо",
       width: "8rem",
+      align: "center",
       dataIndex: "ognoo",
       key: "ognoo",
     },
     {
       title: "Утга",
       width: "8rem",
+      align: "center",
       dataIndex: "utga",
       key: "utga",
     },
@@ -447,7 +449,7 @@ function camera({ token }) {
       title: "Дүн",
       width: "4rem",
       dataIndex: "dun",
-      align: "right",
+      align: "center",
       key: "dun",
       render(v) {
         return v && formatNumber(v, 0);
