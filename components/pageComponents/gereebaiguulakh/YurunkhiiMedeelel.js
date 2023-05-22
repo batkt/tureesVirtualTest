@@ -542,15 +542,7 @@ const YurunkhiiMedeele = ({
                 </Button>
               </Form.Item>
               <div data-aos='fade-right' data-aos-delay='800'>
-                <Form.Item
-                  name='act'
-                  rules={[
-                    {
-                      required: true,
-                      message: t("Актын загвар сонгоно уу!"),
-                    },
-                  ]}
-                  label={t("Актын загвар сонгох")}>
+                <Form.Item name='act' label={t("Актын загвар сонгох")}>
                   <Select>
                     <Select.Option></Select.Option>
                   </Select>
