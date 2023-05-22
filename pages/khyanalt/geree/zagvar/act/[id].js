@@ -112,6 +112,7 @@ function ZakhialgaNemekh({ token }) {
       readMethod("aktiinZagvar", token, id).then(({ data }) => {
         if (data) {
           defaultUtga = data;
+          form.setFieldsValue(data);
           setGereeniiZagvar({ ...data });
         }
       });
