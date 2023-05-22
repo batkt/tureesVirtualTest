@@ -367,7 +367,7 @@ function camera({ token }) {
   }, [turul, i18n.language]);
 
   const dataSource = [
-    {
+    /*{
       key: "1",
       ognoo: "2023-05-11 09:37",
       utga: "Гүйлгээний утга",
@@ -420,7 +420,7 @@ function camera({ token }) {
       ognoo: "2023-05-11 09:37",
       utga: "Бэлэн",
       dun: 5500,
-    },
+    },*/
   ];
 
   const baganuud = [
@@ -434,12 +434,14 @@ function camera({ token }) {
     {
       title: "Огноо",
       width: "8rem",
+      align: "center",
       dataIndex: "ognoo",
       key: "ognoo",
     },
     {
       title: "Утга",
       width: "8rem",
+      align: "center",
       dataIndex: "utga",
       key: "utga",
     },
@@ -447,7 +449,7 @@ function camera({ token }) {
       title: "Дүн",
       width: "4rem",
       dataIndex: "dun",
-      align: "right",
+      align: "center",
       key: "dun",
       render(v) {
         return v && formatNumber(v, 0);
