@@ -24,9 +24,9 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useGereeniiZagvar(token, baiguullagiinId, bId) {
+function useAktiinZagvar(token, baiguullagiinId, bId) {
   const { barilgiinId } = useAuth();
-  const [khuudaslalt, setGereeniiZagvarKhuudaslalt] = useState({
+  const [khuudaslalt, setAktiinZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
     khuudasniiKhemjee: 10,
     search: "",
@@ -35,7 +35,7 @@ function useGereeniiZagvar(token, baiguullagiinId, bId) {
   const { data, mutate } = useSWR(
     !!token && !!baiguullagiinId
       ? [
-          "/gereeniiZagvar",
+          "/aktiinZagvar",
           token,
           baiguullagiinId,
           khuudaslalt,
@@ -46,10 +46,10 @@ function useGereeniiZagvar(token, baiguullagiinId, bId) {
     { revalidateOnFocus: false }
   );
   return {
-    setGereeniiZagvarKhuudaslalt,
-    gereeniiZagvarGaralt: data,
-    gereeniiZagvarMutate: mutate,
+    setAktiinZagvarKhuudaslalt,
+    aktiinZagvarGaralt: data,
+    aktiinZagvarMutate: mutate,
   };
 }
 
-export default useGereeniiZagvar;
+export default useAktiinZagvar;

@@ -231,7 +231,7 @@ function index({ token, baiguullaga, destroy }, ref) {
         setOptions={{
           plugins: { ...plugins, ...plugin },
           height: 200,
-          buttonList: [...formatting, ["custom_example"]],
+          buttonList: [...formatting],
         }}
         showToolbar={true}
         ref={editorRef}

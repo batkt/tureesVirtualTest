@@ -109,6 +109,8 @@ const YurunkhiiMedeele = ({
   barilgiinId,
   gereeniiZagvariinId,
   gereeniiZagvarGaralt,
+  aktiinZagvarGaralt,
+  setAktiinZagvarKhuudaslalt,
   onChangeGereeniiZagvar,
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
@@ -541,27 +543,39 @@ const YurunkhiiMedeele = ({
                   {t("Ялгах утга оруулах")}
                 </Button>
               </Form.Item>
-              {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
-                <div data-aos="fade-right" data-aos-delay="800">
-                  <Form.Item
-                    name="act"
-                    rules={[
-                      {
-                        required: true,
-                        message: t("Актын загвар сонгоно уу!"),
-                      },
-                    ]}
-                    label={t("Актын загвар сонгох")}>
-                    <Select>
-                      <Select.Option></Select.Option>
-                    </Select>
-                  </Form.Item>
-                </div>
-              )}
             </>
           )}
         </Form.List>
       </div>
+      {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item
+            name="aktiinZagvariinId"
+            rules={[
+              {
+                required: true,
+                message: t("Актын загвар сонгоно уу!"),
+              },
+            ]}
+            label={t("Актын загвар сонгох")}>
+            <Select
+              showSearch
+              filterOption={(o) => o}
+              allowClear
+              onSearch={(search) =>
+                setAktiinZagvarKhuudaslalt((a) => ({
+                  ...a,
+                  search,
+                  khuudasniiDugaar: 1,
+                }))
+              }>
+              {aktiinZagvarGaralt?.jagsaalt?.map((mur) => {
+                return <Select.Option key={mur._id}>{mur.ner}</Select.Option>;
+              })}
+            </Select>
+          </Form.Item>
+        </div>
+      )}
       <div data-aos="fade-right" data-aos-delay="1000">
         <Form.Item
           name="dans"

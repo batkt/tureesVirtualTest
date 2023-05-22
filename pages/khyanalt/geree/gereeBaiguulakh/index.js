@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { aldaaBarigch } from "services/uilchilgee";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import useAktiinZagvar from "hooks/useAktiinZagvar";
 
 const { Step } = Steps;
 
@@ -71,8 +72,13 @@ function GereeBaiguulakh({ token }) {
   const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
+  console.log(khadgalakhGeree);
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
+  const { aktiinZagvarGaralt, setAktiinZagvarKhuudaslalt } = useAktiinZagvar(
+    token,
+    baiguullaga?._id
+  );
   const next = (data) => {
     if (current === 0 && !gereeniiZagvar) {
       message.warning(t("Гэрээний загвар сонгоно уу!"));
@@ -343,9 +349,9 @@ function GereeBaiguulakh({ token }) {
   };
   return (
     <Admin
-      khuudasniiNer='gereeBaiguulakh'
-      title='Гэрээ байгуулах'
-      className='grid grid-cols-12 gap-6 p-5'
+      khuudasniiNer="gereeBaiguulakh"
+      title="Гэрээ байгуулах"
+      className="grid grid-cols-12 gap-6 p-5"
       tsonkhniiId={"61c2c5f91c2830c4e6f90c75"}
       loading={waiting}
       setTurulZagvar={setGereekharakhTovch}
@@ -361,8 +367,8 @@ function GereeBaiguulakh({ token }) {
         setGereeniiZagvar(undefined);
         setCurrent(0);
       }}>
-      <div className='box col-span-12 p-5'>
-        <div className='contents px-10'>
+      <div className="box col-span-12 p-5">
+        <div className="contents px-10">
           <Steps onChange={onChange} current={current}>
             {steps.map((item, index) => (
               <Step
@@ -372,15 +378,15 @@ function GereeBaiguulakh({ token }) {
                 value={index}
                 key={item.title}
                 title={t(item.title)}
-                data-aos='zoom-in-up'
-                data-aos-duration='1000'
+                data-aos="zoom-in-up"
+                data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}
               />
             ))}
           </Steps>
         </div>
-        <div className='mt-3 grid grid-cols-12 gap-6 md:col-span-12'>
-          <div className='col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4'>
+        <div className="mt-3 grid grid-cols-12 gap-6 md:col-span-12">
+          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               t={t}
               next={next}
@@ -393,6 +399,8 @@ function GereeBaiguulakh({ token }) {
               baiguullaga={baiguullaga}
               barilgiinId={barilgiinId}
               gereeniiZagvar={gereeniiZagvar}
+              aktiinZagvarGaralt={aktiinZagvarGaralt}
+              setAktiinZagvarKhuudaslalt={setAktiinZagvarKhuudaslalt}
               gereeniiZagvariinId={gereeniiZagvariinId}
               gereeniiZagvarGaralt={gereeniiZagvarGaralt}
               onChangeGereeniiZagvar={onChangeGereeniiZagvar}
@@ -440,8 +448,8 @@ function GereeBaiguulakh({ token }) {
                 id={gereeniiZagvariinId}
                 showSearch
                 placeholder={t("Гэрээний загвар сонгох")}
-                className='hidden w-full md:block'
-                size='large'
+                className="hidden w-full md:block"
+                size="large"
                 value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}
                 filterOption={(o) => o}
                 onSearch={(search) =>
@@ -457,9 +465,9 @@ function GereeBaiguulakh({ token }) {
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
-                      <div className='flex justify-between'>
+                      <div className="flex justify-between">
                         <p>{mur.ner}</p>
-                        <p className='text-gray-500'>
+                        <p className="text-gray-500">
                           /
                           {mur.turGereeEsekh === true
                             ? t("Түр гэрээ")
@@ -472,13 +480,13 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className='flex w-full justify-center'>
+            <div className="flex w-full justify-center">
               <div
-                className='flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black'
+                className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
                 style={{ width: "210mm" }}>
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
-                    <div className='grid grid-cols-2 gap-4'>
+                    <div className="grid grid-cols-2 gap-4">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: alkhamiinGereeniiZagvar?.zuunTolgoi,
@@ -509,9 +517,9 @@ function GereeBaiguulakh({ token }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className='group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100'>
+                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100">
                       <div
-                        className='w-full'
+                        className="w-full"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                       />
                     </div>

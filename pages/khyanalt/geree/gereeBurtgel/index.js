@@ -19,6 +19,7 @@ import {
   RedoOutlined,
   FileTextOutlined,
   FileOutlined,
+  SnippetsOutlined,
 } from "@ant-design/icons";
 import {
   Table,
@@ -62,11 +63,11 @@ import { useTranslation } from "react-i18next";
 //#endregion
 function GereeSegmentTile({ zasya, token, ...a }) {
   return (
-    <div className='box dark:text-white'>
-      <div className='flex items-center px-5 py-2 shadow-none'>
-        <div className='flex gap-2 border-l-2 border-green-500 pl-4'>
-          <div className='font-medium'>{a.ner}</div>
-          <div className='font-medium text-gray-600 dark:text-gray-300'>
+    <div className="box dark:text-white">
+      <div className="flex items-center px-5 py-2 shadow-none">
+        <div className="flex gap-2 border-l-2 border-green-500 pl-4">
+          <div className="font-medium">{a.ner}</div>
+          <div className="font-medium text-gray-600 dark:text-gray-300">
             ({a.utga})
           </div>
         </div>
@@ -162,10 +163,10 @@ const Tailbar = React.forwardRef(
     }, []);
 
     return (
-      <div className='w-full space-y-2'>
-        <div className='w-full space-y-1 font-medium'>
-          <div className='flex w-full flex-row justify-between'>
-            <div className='text-right'>
+      <div className="w-full space-y-2">
+        <div className="w-full space-y-1 font-medium">
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">
               {t(
                 service === "/gereeSergeeye" ? "Сэргээх огноо" : "Эхлэх огноо"
               )}
@@ -177,8 +178,8 @@ const Tailbar = React.forwardRef(
               <div>{moment(data?.gereeniiOgnoo).format("YYYY-MM-DD")}</div>
             )}
           </div>
-          <div className='flex w-full flex-row justify-between'>
-            <div className='text-right'>{t("Дуусах огноо")}:</div>
+          <div className="flex w-full flex-row justify-between">
+            <div className="text-right">{t("Дуусах огноо")}:</div>
             {service === "/gereeSergeeye" ? (
               <DatePicker value={duusakhOgnoo} onChange={setDuusakhOgnoo} />
             ) : (
@@ -186,23 +187,23 @@ const Tailbar = React.forwardRef(
             )}
           </div>
           {service !== "/gereeSergeeye" && (
-            <div className='flex w-full flex-row justify-between'>
-              <div className='text-right'>{t("Ашигласан хоног")}:</div>
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Ашигласан хоног")}:</div>
               <div>
                 {moment(new Date()).diff(moment(data?.gereeniiOgnoo), "day")}
               </div>
             </div>
           )}
           {service !== "/gereeSergeeye" && (
-            <div className='flex w-full flex-row justify-between'>
-              <div className='text-right'>{t("Авлагын дүн")}:</div>
+            <div className="flex w-full flex-row justify-between">
+              <div className="text-right">{t("Авлагын дүн")}:</div>
               <div>{formatNumber(data?.uldegdel)}</div>
             </div>
           )}
         </div>
 
         <Input.TextArea
-          id='shaltgaanTextArea'
+          id="shaltgaanTextArea"
           value={shaltgaan}
           onChange={({ target }) => setTailbar(target?.value)}
         />
@@ -214,6 +215,7 @@ const Tailbar = React.forwardRef(
 const select = {
   _id: 1,
   gereeniiDugaar: 1,
+  aktiinZagvariinId: 1,
   gereeniiOgnoo: 1,
   turul: 1,
   ovog: 1,
@@ -609,7 +611,7 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "7rem",
         render: () => {
-          return <div className='w-full text-left'>{t("Админ")}</div>;
+          return <div className="w-full text-left">{t("Админ")}</div>;
         },
       },
       {
@@ -678,27 +680,27 @@ function ZakhialgiinKhyanalt() {
           if (segmentuud?.length > 0) {
             return (
               <Popover
-                trigger='hover'
+                trigger="hover"
                 content={
                   <div>
                     <CardList
-                      keyValue='segment'
-                      className='max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2'
+                      keyValue="segment"
+                      className="max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2"
                       jagsaalt={segmentuud}
                       Component={GereeSegmentTile}
                       componentProps={{ token }}
                     />
                   </div>
                 }>
-                <a className=' flex items-center justify-center  hover:scale-150 '>
-                  <ImFileText2 className='text-xl' />
+                <a className=" flex items-center justify-center  hover:scale-150 ">
+                  <ImFileText2 className="text-xl" />
                 </a>
               </Popover>
             );
           } else
             return (
-              <div className=' flex items-center justify-center text-gray-500'>
-                <ImFileEmpty className='text-xl text-gray-500' />
+              <div className=" flex items-center justify-center text-gray-500">
+                <ImFileEmpty className="text-xl text-gray-500" />
               </div>
             );
         },
@@ -728,17 +730,17 @@ function ZakhialgiinKhyanalt() {
           return (
             <div>
               <Popover
-                trigger='hover'
+                trigger="hover"
                 content={
-                  <div className='dark:text-gray-200'>
+                  <div className="dark:text-gray-200">
                     {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
                   </div>
                 }>
-                <a className=' flex items-center justify-center hover:scale-150 dark:invert '>
+                <a className=" flex items-center justify-center hover:scale-150 dark:invert ">
                   <img
-                    src='https://cdn-icons-png.flaticon.com/128/1979/1979288.png'
-                    data-src='https://cdn-icons-png.flaticon.com/128/1979/1979288.png'
-                    alt='Cancel'
+                    src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                    data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
+                    alt="Cancel"
                     width={23}></img>
                 </a>
               </Popover>
@@ -761,23 +763,31 @@ function ZakhialgiinKhyanalt() {
         ellipsis: true,
         width: "2.5rem",
         render: (data) => (
-          <div className='flex flex-row justify-center'>
+          <div className="flex flex-row justify-center">
             <Popover
               onVisibleChange={(visible) =>
                 setGereeniiTokhirgoo(visible === true ? data?._id : null)
               }
               visible={data?._id === gereeniiTokhirgoo}
               content={() => (
-                <div className='flex w-24 flex-col space-y-2'>
+                <div className="flex w-24 flex-col space-y-2">
                   <a
-                    className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
-                    onClick={() => gereeKharya(data)}>
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                    onClick={() => gereeKharya(data, "geree")}>
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
                     <label> {t("Харах")}</label>
                   </a>
+                  {!!data?.aktiinZagvariinId && (
+                    <a
+                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      onClick={() => gereeKharya(data, "akt")}>
+                      <SnippetsOutlined style={{ fontSize: "18px" }} />{" "}
+                      <label> {t("Акт")}</label>
+                    </a>
+                  )}
                   {shuult.utga !== "Цуцласан" && (
                     <a
-                      className='ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         if (
                           ajiltan?.erkh === "Admin" ||
@@ -799,7 +809,7 @@ function ZakhialgiinKhyanalt() {
                   )}
                   {shuult.utga !== "Цуцласан" && (
                     <a
-                      className='ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700'
+                      className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                       onClick={() => gereeSungaya(data)}>
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
                       <label> {t("Сунгах")}</label>
@@ -807,11 +817,11 @@ function ZakhialgiinKhyanalt() {
                   )}
                   {shuult.utga !== "Цуцласан" && (
                     <Popconfirm
-                      title='Цуцлахдаа итгэлтэй байна уу?'
+                      title="Цуцлахдаа итгэлтэй байна уу?"
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
                       onConfirm={() => gereeTsutsalya(data)}>
-                      <a className='ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700'>
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
                         <label> {t("Цуцлах")}</label>
                       </a>
@@ -820,16 +830,16 @@ function ZakhialgiinKhyanalt() {
                   {shuult.utga === "Цуцласан" && (
                     <>
                       <Popconfirm
-                        title='Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?'
+                        title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
                         onConfirm={() => gereeSergeeye(data)}>
-                        <a className='ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700'>
+                        <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                           <RedoOutlined style={{ fontSize: "18px" }} />
                           <label> {t("Сэргээх")}</label>
                         </a>
                       </Popconfirm>
-                      <a className='ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700'>
+                      <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <FileOutlined style={{ fontSize: "18px" }} />
                         <label> {t("Акт")}</label>
                       </a>
@@ -837,9 +847,9 @@ function ZakhialgiinKhyanalt() {
                   )}
                 </div>
               )}
-              placement='bottom'
-              trigger='click'>
-              <a className='flex items-center justify-center rounded-full hover:bg-gray-200'>
+              placement="bottom"
+              trigger="click">
+              <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
             </Popover>
@@ -858,7 +868,7 @@ function ZakhialgiinKhyanalt() {
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type='primary' onClick={() => tailbarRef.current.khadgalya()}>
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
         {t("Цуцлах")}
       </Button>,
     ];
@@ -867,7 +877,7 @@ function ZakhialgiinKhyanalt() {
       icon: <MinusCircleOutlined />,
       content: (
         <Tailbar
-          service='/gereeTsutslaya'
+          service="/gereeTsutslaya"
           ref={tailbarRef}
           data={data}
           token={token}
@@ -882,7 +892,7 @@ function ZakhialgiinKhyanalt() {
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type='primary' onClick={() => tailbarRef.current.khadgalya()}>
+      <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
         {t("Сэргээх")}
       </Button>,
     ];
@@ -892,7 +902,7 @@ function ZakhialgiinKhyanalt() {
       icon: <MinusCircleOutlined />,
       content: (
         <Tailbar
-          service='/gereeSergeeye'
+          service="/gereeSergeeye"
           ref={tailbarRef}
           data={data}
           token={token}
@@ -907,7 +917,7 @@ function ZakhialgiinKhyanalt() {
     setGereeniiTokhirgoo(null);
     const footer = [
       <Button onClick={() => sungaltRef.current.khaaya()}>{t("Хаах")}</Button>,
-      <Button type='primary' onClick={() => sungaltRef.current.khadgalya()}>
+      <Button type="primary" onClick={() => sungaltRef.current.khadgalya()}>
         {t("Сунгах")}
       </Button>,
     ];
@@ -927,75 +937,77 @@ function ZakhialgiinKhyanalt() {
     });
   }
 
-  function gereeKharya(geree) {
+  function gereeKharya(geree, turul) {
     const barilga = baiguullaga.barilguud.find(
       (a) => a._id === geree.barilgiinId
     );
-    readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
-      ({ data }) => {
-        if (!!data) {
-          if (geree.gereeniiOgnoo) {
-            geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
-            geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
-            geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
-            if (geree.khugatsaa > 0) {
-              let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
-                geree.khugatsaa,
-                "M"
-              );
-              geree.duusakhOn = duusakhOgnoo.format("YYYY");
-              geree.duusakhSar = duusakhOgnoo.format("MM");
-              geree.duusakhUdur = duusakhOgnoo.format("DD");
-            }
-          }
-          geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
-          geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
-          geree.gariinUseg = renderToString(
-            <span style={{ position: "absolute" }}>
-              <img
-                src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
-                style={{
-                  width: 100,
-                  height: 50,
-                  transform: "translate(-50%, -30%)",
-                }}
-              />
-            </span>
-          );
-          geree.tamga = renderToString(
-            <span style={{ position: "absolute", zIndex: 1 }}>
-              <img
-                src={`${url}/file?path=tamga/${barilga.tamga}`}
-                style={{
-                  width: 115,
-                  height: 100,
-                  transform: "translate(-10%, -50%)",
-                  opacity: 0.65,
-                }}
-              />
-            </span>
-          );
-
-          for (const [key, value] of Object.entries(geree)) {
-            data.dedKhesguud
-              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-              .map((b) => {
-                b.zaalt = b.zaalt.replace(
-                  new RegExp(`&lt;${key}&gt;`, "g"),
-                  value
-                );
-              });
-            data.baruunTolgoi = data.baruunTolgoi?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
-              value
+    readMethod(
+      turul === "geree" ? "gereeniiZagvar" : "aktiinZagvar",
+      token,
+      turul === "geree" ? geree.gereeniiZagvariinId : geree.aktiinZagvariinId
+    ).then(({ data }) => {
+      if (!!data) {
+        if (geree.gereeniiOgnoo) {
+          geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
+          geree.ekhelkhSar = moment(geree.gereeniiOgnoo).format("MM");
+          geree.ekhlekhUdur = moment(geree.gereeniiOgnoo).format("DD");
+          if (geree.khugatsaa > 0) {
+            let duusakhOgnoo = moment(geree.gereeniiOgnoo).add(
+              geree.khugatsaa,
+              "M"
             );
+            geree.duusakhOn = duusakhOgnoo.format("YYYY");
+            geree.duusakhSar = duusakhOgnoo.format("MM");
+            geree.duusakhUdur = duusakhOgnoo.format("DD");
           }
-          data.geree = geree;
-          setKharuulakhGeree(data);
-          setGereeniiTokhirgoo(null);
         }
+        geree.talbainNegjUneUsgeer = toWords(geree.talbainNegjUne);
+        geree.talbainNiitUneUsgeer = toWords(geree.talbainNiitUne);
+        geree.gariinUseg = renderToString(
+          <span style={{ position: "absolute" }}>
+            <img
+              src={`${url}/file?path=gariinUseg/${barilga.gariinUseg}`}
+              style={{
+                width: 100,
+                height: 50,
+                transform: "translate(-50%, -30%)",
+              }}
+            />
+          </span>
+        );
+        geree.tamga = renderToString(
+          <span style={{ position: "absolute", zIndex: 1 }}>
+            <img
+              src={`${url}/file?path=tamga/${barilga.tamga}`}
+              style={{
+                width: 115,
+                height: 100,
+                transform: "translate(-10%, -50%)",
+                opacity: 0.65,
+              }}
+            />
+          </span>
+        );
+
+        for (const [key, value] of Object.entries(geree)) {
+          data.dedKhesguud
+            .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                value
+              );
+            });
+          data.baruunTolgoi = data.baruunTolgoi?.replace(
+            new RegExp(`&lt;${key}&gt;`, "g"),
+            value
+          );
+        }
+        data.geree = geree;
+        setKharuulakhGeree(data);
+        setGereeniiTokhirgoo(null);
       }
-    );
+    });
   }
 
   function gereeOruulakhExcel() {
@@ -1014,10 +1026,10 @@ function ZakhialgiinKhyanalt() {
           barilgiinId={barilgiinId}
           baiguullaga={baiguullaga}
           onFinish={refresh}
-          zam='gereeniiExcelTatya'
-          garchig='Excel файл аа чирч оруулах эсвэл сонгоно уу'
-          tailbar='Харилцагч загварын excel файл'
-          zagvariinZam='gereeniiExcelAvya'
+          zam="gereeniiExcelTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Харилцагч загварын excel файл"
+          zagvariinZam="gereeniiExcelAvya"
         />
       ),
       footer,
@@ -1041,11 +1053,11 @@ function ZakhialgiinKhyanalt() {
 
   return (
     <Admin
-      khuudasniiNer='gereeBurtgel'
-      title='Гэрээний жагсаалт'
-      className='p-0 md:p-5  '
+      khuudasniiNer="gereeBurtgel"
+      title="Гэрээний жагсаалт"
+      className="p-0 md:p-5  "
       setNeesenEsekh={setNeesenEsekh}
-      tsonkhniiId='61c2c5dc1c2830c4e6f90c6d'
+      tsonkhniiId="61c2c5dc1c2830c4e6f90c6d"
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
@@ -1072,8 +1084,8 @@ function ZakhialgiinKhyanalt() {
           />
         )}
       </Drawer>
-      <Card className='cardgrid col-span-12 '>
-        <div className='hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12'>
+      <Card className="cardgrid col-span-12 ">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
@@ -1084,12 +1096,12 @@ function ZakhialgiinKhyanalt() {
                   mur?.utga === shuult?.utga ? mur.selectedColor : ""
                 }`}
                 onClick={() => setShuult(mur)}
-                data-aos='zoom-in-up'
-                data-aos-duration='1000'
+                data-aos="zoom-in-up"
+                data-aos-duration="1000"
                 data-aos-delay={1 + index + "00"}>
-                <div className='h-full w-[67vw] rounded-xl sm:w-auto'>
-                  <div className='rounded-xl p-3'>
-                    <div className='flex'>
+                <div className="h-full w-[67vw] rounded-xl sm:w-auto">
+                  <div className="rounded-xl p-3">
+                    <div className="flex">
                       <div>
                         <div
                           className={`text-3xl ${
@@ -1099,11 +1111,11 @@ function ZakhialgiinKhyanalt() {
                           } font-bold`}>
                           {mur.too}
                         </div>
-                        <div className='text-base text-gray-500'>
+                        <div className="text-base text-gray-500">
                           {t(mur.utga)}
                         </div>
                       </div>
-                      <div className='ml-auto'>
+                      <div className="ml-auto">
                         <div
                           className={`${
                             mur?.utga === shuult?.utga
@@ -1120,21 +1132,21 @@ function ZakhialgiinKhyanalt() {
             );
           })}
         </div>
-        <div className='mt-5 flex flex-col-reverse gap-5 sm:flex-row'>
+        <div className="mt-5 flex flex-col-reverse gap-5 sm:flex-row">
           <div
-            data-aos='zoom-in-right'
-            data-aos-duration='1000'
-            data-aos-delay='300'>
+            data-aos="zoom-in-right"
+            data-aos-duration="1000"
+            data-aos-delay="300">
             <DatePicker.RangePicker
-              className='w-full sm:w-auto'
+              className="w-full sm:w-auto"
               locale={i18n.language === "mn" && locale}
             />
           </div>
           <div
-            className='ml-auto flex place-content-end'
-            data-aos='zoom-in-left'
-            data-aos-duration='1000'
-            data-aos-delay='300'>
+            className="ml-auto flex place-content-end"
+            data-aos="zoom-in-left"
+            data-aos-duration="1000"
+            data-aos-delay="300">
             <BaganiinSongolt
               shineBagana={shineBagana}
               setShineBagana={setShineBagana}
@@ -1207,7 +1219,7 @@ function ZakhialgiinKhyanalt() {
                   width: "7rem",
                   render: (aldangiinUldegdel) => {
                     return (
-                      <div className='w-full text-right'>
+                      <div className="w-full text-right">
                         {formatNumber(aldangiinUldegdel || 0)}
                       </div>
                     );
@@ -1217,15 +1229,15 @@ function ZakhialgiinKhyanalt() {
             />
             <Popover
               content={() => (
-                <div className='flex w-32 flex-col'>
+                <div className="flex w-32 flex-col">
                   <a
-                    className='flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 '
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={gereeOruulakhExcel}>
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Оруулах")}</label>
                   </a>
                   <a
-                    className='flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 '
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={excelTatakh}>
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
@@ -1233,10 +1245,10 @@ function ZakhialgiinKhyanalt() {
                 </div>
               )}
               style={{ padding: 0 }}
-              placement='bottom'
-              trigger='click'>
+              placement="bottom"
+              trigger="click">
               <Button
-                type='primary'
+                type="primary"
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
                 <span>Excel</span>
                 <DownOutlined width={5} />
@@ -1244,19 +1256,19 @@ function ZakhialgiinKhyanalt() {
             </Popover>
           </div>
         </div>
-        <div className='mt-6 flex gap-5 font-medium'>
-          <div className='flex items-center gap-1'>
+        <div className="mt-6 flex gap-5 font-medium">
+          <div className="flex items-center gap-1">
             {t("Үндсэн гэрээ")} :{" "}
-            <div className='h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400' />
+            <div className="h-3 w-3 rounded-full bg-blue-500 dark:bg-blue-400" />
             (
             {gereeToollolt !== undefined
               ? gereeToollolt?.reduce((a, b) => b.undsenGeree, 0)
               : 0}
             )
           </div>
-          <div className='flex items-center gap-1'>
+          <div className="flex items-center gap-1">
             {t("Түр гэрээ")} :{" "}
-            <div className='h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400' />
+            <div className="h-3 w-3 rounded-full bg-purple-600 dark:bg-purple-400" />
             (
             {gereeToollolt !== undefined
               ? gereeToollolt?.reduce((a, b) => b.turGeree, 0)
@@ -1265,15 +1277,15 @@ function ZakhialgiinKhyanalt() {
           </div>
         </div>
         <div
-          data-aos='fade-left'
-          data-aos-duration='1000'
-          data-aos-delay='300'
-          data-aos-anchor-placement='top-bottom'
-          className='mt-2 hidden  md:block '>
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
+          data-aos-anchor-placement="top-bottom"
+          className="mt-2 hidden  md:block ">
           <Table
             bordered
             scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}
-            size='small'
+            size="small"
             loading={!gereeniiMedeelel}
             rowKey={(row) => row._id}
             onChange={(a, b, c) => {
@@ -1296,8 +1308,8 @@ function ZakhialgiinKhyanalt() {
           />
         </div>
         <CardList
-          keyValue='geree'
-          className='block md:hidden'
+          keyValue="geree"
+          className="block md:hidden"
           jagsaalt={gereeniiMedeelel?.jagsaalt}
           Component={GereeTile}
           neesenEsekh={neesenEsekh}
