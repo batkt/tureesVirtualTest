@@ -63,9 +63,9 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
   }
   return (
     <>
-      <div className='flex flex-row justify-end gap-3 md:ml-44'>
+      <div className="flex flex-row justify-end gap-3 md:ml-44">
         <Form.Item
-          className='w-full pl-2'
+          className="w-full pl-2"
           wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "ner"]}
@@ -80,7 +80,7 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
           </Select>
         </Form.Item>
         <Form.Item
-          className='w-2/4 '
+          className="w-2/4 "
           wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "utga"]}
@@ -94,7 +94,7 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
             ))}
           </Select>
         </Form.Item>
-        <CloseCircleOutlined className='pt-2' onClick={() => remove(name)} />
+        <CloseCircleOutlined className="pt-2" onClick={() => remove(name)} />
       </div>
     </>
   );
@@ -263,8 +263,8 @@ const YurunkhiiMedeele = ({
       ref={formRef}
       form={form}
       autoComplete={"off"}
-      className='-space-y-5 md:space-y-0'
-      name='validate_other'
+      className="-space-y-5 md:space-y-0"
+      name="validate_other"
       {...formItemLayout}
       initialValues={value}
       onValuesChange={(changedValues, values) => {
@@ -272,16 +272,16 @@ const YurunkhiiMedeele = ({
       }}
       onFinish={onFinish}>
       <div
-        data-aos='fade-right'
-        className='mb-5 md:hidden'
-        data-aos-delay='200'>
+        data-aos="fade-right"
+        className="mb-5 md:hidden"
+        data-aos-delay="200">
         <Select
           ref={zagvarRef}
           id={gereeniiZagvariinId}
           showSearch
           placeholder={t("Гэрээний загвар сонгох")}
-          className='w-full '
-          size='middle'
+          className="w-full "
+          size="middle"
           value={gereeniiZagvar?.ner ? gereeniiZagvar?.ner : null}
           filterOption={(o) => o}
           onSearch={(search) =>
@@ -297,9 +297,9 @@ const YurunkhiiMedeele = ({
           {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
             return (
               <Select.Option key={mur._id}>
-                <div className='flex justify-between'>
+                <div className="flex justify-between">
                   <p>{mur.ner}</p>
-                  <p className='text-gray-500'>
+                  <p className="text-gray-500">
                     {mur.turGereeEsekh === true
                       ? `/${t("Түр гэрээ")}/`
                       : `/${t("Үндсэн гэрээ")}/`}
@@ -310,9 +310,9 @@ const YurunkhiiMedeele = ({
           })}
         </Select>
       </div>
-      <div data-aos='fade-right' data-aos-delay='200'>
+      <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item
-          name='gereeniiDugaar'
+          name="gereeniiDugaar"
           rules={[
             {
               required: true,
@@ -329,11 +329,11 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       <div
-        data-aos='fade-right'
-        data-aos-delay='300'
-        className='flex w-full justify-end gap-2 '>
-        <p className='mt-1 dark:text-gray-200'>{t("Байгууллага эсэх")}:</p>
-        <Form.Item name='baiguullagaEsekh' valuePropName='checked'>
+        data-aos="fade-right"
+        data-aos-delay="300"
+        className="flex w-full justify-end gap-2 ">
+        <p className="mt-1 dark:text-gray-200">{t("Байгууллага эсэх")}:</p>
+        <Form.Item name="baiguullagaEsekh" valuePropName="checked">
           <Switch
             onChange={(v) => {
               const khariltsagch = {
@@ -351,9 +351,9 @@ const YurunkhiiMedeele = ({
           />
         </Form.Item>
       </div>
-      <div data-aos='fade-right' data-aos-delay='200'>
+      <div data-aos="fade-right" data-aos-delay="200">
         <Form.Item
-          name='register'
+          name="register"
           label={t("Регистр")}
           rules={[
             {
@@ -376,9 +376,9 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right'>
+        <div data-aos="fade-right">
           <Form.Item
-            name='ner'
+            name="ner"
             label={t("Байгууллага нэр")}
             rules={[
               { required: true, message: t("Байгууллага нэр бүртгэнэ үү!") },
@@ -393,10 +393,10 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='500'>
+        <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
-            name='ovog'
+            name="ovog"
             label={t("Овог")}>
             <Input
               onKeyUp={focuser}
@@ -408,9 +408,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='600'>
+        <div data-aos="fade-right" data-aos-delay="600">
           <Form.Item
-            name='ner'
+            name="ner"
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
             label={t("Нэр")}>
             <Input
@@ -423,9 +423,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='300'>
+        <div data-aos="fade-right" data-aos-delay="300">
           <Form.Item
-            name='zakhirliinOvog'
+            name="zakhirliinOvog"
             label={t("Захирлын овог")}
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}>
             <Input
@@ -438,9 +438,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='400'>
+        <div data-aos="fade-right" data-aos-delay="400">
           <Form.Item
-            name='zakhirliinNer'
+            name="zakhirliinNer"
             label={t("Захирлын нэр")}
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}>
             <Input
@@ -453,9 +453,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='700'>
+        <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item
-            name='utas'
+            name="utas"
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
@@ -470,9 +470,9 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='700'>
+        <div data-aos="fade-right" data-aos-delay="700">
           <Form.Item
-            name='utas'
+            name="utas"
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
@@ -487,11 +487,11 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='800'>
-          <Form.Item name='mail' label={t("И-мэйл хаяг")}>
+        <div data-aos="fade-right" data-aos-delay="800">
+          <Form.Item name="mail" label={t("И-мэйл хаяг")}>
             <Input
               onKeyUp={focuser}
-              type='email'
+              type="email"
               placeholder={t("И-мэйл хаяг")}
               allowClear
               prefix={<MailOutlined />}
@@ -500,14 +500,14 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='800'>
+        <div data-aos="fade-right" data-aos-delay="800">
           <Form.Item
-            name='mail'
+            name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
             label={t("И-мэйл хаяг")}>
             <Input
               onKeyUp={focuser}
-              type='email'
+              type="email"
               placeholder={t("И-мэйл хаяг")}
               allowClear
               prefix={<MailOutlined />}
@@ -515,8 +515,8 @@ const YurunkhiiMedeele = ({
           </Form.Item>
         </div>
       )}
-      <div data-aos='fade-right' data-aos-delay='900'>
-        <Form.List name='segmentuud' className=' '>
+      <div data-aos="fade-right" data-aos-delay="900">
+        <Form.List name="segmentuud" className=" ">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, fieldKey, ...restField }) => (
@@ -531,38 +531,40 @@ const YurunkhiiMedeele = ({
                   />
                 </div>
               ))}
-              <Form.Item className='' wrapperCol={{ offset: 10 }}>
+              <Form.Item className="" wrapperCol={{ offset: 10 }}>
                 <Button
                   icon={<PlusOutlined />}
-                  className='h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  '
-                  type='dashed'
+                  className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                  type="dashed"
                   onClick={() => add()}
                   block>
                   {t("Ялгах утга оруулах")}
                 </Button>
               </Form.Item>
-              <div data-aos='fade-right' data-aos-delay='800'>
-                <Form.Item
-                  name='act'
-                  rules={[
-                    {
-                      required: true,
-                      message: t("Актын загвар сонгоно уу!"),
-                    },
-                  ]}
-                  label={t("Актын загвар сонгох")}>
-                  <Select>
-                    <Select.Option></Select.Option>
-                  </Select>
-                </Form.Item>
-              </div>
+              {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
+                <div data-aos="fade-right" data-aos-delay="800">
+                  <Form.Item
+                    name="act"
+                    rules={[
+                      {
+                        required: true,
+                        message: t("Актын загвар сонгоно уу!"),
+                      },
+                    ]}
+                    label={t("Актын загвар сонгох")}>
+                    <Select>
+                      <Select.Option></Select.Option>
+                    </Select>
+                  </Form.Item>
+                </div>
+              )}
             </>
           )}
         </Form.List>
       </div>
-      <div data-aos='fade-right' data-aos-delay='1000'>
+      <div data-aos="fade-right" data-aos-delay="1000">
         <Form.Item
-          name='dans'
+          name="dans"
           rules={[
             { required: true, message: t("Төлөлт хийх данс бүртгэнэ үү!") },
           ]}
@@ -570,19 +572,19 @@ const YurunkhiiMedeele = ({
           <FormLavlakh
             selectId={"dans"}
             gereeniiZagvariinId={gereeniiZagvariinId}
-            lavlakh='dans'
+            lavlakh="dans"
             token={token}
-            placeholder='Данс'
-            valKey='dugaar'
-            infoKey='dugaar'
+            placeholder="Данс"
+            valKey="dugaar"
+            infoKey="dugaar"
             shuukhTalbaruud={["dugaar", "dansniiNer"]}
             InfoComponent={({ data }) => {
               if (data)
                 return (
-                  <div className='flex flex-row items-center space-x-2 p-1 font-medium dark:text-gray-200'>
+                  <div className="flex flex-row items-center space-x-2 p-1 font-medium dark:text-gray-200">
                     <img
-                      className='h-5 w-5'
-                      alt='logo'
+                      className="h-5 w-5"
+                      alt="logo"
                       src={`/${data?.bank}.png`}
                     />
                     <div>{data?.dansniiNer}</div>
@@ -596,22 +598,22 @@ const YurunkhiiMedeele = ({
         </Form.Item>
       </div>
       {value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='500'>
+        <div data-aos="fade-right" data-aos-delay="500">
           <Form.Item
-            name='gerchilgeeniiZurag'
+            name="gerchilgeeniiZurag"
             label={t("Гэрчилгээний хуулбар")}
-            valuePropName='fileList'
+            valuePropName="fileList"
             getValueFromEvent={normFile}
             extra={t("Гэрчилгээний хуулбар")}>
             <Upload
               multiple={false}
-              name='file'
-              listType='picture'
+              name="file"
+              listType="picture"
               action={`${url}/zuragKhadgalya`}
-              method='POST'
+              method="POST"
               data={{ turul: "gerchilgeeniiZurag" }}
               headers={{ Authorization: `bearer ${token}` }}>
-              <Button className='dark:text-gray-300' icon={<UploadOutlined />}>
+              <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
                 {t("Файл сонгох")}
               </Button>
             </Upload>
@@ -619,43 +621,43 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       {!value.baiguullagaEsekh && (
-        <div data-aos='fade-right' data-aos-delay='1000'>
-          <Form.Item label={t("Хавсаргал")} className='w-full'>
+        <div data-aos="fade-right" data-aos-delay="1000">
+          <Form.Item label={t("Хавсаргал")} className="w-full">
             <Form.Item
-              name='zuvshuurliinZurag'
-              valuePropName='fileList'
+              name="zuvshuurliinZurag"
+              valuePropName="fileList"
               getValueFromEvent={normFile}
               extra={t("Зөвшөөрлийн бичгийн хуулбар")}>
               <Upload
                 multiple={false}
-                name='file'
-                listType='picture'
+                name="file"
+                listType="picture"
                 action={`${url}/zuragKhadgalya`}
-                method='POST'
+                method="POST"
                 data={{ turul: "zuvshuurliinZurag" }}
                 headers={{ Authorization: `bearer ${token}` }}>
                 <Button
-                  className='dark:text-gray-300'
+                  className="dark:text-gray-300"
                   icon={<UploadOutlined />}>
                   {t("Файл сонгох")}
                 </Button>
               </Upload>
             </Form.Item>
             <Form.Item
-              name='unemlekhniiZurag'
-              valuePropName='fileList'
+              name="unemlekhniiZurag"
+              valuePropName="fileList"
               getValueFromEvent={normFile}
               extra={t("Иргэний үнэмлэхний хуулбар")}>
               <Upload
                 multiple={false}
-                name='file'
-                listType='picture'
+                name="file"
+                listType="picture"
                 action={`${url}/zuragKhadgalya`}
-                method='POST'
+                method="POST"
                 data={{ turul: "unemlekhniiZurag" }}
                 headers={{ Authorization: `bearer ${token}` }}>
                 <Button
-                  className='dark:text-gray-300'
+                  className="dark:text-gray-300"
                   icon={<UploadOutlined />}>
                   {t("Файл сонгох")}
                 </Button>
@@ -665,10 +667,10 @@ const YurunkhiiMedeele = ({
         </div>
       )}
       <Form.Item wrapperCol={{ span: 24 }}>
-        <div className='flex w-full justify-end'>
+        <div className="flex w-full justify-end">
           <Button
-            id='gereeniiKhugatsaaButton'
-            type='primary'
+            id="gereeniiKhugatsaaButton"
+            type="primary"
             onClick={(e) => form.submit()}
             icon={<ArrowRightOutlined />}>
             {t("Гэрээний хугацаа")}
