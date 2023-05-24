@@ -48,20 +48,17 @@ function Ajiltan() {
             <div
               className="my-auto"
               data-aos="fade-right"
-              data-aos-duration="1000"
-            >
+              data-aos-duration="1000">
               <img
-                alt="Icewall Tailwind HTML Admin Template"
                 className="-intro-x -mt-16 w-1/2"
                 data-aos="fade-left"
                 data-aos-duration="3000"
-                src="http://icewall-laravel.left4code.com/dist/images/illustration.svg"
+                src="/illustration.svg"
               />
               <div
                 className="-intro-x animate__fadeInLeftBig mt-10 text-4xl font-medium leading-tight text-white"
                 data-aos="fade-right"
-                data-aos-duration="3000"
-              >
+                data-aos-duration="3000">
                 {t("Түрээсийн удирдлагын систем")}
               </div>
             </div>
@@ -77,8 +74,7 @@ function Ajiltan() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter")
                       newterya({ ...form.getFieldsValue(), namaigsana });
-                  }}
-                >
+                  }}>
                   <div data-aos="fade-up" data-aos-delay="500">
                     <Form.Item name="nevtrekhNer">
                       <Input
@@ -89,15 +85,17 @@ function Ajiltan() {
                   </div>
                   <div data-aos="fade" data-aos-delay="300">
                     <Form.Item name="nuutsUg">
-                      <Password placeholder={t("Нууц үг")} className="login-input" />
+                      <Password
+                        placeholder={t("Нууц үг")}
+                        className="login-input"
+                      />
                     </Form.Item>
                   </div>
                 </Form>
                 <div
                   className="intro-x mt-4 flex text-xs text-gray-700 dark:text-gray-600 sm:text-sm"
                   data-aos="fade-down"
-                  data-aos-delay="400"
-                >
+                  data-aos-delay="400">
                   <div className="mr-auto flex items-center">
                     <input
                       id="remember-me"
@@ -107,8 +105,7 @@ function Ajiltan() {
                     />
                     <label
                       className="cursor-pointer select-none"
-                      htmlFor="remember-me"
-                    >
+                      htmlFor="remember-me">
                       {t("Намайг сана")}
                     </label>
                   </div>
@@ -121,15 +118,13 @@ function Ajiltan() {
                   }
                   className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
                   data-aos="fade-down"
-                  data-aos-delay="500"
-                >
+                  data-aos-delay="500">
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                     <svg
                       className="h-5 w-5 text-green-500 group-hover:text-green-400"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
+                      fill="currentColor">
                       <path
                         fillRule="evenodd"
                         d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
@@ -137,27 +132,34 @@ function Ajiltan() {
                       />
                     </svg>
                   </span>
-                 {t("Нэвтрэх")}
+                  {t("Нэвтрэх")}
                 </button>
                 <div className="mt-24 text-center xl:hidden">
-                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("Бүх эрх хуулиар баталгаажсан")}
+                  © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
+                  {t("Бүх эрх хуулиар баталгаажсан")}
                 </div>
               </div>
-            <div className="flex fixed w-10 top-6 right-10 hover:scale-105 transition-all gap-2">
-              {i18n.language === "en" ? (
-                <img
-                  onClick={() => {i18n.changeLanguage("mn"); window.localStorage.setItem('Localelanguage', "mn")}}
-                  className={`object-contain cursor-pointer transition-all w-full`}
-                  src="/MN.png"
-                />
-              ) : (
-                <img
-                  onClick={() => {i18n.changeLanguage("en"); window.localStorage.setItem('Localelanguage', "en")}}
-                  className={`object-contain cursor-pointer transition-all w-full`}
-                  src="/UK.png"
-                />
-              )}
-            </div>
+              <div className="fixed top-6 right-10 flex w-10 gap-2 transition-all hover:scale-105">
+                {i18n.language === "en" ? (
+                  <img
+                    onClick={() => {
+                      i18n.changeLanguage("mn");
+                      window.localStorage.setItem("Localelanguage", "mn");
+                    }}
+                    className={`w-full cursor-pointer object-contain transition-all`}
+                    src="/MN.png"
+                  />
+                ) : (
+                  <img
+                    onClick={() => {
+                      i18n.changeLanguage("en");
+                      window.localStorage.setItem("Localelanguage", "en");
+                    }}
+                    className={`w-full cursor-pointer object-contain transition-all`}
+                    src="/UK.png"
+                  />
+                )}
+              </div>
               <div className="dark-mode-switcher dark:bg-dark-2 fixed bottom-0 right-0 z-50 mb-10 mr-10 flex h-12 w-40 cursor-pointer items-center justify-center rounded-full border bg-white shadow-md dark:bg-gray-900">
                 <div className="mr-4 text-gray-700 dark:text-gray-300">
                   Dark Mode
@@ -168,7 +170,8 @@ function Ajiltan() {
                 />
               </div>
               <div className="fixed bottom-0 hidden xl:block">
-                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}. {t("Бүх эрх хуулиар баталгаажсан")}
+                © Zev-TABS LLC © {moment(new Date()).format("YYYY")}.{" "}
+                {t("Бүх эрх хуулиар баталгаажсан")}
               </div>
             </div>
           </div>
