@@ -273,7 +273,7 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
     .catch(aldaaBarigch);
 }
 
-const khuudasnuud = [
+export const khuudasnuud = [
   {
     ner: "Хяналт",
     khuudasniiNer: "barilgaBurtgel",
