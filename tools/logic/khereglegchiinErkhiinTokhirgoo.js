@@ -243,6 +243,10 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
   uilchilgee(token)
     .post("/erkhiinMedeelelAvya")
     .then(({ data }) => {
+      localStorage.setItem(
+        "baiguulgiinErkhiinJagsaalt",
+        JSON.stringify(data?.moduluud)
+      );
       var AdminErkhShalgakh = data?.moduluud?.find(
         (b) => b.zam === "/khyanalt/barilgaBurtgel"
       );
@@ -250,7 +254,6 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
         return data?.moduluud?.find((b) => b.zam === element);
       });
       if (ajiltan?.erkh === "Admin") {
-        console.log("AdminErkhShalgakh", AdminErkhShalgakh);
         if (AdminErkhShalgakh !== undefined) {
           message.success(t("Тавтай морил"));
           window.location.href = "/khyanalt/barilgaBurtgel";
@@ -846,22 +849,20 @@ const khuudasnuud = [
   },
 ];
 
-function useErkh(ajiltan, token) {
-  const { khuudasniiJagsaalt } = useKhuudasniiJagsaalt(token);
-  console.log("khuudasniiJagsaalt", khuudasniiJagsaalt);
+function useErkh(ajiltan, baiguulgiinErkhiinJagsaalt) {
   if (!ajiltan) return [];
   var erkhteiTsonkhnuud = khuudasnuud.filter((a) => {
     if (a.href === "/khyanalt/daalgavar/admin") {
       a.href = "/khyanalt/daalgavar";
     }
-    return khuudasniiJagsaalt?.moduluud?.find(
+    return baiguulgiinErkhiinJagsaalt?.find(
       (b) => b.zam === a.href || (a.sub && a.sub?.find((c) => c.href === b.zam))
     );
   });
   erkhteiTsonkhnuud.forEach((a) => {
     if (a.sub && a.sub.length > 0) {
       a.sub = a.sub.filter((d) =>
-        khuudasniiJagsaalt.moduluud.find((e) => e.zam === d.href)
+        baiguulgiinErkhiinJagsaalt.find((e) => e.zam === d.href)
       );
     }
   });

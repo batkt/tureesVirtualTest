@@ -36,6 +36,9 @@ export const useBarilga = () => {
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const { ajiltan, ajiltanMutate } = useAjiltan(token);
+  const [baiguulgiinErkhiinJagsaalt, setBaiguulgiinErkhiinJagsaalt] = useState(
+    []
+  );
   const { baiguullaga, baiguullagaMutate } = useBaiguullaga(
     token,
     ajiltan?.baiguullagiinId
@@ -56,6 +59,8 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const t = parseCookies();
     setToken(t?.tureestoken);
+    var erkh = localStorage.getItem("baiguulgiinErkhiinJagsaalt");
+    setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
 
     window.addEventListener("online", () =>
       message.success(t("Интернэт ертөнцөд тавтай морил"))
@@ -92,23 +97,36 @@ export const AuthProvider = ({ children }) => {
           .then(({ data, status }) => {
             if (status === 200) {
               if (!!data) {
-                if (
-                  data.result.erkh !== "Admin" &&
-                  data.result.tsonkhniiErkhuud.length < 1
-                ) {
-                  return message.error(
-                    t("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна")
-                  );
-                }
-                setCookie(null, "tureestoken", data.token, {
-                  maxAge: 30 * 24 * 60 * 60,
-                  path: "/",
-                });
-                setToken(data.token);
-                ajiltanMutate(data.result);
-                data?.result?.barilguud?.length > 0 &&
-                  barilgaSoliyo(data.result.barilguud[0]);
-                ekhniiTsonkhruuOchyo(data.result, data.token);
+                uilchilgee(data.token)
+                  .post("/erkhiinMedeelelAvya")
+                  .then((res) => {
+                    if (res.data && res.data?.moduluud?.length > 0) {
+                      if (
+                        data.result.erkh !== "Admin" &&
+                        data.result.tsonkhniiErkhuud.length < 1
+                      ) {
+                        return message.error(
+                          t("Хэрэглэгчийн эрхийн тохиргоо хийгдээгүй байна")
+                        );
+                      }
+                      setCookie(null, "tureestoken", data.token, {
+                        maxAge: 30 * 24 * 60 * 60,
+                        path: "/",
+                      });
+                      setToken(data.token);
+                      ajiltanMutate(data.result);
+                      data?.result?.barilguud?.length > 0 &&
+                        barilgaSoliyo(data.result.barilguud[0]);
+                      ekhniiTsonkhruuOchyo(
+                        data.result,
+                        data.token,
+                        setBaiguulgiinErkhiinJagsaalt
+                      );
+                    } else
+                      message.error(
+                        t("Байгууллагын эрхийн тохиргоо хийгдээгүй байна")
+                      );
+                  });
               } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
             } else message.error(t("Хэрэглэгчийн мэдээлэл буруу байна"));
           })
@@ -125,8 +143,9 @@ export const AuthProvider = ({ children }) => {
       setToken,
       barilgaSoliyo,
       barilgiinId,
+      baiguulgiinErkhiinJagsaalt,
     }),
-    [token, ajiltan, baiguullaga, barilgiinId]
+    [token, ajiltan, baiguullaga, barilgiinId, baiguulgiinErkhiinJagsaalt]
   );
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;

@@ -27,6 +27,7 @@ function Ajiltan() {
   const { newterya } = useAuth();
 
   useEffect(async () => {
+    localStorage.removeItem("baiguulgiinErkhiinJagsaalt");
     const nevtrekhNer = await localStorage.getItem("newtrekhNerTurees");
     form.setFieldsValue({ nevtrekhNer });
   }, []);
