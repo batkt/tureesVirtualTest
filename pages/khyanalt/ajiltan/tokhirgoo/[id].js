@@ -31,7 +31,7 @@ function index({ token, data }) {
     if (khuudasniiJagsaalt?.moduluud) {
       setBolomjitToonuud(
         khuudasniiJagsaalt?.moduluud?.map((a) => {
-          return { zam: a.zam, bolomjit: a.bolomjit };
+          return { zam: a.zam, bolomjit: a.bolomjit - (a.odoogiin || 0) };
         })
       );
     }
@@ -188,18 +188,15 @@ function index({ token, data }) {
           <div className="flex w-1/2 space-x-2">
             <Checkbox
               checked={
-                !khuudasniiJagsaalt?.moduluud
-
-                  ?.filter((a) => !a.nuuya)
-                  .find((mur) => {
-                    return !targetKeys?.find((a) => a === mur.zam);
-                  })
+                !khuudasniiJagsaalt?.moduluud.find((mur) => {
+                  return !targetKeys?.find((a) => a === mur.zam);
+                })
               }
               onChange={(e) => {
                 setTargetKeys(
                   e.target.checked
                     ? khuudasniiJagsaalt?.moduluud
-                        ?.filter((a) => !a.nuuya)
+                        ?.filter((a) => a.bolomjit - (a.odoogiin || 0) > 0)
                         .map((a) => a.zam)
                     : []
                 );
@@ -208,7 +205,8 @@ function index({ token, data }) {
                     ? khuudasniiJagsaalt?.moduluud
                         ?.filter(
                           (a) =>
-                            !data?.tsonkhniiErkhuud?.find((b) => b === a.zam)
+                            !data?.tsonkhniiErkhuud?.find((b) => b === a.zam) &&
+                            a.bolomjit - (a.odoogiin || 0) > 0
                         )
                         .map((a) => {
                           return { zam: a.zam, too: 1 };
@@ -258,7 +256,7 @@ function index({ token, data }) {
                           <Checkbox
                             disabled={
                               !targetKeys?.find((a) => a === mur.href) &&
-                              mur?.bolomjit === 0
+                              mur?.bolomjit < 1
                             }
                             checked={!!targetKeys?.find((a) => a === mur.href)}
                             onChange={(e) => {
@@ -344,7 +342,7 @@ function index({ token, data }) {
                                 <Checkbox
                                   disabled={
                                     !targetKeys?.find((b) => b === a.href) &&
-                                    a?.bolomjit === 0
+                                    a?.bolomjit < 1
                                   }
                                   checked={
                                     !!targetKeys?.find((b) => b === a.href)
