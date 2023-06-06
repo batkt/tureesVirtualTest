@@ -203,7 +203,6 @@ function Tulbur(
   useEffect(() => {
     if (khuleegdejBuiQpay) {
       socket().on(`qpay${khuleegdejBuiQpay}`, (qpay) => {
-        console.log(`qpay${khuleegdejBuiQpay}`, qpay);
         setSongogdsonTulburiinKhelber();
         setQpayerTulukh("Tulugdsun");
         message.success("Qpay Амжилттай төлөгдлөө");
@@ -300,7 +299,6 @@ function Tulbur(
       }
     }
   }
-
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
@@ -439,7 +437,10 @@ function Tulbur(
                     {t("НӨАТ-гүй дүн")}
                   </td>
                   <td className="border text-right">
-                    {formatNumber(data.niitDun / 1.1, 2)}
+                    {formatNumber(
+                      (data?.dutuuDun ? data.dutuuDun : data.niitDun) / 1.1,
+                      2
+                    )}
                   </td>
                 </tr>
                 {data?.khungulukhKhuvi && (
