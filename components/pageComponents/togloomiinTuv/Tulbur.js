@@ -437,19 +437,28 @@ function Tulbur(
                     {t("НӨАТ-гүй дүн")}
                   </td>
                   <td className="border text-right">
-                    {formatNumber(
-                      (data?.dutuuDun ? data.dutuuDun : data.niitDun) / 1.1,
-                      2
-                    )}
+                    {khungulukhEsekh === true
+                      ? formatNumber(
+                          (data?.dutuuDun
+                            ? data?.dutuuDun - khunglult.khungulukhDun
+                            : data.niitDun - khunglult.khungulukhDun) / 1.1,
+                          2
+                        )
+                      : formatNumber(
+                          (data?.dutuuDun ? data.dutuuDun : data.niitDun) / 1.1,
+                          2
+                        )}
                   </td>
                 </tr>
-                {data?.khungulukhKhuvi && (
+                {khungulukhEsekh === true && (
                   <tr>
                     <td colSpan={5} className="border text-right">
                       {t("Хөнгөлөлт")}
                     </td>
                     <td className="border text-right">
-                      {formatNumber(data.niitUndsenDun - data.niitDun)}
+                      {data?.dutuuDun
+                        ? formatNumber(khunglult.khungulukhDun)
+                        : formatNumber(data.niitUndsenDun - data.niitDun)}
                     </td>
                   </tr>
                 )}
