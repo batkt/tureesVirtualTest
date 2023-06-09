@@ -414,7 +414,7 @@ function camera({ token }) {
       align: "center",
       dataIndex: "createdAt",
       render: (data) => {
-        return moment(data).format("MM/DD hh:mm:ss");
+        return moment(data).format("MM/DD HH:MM");
       },
     },
     {
