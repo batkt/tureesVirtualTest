@@ -49,6 +49,7 @@ import Tulbur from "../../../components/pageComponents/togloomiinTuv/Tulbur";
 import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import { excelTatajAvya } from "./index";
+import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 
 function generateChild(mur) {
   if (mur?.length > 0)
@@ -138,6 +139,7 @@ function camera({ token }) {
   // console.log('jagsaalt---------', jagsaalt);
   function onRefresh() {
     uilchluulegchMutate();
+    dansniiKhuulgaMutate();
   }
   useEffect(() => {
     Aos.init({ once: true });
@@ -147,7 +149,43 @@ function camera({ token }) {
     const aa = generateChild(jagsaalt);
     setCameraData(aa);
   }, [jagsaalt]);
+  const dansQuery = useMemo(() => {
+      return{"amount":{"$gt":0}}
+  }, [ognoo]);
+  const dasniiMedeelel = {
+    baiguullagiinId:baiguullaga?._id,
+    bank: "khanbank",
+    barilgiinId:barilgiinId,
+    corporateAshiglakhEsekh: true,
+    corporateNevtrekhNer: "0CAhOZ85wlmRzrPAkBycQFeTBnewDX7O",
+    corporateNuutsUg: "Rv1eLukuzQirNgD3",
+    createdAt: "2022-01-27T06:27:31.111Z",
+    dansniiNer: "Их Наяд Плаза ХХК",
+    dugaar: "5129057717",
+    updatedAt: "2022-12-29T03:50:29.941Z",
+    valyut: "MNT",
+    __v: 0,
+    _id: "61f23b53d75a1b62d86f2987"
+  };
 
+  const {
+    dansniiKhuulgaGaralt,
+    setDansniiKhuulgaKhuudaslalt,
+    dansniiKhuulgaMutate,
+  } = useDansKhuulga(
+      token,
+      baiguullaga?._id,
+      dasniiMedeelel,
+      {
+        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        // $gte: moment().startOf("month"),
+        // $lte: moment(Date.now()).format("YYYY/MM/DD hh:mm:ss"),
+      },
+      { createdAt: -1 },
+      dansQuery
+  );
+  // console.log('-----------dansniiKhuulgaGaralt', dansniiKhuulgaGaralt);
   const columns = useMemo(() => {
     const col = [
       {
@@ -366,93 +404,39 @@ function camera({ token }) {
     ];
   }, [turul, i18n.language]);
 
-  const dataSource = [
-    /*{
-      key: "1",
-      ognoo: "2023-05-11 09:37",
-      utga: "Гүйлгээний утга",
-      dun: 4500,
-    },
-    {
-      key: "2",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХаанБанк",
-      dun: 3000,
-    },
-    {
-      key: "3",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХасБанк",
-      dun: 1500,
-    },
-    {
-      key: "4",
-      ognoo: "2023-05-11 09:37",
-      utga: "Бэлэн",
-      dun: 5500,
-    },
-    {
-      key: "5",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХаанБанк",
-      dun: 2000,
-    },
-    {
-      key: "6",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХаанБанк",
-      dun: 3000,
-    },
-    {
-      key: "7",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХаанБанк",
-      dun: 3000,
-    },
-    {
-      key: "8",
-      ognoo: "2023-05-11 09:37",
-      utga: "ХасБанк",
-      dun: 1500,
-    },
-    {
-      key: "9",
-      ognoo: "2023-05-11 09:37",
-      utga: "Бэлэн",
-      dun: 5500,
-    },*/
-  ];
-
   const baganuud = [
     {
       title: "№",
       width: "2.5rem",
       align: "center",
-      dataIndex: "key",
-      key: "dugaar",
+      dataIndex: "description",
+      render: (v,index, key) => (key + 1)
     },
     {
       title: "Огноо",
-      width: "8rem",
+      width: "6rem",
       align: "center",
-      dataIndex: "ognoo",
-      key: "ognoo",
+      dataIndex: "createdAt",
+      render: (data) => {
+        return moment(data).format("MM/DD hh:mm:ss");
+      },
     },
     {
       title: "Утга",
-      width: "8rem",
+      width: "10rem",
       align: "center",
-      dataIndex: "utga",
-      key: "utga",
+      dataIndex: "description",
+      render: (v) => {
+        return <div className="text-left">{v}</div>;
+      },
     },
     {
       title: "Дүн",
       width: "4rem",
-      dataIndex: "dun",
+      dataIndex: "amount",
       align: "center",
-      key: "dun",
       render(v) {
-        return v && formatNumber(v, 0);
+        return v && <div className="text-right">{formatNumber(v, 0)} ₮</div>;
       },
     },
   ];
@@ -726,7 +710,7 @@ function camera({ token }) {
                 className="mt-3 overflow-auto"
                 scroll={{ y: "calc(100vh / 3.5)" }}
                 size="small"
-                dataSource={dataSource}
+                dataSource={dansniiKhuulgaGaralt?.jagsaalt}
                 columns={baganuud}
               />
             </div>

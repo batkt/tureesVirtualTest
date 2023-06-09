@@ -214,7 +214,7 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
     )
 }
 
-function Khaalga({ name, fieldKey, restField, fields, remove }) {
+function Khaalga({ name, fieldKey, restField, remove }) {
     // console.log('11111111', name, 'fieldKey: ',fieldKey, 'restField ', restField, 'fields ', fields);
     const { t } = useTranslation();
     return (
