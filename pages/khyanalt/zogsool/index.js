@@ -54,7 +54,6 @@ export function excelTatajAvya(
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
     })
     .then(({ data }) => {
-      console.log("-----------1-------sheetName", sheet);
       // console.log('-----------1-------jagsaalt', data?.jagsaalt);
       const { Excel } = require("antd-table-saveas-excel");
       const excel = new Excel();

@@ -1,10 +1,11 @@
-import React, { useImperativeHandle} from 'react'
+import React, {useEffect, useImperativeHandle, useState} from 'react'
 import {Form, Select, Input, Button, notification, Modal, InputNumber, Divider, Space} from 'antd'
 import {CloseCircleOutlined, MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import createMethod from 'tools/function/crud/createMethod';
 import updateMethod from 'tools/function/crud/updateMethod';
 import {aldaaBarigch, url} from 'services/uilchilgee';
 import { useTranslation } from 'react-i18next';
+import axios from "axios";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
@@ -215,6 +216,15 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
 }
 
 function Khaalga({ name, fieldKey, restField, remove }) {
+    const [cameraIps, setCameraIps] = useState(["192.168.1.200","192.168.1.201","192.168.1.202"]);
+    useEffect(()=>{
+        axios.get("http://localhost:5000/api/jagsaaltAvya").then(function (response) {
+            if(!!response)
+                setCameraIps(response);
+        }).catch(function (error) {
+            console.log('ERROR: /api/jagsaaltAvya', error);
+        });
+    },[]);
     // console.log('11111111', name, 'fieldKey: ',fieldKey, 'restField ', restField, 'fields ', fields);
     const { t } = useTranslation();
     return (
@@ -261,7 +271,12 @@ function Khaalga({ name, fieldKey, restField, remove }) {
                                     fieldKey={[talbar.key, "cameraIP"]}
                                     className="w-full m-0"
                                 >
-                                    <Input placeholder="Камер IP" />
+                                    <Select style={{ width: "100%" }} placeholder={t("Камер IP")}>
+                                        {
+                                            cameraIps?.map((mur)=>(
+                                            <Select.Option value={mur}>{mur}</Select.Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                                 <MinusCircleOutlined className="ml-2" onClick={() => remove(talbar.name)} />
                             </div>

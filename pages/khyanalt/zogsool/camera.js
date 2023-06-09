@@ -56,7 +56,7 @@ function generateChild(mur) {
     return mur?.map((a) => ({
       value: !!a?.ner ? a.ner : a.cameraIP,
       title: !!a?.ner ? (
-        a.ner
+        a.ner + (a?.turul ? (' / '+a?.turul) : '')
       ) : (
         <b className="text-green-400 hover:text-green-800">
           Камер-{a.cameraIP}
@@ -167,7 +167,6 @@ function camera({ token }) {
     __v: 0,
     _id: "61f23b53d75a1b62d86f2987"
   };
-
   const {
     dansniiKhuulgaGaralt,
     setDansniiKhuulgaKhuudaslalt,
@@ -176,16 +175,13 @@ function camera({ token }) {
       token,
       baiguullaga?._id,
       dasniiMedeelel,
-      {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        // $gte: moment().startOf("month"),
-        // $lte: moment(Date.now()).format("YYYY/MM/DD hh:mm:ss"),
-      },
+      [
+        moment().subtract(30, "days").format("YYYY-MM-DD 00:00:00"),
+        moment().format("YYYY-MM-DD 23:59:59"),
+      ],
       { createdAt: -1 },
       dansQuery
   );
-  // console.log('-----------dansniiKhuulgaGaralt', dansniiKhuulgaGaralt);
   const columns = useMemo(() => {
     const col = [
       {
@@ -427,7 +423,11 @@ function camera({ token }) {
       align: "center",
       dataIndex: "description",
       render: (v) => {
-        return <div className="text-left">{v}</div>;
+        return <Tooltip
+            placement="top"
+            title={v}>
+          <div className="text-left truncate">{v}</div>
+        </Tooltip>;
       },
     },
     {
@@ -580,14 +580,14 @@ function camera({ token }) {
                     type="primary">
                     Нээх
                   </Button>
-                  <Button
+                  {/*<Button
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
                     className="w-full sm:w-auto"
                     type="primary">
                     Хаах
-                  </Button>
+                  </Button>*/}
                 </div>
                 <TreeSelect
                   onClick={(e) => {
@@ -658,14 +658,14 @@ function camera({ token }) {
                     type="primary">
                     Нээх
                   </Button>
-                  <Button
+                  {/*<Button
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
                     className="w-full sm:w-auto"
                     type="primary">
                     Хаах
-                  </Button>
+                  </Button>*/}
                 </div>
                 <TreeSelect
                   onClick={(e) => {
