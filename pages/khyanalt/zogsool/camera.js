@@ -120,7 +120,7 @@ function camera({ token }) {
   const query = useMemo(() => {
     if (jagsaalt?.length > 0)
       //зогсоолын id.р хайдаг болгох
-      return {
+      /*return {
         "tuukh.tsagiinTuukh.garsanTsag": ognoo
           ? {
               $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -129,7 +129,8 @@ function camera({ token }) {
           : undefined,
         // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
         // turul: turul === "Үйлчлүүлэгч" ? null : turul,
-      };
+      };*/
+      return {};
   }, [ognoo, jagsaalt]);
   const {
     uilchluulegchGaralt,
