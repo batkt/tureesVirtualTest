@@ -50,6 +50,7 @@ import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import { excelTatajAvya } from "./index";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
+import axios from "axios";
 
 function generateChild(mur) {
   if (mur?.length > 0)
@@ -488,6 +489,14 @@ function camera({ token }) {
     });
     return aa;
   };
+  const khaalgaNeey = () => {
+    axios.get("http://localhost:5000/api/neeye").then(function (response) {
+      if(!!response)
+        console.log('/api/neeye', response);
+    }).catch(function (error) {
+      console.log('ERROR: /api/jagsaaltAvya', error);
+    })
+  };
 
   function tulburTulyu(data) {
     modal({
@@ -578,7 +587,7 @@ function camera({ token }) {
                 <div className="flex gap-3">
                   <Button
                     onClick={(e) => {
-                      e.stopPropagation();
+                      khaalgaNeey();
                     }}
                     className="w-full sm:w-auto"
                     type="primary">
