@@ -137,7 +137,7 @@ function camera({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query);
+  } = useUilchluulegch(token, baiguullaga?._id, query, { createdAt: -1 });
   console.log('jagsaalt---------', uilchluulegchGaralt);
   function onRefresh() {
     uilchluulegchMutate();
@@ -722,7 +722,7 @@ function camera({ token }) {
               <Table
                 pagination={false}
                 className="mt-3 overflow-auto"
-                scroll={{ y: "calc(100vh / 3.5)" }}
+                scroll={{ y: "calc(100vh / 4.5)" }}
                 size="small"
                 dataSource={dansniiKhuulgaGaralt?.jagsaalt}
                 columns={baganuud}
