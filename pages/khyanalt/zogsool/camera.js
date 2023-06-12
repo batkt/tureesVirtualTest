@@ -136,7 +136,7 @@ function camera({ token }) {
     uilchluulegchMutate,
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query);
-  // console.log('jagsaalt---------', jagsaalt);
+  console.log('jagsaalt---------', uilchluulegchGaralt);
   function onRefresh() {
     uilchluulegchMutate();
     dansniiKhuulgaMutate();
@@ -261,7 +261,11 @@ function camera({ token }) {
         sorter: () => 0,
         dataIndex: "tuukh",
         render(v) {
-          return v && formatNumber(v[0]?.tulukhDun, 0);
+          const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
+          const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
+          const diff = d2.diff(d1, "minutes");
+          const res = v[0]?.undsenUne * diff;
+          return v && formatNumber(res, 0);
         },
       },
       {
@@ -271,7 +275,7 @@ function camera({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v) => {
-          return v && <div>{t(`${v[0]?.tulburTulsunKhelber}`)}</div>;
+          return v && <div>{v[0]?.tulburTulsunKhelber}</div>;
         },
       },
       {
