@@ -201,6 +201,7 @@ function Tulbur(
         .post("/zogsooliinTulburTulye", { tulbur, id: data._id })
         .then((res)=>{
           data.tuluv = 1;
+          data.tulburTulsunKhelber = tulbur[0].turul;
           updateMethod("zogsoolUilchluulegch", token, {_id: uilchluugchiinId, tuukh: [{...data}]}).then(callback).catch(aldaaBarigch);
         })
         .catch(aldaaBarigch);
