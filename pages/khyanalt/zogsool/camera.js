@@ -275,7 +275,7 @@ function camera({token}) {
           const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
           const diff = d2.diff(d1, "minutes");
-          return diff && diff;
+          return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa+'-' : (diff && diff);
         },
       },
       {
@@ -519,7 +519,7 @@ function camera({token}) {
     return aa;
   };
   const khaalgaNeey = () => {
-    axios.get("http://localhost:5000/api/neeye").then(function (response) {
+    axios.get('http://localhost:5000/api/neeye/'+camerVal+'').then(function (response) {
       if(!!response)
         console.log('/api/neeye', response);
     }).catch(function (error) {
