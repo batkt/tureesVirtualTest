@@ -84,7 +84,7 @@ function camera({token}) {
   const [turul, setTurul] = useState(undefined);
   const [songosonMashin, setSongosonMashin] = useState(undefined);
   const tulburRef = React.useRef(null);
-  const { order, onChangeTable } = useOrder({ garsanTsag: -1 });
+  const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const [modalOpen, setModalOpen] = useState({
     bool: false,
     item: null,
@@ -136,7 +136,7 @@ function camera({token}) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, { createdAt: -1 });
+  } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   // console.log('uilchluulegchGaralt---------', uilchluulegchGaralt);
   function onRefresh() {
     uilchluulegchMutate();
@@ -261,6 +261,7 @@ function camera({token}) {
           const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
+        sortDirections: ['ascend', 'descend', 'ascend'],
       },
       {
         title: t("Гарсан"),
@@ -273,6 +274,7 @@ function camera({token}) {
           const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
+        sortDirections: ['ascend', 'descend', 'ascend'],
       },
       {
         title: t("Хугацаа/мин"),
@@ -285,7 +287,7 @@ function camera({token}) {
           const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
           const diff = d2.diff(d1, "minutes");
-          return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa+'-' : (diff && diff);
+          return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa : (diff && diff);
         },
       },
       {
