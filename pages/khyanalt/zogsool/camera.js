@@ -51,6 +51,7 @@ import updateMethod from "../../../tools/function/crud/updateMethod";
 import { excelTatajAvya } from "./index";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import axios from "axios";
+import{ aldaaBarigch, socket } from "services/uilchilgee";
 
 function generateChild(mur) {
   if (mur?.length > 0)
@@ -149,6 +150,15 @@ function camera({token}) {
     const aa = generateChild(jagsaalt);
     setCameraData(aa);
   }, [jagsaalt]);
+  useEffect(() => {
+    socket().on(`zogsool`, (zogsool) => {
+      onRefresh();
+      console.log(zogsool)
+    });
+    return () => {
+      socket().off(`zogsool`);
+    };
+  }, []);
 
   const dansQuery = useMemo(() => {
       return{"amount":{"$gt":0}}
