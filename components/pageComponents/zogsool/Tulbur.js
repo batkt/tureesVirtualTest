@@ -4,21 +4,22 @@ import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
-import KhuvaajTulukh from "./KhuvaajTulukh";
-import EBarimt from "./EBarimt";
+import KhuvaajTulukh from "../togloomiinTuv/KhuvaajTulukh";
+import EBarimt from "../togloomiinTuv/EBarimt";
 import QRCode from "react-qr-code";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
 import { useQRCode } from "next-qrcode";
+import updateMethod from "../../../tools/function/crud/updateMethod";
 //#endregion
 const { confirm } = Modal;
 function Tulbur(
-  { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
+  { destroy, data, token, ajiltan, baiguullaga, barilgiinId, uilchluugchiinId, onRefresh },
   ref
 ) {
-  console.log('----data11-----', data);
+  // console.log('----data-----', ajiltan);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     data?.tulburTulsunEsekh === true ? 2 : 1
@@ -58,7 +59,9 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        if (
+        onRefresh();
+        destroy();
+        /*if (
           (!data?.dutuuDun &&
             JSON.stringify(data?.tulbur) !== JSON.stringify(tulbur)) ||
           (!!data?.dutuuDun && tulbur.reduce((a, b) => a + b.dun, 0) !== 0)
@@ -76,7 +79,7 @@ function Tulbur(
         } else {
           onRefresh();
           destroy();
-        }
+        }*/
       },
     }),
     [tulbur]
@@ -137,7 +140,7 @@ function Tulbur(
       });
       setTulbur(tulbur);
     } else if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) ===
       tulbur.reduce((a, b) => a + b.dun, 0)
     )
       setAlkham(2);
@@ -152,7 +155,7 @@ function Tulbur(
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
     setTulbur([...tulbur]);
     if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) ===
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       guilgeeniiTuukhKhadgalya(tulbur, () => {
@@ -183,20 +186,23 @@ function Tulbur(
     }
 
     if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) ===
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       tulbur.forEach((a) => {
         a.ognoo = new Date();
-        (a.baiguullagiinId = baiguullaga?._id),
-          (a.barilgiinId = barilgiinId),
-          (a.burtgesenAjiltan = ajiltan._id),
-          (a.burtgesenAjiltaniiNer = ajiltan.ner),
-          (a.togloominId = data._id);
+        (a.baiguullagiinId = baiguullaga?._id);
+          (a.barilgiinId = barilgiinId);
+          (a.burtgesenAjiltan = ajiltan._id);
+          (a.burtgesenAjiltaniiNer = ajiltan.ner);
+          (a.zogsooliinId = data._id);
       });
       uilchilgee(token)
-        .post("/togloomiinTulburTulye", { tulbur, id: data._id })
-        .then(callback)
+        .post("/zogsooliinTulburTulye", { tulbur, id: data._id })
+        .then((res)=>{
+          data.tuluv = 1;
+          updateMethod("zogsoolUilchluulegch", token, {_id: uilchluugchiinId, tuukh: [{...data}]}).then(callback).catch(aldaaBarigch);
+        })
         .catch(aldaaBarigch);
     } else callback();
   }
@@ -241,7 +247,7 @@ function Tulbur(
   function batalgaajuulaltKhiiya() {
     setLoading(true);
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
-    if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
+    /*if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
       axios
         .post(
           "http://127.0.0.1:27028",
@@ -277,15 +283,16 @@ function Tulbur(
       setTerminal(true);
     } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
       !qpayerTulukh ? qpayAvakh() : setLoading(false);
-    } else {
+    } else {*/
       guilgeeniiTuukhKhadgalya(
         tulbur,
-        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
+        (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) ===
           tulbur.reduce((a, b) => a + b.dun, 0)
           ? () => {
-              setAlkham(2);
+              // setAlkham(2);
               setLoading(false);
               onRefresh();
+              ref.current.khaaya();
             }
           : () => {
               setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
@@ -298,7 +305,7 @@ function Tulbur(
       if (tuluv === 2) {
         setSongogdsonBank();
       }
-    }
+    // }
   }
   useEffect(() => {
     function keyUp(e) {
@@ -442,11 +449,11 @@ function Tulbur(
                       ? formatNumber(
                           (data?.dutuuDun
                             ? data?.dutuuDun - khunglult.khungulukhDun
-                            : data.niitDun - khunglult.khungulukhDun) / 1.1,
+                            : data.tulukhDun - khunglult.khungulukhDun) / 1.1,
                           2
                         )
                       : formatNumber(
-                          (data?.dutuuDun ? data.dutuuDun : data.niitDun) / 1.1,
+                          (data?.dutuuDun ? data.dutuuDun : data.tulukhDun) / 1.1,
                           2
                         )}
                   </td>
@@ -459,7 +466,7 @@ function Tulbur(
                     <td className="border text-right">
                       {data?.dutuuDun
                         ? formatNumber(khunglult.khungulukhDun)
-                        : formatNumber(data.niitUndsenDun - data.niitDun)}
+                        : formatNumber(data.niitUndsenDun - data.tulukhDun)}
                     </td>
                   </tr>
                 )}
@@ -604,7 +611,7 @@ function Tulbur(
             </div>
             <div className="table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200">
               {formatNumber(
-                (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+                (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
                   tulbur.reduce((a, b) => a + b.dun, 0) || 0
               )}{" "}
               ₮

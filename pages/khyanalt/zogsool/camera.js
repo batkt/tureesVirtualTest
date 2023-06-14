@@ -45,7 +45,7 @@ import { useTranslation } from "react-i18next";
 import useUilchluulegch from "../../../hooks/useUilchluulegch";
 import useJagsaalt from "../../../hooks/useJagsaalt";
 import { modal } from "../../../components/ant/Modal";
-import Tulbur from "../../../components/pageComponents/togloomiinTuv/Tulbur";
+import Tulbur from "../../../components/pageComponents/zogsool/Tulbur";
 import _ from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import { excelTatajAvya } from "./index";
@@ -73,7 +73,7 @@ function generateChild(mur) {
  * дотороо зогсоолтой тохиолдолд өөрчилнө
  * */
 
-function camera({ token }) {
+function camera({token}) {
   const { t, i18n } = useTranslation();
   const { baiguullaga, ajiltan, barilgiinId } = useAuth();
   const [ognoo, setOgnoo] = useState([
@@ -108,7 +108,6 @@ function camera({ token }) {
                 .catch(aldaaBarigch)
     );
   */
-
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
@@ -120,7 +119,7 @@ function camera({ token }) {
   const query = useMemo(() => {
     if (jagsaalt?.length > 0)
       //зогсоолын id.р хайдаг болгох
-      /*return {
+      return {
         "tuukh.tsagiinTuukh.garsanTsag": ognoo
           ? {
               $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
@@ -129,8 +128,7 @@ function camera({ token }) {
           : undefined,
         // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
         // turul: turul === "Үйлчлүүлэгч" ? null : turul,
-      };*/
-      return {};
+      };
   }, [ognoo, jagsaalt]);
   const {
     uilchluulegchGaralt,
@@ -138,7 +136,7 @@ function camera({ token }) {
     uilchluulegchMutate,
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, { createdAt: -1 });
-  console.log('jagsaalt---------', uilchluulegchGaralt);
+  // console.log('uilchluulegchGaralt---------', uilchluulegchGaralt);
   function onRefresh() {
     uilchluulegchMutate();
     dansniiKhuulgaMutate();
@@ -151,9 +149,11 @@ function camera({ token }) {
     const aa = generateChild(jagsaalt);
     setCameraData(aa);
   }, [jagsaalt]);
+
   const dansQuery = useMemo(() => {
       return{"amount":{"$gt":0}}
   }, [ognoo]);
+
   const dasniiMedeelel = {
     baiguullagiinId:baiguullaga?._id,
     bank: "khanbank",
@@ -184,6 +184,37 @@ function camera({ token }) {
       { createdAt: -1 },
       dansQuery
   );
+  function tulburTulyu(data, uilchluugchiinId) {
+    // console.log('----------', data, ' - ',uilchluugchiinId);
+    modal({
+      title: (
+          <div className="flex w-full flex-row justify-between">
+            <div>{t("Тооцоо хийх")}</div>
+            <div className="flex items-center">
+              {data?.ovog?.charAt(0)}.{data?.ner}
+              <div
+                  className="ml-5 text-xl hover:text-red-400"
+                  onClick={() => tulburRef.current.khaaya()}>
+                <CloseCircleOutlined />
+              </div>
+            </div>
+          </div>
+      ),
+      content: (
+          <Tulbur
+              ref={tulburRef}
+              data={_.cloneDeep(data)}
+              token={token}
+              baiguullaga={baiguullaga}
+              barilgiinId={barilgiinId}
+              ajiltan={ajiltan}
+              uilchluugchiinId={uilchluugchiinId}
+              onRefresh={onRefresh}
+          />
+      ),
+      footer: false,
+    });
+  }
   const columns = useMemo(() => {
     const col = [
       {
@@ -263,12 +294,9 @@ function camera({ token }) {
         sorter: () => 0,
         dataIndex: "tuukh",
         render(v) {
-          const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-          const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
-          const diff = d2.diff(d1, "minutes");
-          const res = v[0]?.undsenUne * diff;
-          return v && formatNumber(res, 0);
+          return v && formatNumber(v[0]?.tulukhDun, 0);
         },
+        summary: true,
       },
       {
         title: t("Хэлбэр"),
@@ -297,7 +325,7 @@ function camera({ token }) {
                 <div className="flex w-24 flex-col space-y-2">
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => tulburTulyu(v[0])}>
+                    onClick={() => tulburTulyu(v[0], parent._id)}>
                     <WalletOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Төлөх")}</label>
                   </a>
@@ -342,8 +370,8 @@ function camera({ token }) {
                 </div>
               </div>
             </Tooltip>
-          ) : v[0]?.ebarimtAvsanEsekh ? (
-            <div className="flex items-center  justify-center space-x-2 text-white">
+          ) : /*v[0]?.ebarimtAvsanEsekh ?*/ (
+            <div className="flex items-center bg-lime-500 rounded justify-center space-x-2 text-white">
               <div className="flex items-center justify-center">
                 <CheckCircleOutlined />
               </div>
@@ -351,7 +379,7 @@ function camera({ token }) {
                 {t("Төлөгдсөн")}
               </div>
             </div>
-          ) : (
+          ) /*: (
             <Button
               style={{
                 display: "flex",
@@ -360,7 +388,7 @@ function camera({ token }) {
                 backgroundColor: "#253985",
               }}
               size="small"
-              onClick={() => tulburTulyu(v[0])}>
+              onClick={() => tulburTulyu(v[0], parent._id)}>
               <div className="flex items-center  justify-center space-x-2 text-white ">
                 <div className="flex items-center justify-center">
                   <PaperClipOutlined />
@@ -370,7 +398,7 @@ function camera({ token }) {
                 </div>
               </div>
             </Button>
-          );
+          )*/;
         },
       },
       {
@@ -404,7 +432,7 @@ function camera({ token }) {
         ),
       },
     ];
-  }, [turul, i18n.language]);
+  }, [turul, i18n.language, ajiltan, baiguullaga, barilgiinId]);
 
   const baganuud = [
     {
@@ -495,39 +523,9 @@ function camera({ token }) {
       if(!!response)
         console.log('/api/neeye', response);
     }).catch(function (error) {
-      console.log('ERROR: /api/jagsaaltAvya', error);
+      console.log('ERROR: /api/neeye', error);
     })
   };
-
-  function tulburTulyu(data) {
-    modal({
-      title: (
-        <div className="flex w-full flex-row justify-between">
-          <div>{t("Тооцоо хийх")}</div>
-          <div className="flex items-center">
-            {data?.ovog?.charAt(0)}.{data?.ner}
-            <div
-              className="ml-5 text-xl hover:text-red-400"
-              onClick={() => tulburRef.current.khaaya()}>
-              <CloseCircleOutlined />
-            </div>
-          </div>
-        </div>
-      ),
-      content: (
-        <Tulbur
-          ref={tulburRef}
-          data={_.cloneDeep(data)}
-          token={token}
-          baiguullaga={baiguullaga}
-          barilgiinId={barilgiinId}
-          ajiltan={ajiltan}
-          onRefresh={onRefresh}
-        />
-      ),
-      footer: false,
-    });
-  }
 
   return (
     <Admin
@@ -755,11 +753,11 @@ function camera({ token }) {
                   value={ognoo}
                   onChange={setOgnoo}
                 />
-                <div className="flex space-x-2 p-1 pt-2 text-base font-medium">
+                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
                   {t("Зогсоолын орлого")} :{" "}
                   {
                     formatNumber(
-                      356700
+                      85700
                     ) /*{formatNumber(zogsooliinMedeelel?.data)}*/
                   }
                   ₮
@@ -868,6 +866,15 @@ function camera({ token }) {
                       khuudasniiDugaar,
                       khuudasniiKhemjee,
                     })),
+                }}
+                summary={(pageData)=>{
+                  let totalBorrow = 0;
+                  // console.log('mur-0--1-', pageData);
+                  pageData.map((mur)=>{
+                    // console.log('mur-0--1-', mur);
+                    // if(mur.summary === true)
+                      // console.log('mur-0--', mur);
+                  })
                 }}
               />
               <CardList

@@ -110,12 +110,12 @@ function KhuvaajTulukh({
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
     if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) <
+      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) <
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       var iluu =
         tulbur.reduce((a, b) => a + b.dun, 0) -
-        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun);
+        (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun);
       if (index !== -1) tulbur[index] = { turul: k, dun: v - iluu };
       else tulbur.push({ turul: k, dun: v - iluu });
       document.getElementById("TogloomiinTuvTulburTovch").focus();
@@ -169,7 +169,7 @@ function KhuvaajTulukh({
 
   function onDoubleClick(e) {
     const tulukhDun =
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
       tulbur
         .filter((a) => a.turul !== e.target.name)
         .reduce((a, b) => a + b.dun, 0);
@@ -396,7 +396,7 @@ function KhuvaajTulukh({
                         <InputNumber
                           disabled={
                             !value.khunglukh &&
-                            ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
+                            ((data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
                               tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                           }
                           autoComplete="off"
@@ -482,7 +482,7 @@ function KhuvaajTulukh({
                         placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdsonBusadTurul.talbar] &&
-                          (data?.niitDun -
+                          (data?.tulukhDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                         }
                         autoComplete="off"
@@ -572,7 +572,7 @@ function KhuvaajTulukh({
                       placeholder="Мөнгөн дүн"
                       disabled={
                         !value[songogdsonBank.talbar] &&
-                        (data?.niitDun -
+                        (data?.tulukhDun -
                           tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                       }
                       autoComplete="off"
@@ -669,7 +669,7 @@ function KhuvaajTulukh({
                         placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdTulburiinKhelber.ner] &&
-                          ((data?.niitDun -
+                          ((data?.tulukhDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
                             !!qpayerTulukh)
                         }
