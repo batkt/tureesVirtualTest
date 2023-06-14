@@ -91,7 +91,7 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
                             </Form.Item>
                         </div>
                         <div className="border-l-2 border-green-500 pl-4 col-span-2">
-                            <div className="font-medium">{t("Үндсэн тариф /₮/")}</div>
+                            <div className="font-medium">{t("Үндсэн тариф /30мин ₮/")}</div>
                         </div>
                         <div className="col-span-2">
                             <Form.Item
@@ -216,7 +216,7 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
 }
 
 function Khaalga({ name, fieldKey, restField, remove }) {
-    const [cameraIps, setCameraIps] = useState(["192.168.1.200","192.168.1.201","192.168.1.202"]);
+    const [cameraIps, setCameraIps] = useState(["192.168.1.200","192.168.1.201","192.168.1.202","192.168.1.203","192.168.1.204","192.168.1.205"]);
     useEffect(()=>{
         axios.get("http://localhost:5000/api/jagsaaltAvya").then(function (response) {
             if(!!response)
