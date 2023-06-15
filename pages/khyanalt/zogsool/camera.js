@@ -3,36 +3,37 @@ import Admin from "components/Admin";
 import React, { useState, useMemo } from "react";
 import { useAuth } from "services/auth";
 import {
-  Button,
-  Card,
-  DatePicker,
-  Input,
-  Popover,
-  Space,
-  Table,
-  Radio,
-  Modal,
-  TreeSelect,
-  message,
-  Tooltip,
-  Drawer,
+    Button,
+    Card,
+    DatePicker,
+    Input,
+    Popover,
+    Space,
+    Table,
+    Radio,
+    Modal,
+    TreeSelect,
+    Tree,
+    message,
+    Tooltip,
+    Drawer,
 } from "antd";
 import {
-  StarOutlined,
-  CameraOutlined,
-  WalletOutlined,
-  SettingOutlined,
-  ExclamationCircleOutlined,
-  MoreOutlined,
-  CloseCircleOutlined,
-  DollarCircleOutlined,
-  PaperClipOutlined,
-  CheckCircleOutlined,
-  DownloadOutlined,
-  FileExcelOutlined,
-  DownOutlined,
-  EyeOutlined,
-  CloseOutlined,
+    StarOutlined,
+    CameraOutlined,
+    WalletOutlined,
+    SettingOutlined,
+    ExclamationCircleOutlined,
+    MoreOutlined,
+    CloseCircleOutlined,
+    DollarCircleOutlined,
+    PaperClipOutlined,
+    CheckCircleOutlined,
+    DownloadOutlined,
+    FileExcelOutlined,
+    DownOutlined,
+    EyeOutlined,
+    CloseOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -52,22 +53,51 @@ import { excelTatajAvya } from "./index";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import axios from "axios";
 import{ aldaaBarigch, socket } from "services/uilchilgee";
+import useSWR from "swr";
+import uilchilgee from "../../../services/uilchilgee";
 
 function generateChild(mur) {
-  if (mur?.length > 0)
-    return mur?.map((a) => ({
-      value: !!a?.ner ? a.ner : a.cameraIP,
-      title: !!a?.ner ? (
-        a.ner + (a?.turul ? (' / '+a?.turul) : '')
-      ) : (
-        <b className="text-green-400 hover:text-green-800">
-          Камер-{a.cameraIP}
-        </b>
-      ),
-      children: generateChild(!!a?.khaalga ? a.khaalga : a.camera),
-    }));
-  return [];
+    if (mur?.length > 0)
+        return mur?.map((a) => ({
+            value: !!a?.ner ? a.ner : a.cameraIP,
+            title: !!a?.ner ? (
+                a.ner + (a?.turul ? (' / '+a?.turul) : '')
+            ) : (
+                <b key={a.cameraIP} className="text-green-400 hover:text-green-800">
+                    Камер-{a.cameraIP}
+                </b>
+            ),
+            children: generateChild(!!a?.khaalga ? a.khaalga : a.camera),
+            disabled: false,
+            disableCheckbox: true,
+            selectable: !a?.ner,
+            checkable: !a?.ner
+        }));
+    return [];
 }
+/*const TreeComponent = ()=>{
+    const { TreeNode } = Tree;
+
+    const TreeComponent = ({ hierarchy }) => {
+        const renderTreeNodes = data =>
+            data.map(item => {
+                if (item.children) {
+                    return (
+                        <TreeNode title={item.title} key={item.key} dataRef={item}>
+                            {renderTreeNodes(item.children)}
+                        </TreeNode>
+                    )
+                }
+                return <TreeNode key={item.key} {...item} />
+            })
+
+        return (
+            <Tree>
+                {renderTreeNodes(hierarchy)}
+            </Tree>
+        )
+    }
+}*/
 
 /**
  * Эхний байдлаар зөвхөн 1 зогсоол дээр төлбөр тооцхоор шийдлээ
@@ -75,323 +105,338 @@ function generateChild(mur) {
  * */
 
 function camera({token}) {
-  const { t, i18n } = useTranslation();
-  const { baiguullaga, ajiltan, barilgiinId } = useAuth();
-  const [ognoo, setOgnoo] = useState([
-    moment().startOf("month"),
-    moment().endOf("month"),
-  ]);
-  const [turul, setTurul] = useState(undefined);
-  const [songosonMashin, setSongosonMashin] = useState(undefined);
-  const tulburRef = React.useRef(null);
-  const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
-  const [modalOpen, setModalOpen] = useState({
-    bool: false,
-    item: null,
-    type: "",
-  });
-  const [value, setValue] = useState(null);
-  const [camerVal, setCamerVal] = useState(null);
-  const [cameraData, setCameraData] = useState(null);
-  const [cameraKharakh, setCamerKharakh] = useState(false);
-  const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  /*
-    const zogsooliinMedeelel = useSWR(
-        ["/zogsooliinDunAvya", token, ognoo],
-        (url, token, ognoo) =>
-            uilchilgee(token)
-                .post(url, {
-                  ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                  duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                })
-                .then((a) => a.data)
-                .catch(aldaaBarigch)
+    const { t, i18n } = useTranslation();
+    const { baiguullaga, ajiltan, barilgiinId } = useAuth();
+    const [ognoo, setOgnoo] = useState([
+        moment().startOf("month"),
+        moment().endOf("month"),
+    ]);
+    const [turul, setTurul] = useState(undefined);
+    const [songosonMashin, setSongosonMashin] = useState(undefined);
+    const tulburRef = React.useRef(null);
+    const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
+    const [modalOpen, setModalOpen] = useState({
+        bool: false,
+        item: null,
+        type: "",
+    });
+    const [value, setValue] = useState(null);
+    const [camerVal, setCamerVal] = useState(null);
+    const [cameraData, setCameraData] = useState(null);
+    const [cameraKharakh, setCamerKharakh] = useState(false);
+    const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [orlogo, setOrlogo] = useState([]);
+
+    const que = useMemo(() => {
+        return {
+            baiguullagiinId: baiguullaga?._id,
+            "khaalga.ajiltnuud.id": ajiltan?._id,
+        };
+    }, [baiguullaga?._id, ajiltan]);
+    const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
+
+    const query = useMemo(() => {
+        if (jagsaalt?.length > 0)
+        //зогсоолын id.р хайдаг болгох
+            return {
+                "tuukh.tsagiinTuukh.garsanTsag": ognoo
+                    ? {
+                        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                    }
+                    : undefined,
+                // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
+                // turul: turul === "Үйлчлүүлэгч" ? null : turul,
+            };
+    }, [ognoo, jagsaalt]);
+    const orlogoQuery = useMemo(() => {
+        if (jagsaalt?.length > 0){
+            //зогсоолын id.р хайдаг болгох
+            return {
+                baiguullagiinId: baiguullaga?._id,
+                // barilgiinId: barilgiinId,
+                zogsooliinId: jagsaalt[0]?._id,
+                ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            };
+        }
+    }, [ognoo, jagsaalt]);
+
+    const dansQuery = useMemo(() => {
+        return{"amount":{"$gt":0}}
+    }, [ognoo]);
+
+    useEffect(() => {
+        Aos.init({ once: true });
+    });
+
+    useEffect(() => {
+        const aa = generateChild(jagsaalt);
+        setCameraData(aa);
+        // console.log('orlogoQuery----- ', orlogoQuery);
+        uilchilgee(token)
+            .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
+            .then((a) => {
+                setOrlogo(a.data);
+            })
+            .catch(aldaaBarigch);
+    }, [jagsaalt]);
+    useEffect(() => {
+        socket().on(`zogsool`, (zogsool) => {
+            onRefresh();
+            console.log(zogsool)
+        });
+        return () => {
+            socket().off(`zogsool`);
+        };
+    }, []);
+
+    const {
+        uilchluulegchGaralt,
+        setUilchluulegchKhuudaslalt,
+        uilchluulegchMutate,
+        isValidating,
+    } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.tsagiinTuukh.garsanTsag":-1});
+
+    // console.log('zogsooliinOrlogo----- ', orlogo);
+    // console.log('zogsooliinorlogoQuery----- ', orlogoQuery);
+    // console.log('cameraData----- ', uilchluulegchGaralt);
+
+    const dasniiMedeelel = {
+        baiguullagiinId:baiguullaga?._id,
+        bank: "khanbank",
+        barilgiinId:barilgiinId,
+        corporateAshiglakhEsekh: true,
+        corporateNevtrekhNer: "0CAhOZ85wlmRzrPAkBycQFeTBnewDX7O",
+        corporateNuutsUg: "Rv1eLukuzQirNgD3",
+        createdAt: "2022-01-27T06:27:31.111Z",
+        dansniiNer: "Их Наяд Плаза ХХК",
+        dugaar: "5129057717",
+        updatedAt: "2022-12-29T03:50:29.941Z",
+        valyut: "MNT",
+        __v: 0,
+        _id: "61f23b53d75a1b62d86f2987"
+    };
+    const {
+        dansniiKhuulgaGaralt,
+        setDansniiKhuulgaKhuudaslalt,
+        dansniiKhuulgaMutate,
+    } = useDansKhuulga(
+        token,
+        baiguullaga?._id,
+        dasniiMedeelel,
+        [
+            moment().subtract(30, "days").format("YYYY-MM-DD 00:00:00"),
+            moment().format("YYYY-MM-DD 23:59:59"),
+        ],
+        { createdAt: -1 },
+        dansQuery
     );
-  */
-  const que = useMemo(() => {
-    return {
-      baiguullagiinId: baiguullaga?._id,
-      "khaalga.ajiltnuud.id": ajiltan?._id,
-    };
-  }, [baiguullaga?._id, ajiltan]);
-  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
-  const query = useMemo(() => {
-    if (jagsaalt?.length > 0)
-      //зогсоолын id.р хайдаг болгох
-      return {
-        "tuukh.tsagiinTuukh.garsanTsag": ognoo
-          ? {
-              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-            }
-          : undefined,
-        // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
-        // turul: turul === "Үйлчлүүлэгч" ? null : turul,
-      };
-  }, [ognoo, jagsaalt]);
-  const {
-    uilchluulegchGaralt,
-    setUilchluulegchKhuudaslalt,
-    uilchluulegchMutate,
-    isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.tsagiinTuukh.garsanTsag":-1});
-  // console.log('uilchluulegchGaralt---------', uilchluulegchGaralt);
-  function onRefresh() {
-    uilchluulegchMutate();
-    dansniiKhuulgaMutate();
-  }
-  useEffect(() => {
-    Aos.init({ once: true });
-  });
+    function onRefresh() {
+        uilchluulegchMutate();
+        dansniiKhuulgaMutate();
+    }
 
-  useEffect(() => {
-    const aa = generateChild(jagsaalt);
-    setCameraData(aa);
-  }, [jagsaalt]);
-  useEffect(() => {
-    socket().on(`zogsool`, (zogsool) => {
-      onRefresh();
-      console.log(zogsool)
-    });
-    return () => {
-      socket().off(`zogsool`);
-    };
-  }, []);
-
-  const dansQuery = useMemo(() => {
-      return{"amount":{"$gt":0}}
-  }, [ognoo]);
-
-  const dasniiMedeelel = {
-    baiguullagiinId:baiguullaga?._id,
-    bank: "khanbank",
-    barilgiinId:barilgiinId,
-    corporateAshiglakhEsekh: true,
-    corporateNevtrekhNer: "0CAhOZ85wlmRzrPAkBycQFeTBnewDX7O",
-    corporateNuutsUg: "Rv1eLukuzQirNgD3",
-    createdAt: "2022-01-27T06:27:31.111Z",
-    dansniiNer: "Их Наяд Плаза ХХК",
-    dugaar: "5129057717",
-    updatedAt: "2022-12-29T03:50:29.941Z",
-    valyut: "MNT",
-    __v: 0,
-    _id: "61f23b53d75a1b62d86f2987"
-  };
-  const {
-    dansniiKhuulgaGaralt,
-    setDansniiKhuulgaKhuudaslalt,
-    dansniiKhuulgaMutate,
-  } = useDansKhuulga(
-      token,
-      baiguullaga?._id,
-      dasniiMedeelel,
-      [
-        moment().subtract(30, "days").format("YYYY-MM-DD 00:00:00"),
-        moment().format("YYYY-MM-DD 23:59:59"),
-      ],
-      { createdAt: -1 },
-      dansQuery
-  );
-  function tulburTulyu(data, uilchluugchiinId) {
-    // console.log('----------', data, ' - ',uilchluugchiinId);
-    modal({
-      title: (
-          <div className="flex w-full flex-row justify-between">
-            <div>{t("Тооцоо хийх")}</div>
-            <div className="flex items-center">
-              {data?.ovog?.charAt(0)}.{data?.ner}
-              <div
-                  className="ml-5 text-xl hover:text-red-400"
-                  onClick={() => tulburRef.current.khaaya()}>
-                <CloseCircleOutlined />
-              </div>
-            </div>
-          </div>
-      ),
-      content: (
-          <Tulbur
-              ref={tulburRef}
-              data={_.cloneDeep(data)}
-              token={token}
-              baiguullaga={baiguullaga}
-              barilgiinId={barilgiinId}
-              ajiltan={ajiltan}
-              uilchluugchiinId={uilchluugchiinId}
-              onRefresh={onRefresh}
-          />
-      ),
-      footer: false,
-    });
-  }
-  const columns = useMemo(() => {
-    const col = [
-      {
-        title: "№",
-        align: "center",
-        dataIndex: "dugaar",
-        width: "2rem",
-        render: (text, record, index) =>
-          (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-            (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
-          (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
-          index +
-          1,
-      },
-      {
-        title: t("Дугаар"),
-        align: "center",
-        width: "10rem",
-        dataIndex: "mashiniiDugaar",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-    ];
-    return [
-      ...col,
-      {
-        title: t("Орсон"),
-        align: "center",
-        width: "10rem",
-        dataIndex: "tuukh",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render(v) {
-          const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
-          return d && moment(d).format("YYYY-MM-DD HH:mm");
-        },
-        sortDirections: ['ascend', 'descend', 'ascend'],
-      },
-      {
-        title: t("Гарсан"),
-        align: "center",
-        width: "10rem",
-        dataIndex: "tuukh",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        render(v) {
-          const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
-          return d && moment(d).format("YYYY-MM-DD HH:mm");
-        },
-        sortDirections: ['ascend', 'descend', 'ascend'],
-      },
-      {
-        title: t("Хугацаа/мин"),
-        align: "center",
-        width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "tuukh",
-        render(v) {
-          const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-          const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
-          const diff = d2.diff(d1, "minutes");
-          return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa : (diff && diff);
-        },
-      },
-      {
-        title: t("Төрөл"),
-        align: "center",
-        width: "10rem",
-        dataIndex: "turul",
-        showSorterTooltip: false,
-        sorter: () => 0,
-      },
-      {
-        title: t("Дүн"),
-        align: "right",
-        width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "tuukh",
-        render(v) {
-          return v && formatNumber(v[0]?.tulukhDun, 0);
-        },
-        summary: true,
-      },
-      {
-        title: t("Хэлбэр"),
-        align: "center",
-        dataIndex: "tuukh",
-        width: "7rem",
-        showSorterTooltip: false,
-        render: (v) => {
-          return v && <div>{v[0]?.tulburTulsunKhelber}</div>;
-        },
-      },
-      {
-        title: t("Төлөв"),
-        align: "center",
-        width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
-        dataIndex: "tuukh",
-        render(v, parent) {
-          // v[0].tuluv === 0 ?
-          return v[0]?.tuluv === 0 ? (
-            <Popover
-              placement="bottom"
-              trigger="hover"
-              content={() => (
-                <div className="flex w-24 flex-col space-y-2">
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => tulburTulyu(v[0], parent._id)}>
-                    <WalletOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Төлөх")}</label>
-                  </a>
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() =>
-                      setModalOpen({ bool: true, item: parent, type: "unegui" })
-                    }>
-                    <StarOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Үнэгүй")}</label>
-                  </a>
+    function tulburTulyu(data, uilchluugchiinId) {
+        // console.log('----------', data, ' - ',uilchluugchiinId);
+        modal({
+            title: (
+                <div className="flex w-full flex-row justify-between">
+                    <div>{t("Тооцоо хийх")}</div>
+                    <div className="flex items-center">
+                        {data?.ovog?.charAt(0)}.{data?.ner}
+                        <div
+                            className="ml-5 text-xl hover:text-red-400"
+                            onClick={() => tulburRef.current.khaaya()}>
+                            <CloseCircleOutlined />
+                        </div>
+                    </div>
                 </div>
-              )}>
-              <Button
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#FF8505",
-                }}
-                size="small">
-                <div className="flex items-center  justify-center space-x-2 text-white">
-                  <div className="flex items-center justify-center">
-                    <DollarCircleOutlined />
-                  </div>
-                  <div className="flex items-center justify-center">
-                    {t("Төлбөр")}
-                  </div>
-                </div>
-              </Button>
-            </Popover>
-          ) : v[0]?.tuluv < 0 ? (
-            <Tooltip
-              placement="top"
-              title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-                <div className="flex items-center justify-center">
-                  <CheckCircleOutlined />
-                </div>
-                <div className="flex items-center justify-center">
-                  {t("Үнэгүй")}
-                </div>
-              </div>
-            </Tooltip>
-          ) : /*v[0]?.ebarimtAvsanEsekh ?*/ (
-            <div className="flex items-center bg-lime-500 rounded justify-center space-x-2 text-white">
-              <div className="flex items-center justify-center">
-                <CheckCircleOutlined />
-              </div>
-              <div className="flex items-center justify-center">
-                {t("Төлөгдсөн")}
-              </div>
-            </div>
-          ) /*: (
+            ),
+            content: (
+                <Tulbur
+                    ref={tulburRef}
+                    data={_.cloneDeep(data)}
+                    token={token}
+                    baiguullaga={baiguullaga}
+                    barilgiinId={barilgiinId}
+                    ajiltan={ajiltan}
+                    uilchluugchiinId={uilchluugchiinId}
+                    onRefresh={onRefresh}
+                />
+            ),
+            footer: false,
+        });
+    }
+    const columns = useMemo(() => {
+        const col = [
+            {
+                title: "№",
+                align: "center",
+                dataIndex: "dugaar",
+                width: "2rem",
+                render: (text, record, index) =>
+                    (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
+                    (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
+                    (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
+                    index +
+                    1,
+            },
+            {
+                title: t("Дугаар"),
+                align: "center",
+                width: "10rem",
+                dataIndex: "mashiniiDugaar",
+                showSorterTooltip: false,
+                sorter: () => 0,
+            },
+        ];
+        return [
+            ...col,
+            {
+                title: t("Орсон"),
+                align: "center",
+                width: "10rem",
+                dataIndex: "tuukh",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                render(v) {
+                    const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
+                    return d && moment(d).format("YYYY-MM-DD HH:mm");
+                },
+                sortDirections: ['ascend', 'descend', 'ascend'],
+            },
+            {
+                title: t("Гарсан"),
+                align: "center",
+                width: "10rem",
+                dataIndex: "tuukh",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                render(v) {
+                    const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
+                    return d && moment(d).format("YYYY-MM-DD HH:mm");
+                },
+                sortDirections: ['ascend', 'descend', 'ascend'],
+            },
+            {
+                title: t("Хугацаа/мин"),
+                align: "center",
+                width: "10rem",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                dataIndex: "tuukh",
+                render(v) {
+                    const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
+                    const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
+                    const diff = d2.diff(d1, "minutes");
+                    return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa : (diff && diff);
+                },
+            },
+            {
+                title: t("Төрөл"),
+                align: "center",
+                width: "10rem",
+                dataIndex: "turul",
+                showSorterTooltip: false,
+                sorter: () => 0,
+            },
+            {
+                title: t("Дүн"),
+                align: "right",
+                width: "10rem",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                dataIndex: "tuukh",
+                render(v) {
+                    return v && formatNumber(v[0]?.tulukhDun, 0);
+                },
+                summary: true,
+            },
+            {
+                title: t("Хэлбэр"),
+                align: "center",
+                dataIndex: "tuukh",
+                width: "7rem",
+                showSorterTooltip: false,
+                render: (v) => {
+                    return v && <div>{v[0]?.tulburTulsunKhelber}</div>;
+                },
+            },
+            {
+                title: t("Төлөв"),
+                align: "center",
+                width: "10rem",
+                showSorterTooltip: false,
+                sorter: () => 0,
+                dataIndex: "tuukh",
+                render(v, parent) {
+                    // v[0].tuluv === 0 ?
+                    return v[0]?.tuluv === 0 ? (
+                        <Popover
+                            placement="bottom"
+                            trigger="hover"
+                            content={() => (
+                                <div className="flex w-24 flex-col space-y-2">
+                                    <a
+                                        className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                                        onClick={() => tulburTulyu(v[0], parent._id)}>
+                                        <WalletOutlined style={{ fontSize: "18px" }} />
+                                        <label>{t("Төлөх")}</label>
+                                    </a>
+                                    <a
+                                        className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                                        onClick={() =>
+                                            setModalOpen({ bool: true, item: parent, type: "unegui" })
+                                        }>
+                                        <StarOutlined style={{ fontSize: "18px" }} />
+                                        <label>{t("Үнэгүй")}</label>
+                                    </a>
+                                </div>
+                            )}>
+                            <Button
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    backgroundColor: "#FF8505",
+                                }}
+                                size="small">
+                                <div className="flex items-center  justify-center space-x-2 text-white">
+                                    <div className="flex items-center justify-center">
+                                        <DollarCircleOutlined />
+                                    </div>
+                                    <div className="flex items-center justify-center">
+                                        {t("Төлбөр")}
+                                    </div>
+                                </div>
+                            </Button>
+                        </Popover>
+                    ) : v[0]?.tuluv < 0 ? (
+                        <Tooltip
+                            placement="top"
+                            title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
+                            <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                                <div className="flex items-center justify-center">
+                                    <CheckCircleOutlined />
+                                </div>
+                                <div className="flex items-center justify-center">
+                                    {t("Үнэгүй")}
+                                </div>
+                            </div>
+                        </Tooltip>
+                    ) : /*v[0]?.ebarimtAvsanEsekh ?*/ (
+                        <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
+                            <div className="flex items-center justify-center">
+                                <CheckCircleOutlined />
+                            </div>
+                            <div className="flex items-center justify-center">
+                                {t("Төлөгдсөн")}
+                            </div>
+                        </div>
+                    ) /*: (
             <Button
               style={{
                 display: "flex",
@@ -411,548 +456,549 @@ function camera({token}) {
               </div>
             </Button>
           )*/;
-        },
-      },
-      {
-        title: () => <SettingOutlined />,
-        width: "2rem",
-        align: "center",
-        render: (data) => (
-          <div className="flex flex-row">
-            <Popover
-              placement="bottom"
-              trigger="hover"
-              content={() => (
-                <div className="space-y-2">
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() =>
-                      setModalOpen({ bool: true, item: data, type: "zurchil" })
-                    }>
-                    <ExclamationCircleOutlined
-                      style={{ fontSize: "18px", marginRight: "3px" }}
-                    />
-                    <div>{t("Зөрчил нэмэх")}</div>
-                  </a>
-                </div>
-              )}>
-              <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
-                <MoreOutlined style={{ fontSize: "18px" }} />
-              </a>
-            </Popover>
-          </div>
-        ),
-      },
-    ];
-  }, [turul, i18n.language, ajiltan, baiguullaga, barilgiinId]);
-
-  const baganuud = [
-    {
-      title: "№",
-      width: "2.5rem",
-      align: "center",
-      dataIndex: "description",
-      render: (v,index, key) => (key + 1)
-    },
-    {
-      title: "Огноо",
-      width: "6rem",
-      align: "center",
-      dataIndex: "createdAt",
-      render: (data) => {
-        return moment(data).format("MM/DD HH:MM");
-      },
-    },
-    {
-      title: "Утга",
-      width: "10rem",
-      align: "center",
-      dataIndex: "description",
-      render: (v) => {
-        return <Tooltip
-            placement="top"
-            title={v}>
-          <div className="text-left truncate">{v}</div>
-        </Tooltip>;
-      },
-    },
-    {
-      title: "Дүн",
-      width: "4rem",
-      dataIndex: "amount",
-      align: "center",
-      render(v) {
-        return v && <div className="text-right">{formatNumber(v, 0)} ₮</div>;
-      },
-    },
-  ];
-  const onChange = (e) => {
-    setValue(e.target.value);
-  };
-  const cameraChange = (e) => {
-    setCamerVal(e);
-  };
-  const khadgalakh = () => {
-    let body = modalOpen.item;
-    if (modalOpen.type === "zurchil") {
-      body.zurchil = value;
-      body.tuukh[0].tuluv = -2;
-    } else {
-      body.tuukh[0].uneguiGarsan = value;
-      body.tuukh[0].tuluv = -1;
-    }
-    updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
-      if (data === "Amjilttai") {
-        message.success(t("Амжилттай хадгаллаа"));
-        onRefresh();
-      }
-    });
-    setModalOpen({ bool: false, item: null, type: "" });
-    setValue(null);
-  };
-  const exlCol = () => {
-    const aa = columns;
-    aa.splice(columns.length - 2, 2, {
-      title: t("Төлөв"),
-      sorter: () => 0,
-      dataIndex: "tuukh",
-      render(v) {
-        return v[0]?.tuluv === 0 ? (
-          <div>Төлөөгүй</div>
-        ) : v[0]?.tuluv < 0 ? (
-          <div>Үнэгүй</div>
-        ) : v[0]?.ebarimtAvsanEsekh ? (
-          <div>Төлөгдсөн</div>
-        ) : (
-          <div>И-Баримт</div>
-        );
-      },
-    });
-    return aa;
-  };
-  const khaalgaNeey = () => {
-    axios.get('http://localhost:5000/api/neeye/'+camerVal+'').then(function (response) {
-      if(!!response)
-        console.log('/api/neeye', response);
-    }).catch(function (error) {
-      console.log('ERROR: /api/neeye', error);
-    })
-  };
-
-  return (
-    <Admin
-      title="Камер"
-      tsonkhniiId={"64474e3e28c37d7cdda15d01"}
-      khuudasniiNer="Camera"
-      fixedZagvarNeegdsenEsekh={guilgeeKharakh}
-      setTurulZagvar={setGuilgeeKharakh}
-      className="relative p-2 sm:p-4"
-      onSearch={(search) =>
-        setUilchluulegchKhuudaslalt((a) => ({
-          ...a,
-          search,
-          khuudasniiDugaar: 1,
-        }))
-      }
-      loading={isValidating}>
-      {jagsaalt?.length > 0 ? (
-        <div className="col-span-12">
-          <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
-            <div
-              onClick={() => {
-                setCamerKharakh(false);
-              }}
-              className={`w-full ${
-                cameraKharakh === 1 &&
-                "fixed top-0 right-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
-              }`}>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCamerKharakh(1);
-                }}
-                className="flex w-full items-center justify-center ">
-                <img
-                  src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
-                  className={`object-cover  ${
-                    cameraKharakh === 1
-                      ? "w-full  sm:h-[80vh] sm:w-[80%]"
-                      : "w-full  sm:h-[250px]"
-                  }`}
-                />
-              </div>
-              {cameraKharakh === 1 && (
-                <div className="absolute top-5 right-5 text-3xl text-white">
-                  <CloseOutlined
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCamerKharakh(false);
-                    }}
-                  />
-                </div>
-              )}
-              <div
-                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
-                  cameraKharakh === 1 && "absolute bottom-5 w-40"
-                }`}>
-                <div className="flex gap-3">
-                  <Button
-                    onClick={(e) => {
-                      khaalgaNeey();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Нээх
-                  </Button>
-                  {/*<Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Хаах
-                  </Button>*/}
-                </div>
-                <TreeSelect
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
-                  showSearch
-                  style={{
-                    backgroundColor: "#10B981",
-                    borderColor: "#10B981",
-                  }}
-                  value={camerVal}
-                  dropdownStyle={{
-                    maxHeight: 600,
-                    minWidth: 280,
-                    overflow: "auto",
-                  }}
-                  placeholder="Камер сонгох"
-                  allowClear
-                  onChange={cameraChange}
-                  treeData={cameraData}
-                />
-              </div>
-            </div>
-            <div
-              onClick={() => {
-                setCamerKharakh(false);
-              }}
-              className={`w-full ${
-                cameraKharakh === 2 &&
-                "fixed top-0 right-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
-              }`}>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCamerKharakh(2);
-                }}
-                className="flex w-full items-center justify-center ">
-                <img
-                  src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
-                  className={`object-cover  ${
-                    cameraKharakh === 2
-                      ? "w-full  sm:h-[80vh] sm:w-[80%]"
-                      : "w-full  sm:h-[250px]"
-                  }`}
-                />
-              </div>
-              {cameraKharakh === 2 && (
-                <div className="absolute top-5 right-5 text-3xl text-white">
-                  <CloseOutlined
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCamerKharakh(false);
-                    }}
-                  />
-                </div>
-              )}
-              <div
-                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
-                  cameraKharakh === 2 && "absolute bottom-5 w-40"
-                }`}>
-                <div className="flex gap-3">
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Нээх
-                  </Button>
-                  {/*<Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="w-full sm:w-auto"
-                    type="primary">
-                    Хаах
-                  </Button>*/}
-                </div>
-                <TreeSelect
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  placement={cameraKharakh === 2 ? "topRight" : "bottomRight"}
-                  showSearch
-                  style={{
-                    backgroundColor: "#10B981",
-                    borderColor: "#10B981",
-                  }}
-                  value={camerVal}
-                  dropdownStyle={{
-                    maxHeight: 600,
-                    minWidth: 280,
-                    overflow: "auto",
-                  }}
-                  placeholder="Камер сонгох"
-                  allowClear
-                  onChange={cameraChange}
-                  treeData={cameraData}
-                />
-              </div>
-            </div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className={`fixed right-[8%] top-1/2 z-50 w-[84%] -translate-y-1/2 rounded-lg border bg-white p-5 shadow-xl transition-all xl:relative xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
-                guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
-              }`}>
-              {" "}
-              <div className="text-base font-bold">Сүүлийн гүйлгээ</div>
-              <div className="absolute top-3 right-3 text-3xl xl:hidden">
-                <CloseCircleOutlined
-                  onClick={() => setGuilgeeKharakh(false)}
-                  className="text-red-400"
-                />
-              </div>
-              <Table
-                pagination={false}
-                className="mt-3 overflow-auto"
-                scroll={{ y: "calc(100vh / 4.5)" }}
-                size="small"
-                dataSource={dansniiKhuulgaGaralt?.jagsaalt}
-                columns={baganuud}
-              />
-            </div>
-          </div>
-          <Card className="col-span-12 mt-2">
-            <div className="mb-5 xl:hidden">
-              <Button
-                style={{ width: "100%" }}
-                icon={<EyeOutlined />}
-                type="primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setGuilgeeKharakh(!guilgeeKharakh);
-                }}>
-                Гүйлгээ харах
-              </Button>
-            </div>
-            <div className="flex flex-col gap-2 md:flex-row">
-              <div
-                data-aos="fade-right"
-                data-aos-duration="1000"
-                className="flex w-full flex-col lg:flex-row"
-                data-aos-delay="100">
-                <DatePicker.RangePicker
-                  inputReadOnly
-                  className="w-full md:w-auto"
-                  size="middle"
-                  value={ognoo}
-                  onChange={setOgnoo}
-                />
-                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
-                  {t("Зогсоолын орлого")} :{" "}
-                  {
-                    formatNumber(
-                      85700
-                    ) /*{formatNumber(zogsooliinMedeelel?.data)}*/
-                  }
-                  ₮
-                </div>
-              </div>
-              <div
-                className="mb-5 flex w-full justify-between sm:justify-end md:ml-auto md:mb-0 lg:w-auto"
-                data-aos="fade-left"
-                data-aos-duration="1000"
-                data-aos-delay="300">
-                <Popover
-                  content={() => (
-                    <div className="flex w-32 flex-col">
-                      <a
-                        className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                        onClick={() => {
-                          excelTatajAvya(
-                            token,
-                            "zogsoolUilchluulegch",
-                            uilchluulegchGaralt.niitMur,
-                            exlCol(),
-                            query,
-                            order,
-                            "Зогсоол"
-                          );
-                        }}>
-                        <DownloadOutlined style={{ fontSize: "18px" }} />
-                        <label>{t("Татах")}</label>
-                      </a>
+                },
+            },
+            {
+                title: () => <SettingOutlined />,
+                width: "2rem",
+                align: "center",
+                render: (data) => (
+                    <div className="flex flex-row">
+                        <Popover
+                            placement="bottom"
+                            trigger="hover"
+                            content={() => (
+                                <div className="space-y-2">
+                                    <a
+                                        className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                                        onClick={() =>
+                                            setModalOpen({ bool: true, item: data, type: "zurchil" })
+                                        }>
+                                        <ExclamationCircleOutlined
+                                            style={{ fontSize: "18px", marginRight: "3px" }}
+                                        />
+                                        <div>{t("Зөрчил нэмэх")}</div>
+                                    </a>
+                                </div>
+                            )}>
+                            <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+                                <MoreOutlined style={{ fontSize: "18px" }} />
+                            </a>
+                        </Popover>
                     </div>
-                  )}
-                  style={{ padding: 0 }}
-                  placement="bottom"
-                  trigger="click">
-                  <Button
-                    type="primary"
-                    className="mr-3 w-32 sm:w-auto"
-                    icon={<FileExcelOutlined />}>
-                    <span>Excel</span>
-                    <DownOutlined width={5} />
-                  </Button>
-                </Popover>
-                <Button
-                  className="w-32 sm:w-auto"
-                  icon={<CameraOutlined />}
-                  onClick={() => setDrawerOpen(true)}
-                  type="primary">
-                  Камер
-                </Button>
-                <Drawer
-                  width={"100vw"}
-                  title={t("Камер")}
-                  placement="right"
-                  onClose={() => setDrawerOpen(false)}
-                  visible={drawerOpen}>
-                  {drawerOpen && (
-                    <Card className="col-span-12 row-span-full lg:col-span-4 lg:col-start-9">
-                      <div className="w-[500px]">
-                        <div className="flex aspect-square items-center justify-center border 2xl:aspect-[3/2]">
-                          <p>Camera1</p>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2">
-                          <div className="aspect-square border">
-                            <p>Camera2</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera3</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera4</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera5</p>
-                          </div>
-                        </div>
-                      </div>
-                    </Card>
-                  )}
-                </Drawer>
-              </div>
-            </div>
-            <div
-              data-aos="fade-left"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-              data-aos-anchor-placement="top-bottom">
-              <Table
-                className="mt-8 hidden overflow-auto md:block"
-                tableLayout="auto"
-                loading={!uilchluulegchGaralt}
-                dataSource={uilchluulegchGaralt?.jagsaalt}
-                scroll={{ y: "calc(100vh - 30rem)" }}
-                size="small"
-                bordered
-                rowKey={(row) => row._id}
-                columns={columns}
-                onChange={onChangeTable}
-                pagination={{
-                  current: uilchluulegchGaralt?.khuudasniiDugaar,
-                  pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
-                  total: uilchluulegchGaralt?.niitMur,
-                  showSizeChanger: true,
-                  onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                    setUilchluulegchKhuudaslalt((kh) => ({
-                      ...kh,
-                      khuudasniiDugaar,
-                      khuudasniiKhemjee,
-                    })),
-                }}
-                summary={(pageData)=>{
-                  let totalBorrow = 0;
-                  // console.log('mur-0--1-', pageData);
-                  pageData.map((mur)=>{
-                    // console.log('mur-0--1-', mur);
-                    // if(mur.summary === true)
-                      // console.log('mur-0--', mur);
-                  })
-                }}
-              />
-              <CardList
-                cardListTuluv={"utas"}
-                keyValue="uilchluulegch"
-                className="block overflow-auto md:hidden"
-                jagsaalt={uilchluulegchGaralt?.jagsaalt}
-                Component={UilchluulegchTile}
-              />
-            </div>
-          </Card>
-          <Modal
-            title={
-              modalOpen.type !== "zurchil"
-                ? "Үнэгүй үйлчлүүлэгчийн төрөл сонгох"
-                : "Зөрчил оруулах"
+                ),
+            },
+        ];
+    }, [turul, i18n.language, ajiltan, baiguullaga, barilgiinId]);
+
+    const baganuud = [
+        {
+            title: "№",
+            width: "2.5rem",
+            align: "center",
+            dataIndex: "description",
+            render: (v,index, key) => (key + 1)
+        },
+        {
+            title: "Огноо",
+            width: "6rem",
+            align: "center",
+            dataIndex: "createdAt",
+            render: (data) => {
+                return moment(data).format("MM/DD HH:MM");
+            },
+        },
+        {
+            title: "Утга",
+            width: "10rem",
+            align: "center",
+            dataIndex: "description",
+            render: (v) => {
+                return <Tooltip
+                    placement="top"
+                    title={v}>
+                    <div className="text-left truncate">{v}</div>
+                </Tooltip>;
+            },
+        },
+        {
+            title: "Дүн",
+            width: "4rem",
+            dataIndex: "amount",
+            align: "center",
+            render(v) {
+                return v && <div className="text-right">{formatNumber(v, 0)} ₮</div>;
+            },
+        },
+    ];
+    const onChange = (e) => {
+        setValue(e.target.value);
+    };
+    const cameraChange = (e) => {
+        setCamerVal(e);
+    };
+    const khadgalakh = () => {
+        let body = modalOpen.item;
+        if (modalOpen.type === "zurchil") {
+            body.zurchil = value;
+            body.tuukh[0].tuluv = -2;
+        } else {
+            body.tuukh[0].uneguiGarsan = value;
+            body.tuukh[0].tuluv = -1;
+        }
+        updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
+            if (data === "Amjilttai") {
+                message.success(t("Амжилттай хадгаллаа"));
+                onRefresh();
             }
-            open={modalOpen.bool}
-            onCancel={() => setModalOpen({ bool: false, item: null, type: "" })}
-            footer={[
-              <Button
-                key="back"
-                onClick={() =>
-                  setModalOpen({ bool: false, item: null, type: "" })
-                }>
-                Хаах
-              </Button>,
-              <Button type="primary" onClick={khadgalakh}>
-                Хадгалах
-              </Button>,
-            ]}>
-            <Space direction="vertical" className="w-full">
-              <Radio.Group onChange={onChange} value={value}>
-                {modalOpen.type !== "zurchil" ? (
-                  <Space direction="vertical">
-                    <Radio value="Цагдаа">Цагдаа</Radio>
-                    <Radio value="Гал">Гал</Radio>
-                    <Radio value="Эмнэлэг">Эмнэлэг</Radio>
-                    <Radio value="Онцгой">Онцгой</Radio>
-                    <Radio value="Борлуулалтын машин">Борлуулалтын машин</Radio>
-                    <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
-                      Хөгжлийн бэрхшээлтэй иргэн
-                    </Radio>
-                    <Radio value="Хогны машин">Хогны машин</Radio>
-                  </Space>
+        });
+        setModalOpen({ bool: false, item: null, type: "" });
+        setValue(null);
+    };
+    const exlCol = () => {
+        const aa = columns;
+        aa.splice(columns.length - 2, 2, {
+            title: t("Төлөв"),
+            sorter: () => 0,
+            dataIndex: "tuukh",
+            render(v) {
+                return v[0]?.tuluv === 0 ? (
+                    <div>Төлөөгүй</div>
+                ) : v[0]?.tuluv < 0 ? (
+                    <div>Үнэгүй</div>
+                ) : v[0]?.ebarimtAvsanEsekh ? (
+                    <div>Төлөгдсөн</div>
                 ) : (
-                  <Space direction="vertical">
-                    <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
-                    <Radio value="Зугтаасан">Зугтаасан</Radio>
-                  </Space>
-                )}
-              </Radio.Group>
-              <div className="flex w-full items-center">
-                <label>Бусад</label>
-                <Input onChange={onChange} className="ml-[10px] w-full" />
-              </div>
-            </Space>
-          </Modal>
-        </div>
-      ) : (
-        <div className="col-span-12 flex justify-center">
-          {ajiltan?.ner}-д зогсоолын эрх байхгүй байна.
-        </div>
-      )}
-    </Admin>
-  );
+                    <div>И-Баримт</div>
+                );
+            },
+        });
+        return aa;
+    };
+    const khaalgaNeey = () => {
+        axios.get('http://localhost:5000/api/neeye/'+camerVal+'').then(function (response) {
+            if(!!response)
+                console.log('/api/neeye', response);
+        }).catch(function (error) {
+            console.log('ERROR: /api/neeye', error);
+        })
+    };
+
+    return (
+        <Admin
+            title="Камер"
+            tsonkhniiId={"64474e3e28c37d7cdda15d01"}
+            khuudasniiNer="Camera"
+            fixedZagvarNeegdsenEsekh={guilgeeKharakh}
+            setTurulZagvar={setGuilgeeKharakh}
+            className="relative p-2 sm:p-4"
+            onSearch={(search) =>
+                setUilchluulegchKhuudaslalt((a) => ({
+                    ...a,
+                    search,
+                    khuudasniiDugaar: 1,
+                }))
+            }
+            loading={isValidating}>
+            {jagsaalt?.length > 0 ? (
+                <div className="col-span-12">
+                    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
+                        <div
+                            onClick={() => {
+                                setCamerKharakh(false);
+                            }}
+                            className={`w-full ${
+                                cameraKharakh === 1 &&
+                                "fixed top-0 right-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
+                            }`}>
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCamerKharakh(1);
+                                }}
+                                className="flex w-full items-center justify-center ">
+                                <img
+                                    src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
+                                    className={`object-cover  ${
+                                        cameraKharakh === 1
+                                            ? "w-full  sm:h-[80vh] sm:w-[80%]"
+                                            : "w-full  sm:h-[250px]"
+                                    }`}
+                                />
+                            </div>
+                            {cameraKharakh === 1 && (
+                                <div className="absolute top-5 right-5 text-3xl text-white">
+                                    <CloseOutlined
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setCamerKharakh(false);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            <div
+                                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
+                                    cameraKharakh === 1 && "absolute bottom-5 w-40"
+                                }`}>
+                                <div className="flex gap-3">
+                                    <Button
+                                        onClick={(e) => {
+                                            khaalgaNeey();
+                                        }}
+                                        className="w-full sm:w-auto"
+                                        type="primary">
+                                        Нээх
+                                    </Button>
+                                    {/*<Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="w-full sm:w-auto"
+                    type="primary">
+                    Хаах
+                  </Button>*/}
+                                </div>
+                                <TreeSelect
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
+                                    placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
+                                    showSearch
+                                    style={{
+                                        backgroundColor: "#10B981",
+                                        borderColor: "#10B981",
+                                    }}
+                                    value={camerVal}
+                                    dropdownStyle={{
+                                        maxHeight: 600,
+                                        minWidth: 280,
+                                        overflow: "auto",
+                                    }}
+                                    placeholder="Камер сонгох"
+                                    allowClear
+                                    treeDefaultExpandAll
+                                    onChange={cameraChange}
+                                    treeData={cameraData}
+                                />
+                            </div>
+                        </div>
+                        <div
+                            onClick={() => {
+                                setCamerKharakh(false);
+                            }}
+                            className={`w-full ${
+                                cameraKharakh === 2 &&
+                                "fixed top-0 right-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
+                            }`}>
+                            <div
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setCamerKharakh(2);
+                                }}
+                                className="flex w-full items-center justify-center ">
+                                <img
+                                    src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
+                                    className={`object-cover  ${
+                                        cameraKharakh === 2
+                                            ? "w-full  sm:h-[80vh] sm:w-[80%]"
+                                            : "w-full  sm:h-[250px]"
+                                    }`}
+                                />
+                            </div>
+                            {cameraKharakh === 2 && (
+                                <div className="absolute top-5 right-5 text-3xl text-white">
+                                    <CloseOutlined
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setCamerKharakh(false);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                            <div
+                                className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
+                                    cameraKharakh === 2 && "absolute bottom-5 w-40"
+                                }`}>
+                                <div className="flex gap-3">
+                                    <Button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                        }}
+                                        className="w-full sm:w-auto"
+                                        type="primary">
+                                        Нээх
+                                    </Button>
+                                    {/*<Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    className="w-full sm:w-auto"
+                    type="primary">
+                    Хаах
+                  </Button>*/}
+                                </div>
+                                <TreeSelect
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
+                                    placement={cameraKharakh === 2 ? "topRight" : "bottomRight"}
+                                    showSearch
+                                    style={{
+                                        backgroundColor: "#10B981",
+                                        borderColor: "#10B981",
+                                    }}
+                                    value={camerVal}
+                                    dropdownStyle={{
+                                        maxHeight: 600,
+                                        minWidth: 280,
+                                        overflow: "auto",
+                                    }}
+                                    placeholder="Камер сонгох"
+                                    allowClear
+                                    onChange={cameraChange}
+                                    treeData={cameraData}
+                                />
+                            </div>
+                        </div>
+                        <div
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                            className={`fixed right-[8%] top-1/2 z-50 w-[84%] -translate-y-1/2 rounded-lg border bg-white p-5 shadow-xl transition-all xl:relative xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
+                                guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
+                            }`}>
+                            {" "}
+                            <div className="text-base font-bold">Сүүлийн гүйлгээ</div>
+                            <div className="absolute top-3 right-3 text-3xl xl:hidden">
+                                <CloseCircleOutlined
+                                    onClick={() => setGuilgeeKharakh(false)}
+                                    className="text-red-400"
+                                />
+                            </div>
+                            <Table
+                                pagination={false}
+                                className="mt-3 overflow-auto"
+                                scroll={{ y: "calc(100vh / 4.5)" }}
+                                size="small"
+                                dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+                                columns={baganuud}
+                            />
+                        </div>
+                    </div>
+                    <Card className="col-span-12 mt-2">
+                        <div className="mb-5 xl:hidden">
+                            <Button
+                                style={{ width: "100%" }}
+                                icon={<EyeOutlined />}
+                                type="primary"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setGuilgeeKharakh(!guilgeeKharakh);
+                                }}>
+                                Гүйлгээ харах
+                            </Button>
+                        </div>
+                        <div className="flex flex-col gap-2 md:flex-row">
+                            <div
+                                data-aos="fade-right"
+                                data-aos-duration="1000"
+                                className="flex w-full flex-col lg:flex-row"
+                                data-aos-delay="100">
+                                <DatePicker.RangePicker
+                                    inputReadOnly
+                                    className="w-full md:w-auto"
+                                    size="middle"
+                                    value={ognoo}
+                                    onChange={setOgnoo}
+                                />
+                                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
+                                    {t("Зогсоолын орлого")} :{" "}
+                                    {
+                                        formatNumber(
+                                            !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
+                                        )
+                                    }
+                                    ₮
+                                </div>
+                            </div>
+                            <div
+                                className="mb-5 flex w-full justify-between sm:justify-end md:ml-auto md:mb-0 lg:w-auto"
+                                data-aos="fade-left"
+                                data-aos-duration="1000"
+                                data-aos-delay="300">
+                                <Popover
+                                    content={() => (
+                                        <div className="flex w-32 flex-col">
+                                            <a
+                                                className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                                                onClick={() => {
+                                                    excelTatajAvya(
+                                                        token,
+                                                        "zogsoolUilchluulegch",
+                                                        uilchluulegchGaralt.niitMur,
+                                                        exlCol(),
+                                                        query,
+                                                        order,
+                                                        "Зогсоол"
+                                                    );
+                                                }}>
+                                                <DownloadOutlined style={{ fontSize: "18px" }} />
+                                                <label>{t("Татах")}</label>
+                                            </a>
+                                        </div>
+                                    )}
+                                    style={{ padding: 0 }}
+                                    placement="bottom"
+                                    trigger="click">
+                                    <Button
+                                        type="primary"
+                                        className="mr-3 w-32 sm:w-auto"
+                                        icon={<FileExcelOutlined />}>
+                                        <span>Excel</span>
+                                        <DownOutlined width={5} />
+                                    </Button>
+                                </Popover>
+                                <Button
+                                    className="w-32 sm:w-auto"
+                                    icon={<CameraOutlined />}
+                                    onClick={() => setDrawerOpen(true)}
+                                    type="primary">
+                                    Камер
+                                </Button>
+                                <Drawer
+                                    width={"100vw"}
+                                    title={t("Камер")}
+                                    placement="right"
+                                    onClose={() => setDrawerOpen(false)}
+                                    visible={drawerOpen}>
+                                    {drawerOpen && (
+                                        <Card className="col-span-12 row-span-full lg:col-span-4 lg:col-start-9">
+                                            <div className="w-[500px]">
+                                                <div className="flex aspect-square items-center justify-center border 2xl:aspect-[3/2]">
+                                                    <p>Camera1</p>
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2">
+                                                    <div className="aspect-square border">
+                                                        <p>Camera2</p>
+                                                    </div>
+                                                    <div className="aspect-square border">
+                                                        <p>Camera3</p>
+                                                    </div>
+                                                    <div className="aspect-square border">
+                                                        <p>Camera4</p>
+                                                    </div>
+                                                    <div className="aspect-square border">
+                                                        <p>Camera5</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Card>
+                                    )}
+                                </Drawer>
+                            </div>
+                        </div>
+                        <div
+                            data-aos="fade-left"
+                            data-aos-duration="1000"
+                            data-aos-delay="300"
+                            data-aos-anchor-placement="top-bottom">
+                            <Table
+                                className="mt-8 hidden overflow-auto md:block"
+                                tableLayout="auto"
+                                loading={!uilchluulegchGaralt}
+                                dataSource={uilchluulegchGaralt?.jagsaalt}
+                                scroll={{ y: "calc(100vh - 30rem)" }}
+                                size="small"
+                                bordered
+                                rowKey={(row) => row._id}
+                                columns={columns}
+                                onChange={onChangeTable}
+                                pagination={{
+                                    current: uilchluulegchGaralt?.khuudasniiDugaar,
+                                    pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
+                                    total: uilchluulegchGaralt?.niitMur,
+                                    showSizeChanger: true,
+                                    onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                                        setUilchluulegchKhuudaslalt((kh) => ({
+                                            ...kh,
+                                            khuudasniiDugaar,
+                                            khuudasniiKhemjee,
+                                        })),
+                                }}
+                                summary={(pageData)=>{
+                                    let totalBorrow = 0;
+                                    // console.log('mur-0--1-', pageData);
+                                    pageData.map((mur)=>{
+                                        // console.log('mur-0--1-', mur);
+                                        // if(mur.summary === true)
+                                        // console.log('mur-0--', mur);
+                                    })
+                                }}
+                            />
+                            <CardList
+                                cardListTuluv={"utas"}
+                                keyValue="uilchluulegch"
+                                className="block overflow-auto md:hidden"
+                                jagsaalt={uilchluulegchGaralt?.jagsaalt}
+                                Component={UilchluulegchTile}
+                            />
+                        </div>
+                    </Card>
+                    <Modal
+                        title={
+                            modalOpen.type !== "zurchil"
+                                ? "Үнэгүй үйлчлүүлэгчийн төрөл сонгох"
+                                : "Зөрчил оруулах"
+                        }
+                        open={modalOpen.bool}
+                        onCancel={() => setModalOpen({ bool: false, item: null, type: "" })}
+                        footer={[
+                            <Button
+                                key="back"
+                                onClick={() =>
+                                    setModalOpen({ bool: false, item: null, type: "" })
+                                }>
+                                Хаах
+                            </Button>,
+                            <Button type="primary" onClick={khadgalakh}>
+                                Хадгалах
+                            </Button>,
+                        ]}>
+                        <Space direction="vertical" className="w-full">
+                            <Radio.Group onChange={onChange} value={value}>
+                                {modalOpen.type !== "zurchil" ? (
+                                    <Space direction="vertical">
+                                        <Radio value="Цагдаа">Цагдаа</Radio>
+                                        <Radio value="Гал">Гал</Radio>
+                                        <Radio value="Эмнэлэг">Эмнэлэг</Radio>
+                                        <Radio value="Онцгой">Онцгой</Radio>
+                                        <Radio value="Борлуулалтын машин">Борлуулалтын машин</Radio>
+                                        <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
+                                            Хөгжлийн бэрхшээлтэй иргэн
+                                        </Radio>
+                                        <Radio value="Хогны машин">Хогны машин</Radio>
+                                    </Space>
+                                ) : (
+                                    <Space direction="vertical">
+                                        <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
+                                        <Radio value="Зугтаасан">Зугтаасан</Radio>
+                                    </Space>
+                                )}
+                            </Radio.Group>
+                            <div className="flex w-full items-center">
+                                <label>Бусад</label>
+                                <Input onChange={onChange} className="ml-[10px] w-full" />
+                            </div>
+                        </Space>
+                    </Modal>
+                </div>
+            ) : (
+                <div className="col-span-12 flex justify-center">
+                    {ajiltan?.ner}-д зогсоолын эрх байхгүй байна.
+                </div>
+            )}
+        </Admin>
+    );
 }
 
 export const getServerSideProps = shalgaltKhiikh;
