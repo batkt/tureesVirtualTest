@@ -136,7 +136,7 @@ function camera({token}) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
+  } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.tsagiinTuukh.garsanTsag":-1});
   // console.log('uilchluulegchGaralt---------', uilchluulegchGaralt);
   function onRefresh() {
     uilchluulegchMutate();
