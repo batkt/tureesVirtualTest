@@ -110,12 +110,12 @@ function KhuvaajTulukh({
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
     if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) <
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) <
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       var iluu =
         tulbur.reduce((a, b) => a + b.dun, 0) -
-        (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun);
+        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun);
       if (index !== -1) tulbur[index] = { turul: k, dun: v - iluu };
       else tulbur.push({ turul: k, dun: v - iluu });
       document.getElementById("TogloomiinTuvTulburTovch").focus();
@@ -168,12 +168,12 @@ function KhuvaajTulukh({
   }
 
   function onDoubleClick(e) {
-    const tulukhDun =
-      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
+    const niitDun =
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
       tulbur
         .filter((a) => a.turul !== e.target.name)
         .reduce((a, b) => a + b.dun, 0);
-    if (tulukhDun > 0) {
+    if (niitDun > 0) {
       const undsenModel = {
         ognoo: new Date(),
         zakhialgiinDugaar: data?.zakhialgiinDugaar,
@@ -182,7 +182,7 @@ function KhuvaajTulukh({
         burtgesenAjiltaniiNer: ajiltan?.ner,
       };
       if (e.target.name === "khunglukh") {
-        setKhunglult({ ...khunglult, khungulukhDun: tulukhDun });
+        setKhunglult({ ...khunglult, khungulukhDun: niitDun });
         setKhungulukhEsekh(true)
       }
       const index = tulbur.findIndex((a) => a.turul === e.target.name);
@@ -190,11 +190,11 @@ function KhuvaajTulukh({
         tulbur[index] = {
           ...undsenModel,
           turul: e.target.name,
-          dun: tulukhDun,
+          dun: niitDun,
           ognoo: new Date(),
         };
       else
-        tulbur.push({ ...undsenModel, turul: e.target.name, dun: tulukhDun });
+        tulbur.push({ ...undsenModel, turul: e.target.name, dun: niitDun });
       setTulbur([...tulbur]);
     }
   }
@@ -396,7 +396,7 @@ function KhuvaajTulukh({
                         <InputNumber
                           disabled={
                             !value.khunglukh &&
-                            ((data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
+                            ((data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
                               tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                           }
                           autoComplete="off"
@@ -482,7 +482,7 @@ function KhuvaajTulukh({
                         placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdsonBusadTurul.talbar] &&
-                          (data?.tulukhDun -
+                          (data?.niitDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                         }
                         autoComplete="off"
@@ -572,7 +572,7 @@ function KhuvaajTulukh({
                       placeholder="Мөнгөн дүн"
                       disabled={
                         !value[songogdsonBank.talbar] &&
-                        (data?.tulukhDun -
+                        (data?.niitDun -
                           tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                       }
                       autoComplete="off"
@@ -669,7 +669,7 @@ function KhuvaajTulukh({
                         placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdTulburiinKhelber.ner] &&
-                          ((data?.tulukhDun -
+                          ((data?.niitDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
                             !!qpayerTulukh)
                         }
