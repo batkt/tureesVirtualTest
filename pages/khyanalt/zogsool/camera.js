@@ -1029,6 +1029,7 @@ function camera({token}) {
                                             <Form.Item
                                                 label="Дугаар"
                                                 name="mashiniiDugaar"
+                                                className="w-2/5"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -1047,6 +1048,7 @@ function camera({token}) {
                                             </Form.Item>
                                             <Form.Item
                                                 name="CAMERA_IP"
+                                                className="w-2/5"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -1061,8 +1063,9 @@ function camera({token}) {
                                                     <Select.Option className="w-1/3 sm:w-auto" value={camerVal}></Select.Option>
                                                 </Select>
                                             </Form.Item>
+                                            <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="px-2 flex items-center rounded border hover:bg-green-200 h-8">Цэвэрлэх</a>
                                         </Form>
-                                        <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="py-2 px-4 mb-3 rounded border hover:bg-green-200">Цэвэрлэх</a>
+
                                         <div className="flex flex-wrap">
                                             <div className="flex flex-wrap w-full">
                                                 {
