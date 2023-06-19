@@ -1063,13 +1063,13 @@ function camera({token}) {
                                                     <Select.Option className="w-1/3 sm:w-auto" value={camerVal}></Select.Option>
                                                 </Select>
                                             </Form.Item>
-                                            <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="px-2 flex items-center rounded border hover:bg-green-200 h-8">Цэвэрлэх</a>
+                                            <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="ml-2 px-2 flex items-center rounded border border-red-400  hover:bg-red-200 h-8">Цэвэрлэх</a>
                                         </Form>
 
                                         <div className="flex flex-wrap">
                                             <div className="flex flex-wrap w-full">
                                                 {
-                                                    ['0','1','3','4','5','6','7','8','9'].map(n=>(
+                                                    ['0','1','2','3','4','5','6','7','8','9'].map(n=>(
                                                         <a onClick={()=>keyPadHandler(n)} className="py-2 px-4 rounded m-1 border hover:bg-green-200">{n}</a>
                                                     ))
                                                 }
