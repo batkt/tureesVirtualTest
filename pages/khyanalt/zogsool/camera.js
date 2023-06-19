@@ -1070,7 +1070,7 @@ function camera({token}) {
                                             <div className="flex flex-wrap w-full">
                                                 {
                                                     ['0','1','2','3','4','5','6','7','8','9'].map(n=>(
-                                                        <a onClick={()=>keyPadHandler(n)} className="py-2 px-4 rounded m-1 border hover:bg-green-200">{n}</a>
+                                                        <a onClick={()=>keyPadHandler(n)} className="py-2 px-3 rounded m-1 border hover:bg-green-200">{n}</a>
                                                     ))
                                                 }
                                             </div>
