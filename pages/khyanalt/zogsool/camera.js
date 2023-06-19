@@ -13,10 +13,10 @@ import {
     Radio,
     Modal,
     TreeSelect,
-    Tree,
+    Form,
     message,
     Tooltip,
-    Drawer,
+    Drawer, Select, notification,
 } from "antd";
 import {
     StarOutlined,
@@ -27,7 +27,7 @@ import {
     MoreOutlined,
     CloseCircleOutlined,
     DollarCircleOutlined,
-    PaperClipOutlined,
+    PlusOutlined,
     CheckCircleOutlined,
     DownloadOutlined,
     FileExcelOutlined,
@@ -55,6 +55,9 @@ import axios from "axios";
 import{ aldaaBarigch, socket } from "services/uilchilgee";
 import useSWR from "swr";
 import uilchilgee from "../../../services/uilchilgee";
+import {t} from "i18next";
+
+const usguud = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'Ө', 'П', 'Р', 'С', 'Т', 'У', 'Ү', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ь', 'Ы', 'Э', 'Ю', 'Я',];
 
 function generateChild(mur) {
     if (mur?.length > 0)
@@ -75,6 +78,7 @@ function generateChild(mur) {
         }));
     return [];
 }
+
 /*const TreeComponent = ()=>{
     const { TreeNode } = Tree;
 
@@ -127,6 +131,8 @@ function camera({token}) {
     const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [orlogo, setOrlogo] = useState([]);
+    const [mashiniiDugaar, setMashiniiDugaar] = useState();
+    const [form] = Form.useForm();
 
     const que = useMemo(() => {
         return {
@@ -306,7 +312,6 @@ function camera({token}) {
                     const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
                     return d && moment(d).format("YYYY-MM-DD HH:mm");
                 },
-                sortDirections: ['ascend', 'descend', 'ascend'],
             },
             {
                 title: t("Гарсан"),
@@ -319,7 +324,6 @@ function camera({token}) {
                     const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
                     return d && moment(d).format("YYYY-MM-DD HH:mm");
                 },
-                sortDirections: ['ascend', 'descend', 'ascend'],
             },
             {
                 title: t("Хугацаа/мин"),
@@ -505,7 +509,7 @@ function camera({token}) {
             align: "center",
             dataIndex: "createdAt",
             render: (data) => {
-                return moment(data).format("MM/DD HH:MM");
+                return moment(data).format("MM/DD HH:mm");
             },
         },
         {
@@ -542,18 +546,22 @@ function camera({token}) {
         if (modalOpen.type === "zurchil") {
             body.zurchil = value;
             body.tuukh[0].tuluv = -2;
-        } else {
+        } else if (modalOpen.type==="dugaarBurtgekh") {
+            form.submit();
+        } else  {
             body.tuukh[0].uneguiGarsan = value;
             body.tuukh[0].tuluv = -1;
         }
-        updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
-            if (data === "Amjilttai") {
-                message.success(t("Амжилттай хадгаллаа"));
-                onRefresh();
-            }
-        });
-        setModalOpen({ bool: false, item: null, type: "" });
-        setValue(null);
+        if(modalOpen.type!=="dugaarBurtgekh"){
+            updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
+                if (data === "Amjilttai") {
+                    message.success(t("Амжилттай хадгаллаа"));
+                    onRefresh();
+                }
+            });
+            setModalOpen({ bool: false, item: null, type: "" });
+            setValue(null);
+        }
     };
     const exlCol = () => {
         const aa = columns;
@@ -583,6 +591,25 @@ function camera({token}) {
             console.log('ERROR: /api/neeye', error);
         })
     };
+    const keyPadHandler = (v)=>{
+        const val = form.getFieldValue('mashiniiDugaar');
+        if(!val || val.length < 7)
+        form.setFieldValue('mashiniiDugaar', val?val+v:v);
+        // console.log(v,' - - ', val)
+    };
+    const dugaarBurtgekh = ()=>{
+        const body = form.getFieldsValue();
+        uilchilgee(token)
+            .post("/zogsoolSdkService", body)
+            .then(({status}) => {
+                // console.log('99999999', status);
+                if (status === 200) {
+                    notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+                    setModalOpen({ bool: false, item: null, type: "" });
+                    onRefresh();
+                }
+            }).catch(aldaaBarigch);
+    }
 
     return (
         <Admin
@@ -826,6 +853,13 @@ function camera({token}) {
                                 data-aos="fade-left"
                                 data-aos-duration="1000"
                                 data-aos-delay="300">
+                                <Button
+                                    className="mr-3 w-32 sm:w-auto"
+                                    icon={<PlusOutlined />}
+                                    onClick={() => setModalOpen({bool: true, item: null, type:'dugaarBurtgekh'})}
+                                    type="primary">
+                                    Машин бүртгэх
+                                </Button>
                                 <Popover
                                     content={() => (
                                         <div className="flex w-32 flex-col">
@@ -925,15 +959,6 @@ function camera({token}) {
                                             khuudasniiKhemjee,
                                         })),
                                 }}
-                                summary={(pageData)=>{
-                                    let totalBorrow = 0;
-                                    // console.log('mur-0--1-', pageData);
-                                    pageData.map((mur)=>{
-                                        // console.log('mur-0--1-', mur);
-                                        // if(mur.summary === true)
-                                        // console.log('mur-0--', mur);
-                                    })
-                                }}
                             />
                             <CardList
                                 cardListTuluv={"utas"}
@@ -946,8 +971,9 @@ function camera({token}) {
                     </Card>
                     <Modal
                         title={
-                            modalOpen.type !== "zurchil"
-                                ? "Үнэгүй үйлчлүүлэгчийн төрөл сонгох"
+                            modalOpen.type !== "zurchil" ?
+                                modalOpen.type !== "dugaarBurtgekh" ?
+                                    "Үнэгүй үйлчлүүлэгчийн төрөл сонгох" : "Машин бүртгэх"
                                 : "Зөрчил оруулах"
                         }
                         open={modalOpen.bool}
@@ -965,30 +991,98 @@ function camera({token}) {
                             </Button>,
                         ]}>
                         <Space direction="vertical" className="w-full">
-                            <Radio.Group onChange={onChange} value={value}>
-                                {modalOpen.type !== "zurchil" ? (
-                                    <Space direction="vertical">
-                                        <Radio value="Цагдаа">Цагдаа</Radio>
-                                        <Radio value="Гал">Гал</Radio>
-                                        <Radio value="Эмнэлэг">Эмнэлэг</Radio>
-                                        <Radio value="Онцгой">Онцгой</Radio>
-                                        <Radio value="Борлуулалтын машин">Борлуулалтын машин</Radio>
-                                        <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
-                                            Хөгжлийн бэрхшээлтэй иргэн
-                                        </Radio>
-                                        <Radio value="Хогны машин">Хогны машин</Radio>
-                                    </Space>
-                                ) : (
-                                    <Space direction="vertical">
-                                        <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
-                                        <Radio value="Зугтаасан">Зугтаасан</Radio>
-                                    </Space>
-                                )}
-                            </Radio.Group>
-                            <div className="flex w-full items-center">
-                                <label>Бусад</label>
-                                <Input onChange={onChange} className="ml-[10px] w-full" />
-                            </div>
+                            {
+                                modalOpen.type!=='dugaarBurtgekh' ?
+                                    <>
+                                        <Radio.Group onChange={onChange} value={value}>
+                                            {modalOpen.type !== "zurchil" ? (
+                                                <Space direction="vertical">
+                                                    <Radio value="Цагдаа">Цагдаа</Radio>
+                                                    <Radio value="Гал">Гал</Radio>
+                                                    <Radio value="Эмнэлэг">Эмнэлэг</Radio>
+                                                    <Radio value="Онцгой">Онцгой</Radio>
+                                                    <Radio value="Борлуулалтын машин">Борлуулалтын машин</Radio>
+                                                    <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
+                                                        Хөгжлийн бэрхшээлтэй иргэн
+                                                    </Radio>
+                                                    <Radio value="Хогны машин">Хогны машин</Radio>
+                                                </Space>
+                                            ) : (
+                                                <Space direction="vertical">
+                                                    <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
+                                                    <Radio value="Зугтаасан">Зугтаасан</Radio>
+                                                </Space>
+                                            )}
+                                        </Radio.Group>
+                                        <div className="flex w-full items-center">
+                                            <label>Бусад</label>
+                                            <Input onChange={onChange} className="ml-[10px] w-full" />
+                                        </div>
+                                    </>
+                                :
+                                    <>
+                                        <Form
+                                            form={form}
+                                            className="flex w-full"
+                                            onFinish={dugaarBurtgekh}
+                                        >
+                                            <Form.Item
+                                                label="Дугаар"
+                                                name="mashiniiDugaar"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: t("Машины дугаар бүртгэнэ үү!"),
+                                                    },
+                                                    {
+                                                        required: form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
+                                                        min: 7,
+                                                        max: 7,
+                                                        pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
+                                                        message: "Машины дугаар 4 тоо 3 үсэг байх ёстой",
+                                                    }
+                                                ]}
+                                            >
+                                                <Input maxLength={7} value={mashiniiDugaar} placeholder="1234УБА" className="ml-[10px]"/>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name="CAMERA_IP"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Камер IP сонгоно уу.',
+                                                    },
+                                                ]}
+                                            >
+                                                <Select
+                                                    className=""
+                                                    placeholder="Камер IP"
+                                                >
+                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal}></Select.Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </Form>
+                                        <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="py-2 px-4 mb-3 rounded border hover:bg-green-200">Цэвэрлэх</a>
+                                        <div className="flex flex-wrap">
+                                            <div className="flex flex-wrap w-full">
+                                                {
+                                                    ['0','1','3','4','5','6','7','8','9'].map(n=>(
+                                                        <a onClick={()=>keyPadHandler(n)} className="py-2 px-4 rounded m-1 border hover:bg-green-200">{n}</a>
+                                                    ))
+                                                }
+                                            </div>
+                                            {
+                                                usguud.map((useg)=>(
+                                                    <a onClick={()=>keyPadHandler(useg)} className="py-2 px-3 rounded m-1 border hover:bg-green-200">{useg}</a>
+                                                ))
+                                            }
+                                        </div>
+                                        {/*<div className="flex w-full items-center">
+                                            <label>Дугаар</label>
+
+                                        </div>*/}
+                                    </>
+                            }
                         </Space>
                     </Modal>
                 </div>
