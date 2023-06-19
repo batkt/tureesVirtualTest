@@ -4,7 +4,7 @@ import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
-import KhuvaajTulukh from "../togloomiinTuv/KhuvaajTulukh";
+import KhuvaajTulukh from "./KhuvaajTulukh";
 import EBarimt from "../togloomiinTuv/EBarimt";
 import QRCode from "react-qr-code";
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
@@ -19,7 +19,7 @@ function Tulbur(
   { destroy, data, token, ajiltan, baiguullaga, barilgiinId, uilchluugchiinId, onRefresh },
   ref
 ) {
-  // console.log('----data-----', ajiltan);
+  // console.log('----data-----', data);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     data?.tulburTulsunEsekh === true ? 2 : 1
