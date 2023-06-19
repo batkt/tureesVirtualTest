@@ -146,7 +146,7 @@ function mashinBurtgel({ token }) {
       title="Машин бүртгэл"
       khuudasniiNer="mashinBurtgel"
       className="p-0 md:p-4"
-      tsonkhniiId={"62ea0cad7c54f8189bdca52d"}
+      tsonkhniiId={"64546d9caf55fc853dd6812c"}
       onSearch={(search) =>
         setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }

@@ -1118,7 +1118,7 @@ function togloom1() {
         }))
       }
       className="p-0 md:p-4"
-      tsonkhniiId={"64113e5d8505554744a87713"}>
+      tsonkhniiId={"64472c1628c37d7cdda11a3a"}>
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {toololtGaralt.map((a, i) => (

@@ -13,8 +13,20 @@ import { useAuth } from "services/auth";
 import formatNumber from "tools/function/formatNumber";
 import { t } from "i18next";
 import useJagsaalt from "hooks/useJagsaalt";
-import { Button, DatePicker,  notification,  Popconfirm,  Select, Tooltip } from "antd";
-import { DeleteOutlined, EditOutlined, FileExcelOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  Button,
+  DatePicker,
+  notification,
+  Popconfirm,
+  Select,
+  Tooltip,
+} from "antd";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FileExcelOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import TailanZagvar from "components/pageComponents/tailan/TailanZagvar";
 import { modal } from "components/ant/Modal";
@@ -141,15 +153,19 @@ function Tailan({ token }) {
   const query = useMemo(() => {
     return {
       barilgiinId: barilgiinId,
-      ekhlekhOgnoo: !!ognoo ? ognoo[0].format("YYYY-MM-DD 00:00:00") : undefined,
-      duusakhOgnoo: !!ognoo ? ognoo[1].format("YYYY-MM-DD 00:00:00") : undefined,
+      ekhlekhOgnoo: !!ognoo
+        ? ognoo[0].format("YYYY-MM-DD 00:00:00")
+        : undefined,
+      duusakhOgnoo: !!ognoo
+        ? ognoo[1].format("YYYY-MM-DD 00:00:00")
+        : undefined,
     };
   }, [ognoo, barilgiinId]);
 
   const tailan = useTailan(service, token, query);
   const [table, setTable] = useState({});
   const [SSR, setSSR] = useState(false);
-  const [selectValue, setSelectValue] = useState(null)
+  const [selectValue, setSelectValue] = useState(null);
   const ref = useRef(null);
   const zagvarQuery = useMemo(() => {
     return {
@@ -165,46 +181,50 @@ function Tailan({ token }) {
 
     if (tailan?.tailanGaralt?.length > 0) {
       tailan?.tailanGaralt.forEach((tmur) => {
-        let murutga = Object.assign({},tmur)
+        let murutga = Object.assign({}, tmur);
         murutga.aldangiinUldegdel = formatNumber(tmur.aldangiinUldegdel) || 0;
         murutga.baiguullagiinNer = tmur.baiguullagiinNer || "";
         murutga.baritsaaAvakhDun = formatNumber(tmur.baritsaaAvakhDun) || 0;
         murutga.baritsaaAvakhKhugatsa = tmur.baritsaaAvakhKhugatsa || "";
         murutga.baritsaaBairshuulakhKhugatsaa =
           tmur.baritsaaBairshuulakhKhugatsaa || "";
-          murutga.baritsaaniiUldegdel = formatNumber(tmur.baritsaaniiUldegdel) || 0;
-          murutga.khariltsagchiinKhayag = tmur.khariltsagchiinKhayag || "";
-          murutga.dans = tmur.dans || "";
-          murutga.daraagiinTulukhOgnoo = tmur.daraagiinTulukhOgnoo || "";
-          murutga.davkhar = tmur.davkhar || "";
-          murutga.duusakhOgnoo = tmur.duusakhOgnoo || "";
-          murutga.gereeniiDugaar = tmur.gereeniiDugaar || "";
-          murutga.gereeniiOgnoo = tmur.gereeniiOgnoo || "";
-          murutga.idevkhiteiEsekh = tmur.idevkhiteiEsekh || 0;
-          murutga.khugatsaa = tmur.khugatsaa || "";
-          murutga.khungulukhEsekh = tmur.khungulukhEsekh || "";
-          murutga.mail = tmur.mail || "";
-          murutga.ner = tmur.ner || "";
-          murutga.ovog = tmur.ovog || "";
-          murutga.register = tmur.register || "";
-          murutga.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
-          murutga.segmentuud = tmur.segmentuud || "";
-          murutga.talbainDugaar = tmur.talbainDugaar || "";
-          murutga.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
-          murutga.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
-          murutga.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
-          murutga.tulukhUdur = tmur.tulukhUdur[0] || "";
-          murutga.tuluv = tmur.tuluv || "";
-          murutga.turul = tmur.turul || "";
-          murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
-          murutga.utas = tmur.utas[0] || 0;
-          murutga.zardluud = tmur.zardluud || 0;
+        murutga.baritsaaniiUldegdel =
+          formatNumber(tmur.baritsaaniiUldegdel) || 0;
+        murutga.khariltsagchiinKhayag = tmur.khariltsagchiinKhayag || "";
+        murutga.dans = tmur.dans || "";
+        murutga.daraagiinTulukhOgnoo = tmur.daraagiinTulukhOgnoo || "";
+        murutga.davkhar = tmur.davkhar || "";
+        murutga.duusakhOgnoo = tmur.duusakhOgnoo || "";
+        murutga.gereeniiDugaar = tmur.gereeniiDugaar || "";
+        murutga.gereeniiOgnoo = tmur.gereeniiOgnoo || "";
+        murutga.idevkhiteiEsekh = tmur.idevkhiteiEsekh || 0;
+        murutga.khugatsaa = tmur.khugatsaa || "";
+        murutga.khungulukhEsekh = tmur.khungulukhEsekh || "";
+        murutga.mail = tmur.mail || "";
+        murutga.ner = tmur.ner || "";
+        murutga.ovog = tmur.ovog || "";
+        murutga.register = tmur.register || "";
+        murutga.sariinTurees = formatNumber(tmur.sariinTurees) || 0;
+        murutga.segmentuud = tmur.segmentuud || "";
+        murutga.talbainDugaar = tmur.talbainDugaar || "";
+        murutga.talbainKhemjee = formatNumber(tmur.talbainKhemjee) || "";
+        murutga.talbainNegjUne = formatNumber(tmur.talbainNegjUne) || "";
+        murutga.talbainNiitUne = formatNumber(tmur.talbainNiitUne) || "";
+        murutga.tulukhUdur = tmur.tulukhUdur[0] || "";
+        murutga.tuluv = tmur.tuluv || "";
+        murutga.turul = tmur.turul || "";
+        murutga.uldegdel = formatNumber(tmur.uldegdel) || 0;
+        murutga.utas = tmur.utas[0] || 0;
+        murutga.zardluud = tmur.zardluud || 0;
 
         let mur = {};
         Object.entries(murutga).map((v) => {
           if (_.isObject(v[1]) || _.isArray(v[1])) murutga[v[0]] = "";
           else if (_.isNumber(v[1])) murutga[v[0]] = v[1];
-          else if (moment(v[1], moment.ISO_8601, true).isValid() && murutga[v[0]].length > 10) {
+          else if (
+            moment(v[1], moment.ISO_8601, true).isValid() &&
+            murutga[v[0]].length > 10
+          ) {
             murutga[v[0]] = moment(v[1]).format("YYYY-MM-DD");
           }
           let key = t(converter(v[0]));
@@ -266,111 +286,146 @@ function Tailan({ token }) {
       title="Тайлан"
       khuudasniiNer="analytictailan"
       className="p-0 md:p-4"
-      tsonkhniiId={"630448aaa612b4cdd5f1fc08"}
-    >
-      <div className="col-span-12 flex flex-col justify-between items-center gap-3 md:flex-row">
+      tsonkhniiId={"645db432d0ec3ffb20a4eb88"}>
+      <div className="col-span-12 flex flex-col items-center justify-between gap-3 md:flex-row">
         <div className=" flex gap-3">
-        <DatePicker.RangePicker
-          className="w-full md:w-auto"
-          locale={locale}
-          value={ognoo}
-          onChange={setOgnoo}
-        />        
-        <div className="flex gap-3 items-center">
-        {!!selectValue && <div className="font-medium">Сонгогдсон загвар:</div>}
-          <Select
-          allowClear 
-
-          value={selectValue}
-            style={{ minWidth: "11rem" }}
-            placeholder="Тайлангийн загвар"
-            onChange={(v) => {      
-              setSelectValue(v)        
-              setTable(v === undefined ? {} : { ...zagvar.jagsaalt.find((a) => a._id === v)?.object });
-            }}
-          >
-            {zagvar.jagsaalt.map((mur) => (
-              <Select.Option value={mur._id} key={mur._id}>
-                <div className="flex flex-row justify-between">
-                  <Tooltip title={<div>{mur.ner}</div>}>
-                  <div className="truncate">{mur.ner}</div>
-                  </Tooltip>                  
-                </div>
-              </Select.Option>
-            ))}
-          </Select>          
-        </div>
-        {!selectValue ? <Button
-        icon={<PlusOutlined/>}
-        className="bg-white dark:bg-gray-900"
-          onClick={() => zagvarBurtgeye({ object: table, turul: "analytik" })}
-        >
-          {t("Загвар бүртгэх")}
-        </Button>
-        : (
-          <div className="flex items-center gap-3">      
-          <Popconfirm
-                    title="Гэрээний загвар устгах уу?"
-                    okText="Тийм"
-                    cancelText="Үгүй"
-                    onConfirm={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      deleteMethod("tailangiinZagvar", token, zagvar.jagsaalt.find((a) => a._id === selectValue)?._id).then(
-                        ({data}) => {
-                          if (data === "Amjilttai") {
-                            notification.success({
-                              message: "Амжилттай",
-                              description: "Амжилттай устгалаа",
-                            });
-                            zagvar.refresh();
-                            setSelectValue(null);
-                            setTable({});
-                          }                          
-                        }
-                      );
-                    }}
-                  >                    
-                    <Button className="bg-white dark:bg-gray-900 group hover:bg-red-400 hover:text-white" icon={<div
-                      className="rounded-md pr-1 text-red-500 group-hover:text-white"
-                    >
-                      <DeleteOutlined />                      
-                    </div>}>Устгах</Button>
-                  </Popconfirm>      
-          <Button className={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) ? "bg-white dark:bg-gray-900 group hover:bg-yellow-100 hover:text-black" : "bg-green-600 hover:bg-green-500 group dark:hover:bg-green-100 text-white hover:text-white"} 
-          icon={(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows === table?.rows && zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols === table?.cols) && <div            
-            className="rounded-md pr-1 text-yellow-500 group-hover:text-black"
-          >
-            <EditOutlined />
-          </div>} onClick={()=> zagvarBurtgeye({...zagvar.jagsaalt.find((a) => a._id === selectValue), object: table})}>
-            {(zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.rows !== table?.rows || zagvar.jagsaalt.find((a) => a._id === selectValue)?.object?.cols !== table?.cols) 
-            ?"Хадгалах" : "Засах"}</Button>
-            
-            
+          <DatePicker.RangePicker
+            className="w-full md:w-auto"
+            locale={locale}
+            value={ognoo}
+            onChange={setOgnoo}
+          />
+          <div className="flex items-center gap-3">
+            {!!selectValue && (
+              <div className="font-medium">Сонгогдсон загвар:</div>
+            )}
+            <Select
+              allowClear
+              value={selectValue}
+              style={{ minWidth: "11rem" }}
+              placeholder="Тайлангийн загвар"
+              onChange={(v) => {
+                setSelectValue(v);
+                setTable(
+                  v === undefined
+                    ? {}
+                    : { ...zagvar.jagsaalt.find((a) => a._id === v)?.object }
+                );
+              }}>
+              {zagvar.jagsaalt.map((mur) => (
+                <Select.Option value={mur._id} key={mur._id}>
+                  <div className="flex flex-row justify-between">
+                    <Tooltip title={<div>{mur.ner}</div>}>
+                      <div className="truncate">{mur.ner}</div>
+                    </Tooltip>
+                  </div>
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          {!selectValue ? (
+            <Button
+              icon={<PlusOutlined />}
+              className="bg-white dark:bg-gray-900"
+              onClick={() =>
+                zagvarBurtgeye({ object: table, turul: "analytik" })
+              }>
+              {t("Загвар бүртгэх")}
+            </Button>
+          ) : (
+            <div className="flex items-center gap-3">
+              <Popconfirm
+                title="Гэрээний загвар устгах уу?"
+                okText="Тийм"
+                cancelText="Үгүй"
+                onConfirm={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  deleteMethod(
+                    "tailangiinZagvar",
+                    token,
+                    zagvar.jagsaalt.find((a) => a._id === selectValue)?._id
+                  ).then(({ data }) => {
+                    if (data === "Amjilttai") {
+                      notification.success({
+                        message: "Амжилттай",
+                        description: "Амжилттай устгалаа",
+                      });
+                      zagvar.refresh();
+                      setSelectValue(null);
+                      setTable({});
+                    }
+                  });
+                }}>
+                <Button
+                  className="group bg-white hover:bg-red-400 hover:text-white dark:bg-gray-900"
+                  icon={
+                    <div className="rounded-md pr-1 text-red-500 group-hover:text-white">
+                      <DeleteOutlined />
+                    </div>
+                  }>
+                  Устгах
+                </Button>
+              </Popconfirm>
+              <Button
+                className={
+                  zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                    ?.rows === table?.rows &&
+                  zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                    ?.cols === table?.cols
+                    ? "group bg-white hover:bg-yellow-100 hover:text-black dark:bg-gray-900"
+                    : "group bg-green-600 text-white hover:bg-green-500 hover:text-white dark:hover:bg-green-100"
+                }
+                icon={
+                  zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                    ?.rows === table?.rows &&
+                  zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                    ?.cols === table?.cols && (
+                    <div className="rounded-md pr-1 text-yellow-500 group-hover:text-black">
+                      <EditOutlined />
+                    </div>
+                  )
+                }
+                onClick={() =>
+                  zagvarBurtgeye({
+                    ...zagvar.jagsaalt.find((a) => a._id === selectValue),
+                    object: table,
+                  })
+                }>
+                {zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                  ?.rows !== table?.rows ||
+                zagvar.jagsaalt.find((a) => a._id === selectValue)?.object
+                  ?.cols !== table?.cols
+                  ? "Хадгалах"
+                  : "Засах"}
+              </Button>
             </div>
-        )}
+          )}
         </div>
         <div>
-        <Button
-        className="bg-white dark:bg-gray-900"
-          icon={<FileExcelOutlined />}
-          onClick={() => {
-            const { Excel } = require("antd-table-saveas-excel");
-            const excel = new Excel();
-            excel
-              .addSheet("Аналитик тайлан")
-              .addColumns(
-                table.rows.map((mur) => {
-                  return { title: mur, dataIndex: mur };
-                })
-              )
-              .addDataSource(data)
-              .saveAs("Аналитик тайлан.xlsx");
-          }}
-        >Excel татах</Button>
-        </div>        
+          <Button
+            className="bg-white dark:bg-gray-900"
+            icon={<FileExcelOutlined />}
+            onClick={() => {
+              const { Excel } = require("antd-table-saveas-excel");
+              const excel = new Excel();
+              excel
+                .addSheet("Аналитик тайлан")
+                .addColumns(
+                  table.rows.map((mur) => {
+                    return { title: mur, dataIndex: mur };
+                  })
+                )
+                .addDataSource(data)
+                .saveAs("Аналитик тайлан.xlsx");
+            }}>
+            Excel татах
+          </Button>
+        </div>
       </div>
-      <div className="ag-theme-alpine col-span-12 overflow-auto" style={{height: "calc( 100vh - 12rem )"}}>
+      <div
+        className="ag-theme-alpine col-span-12 overflow-auto"
+        style={{ height: "calc( 100vh - 12rem )" }}>
         {!SSR && !!PlotlyRenderers && (
           <PivotTableUI
             data={data}

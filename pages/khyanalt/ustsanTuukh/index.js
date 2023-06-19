@@ -100,7 +100,7 @@ const turluud = [
 ];
 
 function UstsanTuukh() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { barilgiinId } = useAuth();
   const [ajiltankhaikh, setAjiltankhaikh] = useState();
   const [turul, setTurul] = useState();
@@ -236,8 +236,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
@@ -257,8 +256,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
@@ -280,8 +278,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
@@ -301,8 +298,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
@@ -324,8 +320,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
@@ -345,8 +340,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
@@ -368,8 +362,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
@@ -389,8 +382,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0)}
                 </div>
               </>
@@ -412,8 +404,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0)}
                 </div>
               </>
@@ -433,8 +424,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
@@ -456,8 +446,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
@@ -477,8 +466,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
@@ -500,8 +488,7 @@ function UstsanTuukh() {
                     tulukhDun.object.tulukhDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulukhDun.object.tulukhDun, 0) || 0}
                 </div>
               </>
@@ -521,8 +508,7 @@ function UstsanTuukh() {
                     tulsunDun.object.tulsunDun > 0
                       ? "text-green-600 "
                       : "text-red-500"
-                  }`}
-                >
+                  }`}>
                   {formatNumber(tulsunDun.object.tulsunDun, 0) || 0}
                 </div>
               </>
@@ -547,7 +533,9 @@ function UstsanTuukh() {
   const ajiltan = useJagsaalt("/ajiltan");
 
   function medeelelKharakh(mur) {
-    const footer = [<Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>];
+    const footer = [
+      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
+    ];
     modal({
       title: t("Дэлгэрэнгүй Мэдээлэл"),
       icon: <FileExcelOutlined />,
@@ -718,8 +706,7 @@ function UstsanTuukh() {
                 icon={
                   <div
                     className={`flex items-center justify-center  dark:bg-gray-700 `}
-                    onClick={() => medeelelKharakh(record, index)}
-                  >
+                    onClick={() => medeelelKharakh(record, index)}>
                     <EyeOutlined
                       style={{ fontSize: "16px" }}
                       className=" dark:bg-gray-700 "
@@ -745,6 +732,7 @@ function UstsanTuukh() {
   return (
     <Admin
       title="Устгасан түүх"
+      tsonkhniiId={"64472c0428c37d7cdda11a32"}
       khuudasniiNer="ustsanTuukh"
       onSearch={(search) =>
         ustsanBarimt.setKhuudaslalt((a) => ({
@@ -754,15 +742,13 @@ function UstsanTuukh() {
         }))
       }
       loading={ustsanBarimt.isValidating}
-      className="p-0 md:p-4"
-    >
+      className="p-0 md:p-4">
       <Card className="col-span-12 rounded-md bg-white dark:bg-gray-900">
         <div
           className="flex flex-col-reverse gap-3 sm:flex-row"
           data-aos="fade-right"
           data-aos-duration="1000"
-          data-aos-delay="300"
-        >
+          data-aos-delay="300">
           <RangePicker
             style={{ marginBottom: "20px" }}
             size="middle"
@@ -772,14 +758,12 @@ function UstsanTuukh() {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="600"
-          >
+            data-aos-delay="600">
             <Select
               className="w-full sm:w-36"
               placeholder={t("Ажилтан")}
               onChange={(v) => setAjiltankhaikh(v)}
-              allowClear
-            >
+              allowClear>
               {ajiltan?.jagsaalt.map((a) => (
                 <Select.Option key={a._id} value={a._id}>
                   {a.ner}
@@ -790,14 +774,12 @@ function UstsanTuukh() {
           <div
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="900"
-          >
+            data-aos-delay="900">
             <Select
               className="w-full sm:w-36"
               placeholder={t("Төрөл")}
               onChange={(v) => setTurul(v)}
-              allowClear
-            >
+              allowClear>
               {turluud.map((a) => (
                 <Select.Option value={a.turul}>{t(a.text)}</Select.Option>
               ))}
