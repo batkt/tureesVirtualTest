@@ -536,6 +536,43 @@ function Tulbur(
                     </div>
                   </td>
                 </tr>
+                <tr>
+                  <td colSpan={6}>
+                    <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
+                      <div className=" text-justify text-xs">
+                        <div>
+                          Эхлэх хугацаа:{" "}
+                          {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+                        </div>{" "}
+                        <div>
+                          Дуусах хугацаа:{" "}
+                          {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
+                        </div>
+                      </div>
+                      <div className="flex w-full items-center justify-center">
+                        <Canvas
+                          text={moment(data?.duusakhTsag).format(
+                            "YYYYMMDDHHmmss"
+                          )}
+                          options={{
+                            level: "M",
+                            margin: 3,
+                            scale: 4,
+                            width: 200,
+                            color: {
+                              dark: "#000000",
+                              light: "#FFFFFF",
+                            },
+                          }}
+                        />
+                      </div>
+                      <div className="max-w-[400px] text-center text-xs">
+                        Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг
+                        удаа нэвтэрч ороход ашиглагдахыг анхаарна уу!
+                      </div>
+                    </div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
