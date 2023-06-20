@@ -162,6 +162,11 @@ const TsagSungakh = React.forwardRef(
       ref,
       () => ({
         khadgalya() {
+          if (!khugatsaa) {
+            message.warn("Сунгах хугацаа оруулна уу!");
+            setKhugatsaa(false);
+            return;
+          }
           confirm(niitDun, khugatsaa, ekhlekhTsag, duusakhTsag, data);
           destroy();
         },
@@ -225,6 +230,8 @@ const TsagSungakh = React.forwardRef(
           <label className="w-48 pr-4 text-end">{t("Хугацаа/мин/")}:</label>
           <InputNumber
             className="w-full"
+            value={khugatsaa}
+            status={khugatsaa === false && "error"}
             placeholder={t("Сунгах хугацаа/мин/")}
             onChange={(v) => onChangeKhugatsaa(v)}
           />

@@ -60,6 +60,7 @@ function Tulbur(
       khaaya() {
         if (
           (!data?.dutuuDun &&
+            alkham === 2 &&
             JSON.stringify(data?.tulbur) !== JSON.stringify(tulbur)) ||
           (!!data?.dutuuDun && tulbur.reduce((a, b) => a + b.dun, 0) !== 0)
         ) {
