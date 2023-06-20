@@ -54,7 +54,7 @@ import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
 import axios from "axios";
 import{ aldaaBarigch, socket } from "services/uilchilgee";
 import useSWR from "swr";
-import uilchilgee from "../../../services/uilchilgee";
+import uilchilgee from "services/uilchilgee";
 import {t} from "i18next";
 
 const usguud = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'Ө', 'П', 'Р', 'С', 'Т', 'У', 'Ү', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ь', 'Ы', 'Э', 'Ю', 'Я',];
@@ -118,20 +118,21 @@ function camera({token}) {
     const [turul, setTurul] = useState(undefined);
     const [songosonMashin, setSongosonMashin] = useState(undefined);
     const tulburRef = React.useRef(null);
-    const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
+    // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
+    const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
     const [modalOpen, setModalOpen] = useState({
         bool: false,
         item: null,
         type: "",
     });
     const [value, setValue] = useState(null);
-    const [camerVal, setCamerVal] = useState(null);
+    const [camerVal, setCamerVal] = useState([null,null]);
     const [cameraData, setCameraData] = useState(null);
     const [cameraKharakh, setCamerKharakh] = useState(false);
     const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [orlogo, setOrlogo] = useState([]);
-    const [mashiniiDugaar, setMashiniiDugaar] = useState();
+    const [tsag, setTsag] = useState();
     const [form] = Form.useForm();
 
     const que = useMemo(() => {
@@ -180,10 +181,10 @@ function camera({token}) {
     useEffect(() => {
         const aa = generateChild(jagsaalt);
         setCameraData(aa);
-        // console.log('orlogoQuery----- ', orlogoQuery);
         uilchilgee(token)
             .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
             .then((a) => {
+                // console.log('a.data-------------- ', a.data);
                 setOrlogo(a.data);
             })
             .catch(aldaaBarigch);
@@ -203,11 +204,7 @@ function camera({token}) {
         setUilchluulegchKhuudaslalt,
         uilchluulegchMutate,
         isValidating,
-    } = useUilchluulegch(token, baiguullaga?._id, query, {"tuukh.tsagiinTuukh.garsanTsag":-1});
-
-    // console.log('zogsooliinOrlogo----- ', orlogo);
-    // console.log('zogsooliinorlogoQuery----- ', orlogoQuery);
-    // console.log('cameraData----- ', uilchluulegchGaralt);
+    } = useUilchluulegch(token, baiguullaga?._id, {}, order);
 
     const dasniiMedeelel = {
         baiguullagiinId:baiguullaga?._id,
@@ -310,7 +307,7 @@ function camera({token}) {
                 sorter: () => 0,
                 render(v) {
                     const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
-                    return d && moment(d).format("YYYY-MM-DD HH:mm");
+                    return d && moment(d).format("MM-DD HH:mm");
                 },
             },
             {
@@ -322,7 +319,7 @@ function camera({token}) {
                 sorter: () => 0,
                 render(v) {
                     const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
-                    return d && moment(d).format("YYYY-MM-DD HH:mm");
+                    return d && moment(d).format("MM-DD HH:mm");
                 },
             },
             {
@@ -333,10 +330,10 @@ function camera({token}) {
                 sorter: () => 0,
                 dataIndex: "tuukh",
                 render(v) {
-                    const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-                    const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
-                    const diff = d2.diff(d1, "minutes");
-                    return v[0]?.niitKhugatsaa ? v[0]?.niitKhugatsaa : (diff && diff);
+                    // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
+                    const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
+                    return v[0]?.niitKhugatsaa ? <div className="py-1 px-3 rounded bg-green-200">{v[0].niitKhugatsaa} мин</div> :
+                        <div className="py-1 px-3 rounded bg-blue-200">{d2.hours} : {d2.minutes}</div>;
                 },
             },
             {
@@ -386,7 +383,11 @@ function camera({token}) {
                                 <div className="flex w-24 flex-col space-y-2">
                                     <a
                                         className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                                        onClick={() => tulburTulyu(v[0], parent._id)}>
+                                        onClick={() => {
+                                            !!v[0]?.tulukhDun ?
+                                            tulburTulyu(v[0], parent._id) :
+                                            notification.warn({ message: t("Дүн бодогдоогүй байна.") });;
+                                        }}>
                                         <WalletOutlined style={{ fontSize: "18px" }} />
                                         <label>{t("Төлөх")}</label>
                                     </a>
@@ -538,8 +539,12 @@ function camera({token}) {
     const onChange = (e) => {
         setValue(e.target.value);
     };
-    const cameraChange = (e) => {
-        setCamerVal(e);
+    const cameraChange = (e, type) => {
+        // console.log('------', e, '  ', type);
+        if (type===1)
+            setCamerVal([e,camerVal[1]]);
+         else
+            setCamerVal([camerVal[0],e]);
     };
     const khadgalakh = () => {
         let body = modalOpen.item;
@@ -583,8 +588,8 @@ function camera({token}) {
         });
         return aa;
     };
-    const khaalgaNeey = () => {
-        axios.get('http://localhost:5000/api/neeye/'+camerVal+'').then(function (response) {
+    const khaalgaNeey = (ip) => {
+        axios.get('http://localhost:5000/api/neeye/'+ip+'').then(function (response) {
             if(!!response)
                 console.log('/api/neeye', response);
         }).catch(function (error) {
@@ -610,6 +615,45 @@ function camera({token}) {
                 }
             }).catch(aldaaBarigch);
     }
+    /*useEffect(()=>{
+        const odooginTsag =
+            Number(moment(new Date()).format("HH")) * 60 * 60 +
+            Number(moment(new Date()).format("mm")) * 60 +
+            Number(moment(new Date()).format("ss"));
+        const ekhlesenTsag =
+            Number(moment(data?.ekhlekhTsag).format("HH")) * 60 * 60 +
+            Number(moment(data?.ekhlekhTsag).format("mm")) * 60 +
+            Number(moment(data?.ekhlekhTsag).format("ss"));
+        const difference = odooginTsag - ekhlesenTsag;
+        let timeLeft = "";
+        var tsag = Math.floor(difference / 60 / 60);
+        var minut = Math.floor((difference - tsag * 60 * 60) / 60);
+        var second = Math.floor(difference - tsag * 60 * 60 - minut * 60);
+        timeLeft = {
+            hours: tsag,
+            minutes: minut,
+            seconds: second,
+        };
+        setTsag(timeLeft);
+    },[]);*/
+    const tsagTootsoolur = (v) => {
+        const odooginTsag =
+            Number(moment(new Date()).format("HH")) * 60 * 60 +
+            Number(moment(new Date()).format("mm")) * 60 +
+            Number(moment(new Date()).format("ss"));
+        const ekhlesenTsag =
+            Number(moment(v).format("HH")) * 60 * 60 +
+            Number(moment(v).format("mm")) * 60 +
+            Number(moment(v).format("ss"));
+        const difference = odooginTsag - ekhlesenTsag;
+        const tsag = Math.floor(difference / 60 / 60);
+        const minut = Math.floor((difference - tsag * 60 * 60) / 60);
+        // const second = Math.floor(difference - tsag * 60 * 60 - minut * 60);
+        return {
+            hours: tsag,
+            minutes: minut,
+        };
+    };
 
     return (
         <Admin
@@ -670,7 +714,7 @@ function camera({token}) {
                                 <div className="flex gap-3">
                                     <Button
                                         onClick={(e) => {
-                                            khaalgaNeey();
+                                            khaalgaNeey(camerVal[0]);
                                         }}
                                         className="w-full sm:w-auto"
                                         type="primary">
@@ -686,16 +730,16 @@ function camera({token}) {
                   </Button>*/}
                                 </div>
                                 <TreeSelect
-                                    onClick={(e) => {
+                                    /*onClick={(e) => {
                                         e.stopPropagation();
-                                    }}
+                                    }}*/
                                     placement={cameraKharakh === 1 ? "topRight" : "bottomLeft"}
                                     showSearch
                                     style={{
                                         backgroundColor: "#10B981",
                                         borderColor: "#10B981",
                                     }}
-                                    value={camerVal}
+                                    value={camerVal[0]}
                                     dropdownStyle={{
                                         maxHeight: 600,
                                         minWidth: 280,
@@ -704,7 +748,7 @@ function camera({token}) {
                                     placeholder="Камер сонгох"
                                     allowClear
                                     treeDefaultExpandAll
-                                    onChange={cameraChange}
+                                    onChange={(e)=>cameraChange(e, 1)}
                                     treeData={cameraData}
                                 />
                             </div>
@@ -749,7 +793,7 @@ function camera({token}) {
                                 <div className="flex gap-3">
                                     <Button
                                         onClick={(e) => {
-                                            e.stopPropagation();
+                                            khaalgaNeey(camerVal[1]);
                                         }}
                                         className="w-full sm:w-auto"
                                         type="primary">
@@ -774,7 +818,7 @@ function camera({token}) {
                                         backgroundColor: "#10B981",
                                         borderColor: "#10B981",
                                     }}
-                                    value={camerVal}
+                                    value={camerVal[1]}
                                     dropdownStyle={{
                                         maxHeight: 600,
                                         minWidth: 280,
@@ -782,7 +826,8 @@ function camera({token}) {
                                     }}
                                     placeholder="Камер сонгох"
                                     allowClear
-                                    onChange={cameraChange}
+                                    treeDefaultExpandAll
+                                    onChange={(e)=>cameraChange(e, 2)}
                                     treeData={cameraData}
                                 />
                             </div>
@@ -838,6 +883,15 @@ function camera({token}) {
                                     value={ognoo}
                                     onChange={setOgnoo}
                                 />
+                                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
+                                    {t("Бүртгэгдсэн орлого")} :{" "}
+                                    {
+                                        formatNumber(
+                                            !!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0
+                                        )
+                                    }
+                                    ₮
+                                </div>
                                 <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
                                     {t("Зогсоолын орлого")} :{" "}
                                     {
@@ -941,7 +995,7 @@ function camera({token}) {
                                 tableLayout="auto"
                                 loading={!uilchluulegchGaralt}
                                 dataSource={uilchluulegchGaralt?.jagsaalt}
-                                scroll={{ y: "calc(100vh - 30rem)" }}
+                                scroll={{ y: "calc(100vh - 39.5rem)" }}
                                 size="small"
                                 bordered
                                 rowKey={(row) => row._id}
@@ -1044,7 +1098,7 @@ function camera({token}) {
                                                     }
                                                 ]}
                                             >
-                                                <Input maxLength={7} value={mashiniiDugaar} placeholder="1234УБА" className="ml-[10px]"/>
+                                                <Input maxLength={7} placeholder="1234УБА" className="ml-[10px]"/>
                                             </Form.Item>
                                             <Form.Item
                                                 name="CAMERA_IP"
@@ -1060,7 +1114,8 @@ function camera({token}) {
                                                     className=""
                                                     placeholder="Камер IP"
                                                 >
-                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal}></Select.Option>
+                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal[0]}></Select.Option>
+                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal[1]}></Select.Option>
                                                 </Select>
                                             </Form.Item>
                                             <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="ml-2 px-2 flex items-center rounded border border-red-400  hover:bg-red-200 h-8">Цэвэрлэх</a>
