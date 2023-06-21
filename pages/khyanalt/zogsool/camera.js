@@ -158,14 +158,15 @@ function camera({token}) {
             };
     }, [ognoo, jagsaalt]);
     const orlogoQuery = useMemo(() => {
+        // console.log('888888888', ognoo);
         if (jagsaalt?.length > 0){
             //зогсоолын id.р хайдаг болгох
             return {
                 baiguullagiinId: baiguullaga?._id,
                 // barilgiinId: barilgiinId,
                 zogsooliinId: jagsaalt[0]?._id,
-                ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                ekhlekhOgnoo: moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
+                duusakhOgnoo: moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
             };
         }
     }, [ognoo, jagsaalt]);
