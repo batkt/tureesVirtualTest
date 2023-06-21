@@ -10,7 +10,7 @@ import {
   Popconfirm,
   Popover,
   Radio,
-  Space,
+  Select,
   Table,
 } from "antd";
 import CardList from "components/cardList";
@@ -72,27 +72,16 @@ function Zogsool({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const [ognoo, setOgnoo] = useState([
-    moment().startOf("month"),
-    moment().endOf("month"),
+    moment().startOf("day"),
+    moment().endOf("day"),
   ]);
   const [turul, setTurul] = useState(undefined);
   const [zogsoolId, setZogsoolId] = useState(undefined);
+  const [orlogo, setOrlogo] = useState([]);
 
   const { zogsoolToololt, zogsoolToololtMutate } = useZogsoolToololt(
     token,
     ognoo
-  );
-
-  const zogsooliinMedeelel = useSWR(
-    ["/zogsooliinDunAvya", token, ognoo],
-    (url, token, ognoo) =>
-      uilchilgee(token)
-        .post(url, {
-          ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-          duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-        })
-        .then((a) => a.data)
-        .catch(aldaaBarigch)
   );
 
   const { order, onChangeTable } = useOrder({ check_in_time: -1 });
@@ -102,26 +91,44 @@ function Zogsool({ token }) {
       baiguullagiinId: baiguullaga?._id,
     };
   }, [baiguullaga?._id]);
-  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
-
   const query = useMemo(() => {
     return {
       "tuukh.tsagiinTuukh.garsanTsag": ognoo
-        ? {
+          ? {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
-        : undefined,
+          : undefined,
       "tuukh.zogsooliinId": zogsoolId,
     };
   }, [ognoo, zogsoolId]);
-
   const {
     uilchluulegchGaralt,
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query);
+
+  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
+
+  const orlogoQuery = useMemo(() => {
+    return {
+      baiguullagiinId: baiguullaga?._id,
+      zogsooliinId: jagsaalt[0]?._id,
+      ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    };
+  }, [ognoo, jagsaalt, uilchluulegchGaralt]);
+
+  useEffect(() => {
+    uilchilgee(token)
+        .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
+        .then((a) => {
+          // console.log('--------0-', a.data)
+          setOrlogo(a.data);
+        })
+        .catch(aldaaBarigch);
+  }, [uilchluulegchGaralt, jagsaalt]);
 
   const toololt = useMemo(
     () => [
@@ -168,7 +175,8 @@ function Zogsool({ token }) {
     [zogsoolToololt, uilchluulegchGaralt]
   );
   const zogsoolChange = (e) => {
-    setZogsoolId(e.target.value);
+    // console.log('2222222222', e);
+    setZogsoolId(e);
   };
   function zurchilNemey(d) {
     console.log("heey", d);
@@ -295,7 +303,7 @@ function Zogsool({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v) => {
-          return v && <div>{t(`${v[0]?.tulburTulsunKhelber}`)}</div>;
+          return v && <div>{v[0]?.tulburTulsunKhelber}</div>;
         },
       },
       {
@@ -426,8 +434,26 @@ function Zogsool({ token }) {
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="200">
-            <div className="flex flex-row space-x-2 p-1 font-medium">
-              {t("Зогсоолын орлого")} : {formatNumber(zogsooliinMedeelel?.data)}
+            {/*<div className="flex flex-row space-x-2 p-1 font-medium">
+              {t("Зогсоолын орлого")} : {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}
+              ₮
+            </div>*/}
+            <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
+              {t("Бүртгэгдсэн орлого")} :{" "}
+              {
+                formatNumber(
+                    !!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0
+                )
+              }
+              ₮
+            </div>
+            <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
+              {t("Зогсоолын орлого")} :{" "}
+              {
+                formatNumber(
+                    !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
+                )
+              }
               ₮
             </div>
           </div>
@@ -445,24 +471,17 @@ function Zogsool({ token }) {
             data-aos="zoom-in-left"
             data-aos-duration="1000"
             data-aos-delay="300">
-            <Radio.Group
-              className="mb-3 w-full sm:mb-0 sm:mr-2 sm:w-auto"
-              onChange={zogsoolChange}
-              type="primary"
-              defaultValue={undefined}
-              buttonStyle="solid">
-              <Radio.Button className="w-1/3 sm:w-auto" value={undefined}>
-                Бүгд
-              </Radio.Button>
+            {/*<Select
+                className="mb-3 w-max sm:mb-0 sm:mr-2 sm:w-auto"
+                defaultValue="Бүгд"
+                onChange={zogsoolChange}
+            >
               {jagsaalt?.map((zogsool) => (
-                <Radio.Button
-                  className="w-1/3 sm:w-auto  "
-                  value={`${zogsool._id}`}
-                  type="primary">
-                  {zogsool.ner}
-                </Radio.Button>
+                  <Select.Option className="w-1/3 sm:w-auto" key={zogsool._id} value={zogsool._id}>
+                    <div>{zogsool.ner}</div>
+                  </Select.Option>
               ))}
-            </Radio.Group>
+            </Select>*/}
             <Popover
               content={() => (
                 <div className="flex w-32 flex-col space-y-2">

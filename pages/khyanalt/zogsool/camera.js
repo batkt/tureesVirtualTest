@@ -112,8 +112,8 @@ function camera({token}) {
     const { t, i18n } = useTranslation();
     const { baiguullaga, ajiltan, barilgiinId } = useAuth();
     const [ognoo, setOgnoo] = useState([
-        moment().startOf("month"),
-        moment().endOf("month"),
+        moment().startOf("day"),
+        moment().endOf("day"),
     ]);
     const [turul, setTurul] = useState(undefined);
     const [songosonMashin, setSongosonMashin] = useState(undefined);
@@ -333,7 +333,7 @@ function camera({token}) {
                     // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     return v[0]?.niitKhugatsaa ? <div className="py-1 px-3 rounded bg-green-200">{v[0].niitKhugatsaa} мин</div> :
-                        <div className="py-1 px-3 rounded bg-blue-200">{d2.hours} : {d2.minutes}</div>;
+                        <div className="py-1 px-3 rounded bg-blue-200">{d2.hours.length < 2 ? ('0'+d2.hours) : d2.hours} : {d2.minutes.length < 2 ? ('0'+d2.minutes) : d2.minutes}</div>;
                 },
             },
             {
@@ -420,18 +420,14 @@ function camera({token}) {
                             </Button>
                         </Popover>
                     ) : v[0]?.tuluv < 0 ? (
-                        <Tooltip
-                            placement="top"
-                            title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-                            <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-                                <div className="flex items-center justify-center">
-                                    <CheckCircleOutlined />
-                                </div>
-                                <div className="flex items-center justify-center">
-                                    {t("Үнэгүй")}
-                                </div>
+                        <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                            <div className="flex items-center justify-center">
+                                <CheckCircleOutlined />
                             </div>
-                        </Tooltip>
+                            <div className="flex items-center justify-center">
+                                {t("Үнэгүй")}
+                            </div>
+                        </div>
                     ) : /*v[0]?.ebarimtAvsanEsekh ?*/ (
                         <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                             <div className="flex items-center justify-center">
@@ -461,6 +457,20 @@ function camera({token}) {
               </div>
             </Button>
           )*/;
+                },
+            },
+            {
+                title: t("Шалтгаан"),
+                align: "center",
+                dataIndex: "tuukh",
+                width: "7rem",
+                showSorterTooltip: false,
+                render: (v, parent) => {
+                    return v && <Tooltip
+                        placement="top"
+                        title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
+                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}</div>
+                    </Tooltip>;
                 },
             },
             {
@@ -615,27 +625,6 @@ function camera({token}) {
                 }
             }).catch(aldaaBarigch);
     }
-    /*useEffect(()=>{
-        const odooginTsag =
-            Number(moment(new Date()).format("HH")) * 60 * 60 +
-            Number(moment(new Date()).format("mm")) * 60 +
-            Number(moment(new Date()).format("ss"));
-        const ekhlesenTsag =
-            Number(moment(data?.ekhlekhTsag).format("HH")) * 60 * 60 +
-            Number(moment(data?.ekhlekhTsag).format("mm")) * 60 +
-            Number(moment(data?.ekhlekhTsag).format("ss"));
-        const difference = odooginTsag - ekhlesenTsag;
-        let timeLeft = "";
-        var tsag = Math.floor(difference / 60 / 60);
-        var minut = Math.floor((difference - tsag * 60 * 60) / 60);
-        var second = Math.floor(difference - tsag * 60 * 60 - minut * 60);
-        timeLeft = {
-            hours: tsag,
-            minutes: minut,
-            seconds: second,
-        };
-        setTsag(timeLeft);
-    },[]);*/
     const tsagTootsoolur = (v) => {
         const odooginTsag =
             Number(moment(new Date()).format("HH")) * 60 * 60 +
@@ -650,8 +639,8 @@ function camera({token}) {
         const minut = Math.floor((difference - tsag * 60 * 60) / 60);
         // const second = Math.floor(difference - tsag * 60 * 60 - minut * 60);
         return {
-            hours: tsag,
-            minutes: minut,
+            hours: tsag.toString(),
+            minutes: minut.toString(),
         };
     };
 
