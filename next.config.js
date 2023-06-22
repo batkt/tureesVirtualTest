@@ -13,7 +13,7 @@ module.exports = {
       fallback: [
         {
           source: "/hicarapi/:path*",
-          destination: "http://103.50.205.33:8080/:path*",
+          destination: "http://hicar.zevtabs.mn:8080/:path*",
         },
       ],
     };
