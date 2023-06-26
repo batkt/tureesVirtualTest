@@ -16,8 +16,7 @@ function MashinBurtgel(
   ref
 ) {
   const [form] = Form.useForm();
-
-  const [geree, setGeree] = useState();
+  const [geree, setGeree] = useState(null);
 
   useImperativeHandle(
     ref,
@@ -25,8 +24,10 @@ function MashinBurtgel(
       khadgalya() {
         const data = form.getFieldsValue();
         data.barilgiinId = barilgiinId;
-        data.ezemshigchiinTalbainDugaar = geree.talbainDugaar;
-        data.gereeniiDugaar = geree.gereeniiDugaar;
+        if(!!geree){
+          data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
+          data.gereeniiDugaar = geree?.gereeniiDugaar;
+        }
         const method = data?._id ? updateMethod : createMethod;
         method("mashin", token, data).then(({ data }) => {
           if (data === "Amjilttai") {

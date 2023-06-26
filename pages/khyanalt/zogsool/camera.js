@@ -132,7 +132,6 @@ function camera({token}) {
     const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [orlogo, setOrlogo] = useState([]);
-    const [tsag, setTsag] = useState();
     const [form] = Form.useForm();
 
     const que = useMemo(() => {
@@ -158,7 +157,6 @@ function camera({token}) {
             };
     }, [ognoo, jagsaalt]);
     const orlogoQuery = useMemo(() => {
-        // console.log('888888888', ognoo);
         if (jagsaalt?.length > 0){
             //зогсоолын id.р хайдаг болгох
             return {
@@ -375,8 +373,7 @@ function camera({token}) {
                 sorter: () => 0,
                 dataIndex: "tuukh",
                 render(v, parent) {
-                    // v[0].tuluv === 0 ?
-                    return v[0]?.tuluv === 0 ? (
+                    return (v[0]?.tuluv === 0 && !!v[0]?.tulukhDun) ? (
                         <Popover
                             placement="bottom"
                             trigger="hover"
@@ -386,8 +383,8 @@ function camera({token}) {
                                         className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                                         onClick={() => {
                                             !!v[0]?.tulukhDun ?
-                                            tulburTulyu(v[0], parent._id) :
-                                            notification.warn({ message: t("Дүн бодогдоогүй байна.") });;
+                                                tulburTulyu(v[0], parent._id) :
+                                                notification.warn({ message: t("Дүн бодогдоогүй байна.") });
                                         }}>
                                         <WalletOutlined style={{ fontSize: "18px" }} />
                                         <label>{t("Төлөх")}</label>
@@ -420,16 +417,36 @@ function camera({token}) {
                                 </div>
                             </Button>
                         </Popover>
-                    ) : v[0]?.tuluv < 0 ? (
-                        <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-                            <div className="flex items-center justify-center">
-                                <CheckCircleOutlined />
+                    ) :  (
+                        (v[0]?.tuluv === 0 && !v[0]?.niitKhugatsaa) ?
+                            <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
+                                <div className="flex items-center justify-center">
+                                    <CheckCircleOutlined />
+                                </div>
+                                <div className="flex items-center justify-center">Идэвтхэй</div>
                             </div>
-                            <div className="flex items-center justify-center">
-                                {t("Үнэгүй")}
-                            </div>
-                        </div>
-                    ) : /*v[0]?.ebarimtAvsanEsekh ?*/ (
+                            :
+                            (v[0]?.tuluv === 1 ?
+                                    <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
+                                        <div className="flex items-center justify-center">
+                                            <CheckCircleOutlined />
+                                        </div>
+                                        <div className="flex items-center justify-center">
+                                            {t("Төлөгдсөн")}
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                                        <div className="flex items-center justify-center">
+                                            <CheckCircleOutlined />
+                                        </div>
+                                        <div className="flex items-center justify-center">
+                                            {t("Үнэгүй")}
+                                        </div>
+                                    </div>
+                            )
+
+                    ) /*v[0]?.ebarimtAvsanEsekh ? (
                         <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                             <div className="flex items-center justify-center">
                                 <CheckCircleOutlined />
@@ -438,7 +455,7 @@ function camera({token}) {
                                 {t("Төлөгдсөн")}
                             </div>
                         </div>
-                    ) /*: (
+                    ) : (
             <Button
               style={{
                 display: "flex",
@@ -457,7 +474,7 @@ function camera({token}) {
                 </div>
               </div>
             </Button>
-          )*/;
+          );*/
                 },
             },
             {
@@ -470,7 +487,7 @@ function camera({token}) {
                     return v && <Tooltip
                         placement="top"
                         title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}</div>
+                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : v[0]?.niitKhugatsaa ? '30 мин' : parent.zurchil}</div>
                     </Tooltip>;
                 },
             },
@@ -554,7 +571,7 @@ function camera({token}) {
         // console.log('------', e, '  ', type);
         if (type===1)
             setCamerVal([e,camerVal[1]]);
-         else
+        else
             setCamerVal([camerVal[0],e]);
     };
     const khadgalakh = () => {
@@ -610,15 +627,15 @@ function camera({token}) {
     const keyPadHandler = (v)=>{
         const val = form.getFieldValue('mashiniiDugaar');
         if(!val || val.length < 7)
-        form.setFieldValue('mashiniiDugaar', val?val+v:v);
+            form.setFieldValue('mashiniiDugaar', val?val+v:v);
         // console.log(v,' - - ', val)
     };
     const dugaarBurtgekh = ()=>{
         const body = form.getFieldsValue();
+        // console.log('99999999', body);
         uilchilgee(token)
             .post("/zogsoolSdkService", body)
             .then(({status}) => {
-                // console.log('99999999', status);
                 if (status === 200) {
                     notification.success({ message: t("Амжилттай бүртгэгдлээ") });
                     setModalOpen({ bool: false, item: null, type: "" });
@@ -1063,7 +1080,7 @@ function camera({token}) {
                                             <Input onChange={onChange} className="ml-[10px] w-full" />
                                         </div>
                                     </>
-                                :
+                                    :
                                     <>
                                         <Form
                                             form={form}
@@ -1096,16 +1113,18 @@ function camera({token}) {
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message: 'Камер IP сонгоно уу.',
+                                                        message: 'Камер сонгоно уу.',
                                                     },
                                                 ]}
                                             >
                                                 <Select
                                                     className=""
                                                     placeholder="Камер IP"
-                                                >
-                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal[0]}></Select.Option>
-                                                    <Select.Option className="w-1/3 sm:w-auto" value={camerVal[1]}></Select.Option>
+                                                > {
+                                                    cameraData[0].children.map(cam=>(
+                                                        <Select.Option className="w-1/3 sm:w-auto" value={cam.children[0].value}>{cam.title}</Select.Option>
+                                                    ))
+                                                }
                                                 </Select>
                                             </Form.Item>
                                             <a onClick={()=>form.setFieldValue('mashiniiDugaar', '')} className="ml-2 px-2 flex items-center rounded border border-red-400  hover:bg-red-200 h-8">Цэвэрлэх</a>
