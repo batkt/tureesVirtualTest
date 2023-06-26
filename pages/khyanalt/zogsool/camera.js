@@ -113,7 +113,7 @@ function camera({token}) {
     const { t, i18n } = useTranslation();
     const { baiguullaga, ajiltan, barilgiinId } = useAuth();
     const [ognoo, setOgnoo] = useState([
-        moment().startOf("month"),
+        moment().startOf("day"),
         moment().endOf("day"),
     ]);
     const [turul, setTurul] = useState(undefined);
