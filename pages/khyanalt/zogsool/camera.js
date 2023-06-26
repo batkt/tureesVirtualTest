@@ -34,6 +34,7 @@ import {
     DownOutlined,
     EyeOutlined,
     CloseOutlined,
+    CaretDownOutlined
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -112,7 +113,7 @@ function camera({token}) {
     const { t, i18n } = useTranslation();
     const { baiguullaga, ajiltan, barilgiinId } = useAuth();
     const [ognoo, setOgnoo] = useState([
-        moment().startOf("day"),
+        moment().startOf("month"),
         moment().endOf("day"),
     ]);
     const [turul, setTurul] = useState(undefined);
@@ -132,6 +133,7 @@ function camera({token}) {
     const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [orlogo, setOrlogo] = useState([]);
+    const [khelber, setKhelber] = useState(null);
     const [form] = Form.useForm();
 
     const que = useMemo(() => {
@@ -143,7 +145,6 @@ function camera({token}) {
     const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
     const query = useMemo(() => {
-        if (jagsaalt?.length > 0)
         //зогсоолын id.р хайдаг болгох
             return {
                 "tuukh.tsagiinTuukh.garsanTsag": ognoo
@@ -152,10 +153,11 @@ function camera({token}) {
                         $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
                     }
                     : undefined,
+                "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber
                 // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
                 // turul: turul === "Үйлчлүүлэгч" ? null : turul,
             };
-    }, [ognoo, jagsaalt]);
+    }, [ognoo, khelber]);
     const orlogoQuery = useMemo(() => {
         if (jagsaalt?.length > 0){
             //зогсоолын id.р хайдаг болгох
@@ -163,8 +165,8 @@ function camera({token}) {
                 baiguullagiinId: baiguullaga?._id,
                 // barilgiinId: barilgiinId,
                 zogsooliinId: jagsaalt[0]?._id,
-                ekhlekhOgnoo: moment().startOf("month").format("YYYY-MM-DD 00:00:00"),
-                duusakhOgnoo: moment().endOf("month").format("YYYY-MM-DD 23:59:59"),
+                ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
             };
         }
     }, [ognoo, jagsaalt]);
@@ -177,9 +179,7 @@ function camera({token}) {
         Aos.init({ once: true });
     });
 
-    useEffect(() => {
-        const aa = generateChild(jagsaalt);
-        setCameraData(aa);
+    useEffect(()=>{
         uilchilgee(token)
             .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
             .then((a) => {
@@ -187,6 +187,11 @@ function camera({token}) {
                 setOrlogo(a.data);
             })
             .catch(aldaaBarigch);
+    },[orlogoQuery]);
+
+    useEffect(() => {
+        const aa = generateChild(jagsaalt);
+        setCameraData(aa);
     }, [jagsaalt]);
     useEffect(() => {
         socket().on(`zogsool`, (zogsool) => {
@@ -203,7 +208,7 @@ function camera({token}) {
         setUilchluulegchKhuudaslalt,
         uilchluulegchMutate,
         isValidating,
-    } = useUilchluulegch(token, baiguullaga?._id, {}, order);
+    } = useUilchluulegch(token, baiguullaga?._id, query, order);
 
     const dasniiMedeelel = {
         baiguullagiinId:baiguullaga?._id,
@@ -301,11 +306,11 @@ function camera({token}) {
                 title: t("Орсон"),
                 align: "center",
                 width: "10rem",
-                dataIndex: "tuukh",
+                dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
                 showSorterTooltip: false,
                 sorter: () => 0,
-                render(v) {
-                    const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
+                render(v, p) {
+                    const d = p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
                     return d && moment(d).format("MM-DD HH:mm");
                 },
             },
@@ -313,11 +318,11 @@ function camera({token}) {
                 title: t("Гарсан"),
                 align: "center",
                 width: "10rem",
-                dataIndex: "tuukh",
+                dataIndex: "tuukh.tsagiinTuukh.garsanTsag",
                 showSorterTooltip: false,
                 sorter: () => 0,
-                render(v) {
-                    const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
+                render(v, p) {
+                    const d = p.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
                     return d && moment(d).format("MM-DD HH:mm");
                 },
             },
@@ -356,7 +361,72 @@ function camera({token}) {
                 summary: true,
             },
             {
-                title: t("Хэлбэр"),
+                title: (
+                    <Popover
+                    placement="bottom"
+                    content={
+                        <div className="space-y-2">
+                            <div
+                                onClick={() => setKhelber("belen")}
+                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-blue-600 font-medium hover:bg-opacity-20 rounded-md border ${
+                                    khelber === "belen" &&
+                                    "bg-blue-600 border-blue-600 bg-opacity-20"
+                                }`}>
+                                Бэлэн
+                                {khelber === "belen" && (
+                                    <div
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setKhelber(undefined);
+                                        }}
+                                        className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
+                                        <CloseCircleOutlined />
+                                    </div>
+                                )}
+                            </div>
+                            <div
+                                onClick={() => setKhelber("card")}
+                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
+                                    khelber === "VIP" &&
+                                    "border-green-600 bg-green-600 bg-opacity-20"
+                                }`}>
+                                Карт
+                                {khelber === "card" && (
+                                    <div
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setKhelber(undefined);
+                                        }}
+                                        className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-red rounded-full -top-1 flex">
+                                        <CloseCircleOutlined />
+                                    </div>
+                                )}
+                            </div>
+                            <div
+                                onClick={() => setKhelber("khariltsakh")}
+                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
+                                    khelber === "VIP" &&
+                                    "border-green-600 bg-green-600 bg-opacity-20"
+                                }`}>
+                                Харилцах
+                                {khelber === "khariltsakh" && (
+                                    <div
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setKhelber(undefined);
+                                        }}
+                                        className="absolute text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
+                                        <CloseCircleOutlined />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    }>
+                        <div
+                            className={`flex gap-3  cursor-pointer items-center justify-center `}>
+                            Хэлбэр <CaretDownOutlined className={`text-lg`} />
+                        </div>
+                </Popover>),
                 align: "center",
                 dataIndex: "tuukh",
                 width: "7rem",
@@ -998,7 +1068,7 @@ function camera({token}) {
                             data-aos-delay="300"
                             data-aos-anchor-placement="top-bottom">
                             <Table
-                                className="mt-8 hidden overflow-auto md:block"
+                                className="mt-8 hidden cameraTable overflow-auto md:block"
                                 tableLayout="auto"
                                 loading={!uilchluulegchGaralt}
                                 dataSource={uilchluulegchGaralt?.jagsaalt}
@@ -1008,6 +1078,11 @@ function camera({token}) {
                                 rowKey={(row) => row._id}
                                 columns={columns}
                                 onChange={onChangeTable}
+                                rowClassName={(record, index) =>{
+                                    const d = record.tuukh[0];
+                                    if(d.tuluv===0&&d?.tulukhDun)
+                                        return "blue";
+                                }}
                                 pagination={{
                                     current: uilchluulegchGaralt?.khuudasniiDugaar,
                                     pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
