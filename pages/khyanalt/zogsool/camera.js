@@ -146,17 +146,17 @@ function camera({token}) {
 
     const query = useMemo(() => {
         //зогсоолын id.р хайдаг болгох
-            return {
-                createdAt: ognoo
-                    ? {
-                        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                    }
-                    : undefined,
-                "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber
-                // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
-                // turul: turul === "Үйлчлүүлэгч" ? null : turul,
-            };
+        return {
+            "tuukh.tsagiinTuukh.garsanTsag": ognoo
+                ? {
+                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                }
+                : undefined,
+            "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber
+            // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
+            // turul: turul === "Үйлчлүүлэгч" ? null : turul,
+        };
     }, [ognoo, khelber]);
     const orlogoQuery = useMemo(() => {
         if (jagsaalt?.length > 0){
@@ -245,7 +245,17 @@ function camera({token}) {
         uilchluulegchMutate();
         dansniiKhuulgaMutate();
     }
-
+    const minToHour = (m) => {
+        let res ;
+        if(m<60)
+            res = (m+' мин');
+        else {
+            const h = Math.floor(m / 60);
+            const min = m % 60;
+            res = (h+' цаг '+(min&&min+' мин'))
+        }
+        return res;
+    };
     function tulburTulyu(data, uilchluugchiinId) {
         // console.log('----------', data, ' - ',uilchluugchiinId);
         modal({
@@ -336,7 +346,7 @@ function camera({token}) {
                 render(v) {
                     // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-                    return v[0]?.niitKhugatsaa ? <div className="py-1 px-3 rounded bg-green-200">{v[0].niitKhugatsaa} мин</div> :
+                    return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? <div className="py-1 px-3 rounded bg-green-200">{minToHour(v[0].niitKhugatsaa)}</div> :
                         <div className="py-1 px-3 rounded bg-blue-200">{d2.hours.length < 2 ? ('0'+d2.hours) : d2.hours} : {d2.minutes.length < 2 ? ('0'+d2.minutes) : d2.minutes}</div>;
                 },
             },
@@ -363,70 +373,70 @@ function camera({token}) {
             {
                 title: (
                     <Popover
-                    placement="bottom"
-                    content={
-                        <div className="space-y-2">
-                            <div
-                                onClick={() => setKhelber("belen")}
-                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-blue-600 font-medium hover:bg-opacity-20 rounded-md border ${
-                                    khelber === "belen" &&
-                                    "bg-blue-600 border-blue-600 bg-opacity-20"
-                                }`}>
-                                Бэлэн
-                                {khelber === "belen" && (
-                                    <div
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setKhelber(undefined);
-                                        }}
-                                        className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
-                                        <CloseCircleOutlined />
-                                    </div>
-                                )}
+                        placement="bottom"
+                        content={
+                            <div className="space-y-2">
+                                <div
+                                    onClick={() => setKhelber("belen")}
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-blue-600 font-medium hover:bg-opacity-20 rounded-md border ${
+                                        khelber === "belen" &&
+                                        "bg-blue-600 border-blue-600 bg-opacity-20"
+                                    }`}>
+                                    Бэлэн
+                                    {khelber === "belen" && (
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setKhelber(undefined);
+                                            }}
+                                            className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
+                                            <CloseCircleOutlined />
+                                        </div>
+                                    )}
+                                </div>
+                                <div
+                                    onClick={() => setKhelber("card")}
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
+                                        khelber === "VIP" &&
+                                        "border-green-600 bg-green-600 bg-opacity-20"
+                                    }`}>
+                                    Карт
+                                    {khelber === "card" && (
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setKhelber(undefined);
+                                            }}
+                                            className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-red rounded-full -top-1 flex">
+                                            <CloseCircleOutlined />
+                                        </div>
+                                    )}
+                                </div>
+                                <div
+                                    onClick={() => setKhelber("khariltsakh")}
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
+                                        khelber === "VIP" &&
+                                        "border-green-600 bg-green-600 bg-opacity-20"
+                                    }`}>
+                                    Харилцах
+                                    {khelber === "khariltsakh" && (
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setKhelber(undefined);
+                                            }}
+                                            className="absolute text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
+                                            <CloseCircleOutlined />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                            <div
-                                onClick={() => setKhelber("card")}
-                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
-                                    khelber === "VIP" &&
-                                    "border-green-600 bg-green-600 bg-opacity-20"
-                                }`}>
-                                Карт
-                                {khelber === "card" && (
-                                    <div
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setKhelber(undefined);
-                                        }}
-                                        className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-red rounded-full -top-1 flex">
-                                        <CloseCircleOutlined />
-                                    </div>
-                                )}
-                            </div>
-                            <div
-                                onClick={() => setKhelber("khariltsakh")}
-                                className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
-                                    khelber === "VIP" &&
-                                    "border-green-600 bg-green-600 bg-opacity-20"
-                                }`}>
-                                Харилцах
-                                {khelber === "khariltsakh" && (
-                                    <div
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setKhelber(undefined);
-                                        }}
-                                        className="absolute text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
-                                        <CloseCircleOutlined />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    }>
+                        }>
                         <div
                             className={`flex gap-3  cursor-pointer items-center justify-center `}>
                             Хэлбэр <CaretDownOutlined className={`text-lg`} />
                         </div>
-                </Popover>),
+                    </Popover>),
                 align: "center",
                 dataIndex: "tuukh",
                 width: "7rem",
@@ -488,28 +498,19 @@ function camera({token}) {
                             </Button>
                         </Popover>
                     ) :  (
-                        (v[0]?.tuluv === 0 && !v[0]?.niitKhugatsaa) ?
+                        (v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh[0]?.garsanTsag) ?
                             <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-                                <div className="flex items-center justify-center">
-                                    <CheckCircleOutlined />
-                                </div>
                                 <div className="flex items-center justify-center">Идэвтхэй</div>
                             </div>
                             :
                             (v[0]?.tuluv === 1 ?
                                     <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                                         <div className="flex items-center justify-center">
-                                            <CheckCircleOutlined />
-                                        </div>
-                                        <div className="flex items-center justify-center">
                                             {t("Төлөгдсөн")}
                                         </div>
                                     </div>
                                     :
                                     <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-                                        <div className="flex items-center justify-center">
-                                            <CheckCircleOutlined />
-                                        </div>
                                         <div className="flex items-center justify-center">
                                             {t("Үнэгүй")}
                                         </div>
@@ -557,7 +558,8 @@ function camera({token}) {
                     return v && <Tooltip
                         placement="top"
                         title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : v[0]?.niitKhugatsaa ? '30 мин' : parent.zurchil}</div>
+                        {/*<div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : v[0]?.niitKhugatsaa ? '30 мин' : parent.zurchil}</div>*/}
+                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : (!!v[0]?.tsagiinTuukh[0]?.garsanTsag  && v[0]?.niitKhugatsaa <= 30) ? '30 мин' : parent.zurchil}</div>
                     </Tooltip>;
                 },
             },
