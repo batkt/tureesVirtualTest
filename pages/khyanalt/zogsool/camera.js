@@ -120,7 +120,7 @@ function camera({token}) {
     const [songosonMashin, setSongosonMashin] = useState(undefined);
     const tulburRef = React.useRef(null);
     // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
-    const { order, onChangeTable, setOrder } = useOrder({ createdAt: -1 });
+    const { order, onChangeTable, setOrder } = useOrder({ "tuukh.tsagiinTuukh.garsanTsag": -1 });
     const [modalOpen, setModalOpen] = useState({
         bool: false,
         item: null,
@@ -147,12 +147,12 @@ function camera({token}) {
     const query = useMemo(() => {
         //зогсоолын id.р хайдаг болгох
         return {
-            "tuukh.tsagiinTuukh.garsanTsag": ognoo
+            /*"tuukh.tsagiinTuukh.garsanTsag": ognoo
                 ? {
                     $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
                     $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
                 }
-                : undefined,
+                : undefined,*/
             "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber
             // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
             // turul: turul === "Үйлчлүүлэгч" ? null : turul,
