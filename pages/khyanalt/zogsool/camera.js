@@ -347,7 +347,7 @@ function camera({token}) {
                 render(v) {
                     // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-                    return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? <div className="py-1 px-3 rounded bg-green-200">{minToHour(v[0].niitKhugatsaa)}</div> :
+                    return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? <div  style={{ color: "#303030" }} className="py-1 px-3 rounded bg-green-200">{minToHour(v[0].niitKhugatsaa)}</div> :
                         <div className="py-1 px-3 rounded bg-blue-200">{d2.hours.length < 2 ? ('0'+d2.hours) : d2.hours} : {d2.minutes.length < 2 ? ('0'+d2.minutes) : d2.minutes}</div>;
                 },
             },
