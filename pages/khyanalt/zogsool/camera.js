@@ -446,22 +446,14 @@ function camera({token}) {
                 render: (v) => {
                     let r = null;
                     switch(v[0]?.tulburTulsunKhelber) {
-                        case 'belen':
-                            r = 'Бэлэн';break;
-                        case 'khariltsakh':
-                            r='Харилцах';break;
-                        case 'khaan':
-                            r='Хаан';break;
-                        case 'khas':
-                            r='Хас';break;
-                        case 'tur':
-                            r='Төр';break;
-                        case 'golomt':
-                            r='Голомт';break;
-                        case 'tdb':
-                            r='ХХБ';break;
+                        case 'belen':r = 'Бэлэн';break;
+                        case 'khariltsakh':r='Харилцах';break;
+                        case 'khaan':r='Хаан';break;
+                        case 'khas':r='Хас';break;
+                        case 'tur':r='Төр';break;
+                        case 'golomt':r='Голомт';break;
+                        case 'tdb':r='ХХБ';break;
                         default: break;
-                        // code block"khaan", "tdb","khas","golomt","kapitron","tur"
                     }
                     return r && <div>{r}</div>;
                 },
