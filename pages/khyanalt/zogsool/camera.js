@@ -145,18 +145,19 @@ function camera({token}) {
     const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
     const query = useMemo(() => {
-        //зогсоолын id.р хайдаг болгох
-        return {
-            createdAt: ognoo
-                ? {
-                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-                }
-                : undefined,
-            "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber
-            // "tuukh.zogsooliinId": !!zogsoolId ? zogsoolId : jagsaalt[0]?._id,
-            // turul: turul === "Үйлчлүүлэгч" ? null : turul,
-        };
+        let result = {
+            createdAt: {
+                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            }
+        }
+        if(!!khelber){
+            result = {
+                "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber, ...result
+            }
+        }
+
+        return result
     }, [ognoo, khelber]);
     const orlogoQuery = useMemo(() => {
         if (jagsaalt?.length > 0){
@@ -443,7 +444,26 @@ function camera({token}) {
                 width: "7rem",
                 showSorterTooltip: false,
                 render: (v) => {
-                    return v && <div>{v[0]?.tulburTulsunKhelber}</div>;
+                    let r = null;
+                    switch(v[0]?.tulburTulsunKhelber) {
+                        case 'belen':
+                            r = 'Бэлэн';break;
+                        case 'khariltsakh':
+                            r='Харилцах';break;
+                        case 'khaan':
+                            r='Хаан';break;
+                        case 'khas':
+                            r='Хас';break;
+                        case 'tur':
+                            r='Төр';break;
+                        case 'golomt':
+                            r='Голомт';break;
+                        case 'tdb':
+                            r='ХХБ';break;
+                        default: break;
+                        // code block"khaan", "tdb","khas","golomt","kapitron","tur"
+                    }
+                    return r && <div>{r}</div>;
                 },
             },
             {
@@ -517,7 +537,6 @@ function camera({token}) {
                                         </div>
                                     </div>
                             )
-
                     ) /*v[0]?.ebarimtAvsanEsekh ? (
                         <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                             <div className="flex items-center justify-center">
@@ -559,7 +578,6 @@ function camera({token}) {
                     return v && <Tooltip
                         placement="top"
                         title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-                        {/*<div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : v[0]?.niitKhugatsaa ? '30 мин' : parent.zurchil}</div>*/}
                         <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : (!!v[0]?.tsagiinTuukh[0]?.garsanTsag  && v[0]?.niitKhugatsaa <= 30) ? '30 мин' : parent.zurchil}</div>
                     </Tooltip>;
                 },
@@ -641,7 +659,6 @@ function camera({token}) {
         setValue(e.target.value);
     };
     const cameraChange = (e, type) => {
-        // console.log('------', e, '  ', type);
         if (type===1)
             setCamerVal([e,camerVal[1]]);
         else
@@ -919,7 +936,6 @@ function camera({token}) {
                             className={`fixed right-[8%] top-1/2 z-50 w-[84%] -translate-y-1/2 rounded-lg border bg-white p-5 shadow-xl transition-all xl:relative xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
                                 guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
                             }`}>
-                            {" "}
                             <div className="text-base font-bold">Сүүлийн гүйлгээ</div>
                             <div className="absolute top-3 right-3 text-3xl xl:hidden">
                                 <CloseCircleOutlined
@@ -1243,16 +1259,3 @@ function camera({token}) {
 export const getServerSideProps = shalgaltKhiikh;
 
 export default camera;
-
-/*<Card className="row-span-full col-span-12 lg:col-span-4 lg:col-start-9">
-          <div className="w-full">
-            <div className="border 2xl:aspect-[3/2] aspect-square flex justify-center items-center"><p>Camera1</p></div>
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 grid-cols-1">
-              <div className="border aspect-square"><p>Camera2</p></div>
-              <div className="border aspect-square"><p>Camera3</p></div>
-              <div className="border aspect-square"><p>Camera4</p></div>
-              <div className="border aspect-square"><p>Camera5</p></div>
-            </div>
-          </div>
-        </Card>
-        */
