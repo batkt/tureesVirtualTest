@@ -926,8 +926,8 @@ input:-webkit-autofill {
   @apply bg-green-200 dark:bg-gray-600 !important;
 }
 
-.cameraTable .blue > .ant-table-cell  {
-  @apply bg-blue-500 dark:bg-gray-700 !important;
+.cameraTable .green > .ant-table-cell  {
+  @apply bg-green-500 dark:bg-gray-700 !important;
 }
 
 .ant-form-item-extra {

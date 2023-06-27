@@ -364,9 +364,10 @@ function camera({token}) {
                 width: "10rem",
                 showSorterTooltip: false,
                 sorter: () => 0,
-                dataIndex: "tuukh",
-                render(v) {
-                    return v && formatNumber(v[0]?.tulukhDun, 0);
+                dataIndex: "tuukh.tulukhDun",
+                render(v, p) {
+                    // console.log(p.tuukh[0]?.tulukhDun, '======')
+                    return p && formatNumber(p.tuukh[0]?.tulukhDun, 0);
                 },
                 summary: true,
             },
@@ -1083,7 +1084,7 @@ function camera({token}) {
                                 rowClassName={(record, index) =>{
                                     const d = record.tuukh[0];
                                     if(d.tuluv===0&&d?.tulukhDun)
-                                        return "blue";
+                                        return "green";
                                 }}
                                 pagination={{
                                     current: uilchluulegchGaralt?.khuudasniiDugaar,
