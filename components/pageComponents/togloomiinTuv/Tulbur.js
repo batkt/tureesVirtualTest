@@ -18,7 +18,6 @@ function Tulbur(
   { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
   ref
 ) {
-  console.log("----data11-----", data);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     data?.tulburTulsunEsekh === true ? 2 : 1
@@ -39,7 +38,11 @@ function Tulbur(
     tailbarTurul: undefined,
   });
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
-  const [qpayerTulukh, setQpayerTulukh] = React.useState(false);
+  const [qpayerTulukh, setQpayerTulukh] = React.useState(
+    !!data?.tulbur?.find((data) => data.turul === "qpay")
+      ? "Tulugdsun"
+      : undefined
+  );
   const [songogdTulburiinKhelber, setSongogdsonTulburiinKhelber] =
     React.useState();
   const [songogdsonBank, setSongogdsonBank] = React.useState();
@@ -58,29 +61,11 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        if (
-          (!data?.dutuuDun &&
-            alkham === 2 &&
-            JSON.stringify(data?.tulbur) !== JSON.stringify(tulbur)) ||
-          (!!data?.dutuuDun && tulbur.reduce((a, b) => a + b.dun, 0) !== 0)
-        ) {
-          confirm({
-            title: "Та гарахдаа итгэлтэй байна уу?",
-            okText: "Тийм",
-            cancelText: "Үгүй",
-            content: "Төлбөрийн мэдээлэл хадгалагдахгүй болохыг анхаарна уу!",
-            onOk: () => {
-              onRefresh();
-              destroy();
-            },
-          });
-        } else {
-          onRefresh();
-          destroy();
-        }
+        onRefresh();
+        destroy();
       },
     }),
-    [tulbur]
+    [tulbur, alkham]
   );
 
   function ebarimtAvya(id) {
@@ -132,10 +117,7 @@ function Tulbur(
   function batalgaajuulya(turul, val) {
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
-      guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
-        onRefresh();
-      });
+      guilgeeniiTuukhKhadgalya(tulbur);
       setTulbur(tulbur);
     } else if (
       (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
@@ -152,22 +134,10 @@ function Tulbur(
     setTerminal(false);
     tulbur.find((a) => a.turul === "khaan").isPayed = true;
     setTulbur([...tulbur]);
-    if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
-      tulbur.reduce((a, b) => a + b.dun, 0)
-    ) {
-      guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
-        onRefresh();
-      });
-      setAlkham(2);
-    } else {
-      setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
-      setLoading(false);
-    }
+    guilgeeniiTuukhKhadgalya(tulbur);
   }
 
-  function guilgeeniiTuukhKhadgalya(tulbur, callback) {
+  function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
         message.warn(t("Хөнгөлөх дүн оруулна уу"));
@@ -182,39 +152,45 @@ function Tulbur(
     if (index > -1) {
       tulbur[index].tailbar = khunglult.tailbar;
     }
-
-    if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
-      tulbur.reduce((a, b) => a + b.dun, 0)
-    ) {
-      tulbur.forEach((a) => {
-        a.ognoo = new Date();
-        (a.baiguullagiinId = baiguullaga?._id),
-          (a.barilgiinId = barilgiinId),
-          (a.burtgesenAjiltan = ajiltan._id),
-          (a.burtgesenAjiltaniiNer = ajiltan.ner),
-          (a.togloominId = data._id);
-      });
-      uilchilgee(token)
-        .post("/togloomiinTulburTulye", { tulbur, id: data._id })
-        .then(callback)
-        .catch(aldaaBarigch);
-    } else callback();
+    tulbur.forEach((a) => {
+      a.ognoo = new Date();
+      (a.baiguullagiinId = baiguullaga?._id),
+        (a.barilgiinId = barilgiinId),
+        (a.burtgesenAjiltan = ajiltan._id),
+        (a.burtgesenAjiltaniiNer = ajiltan.ner),
+        (a.togloominId = data._id);
+    });
+    uilchilgee(token)
+      .post("/togloomiinTulburTulye", { tulbur, id: data._id })
+      .then(({ data }) => {
+        if (data === "Amjilttai") {
+          setAlkham(2);
+          onRefresh();
+          setLoading(false);
+        } else {
+          setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
+          message.success("Төлбөр амжилттай хадгалагдлаа");
+          setLoading(false);
+        }
+        if (!!qpayEsekh && qpayEsekh === true) {
+          setSongogdsonTulburiinKhelber();
+          setQpayerTulukh("Tulugdsun");
+        }
+      })
+      .catch(aldaaBarigch);
   }
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
-      socket().on(`qpay${khuleegdejBuiQpay}`, (qpay) => {
-        setSongogdsonTulburiinKhelber();
-        setQpayerTulukh("Tulugdsun");
+      socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
+        batalgaajuulaltKhiiya("qpayTulugdsun");
         message.success("Qpay Амжилттай төлөгдлөө");
-        batalgaajuulaltKhiiya();
       });
     }
     return () => {
       socket().off(`qpay${khuleegdejBuiQpay}`);
     };
-  }, [khuleegdejBuiQpay]);
+  }, [khuleegdejBuiQpay, baiguullaga]);
 
   function qpayAvakh() {
     var ilgeekhDun = tulbur.find((a) => a.turul === "qpay")?.dun;
@@ -228,6 +204,7 @@ function Tulbur(
       .post("/qpayGargaya", {
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
+        barilgiinId: barilgiinId,
       })
       .then(({ data }) => {
         setQpayerTulukh(data.khariu);
@@ -239,7 +216,7 @@ function Tulbur(
       });
   }
 
-  function batalgaajuulaltKhiiya() {
+  function batalgaajuulaltKhiiya(qpayTulugdsun) {
     setLoading(true);
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
     if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
@@ -277,22 +254,11 @@ function Tulbur(
         });
       setTerminal(true);
     } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
-      !qpayerTulukh ? qpayAvakh() : setLoading(false);
+      qpayTulugdsun === "qpayTulugdsun"
+        ? guilgeeniiTuukhKhadgalya(tulbur, true)
+        : qpayAvakh();
     } else {
-      guilgeeniiTuukhKhadgalya(
-        tulbur,
-        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
-          tulbur.reduce((a, b) => a + b.dun, 0)
-          ? () => {
-              setAlkham(2);
-              setLoading(false);
-              onRefresh();
-            }
-          : () => {
-              setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
-              setLoading(false);
-            }
-      );
+      guilgeeniiTuukhKhadgalya(tulbur);
       if (tuluv === 1) {
         setSongogdsonBusadTurul();
       }
@@ -305,7 +271,7 @@ function Tulbur(
     function keyUp(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        ref.current.khaaya();
+        ref.current?.khaaya();
       }
     }
     document.addEventListener("keyup", keyUp);
@@ -637,7 +603,10 @@ function Tulbur(
           setKhungulukhEsekh={setKhungulukhEsekh}
         />
         {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
-          <div className="col-span-3 flex w-full items-center justify-center">
+          <div
+            className={`col-span-3 flex w-full items-center justify-center ${
+              qpayerTulukh === "Tulugdsun" && "hidden"
+            }`}>
             <img src={qpayerTulukh?.qr_image} />
           </div>
         )}
@@ -707,7 +676,7 @@ function Tulbur(
         <Button type="primary" danger onClick={() => ref.current.khaaya()}>
           {t("Хаах")}
         </Button>
-        {alkham === 1 && !qpayerTulukh && (
+        {alkham === 1 && (!qpayerTulukh || qpayerTulukh === "Tulugdsun") && (
           <Button
             type="primary"
             loading={loading}
