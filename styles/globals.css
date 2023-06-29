@@ -580,8 +580,9 @@ audio::-webkit-media-controls-volume-control-container {
 }
 
 .ant-table-row > tr > td {
-  @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300 !important;
+  @apply mt-1 rounded-md shadow-lg dark:bg-gray-700 dark:text-gray-300;
 }
+
 
 .ant-notification-notice-message {
   margin-bottom: 0 !important;
@@ -923,6 +924,10 @@ input:-webkit-autofill {
 
 .ant-table-row:hover > .ant-table-cell {
   @apply bg-green-200 dark:bg-gray-600 !important;
+}
+
+.cameraTable .green > .ant-table-cell  {
+  @apply bg-green-500 text-gray-100 dark:bg-green-700 !important;
 }
 
 .ant-form-item-extra {

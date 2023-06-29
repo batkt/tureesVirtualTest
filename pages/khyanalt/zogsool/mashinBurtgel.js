@@ -2,11 +2,12 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useMemo, useState } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, Popover, Space, Table } from "antd";
+import {Button, Card, Popconfirm, Popover, Space, Table} from "antd";
 import {
-  DownOutlined,
-  FileExcelOutlined,
-  PlusOutlined,
+  DeleteOutlined,
+  DownOutlined, EditOutlined,
+  FileExcelOutlined, MoreOutlined,
+  PlusOutlined, SettingOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
@@ -21,9 +22,10 @@ import useOrder from "tools/function/useOrder";
 import moment from "moment";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
+import deleteMethod from "../../../tools/function/crud/deleteMethod";
 
 function mashinBurtgel({ token }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const mashinref = useRef(null);
@@ -107,8 +109,14 @@ function mashinBurtgel({ token }) {
     });
   }
 
+  function mashinUstgaya(data) {
+    deleteMethod("mashin", token, data?._id).then(
+        ({ data }) => data === "Amjilttai" && mashinMutate()
+    );
+  }
+
   function mashinBurtgekh(data) {
-    var mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
+    let mashinBurtgekhButtonId = "mashinBurtgekhButtonId";
     const footer = [
       <Space>
         <Button onClick={() => mashinref.current.khaaya()}>{t("Хаах")}</Button>
@@ -291,6 +299,50 @@ function mashinBurtgel({ token }) {
               showSorterTooltip: false,
               sorter: () => 0,
             },
+            {
+              title: () => <SettingOutlined />,
+              width: "2rem",
+              align: "center",
+              render: (data) => (
+                  <div className="flex flex-row">
+                    <Popover
+                        placement="bottom"
+                        trigger="hover"
+                        content={() => (
+                            <div className="flex w-24 flex-col space-y-2">
+                              <a
+                                  className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                                  onClick={() => mashinBurtgekh(data)}
+                              >
+                                <EditOutlined style={{ fontSize: "18px" }} />
+                                <label>{t("Засах")}</label>
+                              </a>
+                              <Popconfirm
+                                  title={t("Машин устгах уу?")}
+                                  okText={t("Тийм")}
+                                  cancelText={t("Үгүй")}
+                                  onConfirm={() => mashinUstgaya(data)}
+                              >
+                                <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
+                                  <DeleteOutlined
+                                      className="text-red-600"
+                                      style={{ fontSize: "18px" }}
+                                  />
+                                  <label className="text-red-600">
+                                    {t("Устгах")}
+                                  </label>
+                                </a>
+                              </Popconfirm>
+                            </div>
+                        )}
+                    >
+                      <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+                        <MoreOutlined style={{ fontSize: "18px" }} />
+                      </a>
+                    </Popover>
+                  </div>
+              ),
+            }
           ]}
           pagination={{
             current: mashinGaralt?.khuudasniiDugaar,

@@ -439,7 +439,7 @@ function Zogsool({ token }) {
               ₮
             </div>*/}
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
-              {t("Бүртгэгдсэн орлого")} :{" "}
+              {t("Нийт бодогдсон")} :{" "}
               {
                 formatNumber(
                     !!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0
@@ -448,7 +448,7 @@ function Zogsool({ token }) {
               ₮
             </div>
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
-              {t("Зогсоолын орлого")} :{" "}
+              {t("Нийт төлсөн")} :{" "}
               {
                 formatNumber(
                     !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
