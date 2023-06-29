@@ -137,8 +137,8 @@ function MashinBurtgel(
       <Form.Item label={t("Нэр")} name="ezemshigchiinNer">
         <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item label={t("Регистр")} name="ezemshigchiinRegister">
-        <Input onKeyUp={focuser} placeholder={t("Регистр")} />
+      <Form.Item label={t("Тайлбар")} name="tailbar">
+        <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
       </Form.Item>
     </Form>
   );

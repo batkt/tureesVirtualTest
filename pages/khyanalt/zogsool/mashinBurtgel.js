@@ -273,12 +273,11 @@ function mashinBurtgel({ token }) {
               sorter: () => 0,
             },
             {
-              title: t("Регистр"),
+              title: t("Тайлбар"),
               width: "8rem",
               align: "center",
-              dataIndex: "ezemshigchiinRegister",
+              dataIndex: "tailbar",
               showSorterTooltip: false,
-              sorter: () => 0,
             },
             {
               title: t("Утас"),
