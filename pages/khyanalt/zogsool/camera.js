@@ -28,13 +28,12 @@ import {
     CloseCircleOutlined,
     DollarCircleOutlined,
     PlusOutlined,
-    CheckCircleOutlined,
     DownloadOutlined,
     FileExcelOutlined,
     DownOutlined,
     EyeOutlined,
     CloseOutlined,
-    CaretDownOutlined
+    FilterOutlined
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -60,23 +59,33 @@ import {t} from "i18next";
 
 const usguud = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'Ө', 'П', 'Р', 'С', 'Т', 'У', 'Ү', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ь', 'Ы', 'Э', 'Ю', 'Я',];
 
-function generateChild(mur) {
-    if (mur?.length > 0)
-        return mur?.map((a) => ({
-            value: !!a?.ner ? a.ner : a.cameraIP,
-            title: !!a?.ner ? (
-                a.ner + (a?.turul ? (' / '+a?.turul) : '')
-            ) : (
-                <b key={a.cameraIP} className="text-green-400 hover:text-green-800">
-                    Камер-{a.cameraIP}
-                </b>
-            ),
-            children: generateChild(!!a?.khaalga ? a.khaalga : a.camera),
-            disabled: false,
-            disableCheckbox: true,
-            selectable: !a?.ner,
-            checkable: !a?.ner
-        }));
+function generateChild(mur, turul) {
+    if (mur?.length > 0){
+        let res = [];
+        for(let i=0; i < mur.length; i++){
+            const a = mur[i];
+            if(!!a?.turul)
+                if(a.turul!==turul)continue;
+            res.push(
+                {
+                    value: !!a?.ner ? a.ner : a.cameraIP,
+                    title: !!a?.ner ? (
+                        a.ner + (a?.turul ? (' / '+a?.turul) : '')
+                    ) : (
+                        <b key={a.cameraIP} className="text-green-400 hover:text-green-800">
+                            Камер-{a.cameraIP}
+                        </b>
+                    ),
+                    children: generateChild(!!a?.khaalga ? a.khaalga : a.camera, turul),
+                    disabled: false,
+                    disableCheckbox: true,
+                    selectable: !a?.ner,
+                    checkable: !a?.ner
+                }
+            )
+        }
+        return res;
+    }
     return [];
 }
 
@@ -128,12 +137,15 @@ function camera({token}) {
     });
     const [value, setValue] = useState(null);
     const [camerVal, setCamerVal] = useState([null,null]);
-    const [cameraData, setCameraData] = useState(null);
+    const [cameraData, setCameraData] = useState([null, null]);
     const [cameraKharakh, setCamerKharakh] = useState(false);
     const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [orlogo, setOrlogo] = useState([]);
-    const [khelber, setKhelber] = useState(null);
+    const [khelber, setKhelber] = useState('');
+    const [dun, setDun] = useState(null);
+    const [idevkhtei, setIdevkhtei] = useState(0);
+    const [garakhKhaalgaIp, setGarakhKhaalgaIp] = useState('');
     const [form] = Form.useForm();
 
     const que = useMemo(() => {
@@ -150,27 +162,32 @@ function camera({token}) {
                 $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
                 $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
             }
-        }
+        };
         if(!!khelber){
             result = {
                 "tuukh.tulburTulsunKhelber": !!khelber&&khelber==='card' ? { $all: ["khaan", "tdb","khas","golomt","kapitron","tur"] } : khelber, ...result
             }
         }
-
+        if(!!dun){
+            result = {
+                "tuukh.tulukhDun": !!dun&&dun==='dunBodson' ? { $gt : 0  } : {$in : [0,null,undefined]}, ...result
+            }
+        }
         return result
-    }, [ognoo, khelber]);
+    }, [ognoo, khelber, dun]);
     const orlogoQuery = useMemo(() => {
         if (jagsaalt?.length > 0){
+            // console.log('dada', garakhKhaalgaIp);
             //зогсоолын id.р хайдаг болгох
             return {
                 baiguullagiinId: baiguullaga?._id,
-                // barilgiinId: barilgiinId,
                 zogsooliinId: jagsaalt[0]?._id,
+                garakhKhaalgaIp: garakhKhaalgaIp,
                 ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
                 duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
             };
         }
-    }, [ognoo, jagsaalt]);
+    }, [ognoo, jagsaalt, garakhKhaalgaIp]);
 
     const dansQuery = useMemo(() => {
         return{"amount":{"$gt":0}}
@@ -184,15 +201,15 @@ function camera({token}) {
         uilchilgee(token)
             .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
             .then((a) => {
-                // console.log('a.data-------------- ', a.data);
                 setOrlogo(a.data);
             })
             .catch(aldaaBarigch);
     },[orlogoQuery]);
 
     useEffect(() => {
-        const aa = generateChild(jagsaalt);
-        setCameraData(aa);
+        const a1 = generateChild(jagsaalt, 'Орох');
+        const a2 = generateChild(jagsaalt, 'Гарах');
+        setCameraData([a1, a2]);
     }, [jagsaalt]);
     useEffect(() => {
         socket().on(`zogsool`, (zogsool) => {
@@ -210,6 +227,23 @@ function camera({token}) {
         uilchluulegchMutate,
         isValidating,
     } = useUilchluulegch(token, baiguullaga?._id, query, order);
+
+    // console.log('---------', uilchluulegchGaralt);
+
+    useEffect(()=>{
+        const d1 = moment().startOf("day").format("YYYY-MM-DD 00:00:00");
+        const d2 = moment().endOf("day").format("YYYY-MM-DD 23:59:59");
+        const o1 = moment(ognoo[0]).format("YYYY-MM-DD 00:00:00");
+        const o2 = moment(ognoo[1]).format("YYYY-MM-DD 23:59:59");
+        if(o1===d1&&o2===d2){
+            let c = 0;
+            uilchluulegchGaralt?.jagsaalt.map((u)=>{
+                if(!u.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag)
+                    c++;
+            });
+            setIdevkhtei(c);
+        }
+    }, [uilchluulegchGaralt, ognoo]);
 
     const dasniiMedeelel = {
         baiguullagiinId:baiguullaga?._id,
@@ -345,7 +379,6 @@ function camera({token}) {
                 sorter: () => 0,
                 dataIndex: "tuukh",
                 render(v) {
-                    // const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
                     return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? <div  style={{ color: "#303030" }} className="py-1 px-3 rounded bg-green-200">{minToHour(v[0].niitKhugatsaa)}</div> :
                         <div className="py-1 px-3 rounded bg-blue-200">{d2.hours.length < 2 ? ('0'+d2.hours) : d2.hours} : {d2.minutes.length < 2 ? ('0'+d2.minutes) : d2.minutes}</div>;
@@ -360,7 +393,28 @@ function camera({token}) {
                 sorter: () => 0,
             },
             {
-                title: t("Дүн"),
+                title: (
+                    <Popover
+                        placement="bottom"
+                        content={
+                            <div className="space-y-2">
+                                <div
+                                    onClick={() => setDun("dunBodson")}
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20  justify-center rounded-md border`}>
+                                    Дүн бодсон
+                                </div>
+                                <div
+                                    onClick={() => setDun("dunBodoogui")}
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 justify-center rounded-md border`}>
+                                    Дүн бодоогүй
+                                </div>
+                            </div>
+                        }>
+                        <div
+                            className={`flex gap-3  cursor-pointer items-center justify-center `}>
+                            <FilterOutlined className="text-lg text-green-600" />Дүн
+                        </div>
+                    </Popover>),
                 align: "right",
                 width: "10rem",
                 showSorterTooltip: false,
@@ -380,63 +434,24 @@ function camera({token}) {
                             <div className="space-y-2">
                                 <div
                                     onClick={() => setKhelber("belen")}
-                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-blue-600 font-medium hover:bg-opacity-20 rounded-md border ${
-                                        khelber === "belen" &&
-                                        "bg-blue-600 border-blue-600 bg-opacity-20"
-                                    }`}>
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border`}>
                                     Бэлэн
-                                    {khelber === "belen" && (
-                                        <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setKhelber(undefined);
-                                            }}
-                                            className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
-                                            <CloseCircleOutlined />
-                                        </div>
-                                    )}
                                 </div>
                                 <div
                                     onClick={() => setKhelber("card")}
-                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
-                                        khelber === "VIP" &&
-                                        "border-green-600 bg-green-600 bg-opacity-20"
-                                    }`}>
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border`}>
                                     Карт
-                                    {khelber === "card" && (
-                                        <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setKhelber(undefined);
-                                            }}
-                                            className="text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-red rounded-full -top-1 flex">
-                                            <CloseCircleOutlined />
-                                        </div>
-                                    )}
                                 </div>
                                 <div
                                     onClick={() => setKhelber("khariltsakh")}
-                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border ${
-                                        khelber === "VIP" &&
-                                        "border-green-600 bg-green-600 bg-opacity-20"
-                                    }`}>
+                                    className={`flex py-[2px] px-5 cursor-pointer relative hover:bg-green-600 font-medium hover:bg-opacity-20 items-center justify-center rounded-md border `}>
                                     Харилцах
-                                    {khelber === "khariltsakh" && (
-                                        <div
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setKhelber(undefined);
-                                            }}
-                                            className="absolute text-xl hover:text-red-400 hover:scale-105 right-0 translate-x-1/2 bg-white rounded-full -top-1 flex">
-                                            <CloseCircleOutlined />
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         }>
                         <div
                             className={`flex gap-3  cursor-pointer items-center justify-center `}>
-                            Хэлбэр <CaretDownOutlined className={`text-lg`} />
+                            <FilterOutlined className="text-lg text-green-600" />Хэлбэр
                         </div>
                     </Popover>),
                 align: "center",
@@ -464,9 +479,10 @@ function camera({token}) {
                 width: "10rem",
                 showSorterTooltip: false,
                 sorter: () => 0,
-                dataIndex: "tuukh",
+                dataIndex: "tuukh.tuluv",
                 render(v, parent) {
-                    return (v[0]?.tuluv === 0 && !!v[0]?.tulukhDun) ? (
+                    const mur = parent.tuukh[0];
+                    return (mur.tuluv === 0 && !!mur?.tulukhDun) ? (
                         <Popover
                             placement="bottom"
                             trigger="hover"
@@ -475,9 +491,9 @@ function camera({token}) {
                                     <a
                                         className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                                         onClick={() => {
-                                            !!v[0]?.tulukhDun ?
-                                                tulburTulyu(v[0], parent._id) :
-                                                notification.warn({ message: t("Дүн бодогдоогүй байна.") });
+                                            !!mur?.tulukhDun ?
+                                                tulburTulyu(mur, parent._id) :
+                                                notification.warn({ message: t("Дүн бодогдоогүй байна.")});
                                         }}>
                                         <WalletOutlined style={{ fontSize: "18px" }} />
                                         <label>{t("Төлөх")}</label>
@@ -511,12 +527,12 @@ function camera({token}) {
                             </Button>
                         </Popover>
                     ) :  (
-                        (v[0]?.tuluv === 0 && !v[0]?.tsagiinTuukh[0]?.garsanTsag) ?
+                        (mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag) ?
                             <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-                                <div className="flex items-center justify-center">Идэвтхэй</div>
+                                <div className="flex items-center justify-center">Идэвхтэй</div>
                             </div>
                             :
-                            (v[0]?.tuluv === 1 ?
+                            (mur?.tuluv === 1 ?
                                     <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                                         <div className="flex items-center justify-center">
                                             {t("Төлөгдсөн")}
@@ -570,7 +586,7 @@ function camera({token}) {
                     return v && <Tooltip
                         placement="top"
                         title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}>
-                        <div className="line-clamp-2">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : (!!v[0]?.tsagiinTuukh[0]?.garsanTsag  && v[0]?.niitKhugatsaa <= 30) ? '30 мин' : parent.zurchil}</div>
+                        <div className="line-clamp-1">{v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : (!!v[0]?.tsagiinTuukh[0]?.garsanTsag  && v[0]?.niitKhugatsaa <= 30) ? '30 мин' : parent.zurchil}</div>
                     </Tooltip>;
                 },
             },
@@ -653,8 +669,10 @@ function camera({token}) {
     const cameraChange = (e, type) => {
         if (type===1)
             setCamerVal([e,camerVal[1]]);
-        else
+        else{
             setCamerVal([camerVal[0],e]);
+            setGarakhKhaalgaIp(e)
+        }
     };
     const khadgalakh = () => {
         let body = modalOpen.item;
@@ -838,7 +856,7 @@ function camera({token}) {
                                     allowClear
                                     treeDefaultExpandAll
                                     onChange={(e)=>cameraChange(e, 1)}
-                                    treeData={cameraData}
+                                    treeData={cameraData[0]}
                                 />
                             </div>
                         </div>
@@ -917,7 +935,7 @@ function camera({token}) {
                                     allowClear
                                     treeDefaultExpandAll
                                     onChange={(e)=>cameraChange(e, 2)}
-                                    treeData={cameraData}
+                                    treeData={cameraData[1]}
                                 />
                             </div>
                         </div>
@@ -965,7 +983,7 @@ function camera({token}) {
                                 className="flex w-full flex-col lg:flex-row"
                                 data-aos-delay="100">
                                 <DatePicker.RangePicker
-                                    inputReadOnly
+                                    allowClear={false}
                                     className="w-full md:w-auto"
                                     size="middle"
                                     value={ognoo}
@@ -981,10 +999,10 @@ function camera({token}) {
                                     ₮
                                 </div>
                                 <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
-                                    {t("Нийт төлсөн")} :{" "}
+                                    {t("Төлсөн")} :{" "}
                                     {
                                         formatNumber(
-                                            !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
+                                            !!orlogo[0]?.garsanKhaalga ? orlogo[0].garsanKhaalga : 0, 0
                                         )
                                     }
                                     ₮
@@ -1156,6 +1174,7 @@ function camera({token}) {
                                                 </Space>
                                             ) : (
                                                 <Space direction="vertical">
+                                                    <Radio value="Хонох магадлалтай">Хонох магадлалтай</Radio>
                                                     <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
                                                     <Radio value="Зугтаасан">Зугтаасан</Radio>
                                                 </Space>
@@ -1207,8 +1226,8 @@ function camera({token}) {
                                                     className=""
                                                     placeholder="Камер IP"
                                                 > {
-                                                    cameraData[0].children.map(cam=>(
-                                                        <Select.Option className="w-1/3 sm:w-auto" value={cam.children[0].value}>{cam.title}</Select.Option>
+                                                    cameraData[0][0].children.map(cam=>(
+                                                        <Select.Option className="w-1/3 sm:w-auto" value={cam?.children[0].value}>{cam.title}</Select.Option>
                                                     ))
                                                 }
                                                 </Select>
@@ -1238,6 +1257,16 @@ function camera({token}) {
                             }
                         </Space>
                     </Modal>
+                    <div style={{position: 'absolute', bottom: 58}}>
+                        <div className="ml-10 flex">
+                            <div className="flex text-blue-600">
+                                Идэвхтэй: {idevkhtei}
+                            </div>
+                            <div className="ml-10 flex text-yellow-600">
+                                Сул зогсоол: {(jagsaalt[0].too - idevkhtei)}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div className="col-span-12 flex justify-center">
