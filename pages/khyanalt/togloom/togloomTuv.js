@@ -21,9 +21,11 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   DollarCircleOutlined,
+  DollarTwoTone,
   DownloadOutlined,
   DownOutlined,
   EyeOutlined,
+  FieldTimeOutlined,
   FileExcelOutlined,
   MoreOutlined,
   PaperClipOutlined,
@@ -1221,21 +1223,55 @@ function togloom1() {
                       const jagsaalt = data?.tulbur.filter(
                         (a) => a.turul !== "khunglukh"
                       );
-                      var utga = undefined;
+                      var utga = [];
                       if (jagsaalt.length > 0) {
-                        switch (jagsaalt[0].turul) {
-                          case "belen":
-                            utga = "Бэлэн";
-                            break;
-                          case "khariltsakh":
-                            utga = "Харилцах";
-                            break;
-                          default:
-                            utga = data?.tulbur[0].turul;
-                            break;
+                        for (let index = 0; index < jagsaalt.length; index++) {
+                          const element = jagsaalt[index];
+                          switch (element.turul) {
+                            case "belen":
+                              utga.push({
+                                ner: "Бэлэн",
+                                dun: data?.tulbur[index].dun,
+                              });
+                              break;
+                            case "khariltsakh":
+                              utga.push({
+                                ner: "Харилцах",
+                                dun: data?.tulbur[index].dun,
+                              });
+                              break;
+                            default:
+                              utga.push({
+                                ner: data?.tulbur[index].turul,
+                                dun: data?.tulbur[index].dun,
+                              });
+                              break;
+                          }
                         }
                       }
-                      return <div>{t(`${utga}`)}</div>;
+                      return jagsaalt.length > 0 ? (
+                        <Popover
+                          placement="bottom"
+                          trigger="hover"
+                          content={() => (
+                            <div className="flex w-32 flex-col space-y-2 divide-y">
+                              {utga.map((a, i) => {
+                                return (
+                                  <div key={i} className="flex justify-between">
+                                    <div className="font-medium">{a.ner}:</div>
+                                    {formatNumber(a.dun)}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}>
+                          <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
+                            <DollarTwoTone style={{ fontSize: "18px" }} />
+                          </a>
+                        </Popover>
+                      ) : (
+                        <FieldTimeOutlined style={{ fontSize: "18px" }} />
+                      );
                     },
                   },
                   {
