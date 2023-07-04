@@ -345,8 +345,7 @@ function camera({ token }) {
             {data?.ovog?.charAt(0)}.{data?.ner}
             <div
               className="ml-5 text-xl hover:text-red-400"
-              onClick={() => tulburRef.current.khaaya()}
-            >
+              onClick={() => tulburRef.current.khaaya()}>
               <CloseCircleOutlined />
             </div>
           </div>
@@ -428,8 +427,7 @@ function camera({ token }) {
           return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? (
             <div
               style={{ color: "#303030" }}
-              className="rounded bg-green-200 px-3 py-1"
-            >
+              className="rounded bg-green-200 px-3 py-1">
               {minToHour(v[0].niitKhugatsaa)}
             </div>
           ) : (
@@ -456,22 +454,18 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setDun("dunBodson")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Дүн бодсон
                 </div>
                 <div
                   onClick={() => setDun("dunBodoogui")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Дүн бодоогүй
                 </div>
               </div>
-            }
-          >
+            }>
             <div
-              className={`flex cursor-pointer  items-center justify-center gap-3 `}
-            >
+              className={`flex cursor-pointer  items-center justify-center gap-3 `}>
               <FilterOutlined className="text-lg text-green-600" />
               Дүн
             </div>
@@ -496,28 +490,23 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setKhelber("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Бэлэн
                 </div>
                 <div
                   onClick={() => setKhelber("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Карт
                 </div>
                 <div
                   onClick={() => setKhelber("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
-                >
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}>
                   Харилцах
                 </div>
               </div>
-            }
-          >
+            }>
             <div
-              className={`flex cursor-pointer  items-center justify-center gap-3 `}
-            >
+              className={`flex cursor-pointer  items-center justify-center gap-3 `}>
               <FilterOutlined className="text-lg text-green-600" />
               Хэлбэр
             </div>
@@ -580,8 +569,7 @@ function camera({ token }) {
                         : notification.warn({
                             message: t("Дүн бодогдоогүй байна."),
                           });
-                    }}
-                  >
+                    }}>
                     <WalletOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Төлөх")}</label>
                   </a>
@@ -589,14 +577,12 @@ function camera({ token }) {
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() =>
                       setModalOpen({ bool: true, item: parent, type: "unegui" })
-                    }
-                  >
+                    }>
                     <StarOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Үнэгүй")}</label>
                   </a>
                 </div>
-              )}
-            >
+              )}>
               <Button
                 style={{
                   display: "flex",
@@ -604,8 +590,7 @@ function camera({ token }) {
                   alignItems: "center",
                   backgroundColor: "#FF8505",
                 }}
-                size="small"
-              >
+                size="small">
                 <div className="flex items-center  justify-center space-x-2 text-white">
                   <div className="flex items-center justify-center">
                     <DollarCircleOutlined />
@@ -621,11 +606,21 @@ function camera({ token }) {
               <div className="flex items-center justify-center">Идэвхтэй</div>
             </div>
           ) : mur?.tuluv === 1 ? (
-            <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
-              <div className="flex items-center justify-center">
-                {t("Төлөгдсөн")}
+            mur?.ebarimtAvsanEsekh === true ? (
+              <div
+                onClick={() => tulburTulyu(mur, parent._id)}
+                className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("И-Баримт")}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Төлөгдсөн")}
+                </div>
+              </div>
+            )
           ) : (
             <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
               <div className="flex items-center justify-center">
@@ -674,8 +669,9 @@ function camera({ token }) {
             v && (
               <Tooltip
                 placement="top"
-                title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}
-              >
+                title={
+                  v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil
+                }>
                 <div className="line-clamp-1">
                   {v[0]?.tuluv === -1
                     ? v[0]?.uneguiGarsan
@@ -704,16 +700,14 @@ function camera({ token }) {
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() =>
                       setModalOpen({ bool: true, item: data, type: "zurchil" })
-                    }
-                  >
+                    }>
                     <ExclamationCircleOutlined
                       style={{ fontSize: "18px", marginRight: "3px" }}
                     />
                     <div>{t("Зөрчил нэмэх")}</div>
                   </a>
                 </div>
-              )}
-            >
+              )}>
               <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
@@ -882,8 +876,7 @@ function camera({ token }) {
           khuudasniiDugaar: 1,
         }))
       }
-      loading={isValidating}
-    >
+      loading={isValidating}>
       {jagsaalt?.length > 0 ? (
         <div className="col-span-12">
           <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
@@ -894,15 +887,13 @@ function camera({ token }) {
               className={`w-full ${
                 cameraKharakh === 1 &&
                 "fixed right-0 top-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
-              }`}
-            >
+              }`}>
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className="flex w-full items-center justify-center "
-              >
+                className="flex w-full items-center justify-center ">
                 <img
                   src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
                   className={`object-cover  ${
@@ -925,16 +916,14 @@ function camera({ token }) {
               <div
                 className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
                   cameraKharakh === 1 && "absolute bottom-5 w-40"
-                }`}
-              >
+                }`}>
                 <div className="flex gap-3">
                   <Button
                     onClick={(e) => {
                       khaalgaNeey(camerVal[0]);
                     }}
                     className="w-full sm:w-auto"
-                    type="primary"
-                  >
+                    type="primary">
                     Нээх
                   </Button>
                   {/*<Button
@@ -977,15 +966,13 @@ function camera({ token }) {
               className={`w-full ${
                 cameraKharakh === 2 &&
                 "fixed right-0 top-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
-              }`}
-            >
+              }`}>
               <div
                 onClick={(e) => {
                   e.stopPropagation();
                   setCamerKharakh(2);
                 }}
-                className="flex w-full items-center justify-center "
-              >
+                className="flex w-full items-center justify-center ">
                 <img
                   src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
                   className={`object-cover  ${
@@ -1008,16 +995,14 @@ function camera({ token }) {
               <div
                 className={`mt-3 flex flex-col justify-between gap-3 sm:flex-row ${
                   cameraKharakh === 2 && "absolute bottom-5 w-40"
-                }`}
-              >
+                }`}>
                 <div className="flex gap-3">
                   <Button
                     onClick={(e) => {
                       khaalgaNeey(camerVal[1]);
                     }}
                     className="w-full sm:w-auto"
-                    type="primary"
-                  >
+                    type="primary">
                     Нээх
                   </Button>
                   {/*<Button
@@ -1059,8 +1044,7 @@ function camera({ token }) {
               }}
               className={`fixed right-[8%] top-1/2 z-50 w-[84%] -translate-y-1/2 rounded-lg border bg-white p-5 shadow-xl transition-all xl:relative xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
                 guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
-              }`}
-            >
+              }`}>
               <div className="text-base font-bold">Сүүлийн гүйлгээ</div>
               <div className="absolute right-3 top-3 text-3xl xl:hidden">
                 <CloseCircleOutlined
@@ -1087,8 +1071,7 @@ function camera({ token }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   setGuilgeeKharakh(!guilgeeKharakh);
-                }}
-              >
+                }}>
                 Гүйлгээ харах
               </Button>
             </div>
@@ -1097,8 +1080,7 @@ function camera({ token }) {
                 data-aos="fade-right"
                 data-aos-duration="1000"
                 className="flex w-full flex-col lg:flex-row"
-                data-aos-delay="100"
-              >
+                data-aos-delay="100">
                 <DatePicker.RangePicker
                   allowClear={false}
                   className="w-full md:w-auto"
@@ -1127,8 +1109,7 @@ function camera({ token }) {
                 className="mb-5 flex w-full justify-between sm:justify-end md:mb-0 md:ml-auto lg:w-auto"
                 data-aos="fade-left"
                 data-aos-duration="1000"
-                data-aos-delay="300"
-              >
+                data-aos-delay="300">
                 <Button
                   className="mr-3 w-32 sm:w-auto"
                   icon={<PlusOutlined />}
@@ -1139,8 +1120,7 @@ function camera({ token }) {
                       type: "dugaarBurtgekh",
                     })
                   }
-                  type="primary"
-                >
+                  type="primary">
                   Машин бүртгэх
                 </Button>
                 <Popover
@@ -1406,8 +1386,7 @@ function camera({ token }) {
                             ])
                             .addDataSource(uilchluulegchGaralt?.jagsaalt)
                             .saveAs("Camera.xlsx");
-                        }}
-                      >
+                        }}>
                         <DownloadOutlined style={{ fontSize: "18px" }} />
                         <label>{t("Татах")}</label>
                       </a>
@@ -1415,13 +1394,11 @@ function camera({ token }) {
                   )}
                   style={{ padding: 0 }}
                   placement="bottom"
-                  trigger="click"
-                >
+                  trigger="click">
                   <Button
                     type="primary"
                     className="mr-3 w-32 sm:w-auto"
-                    icon={<FileExcelOutlined />}
-                  >
+                    icon={<FileExcelOutlined />}>
                     <span>Excel</span>
                     <DownOutlined width={5} />
                   </Button>
@@ -1430,8 +1407,7 @@ function camera({ token }) {
                   className="w-32 sm:w-auto"
                   icon={<CameraOutlined />}
                   onClick={() => setDrawerOpen(true)}
-                  type="primary"
-                >
+                  type="primary">
                   Камер
                 </Button>
                 <Drawer
@@ -1439,8 +1415,7 @@ function camera({ token }) {
                   title={t("Камер")}
                   placement="right"
                   onClose={() => setDrawerOpen(false)}
-                  visible={drawerOpen}
-                >
+                  visible={drawerOpen}>
                   {drawerOpen && (
                     <Card className="col-span-12 row-span-full lg:col-span-4 lg:col-start-9">
                       <div className="w-[500px]">
@@ -1471,8 +1446,7 @@ function camera({ token }) {
               data-aos="fade-left"
               data-aos-duration="1000"
               data-aos-delay="300"
-              data-aos-anchor-placement="top-bottom"
-            >
+              data-aos-anchor-placement="top-bottom">
               <Table
                 className="cameraTable mt-8 hidden overflow-auto md:block"
                 tableLayout="auto"
@@ -1525,15 +1499,13 @@ function camera({ token }) {
                 key="back"
                 onClick={() =>
                   setModalOpen({ bool: false, item: null, type: "" })
-                }
-              >
+                }>
                 Хаах
               </Button>,
               <Button type="primary" onClick={khadgalakh}>
                 Хадгалах
               </Button>,
-            ]}
-          >
+            ]}>
             <Space direction="vertical" className="w-full">
               {modalOpen.type !== "dugaarBurtgekh" ? (
                 <>
@@ -1572,8 +1544,7 @@ function camera({ token }) {
                   <Form
                     form={form}
                     className="flex w-full"
-                    onFinish={dugaarBurtgekh}
-                  >
+                    onFinish={dugaarBurtgekh}>
                     <Form.Item
                       label="Дугаар"
                       name="mashiniiDugaar"
@@ -1592,8 +1563,7 @@ function camera({ token }) {
                           pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
                           message: "Машины дугаар 4 тоо 3 үсэг байх ёстой",
                         },
-                      ]}
-                    >
+                      ]}>
                       <Input
                         maxLength={7}
                         placeholder="1234УБА"
@@ -1608,15 +1578,13 @@ function camera({ token }) {
                           required: true,
                           message: "Камер сонгоно уу.",
                         },
-                      ]}
-                    >
+                      ]}>
                       <Select className="" placeholder="Камер IP">
                         {" "}
                         {cameraData[0][0].children.map((cam) => (
                           <Select.Option
                             className="w-1/3 sm:w-auto"
-                            value={cam?.children[0].value}
-                          >
+                            value={cam?.children[0].value}>
                             {cam.title}
                           </Select.Option>
                         ))}
@@ -1624,8 +1592,7 @@ function camera({ token }) {
                     </Form.Item>
                     <a
                       onClick={() => form.setFieldValue("mashiniiDugaar", "")}
-                      className="ml-2 flex h-8 items-center rounded border border-red-400  px-2 hover:bg-red-200"
-                    >
+                      className="ml-2 flex h-8 items-center rounded border border-red-400  px-2 hover:bg-red-200">
                       Цэвэрлэх
                     </a>
                   </Form>
@@ -1636,8 +1603,7 @@ function camera({ token }) {
                         (n) => (
                           <a
                             onClick={() => keyPadHandler(n)}
-                            className="m-1 rounded border px-3 py-2 hover:bg-green-200"
-                          >
+                            className="m-1 rounded border px-3 py-2 hover:bg-green-200">
                             {n}
                           </a>
                         )
@@ -1646,8 +1612,7 @@ function camera({ token }) {
                     {usguud.map((useg) => (
                       <a
                         onClick={() => keyPadHandler(useg)}
-                        className="m-1 rounded border px-3 py-2 hover:bg-green-200"
-                      >
+                        className="m-1 rounded border px-3 py-2 hover:bg-green-200">
                         {useg}
                       </a>
                     ))}
