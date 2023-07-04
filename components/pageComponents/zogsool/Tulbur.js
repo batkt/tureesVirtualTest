@@ -31,7 +31,7 @@ function Tulbur(
   // console.log('----data-----', data);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
-    data?.tuukh?.length > 0 && data?.tuukh[0]?.tuluv === 1 ? 2 : 1
+    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
   );
   const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(
