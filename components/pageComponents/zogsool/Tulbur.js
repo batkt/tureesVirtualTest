@@ -86,7 +86,7 @@ function Tulbur(
       }
       const body = {
         id,
-        ebarimtiinTurul: "togloom",
+        ebarimtiinTurul: "zogsool",
       };
       if (baiguullagaEsekh || irgenEsekh) {
         body.register = register;
@@ -646,13 +646,15 @@ function Tulbur(
               <Button
                 danger
                 onClick={() => setTerminal(false)}
-                icon={<CloseOutlined />}>
+                icon={<CloseOutlined />}
+              >
                 {t("Цуцлах")}
               </Button>
               <Button
                 type="primary"
                 onClick={batalgaajuuljDuusgakh}
-                icon={<CheckOutlined />}>
+                icon={<CheckOutlined />}
+              >
                 {t("Баталгаажуулах")}
               </Button>
             </div>
@@ -700,7 +702,8 @@ function Tulbur(
             type="primary"
             loading={loading}
             id="TogloomiinTuvTulburTovch"
-            onClick={batalgaajuulaltKhiiya}>
+            onClick={batalgaajuulaltKhiiya}
+          >
             {t("Төлбөр төлөх")}
           </Button>
         )}
@@ -709,7 +712,8 @@ function Tulbur(
           <Button
             type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(data?._id)}>
+            onClick={() => ebarimtAvya(data?._id)}
+          >
             {t("Хэвлэх")}
           </Button>
         )}

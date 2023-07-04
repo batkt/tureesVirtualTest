@@ -38,6 +38,7 @@ import {
   SettingOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import { Excel } from "antd-table-saveas-excel";
 
 export function excelTatajAvya(
   token,
@@ -55,7 +56,6 @@ export function excelTatajAvya(
     })
     .then(({ data }) => {
       // console.log('-----------1-------jagsaalt', data?.jagsaalt);
-      const { Excel } = require("antd-table-saveas-excel");
       const excel = new Excel();
       excel
         .addSheet(sheetName)
@@ -94,11 +94,11 @@ function Zogsool({ token }) {
   const query = useMemo(() => {
     return {
       "tuukh.tsagiinTuukh.garsanTsag": ognoo
-          ? {
+        ? {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           }
-          : undefined,
+        : undefined,
       "tuukh.zogsooliinId": zogsoolId,
     };
   }, [ognoo, zogsoolId]);
@@ -122,12 +122,12 @@ function Zogsool({ token }) {
 
   useEffect(() => {
     uilchilgee(token)
-        .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
-        .then((a) => {
-          // console.log('--------0-', a.data)
-          setOrlogo(a.data);
-        })
-        .catch(aldaaBarigch);
+      .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
+      .then((a) => {
+        // console.log('--------0-', a.data)
+        setOrlogo(a.data);
+      })
+      .catch(aldaaBarigch);
   }, [uilchluulegchGaralt, jagsaalt]);
 
   const toololt = useMemo(
@@ -349,12 +349,14 @@ function Zogsool({ token }) {
                 <div className="flex w-24 flex-col space-y-2">
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => zogsoolBurtegye(data, "zasah")}>
+                    onClick={() => zogsoolBurtegye(data, "zasah")}
+                  >
                     <EditOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Зөрчил нэмэх")}</label>
                   </a>
                 </div>
-              )}>
+              )}
+            >
               <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
@@ -388,7 +390,8 @@ function Zogsool({ token }) {
         }))
       }
       tsonkhniiId="61c2c7481c2830c4e6f90ce1"
-      loading={isValidating}>
+      loading={isValidating}
+    >
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {toololt.map((a, i) => (
@@ -400,7 +403,8 @@ function Zogsool({ token }) {
               onClick={() => setTurul(a.name)}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
-              data-aos-delay={1 + i + "00"}>
+              data-aos-delay={1 + i + "00"}
+            >
               <div className="h-full w-[67vw] rounded-xl md:w-auto">
                 <div className="rounded-xl p-3">
                   <div className="flex flex-row items-center space-x-2">
@@ -421,7 +425,8 @@ function Zogsool({ token }) {
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="100"
-            className="w-full xl:w-1/2">
+            className="w-full xl:w-1/2"
+          >
             <DatePicker.RangePicker
               style={{ width: "100%" }}
               size="middle"
@@ -430,31 +435,22 @@ function Zogsool({ token }) {
             />
           </div>
           <div
-            className=" flex w-full items-center sm:justify-end md:ml-auto md:mb-0 xl:justify-start"
+            className=" flex w-full items-center sm:justify-end md:mb-0 md:ml-auto xl:justify-start"
             data-aos="fade-left"
             data-aos-duration="1000"
-            data-aos-delay="200">
+            data-aos-delay="200"
+          >
             {/*<div className="flex flex-row space-x-2 p-1 font-medium">
               {t("Зогсоолын орлого")} : {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}
               ₮
             </div>*/}
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
               {t("Нийт бодогдсон")} :{" "}
-              {
-                formatNumber(
-                    !!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0
-                )
-              }
-              ₮
+              {formatNumber(!!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0)}₮
             </div>
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
               {t("Нийт төлсөн")} :{" "}
-              {
-                formatNumber(
-                    !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
-                )
-              }
-              ₮
+              {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}₮
             </div>
           </div>
 
@@ -470,7 +466,8 @@ function Zogsool({ token }) {
             className="col-span-2 ml-auto w-full place-content-end justify-between sm:flex xl:justify-end"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             {/*<Select
                 className="mb-3 w-max sm:mb-0 sm:mr-2 sm:w-auto"
                 defaultValue="Бүгд"
@@ -494,27 +491,126 @@ function Zogsool({ token }) {
                       </a>*/}
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                    // onClick={() => {
+                    //   excelTatajAvya(
+                    //     token,
+                    //     "zogsoolUilchluulegch",
+                    //     uilchluulegchGaralt.niitMur,
+                    //     exlCol(),
+                    //     query,
+                    //     order,
+                    //     "Зогсоол"
+                    //   );
+                    // }}
                     onClick={() => {
-                      excelTatajAvya(
-                        token,
-                        "zogsoolUilchluulegch",
-                        uilchluulegchGaralt.niitMur,
-                        exlCol(),
-                        query,
-                        order,
-                        "Зогсоол"
-                      );
-                    }}>
+                      const excel = new Excel();
+                      excel
+                        .addSheet("Жагсаалт")
+                        .addColumns([
+                          {
+                            title: "№",
+                            align: "center",
+                            dataIndex: "dugaar",
+                            width: "2rem",
+                            render: (text, record, index) =>
+                              (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
+                                (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
+                              (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
+                              index +
+                              1,
+                          },
+                          {
+                            title: "Дугаар",
+                            dataIndex: "mashiniiDugaar",
+                          },
+                          {
+                            title: "Орсон",
+                            dataIndex: "tuukh",
+                            render(v) {
+                              const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
+                              return d && moment(d).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: "Гарсан",
+                            dataIndex: "tuukh",
+                            render(v) {
+                              const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
+                              return d && moment(d).format("YYYY-MM-DD HH:mm");
+                            },
+                          },
+                          {
+                            title: "Хугацаа/мин",
+                            dataIndex: "tuukh",
+                            render(v) {
+                              const d1 = moment(
+                                v[0]?.tsagiinTuukh[0]?.orsonTsag
+                              );
+                              const d2 = moment(
+                                v[0]?.tsagiinTuukh[0]?.garsanTsag
+                              );
+                              const diff = d2.diff(d1, "minutes");
+                              return diff && diff;
+                            },
+                          },
+                          {
+                            title: "Төрөл",
+                            dataIndex: "turul",
+                          },
+                          {
+                            title: "Дүн",
+                            dataIndex: "tuukh",
+                            render(v) {
+                              return v && formatNumber(v[0]?.tulukhDun, 0);
+                            },
+                          },
+                          {
+                            title: "Хэлбэр",
+                            render: (v) => {
+                              return (
+                                v && <div>{v[0]?.tulburTulsunKhelber}</div>
+                              );
+                            },
+                          },
+                          {
+                            title: "Төлбөр",
+                            dataIndex: "tuukh",
+                            render(v) {
+                              return v[0]?.tuluv === 0 ? (
+                                <div>-</div>
+                              ) : v[0]?.tuluv < 0 ? (
+                                <div>Үнэгүй</div>
+                              ) : v[0]?.ebarimtAvsanEsekh ? (
+                                <div>Төлөгдсөн</div>
+                              ) : (
+                                <div>И-Баримт</div>
+                              );
+                            },
+                          },
+                          {
+                            title: "Төлөв",
+                            dataIndex: "tuluv",
+                            render(v) {
+                              return formatNumber(v);
+                            },
+                          },
+                        ])
+                        .addDataSource(uilchluulegchGaralt?.jagsaalt)
+                        .saveAs("Camera.xlsx");
+                    }}
+                  >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}
               placement="bottom"
-              trigger="click">
+              trigger="click"
+            >
               <Button
                 type="primary"
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
                 <span>Excel</span>
                 <DownOutlined width={5} />
               </Button>
@@ -525,7 +621,8 @@ function Zogsool({ token }) {
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="400"
-          data-aos-anchor-placement="top-bottom">
+          data-aos-anchor-placement="top-bottom"
+        >
           <Table
             className="mt-8 hidden overflow-auto md:block"
             tableLayout="auto"
