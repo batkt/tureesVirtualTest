@@ -31,7 +31,7 @@ function Tulbur(
   // console.log('----data-----', data);
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
-    data?.tulburTulsunEsekh === true ? 2 : 1
+    data?.tuukh[0]?.tuluv === 1 ? 2 : 1
   );
   const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(
@@ -86,7 +86,7 @@ function Tulbur(
       }
       const body = {
         id,
-        ebarimtiinTurul: "togloom",
+        ebarimtiinTurul: "zogsool",
       };
       if (baiguullagaEsekh || irgenEsekh) {
         body.register = register;
