@@ -1220,9 +1220,12 @@ function togloom1() {
                     width: "7rem",
                     showSorterTooltip: false,
                     render: (v, data) => {
-                      const jagsaalt = data?.tulbur.filter(
-                        (a) => a.turul !== "khunglukh"
-                      );
+                      const jagsaalt =
+                        data?.niitTulbur?.length > 0
+                          ? data?.niitTulbur.filter(
+                              (a) => a.turul !== "khunglukh"
+                            )
+                          : data?.tulbur.filter((a) => a.turul !== "khunglukh");
                       var utga = [];
                       if (jagsaalt.length > 0) {
                         for (let index = 0; index < jagsaalt.length; index++) {
@@ -1231,19 +1234,19 @@ function togloom1() {
                             case "belen":
                               utga.push({
                                 ner: "Бэлэн",
-                                dun: data?.tulbur[index].dun,
+                                dun: element.dun,
                               });
                               break;
                             case "khariltsakh":
                               utga.push({
                                 ner: "Харилцах",
-                                dun: data?.tulbur[index].dun,
+                                dun: element.dun,
                               });
                               break;
                             default:
                               utga.push({
-                                ner: data?.tulbur[index].turul,
-                                dun: data?.tulbur[index].dun,
+                                ner: element.turul,
+                                dun: element.dun,
                               });
                               break;
                           }
@@ -1259,7 +1262,7 @@ function togloom1() {
                                 return (
                                   <div key={i} className="flex justify-between">
                                     <div className="font-medium">{a.ner}:</div>
-                                    {formatNumber(a.dun)}
+                                    {formatNumber(a.dun)}₮
                                   </div>
                                 );
                               })}

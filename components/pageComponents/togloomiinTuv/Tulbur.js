@@ -39,7 +39,7 @@ function Tulbur(
   });
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
   const [qpayerTulukh, setQpayerTulukh] = React.useState(
-    !!data?.tulbur?.find((data) => data.turul === "qpay")
+    !data?.dutuuDun && !!data?.tulbur?.find((data) => data.turul === "qpay")
       ? "Tulugdsun"
       : undefined
   );
