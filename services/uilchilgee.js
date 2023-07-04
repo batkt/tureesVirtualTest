@@ -26,7 +26,11 @@ export const aldaaBarigch = (e) => {
       description: t(JSON.stringify(e?.response?.errors)),
       message: t("Алдаа"),
     });
-  else notification.error({ description: t(JSON.stringify(e)), message: t("Алдаа") });
+  else
+    notification.error({
+      description: t(JSON.stringify(e)),
+      message: t("Алдаа"),
+    });
 };
 
 /*axios.interceptors.response.use(function (response) {
@@ -45,7 +49,7 @@ const uilchilgee = (token) => {
   return axios.create({
     baseURL:
       typeof window === "undefined"
-        ? serverRuntimeConfig.HTTP_URL || "http://103.143.40.43:8081"
+        ? serverRuntimeConfig.HTTP_URL || "http://103.143.40.230:8081"
         : url,
     headers,
   });
