@@ -606,7 +606,7 @@ function camera({ token }) {
               <div className="flex items-center justify-center">Идэвхтэй</div>
             </div>
           ) : mur?.tuluv === 1 ? (
-            mur?.ebarimtAvsanEsekh === true ? (
+            mur?.ebarimtAvsanEsekh === false ? (
               <div
                 onClick={() => tulburTulyu(mur, parent._id)}
                 className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
