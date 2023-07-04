@@ -504,99 +504,114 @@ function Zogsool({ token }) {
                     // }}
                     onClick={() => {
                       const excel = new Excel();
-                      excel
-                        .addSheet("Жагсаалт")
-                        .addColumns([
-                          {
-                            title: "№",
-                            align: "center",
-                            dataIndex: "dugaar",
-                            width: "2rem",
-                            render: (text, record, index) =>
-                              (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-                                (uilchluulegchGaralt?.khuudasniiKhemjee || 0) -
-                              (uilchluulegchGaralt?.khuudasniiKhemjee || 0) +
-                              index +
-                              1,
+                      uilchilgee(token)
+                        .get("zogsoolUilchluulegch", {
+                          params: {
+                            order: order,
+                            query: query,
+                            khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
                           },
-                          {
-                            title: "Дугаар",
-                            dataIndex: "mashiniiDugaar",
-                          },
-                          {
-                            title: "Орсон",
-                            dataIndex: "tuukh",
-                            render(v) {
-                              const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
-                              return d && moment(d).format("YYYY-MM-DD HH:mm");
-                            },
-                          },
-                          {
-                            title: "Гарсан",
-                            dataIndex: "tuukh",
-                            render(v) {
-                              const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
-                              return d && moment(d).format("YYYY-MM-DD HH:mm");
-                            },
-                          },
-                          {
-                            title: "Хугацаа/мин",
-                            dataIndex: "tuukh",
-                            render(v) {
-                              const d1 = moment(
-                                v[0]?.tsagiinTuukh[0]?.orsonTsag
-                              );
-                              const d2 = moment(
-                                v[0]?.tsagiinTuukh[0]?.garsanTsag
-                              );
-                              const diff = d2.diff(d1, "minutes");
-                              return diff && diff;
-                            },
-                          },
-                          {
-                            title: "Төрөл",
-                            dataIndex: "turul",
-                          },
-                          {
-                            title: "Дүн",
-                            dataIndex: "tuukh",
-                            render(v) {
-                              return v && formatNumber(v[0]?.tulukhDun, 0);
-                            },
-                          },
-                          {
-                            title: "Хэлбэр",
-                            render: (v) => {
-                              return (
-                                v && <div>{v[0]?.tulburTulsunKhelber}</div>
-                              );
-                            },
-                          },
-                          {
-                            title: "Төлбөр",
-                            dataIndex: "tuukh",
-                            render(v) {
-                              return v[0]?.tuluv === 0 ? (
-                                <div>-</div>
-                              ) : v[0]?.tuluv < 0 ? (
-                                <div>Үнэгүй</div>
-                              ) : v[0]?.ebarimtAvsanEsekh ? (
-                                <div>Төлөгдсөн</div>
-                              ) : (
-                                <div>И-Баримт</div>
-                              );
-                            },
-                          },
-                          {
-                            title: "Төлөв",
-                            dataIndex: "tuluv",
-                            render(v) {
-                              return formatNumber(v);
-                            },
-                          },
-                        ])
-                        .addDataSource(uilchluulegchGaralt?.jagsaalt)
-                        .saveAs("Camera.xlsx");
+                        })
+                        .then(({ data }) => {
+                          excel
+                            .addSheet("Жагсаалт")
+                            .addColumns([
+                              {
+                                title: "№",
+                                align: "center",
+                                dataIndex: "dugaar",
+                                width: "2rem",
+                                render: (text, record, index) =>
+                                  (data?.khuudasniiDugaar || 0) *
+                                    (data?.khuudasniiKhemjee || 0) -
+                                  (data?.khuudasniiKhemjee || 0) +
+                                  index +
+                                  1,
+                              },
+                              {
+                                title: "Дугаар",
+                                dataIndex: "mashiniiDugaar",
+                              },
+                              {
+                                title: "Орсон",
+                                dataIndex: "tuukh",
+                                render(v) {
+                                  const d = v[0]?.tsagiinTuukh[0]?.orsonTsag;
+                                  return (
+                                    d && moment(d).format("YYYY-MM-DD HH:mm")
+                                  );
+                                },
+                              },
+                              {
+                                title: "Гарсан",
+                                dataIndex: "tuukh",
+                                render(v) {
+                                  const d = v[0]?.tsagiinTuukh[0]?.garsanTsag;
+                                  return (
+                                    d && moment(d).format("YYYY-MM-DD HH:mm")
+                                  );
+                                },
+                              },
+                              {
+                                title: "Хугацаа/мин",
+                                dataIndex: "tuukh",
+                                render(v) {
+                                  const d1 = moment(
+                                    v[0]?.tsagiinTuukh[0]?.orsonTsag
+                                  );
+                                  const d2 = moment(
+                                    v[0]?.tsagiinTuukh[0]?.garsanTsag
+                                  );
+                                  const diff = d2.diff(d1, "minutes");
+                                  return diff && diff;
+                                },
+                              },
+                              {
+                                title: "Төрөл",
+                                dataIndex: "turul",
+                              },
+                              {
+                                title: "Дүн",
+                                dataIndex: "tuukh",
+                                render(v) {
+                                  return v && formatNumber(v[0]?.tulukhDun, 0);
+                                },
+                              },
+                              {
+                                title: "Хэлбэр",
+                                render: (v) => {
+                                  return (
+                                    v && <div>{v[0]?.tulburTulsunKhelber}</div>
+                                  );
+                                },
+                              },
+                              {
+                                title: "Төлбөр",
+                                dataIndex: "tuukh",
+                                render(v) {
+                                  return v[0]?.tuluv === 0 ? (
+                                    <div>-</div>
+                                  ) : v[0]?.tuluv < 0 ? (
+                                    <div>Үнэгүй</div>
+                                  ) : v[0]?.ebarimtAvsanEsekh ? (
+                                    <div>Төлөгдсөн</div>
+                                  ) : (
+                                    <div>И-Баримт</div>
+                                  );
+                                },
+                              },
+                              {
+                                title: "Төлөв",
+                                dataIndex: "tuluv",
+                                render(v) {
+                                  return formatNumber(v);
+                                },
+                              },
+                            ])
+                            .addDataSource(data?.jagsaalt)
+                            .saveAs("Жагсаалт.xlsx");
+                        })
+                        .catch((aldaa) => aldaaBarigch(aldaa));
                     }}
                   >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
