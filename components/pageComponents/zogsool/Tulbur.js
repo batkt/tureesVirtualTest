@@ -228,7 +228,7 @@ function Tulbur(
         zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
       })
       .then(({ data }) => {
-        setQpayerTulukh(data.khariu);
+        setQpayerTulukh(data);
         setLoading(false);
       })
       .catch((e) => {

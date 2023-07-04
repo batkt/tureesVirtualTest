@@ -207,7 +207,7 @@ function Tulbur(
         barilgiinId: barilgiinId,
       })
       .then(({ data }) => {
-        setQpayerTulukh(data.khariu);
+        setQpayerTulukh(data);
         setLoading(false);
       })
       .catch((e) => {
