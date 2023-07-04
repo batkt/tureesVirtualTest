@@ -180,10 +180,10 @@ function Tulbur(
         (a.barilgiinId = barilgiinId),
         (a.burtgesenAjiltan = ajiltan._id),
         (a.burtgesenAjiltaniiNer = ajiltan.ner),
-        (a.togloominId = data._id);
+        (a.zogsooliinId = uilchluugchiinId);
     });
     uilchilgee(token)
-      .post("/zogsooliinTulburTulye", { tulbur, id: data._id })
+      .post("/zogsooliinTulburTulye", { tulbur, id: uilchluugchiinId })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setAlkham(2);
@@ -221,11 +221,11 @@ function Tulbur(
       setLoading(false);
       return;
     }
-    setKhuleegdejBuiQpay(`${data?._id}${ilgeekhDun}`);
+    setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
     uilchilgee(token)
       .post("/qpayGargaya", {
         dun: ilgeekhDun,
-        zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
+        zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
       })
       .then(({ data }) => {
         setQpayerTulukh(data);
@@ -709,7 +709,7 @@ function Tulbur(
           <Button
             type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(data?._id)}>
+            onClick={() => ebarimtAvya(uilchluugchiinId)}>
             {t("Хэвлэх")}
           </Button>
         )}
