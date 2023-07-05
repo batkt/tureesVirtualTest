@@ -1140,8 +1140,7 @@ function camera({ token }) {
                 <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
                   {t("Төлсөн")} :{" "}
                   {formatNumber(
-                    !!orlogo[0]?.garsanKhaalga ? orlogo[0].garsanKhaalga : 0,
-                    0
+                      !!orlogo[0]?.dun ? orlogo[0].dun : 0, 0
                   )}
                   ₮
                 </div>
