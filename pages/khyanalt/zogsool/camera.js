@@ -59,6 +59,7 @@ import useSWR from "swr";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
+import Image from "next/image";
 
 const usguud = [
   "А",
@@ -894,8 +895,13 @@ function camera({ token }) {
                   setCamerKharakh(1);
                 }}
                 className="flex w-full items-center justify-center ">
+                {/*<Image src="/v1.jpg" width="100%" height="100%" className={`object-cover  ${
+                    cameraKharakh === 1
+                        ? "w-full  sm:h-[80vh] sm:w-[80%]"
+                        : "w-full  sm:h-[250px]"
+                }`}/>*/}
                 <img
-                  src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
+                  src="/v2.jpg"
                   className={`object-cover  ${
                     cameraKharakh === 1
                       ? "w-full  sm:h-[80vh] sm:w-[80%]"
@@ -974,7 +980,7 @@ function camera({ token }) {
                 }}
                 className="flex w-full items-center justify-center ">
                 <img
-                  src={`https://i.pinimg.com/originals/a4/4e/49/a44e4947dc1057f222dbe705b04570a3.jpg`}
+                    src="/v1.jpg"
                   className={`object-cover  ${
                     cameraKharakh === 2
                       ? "w-full  sm:h-[80vh] sm:w-[80%]"
