@@ -926,7 +926,8 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className="flex w-full items-center justify-center ">
+                className="flex w-full items-center justify-center "
+              >
                 <img
                   src="/v2.jpg"
                   className={`object-cover  ${
@@ -1011,7 +1012,7 @@ function camera({ token }) {
                 className="flex w-full items-center justify-center "
               >
                 <img
-                    src="/v1.jpg"
+                  src="/v1.jpg"
                   className={`object-cover  ${
                     cameraKharakh === 2
                       ? "w-full  sm:h-[80vh] sm:w-[80%]"
@@ -1184,252 +1185,86 @@ function camera({ token }) {
                         //     );
                         // }}
                         onClick={() => {
-                          excel
-                            .addSheet("Камер")
-                            .addColumns([
-                              {
-                                title: "№",
-                                align: "center",
-                                dataIndex: "dugaar",
-                                width: "2rem",
-                                render: (text, record, index) =>
-                                  (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
-                                    (uilchluulegchGaralt?.khuudasniiKhemjee ||
-                                      0) -
-                                  (uilchluulegchGaralt?.khuudasniiKhemjee ||
-                                    0) +
-                                  index +
-                                  1,
+                          uilchilgee(token)
+                            .get("zogsoolUilchluulegch", {
+                              params: {
+                                order: order,
+                                query: query,
+                                khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
                               },
-                              {
-                                title: t("Дугаар"),
-                                dataIndex: "mashiniiDugaar",
-                              },
-                              {
-                                title: t("Орсон"),
-                                dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
-                                render(v, p) {
-                                  const d =
-                                    p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
-                                  return d && moment(d).format("MM-DD HH:mm");
-                                },
-                              },
-                              {
-                                title: t("Гарсан"),
-                                dataIndex: "tuukh.tsagiinTuukh.garsanTsag",
-                                render(v, p) {
-                                  const d =
-                                    p.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
-                                  return d && moment(d).format("MM-DD HH:mm");
-                                },
-                              },
-                              {
-                                title: t("Төрөл"),
-                                dataIndex: "turul",
-                              },
-                              {
-                                title: "Дүн",
-                                dataIndex: "tuukh",
-                                render(v, p, i) {
-                                  return formatNumber(v[i]?.tulukhDun, 0);
-                                },
-                              },
-                              // {
-                              //   title: (
-                              //     <Popover
-                              //       placement="bottom"
-                              //       content={
-                              //         <div className="space-y-2">
-                              //           <div
-                              //             onClick={() => setKhelber("belen")}
-                              //             className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                              //           >
-                              //             Бэлэн
-                              //           </div>
-                              //           <div
-                              //             onClick={() => setKhelber("card")}
-                              //             className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                              //           >
-                              //             Карт
-                              //           </div>
-                              //           <div
-                              //             onClick={() =>
-                              //               setKhelber("khariltsakh")
-                              //             }
-                              //             className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
-                              //           >
-                              //             Харилцах
-                              //           </div>
-                              //         </div>
-                              //       }
-                              //     >
-                              //       <div
-                              //         className={`flex cursor-pointer  items-center justify-center gap-3 `}
-                              //       >
-                              //         <FilterOutlined className="text-lg text-green-600" />
-                              //         Хэлбэр
-                              //       </div>
-                              //     </Popover>
-                              //   ),
-                              //   align: "center",
-                              //   dataIndex: "tuukh",
-                              //   width: "7rem",
-                              //   showSorterTooltip: false,
-                              //   render: (v) => {
-                              //     let r = null;
-                              //     switch (v[0]?.tulburTulsunKhelber) {
-                              //       case "belen":
-                              //         r = "Бэлэн";
-                              //         break;
-                              //       case "khariltsakh":
-                              //         r = "Харилцах";
-                              //         break;
-                              //       case "khaan":
-                              //         r = "Хаан";
-                              //         break;
-                              //       case "khas":
-                              //         r = "Хас";
-                              //         break;
-                              //       case "tur":
-                              //         r = "Төр";
-                              //         break;
-                              //       case "golomt":
-                              //         r = "Голомт";
-                              //         break;
-                              //       case "tdb":
-                              //         r = "ХХБ";
-                              //         break;
-                              //       default:
-                              //         break;
-                              //     }
-                              //     return r && <div>{r}</div>;
-                              //   },
-                              // },
-                              // {
-                              //   title: t("Төлөв"),
-                              //   align: "center",
-                              //   width: "10rem",
-                              //   showSorterTooltip: false,
-                              //   sorter: () => 0,
-                              //   dataIndex: "tuukh.tuluv",
-                              //   render(v, parent) {
-                              //     const mur = parent.tuukh[0];
-                              //     return mur.tuluv === 0 && !!mur?.tulukhDun ? (
-                              //       <Popover
-                              //         placement="bottom"
-                              //         trigger="hover"
-                              //         content={() => (
-                              //           <div className="flex w-24 flex-col space-y-2">
-                              //             <a
-                              //               className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                              //               onClick={() => {
-                              //                 !!mur?.tulukhDun
-                              //                   ? tulburTulyu(mur, parent._id)
-                              //                   : notification.warn({
-                              //                       message: t(
-                              //                         "Дүн бодогдоогүй байна."
-                              //                       ),
-                              //                     });
-                              //               }}
-                              //             >
-                              //               <WalletOutlined
-                              //                 style={{ fontSize: "18px" }}
-                              //               />
-                              //               <label>{t("Төлөх")}</label>
-                              //             </a>
-                              //             <a
-                              //               className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                              //               onClick={() =>
-                              //                 setModalOpen({
-                              //                   bool: true,
-                              //                   item: parent,
-                              //                   type: "unegui",
-                              //                 })
-                              //               }
-                              //             >
-                              //               <StarOutlined
-                              //                 style={{ fontSize: "18px" }}
-                              //               />
-                              //               <label>{t("Үнэгүй")}</label>
-                              //             </a>
-                              //           </div>
-                              //         )}
-                              //       >
-                              //         <Button
-                              //           style={{
-                              //             display: "flex",
-                              //             justifyContent: "center",
-                              //             alignItems: "center",
-                              //             backgroundColor: "#FF8505",
-                              //           }}
-                              //           size="small"
-                              //         >
-                              //           <div className="flex items-center  justify-center space-x-2 text-white">
-                              //             <div className="flex items-center justify-center">
-                              //               <DollarCircleOutlined />
-                              //             </div>
-                              //             <div className="flex items-center justify-center">
-                              //               {t("Төлбөр")}
-                              //             </div>
-                              //           </div>
-                              //         </Button>
-                              //       </Popover>
-                              //     ) : mur?.tuluv === 0 &&
-                              //       !mur?.tsagiinTuukh[0]?.garsanTsag ? (
-                              //       <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-                              //         <div className="flex items-center justify-center">
-                              //           Идэвхтэй
-                              //         </div>
-                              //       </div>
-                              //     ) : mur?.tuluv === 1 ? (
-                              //       <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
-                              //         <div className="flex items-center justify-center">
-                              //           {t("Төлөгдсөн")}
-                              //         </div>
-                              //       </div>
-                              //     ) : (
-                              //       <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-                              //         <div className="flex items-center justify-center">
-                              //           {t("Үнэгүй")}
-                              //         </div>
-                              //       </div>
-                              //     );
-                              //   },
-                              // },
-                              // {
-                              //   title: t("Шалтгаан"),
-                              //   align: "center",
-                              //   dataIndex: "tuukh",
-                              //   width: "7rem",
-                              //   showSorterTooltip: false,
-                              //   render: (v, parent) => {
-                              //     return (
-                              //       v && (
-                              //         <Tooltip
-                              //           placement="top"
-                              //           title={
-                              //             v[0]?.tuluv === -1
-                              //               ? v[0]?.uneguiGarsan
-                              //               : parent.zurchil
-                              //           }
-                              //         >
-                              //           <div className="line-clamp-1">
-                              //             {v[0]?.tuluv === -1
-                              //               ? v[0]?.uneguiGarsan
-                              //               : !!v[0]?.tsagiinTuukh[0]
-                              //                   ?.garsanTsag &&
-                              //                 v[0]?.niitKhugatsaa <= 30
-                              //               ? "30 мин"
-                              //               : parent.zurchil}
-                              //           </div>
-                              //         </Tooltip>
-                              //       )
-                              //     );
-                              //   },
-                              // },
-                            ])
-                            .addDataSource(uilchluulegchGaralt?.jagsaalt)
-                            .saveAs("Camera.xlsx");
+                            })
+                            .then(({ data }) => {
+                              excel
+                                .addSheet("Камер")
+                                .addColumns([
+                                  {
+                                    title: "№",
+                                    align: "center",
+                                    dataIndex: "dugaar",
+                                    width: "2rem",
+                                    render: (text, record, index) =>
+                                      (data?.khuudasniiDugaar || 0) *
+                                        (data?.khuudasniiKhemjee || 0) -
+                                      (data?.khuudasniiKhemjee || 0) +
+                                      index +
+                                      1,
+                                  },
+                                  {
+                                    title: t("Дугаар"),
+                                    dataIndex: "mashiniiDugaar",
+                                  },
+                                  {
+                                    title: t("Орсон"),
+                                    dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
+                                    render(v, p) {
+                                      const d =
+                                        p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
+                                      return (
+                                        d && moment(d).format("MM-DD HH:mm")
+                                      );
+                                    },
+                                  },
+                                  {
+                                    title: t("Гарсан"),
+                                    dataIndex: "tuukh.tsagiinTuukh.garsanTsag",
+                                    render(v, p) {
+                                      const d =
+                                        p.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
+                                      return (
+                                        d && moment(d).format("MM-DD HH:mm")
+                                      );
+                                    },
+                                  },
+                                  {
+                                    title: t("Төрөл"),
+                                    dataIndex: "turul",
+                                  },
+                                  {
+                                    title: "Дүн",
+                                    dataIndex: "tuukh",
+                                    render(v, p, i) {
+                                      return formatNumber(v[i]?.tulukhDun, 0);
+                                    },
+                                  },
+                                  {
+                                    title: t("Шалтгаан"),
+                                    align: "center",
+                                    dataIndex: "tuukh",
+                                    width: "7rem",
+                                    showSorterTooltip: false,
+                                    render: (v, parent) => {
+                                      return v[0]?.tuluv === -1
+                                        ? v[0]?.uneguiGarsan
+                                        : !!v[0]?.tsagiinTuukh[0]?.garsanTsag &&
+                                          v[0]?.niitKhugatsaa <= 30
+                                        ? "30 мин"
+                                        : parent.zurchil;
+                                    },
+                                  },
+                                ])
+                                .addDataSource(data?.jagsaalt)
+                                .saveAs("Camera.xlsx");
+                            });
                         }}
                       >
                         <DownloadOutlined style={{ fontSize: "18px" }} />
