@@ -1230,6 +1230,20 @@ function camera({ token }) {
                                     },
                                   },
                                   {
+                                    title: "Хугацаа/мин",
+                                    dataIndex: "tuukh",
+                                    render(v) {
+                                      const d1 = moment(
+                                        v?.[0]?.tsagiinTuukh[0]?.orsonTsag
+                                      );
+                                      const d2 = moment(
+                                        v?.[0]?.tsagiinTuukh[0]?.garsanTsag
+                                      );
+                                      const diff = d2.diff(d1, "minutes");
+                                      return diff && diff;
+                                    },
+                                  },
+                                  {
                                     title: t("Төрөл"),
                                     dataIndex: "turul",
                                   },
