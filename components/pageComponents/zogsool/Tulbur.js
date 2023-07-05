@@ -108,10 +108,9 @@ function Tulbur(
   }
 
   useEffect(() => {
-    console.log('1213', eBarimt);
-    /*if (!!eBarimt) {
+    if (!!eBarimt) {
       handlePrint();
-    }*/
+    }
   }, [eBarimt]);
 
   useEffect(() => {
@@ -225,6 +224,7 @@ function Tulbur(
     setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
     uilchilgee(token)
       .post("/qpayGargaya", {
+        barilgiinId: barilgiinId,
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
       })

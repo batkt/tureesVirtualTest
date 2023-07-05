@@ -1472,6 +1472,14 @@ function togloom1() {
             </div>
           </div>
         </div>
+          <div className="grid gap-2 sm:grid-cols-2 sm:gap-5 xl:flex mt-5">
+              <Button type="primary">
+                  <span>Хаалт нээх</span>
+              </Button>
+              <Button type="primary">
+                  <span>Хаалт хаах</span>
+              </Button>
+          </div>
         <div
           data-aos="fade-left"
           data-aos-duration="1000"

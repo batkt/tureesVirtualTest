@@ -180,7 +180,6 @@ function camera({ token }) {
   const [cameraKharakh, setCamerKharakh] = useState(false);
   const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [orlogo, setOrlogo] = useState([]);
   const [khelber, setKhelber] = useState("");
   const [dun, setDun] = useState(null);
   const [idevkhtei, setIdevkhtei] = useState(0);
@@ -222,19 +221,6 @@ function camera({ token }) {
     }
     return result;
   }, [ognoo, khelber, dun]);
-  const orlogoQuery = useMemo(() => {
-    if (jagsaalt?.length > 0) {
-      // console.log('dada', garakhKhaalgaIp);
-      //зогсоолын id.р хайдаг болгох
-      return {
-        baiguullagiinId: baiguullaga?._id,
-        zogsooliinId: jagsaalt[0]?._id,
-        garakhKhaalgaIp: garakhKhaalgaIp,
-        ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      };
-    }
-  }, [ognoo, jagsaalt, garakhKhaalgaIp]);
 
   const dansQuery = useMemo(() => {
     return { amount: { $gt: 0 } };
@@ -243,15 +229,6 @@ function camera({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
-
-  useEffect(() => {
-    uilchilgee(token)
-      .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
-      .then((a) => {
-        setOrlogo(a.data);
-      })
-      .catch(aldaaBarigch);
-  }, [orlogoQuery]);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
@@ -1129,18 +1106,6 @@ function camera({ token }) {
                   value={ognoo}
                   onChange={setOgnoo}
                 />
-                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
-                  {t("Нийт бодогдсон")} :{" "}
-                  {formatNumber(
-                    !!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0,
-                    0
-                  )}
-                  ₮
-                </div>
-                <div className="ml-5 flex space-x-2 p-1 pt-2 text-base font-medium">
-                  {t("Төлсөн")} :{" "}
-                  {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}₮
-                </div>
               </div>
               <div
                 className="mb-5 flex w-full justify-between sm:justify-end md:mb-0 md:ml-auto lg:w-auto"
