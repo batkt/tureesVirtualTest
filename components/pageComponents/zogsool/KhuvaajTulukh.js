@@ -178,7 +178,7 @@ function KhuvaajTulukh({
         ognoo: new Date(),
         zakhialgiinDugaar: data?.zakhialgiinDugaar,
         baiguullagiinId: data?.baiguullagiinId,
-        burtgesenAjiltan: ajiltan?._id,
+        burtgesenAjiltaniiId: ajiltan?._id,
         burtgesenAjiltaniiNer: ajiltan?.ner,
       };
       if (e.target.name === "khunglukh") {

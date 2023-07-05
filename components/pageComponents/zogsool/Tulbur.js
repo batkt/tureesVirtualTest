@@ -176,11 +176,10 @@ function Tulbur(
     }
     tulbur.forEach((a) => {
       a.ognoo = new Date();
-      (a.baiguullagiinId = baiguullaga?._id),
-        (a.barilgiinId = barilgiinId),
-        (a.burtgesenAjiltan = ajiltan._id),
-        (a.burtgesenAjiltaniiNer = ajiltan.ner),
-        (a.zogsooliinId = uilchluugchiinId);
+      a.baiguullagiinId = baiguullaga?._id;
+          a.barilgiinId = barilgiinId;
+          a.burtgesenAjiltaniiId = ajiltan._id;
+          a.burtgesenAjiltaniiNer = ajiltan.ner;
     });
     uilchilgee(token)
       .post("/zogsooliinTulburTulye", { tulbur, id: uilchluugchiinId })
