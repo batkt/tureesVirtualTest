@@ -486,8 +486,6 @@ function camera({ token }) {
         ),
         align: "right",
         width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
         dataIndex: "tuukh.tulukhDun",
         render(v, p) {
           // console.log(p.tuukh[0]?.tulukhDun, '======')
