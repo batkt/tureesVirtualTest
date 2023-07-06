@@ -1454,6 +1454,14 @@ function camera({ token }) {
                             {cam.title}
                           </Select.Option>
                         ))}
+                        {cameraData[1][0].children.map((cam) => (
+                            <Select.Option
+                                className="w-1/3 sm:w-auto"
+                                value={cam?.children[0].value}
+                            >
+                              {cam.title}
+                            </Select.Option>
+                        ))}
                       </Select>
                     </Form.Item>
                     <a
