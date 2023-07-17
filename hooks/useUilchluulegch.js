@@ -19,7 +19,6 @@ const fetcher = (
                 ...khuudaslalt,
                 query: {
                     baiguullagiinId,
-                    barilgiinId,
                     $or: [
                         { mashiniiDugaar: { $regex: search, $options: "i" } },
                     ],
