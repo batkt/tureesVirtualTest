@@ -205,7 +205,7 @@ function camera({ token }) {
       result = {
         "tuukh.tulburTulsunKhelber":
           !!khelber && khelber === "card"
-            ? { $all: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
+            ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
             : khelber,
         ...result,
       };
@@ -746,7 +746,7 @@ function camera({ token }) {
       dataIndex: "description",
       render: (v) => {
         return (
-          <Tooltip placement="top" title={v}>
+          <Tooltip placement="top" title={v} mouseLeaveDelay={0}>
             <div className="truncate text-left">{v}</div>
           </Tooltip>
         );
