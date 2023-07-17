@@ -182,6 +182,7 @@ function Tulbur(
           a.burtgesenAjiltaniiNer = ajiltan.ner;
           a.zogsooliinId = data?.zogsooliinId;
     });
+    // console.log('3434', tulbur)
     uilchilgee(token)
       .post("/zogsooliinTulburTulye", { tulbur, id: uilchluugchiinId })
       .then(({ data }) => {

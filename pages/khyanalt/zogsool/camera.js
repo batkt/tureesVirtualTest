@@ -36,6 +36,7 @@ import {
   EyeOutlined,
   CloseOutlined,
   FilterOutlined,
+  ShareAltOutlined, UploadOutlined
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -124,6 +125,27 @@ function generateChild(mur, turul) {
     return res;
   }
   return [];
+}
+
+function tulburKhurvuulekh(v) {
+  switch (v) {
+    case "belen":
+      return "Бэлэн";
+    case "khariltsakh":
+      return  "Харилцах";
+    case "khaan":
+      return  "Хаан";
+    case "khas":
+      return  "Хас";
+    case "tur":
+      return "Төр";
+    case "golomt":
+      return "Голомт";
+    case "tdb":
+      return "ХХБ";
+    default:
+      break;
+  }
 }
 
 /*const TreeComponent = ()=>{
@@ -516,31 +538,28 @@ function camera({ token }) {
         showSorterTooltip: false,
         render: (v) => {
           let r = null;
-          switch (v[0]?.tulburTulsunKhelber) {
-            case "belen":
-              r = "Бэлэн";
-              break;
-            case "khariltsakh":
-              r = "Харилцах";
-              break;
-            case "khaan":
-              r = "Хаан";
-              break;
-            case "khas":
-              r = "Хас";
-              break;
-            case "tur":
-              r = "Төр";
-              break;
-            case "golomt":
-              r = "Голомт";
-              break;
-            case "tdb":
-              r = "ХХБ";
-              break;
-            default:
-              break;
-          }
+          if(v[0]?.tulbur?.length > 1){
+            r = <div className="flex justify-center">
+              <Popover
+                  content={() => (
+                      v[0]?.tulbur.map((mur)=>(
+                          <div>
+                            {tulburKhurvuulekh(mur.turul)}: {mur.dun}
+                          </div>
+                          ))
+                  )}
+                  placement="bottom"
+                  trigger="click"
+              >
+                <Button
+                    icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                >
+                </Button>
+              </Popover>
+            </div>
+          } else
+            r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
+          console.log('45454',v[0]?.tulbur[0]);
           return r && <div>{r}</div>;
         },
       },
