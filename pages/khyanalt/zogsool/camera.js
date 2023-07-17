@@ -223,7 +223,7 @@ function camera({ token }) {
   }, [ognoo, khelber, dun]);
 
   const dansQuery = useMemo(() => {
-    return { amount: { $gt: 0 } };
+    return { amount: { $gt: 0, $lt: 1000000 }};
   }, [ognoo]);
 
   useEffect(() => {
@@ -238,7 +238,6 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool`, (zogsool) => {
       onRefresh();
-      console.log(zogsool);
     });
     return () => {
       socket().off(`zogsool`);
