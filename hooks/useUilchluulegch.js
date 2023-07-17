@@ -19,7 +19,7 @@ const fetcher = (
                 ...khuudaslalt,
                 query: {
                     baiguullagiinId,
-                    barilgiinId,
+                    // barilgiinId,
                     $or: [
                         { mashiniiDugaar: { $regex: search, $options: "i" } },
                     ],
@@ -47,7 +47,7 @@ function useUilchluulegch(token, baiguullagiinId, query, order) {
                 token,
                 baiguullagiinId,
                 khuudaslalt,
-                // barilgiinId,
+                barilgiinId,
                 query,
                 order,
             ]
