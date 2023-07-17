@@ -746,7 +746,7 @@ function camera({ token }) {
       dataIndex: "description",
       render: (v) => {
         return (
-          <Tooltip placement="top" title={v} mouseLeaveDelay={0}>
+          <Tooltip placement="top" title={v} mouseLeaveDelay={0} mouseEnterDelay={1}>
             <div className="truncate text-left">{v}</div>
           </Tooltip>
         );
