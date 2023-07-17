@@ -47,7 +47,7 @@ function useUilchluulegch(token, baiguullagiinId, query, order) {
                 token,
                 baiguullagiinId,
                 khuudaslalt,
-                barilgiinId,
+                // barilgiinId,
                 query,
                 order,
             ]
