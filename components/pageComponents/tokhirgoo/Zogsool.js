@@ -22,9 +22,10 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId, setSongog
 
   const query = useMemo(() => {
     return {
-      baiguullagiinId: baiguullaga._id
+      baiguullagiinId: baiguullaga._id,
+      barilgiinId: barilgiinId
     };
-  }, [baiguullaga._id]);
+  }, [baiguullaga._id, barilgiinId]);
 
   const jagsaalt = useJagsaalt("/zogsoolJagsaalt", query, { createdAt: -1 });
   useEffect(() => {
