@@ -225,7 +225,7 @@ function camera({ token }) {
     };
     if (!!khelber) {
       result = {
-        "tuukh.tulburTulsunKhelber":
+        "tuukh.tulbur.turul":
           !!khelber && khelber === "card"
             ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
             : khelber,
@@ -335,7 +335,6 @@ function camera({ token }) {
     return res;
   };
   function tulburTulyu(data, uilchluugchiinId) {
-    // console.log('----------', data, ' - ',uilchluugchiinId);
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
