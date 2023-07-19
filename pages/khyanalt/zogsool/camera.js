@@ -205,15 +205,15 @@ function camera({ token }) {
   const [khelber, setKhelber] = useState("");
   const [dun, setDun] = useState(null);
   const [idevkhtei, setIdevkhtei] = useState(0);
-  const [garakhKhaalgaIp, setGarakhKhaalgaIp] = useState("");
   const [form] = Form.useForm();
 
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
       "khaalga.ajiltnuud.id": ajiltan?._id,
     };
-  }, [baiguullaga?._id, ajiltan]);
+  }, [baiguullaga?._id, ajiltan, barilgiinId]);
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
   const query = useMemo(() => {
@@ -695,10 +695,11 @@ function camera({ token }) {
                 <div className="line-clamp-1">
                   {v[0]?.tuluv === -1
                     ? v[0]?.uneguiGarsan
-                    : !!v[0]?.tsagiinTuukh[0]?.garsanTsag &&
-                      v[0]?.niitKhugatsaa <= 30
+                    : !!parent.zurchil ?
+                          parent.zurchil
+                          : !!v[0]?.tsagiinTuukh[0]?.garsanTsag && v[0]?.niitKhugatsaa <= 30
                     ? "30 мин"
-                    : parent.zurchil}
+                    : ''}
                 </div>
               </Tooltip>
             )
@@ -834,7 +835,7 @@ function camera({ token }) {
   };
   const khaalgaNeey = (ip) => {
     axios
-      .get("http://localhost:5000/api/neeye/" + ip + "")
+      .get("http://192.168.1.130:5000/api/neeye/" + ip + "")
       .then(function (response) {
         if (!!response) console.log("/api/neeye", response);
       })

@@ -1,11 +1,14 @@
-import React, {useEffect, useImperativeHandle, useState} from 'react'
+import React, {useEffect, useImperativeHandle, useMemo, useState} from 'react'
 import {Form, Select, Input, Button, notification, Modal, InputNumber, Divider, Space} from 'antd'
 import {CloseCircleOutlined, MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import createMethod from 'tools/function/crud/createMethod';
 import updateMethod from 'tools/function/crud/updateMethod';
-import {aldaaBarigch, url} from 'services/uilchilgee';
+import uilchilgee, {aldaaBarigch, url} from 'services/uilchilgee';
 import { useTranslation } from 'react-i18next';
 import axios from "axios";
+import moment from "moment";
+import useJagsaalt from "../../../hooks/useJagsaalt";
+import getConfig from "next/config";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
@@ -22,6 +25,7 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
     }
     else
         method = createMethod;
+
     useImperativeHandle(
         ref,
         () => ({
@@ -195,7 +199,7 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
                             <>
                                 <div className="space-y-3 overflow-y-auto mb-5" style={{ maxHeight: "40vh" }}>
                                     {fields.map(({ key, name, fieldKey, ...restField }) => (
-                                        <Khaalga key={key} name={name} fieldKey={fieldKey} restField={restField} fields={fields} remove={remove}/>
+                                        <Khaalga barilgiinId={barilgiinId} key={key} name={name} fieldKey={fieldKey} restField={restField} fields={fields} remove={remove}/>
                                     ))}
 
                                 </div>
@@ -215,17 +219,19 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
     )
 }
 
-function Khaalga({ name, fieldKey, restField, remove }) {
-    const [cameraIps, setCameraIps] = useState(["192.168.1.200","192.168.1.201","192.168.1.202","192.168.1.203","192.168.1.204","192.168.1.205"]);
+function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
+    const [cameraIps, setCameraIps] = useState([]);
     useEffect(()=>{
-        axios.get("http://localhost:5000/api/jagsaaltAvya").then(function (response) {
-            if(!!response)
-                setCameraIps(response);
-        }).catch(function (error) {
-            console.log('ERROR: /api/jagsaaltAvya', error);
-        });
+        axios.get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/"+barilgiinId )
+            .then(function (response) {
+                if (!!response)
+                    setCameraIps(response.data.ip);
+            })
+            .catch(function (error) {
+                console.log("ERROR: /api/neeye", error);
+            });
     },[]);
-    // console.log('11111111', name, 'fieldKey: ',fieldKey, 'restField ', restField, 'fields ', fields);
+    // console.log('11111111', name, 'fieldKey: ',fieldKey, 'restField ', restField, 'fields ', cameraIps);
     const { t } = useTranslation();
     return (
         <div key={fieldKey} className=" relative rounded-md border bg-yellow-50 px-10 py-4 shadow-md 2xl:pr-20 mb-5">
