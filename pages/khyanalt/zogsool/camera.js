@@ -214,6 +214,7 @@ function camera({ token }) {
       "khaalga.ajiltnuud.id": ajiltan?._id,
     };
   }, [baiguullaga?._id, ajiltan, barilgiinId]);
+
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
   const query = useMemo(() => {
@@ -425,13 +426,12 @@ function camera({ token }) {
           const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? (
             <div
-              style={{ color: "#303030" }}
-              className="rounded bg-green-200 px-3 py-1"
+              className="rounded bg-green-200 px-3 py-1 text-slate-700"
             >
               {minToHour(v[0].niitKhugatsaa)}
             </div>
           ) : (
-            <div className="rounded bg-blue-200 px-3 py-1">
+            <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
               {d2.hours.length < 2 ? "0" + d2.hours : d2.hours} :{" "}
               {d2.minutes.length < 2 ? "0" + d2.minutes : d2.minutes}
             </div>
@@ -496,36 +496,22 @@ function camera({ token }) {
             placement="bottom"
             content={
               <div className="space-y-2">
-                <div
-                  onClick={() => setKhelber("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                <div onClick={() => setKhelber("")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Бүгд
                 </div>
-                <div
-                  onClick={() => setKhelber("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                <div onClick={() => setKhelber("belen")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Бэлэн
                 </div>
-                <div
-                  onClick={() => setKhelber("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
-                >
+                <div onClick={() => setKhelber("card")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Карт
                 </div>
-                <div
-                  onClick={() => setKhelber("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
-                >
+                <div onClick={() => setKhelber("khariltsakh")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}>
                   Харилцах
                 </div>
               </div>
             }
           >
-            <div
-              className={`flex cursor-pointer  items-center justify-center gap-3 `}
-            >
+            <div className={`flex cursor-pointer items-center justify-center gap-3`}>
               <FilterOutlined className="text-lg text-green-600" />
               Хэлбэр
             </div>
@@ -558,7 +544,6 @@ function camera({ token }) {
             </div>
           } else
             r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
-          console.log('45454',v[0]?.tulbur[0]);
           return r && <div>{r}</div>;
         },
       },
