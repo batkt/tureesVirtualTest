@@ -62,5 +62,22 @@ function useUilchluulegch(token, baiguullagiinId, query, order) {
         isValidating,
     };
 }
+const fetcherToololt = (url, token, barilgiinId) =>{
+  if(!!barilgiinId)
+      return axios(token)
+          .post(url, { barilgiinId })
+          .then((res) => res.data)
+          .catch(aldaaBarigch);
+};
+
+export function useUilchluulegchToololt(token) {
+    const { barilgiinId } = useAuth();
+    const { data, mutate } = useSWR(
+        !!token ? ["/zogsoolUilchluulegchdiinToo", token, barilgiinId] : null,
+        fetcherToololt,
+        { revalidateOnFocus: false }
+    );
+    return { uilchiluulegchToololt: data, uilchiluulegchToololtMutate: mutate };
+}
 
 export default useUilchluulegch;

@@ -26,6 +26,7 @@ import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import useUilchluulegch from "hooks/useUilchluulegch";
+import {useUilchluulegchToololt} from "hooks/useUilchluulegch";
 import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import {
@@ -96,39 +97,37 @@ function Zogsool({ token }) {
     moment().startOf("day"),
     moment().endOf("day"),
   ]);
-  const [turul, setTurul] = useState(undefined);
   const [zogsoolId, setZogsoolId] = useState(undefined);
   const [orlogo, setOrlogo] = useState([]);
   const [tulbur, setTulbur] = useState("");
+  const [shuult, setShuult] = useState("");
 
-  const { zogsoolToololt, zogsoolToololtMutate } = useZogsoolToololt(
-    token,
-    ognoo
-  );
+  const { uilchiluulegchToololt, uilchiluulegchToololtMutate } = useUilchluulegchToololt(token);
 
   const { order, onChangeTable, setOrder } = useOrder({"tuukh.tsagiinTuukh.garsanTsag": -1,});
-
+  console.log(shuult);
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
     };
   }, [baiguullaga?._id]);
   const query = useMemo(() => {
+    const aa = !!shuult?.query ? shuult.query : {};
     return {
       createdAt: {
         $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       },
+      ...aa,
       "tuukh.zogsooliinId": zogsoolId,
     };
-  }, [ognoo, zogsoolId]);
+  }, [ognoo, zogsoolId, shuult]);
   const {
     uilchluulegchGaralt,
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order);
-  console.log('0--', uilchluulegchGaralt);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que, { createdAt: -1 });
 
@@ -143,7 +142,7 @@ function Zogsool({ token }) {
 
   useEffect(() => {
     uilchilgee(token)
-      .post("/zogsoolUilchiluulegchidiinDunAvay", orlogoQuery)
+      .post("/zogsoolUilchluulegchdiinDunAvay", orlogoQuery)
       .then((a) => {
         // console.log('--------0-', a.data)
         setOrlogo(a.data);
@@ -160,40 +159,51 @@ function Zogsool({ token }) {
       {
         name: "Түрээслэгч",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Түрээслэгч")?.too,
+            uilchiluulegchToololt?.find((a) => a._id === "Түрээслэгч")?.too,
           0
         ),
+        query: {
+          turul: "Түрээслэгч",
+        },
       },
       {
         name: "Гэрээт",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Гэрээт")?.too,
+          uilchiluulegchToololt?.find((a) => a._id === "Гэрээт")?.too,
           0
         ),
+        query: {
+          turul: "Гэрээт",
+        },
       },
       {
         name: "Дотоод",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Дотоод")?.too,
+          uilchiluulegchToololt?.find((a) => a._id === "Дотоод")?.too,
           0
         ),
+        query: {
+          turul: "Дотоод",
+        },
       },
       {
         name: "Зөрчилтэй",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Зөрчилтэй")?.too,
+          uilchiluulegchToololt?.find((a) => a._id === "Зөрчилтэй")?.too,
           0
         ),
+        query: {},
       },
       {
         name: "Бусад",
         too: formatNumber(
-          zogsoolToololt?.find((a) => a._id === "Бусад")?.too,
+          uilchiluulegchToololt?.find((a) => a._id === "Бусад")?.too,
           0
         ),
+        query: {},
       },
     ],
-    [zogsoolToololt, uilchluulegchGaralt]
+    [uilchiluulegchToololt, uilchluulegchGaralt]
   );
   const zogsoolChange = (e) => {
     // console.log('2222222222', e);
@@ -429,7 +439,7 @@ function Zogsool({ token }) {
         ),
       },*/
     ];
-  }, [turul, i18n.language]);
+  }, [shuult, i18n.language]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -462,9 +472,9 @@ function Zogsool({ token }) {
             <div
               key={i}
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2  border-green-600 sm:col-span-3 xl:col-span-2 2xl:col-span-2 ${
-                a.name === turul ? "bg-green-50 dark:bg-gray-900" : ""
+                a.name === shuult?.name ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
-              onClick={() => setTurul(a.name)}
+              onClick={() => setShuult({query: a.query, name: a.name})}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}

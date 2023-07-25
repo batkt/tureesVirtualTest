@@ -25,6 +25,16 @@ function ZogsoolBurtgekh({ data, jagsaalt, barilgiinId, destroy, token, refresh 
     }
     else
         method = createMethod;
+    useEffect(()=>{
+        function keyUp(e) {
+            if (e.key === "Escape") {
+                e.preventDefault();
+                destroy();
+            }
+        }
+        document.addEventListener("keyup", keyUp);
+        return () => document.removeEventListener("keyup", keyUp);
+    },[]);
 
     useImperativeHandle(
         ref,
