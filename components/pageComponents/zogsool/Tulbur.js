@@ -68,8 +68,17 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        onRefresh();
-        destroy();
+        if(tulbur?.length!==0){
+          Modal.confirm({
+            content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+            okText: t("Тийм"),
+            cancelText: t("Үгүй"),
+            onOk: ()=>{onRefresh();destroy();},
+          });
+        } else{
+          onRefresh();
+          destroy();
+        }
       },
     }),
     [tulbur]

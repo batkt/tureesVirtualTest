@@ -339,9 +339,9 @@ function camera({ token }) {
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
-          <div>{t("Тооцоо хийх")}</div>
+          <div>{t("Тооцоо хийху")}</div>
           <div className="flex items-center">
-            {data?.ovog?.charAt(0)}.{data?.ner}
+            {/*{data?.ovog?.charAt(0)}.{data?.ner}*/}
             <div
               className="ml-5 text-xl hover:text-red-400"
               onClick={() => tulburRef.current.khaaya()}
@@ -551,8 +551,6 @@ function camera({ token }) {
         title: t("Төлөв"),
         align: "center",
         width: "10rem",
-        showSorterTooltip: false,
-        sorter: () => 0,
         dataIndex: "tuukh.tuluv",
         render(v, parent) {
           const mur = parent.tuukh[0];
@@ -868,6 +866,17 @@ function camera({ token }) {
     };
   };
 
+  const modalKhaakh = ()=>{
+    if(!!value){
+      Modal.confirm({
+        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
+        okText: t("Тийм"),
+        cancelText: t("Үгүй"),
+        onOk: ()=>setModalOpen({ bool: false, item: null, type: "" }),
+      });
+    } else
+      setModalOpen({ bool: false, item: null, type: "" });
+  };
   const excel = new Excel();
 
   return (
@@ -1352,13 +1361,11 @@ function camera({ token }) {
                 : "Зөрчил оруулах"
             }
             open={modalOpen.bool}
-            onCancel={() => setModalOpen({ bool: false, item: null, type: "" })}
+            onCancel={()=>modalKhaakh()}
             footer={[
               <Button
                 key="back"
-                onClick={() =>
-                  setModalOpen({ bool: false, item: null, type: "" })
-                }
+                onClick={()=>modalKhaakh()}
               >
                 Хаах
               </Button>,
