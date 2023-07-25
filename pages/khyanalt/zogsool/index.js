@@ -154,7 +154,7 @@ function Zogsool({ token }) {
     () => [
       {
         name: "Үйлчлүүлэгч",
-        too: formatNumber(uilchluulegchGaralt?.niitMur, 0),
+        too: formatNumber(uilchiluulegchToololt?.find((a) => a._id === null)?.too, 0),
       },
       {
         name: "Түрээслэгч",
