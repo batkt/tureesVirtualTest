@@ -417,6 +417,7 @@ function togloom1() {
   const tulburRef = React.useRef(null);
   const [shineBagana, setShineBagana] = useState([]);
   const [khaalga, setKhaalga] = useState(["a","b"])
+  const [dataIrsenEsekh, setDataIrsenEsekh] = useState(false);
 
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
@@ -427,6 +428,7 @@ function togloom1() {
   useEffect(() => {
     togloomUilchilgee().get("/khaalguudAvya").then(res => {
       setKhaalga(res.data)
+      setDataIrsenEsekh(true);
     }).catch(err => console.log(err))
   },[])
 
@@ -1240,13 +1242,13 @@ function togloom1() {
                   placement="bottom"
                   content={
                     <div className="flex flex-col gap-2">
-                      {khaalga.map((a) => {
+                      {khaalga.map((a, index) => {
                         return (
                           <div
                             onClick={() =>{khaaltNeey(a); setKhaaltPopoverNeegdsen(false)} }
-                            className="cursor-pointer select-none text-lg"
+                            className="cursor-pointer select-none p-2 bg-green-300 dark:bg-gray-600 dark:text-gray-200 rounded-lg"
                           >
-                            {a}
+                            {dataIrsenEsekh ? а === "MC-5824T20044701" ? "Зүүн" : "Баруун" : "Хаалт "+(index+1)}
                           </div>
                         );
                       })}
