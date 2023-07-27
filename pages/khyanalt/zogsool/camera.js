@@ -61,6 +61,7 @@ import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import Image from "next/image";
+import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol"; 
 
 const usguud = [
   "А",
@@ -187,6 +188,7 @@ function camera({ token }) {
   const [turul, setTurul] = useState(undefined);
   const [songosonMashin, setSongosonMashin] = useState(undefined);
   const tulburRef = React.useRef(null);
+  const mashiniiDugaarRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
@@ -276,6 +278,35 @@ function camera({ token }) {
 
   // console.log('---------', uilchluulegchGaralt);
 
+  useKeyboardTovchlol("F5", f5Darsan)
+  useKeyboardTovchlol("+", nemekhDarsan)
+
+  function f5Darsan(){
+    const data = uilchluulegchGaralt?.jagsaalt?.[0]
+    const mur = data?.tuukh?.[0]
+    if(!data){
+      return notification.error({
+        message: "Мэдээлэл алга",
+        duration: 1
+      })
+    }
+    if(mur?.tuluv === 0 && !!mur?.tulukhDun){
+      return tulburTulyu(mur, data?._id, data?.mashiniiDugaar)
+    }
+    else return notification.warning({ message: "Төлбөр бодогдох боломжгүй" , duration: 1})
+  }
+
+  function nemekhDarsan(){
+    setModalOpen({
+      bool: true,
+      item: null,
+      type: "dugaarBurtgekh",
+    })
+    setTimeout(() => {
+      mashiniiDugaarRef.current.focus();
+    },200)
+  }
+
   useEffect(() => {
     const d1 = moment().startOf("day").format("YYYY-MM-DD 00:00:00");
     const d2 = moment().endOf("day").format("YYYY-MM-DD 23:59:59");
@@ -335,13 +366,13 @@ function camera({ token }) {
     }
     return res;
   };
-  function tulburTulyu(data, uilchluugchiinId) {
+  function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar) {
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
-          <div>{t("Тооцоо хийху")}</div>
+          <div>{t("Тооцоо хийх")}</div>
           <div className="flex items-center">
-            {/*{data?.ovog?.charAt(0)}.{data?.ner}*/}
+            {mashiniiDugaar}
             <div
               className="ml-5 text-xl hover:text-red-400"
               onClick={() => tulburRef.current.khaaya()}
@@ -874,8 +905,8 @@ function camera({ token }) {
         cancelText: t("Үгүй"),
         onOk: ()=>setModalOpen({ bool: false, item: null, type: "" }),
       });
-    } else
-      setModalOpen({ bool: false, item: null, type: "" });
+    } else setModalOpen({ bool: false, item: null, type: "" });
+    form.resetFields();
   };
   const excel = new Excel();
 
@@ -1440,6 +1471,7 @@ function camera({ token }) {
                     >
                       <Input
                         maxLength={7}
+                        ref={mashiniiDugaarRef}
                         placeholder="1234УБА"
                         className="ml-[10px]"
                       />

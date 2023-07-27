@@ -41,6 +41,17 @@ export const aldaaBarigch = (e) => {
     return Promise.reject(error);
 });*/
 
+export const togloomUilchilgee = (token) => {
+  const headers = {
+    "Content-type": "application/json",
+  };
+  if (!!token) headers["Authorization"] = `bearer ${token}`;
+  return axios.create({
+    baseURL: "http://localhost:5000",
+    headers,
+  });
+}
+
 const uilchilgee = (token) => {
   const headers = {
     "Content-type": "application/json",

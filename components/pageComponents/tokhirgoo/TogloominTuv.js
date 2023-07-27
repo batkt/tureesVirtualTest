@@ -112,7 +112,6 @@ function TogloominTuv({ token, baiguullaga, barilgiinId }) {
         }
       });
   }, [baiguullaga]);
-
   return (
     <div className="col-span-12 grid grid-cols-12">
       <div className="col-span-8 space-y-5 py-5">
