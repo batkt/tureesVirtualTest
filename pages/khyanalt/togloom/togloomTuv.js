@@ -407,10 +407,6 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
 }
 const searchKeys = ["ner", "utas", "ovog"];
 
-const khaalga = ["a","b"];
-
-
-
 function togloom1() {
   const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -420,6 +416,7 @@ function togloom1() {
   const [turul, setTurul] = useState({ shuult: { tuluv: undefined } });
   const tulburRef = React.useRef(null);
   const [shineBagana, setShineBagana] = useState([]);
+  const [khaalga, setKhaalga] = useState(["a","b"])
 
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
@@ -429,8 +426,8 @@ function togloom1() {
 
   useEffect(() => {
     togloomUilchilgee().get("/khaalguudAvya").then(res => {
-      console.log(res)
-    }).catch(err => console.log(err))
+      setKhaalga(res.data)
+    }).catch(err => aldaaBarigch(err))
   },[])
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -438,7 +435,6 @@ function togloom1() {
   const [khaaltPopoverNeegdsen, setKhaaltPopoverNeegdsen] = useState(false);
 
   function khaaltNeey(id){
-    console.log("Neegdekh Khaalga: ",id)
     togloomUilchilgee().get(`/neeye/${id}`).then(res => {
       if(res.data === "Amjilttai"){
         notification.success({ message: `${id} хаалга амжилттай нээгдлээ` })
