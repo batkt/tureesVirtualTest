@@ -1246,7 +1246,7 @@ function togloom1() {
                             onClick={() =>{khaaltNeey(a); setKhaaltPopoverNeegdsen(false)} }
                             className="cursor-pointer select-none text-lg"
                           >
-                            {a==="a" ? "Хаалга 1" : "Хаалга 2"}
+                            {a}
                           </div>
                         );
                       })}
