@@ -68,7 +68,6 @@ const BaganiinSongolt = ({
         trigger="click">
         <Button
           className={ButtonStyle}
-          style={{ marginRight: "10px" }}
           type="primary"
           icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}>
           <span>{t("Багана")}</span>

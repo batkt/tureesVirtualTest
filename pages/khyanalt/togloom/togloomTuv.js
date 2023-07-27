@@ -1234,7 +1234,6 @@ function togloom1() {
             data-aos-delay="300"
           >
             <div className="grid w-full grid-cols-2 gap-2 sm:w-auto xl:flex">
-              <div className="mr-4">
                 <Popover
                   open={khaaltPopoverNeegdsen}
                   onOpenChange={() => setKhaaltPopoverNeegdsen((e) => !e)}
@@ -1259,7 +1258,6 @@ function togloom1() {
                     <span>Хаалт нээх</span>
                   </Button>
                 </Popover>
-              </div>
 
               <Button
                 className="col-span-2 w-full sm:w-auto"
