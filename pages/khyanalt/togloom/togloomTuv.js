@@ -427,7 +427,7 @@ function togloom1() {
   useEffect(() => {
     togloomUilchilgee().get("/khaalguudAvya").then(res => {
       setKhaalga(res.data)
-    }).catch(err => aldaaBarigch(err))
+    }).catch(err => console.log(err))
   },[])
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
@@ -440,7 +440,7 @@ function togloom1() {
         notification.success({ message: `${id} хаалга амжилттай нээгдлээ` })
       }
     }).catch(err => {
-      aldaaBarigch(err);
+      console.log(err);
     })
   }
 
