@@ -805,5 +805,7 @@
 "Нууц үг оруулна уу": "Enter the password",
 "gmail хаяг оруулна уу": "Enter the gmail account",
 "Шинэ заалт": "New provision",
-"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?"
+"Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?": "Are you sure you want to delete the contract draft?",
+"Хаалт нээх": "Open gate",
+"Хаалт" : "Gate"
 }

@@ -1248,7 +1248,7 @@ function togloom1() {
                             }}
                             className="cursor-pointer select-none p-2 bg-green-300 dark:bg-gray-600 dark:text-gray-200 rounded-lg"
                           >
-                            {"Хаалт "+(index+1)}
+                            {t("Хаалт")+(index+1)}
                           </div>
                         );
                       })}
@@ -1256,7 +1256,7 @@ function togloom1() {
                   }
                 > 
                   <Button type="primary">
-                    <span>Хаалт нээх</span>
+                    <span>{t("Хаалт нээх")}</span>
                   </Button>
                 </Popover>
               <Button
