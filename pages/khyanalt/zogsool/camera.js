@@ -36,7 +36,8 @@ import {
   EyeOutlined,
   CloseOutlined,
   FilterOutlined,
-  ShareAltOutlined, UploadOutlined
+  ShareAltOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -61,7 +62,7 @@ import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import Image from "next/image";
-import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol"; 
+import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 
 const usguud = [
   "А",
@@ -133,11 +134,11 @@ function tulburKhurvuulekh(v) {
     case "belen":
       return "Бэлэн";
     case "khariltsakh":
-      return  "Харилцах";
+      return "Харилцах";
     case "khaan":
-      return  "Хаан";
+      return "Хаан";
     case "khas":
-      return  "Хас";
+      return "Хас";
     case "tur":
       return "Төр";
     case "golomt":
@@ -248,7 +249,7 @@ function camera({ token }) {
   }, [ognoo, khelber, dun]);
 
   const dansQuery = useMemo(() => {
-    return { amount: { $gt: 0, $lt: 1000000 }};
+    return { amount: { $gt: 0, $lt: 1000000 } };
   }, [ognoo]);
 
   useEffect(() => {
@@ -278,33 +279,36 @@ function camera({ token }) {
 
   // console.log('---------', uilchluulegchGaralt);
 
-  useKeyboardTovchlol("F5", f5Darsan)
-  useKeyboardTovchlol("+", nemekhDarsan)
+  useKeyboardTovchlol("F5", f5Darsan);
+  useKeyboardTovchlol("+", nemekhDarsan);
 
-  function f5Darsan(){
-    const data = uilchluulegchGaralt?.jagsaalt?.[0]
-    const mur = data?.tuukh?.[0]
-    if(!data){
+  function f5Darsan() {
+    const data = uilchluulegchGaralt?.jagsaalt?.[0];
+    const mur = data?.tuukh?.[0];
+    if (!data) {
       return notification.error({
         message: "Мэдээлэл алга",
-        duration: 1
-      })
+        duration: 1,
+      });
     }
-    if(mur?.tuluv === 0 && !!mur?.tulukhDun){
-      return tulburTulyu(mur, data?._id, data?.mashiniiDugaar)
-    }
-    else return notification.warning({ message: "Төлбөр бодогдох боломжгүй" , duration: 1})
+    if (mur?.tuluv === 0 && !!mur?.tulukhDun) {
+      return tulburTulyu(mur, data?._id, data?.mashiniiDugaar);
+    } else
+      return notification.warning({
+        message: "Төлбөр бодогдох боломжгүй",
+        duration: 1,
+      });
   }
 
-  function nemekhDarsan(){
+  function nemekhDarsan() {
     setModalOpen({
       bool: true,
       item: null,
       type: "dugaarBurtgekh",
-    })
+    });
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
-    },200)
+    }, 200);
   }
 
   useEffect(() => {
@@ -456,9 +460,7 @@ function camera({ token }) {
         render(v) {
           const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? (
-            <div
-              className="rounded bg-green-200 px-3 py-1 text-slate-700"
-            >
+            <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
               {minToHour(v[0].niitKhugatsaa)}
             </div>
           ) : (
@@ -527,22 +529,36 @@ function camera({ token }) {
             placement="bottom"
             content={
               <div className="space-y-2">
-                <div onClick={() => setKhelber("")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                <div
+                  onClick={() => setKhelber("")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                >
                   Бүгд
                 </div>
-                <div onClick={() => setKhelber("belen")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                <div
+                  onClick={() => setKhelber("belen")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                >
                   Бэлэн
                 </div>
-                <div onClick={() => setKhelber("card")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                <div
+                  onClick={() => setKhelber("card")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                >
                   Карт
                 </div>
-                <div onClick={() => setKhelber("khariltsakh")} className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}>
+                <div
+                  onClick={() => setKhelber("khariltsakh")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
+                >
                   Харилцах
                 </div>
               </div>
             }
           >
-            <div className={`flex cursor-pointer items-center justify-center gap-3`}>
+            <div
+              className={`flex cursor-pointer items-center justify-center gap-3`}
+            >
               <FilterOutlined className="text-lg text-green-600" />
               Хэлбэр
             </div>
@@ -554,27 +570,27 @@ function camera({ token }) {
         showSorterTooltip: false,
         render: (v) => {
           let r = null;
-          if(v[0]?.tulbur?.length > 1){
-            r = <div className="flex justify-center">
-              <Popover
-                  content={() => (
-                      v[0]?.tulbur.map((mur)=>(
-                          <div>
-                            {tulburKhurvuulekh(mur.turul)}: {mur.dun}
-                          </div>
-                          ))
-                  )}
+          if (v[0]?.tulbur?.length > 1) {
+            r = (
+              <div className="flex justify-center">
+                <Popover
+                  content={() =>
+                    v[0]?.tulbur.map((mur) => (
+                      <div>
+                        {tulburKhurvuulekh(mur.turul)}: {mur.dun}
+                      </div>
+                    ))
+                  }
                   placement="bottom"
                   trigger="click"
-              >
-                <Button
-                    icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
                 >
-                </Button>
-              </Popover>
-            </div>
-          } else
-            r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
+                  <Button
+                    icon={<ShareAltOutlined style={{ fontSize: "16px" }} />}
+                  ></Button>
+                </Popover>
+              </div>
+            );
+          } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
           return r && <div>{r}</div>;
         },
       },
@@ -709,11 +725,12 @@ function camera({ token }) {
                 <div className="line-clamp-1">
                   {v[0]?.tuluv === -1
                     ? v[0]?.uneguiGarsan
-                    : !!parent.zurchil ?
-                          parent.zurchil
-                          : !!v[0]?.tsagiinTuukh[0]?.garsanTsag && v[0]?.niitKhugatsaa <= 30
+                    : !!parent.zurchil
+                    ? parent.zurchil
+                    : !!v[0]?.tsagiinTuukh[0]?.garsanTsag &&
+                      v[0]?.niitKhugatsaa <= 30
                     ? "30 мин"
-                    : ''}
+                    : ""}
                 </div>
               </Tooltip>
             )
@@ -779,7 +796,12 @@ function camera({ token }) {
       dataIndex: "description",
       render: (v) => {
         return (
-          <Tooltip placement="top" title={v} mouseLeaveDelay={0} mouseEnterDelay={1}>
+          <Tooltip
+            placement="top"
+            title={v}
+            mouseLeaveDelay={0}
+            mouseEnterDelay={1}
+          >
             <div className="truncate text-left">{v}</div>
           </Tooltip>
         );
@@ -849,7 +871,7 @@ function camera({ token }) {
   };
   const khaalgaNeey = (ip) => {
     axios
-      .get("http://192.168.1.130:5000/api/neeye/" + ip + "")
+      .get("http://192.168.1.139:5000/api/neeye/" + ip + "")
       .then(function (response) {
         if (!!response) console.log("/api/neeye", response);
       })
@@ -897,13 +919,13 @@ function camera({ token }) {
     };
   };
 
-  const modalKhaakh = ()=>{
-    if(!!value){
+  const modalKhaakh = () => {
+    if (!!value) {
       Modal.confirm({
         content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        onOk: ()=>setModalOpen({ bool: false, item: null, type: "" }),
+        onOk: () => setModalOpen({ bool: false, item: null, type: "" }),
       });
     } else setModalOpen({ bool: false, item: null, type: "" });
     form.resetFields();
@@ -1392,12 +1414,9 @@ function camera({ token }) {
                 : "Зөрчил оруулах"
             }
             open={modalOpen.bool}
-            onCancel={()=>modalKhaakh()}
+            onCancel={() => modalKhaakh()}
             footer={[
-              <Button
-                key="back"
-                onClick={()=>modalKhaakh()}
-              >
+              <Button key="back" onClick={() => modalKhaakh()}>
                 Хаах
               </Button>,
               <Button type="primary" onClick={khadgalakh}>
@@ -1497,12 +1516,12 @@ function camera({ token }) {
                           </Select.Option>
                         ))}
                         {cameraData[1][0].children.map((cam) => (
-                            <Select.Option
-                                className="w-1/3 sm:w-auto"
-                                value={cam?.children[0].value}
-                            >
-                              {cam.title}
-                            </Select.Option>
+                          <Select.Option
+                            className="w-1/3 sm:w-auto"
+                            value={cam?.children[0].value}
+                          >
+                            {cam.title}
+                          </Select.Option>
                         ))}
                       </Select>
                     </Form.Item>
