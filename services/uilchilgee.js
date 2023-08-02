@@ -50,7 +50,7 @@ export const togloomUilchilgee = (token) => {
     baseURL: "http://localhost:5000/api",
     headers,
   });
-}
+};
 
 const uilchilgee = (token) => {
   const headers = {

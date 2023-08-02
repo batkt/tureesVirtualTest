@@ -22,7 +22,7 @@ function DansBurtgel(
   { data, destroy, baiguullagiinId, barilgiinId, token, dansMutate },
   ref
 ) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [bank, setBank] = useState(data?.bank);
 
@@ -102,34 +102,33 @@ function DansBurtgel(
       initialValues={data}
       labelCol={{ span: 10 }}
       autoComplete={"off"}
-      wrapperCol={{ span: 14 }}
-    >
-      <Form.Item hidden name="_id"></Form.Item>
-      <Form.Item label={t("Банкны нэр")} name="bank">
+      wrapperCol={{ span: 14 }}>
+      <Form.Item hidden name='_id'></Form.Item>
+      <Form.Item label={t("Банкны нэр")} name='bank'>
         <Select onSelect={setBank} onKeyUp={focuser}>
-          <Select.Option key="khanbank" value="khanbank">
+          <Select.Option key='khanbank' value='khanbank'>
             {t("Хаан банк")}
           </Select.Option>
-          <Select.Option key="tdb" value="tdb">
+          <Select.Option key='tdb' value='tdb'>
             {t("Худалдаа хөгжлийн банк")}
           </Select.Option>
-          <Select.Option key="golomt" value="golomt">
+          <Select.Option key='golomt' value='golomt'>
             {t("Голомт банк")}
           </Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item label={t("Дансны дугаар")} name="dugaar">
+      <Form.Item label={t("Дансны дугаар")} name='dugaar'>
         <InputNumber style={{ width: "100%" }} min={0} onKeyUp={focuser} />
       </Form.Item>
-      <Form.Item label={t("Дансны нэр")} name="dansniiNer">
+      <Form.Item label={t("Дансны нэр")} name='dansniiNer'>
         <Input onKeyUp={focuser} />
       </Form.Item>
-      <Form.Item label={t("Валют")} name="valyut">
+      <Form.Item label={t("Валют")} name='valyut'>
         <Select onKeyUp={focuser}>
-          <Select.Option key="MNT" value="MNT">
+          <Select.Option key='MNT' value='MNT'>
             MNT
           </Select.Option>
-          <Select.Option key="USD" value="USD">
+          <Select.Option key='USD' value='USD'>
             USD
           </Select.Option>
         </Select>
