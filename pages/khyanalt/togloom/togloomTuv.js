@@ -41,7 +41,10 @@ import { useRef, useEffect } from "react";
 import { modal } from "components/ant/Modal";
 import _ from "lodash";
 import useOrder from "tools/function/useOrder";
-import uilchilgee, { aldaaBarigch, togloomUilchilgee } from "services/uilchilgee";
+import uilchilgee, {
+  aldaaBarigch,
+  togloomUilchilgee,
+} from "services/uilchilgee";
 import Aos from "aos";
 import KhuukhedBurtgel from "components/pageComponents/togloom/TsagBurtgel";
 import useJagsaalt from "hooks/useJagsaalt";
@@ -416,7 +419,7 @@ function togloom1() {
   const [turul, setTurul] = useState({ shuult: { tuluv: undefined } });
   const tulburRef = React.useRef(null);
   const [shineBagana, setShineBagana] = useState([]);
-  const [khaalga, setKhaalga] = useState(["a","b"])
+  const [khaalga, setKhaalga] = useState(["a", "b"]);
 
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
@@ -425,23 +428,29 @@ function togloom1() {
   );
 
   useEffect(() => {
-    togloomUilchilgee().get("/khaalguudAvya").then(res => {
-      setKhaalga(res.data)
-    }).catch(err => console.log(err))
-  },[])
+    togloomUilchilgee()
+      .get("/khaalguudAvya")
+      .then((res) => {
+        setKhaalga(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
   const [khaaltPopoverNeegdsen, setKhaaltPopoverNeegdsen] = useState(false);
 
-  function khaaltNeey(id){
-    togloomUilchilgee().get(`/neeye/${id}`).then(res => {
-      if(res.data === "Amjilttai"){
-        notification.success({ message: `${id} хаалга амжилттай нээгдлээ` })
-      }
-    }).catch(err => {
-      console.log(err);
-    })
+  function khaaltNeey(id) {
+    togloomUilchilgee()
+      .get(`/neeye/${id}`)
+      .then((res) => {
+        if (res.data === "Amjilttai") {
+          notification.success({ message: `${id} хаалга амжилттай нээгдлээ` });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function tsutslakh(data) {
@@ -1232,33 +1241,33 @@ function togloom1() {
             data-aos-delay="300"
           >
             <div className="grid w-full grid-cols-2 gap-2 sm:w-auto xl:flex">
-                <Popover
-                  open={khaaltPopoverNeegdsen}
-                  onOpenChange={() => setKhaaltPopoverNeegdsen((e) => !e)}
-                  trigger="click"
-                  placement="bottom"
-                  content={
-                    <div className="flex flex-col gap-2">
-                      {khaalga.map((a, index) => {
-                        return (
-                          <div
-                            onClick={() =>{
-                              khaaltNeey(a); 
-                              setKhaaltPopoverNeegdsen(false)
-                            }}
-                            className="cursor-pointer select-none p-2 bg-green-300 dark:bg-gray-600 dark:text-gray-200 rounded-lg"
-                          >
-                            {t("Хаалт")+(index+1)}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  }
-                > 
-                  <Button type="primary">
-                    <span>{t("Хаалт нээх")}</span>
-                  </Button>
-                </Popover>
+              <Popover
+                open={khaaltPopoverNeegdsen}
+                onOpenChange={() => setKhaaltPopoverNeegdsen((e) => !e)}
+                trigger="click"
+                placement="bottom"
+                content={
+                  <div className="flex flex-col gap-2">
+                    {khaalga.map((a, index) => {
+                      return (
+                        <div
+                          onClick={() => {
+                            khaaltNeey(a);
+                            setKhaaltPopoverNeegdsen(false);
+                          }}
+                          className="cursor-pointer select-none rounded-lg bg-green-300 p-2 dark:bg-gray-600 dark:text-gray-200"
+                        >
+                          {t("Хаалт") + (index + 1)}
+                        </div>
+                      );
+                    })}
+                  </div>
+                }
+              >
+                <Button type="primary">
+                  <span>{t("Хаалт нээх")}</span>
+                </Button>
+              </Popover>
               <Button
                 className="col-span-2 w-full sm:w-auto"
                 type="primary"
@@ -1326,7 +1335,11 @@ function togloom1() {
                           }
                         }
                       }
-                      return jagsaalt.length > 0 ? (
+                      return jagsaalt.length === 1 ? (
+                        <div className="font-semibold capitalize">
+                          {utga?.[0]?.ner}
+                        </div>
+                      ) : jagsaalt.length > 0 ? (
                         <Popover
                           placement="bottom"
                           trigger="hover"
