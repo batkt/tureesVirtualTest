@@ -61,7 +61,7 @@ import useSWR from "swr";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
-import Image from "next/image";
+import ReactPlayer from 'react-player'
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 
 const usguud = [
@@ -805,7 +805,7 @@ function camera({ token }) {
     if (type === 1) setCamerVal([e, camerVal[1]]);
     else {
       setCamerVal([camerVal[0], e]);
-      setGarakhKhaalgaIp(e);
+      // setGarakhKhaalgaIp(e);
     }
   };
   const khadgalakh = () => {
@@ -945,15 +945,12 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className='flex w-full items-center justify-center '>
-                <img
-                  src='/v2.jpg'
-                  className={`object-cover  ${
+                className={`w-full bg-[url('/notPlay.png')] bg-center ${
                     cameraKharakh === 1
-                      ? "w-full  sm:h-[80vh] sm:w-[80%]"
-                      : "w-full  sm:h-[250px]"
-                  }`}
-                />
+                        ? "sm:h-[80vh] sm:w-[80%]"
+                        : "sm:h-[250px]"
+                }`}>
+                <ReactPlayer playing={!!camerVal[0]} url={`rtsp://admin:admin@${camerVal[0]}:8557`}/>
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
@@ -1024,15 +1021,13 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(2);
                 }}
-                className='flex w-full items-center justify-center '>
-                <img
-                  src='/v1.jpg'
-                  className={`object-cover  ${
+                className={`w-full bg-[url('/notPlay.png')] bg-center ${
                     cameraKharakh === 2
-                      ? "w-full  sm:h-[80vh] sm:w-[80%]"
-                      : "w-full  sm:h-[250px]"
-                  }`}
-                />
+                        ? "sm:h-[80vh] sm:w-[80%]"
+                        : "sm:h-[250px]"
+                }`}
+                >
+                <ReactPlayer playing={!!camerVal[1]} url={`rtsp://admin:admin@${camerVal[1]}:8557`}/>
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
