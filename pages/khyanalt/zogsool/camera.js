@@ -852,7 +852,7 @@ function camera({ token }) {
   };
   const khaalgaNeey = (ip) => {
     axios
-      .get("http://192.168.1.139:5000/api/neeye/" + ip + "")
+      .get("http://localhost:5000/api/neeye/" + ip + "")
       .then(function (response) {
         if (!!response) console.log("/api/neeye", response);
       })
