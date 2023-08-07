@@ -129,6 +129,59 @@ function generateChild(mur, turul) {
   return [];
 }
 
+const CSS = {
+  root : {
+    width: '100%',
+    height : '600px' ,
+    position: 'relative',
+    border: '1px solid rgba(197, 197, 197, 0.22)'
+  },
+  statusbar : {
+    width: '100%',
+    height: '40px',
+    position: 'relative',
+    borderBottom: '2px solid #2196F3'
+  },
+  iframe : {
+    height: '100%'
+  },
+  iframehtml : {
+    width: '100%',
+    height: '100%',
+    border: 'none'
+  },
+  stringurl : {
+    fontFamily : 'Helvetica',
+    fontSize : '16px',
+    textAlign : 'center',
+    padding : '0',
+    margin : '0',
+    lineHeight : '40px',
+    fontWeight : 'bold',
+    color : '#6d6d6d'
+  },
+  button : {
+    backgroundColor: 'transparent',
+    border: 'none',
+    lineHeight: '40px',
+    margin: '0',
+    padding: '0',
+    position: 'absolute',
+    left: '0px',
+    width: '30px',
+    fontWeight: 'bold',
+    fontSize: '14px',
+    color: '#a5977e',
+    outline: 'none'
+  },
+  statusbarline : {
+    position: 'absolute',
+    width: '0%',
+    height: '100%',
+    transition: 'width 1s ease-in-out',
+    backgroundColor: 'rgba(197, 197, 197, 0.22)'
+  }
+}
 
 function tulburKhurvuulekh(v) {
   switch (v) {
@@ -149,6 +202,44 @@ function tulburKhurvuulekh(v) {
     default:
       break;
   }
+}
+
+function WebView() {
+  // const iframeRef = useRef(null);
+  function handleLoadFrame(e) {
+    console.log('123123123', e);
+  }
+  /* function getInitialState() {
+    return {
+      percent : 10
+    }
+  }
+  function changeStatusBar(number) {
+    this.setState({percent:number})
+  }
+  CSS.statusbarline.width = this.state.percent + '%'
+  var url = this.props.url.replace(/(http|https):\/\/(www\.)?/,'')
+  function handleLoadFrame() {
+    this.setState({percent:100})
+  }
+  function closeIframeBar() {
+    document.querySelector('.react-webview').remove()
+  }*/
+
+  return (
+      <div className="react-webview" style={CSS.root}>
+        <div className="webview__block" style={{height : '100%'}}>
+          <div className="status-bar" style={CSS.statusbar}>
+            {/*<div className="status-bar_line" style={CSS.statusbarline}></div>*/}
+            {/*<button style={CSS.button} onClick={closeIframeBar}>X</button>*/}
+            {/*<p style={CSS.stringurl}>{url}</p>*/}
+          </div>
+          <div className="iframe" style={CSS.iframehtml}>
+            <iframe id="iframe" src="http://192.168.1.54/main.htm" style={CSS.iframehtml} onLoad={handleLoadFrame}></iframe>
+          </div>
+        </div>
+      </div>
+  )
 }
 
 /*const TreeComponent = ()=>{
@@ -953,8 +1044,9 @@ function camera({ token }) {
                 }`}>
                 {/*<WebView src="https://example.com" />*/}
                 {/*<ReactPlayer playing={!!camerVal[0]} url={`rtsp://admin:admin@${camerVal[0]}:8557/`}/>*/}
-                <ReactPlayer url="http://192.168.1.54:8080/stream"/>
-                <video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>
+                {/*<ReactPlayer url="http://192.168.1.54:8080/stream"/>*/}
+                {/*<video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>*/}
+                <WebView/>
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
