@@ -63,6 +63,7 @@ import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import ReactPlayer from 'react-player'
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
+import StreamTest from "./stream";
 
 const usguud = [
   "А",
@@ -229,16 +230,17 @@ function WebView() {
   return (
       <div className="react-webview" style={CSS.root}>
         <div className="webview__block" style={{height : '100%'}}>
-          <div className="status-bar" style={CSS.statusbar}>
-            {/*<div className="status-bar_line" style={CSS.statusbarline}></div>*/}
-            {/*<button style={CSS.button} onClick={closeIframeBar}>X</button>*/}
-            {/*<p style={CSS.stringurl}>{url}</p>*/}
-          </div>
+          {/*<div className="status-bar" style={CSS.statusbar}>
+            <div className="status-bar_line" style={CSS.statusbarline}></div>
+            <button style={CSS.button} onClick={closeIframeBar}>X</button>
+            <p style={CSS.stringurl}>{url}</p>
+          </div>*/}
           <div className="iframe" style={CSS.iframehtml}>
-            <iframe id="iframe" src="http://192.168.1.54/main.htm" style={CSS.iframehtml} onLoad={handleLoadFrame}></iframe>
+            <iframe id="iframe" src="https://bing.com" style={CSS.iframehtml} onLoad={handleLoadFrame}></iframe>
           </div>
         </div>
       </div>
+
   )
 }
 
@@ -1045,7 +1047,9 @@ function camera({ token }) {
                 {/*<WebView src="https://example.com" />*/}
                 {/*<ReactPlayer playing={!!camerVal[0]} url={`rtsp://admin:admin@${camerVal[0]}:8557/`}/>*/}
                 {/*<ReactPlayer url="http://192.168.1.54:8080/stream"/>*/}
-                <video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>
+                {/*<video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>*/}
+                {/*<WebView />*/}
+                <StreamTest />
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
