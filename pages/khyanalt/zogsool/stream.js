@@ -3,14 +3,11 @@ import React, { useEffect, useRef } from "react";
 
 
 
-function StreamTest({ token }) {
+function StreamTest({ url }) {
     const ws = useRef(null);
 
     useEffect(() => {
-
-
-// Replace 'wss://your-websocket-url' with your WebSocket server URL
-        ws.current = new WebSocket('ws://192.168.1.56:9080/ws');
+        ws.current = new WebSocket(url);
 
         ws.current.binaryType = 'arraybuffer';
 
@@ -23,12 +20,11 @@ function StreamTest({ token }) {
         };
 
         return () => {
-// Clean up the WebSocket connection on component unmount
             if (ws.current) {
                 ws.current.close();
             }
         };
-    }, []);
+    }, [url]);
 
     useEffect(() => {
         // Previous WebSocket setup code...
@@ -53,14 +49,11 @@ function StreamTest({ token }) {
         };
     }, []);
 
-
-
     return (
         <div>
             <canvas id="canvas" width="800" height="600" />
         </div>
     )
-
 }
 
 export default StreamTest;

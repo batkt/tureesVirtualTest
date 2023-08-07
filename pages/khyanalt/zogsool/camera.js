@@ -1006,7 +1006,7 @@ function camera({ token }) {
     form.resetFields();
   };
   const excel = new Excel();
-
+// console.log('0-0--0', baiguullaga);
   return (
     <Admin
       title='Камер'
@@ -1049,7 +1049,12 @@ function camera({ token }) {
                 {/*<ReactPlayer url="http://192.168.1.54:8080/stream"/>*/}
                 {/*<video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>*/}
                 {/*<WebView />*/}
-                <StreamTest />
+                {
+                  baiguullaga._id === '63c0f31efe522048bf02086d' ?
+                      <StreamTest url={`ws://${camerVal[0]}:9080/ws`}/>
+                      :
+                      ''
+                }
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
@@ -1128,7 +1133,12 @@ function camera({ token }) {
                 >
                 {/*<ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>*/}
                 {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
-                <video src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>
+                {
+                  baiguullaga._id === '63c0f31efe522048bf02086d' ?
+                      <StreamTest url={`ws://${camerVal[1]}:9080/ws`}/>
+                      :
+                      ''
+                }
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
