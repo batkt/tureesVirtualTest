@@ -10,7 +10,7 @@ function StreamTest({ token }) {
 
 
 // Replace 'wss://your-websocket-url' with your WebSocket server URL
-        ws.current = new WebSocket('wss://192.168.1.56:9080/wss');
+        ws.current = new WebSocket('ws://192.168.1.56:9080/ws');
 
         ws.current.binaryType = 'arraybuffer';
 
