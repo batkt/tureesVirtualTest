@@ -954,6 +954,7 @@ function camera({ token }) {
                 {/*<WebView src="https://example.com" />*/}
                 {/*<ReactPlayer playing={!!camerVal[0]} url={`rtsp://admin:admin@${camerVal[0]}:8557/`}/>*/}
                 <ReactPlayer url="http://192.168.1.54:8080/stream"/>
+                <video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
@@ -1031,7 +1032,8 @@ function camera({ token }) {
                 }`}
                 >
                 {/*<ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>*/}
-                <ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>
+                {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
+                <video src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
