@@ -1027,7 +1027,7 @@ function camera({ token }) {
                         : "sm:h-[250px]"
                 }`}
                 >
-                <ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557/`}/>
+                <ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
