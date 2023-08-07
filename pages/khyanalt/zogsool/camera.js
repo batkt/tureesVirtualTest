@@ -953,7 +953,7 @@ function camera({ token }) {
                 }`}>
                 {/*<WebView src="https://example.com" />*/}
                 {/*<ReactPlayer playing={!!camerVal[0]} url={`rtsp://admin:admin@${camerVal[0]}:8557/`}/>*/}
-                <ReactPlayer url="rtsp://192.168.1.54:8557"/>
+                <ReactPlayer url="http://192.168.1.54:8080/stream"/>
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
