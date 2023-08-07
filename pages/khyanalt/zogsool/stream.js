@@ -7,6 +7,7 @@ function StreamTest({ url }) {
     const ws = useRef(null);
 
     useEffect(() => {
+        console.log(url!==null ? url : '192.168.1.54');
         ws.current = new WebSocket(url!==null ? url : '192.168.1.54');
 
         ws.current.binaryType = 'arraybuffer';

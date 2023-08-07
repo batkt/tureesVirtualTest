@@ -1050,7 +1050,7 @@ function camera({ token }) {
                 {/*<video id="video" src="http://192.168.1.54:8080/stream" autoPlay="autoplay"/>*/}
                 {/*<WebView />*/}
                 {
-                  baiguullaga._id === '63c0f31efe522048bf02086d' ?
+                  baiguullaga?._id === '63c0f31efe522048bf02086d' ?
                       <StreamTest url={`ws://${camerVal[0]}:9080/ws`}/>
                       :
                       ''
