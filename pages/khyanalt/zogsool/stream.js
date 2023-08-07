@@ -7,8 +7,8 @@ function StreamTest({ url }) {
     const ws = useRef(null);
 
     useEffect(() => {
-        console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
-        ws.current = new WebSocket(url!==null ? url : 'ws://192.168.1.54:9080/ws');
+        // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
+        ws.current = new WebSocket('ws://192.168.1.54:9080/ws');
 
         ws.current.binaryType = 'arraybuffer';
 
@@ -25,7 +25,7 @@ function StreamTest({ url }) {
                 ws.current.close();
             }
         };
-    }, [url]);
+    }, []);
 
     useEffect(() => {
         // Previous WebSocket setup code...
