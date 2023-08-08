@@ -67,7 +67,7 @@ function Stream1({ ip }) {
                     const newChunk = new Uint8Array(event.data);
                     accumulatedData = new Uint8Array([...accumulatedData, ...newChunk]);
 
-                    const isJPEG = (data) => {
+                    /*const isJPEG = (data) => {
                         const jpegMagicNumber = [0xFF, 0xD8];
                         const magicBytes = new Uint8Array(data.slice(0, 2));
                         return Array.from(magicBytes).every((byte, index) => byte === jpegMagicNumber[index]);
@@ -83,6 +83,34 @@ function Stream1({ ip }) {
                         const gifMagicNumber = [0x47, 0x49, 0x46, 0x38];
                         const magicBytes = new Uint8Array(data.slice(0, 4));
                         return Array.from(magicBytes).every((byte, index) => byte === gifMagicNumber[index]);
+                    };*/
+                    const isJPEG = (data) => {
+                        // Check magic numbers for JPEG format
+                        return data[0] === 0xFF && data[1] === 0xD8;
+                    };
+
+                    const isPNG = (data) => {
+                        // Check magic numbers for PNG format
+                        return (
+                            data[0] === 0x89 &&
+                            data[1] === 0x50 &&
+                            data[2] === 0x4E &&
+                            data[3] === 0x47 &&
+                            data[4] === 0x0D &&
+                            data[5] === 0x0A &&
+                            data[6] === 0x1A &&
+                            data[7] === 0x0A
+                        );
+                    };
+
+                    const isGIF = (data) => {
+                        // Check magic numbers for GIF format
+                        return (
+                            data[0] === 0x47 &&
+                            data[1] === 0x49 &&
+                            data[2] === 0x46 &&
+                            data[3] === 0x38
+                        );
                     };
                     if (accumulatedData.length >= 8) {
                         console.log('accumulatedData--', accumulatedData);
