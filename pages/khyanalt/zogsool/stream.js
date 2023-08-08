@@ -9,7 +9,6 @@ import {
 
 function Stream1({ ip }) {
     const ws = useRef(null);
-    console.log('hello', ip);
     const [onOpen, setOnOpen] = useState(false);
 
     useEffect(() => {
@@ -80,8 +79,8 @@ export function Stream2({ ip }) {
 
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
-        if(!!ip){
-            const url = ip === '192.168.1.56' ? `ws://${ip}:9080/ws` : 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1';
+        if(!!ip){                                                   // 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1\n'
+            const url = ip === '192.168.1.56' ? `ws://${ip}:9080/ws` : 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1\n';
             console.log('url111', url);
             try {
                 ws2.current = new WebSocket(url);
