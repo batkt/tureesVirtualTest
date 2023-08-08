@@ -54,6 +54,10 @@ function Stream1({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
+        }else {
+            if (ws.current) {
+                ws.current.close();
+            }
         }
     }, [onOpen]);
 
@@ -108,6 +112,10 @@ export function Stream2({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
+        } else {
+            if (ws2.current) {
+                ws2.current.close();
+            }
         }
     }, [onOpen]);
 
