@@ -18,7 +18,7 @@ function Stream1({ ip }) {
             try {
                 console.log('url', url);
                 ws.current = new WebSocket(url);
-                ws.current.binaryType = 'blob';
+                ws.current.binaryType = 'arraybuffer';
                 ws.current.onopen = () => {
                     console.log('WebSocket kholbolt amjilttai');
                     setOnOpen(true);
@@ -45,24 +45,27 @@ function Stream1({ ip }) {
 
     useEffect(() => {
         if(onOpen){
+            let accumulatedData = new Uint8Array();
             // console.log('464666545646111111', onOpen);
             ws.current.onmessage = async (event) => {
-                /*const imageData = event.data;
+                const imageData = event.data;
                 const canvas = document.getElementById('canvas1');
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 540;
                 const imgHeight = 250;
 
-                /!*try {
+                /*try {
                     const blob = new Blob([imageData]);
                     const  = await createImageBitmap(blob);
                     console.log('imageBitmap1111', imageBitmap);
                     ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
                 } catch (error) {
                     console.error('Error decoding image:', error);
-                }*!/
+                }*/
 
                 try {
+                    const newChunk = new Uint8Array(event.data);
+                    accumulatedData = new Uint8Array([...accumulatedData, ...newChunk]);
 
                     const isJPEG = (data) => {
                         const jpegMagicNumber = [0xFF, 0xD8];
@@ -81,8 +84,22 @@ function Stream1({ ip }) {
                         const magicBytes = new Uint8Array(data.slice(0, 4));
                         return Array.from(magicBytes).every((byte, index) => byte === gifMagicNumber[index]);
                     };
+                    if (accumulatedData.length >= 8) {
+                        if (isJPEG(accumulatedData)) {
+                            console.log('Image is in JPEG format');
+                        } else if (isPNG(accumulatedData)) {
+                            console.log('Image is in PNG format');
+                        } else if (isGIF(accumulatedData)) {
+                            console.log('Image is in GIF format');
+                        } else {
+                            console.log('Unsupported image format');
+                        }
 
-                    if (isJPEG(imageData)) {
+                        // Clear accumulated data after format detection
+                        accumulatedData = new Uint8Array();
+                    }
+
+                    /*if (isJPEG(imageData)) {
                         console.log('Image is JPEG format');
                     } else if (isPNG(imageData)) {
                         console.log('Image is PNG format');
@@ -91,12 +108,12 @@ function Stream1({ ip }) {
                     } else {
                         console.log('Unsupported image format');
                         return;
-                    }
+                    }*/
 
                 } catch (e) {
 
-                }*/
-                const blobData = event.data;
+                }
+                /*const blobData = event.data;
                 const reader = new FileReader();
 
                 reader.onload = () => {
@@ -143,7 +160,7 @@ function Stream1({ ip }) {
                         data[2] === 0x46 &&
                         data[3] === 0x38
                     );
-                };
+                };*/
 
 
                 /* console.log('imageData0000', imageData);
