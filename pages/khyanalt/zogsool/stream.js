@@ -31,6 +31,10 @@ function Stream1({ ip }) {
                 console.log(e.message)
             }
 
+        }else {
+            if (ws.current) {
+                ws.current.close();
+            }
         }
         return () => {
             if (ws.current) {
@@ -54,10 +58,6 @@ function Stream1({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
-        }else {
-            if (ws.current) {
-                ws.current.close();
-            }
         }
     }, [onOpen]);
 
@@ -76,7 +76,7 @@ export function Stream2({ ip }) {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
             const url = ip === '192.168.1.56' ? `ws://${ip}:9080/ws` : 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1';
-            console.log('hello', url);
+            console.log('url111', url);
             try {
                 ws2.current = new WebSocket(url);
                 ws2.current.binaryType = 'arraybuffer';
@@ -89,6 +89,10 @@ export function Stream2({ ip }) {
                 };
             } catch (e) {
                 console.log(e.message)
+            }
+        }else {
+            if (ws2.current) {
+                ws2.current.close();
             }
         }
         return () => {
@@ -106,16 +110,12 @@ export function Stream2({ ip }) {
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 460;
                 const imgHeight = 250;
-                console.log('464666545646111111', imageData);
+                console.log('imageData111111', imageData);
                 const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
                 imageBitmap.then((bitmap) => {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
-        } else {
-            if (ws2.current) {
-                ws2.current.close();
-            }
         }
     }, [onOpen]);
 
