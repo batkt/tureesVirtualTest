@@ -11,7 +11,6 @@ import {
 function Stream1({ ip }) {
     const ws = useRef(null);
     const [onOpen, setOnOpen] = useState(false);
-
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
@@ -19,7 +18,7 @@ function Stream1({ ip }) {
             try {
                 console.log('url', url);
                 ws.current = new WebSocket(url);
-                ws.current.binaryType = 'arraybuffer';
+                ws.current.binaryType = 'blob';
                 ws.current.onopen = () => {
                     console.log('WebSocket kholbolt amjilttai');
                     setOnOpen(true);
@@ -48,20 +47,20 @@ function Stream1({ ip }) {
         if(onOpen){
             // console.log('464666545646111111', onOpen);
             ws.current.onmessage = async (event) => {
-                const imageData = event.data;
+                /*const imageData = event.data;
                 const canvas = document.getElementById('canvas1');
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 540;
                 const imgHeight = 250;
 
-                /*try {
+                /!*try {
                     const blob = new Blob([imageData]);
                     const  = await createImageBitmap(blob);
                     console.log('imageBitmap1111', imageBitmap);
                     ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
                 } catch (error) {
                     console.error('Error decoding image:', error);
-                }*/
+                }*!/
 
                 try {
 
@@ -96,7 +95,55 @@ function Stream1({ ip }) {
 
                 } catch (e) {
 
-                }
+                }*/
+                const blobData = event.data;
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    const arrayBuffer = reader.result;
+                    const uint8Array = new Uint8Array(arrayBuffer);
+
+                    if (isJPEG(uint8Array)) {
+                        console.log('Image is in JPEG format');
+                    } else if (isPNG(uint8Array)) {
+                        console.log('Image is in PNG format');
+                    } else if (isGIF(uint8Array)) {
+                        console.log('Image is in GIF format');
+                    } else {
+                        console.log('Unsupported image format');
+                    }
+                };
+
+                const isJPEG = (data) => {
+                    // Check magic numbers for JPEG format
+                    return data[0] === 0xFF && data[1] === 0xD8;
+                };
+
+                const isPNG = (data) => {
+                    // Check magic numbers for PNG format
+                    return (
+                        data[0] === 0x89 &&
+                        data[1] === 0x50 &&
+                        data[2] === 0x4E &&
+                        data[3] === 0x47 &&
+                        data[4] === 0x0D &&
+                        data[5] === 0x0A &&
+                        data[6] === 0x1A &&
+                        data[7] === 0x0A
+                    );
+                };
+
+                const isGIF = (data) => {
+                    // Check magic numbers for GIF format
+                    return (
+                        data[0] === 0x47 &&
+                        data[1] === 0x49 &&
+                        data[2] === 0x46 &&
+                        data[3] === 0x38
+                    );
+                };
+
+                // reader.readAsArrayBuffer(blobData);
 
                 /* console.log('imageData0000', imageData);
                  const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
@@ -163,47 +210,13 @@ export function Stream2({ ip }) {
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 540;
                 const imgHeight = 250;
-                /*try {
+                try {
                     const blob = new Blob([imageData]);
                     const imageBitmap = await createImageBitmap(blob);
                     console.log('imageBitmap1111', imageBitmap);
                     ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
                 } catch (error) {
                     console.error('Error decoding image:', error);
-                }*/
-                try {
-
-                    const isJPEG = (data) => {
-                        const jpegMagicNumber = [0xFF, 0xD8];
-                        const magicBytes = new Uint8Array(data.slice(0, 2));
-                        return Array.from(magicBytes).every((byte, index) => byte === jpegMagicNumber[index]);
-                    };
-
-                    const isPNG = (data) => {
-                        const pngMagicNumber = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
-                        const magicBytes = new Uint8Array(data.slice(0, 8));
-                        return Array.from(magicBytes).every((byte, index) => byte === pngMagicNumber[index]);
-                    };
-
-                    const isGIF = (data) => {
-                        const gifMagicNumber = [0x47, 0x49, 0x46, 0x38];
-                        const magicBytes = new Uint8Array(data.slice(0, 4));
-                        return Array.from(magicBytes).every((byte, index) => byte === gifMagicNumber[index]);
-                    };
-
-                    if (isJPEG(imageData)) {
-                        console.log('Image is JPEG format');
-                    } else if (isPNG(imageData)) {
-                        console.log('Image is PNG format');
-                    } else if (isGIF(imageData)) {
-                        console.log('Image is GIF format');
-                    } else {
-                        console.log('Unsupported image format');
-                        return;
-                    }
-
-                } catch (e) {
-
                 }
 
                 /*console.log('imageData111111', imageData);
