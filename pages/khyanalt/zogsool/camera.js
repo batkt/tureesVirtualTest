@@ -736,7 +736,7 @@ function camera({ token }) {
           ) : mur?.tuluv === 1 ? (
             mur?.ebarimtAvsanEsekh === false ? (
               <div
-                onClick={() => tulburTulyu(mur, parent._id)}
+                onClick={() => tulburTulyu(mur, parent?._id)}
                 className='mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white'>
                 <div className='flex items-center justify-center'>
                   {t("И-Баримт")}
@@ -1134,7 +1134,7 @@ function camera({ token }) {
                 {/*<ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>*/}
                 {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
                 {
-                  baiguullaga._id === '63c0f31efe522048bf02086d' ?
+                  baiguullaga?._id === '63c0f31efe522048bf02086d' ?
                       <StreamTest url={`ws://${camerVal[1]}:9080/ws`}/>
                       :
                       ''
