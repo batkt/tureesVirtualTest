@@ -271,7 +271,7 @@ export function Stream2({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });*/
 
-                // try {
+                try {
                 const newChunk = new Uint8Array(event.data);
                 accumulatedData = new Uint8Array([...accumulatedData, ...newChunk]);
                 const blob = new Blob([event.data]);
@@ -302,9 +302,9 @@ export function Stream2({ ip }) {
                         data[3] === 0x38
                     );
                 };
-                if (accumulatedData.length >= 32) {
-                    console.log('accumulatedData32--blob ', new Blob(accumulatedData));
-                    console.log('accumulatedData32-- ', accumulatedData);
+                if (accumulatedData.length >= 64) {
+                    console.log('accumulatedData64--blob ', new Blob(accumulatedData));
+                    console.log('accumulatedData64-- ', accumulatedData);
                     if (isJPEG(accumulatedData)) {
                         console.log('Image is in JPEG format');
                     } else if (isPNG(accumulatedData)) {
@@ -316,12 +316,12 @@ export function Stream2({ ip }) {
                     }
 
                     // Clear accumulated data after format detection
-                    accumulatedData = new Uint8Array([]);
+                    accumulatedData = new Uint8Array();
                 }
 
-                /*} catch (e) {
+                } catch (e) {
                     console.log('canva1 err ',e.message);
-                }*/
+                }
             };
         }else {
             if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
