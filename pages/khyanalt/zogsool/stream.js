@@ -14,8 +14,8 @@ function StreamTest({ ip }) {
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
+            console.log('111111', ip);
             const url = `ws://${ip}:9080/ws`;
-            // console.log('111111', url);
             ws.current = new WebSocket(url);
             ws.current.binaryType = 'arraybuffer';
             ws.current.onopen = () => {
