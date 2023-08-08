@@ -114,6 +114,8 @@ function Stream1({ ip }) {
                     }
                 };
 
+                reader.readAsArrayBuffer(blobData);
+
                 const isJPEG = (data) => {
                     // Check magic numbers for JPEG format
                     return data[0] === 0xFF && data[1] === 0xD8;
@@ -143,7 +145,6 @@ function Stream1({ ip }) {
                     );
                 };
 
-                // reader.readAsArrayBuffer(blobData);
 
                 /* console.log('imageData0000', imageData);
                  const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
