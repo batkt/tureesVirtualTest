@@ -14,7 +14,7 @@ function StreamTest({ ip }) {
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
-            console.log('111111', ip);
+            console.log('111111464666545646', ip);
             const url = `ws://${ip}:9080/ws`;
             ws.current = new WebSocket(url);
             ws.current.binaryType = 'arraybuffer';
@@ -35,6 +35,7 @@ function StreamTest({ ip }) {
 
     useEffect(() => {
         if(onOpen){
+            console.log('464666545646111111', onOpen);
             ws.current.onmessage = (event) => {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas');
