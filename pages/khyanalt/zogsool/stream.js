@@ -17,7 +17,7 @@ function Stream1({ ip }) {
         if(!!ip){
             const url = ip === '192.168.1.54' ? `ws://192.168.1.54:9080/ws.flv?token=db1f2387-766d-29b5-41d2-43dbea5bd7fc&channel=1` : 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1';
             try {
-                console.log('1111114646665456461', ip);
+                console.log('url', url);
                 ws.current = new WebSocket(url);
                 ws.current.binaryType = 'arraybuffer';
                 ws.current.onopen = () => {
@@ -35,6 +35,7 @@ function Stream1({ ip }) {
             if (ws.current) {
                 ws.current.close();
             }
+            setOnOpen(false);
         }
         return () => {
             if (ws.current) {
@@ -45,7 +46,7 @@ function Stream1({ ip }) {
 
     useEffect(() => {
         if(onOpen){
-            console.log('464666545646111111', onOpen);
+            // console.log('464666545646111111', onOpen);
             ws.current.onmessage = (event) => {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas1');
@@ -58,7 +59,12 @@ function Stream1({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
+        } else {
+            if (!!ws.current?.onmessage) ws.current.onmessage = null;
         }
+        return () => {
+            if (!!ws.current?.onmessage) ws.current.onmessage = null;
+        };
     }, [onOpen]);
 
     return (
@@ -94,6 +100,7 @@ export function Stream2({ ip }) {
             if (ws2.current) {
                 ws2.current.close();
             }
+            setOnOpen(false);
         }
         return () => {
             if (ws2.current) {
@@ -116,7 +123,12 @@ export function Stream2({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });
             };
+        }else {
+            if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
         }
+        return () => {
+            if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
+        };
     }, [onOpen]);
 
     return (
