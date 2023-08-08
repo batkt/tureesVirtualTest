@@ -10,7 +10,8 @@ function StreamTest({ url }) {
 
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
-        if(url){
+        if(!!url){
+            console.log('111111', url);
             ws.current = new WebSocket(url);
             ws.current.binaryType = 'arraybuffer';
             ws.current.onopen = () => {
