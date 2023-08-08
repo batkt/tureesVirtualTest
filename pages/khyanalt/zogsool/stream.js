@@ -47,18 +47,28 @@ function Stream1({ ip }) {
     useEffect(() => {
         if(onOpen){
             // console.log('464666545646111111', onOpen);
-            ws.current.onmessage = (event) => {
+            ws.current.onmessage = async (event) => {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas1');
                 const ctx = canvas.getContext('2d');
-                const imgWidth = 460;
-                const imgHeight = 300;
-                console.log('imageData0000', imageData);
-                const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
-                console.log('imageBitmap0000', imageBitmap);
-                imageBitmap.then((bitmap) => {
-                    ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
-                });
+                const imgWidth = 540;
+                const imgHeight = 250;
+
+                try {
+                    const blob = new Blob([imageData]);
+                    const imageBitmap = await createImageBitmap(blob);
+                    console.log('imageBitmap1111', imageBitmap);
+                    ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
+                } catch (error) {
+                    console.error('Error decoding image:', error);
+                }
+
+                /* console.log('imageData0000', imageData);
+                 const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
+                 console.log('imageBitmap0000', imageBitmap);
+                 imageBitmap.then((bitmap) => {
+                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
+                 });*/
             };
         } else {
             if (!!ws.current?.onmessage) ws.current.onmessage = null;
@@ -70,7 +80,7 @@ function Stream1({ ip }) {
 
     return (
         <div>
-            <canvas id="canvas1" width="460" height="300" />
+            <canvas id="canvas1" width="540" height="250" />
         </div>
     )
 }
@@ -112,18 +122,27 @@ export function Stream2({ ip }) {
 
     useEffect(() => {
         if(onOpen){
-            ws2.current.onmessage = (event) => {
+            ws2.current.onmessage = async (event) => {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas2');
                 const ctx = canvas.getContext('2d');
-                const imgWidth = 460;
-                const imgHeight = 300;
-                console.log('imageData111111', imageData);
+                const imgWidth = 540;
+                const imgHeight = 250;
+                try {
+                    const blob = new Blob([imageData]);
+                    const imageBitmap = await createImageBitmap(blob);
+                    console.log('imageBitmap1111', imageBitmap);
+                    ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
+                } catch (error) {
+                    console.error('Error decoding image:', error);
+                }
+
+                /*console.log('imageData111111', imageData);
                 const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
                 console.log('imageBitmap1111', imageBitmap);
                 imageBitmap.then((bitmap) => {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
-                });
+                });*/
             };
         }else {
             if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
@@ -135,7 +154,7 @@ export function Stream2({ ip }) {
 
     return (
         <div>
-            <canvas id="canvas2" width="460" height="300" />
+            <canvas id="canvas2" width="540" height="250" />
         </div>
     )
 }
