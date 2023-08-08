@@ -66,15 +66,14 @@ function Stream1({ ip }) {
 
 export function Stream2({ ip }) {
     const ws2 = useRef(null);
-    console.log('hello', ip);
     const [onOpen, setOnOpen] = useState(false);
 
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
             const url = ip === '192.168.1.56' ? `ws://${ip}:9080/ws` : 'ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1';
+            console.log('hello', url);
             try {
-                console.log('111111464666545646', ip);
                 ws2.current = new WebSocket(url);
                 ws2.current.binaryType = 'arraybuffer';
                 ws2.current.onopen = () => {
@@ -87,7 +86,6 @@ export function Stream2({ ip }) {
             } catch (e) {
                 console.log(e.message)
             }
-
         }
         return () => {
             if (ws2.current) {
@@ -98,14 +96,13 @@ export function Stream2({ ip }) {
 
     useEffect(() => {
         if(onOpen){
-            console.log('464666545646111111', onOpen);
             ws2.current.onmessage = (event) => {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas2');
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 460;
                 const imgHeight = 250;
-
+                console.log('464666545646111111', imageData);
                 const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
                 imageBitmap.then((bitmap) => {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
