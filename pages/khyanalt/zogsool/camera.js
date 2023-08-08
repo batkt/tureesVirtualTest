@@ -1135,7 +1135,7 @@ function camera({ token }) {
                 {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest url={${camerVal[1]}}/>
+                      <StreamTest url={camerVal[1]}/>
                       :
                       ''
                 }
