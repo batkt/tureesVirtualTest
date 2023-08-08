@@ -302,7 +302,7 @@ export function Stream2({ ip }) {
                             data[3] === 0x38
                         );
                     };
-                    if (accumulatedData.length >= 8) {
+                    if (accumulatedData.length >= 32) {
                         console.log('accumulatedData--blob ', new Blob(accumulatedData));
                         if (isJPEG(accumulatedData)) {
                             console.log('Image is in JPEG format');
