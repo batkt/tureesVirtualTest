@@ -15,17 +15,22 @@ function StreamTest({ ip }) {
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
         if(!!ip){
-            console.log('111111464666545646', ip);
-            const url = `ws://${ip}:9080/ws`;
-            ws.current = new WebSocket(url);
-            ws.current.binaryType = 'arraybuffer';
-            ws.current.onopen = () => {
-                console.log('WebSocket kholbolt amjilttai');
-                setOnOpen(true);
-            };
-            ws.current.onclose = () => {
-                console.log('WebSocket kholbolt amjiltgui bolloo');
-            };
+            try {
+                console.log('111111464666545646', ip);
+                const url = `ws://${ip}:9080/ws`;
+                ws.current = new WebSocket(url);
+                ws.current.binaryType = 'arraybuffer';
+                ws.current.onopen = () => {
+                    console.log('WebSocket kholbolt amjilttai');
+                    setOnOpen(true);
+                };
+                ws.current.onclose = () => {
+                    console.log('WebSocket kholbolt amjiltgui bolloo');
+                };
+            } catch (e) {
+                console.log(e.message)
+            }
+
         }
         return () => {
             if (ws.current) {

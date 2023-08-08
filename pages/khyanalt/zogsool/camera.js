@@ -1051,7 +1051,7 @@ function camera({ token }) {
                 {/*<WebView />*/}
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest url={camerVal[0]}/>
+                      <StreamTest ip={camerVal[0]}/>
                       :
                       ''
                 }
@@ -1133,12 +1133,14 @@ function camera({ token }) {
                 >
                 {/*<ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>*/}
                 {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
+                <StreamTest ip={camerVal[1]}/>
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest url={camerVal[1]}/>
+                      <StreamTest ip={camerVal[1]}/>
                       :
                       ''
                 }
+                {console.log('12312', camerVal)}
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
