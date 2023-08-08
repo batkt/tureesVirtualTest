@@ -271,7 +271,7 @@ export function Stream2({ ip }) {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });*/
 
-                try {
+                // try {
                     const newChunk = new Uint8Array(event.data);
                     accumulatedData = new Uint8Array([...accumulatedData, ...newChunk]);
                     const blob = new Blob([event.data]);
@@ -318,9 +318,9 @@ export function Stream2({ ip }) {
                         accumulatedData = new Uint8Array();
                     }
 
-                } catch (e) {
+                /*} catch (e) {
                     console.log('canva1 err ',e.message);
-                }
+                }*/
             };
         }else {
             if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
