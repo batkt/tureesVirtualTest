@@ -9,7 +9,7 @@ import {
 
 function StreamTest({ ip }) {
     const ws = useRef(null);
-    console.log('hello');
+    console.log('hello', ip);
     const [onOpen, setOnOpen] = useState(false);
 
     useEffect(() => {
