@@ -4,14 +4,15 @@ import React, {useEffect, useRef, useState} from "react";
 // ws://192.168.1.57:9080/ws.flv?token=d8142256-e92f-57fe-60e4-2aa83de7832c&channel=1
 // ws://192.168.1.54:9080/ws.flv?token=db1f2387-766d-29b5-41d2-43dbea5bd7fc&channel=1
 
-function StreamTest({ url }) {
+function StreamTest({ ip }) {
     const ws = useRef(null);
     const [onOpen, setOnOpen] = useState(false);
 
     useEffect(() => {
         // console.log(url!==null ? url : 'ws://192.168.1.54:9080/ws');
-        if(!!url){
-            console.log('111111', url);
+        if(!!ip){
+            const url = `ws://${ip}:9080/ws`;
+            // console.log('111111', url);
             ws.current = new WebSocket(url);
             ws.current.binaryType = 'arraybuffer';
             ws.current.onopen = () => {
@@ -27,7 +28,7 @@ function StreamTest({ url }) {
                 ws.current.close();
             }
         };
-    }, [url]);
+    }, [ip]);
 
     useEffect(() => {
         if(onOpen){
