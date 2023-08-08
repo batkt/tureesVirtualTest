@@ -273,7 +273,7 @@ export function Stream2({ ip }) {
 
                 try {
                 const newChunk = new Uint8Array(event.data);
-                accumulatedData = new Uint8Array([...accumulatedData, ...newChunk]);
+                accumulatedData = new Uint8Array([...accumulatedData, newChunk]);
                 const blob = new Blob([event.data]);
                 console.log('blob ', blob);
 
