@@ -1051,7 +1051,7 @@ function camera({ token }) {
                 {/*<WebView />*/}
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest url={${camerVal[0]}}/>
+                      <StreamTest url={camerVal[0]}/>
                       :
                       ''
                 }
