@@ -54,13 +54,48 @@ function Stream1({ ip }) {
                 const imgWidth = 540;
                 const imgHeight = 250;
 
-                try {
+                /*try {
                     const blob = new Blob([imageData]);
                     const imageBitmap = await createImageBitmap(blob);
                     console.log('imageBitmap1111', imageBitmap);
                     ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
                 } catch (error) {
                     console.error('Error decoding image:', error);
+                }*/
+
+                try {
+
+                    const isJPEG = (data) => {
+                        const jpegMagicNumber = [0xFF, 0xD8];
+                        const magicBytes = new Uint8Array(data.slice(0, 2));
+                        return Array.from(magicBytes).every((byte, index) => byte === jpegMagicNumber[index]);
+                    };
+
+                    const isPNG = (data) => {
+                        const pngMagicNumber = [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A];
+                        const magicBytes = new Uint8Array(data.slice(0, 8));
+                        return Array.from(magicBytes).every((byte, index) => byte === pngMagicNumber[index]);
+                    };
+
+                    const isGIF = (data) => {
+                        const gifMagicNumber = [0x47, 0x49, 0x46, 0x38];
+                        const magicBytes = new Uint8Array(data.slice(0, 4));
+                        return Array.from(magicBytes).every((byte, index) => byte === gifMagicNumber[index]);
+                    };
+
+                    if (isJPEG(imageData)) {
+                        console.log('Image is JPEG format');
+                    } else if (isPNG(imageData)) {
+                        console.log('Image is PNG format');
+                    } else if (isGIF(imageData)) {
+                        console.log('Image is GIF format');
+                    } else {
+                        console.log('Unsupported image format');
+                        return;
+                    }
+
+                } catch (e) {
+
                 }
 
                 /* console.log('imageData0000', imageData);
