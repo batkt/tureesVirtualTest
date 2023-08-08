@@ -302,6 +302,7 @@ export function Stream2({ ip }) {
                         data[3] === 0x38
                     );
                 };
+                console.log('1231231', accumulatedData.length);
                 if (accumulatedData.length >= 64) {
                     console.log('accumulatedData64--blob ', new Blob(accumulatedData));
                     console.log('accumulatedData64-- ', accumulatedData);
