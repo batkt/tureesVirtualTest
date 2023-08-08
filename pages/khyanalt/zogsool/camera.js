@@ -63,7 +63,7 @@ import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import ReactPlayer from 'react-player'
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
-import StreamTest from "./stream";
+import Stream1, {Stream2} from "./stream";
 
 const usguud = [
   "А",
@@ -1051,7 +1051,7 @@ function camera({ token }) {
                 {/*<WebView />*/}
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest ip={camerVal[0]}/>
+                      <Stream1 ip={camerVal[0]}/>
                       :
                       ''
                 }
@@ -1133,10 +1133,10 @@ function camera({ token }) {
                 >
                 {/*<ReactPlayer playing={!!camerVal[1]} url={`rtsp://${camerVal[1]}:8557`}/>*/}
                 {/*<ReactPlayer playing={!!camerVal[1]} url="http://192.168.1.54:8080/stream"/>*/}
-                <StreamTest ip={camerVal[1]}/>
+                <Stream2 ip={camerVal[1]}/>
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <StreamTest ip={camerVal[1]}/>
+                      <Stream2 ip={camerVal[1]}/>
                       :
                       ''
                 }
