@@ -85,6 +85,7 @@ function Stream1({ ip }) {
                         return Array.from(magicBytes).every((byte, index) => byte === gifMagicNumber[index]);
                     };
                     if (accumulatedData.length >= 8) {
+                        console.log('accumulatedData--', accumulatedData);
                         if (isJPEG(accumulatedData)) {
                             console.log('Image is in JPEG format');
                         } else if (isPNG(accumulatedData)) {
@@ -111,7 +112,7 @@ function Stream1({ ip }) {
                     }*/
 
                 } catch (e) {
-
+                    console.log('canva1 err ',e.message);
                 }
                 /*const blobData = event.data;
                 const reader = new FileReader();
