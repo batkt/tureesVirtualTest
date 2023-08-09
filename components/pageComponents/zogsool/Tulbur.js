@@ -276,6 +276,7 @@ function Tulbur(
           // aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
+          guilgeeniiTuukhKhadgalya(tulbur);
         });
     } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
@@ -592,6 +593,8 @@ function Tulbur(
           setKhungulukhEsekh={setKhungulukhEsekh}
           setLoading={setLoading}
           setTerminal={setTerminal}
+          khaanbank={khaanbank}
+          guilgeeniiTuukhKhadgalya={guilgeeniiTuukhKhadgalya}
         />
         {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
           <div className='col-span-3 flex w-full items-center justify-center'>

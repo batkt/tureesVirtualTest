@@ -391,9 +391,9 @@ function camera({ token }) {
 
   // console.log('---------', uilchluulegchGaralt);
 
-  useKeyboardTovchlol("F5", f5Darsan);
-  useKeyboardTovchlol("F3", f3Darsan);
-  useKeyboardTovchlol("F4", f4Darsan);
+  useKeyboardTovchlol("F4", f5Darsan);
+  useKeyboardTovchlol("F1", f3Darsan);
+  useKeyboardTovchlol("F2", f4Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
 
   function f3Darsan() {

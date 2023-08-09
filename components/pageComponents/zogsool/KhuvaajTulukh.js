@@ -66,6 +66,7 @@ function KhuvaajTulukh({
   setLoading,
   batalgaajuulya,
   setTerminal,
+  guilgeeniiTuukhKhadgalya,
 }) {
   const belenRef = React.useRef();
   const khariltsakhRef = React.useRef();
@@ -239,6 +240,7 @@ function KhuvaajTulukh({
         setTerminal(false);
         setLoading(false);
       });
+    // if()
   }
 
   const terminaluud = [
@@ -613,7 +615,7 @@ function KhuvaajTulukh({
                       {songogdsonBank.ner}
                     </div>
                     <InputNumber
-                      placeholder='Мөнгөн дүн123'
+                      placeholder='Мөнгөн дүн'
                       disabled={
                         !value[songogdsonBank.talbar] &&
                         (data?.tulukhDun -
