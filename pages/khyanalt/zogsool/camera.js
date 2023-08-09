@@ -392,7 +392,17 @@ function camera({ token }) {
   // console.log('---------', uilchluulegchGaralt);
 
   useKeyboardTovchlol("F5", f5Darsan);
+  useKeyboardTovchlol("F3", f3Darsan);
+  useKeyboardTovchlol("F4", f4Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
+
+  function f3Darsan() {
+    khaalgaNeey(camerVal[0]);
+  }
+
+  function f4Darsan() {
+    khaalgaNeey(camerVal[1]);
+  }
 
   function f5Darsan() {
     const data = uilchluulegchGaralt?.jagsaalt?.[0];
@@ -812,6 +822,7 @@ function camera({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
+          // console.log(v, "vvvvvvvvvvvvvvvvvv");
           return (
             v && (
               <Tooltip
@@ -838,31 +849,38 @@ function camera({ token }) {
         title: () => <SettingOutlined />,
         width: "2rem",
         align: "center",
-        render: (data) => (
-          <div className='flex flex-row'>
-            <Popover
-              placement='bottom'
-              trigger='hover'
-              content={() => (
-                <div className='space-y-2'>
-                  <a
-                    className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
-                    onClick={() =>
-                      setModalOpen({ bool: true, item: data, type: "zurchil" })
-                    }>
-                    <ExclamationCircleOutlined
-                      style={{ fontSize: "18px", marginRight: "3px" }}
-                    />
-                    <div>{t("Зөрчил нэмэх")}</div>
-                  </a>
-                </div>
-              )}>
-              <a className=' flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700'>
-                <MoreOutlined style={{ fontSize: "18px" }} />
-              </a>
-            </Popover>
-          </div>
-        ),
+        render: (data) => {
+          return data.tuukh[0].tulbur.length === 0 &&
+            data.tuukh[0].tulukhDun !== 0 ? (
+            <div className='flex flex-row'>
+              <Popover
+                placement='bottom'
+                trigger='hover'
+                content={() => (
+                  <div className='space-y-2'>
+                    <a
+                      className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
+                      onClick={() =>
+                        setModalOpen({
+                          bool: true,
+                          item: data,
+                          type: "zurchil",
+                        })
+                      }>
+                      <ExclamationCircleOutlined
+                        style={{ fontSize: "18px", marginRight: "3px" }}
+                      />
+                      <div>{t("Зөрчил нэмэх")}</div>
+                    </a>
+                  </div>
+                )}>
+                <a className=' flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700'>
+                  <MoreOutlined style={{ fontSize: "18px" }} />
+                </a>
+              </Popover>
+            </div>
+          ) : null;
+        },
       },
     ];
   }, [turul, i18n.language, ajiltan, baiguullaga, barilgiinId]);
@@ -1090,7 +1108,7 @@ function camera({ token }) {
                     }}
                     className='w-full sm:w-auto'
                     type='primary'>
-                    Нээх
+                    Нээх6666
                   </Button>
                   {/*<Button
                     onClick={(e) => {

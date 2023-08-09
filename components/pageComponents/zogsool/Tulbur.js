@@ -68,17 +68,7 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
-        if(tulbur?.length!==0){
-          Modal.confirm({
-            content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
-            okText: t("Тийм"),
-            cancelText: t("Үгүй"),
-            onOk: ()=>{onRefresh();destroy();},
-          });
-        } else{
-          onRefresh();
-          destroy();
-        }
+        destroy();
       },
     }),
     [tulbur]
@@ -186,10 +176,10 @@ function Tulbur(
     tulbur.forEach((a) => {
       a.ognoo = new Date();
       a.baiguullagiinId = baiguullaga?._id;
-          a.barilgiinId = barilgiinId;
-          a.burtgesenAjiltaniiId = ajiltan._id;
-          a.burtgesenAjiltaniiNer = ajiltan.ner;
-          a.zogsooliinId = data?.zogsooliinId;
+      a.barilgiinId = barilgiinId;
+      a.burtgesenAjiltaniiId = ajiltan._id;
+      a.burtgesenAjiltaniiNer = ajiltan.ner;
+      a.zogsooliinId = data?.zogsooliinId;
     });
     // console.log('3434', tulbur)
     uilchilgee(token)
@@ -281,7 +271,7 @@ function Tulbur(
           setSongogdsonBank(null);
         })
         .catch((e) => {
-          aldaaBarigch(e);
+          // aldaaBarigch(e);
           setLoading(false);
         });
       setTerminal(true);
@@ -311,132 +301,132 @@ function Tulbur(
   }, []);
 
   return (
-    <div className="h-full w-full">
+    <div className='h-full w-full'>
       {eBarimt && (
-        <div className="hidden">
-          <div className="p-2" style={{ minWidth: "20rem" }} ref={eBarimtRef}>
-            <table className="w-full">
+        <div className='hidden'>
+          <div className='p-2' style={{ minWidth: "20rem" }} ref={eBarimtRef}>
+            <table className='w-full'>
               <colgroup>
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
+                <col className='w-1/6' />
+                <col className='w-1/6' />
+                <col className='w-1/6' />
+                <col className='w-1/6' />
+                <col className='w-1/6' />
+                <col className='w-1/6' />
               </colgroup>
-              <tbody className="text-xs">
+              <tbody className='text-xs'>
                 <tr>
-                  <td colSpan={6} className="border text-center">
+                  <td colSpan={6} className='border text-center'>
                     {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="border text-center">
+                  <td colSpan={6} className='border text-center'>
                     {baiguullaga?.ner}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={6} className="border font-medium">
+                  <td colSpan={6} className='border font-medium'>
                     {t("Борлуулагч")}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {t("Огноо")}
                   </td>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {t("ТТД")}
                   </td>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {eBarimt?.registerNo}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {t("ДДТД")}
                   </td>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {eBarimt?.billId}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {t("Касс")}
                   </td>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {eBarimt?.posNo}
                   </td>
                 </tr>
                 <tr>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {t("Кассчин")}
                   </td>
-                  <td className="border" colSpan={3}>
+                  <td className='border' colSpan={3}>
                     {ajiltan?.ner}
                   </td>
                 </tr>
                 {baiguullagaEsekh && (
                   <>
                     <tr>
-                      <td className="border" colSpan={6}>
+                      <td className='border' colSpan={6}>
                         {t("Худалдан авагч")}
                       </td>
                     </tr>
                     <tr>
-                      <td className="border" colSpan={1}>
+                      <td className='border' colSpan={1}>
                         {t("ТТД")}
                       </td>
-                      <td className="border" colSpan={5}>
+                      <td className='border' colSpan={5}>
                         {register}
                       </td>
                     </tr>
                     <tr>
-                      <td className="border" colSpan={1}>
+                      <td className='border' colSpan={1}>
                         {t("Нэр")}
                       </td>
-                      <td className="border" colSpan={5}>
+                      <td className='border' colSpan={5}>
                         {baiguullagiinMedeelel?.name}
                       </td>
                     </tr>
                   </>
                 )}
                 <tr>
-                  <td colSpan={6} className="border">
+                  <td colSpan={6} className='border'>
                     <br />
                   </td>
                 </tr>
                 <tr>
-                  <td className="border text-center" colSpan={3}>
+                  <td className='border text-center' colSpan={3}>
                     {t("Барааны нэр")}
                   </td>
-                  <td className="border text-center">{t("Тоо")}</td>
-                  <td className="border text-center">{t("Нэгж")}</td>
-                  <td className="border text-center">{t("Дүн")}</td>
+                  <td className='border text-center'>{t("Тоо")}</td>
+                  <td className='border text-center'>{t("Нэгж")}</td>
+                  <td className='border text-center'>{t("Дүн")}</td>
                 </tr>
                 {eBarimt?.stocks?.map((mur, index) => (
                   <tr key={`${index}-zakhialga`}>
-                    <td colSpan={3} className="border text-right">
+                    <td colSpan={3} className='border text-right'>
                       {mur.name}
                     </td>
-                    <td className="border text-right">{mur.qty}</td>
-                    <td className="border text-right">
+                    <td className='border text-right'>{mur.qty}</td>
+                    <td className='border text-right'>
                       {formatNumber(mur.unitPrice, 2)}
                     </td>
-                    <td className="border text-right">
+                    <td className='border text-right'>
                       {formatNumber(mur.totalAmount, 2)}
                     </td>
                   </tr>
                 ))}
                 <tr>
-                  <td colSpan={5} className="border text-right">
+                  <td colSpan={5} className='border text-right'>
                     {t("НӨАТ-гүй дүн")}
                   </td>
-                  <td className="border text-right">
+                  <td className='border text-right'>
                     {khungulukhEsekh === true
                       ? formatNumber(
                           (data?.dutuuDun
@@ -453,10 +443,10 @@ function Tulbur(
                 </tr>
                 {khungulukhEsekh === true && (
                   <tr>
-                    <td colSpan={5} className="border text-right">
+                    <td colSpan={5} className='border text-right'>
                       {t("Хөнгөлөлт")}
                     </td>
-                    <td className="border text-right">
+                    <td className='border text-right'>
                       {data?.dutuuDun
                         ? formatNumber(khunglult.khungulukhDun)
                         : formatNumber(data.niitUndsenDun - data.tulukhDun)}
@@ -464,73 +454,73 @@ function Tulbur(
                   </tr>
                 )}
                 <tr>
-                  <td colSpan={5} className="border text-right">
+                  <td colSpan={5} className='border text-right'>
                     {t("НӨАТ-н дүн")}
                   </td>
-                  <td className="border text-right">
+                  <td className='border text-right'>
                     {formatNumber(eBarimt?.vat, 2)}
                   </td>
                 </tr>
                 <tr>
-                  <td colSpan={5} className="border text-right">
+                  <td colSpan={5} className='border text-right'>
                     {t("Төлөх дүн")}
                   </td>
-                  <td className="border text-right">
+                  <td className='border text-right'>
                     {formatNumber(eBarimt?.amount)}
                   </td>
                 </tr>
                 {tulbur?.belen && (
                   <tr>
-                    <td colSpan={5} className="border text-right">
+                    <td colSpan={5} className='border text-right'>
                       {t("Бэлнээр")}
                     </td>
-                    <td className="border text-right">
+                    <td className='border text-right'>
                       {formatNumber(tulbur?.belen)}
                     </td>
                   </tr>
                 )}
                 {tulbur?.belenBus && (
                   <tr>
-                    <td colSpan={5} className="border text-right">
+                    <td colSpan={5} className='border text-right'>
                       {t("Бэлэн бусаар")}
                     </td>
-                    <td className="border text-right">
+                    <td className='border text-right'>
                       {formatNumber(tulbur?.belenBus)}
                     </td>
                   </tr>
                 )}
                 {tulbur?.khariult && (
                   <tr>
-                    <td colSpan={5} className="border text-right">
+                    <td colSpan={5} className='border text-right'>
                       {t("Хариулт")}
                     </td>
-                    <td className="border text-right">
+                    <td className='border text-right'>
                       {formatNumber(tulbur?.khariult)}
                     </td>
                   </tr>
                 )}
                 <tr>
-                  <td colSpan={4} className="border">{`Е-Баримт ${
+                  <td colSpan={4} className='border'>{`Е-Баримт ${
                     baiguullagaEsekh ? "" : "уншуулах"
                   } дүн`}</td>
-                  <td colSpan={2} className="border text-right">
+                  <td colSpan={2} className='border text-right'>
                     {formatNumber(eBarimt?.amount)}
                   </td>
                 </tr>
                 {!baiguullagaEsekh && (
                   <tr>
-                    <td colSpan={4} className="border">
+                    <td colSpan={4} className='border'>
                       {t("Сугалааны дугаар")}
                     </td>
-                    <td colSpan={2} className="border">
+                    <td colSpan={2} className='border'>
                       {eBarimt?.lottery}
                     </td>
                   </tr>
                 )}
                 <tr>
                   <td colSpan={6}>
-                    <div className="flex w-full justify-center p-5">
-                      <div className="h-40 w-40">
+                    <div className='flex w-full justify-center p-5'>
+                      <div className='h-40 w-40'>
                         <QRCode value={eBarimt?.qrData} size={160} />
                       </div>
                     </div>
@@ -541,31 +531,31 @@ function Tulbur(
           </div>
         </div>
       )}
-      <div className="pb-2">
-        <Steps className="hidden" current={alkham}>
+      <div className='pb-2'>
+        <Steps className='hidden' current={alkham}>
           <Steps.Step
-            key="Төлбөр төлөх"
+            key='Төлбөр төлөх'
             subTitle={
-              <span className="dark:text-gray-200">{t("Төлбөр төлөх")}</span>
+              <span className='dark:text-gray-200'>{t("Төлбөр төлөх")}</span>
             }
             onClick={() => setAlkham(1)}
           />
           <Steps.Step
-            key="Төлбөрын баримт"
+            key='Төлбөрын баримт'
             subTitle={
-              <span className="dark:text-gray-200">{t("Төлбөрын баримт")}</span>
+              <span className='dark:text-gray-200'>{t("Төлбөрын баримт")}</span>
             }
             onClick={() => setAlkham(2)}
           />
         </Steps>
       </div>
       <div className={`${alkham === 1 ? "" : "hidden"}`}>
-        <div className="table w-full text-lg font-medium">
-          <div className="table-row">
-            <div className="table-cell border-b-2 border-dashed p-2 dark:text-gray-200">
+        <div className='table w-full text-lg font-medium'>
+          <div className='table-row'>
+            <div className='table-cell border-b-2 border-dashed p-2 dark:text-gray-200'>
               {t("Төлөх дүн")}
             </div>
-            <div className="table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200">
+            <div className='table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200'>
               {formatNumber(
                 (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
                   tulbur.reduce((a, b) => a + b.dun, 0) || 0
@@ -599,24 +589,24 @@ function Tulbur(
           setKhungulukhEsekh={setKhungulukhEsekh}
         />
         {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
-          <div className="col-span-3 flex w-full items-center justify-center">
+          <div className='col-span-3 flex w-full items-center justify-center'>
             <img src={qpayerTulukh?.qr_image} />
           </div>
         )}
         {khaanbank && tulbur.find((a) => a.turul === "khaan") && (
-          <div className="relative col-span-3 mt-5 flex flex-col items-center space-y-2">
+          <div className='relative col-span-3 mt-5 flex flex-col items-center space-y-2'>
             <img
               src={"https://www.khanbank.com/assets/logos/khanbank-mn.png"}
-              className="w-1/2"
+              className='w-1/2'
             />
-            <div id="loading">
+            <div id='loading'>
               <Spin
                 style={{ fontSize: "1.5rem" }}
-                size="large"
+                size='large'
                 tip={t("Карт аа уншуулна уу!!")}
               />
             </div>
-            <div className="flex flex-row space-x-5">
+            <div className='flex flex-row space-x-5'>
               <Button
                 danger
                 onClick={() => setTerminal(false)}
@@ -624,7 +614,7 @@ function Tulbur(
                 {t("Цуцлах")}
               </Button>
               <Button
-                type="primary"
+                type='primary'
                 onClick={batalgaajuuljDuusgakh}
                 icon={<CheckOutlined />}>
                 {t("Баталгаажуулах")}
@@ -632,13 +622,13 @@ function Tulbur(
             </div>
           </div>
         )}
-        <div className="mt-5 table w-full text-lg font-medium">
+        <div className='mt-5 table w-full text-lg font-medium'>
           {tulbur.length > 0 && (
-            <div className="table-row">
-              <div className="table-cell border-t-2 border-dashed p-2 dark:text-gray-200">
+            <div className='table-row'>
+              <div className='table-cell border-t-2 border-dashed p-2 dark:text-gray-200'>
                 {t("Төлсөн дүн")}
               </div>
-              <div className="table-cell border-t-2 border-dashed p-2 text-right dark:text-gray-200">
+              <div className='table-cell border-t-2 border-dashed p-2 text-right dark:text-gray-200'>
                 {formatNumber(tulbur.reduce((a, b) => a + b.dun, 0))} ₮
               </div>
             </div>
@@ -665,15 +655,15 @@ function Tulbur(
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
       />
-      <div className="mt-5 flex flex-row justify-between">
-        <Button type="primary" danger onClick={() => ref.current.khaaya()}>
+      <div className='mt-5 flex flex-row justify-between'>
+        <Button type='primary' danger onClick={() => ref.current.khaaya()}>
           {t("Хаах")}
         </Button>
         {alkham === 1 && !qpayerTulukh && (
           <Button
-            type="primary"
+            type='primary'
             loading={loading}
-            id="TogloomiinTuvTulburTovch"
+            id='TogloomiinTuvTulburTovch'
             onClick={batalgaajuulaltKhiiya}>
             {t("Төлбөр төлөх")}
           </Button>
@@ -681,7 +671,7 @@ function Tulbur(
 
         {alkham === 2 && barimtKhevlekhEsekh === true && (
           <Button
-            type="primary"
+            type='primary'
             loading={loading}
             onClick={() => ebarimtAvya(uilchluugchiinId)}>
             {t("Хэвлэх")}
