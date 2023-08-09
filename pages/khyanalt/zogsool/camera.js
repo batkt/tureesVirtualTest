@@ -62,7 +62,8 @@ import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
-import Stream1, {Stream2} from "./stream";
+import Stream1, { Stream2 } from "./stream";
+import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 
 const usguud = [
   "А",
@@ -130,58 +131,58 @@ function generateChild(mur, turul) {
 }
 
 const CSS = {
-  root : {
-    width: '100%',
-    height : '600px' ,
-    position: 'relative',
-    border: '1px solid rgba(197, 197, 197, 0.22)'
+  root: {
+    width: "100%",
+    height: "600px",
+    position: "relative",
+    border: "1px solid rgba(197, 197, 197, 0.22)",
   },
-  statusbar : {
-    width: '100%',
-    height: '40px',
-    position: 'relative',
-    borderBottom: '2px solid #2196F3'
+  statusbar: {
+    width: "100%",
+    height: "40px",
+    position: "relative",
+    borderBottom: "2px solid #2196F3",
   },
-  iframe : {
-    height: '100%'
+  iframe: {
+    height: "100%",
   },
-  iframehtml : {
-    width: '100%',
-    height: '100%',
-    border: 'none'
+  iframehtml: {
+    width: "100%",
+    height: "100%",
+    border: "none",
   },
-  stringurl : {
-    fontFamily : 'Helvetica',
-    fontSize : '16px',
-    textAlign : 'center',
-    padding : '0',
-    margin : '0',
-    lineHeight : '40px',
-    fontWeight : 'bold',
-    color : '#6d6d6d'
+  stringurl: {
+    fontFamily: "Helvetica",
+    fontSize: "16px",
+    textAlign: "center",
+    padding: "0",
+    margin: "0",
+    lineHeight: "40px",
+    fontWeight: "bold",
+    color: "#6d6d6d",
   },
-  button : {
-    backgroundColor: 'transparent',
-    border: 'none',
-    lineHeight: '40px',
-    margin: '0',
-    padding: '0',
-    position: 'absolute',
-    left: '0px',
-    width: '30px',
-    fontWeight: 'bold',
-    fontSize: '14px',
-    color: '#a5977e',
-    outline: 'none'
+  button: {
+    backgroundColor: "transparent",
+    border: "none",
+    lineHeight: "40px",
+    margin: "0",
+    padding: "0",
+    position: "absolute",
+    left: "0px",
+    width: "30px",
+    fontWeight: "bold",
+    fontSize: "14px",
+    color: "#a5977e",
+    outline: "none",
   },
-  statusbarline : {
-    position: 'absolute',
-    width: '0%',
-    height: '100%',
-    transition: 'width 1s ease-in-out',
-    backgroundColor: 'rgba(197, 197, 197, 0.22)'
-  }
-}
+  statusbarline: {
+    position: "absolute",
+    width: "0%",
+    height: "100%",
+    transition: "width 1s ease-in-out",
+    backgroundColor: "rgba(197, 197, 197, 0.22)",
+  },
+};
 
 function tulburKhurvuulekh(v) {
   switch (v) {
@@ -207,7 +208,7 @@ function tulburKhurvuulekh(v) {
 function WebView() {
   // const iframeRef = useRef(null);
   function handleLoadFrame(e) {
-    console.log('123123123', e);
+    console.log("123123123", e);
   }
   /* function getInitialState() {
     return {
@@ -227,20 +228,23 @@ function WebView() {
   }*/
 
   return (
-      <div className="react-webview" style={CSS.root}>
-        <div className="webview__block" style={{height : '100%'}}>
-          {/*<div className="status-bar" style={CSS.statusbar}>
+    <div className='react-webview' style={CSS.root}>
+      <div className='webview__block' style={{ height: "100%" }}>
+        {/*<div className="status-bar" style={CSS.statusbar}>
             <div className="status-bar_line" style={CSS.statusbarline}></div>
             <button style={CSS.button} onClick={closeIframeBar}>X</button>
             <p style={CSS.stringurl}>{url}</p>
           </div>*/}
-          <div className="iframe" style={CSS.iframehtml}>
-            <iframe id="iframe" src="https://bing.com" style={CSS.iframehtml} onLoad={handleLoadFrame}></iframe>
-          </div>
+        <div className='iframe' style={CSS.iframehtml}>
+          <iframe
+            id='iframe'
+            src='https://bing.com'
+            style={CSS.iframehtml}
+            onLoad={handleLoadFrame}></iframe>
         </div>
       </div>
-
-  )
+    </div>
+  );
 }
 
 /*const TreeComponent = ()=>{
@@ -370,6 +374,21 @@ function camera({ token }) {
     isValidating,
   } = useUilchluulegch(token, baiguullaga?._id, query, order);
 
+  const tooQuery = useMemo(() => {
+    const todayStart = moment().startOf("day").toDate();
+    const todayEnd = moment().endOf("day").toDate();
+    return {
+      "tuukh.tsagiinTuukh.garsanTsag": { $exists: false },
+      createdAt: {
+        $gte: todayStart,
+        $lt: todayEnd,
+      },
+    };
+  }, [uilchluulegchGaralt]);
+
+  const { uilchluulegchTooGaralt, uilchluulegchTooMutate } =
+    useUilchluulegchToo(token, baiguullaga?._id, tooQuery);
+
   // console.log('---------', uilchluulegchGaralt);
 
   useKeyboardTovchlol("F5", f5Darsan);
@@ -404,19 +423,19 @@ function camera({ token }) {
     }, 200);
   }
 
-  useEffect(() => {
-    const d1 = moment().startOf("day").format("YYYY-MM-DD 00:00:00");
-    const d2 = moment().endOf("day").format("YYYY-MM-DD 23:59:59");
-    const o1 = moment(ognoo[0]).format("YYYY-MM-DD 00:00:00");
-    const o2 = moment(ognoo[1]).format("YYYY-MM-DD 23:59:59");
-    if (o1 === d1 && o2 === d2) {
-      let c = 0;
-      uilchluulegchGaralt?.jagsaalt.map((u) => {
-        if (!u.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag) c++;
-      });
-      setIdevkhtei(c);
-    }
-  }, [uilchluulegchGaralt, ognoo]);
+  // useEffect(() => {
+  //   const d1 = moment().startOf("day").format("YYYY-MM-DD 00:00:00");
+  //   const d2 = moment().endOf("day").format("YYYY-MM-DD 23:59:59");
+  //   const o1 = moment(ognoo[0]).format("YYYY-MM-DD 00:00:00");
+  //   const o2 = moment(ognoo[1]).format("YYYY-MM-DD 23:59:59");
+  //   if (o1 === d1 && o2 === d2) {
+  //     let c = 0;
+  //     uilchluulegchGaralt?.jagsaalt.map((u) => {
+  //       if (!u.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag) c++;
+  //     });
+  //     setIdevkhtei(c);
+  //   }
+  // }, [uilchluulegchGaralt, ognoo]);
 
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
@@ -451,6 +470,7 @@ function camera({ token }) {
 
   function onRefresh() {
     uilchluulegchMutate();
+    uilchluulegchTooMutate();
     dansniiKhuulgaMutate();
   }
   const minToHour = (m) => {
@@ -1005,7 +1025,7 @@ function camera({ token }) {
     form.resetFields();
   };
   const excel = new Excel();
-// console.log('0-0--0', baiguullaga);
+  // console.log('0-0--0', baiguullaga);
   return (
     <Admin
       title='Камер'
@@ -1039,16 +1059,15 @@ function camera({ token }) {
                   setCamerKharakh(1);
                 }}
                 className={`w-full bg-[url('/notPlay.png')] bg-center ${
-                    cameraKharakh === 1
-                        ? "sm:h-[80vh] sm:w-[80%]"
-                        : "sm:h-[250px]"
+                  cameraKharakh === 1
+                    ? "sm:h-[80vh] sm:w-[80%]"
+                    : "sm:h-[250px]"
                 }`}>
-                {
-                  baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <Stream1 ip={camerVal[0]}/>
-                      :
-                      ''
-                }
+                {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
+                  <Stream1 ip={camerVal[0]} />
+                ) : (
+                  ""
+                )}
               </div>
               {cameraKharakh === 1 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
@@ -1120,17 +1139,15 @@ function camera({ token }) {
                   setCamerKharakh(2);
                 }}
                 className={`w-full bg-[url('/notPlay.png')] bg-center ${
-                    cameraKharakh === 2
-                        ? "sm:h-[80vh] sm:w-[80%]"
-                        : "sm:h-[250px]"
-                }`}
-                >
-                {
-                  baiguullaga?._id === '63c0f31efe522048bf02086d' ?
-                      <Stream2 ip={camerVal[1]}/>
-                      :
-                      ''
-                }
+                  cameraKharakh === 2
+                    ? "sm:h-[80vh] sm:w-[80%]"
+                    : "sm:h-[250px]"
+                }`}>
+                {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
+                  <Stream2 ip={camerVal[1]} />
+                ) : (
+                  ""
+                )}
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
@@ -1615,9 +1632,11 @@ function camera({ token }) {
           </Modal>
           <div style={{ position: "absolute", bottom: 58 }}>
             <div className='ml-10 flex'>
-              <div className='flex text-blue-600'>Идэвхтэй: {idevkhtei}</div>
+              <div className='flex text-blue-600'>
+                Идэвхтэй: {uilchluulegchTooGaralt?.niitMur}
+              </div>
               <div className='ml-10 flex text-yellow-600'>
-                Сул зогсоол: {jagsaalt[0].too - idevkhtei}
+                Сул зогсоол: {jagsaalt[0].too - uilchluulegchTooGaralt?.niitMur}
               </div>
             </div>
           </div>
