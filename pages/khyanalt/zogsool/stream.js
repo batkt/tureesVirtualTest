@@ -9,6 +9,7 @@ import {
 
 
 function Stream1({ ip }) {
+
     const ws = useRef(null);
     const [onOpen, setOnOpen] = useState(false);
     useEffect(() => {
@@ -139,55 +140,6 @@ function Stream1({ ip }) {
                 } catch (e) {
                     console.log('canva1 err ',e.message);
                 }
-                /*const blobData = event.data;
-                const reader = new FileReader();
-
-                reader.onload = () => {
-                    const arrayBuffer = reader.result;
-                    const uint8Array = new Uint8Array(arrayBuffer);
-
-                    if (isJPEG(uint8Array)) {
-                        console.log('Image is in JPEG format');
-                    } else if (isPNG(uint8Array)) {
-                        console.log('Image is in PNG format');
-                    } else if (isGIF(uint8Array)) {
-                        console.log('Image is in GIF format');
-                    } else {
-                        console.log('Unsupported image format');
-                    }
-                };
-
-                reader.readAsArrayBuffer(blobData);
-
-                const isJPEG = (data) => {
-                    // Check magic numbers for JPEG format
-                    return data[0] === 0xFF && data[1] === 0xD8;
-                };
-
-                const isPNG = (data) => {
-                    // Check magic numbers for PNG format
-                    return (
-                        data[0] === 0x89 &&
-                        data[1] === 0x50 &&
-                        data[2] === 0x4E &&
-                        data[3] === 0x47 &&
-                        data[4] === 0x0D &&
-                        data[5] === 0x0A &&
-                        data[6] === 0x1A &&
-                        data[7] === 0x0A
-                    );
-                };
-
-                const isGIF = (data) => {
-                    // Check magic numbers for GIF format
-                    return (
-                        data[0] === 0x47 &&
-                        data[1] === 0x49 &&
-                        data[2] === 0x46 &&
-                        data[3] === 0x38
-                    );
-                };*/
-
 
                 /* console.log('imageData0000', imageData);
                  const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
@@ -248,9 +200,8 @@ export function Stream2({ ip }) {
 
     useEffect(() => {
         if(onOpen){
-            let accumulatedData = new Uint8Array();
             ws2.current.onmessage = async (event) => {
-                /*const imageData = event.data;
+                const imageData = event.data;
                 const canvas = document.getElementById('canvas2');
                 const ctx = canvas.getContext('2d');
                 const imgWidth = 540;
@@ -258,11 +209,10 @@ export function Stream2({ ip }) {
                 try {
                     const blob = new Blob([imageData]);
                     const imageBitmap = await createImageBitmap(blob);
-                    console.log('imageBitmap1111', imageBitmap);
                     ctx.drawImage(imageBitmap, 0, 0, imgWidth, imgHeight);
                 } catch (error) {
                     console.error('Error decoding image:', error);
-                }*/
+                }
 
                 /*console.log('imageData111111', imageData);
                 const imageBitmap = createImageBitmap(new Blob([imageData]), 0, 0, imgWidth, imgHeight);
@@ -270,59 +220,6 @@ export function Stream2({ ip }) {
                 imageBitmap.then((bitmap) => {
                     ctx.drawImage(bitmap, 0, 0, imgWidth, imgHeight);
                 });*/
-
-                try {
-                const newChunk = new Uint8Array(event.data);
-                accumulatedData = new Uint8Array([...accumulatedData, newChunk]);
-                const blob = new Blob([event.data]);
-                console.log('blob ', blob);
-
-                const isJPEG = (data) => {
-                    return data[0] === 0xFF && data[1] === 0xD8;
-                };
-
-                const isPNG = (data) => {
-                    return (
-                        data[0] === 0x89 &&
-                        data[1] === 0x50 &&
-                        data[2] === 0x4E &&
-                        data[3] === 0x47 &&
-                        data[4] === 0x0D &&
-                        data[5] === 0x0A &&
-                        data[6] === 0x1A &&
-                        data[7] === 0x0A
-                    );
-                };
-
-                const isGIF = (data) => {
-                    return (
-                        data[0] === 0x47 &&
-                        data[1] === 0x49 &&
-                        data[2] === 0x46 &&
-                        data[3] === 0x38
-                    );
-                };
-                console.log('1231231', accumulatedData.length);
-                if (accumulatedData.length >= 64) {
-                    console.log('accumulatedData64--blob ', new Blob(accumulatedData));
-                    console.log('accumulatedData64-- ', accumulatedData);
-                    if (isJPEG(accumulatedData)) {
-                        console.log('Image is in JPEG format');
-                    } else if (isPNG(accumulatedData)) {
-                        console.log('Image is in PNG format');
-                    } else if (isGIF(accumulatedData)) {
-                        console.log('Image is in GIF format');
-                    } else {
-                        console.log('Unsupported image format');
-                    }
-
-                    // Clear accumulated data after format detection
-                    accumulatedData = new Uint8Array();
-                }
-
-                } catch (e) {
-                    console.log('canva1 err ',e.message);
-                }
             };
         }else {
             if (!!ws2.current?.onmessage) ws2.current.onmessage = null;
