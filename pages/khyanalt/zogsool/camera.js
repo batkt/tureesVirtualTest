@@ -392,7 +392,17 @@ function camera({ token }) {
   // console.log('---------', uilchluulegchGaralt);
 
   useKeyboardTovchlol("F5", f5Darsan);
+  useKeyboardTovchlol("F3", f3Darsan);
+  useKeyboardTovchlol("F4", f4Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
+
+  function f3Darsan() {
+    khaalgaNeey(camerVal[0]);
+  }
+
+  function f4Darsan() {
+    khaalgaNeey(camerVal[1]);
+  }
 
   function f5Darsan() {
     const data = uilchluulegchGaralt?.jagsaalt?.[0];
@@ -1098,7 +1108,7 @@ function camera({ token }) {
                     }}
                     className='w-full sm:w-auto'
                     type='primary'>
-                    Нээх
+                    Нээх6666
                   </Button>
                   {/*<Button
                     onClick={(e) => {

@@ -26,7 +26,6 @@ function EBarimt({
   barimtKhevlekhEsekh,
   setBarimtKhevlekhEsekh,
 }) {
-  
   function registerShalgaya(register) {
     setRegister(register);
     setBaiguullaga(null);
@@ -38,11 +37,11 @@ function EBarimt({
 
   if (alkham === 2)
     return (
-      <div className={`p-3 flex flex-row`}>
-        <div className="p-2 w-full">
-          <div className="flex flex-row border-b-2 border-dashed py-2">
+      <div className={`flex flex-row p-3`}>
+        <div className='w-full p-2'>
+          <div className='flex flex-row border-b-2 border-dashed py-2'>
             <div>{t("Баримт хэвлэх эсэх")}</div>
-            <div className="ml-auto">
+            <div className='ml-auto'>
               <Switch
                 checked={barimtKhevlekhEsekh}
                 onChange={setBarimtKhevlekhEsekh}
@@ -50,9 +49,9 @@ function EBarimt({
             </div>
           </div>
           {barimtKhevlekhEsekh && !irgenEsekh && (
-            <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div className='flex flex-row border-b-2 border-dashed py-2'>
               <div>{t("ААН эсэх")}</div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Switch
                   checked={baiguullagaEsekh}
                   onChange={setBaiguullagaEsekh}
@@ -61,20 +60,20 @@ function EBarimt({
             </div>
           )}
           {barimtKhevlekhEsekh && !baiguullagaEsekh && (
-            <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div className='flex flex-row border-b-2 border-dashed py-2'>
               <div>{t("Иргэнд эсэх")}</div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
               </div>
             </div>
           )}
           {baiguullagaEsekh && (
-            <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div className='flex flex-row border-b-2 border-dashed py-2'>
               <div>{t("ААН регистр")}</div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <InputNumber
-                  autoComplete="off"
-                  size="small"
+                  autoComplete='off'
+                  size='small'
                   maxLength={7}
                   minLength={7}
                   onChange={registerShalgaya}
@@ -84,12 +83,12 @@ function EBarimt({
             </div>
           )}
           {irgenEsekh && (
-            <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div className='flex flex-row border-b-2 border-dashed py-2'>
               <div>{t("Иргэний регистр")}</div>
-              <div className="ml-auto">
+              <div className='ml-auto'>
                 <Input
-                  autoComplete="off"
-                  size="small"
+                  autoComplete='off'
+                  size='small'
                   maxLength={10}
                   minLength={10}
                   onChange={({ target }) => registerShalgaya(target.value)}
@@ -99,14 +98,14 @@ function EBarimt({
             </div>
           )}
           {baiguullagiinMedeelel?.name && (
-            <div className="flex flex-row border-b-2 border-dashed py-2">
+            <div className='flex flex-row border-b-2 border-dashed py-2'>
               <div>{t("ААН нэр")}</div>
-              <div className="ml-auto text-lg font-medium">
+              <div className='ml-auto text-lg font-medium'>
                 {baiguullagiinMedeelel?.name}
               </div>
             </div>
           )}
-        </div>        
+        </div>
       </div>
     );
   return <div></div>;
