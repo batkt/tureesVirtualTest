@@ -59,6 +59,204 @@ import { useQRCode } from "next-qrcode";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 
+const DelegrenguiKharakh = React.forwardRef(
+  ({ data, destroy, confirm }, ref) => {
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        khaaya() {
+          destroy();
+        },
+      }),
+      []
+    );
+
+    const tulburiinMedeelel = useMemo(() => {
+      var ugugdul = [];
+      var niitDun = data?.reduce((a, b) => a + b.niitDun, 0) || 0;
+
+      data?.forEach((element) => {
+        switch (element?._id) {
+          case "khariltsakh":
+            ugugdul.push({
+              ner: "Харилцах",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "belen":
+            ugugdul.push({
+              ner: "Бэлэн",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "khunglukh":
+            ugugdul.push({
+              ner: "Хөнгөлөх",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "khaan":
+            ugugdul.push({
+              ner: "Хаан банк",
+              icon: "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "tdb":
+            ugugdul.push({
+              ner: "TDB банк",
+              icon: "https://tz.mn/storage/uploads/slider/45adc5a14070aa.jpg",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "khas":
+            ugugdul.push({
+              ner: "Xac банк",
+              icon: "https://cdn6.aptoide.com/imgs/0/6/d/06df97a06fbc7622a775a7c414b69e87_icon.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "golomt":
+            ugugdul.push({
+              ner: "Голомт банк",
+              icon: "https://play-lh.googleusercontent.com/9tUBesUsI4UIkpgO1MPIMLFvhDa_4vZE75TrVAUHFA7a0bJ7IIgeyh2r1QXs9VlmXmkX",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "kapitron":
+            ugugdul.push({
+              ner: "Капитрон банк",
+              icon: "https://play-lh.googleusercontent.com/1PMmu0x2x_07XdPtLyTRe_4cffXDLFCG3xEoUTqUpy3eSJeB-C81dbyzZSnJjW907OA=w240-h480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "tur":
+            ugugdul.push({
+              ner: "Төрийн банк",
+              icon: "https://play-lh.googleusercontent.com/KYQyVTgP4ZV60gxNOsKYssScNe17NMgHpO_nRY4WRBYj_4YTZ0e8t6zwh38sTFmyCco",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "qpay":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://qpay.mn/q/img/q.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "monpay":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://play-lh.googleusercontent.com/GofyFzRM2Kwf3d47fl6FibZB7kE16Aljaodzc-ghiJmdiPpGljaqeop2T6JaURd8rw=s480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "socialpay":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://play-lh.googleusercontent.com/Jg_jjsNezlkTuxWT5ADzfqhjwHVvqZEDqQGbXJlkplNrYPyyMGXtmLA6dGrH37_paOY=w240-h480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "pocket":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "lend":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://play-lh.googleusercontent.com/VEPdS1mrQMl-tmGa86GLKXiYt1WJFSSGrKeW83liDogKSTE5P0p0bei8i_QwatQhI0k=w240-h480-rw",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+
+          default:
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+        }
+      });
+
+      return ugugdul;
+    }, [data]);
+
+    useEffect(() => {
+      function keyUp(e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          destroy();
+        }
+      }
+      document.addEventListener("keyup", keyUp);
+      return () => document.removeEventListener("keyup", keyUp);
+    }, []);
+
+    return tulburiinMedeelel.length > 0 ? (
+      <div>
+        {tulburiinMedeelel.map((a, i) => {
+          console.log(String(Math.round(a.khuvi)));
+          return (
+            <div
+              className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
+              key={i}
+            >
+              <div
+                style={{ width: `${String(Math.round(a.khuvi))}%` }}
+                className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 `}
+              >
+                <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 " />
+              </div>
+              <img
+                src={a.icon}
+                className="z-10 ml-2 h-12 overflow-hidden rounded-md"
+              />
+              <div className="z-10 flex w-full justify-between px-3 text-lg font-semibold">
+                {a.ner}:
+                <div className="flex font-normal">
+                  <div className="mr-2 border-r px-2">
+                    {formatNumber(a.dun) || 0}₮
+                  </div>{" "}
+                  {a.khuvi || 0}%
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    ) : (
+      <div className="flex h-52 w-full items-center justify-center">
+        <div className="text-lg font-semibold text-black text-opacity-30">
+          Орлогын мэдээлэл байхгүй байна.
+        </div>
+      </div>
+    );
+  }
+);
+
 const QrCodeAvakh = React.forwardRef(
   ({ destroy, duusakhTsag, ekhlekhTsag }, ref) => {
     const khevlekhRef = useRef(null);
@@ -439,6 +637,7 @@ function togloom1() {
   const togloomiinDun = useToololt("/togloomiinDunAvya", token, ognoo);
   const { order, onChangeTable } = useOrder({ createdAt: -1 });
   const [khaaltPopoverNeegdsen, setKhaaltPopoverNeegdsen] = useState(false);
+  const delegrenhuiRef = React.useRef(null);
 
   function khaaltNeey(id) {
     togloomUilchilgee()
@@ -1135,6 +1334,29 @@ function togloom1() {
     onRefresh,
   ]);
 
+  function orlogiinDelegrengui(data) {
+    const footer = [
+      <div>
+        <Button type="primary" onClick={() => delegrenhuiRef.current.khaaya()}>
+          Хаах
+        </Button>
+      </div>,
+    ];
+    modal({
+      title: (
+        <div className="flex w-full justify-between">
+          Орлогын дэлгэрэнгүй
+          <div>
+            /{moment(ognoo[0]).format("YYYY-MM-DD")}/ - /
+            {moment(ognoo[1]).format("YYYY-MM-DD")}/
+          </div>
+        </div>
+      ),
+      content: <DelegrenguiKharakh data={data} ref={delegrenhuiRef} />,
+      footer,
+    });
+  }
+
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -1212,7 +1434,7 @@ function togloom1() {
       <Card className="col-span-12">
         <div className="grid gap-2 sm:grid-cols-2 sm:gap-5 xl:flex">
           <div
-            className="w-full gap-3 xl:flex"
+            className="w-full items-center gap-3 xl:flex"
             data-aos="fade-right"
             data-aos-duration="1000"
             data-aos-delay="100"
@@ -1220,17 +1442,23 @@ function togloom1() {
             <DatePicker.RangePicker
               inputReadOnly
               className="w-full md:w-auto"
-              size="middle"
+              size="large"
               allowClear={false}
               value={ognoo}
               onChange={setOgnoo}
             />
-            <div className="flex flex-row space-x-2 p-1  text-lg font-medium">
+            <div
+              onClick={() => orlogiinDelegrengui(togloomiinDun?.toololt)}
+              className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
+            >
               {t("Тоглоомын орлого")} :{" "}
               {!!togloomiinDun?.toololt
-                ? formatNumber(togloomiinDun?.toololt[0]?.dun)
+                ? formatNumber(
+                    togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)
+                  )
                 : 0}
               ₮
+              <EyeOutlined className="opacity-30 transition-opacity group-hover:opacity-100" />
             </div>
           </div>
 
@@ -1415,6 +1643,7 @@ function togloom1() {
                                   ?.khuudasniiKhemjee || 0) +
                                 index +
                                 1,
+                              __style__: { h: "center", width: "3rem" },
                             },
                             {
                               title: t("Овог"),
@@ -1437,17 +1666,20 @@ function togloom1() {
                               dataIndex: "nas",
                               ellipsis: true,
                               align: "center",
+                              __style__: { h: "center" },
                             },
                             {
                               title: t("Хүүхдийн тоо"),
                               dataIndex: "khuukhdiinToo",
                               ellipsis: true,
                               align: "center",
+                              __style__: { h: "center" },
                             },
                             {
                               title: t("Хүйс"),
                               dataIndex: "khuis",
                               ellipsis: true,
+                              __style__: { h: "center" },
                               align: "center",
                               render: (a) => (
                                 <div>{a === 1 ? "Эрэгтэй" : "Эмэгтэй"}</div>
@@ -1458,16 +1690,19 @@ function togloom1() {
                               dataIndex: "utas",
                               ellipsis: true,
                               align: "center",
+                              __style__: { h: "center" },
                             },
                             {
                               title: t("Хугацаа /мин/"),
                               dataIndex: "khugatsaa",
+                              __style__: { h: "center" },
                               ellipsis: true,
                               align: "center",
                             },
                             {
                               title: t("Эхлэх цаг"),
                               dataIndex: "ekhlekhTsag",
+                              __style__: { h: "center" },
                               ellipsis: true,
                               render: (data) => {
                                 return moment(data).format("YYYY-MM-DD HH:mm");
@@ -1477,10 +1712,12 @@ function togloom1() {
                               title: t("Сунгасан/мин/"),
                               dataIndex: "sungsanMinut",
                               render: (data) => (!!data ? data : 0),
+                              __style__: { h: "center" },
                             },
                             {
                               title: t("Дуусах цаг"),
                               dataIndex: "duusakhTsag",
+                              __style__: { h: "center" },
                               ellipsis: true,
 
                               render: (data) => {
@@ -1491,6 +1728,7 @@ function togloom1() {
                               title: t("нийт дүн"),
                               dataIndex: "niitDun",
                               ellipsis: true,
+                              __style__: { h: "right" },
                               render: (data) => {
                                 return formatNumber(data, 0);
                               },
@@ -1498,6 +1736,7 @@ function togloom1() {
                             {
                               title: t("Хөнгөлсөн дүн"),
                               dataIndex: "khungulsunDun",
+                              __style__: { h: "right" },
                               ellipsis: true,
                               render: (data) => {
                                 return formatNumber(data, 0);

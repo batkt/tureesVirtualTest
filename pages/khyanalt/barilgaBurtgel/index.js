@@ -20,12 +20,12 @@ import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-import { GoPrimitiveDot } from "react-icons/go";
+import { GoDotFill } from "react-icons/go";
 import formatNumber from "tools/function/formatNumber";
 import local from "antd/lib/date-picker/locale/mn_MN";
 import { useTranslation } from "react-i18next";
 function BarilgaBurtgel({ token }) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const { baiguullaga, barilgiinId } = useAuth();
   const [ognoo, setOgnoo] = useState(new Date());
   const [nariivchlal, setNariivchlal] = useState("day");
@@ -112,8 +112,8 @@ function BarilgaBurtgel({ token }) {
         too:
           0 ||
           barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0) +
-          "/" +
-          0 ||
+            "/" +
+            0 ||
           barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too,
         icon: (
           <svg
@@ -135,7 +135,7 @@ function BarilgaBurtgel({ token }) {
         khuvi: (
           (100 * 0 ||
             barilgaToololt?.data?.khariu?.find((a) => a._id === true)?.too) /
-          0 || barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
+            0 || barilgaToololt?.data?.khariu?.reduce((a, b) => a + b.too, 0)
         )?.toFixed(0),
         utga: "Түрээслэгч",
       },
@@ -289,8 +289,9 @@ function BarilgaBurtgel({ token }) {
                         {mur.icon}
                         <div className="ml-auto">
                           <div
-                            className={`report-box__indicator ${mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
-                              } tooltip cursor-pointer `}
+                            className={`report-box__indicator ${
+                              mur.khuvi > 0 ? "bg-theme-9" : "bg-theme-6"
+                            } tooltip cursor-pointer `}
                           >
                             {" "}
                             {mur.khuvi}%{" "}
@@ -419,7 +420,7 @@ function BarilgaBurtgel({ token }) {
                             return dataLabel;
                           },
                         },
-                      }
+                      },
                     }}
                     scales={{
                       xAxes: [
@@ -498,7 +499,7 @@ function BarilgaBurtgel({ token }) {
                       (a, index) => (
                         <div className="flex items-center space-x-2">
                           <div key={index}>
-                            <GoPrimitiveDot
+                            <GoDotFill
                               style={{
                                 color:
                                   avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
@@ -554,13 +555,13 @@ function BarilgaBurtgel({ token }) {
                       (a, index) => (
                         <div className="flex items-center space-x-2">
                           <div key={index}>
-                            <GoPrimitiveDot
-                            style={{
-                              color:
-                                avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
-                                  (a, i) => i === index
-                                ),
-                            }}
+                            <GoDotFill
+                              style={{
+                                color:
+                                  avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
+                                    (a, i) => i === index
+                                  ),
+                              }}
                             />
                           </div>
                           <div>{a}</div>
@@ -613,7 +614,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoPrimitiveDot className="text-2xl text-green-500 " />
+                  <GoDotFill className="text-2xl text-green-500 " />
                 </div>
                 <div>{t("Дууссан ажил")}</div>
               </div>
@@ -622,7 +623,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoPrimitiveDot className="text-2xl text-yellow-500 " />
+                  <GoDotFill className="text-2xl text-yellow-500 " />
                 </div>
                 <div>{t("Идэвхтэй ажил")}</div>
               </div>
@@ -631,7 +632,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoPrimitiveDot className="text-2xl text-red-500 " />
+                  <GoDotFill className="text-2xl text-red-500 " />
                 </div>
                 <div>{t("Цуцлагдсан")}</div>
               </div>
@@ -693,7 +694,10 @@ function BarilgaBurtgel({ token }) {
                         }
                       >
                         <EditOutlined className="text-xl text-green-400" />
-                        <label className="hover:text-black"> {t("Засах")}</label>
+                        <label className="hover:text-black">
+                          {" "}
+                          {t("Засах")}
+                        </label>
                       </a>
                     </div>
                   )}
