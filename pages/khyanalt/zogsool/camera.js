@@ -1108,7 +1108,7 @@ function camera({ token }) {
                     }}
                     className='w-full sm:w-auto'
                     type='primary'>
-                    Нээх6666
+                    Нээх
                   </Button>
                   {/*<Button
                     onClick={(e) => {
