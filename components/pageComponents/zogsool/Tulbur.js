@@ -242,6 +242,7 @@ function Tulbur(
     setLoading(true);
     const dun = tulbur.find((a) => a.turul === "khaan")?.dun;
     if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && dun > 0) {
+      setTerminal(true);
       axios
         .post(
           "http://127.0.0.1:27028",
@@ -269,12 +270,13 @@ function Tulbur(
             setLoading(false);
           }
           setSongogdsonBank(null);
+          setTerminal(false);
         })
         .catch((e) => {
           // aldaaBarigch(e);
+          setTerminal(false);
           setLoading(false);
         });
-      setTerminal(true);
     } else if (tuluv === 3 && songogdTulburiinKhelber?.ner === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
         ? guilgeeniiTuukhKhadgalya(tulbur, true)
@@ -570,6 +572,7 @@ function Tulbur(
           token={token}
           tulbur={tulbur}
           data={data}
+          batalgaajuulaltKhiiya={batalgaajuulaltKhiiya}
           songogdsonBusadTurul={songogdsonBusadTurul}
           setSongogdsonBusadTurul={setSongogdsonBusadTurul}
           songogdsonBank={songogdsonBank}
@@ -587,6 +590,8 @@ function Tulbur(
           ajiltan={ajiltan}
           khungulukhEsekh={khungulukhEsekh}
           setKhungulukhEsekh={setKhungulukhEsekh}
+          setLoading={setLoading}
+          setTerminal={setTerminal}
         />
         {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
           <div className='col-span-3 flex w-full items-center justify-center'>
