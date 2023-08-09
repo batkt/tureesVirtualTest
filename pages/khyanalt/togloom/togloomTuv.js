@@ -240,7 +240,7 @@ const DelegrenguiKharakh = React.forwardRef(
                   <div className="mr-2 border-r px-2">
                     {formatNumber(a.dun) || 0}₮
                   </div>{" "}
-                  {a.khuvi || 0}%
+                  {Math.round(a.khuvi) || 0}%
                 </div>
               </div>
             </div>
