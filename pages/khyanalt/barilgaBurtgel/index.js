@@ -4,7 +4,15 @@ import { useMemo, useEffect, useState } from "react";
 import { aldaaBarigch, url } from "services/uilchilgee";
 import { useAuth } from "services/auth";
 import { Button, Popover, Calendar, Select, DatePicker } from "antd";
-import { PlusOutlined, MoreOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  MoreOutlined,
+  EditOutlined,
+  PieChartFilled,
+  CheckCircleFilled,
+  ClockCircleFilled,
+  CloseCircleFilled,
+} from "@ant-design/icons";
 import _ from "lodash";
 import router from "next/router";
 import CardList from "components/cardList";
@@ -20,7 +28,6 @@ import useAvlagiinChartSalbaraar from "hooks/tailan/useAvlagiinChartSalbaraar";
 import useOrlogiinChartSalbaraarAvya from "hooks/tailan/useOrlogiinChartSalbaraarAvya";
 import useLineChart from "hooks/tailan/useLineChart";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-import { GoDotFill } from "react-icons/go";
 import formatNumber from "tools/function/formatNumber";
 import local from "antd/lib/date-picker/locale/mn_MN";
 import { useTranslation } from "react-i18next";
@@ -499,7 +506,7 @@ function BarilgaBurtgel({ token }) {
                       (a, index) => (
                         <div className="flex items-center space-x-2">
                           <div key={index}>
-                            <GoDotFill
+                            <PieChartFilled
                               style={{
                                 color:
                                   avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
@@ -555,7 +562,7 @@ function BarilgaBurtgel({ token }) {
                       (a, index) => (
                         <div className="flex items-center space-x-2">
                           <div key={index}>
-                            <GoDotFill
+                            <PieChartFilled
                               style={{
                                 color:
                                   avlagiinChartSalbaraarAvya?.data?.backgroundColor.find(
@@ -614,7 +621,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoDotFill className="text-2xl text-green-500 " />
+                  <CheckCircleFilled className="text-lg text-green-500 " />
                 </div>
                 <div>{t("Дууссан ажил")}</div>
               </div>
@@ -623,7 +630,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoDotFill className="text-2xl text-yellow-500 " />
+                  <ClockCircleFilled className="text-lg text-yellow-500 " />
                 </div>
                 <div>{t("Идэвхтэй ажил")}</div>
               </div>
@@ -632,7 +639,7 @@ function BarilgaBurtgel({ token }) {
             <div className="flex w-full items-center justify-between space-x-3">
               <div className=" flex items-center space-x-2">
                 <div className="flex items-center">
-                  <GoDotFill className="text-2xl text-red-500 " />
+                  <CloseCircleFilled className="text-lg text-red-500 " />
                 </div>
                 <div>{t("Цуцлагдсан")}</div>
               </div>
