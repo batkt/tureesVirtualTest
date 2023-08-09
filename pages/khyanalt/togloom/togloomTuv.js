@@ -216,9 +216,8 @@ const DelegrenguiKharakh = React.forwardRef(
     }, []);
 
     return tulburiinMedeelel.length > 0 ? (
-      <div>
+      <div className="space-y-3">
         {tulburiinMedeelel.map((a, i) => {
-          console.log(String(Math.round(a.khuvi)));
           return (
             <div
               className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
@@ -232,15 +231,15 @@ const DelegrenguiKharakh = React.forwardRef(
               </div>
               <img
                 src={a.icon}
-                className="z-10 ml-2 h-12 overflow-hidden rounded-md"
+                className="z-10 mx-2 h-12 w-12 overflow-hidden rounded-md"
               />
-              <div className="z-10 flex w-full justify-between px-3 text-lg font-semibold">
+              <div className="z-10 flex w-full justify-between text-lg font-semibold">
                 {a.ner}:
                 <div className="flex font-normal">
-                  <div className="mr-2 border-r px-2">
-                    {formatNumber(a.dun) || 0}₮
-                  </div>{" "}
-                  {Math.round(a.khuvi) || 0}%
+                  {formatNumber(a.dun) || 0}₮
+                  <div className="ml-3 flex w-12 items-center justify-center border-l border-green-600 pl-2 text-center">
+                    {Math.round(a.khuvi) || 0}%
+                  </div>
                 </div>
               </div>
             </div>
