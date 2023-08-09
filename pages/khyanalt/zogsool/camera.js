@@ -61,7 +61,6 @@ import useSWR from "swr";
 import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
-import ReactPlayer from 'react-player'
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import Stream1, {Stream2} from "./stream";
 
@@ -1126,14 +1125,12 @@ function camera({ token }) {
                         : "sm:h-[250px]"
                 }`}
                 >
-                <Stream2 ip={camerVal[1]}/>
                 {
                   baiguullaga?._id === '63c0f31efe522048bf02086d' ?
                       <Stream2 ip={camerVal[1]}/>
                       :
                       ''
                 }
-                {console.log('12312', camerVal)}
               </div>
               {cameraKharakh === 2 && (
                 <div className='absolute right-5 top-5 text-3xl text-white'>
