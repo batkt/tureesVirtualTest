@@ -1032,15 +1032,9 @@ function camera({ token }) {
   };
 
   const modalKhaakh = () => {
-    if (!!value) {
-      Modal.confirm({
-        content: t("Та хадгалахгүй гарахдаа итгэлтэй байна уу?"),
-        okText: t("Тийм"),
-        cancelText: t("Үгүй"),
-        onOk: () => setModalOpen({ bool: false, item: null, type: "" }),
-      });
-    } else setModalOpen({ bool: false, item: null, type: "" });
     form.resetFields();
+    setValue();
+    setModalOpen({ bool: false, item: null, type: "" });
   };
   const excel = new Excel();
   // console.log('0-0--0', baiguullaga);
