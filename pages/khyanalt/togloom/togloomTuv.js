@@ -231,7 +231,7 @@ const DelegrenguiKharakh = React.forwardRef(
               </div>
               <img
                 src={a.icon}
-                className="z-10 mx-2 h-12 w-12 overflow-hidden rounded-md"
+                className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
               />
               <div className="z-10 flex w-full justify-between text-lg font-semibold">
                 {a.ner}:
