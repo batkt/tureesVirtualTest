@@ -102,7 +102,9 @@ function Zogsool({ token }) {
   ]);
   const [zogsoolId, setZogsoolId] = useState(undefined);
   const [orlogo, setOrlogo] = useState([]);
-  const [tulbur, setTulbur] = useState("");
+  const [tulbur, setTulbur] = useState(null);
+  const [tuluv, setTuluv] = useState("");
+
   const [shuult, setShuult] = useState("");
 
   const { uilchiluulegchToololt, uilchiluulegchToololtMutate } =
@@ -111,7 +113,6 @@ function Zogsool({ token }) {
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
   });
-  console.log(shuult);
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
@@ -119,7 +120,7 @@ function Zogsool({ token }) {
   }, [baiguullaga?._id]);
   const query = useMemo(() => {
     const aa = !!shuult?.query ? shuult.query : {};
-    return {
+    const baseQuery = {
       createdAt: {
         $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
@@ -127,7 +128,17 @@ function Zogsool({ token }) {
       ...aa,
       "tuukh.zogsooliinId": zogsoolId,
     };
-  }, [ognoo, zogsoolId, shuult]);
+
+    if (tuluv !== "") {
+      if (tuluv === "-2") {
+        baseQuery["tuukh.tuluv"] = { $in: [-2, 0] };
+      } else if (tuluv === "1") {
+        baseQuery["tuukh.tuluv"] = 1;
+      }
+    }
+
+    return baseQuery;
+  }, [ognoo, zogsoolId, shuult, tuluv]);
   const {
     uilchluulegchGaralt,
     setUilchluulegchKhuudaslalt,
@@ -415,6 +426,52 @@ function Zogsool({ token }) {
             );
           } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
           return r && <div>{r}</div>;
+        },
+      },
+      {
+        title: (
+          <Popover
+            placement='bottom'
+            content={
+              <div className='space-y-2'>
+                <div
+                  onClick={() => setTuluv("")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  {t("Бүгд")}
+                </div>
+                <div
+                  onClick={() => setTuluv("1")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  {t("Төлсөн")}
+                </div>
+                <div
+                  onClick={() => setTuluv("-2")}
+                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  {t("Төлөөгүй")}
+                </div>
+              </div>
+            }>
+            <div
+              className={`flex cursor-pointer items-center justify-center gap-3`}>
+              <FilterOutlined className='text-lg text-green-600' />
+              Төлөв
+            </div>
+          </Popover>
+        ),
+        align: "center",
+        width: "10rem",
+        showSorterTooltip: false,
+        dataIndex: "tuukh",
+        render(v) {
+          return (
+            <div>
+              {v[0].tuluv === 1
+                ? "Төлсөн"
+                : v[0].tuluv === -2 || v[0].tuluv === 0
+                ? "Төлөөгүй"
+                : ""}
+            </div>
+          );
         },
       },
       {
