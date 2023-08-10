@@ -23,7 +23,6 @@ function StackStream() {
                 ws.onopen = () => {
                     console.log(`WebSocket kholbolt amjilttai ${index + 1}`);
                 };
-
                 ws.onclose = () => {
                     console.log(`WebSocket kholbolt amjiltgui bolloo ${index + 1} `);
                 };
@@ -46,7 +45,7 @@ function StackStream() {
             wsRefs.current.forEach((ws, index) => {
                 ws.onmessage = async (event) => {
                     const imageData = event.data;
-                    const canvas = document.getElementById(`canvas2${index}`);
+                    const canvas = document.getElementById(`canvas${index}`);
                     const ctx = canvas.getContext('2d');
                     const imgWidth = 600;
                     const imgHeight = 400;

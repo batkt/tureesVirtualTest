@@ -3,9 +3,6 @@ import {
     LoadingOutlined,
 } from "@ant-design/icons";
 
-// ws://192.168.1.55:9080/ws.flv?token=b6aafed0-35b1-7a98-97b5-e7a797fe9b4a&channel=1
-// ws://192.168.1.57:9080/ws.flv?token=d8142256-e92f-57fe-60e4-2aa83de7832c&channel=1
-// ws://192.168.1.54:9080/ws.flv?token=db1f2387-766d-29b5-41d2-43dbea5bd7fc&channel=1
 
 function Stream1({ ip }) {
     const ws = useRef(null);
