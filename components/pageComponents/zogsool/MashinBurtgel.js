@@ -24,7 +24,7 @@ function MashinBurtgel(
       khadgalya() {
         const data = form.getFieldsValue();
         data.barilgiinId = barilgiinId;
-        if(!!geree){
+        if (!!geree) {
           data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
           data.gereeniiDugaar = geree?.gereeniiDugaar;
         }
@@ -121,7 +121,7 @@ function MashinBurtgel(
           onChange={() => form.getFieldInstance("ezemshigchiinUtas").focus()}
           placeholder={t("Төрөл")}
         >
-          {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
+          {["Гэрээт", "Түрээслэгч", "Дотоод", "Үнэгүй"].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
