@@ -50,9 +50,9 @@ function StackStream({ tuluv }) {
             wsRefs.current.forEach((ws, index) => {
                 ws.onmessage = async (event) => {
                     const imageData = event.data;
-                    const canvas = document.getElementById(`canvas${index}`);
+                    const canvas = document.getElementById(`stack${index}`);
                     const ctx = canvas.getContext('2d');
-                    console.log('0-0-',index,' - ', canvas, ' ws ', ws);
+                    // console.log('0-0-',index,' - ', canvas, ' ws ', ws);
                     const imgWidth = 600;
                     const imgHeight = 400;
                     try {
@@ -79,16 +79,16 @@ function StackStream({ tuluv }) {
     return (
         <div className='grid xl:grid-cols-1 2xl:grid-cols-2'>
             <div className='border'>
-                <canvas id="canvas0" width="600" height="400" />
+                <canvas id="stack0" width="600" height="400" />
             </div>
             <div className='border'>
-                <canvas id="canvas1" width="600" height="400" />
+                <canvas id="stack1" width="600" height="400" />
             </div>
             <div className='border'>
-                <canvas id="canvas2" width="600" height="400" />
+                <canvas id="stack2" width="600" height="400" />
             </div>
             <div className='border'>
-                <canvas id="canvas3" width="600" height="400" />
+                <canvas id="stack3" width="600" height="400" />
             </div>
         </div>
     );
