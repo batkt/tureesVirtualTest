@@ -210,6 +210,7 @@ function camera({ token }) {
   const [khelber, setKhelber] = useState("");
   const [dun, setDun] = useState(null);
   const [idevkhtei, setIdevkhtei] = useState(0);
+  const [refresh, setRefresh] = useState(true);
   const [form] = Form.useForm();
 
   const que = useMemo(() => {
@@ -266,20 +267,22 @@ function camera({ token }) {
   }, [jagsaalt]);
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
-      var uilchluulegch = JSON.parse(zogsool);
-      console.log(uilchluulegch);
-      if (!!uilchluulegch) {
-        if (uilchluulegchGaralt) {
-          uilchluulegchGaralt.jagsaalt = uilchluulegchGaralt?.jagsaalt?.filter(
-            (a) => a.mashiniiDugaar !== uilchluulegch.mashiniiDugaar
-          );
-          uilchluulegchGaralt.jagsaalt.unshift(uilchluulegch);
-        }
-        console.log(
-          "uilchluulegchGaralt?.jagsaalt",
-          uilchluulegchGaralt?.jagsaalt
-        );
-      }
+      onRefresh();
+      // var uilchluulegch = JSON.parse(zogsool);
+      // console.log(uilchluulegch);
+      // if (!!uilchluulegch) {
+      //   if (uilchluulegchGaralt) {
+      //     uilchluulegchGaralt.jagsaalt = uilchluulegchGaralt?.jagsaalt?.filter(
+      //       (a) => a.mashiniiDugaar !== uilchluulegch.mashiniiDugaar
+      //     );
+      //     uilchluulegchGaralt.jagsaalt.unshift(uilchluulegch);
+      //     setRefresh(!refresh);
+      //   }
+      //   console.log(
+      //     "uilchluulegchGaralt?.jagsaalt",
+      //     uilchluulegchGaralt?.jagsaalt
+      //   );
+      // }
     });
     return () => {
       socket().off(`zogsool`);
@@ -1240,6 +1243,11 @@ function camera({ token }) {
                   value={ognoo}
                   onChange={setOgnoo}
                 />
+                <div
+                  className={`h-3 w-1 bg-slate-100 ${
+                    refresh ? "rotate-90" : "rotate-0"
+                  }`}
+                ></div>
               </div>
               <div
                 className="mb-5 flex w-full justify-between sm:justify-end md:mb-0 md:ml-auto lg:w-auto"
