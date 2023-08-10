@@ -268,7 +268,8 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       onRefresh();
-      // var uilchluulegch = JSON.parse(zogsool);
+      var uilchluulegch = JSON.parse(zogsool);
+      console.log(uilchluulegch?.mashiniiDugaar, "mashin");
       // console.log(uilchluulegch);
       // if (!!uilchluulegch) {
       //   if (uilchluulegchGaralt) {
