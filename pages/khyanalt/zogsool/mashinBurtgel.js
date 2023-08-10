@@ -39,12 +39,145 @@ function mashinBurtgel({ token }) {
     return { turul };
   }, [turul]);
 
+  // const [shineCol, setShineCol] = useState(() => {
+  //   if (turul?.name === "Гэрээт") {
+  //     return [
+  //       {
+  //         title: t("Хугацаа"),
+  //         dataIndex: "createdAt",
+  //         ellipsis: true,
+  //         align: "center",
+  //         render(date) {
+  //           return "";
+  //         },
+  //         showSorterTooltip: false,
+  //       },
+  //     ];
+  //   } else {
+  //     return [];
+  //   }
+  // });
+
   const { mashinToololt, mashinToololtMutate } = useMashinToololt(token);
 
-  const { order, onChangeTable } = useOrder({});
+  const { order, onChangeTable } = useOrder({
+    createdAt: -1,
+  });
 
   const { mashinGaralt, setMashinKhuudaslalt, mashinMutate, isValidating } =
     useMashin(token, baiguullaga?._id, query, order);
+
+  const columns = useMemo(() => {
+    const shinecol =
+      turul === "Гэрээт"
+        ? [
+            {
+              title: t("Хугацаа"),
+              align: "center",
+              dataIndex: "hugatsaa",
+              width: "7rem",
+            },
+          ]
+        : [];
+    return [
+      {
+        title: "№",
+        align: "center",
+        dataIndex: "dugaar",
+        width: "2rem",
+        render: (text, record, index) =>
+          (mashinGaralt?.khuudasniiDugaar || 0) *
+            (mashinGaralt?.khuudasniiKhemjee || 0) -
+          (mashinGaralt?.khuudasniiKhemjee || 0) +
+          index +
+          1,
+      },
+      {
+        title: t("Бүртгэсэн"),
+        dataIndex: "createdAt",
+        ellipsis: true,
+        align: "center",
+        render(date) {
+          return moment(date).format("YYYY-MM-DD HH:mm");
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Нэр"),
+        align: "left",
+        dataIndex: "ezemshigchiinNer",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Тайлбар"),
+        width: "8rem",
+        align: "center",
+        dataIndex: "tailbar",
+        showSorterTooltip: false,
+      },
+      {
+        title: t("Утас"),
+        align: "center",
+        dataIndex: "ezemshigchiinUtas",
+      },
+      {
+        title: t("Дугаар"),
+        align: "center",
+        dataIndex: "dugaar",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Төрөл"),
+        align: "center",
+        dataIndex: "turul",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      ...shinecol,
+      {
+        title: () => <SettingOutlined />,
+        width: "2rem",
+        align: "center",
+        render: (data) => (
+          <div className='flex flex-row'>
+            <Popover
+              placement='bottom'
+              trigger='hover'
+              content={() => (
+                <div className='flex w-24 flex-col space-y-2'>
+                  <a
+                    className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
+                    onClick={() => mashinBurtgekh(data)}>
+                    <EditOutlined style={{ fontSize: "18px" }} />
+                    <label>{t("Засах")}</label>
+                  </a>
+                  <Popconfirm
+                    title={t("Машин устгах уу?")}
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    onConfirm={() => mashinUstgaya(data)}>
+                    <a className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'>
+                      <DeleteOutlined
+                        className='text-red-600'
+                        style={{ fontSize: "18px" }}
+                      />
+                      <label className='text-red-600'>{t("Устгах")}</label>
+                    </a>
+                  </Popconfirm>
+                </div>
+              )}>
+              <a className=' flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700'>
+                <MoreOutlined style={{ fontSize: "18px" }} />
+              </a>
+            </Popover>
+          </div>
+        ),
+      },
+    ];
+  }, [turul]);
 
   const toololt = useMemo(() => {
     return [
@@ -236,105 +369,7 @@ function mashinBurtgel({ token }) {
           size='small'
           bordered
           onChange={onChangeTable}
-          columns={[
-            {
-              title: "№",
-              align: "center",
-              dataIndex: "dugaar",
-              width: "2rem",
-              render: (text, record, index) =>
-                (mashinGaralt?.khuudasniiDugaar || 0) *
-                  (mashinGaralt?.khuudasniiKhemjee || 0) -
-                (mashinGaralt?.khuudasniiKhemjee || 0) +
-                index +
-                1,
-            },
-            {
-              title: t("Бүртгэсэн"),
-              dataIndex: "createdAt",
-              ellipsis: true,
-              align: "center",
-              render(date) {
-                return moment(date).format("YYYY-MM-DD HH:mm");
-              },
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: t("Нэр"),
-              align: "left",
-              dataIndex: "ezemshigchiinNer",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: t("Тайлбар"),
-              width: "8rem",
-              align: "center",
-              dataIndex: "tailbar",
-              showSorterTooltip: false,
-            },
-            {
-              title: t("Утас"),
-              align: "center",
-              dataIndex: "ezemshigchiinUtas",
-            },
-            {
-              title: t("Дугаар"),
-              align: "center",
-              dataIndex: "dugaar",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: t("Төрөл"),
-              align: "center",
-              dataIndex: "turul",
-              showSorterTooltip: false,
-              sorter: () => 0,
-            },
-            {
-              title: () => <SettingOutlined />,
-              width: "2rem",
-              align: "center",
-              render: (data) => (
-                <div className='flex flex-row'>
-                  <Popover
-                    placement='bottom'
-                    trigger='hover'
-                    content={() => (
-                      <div className='flex w-24 flex-col space-y-2'>
-                        <a
-                          className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'
-                          onClick={() => mashinBurtgekh(data)}>
-                          <EditOutlined style={{ fontSize: "18px" }} />
-                          <label>{t("Засах")}</label>
-                        </a>
-                        <Popconfirm
-                          title={t("Машин устгах уу?")}
-                          okText={t("Тийм")}
-                          cancelText={t("Үгүй")}
-                          onConfirm={() => mashinUstgaya(data)}>
-                          <a className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700'>
-                            <DeleteOutlined
-                              className='text-red-600'
-                              style={{ fontSize: "18px" }}
-                            />
-                            <label className='text-red-600'>
-                              {t("Устгах")}
-                            </label>
-                          </a>
-                        </Popconfirm>
-                      </div>
-                    )}>
-                    <a className=' flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700'>
-                      <MoreOutlined style={{ fontSize: "18px" }} />
-                    </a>
-                  </Popover>
-                </div>
-              ),
-            },
-          ]}
+          columns={columns}
           pagination={{
             current: mashinGaralt?.khuudasniiDugaar,
             pageSize: mashinGaralt?.khuudasniiKhemjee,
