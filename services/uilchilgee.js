@@ -6,10 +6,10 @@ import getConfig from "next/config";
 import { t } from "i18next";
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
-export const url = "http://localhost:8081";
+export const url = publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
 
 export const socket = () =>
-  socketIOClient("http://localhost:8081", {
+  socketIOClient(publicRuntimeConfig.SOCKET || "https://turees.zevtabs.mn", {
     transports: ["websocket"],
   });
 
