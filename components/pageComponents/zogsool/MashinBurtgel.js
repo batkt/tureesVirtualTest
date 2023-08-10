@@ -21,8 +21,6 @@ function MashinBurtgel(
   const [turulShalgah, setTurulShalgah] = useState();
   const [inputValue, setInputValue] = useState("");
   const [ognoo, setOgnoo] = useState([
-    // moment(new Date()).subtract(1, "months"),
-    // moment(new Date()),
   ]);
 
   // function mashiniiFormatSolyo(value) {
@@ -37,7 +35,7 @@ function MashinBurtgel(
   //   // console.log(inputValue, "formattedValueformattedValue");
   // }
 
-  console.log(inputValue, "inputValueinputValue");
+  // console.log(inputValue, "inputValueinputValue");
 
   useImperativeHandle(
     ref,
@@ -179,7 +177,7 @@ function MashinBurtgel(
       <Form.Item label={t("Нэр")} name="ezemshigchiinNer">
         <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item label={t("Тайлбар")} name="tailbar">
+      <Form.Item label={t("Тайлбар")} name="temdeglel">
         <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
       </Form.Item>
       {turulShalgah === "Гэрээт" && (
