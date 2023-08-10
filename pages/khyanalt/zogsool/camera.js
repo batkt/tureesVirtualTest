@@ -267,12 +267,19 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       var uilchluulegch = JSON.parse(zogsool);
-      console.log(uilchluulegch)
+      console.log(uilchluulegch);
       if (!!uilchluulegch) {
-        uilchluulegchGaralt?.jagsaalt = uilchluulegchGaralt?.jagsaalt?.filter((a)=> a.mashiniiDugaar !== uilchluulegch.mashiniiDugaar);
-        uilchluulegchGaralt?.jagsaalt.unshift(uilchluulegch)
-        console.log("uilchluulegchGaralt?.jagsaalt", uilchluulegchGaralt?.jagsaalt)
-      }  
+        if (uilchluulegchGaralt) {
+          uilchluulegchGaralt.jagsaalt = uilchluulegchGaralt?.jagsaalt?.filter(
+            (a) => a.mashiniiDugaar !== uilchluulegch.mashiniiDugaar
+          );
+          uilchluulegchGaralt.jagsaalt.unshift(uilchluulegch);
+        }
+        console.log(
+          "uilchluulegchGaralt?.jagsaalt",
+          uilchluulegchGaralt?.jagsaalt
+        );
+      }
     });
     return () => {
       socket().off(`zogsool`);
@@ -637,90 +644,96 @@ function camera({ token }) {
         render(v, parent) {
           const mur = parent.tuukh[0];
           if (parent.turul === "Үнэгүй") {
-            return <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-            <div className="flex items-center justify-center">
-              {t("Үнэгүй")}
-            </div>
-          </div>
+            return (
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Үнэгүй")}
+                </div>
+              </div>
+            );
           } else
-          return mur.tuluv === 0 && !!mur?.tulukhDun ? (
-            <Popover
-              placement="bottom"
-              trigger="hover"
-              content={() => (
-                <div className="flex w-24 flex-col space-y-2">
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => {
-                      !!mur?.tulukhDun
-                        ? tulburTulyu(mur, parent._id)
-                        : notification.warn({
-                            message: t("Дүн бодогдоогүй байна."),
-                          });
-                    }}
-                  >
-                    <WalletOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Төлөх")}</label>
-                  </a>
-                  <a
-                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() =>
-                      setModalOpen({ bool: true, item: parent, type: "unegui" })
-                    }
-                  >
-                    <StarOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Үнэгүй")}</label>
-                  </a>
-                </div>
-              )}
-            >
-              <Button
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#FF8505",
-                }}
-                size="small"
-              >
-                <div className="flex items-center  justify-center space-x-2 text-white">
-                  <div className="flex items-center justify-center">
-                    <DollarCircleOutlined />
+            return mur.tuluv === 0 && !!mur?.tulukhDun ? (
+              <Popover
+                placement="bottom"
+                trigger="hover"
+                content={() => (
+                  <div className="flex w-24 flex-col space-y-2">
+                    <a
+                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      onClick={() => {
+                        !!mur?.tulukhDun
+                          ? tulburTulyu(mur, parent._id)
+                          : notification.warn({
+                              message: t("Дүн бодогдоогүй байна."),
+                            });
+                      }}
+                    >
+                      <WalletOutlined style={{ fontSize: "18px" }} />
+                      <label>{t("Төлөх")}</label>
+                    </a>
+                    <a
+                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                      onClick={() =>
+                        setModalOpen({
+                          bool: true,
+                          item: parent,
+                          type: "unegui",
+                        })
+                      }
+                    >
+                      <StarOutlined style={{ fontSize: "18px" }} />
+                      <label>{t("Үнэгүй")}</label>
+                    </a>
                   </div>
-                  <div className="flex items-center justify-center">
-                    {t("Төлбөр")}
-                  </div>
-                </div>
-              </Button>
-            </Popover>
-          ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
-            <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-              <div className="flex items-center justify-center">Идэвхтэй</div>
-            </div>
-          ) : mur?.tuluv === 1 ? (
-            mur?.ebarimtAvsanEsekh === false ? (
-              <div
-                onClick={() => tulburTulyu(mur, parent?._id)}
-                className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white"
+                )}
               >
-                <div className="flex items-center justify-center">
-                  {t("И-Баримт")}
-                </div>
+                <Button
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#FF8505",
+                  }}
+                  size="small"
+                >
+                  <div className="flex items-center  justify-center space-x-2 text-white">
+                    <div className="flex items-center justify-center">
+                      <DollarCircleOutlined />
+                    </div>
+                    <div className="flex items-center justify-center">
+                      {t("Төлбөр")}
+                    </div>
+                  </div>
+                </Button>
+              </Popover>
+            ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
+                <div className="flex items-center justify-center">Идэвхтэй</div>
               </div>
+            ) : mur?.tuluv === 1 ? (
+              mur?.ebarimtAvsanEsekh === false ? (
+                <div
+                  onClick={() => tulburTulyu(mur, parent?._id)}
+                  className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white"
+                >
+                  <div className="flex items-center justify-center">
+                    {t("И-Баримт")}
+                  </div>
+                </div>
+              ) : (
+                <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
+                  <div className="flex items-center justify-center">
+                    {t("Төлөгдсөн")}
+                  </div>
+                </div>
+              )
             ) : (
-              <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
                 <div className="flex items-center justify-center">
-                  {t("Төлөгдсөн")}
+                  {t("Үнэгүй")}
                 </div>
               </div>
-            )
-          ) : (
-            <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
-              <div className="flex items-center justify-center">
-                {t("Үнэгүй")}
-              </div>
-            </div>
-          ); /*v[0]?.ebarimtAvsanEsekh ? (
+            ); /*v[0]?.ebarimtAvsanEsekh ? (
                         <div className="mx-auto flex w-max items-center bg-lime-500 rounded justify-center space-x-2 text-white px-3">
                             <div className="flex items-center justify-center">
                                 <CheckCircleOutlined />
@@ -1022,7 +1035,8 @@ function camera({ token }) {
                   cameraKharakh === 1
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
-                }`}>
+                }`}
+              >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream1 ip={camerVal[0]} />
@@ -1106,7 +1120,8 @@ function camera({ token }) {
                   cameraKharakh === 2
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
-                }`}>
+                }`}
+              >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream2 ip={camerVal[1]} />
@@ -1394,13 +1409,13 @@ function camera({ token }) {
                   visible={drawerOpen}
                 >
                   {drawerOpen && (
-                    <Card className='col-span-12 row-span-full lg:col-span-4 lg:col-start-9'>
-                      <div className='w-max'>
+                    <Card className="col-span-12 row-span-full lg:col-span-4 lg:col-start-9">
+                      <div className="w-max">
                         {/*baiguullagiin id ni FoodCity.iin id */}
                         {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
-                            <StackStream tuluv={drawerOpen}/>
+                          <StackStream tuluv={drawerOpen} />
                         ) : (
-                            ""
+                          ""
                         )}
                       </div>
                     </Card>
