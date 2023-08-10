@@ -52,6 +52,7 @@ function StackStream({ tuluv }) {
                     const imageData = event.data;
                     const canvas = document.getElementById(`canvas${index}`);
                     const ctx = canvas.getContext('2d');
+                    console.log('0-0-',index,' - ', canvas, ' ws ', ws);
                     const imgWidth = 600;
                     const imgHeight = 400;
                     try {
@@ -78,19 +79,15 @@ function StackStream({ tuluv }) {
     return (
         <div className='grid xl:grid-cols-1 2xl:grid-cols-2'>
             <div className='border'>
-                1
                 <canvas id="canvas0" width="600" height="400" />
             </div>
             <div className='border'>
-                2
                 <canvas id="canvas1" width="600" height="400" />
             </div>
             <div className='border'>
-                3
                 <canvas id="canvas2" width="600" height="400" />
             </div>
             <div className='border'>
-                4
                 <canvas id="canvas3" width="600" height="400" />
             </div>
         </div>
