@@ -116,7 +116,7 @@ function generateChild(mur, turul) {
           a.ner + (a?.turul ? " / " + a?.turul : "")
         ) : (
           <b key={a.cameraIP} className="text-green-400 hover:text-green-800">
-            Камер-{a.cameraIP}
+            {t("Камер")}-{a.cameraIP}
           </b>
         ),
         children: generateChild(!!a?.khaalga ? a.khaalga : a.camera, turul),
@@ -259,6 +259,14 @@ function camera({ token }) {
   useEffect(() => {
     Aos.init({ once: true });
   });
+
+  useEffect(() => {
+    var data = localStorage.getItem("CamerVal");
+    data = JSON.parse(data);
+    if (!!data) {
+      setCamerVal(data);
+    }
+  }, []);
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
@@ -472,7 +480,7 @@ function camera({ token }) {
           1,
       },
       {
-        title: t("Дугаар"),
+        title: t("Дугаар1"),
         align: "center",
         width: "10rem",
         dataIndex: "mashiniiDugaar",
@@ -545,19 +553,19 @@ function camera({ token }) {
                   onClick={() => setDun("")}
                   className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Бүгд
+                  {t("Бүгд1")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodson")}
                   className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Дүн бодсон
+                  {t("Дүн бодсон")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodoogui")}
                   className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Дүн бодоогүй
+                  {t("Дүн бодоогүй")}
                 </div>
               </div>
             }
@@ -566,7 +574,7 @@ function camera({ token }) {
               className={`flex cursor-pointer  items-center justify-center gap-3 `}
             >
               <FilterOutlined className="text-lg text-green-600" />
-              Дүн
+              {t("Дүн")}
             </div>
           </Popover>
         ),
@@ -589,25 +597,25 @@ function camera({ token }) {
                   onClick={() => setKhelber("")}
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Бүгд
+                  {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setKhelber("belen")}
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Бэлэн
+                  {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setKhelber("card")}
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
-                  Карт
+                  {t("Карт")}
                 </div>
                 <div
                   onClick={() => setKhelber("khariltsakh")}
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
                 >
-                  Харилцах
+                  {t("Харилцах")}
                 </div>
               </div>
             }
@@ -616,7 +624,7 @@ function camera({ token }) {
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
-              Хэлбэр
+              {t("Хэлбэр")}
             </div>
           </Popover>
         ),
@@ -655,7 +663,7 @@ function camera({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "tuukh.tuluv",
-        render(v, parent) {
+        render(v, parent, index) {
           const mur = parent.tuukh[0];
           if (parent.turul === "Үнэгүй") {
             return (
@@ -715,14 +723,16 @@ function camera({ token }) {
                       <DollarCircleOutlined />
                     </div>
                     <div className="flex items-center justify-center">
-                      {t("Төлбөр")}
+                      {t("Төлбөр")} {index === 0 && "[ F4 ]"}
                     </div>
                   </div>
                 </Button>
               </Popover>
             ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-                <div className="flex items-center justify-center">Идэвхтэй</div>
+                <div className="flex items-center justify-center">
+                  {t("Идэвхтэй")}
+                </div>
               </div>
             ) : mur?.tuluv === 1 ? (
               mur?.ebarimtAvsanEsekh === false ? (
@@ -797,17 +807,17 @@ function camera({ token }) {
                 <Tooltip
                   placement="top"
                   title={
-                    v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil
+                    v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : t(parent.zurchil)
                   }
                 >
                   <div className="line-clamp-1">
                     {v[0]?.tuluv === -1
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
-                      ? parent.zurchil
+                      ? t(parent.zurchil)
                       : !!v[0]?.tsagiinTuukh[0]?.garsanTsag &&
                         v[0]?.niitKhugatsaa <= 30
-                      ? "30 мин"
+                      ? t("30 мин")
                       : ""}
                   </div>
                 </Tooltip>
@@ -866,7 +876,7 @@ function camera({ token }) {
       render: (v, index, key) => key + 1,
     },
     {
-      title: "Огноо",
+      title: t("Огноо"),
       width: "6rem",
       align: "center",
       dataIndex: "createdAt",
@@ -875,7 +885,7 @@ function camera({ token }) {
       },
     },
     {
-      title: "Утга",
+      title: t("Утга"),
       width: "10rem",
       align: "center",
       dataIndex: "description",
@@ -893,7 +903,7 @@ function camera({ token }) {
       },
     },
     {
-      title: "Дүн",
+      title: t("Дүн"),
       width: "4rem",
       dataIndex: "amount",
       align: "center",
@@ -906,9 +916,12 @@ function camera({ token }) {
     setValue(e.target.value);
   };
   const cameraChange = (e, type) => {
-    if (type === 1) setCamerVal([e, camerVal[1]]);
-    else {
+    if (type === 1) {
+      setCamerVal([e, camerVal[1]]);
+      localStorage.setItem("CamerVal", JSON.stringify([e, camerVal[1]]));
+    } else {
       setCamerVal([camerVal[0], e]);
+      localStorage.setItem("CamerVal", JSON.stringify([camerVal[0], e]));
       // setGarakhKhaalgaIp(e);
     }
   };
@@ -942,13 +955,13 @@ function camera({ token }) {
       dataIndex: "tuukh",
       render(v) {
         return v[0]?.tuluv === 0 ? (
-          <div>Төлөөгүй</div>
+          <div>{t("Төлөөгүй")}</div>
         ) : v[0]?.tuluv < 0 ? (
-          <div>Үнэгүй</div>
+          <div>{t("Үнэгүй")}</div>
         ) : v[0]?.ebarimtAvsanEsekh ? (
-          <div>Төлөгдсөн</div>
+          <div>{t("Төлөгдсөн")}</div>
         ) : (
-          <div>И-Баримт</div>
+          <div>{t("И-Баримт")}</div>
         );
       },
     });
@@ -1081,7 +1094,7 @@ function camera({ token }) {
                     className="w-full sm:w-auto"
                     type="primary"
                   >
-                    Нээх
+                    {t("Нээх")} [ {t("Орох")} F1 ]
                   </Button>
                   {/*<Button
                     onClick={(e) => {
@@ -1108,7 +1121,7 @@ function camera({ token }) {
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  placeholder="Камер сонгох"
+                  placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
                   onChange={(e) => cameraChange(e, 1)}
@@ -1166,7 +1179,7 @@ function camera({ token }) {
                     className="w-full sm:w-auto"
                     type="primary"
                   >
-                    Нээх
+                    {t("Нээх")} [ {t("Гарах1")} F2 ]
                   </Button>
                   {/*<Button
                     onClick={(e) => {
@@ -1193,7 +1206,7 @@ function camera({ token }) {
                     minWidth: 280,
                     overflow: "auto",
                   }}
-                  placeholder="Камер сонгох"
+                  placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
                   onChange={(e) => cameraChange(e, 2)}
@@ -1209,7 +1222,7 @@ function camera({ token }) {
                 guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
               }`}
             >
-              <div className="text-base font-bold">Сүүлийн гүйлгээ</div>
+              <div className="text-base font-bold">{t("Сүүлийн гүйлгээ")}</div>
               <div className="absolute right-3 top-3 text-3xl xl:hidden">
                 <CloseCircleOutlined
                   onClick={() => setGuilgeeKharakh(false)}
@@ -1237,7 +1250,7 @@ function camera({ token }) {
                   setGuilgeeKharakh(!guilgeeKharakh);
                 }}
               >
-                Гүйлгээ харах
+                {t("Гүйлгээ харах")}
               </Button>
             </div>
             <div className="flex flex-col gap-2 md:flex-row">
@@ -1268,7 +1281,6 @@ function camera({ token }) {
               >
                 <Button
                   className="mr-3 w-32 sm:w-auto"
-                  icon={<PlusOutlined />}
                   onClick={() =>
                     setModalOpen({
                       bool: true,
@@ -1278,7 +1290,7 @@ function camera({ token }) {
                   }
                   type="primary"
                 >
-                  Машин бүртгэх
+                  {t("Машин бүртгэх")} [ + ]
                 </Button>
                 <Popover
                   content={() => (
@@ -1348,7 +1360,7 @@ function camera({ token }) {
                                     },
                                   },
                                   {
-                                    title: "Хугацаа/мин",
+                                    title: t("Хугацаа/мин"),
                                     dataIndex: "tuukh",
                                     render(v) {
                                       const d1 = moment(
@@ -1366,26 +1378,26 @@ function camera({ token }) {
                                     dataIndex: "turul",
                                   },
                                   {
-                                    title: "Дүн",
+                                    title: t("Дүн"),
                                     dataIndex: "tuukh",
                                     render(v, p, i) {
                                       return v?.[0]?.tulukhDun || 0;
                                     },
                                   },
                                   {
-                                    title: "Шалтгаан",
+                                    title: t("Шалтгаан"),
                                     dataIndex: "tuukh",
                                     render: (v, parent) => {
                                       if (parent.turul === "Үнэгүй") {
-                                        return parent?.mashin?.temdeglel;
+                                        return t(parent?.mashin?.temdeglel);
                                       } else
                                         return v?.[0]?.tuluv === -1
                                           ? v?.[0]?.uneguiGarsan
                                           : !!v?.[0]?.tsagiinTuukh[0]
                                               ?.garsanTsag &&
                                             v?.[0]?.niitKhugatsaa <= 30
-                                          ? "30 мин"
-                                          : parent.zurchil;
+                                          ? t("30 мин")
+                                          : t(parent.zurchil);
                                     },
                                   },
                                 ])
@@ -1418,7 +1430,7 @@ function camera({ token }) {
                   onClick={() => setDrawerOpen(true)}
                   type="primary"
                 >
-                  Камер
+                  {t("Камер")}
                 </Button>
                 <Drawer
                   width={"100vw"}
@@ -1489,18 +1501,18 @@ function camera({ token }) {
             title={
               modalOpen.type !== "zurchil"
                 ? modalOpen.type !== "dugaarBurtgekh"
-                  ? "Үнэгүй үйлчлүүлэгчийн төрөл сонгох"
-                  : "Машин бүртгэх"
-                : "Зөрчил оруулах"
+                  ? t("Үнэгүй үйлчлүүлэгчийн төрөл сонгох")
+                  : t("Машин бүртгэх")
+                : t("Зөрчил оруулах")
             }
             open={modalOpen.bool}
             onCancel={() => modalKhaakh()}
             footer={[
               <Button key="back" onClick={() => modalKhaakh()}>
-                Хаах
+                {t("Хаах")}
               </Button>,
               <Button type="primary" onClick={khadgalakh}>
-                Хадгалах
+                {t("Хадгалах")}
               </Button>,
             ]}
           >
@@ -1510,30 +1522,32 @@ function camera({ token }) {
                   <Radio.Group onChange={onChange} value={value}>
                     {modalOpen.type !== "zurchil" ? (
                       <Space direction="vertical">
-                        <Radio value="Цагдаа">Цагдаа</Radio>
-                        <Radio value="Гал">Гал</Radio>
-                        <Radio value="Эмнэлэг">Эмнэлэг</Radio>
-                        <Radio value="Онцгой">Онцгой</Radio>
+                        <Radio value="Цагдаа">{t("Цагдаа")}</Radio>
+                        <Radio value="Гал">{t("Гал")}</Radio>
+                        <Radio value="Эмнэлэг">{t("Эмнэлэг")}</Radio>
+                        <Radio value="Онцгой">{t("Онцгой")}</Radio>
                         <Radio value="Борлуулалтын машин">
-                          Борлуулалтын машин
+                          {t("Борлуулалтын машин")}
                         </Radio>
                         <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
-                          Хөгжлийн бэрхшээлтэй иргэн
+                          {t("Хөгжлийн бэрхшээлтэй иргэн")}
                         </Radio>
-                        <Radio value="Хогны машин">Хогны машин</Radio>
+                        <Radio value="Хогны машин">{t("Хогны машин")}</Radio>
                       </Space>
                     ) : (
                       <Space direction="vertical">
                         <Radio value="Хонох магадлалтай">
-                          Хонох магадлалтай
+                          {t("Хонох магадлалтай")}
                         </Radio>
-                        <Radio value="Журам зөрчсөн">Журам зөрчсөн</Radio>
-                        <Radio value="Зугтаасан">Зугтаасан</Radio>
+                        <Radio value="Журам зөрчсөн">
+                          {t("Журам зөрчсөн")}
+                        </Radio>
+                        <Radio value="Зугтаасан">{t("Зугтаасан")}</Radio>
                       </Space>
                     )}
                   </Radio.Group>
                   <div className="flex w-full items-center">
-                    <label>Бусад</label>
+                    <label>{t("Бусад")}</label>
                     <Input
                       value={value}
                       onChange={onChange}
@@ -1549,7 +1563,7 @@ function camera({ token }) {
                     onFinish={dugaarBurtgekh}
                   >
                     <Form.Item
-                      label="Дугаар"
+                      label={t("Дугаар")}
                       name="mashiniiDugaar"
                       className="w-2/5"
                       rules={[
@@ -1564,7 +1578,7 @@ function camera({ token }) {
                           min: 7,
                           max: 7,
                           pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
-                          message: "Машины дугаар 4 тоо 3 үсэг байх ёстой",
+                          message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
                         },
                       ]}
                     >
@@ -1581,11 +1595,11 @@ function camera({ token }) {
                       rules={[
                         {
                           required: true,
-                          message: "Камер сонгоно уу.",
+                          message: t("Камер сонгоно уу."),
                         },
                       ]}
                     >
-                      <Select className="" placeholder="Камер IP">
+                      <Select className="" placeholder={`${t("Камер")} IP`}>
                         {" "}
                         {cameraData[0][0].children.map((cam) => (
                           <Select.Option
@@ -1609,7 +1623,7 @@ function camera({ token }) {
                       onClick={() => form.resetFields()}
                       className="ml-2 flex h-8 items-center rounded border border-red-400  px-2 hover:bg-red-200"
                     >
-                      Цэвэрлэх
+                      {t("Цэвэрлэх")}
                     </a>
                   </Form>
 
@@ -1646,17 +1660,20 @@ function camera({ token }) {
           <div style={{ position: "absolute", bottom: 58 }}>
             <div className="ml-10 flex">
               <div className="flex text-blue-600">
-                Идэвхтэй: {uilchluulegchTooGaralt?.niitMur}
+                {t("Идэвхтэй")}: {uilchluulegchTooGaralt?.niitMur}
               </div>
               <div className="ml-10 flex text-yellow-600">
-                Сул зогсоол: {jagsaalt[0].too - uilchluulegchTooGaralt?.niitMur}
+                {t("Сул зогсоол")}:{" "}
+                {jagsaalt[0].too - uilchluulegchTooGaralt?.niitMur}
               </div>
             </div>
           </div>
         </div>
       ) : (
         <div className="col-span-12 flex justify-center">
-          {ajiltan?.ner}-д зогсоолын эрх байхгүй байна.
+          {t("зогсоолын эрх байхгүй байна.", {
+            ajiltniiNer: ajiltan?.ner,
+          })}
         </div>
       )}
     </Admin>

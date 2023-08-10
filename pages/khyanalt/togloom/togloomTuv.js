@@ -237,8 +237,13 @@ const DelegrenguiKharakh = React.forwardRef(
                 {a.ner}:
                 <div className="flex font-normal">
                   {formatNumber(a.dun) || 0}₮
-                  <div className="ml-3 flex w-12 items-center justify-center border-l border-green-600 pl-2 text-center">
-                    {Math.round(a.khuvi) || 0}%
+                  <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
+                    <div>
+                      {a.khuvi - Math.floor(a.khuvi) > 0
+                        ? Number(a.khuvi).toFixed(2)
+                        : a.khuvi || 0}
+                    </div>
+                    %
                   </div>
                 </div>
               </div>
@@ -1292,7 +1297,7 @@ function togloom1() {
                               .then(({ data }) => {
                                 if (data === "Amjilttai") {
                                   message.success(
-                                    `${ovog.charAt(0)}.${ner} гарлаа`
+                                    `${ovog && ovog.charAt(0)}.${ner} гарлаа`
                                   );
                                 }
                               })
