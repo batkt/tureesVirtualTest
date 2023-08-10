@@ -270,6 +270,15 @@ function camera({ token }) {
       onRefresh();
       var uilchluulegch = JSON.parse(zogsool);
       console.log(uilchluulegch?.mashiniiDugaar, "mashin");
+      if (uilchluulegch?.turul === "Үнэгүй") {
+        if (
+          uilchluulegch?.tuukh &&
+          uilchluulegch?.tuukh.length > 0 &&
+          !!uilchluulegch?.tuukh[0].garsanKhaalga
+        ) {
+          khaalgaNeey(tuukh[0].garsanKhaalga);
+        }
+      }
       // console.log(uilchluulegch);
       // if (!!uilchluulegch) {
       //   if (uilchluulegchGaralt) {
