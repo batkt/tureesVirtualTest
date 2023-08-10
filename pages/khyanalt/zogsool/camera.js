@@ -641,7 +641,7 @@ function camera({ token }) {
                   content={() =>
                     v[0]?.tulbur.map((mur) => (
                       <div>
-                        {tulburKhurvuulekh(mur.turul)}: {mur.dun}
+                        {t(tulburKhurvuulekh(mur.turul))}: {mur.dun}
                       </div>
                     ))
                   }
@@ -655,7 +655,7 @@ function camera({ token }) {
               </div>
             );
           } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
-          return r && <div>{r}</div>;
+          return r && <div>{v[0]?.tulbur?.length > 1 ? r : t(r)}</div>;
         },
       },
       {
