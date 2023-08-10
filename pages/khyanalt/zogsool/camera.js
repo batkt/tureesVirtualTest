@@ -1336,21 +1336,12 @@ function camera({ token }) {
                   {drawerOpen && (
                     <Card className='col-span-12 row-span-full lg:col-span-4 lg:col-start-9'>
                       <div className='w-max'>
-                        <div className='grid xl:grid-cols-1 2xl:grid-cols-2'>
-                          <StackStream />
-                          {/*<div className='w-[600px] h-[400px] border'>
-                            <p>Camera2</p>
-                          </div>
-                          <div className='w-[600px] h-[400px] border'>
-                            <p>Camera3</p>
-                          </div>
-                          <div className='w-[600px] h-[400px] border'>
-                            <p>Camera4</p>
-                          </div>
-                          <div className='w-[600px] h-[400px] border'>
-                            <p>Camera5</p>
-                          </div>*/}
-                        </div>
+                        {/*baiguullagiin id ni FoodCity.iin id */}
+                        {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
+                            <StackStream tuluv={drawerOpen}/>
+                        ) : (
+                            ""
+                        )}
                       </div>
                     </Card>
                   )}
