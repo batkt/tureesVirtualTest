@@ -273,13 +273,19 @@ function Zogsool({ token }) {
               title: t("Талбай"),
               align: "center",
               width: "10rem",
-              dataIndex: "talbainDugaar",
+              dataIndex: "mashin",
+              render(v) {
+                return v && v.ezemshigchiinTalbainDugaar;
+              },
             },
             {
               title: t("Утас"),
               align: "center",
               width: "10rem",
-              dataIndex: "utasniiDugaar",
+              dataIndex: "mashin",
+              render(v) {
+                return v && v.ezemshigchiinUtas;
+              },
             },
           ]
         : [];
@@ -467,8 +473,10 @@ function Zogsool({ token }) {
             <div>
               {v[0].tuluv === 1
                 ? "Төлсөн"
-                : v[0].tuluv === -2 || v[0].tuluv === 0
+                : v[0].tuluv === 0
                 ? "Төлөөгүй"
+                : v[0].tuluv === -2
+                ? "Зөрчилтэй"
                 : ""}
             </div>
           );

@@ -72,10 +72,12 @@ function mashinBurtgel({ token }) {
       turul === "Гэрээт"
         ? [
             {
-              title: t("Хугацаа"),
+              title: t("Өдөр"),
               align: "center",
-              dataIndex: "hugatsaa",
+              dataIndex: "duusakhOgnoo",
               width: "7rem",
+              render: (duusakhOgnoo) =>
+                moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
             },
           ]
         : [];
@@ -114,7 +116,7 @@ function mashinBurtgel({ token }) {
         title: t("Тайлбар"),
         width: "8rem",
         align: "center",
-        dataIndex: "tailbar",
+        dataIndex: "temdeglel",
         showSorterTooltip: false,
       },
       {

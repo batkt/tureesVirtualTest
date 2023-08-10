@@ -21,7 +21,11 @@ function MashinBurtgel(
   const [turulShalgah, setTurulShalgah] = useState();
   const [inputValue, setInputValue] = useState("");
   const [ognoo, setOgnoo] = useState([
+    moment(new Date()).subtract(1, "months"),
+    moment(new Date()),
   ]);
+
+  // console.log(ognoo, "ognooognoo");
 
   // function mashiniiFormatSolyo(value) {
   //   const too = value.replace(/[^0-9]/g, "").slice(0, 4);
@@ -49,6 +53,7 @@ function MashinBurtgel(
           data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
           data.gereeniiDugaar = geree?.gereeniiDugaar;
         }
+        console.log(data, "|dataa");
         const method = data?._id ? updateMethod : createMethod;
         method("mashin", token, data).then(({ data }) => {
           if (data === "Amjilttai") {
@@ -62,7 +67,7 @@ function MashinBurtgel(
         destroy();
       },
     }),
-    [form, geree]
+    [form, geree, ognoo]
   );
 
   function garya() {
@@ -132,19 +137,17 @@ function MashinBurtgel(
     <Form
       form={form}
       initialValues={data}
-      className="space-y-2"
+      className='space-y-2'
       labelCol={{ span: 6 }}
-      wrapperCol={{ span: 24 }}
-    >
-      <Form.Item name="_id" noStyle />
-      <Form.Item label={t("Төрөл")} name="turul">
+      wrapperCol={{ span: 24 }}>
+      <Form.Item name='_id' noStyle />
+      <Form.Item label={t("Төрөл")} name='turul'>
         <Select
           onChange={(e) => {
             form.getFieldInstance("ezemshigchiinUtas").focus();
             setTurulShalgah(e);
           }}
-          placeholder={t("Төрөл")}
-        >
+          placeholder={t("Төрөл")}>
           {["Гэрээт", "Түрээслэгч", "Дотоод", "Үнэгүй"].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
@@ -152,7 +155,7 @@ function MashinBurtgel(
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label={t("Утас")} name="ezemshigchiinUtas">
+      <Form.Item label={t("Утас")} name='ezemshigchiinUtas'>
         <Input
           maxLength={8}
           onKeyUp={focuser}
@@ -170,22 +173,21 @@ function MashinBurtgel(
           return `${too}${useg}`.toUpperCase();
         }}
         label={t("Машины дугаар")}
-        name="dugaar"
-      >
+        name='dugaar'>
         <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
       </Form.Item>
-      <Form.Item label={t("Нэр")} name="ezemshigchiinNer">
+      <Form.Item label={t("Нэр")} name='ezemshigchiinNer'>
         <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item label={t("Тайлбар")} name="temdeglel">
+      <Form.Item label={t("Тайлбар")} name='temdeglel'>
         <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
       </Form.Item>
       {turulShalgah === "Гэрээт" && (
         <Form.Item label={t("Огноо")}>
           <DatePicker.RangePicker
             onClick={(e) => e.stopPropagation()}
-            className="flex w-full  rounded-md md:w-auto"
-            size="middle"
+            className='flex w-full  rounded-md md:w-auto'
+            size='middle'
             allowClear={true}
             placeholder={["Эхлэх огноо", "Дуусах огноо"]}
             value={ognoo}
