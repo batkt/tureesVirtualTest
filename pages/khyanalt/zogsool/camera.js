@@ -63,6 +63,7 @@ import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import Stream1, { Stream2 } from "./stream";
+import StackStream from "./stackStream";
 import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 
 const usguud = [
@@ -130,60 +131,6 @@ function generateChild(mur, turul) {
   return [];
 }
 
-const CSS = {
-  root: {
-    width: "100%",
-    height: "600px",
-    position: "relative",
-    border: "1px solid rgba(197, 197, 197, 0.22)",
-  },
-  statusbar: {
-    width: "100%",
-    height: "40px",
-    position: "relative",
-    borderBottom: "2px solid #2196F3",
-  },
-  iframe: {
-    height: "100%",
-  },
-  iframehtml: {
-    width: "100%",
-    height: "100%",
-    border: "none",
-  },
-  stringurl: {
-    fontFamily: "Helvetica",
-    fontSize: "16px",
-    textAlign: "center",
-    padding: "0",
-    margin: "0",
-    lineHeight: "40px",
-    fontWeight: "bold",
-    color: "#6d6d6d",
-  },
-  button: {
-    backgroundColor: "transparent",
-    border: "none",
-    lineHeight: "40px",
-    margin: "0",
-    padding: "0",
-    position: "absolute",
-    left: "0px",
-    width: "30px",
-    fontWeight: "bold",
-    fontSize: "14px",
-    color: "#a5977e",
-    outline: "none",
-  },
-  statusbarline: {
-    position: "absolute",
-    width: "0%",
-    height: "100%",
-    transition: "width 1s ease-in-out",
-    backgroundColor: "rgba(197, 197, 197, 0.22)",
-  },
-};
-
 function tulburKhurvuulekh(v) {
   switch (v) {
     case "belen":
@@ -203,49 +150,6 @@ function tulburKhurvuulekh(v) {
     default:
       break;
   }
-}
-
-function WebView() {
-  // const iframeRef = useRef(null);
-  function handleLoadFrame(e) {
-    console.log("123123123", e);
-  }
-  /* function getInitialState() {
-    return {
-      percent : 10
-    }
-  }
-  function changeStatusBar(number) {
-    this.setState({percent:number})
-  }
-  CSS.statusbarline.width = this.state.percent + '%'
-  var url = this.props.url.replace(/(http|https):\/\/(www\.)?/,'')
-  function handleLoadFrame() {
-    this.setState({percent:100})
-  }
-  function closeIframeBar() {
-    document.querySelector('.react-webview').remove()
-  }*/
-
-  return (
-    <div className="react-webview" style={CSS.root}>
-      <div className="webview__block" style={{ height: "100%" }}>
-        {/*<div className="status-bar" style={CSS.statusbar}>
-            <div className="status-bar_line" style={CSS.statusbarline}></div>
-            <button style={CSS.button} onClick={closeIframeBar}>X</button>
-            <p style={CSS.stringurl}>{url}</p>
-          </div>*/}
-        <div className="iframe" style={CSS.iframehtml}>
-          <iframe
-            id="iframe"
-            src="https://bing.com"
-            style={CSS.iframehtml}
-            onLoad={handleLoadFrame}
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 /*const TreeComponent = ()=>{
@@ -317,6 +221,7 @@ function camera({ token }) {
   }, [baiguullaga?._id, ajiltan, barilgiinId]);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
+  // console.log('jagsaalt', jagsaalt);
 
   const query = useMemo(() => {
     let result = {
@@ -1117,8 +1022,8 @@ function camera({ token }) {
                   cameraKharakh === 1
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
-                }`}
-              >
+                }`}>
+                {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream1 ip={camerVal[0]} />
                 ) : (
@@ -1201,8 +1106,8 @@ function camera({ token }) {
                   cameraKharakh === 2
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
-                }`}
-              >
+                }`}>
+                {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream2 ip={camerVal[1]} />
                 ) : (
@@ -1489,25 +1394,14 @@ function camera({ token }) {
                   visible={drawerOpen}
                 >
                   {drawerOpen && (
-                    <Card className="col-span-12 row-span-full lg:col-span-4 lg:col-start-9">
-                      <div className="w-[500px]">
-                        <div className="flex aspect-square items-center justify-center border 2xl:aspect-[3/2]">
-                          <p>Camera1</p>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-1 2xl:grid-cols-2">
-                          <div className="aspect-square border">
-                            <p>Camera2</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera3</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera4</p>
-                          </div>
-                          <div className="aspect-square border">
-                            <p>Camera5</p>
-                          </div>
-                        </div>
+                    <Card className='col-span-12 row-span-full lg:col-span-4 lg:col-start-9'>
+                      <div className='w-max'>
+                        {/*baiguullagiin id ni FoodCity.iin id */}
+                        {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
+                            <StackStream tuluv={drawerOpen}/>
+                        ) : (
+                            ""
+                        )}
                       </div>
                     </Card>
                   )}
