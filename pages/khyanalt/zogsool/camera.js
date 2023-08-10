@@ -276,7 +276,8 @@ function camera({ token }) {
           uilchluulegch?.tuukh.length > 0 &&
           !!uilchluulegch?.tuukh[0].garsanKhaalga
         ) {
-          khaalgaNeey(tuukh[0].garsanKhaalga);
+          console.log(uilchluulegch?.tuukh[0].garsanKhaalga);
+          khaalgaNeey(uilchluulegch?.tuukh[0].garsanKhaalga);
         }
       }
       // console.log(uilchluulegch);
