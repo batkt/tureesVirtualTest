@@ -45,6 +45,8 @@ export const AuthProvider = ({ children }) => {
   );
   const { barilgaSoliyo, barilgiinId } = useBarilga();
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (
       (!barilgiinId && !!baiguullaga?.barilguud) ||
