@@ -523,51 +523,67 @@ function Zogsool({ token }) {
         },
       },
       {
-        title: "Бүртгэсэн ажилтан",
-        align: "center",
-        dataIndex: "tuukh",
-        width: "7rem",
-        showSorterTooltip: false,
-        render: (v, parent) => {
-          return (
-            v && (
-              <div>
-                {String(v[0]?.burtgesenAjiltaniiNer).replace(/\D/g, "").length >
-                9
-                  ? ajiltniiNers.find(
-                      (a) => a.id === v[0]?.burtgesenAjiltaniiId
-                    )?.ner
-                  : v[0]?.burtgesenAjiltaniiNer}
-              </div>
-            )
-          );
-        },
-      },
-      {
         title: t("Шалтгаан"),
         align: "center",
         dataIndex: "tuukh",
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
-          return (
-            v && (
-              <Tooltip
-                placement="top"
-                title={v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : parent.zurchil}
-              >
-                <div className="line-clamp-1">
-                  {v[0]?.tuluv === -1
-                    ? v[0]?.uneguiGarsan
-                    : !!parent.zurchil
-                    ? parent.zurchil
-                    : ""}
-                </div>
+          console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
+          if (parent.turul === "Үнэгүй") {
+            return (
+              <Tooltip placement="top" title={parent?.mashin?.temdeglel}> 
+                <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
               </Tooltip>
-            )
-          );
+            );
+          } 
+          else if (parent.turul === "Гэрээт".trim()){
+            return (<div>
+              {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
+            </div>)
+          }
+          else
+            return (
+              v && (
+                <Tooltip
+                  placement="top"
+                  title={
+                    v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : t(parent.zurchil)
+                  }
+                >
+                  <div className="line-clamp-1">
+                    {v[0]?.tuluv === -1
+                      ? v[0]?.uneguiGarsan
+                      : !!parent.zurchil
+                      ? t(parent.zurchil)
+                      : ""}
+                  </div>
+                </Tooltip>
+              )
+            );
         },
-      },
+        },
+        {
+          title: "Бүртгэсэн",
+          align: "center",
+          dataIndex: "tuukh",
+          width: "7rem",
+          showSorterTooltip: false,
+          render: (v, parent) => {
+            return (
+              v && (
+                <div>
+                  {String(v[0]?.burtgesenAjiltaniiNer).replace(/\D/g, "").length >
+                  9
+                    ? ajiltniiNers.find(
+                        (a) => a.id === v[0]?.burtgesenAjiltaniiId
+                      )?.ner
+                    : v[0]?.burtgesenAjiltaniiNer}
+                </div>
+              )
+            );
+          },
+        },
       /*{
         title: () => <SettingOutlined />,
         width: "2rem",

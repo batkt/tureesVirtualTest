@@ -796,13 +796,20 @@ function camera({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
+          console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
           if (parent.turul === "Үнэгүй") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
                 <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
               </Tooltip>
             );
-          } else
+          } 
+          else if (parent.turul === "Гэрээт".trim()){
+            return (<div>
+              {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
+            </div>)
+          }
+          else
             return (
               v && (
                 <Tooltip
