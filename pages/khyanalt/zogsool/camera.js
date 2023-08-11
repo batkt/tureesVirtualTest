@@ -223,7 +223,7 @@ function camera({ token }) {
   }, [baiguullaga?._id, ajiltan, barilgiinId]);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
-  // console.log('jagsaalt', jagsaalt);
+  console.log('jagsaalt', jagsaalt);
 
   const query = useMemo(() => {
     let result = {
@@ -456,6 +456,7 @@ function camera({ token }) {
       ),
       content: (
         <Tulbur
+          camerVal={camerVal[1]}
           ref={tulburRef}
           data={_.cloneDeep(data)}
           token={token}
@@ -965,6 +966,7 @@ function camera({ token }) {
     return aa;
   };
   const khaalgaNeey = (ip) => {
+    console.log(ip,"123213")
     axios
       .get("http://localhost:5000/api/neeye/" + ip + "")
       .then(function (response) {

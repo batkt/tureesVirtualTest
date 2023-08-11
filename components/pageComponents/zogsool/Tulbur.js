@@ -25,7 +25,8 @@ function Tulbur(
     barilgiinId,
     uilchluugchiinId,
     onRefresh,
-    setModalNeelttei
+    setModalNeelttei,
+    camerVal
   },
   ref
 ) {
@@ -159,8 +160,10 @@ function Tulbur(
       setLoading(false);
     }
   }
+  
 
   function guilgeeniiTuukhKhadgalya(tulbur, qpayEsekh) {
+    
     if (khungulukhEsekh === true) {
       if (!khunglult.khungulukhDun || khunglult.khungulukhDun === "") {
         message.warn(t("Хөнгөлөх дүн оруулна уу"));
@@ -190,6 +193,14 @@ function Tulbur(
         if (data === "Amjilttai") {
           setAlkham(2);
           onRefresh();
+          axios
+          .get("http://localhost:5000/api/neeye/" + camerVal + "")
+          .then(function (response) {
+            if (!!response) console.log("/api/neeye", response);
+          })
+          .catch(function (error) {
+            console.log("ERROR: /api/neeye", error);
+          });
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
