@@ -530,7 +530,7 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         render: (v, parent) => {
           console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
-          if (parent.turul === "Үнэгүй") {
+          if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>   
                 <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
