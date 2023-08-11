@@ -1568,6 +1568,14 @@ function camera({ token }) {
                       label={t("Дугаар1")}
                       name="mashiniiDugaar"
                       className="w-2/5"
+                      normalize={(input) => {
+                        const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+                        const useg = Array.from(input)
+                          .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+                          .slice(0, 3)
+                          .join("");
+                        return `${too}${useg}`.toUpperCase();
+                      }}
                       rules={[
                         {
                           required: true,
