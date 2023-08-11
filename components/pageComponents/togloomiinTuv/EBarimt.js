@@ -40,7 +40,7 @@ function EBarimt({
       <div className={`flex flex-row p-3`}>
         <div className='w-full p-2'>
           <div className='flex flex-row border-b-2 border-dashed py-2'>
-            <div>{t("Баримт хэвлэх эсэх")}</div>
+            <div className='dark:text-white' >{t("Баримт хэвлэх эсэх")}</div>
             <div className='ml-auto'>
               <Switch
                 checked={barimtKhevlekhEsekh}
@@ -50,7 +50,7 @@ function EBarimt({
           </div>
           {barimtKhevlekhEsekh && !irgenEsekh && (
             <div className='flex flex-row border-b-2 border-dashed py-2'>
-              <div>{t("ААН эсэх")}</div>
+              <div className='dark:text-white'>{t("ААН эсэх")}</div>
               <div className='ml-auto'>
                 <Switch
                   checked={baiguullagaEsekh}
@@ -61,7 +61,7 @@ function EBarimt({
           )}
           {barimtKhevlekhEsekh && !baiguullagaEsekh && (
             <div className='flex flex-row border-b-2 border-dashed py-2'>
-              <div>{t("Иргэнд эсэх")}</div>
+              <div className='dark:text-white'>{t("Иргэнд эсэх")}</div>
               <div className='ml-auto'>
                 <Switch checked={irgenEsekh} onChange={setIrgenEsekh} />
               </div>
@@ -69,7 +69,7 @@ function EBarimt({
           )}
           {baiguullagaEsekh && (
             <div className='flex flex-row border-b-2 border-dashed py-2'>
-              <div>{t("ААН регистр")}</div>
+              <div className='dark:text-white'>{t("ААН регистр")}</div>
               <div className='ml-auto'>
                 <InputNumber
                   autoComplete='off'
@@ -84,7 +84,7 @@ function EBarimt({
           )}
           {irgenEsekh && (
             <div className='flex flex-row border-b-2 border-dashed py-2'>
-              <div>{t("Иргэний регистр")}</div>
+              <div className='dark:text-white'>{t("Иргэний регистр")}</div>
               <div className='ml-auto'>
                 <Input
                   autoComplete='off'
