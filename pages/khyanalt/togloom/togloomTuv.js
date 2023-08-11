@@ -394,7 +394,12 @@ const TsagSungakh = React.forwardRef(
       if (khugatsaa > 0 || asragch.length > 0) {
         uilchilgee(token)
           .post("/togloomiinDunBoduulya", {
+            niitMinut:
+              (data?.khugatsaa || 0) +
+              (data?.sungasanMinut || 0) +
+              (khugatsaa || 0),
             minut: khugatsaa || 0,
+            tulugdsunDun: data?.niitTulbur?.reduce((a, b) => a + b.dun, 0) || 0,
             asragchiinToo: asragch.length || 0,
           })
           .then(({ data }) => {
@@ -1131,7 +1136,7 @@ function togloom1() {
           <div className="flex w-full justify-center">
             <div
               onClick={() => qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)}
-              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 dark:text-black px-3 transition-all hover:bg-white hover:text-black"
+              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 px-3 transition-all hover:bg-white hover:text-black dark:text-black"
             >
               <ImQrcode />
             </div>
