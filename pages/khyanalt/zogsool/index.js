@@ -107,10 +107,13 @@ function Zogsool({ token }) {
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
 
   const [shuult, setShuult] = useState("");
+
   const tooQuery = useMemo(() => {
     return {
-      ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      ...(ognoo && {
+        ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      }),
     };
   }, [ognoo]);
 
@@ -165,7 +168,7 @@ function Zogsool({ token }) {
       zogsooliinId: jagsaalt[0]?._id,
       ...(ognoo && {
         ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59")  ,
       }),
     };
   }, [ognoo, jagsaalt, uilchluulegchGaralt]);
