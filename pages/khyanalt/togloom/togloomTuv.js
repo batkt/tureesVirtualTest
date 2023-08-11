@@ -253,7 +253,7 @@ const DelegrenguiKharakh = React.forwardRef(
       </div>
     ) : (
       <div className="flex h-52 w-full items-center justify-center">
-        <div className="text-lg font-semibold text-black text-opacity-30">
+        <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
           Орлогын мэдээлэл байхгүй байна.
         </div>
       </div>
@@ -1131,7 +1131,7 @@ function togloom1() {
           <div className="flex w-full justify-center">
             <div
               onClick={() => qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)}
-              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 px-3 transition-all hover:bg-white hover:text-black"
+              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 dark:text-black px-3 transition-all hover:bg-white hover:text-black"
             >
               <ImQrcode />
             </div>

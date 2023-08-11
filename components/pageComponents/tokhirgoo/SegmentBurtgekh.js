@@ -97,7 +97,7 @@ const { t } = useTranslation();
     return (
         <Form form={form} autoComplete="off" initialValues={data} {...formItemLayout} >
             <Form.Item label={t('Төрөл')} name="turul">
-                <Select onKeyUp={focuser}>
+                <Select placeholder="Төрөл"  onKeyUp={focuser}>
                     <Select.Option key='khariltsagch' value='khariltsagch'>{t("Харилцагч")}</Select.Option>
                     <Select.Option key='talbai' value='talbai'>{t("Талбай")}</Select.Option>
                     <Select.Option key='geree' value='geree'>{t("Гэрээ")}</Select.Option>
@@ -113,7 +113,7 @@ const { t } = useTranslation();
                     },
                 ]}
             >
-                <Input onKeyUp={focuser} ></Input>
+                <Input placeholder='Нэр' onKeyUp={focuser} ></Input>
             </Form.Item>
             <Form.List name="utguud">
                 {(fields, { add, remove }, { errors }) => (
@@ -153,7 +153,9 @@ const { t } = useTranslation();
                             <Button
                                 type="dashed"
                                 onClick={() => add()}
-                                className="relative w-[85%]"
+                                // className="relative w-[85%]"
+                                className="relative w-[85%] dark:bg-gray-700 dark:text-white"
+
                                 icon={
                                     <PlusOutlined />
                                 }

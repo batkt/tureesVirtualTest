@@ -552,19 +552,19 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setDun("")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Бүгд1")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodson")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white justify-center rounded-md border px-5 py-[2px]  font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Дүн бодсон")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodoogui")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Дүн бодоогүй")}
                 </div>
@@ -596,25 +596,25 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setKhelber("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setKhelber("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setKhelber("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}
                 >
                   {t("Карт")}
                 </div>
                 <div
                   onClick={() => setKhelber("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}
                 >
                   {t("Харилцах")}
                 </div>
@@ -1252,11 +1252,11 @@ function camera({ token }) {
                   value={ognoo}
                   onChange={setOgnoo}
                 />
-                <div
+                {/* <div
                   className={`h-3 w-1 bg-slate-100 ${
                     refresh ? "rotate-90" : "rotate-0"
                   }`}
-                ></div>
+                ></div> */}
               </div>
               <div
                 className="mb-5 flex w-full justify-between sm:justify-end md:mb-0 md:ml-auto lg:w-auto"
@@ -1616,7 +1616,8 @@ function camera({ token }) {
                     </Form.Item>
                     <a
                       onClick={() => form.resetFields()}
-                      className="ml-2 flex h-8 items-center rounded border border-red-400  px-2 hover:bg-red-200"
+                      className="ml-2 flex h-8 items-center rounded border border-red-400 dark:text-white px-2 hover:bg-red-200"
+
                     >
                       {t("Цэвэрлэх")}
                     </a>
@@ -1628,7 +1629,7 @@ function camera({ token }) {
                         (n) => (
                           <a
                             onClick={() => keyPadHandler(n)}
-                            className="m-1 rounded border px-3 py-2 hover:bg-green-200"
+                            className="m-1 rounded border px-3 py-2 dark:text-white hover:bg-green-200"
                           >
                             {n}
                           </a>
@@ -1638,7 +1639,7 @@ function camera({ token }) {
                     {usguud.map((useg) => (
                       <a
                         onClick={() => keyPadHandler(useg)}
-                        className="m-1 rounded border px-3 py-2 hover:bg-green-200"
+                        className="m-1 rounded border px-3 py-2 dark:text-white hover:bg-green-200"
                       >
                         {useg}
                       </a>

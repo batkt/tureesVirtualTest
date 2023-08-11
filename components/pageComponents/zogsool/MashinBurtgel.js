@@ -18,12 +18,14 @@ function MashinBurtgel(
 ) {
   const [form] = Form.useForm();
   const [geree, setGeree] = useState(null);
-  const [turulShalgah, setTurulShalgah] = useState();
+  const [turulShalgah, setTurulShalgah] = useState(data?.turul ? data?.turul : undefined);
   const [inputValue, setInputValue] = useState("");
   const [ognoo, setOgnoo] = useState([
     moment(new Date()).subtract(1, "months"),
     moment(new Date()),
   ]);
+
+  console.log(data,"turulShalgahturulShalgah")
 
   // console.log(ognoo, "ognooognoo");
 

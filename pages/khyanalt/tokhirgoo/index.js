@@ -448,7 +448,7 @@ function AjiltanBurtgel({ token }) {
             {tokhirgoo?.map((mur, index) => (
               <div
                 className={`mt-5 flex cursor-pointer items-center ${
-                  index === songogdsonTsonkhniiIndex ? "font-medium" : ""
+                  index === songogdsonTsonkhniiIndex ? "text-white" : ""
                 } `}
                 onClick={() => setSongogdsonTsonkhniiIndex(index)}>
                 {mur.icon} {t(mur.text)}
