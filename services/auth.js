@@ -12,6 +12,7 @@ import { ekhniiTsonkhruuOchyo } from "tools/logic/khereglegchiinErkhiinTokhirgoo
 import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
 import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 const AuthContext = createContext({});
 
 export const useBarilga = () => {
