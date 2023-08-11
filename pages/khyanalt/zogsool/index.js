@@ -108,8 +108,7 @@ function Zogsool({ token }) {
 
   const [shuult, setShuult] = useState("");
 
-  const { uilchiluulegchToololt, uilchiluulegchToololtMutate } =
-    useUilchluulegchToololt(token);
+  const { uilchiluulegchToololt, uilchiluulegchToololtMutate } = useUilchluulegchToololt(token);
 
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
@@ -121,11 +120,16 @@ function Zogsool({ token }) {
   }, [baiguullaga?._id]);
   const query = useMemo(() => {
     const aa = !!shuult?.query ? shuult.query : {};
+    console.log(ognoo,"ognooognoo")
     const baseQuery = {
-      createdAt: {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      },
+      ...(ognoo &&
+        {
+            createdAt: {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+          }
+        ),
       ...aa,
       "tuukh.zogsooliinId": zogsoolId,
     };
@@ -153,8 +157,10 @@ function Zogsool({ token }) {
     return {
       baiguullagiinId: baiguullaga?._id,
       zogsooliinId: jagsaalt[0]?._id,
-      ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      ...(ognoo && {
+        ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      }),
     };
   }, [ognoo, jagsaalt, uilchluulegchGaralt]);
 
@@ -173,14 +179,14 @@ function Zogsool({ token }) {
       {
         name: "Үйлчлүүлэгч",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === null)?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
           0
         ),
       },
       {
         name: "Түрээслэгч",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === "Түрээслэгч")?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].turul.find((a) => a._id === "Түрээслэгч")?.too,
           0
         ),
         query: {
@@ -190,7 +196,7 @@ function Zogsool({ token }) {
       {
         name: "Гэрээт",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === "Гэрээт")?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].turul.find((a) => a._id === "Гэрээт")?.too,
           0
         ),
         query: {
@@ -200,7 +206,7 @@ function Zogsool({ token }) {
       {
         name: "Дотоод",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === "Дотоод")?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].turul.find((a) => a._id === "Дотоод")?.too,
           0
         ),
         query: {
@@ -210,22 +216,23 @@ function Zogsool({ token }) {
       {
         name: "Зөрчилтэй",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === "Зөрчилтэй")?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].tuluv.find((a) => a._id === -2)?.too,
           0
         ),
-        query: {},
+        query: {"tuukh.tuluv": -2},
       },
       {
         name: "Бусад",
         too: formatNumber(
-          uilchiluulegchToololt?.find((a) => a._id === "Бусад")?.too,
+            !!uilchiluulegchToololt && uilchiluulegchToololt[0].tuluv.find((a) => a._id === -1)?.too,
           0
         ),
-        query: {},
+        query: {"tuukh.tuluv": -1},
       },
     ],
     [uilchiluulegchToololt, uilchluulegchGaralt]
   );
+
   const zogsoolChange = (e) => {
     // console.log('2222222222', e);
     setZogsoolId(e);
@@ -530,13 +537,13 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         render: (v, parent) => {
           console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
-          if (parent.turul === "Үнэгүй") {
+          if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
-              <Tooltip placement="top" title={parent?.mashin?.temdeglel}> 
+              <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
                 <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
               </Tooltip>
             );
-          } 
+          }
           else if (parent.turul === "Гэрээт".trim()){
             return (<div>
               {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}

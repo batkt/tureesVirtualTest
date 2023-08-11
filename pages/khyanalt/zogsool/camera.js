@@ -797,7 +797,7 @@ function camera({ token }) {
         showSorterTooltip: false,
         render: (v, parent) => {
           console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
-          if (parent.turul === "Үнэгүй") {
+          if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
                 <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
@@ -1197,7 +1197,7 @@ function camera({ token }) {
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
-                  }}
+                  }}  
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll
@@ -1568,6 +1568,14 @@ function camera({ token }) {
                       label={t("Дугаар1")}
                       name="mashiniiDugaar"
                       className="w-2/5"
+                      normalize={(input) => {
+                        const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+                        const useg = Array.from(input)
+                          .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+                          .slice(0, 3)
+                          .join("");
+                        return `${too}${useg}`.toUpperCase();
+                      }}
                       rules={[
                         {
                           required: true,
