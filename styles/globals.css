@@ -455,6 +455,23 @@ audio::-webkit-media-controls-volume-control-container {
   justify-content: center;
 }
 
+.ant-select .ant-select-focused .ant-select-open .ant-tree-select .ant-select-single .ant-select-allow-clear .ant-select-show-arrow .ant-select-show-search {
+  @apply bg-white dark:bg-gray-800;
+}
+
+.ant-radio-wrapper span{
+  @apply dark:text-white;
+}
+
+.ant-radio-wrapper-disabled span{
+  @apply dark:text-gray-500;
+}
+
+
+.ant-modal-close-x{
+  @apply dark:text-white;
+}
+
 .ant-picker-calendar .ant-picker-panel {
   @apply bg-white dark:bg-gray-800;
   border: 0;

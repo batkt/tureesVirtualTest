@@ -37,7 +37,7 @@ function EbarimtMedeelel({ token }) {
 
   const [loading, setLoading] = useState(false);
   const [waiting, setWaiting] = useState(false);
-  const [uilchilgee, setUilchilgee] = useState();
+  const [uilchilgeeAvi, setUilchilgeeAvi] = useState();
 
   const query = useMemo(() => {
     const yavuulahQuery = {
@@ -50,18 +50,18 @@ function EbarimtMedeelel({ token }) {
         : undefined,
     };
 
-    if (uilchilgee) {
-      if (uilchilgee === "Зогсоол") {
+    if (uilchilgeeAvi) {
+      if (uilchilgeeAvi === "Зогсоол") {
         yavuulahQuery.mashiniiDugaar = { $exists: true };
-      } else if (uilchilgee === "Түрээс") {
+      } else if (uilchilgeeAvi === "Түрээс") {
         yavuulahQuery.gereeniiDugaar = { $exists: true };
-      } else if (uilchilgee === "Тоглоом") {
+      } else if (uilchilgeeAvi === "Тоглоом") {
         yavuulahQuery.togloomiinId = { $exists: true };
       }
     }
 
     return yavuulahQuery;
-  }, [ekhlekhOgnoo, uilchilgee]);
+  }, [ekhlekhOgnoo, uilchilgeeAvi]);
 
   const queryToololt = useMemo(() => {
     return {
@@ -229,7 +229,7 @@ function EbarimtMedeelel({ token }) {
               <Select
                 className='w-full sm:w-36'
                 placeholder='Үйлчилгээ'
-                onChange={(v) => setUilchilgee(v)}
+                onChange={(v) => setUilchilgeeAvi(v)}
                 allowClear>
                 <Select.Option key='Зогсоол' value='Зогсоол'>
                   Зогсоол

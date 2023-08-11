@@ -183,20 +183,20 @@ function AnketiinZagvar({
         <div>{a.ner}</div>
         <div className="flex justify-end gap-2">
           <Button
-            className="bg-white text-green-400 hover:text-green-600 dark:bg-gray-900"
+            className="bg-white text-green-400 hover:text-green-600  dark:bg-gray-900 "
             onClick={(e) => {
               e.stopPropagation();
               anketIlgeeye(a);
             }}
-            icon={<SendOutlined />}
+            icon={<SendOutlined className="dark:text-green-400" />}
           />
           <Button
-            className="bg-white text-blue-400 hover:text-blue-600 dark:bg-gray-900"
+            className="bg-white text-blue-400 hover:text-blue-600  dark:bg-gray-900 "
             onClick={(e) => {
               e.stopPropagation();
               setData({ ...a, khariultuud: undefined });
             }}
-            icon={<EyeOutlined />}
+            icon={<EyeOutlined className="dark:text-blue-400" />}
           />
           <Popconfirm
             placement="right"
@@ -208,11 +208,11 @@ function AnketiinZagvar({
             okText={t("Тийм")}
             cancelText={t("Үгүй")}>
             <Button
-              className="bg-white text-red-400 hover:text-red-600 dark:bg-gray-900"
+              className="bg-white text-red-400 hover:text-red-600  dark:bg-gray-900 "
               onClick={(e) => {
                 e.stopPropagation();
               }}
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined className="dark:text-red-400" />}
             />
           </Popconfirm>
         </div>
@@ -345,7 +345,7 @@ function Anket({ token }) {
   function anketIlgeeye(data) {
     const footer = [
       <Space className="flex justify-end">
-        <Button type="sideKick" onClick={() => ilgeekhRef.current.khaaya()}>
+        <Button className="dark:text-gray-200 dark:hover:text-gray-800" type="sideKick" onClick={() => ilgeekhRef.current.khaaya()}>
           {t("Хаах")}
         </Button>
         <Button
@@ -578,7 +578,7 @@ function Anket({ token }) {
                             <Form.Item
                               {...restField}
                               name={[name, "khariult"]}
-                              className="w-full">
+                              className="w-full ">
                               {!!formPreview.getFieldValue("asuultuud") &&
                               formPreview.getFieldValue("asuultuud")[name]
                                 ?.turul === "songokh" ? (
@@ -588,12 +588,12 @@ function Anket({ token }) {
                                       ? data?.khariultuud[name]?.khariult
                                       : undefined
                                   }
-                                  className="flex flex-col">
+                                  className="flex flex-col ">
                                   {!!formPreview.getFieldValue("asuultuud") &&
                                     formPreview
                                       .getFieldValue("asuultuud")
                                       [name].khariultuud?.map((a, i) => (
-                                        <Radio key={i} value={a}>
+                                        <Radio key={i} value={a} className="dark:text-gray-200">
                                           {a}
                                         </Radio>
                                       ))}

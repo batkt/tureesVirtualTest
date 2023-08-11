@@ -376,22 +376,22 @@ function Zogsool({ token }) {
               <div className='space-y-2'>
                 <div
                   onClick={() => setTulbur("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer items-center dark:text-white justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Бүгд
                 </div>
                 <div
                   onClick={() => setTulbur("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer items-center dark:text-white justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Бэлэн
                 </div>
                 <div
                   onClick={() => setTulbur("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer items-center dark:text-white justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   Карт
                 </div>
                 <div
                   onClick={() => setTulbur("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}>
+                  className={`relative flex cursor-pointer items-center dark:text-white justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 `}>
                   Харилцах
                 </div>
               </div>
@@ -442,17 +442,17 @@ function Zogsool({ token }) {
               <div className='space-y-2'>
                 <div
                   onClick={() => setTuluv("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setTuluv("1")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   {t("Төлсөн")}
                 </div>
                 <div
                   onClick={() => setTuluv("-2")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
+                  className={`relative flex cursor-pointer dark:text-white items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20`}>
                   {t("Төлөөгүй")}
                 </div>
               </div>
