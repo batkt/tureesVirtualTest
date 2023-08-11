@@ -211,6 +211,7 @@ function camera({ token }) {
   const [dun, setDun] = useState(null);
   const [idevkhtei, setIdevkhtei] = useState(0);
   const [refresh, setRefresh] = useState(true);
+  const [modalNeelttei, setModalNeelttei] = useState(false);
   const [form] = Form.useForm();
 
   const que = useMemo(() => {
@@ -355,7 +356,10 @@ function camera({ token }) {
       });
     }
     if (mur?.tuluv === 0 && !!mur?.tulukhDun) {
-      return tulburTulyu(mur, data?._id, data?.mashiniiDugaar);
+      if(modalNeelttei === false){
+        setModalNeelttei(true)
+        return tulburTulyu(mur, data?._id, data?.mashiniiDugaar);
+      }
     } else
       return notification.warning({
         message: "Төлбөр бодогдох боломжгүй",
@@ -460,6 +464,7 @@ function camera({ token }) {
           ajiltan={ajiltan}
           uilchluugchiinId={uilchluugchiinId}
           onRefresh={onRefresh}
+          setModalNeelttei={setModalNeelttei}
         />
       ),
       footer: false,

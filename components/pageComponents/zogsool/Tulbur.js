@@ -25,6 +25,7 @@ function Tulbur(
     barilgiinId,
     uilchluugchiinId,
     onRefresh,
+    setModalNeelttei
   },
   ref
 ) {
@@ -68,6 +69,7 @@ function Tulbur(
     ref,
     () => ({
       khaaya() {
+        setModalNeelttei(false)
         destroy();
       },
     }),
