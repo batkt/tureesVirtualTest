@@ -304,7 +304,7 @@ function camera({ token }) {
       // }
     });
     return () => {
-      socket().off(`zogsool`);
+      socket().off(`zogsool${baiguullaga?._id}`);
     };
   }, [baiguullaga]);
 
@@ -486,6 +486,7 @@ function camera({ token }) {
         dataIndex: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (a) => String(a).toUpperCase(),
       },
     ];
     return [
@@ -815,9 +816,6 @@ function camera({ token }) {
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
                       ? t(parent.zurchil)
-                      : !!v[0]?.tsagiinTuukh[0]?.garsanTsag &&
-                        v[0]?.niitKhugatsaa <= 30
-                      ? t("30 мин")
                       : ""}
                   </div>
                 </Tooltip>
@@ -833,33 +831,20 @@ function camera({ token }) {
           return data.tuukh[0].tulbur.length === 0 &&
             data.tuukh[0].tulukhDun !== 0 ? (
             <div className="flex flex-row">
-              <Popover
-                placement="bottom"
-                trigger="hover"
-                content={() => (
-                  <div className="space-y-2">
-                    <a
-                      className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                      onClick={() =>
-                        setModalOpen({
-                          bool: true,
-                          item: data,
-                          type: "zurchil",
-                        })
-                      }
-                    >
-                      <ExclamationCircleOutlined
-                        style={{ fontSize: "18px", marginRight: "3px" }}
-                      />
-                      <div>{t("Зөрчил нэмэх")}</div>
-                    </a>
-                  </div>
-                )}
+              <a
+                className="ant-dropdown-link flex w-full items-center justify-center rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                onClick={() =>
+                  setModalOpen({
+                    bool: true,
+                    item: data,
+                    type: "zurchil",
+                  })
+                }
               >
-                <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
-                  <MoreOutlined style={{ fontSize: "18px" }} />
-                </a>
-              </Popover>
+                <ExclamationCircleOutlined
+                  style={{ fontSize: "18px", marginRight: "3px" }}
+                />
+              </a>
             </div>
           ) : null;
         },
@@ -1326,6 +1311,7 @@ function camera({ token }) {
                                     align: "center",
                                     dataIndex: "dugaar",
                                     width: "2rem",
+                                    __style__: { h: "center" },
                                     render: (text, record, index) =>
                                       (data?.khuudasniiDugaar || 0) *
                                         (data?.khuudasniiKhemjee || 0) -
@@ -1334,12 +1320,17 @@ function camera({ token }) {
                                       1,
                                   },
                                   {
-                                    title: t("Дугаар"),
+                                    title: t("Дугаар1"),
                                     dataIndex: "mashiniiDugaar",
+                                    __style__: { h: "center" },
+                                    render(v) {
+                                      return String(v).toUpperCase();
+                                    },
                                   },
                                   {
                                     title: t("Орсон"),
                                     dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
+                                    __style__: { h: "center" },
                                     render(v, p) {
                                       const d =
                                         p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
@@ -1350,6 +1341,7 @@ function camera({ token }) {
                                   },
                                   {
                                     title: t("Гарсан"),
+                                    __style__: { h: "center" },
                                     dataIndex: "tuukh.tsagiinTuukh.garsanTsag",
                                     render(v, p) {
                                       const d =
@@ -1362,6 +1354,7 @@ function camera({ token }) {
                                   {
                                     title: t("Хугацаа/мин"),
                                     dataIndex: "tuukh",
+                                    __style__: { h: "center" },
                                     render(v) {
                                       const d1 = moment(
                                         v?.[0]?.tsagiinTuukh[0]?.orsonTsag
@@ -1375,13 +1368,17 @@ function camera({ token }) {
                                   },
                                   {
                                     title: t("Төрөл"),
+                                    __style__: { h: "center" },
                                     dataIndex: "turul",
                                   },
                                   {
                                     title: t("Дүн"),
                                     dataIndex: "tuukh",
+                                    __style__: { h: "right" },
                                     render(v, p, i) {
-                                      return v?.[0]?.tulukhDun || 0;
+                                      return formatNumber(
+                                        v?.[0]?.tulukhDun || 0
+                                      );
                                     },
                                   },
                                   {
@@ -1536,9 +1533,7 @@ function camera({ token }) {
                       </Space>
                     ) : (
                       <Space direction="vertical">
-                        <Radio value="Хонох магадлалтай">
-                          {t("Хонох магадлалтай")}
-                        </Radio>
+                        <Radio value="Маргалдсан">{t("Маргалдсан")}</Radio>
                         <Radio value="Журам зөрчсөн">
                           {t("Журам зөрчсөн")}
                         </Radio>
@@ -1563,7 +1558,7 @@ function camera({ token }) {
                     onFinish={dugaarBurtgekh}
                   >
                     <Form.Item
-                      label={t("Дугаар")}
+                      label={t("Дугаар1")}
                       name="mashiniiDugaar"
                       className="w-2/5"
                       rules={[
