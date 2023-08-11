@@ -107,8 +107,14 @@ function Zogsool({ token }) {
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
 
   const [shuult, setShuult] = useState("");
+  const tooQuery = useMemo(() => {
+    return {
+      ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+    };
+  }, [ognoo]);
 
-  const { uilchiluulegchToololt, uilchiluulegchToololtMutate } = useUilchluulegchToololt(token);
+  const { uilchiluulegchToololt, uilchiluulegchToololtMutate } = useUilchluulegchToololt(token, tooQuery);
 
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
@@ -120,7 +126,7 @@ function Zogsool({ token }) {
   }, [baiguullaga?._id]);
   const query = useMemo(() => {
     const aa = !!shuult?.query ? shuult.query : {};
-    console.log(ognoo,"ognooognoo")
+    // console.log(ognoo,"ognooognoo")
     const baseQuery = {
       ...(ognoo &&
         {
@@ -299,7 +305,6 @@ function Zogsool({ token }) {
         });
   }, [uilchluulegchGaralt?.jagsaalt]);
 
-  console.log(ajiltniiNers);
 
   const columns = useMemo(() => {
     const shinecol =
@@ -536,7 +541,7 @@ function Zogsool({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
-          console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
+          // console.log(moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),"12312312312321")
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>

@@ -809,7 +809,7 @@ function camera({ token }) {
                 <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
               </Tooltip>
             );
-          } 
+          }
           else if (parent.turul === "Гэрээт".trim()){
             return (<div>
               {moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD")}
@@ -984,12 +984,14 @@ function camera({ token }) {
   };
   const dugaarBurtgekh = () => {
     const body = form.getFieldsValue();
-    // console.log('99999999', body);
     uilchilgee(token)
       .post("/zogsoolSdkService", body)
-      .then(({ status }) => {
-        if (status === 200) {
-          notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+      .then((res) => {
+        if (res.status === 200) {
+          if(!!res?.data)
+            notification.warn({ message: res.data.aldaa });
+          else
+            notification.success({ message: t("Амжилттай бүртгэгдлээ") });
           setModalOpen({ bool: false, item: null, type: "" });
           form.resetFields();
           onRefresh();
@@ -1204,7 +1206,7 @@ function camera({ token }) {
                     maxHeight: 600,
                     minWidth: 280,
                     overflow: "auto",
-                  }}  
+                  }}
                   placeholder={t("Камер сонгох")}
                   allowClear
                   treeDefaultExpandAll

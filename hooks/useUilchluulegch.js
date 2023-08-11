@@ -62,18 +62,18 @@ function useUilchluulegch(token, baiguullagiinId, query, order) {
         isValidating,
     };
 }
-const fetcherToololt = (url, token, barilgiinId) =>{
+const fetcherToololt = (url, token, barilgiinId, query) =>{
   if(!!barilgiinId)
       return axios(token)
-          .post(url, { barilgiinId })
+          .post(url, { barilgiinId, ...query })
           .then((res) => res.data)
           .catch(aldaaBarigch);
 };
 
-export function useUilchluulegchToololt(token) {
+export function useUilchluulegchToololt(token, query) {
     const { barilgiinId } = useAuth();
     const { data, mutate } = useSWR(
-        !!token ? ["/zogsoolUilchluulegchdiinToo", token, barilgiinId] : null,
+        !!token ? ["/zogsoolUilchluulegchdiinToo", token, barilgiinId, query] : null,
         fetcherToololt,
         { revalidateOnFocus: false }
     );
