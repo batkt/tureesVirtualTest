@@ -120,11 +120,16 @@ function Zogsool({ token }) {
   }, [baiguullaga?._id]);
   const query = useMemo(() => {
     const aa = !!shuult?.query ? shuult.query : {};
+    console.log(ognoo,"ognooognoo")
     const baseQuery = {
-      createdAt: {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      },
+      ...(ognoo &&
+        {
+            createdAt: {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+          }
+        ),
       ...aa,
       "tuukh.zogsooliinId": zogsoolId,
     };
@@ -152,8 +157,10 @@ function Zogsool({ token }) {
     return {
       baiguullagiinId: baiguullaga?._id,
       zogsooliinId: jagsaalt[0]?._id,
-      ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-      duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      ...(ognoo && {
+        ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      }),
     };
   }, [ognoo, jagsaalt, uilchluulegchGaralt]);
 
