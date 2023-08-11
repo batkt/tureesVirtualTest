@@ -11,21 +11,48 @@ import uilchilgee from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
 import moment from "moment";
 import { t } from "i18next";
+import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import formatNumber from "tools/function/formatNumber";
+import { CheckCircleOutlined } from "@ant-design/icons";
+
+const order = { createdAt: -1 };
 
 function MashinBurtgel(
-  { data, barilgiinId, token, destroy, onRefresh, mashinBurtgekhButtonId },
+  {
+    data,
+    barilgiinId,
+    token,
+    destroy,
+    onRefresh,
+    mashinBurtgekhButtonId,
+    baiguullagiinId,
+  },
   ref
 ) {
   const [form] = Form.useForm();
   const [geree, setGeree] = useState(null);
-  const [turulShalgah, setTurulShalgah] = useState(data?.turul ? data?.turul : undefined);
+  const [turulShalgah, setTurulShalgah] = useState(
+    data?.turul ? data?.turul : undefined
+  );
   const [inputValue, setInputValue] = useState("");
   const [ognoo, setOgnoo] = useState([
     moment(new Date()).subtract(1, "months"),
     moment(new Date()),
   ]);
 
-  console.log(data,"turulShalgahturulShalgah")
+  const query = React.useMemo(() => {
+    return { tuluv: { $nin: [-1] }, barilgiinId };
+  }, []);
+
+  const { gereeniiMedeelel, setGereeniiKhuudaslalt } = useGereeniiJagsaalt(
+    token,
+    baiguullagiinId,
+    undefined,
+    query,
+    undefined,
+    undefined,
+    order
+  );
 
   // console.log(ognoo, "ognooognoo");
 
@@ -47,23 +74,7 @@ function MashinBurtgel(
     ref,
     () => ({
       khadgalya() {
-        const data = form.getFieldsValue();
-        (data.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00")),
-          (data.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59")),
-          (data.barilgiinId = barilgiinId);
-        if (!!geree) {
-          data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
-          data.gereeniiDugaar = geree?.gereeniiDugaar;
-        }
-        console.log(data, "|dataa");
-        const method = data?._id ? updateMethod : createMethod;
-        method("mashin", token, data).then(({ data }) => {
-          if (data === "Amjilttai") {
-            message.success(t("Амжилттай хадгаллаа"));
-            onRefresh && onRefresh();
-            destroy();
-          }
-        });
+        form.submit();
       },
       khaaya() {
         destroy();
@@ -90,6 +101,26 @@ function MashinBurtgel(
         onOk: destroy,
       });
     else destroy();
+  }
+
+  function onFinish() {
+    const data = form.getFieldsValue();
+    (data.ekhlekhOgnoo = ognoo[0]?.format("YYYY-MM-DD 00:00:00")),
+      (data.duusakhOgnoo = ognoo[1]?.format("YYYY-MM-DD 23:59:59")),
+      (data.barilgiinId = barilgiinId);
+    if (!!geree) {
+      data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
+      data.gereeniiDugaar = geree?.gereeniiDugaar;
+    }
+    console.log(data, "|dataa");
+    const method = data?._id ? updateMethod : createMethod;
+    method("mashin", token, data).then(({ data }) => {
+      if (data === "Amjilttai") {
+        message.success(t("Амжилттай хадгаллаа"));
+        onRefresh && onRefresh();
+        destroy();
+      }
+    });
   }
 
   useEffect(() => {
@@ -138,26 +169,133 @@ function MashinBurtgel(
   return (
     <Form
       form={form}
+      onFinish={onFinish}
       initialValues={data}
-      className='space-y-2'
+      className="space-y-2"
       labelCol={{ span: 6 }}
-      wrapperCol={{ span: 24 }}>
-      <Form.Item name='_id' noStyle />
-      <Form.Item label={t("Төрөл")} name='turul'>
+      wrapperCol={{ span: 24 }}
+    >
+      <Form.Item name="_id" noStyle />
+      <Form.Item
+        label={t("Төрөл")}
+        name="turul"
+        requiredMark={"optional"}
+        rules={[
+          {
+            required: true,
+            message: t("Төрөл сонгоно үү!"),
+          },
+        ]}
+      >
         <Select
           onChange={(e) => {
             form.getFieldInstance("ezemshigchiinUtas").focus();
             setTurulShalgah(e);
           }}
-          placeholder={t("Төрөл")}>
-          {["Гэрээт", "Түрээслэгч", "Дотоод", "Үнэгүй"].map((a) => (
+          placeholder={t("Төрөл")}
+        >
+          {[
+            "Гэрээт",
+            "Түрээслэгч",
+            "Дотоод",
+            "Үнэгүй",
+            "Онцгой үйлчлүүлэгч",
+          ].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label={t("Утас")} name='ezemshigchiinUtas'>
+      {turulShalgah === "Онцгой үйлчлүүлэгч" && (
+        <div>
+          <Form.Item name="khariltsagchiinNer" noStyle />
+          <Form.Item name="gereeniiDugaar" noStyle />
+          <Form.Item
+            name={"gereeniiId"}
+            requiredMark={"optional"}
+            rules={[
+              {
+                required: true,
+                message: t("Гэрээ сонгоно уу!"),
+              },
+            ]}
+            label={t("Гэрээ сонгох")}
+          >
+            <Select
+              onChange={(v) => {
+                form.setFieldValue(
+                  "khariltsagchiinNer",
+                  gereeniiMedeelel?.jagsaalt?.find((a) => a._id === v)?.ner
+                );
+                form.setFieldValue(
+                  "gereeniiDugaar",
+                  gereeniiMedeelel?.jagsaalt?.find((a) => a._id === v)
+                    ?.gereeniiDugaar
+                );
+              }}
+              showSearch
+              filterOption={(o) => o}
+              allowClear
+              onSearch={(search) =>
+                setGereeniiKhuudaslalt((a) => ({
+                  ...a,
+                  search,
+                  khuudasniiDugaar: 1,
+                }))
+              }
+              placeholder={t("Гэрээ сонгох")}
+            >
+              {gereeniiMedeelel?.jagsaalt?.map((mur) => {
+                return (
+                  <Select.Option key={mur._id} value={mur._id}>
+                    <div className="flex flex-row justify-between">
+                      <div className="flex flex-row space-x-2">
+                        <label className="font-semibold">
+                          {t("Гэрээний №")}:
+                        </label>
+                        <div>{mur.gereeniiDugaar}</div>
+                      </div>
+                      <div className="flex flex-row space-x-2">
+                        <label className="font-semibold">
+                          {t("Түрээслэгч")}:
+                        </label>
+                        <div>{mur.ner}</div>
+                      </div>
+                    </div>
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+        </div>
+      )}
+      <Form.Item
+        requiredMark={"optional"}
+        normalize={(input) => {
+          const too = input.replace(/[^0-9\\.]+/g, "").slice(0, 8);
+          return too;
+        }}
+        rules={[
+          {
+            required: true,
+            message: t("Машины дугаар бүртгэнэ үү!"),
+          },
+          {
+            required: true,
+            len: 8,
+            validator: async (_, names) => {
+              if (names?.length < 8 && names?.length > 0) {
+                return Promise.reject(
+                  new Error("Машины дугаар аа шалгана уу!")
+                );
+              }
+            },
+          },
+        ]}
+        label={t("Утас")}
+        name="ezemshigchiinUtas"
+      >
         <Input
           maxLength={8}
           onKeyUp={focuser}
@@ -174,22 +312,65 @@ function MashinBurtgel(
             .join("");
           return `${too}${useg}`.toUpperCase();
         }}
+        requiredMark={"optional"}
+        rules={[
+          {
+            required: true,
+            message: t("Машины дугаар бүртгэнэ үү!"),
+          },
+          {
+            required: form.getFieldValue("mashiniiDugaar")?.length > 0 && true,
+            min: 7,
+            max: 7,
+            pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
+            message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
+          },
+        ]}
         label={t("Машины дугаар")}
-        name='dugaar'>
+        name="dugaar"
+      >
         <Input onKeyUp={focuser} placeholder={t("Машины дугаар")} />
       </Form.Item>
-      <Form.Item label={t("Нэр")} name='ezemshigchiinNer'>
+      <Form.Item
+        requiredMark={"optional"}
+        rules={[
+          {
+            required: true,
+            message: t("Нэр бүртгэнэ үү!"),
+          },
+        ]}
+        label={t("Нэр")}
+        name="ezemshigchiinNer"
+      >
         <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item label={t("Тайлбар")} name='temdeglel'>
+      <Form.Item
+        requiredMark={"optional"}
+        rules={[
+          {
+            required: true,
+            message: t("Тайлбар бүртгэнэ үү!"),
+          },
+        ]}
+        label={t("Тайлбар")}
+        name="temdeglel"
+      >
         <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
       </Form.Item>
       {turulShalgah === "Гэрээт" && (
-        <Form.Item label={t("Огноо")}>
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: t("Огноо бүртгэнэ үү!"),
+            },
+          ]}
+          label={t("Огноо")}
+        >
           <DatePicker.RangePicker
             onClick={(e) => e.stopPropagation()}
-            className='flex w-full  rounded-md md:w-auto'
-            size='middle'
+            className="flex w-full  rounded-md md:w-auto"
+            size="middle"
             allowClear={true}
             placeholder={["Эхлэх огноо", "Дуусах огноо"]}
             value={ognoo}
