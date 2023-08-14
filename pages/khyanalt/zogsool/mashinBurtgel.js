@@ -113,13 +113,6 @@ function mashinBurtgel({ token }) {
         sorter: () => 0,
       },
       {
-        title: t("Тайлбар"),
-        width: "8rem",
-        align: "center",
-        dataIndex: "temdeglel",
-        showSorterTooltip: false,
-      },
-      {
         title: t("Утас"),
         align: "center",
         dataIndex: "ezemshigchiinUtas",
@@ -139,6 +132,13 @@ function mashinBurtgel({ token }) {
         sorter: () => 0,
       },
       ...shinecol,
+      {
+        title: t("Тайлбар"),
+        width: "8rem",
+        align: "center",
+        dataIndex: "temdeglel",
+        showSorterTooltip: false,
+      },
       {
         title: () => <SettingOutlined />,
         width: "2rem",
