@@ -183,7 +183,7 @@ function MashinBurtgel(
         rules={[
           {
             required: true,
-            message: t("Төрөл сонгоно үү!"),
+            message: t("Төрөл сонгоно уу!"),
           },
         ]}
       >
@@ -273,13 +273,13 @@ function MashinBurtgel(
       <Form.Item
         requiredMark={"optional"}
         normalize={(input) => {
-          const too = input.replace(/[^0-9\\.]+/g, "").slice(0, 8);
+          const too = input.replace(/[^0-9]+/g, "").slice(0, 8);
           return too;
         }}
         rules={[
           {
             required: true,
-            message: t("Машины дугаар бүртгэнэ үү!"),
+            message: t("Утасны дугаар бүртгэнэ үү!"),
           },
           {
             required: true,
@@ -287,7 +287,7 @@ function MashinBurtgel(
             validator: async (_, names) => {
               if (names?.length < 8 && names?.length > 0) {
                 return Promise.reject(
-                  new Error("Машины дугаар аа шалгана уу!")
+                  new Error("Утасны дугаар аа шалгана уу!")
                 );
               }
             },
@@ -344,17 +344,7 @@ function MashinBurtgel(
       >
         <Input onKeyUp={focuser} placeholder={t("Нэр")} />
       </Form.Item>
-      <Form.Item
-        requiredMark={"optional"}
-        rules={[
-          {
-            required: true,
-            message: t("Тайлбар бүртгэнэ үү!"),
-          },
-        ]}
-        label={t("Тайлбар")}
-        name="temdeglel"
-      >
+      <Form.Item label={t("Тайлбар")} name="temdeglel">
         <Input onKeyUp={focuser} placeholder={t("Тайлбар")} />
       </Form.Item>
       {turulShalgah === "Гэрээт" && (

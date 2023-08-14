@@ -2,7 +2,7 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useMemo, useState } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, Popconfirm, Popover, Space, Table } from "antd";
+import { Button, Card, Popconfirm, Popover, Space, Table, message } from "antd";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -146,18 +146,22 @@ function mashinBurtgel({ token }) {
         render: (data) => (
           <div className="flex flex-row">
             <Popover
+              zIndex={99}
               placement="bottom"
               trigger="hover"
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => mashinBurtgekh(data)}
+                    onClick={() => {
+                      mashinBurtgekh(data);
+                    }}
                   >
                     <EditOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Засах")}</label>
                   </a>
                   <Popconfirm
+                    placement="left"
                     title={t("Машин устгах уу?")}
                     okText={t("Тийм")}
                     cancelText={t("Үгүй")}
@@ -251,9 +255,12 @@ function mashinBurtgel({ token }) {
   }
 
   function mashinUstgaya(data) {
-    deleteMethod("mashin", token, data?._id).then(
-      ({ data }) => data === "Amjilttai" && mashinMutate()
-    );
+    deleteMethod("mashin", token, data?._id).then(({ data }) => {
+      if (data === "Amjilttai") {
+        mashinMutate();
+        message.success("Амжилттай устгагдлаа");
+      }
+    });
   }
 
   function mashinBurtgekh(data) {

@@ -58,6 +58,7 @@ import { ImQrcode } from "react-icons/im";
 import { useQRCode } from "next-qrcode";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
+import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 
 const DelegrenguiKharakh = React.forwardRef(
   ({ data, destroy, confirm }, ref) => {
@@ -1176,6 +1177,9 @@ function togloom1() {
                     <div className="flex items-center justify-center">
                       {t("Төлбөр")}
                     </div>
+                    {togloominTuviinGaralt?.jagsaalt?.find(
+                      (a) => a?.tulburTulsunEsekh !== true
+                    )?._id === data?._id && "[ F2 ]"}
                   </div>
                 ) : (
                   <div className="flex items-center  justify-center space-x-2 text-white ">
@@ -1369,7 +1373,6 @@ function togloom1() {
   useEffect(() => {
     Aos.init({ once: true });
   });
-
   function khuukhedBurtgekh(data) {
     modal({
       title: (
@@ -1396,6 +1399,20 @@ function togloom1() {
       footer: false,
     });
   }
+
+  useKeyboardTovchlol(
+    "+",
+    () => mashinref?.current === null && khuukhedBurtgekh()
+  );
+  useKeyboardTovchlol("F2", () => {
+    var data = togloominTuviinGaralt?.jagsaalt?.find(
+      (a) => a?.tulburTulsunEsekh !== true
+    );
+    tulburRef.current === null &&
+      (!!data
+        ? tulburTulyu(data)
+        : message.warn("Төлбөр төлөх үйлчлүүлэгч байхгүй байна"));
+  });
 
   return (
     <Admin
@@ -1508,10 +1525,9 @@ function togloom1() {
               <Button
                 className="col-span-2 w-full sm:w-auto"
                 type="primary"
-                icon={<PlusOutlined />}
                 onClick={() => khuukhedBurtgekh()}
               >
-                {t("Бүртгэл")}
+                {t("Бүртгэл")} [ + ]
               </Button>
               <BaganiinSongolt
                 ButtonStyle="w-full sm:w-auto"
