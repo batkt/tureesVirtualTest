@@ -1038,7 +1038,7 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className={`w-full bg-[url('/notPlay.png')] bg-center ${
+                className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 1
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
@@ -1120,7 +1120,7 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(2);
                 }}
-                className={`w-full bg-[url('/notPlay.png')] bg-center ${
+                className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 2
                     ? "sm:h-[80vh] sm:w-[80%]"
                     : "sm:h-[250px]"
