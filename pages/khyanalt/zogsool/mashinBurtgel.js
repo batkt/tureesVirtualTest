@@ -58,7 +58,10 @@ function mashinBurtgel({ token }) {
   //   }
   // });
 
-  const { mashinToololt, mashinToololtMutate } = useMashinToololt(token);
+  const { mashinToololt, mashinToololtMutate } = useMashinToololt(
+    token,
+    barilgiinId
+  );
 
   const { order, onChangeTable } = useOrder({
     createdAt: -1,

@@ -3,15 +3,15 @@ import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 
-const mashiniiTooAvya = (url, token) =>
+const mashiniiTooAvya = (url, token, barilgiinId) =>
   axios(token)
-    .post(url)
+    .post(url, { barilgiinId: barilgiinId })
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-export function useMashinToololt(token) {
+export function useMashinToololt(token, barilgiinId) {
   const { data, mutate } = useSWR(
-    !!token ? ["/mashiniiTooAvya", token] : null,
+    !!token ? ["/mashiniiTooAvya", token, barilgiinId] : null,
     mashiniiTooAvya,
     { revalidateOnFocus: false }
   );

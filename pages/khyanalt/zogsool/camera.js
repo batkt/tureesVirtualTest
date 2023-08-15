@@ -132,24 +132,43 @@ function generateChild(mur, turul) {
 }
 
 function tulburKhurvuulekh(v) {
+  var utga = undefined;
   switch (v) {
     case "belen":
-      return "Бэлэн";
+      utga = "Бэлэн";
+      break;
     case "khariltsakh":
-      return "Харилцах";
+      utga = "Харилцах";
+      break;
     case "khaan":
-      return "Хаан";
+      utga = "Хаан";
+      break;
     case "khas":
-      return "Хас";
+      utga = "Хас";
+      break;
     case "tur":
-      return "Төр";
+      utga = "Төр";
+      break;
     case "golomt":
-      return "Голомт";
+      utga = "Голомт";
+      break;
     case "tdb":
-      return "ХХБ";
+      utga = "ХХБ";
+      break;
+    case "tdb":
+      utga = "ХХБ";
+      break;
+    case "kapitron":
+      utga = "Капитрон";
+      break;
+    case "khariltsakh":
+      utga = "Харилцах";
+      break;
     default:
+      utga = v;
       break;
   }
+  return utga;
 }
 
 /*const TreeComponent = ()=>{
@@ -620,6 +639,7 @@ function camera({ token }) {
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (a) => (!!a ? a : "Үйлчлүүлэгч"),
       },
       {
         title: (
@@ -716,7 +736,7 @@ function camera({ token }) {
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
-              {t("Хэлбэр")}
+              {t("Төлбөр")}
             </div>
           </Popover>
         ),
@@ -1013,27 +1033,49 @@ function camera({ token }) {
     }
   };
   const khadgalakh = () => {
-    let body = modalOpen.item;
-    if (modalOpen.type === "zurchil") {
-      body.zurchil = value;
-      body.tuukh[0].tuluv = -2;
-    } else if (modalOpen.type === "dugaarBurtgekh") {
-      form.submit();
-    } else {
-      body.tuukh[0].uneguiGarsan = value;
-      body.tuukh[0].tuluv = -1;
-    }
-    if (modalOpen.type !== "dugaarBurtgekh") {
-      updateMethod("zogsoolUilchluulegch", token, body).then(({ data }) => {
-        if (data === "Amjilttai") {
-          message.success(t("Амжилттай хадгаллаа"));
-          onRefresh();
-        }
+    uilchilgee(token)
+      .get("ognooAvya")
+      .then(({ data }) => {
+        if (!!data) {
+          console.log(data);
+          let body = modalOpen.item;
+          if (modalOpen.type === "zurchil") {
+            if (!value || value === "" || value === undefined) {
+              message.warn("Зөрчлийн шалтгаан оруулна уу!");
+              return;
+            }
+            body.zurchil = value;
+            body.tuukh[0].tuluv = -2;
+            if (!!camerVal[1]) {
+              body.tuukh[0].garsanKhaalga = camerVal[1];
+            }
+            body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
+            body.tuukh[0].niitKhugatsaa = moment(data).diff(
+              body.tuukh[0].tsagiinTuukh[0].orsonTsag,
+              "minutes"
+            );
+          } else if (modalOpen.type === "dugaarBurtgekh") {
+            form.submit();
+          } else {
+            body.tuukh[0].uneguiGarsan = value;
+            body.tuukh[0].tuluv = -1;
+          }
+          if (modalOpen.type !== "dugaarBurtgekh") {
+            updateMethod("zogsoolUilchluulegch", token, body).then(
+              ({ data }) => {
+                if (data === "Amjilttai") {
+                  message.success(t("Амжилттай хадгаллаа"));
+                  onRefresh();
+                }
+              }
+            );
+            setModalOpen({ bool: false, item: null, type: "" });
+            setValue(null);
+          }
+        } else message.warn("Уучлаарай дахин оролдоно уу");
       });
-      setModalOpen({ bool: false, item: null, type: "" });
-      setValue(null);
-    }
   };
+
   const exlCol = () => {
     const aa = columns;
     aa.splice(columns.length - 2, 2, {
@@ -1475,6 +1517,7 @@ function camera({ token }) {
                                     title: t("Төрөл"),
                                     __style__: { h: "center" },
                                     dataIndex: "turul",
+                                    render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
                                   },
                                   {
                                     title: t("Дүн"),
@@ -1575,7 +1618,12 @@ function camera({ token }) {
                 onChange={onChangeTable}
                 rowClassName={(record, index) => {
                   const d = record.tuukh[0];
-                  if (d.tuluv === 0 && d?.tulukhDun) return "green";
+                  if (
+                    d.tuluv === 0 &&
+                    record.turul !== "Үнэгүй" &&
+                    d?.tulukhDun
+                  )
+                    return "green";
                 }}
                 pagination={{
                   current: uilchluulegchGaralt?.khuudasniiDugaar,

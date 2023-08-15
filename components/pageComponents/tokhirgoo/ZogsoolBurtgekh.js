@@ -89,7 +89,9 @@ function ZogsoolBurtgekh(
         <div className="col-span-2">
           <div className="grid grid-cols-4 gap-5 p-3">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white">{t("Зогсоолын нэр")}</div>
+              <div className="font-medium dark:text-white">
+                {t("Зогсоолын нэр")}
+              </div>
             </div>
             <div className="col-span-2">
               <Form.Item
@@ -106,7 +108,9 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white">{t("Нийт зогсоолын тоо")}</div>
+              <div className="font-medium dark:text-white">
+                {t("Нийт зогсоолын тоо")}
+              </div>
             </div>
             <div className="col-span-2">
               <Form.Item
@@ -123,7 +127,9 @@ function ZogsoolBurtgekh(
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white">{t("Үндсэн тариф /30мин ₮/")}</div>
+              <div className="font-medium dark:text-white">
+                {t("Үндсэн тариф /30мин ₮/")}
+              </div>
             </div>
             <div className="col-span-2">
               <Form.Item
@@ -136,11 +142,13 @@ function ZogsoolBurtgekh(
                   },
                 ]}
               >
-                <Input placeholder="Тариф "/>
+                <Input placeholder="Тариф " />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
-              <div className="font-medium dark:text-white">{t("Гадна зогсоол сонгох")}</div>
+              <div className="font-medium dark:text-white">
+                {t("Гадна зогсоол сонгох")}
+              </div>
             </div>
             <div className="col-span-2">
               <Form.Item
@@ -179,7 +187,7 @@ function ZogsoolBurtgekh(
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div
                       key={fieldKey}
-                      className=" relative mb-5 rounded-md border bg-green-50 dark:bg-gray-700 px-10 py-4 shadow-md 2xl:pr-20"
+                      className=" relative mb-5 rounded-md border bg-green-50 px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
                     >
                       <div className="grid w-full grid-cols-4 items-center gap-5">
                         <div
@@ -257,7 +265,7 @@ function ZogsoolBurtgekh(
                 </div>
                 <Button
                   icon={<PlusOutlined />}
-                  className="flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"  
+                  className="flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
                   onClick={() => add()}
                 >
@@ -289,7 +297,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
   return (
     <div
       key={fieldKey}
-      className=" relative mb-5 rounded-md border bg-yellow-50 dark:bg-gray-700 px-10 py-4 shadow-md 2xl:pr-20"
+      className=" relative mb-5 rounded-md border bg-yellow-50 px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
     >
       <Divider className="pb-5">
         {t("Хаалга")} {fieldKey + 1}
@@ -308,7 +316,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
           rules={[{ required: true, message: "Нэр бөглөнө үү." }]}
-          className="col-span-2 mb-0"
+          className="col-span-2 mb-0 h-20"
         >
           <Input placeholder={t("Ялгах нэр")} />
         </Form.Item>
@@ -319,7 +327,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
           rules={[{ required: true, message: "Төрөл бөглөнө үү." }]}
-          className="col-span-2 mb-0"
+          className="col-span-2 mb-0 h-20"
         >
           <Select style={{ width: "100%" }} placeholder={t("Орох / Гарах")}>
             <Select.Option value={"Орох"}>{t("Орох")}</Select.Option>

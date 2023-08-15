@@ -72,24 +72,43 @@ export function excelTatajAvya(
 }
 
 function tulburKhurvuulekh(v) {
+  var utga = undefined;
   switch (v) {
     case "belen":
-      return "Бэлэн";
+      utga = "Бэлэн";
+      break;
     case "khariltsakh":
-      return "Харилцах";
+      utga = "Харилцах";
+      break;
     case "khaan":
-      return "Хаан";
+      utga = "Хаан";
+      break;
     case "khas":
-      return "Хас";
+      utga = "Хас";
+      break;
     case "tur":
-      return "Төр";
+      utga = "Төр";
+      break;
     case "golomt":
-      return "Голомт";
+      utga = "Голомт";
+      break;
     case "tdb":
-      return "ХХБ";
+      utga = "ХХБ";
+      break;
+    case "tdb":
+      utga = "ХХБ";
+      break;
+    case "kapitron":
+      utga = "Капитрон";
+      break;
+    case "khariltsakh":
+      utga = "Харилцах";
+      break;
     default:
+      utga = v;
       break;
   }
+  return utga;
 }
 
 function Zogsool({ token }) {
@@ -102,7 +121,7 @@ function Zogsool({ token }) {
   ]);
   const [zogsoolId, setZogsoolId] = useState(undefined);
   const [orlogo, setOrlogo] = useState([]);
-  const [tulbur, setTulbur] = useState(null);
+  const [tulbur, setTulbur] = useState("");
   const [tuluv, setTuluv] = useState("");
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
 
@@ -126,8 +145,9 @@ function Zogsool({ token }) {
   const que = useMemo(() => {
     return {
       baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
     };
-  }, [baiguullaga?._id]);
+  }, [baiguullaga?._id, barilgiinId]);
   const query = useMemo(() => {
     const aa = !!shuult?.query ? shuult.query : {};
     // console.log(ognoo,"ognooognoo")
@@ -141,6 +161,12 @@ function Zogsool({ token }) {
       ...aa,
       "tuukh.zogsooliinId": zogsoolId,
     };
+    if (!!tulbur && tulbur !== "") {
+      baseQuery["tuukh.tulbur.turul"] =
+        !!tulbur && tulbur === "card"
+          ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
+          : tulbur;
+    }
 
     if (tuluv !== "") {
       if (tuluv === "-2") {
@@ -151,7 +177,7 @@ function Zogsool({ token }) {
     }
 
     return baseQuery;
-  }, [ognoo, zogsoolId, shuult, tuluv]);
+  }, [ognoo, zogsoolId, shuult, tuluv, tulbur]);
   const {
     uilchluulegchGaralt,
     setUilchluulegchKhuudaslalt,
@@ -165,12 +191,13 @@ function Zogsool({ token }) {
     return {
       baiguullagiinId: baiguullaga?._id,
       zogsooliinId: jagsaalt[0]?._id,
+      barilgiinId: barilgiinId,
       ...(ognoo && {
         ekhlekhOgnoo: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
         duusakhOgnoo: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       }),
     };
-  }, [ognoo, jagsaalt, uilchluulegchGaralt]);
+  }, [ognoo, jagsaalt, uilchluulegchGaralt, barilgiinId]);
 
   useEffect(() => {
     uilchilgee(token)
@@ -180,7 +207,7 @@ function Zogsool({ token }) {
         setOrlogo(a.data);
       })
       .catch(aldaaBarigch);
-  }, [uilchluulegchGaralt, jagsaalt]);
+  }, [uilchluulegchGaralt, jagsaalt, orlogoQuery]);
 
   const toololt = useMemo(
     () => [
@@ -382,6 +409,7 @@ function Zogsool({ token }) {
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
+        render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
       },
       {
         title: t("Дугаар"),
@@ -425,25 +453,33 @@ function Zogsool({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setTulbur("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tulbur === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   Бүгд
                 </div>
                 <div
                   onClick={() => setTulbur("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tulbur === "belen" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   Бэлэн
                 </div>
                 <div
                   onClick={() => setTulbur("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tulbur === "card" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   Карт
                 </div>
                 <div
                   onClick={() => setTulbur("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    tulbur === "khariltsakh" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Харилцах
                 </div>
@@ -454,7 +490,7 @@ function Zogsool({ token }) {
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
-              Төлбөр
+              {t("Төлбөр")}
             </div>
           </Popover>
         ),
@@ -495,19 +531,25 @@ function Zogsool({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setTuluv("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluv === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setTuluv("1")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluv === "1" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлсөн")}
                 </div>
                 <div
                   onClick={() => setTuluv("-2")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    tuluv === "-2" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Төлөөгүй")}
                 </div>
@@ -518,7 +560,7 @@ function Zogsool({ token }) {
               className={`flex cursor-pointer items-center justify-center gap-3`}
             >
               <FilterOutlined className="text-lg text-green-600" />
-              Төлөв
+              {t("Төлөв")}
             </div>
           </Popover>
         ),
@@ -631,7 +673,7 @@ function Zogsool({ token }) {
         ),
       },*/
     ];
-  }, [shuult, i18n.language, ajiltniiNers]);
+  }, [shuult, i18n.language, ajiltniiNers, tulbur, tuluv]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -849,6 +891,7 @@ function Zogsool({ token }) {
                                 title: "Төрөл",
                                 dataIndex: "turul",
                                 __style__: { h: "center" },
+                                render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
                               },
                               {
                                 title: "Дүн",
