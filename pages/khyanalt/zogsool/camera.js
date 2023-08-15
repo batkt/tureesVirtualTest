@@ -571,16 +571,16 @@ function camera({ token }) {
                 <div
                   onClick={() =>
                     setOrder({
-                      "tuukh.0.niitKhugatsaa": 1,
+                      "tuukh.tsagiinTuukh.orsonTsag": -1,
                     })
                   }
                   className={`relative ${
                     JSON.stringify(order) ==
-                      JSON.stringify({ "tuukh.0.niitKhugatsaa": 1 }) &&
+                      JSON.stringify({ "tuukh.tsagiinTuukh.orsonTsag": -1 }) &&
                     "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Удаан зогссон сүүлд")}
+                  {t("Сүүлд орсон эхэнд")}
                 </div>
                 <div
                   onClick={() =>
@@ -594,7 +594,7 @@ function camera({ token }) {
                     "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Сүүлд орсон эхэнд")}
+                  {t("Сүүлд гарсан эхэнд")}
                 </div>
               </div>
             }
@@ -1739,6 +1739,7 @@ function camera({ token }) {
                         className="ml-[10px]"
                       />
                     </Form.Item>
+                    {console.log(cameraData)}
                     <Form.Item
                       name="CAMERA_IP"
                       className="w-2/5"
@@ -1750,23 +1751,12 @@ function camera({ token }) {
                       ]}
                     >
                       <Select className="" placeholder={`${t("Камер")} IP`}>
-                        {" "}
-                        {cameraData[0][0].children.map((cam) => (
-                          <Select.Option
-                            className="w-1/3 sm:w-auto"
-                            value={cam?.children[0].value}
-                          >
-                            {cam.title}
-                          </Select.Option>
-                        ))}
-                        {cameraData[1][0].children.map((cam) => (
-                          <Select.Option
-                            className="w-1/3 sm:w-auto"
-                            value={cam?.children[0].value}
-                          >
-                            {cam.title}
-                          </Select.Option>
-                        ))}
+                        {camerVal[0] && (
+                          <Select.Option key={camerVal[0]}>Орох</Select.Option>
+                        )}
+                        {camerVal[1] && (
+                          <Select.Option key={camerVal[1]}>Гарах</Select.Option>
+                        )}
                       </Select>
                     </Form.Item>
                     <a
