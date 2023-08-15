@@ -155,14 +155,8 @@ function tulburKhurvuulekh(v) {
     case "tdb":
       utga = "ХХБ";
       break;
-    case "tdb":
-      utga = "ХХБ";
-      break;
     case "kapitron":
       utga = "Капитрон";
-      break;
-    case "khariltsakh":
-      utga = "Харилцах";
       break;
     default:
       utga = v;
