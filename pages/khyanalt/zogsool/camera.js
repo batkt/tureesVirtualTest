@@ -548,7 +548,7 @@ function camera({ token }) {
                   }
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Ихээс баг руу")}
+                  {t("Ихээс бага")}
                 </div>
                 <div
                   onClick={() =>
@@ -558,7 +558,7 @@ function camera({ token }) {
                   }
                   className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Багаас их рүү")}
+                  {t("Багаас их")}
                 </div>
                 <div
                   onClick={() =>
