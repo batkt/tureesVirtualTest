@@ -208,7 +208,7 @@ function camera({ token }) {
   const [guilgeeKharakh, setGuilgeeKharakh] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [khelber, setKhelber] = useState("");
-  const [dun, setDun] = useState(null);
+  const [dun, setDun] = useState("");
   const [idevkhtei, setIdevkhtei] = useState(0);
   const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
@@ -223,7 +223,6 @@ function camera({ token }) {
   }, [baiguullaga?._id, ajiltan, barilgiinId]);
 
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
-  console.log("jagsaalt", jagsaalt);
 
   const query = useMemo(() => {
     let result = {
@@ -353,10 +352,12 @@ function camera({ token }) {
 
   function f3Darsan() {
     khaalgaNeey(camerVal[0]);
+    document.getElementById("neekhKhaalgaID").focus();
   }
 
   function f4Darsan() {
     khaalgaNeey(camerVal[1]);
+    document.getElementById("khaakhkhaalgaID").focus();
   }
 
   function f5Darsan() {
@@ -546,9 +547,13 @@ function camera({ token }) {
                       "tuukh.0.niitKhugatsaa": -1,
                     })
                   }
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative flex ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({ "tuukh.0.niitKhugatsaa": -1 }) &&
+                    "bg-green-500 text-white"
+                  } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Ихээс бага")}
+                  {t("Удаан зогссон эхэнд")}
                 </div>
                 <div
                   onClick={() =>
@@ -556,9 +561,13 @@ function camera({ token }) {
                       "tuukh.0.niitKhugatsaa": 1,
                     })
                   }
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({ "tuukh.0.niitKhugatsaa": 1 }) &&
+                    "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Багаас их")}
+                  {t("Удаан зогссон сүүлд")}
                 </div>
                 <div
                   onClick={() =>
@@ -566,9 +575,13 @@ function camera({ token }) {
                       "tuukh.tsagiinTuukh.garsanTsag": -1,
                     })
                   }
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    JSON.stringify(order) ==
+                      JSON.stringify({ "tuukh.tsagiinTuukh.garsanTsag": -1 }) &&
+                    "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Сүүлд орсноос")}
+                  {t("Сүүлд орсон эхэнд")}
                 </div>
               </div>
             }
@@ -616,19 +629,25 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setDun("")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд1")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodson")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "dunBodson" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium  hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Дүн бодсон")}
                 </div>
                 <div
                   onClick={() => setDun("dunBodoogui")}
-                  className={`relative flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    dun === "dunBodoogui" && "bg-green-500 text-white"
+                  } flex cursor-pointer justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Дүн бодоогүй")}
                 </div>
@@ -660,25 +679,33 @@ function camera({ token }) {
               <div className="space-y-2">
                 <div
                   onClick={() => setKhelber("")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бүгд")}
                 </div>
                 <div
                   onClick={() => setKhelber("belen")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "belen" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Бэлэн")}
                 </div>
                 <div
                   onClick={() => setKhelber("card")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                  className={`relative ${
+                    khelber === "card" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Карт")}
                 </div>
                 <div
                   onClick={() => setKhelber("khariltsakh")}
-                  className={`relative flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                  className={`relative ${
+                    khelber === "khariltsakh" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   {t("Харилцах")}
                 </div>
@@ -860,10 +887,6 @@ function camera({ token }) {
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
-          console.log(
-            moment(parent?.mashin?.duusakhOgnoo).format("YYYY-MM-DD"),
-            "12312312312321"
-          );
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
@@ -920,7 +943,16 @@ function camera({ token }) {
         },
       },
     ];
-  }, [turul, i18n.language, ajiltan, baiguullaga, barilgiinId]);
+  }, [
+    turul,
+    i18n.language,
+    ajiltan,
+    baiguullaga,
+    barilgiinId,
+    order,
+    khelber,
+    dun,
+  ]);
 
   const baganuud = [
     {
@@ -1023,7 +1055,6 @@ function camera({ token }) {
     return aa;
   };
   const khaalgaNeey = (ip) => {
-    console.log(ip, "123213");
     axios
       .get("http://localhost:5000/api/neeye/" + ip + "")
       .then(function (response) {
@@ -1149,6 +1180,7 @@ function camera({ token }) {
                     }}
                     className="w-full sm:w-auto"
                     type="primary"
+                    id="neekhKhaalgaID"
                   >
                     {t("Нээх")} [ {t("Орох")} F1 ]
                   </Button>
@@ -1233,6 +1265,7 @@ function camera({ token }) {
                     onClick={(e) => {
                       khaalgaNeey(camerVal[1]);
                     }}
+                    id="khaakhkhaalgaID"
                     className="w-full sm:w-auto"
                     type="primary"
                   >
