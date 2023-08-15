@@ -585,28 +585,17 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.0.niitKhugatsaa",
         render(v, parents) {
-          // const d2 = tsagTootsoolur(v[0]?.tsagiinTuukh[0]?.orsonTsag);
-          // return !!v[0]?.tsagiinTuukh[0]?.garsanTsag ? (
-          //   <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
-          //     {minToHour(v[0].niitKhugatsaa)}
-          //   </div>
-          // ) : (
-          //   <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
-          //     {d2.hours.length < 2 ? "0" + d2.hours : d2.hours} :{" "}
-          //     {d2.minutes.length < 2 ? "0" + d2.minutes : d2.minutes}
-          //   </div>
-          // );
-          var tsag =
-            parents?.tuukh[0]?.niitKhugatsaa > 60
-              ? parents?.tuukh[0]?.niitKhugatsaa / 60
-              : 0;
-          var minut =
-            parents?.tuukh[0]?.niitKhugatsaa > 60
-              ? parents?.tuukh[0]?.niitKhugatsaa % 60
-              : parents?.tuukh[0]?.niitKhugatsaa;
-          return (
-            <div>
-              {tsag > 0 && `${Math.floor(tsag)} цаг`} {minut || 0} минут
+          const d2 = tsagTootsoolur(
+            parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag
+          );
+          return !!parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
+            <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
+              {minToHour(parents?.tuukh[0].niitKhugatsaa)}
+            </div>
+          ) : (
+            <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
+              {d2.hours.length < 2 ? "0" + d2.hours : d2.hours} :{" "}
+              {d2.minutes.length < 2 ? "0" + d2.minutes : d2.minutes}
             </div>
           );
         },
