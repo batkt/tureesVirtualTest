@@ -2,7 +2,16 @@ import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import React, { useMemo, useState } from "react";
 import { useAuth } from "services/auth";
-import { Button, Card, Popconfirm, Popover, Space, Table, message } from "antd";
+import {
+  Button,
+  Card,
+  Popconfirm,
+  Popover,
+  Space,
+  Table,
+  Tooltip,
+  message,
+} from "antd";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -146,13 +155,18 @@ function mashinBurtgel({ token }) {
         align: "center",
         dataIndex: "temdeglel",
         showSorterTooltip: false,
+        render: (v) => (
+          <Tooltip title={v}>
+            <div className="w-full text-left">{v}</div>
+          </Tooltip>
+        ),
       },
       {
         title: () => <SettingOutlined />,
         width: "2rem",
         align: "center",
         render: (data) => (
-          <div className="flex flex-row">
+          <div className="flex flex-row justify-center">
             <Popover
               zIndex={99}
               placement="bottom"
