@@ -206,41 +206,43 @@ function KhuvaajTulukh({
       }
       setTulbur([...tulbur]);
     }
-    setTerminal(true);
-    axios
-      .post(
-        "http://127.0.0.1:27028",
-        {
-          service_name: "doSaleTransaction",
-          service_params: {
-            db_ref_no: moment().format("YYYYMMDDhhmmss00"),
-            amount: String(tulukhDun),
-            vatps_bill_type: "1",
-          },
-        },
-        { timeout: 4000000 }
-      )
-      .then(({ data }) => {
-        if (data.status === true && data?.response?.response_code === "000") {
-          batalgaajuulya("khaan", data?.response);
-        } else if (
-          data.status === true &&
-          data?.response?.response_code === "366"
-        ) {
-          tulbur.find((a) => a.turul === "khaan").msg =
-            data?.response?.response_msg;
-          setTulbur(tulbur);
-          message.warning(data?.response?.response_msg);
-          setLoading(false);
-          setTerminal(false);
-        }
-        setSongogdsonBank(null);
-      })
-      .catch((e) => {
-        // aldaaBarigch(e);
-        setTerminal(false);
-        setLoading(false);
-      });
+    if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && tulukhDun > 0) {
+      setTerminal(true);
+      axios
+          .post(
+              "http://127.0.0.1:27028",
+              {
+                service_name: "doSaleTransaction",
+                service_params: {
+                  db_ref_no: moment().format("YYYYMMDDhhmmss00"),
+                  amount: String(tulukhDun),
+                  vatps_bill_type: "1",
+                },
+              },
+              { timeout: 4000000 }
+          )
+          .then(({ data }) => {
+            if (data.status === true && data?.response?.response_code === "000") {
+              batalgaajuulya("khaan", data?.response);
+            } else if (
+                data.status === true &&
+                data?.response?.response_code === "366"
+            ) {
+              tulbur.find((a) => a.turul === "khaan").msg =
+                  data?.response?.response_msg;
+              setTulbur(tulbur);
+              message.warning(data?.response?.response_msg);
+              setLoading(false);
+              setTerminal(false);
+            }
+            setSongogdsonBank(null);
+          })
+          .catch((e) => {
+            // aldaaBarigch(e);
+            setTerminal(false);
+            setLoading(false);
+          });
+    }
     // if()
   }
 
