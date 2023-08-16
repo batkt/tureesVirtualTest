@@ -830,7 +830,7 @@ function camera({ token }) {
               </div>
             );
           } else
-            return mur.tuluv === 0 && !!mur?.tulukhDun ? (
+            return !!mur?.tulukhDun ? (
               <Popover
                 placement="bottom"
                 trigger="hover"
