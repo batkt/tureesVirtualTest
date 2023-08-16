@@ -649,7 +649,15 @@ function camera({ token }) {
             );
           } else
             return !!parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
-              <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
+              <div
+                className={`rounded px-3 py-1 text-slate-700 ${
+                  !!parents.zurchil &&
+                  parents.zurchil !== "" &&
+                  parents?.tuukh[0]?.tuluv === -2
+                    ? "bg-red-200"
+                    : "bg-green-200"
+                }`}
+              >
                 {minToHour(
                   parents?.tuukh?.reduce(
                     (a, b) => a + (b.niitKhugatsaa || 0),
