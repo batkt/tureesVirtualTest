@@ -681,7 +681,7 @@ function camera({ token }) {
         dataIndex: "tuukh.tulukhDun",
         render(v, p) {
           // console.log(p.tuukh[0]?.tulukhDun, '======')
-          return p && formatNumber(p.tuukh[0]?.tulukhDun, 0);
+          return p && formatNumber(p.niitDun || p.tuukh[0]?.tulukhDun || 0, 0);
         },
         summary: true,
       },
