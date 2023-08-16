@@ -51,7 +51,7 @@ import useUilchluulegch from "../../../hooks/useUilchluulegch";
 import useJagsaalt from "../../../hooks/useJagsaalt";
 import { modal } from "../../../components/ant/Modal";
 import Tulbur from "../../../components/pageComponents/zogsool/Tulbur";
-import _ from "lodash";
+import _, { min } from "lodash";
 import updateMethod from "../../../tools/function/crud/updateMethod";
 import { excelTatajAvya } from "./index";
 import useDansKhuulga from "../../../hooks/khuulga/useDansKhuulga";
@@ -70,8 +70,18 @@ function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
   const tsagTootsoolur = () => {
-    var zoruu = moment(new Date()).diff(ekhlekhTsag);
-    return moment(zoruu).format("mm : ss");
+    var zoruu = moment(new Date()).diff(ekhlekhTsag, "seconds");
+    var tsag = Math.floor(zoruu / 60 / 60);
+    var minut = Math.floor((zoruu / 60) % 60);
+    var second = zoruu - minut * 60 - tsag * 60 * 60;
+    return (
+      <div>
+        {tsag < 10 && "0"}
+        {tsag > 0 ? tsag : "0"} : {minut < 10 && "0"}
+        {minut > 0 ? minut : "0"} : {second < 10 && "0"}
+        {second > 0 ? second : "0"}
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -634,7 +644,7 @@ function camera({ token }) {
           if (parents?.zurchil === "Гарсан цаг тодорхойгүй!") {
             return (
               <div className="rounded bg-red-200 px-3 py-1 text-slate-700">
-                -- : --
+                -- : -- : --
               </div>
             );
           } else
