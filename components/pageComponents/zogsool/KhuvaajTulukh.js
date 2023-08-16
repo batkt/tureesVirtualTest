@@ -61,6 +61,7 @@ function KhuvaajTulukh({
   tuluv,
   setTuluv,
   setKhuleegdejBuiQpay,
+  niitDun,
   khuleegdejBuiQpay,
   batalgaajuulaltKhiiya,
   setLoading,
@@ -117,12 +118,12 @@ function KhuvaajTulukh({
     if (index !== -1) tulbur[index] = { turul: k, dun: v };
     else tulbur.push({ turul: k, dun: v });
     if (
-      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) <
+      (niitDun ? niitDun : data?.niitDun) <
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       var iluu =
         tulbur.reduce((a, b) => a + b.dun, 0) -
-        (data?.dutuuDun ? data?.dutuuDun : data?.niitDun);
+        (niitDun ? niitDun : data?.niitDun);
       if (index !== -1) tulbur[index] = { turul: k, dun: v - iluu };
       else tulbur.push({ turul: k, dun: v - iluu });
       document.getElementById("TogloomiinTuvTulburTovch").focus();
@@ -176,7 +177,7 @@ function KhuvaajTulukh({
 
   function onDoubleClick(e) {
     const tulukhDun =
-      (data?.dutuuDun ? data?.dutuuDun : data?.tulukhDun) -
+      (niitDun ? niitDun : data?.tulukhDun) -
       tulbur
         .filter((a) => a.turul !== e.target.name)
         .reduce((a, b) => a + b.dun, 0);
@@ -323,8 +324,9 @@ function KhuvaajTulukh({
   return (
     <div
       className={`mt-5 grid grid-cols-3 gap-4 overflow-y-auto border-2 p-4`}
-      style={{ maxHeight: "calc( 100vh - 26rem )" }}>
-      <div className='relative col-span-3 flex w-full justify-between rounded-md border dark:text-gray-200'>
+      style={{ maxHeight: "calc( 100vh - 26rem )" }}
+    >
+      <div className="relative col-span-3 flex w-full justify-between rounded-md border dark:text-gray-200">
         <div
           className={`absolute top-0 ${
             tuluv === 1
@@ -340,7 +342,8 @@ function KhuvaajTulukh({
           }}
           className={`z-10 flex h-10 w-1/3 cursor-pointer items-center justify-center rounded-md border text-center font-medium transition-all ${
             tuluv === 1 && "text-lg text-white"
-          }`}>
+          }`}
+        >
           Бусад
         </div>
         <div
@@ -349,7 +352,8 @@ function KhuvaajTulukh({
           }}
           className={`z-10 flex h-10 w-1/3 cursor-pointer items-center justify-center rounded-md border text-center font-medium transition-all ${
             tuluv === 2 && "text-lg text-white"
-          }`}>
+          }`}
+        >
           Карт
         </div>
         <div
@@ -358,56 +362,62 @@ function KhuvaajTulukh({
           }}
           className={`z-10 flex h-10 w-1/3 cursor-pointer items-center justify-center rounded-md border text-center font-medium transition-all ${
             tuluv === 3 && "text-lg text-white"
-          }`}>
+          }`}
+        >
           Финтек
         </div>
       </div>
       {/*tuluv belen*/}
       {tuluv === 1 && (
-        <div className='col-span-3 flex flex-col text-center text-lg font-medium'>
+        <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
             className={`grid transition-all ${
               songogdsonBusadTurul ? "grid-cols-6" : "grid-cols-3"
-            }`}>
+            }`}
+          >
             {!songogdsonBusadTurul &&
               busadKhelber?.map((mur) => (
                 <div
                   onClick={() => {
                     setSongogdsonBusadTurul(mur);
                   }}
-                  className='group relative flex flex-col items-center justify-center py-3 transition-all hover:scale-105'
-                  key={mur.ner}>
+                  className="group relative flex flex-col items-center justify-center py-3 transition-all hover:scale-105"
+                  key={mur.ner}
+                >
                   {value[mur.talbar] && (
                     <div
-                      className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}>
+                      className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}
+                    >
                       {value[mur.talbar]}
                     </div>
                   )}
                   <div
                     className={`flex items-center justify-center overflow-hidden  rounded-xl border-2 transition-all group-hover:scale-105 group-hover:shadow-md dark:bg-gradient-to-r ${mur.bgColor}`}
-                    style={{ width: 100, height: 100 }}>
+                    style={{ width: 100, height: 100 }}
+                  >
                     <Image
-                      className='transition-all group-hover:scale-105'
+                      className="transition-all group-hover:scale-105"
                       preview={false}
                       width={100}
                       src={mur.zurag}
                     />
                   </div>
-                  <div className='dark:text-gray-200'>{mur.ner}</div>
+                  <div className="dark:text-gray-200">{mur.ner}</div>
                 </div>
               ))}
           </div>
           {songogdsonBusadTurul && (
-            <div className='relative'>
+            <div className="relative">
               <div
                 onClick={() => {
                   setSongogdsonBusadTurul();
                 }}
-                className='absolute left-5 top-2 flex cursor-pointer dark:text-white'>
+                className="absolute left-5 top-2 flex cursor-pointer dark:text-white"
+              >
                 <ArrowLeftOutlined />
               </div>
               <Image
-                className='overflow-hidden rounded-xl transition-all'
+                className="overflow-hidden rounded-xl transition-all"
                 preview={false}
                 width={100}
                 src={songogdsonBusadTurul.zurag}
@@ -417,40 +427,40 @@ function KhuvaajTulukh({
           <div
             className={`relative ${
               songogdsonBusadTurul?.talbar === "khunglukh" ? "h-36" : "h-12"
-            } mt-2 w-full overflow-hidden`}>
+            } mt-2 w-full overflow-hidden`}
+          >
             <div
               className={`absolute w-full transition-all ${
                 songogdsonBusadTurul ? "top-0 delay-300" : "-top-full"
-              }`}>
+              }`}
+            >
               {songogdsonBusadTurul &&
                 (songogdsonBusadTurul.talbar === "khunglukh" ? (
                   <div>
-                    <div className='space-y-2 text-lg font-medium'>
-                      <div className='flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900'>
-                        <div className='flex items-center justify-center border px-2 '>
+                    <div className="space-y-2 text-lg font-medium">
+                      <div className="flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900">
+                        <div className="flex items-center justify-center border px-2 ">
                           <Image
                             preview={false}
                             width={40}
                             src={songogdsonBusadTurul.zurag}
                           />
                         </div>
-                        <div className='w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200'>
+                        <div className="w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200">
                           {songogdsonBusadTurul.ner}
                         </div>
                         <InputNumber
                           disabled={
                             !value.khunglukh &&
-                            ((data?.dutuuDun
-                              ? data?.dutuuDun
-                              : data?.tulukhDun) -
+                            ((niitDun ? niitDun : data?.tulukhDun) -
                               tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                           }
-                          autoComplete='off'
+                          autoComplete="off"
                           min={0}
                           ref={khunglukhRef}
-                          placeholder='Мөнгөн дүн'
+                          placeholder="Мөнгөн дүн"
                           value={value.khunglukh}
-                          name='khunglukh'
+                          name="khunglukh"
                           onDoubleClick={onDoubleClick}
                           onKeyDown={onKeyDown}
                           onChange={(v) => {
@@ -466,13 +476,13 @@ function KhuvaajTulukh({
                       </div>
                       {khungulukhEsekh === true && (
                         <div>
-                          <div className='flex w-full flex-row bg-green-100 dark:bg-green-900'>
-                            <div className='w-3/4 border-b border-l border-t pl-10 text-left dark:text-gray-200'>
+                          <div className="flex w-full flex-row bg-green-100 dark:bg-green-900">
+                            <div className="w-3/4 border-b border-l border-t pl-10 text-left dark:text-gray-200">
                               {t("Тайлбар")}
                             </div>
                             <Select
                               value={khunglult.tailbarTurul}
-                              name='tailbar'
+                              name="tailbar"
                               onChange={(v) => {
                                 setKhunglult({
                                   ...khunglult,
@@ -481,7 +491,8 @@ function KhuvaajTulukh({
                                 });
                               }}
                               style={{ width: "230px" }}
-                              placeholder={t("Тайлбар сонгох")}>
+                              placeholder={t("Тайлбар сонгох")}
+                            >
                               <Select.Option key={"Төрсөн өдөр"}>
                                 {t("Төрсөн өдөр")}
                               </Select.Option>
@@ -513,25 +524,25 @@ function KhuvaajTulukh({
                   </div>
                 ) : (
                   <div>
-                    <div className='flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900'>
-                      <div className='flex h-10 items-center justify-center border px-2 '>
+                    <div className="flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900">
+                      <div className="flex h-10 items-center justify-center border px-2 ">
                         <Image
                           preview={false}
                           width={40}
                           src={songogdsonBusadTurul.zurag}
                         />
                       </div>
-                      <div className='w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200'>
+                      <div className="w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200">
                         {songogdsonBusadTurul.ner}
                       </div>
                       <InputNumber
-                        placeholder='Мөнгөн дүн'
+                        placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdsonBusadTurul.talbar] &&
                           (data?.tulukhDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                         }
-                        autoComplete='off'
+                        autoComplete="off"
                         ref={songogdsonBusadTurul.ref}
                         value={value[songogdsonBusadTurul.talbar]}
                         name={songogdsonBusadTurul.talbar}
@@ -555,25 +566,28 @@ function KhuvaajTulukh({
       )}
       {/*tuluv kart*/}
       {tuluv === 2 && (
-        <div className='col-span-3 flex flex-col text-center text-lg font-medium'>
+        <div className="col-span-3 flex flex-col text-center text-lg font-medium">
           <div
             className={`grid transition-all ${
               songogdsonBank ? "grid-cols-6" : "grid-cols-3"
-            }`}>
+            }`}
+          >
             {!songogdsonBank &&
               terminaluud?.map((mur) => (
                 <div
                   onClick={() => setSongogdsonBank(mur)}
-                  className='relative flex flex-col items-center justify-center py-3 transition-all hover:scale-110'
-                  key={mur.ner}>
+                  className="relative flex flex-col items-center justify-center py-3 transition-all hover:scale-110"
+                  key={mur.ner}
+                >
                   {value[mur.talbar] && (
                     <div
-                      className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}>
+                      className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}
+                    >
                       {value[mur.talbar]}
                     </div>
                   )}
                   <Image
-                    className='overflow-hidden rounded-xl transition-all'
+                    className="overflow-hidden rounded-xl transition-all"
                     preview={false}
                     width={100}
                     src={mur.zurag}
@@ -582,46 +596,48 @@ function KhuvaajTulukh({
               ))}
           </div>
           {songogdsonBank && (
-            <div className='relative'>
+            <div className="relative">
               <div
                 onClick={() => setSongogdsonBank()}
-                className='absolute left-5 top-2 flex cursor-pointer dark:text-white'>
+                className="absolute left-5 top-2 flex cursor-pointer dark:text-white"
+              >
                 <ArrowLeftOutlined />
               </div>
               <Image
-                className='overflow-hidden rounded-xl transition-all'
+                className="overflow-hidden rounded-xl transition-all"
                 preview={false}
                 width={100}
                 src={songogdsonBank.zurag}
               />
             </div>
           )}
-          <div className='relative mt-2 h-12 w-full overflow-hidden'>
+          <div className="relative mt-2 h-12 w-full overflow-hidden">
             <div
               className={`absolute w-full transition-all ${
                 songogdsonBank ? "top-0 delay-300" : "-top-full"
-              }`}>
+              }`}
+            >
               {songogdsonBank && (
                 <div>
-                  <div className='flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900'>
-                    <div className='flex items-center justify-center border px-2 '>
+                  <div className="flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900">
+                    <div className="flex items-center justify-center border px-2 ">
                       <Image
                         preview={false}
                         width={40}
                         src={songogdsonBank.zurag}
                       />
                     </div>
-                    <div className='w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200'>
+                    <div className="w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200">
                       {songogdsonBank.ner}
                     </div>
                     <InputNumber
-                      placeholder='Мөнгөн дүн'
+                      placeholder="Мөнгөн дүн"
                       disabled={
                         !value[songogdsonBank.talbar] &&
                         (data?.tulukhDun -
                           tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
                       }
-                      autoComplete='off'
+                      autoComplete="off"
                       ref={songogdsonBank.ref}
                       value={value[songogdsonBank.talbar]}
                       name={songogdsonBank.talbar}
@@ -643,8 +659,8 @@ function KhuvaajTulukh({
       )}
       {/*tuluv qpay*/}
       {tuluv === 3 && (
-        <div className='col-span-3'>
-          <div className='grid grid-cols-3 transition-all'>
+        <div className="col-span-3">
+          <div className="grid grid-cols-3 transition-all">
             {!songogdTulburiinKhelber &&
               qpayTulburiinKhelberuud.map((mur) => {
                 return (
@@ -655,15 +671,17 @@ function KhuvaajTulukh({
                         : setSongogdsonTulburiinKhelber(mur)
                     }
                     key={mur.ner}
-                    className='relative flex flex-col items-center justify-center py-3 transition-all hover:scale-110'>
+                    className="relative flex flex-col items-center justify-center py-3 transition-all hover:scale-110"
+                  >
                     {value[mur.ner] && (
                       <div
-                        className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}>
+                        className={`absolute right-0 top-0 z-50 rounded-md border-2 bg-white px-2 ${mur.bgColor}`}
+                      >
                         {value[mur.ner]}
                       </div>
                     )}
                     <Image
-                      className='overflow-hidden rounded-lg'
+                      className="overflow-hidden rounded-lg"
                       preview={false}
                       width={100}
                       src={mur.src}
@@ -672,7 +690,7 @@ function KhuvaajTulukh({
                 );
               })}
             {songogdTulburiinKhelber && (
-              <div className='relative col-span-3 flex w-full justify-center'>
+              <div className="relative col-span-3 flex w-full justify-center">
                 <div
                   onClick={() => {
                     setSongogdsonTulburiinKhelber();
@@ -680,11 +698,12 @@ function KhuvaajTulukh({
                       !khuleegdejBuiQpay &&
                       onChangeDun(null, "qpay");
                   }}
-                  className='absolute left-5 top-2 flex cursor-pointer text-lg transition-all hover:text-2xl hover:text-blue-400 dark:text-white'>
+                  className="absolute left-5 top-2 flex cursor-pointer text-lg transition-all hover:text-2xl hover:text-blue-400 dark:text-white"
+                >
                   <ArrowLeftOutlined />
                 </div>
                 <Image
-                  className='overflow-hidden rounded-xl transition-all'
+                  className="overflow-hidden rounded-xl transition-all"
                   preview={false}
                   width={100}
                   src={songogdTulburiinKhelber.src}
@@ -692,34 +711,35 @@ function KhuvaajTulukh({
               </div>
             )}
           </div>
-          <div className='relative mt-2 h-12 w-full overflow-hidden'>
+          <div className="relative mt-2 h-12 w-full overflow-hidden">
             <div
               className={`absolute w-full transition-all ${
                 songogdTulburiinKhelber ? "top-0 delay-300" : "-top-full"
-              }`}>
+              }`}
+            >
               {songogdTulburiinKhelber && (
                 <div>
                   {songogdTulburiinKhelber?.ner === "qpay" ? (
-                    <div className='flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900'>
-                      <div className='flex items-center justify-center border px-2 '>
+                    <div className="flex w-full flex-row items-center bg-gray-100 pr-2 dark:bg-gray-900">
+                      <div className="flex items-center justify-center border px-2 ">
                         <Image
                           preview={false}
                           width={40}
                           src={songogdTulburiinKhelber.src}
                         />
                       </div>
-                      <div className='w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200'>
+                      <div className="w-3/4 border-b border-l border-t pl-2 text-left dark:text-gray-200">
                         {songogdTulburiinKhelber.ner}
                       </div>
                       <InputNumber
-                        placeholder='Мөнгөн дүн'
+                        placeholder="Мөнгөн дүн"
                         disabled={
                           !value[songogdTulburiinKhelber.ner] &&
                           ((data?.tulukhDun -
                             tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
                             !!qpayerTulukh)
                         }
-                        autoComplete='off'
+                        autoComplete="off"
                         ref={songogdTulburiinKhelber.ref}
                         value={value[songogdTulburiinKhelber.ner]}
                         name={songogdTulburiinKhelber.ner}
@@ -738,7 +758,7 @@ function KhuvaajTulukh({
                       />
                     </div>
                   ) : (
-                    <div className='animate-pulse text-center text-lg'>
+                    <div className="animate-pulse text-center text-lg">
                       Тун удахгүй...
                     </div>
                   )}

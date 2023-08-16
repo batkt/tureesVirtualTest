@@ -66,6 +66,22 @@ import Stream1, { Stream2 } from "./stream";
 import StackStream from "./stackStream";
 import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 
+function TsagToololt({ ekhlekhTsag }) {
+  const [timeUp, setTimeUp] = useState("Тооцоолж байна");
+
+  const tsagTootsoolur = () => {
+    var zoruu = moment(new Date()).diff(ekhlekhTsag);
+    return moment(zoruu).format("mm : ss");
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeUp(tsagTootsoolur());
+    }, 1000);
+  }, [ekhlekhTsag, timeUp]);
+  return <div>{timeUp}</div>;
+}
+
 const usguud = [
   "А",
   "Б",
@@ -382,10 +398,10 @@ function camera({ token }) {
         duration: 1,
       });
     }
-    if (mur?.tuluv === 0 && !!mur?.tulukhDun) {
+    if (mur?.tuluv === 0 && (!!mur?.tulukhDun || data?.niitDun)) {
       if (modalNeelttei === false) {
         setModalNeelttei(true);
-        return tulburTulyu(mur, data?._id, data?.mashiniiDugaar);
+        return tulburTulyu(mur, data?._id, data?.mashiniiDugaar, data?.niitDun);
       }
     } else
       return notification.warning({
@@ -465,7 +481,7 @@ function camera({ token }) {
     }
     return res;
   };
-  function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar) {
+  function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar, niitDun) {
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
@@ -483,6 +499,7 @@ function camera({ token }) {
       ),
       content: (
         <Tulbur
+          niitDun={niitDun}
           camerVal={camerVal[1]}
           ref={tulburRef}
           data={_.cloneDeep(data)}
@@ -614,16 +631,31 @@ function camera({ token }) {
           const d2 = tsagTootsoolur(
             parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag
           );
-          return !!parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
-            <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
-              {minToHour(parents?.tuukh[0].niitKhugatsaa)}
-            </div>
-          ) : (
-            <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
-              {d2.hours.length < 2 ? "0" + d2.hours : d2.hours} :{" "}
-              {d2.minutes.length < 2 ? "0" + d2.minutes : d2.minutes}
-            </div>
-          );
+          if (parents?.zurchil === "Гарсан цаг тодорхойгүй!") {
+            return (
+              <div className="rounded bg-red-200 px-3 py-1 text-slate-700">
+                -- : --
+              </div>
+            );
+          } else
+            return !!parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
+              <div className="rounded bg-green-200 px-3 py-1 text-slate-700">
+                {minToHour(
+                  parents?.tuukh?.reduce(
+                    (a, b) => a + (b.niitKhugatsaa || 0),
+                    0
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="rounded bg-blue-200 px-3 py-1 text-slate-700">
+                {/* {d2.hours.length < 2 ? "0" + d2.hours : d2.hours} :{" "}
+                {d2.minutes.length < 2 ? "0" + d2.minutes : d2.minutes} */}
+                <TsagToololt
+                  ekhlekhTsag={parents?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag}
+                />
+              </div>
+            );
         },
       },
       {
@@ -790,7 +822,12 @@ function camera({ token }) {
                       className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
                         !!mur?.tulukhDun
-                          ? tulburTulyu(mur, parent._id)
+                          ? tulburTulyu(
+                              mur,
+                              parent._id,
+                              parent?.mashiniiDugaar,
+                              parent?.niitDun
+                            )
                           : notification.warn({
                               message: t("Дүн бодогдоогүй байна."),
                             });
@@ -843,7 +880,14 @@ function camera({ token }) {
             ) : mur?.tuluv === 1 ? (
               mur?.ebarimtAvsanEsekh === false ? (
                 <div
-                  onClick={() => tulburTulyu(mur, parent?._id)}
+                  onClick={() =>
+                    tulburTulyu(
+                      mur,
+                      parent?._id,
+                      parent?.mashiniiDugaar,
+                      parent?.niitDun
+                    )
+                  }
                   className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white"
                 >
                   <div className="flex items-center justify-center">
@@ -857,6 +901,14 @@ function camera({ token }) {
                   </div>
                 </div>
               )
+            ) : !!parent.zurchil &&
+              parent.zurchil !== "" &&
+              mur?.tuluv === -2 ? (
+              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-red-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Зөрчилтэй")}
+                </div>
+              </div>
             ) : (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
                 <div className="flex items-center justify-center">
@@ -936,7 +988,8 @@ function camera({ token }) {
         align: "center",
         render: (data) => {
           return data.tuukh[0].tulbur.length === 0 &&
-            data.tuukh[0].tulukhDun !== 0 ? (
+            data.tuukh[0].tulukhDun !== 0 &&
+            data?.zurchil !== "Гарсан цаг тодорхойгүй!" ? (
             <div className="flex flex-row">
               <a
                 className="ant-dropdown-link flex w-full items-center justify-center rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
@@ -1040,14 +1093,14 @@ function camera({ token }) {
             }
             body.zurchil = value;
             body.tuukh[0].tuluv = -2;
-            if (!!camerVal[1]) {
+            if (!!camerVal[1] && value === "Зугтаасан") {
               body.tuukh[0].garsanKhaalga = camerVal[1];
+              body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
+              body.tuukh[0].niitKhugatsaa = moment(data).diff(
+                body.tuukh[0].tsagiinTuukh[0].orsonTsag,
+                "minutes"
+              );
             }
-            body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
-            body.tuukh[0].niitKhugatsaa = moment(data).diff(
-              body.tuukh[0].tsagiinTuukh[0].orsonTsag,
-              "minutes"
-            );
           } else if (modalOpen.type === "dugaarBurtgekh") {
             form.submit();
           } else {

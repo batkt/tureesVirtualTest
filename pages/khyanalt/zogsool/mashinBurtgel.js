@@ -100,6 +100,7 @@ function mashinBurtgel({ token }) {
       {
         title: t("Бүртгэсэн"),
         dataIndex: "createdAt",
+        width: "8rem",
         ellipsis: true,
         align: "center",
         render(date) {
@@ -111,17 +112,20 @@ function mashinBurtgel({ token }) {
       {
         title: t("Нэр"),
         align: "left",
+        width: "8rem",
         dataIndex: "ezemshigchiinNer",
         showSorterTooltip: false,
         sorter: () => 0,
       },
       {
         title: t("Утас"),
+        width: "7rem",
         align: "center",
         dataIndex: "ezemshigchiinUtas",
       },
       {
         title: t("Дугаар"),
+        width: "6rem",
         align: "center",
         dataIndex: "dugaar",
         showSorterTooltip: false,
@@ -130,6 +134,7 @@ function mashinBurtgel({ token }) {
       {
         title: t("Төрөл"),
         align: "center",
+        width: "10rem",
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -137,7 +142,7 @@ function mashinBurtgel({ token }) {
       ...shinecol,
       {
         title: t("Тайлбар"),
-        width: "8rem",
+        width: "12rem",
         align: "center",
         dataIndex: "temdeglel",
         showSorterTooltip: false,
@@ -383,10 +388,7 @@ function mashinBurtgel({ token }) {
         </div>
         <Table
           className="mt-8 hidden overflow-auto md:block"
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          data-aos-delay="300"
-          tableLayout="auto"
+          tableLayout="fixed"
           loading={!mashinGaralt}
           dataSource={mashinGaralt?.jagsaalt}
           scroll={{ y: "calc(100vh - 30rem)" }}
