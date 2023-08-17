@@ -830,7 +830,9 @@ function camera({ token }) {
               </div>
             );
           } else
-            return mur.tuluv === 0 && !!mur?.tulukhDun ? (
+            return (mur.tuluv === 0 ||
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
+              !!mur?.tulukhDun ? (
               <Popover
                 placement="bottom"
                 trigger="hover"
