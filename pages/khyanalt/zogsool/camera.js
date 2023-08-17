@@ -324,7 +324,15 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       onRefresh();
-      var uilchluulegch = JSON.parse(zogsool);
+      var uilchluulegch = zogsool;
+      if (
+        !!uilchluulegch?.khaalgaTurul &&
+        uilchluulegch?.khaalgaTurul === "oroh" &&
+        !!uilchluulegch?.cameraIP
+      ) {
+        console.log(uilchluulegch?.cameraIP);
+        khaalgaNeey(uilchluulegch?.cameraIP);
+      }
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
         (uilchluulegch?.tuukh &&
