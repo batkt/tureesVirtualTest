@@ -830,7 +830,7 @@ function camera({ token }) {
               </div>
             );
           } else
-            return !!mur?.tulukhDun ? (
+            return mur.tuluv === 0 && !!mur?.tulukhDun ? (
               <Popover
                 placement="bottom"
                 trigger="hover"
@@ -978,7 +978,13 @@ function camera({ token }) {
               </Tooltip>
             );
           } else if (parent.turul === "Гэрээт") {
-            return <div>{parent?.mashin?.temdeglel}</div>;
+            return (
+              <div>
+                {!!parent?.zurchil
+                  ? parent?.zurchil
+                  : parent?.mashin?.temdeglel}
+              </div>
+            );
           } else
             return (
               v && (
