@@ -272,15 +272,17 @@ function camera({ token }) {
     };
     if (!!camerVal[1]) {
       if (!!khaikh) {
+        // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
         result = {
-          $or: [
+          $and: [
             {
-              "tuukh.0.garsanKhaalga": camerVal[1],
-              mashiniiDugaar: { $regex: khaikh, $options: "i" },
+              $or: [
+                { "tuukh.0.garsanKhaalga": camerVal[1] },
+                { "tuukh.0.garsanKhaalga": { $exists: false } },
+              ],
             },
             {
-              "tuukh.0.garsanKhaalga": { $exists: false },
-              mashiniiDugaar: { $regex: khaikh, $options: "i" },
+              $or: [{ mashiniiDugaar: { $regex: khaikh, $options: "i" } }],
             },
           ],
           ...result,
