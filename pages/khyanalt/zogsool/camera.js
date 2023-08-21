@@ -348,6 +348,8 @@ function camera({ token }) {
       ) {
         console.log(uilchluulegch?.cameraIP);
         khaalgaNeey(uilchluulegch?.cameraIP);
+      } else {
+        onRefresh();
       }
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
@@ -362,7 +364,6 @@ function camera({ token }) {
         ) {
           console.log(uilchluulegch?.tuukh[0].garsanKhaalga);
           khaalgaNeey(uilchluulegch?.tuukh[0].garsanKhaalga);
-          onRefresh();
         }
       }
       // console.log(uilchluulegch);
