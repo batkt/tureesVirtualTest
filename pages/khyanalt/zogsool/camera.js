@@ -248,7 +248,7 @@ function camera({ token }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [khelber, setKhelber] = useState("");
   const [dun, setDun] = useState("");
-  const [idevkhtei, setIdevkhtei] = useState(0);
+  const [khaikh, setKhaikh] = useState("");
   const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
   const [form] = Form.useForm();
@@ -271,13 +271,28 @@ function camera({ token }) {
       },
     };
     if (!!camerVal[1]) {
-      result = {
-        $or: [
-          { "tuukh.0.garsanKhaalga": camerVal[1] },
-          { "tuukh.0.garsanKhaalga": { $exists: false } },
-        ],
-        ...result,
-      };
+      if (!!khaikh) {
+        result = {
+          $or: [
+            {
+              "tuukh.0.garsanKhaalga": camerVal[1],
+              mashiniiDugaar: { $regex: khaikh, $options: "i" },
+            },
+            {
+              "tuukh.0.garsanKhaalga": { $exists: false },
+              mashiniiDugaar: { $regex: khaikh, $options: "i" },
+            },
+          ],
+          ...result,
+        };
+      } else
+        result = {
+          $or: [
+            { "tuukh.0.garsanKhaalga": camerVal[1] },
+            { "tuukh.0.garsanKhaalga": { $exists: false } },
+          ],
+          ...result,
+        };
     }
     if (!!khelber) {
       result = {
@@ -298,7 +313,7 @@ function camera({ token }) {
       };
     }
     return result;
-  }, [ognoo, khelber, dun, camerVal]);
+  }, [ognoo, khelber, dun, camerVal, khaikh]);
 
   const dansQuery = useMemo(() => {
     return { amount: { $gt: 0, $lt: 1000000 } };
@@ -323,7 +338,6 @@ function camera({ token }) {
   }, [jagsaalt]);
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
-      onRefresh();
       var uilchluulegch = zogsool;
       if (
         !!uilchluulegch?.khaalgaTurul &&
@@ -346,6 +360,7 @@ function camera({ token }) {
         ) {
           console.log(uilchluulegch?.tuukh[0].garsanKhaalga);
           khaalgaNeey(uilchluulegch?.tuukh[0].garsanKhaalga);
+          onRefresh();
         }
       }
       // console.log(uilchluulegch);
@@ -1242,13 +1257,14 @@ function camera({ token }) {
       fixedZagvarNeegdsenEsekh={guilgeeKharakh}
       setTurulZagvar={setGuilgeeKharakh}
       className="relative p-2 sm:p-4"
-      onSearch={(search) =>
+      onSearch={(search) => {
         setUilchluulegchKhuudaslalt((a) => ({
           ...a,
           search,
           khuudasniiDugaar: 1,
-        }))
-      }
+        }));
+        setKhaikh(search);
+      }}
       loading={isValidating}
     >
       {jagsaalt?.length > 0 ? (
