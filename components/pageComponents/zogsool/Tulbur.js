@@ -319,229 +319,179 @@ function Tulbur(
     <div className="h-full w-full">
       {eBarimt && (
         <div className="hidden">
-          <div className="p-2" style={{ minWidth: "20rem" }} ref={eBarimtRef}>
-            <table className="w-full">
-              <colgroup>
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-                <col className="w-1/6" />
-              </colgroup>
-              <tbody className="text-xs">
-                <tr>
-                  <td colSpan={6} className="border text-center">
-                    {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={6} className="border text-center">
-                    {baiguullaga?.ner}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={6} className="border font-medium">
-                    {t("Борлуулагч")}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border" colSpan={3}>
-                    {t("Огноо")}
-                  </td>
-                  <td className="border" colSpan={3}>
-                    {moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border" colSpan={3}>
-                    {t("ТТД")}
-                  </td>
-                  <td className="border" colSpan={3}>
-                    {eBarimt?.registerNo}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border" colSpan={3}>
-                    {t("ДДТД")}
-                  </td>
-                  <td className="border" colSpan={3}>
-                    {eBarimt?.billId}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border" colSpan={3}>
-                    {t("Касс")}
-                  </td>
-                  <td className="border" colSpan={3}>
-                    {eBarimt?.posNo}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border" colSpan={3}>
-                    {t("Кассчин")}
-                  </td>
-                  <td className="border" colSpan={3}>
-                    {ajiltan?.ner}
-                  </td>
-                </tr>
-                {baiguullagaEsekh && (
-                  <>
-                    <tr>
-                      <td className="border" colSpan={6}>
-                        {t("Худалдан авагч")}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="border" colSpan={1}>
-                        {t("ТТД")}
-                      </td>
-                      <td className="border" colSpan={5}>
-                        {register}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="border" colSpan={1}>
-                        {t("Нэр")}
-                      </td>
-                      <td className="border" colSpan={5}>
-                        {baiguullagiinMedeelel?.name}
-                      </td>
-                    </tr>
-                  </>
-                )}
-                <tr>
-                  <td colSpan={6} className="border">
-                    <br />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border text-center" colSpan={3}>
-                    {t("Барааны нэр")}
-                  </td>
-                  <td className="border text-center">{t("Тоо")}</td>
-                  <td className="border text-center">{t("Нэгж")}</td>
-                  <td className="border text-center">{t("Дүн")}</td>
-                </tr>
-                {eBarimt?.stocks?.map((mur, index) => (
-                  <tr key={`${index}-zakhialga`}>
-                    <td colSpan={3} className="border text-right">
-                      {mur.name}
-                    </td>
-                    <td className="border text-right">{mur.qty}</td>
-                    <td className="border text-right">
-                      {formatNumber(mur.unitPrice, 2)}
-                    </td>
-                    <td className="border text-right">
-                      {formatNumber(mur.totalAmount, 2)}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td colSpan={5} className="border text-right">
-                    {t("НӨАТ-гүй дүн")}
-                  </td>
-                  <td className="border text-right">
-                    {khungulukhEsekh === true
-                      ? formatNumber(
-                          (niitDun
-                            ? niitDun - khunglult.khungulukhDun
-                            : data.tulukhDun - khunglult.khungulukhDun) / 1.1,
-                          2
-                        )
-                      : formatNumber(
-                          (niitDun ? niitDun : data.tulukhDun) / 1.1,
-                          2
-                        )}
-                  </td>
-                </tr>
-                {khungulukhEsekh === true && (
-                  <tr>
-                    <td colSpan={5} className="border text-right">
-                      {t("Хөнгөлөлт")}
-                    </td>
-                    <td className="border text-right">
-                      {niitDun
-                        ? formatNumber(khunglult.khungulukhDun)
-                        : formatNumber(data.niitUndsenDun - data.tulukhDun)}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td colSpan={5} className="border text-right">
-                    {t("НӨАТ-н дүн")}
-                  </td>
-                  <td className="border text-right">
-                    {formatNumber(eBarimt?.vat, 2)}
-                  </td>
-                </tr>
-                <tr>
-                  <td colSpan={5} className="border text-right">
-                    {t("Төлөх дүн")}
-                  </td>
-                  <td className="border text-right">
-                    {formatNumber(eBarimt?.amount)}
-                  </td>
-                </tr>
-                {tulbur?.belen && (
-                  <tr>
-                    <td colSpan={5} className="border text-right">
-                      {t("Бэлнээр")}
-                    </td>
-                    <td className="border text-right">
-                      {formatNumber(tulbur?.belen)}
-                    </td>
-                  </tr>
-                )}
-                {tulbur?.belenBus && (
-                  <tr>
-                    <td colSpan={5} className="border text-right">
-                      {t("Бэлэн бусаар")}
-                    </td>
-                    <td className="border text-right">
-                      {formatNumber(tulbur?.belenBus)}
-                    </td>
-                  </tr>
-                )}
-                {tulbur?.khariult && (
-                  <tr>
-                    <td colSpan={5} className="border text-right">
-                      {t("Хариулт")}
-                    </td>
-                    <td className="border text-right">
-                      {formatNumber(tulbur?.khariult)}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td colSpan={4} className="border">{`Е-Баримт ${
-                    baiguullagaEsekh ? "" : "уншуулах"
-                  } дүн`}</td>
-                  <td colSpan={2} className="border text-right">
-                    {formatNumber(eBarimt?.amount)}
-                  </td>
-                </tr>
-                {!baiguullagaEsekh && (
-                  <tr>
-                    <td colSpan={4} className="border">
-                      {t("Сугалааны дугаар")}
-                    </td>
-                    <td colSpan={2} className="border">
-                      {eBarimt?.lottery}
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td colSpan={6}>
-                    <div className="flex w-full justify-center p-5">
-                      <div className="h-40 w-40">
-                        <QRCode value={eBarimt?.qrData} size={160} />
-                      </div>
+          <div
+            className="flex flex-col p-3 pr-10 pt-0 text-sm font-semibold text-black"
+            ref={eBarimtRef}
+          >
+            <div className="text-center">
+              {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
+            </div>
+            <div className="text-center">{baiguullaga?.ner}</div>
+            <div>{t("Борлуулагч")}:</div>
+            <div className="flex justify-between">
+              <p>{t("Огноо")}:</p>
+              <p>{moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>{t("ТТД")}:</p>
+              <p>{eBarimt?.registerNo}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>{t("Касс")}:</p>
+              <p>{eBarimt?.posNo}</p>
+            </div>
+            <div className="flex justify-between">
+              <p>{t("Кассчин")}:</p>
+              <p>{ajiltan?.ner}</p>
+            </div>
+            <div>
+              <p>{t("ДДТД")}:</p>
+            </div>
+            <div>
+              <p>{eBarimt?.billId}</p>
+            </div>
+            {baiguullagaEsekh && (
+              <>
+                <div>
+                  <p>{t("Худалдан авагч")}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>{t("ТТД")}:</p>
+                  <p>{register}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>{t("Нэр")}:</p>
+                  <p>{baiguullagiinMedeelel?.name}</p>
+                </div>
+              </>
+            )}
+            <div>
+              <p>
+                <br />
+              </p>
+            </div>
+            {eBarimt?.stocks?.map((mur, index) => (
+              <div
+                className="flex flex-col justify-between border-y-2 border-dashed"
+                key={`${index}-zakhialga`}
+              >
+                <p className="">{mur.name}:</p>
+                <p className="text-right">
+                  {mur.qty} * {formatNumber(mur.unitPrice, 2)} ={" "}
+                  {formatNumber(mur.totalAmount, 2)}
+                </p>
+              </div>
+            ))}
+            <div>
+              <p>
+                <br />
+              </p>
+            </div>
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">{t("НӨАТ-гүй дүн")}:</p>
+              <p className="text-right">
+                {khungulukhEsekh === true
+                  ? formatNumber(
+                      (data?.tulukhDun
+                        ? data?.tulukhDun - khunglult.khungulukhDun
+                        : data.tulukhDun - khunglult.khungulukhDun) / 1.1,
+                      2
+                    )
+                  : formatNumber((data.tulukhDun || 0) / 1.1, 2)}
+              </p>
+            </div>
+            {khungulukhEsekh === true && (
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">{t("Хөнгөлөлт")}:</p>
+                <p className="text-right">
+                  {data?.tulukhDun
+                    ? formatNumber(khunglult.khungulukhDun)
+                    : formatNumber(data.niitUndsenDun - data.niitDun)}
+                </p>
+              </div>
+            )}
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">{t("НӨАТ-н дүн")}:</p>
+              <p className="text-right">{formatNumber(eBarimt?.vat, 2)}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">{t("Төлөх дүн")}:</p>
+              <p className="text-right">{formatNumber(eBarimt?.amount)}</p>
+            </div>
+            {tulbur?.belen && (
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">{t("Бэлнээр")}:</p>
+                <p className="text-right">{formatNumber(tulbur?.belen)}</p>
+              </div>
+            )}
+            {tulbur?.belenBus && (
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">{t("Бэлэн бусаар")}:</p>
+                <p className="text-right">{formatNumber(tulbur?.belenBus)}</p>
+              </div>
+            )}
+            {tulbur?.khariult && (
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">{t("Хариулт")}:</p>
+                <p className="text-right">{formatNumber(tulbur?.khariult)}</p>
+              </div>
+            )}
+            <div className="flex items-end justify-between">
+              <p className="">
+                {`Е-Баримт ${baiguullagaEsekh ? "" : "уншуулах"} дүн`}:
+              </p>
+              <p className="text-end">{formatNumber(eBarimt?.amount)}</p>
+            </div>
+            {!baiguullagaEsekh && (
+              <div className="flex items-end justify-between">
+                <p className="w-1/2 text-right">{t("Сугалааны дугаар")}:</p>
+                <p className=" text-end">{eBarimt?.lottery}</p>
+              </div>
+            )}
+            <div>
+              <p>
+                <div className="flex w-full justify-center p-5">
+                  <div>
+                    <QRCode level="L" value={eBarimt?.qrData} size={200} />
+                  </div>
+                </div>
+              </p>
+            </div>
+            {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
+              <div>
+                <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
+                  <div className=" text-justify text-base">
+                    Эхлэх хугацаа:{" "}
+                    <div>
+                      {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+                    </div>{" "}
+                    Дуусах хугацаа:{" "}
+                    <div>
+                      {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
                     </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                  <div className="flex w-full items-center justify-center">
+                    <Canvas
+                      text={moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")}
+                      options={{
+                        level: "M",
+                        margin: 3,
+                        scale: 4,
+                        width: 200,
+                        color: {
+                          dark: "#000000",
+                          light: "#FFFFFF",
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="max-w-[400px] text-center text-base">
+                    Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа
+                    нэвтэрч ороход ашиглагдахыг анхаарна уу!
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
