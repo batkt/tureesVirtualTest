@@ -1293,7 +1293,7 @@ function camera({ token }) {
                     className='w-full sm:w-auto'
                     type='primary'
                     id='neekhKhaalgaID'>
-                    {t("Нээх")}dd [ {t("Орох")} F1 ]
+                    {t("Нээх")} [ {t("Орох")} F1 ]
                   </Button>
                   {/*<Button
                     onClick={(e) => {

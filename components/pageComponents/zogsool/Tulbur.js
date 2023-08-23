@@ -271,6 +271,10 @@ function Tulbur(
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
             batalgaajuulya("khaan", data?.response);
+          } else if (
+            data?.status == true &&
+            data?.response?.response_code !== "000"
+          ) {
             message.success(data?.response?.response_msg);
           } else if (
             data.status === true &&
@@ -286,7 +290,7 @@ function Tulbur(
           setTerminal(false);
         })
         .catch((e) => {
-          // aldaaBarigch(e);
+          // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
           guilgeeniiTuukhKhadgalya(tulbur);
