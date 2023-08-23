@@ -70,7 +70,8 @@ function index({ token, data }) {
     <Admin
       title={"Ажилтны эрхийн тохиргоо"}
       dedKhuudas
-      className="p-5 pb-10 lg:pb-0">
+      className="p-5 pb-10 lg:pb-0"
+    >
       <div className="box col-span-12 flex-row items-center p-2 lg:col-span-4 2xl:col-span-3">
         <div className=" font-medium">
           <div className="flex flex-col gap-3">
@@ -107,12 +108,14 @@ function index({ token, data }) {
             <div className="flex flex-col gap-3 px-3 py-5 font-medium xl:border-t-2">
               <div
                 className="flex flex-col overflow-y-auto"
-                style={{ height: "calc( 100vh - 18rem )" }}>
+                style={{ height: "calc( 100vh - 18rem )" }}
+              >
                 <Divider orientation="left">{t("Барилга сонгох")}</Divider>
                 {barilguud?.map((a) => (
                   <div
                     key={a._id}
-                    className="my-2 grid grid-cols-12 space-x-3 rounded-md bg-gray-100 p-5 py-2  hover:shadow-lg dark:bg-gray-700  ">
+                    className="my-2 grid grid-cols-12 space-x-3 rounded-md bg-gray-100 p-5 py-2  hover:shadow-lg dark:bg-gray-700  "
+                  >
                     <div className="col-span-2 flex items-center justify-start">
                       <img
                         className="h-10 w-10"
@@ -156,7 +159,8 @@ function index({ token, data }) {
                 {jagsaalt?.map((a) => (
                   <div
                     key={a._id}
-                    className="my-2 rounded-md bg-gray-100 p-5 py-2 hover:shadow-lg dark:bg-gray-700">
+                    className="my-2 rounded-md bg-gray-100 p-5 py-2 hover:shadow-lg dark:bg-gray-700"
+                  >
                     <div className="mx-auto mb-3 w-max font-bold">{a.ner}</div>
                     {a.khaalga?.map((b) => (
                       <Col span={8}>
@@ -171,7 +175,8 @@ function index({ token, data }) {
                               return [...value];
                             });
                           }}
-                          checked={!!khaalgaErkh.find((c) => c === b._id)}>
+                          checked={!!khaalgaErkh.find((c) => c === b._id)}
+                        >
                           {b.ner}
                         </Checkbox>
                       </Col>
@@ -184,7 +189,7 @@ function index({ token, data }) {
         </div>
       </div>
       <div className="box col-span-12 p-2 lg:col-span-4">
-        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-1 pt-5 pb-2">
+        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-1 pb-2 pt-5">
           <div className="flex w-1/2 space-x-2">
             <Checkbox
               checked={
@@ -233,7 +238,8 @@ function index({ token, data }) {
         </div>
         <div
           className="overflow-y-auto"
-          style={{ height: "calc( 100vh - 14rem )" }}>
+          style={{ height: "calc( 100vh - 14rem )" }}
+        >
           {data?.erkh !== "Zasvarchin" &&
             khuudasnuud
               ?.filter((a) => !a.nuuya)
@@ -248,10 +254,12 @@ function index({ token, data }) {
                         index % 2 === 0
                           ? "bg-blue-100 dark:bg-gray-700"
                           : "bg-green-100 dark:bg-gray-600"
-                      }`}>
+                      }`}
+                    >
                       <div
                         key={`${mur.href}-${index}`}
-                        className="flex w-1/2 flex-row space-x-2 p-1">
+                        className="flex w-1/2 flex-row space-x-2 p-1"
+                      >
                         {!mur?.sub && (
                           <Checkbox
                             disabled={
@@ -335,10 +343,12 @@ function index({ token, data }) {
                                 index % 2 === 0
                                   ? "bg-blue-50 dark:bg-gray-700"
                                   : "bg-green-50 dark:bg-gray-600"
-                              }`}>
+                              }`}
+                            >
                               <div
                                 key={`${a.href}-${i}`}
-                                className="flex w-1/2 flex-row space-x-2 p-1 pl-5">
+                                className="flex w-1/2 flex-row space-x-2 p-1 pl-5"
+                              >
                                 <Checkbox
                                   disabled={
                                     !targetKeys?.find((b) => b === a.href) &&
@@ -424,7 +434,7 @@ function index({ token, data }) {
         </div>
       </div>
       <div className="box col-span-12 p-2 lg:col-span-4 2xl:col-span-5">
-        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+        <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
           <h2 className="mr-auto text-base font-medium dark:text-gray-200">
             {t("Цонхны эрхийн тохиргоо")}
           </h2>
@@ -479,7 +489,34 @@ function index({ token, data }) {
             </div>
           </div>
         ))}
-        <div className="right-3 bottom-5 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
+        {!!targetKeys.find((a) => a === "/khyanalt/zogsool/camera") && (
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("Нэгтгэл дүн харах эсэх")}</div>
+                <div className="text-gray-600 dark:text-gray-300">
+                  {t(
+                    "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                  )}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={_.get(tokhirgoo, `zogsoolNegtgelDunKharakhEsekh`)}
+                  onChange={(checked) => {
+                    setTokhirgoo((a) => {
+                      if (!checked) {
+                        _.set(a, `zogsoolNegtgelDunKharakhEsekh`, false);
+                      } else _.set(a, `zogsoolNegtgelDunKharakhEsekh`, true);
+                      return { ...a };
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        <div className="bottom-5 right-3 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
           <Button className="w-full" type="primary" onClick={khadgalya}>
             {t("Хадгалах")}
           </Button>

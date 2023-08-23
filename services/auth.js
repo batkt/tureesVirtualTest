@@ -60,8 +60,8 @@ export const AuthProvider = ({ children }) => {
   }, [barilgiinId, baiguullaga]);
 
   useEffect(() => {
-    const t = parseCookies();
-    setToken(t?.tureestoken);
+    const d = parseCookies();
+    setToken(d?.tureestoken);
     var erkh = localStorage.getItem("baiguulgiinErkhiinJagsaalt");
     setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
 

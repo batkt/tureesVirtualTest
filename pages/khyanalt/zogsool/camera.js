@@ -38,6 +38,7 @@ import {
   FilterOutlined,
   ShareAltOutlined,
   UploadOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -65,6 +66,7 @@ import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import Stream1, { Stream2 } from "./stream";
 import StackStream from "./stackStream";
 import useUilchluulegchToo from "hooks/useUilchluulegchToo";
+import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 
 function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -137,15 +139,15 @@ function generateChild(mur, turul) {
       const a = mur[i];
       if (!!a?.turul) if (a.turul !== turul) continue;
       res.push({
-        value: !!a?.ner ? a.ner : a.cameraIP,
+        value: !!a?.ner ? a.ner : a?.cameraIP,
         title: !!a?.ner ? (
           a.ner + (a?.turul ? " / " + a?.turul : "")
         ) : (
-          <b key={a.cameraIP} className="text-green-400 hover:text-green-800">
-            {t("Камер")}-{a.cameraIP}
+          <b key={a?.cameraIP} className="text-green-400 hover:text-green-800">
+            {t("Камер")}-{a?.cameraIP}
           </b>
         ),
-        children: generateChild(!!a?.khaalga ? a.khaalga : a.camera, turul),
+        children: generateChild(!!a?.khaalga ? a.khaalga : a?.camera, turul),
         disabled: false,
         disableCheckbox: true,
         selectable: !a?.ner,
@@ -231,6 +233,7 @@ function camera({ token }) {
   const [songosonMashin, setSongosonMashin] = useState(undefined);
   const tulburRef = React.useRef(null);
   const mashiniiDugaarRef = React.useRef(null);
+  const tailanRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
@@ -264,12 +267,7 @@ function camera({ token }) {
   const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
 
   const query = useMemo(() => {
-    let result = {
-      createdAt: {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      },
-    };
+    let result = {};
     if (!!camerVal[1]) {
       if (!!khaikh) {
         // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
@@ -277,8 +275,20 @@ function camera({ token }) {
           $and: [
             {
               $or: [
-                { "tuukh.0.garsanKhaalga": camerVal[1] },
-                { "tuukh.0.garsanKhaalga": { $exists: false } },
+                {
+                  "tuukh.0.garsanKhaalga": camerVal[1],
+                  "tuukh.tsagiinTuukh.garsanTsag": {
+                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                  },
+                },
+                {
+                  "tuukh.0.garsanKhaalga": { $exists: false },
+                  createdAt: {
+                    $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                    $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                  },
+                },
               ],
             },
             {
@@ -290,8 +300,20 @@ function camera({ token }) {
       } else
         result = {
           $or: [
-            { "tuukh.0.garsanKhaalga": camerVal[1] },
-            { "tuukh.0.garsanKhaalga": { $exists: false } },
+            {
+              "tuukh.0.garsanKhaalga": camerVal[1],
+              "tuukh.tsagiinTuukh.garsanTsag": {
+                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              },
+            },
+            {
+              "tuukh.0.garsanKhaalga": { $exists: false },
+              createdAt: {
+                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+              },
+            },
           ],
           ...result,
         };
@@ -1175,6 +1197,41 @@ function camera({ token }) {
       });
   };
 
+  function tulburiinDelgerengui() {
+    if (!camerVal[1]) {
+      message.warn("Гарах камер сонгоно уу.");
+      return;
+    }
+    const footer = [
+      <div className="flex w-full items-center justify-between">
+        <Button type="primary" onClick={() => tailanRef.current.khaaya()}>
+          {t("Хаах")}
+        </Button>
+        <Button
+          icon={<PrinterOutlined />}
+          onClick={() => tailanRef.current.khadgalya()}
+        >
+          {t("Хэвлэх")}
+        </Button>
+      </div>,
+    ];
+    modal({
+      title: t("Төлбөрийн дэлгэрэнгүй"),
+      icon: <FileExcelOutlined />,
+      content: (
+        <TulburiinDelgerenguiTailan
+          ref={tailanRef}
+          defualtOgnoo={ognoo}
+          garsanKhaalga={camerVal[1]}
+          token={token}
+          baiguullagiinId={baiguullaga?._id}
+          barilgiinId={barilgiinId}
+        />
+      ),
+      footer,
+    });
+  }
+
   const exlCol = () => {
     const aa = columns;
     aa.splice(columns.length - 2, 2, {
@@ -1511,6 +1568,16 @@ function camera({ token }) {
                 data-aos-duration="1000"
                 data-aos-delay="300"
               >
+                {(ajiltan?.tokhirgoo?.zogsoolNegtgelDunKharakhEsekh === true ||
+                  ajiltan?.erkh === "Admin") && (
+                  <Button
+                    onClick={() => tulburiinDelgerengui()}
+                    className="mr-3 w-32 sm:w-auto"
+                    icon={<PrinterOutlined />}
+                  >
+                    {t("Төлбөрийн дэлгэрэнгүй")}
+                  </Button>
+                )}
                 <Button
                   className="mr-3 w-32 sm:w-auto"
                   onClick={() =>
