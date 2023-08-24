@@ -35,10 +35,11 @@ function MashinBurtgel(
     data?.turul ? data?.turul : undefined
   );
   const [inputValue, setInputValue] = useState("");
-  const [ognoo, setOgnoo] = useState([
-    moment(new Date()).subtract(1, "months"),
-    moment(new Date()),
-  ]);
+  const [ognoo, setOgnoo] = useState(
+    data?.ekhlekhOgnoo && data?.duusakhOgnoo
+      ? [moment(data.ekhlekhOgnoo), moment(data.duusakhOgnoo)]
+      : [moment(new Date()), moment(new Date()).add(1, "months")]
+  );
 
   const query = React.useMemo(() => {
     return { tuluv: { $nin: [-1] }, barilgiinId };
