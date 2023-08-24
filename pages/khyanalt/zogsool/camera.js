@@ -368,7 +368,7 @@ function camera({ token }) {
         uilchluulegch?.khaalgaTurul === "oroh" &&
         !!uilchluulegch?.cameraIP
       ) {
-        console.log(uilchluulegch?.cameraIP);
+        console.log("orohKhaalga", uilchluulegch?.cameraIP);
         khaalgaNeey(uilchluulegch?.cameraIP);
       } else {
         onRefresh();
@@ -384,7 +384,7 @@ function camera({ token }) {
           uilchluulegch?.tuukh.length > 0 &&
           !!uilchluulegch?.tuukh[0].garsanKhaalga
         ) {
-          console.log(uilchluulegch?.tuukh[0].garsanKhaalga);
+          console.log("garakhHkaalga", uilchluulegch?.tuukh[0].garsanKhaalga);
           khaalgaNeey(uilchluulegch?.tuukh[0].garsanKhaalga);
         }
       }
