@@ -178,6 +178,14 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
+    ner: "Машин бүртгэл",
+    key: "/khyanalt/zogsool/mashinBurtgel",
+  },
+  {
+    ner: "Камер",
+    key: "/khyanalt/zogsool/camera",
+  },
+  {
     key: "/khyanalt/anket",
     ner: "Анкет",
     tokhirgoo: [],
@@ -296,7 +304,8 @@ export const khuudasnuud = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="feather feather-file-text">
+        className="feather feather-file-text"
+      >
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -320,7 +329,8 @@ export const khuudasnuud = [
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="feather feather-folder d-block mx-auto">
+            className="feather feather-folder d-block mx-auto"
+          >
             <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
           </svg>
         ),
@@ -340,7 +350,8 @@ export const khuudasnuud = [
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="feather feather-edit">
+            className="feather feather-edit"
+          >
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
@@ -363,7 +374,8 @@ export const khuudasnuud = [
             strokeLinejoin="round"
             icon-name="paperclip"
             data-lucide="paperclip"
-            className="lucide lucide-paperclip mx-auto block">
+            className="lucide lucide-paperclip mx-auto block"
+          >
             <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"></path>
           </svg>
         ),
@@ -384,7 +396,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         {" "}
         <path stroke="none" d="M0 0h24v24H0z" />{" "}
         <rect x="3" y="4" width="18" height="16" rx="3" />{" "}
@@ -409,7 +422,8 @@ export const khuudasnuud = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="feather feather-users">
+        className="feather feather-users"
+      >
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
         <circle cx="9" cy="7" r="4"></circle>
         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -430,7 +444,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         {" "}
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />{" "}
         <circle cx="12" cy="7" r="4" />
@@ -451,7 +466,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     ),
@@ -493,7 +509,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <line x1="12" y1="1" x2="12" y2="23"></line>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
@@ -513,7 +530,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
             <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
           </svg>
@@ -533,7 +551,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <line x1="8" y1="6" x2="21" y2="6"></line>
             <line x1="8" y1="12" x2="21" y2="12"></line>
             <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -557,7 +576,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -579,7 +599,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <line x1="19" y1="5" x2="5" y2="19" />
             <circle cx="6.5" cy="6.5" r="2.5" />
             <circle cx="17.5" cy="17.5" r="2.5" />
@@ -600,7 +621,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"></path>
             <polyline points="14 2 14 8 20 8"></polyline>
             <line x1="9" y1="15" x2="15" y2="15"></line>
@@ -623,7 +645,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
@@ -640,7 +663,8 @@ export const khuudasnuud = [
         fill="currentColor"
         stroke="currentColor"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         <g>
           <path
             stroke="null"
@@ -665,7 +689,8 @@ export const khuudasnuud = [
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <line x1="8" y1="6" x2="21" y2="6"></line>
             <line x1="8" y1="12" x2="21" y2="12"></line>
             <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -687,7 +712,8 @@ export const khuudasnuud = [
             fill="currentColor"
             stroke="currentColor"
             strokeLinecap="round"
-            strokeLinejoin="round">
+            strokeLinejoin="round"
+          >
             <g>
               <path
                 stroke="null"
@@ -715,7 +741,8 @@ export const khuudasnuud = [
             stroke-linejoin="round"
             icon-name="video"
             data-lucide="video"
-            className="lucide lucide-video mx-auto block">
+            className="lucide lucide-video mx-auto block"
+          >
             <polygon points="23 7 16 12 23 17 23 7"></polygon>
             <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
           </svg>
@@ -738,7 +765,8 @@ export const khuudasnuud = [
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="feather feather-file-text">
+        className="feather feather-file-text"
+      >
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
         <polyline points="14 2 14 8 20 8"></polyline>
         <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -759,7 +787,8 @@ export const khuudasnuud = [
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"
-        strokeLinejoin="round">
+        strokeLinejoin="round"
+      >
         {" "}
         <path stroke="none" d="M0 0h24v24H0z" />{" "}
         <path d="M10 3.2a9 9 0 1 0 10.8 10.8a1 1 0 0 0 -1 -1h-6.8a2 2 0 0 1 -2 -2v-7a.9 .9 0 0 0 -1 -.8" />{" "}
@@ -798,7 +827,8 @@ export const khuudasnuud = [
         strokeLinejoin="round"
         icon-name="plus-square"
         data-lucide="plus-square"
-        className="lucide lucide-plus-square mx-auto block">
+        className="lucide lucide-plus-square mx-auto block"
+      >
         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
         <line x1="12" y1="8" x2="12" y2="16"></line>
         <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -815,7 +845,8 @@ export const khuudasnuud = [
         width="24"
         height="24"
         preserveAspectRatio="xMidYMid meet"
-        viewBox="0 0 24 24">
+        viewBox="0 0 24 24"
+      >
         <path
           fill="currentColor"
           d="M19 19H5V5h6V3H5a2.006 2.006 0 0 0-2 2v14a2.006 2.006 0 0 0 2 2h14a2.006 2.006 0 0 0 2-2v-4h-2Z"

@@ -170,9 +170,11 @@ function Zogsool({ token }) {
 
     if (tuluv !== "") {
       if (tuluv === "-2") {
-        baseQuery["tuukh.tuluv"] = { $in: [-2, 0] };
+        baseQuery["tuukh.tuluv"] = -2;
       } else if (tuluv === "1") {
         baseQuery["tuukh.tuluv"] = 1;
+      } else if (tuluv === "0") {
+        baseQuery["tuukh.tuluv"] = 0;
       }
     }
 
@@ -546,12 +548,20 @@ function Zogsool({ token }) {
                   {t("Төлсөн")}
                 </div>
                 <div
+                  onClick={() => setTuluv("0")}
+                  className={`relative ${
+                    tuluv === "0" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлөөгүй")}
+                </div>
+                <div
                   onClick={() => setTuluv("-2")}
                   className={`relative ${
                     tuluv === "-2" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
-                  {t("Төлөөгүй")}
+                  {t("Зөрчилтэй")}
                 </div>
               </div>
             }
@@ -577,7 +587,7 @@ function Zogsool({ token }) {
                 ? "Төлөөгүй"
                 : v[0].tuluv === -2
                 ? "Зөрчилтэй"
-                : ""}
+                : "Үнэгүй"}
             </div>
           );
         },
