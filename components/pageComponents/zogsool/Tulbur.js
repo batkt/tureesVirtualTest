@@ -398,30 +398,6 @@ function Tulbur(
                 </div>
               </div>
             ))}
-            <div className={`flex justify-between border-b-2 border-dashed`}>
-              <p className="">Орсон цаг:</p>
-              <p className="text-right">
-                {data?.tsagiinTuukh[0]?.orsonTsag &&
-                  moment(data?.tsagiinTuukh[0]?.orsonTsag).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-              </p>
-            </div>
-            <div className={`flex justify-between border-b-2 border-dashed`}>
-              <p className="">Гарсан цаг:</p>
-              <p className="text-right">
-                {data?.tsagiinTuukh[0]?.garsanTsag &&
-                  moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
-                    "YYYY-MM-DD HH:mm"
-                  )}
-              </p>
-            </div>
-            <div className={`flex justify-between border-b-2 border-dashed`}>
-              <p className="">Нийт Хугацаа:</p>
-              <p className="text-right">
-                {minToHour(data?.niitKhugatsaa || 0)}
-              </p>
-            </div>
             <div>
               <p>
                 <br />
@@ -478,6 +454,30 @@ function Tulbur(
                     <QRCode level="L" value={eBarimt?.qrData} size={200} />
                   </div>
                 </div>
+              </p>
+            </div>
+            <div className={`flex justify-between border-y-2 border-dashed`}>
+              <p className="">Орсон цаг:</p>
+              <p className="text-right">
+                {data?.tsagiinTuukh[0]?.orsonTsag &&
+                  moment(data?.tsagiinTuukh[0]?.orsonTsag).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+              </p>
+            </div>
+            <div className={`flex justify-between border-b-2 border-dashed`}>
+              <p className="">Гарсан цаг:</p>
+              <p className="text-right">
+                {data?.tsagiinTuukh[0]?.garsanTsag &&
+                  moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+              </p>
+            </div>
+            <div className={`flex justify-between border-b-2 border-dashed`}>
+              <p className="">Нийт Хугацаа:</p>
+              <p className="text-right">
+                {minToHour(data?.niitKhugatsaa || 0)}
               </p>
             </div>
           </div>
