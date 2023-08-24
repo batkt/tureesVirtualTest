@@ -309,6 +309,16 @@ function Tulbur(
       }
     }
   }
+  const minToHour = (m) => {
+    let res;
+    if (m < 60) res = m + " мин";
+    else {
+      const h = Math.floor(m / 60);
+      const min = m % 60;
+      res = h + " цаг " + (min && min + " мин");
+    }
+    return res;
+  };
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
@@ -321,50 +331,51 @@ function Tulbur(
   }, []);
 
   return (
-    <div className='h-full w-full'>
+    <div className="h-full w-full">
       {eBarimt && (
-        <div className='hidden'>
+        <div className="hidden">
           <div
-            className='flex flex-col p-3 pr-10 pt-0 text-sm font-semibold text-black'
-            ref={eBarimtRef}>
-            <div className='text-center'>
+            className="flex w-full min-w-[58mm] flex-col p-2 pr-4 text-base font-semibold text-black"
+            ref={eBarimtRef}
+          >
+            <div className="text-center">
               {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
             </div>
-            <div className='text-center'>{baiguullaga?.ner}</div>
-            <div>{t("Борлуулагч")}:</div>
-            <div className='flex justify-between'>
-              <p>{t("Огноо")}:</p>
+            <div className="text-center">{baiguullaga?.ner}</div>
+            {/* <div>Борлуулагч:</div> */}
+            <div className="flex justify-between">
+              <p>Огноо:</p>
               <p>{moment(Date.now()).format("YYYY/MM/DD hh:mm:ss")}</p>
             </div>
-            <div className='flex justify-between'>
-              <p>{t("ТТД")}:</p>
+            <div className="flex justify-between">
+              <p>ТТД:</p>
               <p>{eBarimt?.registerNo}</p>
             </div>
-            <div className='flex justify-between'>
-              <p>{t("Касс")}:</p>
+            <div className="flex justify-between">
+              <p>Касс:</p>
               <p>{eBarimt?.posNo}</p>
             </div>
-            <div className='flex justify-between'>
-              <p>{t("Кассчин")}:</p>
+            <div className="flex justify-between">
+              <p>Кассчин:</p>
               <p>{ajiltan?.ner}</p>
             </div>
             <div>
-              <p>{t("ДДТД")}:</p>
+              <p>ДДТД:</p>
             </div>
-            <div>
-              <p>{eBarimt?.billId}</p>
+            <div className="-mt-1 w-[80mm]">
+              <div>{eBarimt?.billId}</div>
             </div>
             {baiguullagaEsekh && (
               <>
                 <div>
-                  <p>{t("Худалдан авагч")}</p>
+                  <p>Худалдан авагч</p>
                 </div>
-                <div className='flex justify-between'>
-                  <p>{t("ТТД")}:</p>
+                <div className="flex justify-between">
+                  <p>ТТД:</p>
                   <p>{register}</p>
                 </div>
-                <div className='flex justify-between'>
-                  <p>{t("Нэр")}:</p>
+                <div className="flex justify-between">
+                  <p>Нэр:</p>
                   <p>{baiguullagiinMedeelel?.name}</p>
                 </div>
               </>
@@ -376,153 +387,127 @@ function Tulbur(
             </div>
             {eBarimt?.stocks?.map((mur, index) => (
               <div
-                className='flex flex-col justify-between border-y-2 border-dashed'
-                key={`${index}-zakhialga`}>
-                <p className=''>{mur.name}:</p>
-                <p className='text-right'>
-                  {mur.qty} * {formatNumber(mur.unitPrice, 2)} ={" "}
-                  {formatNumber(mur.totalAmount, 2)}
-                </p>
+                className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
+                  index === 0 && "border-t-2"
+                }`}
+                key={`${index}-zakhialga`}
+              >
+                <div className="">{mur.name}:</div>
+                <div className="-mt-1 text-right">
+                  {formatNumber(mur.totalAmount, 2)}₮
+                </div>
               </div>
             ))}
+            <div className={`flex justify-between border-b-2 border-dashed`}>
+              <p className="">Орсон цаг:</p>
+              <p className="text-right">
+                {data?.tsagiinTuukh[0]?.orsonTsag &&
+                  moment(data?.tsagiinTuukh[0]?.orsonTsag).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+              </p>
+            </div>
+            <div className={`flex justify-between border-b-2 border-dashed`}>
+              <p className="">Гарсан цаг:</p>
+              <p className="text-right">
+                {data?.tsagiinTuukh[0]?.garsanTsag &&
+                  moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
+                    "YYYY-MM-DD HH:mm"
+                  )}
+              </p>
+            </div>
+            <div className={`flex justify-between border-b-2 border-dashed`}>
+              <p className="">Нийт Хугацаа:</p>
+              <p className="text-right">
+                {minToHour(data?.niitKhugatsaa || 0)}
+              </p>
+            </div>
             <div>
               <p>
                 <br />
               </p>
             </div>
-            <div className='flex justify-between'>
-              <p className='w-1/2 text-right'>{t("НӨАТ-гүй дүн")}:</p>
-              <p className='text-right'>
-                {khungulukhEsekh === true
-                  ? formatNumber(
-                      (data?.tulukhDun
-                        ? data?.tulukhDun - khunglult.khungulukhDun
-                        : data.tulukhDun - khunglult.khungulukhDun) / 1.1,
-                      2
-                    )
-                  : formatNumber((data.tulukhDun || 0) / 1.1, 2)}
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">НӨАТ-гүй дүн:</p>
+              <p className="text-right">
+                {formatNumber(data.tulukhDun / 1.1, 2)}₮
               </p>
             </div>
-            {khungulukhEsekh === true && (
-              <div className='flex justify-between'>
-                <p className='w-1/2 text-right'>{t("Хөнгөлөлт")}:</p>
-                <p className='text-right'>
-                  {data?.tulukhDun
-                    ? formatNumber(khunglult.khungulukhDun)
-                    : formatNumber(data.niitUndsenDun - data.niitDun)}
-                </p>
-              </div>
-            )}
-            <div className='flex justify-between'>
-              <p className='w-1/2 text-right'>{t("НӨАТ-н дүн")}:</p>
-              <p className='text-right'>{formatNumber(eBarimt?.vat, 2)}</p>
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">НӨАТ-н дүн:</p>
+              <p className="text-right">{formatNumber(eBarimt?.vat, 2)}₮</p>
             </div>
-            <div className='flex justify-between'>
-              <p className='w-1/2 text-right'>{t("Төлөх дүн")}:</p>
-              <p className='text-right'>{formatNumber(eBarimt?.amount)}</p>
+            <div className="flex justify-between">
+              <p className="w-1/2 text-right">Төлөх дүн:</p>
+              <p className="text-right">{formatNumber(eBarimt?.amount)}₮</p>
             </div>
             {tulbur?.belen && (
-              <div className='flex justify-between'>
-                <p className='w-1/2 text-right'>{t("Бэлнээр")}:</p>
-                <p className='text-right'>{formatNumber(tulbur?.belen)}</p>
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">Бэлнээр:</p>
+                <p className="text-right">{formatNumber(tulbur?.belen)}₮</p>
               </div>
             )}
             {tulbur?.belenBus && (
-              <div className='flex justify-between'>
-                <p className='w-1/2 text-right'>{t("Бэлэн бусаар")}:</p>
-                <p className='text-right'>{formatNumber(tulbur?.belenBus)}</p>
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">Бэлэн бусаар:</p>
+                <p className="text-right">{formatNumber(tulbur?.belenBus)}₮</p>
               </div>
             )}
             {tulbur?.khariult && (
-              <div className='flex justify-between'>
-                <p className='w-1/2 text-right'>{t("Хариулт")}:</p>
-                <p className='text-right'>{formatNumber(tulbur?.khariult)}</p>
+              <div className="flex justify-between">
+                <p className="w-1/2 text-right">Хариулт:</p>
+                <p className="text-right">{formatNumber(tulbur?.khariult)}₮</p>
               </div>
             )}
-            <div className='flex items-end justify-between'>
-              <p className=''>
+            <div className="flex items-end justify-between">
+              <p className="w-1/2 text-right">
                 {`Е-Баримт ${baiguullagaEsekh ? "" : "уншуулах"} дүн`}:
               </p>
-              <p className='text-end'>{formatNumber(eBarimt?.amount)}</p>
+              <p className="text-end">{formatNumber(eBarimt?.amount)}₮</p>
             </div>
             {!baiguullagaEsekh && (
-              <div className='flex items-end justify-between'>
-                <p className='w-1/2 text-right'>{t("Сугалааны дугаар")}:</p>
-                <p className=' text-end'>{eBarimt?.lottery}</p>
+              <div className="flex items-end justify-between">
+                <p className="w-1/2 text-right">Сугалааны дугаар:</p>
+                <p className=" text-end">{eBarimt?.lottery}</p>
               </div>
             )}
             <div>
               <p>
-                <div className='flex w-full justify-center p-5'>
+                <div className="flex w-full justify-center p-5">
                   <div>
-                    <QRCode level='L' value={eBarimt?.qrData} size={200} />
+                    <QRCode level="L" value={eBarimt?.qrData} size={200} />
                   </div>
                 </div>
               </p>
             </div>
-            {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
-              <div>
-                <div className='mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5'>
-                  <div className=' text-justify text-base'>
-                    Эхлэх хугацаа:{" "}
-                    <div>
-                      {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
-                    </div>{" "}
-                    Дуусах хугацаа:{" "}
-                    <div>
-                      {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
-                    </div>
-                  </div>
-                  <div className='flex w-full items-center justify-center'>
-                    <Canvas
-                      text={moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")}
-                      options={{
-                        level: "M",
-                        margin: 3,
-                        scale: 4,
-                        width: 200,
-                        color: {
-                          dark: "#000000",
-                          light: "#FFFFFF",
-                        },
-                      }}
-                    />
-                  </div>
-                  <div className='max-w-[400px] text-center text-base'>
-                    Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа
-                    нэвтэрч ороход ашиглагдахыг анхаарна уу!
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
-      <div className='pb-2'>
-        <Steps className='hidden' current={alkham}>
+      <div className="pb-2">
+        <Steps className="hidden" current={alkham}>
           <Steps.Step
-            key='Төлбөр төлөх'
+            key="Төлбөр төлөх"
             subTitle={
-              <span className='dark:text-gray-200'>{t("Төлбөр төлөх")}</span>
+              <span className="dark:text-gray-200">{t("Төлбөр төлөх")}</span>
             }
             onClick={() => setAlkham(1)}
           />
           <Steps.Step
-            key='Төлбөрын баримт'
+            key="Төлбөрын баримт"
             subTitle={
-              <span className='dark:text-gray-200'>{t("Төлбөрын баримт")}</span>
+              <span className="dark:text-gray-200">{t("Төлбөрын баримт")}</span>
             }
             onClick={() => setAlkham(2)}
           />
         </Steps>
       </div>
       <div className={`${alkham === 1 ? "" : "hidden"}`}>
-        <div className='table w-full text-lg font-medium'>
-          <div className='table-row'>
-            <div className='table-cell border-b-2 border-dashed p-2 dark:text-gray-200'>
+        <div className="table w-full text-lg font-medium">
+          <div className="table-row">
+            <div className="table-cell border-b-2 border-dashed p-2 dark:text-gray-200">
               {t("Төлөх дүн")}
             </div>
-            <div className='table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200'>
+            <div className="table-cell border-b-2 border-dashed p-2 text-right dark:text-gray-200">
               {formatNumber(
                 (niitDun ? niitDun : data?.tulukhDun) -
                   tulbur.reduce((a, b) => a + b.dun, 0) || 0
@@ -562,28 +547,29 @@ function Tulbur(
           guilgeeniiTuukhKhadgalya={guilgeeniiTuukhKhadgalya}
         />
         {!!qpayerTulukh && qpayerTulukh !== "Tulugdsun" && (
-          <div className='col-span-3 flex w-full items-center justify-center'>
+          <div className="col-span-3 flex w-full items-center justify-center">
             <img src={qpayerTulukh?.qr_image} />
           </div>
         )}
         {khaanbank && tulbur.find((a) => a.turul === "khaan") && (
-          <div className='relative col-span-3 mt-5 flex flex-col items-center space-y-2'>
+          <div className="relative col-span-3 mt-5 flex flex-col items-center space-y-2">
             <img
               src={"https://www.khanbank.com/assets/logos/khanbank-mn.png"}
-              className='w-1/2'
+              className="w-1/2"
             />
-            <div id='loading'>
+            <div id="loading">
               <Spin
                 style={{ fontSize: "1.5rem" }}
-                size='large'
+                size="large"
                 tip={t("Карт аа уншуулна уу!!")}
               />
             </div>
-            <div className='flex flex-row space-x-5'>
+            <div className="flex flex-row space-x-5">
               <Button
                 danger
                 onClick={() => setTerminal(false)}
-                icon={<CloseOutlined />}>
+                icon={<CloseOutlined />}
+              >
                 {t("Цуцлах")}
               </Button>
               {/* <Button
@@ -595,13 +581,13 @@ function Tulbur(
             </div>
           </div>
         )}
-        <div className='mt-5 table w-full text-lg font-medium'>
+        <div className="mt-5 table w-full text-lg font-medium">
           {tulbur.length > 0 && (
-            <div className='table-row'>
-              <div className='table-cell border-t-2 border-dashed p-2 dark:text-gray-200'>
+            <div className="table-row">
+              <div className="table-cell border-t-2 border-dashed p-2 dark:text-gray-200">
                 {t("Төлсөн дүн")}
               </div>
-              <div className='table-cell border-t-2 border-dashed p-2 text-right dark:text-gray-200'>
+              <div className="table-cell border-t-2 border-dashed p-2 text-right dark:text-gray-200">
                 {formatNumber(tulbur.reduce((a, b) => a + b.dun, 0))} ₮
               </div>
             </div>
@@ -628,25 +614,27 @@ function Tulbur(
         barimtKhevlekhEsekh={barimtKhevlekhEsekh}
         setBarimtKhevlekhEsekh={setBarimtKhevlekhEsekh}
       />
-      <div className='mt-5 flex flex-row justify-between'>
-        <Button type='primary' danger onClick={() => ref.current.khaaya()}>
+      <div className="mt-5 flex flex-row justify-between">
+        <Button type="primary" danger onClick={() => ref.current.khaaya()}>
           {t("Хаах")}
         </Button>
         {alkham === 1 && !qpayerTulukh && (
           <Button
-            type='primary'
+            type="primary"
             loading={loading}
-            id='TogloomiinTuvTulburTovch'
-            onClick={batalgaajuulaltKhiiya}>
+            id="TogloomiinTuvTulburTovch"
+            onClick={batalgaajuulaltKhiiya}
+          >
             {t("Төлбөр төлөх")}
           </Button>
         )}
 
         {alkham === 2 && barimtKhevlekhEsekh === true && (
           <Button
-            type='primary'
+            type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(uilchluugchiinId)}>
+            onClick={() => ebarimtAvya(uilchluugchiinId)}
+          >
             {t("Хэвлэх")}
           </Button>
         )}
