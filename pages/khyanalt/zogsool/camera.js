@@ -1196,6 +1196,7 @@ function camera({ token }) {
     order,
     khelber,
     dun,
+    uilchluulegchGaralt,
   ]);
 
   const baganuud = [
@@ -2011,8 +2012,9 @@ function camera({ token }) {
                         onDoubleClick={() =>
                           navigator.clipboard
                             .readText()
-                            .then((v) =>
-                              form.setFieldValue("mashiniiDugaar", v)
+                            .then(
+                              (v) =>
+                                !!v && form.setFieldValue("mashiniiDugaar", v)
                             )
                         }
                         maxLength={7}
