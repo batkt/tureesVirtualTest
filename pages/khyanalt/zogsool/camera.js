@@ -39,6 +39,7 @@ import {
   ShareAltOutlined,
   UploadOutlined,
   PrinterOutlined,
+  CopyOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -335,13 +336,19 @@ function camera({ token }) {
         ],
       };
     if (!!khelber) {
-      result = {
-        "tuukh.tulbur.turul":
-          !!khelber && khelber === "card"
-            ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
-            : khelber,
-        ...result,
-      };
+      if (khelber === "tuluugui") {
+        result = {
+          "tuukh.tulbur.0": { $exists: false },
+          ...result,
+        };
+      } else
+        result = {
+          "tuukh.tulbur.turul":
+            !!khelber && khelber === "card"
+              ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
+              : khelber,
+          ...result,
+        };
     }
     if (!!dun) {
       result = {
@@ -452,6 +459,7 @@ function camera({ token }) {
   useKeyboardTovchlol("F1", f3Darsan);
   useKeyboardTovchlol("F2", f4Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
+  useKeyboardTovchlol("-", khasakhDarsan);
 
   function f3Darsan() {
     khaalgaNeey(camerVal[0]);
@@ -490,6 +498,18 @@ function camera({ token }) {
       item: null,
       type: "dugaarBurtgekh",
     });
+    !!camerVal[0] && form.setFieldValue("CAMERA_IP", camerVal[0]);
+    setTimeout(() => {
+      mashiniiDugaarRef.current.focus();
+    }, 200);
+  }
+  function khasakhDarsan() {
+    setModalOpen({
+      bool: true,
+      item: null,
+      type: "dugaarBurtgekh",
+    });
+    !!camerVal[1] && form.setFieldValue("CAMERA_IP", camerVal[1]);
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
     }, 200);
@@ -555,7 +575,7 @@ function camera({ token }) {
     }
     return res;
   };
-  function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar, niitDun) {
+  function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar, niitDun, index) {
     modal({
       title: (
         <div className="flex w-full flex-row justify-between">
@@ -573,6 +593,7 @@ function camera({ token }) {
       ),
       content: (
         <Tulbur
+          index={index}
           niitDun={niitDun}
           camerVal={camerVal[1]}
           ref={tulburRef}
@@ -610,7 +631,18 @@ function camera({ token }) {
         dataIndex: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
-        render: (a) => String(a).toUpperCase(),
+        render: (a) => (
+          <div
+            onClick={() => {
+              navigator.clipboard.writeText(String(a).toUpperCase());
+              message.success(`${String(a).toUpperCase()} дугаарыг хууллаа`);
+            }}
+            className="flex cursor-copy items-center justify-center gap-3"
+          >
+            {String(a).toUpperCase()}
+            <CopyOutlined className="text-lg text-gray-300" />
+          </div>
+        ),
       },
     ];
     return [
@@ -747,7 +779,51 @@ function camera({ token }) {
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
-        render: (a) => (!!a ? a : "Үйлчлүүлэгч"),
+        render: (a, b) => {
+          var ekhlekhOgnoo = moment(b?.mashin?.ekhlekhOgnoo).diff(
+            new Date(),
+            "d"
+          );
+          var duusakhOgnoo = moment(b?.mashin?.duusakhOgnoo).diff(
+            new Date(),
+            "d"
+          );
+          return !!a ? (
+            a === "Гэрээт" ? (
+              <Tooltip
+                title={`${moment(b.mashin.ekhlekhOgnoo).format(
+                  "YYYY-MM-DD"
+                )}-/аас⁴/ ${moment(b.mashin.duusakhOgnoo).format(
+                  "YYYY-MM-DD"
+                )} хүртэл гэрээ байгуулсан ба гэрээ ${
+                  duusakhOgnoo < 0
+                    ? "дууссан"
+                    : ekhlekhOgnoo > 0
+                    ? "эхлээгүй"
+                    : "идэвхитэй"
+                } байна.`}
+              >
+                <div className="flex items-center justify-center">
+                  <div
+                    className={`flex cursor-help rounded-md border-white px-3 ${
+                      a === "Гэрээт" && duusakhOgnoo < 0
+                        ? " border bg-red-400 font-medium text-white"
+                        : ekhlekhOgnoo > 0
+                        ? " border bg-blue-400 font-medium text-white"
+                        : ""
+                    }`}
+                  >
+                    {a}
+                  </div>
+                </div>
+              </Tooltip>
+            ) : (
+              a
+            )
+          ) : (
+            "Үйлчлүүлэгч"
+          );
+        },
       },
       {
         title: (
@@ -837,6 +913,14 @@ function camera({ token }) {
                 >
                   {t("Харилцах")}
                 </div>
+                <div
+                  onClick={() => setKhelber("tuluugui")}
+                  className={`relative ${
+                    khelber === "tuluugui" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  {t("Төлөөгүй")}
+                </div>
               </div>
             }
           >
@@ -910,7 +994,8 @@ function camera({ token }) {
                               mur,
                               parent._id,
                               parent?.mashiniiDugaar,
-                              parent?.niitDun
+                              parent?.niitDun,
+                              index
                             )
                           : notification.warn({
                               message: t("Дүн бодогдоогүй байна."),
@@ -1040,12 +1125,14 @@ function camera({ token }) {
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
-                <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
+                <div className="max-w-[8rem] cursor-help truncate break-words">
+                  {parent?.mashin?.temdeglel}
+                </div>
               </Tooltip>
             );
           } else if (parent.turul === "Гэрээт") {
             return (
-              <div>
+              <div className="max-w-[8rem] cursor-help truncate break-words">
                 {!!parent?.zurchil
                   ? parent?.zurchil
                   : parent?.mashin?.temdeglel}
@@ -1060,7 +1147,7 @@ function camera({ token }) {
                     v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : t(parent.zurchil)
                   }
                 >
-                  <div className="line-clamp-1">
+                  <div className="max-w-[8rem] cursor-help truncate break-words">
                     {v[0]?.tuluv === -1
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
@@ -1341,7 +1428,6 @@ function camera({ token }) {
         }));
         setKhaikh(search);
       }}
-      loading={isValidating}
     >
       {jagsaalt?.length > 0 ? (
         <div className="col-span-12">
@@ -1791,7 +1877,7 @@ function camera({ token }) {
               <Table
                 className="cameraTable mt-8 hidden overflow-auto md:block"
                 tableLayout="auto"
-                loading={!uilchluulegchGaralt}
+                loading={isValidating}
                 dataSource={uilchluulegchGaralt?.jagsaalt}
                 scroll={{ y: "calc(100vh - 39.5rem)" }}
                 size="small"
@@ -1922,6 +2008,13 @@ function camera({ token }) {
                       ]}
                     >
                       <Input
+                        onDoubleClick={() =>
+                          navigator.clipboard
+                            .readText()
+                            .then((v) =>
+                              form.setFieldValue("mashiniiDugaar", v)
+                            )
+                        }
                         maxLength={7}
                         ref={mashiniiDugaarRef}
                         placeholder="1234УБА"

@@ -28,6 +28,7 @@ function Tulbur(
     setModalNeelttei,
     camerVal,
     niitDun,
+    index,
   },
   ref
 ) {
@@ -192,14 +193,15 @@ function Tulbur(
         if (data === "Amjilttai") {
           setAlkham(2);
           onRefresh();
-          axios
-            .get("http://localhost:5000/api/neeye/" + camerVal + "")
-            .then(function (response) {
-              if (!!response) console.log("/api/neeye", response);
-            })
-            .catch(function (error) {
-              console.log("ERROR: /api/neeye", error);
-            });
+          index === 0 &&
+            axios
+              .get("http://localhost:5000/api/neeye/" + camerVal + "")
+              .then(function (response) {
+                if (!!response) console.log("/api/neeye", response);
+              })
+              .catch(function (error) {
+                console.log("ERROR: /api/neeye", error);
+              });
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);

@@ -157,7 +157,9 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         render: (v) => (
           <Tooltip title={v}>
-            <div className="w-full text-left">{v}</div>
+            <div className="w-full cursor-help truncate break-words text-left">
+              {v}
+            </div>
           </Tooltip>
         ),
       },

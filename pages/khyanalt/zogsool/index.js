@@ -603,7 +603,9 @@ function Zogsool({ token }) {
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
               <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
-                <div className="line-clamp-1">{parent?.mashin?.temdeglel}</div>
+                <div className="max-w-[8rem] cursor-help truncate break-words">
+                  {parent?.mashin?.temdeglel}
+                </div>
               </Tooltip>
             );
           } else if (parent.turul === "Гэрээт".trim()) {
@@ -621,7 +623,7 @@ function Zogsool({ token }) {
                     v[0]?.tuluv === -1 ? v[0]?.uneguiGarsan : t(parent.zurchil)
                   }
                 >
-                  <div className="line-clamp-1">
+                  <div className="max-w-[8rem] cursor-help truncate break-words">
                     {v[0]?.tuluv === -1
                       ? v[0]?.uneguiGarsan
                       : !!parent.zurchil
