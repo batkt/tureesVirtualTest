@@ -363,7 +363,7 @@ function camera({ token }) {
   }, [ognoo, khelber, dun, camerVal, khaikh]);
 
   const dansQuery = useMemo(() => {
-    return { amount: { $gt: 0, $lt: 1000000 } };
+    return { Amt: { $gt: 0, $lt: 1000000 } };
   }, [ognoo]);
 
   useEffect(() => {
