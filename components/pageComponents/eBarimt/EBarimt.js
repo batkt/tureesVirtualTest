@@ -32,7 +32,7 @@ function EBarimt({
     setRegister(register);
     setBaiguullaga(null);
     if (
-      (register?.toString().length === 7 && baiguullagaEsekh) ||
+      register?.toString().length === 7 ||
       (irgenEsekh && register?.toString().length === 10)
     )
       axios
