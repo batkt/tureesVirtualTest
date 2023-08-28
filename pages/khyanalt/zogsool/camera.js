@@ -1221,15 +1221,17 @@ function camera({ token }) {
       width: "10rem",
       align: "center",
       dataIndex: "description",
-      render: (v) => {
+      render: (_v, e) => {
         return (
           <Tooltip
             placement="top"
-            title={v}
+            title={e?.description ? e?.description : e?.TxAddInf}
             mouseLeaveDelay={0}
             mouseEnterDelay={1}
           >
-            <div className="truncate text-left">{v}</div>
+            <div className="truncate text-left">
+              {e?.description ? e?.description : e?.TxAddInf}
+            </div>
           </Tooltip>
         );
       },
@@ -1239,8 +1241,14 @@ function camera({ token }) {
       width: "4rem",
       dataIndex: "amount",
       align: "center",
-      render(v) {
-        return v && <div className="text-right">{formatNumber(v, 0)} ₮</div>;
+      render(_v, e) {
+        return (
+          (e?.amount || e?.Amt) && (
+            <div className="text-right">
+              {formatNumber(e?.amount ? e?.amount : e?.Amt, 0)} ₮
+            </div>
+          )
+        );
       },
     },
   ];
