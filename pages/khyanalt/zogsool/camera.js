@@ -447,13 +447,14 @@ function camera({ token }) {
         $gte: todayStart,
         $lt: todayEnd,
       },
+      "tuukh.tuluv": { $ne: -2 },
     };
   }, [uilchluulegchGaralt]);
 
   const { uilchluulegchTooGaralt, uilchluulegchTooMutate } =
     useUilchluulegchToo(token, baiguullaga?._id, tooQuery);
 
-  // console.log('---------', uilchluulegchGaralt);
+  // console.log("---------", uilchluulegchGaralt);
 
   useKeyboardTovchlol("F4", f5Darsan);
   useKeyboardTovchlol("F1", f3Darsan);
