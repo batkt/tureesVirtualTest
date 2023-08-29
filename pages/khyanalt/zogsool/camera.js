@@ -594,7 +594,7 @@ function camera({ token }) {
       ),
       content: (
         <Tulbur
-          index={index}
+          suuliikhEsekh={index === 0}
           niitDun={niitDun}
           camerVal={camerVal[1]}
           ref={tulburRef}

@@ -28,7 +28,7 @@ function Tulbur(
     setModalNeelttei,
     camerVal,
     niitDun,
-    index,
+    suuliikhEsekh,
   },
   ref
 ) {
@@ -193,7 +193,7 @@ function Tulbur(
         if (data === "Amjilttai") {
           setAlkham(2);
           onRefresh();
-          index === 0 &&
+          suuliikhEsekh === true &&
             axios
               .get("http://localhost:5000/api/neeye/" + camerVal + "")
               .then(function (response) {
