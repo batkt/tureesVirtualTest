@@ -588,7 +588,7 @@ function Zogsool({ token }) {
                   ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   : v[0].tuluv === -2
                   ? "bg-red-500 text-white dark:bg-red-700"
-                  : ""
+                  : "bg-gray-500 text-white dark:bg-gray-700"
               } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
               {v[0].tuluv === 1
@@ -597,7 +597,7 @@ function Zogsool({ token }) {
                 ? "Төлөөгүй"
                 : v[0].tuluv === -2
                 ? "Зөрчилтэй"
-                : ""}
+                : "Үнэгүй"}
             </div>
           );
         },
