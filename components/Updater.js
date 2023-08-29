@@ -21,7 +21,7 @@ function Updater() {
     socket().on("tureesFront", (medegdel) => {
       if (!medegdel?.err && !medegdelIrsenEsekh) {
         medegdelIrsenEsekh = true;
-        let notif = {
+        notification.info({
           icon: (
             <div className="text-yellow-500">
               <InfoCircleOutlined />
@@ -30,7 +30,9 @@ function Updater() {
           message: t("Мэдэгдэл"),
           description: (
             <div style={{ maxWidth: "20rem" }} className="break-words">
-              {t("Системд шинэчлэлт хийгдсэн байна. Та шинэчлэлт хийх үү!")}
+              {/* {t(" */}
+              Системд шинэчлэлт хийгдсэн байна. Та шинэчлэлт хийх үү!
+              {/* ")} */}
               <div>
                 <Button
                   style={{ marginTop: 0, marginLeft: "auto" }}
@@ -38,13 +40,14 @@ function Updater() {
                   type="primary"
                   onClick={refreshPage}
                 >
-                  {t("Тийм")}
+                  {/* {t(" */}
+                  Тийм
+                  {/* ")} */}
                 </Button>
               </div>
             </div>
           ),
-        };
-        notification.info(t(notif));
+        });
         //setMedegdel(notif)
       }
     });
@@ -58,8 +61,8 @@ function Updater() {
       <div className="flex flex-row space-x-2 rounded-md bg-gray-100 p-2">
         <div className="text-xl">{medegdel.icon}</div>
         <div>
-          <div>{t(medegdel.message)}</div>
-          {t(medegdel.description)}
+          <div>{medegdel.message}</div>
+          {medegdel.description}
         </div>
       </div>
     );

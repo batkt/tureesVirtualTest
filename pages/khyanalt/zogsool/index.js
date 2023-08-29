@@ -580,14 +580,24 @@ function Zogsool({ token }) {
         dataIndex: "tuukh",
         render(v) {
           return (
-            <div>
+            <div
+              className={`${
+                v[0].tuluv === 1
+                  ? "bg-green-500 text-white dark:bg-green-700"
+                  : v[0].tuluv === 0
+                  ? "bg-yellow-500 text-white dark:bg-yellow-700"
+                  : v[0].tuluv === -2
+                  ? "bg-red-500 text-white dark:bg-red-700"
+                  : ""
+              } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
+            >
               {v[0].tuluv === 1
                 ? "Төлсөн"
                 : v[0].tuluv === 0
                 ? "Төлөөгүй"
                 : v[0].tuluv === -2
                 ? "Зөрчилтэй"
-                : "Үнэгүй"}
+                : ""}
             </div>
           );
         },
