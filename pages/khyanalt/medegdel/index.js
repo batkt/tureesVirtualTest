@@ -117,6 +117,7 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
+      // talbainDugaar: { $ne: [], $exists: true },
     };
   }, [barilgiinId]);
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
@@ -884,7 +885,7 @@ function Khyanalt({ token }) {
                       <div className="text-xs">{mur?.ner}</div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                         {mur?.utas.length > 0 ? (
-                          <div className="flex gap-1 ">
+                          <div className="flex w-full justify-end gap-1">
                             {mur?.utas.map((a, i) => (
                               <div key={i}>
                                 {a}
@@ -893,13 +894,24 @@ function Khyanalt({ token }) {
                             ))}
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex w-full justify-end">
                             <div>{mur?.utas}</div>
                           </div>
                         )}
-                        <div className="text-xs text-gray-800 dark:text-gray-200">
-                          {mur?.talbainDugaar}
-                        </div>
+                        {mur?.talbainDugaar.length > 0 ? (
+                          <div className="flex items-center justify-center gap-1 rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
+                            {mur?.talbainDugaar.map((a, i) => (
+                              <div key={i}>
+                                {a}
+                                {i !== mur.talbainDugaar.length - 1 && ","}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
+                            <div>{mur?.talbainDugaar}</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
