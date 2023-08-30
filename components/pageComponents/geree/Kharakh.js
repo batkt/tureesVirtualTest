@@ -74,7 +74,7 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
 
   return (
     <div>
-      <div className="absolute left-0 top-4 flex w-full justify-end gap-5 px-10 font-semibold">
+      <div className="absolute right-0 top-4 flex justify-end gap-5 px-10 font-semibold">
         <div
           onClick={() =>
             KharakhKhesguud.find((a) => a === 1)
