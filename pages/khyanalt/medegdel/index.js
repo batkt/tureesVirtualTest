@@ -95,7 +95,7 @@ function Khyanalt({ token }) {
   });
   //#region const
   const { baiguullaga, barilgiinId } = useAuth();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [khariltsagch, setKhariltsagch] = useState(null);
   const [davkhar, setDavkhar] = useState(null);
   const [content, setContent] = useState();
@@ -117,6 +117,7 @@ function Khyanalt({ token }) {
   const khariltsagchiinQuery = useMemo(() => {
     return {
       barilgiinId,
+      // talbainDugaar: { $ne: [], $exists: true },
     };
   }, [barilgiinId]);
   const { setKhariltsagchKhuudaslalt, jagsaalt } = useKhariltsagchDavkhraarAvya(
@@ -646,7 +647,7 @@ function Khyanalt({ token }) {
 
         {turul === "SMS" ? (
           <div
-            className="my-4 mx-2 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
+            className="mx-2 my-4 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="100"
@@ -689,10 +690,10 @@ function Khyanalt({ token }) {
           }}
           className={`fixed z-50 rounded-full border bg-green-600 p-2 text-2xl text-white transition-all  duration-300 md:hidden ${
             turulZagvar === true
-              ? "top-[10vh] right-[2vw]"
+              ? "right-[2vw] top-[10vh]"
               : neesenEsekh
-              ? "top-[100vh] right-full"
-              : "top-[25vh] right-5"
+              ? "right-full top-[100vh]"
+              : "right-5 top-[25vh]"
           }`}
         >
           {turulZagvar !== true ? (
@@ -710,10 +711,12 @@ function Khyanalt({ token }) {
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex px-1 pb-2">
-            <p>{turul} {t("загвар")}</p>
+            <p>
+              {turul} {t("загвар")}
+            </p>
 
             <button
-              className={`ml-auto cursor-pointer rounded-md bg-green-500 py-2 px-4 text-center text-white`}
+              className={`ml-auto cursor-pointer rounded-md bg-green-500 px-4 py-2 text-center text-white`}
               onClick={() =>
                 turul === "SMS"
                   ? smsZagvarNemya()
@@ -842,7 +845,7 @@ function Khyanalt({ token }) {
                   >
                     <div>
                       <Checkbox
-                      onClick={(e)=> e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()}
                         checked={
                           songogdsonKhariltsagch.findIndex(
                             (a) => a._id === mur._id
@@ -878,11 +881,11 @@ function Khyanalt({ token }) {
                         }
                       />
                     </div>
-                    <div className="flex w-full justify-between">
+                    <div className="flex w-full items-center justify-between">
                       <div className="text-xs">{mur?.ner}</div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                         {mur?.utas.length > 0 ? (
-                          <div className="flex gap-1 ">
+                          <div className="flex w-full justify-end gap-1">
                             {mur?.utas.map((a, i) => (
                               <div key={i}>
                                 {a}
@@ -891,8 +894,22 @@ function Khyanalt({ token }) {
                             ))}
                           </div>
                         ) : (
-                          <div className="flex">
+                          <div className="flex w-full justify-end">
                             <div>{mur?.utas}</div>
+                          </div>
+                        )}
+                        {mur?.talbainDugaar.length > 0 ? (
+                          <div className="flex items-center justify-center gap-1 rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
+                            {mur?.talbainDugaar.map((a, i) => (
+                              <div key={i}>
+                                {a}
+                                {i !== mur.talbainDugaar.length - 1 && ","}
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center rounded-lg bg-blue-500 px-2 py-1 text-xs text-gray-200 dark:bg-blue-700 dark:text-white">
+                            <div>{mur?.talbainDugaar}</div>
                           </div>
                         )}
                       </div>
@@ -994,7 +1011,9 @@ function Khyanalt({ token }) {
                   <div className="mt-3">
                     <div className="font-medium">{t("Өдрийн мэнд")}</div>
                     <p>
-                      {t("Сонгогдсон харилцагч байна.", {count: songogdsonKhariltsagch.length})}
+                      {t("Сонгогдсон харилцагч байна.", {
+                        count: songogdsonKhariltsagch.length,
+                      })}
                     </p>
                     {console.log(songogdsonKhariltsagch)}
                     <div className="mt-1 text-gray-600 dark:text-gray-300">
@@ -1073,7 +1092,7 @@ function Khyanalt({ token }) {
                       <span className="absolute -bottom-5 text-xs font-medium text-gray-500">
                         {moment(a.createdAt).format("YYYY-MM-DD hh:mm")}
                       </span>
-                      <span className="absolute right-0 -bottom-5 text-gray-500">
+                      <span className="absolute -bottom-5 right-0 text-gray-500">
                         {t("Мэдэгдэл")}
                       </span>
                     </div>
@@ -1119,7 +1138,9 @@ function Khyanalt({ token }) {
                       onChange={(v) => setZurag(v.file.response)}
                     >
                       <div className="flex flex-row space-x-1">
-                        <Button icon={<UploadOutlined />}>{t("Зураг оруулах")}</Button>
+                        <Button icon={<UploadOutlined />}>
+                          {t("Зураг оруулах")}
+                        </Button>
                       </div>
                     </Upload>
                   </div>
@@ -1137,7 +1158,9 @@ function Khyanalt({ token }) {
           <div className=" absolute bottom-1 z-50 flex w-full items-center justify-between space-x-2 p-2">
             <div className="text-xs font-semibold">{msj.length}/160</div>
             <div className="flex items-center justify-between space-x-3">
-              <label className="font-medium">{turul} {t("Илгээх")}</label>
+              <label className="font-medium">
+                {turul} {t("Илгээх")}
+              </label>
               <div
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
