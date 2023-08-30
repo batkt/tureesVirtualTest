@@ -18,6 +18,9 @@ import { aldaaBarigch } from "services/uilchilgee";
 import { EyeInvisibleOutlined, FileTextOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import useAktiinZagvar from "hooks/useAktiinZagvar";
+import dynamic from "next/dynamic";
+import formatNumber from "tools/function/formatNumber";
+const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
 const { Step } = Steps;
 
@@ -72,7 +75,8 @@ function GereeBaiguulakh({ token }) {
   const [gereekharakhTovch, setGereekharakhTovch] = useState(false);
 
   const [gereeniiZagvar, setGereeniiZagvar] = React.useState();
-  console.log(khadgalakhGeree);
+  const [aktiinZagvar, setAktiinZagvar] = React.useState();
+
   const { gereeniiZagvarGaralt, setGereeniiZagvarKhuudaslalt } =
     useGereeniiZagvar(token, baiguullaga?._id);
   const { aktiinZagvarGaralt, setAktiinZagvarKhuudaslalt } = useAktiinZagvar(
@@ -132,7 +136,6 @@ function GereeBaiguulakh({ token }) {
         data.baritsaaAvakhEsekh === true &&
         data.baritsaaBairshuulakhKhugatsaa === (undefined || null)
       ) {
-        console.log(data.baritsaaBairshuulakhKhugatsaa);
         utgaShalgakh.push(4);
         notification.warning({ message: t("барьцаа хугацаа оруулна уу!") });
       }
@@ -322,6 +325,50 @@ function GereeBaiguulakh({ token }) {
     return butsaakhUtga;
   }, [gereeniiZagvar, khadgalakhGeree, current]);
 
+  const alkhamiinAktiinZagvar = React.useMemo(() => {
+    if (aktiinZagvar === undefined) return;
+    let butsaakhUtga = _.cloneDeep(aktiinZagvar);
+    if (!butsaakhUtga?.dedKhesguud)
+      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+        (a) => a.khamaarakhKheseg === steps[current].title
+      );
+    if (khadgalakhGeree.gereeniiOgnoo) {
+      khadgalakhGeree.ekhlekhOn = moment(khadgalakhGeree.gereeniiOgnoo).format(
+        "YYYY"
+      );
+      khadgalakhGeree.ekhelkhSar = moment(khadgalakhGeree.gereeniiOgnoo).format(
+        "MM"
+      );
+      khadgalakhGeree.ekhlekhUdur = moment(
+        khadgalakhGeree.gereeniiOgnoo
+      ).format("DD");
+      if (khadgalakhGeree.khugatsaa > 0) {
+        // let duusakhOgnoo = moment(khadgalakhGeree.gereeniiOgnoo).add(
+        //   khadgalakhGeree.khugatsaa,
+        //   "months"
+        // )
+        let duusakhOgnoo = moment(khadgalakhGeree.duusakhOgnoo);
+
+        khadgalakhGeree.duusakhOn = duusakhOgnoo.format("YYYY");
+        khadgalakhGeree.duusakhSar = duusakhOgnoo.format("MM");
+        khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
+      }
+    }
+
+    for (const [key, value] of Object.entries(khadgalakhGeree)) {
+      butsaakhUtga.dedKhesguud
+        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        .map((b) => {
+          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+        });
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
+        new RegExp(`&lt;${key}&gt;`, "g"),
+        value
+      );
+    }
+    return butsaakhUtga;
+  }, [aktiinZagvar, khadgalakhGeree, current]);
+
   useEffect(() => {
     if (barilgiinId !== khadgalakhGeree.barilgiinId) {
       setKhagalakhGeree({
@@ -366,7 +413,8 @@ function GereeBaiguulakh({ token }) {
         });
         setGereeniiZagvar(undefined);
         setCurrent(0);
-      }}>
+      }}
+    >
       <div className="box col-span-12 p-5">
         <div className="contents px-10">
           <Steps onChange={onChange} current={current}>
@@ -391,6 +439,7 @@ function GereeBaiguulakh({ token }) {
               t={t}
               next={next}
               current={current}
+              setAktiinZagvar={setAktiinZagvar}
               prev={prev}
               alkhamErkh={alkhamSoliyo}
               onChange={setKhagalakhGeree}
@@ -414,7 +463,8 @@ function GereeBaiguulakh({ token }) {
                 gereekharakhTovch !== true
                   ? "bottom-20 right-5"
                   : "bottom-[72vh] right-1"
-              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}>
+              } fixed z-50 rounded-full border-2 bg-green-600 p-2 text-2xl text-white transition-all duration-300 md:hidden`}
+            >
               {gereekharakhTovch !== true ? (
                 <FileTextOutlined
                   onClick={(e) => {
@@ -441,7 +491,8 @@ function GereeBaiguulakh({ token }) {
               maxHeight: "calc(100vh - 17rem)",
               overflow: "auto",
               scrollBehavior: "smooth",
-            }}>
+            }}
+          >
             {current === 0 && (
               <Select
                 ref={zagvarRef}
@@ -461,7 +512,8 @@ function GereeBaiguulakh({ token }) {
                 }
                 onChange={(v) => {
                   onChangeGereeniiZagvar(v);
-                }}>
+                }}
+              >
                 {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
                   return (
                     <Select.Option key={mur._id}>
@@ -480,10 +532,11 @@ function GereeBaiguulakh({ token }) {
                 })}
               </Select>
             )}
-            <div className="flex w-full justify-center">
+            <div className="flex w-full flex-col items-center justify-center gap-10">
               <div
                 className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
-                style={{ width: "210mm" }}>
+                style={{ width: "210mm" }}
+              >
                 {current === 0 && alkhamiinGereeniiZagvar?.ner && (
                   <>
                     <div className="grid grid-cols-2 gap-4">
@@ -517,7 +570,8 @@ function GereeBaiguulakh({ token }) {
                           : ""
                       }
                       key={`alkhamiinGereeniiZagvar${index}`}
-                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100">
+                      className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
+                    >
                       <div
                         className="w-full"
                         dangerouslySetInnerHTML={{ __html: mur.zaalt }}
@@ -526,6 +580,92 @@ function GereeBaiguulakh({ token }) {
                   );
                 })}
               </div>
+              {khadgalakhGeree?.talbainuud?.length > 0 &&
+                khadgalakhGeree?.talbainuud?.map((a, i) => {
+                  return (
+                    <div
+                      key={i}
+                      id={`talbaiKharii${i}`}
+                      className="flex w-full flex-col justify-center space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
+                      style={{ width: "210mm", height: "297mm" }}
+                    >
+                      <div className="font flex gap-3 text-lg">
+                        <div>{t("Код")}:</div>
+                        <div>{a?.kod}</div>
+                      </div>
+                      <Konva
+                        talbaiGereendKharakh={true}
+                        baiguullaga={baiguullaga}
+                        barilgiinId={barilgiinId}
+                        token={token}
+                        _id={a._id}
+                        points={a.bairshil}
+                        davkhar={a.davkhar}
+                      />
+                      <div className="flex gap-3">
+                        <div>{t("Хэмжээ")}:</div>
+                        <div>{a.talbainKhemjee || 0}m²</div>
+                      </div>
+                      <div className="flex gap-3">
+                        <div>{t("Сарын түрээс")}:</div>
+                        <div>{formatNumber(a.tureesiinTulbur || 0)}₮</div>
+                      </div>
+                      <div className="flex gap-3">
+                        <div>{t("Давхар")}:</div>
+                        <div>{a.davkhar}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              {baiguullaga?.tokhirgoo?.aktAshiglakhEsekh === true && (
+                <div
+                  className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm] text-black"
+                  style={{ width: "210mm" }}
+                >
+                  {current === 0 && alkhamiinAktiinZagvar?.ner && (
+                    <>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: alkhamiinAktiinZagvar?.zuunTolgoi,
+                          }}
+                        />
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: alkhamiinAktiinZagvar?.baruunTolgoi,
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  {alkhamiinAktiinZagvar?.dedKhesguud?.map((mur, index) => {
+                    return (
+                      <div
+                        id={
+                          mur.khamaarakhKheseg === "Ерөнхий мэдээлэл"
+                            ? "erunkhiiMedeelel"
+                            : mur.khamaarakhKheseg === "Гэрээний хугацаа"
+                            ? "gereeniiKhugatsaa"
+                            : mur.khamaarakhKheseg === "Түрээсийн талбай"
+                            ? "tureesiinTalbai"
+                            : mur.khamaarakhKheseg === "Барьцаа бүртгэл"
+                            ? "baritsaaBurtgel"
+                            : mur.khamaarakhKheseg === "Төлбөр тооцоо"
+                            ? "tulburToostoo"
+                            : ""
+                        }
+                        key={`alkhamiinAktiinZagvar${index}`}
+                        className="group relative flex w-full flex-row rounded-md hover:bg-gray-100 dark:hover:bg-gray-100"
+                      >
+                        <div
+                          className="w-full"
+                          dangerouslySetInnerHTML={{ __html: mur.zaalt }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>

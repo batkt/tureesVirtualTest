@@ -17,11 +17,11 @@ import uilchilgee, { url } from "services/uilchilgee";
 export const undur = window.innerHeight - 155 - 75;
 export const urgun = window.innerWidth - 75;
 
-export function bairshilKhurvuuljAvakh(points) {
+export function bairshilKhurvuuljAvakh(points, gereeEsekh) {
   const data =
     points?.map((mur) => {
-      mur[0] = (mur[0] * urgun) / 1000;
-      mur[1] = (mur[1] * undur) / 1000;
+      mur[0] = (mur[0] * (!!gereeEsekh ? 650 : urgun)) / 1000;
+      mur[1] = (mur[1] * (!!gereeEsekh ? 500 : undur)) / 1000;
       return mur;
     }) || [];
   return JSON.parse(JSON.stringify(data));
@@ -81,7 +81,7 @@ class URLImage extends React.Component {
 
 function Drawer(props) {
   const [points, setPoints] = useState(
-    bairshilKhurvuuljAvakh(props.points) || []
+    bairshilKhurvuuljAvakh(props.points, props?.talbaiGereendKharakh) || []
   );
   const [curMousePos, setCurMousePos] = useState([0, 0]);
   const [talbainuud, setTalbainuud] = useState([]);
@@ -109,7 +109,11 @@ function Drawer(props) {
       })
       .then(({ data }) => {
         data.jagsaalt.map(
-          (mur) => (mur.bairshil = bairshilKhurvuuljAvakh(mur.bairshil))
+          (mur) =>
+            (mur.bairshil = bairshilKhurvuuljAvakh(
+              mur.bairshil,
+              props?.talbaiGereendKharakh
+            ))
         );
         setTalbainuud(data.jagsaalt);
       });
@@ -187,7 +191,7 @@ function Drawer(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex  justify-end space-x-3 pb-3">
+      <div className="flex justify-end space-x-3 pb-3 print:hidden">
         <div className="flex space-x-3 border-2 border-dashed p-1">
           <div className="h-5 w-5 border-2 bg-green-400"></div>
           <div> {t("Идэвхтэй")}</div>
@@ -198,15 +202,15 @@ function Drawer(props) {
         </div>
       </div>
       <Stage
-        width={urgun}
-        height={undur}
+        width={!!props?.talbaiGereendKharakh ? 650 : urgun}
+        height={!!props?.talbaiGereendKharakh ? 500 : undur}
         onMouseDown={handleClick}
         onMouseMove={handleMouseMove}
       >
         <Layer>
           <URLImage
-            width={urgun}
-            height={undur}
+            width={!!props?.talbaiGereendKharakh ? 650 : urgun}
+            height={!!props?.talbaiGereendKharakh ? 500 : undur}
             src={`${url}/zuragAvya/plan/${props.baiguullaga._id}/${plan}`}
           />
           {talbainuud?.map((mur) => {
@@ -298,28 +302,30 @@ function Drawer(props) {
         </Layer>
       </Stage>
 
-      <div className="flex items-center justify-between space-x-3">
-        <div className=" space-x-3 space-y-2 ">
-          <Button
-            style={{ backgroundColor: "#209669", color: "#ffffff" }}
-            onClick={() =>
-              props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
-            }
-          >
-            <SaveOutlined /> {t("Хадгалах")}
-          </Button>
-          <Button
-            onClick={() => {
-              setPoints([]);
-              setIsFinished(false);
-              setIsMouseOverStartPoint(false);
-            }}
-          >
-            <ClearOutlined className="pr-2 dark:text-white" />
-            <p className="dark:text-white">{t("Шинээр зурах")}</p>
-          </Button>
+      {!props?.talbaiGereendKharakh && (
+        <div className="flex items-center justify-between space-x-3">
+          <div className=" space-x-3 space-y-2 ">
+            <Button
+              style={{ backgroundColor: "#209669", color: "#ffffff" }}
+              onClick={() =>
+                props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
+              }
+            >
+              <SaveOutlined /> {t("Хадгалах")}
+            </Button>
+            <Button
+              onClick={() => {
+                setPoints([]);
+                setIsFinished(false);
+                setIsMouseOverStartPoint(false);
+              }}
+            >
+              <ClearOutlined className="pr-2 dark:text-white" />
+              <p className="dark:text-white">{t("Шинээр зурах")}</p>
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

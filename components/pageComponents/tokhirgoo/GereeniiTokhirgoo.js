@@ -200,7 +200,7 @@ function KhuviinMedeelel({
               <div className="ml-auto">
                 <InputNumber
                   min={0}
-                  max={100}
+                  max={0.5}
                   defaultValue={baiguullaga?.tokhirgoo?.aldangiinKhuvi}
                   onChange={(v) =>
                     setGereeTokhirgoo((a) => ({
@@ -264,7 +264,8 @@ function KhuviinMedeelel({
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}>
+            }`}
+          >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
@@ -288,7 +289,8 @@ function KhuviinMedeelel({
                     action={`${url}/upload`}
                     method="POST"
                     onChange={(v) => setTamga(v.file.response)}
-                    onChanged={(a) => soligdsonZurag(a.file.response)}>
+                    onChanged={(a) => soligdsonZurag(a.file.response)}
+                  >
                     <div className="flex flex-row space-x-1">
                       {!barilga?.tamga && (
                         <Button icon={<UploadOutlined />}>
@@ -300,7 +302,8 @@ function KhuviinMedeelel({
                           icon={<EyeOutlined />}
                           onClick={(e) =>
                             tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
-                          }>
+                          }
+                        >
                           {t("Тамга зураг харах")}
                         </Button>
                       )}
@@ -317,7 +320,8 @@ function KhuviinMedeelel({
                     name="file"
                     action={`${url}/upload`}
                     method="POST"
-                    onChange={(v) => setGariinUseg(v.file.response)}>
+                    onChange={(v) => setGariinUseg(v.file.response)}
+                  >
                     <div className="flex flex-row space-x-1">
                       {!barilga?.gariinUseg && (
                         <Button icon={<UploadOutlined />}>
@@ -332,7 +336,8 @@ function KhuviinMedeelel({
                               e,
                               `gariinUseg/${barilga.gariinUseg}`
                             )
-                          }>
+                          }
+                        >
                           {t("Гарын үсэг зураг харах")}
                         </Button>
                       )}

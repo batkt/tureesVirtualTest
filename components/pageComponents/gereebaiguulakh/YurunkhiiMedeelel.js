@@ -69,11 +69,13 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
           wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "ner"]}
-          fieldKey={[fieldKey, "ner"]}>
+          fieldKey={[fieldKey, "ner"]}
+        >
           <Select
             style={{ width: "100%" }}
             placeholder={t("Нэр")}
-            onChange={solikh}>
+            onChange={solikh}
+          >
             {segment?.jagsaalt?.map((mur) => (
               <Select.Option value={mur?.ner}>{t(mur?.ner)}</Select.Option>
             ))}
@@ -84,11 +86,13 @@ function YalgakhUtga({ fieldKey, name, remove, t, ...restField }) {
           wrapperCol={{ offset: 0 }}
           {...restField}
           name={[name, "utga"]}
-          fieldKey={[fieldKey, "utga"]}>
+          fieldKey={[fieldKey, "utga"]}
+        >
           <Select
             style={{ width: "100%" }}
             placeholder={t("Утга")}
-            onChange={solikhtTurul}>
+            onChange={solikhtTurul}
+          >
             {turul?.utguud?.map((a) => (
               <Select.Option value={a}>{t(a)}</Select.Option>
             ))}
@@ -111,6 +115,7 @@ const YurunkhiiMedeele = ({
   gereeniiZagvarGaralt,
   aktiinZagvarGaralt,
   setAktiinZagvarKhuudaslalt,
+  setAktiinZagvar,
   onChangeGereeniiZagvar,
   setGereeniiZagvarKhuudaslalt,
   gereeniiZagvar,
@@ -272,11 +277,13 @@ const YurunkhiiMedeele = ({
       onValuesChange={(changedValues, values) => {
         onChange({ ...value, ...values });
       }}
-      onFinish={onFinish}>
+      onFinish={onFinish}
+    >
       <div
         data-aos="fade-right"
         className="mb-5 md:hidden"
-        data-aos-delay="200">
+        data-aos-delay="200"
+      >
         <Select
           ref={zagvarRef}
           id={gereeniiZagvariinId}
@@ -295,7 +302,8 @@ const YurunkhiiMedeele = ({
           }
           onChange={(v) => {
             onChangeGereeniiZagvar(v);
-          }}>
+          }}
+        >
           {gereeniiZagvarGaralt?.jagsaalt?.map((mur) => {
             return (
               <Select.Option key={mur._id}>
@@ -321,7 +329,8 @@ const YurunkhiiMedeele = ({
               message: t("Гэрээний дугаар бүртгэнэ үү!"),
             },
           ]}
-          label={t("Гэрээний дугаар")}>
+          label={t("Гэрээний дугаар")}
+        >
           <Input
             onKeyUp={focuser}
             allowClear
@@ -333,7 +342,8 @@ const YurunkhiiMedeele = ({
       <div
         data-aos="fade-right"
         data-aos-delay="300"
-        className="flex w-full justify-end gap-2 ">
+        className="flex w-full justify-end gap-2 "
+      >
         <p className="mt-1 dark:text-gray-200">{t("Байгууллага эсэх")}:</p>
         <Form.Item name="baiguullagaEsekh" valuePropName="checked">
           <Switch
@@ -366,7 +376,8 @@ const YurunkhiiMedeele = ({
                 : new RegExp("([А-Я|Ө|Ү]{2})(\\d{8})"),
               message: t("Регистр бүртгэнэ үү!"),
             },
-          ]}>
+          ]}
+        >
           <KhariltsagchiinLavlakh
             khadgalsabRegister={value.register}
             focuser={focuser}
@@ -384,7 +395,8 @@ const YurunkhiiMedeele = ({
             label={t("Байгууллага нэр")}
             rules={[
               { required: true, message: t("Байгууллага нэр бүртгэнэ үү!") },
-            ]}>
+            ]}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -399,7 +411,8 @@ const YurunkhiiMedeele = ({
           <Form.Item
             rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
             name="ovog"
-            label={t("Овог")}>
+            label={t("Овог")}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -414,7 +427,8 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="ner"
             rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
-            label={t("Нэр")}>
+            label={t("Нэр")}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -429,7 +443,8 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinOvog"
             label={t("Захирлын овог")}
-            rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}>
+            rules={[{ required: true, message: t("Овог бүртгэнэ үү!") }]}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -444,7 +459,8 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="zakhirliinNer"
             label={t("Захирлын нэр")}
-            rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}>
+            rules={[{ required: true, message: t("Нэр заавал оруулна уу!") }]}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -461,7 +477,8 @@ const YurunkhiiMedeele = ({
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
-            label={t("Утас")}>
+            label={t("Утас")}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -478,7 +495,8 @@ const YurunkhiiMedeele = ({
             rules={[
               { required: true, message: t("Утасны дугаар оруулна уу !") },
             ]}
-            label={t("Утас")}>
+            label={t("Утас")}
+          >
             <Input
               onKeyUp={focuser}
               allowClear
@@ -506,7 +524,8 @@ const YurunkhiiMedeele = ({
           <Form.Item
             name="mail"
             rules={[{ required: true, message: t("И-мэйл хаяг бүртгэнэ үү!") }]}
-            label={t("И-мэйл хаяг")}>
+            label={t("И-мэйл хаяг")}
+          >
             <Input
               onKeyUp={focuser}
               type="email"
@@ -539,7 +558,8 @@ const YurunkhiiMedeele = ({
                   className="h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
                   type="dashed"
                   onClick={() => add()}
-                  block>
+                  block
+                >
                   {t("Ялгах утга оруулах")}
                 </Button>
               </Form.Item>
@@ -557,8 +577,14 @@ const YurunkhiiMedeele = ({
                 message: t("Актын загвар сонгоно уу!"),
               },
             ]}
-            label={t("Актын загвар сонгох")}>
+            label={t("Актын загвар сонгох")}
+          >
             <Select
+              onChange={(v) =>
+                setAktiinZagvar(
+                  aktiinZagvarGaralt?.jagsaalt?.find((a) => a._id === v)
+                )
+              }
               showSearch
               filterOption={(o) => o}
               allowClear
@@ -568,7 +594,8 @@ const YurunkhiiMedeele = ({
                   search,
                   khuudasniiDugaar: 1,
                 }))
-              }>
+              }
+            >
               {aktiinZagvarGaralt?.jagsaalt?.map((mur) => {
                 return <Select.Option key={mur._id}>{mur.ner}</Select.Option>;
               })}
@@ -582,7 +609,8 @@ const YurunkhiiMedeele = ({
           rules={[
             { required: true, message: t("Төлөлт хийх данс бүртгэнэ үү!") },
           ]}
-          label={t("Төлөлт хийх данс")}>
+          label={t("Төлөлт хийх данс")}
+        >
           <FormLavlakh
             selectId={"dans"}
             gereeniiZagvariinId={gereeniiZagvariinId}
@@ -618,7 +646,8 @@ const YurunkhiiMedeele = ({
             label={t("Гэрчилгээний хуулбар")}
             valuePropName="fileList"
             getValueFromEvent={normFile}
-            extra={t("Гэрчилгээний хуулбар")}>
+            extra={t("Гэрчилгээний хуулбар")}
+          >
             <Upload
               multiple={false}
               name="file"
@@ -626,7 +655,8 @@ const YurunkhiiMedeele = ({
               action={`${url}/zuragKhadgalya`}
               method="POST"
               data={{ turul: "gerchilgeeniiZurag" }}
-              headers={{ Authorization: `bearer ${token}` }}>
+              headers={{ Authorization: `bearer ${token}` }}
+            >
               <Button className="dark:text-gray-300" icon={<UploadOutlined />}>
                 {t("Файл сонгох")}
               </Button>
@@ -641,7 +671,8 @@ const YurunkhiiMedeele = ({
               name="zuvshuurliinZurag"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              extra={t("Зөвшөөрлийн бичгийн хуулбар")}>
+              extra={t("Зөвшөөрлийн бичгийн хуулбар")}
+            >
               <Upload
                 multiple={false}
                 name="file"
@@ -649,10 +680,12 @@ const YurunkhiiMedeele = ({
                 action={`${url}/zuragKhadgalya`}
                 method="POST"
                 data={{ turul: "zuvshuurliinZurag" }}
-                headers={{ Authorization: `bearer ${token}` }}>
+                headers={{ Authorization: `bearer ${token}` }}
+              >
                 <Button
                   className="dark:text-gray-300"
-                  icon={<UploadOutlined />}>
+                  icon={<UploadOutlined />}
+                >
                   {t("Файл сонгох")}
                 </Button>
               </Upload>
@@ -661,7 +694,8 @@ const YurunkhiiMedeele = ({
               name="unemlekhniiZurag"
               valuePropName="fileList"
               getValueFromEvent={normFile}
-              extra={t("Иргэний үнэмлэхний хуулбар")}>
+              extra={t("Иргэний үнэмлэхний хуулбар")}
+            >
               <Upload
                 multiple={false}
                 name="file"
@@ -669,10 +703,12 @@ const YurunkhiiMedeele = ({
                 action={`${url}/zuragKhadgalya`}
                 method="POST"
                 data={{ turul: "unemlekhniiZurag" }}
-                headers={{ Authorization: `bearer ${token}` }}>
+                headers={{ Authorization: `bearer ${token}` }}
+              >
                 <Button
                   className="dark:text-gray-300"
-                  icon={<UploadOutlined />}>
+                  icon={<UploadOutlined />}
+                >
                   {t("Файл сонгох")}
                 </Button>
               </Upload>
@@ -686,7 +722,8 @@ const YurunkhiiMedeele = ({
             id="gereeniiKhugatsaaButton"
             type="primary"
             onClick={(e) => form.submit()}
-            icon={<ArrowRightOutlined />}>
+            icon={<ArrowRightOutlined />}
+          >
             {t("Гэрээний хугацаа")}
           </Button>
         </div>

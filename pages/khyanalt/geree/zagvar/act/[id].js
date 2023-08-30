@@ -86,7 +86,8 @@ function ZakhialgaNemekh({ token }) {
       <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya()}>
+        onClick={() => ref.current.khadgalya()}
+      >
         {t("Хадгалах")}
       </Button>,
     ];
@@ -157,7 +158,7 @@ function ZakhialgaNemekh({ token }) {
         <div>
           <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
           <span className="font-medium">
-            Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?
+            Заалтыг актын загвараас устгахдаа итгэлтэй байна уу?
           </span>
         </div>
       ),
@@ -189,26 +190,28 @@ function ZakhialgaNemekh({ token }) {
       title="Актын загвар угсрах"
       hideSearch
       dedKhuudas
-      className="p-4">
+      className="p-4"
+    >
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-8">
         <div
           className="flex flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm]"
-          style={{ width: width, height: height }}>
+          style={{ width: width, height: height }}
+        >
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">
               <div
                 className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    aktiinZagvar.zuunTolgoi ||
-                    t("Гэрээний загварын зүүн толгой"),
+                    aktiinZagvar.zuunTolgoi || t("Актын загварын зүүн толгой"),
                 }}
               />
               <div
                 className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("zuunTolgoi", aktiinZagvar.zuunTolgoi || "")
-                }>
+                }
+              >
                 <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
@@ -218,14 +221,15 @@ function ZakhialgaNemekh({ token }) {
                 dangerouslySetInnerHTML={{
                   __html:
                     aktiinZagvar.baruunTolgoi ||
-                    t("Гэрээний загварын баруун толгой"),
+                    t("Актын загварын баруун толгой"),
                 }}
               />
               <div
                 className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("baruunTolgoi", aktiinZagvar.baruunTolgoi || "")
-                }>
+                }
+              >
                 <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
@@ -234,7 +238,8 @@ function ZakhialgaNemekh({ token }) {
             return (
               <div
                 key={mur._id}
-                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700">
+                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
                 <div
                   className="sun-editor-editable w-full"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
@@ -260,15 +265,15 @@ function ZakhialgaNemekh({ token }) {
               <div
                 className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
-                  __html:
-                    aktiinZagvar.zuunKhul || t("Гэрээний загварын зүүн хөл"),
+                  __html: aktiinZagvar.zuunKhul || t("Актын загварын зүүн хөл"),
                 }}
               />
               <div
                 className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("zuunKhul", aktiinZagvar.zuunKhul || "")
-                }>
+                }
+              >
                 <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
@@ -277,15 +282,15 @@ function ZakhialgaNemekh({ token }) {
                 className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
-                    aktiinZagvar.baruunKhul ||
-                    t("Гэрээний загварын баруун хөл"),
+                    aktiinZagvar.baruunKhul || t("Актын загварын баруун хөл"),
                 }}
               />
               <div
                 className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("baruunKhul", aktiinZagvar.baruunKhul || "")
-                }>
+                }
+              >
                 <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
@@ -308,7 +313,8 @@ function ZakhialgaNemekh({ token }) {
                       key={item.label}
                       onChange={handleChange}
                       checked={item.value == value}
-                      value={item.value}>
+                      value={item.value}
+                    >
                       {item.value}
                     </Checkbox>
                   );
@@ -316,7 +322,8 @@ function ZakhialgaNemekh({ token }) {
               </div>
               <div
                 className="flex h-7 w-28 cursor-pointer items-center justify-center gap-3 rounded border duration-300 ease-out hover:border-blue-400"
-                onClick={() => setHevteeBolgoh(!hevteeBolgoh)}>
+                onClick={() => setHevteeBolgoh(!hevteeBolgoh)}
+              >
                 Landscape
                 <div className="h-5 w-5">
                   <Image
@@ -332,7 +339,8 @@ function ZakhialgaNemekh({ token }) {
               className="w-full"
               type="primary"
               onClick={() => form.submit()}
-              loading={towchTuluv}>
+              loading={towchTuluv}
+            >
               {t("Хадгалах")}
             </Button>
           </div>

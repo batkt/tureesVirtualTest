@@ -67,12 +67,13 @@ function TalbaiSongolt({ value, onChange, id, mode, gereeniiZagvar }) {
     >
       {talbainiiGaralt?.jagsaalt?.map((a) => {
         return (
-          <Select.Option key={a._id} disabled={a?.sulKhemjee === 0} >
+          <Select.Option key={a._id} disabled={a?.sulKhemjee === 0}>
             <div
-              className={`flex ${gereeniiZagvar?.turGereeEsekh !== true && a.idevkhiteiEsekh
-                ? "opacity-50"
-                : "opacity-100"
-                } `}
+              className={`flex ${
+                gereeniiZagvar?.turGereeEsekh !== true && a.idevkhiteiEsekh
+                  ? "opacity-50"
+                  : "opacity-100"
+              } `}
             >
               <p className="w-28 border-r-2 text-left">{a.kod}</p>
               <p className="w-24 border-r-2 text-center">
@@ -129,7 +130,10 @@ const YurunkhiiMedeele = ({
           notification.warning({
             message: (
               <div>
-                {("талбай нь гэрээн дээр холбогдсон байна.", {talbainDugaar: talbainDugaar, data })}
+                {
+                  ("талбай нь гэрээн дээр холбогдсон байна.",
+                  { talbainDugaar: talbainDugaar, data })
+                }
               </div>
             ),
           });
@@ -139,13 +143,13 @@ const YurunkhiiMedeele = ({
   function talbainBurtgelBugulyu(talbainuud) {
     gereeniiZagvar?.turGereeEsekh !== true
       ? (value.baritsaaAvakhDun = talbainuud.reduce(
-        (a, b) => a + Number(b.talbainNiitUne || 0),
-        0
-      ))
+          (a, b) => a + Number(b.talbainNiitUne || 0),
+          0
+        ))
       : (value.talbainNiitUne = talbainuud.reduce(
-        (a, b) => a + Number(b.talbainNiitUne || 0),
-        0
-      ));
+          (a, b) => a + Number(b.talbainNiitUne || 0),
+          0
+        ));
     value.sariinTurees = talbainuud.reduce(
       (a, b) => a + Number(b.talbainNiitUne || 0),
       0
@@ -153,9 +157,13 @@ const YurunkhiiMedeele = ({
     value.talbainNegjUne = talbainuud.reduce((a, b) => a + b.talbainNegjUne, 0);
 
     if (gereeniiZagvar?.turGereeEsekh !== true) {
-      (value.talbainNiitUne = value.baritsaaAvakhDun);
-      value.talbainKhemjee = talbainuud.reduce((a, b) => a + b.talbainKhemjee, 0);
-    } else value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
+      value.talbainNiitUne = value.baritsaaAvakhDun;
+      value.talbainKhemjee = talbainuud.reduce(
+        (a, b) => a + b.talbainKhemjee,
+        0
+      );
+    } else
+      value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
 
     value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
@@ -179,8 +187,8 @@ const YurunkhiiMedeele = ({
     function talbaiOruulya() {
       value.talbainuud = value.talbainuud || [];
       if (gereeniiZagvar?.turGereeEsekh === true) {
-        v.talbainKhemjee = 0
-        v.talbainNiitUne = 0
+        v.talbainKhemjee = 0;
+        v.talbainNiitUne = 0;
       }
       value.talbainuud.push(v);
       talbainBurtgelBugulyu(value.talbainuud);
@@ -208,18 +216,18 @@ const YurunkhiiMedeele = ({
   function onFinish() {
     if (value.talbainuud === undefined) {
       message.warning(t("Талбай бүртгэнэ үү!"));
-      return
+      return;
     } else if (value.talbainuud.length <= 0) {
       message.warning(t("Талбай бүртгэнэ үү!"));
-      return
-    };
+      return;
+    }
     if (value.talbainNiitUne === undefined) {
       message.warning(t("Талбайн үнэ бүртгэнэ үү!"));
-      return
+      return;
     }
     if (value.talbainKhemjee === undefined) {
       message.warning(t("Талбайн хэмжээ бүртгэнэ үү!"));
-      return
+      return;
     }
     next();
   }
@@ -275,13 +283,16 @@ const YurunkhiiMedeele = ({
               key={talbai?._id}
               className="group relative space-y-2 rounded-md border border-gray-400 bg-gray-50 p-2 pb-5 shadow-md dark:bg-gray-800 dark:text-gray-300"
             >
-              <div className="text-xl font-medium">{t("Код")}:{talbai.kod}</div>
+              <div className="text-xl font-medium">
+                {t("Код")}:{talbai.kod}
+              </div>
               <div className="divide-y-2 border">
                 <div
-                  className={`grid ${gereeniiZagvar?.turGereeEsekh
-                    ? "grid-cols-4"
-                    : "grid-cols-3"
-                    } divide-x-2 py-1`}
+                  className={`grid ${
+                    gereeniiZagvar?.turGereeEsekh
+                      ? "grid-cols-4"
+                      : "grid-cols-3"
+                  } divide-x-2 py-1`}
                 >
                   <div className="flex items-center justify-center text-center">
                     {t("Давхар")}
@@ -292,21 +303,25 @@ const YurunkhiiMedeele = ({
                     </div>
                   )}
                   <div className="flex items-center justify-center text-center">
-                    {t("м")}<sup>2</sup>
+                    {t("м")}
+                    <sup>2</sup>
                   </div>
                   <div className="flex items-center justify-center text-center">
                     {t("Түрээсийн төлбөр")}
                   </div>
                 </div>
                 <div
-                  className={`grid ${gereeniiZagvar?.turGereeEsekh
-                    ? "grid-cols-4"
-                    : "grid-cols-3"
-                    } divide-x-2 py-1`}
+                  className={`grid ${
+                    gereeniiZagvar?.turGereeEsekh
+                      ? "grid-cols-4"
+                      : "grid-cols-3"
+                  } divide-x-2 py-1`}
                 >
                   <div className="text-center">{talbai.davkhar}</div>
                   <div className="text-center">
-                    {gereeniiZagvar.turGereeEsekh ? talbai.sulKhemjee : talbai.talbainKhemjee}
+                    {gereeniiZagvar.turGereeEsekh
+                      ? talbai.sulKhemjee
+                      : talbai.talbainKhemjee}
                   </div>
                   {gereeniiZagvar.turGereeEsekh && (
                     <div className="flex items-center justify-center text-center">
@@ -339,7 +354,7 @@ const YurunkhiiMedeele = ({
                   </div>
                 </div>
               </div>
-              <div className="absolute top-0  right-2 flex items-center justify-center rounded-full bg-gray-100  text-lg dark:bg-gray-800">
+              <div className="absolute right-2  top-0 flex items-center justify-center rounded-full bg-gray-100  text-lg dark:bg-gray-800">
                 <Popconfirm
                   title={`${talbai.kod} талбай устгах уу?`}
                   okText={t("Тийм")}
@@ -365,7 +380,8 @@ const YurunkhiiMedeele = ({
           <div className="grid grid-cols-12 divide-x-2">
             <div className="col-span-4 text-center">{t("Давхар")}</div>
             <div className="col-span-4 text-center">
-            {t("м")}<sup>2</sup>
+              {t("м")}
+              <sup>2</sup>
             </div>
             <div className="col-span-4 text-center">{t("Нийт төлбөр")}</div>
           </div>
@@ -387,7 +403,7 @@ const YurunkhiiMedeele = ({
       </Form.Item>
       <Form.Item wrapperCol={{ span: 24 }}>
         <div
-          className="flex w-full flex-col gap-4 md:flex-row justify-between"
+          className="flex w-full flex-col justify-between gap-4 md:flex-row"
           data-aos="fade-right"
           data-aos-duration="1000"
           data-aos-delay="700"
