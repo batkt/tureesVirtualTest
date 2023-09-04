@@ -110,7 +110,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
             <Button type="primary" onClick={() => setKharuulakhGeree(null)}>
               {t("Хаах")}
             </Button>
-          }>
+          }
+        >
           {!!kharuulakhGeree && (
             <GereeKharakh data={{ ...kharuulakhGeree, geree: {} }} />
           )}
@@ -118,12 +119,14 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
         <div
           className="flex w-full gap-2 sm:w-auto"
           data-aos="fade-right"
-          data-aos-delay="300">
+          data-aos-delay="300"
+        >
           <Button
             className=" font-medium dark:text-gray-200"
             onClick={() =>
               router.push(`/khyanalt/geree/zagvar/${zagvaraaBichijUgnu}/new`)
-            }>
+            }
+          >
             {t(
               zagvaraaBichijUgnu === "geree"
                 ? "Шинэ гэрээний загвар үүсгэх"
@@ -136,28 +139,32 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 <Menu.Item
                   key="Заалт нэмэх"
                   className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
-                  onClick={zaaltOruulakh}>
+                  onClick={zaaltOruulakh}
+                >
                   <UserAddOutlined />
                   <span>{t("Заалт нэмэх")}</span>
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
                   className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
-                  onClick={zaaltOruulakhExcel}>
+                  onClick={zaaltOruulakhExcel}
+                >
                   <UserAddOutlined />
                   <span>{t("Заалт Excel-ээс оруулах")}</span>
                 </Menu.Item>
                 <Menu.Item
                   key="Заалт Excel-ээс оруулах"
                   className="dark:hover:bg-dark-2 flex items-center space-x-2 rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-700"
-                  onClick={zagvarOruulakhExcel}>
+                  onClick={zagvarOruulakhExcel}
+                >
                   <UserAddOutlined />
                   <span>{t("Гэрээний загвар Excel-ээс оруулах")}</span>
                 </Menu.Item>
               </Menu>
             }
             trigger="click"
-            className="cursor-pointer">
+            className="cursor-pointer"
+          >
             <Button
               className="dropdown-toggle btn w-full px-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 dark:text-gray-300 md:mt-0 md:w-auto"
               aria-expanded="false"
@@ -173,12 +180,14 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-plus h-4 w-4">
+                    className="feather feather-plus h-4 w-4"
+                  >
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
                 </span>
-              }></Button>
+              }
+            ></Button>
           </Dropdown>
         </div>
       </div>
@@ -195,7 +204,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
               onClick={() => setKharuulakhGeree(a)}
               data-aos="zoom-in-up"
               data-aos-duration="1000"
-              data-aos-delay={1 + i + "00"}>
+              data-aos-delay={1 + i + "00"}
+            >
               <div className="file box zoom-in relative rounded-md px-3 pb-5 pt-8 shadow-lg dark:shadow-lg dark:shadow-white sm:px-5">
                 <div className="absolute left-0 top-0 ml-3 mt-3"></div>
 
@@ -207,7 +217,9 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                 </div>
                 <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
                   {zagvaraaBichijUgnu === "geree"
-                    ? t(a?.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ")
+                    ? t(
+                        a?.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ"
+                      )
                     : moment(a?.createdAt).format("YYYY-MM-DD HH:mm")}
                 </div>
                 <div className="dropdown absolute right-0 top-0 ml-auto mr-2 mt-2">
@@ -224,7 +236,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                                 `/khyanalt/geree/zagvar/${zagvaraaBichijUgnu}/${a._id}`
                               );
                             }}
-                            className="dark:bg-dark-1 dark:hover:bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
+                            className="dark:bg-dark-1 dark:hover:bg-dark-2 flex cursor-pointer items-center rounded-md bg-white p-2 transition duration-300 ease-in-out hover:bg-gray-200 dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="24"
@@ -235,7 +248,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                               strokeWidth="1.5"
                               strokeLinecap="round"
                               strokeLinejoin="round"
-                              className="feather feather-users mr-2 h-4 w-4">
+                              className="feather feather-users mr-2 h-4 w-4"
+                            >
                               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                               <circle cx="9" cy="7" r="4"></circle>
                               <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -265,7 +279,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                                     t("Гэрээний загвар устгагдлаа")
                                   );
                                 });
-                              }}>
+                              }}
+                            >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -276,7 +291,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                                 strokeWidth="1.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
-                                className="feather feather-trash mr-2 h-4 w-4 text-red-600">
+                                className="feather feather-trash mr-2 h-4 w-4 text-red-600"
+                              >
                                 <polyline points="3 6 5 6 21 6"></polyline>
                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                               </svg>
@@ -285,14 +301,16 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                           </div>
                         </div>
                       </div>
-                    }>
+                    }
+                  >
                     <div
                       className="dropdown-toggle block h-5 w-5"
                       aria-expanded="false"
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                      }}>
+                      }}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -303,7 +321,8 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                         strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className="feather feather-more-vertical h-5 w-5 text-gray-600">
+                        className="feather feather-more-vertical h-5 w-5 text-gray-600"
+                      >
                         <circle cx="12" cy="12" r="1"></circle>
                         <circle cx="12" cy="5" r="1"></circle>
                         <circle cx="12" cy="19" r="1"></circle>

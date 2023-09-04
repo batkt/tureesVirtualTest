@@ -12,8 +12,8 @@ const Konva = dynamic(() => import("components/konva"), { ssr: false });
 
 function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
   const { geree, ...gereeniiZagvar } = data;
-  const barilga = baiguullaga.barilguud.find(
-    (a) => a._id === geree.barilgiinId
+  const barilga = baiguullaga?.barilguud.find(
+    (a) => a._id === geree?.barilgiinId
   );
   const [akt, setAkt] = useState();
   const [KharakhKhesguud, setKharakhKhesguud] = useState([1]);
