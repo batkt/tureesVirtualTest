@@ -189,7 +189,7 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
         )?.jagsaalt?.map((a, i) => {
           return (
             <div
-              key={a._id}
+              key={a?._id}
               className="sm:col-span -6
               col-span-12 md:col-span-4 xl:col-span-2"
               onClick={() => setKharuulakhGeree(a)}
@@ -203,11 +203,11 @@ function GereeniiZagvarJagsaalt({ token, zagvaraaBichijUgnu }) {
                   <div className="file__icon__file-name"></div>
                 </div>
                 <div className="mt-4 block truncate text-center font-medium">
-                  {a.ner}
+                  {a?.ner}
                 </div>
                 <div className="mt-0.5 text-center text-xs text-gray-600 dark:text-gray-400">
                   {zagvaraaBichijUgnu === "geree"
-                    ? t(a.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ")
+                    ? t(a?.turGereeEsekh === true ? "Түр гэрээ" : "Үндсэн гэрээ")
                     : moment(a?.createdAt).format("YYYY-MM-DD HH:mm")}
                 </div>
                 <div className="dropdown absolute right-0 top-0 ml-auto mr-2 mt-2">
