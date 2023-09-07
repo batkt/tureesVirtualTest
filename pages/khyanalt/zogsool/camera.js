@@ -49,7 +49,7 @@ import { useRef, useEffect } from "react";
 import useOrder from "tools/function/useOrder";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
-import useUilchluulegch from "../../../hooks/useUilchluulegch";
+import useUilchluulegch, {useUilchluulegchZogsoolToo} from "hooks/useUilchluulegch";
 import useJagsaalt from "../../../hooks/useJagsaalt";
 import { modal } from "../../../components/ant/Modal";
 import Tulbur from "../../../components/pageComponents/zogsool/Tulbur";
@@ -516,20 +516,14 @@ function camera({ token }) {
     }, 200);
   }
 
-  // useEffect(() => {
-  //   const d1 = moment().startOf("day").format("YYYY-MM-DD 00:00:00");
-  //   const d2 = moment().endOf("day").format("YYYY-MM-DD 23:59:59");
-  //   const o1 = moment(ognoo[0]).format("YYYY-MM-DD 00:00:00");
-  //   const o2 = moment(ognoo[1]).format("YYYY-MM-DD 23:59:59");
-  //   if (o1 === d1 && o2 === d2) {
-  //     let c = 0;
-  //     uilchluulegchGaralt?.jagsaalt.map((u) => {
-  //       if (!u.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag) c++;
-  //     });
-  //     setIdevkhtei(c);
-  //   }
-  // }, [uilchluulegchGaralt, ognoo]);
+  const tooQue = useMemo(() => {
+    return {
+      ekhlekhOgnoo: moment().startOf("day").format("YYYY-MM-DD 00:00:00"),
+      duusakhOgnoo: moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
+    };
+  }, []);
 
+  const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } = useUilchluulegchZogsoolToo(token, tooQue);
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     bank: "tdb",
@@ -1459,7 +1453,7 @@ function camera({ token }) {
                 className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 1
                     ? "sm:h-[80vh] sm:w-[80%]"
-                    : "sm:h-[250px]"
+                    : "sm:h-[300px]"
                 }`}
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
@@ -1546,7 +1540,7 @@ function camera({ token }) {
                 className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 2
                     ? "sm:h-[80vh] sm:w-[80%]"
-                    : "sm:h-[250px]"
+                    : "sm:h-[300px]"
                 }`}
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
@@ -2032,7 +2026,7 @@ function camera({ token }) {
                         className="ml-[10px]"
                       />
                     </Form.Item>
-                    {console.log(cameraData)}
+                    {/*{console.log(cameraData)}*/}
                     <Form.Item
                       name="CAMERA_IP"
                       className="w-2/5"

@@ -43,8 +43,8 @@ function Stream1({ ip }) {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas1');
                 const ctx = canvas.getContext('2d');
-                const imgWidth = 540;
-                const imgHeight = 250;
+                const imgWidth = 515;
+                const imgHeight = 300;
                 try {
                     const blob = new Blob([imageData]);
                     const imageBitmap = await createImageBitmap(blob);
@@ -63,7 +63,7 @@ function Stream1({ ip }) {
 
     return (
         <div>
-            <canvas id="canvas1" width="540" height="250" />
+            <canvas id="canvas1" width="515" height="300" />
         </div>
     )
 }
@@ -108,8 +108,8 @@ export function Stream2({ ip }) {
                 const imageData = event.data;
                 const canvas = document.getElementById('canvas2');
                 const ctx = canvas.getContext('2d');
-                const imgWidth = 540;
-                const imgHeight = 250;
+                const imgWidth = 515;
+                const imgHeight = 300;
                 try {
                     const blob = new Blob([imageData]);
                     const imageBitmap = await createImageBitmap(blob);
@@ -128,7 +128,7 @@ export function Stream2({ ip }) {
 
     return (
         <div>
-            <canvas id="canvas2" width="540" height="250" />
+            <canvas id="canvas2" width="515" height="300" />
         </div>
     )
 }

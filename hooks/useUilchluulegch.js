@@ -77,7 +77,18 @@ export function useUilchluulegchToololt(token, query) {
         fetcherToololt,
         { revalidateOnFocus: false }
     );
+    // console.log("---------", data);
     return { uilchiluulegchToololt: data, uilchiluulegchToololtMutate: mutate };
+}
+export function useUilchluulegchZogsoolToo(token, query) {
+    const { barilgiinId } = useAuth();
+    const { data, mutate } = useSWR(
+        !!token ? ["/zogsoolTusBurUilchluulegchdiinToo", token, barilgiinId, query] : null,
+        fetcherToololt,
+        { revalidateOnFocus: false }
+    );
+    console.log("---------", data);
+    return { zogsoolTusBuriinToo: data, zogsoolTusBuriinTooMutate: mutate };
 }
 
 export default useUilchluulegch;
