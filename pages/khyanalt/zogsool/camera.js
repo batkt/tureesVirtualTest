@@ -523,7 +523,7 @@ function camera({ token }) {
     };
   }, []);
 
-  const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } = useUilchluulegchZogsoolToo(token, tooQue);
+  // const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } = useUilchluulegchZogsoolToo(token, tooQue);
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     bank: "tdb",
