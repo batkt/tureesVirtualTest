@@ -87,7 +87,6 @@ export function useUilchluulegchZogsoolToo(token, query) {
         fetcherToololt,
         { revalidateOnFocus: false }
     );
-    console.log("---------", data);
     return { zogsoolTusBuriinToo: data, zogsoolTusBuriinTooMutate: mutate };
 }
 

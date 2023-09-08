@@ -521,9 +521,11 @@ function camera({ token }) {
       ekhlekhOgnoo: moment().startOf("day").format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
     };
-  }, []);
+  }, [uilchluulegchGaralt]);
+  // console.log('----000', uilchluulegchTooGaralt);
 
-  // const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } = useUilchluulegchZogsoolToo(token, tooQue);
+  const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } = useUilchluulegchZogsoolToo(token, tooQue);
+  // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     bank: "tdb",
@@ -2084,16 +2086,8 @@ function camera({ token }) {
               )}
             </Space>
           </Modal>
-          <div style={{ position: "absolute", bottom: 58 }}>
-            <div className="ml-10 flex">
-              <div className="flex text-blue-600">
-                {t("Идэвхтэй")}: {uilchluulegchTooGaralt?.niitMur}
-              </div>
-              <div className="ml-10 flex text-yellow-600">
-                {t("Сул зогсоол")}:{" "}
-                {jagsaalt[0].too - uilchluulegchTooGaralt?.niitMur}
-              </div>
-            </div>
+          <div style={{ position: "absolute", bottom: 45 }}>
+            <ZogsooliinToo zogsoolTusBuriinToo={zogsoolTusBuriinToo} jagsaalt={jagsaalt}/>
           </div>
         </div>
       ) : (
@@ -2106,6 +2100,38 @@ function camera({ token }) {
     </Admin>
   );
 }
+
+const ZogsooliinToo = ({zogsoolTusBuriinToo, jagsaalt}) => {
+  // const [too, setToo] = useState([]);
+  const too = [];
+  for(let i=0; jagsaalt.length > i; i++){
+    const zog = jagsaalt[i];
+    // console.log('4444444', zog);
+    for(let k=0; zogsoolTusBuriinToo?.length > k; k++){
+      const to = zogsoolTusBuriinToo[k];
+      if(zog._id===to._id.zogsool){
+        too.push({ner: zog.ner, idevkhtei: to.too, sul: (zog.too-to.too)})
+        // setToo([...too, {ner: zog.ner, idevkhtei: to.too, sul: (zog.too-to.too)}])
+      }
+      continue;
+    }
+  }
+  return (
+      too.length>0&&
+      too.map((mur)=>(
+          <div className="ml-10 flex">
+            <text style={{width: 80}} className="text-blue-600 font-bold">{mur.ner}</text>
+            <div style={{width: 100}} className="flex text-blue-600">
+              {"Идэвхтэй"}: {mur.idevkhtei}
+            </div>
+            <div className="ml-10 flex text-yellow-600">
+              Сул зогсоол:{" "}
+              {mur.sul}
+            </div>
+          </div>
+      ))
+  )
+};
 
 export const getServerSideProps = shalgaltKhiikh;
 
