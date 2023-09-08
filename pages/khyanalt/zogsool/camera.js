@@ -231,7 +231,7 @@ function camera({ token }) {
     moment().endOf("day"),
   ]);
   const [turul, setTurul] = useState(undefined);
-  const [songosonMashin, setSongosonMashin] = useState(undefined);
+  // const [songosonMashin, setSongosonMashin] = useState(undefined);
   const tulburRef = React.useRef(null);
   const mashiniiDugaarRef = React.useRef(null);
   const tailanRef = React.useRef(null);
@@ -253,7 +253,7 @@ function camera({ token }) {
   const [khelber, setKhelber] = useState("");
   const [dun, setDun] = useState("");
   const [khaikh, setKhaikh] = useState("");
-  const [refresh, setRefresh] = useState(true);
+  // const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
   const [form] = Form.useForm();
 

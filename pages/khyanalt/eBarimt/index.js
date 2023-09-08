@@ -64,12 +64,23 @@ function EbarimtMedeelel({ token }) {
   }, [ekhlekhOgnoo, uilchilgeeAvi]);
 
   const queryToololt = useMemo(() => {
-    return {
+    const query = {
       barilgiinId: barilgiinId,
       ekhlekhOgnoo: moment(ekhlekhOgnoo[0]).format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment(ekhlekhOgnoo[1]).format("YYYY-MM-DD 23:59:59"),
     };
-  }, [ekhlekhOgnoo]);
+
+    if (uilchilgeeAvi) {
+      if (uilchilgeeAvi === "Зогсоол") {
+        query.barimtTurul = 'mashiniiDugaar';
+      } else if (uilchilgeeAvi === "Түрээс") {
+        query.barimtTurul = 'gereeniiDugaar';
+      } else if (uilchilgeeAvi === "Тоглоом") {
+        query.barimtTurul = 'togloomiinId';
+      }
+    }
+    return query;
+  }, [ekhlekhOgnoo, uilchilgeeAvi]);
 
   const { order, onChangeTable } = useOrder({ createAt: -1 });
 
@@ -86,6 +97,8 @@ function EbarimtMedeelel({ token }) {
     barilgiinId && token,
     queryToololt
   );
+
+  console.log(ebarimtiinToololt, "ebarimtiinToololt");
   const khyanaltiinDun = [
     {
       too:
