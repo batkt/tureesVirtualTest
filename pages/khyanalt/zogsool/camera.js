@@ -399,16 +399,16 @@ function camera({ token }) {
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
         (uilchluulegch?.tuukh &&
-          uilchluulegch?.tuukh.length > 0 &&
-          uilchluulegch?.tuukh[0]?.tulukhDun === 0)
+          uilchluulegch?.tuukh?.length > 0 &&
+          uilchluulegch?.tuukh?.[0]?.tulukhDun === 0)
       ) {
         if (
           uilchluulegch?.tuukh &&
-          uilchluulegch?.tuukh.length > 0 &&
-          !!uilchluulegch?.tuukh[0].garsanKhaalga
+          uilchluulegch?.tuukh?.length > 0 &&
+          !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
         ) {
-          console.log("garakhHkaalga", uilchluulegch?.tuukh[0].garsanKhaalga);
-          khaalgaNeey(uilchluulegch?.tuukh[0].garsanKhaalga);
+          console.log("garakhHkaalga", uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
+          khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
         }
       }
       // console.log(uilchluulegch);
