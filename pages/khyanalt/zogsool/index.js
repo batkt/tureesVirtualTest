@@ -424,10 +424,10 @@ function Zogsool({ token }) {
         width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "tuukh.0.tulukhDun",
+        dataIndex: "niitDun",
         render(v, parents) {
           return (
-            parents?.tuukh && formatNumber(parents?.tuukh[0]?.tulukhDun, 0)
+              v && formatNumber(v, 0)
           );
         },
       },
