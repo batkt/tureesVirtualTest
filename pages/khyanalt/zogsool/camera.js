@@ -386,6 +386,21 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       var uilchluulegch = zogsool;
+      if (uilchluulegch) {
+        console.log("uilchluulegch", uilchluulegch);
+        axios
+          .get(
+            `http://localhost:5000/api/sambar/${camerVal[1]}/${uilchluulegch?.mashiniiDugaar}/${uilchluulegch?.niitDun}`
+          )
+          .then((res) => {
+            if (res) {
+              console.log("amjilttai:", res);
+            }
+          })
+          .catch((err) => {
+            console.log("aldaa:", err);
+          });
+      }
       if (
         !!uilchluulegch?.khaalgaTurul &&
         uilchluulegch?.khaalgaTurul === "oroh" &&
