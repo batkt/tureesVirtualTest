@@ -95,14 +95,8 @@ function tulburKhurvuulekh(v) {
     case "tdb":
       utga = "ХХБ";
       break;
-    case "tdb":
-      utga = "ХХБ";
-      break;
     case "kapitron":
       utga = "Капитрон";
-      break;
-    case "khariltsakh":
-      utga = "Харилцах";
       break;
     default:
       utga = v;
@@ -119,7 +113,7 @@ function Zogsool({ token }) {
     moment().startOf("day"),
     moment().endOf("day"),
   ]);
-  const [zogsoolId, setZogsoolId] = useState(undefined);
+  const [zogsoolId, setZogsoolId] = useState();
   const [orlogo, setOrlogo] = useState([]);
   const [tulbur, setTulbur] = useState("");
   const [tuluv, setTuluv] = useState("");
@@ -159,13 +153,15 @@ function Zogsool({ token }) {
         },
       }),
       ...aa,
-      "tuukh.zogsooliinId": zogsoolId,
     };
+    if (!!zogsoolId){
+      baseQuery["tuukh.zogsooliinId"]= zogsoolId;
+    }
     if (!!tulbur && tulbur !== "") {
       baseQuery["tuukh.tulbur.turul"] =
-        !!tulbur && tulbur === "card"
-          ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
-          : tulbur;
+          !!tulbur && tulbur === "card"
+              ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
+              : tulbur;
     }
 
     if (tuluv !== "") {
@@ -277,18 +273,6 @@ function Zogsool({ token }) {
     [uilchiluulegchToololt, uilchluulegchGaralt]
   );
 
-  const zogsoolChange = (e) => {
-    // console.log('2222222222', e);
-    setZogsoolId(e);
-  };
-  function zurchilNemey(d) {
-    console.log("heey", d);
-  }
-
-  function onRefresh() {
-    zogsoolToololtMutate();
-    uilchluulegchMutate();
-  }
   /*function mashinOruulakhExcel() {
     const footer = [
       <Space>
@@ -440,10 +424,10 @@ function Zogsool({ token }) {
         width: "10rem",
         showSorterTooltip: false,
         sorter: () => 0,
-        dataIndex: "tuukh.0.tulukhDun",
+        dataIndex: "niitDun",
         render(v, parents) {
           return (
-            parents?.tuukh && formatNumber(parents?.tuukh[0]?.tulukhDun, 0)
+              v && formatNumber(v, 0)
           );
         },
       },
@@ -764,6 +748,23 @@ function Zogsool({ token }) {
               onChange={setOgnoo}
             />
           </div>
+            {/*<Select
+                defaultValue="lucy"
+                style={{ width: 120 }}
+                // onChange={handleChange}
+                options={[jagsaalt.map((zogsool)=>({value: zogsool._id, label: zogsool.ner}))
+                ]}
+            />*/}
+          <Select defaultValue="Бүгд" onChange={setZogsoolId}>
+            <Select.Option value={false}>
+              Бүгд
+            </Select.Option>
+            {jagsaalt.map((a) => (
+                <Select.Option key={a._id} value={a._id}>
+                  {t(a.ner)}
+                </Select.Option>
+            ))}
+          </Select>
           <div
             className=" flex w-full items-center sm:justify-end md:mb-0 md:ml-auto xl:justify-start"
             data-aos="fade-left"
