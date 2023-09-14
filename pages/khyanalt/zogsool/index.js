@@ -532,21 +532,21 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => setTuluv(1)}
                   className={`relative ${
-                    tuluv === "1" && "bg-green-500 text-white"
+                    tuluv === 1 && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}>
                   {t("Төлсөн")}
                 </div>
                 <div
                   onClick={() => setTuluv(-2)}
                   className={`relative ${
-                    tuluv === "-2" && "bg-green-500 text-white"
+                    tuluv === -2 && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}>
                   {t("Зөрчилтэй")}
                 </div>
                 <div
                   onClick={() => setTuluv(2)}
                   className={`relative ${
-                    tuluv === "-2" && "bg-green-500 text-white"
+                    tuluv === 2 && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}>
                   {t("Үнэгүй")}
                 </div>
