@@ -337,12 +337,10 @@ function Tulbur(
       {eBarimt && (
         <div className="hidden">
           <div
-            className="flex w-full min-w-[58mm] flex-col p-2 pr-4 text-base font-semibold text-black"
+            className="flex w-full min-w-[58mm] flex-col p-2 pr-4 text-sm font-semibold text-black"
             ref={eBarimtRef}
           >
-            <div className="text-center">
-              {`${baiguullagaEsekh ? "ААН-д" : "Иргэнд"} очих баримт`}
-            </div>
+            <div className="text-center">Авто зогсоолын үйлчилгээ</div>
             <div className="text-center">{baiguullaga?.ner}</div>
             {/* <div>Борлуулагч:</div> */}
             <div className="flex justify-between">
@@ -352,10 +350,6 @@ function Tulbur(
             <div className="flex justify-between">
               <p>ТТД:</p>
               <p>{eBarimt?.registerNo}</p>
-            </div>
-            <div className="flex justify-between">
-              <p>Касс:</p>
-              <p>{eBarimt?.posNo}</p>
             </div>
             <div className="flex justify-between">
               <p>Кассчин:</p>
@@ -383,11 +377,9 @@ function Tulbur(
               </>
             )}
             <div>
-              <p>
-                <br />
-              </p>
+              <p></p>
             </div>
-            {eBarimt?.stocks?.map((mur, index) => (
+            {/* {eBarimt?.stocks?.map((mur, index) => (
               <div
                 className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
                   index === 0 && "border-t-2"
@@ -399,61 +391,61 @@ function Tulbur(
                   {formatNumber(mur.totalAmount, 2)}₮
                 </div>
               </div>
-            ))}
+            ))} */}
             <div>
               <p>
                 <br />
               </p>
             </div>
-            <div className="flex justify-between">
-              <p className="w-1/2 text-right">НӨАТ-гүй дүн:</p>
-              <p className="text-right">
-                {formatNumber(data.tulukhDun / 1.1, 2)}₮
-              </p>
-            </div>
-            <div className="flex justify-between">
-              <p className="w-1/2 text-right">НӨАТ-н дүн:</p>
-              <p className="text-right">{formatNumber(eBarimt?.vat, 2)}₮</p>
-            </div>
-            <div className="flex justify-between">
-              <p className="w-1/2 text-right">Төлөх дүн:</p>
-              <p className="text-right">{formatNumber(eBarimt?.amount)}₮</p>
-            </div>
-            {tulbur?.belen && (
+            <div className="grid grid-cols-2 text-sm">
               <div className="flex justify-between">
-                <p className="w-1/2 text-right">Бэлнээр:</p>
-                <p className="text-right">{formatNumber(tulbur?.belen)}₮</p>
+                <p className="w-1/2 text-right">НӨАТ-гүй:</p>
+                <p className="text-right">
+                  {formatNumber(data.tulukhDun / 1.1, 2)}₮
+                </p>
               </div>
-            )}
-            {tulbur?.belenBus && (
               <div className="flex justify-between">
-                <p className="w-1/2 text-right">Бэлэн бусаар:</p>
-                <p className="text-right">{formatNumber(tulbur?.belenBus)}₮</p>
+                <p className="w-1/2 text-right">НӨАТ:</p>
+                <p className="text-right">{formatNumber(eBarimt?.vat, 2)}₮</p>
               </div>
-            )}
-            {tulbur?.khariult && (
               <div className="flex justify-between">
-                <p className="w-1/2 text-right">Хариулт:</p>
-                <p className="text-right">{formatNumber(tulbur?.khariult)}₮</p>
+                <p className="w-1/2 text-right">Төлөх дүн:</p>
+                <p className="text-right">{formatNumber(eBarimt?.amount)}₮</p>
               </div>
-            )}
-            <div className="flex items-end justify-between">
-              <p className="w-1/2 text-right">
-                {`Е-Баримт ${baiguullagaEsekh ? "" : "уншуулах"} дүн`}:
-              </p>
-              <p className="text-end">{formatNumber(eBarimt?.amount)}₮</p>
+              {tulbur?.belen && (
+                <div className="flex justify-between">
+                  <p className="w-1/2 text-right">Бэлнээр:</p>
+                  <p className="text-right">{formatNumber(tulbur?.belen)}₮</p>
+                </div>
+              )}
+              {tulbur?.belenBus && (
+                <div className="flex justify-between">
+                  <p className="w-1/2 text-right">Бэлэн бусаар:</p>
+                  <p className="text-right">
+                    {formatNumber(tulbur?.belenBus)}₮
+                  </p>
+                </div>
+              )}
+              {tulbur?.khariult && (
+                <div className="flex justify-between">
+                  <p className="w-1/2 text-right">Хариулт:</p>
+                  <p className="text-right">
+                    {formatNumber(tulbur?.khariult)}₮
+                  </p>
+                </div>
+              )}
             </div>
             {!baiguullagaEsekh && (
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between pt-2">
                 <p className="w-1/2 text-right">Сугалааны дугаар:</p>
                 <p className=" text-end">{eBarimt?.lottery}</p>
               </div>
             )}
             <div>
               <p>
-                <div className="flex w-full justify-center p-5">
+                <div className="flex w-full justify-center p-5 pt-3">
                   <div>
-                    <QRCode level="L" value={eBarimt?.qrData} size={200} />
+                    <QRCode level="L" value={eBarimt?.qrData} size={100} />
                   </div>
                 </div>
               </p>
