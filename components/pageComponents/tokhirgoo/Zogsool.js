@@ -151,7 +151,7 @@ function Zogsool({ token, baiguullaga, baiguullagaMutate, barilgiinId, setSongog
     modal({
       top: 0,
       width: 1200,
-      height: 1200,
+      height: 2200,
       title: t("Зогсоол бүртгэх"),
       icon: <PlusOutlined />,
       content: (

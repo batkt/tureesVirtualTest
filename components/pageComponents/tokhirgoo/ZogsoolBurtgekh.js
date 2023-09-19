@@ -10,10 +10,9 @@ import {
   Input,
   Button,
   notification,
-  Modal,
   InputNumber,
   Divider,
-  Space,
+  TimePicker, DatePicker
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -42,8 +41,19 @@ function ZogsoolBurtgekh(
   const [form] = Form.useForm();
   let method;
   if (!!data) {
+    let toForm = data;
     method = updateMethod;
-    form.setFieldsValue({ ...data });
+    if(toForm?.tulburuud.length>0)
+      for(let i=0; toForm?.tulburuud.length > i; i++){
+        const d = toForm?.tulburuud[i];
+        if(d?.tsag.length>0)
+          for(let k=0; d.tsag.length>k;k++ ){
+            toForm.tulburuud[i].tsag[k] = moment(d.tsag[k]);
+          }
+        else continue;
+      }
+    console.log('  after- ',toForm);
+    form.setFieldsValue({ ...toForm });
   } else method = createMethod;
   useEffect(() => {
     function keyUp(e) {
@@ -62,6 +72,7 @@ function ZogsoolBurtgekh(
       khadgalya() {
         const body = form.getFieldsValue();
         body.barilgiinId = barilgiinId;
+        // console.log('^^^^^^^', body);
         method("parking", token, body)
           .then(({ data }) => {
             if (data === "Amjilttai") {
@@ -80,6 +91,10 @@ function ZogsoolBurtgekh(
     }),
     [form]
   );
+  /*const onChangeTime = (e)=>{
+    console.log('11111111',moment(e[0]).format('hh:mm'));
+    console.log('222222222',moment(e[1]).format('hh:mm'));
+  };*/
 
   return (
     <Form form={form} autoComplete="off">
@@ -182,8 +197,19 @@ function ZogsoolBurtgekh(
               <>
                 <div
                   className="my-5 space-y-3 overflow-y-auto py-2"
-                  style={{ maxHeight: "40vh" }}
+                  style={{ maxHeight: "50vh" }}
                 >
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                      <Tariff
+                          key={key}
+                          name={name}
+                          fieldKey={fieldKey}
+                          restField={restField}
+                          fields={fields}
+                          remove={remove}
+                      />
+                  ))}
+{/*
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div
                       key={fieldKey}
@@ -232,6 +258,7 @@ function ZogsoolBurtgekh(
                       </div>
                     </div>
                   ))}
+*/}
                 </div>
                 <Button
                   icon={<PlusOutlined />}
@@ -249,7 +276,7 @@ function ZogsoolBurtgekh(
               <>
                 <div
                   className="mb-5 space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "40vh" }}
+                  style={{ maxHeight: "50vh" }}
                 >
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
@@ -284,7 +311,8 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
   const [cameraIps, setCameraIps] = useState([]);
   useEffect(() => {
     axios
-      .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
+      // .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
+      .get("http://192.168.1.185:8081/zogsooliinIpAvaya/" + barilgiinId)
       .then(function (response) {
         if (!!response) setCameraIps(response.data.ip);
       })
@@ -365,7 +393,6 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
               className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
               type="dashed"
               onClick={() => add()}
-              id={"khurunguBurtgekh"}
               block
               icon={<PlusOutlined />}
             >
@@ -377,5 +404,102 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
     </div>
   );
 }
+
+function Tariff({ name, fieldKey, restField, remove }) {
+
+  const { t } = useTranslation();
+  return (
+      <div
+          key={fieldKey}
+          className=" relative mb-5 rounded-md border bg-green-50  px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
+      >
+        <Divider className="pb-5">
+          {t("Тариф")} {fieldKey + 1}
+        </Divider>
+        <div className="grid w-full grid-cols-4 items-center gap-5">
+          <div
+              onClick={() => remove(name)}
+              className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
+          >
+            <CloseCircleOutlined />
+          </div>
+          <Form.Item
+              label="Цаг:"
+              labelCol={{ span: 24 }}
+              {...restField}
+              name={[name, "tsag"]}
+              fieldKey={[fieldKey, "tsag"]}
+              // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
+              className="col-span-3 mb-0 h-20"
+          >
+            <TimePicker.RangePicker
+                format = 'HH:mm'
+                placeholder={['Эхлэх','Дуусах']}
+            />
+          </Form.Item>
+        </div>
+        <Form.List name={[name, "tariff"]}>
+          {(muruud, { add, remove }) => (
+              <>
+                {muruud.map((mur, index) => (
+                    <div key={index} className="grid mt-3 w-full grid-cols-4 items-end flex-center gap-5">
+                      <Form.Item
+                          label="Минут хүртэл:"
+                          labelCol={{ span: 24 }}
+                          {...mur.restField}
+                          name={[mur.name, "minut"]}
+                          fieldKey={[mur.key, "minut"]}
+                          rules={[
+                            { required: true, message: "Минут бөглөнө үү." },
+                          ]}
+                          className="col-span-2 mb-0"
+                      >
+                        <InputNumber placeholder="Минут" className="w-full" />
+                      </Form.Item>
+                      <div className='flex col-span-2 items-end'>
+                        <Form.Item
+                            label="Тариф/₮/:"
+                            labelCol={{ span: 24 }}
+                            {...mur.restField}
+                            name={[mur.name, "tulbur"]}
+                            fieldKey={[mur.key, "tulbur"]}
+                            rules={[
+                              { required: true, message: "Тариф бөглөнө үү." },
+                            ]}
+                            className="mb-0"
+                        >
+                          <InputNumber
+                              formatter={(value) =>
+                                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              }
+                              className="w-full"
+                              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              placeholder="Тариф"
+                          />
+                        </Form.Item>
+                        <MinusCircleOutlined
+                            className="ml-2 mb-2.5"
+                            onClick={() => remove(mur.name)}
+                        />
+                      </div>
+                    </div>
+                ))}
+                <Button
+                    className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                    type="dashed"
+                    onClick={() => add()}
+                    // id={"tariff"}
+                    block
+                    icon={<PlusOutlined />}
+                >
+                  {t("Нэмэх")}
+                </Button>
+              </>
+          )}
+        </Form.List>
+      </div>
+  );
+}
+
 
 export default React.forwardRef(ZogsoolBurtgekh);

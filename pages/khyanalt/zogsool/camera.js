@@ -388,7 +388,12 @@ function camera({ token }) {
   }, [jagsaalt]);
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
-      var uilchluulegch = zogsool;
+      let uilchluulegch = zogsool;
+      let dunTuluv = true;
+      uilchluulegch?.tuukh?.map((mur)=>{
+        if(mur.tulukhDun !== 0)
+          dunTuluv = false;
+      });
       if (uilchluulegch) {
         console.log("uilchluulegch", uilchluulegch);
         axios
@@ -414,12 +419,10 @@ function camera({ token }) {
       } else {
         onRefresh();
       }
+
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
-        (uilchluulegch?.tuukh &&
-          uilchluulegch?.tuukh?.length > 0 &&
-          uilchluulegch?.tuukh?.[0]?.tulukhDun === 0 &&
-          uilchluulegch?.niitDun === 0)
+        (uilchluulegch?.tuukh && uilchluulegch?.tuukh?.length > 0 && dunTuluv && uilchluulegch?.niitDun === 0)
       ) {
         if (
           uilchluulegch?.tuukh &&
