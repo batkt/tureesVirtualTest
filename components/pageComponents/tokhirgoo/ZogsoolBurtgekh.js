@@ -12,7 +12,7 @@ import {
   notification,
   InputNumber,
   Divider,
-  TimePicker, DatePicker
+  TimePicker, Switch
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
+import { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import moment from "moment";
@@ -143,7 +143,7 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
-                {t("Үндсэн тариф /30мин ₮/")}
+                {t("Үндсэн тариф")}
               </div>
             </div>
             <div className="col-span-2">
@@ -158,6 +158,19 @@ function ZogsoolBurtgekh(
                 ]}
               >
                 <Input placeholder="Тариф " />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Үндсэн тариф 30мин эсэх")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item
+                  className="m-0"
+                  name="undsenMin"
+              >
+                <Switch defaultChecked={data?.undsenMin} checkedChildren="мин" unCheckedChildren="цаг" />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -311,8 +324,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
   const [cameraIps, setCameraIps] = useState([]);
   useEffect(() => {
     axios
-      // .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
-      .get("http://192.168.1.185:8081/zogsooliinIpAvaya/" + barilgiinId)
+      .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
       .then(function (response) {
         if (!!response) setCameraIps(response.data.ip);
       })

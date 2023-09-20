@@ -1957,6 +1957,12 @@ function camera({ token }) {
                           {t("Хөгжлийн бэрхшээлтэй иргэн")}
                         </Radio>
                         <Radio value="Хогны машин">{t("Хогны машин")}</Radio>
+                        {baiguullaga?._id === "63c0f31efe522048bf02086d"&&
+                        <>
+                          <Radio value="Түрээслэгч">{t("Түрээслэгч")}</Radio>
+                          <Radio value="Барилга">{t("Барилга")}</Radio>
+                        </>
+                        }
                       </Space>
                     ) : (
                       <Space direction="vertical">
