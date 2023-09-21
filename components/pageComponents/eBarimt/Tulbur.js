@@ -1,26 +1,42 @@
-import { Button, Spin, message } from "antd"
-import React, { useState } from "react"
-import { useReactToPrint } from "react-to-print"
+import { Button, Spin, message } from "antd";
+import React, { useState } from "react";
+import { useReactToPrint } from "react-to-print";
 
-import EBarimt from "./EBarimt"
-import uilchilgee, { aldaaBarigch } from "services/uilchilgee"
+import EBarimt from "./EBarimt";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
+import { t } from "i18next";
 //#endregion
 
 function Tulbur(
-  { destroy, dansniiKhuulgaMutate, data, token, ajiltan, baiguullaga,onRefresh ,defaultRegister,eBarimtAutomataarShivikh,defaultTurul},
+  {
+    destroy,
+    dansniiKhuulgaMutate,
+    data,
+    token,
+    ajiltan,
+    baiguullaga,
+    onRefresh,
+    defaultRegister,
+    eBarimtAutomataarShivikh,
+    defaultTurul,
+  },
   ref
 ) {
-  const [tulbur, setTulbur] = React.useState(data?.tulbur || [])
-  const [eBarimt, setEBarimt] = React.useState(null)
+  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
+  const [eBarimt, setEBarimt] = React.useState(null);
 
-  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(defaultTurul === 'ААН' ? true : false)
-  const [irgenEsekh, setIrgenEsekh] = React.useState(defaultTurul === 'Иргэн' ? true : false)
-  const [register, setRegister] = React.useState(defaultRegister || "")
-  const [baiguullagiinMedeelel, setBaiguullaga] = React.useState()
-  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false)
-  const [loading, setLoading] = useState(false)
+  const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(
+    defaultTurul === "ААН" ? true : false
+  );
+  const [irgenEsekh, setIrgenEsekh] = React.useState(
+    defaultTurul === "Иргэн" ? true : false
+  );
+  const [register, setRegister] = React.useState(defaultRegister || "");
+  const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
+  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const eBarimtRef = React.useRef(null)
+  const eBarimtRef = React.useRef(null);
   const pageStyle = `
   @page {
     size: A4;
@@ -40,61 +56,63 @@ function Tulbur(
         
     }
 }
-`
+`;
 
   const handlePrint = useReactToPrint({
     pageStyle: () => pageStyle,
     content: () => eBarimtRef.current,
     onAfterPrint: () => khaaya(),
-  })
+  });
 
   React.useImperativeHandle(
     ref,
     () => ({
       khaaya() {
-        eBarimtMutate()
-        dansniiKhuulgaMutate()
-        destroy()
+        eBarimtMutate();
+        dansniiKhuulgaMutate();
+        destroy();
       },
     }),
     []
-  )
+  );
 
   function ebarimtAvya(id) {
-    if (!!eBarimt) handlePrint()
+    if (!!eBarimt) handlePrint();
     else {
-      if (baiguullagaEsekh === true && register?.toString().length !== 7 || irgenEsekh === true && register?.toString().length !== 10) {
-        message.warning(t("Байгууллагын регистр оруулна уу"))
-        return
+      if (
+        (baiguullagaEsekh === true && register?.toString().length !== 7) ||
+        (irgenEsekh === true && register?.toString().length !== 10)
+      ) {
+        message.warning(t("Байгууллагын регистр оруулна уу"));
+        return;
       }
-      setLoading(true)
+      setLoading(true);
       const body = {
         id: id,
         barilgiinId: data.barilgiinId,
-      }
+      };
 
-      if(baiguullagaEsekh === true || irgenEsekh === true)
-      {
-        body.turul = '3'
-        body.register = register
+      if (baiguullagaEsekh === true || irgenEsekh === true) {
+        body.turul = "3";
+        body.register = register;
       }
 
       uilchilgee(token)
         .post("/ebarimtShivye", body)
         .then(({ data }) => {
           if (data.success === true) {
-            setEBarimt(data)
-            handlePrint()
+            setEBarimt(data);
+            handlePrint();
           }
         })
         .catch(aldaaBarigch)
-        .finally(() => setLoading(false))
+        .finally(() => setLoading(false));
     }
   }
 
   function khaaya() {
-    onRefresh()
-    destroy()
+    onRefresh();
+    destroy();
   }
 
   return (
@@ -134,7 +152,7 @@ function Tulbur(
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default React.forwardRef(Tulbur)
+export default React.forwardRef(Tulbur);
