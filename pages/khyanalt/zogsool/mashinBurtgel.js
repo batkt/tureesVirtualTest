@@ -92,6 +92,15 @@ function mashinBurtgel({ token }) {
                 moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
             },
           ]
+        : turul === "Түрээслэгч"
+        ? [
+            {
+              title: t("Гэрээний дугаар"),
+              align: "center",
+              dataIndex: "gereeniiDugaar",
+              width: "7rem",
+            },
+          ]
         : [];
     return [
       {

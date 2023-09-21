@@ -24,12 +24,13 @@ function GereeExceleesOruulakh(
   const [zagvariinId, setGereeniiZagvar] = React.useState(null);
   const [ognoo, setOgnoo] = React.useState(null);
   const [aldaa, setAldaa] = React.useState(null);
-  const { t, i18n } = useTranslation()
-
+  const { t, i18n } = useTranslation();
+  const query = { turGereeEsekh: { $ne: true } };
   const { gereeniiZagvarGaralt } = useGereeniiZagvar(
     token,
     baiguullaga?._id,
-    barilgiinId
+    barilgiinId,
+    query
   );
 
   React.useImperativeHandle(
@@ -73,7 +74,10 @@ function GereeExceleesOruulakh(
   return (
     <div>
       <div className="grid w-full grid-cols-2 gap-4">
-        <DatePicker.MonthPicker locale={i18n.language === "mn" && local} onChange={setOgnoo} />
+        <DatePicker.MonthPicker
+          locale={i18n.language === "mn" && local}
+          onChange={setOgnoo}
+        />
         <Select
           placeholder={t("Гэрээний загвар")}
           onChange={setGereeniiZagvar}

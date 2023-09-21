@@ -8,12 +8,14 @@ const fetcher = (
   token,
   baiguullagiinId,
   { search, ...khuudaslalt },
-  barilgiinId
+  barilgiinId,
+  query
 ) =>
   axios(token)
     .get(url, {
       params: {
         query: {
+          ...query,
           barilgiinId,
           baiguullagiinId,
           $or: [{ ner: { $regex: search, $options: "i" } }],
@@ -24,7 +26,7 @@ const fetcher = (
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useGereeniiZagvar(token, baiguullagiinId, bId) {
+function useGereeniiZagvar(token, baiguullagiinId, bId, query) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setGereeniiZagvarKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -40,6 +42,7 @@ function useGereeniiZagvar(token, baiguullagiinId, bId) {
           baiguullagiinId,
           khuudaslalt,
           barilgiinId || bId,
+          query,
         ]
       : null,
     fetcher,
