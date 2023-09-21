@@ -95,9 +95,9 @@ function mashinBurtgel({ token }) {
         : turul === "Түрээслэгч"
         ? [
             {
-              title: t("Гэрээний дугаар"),
+              title: t("Талбайн дугаар"),
               align: "center",
-              dataIndex: "gereeniiDugaar",
+              dataIndex: "ezemshigchiinTalbainDugaar",
               width: "7rem",
             },
           ]

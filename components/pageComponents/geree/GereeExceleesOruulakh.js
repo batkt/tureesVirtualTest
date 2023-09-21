@@ -94,7 +94,6 @@ function GereeExceleesOruulakh(
       {!!zagvariinId && !!ognoo && (
         <Upload
           type="drag"
-          showUploadList={false}
           multiple={false}
           name="file"
           data={{
