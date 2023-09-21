@@ -130,7 +130,7 @@ function GuilgeeniiDun({ token, dansniiDugaar, barilgiinId, ognoo, turul, t }) {
         .catch(aldaaBarigch)
   );
   return (
-    <div className='font-medium dark:bg-gray-900 dark:text-white'>
+    <div className="font-medium dark:bg-gray-900 dark:text-white">
       {t("Гүйлгээний нийт дүн")}: {formatNumber(_.get(data, "0.dun"))}
     </div>
   );
@@ -232,12 +232,12 @@ function tulburTootsoo({ token }) {
         return;
       }
       const footer = [
-        <div className='pr-[1%]'>
+        <div className="pr-[1%]">
           <Button onClick={() => refGuilgee.current.khaaya()}>
             {t("Хаах")}
           </Button>
           ,
-          <Button type='primary' onClick={() => refGuilgee.current.khadgalya()}>
+          <Button type="primary" onClick={() => refGuilgee.current.khadgalya()}>
             {t("Хадгалах")}
           </Button>
         </div>,
@@ -269,9 +269,9 @@ function tulburTootsoo({ token }) {
     }
 
     const footer = [
-      <div className='pr-[1%]'>
+      <div className="pr-[1%]">
         <Button onClick={() => zardalRef.current.khaaya()}>{t("Хаах")}</Button>,
-        <Button type='primary' onClick={() => zardalRef.current.khadgalya()}>
+        <Button type="primary" onClick={() => zardalRef.current.khadgalya()}>
           {t("Хадгалах")}
         </Button>
         ,
@@ -305,7 +305,7 @@ function tulburTootsoo({ token }) {
     function barimtShivya(register, turul) {
       modal({
         title: (
-          <div className='flex w-full flex-row justify-between'>
+          <div className="flex w-full flex-row justify-between">
             <div>{t("Түрээсийн төлбөрийн и-баримт")}</div>
           </div>
         ),
@@ -382,7 +382,7 @@ function tulburTootsoo({ token }) {
           render(a) {
             return (
               <Tooltip title={<div>{a}</div>}>
-                <div className='flex w-full truncate'>{a}</div>
+                <div className="flex w-full truncate">{a}</div>
               </Tooltip>
             );
           },
@@ -416,10 +416,10 @@ function tulburTootsoo({ token }) {
             align: "center",
             render(a) {
               return (
-                <div className='flex items-center justify-center'>
+                <div className="flex items-center justify-center">
                   <Button
-                    shape='circle'
-                    size='small'
+                    shape="circle"
+                    size="small"
                     onClick={() => guilgeeKholbyo(a)}
                     icon={iconAvya(a, "tdb")}
                   />
@@ -437,24 +437,27 @@ function tulburTootsoo({ token }) {
               if (data.length > 1) {
                 return (
                   <Tooltip
-                    placement='top'
+                    placement="top"
                     title={
-                      <div className='flex justify-center truncate'>
+                      <div className="flex justify-center truncate">
                         {data.map((a, i) => (
                           <div
                             key={i}
-                            className={`${data.length - 1 !== i && "pr-1"}`}>
+                            className={`${data.length - 1 !== i && "pr-1"}`}
+                          >
                             {a}
                             {data.length - 1 !== i && ","}
                           </div>
                         ))}
                       </div>
-                    }>
-                    <div className='flex justify-center truncate'>
+                    }
+                  >
+                    <div className="flex justify-center truncate">
                       {data.map((a, i) => (
                         <div
                           key={i}
-                          className={`${data.length - 1 !== i && "pr-1"}`}>
+                          className={`${data.length - 1 !== i && "pr-1"}`}
+                        >
                           {a}
                           {data.length - 1 !== i && ","}
                         </div>
@@ -464,7 +467,7 @@ function tulburTootsoo({ token }) {
                 );
               } else
                 return (
-                  <Tooltip placement='top' title={<div>{data}</div>}>
+                  <Tooltip placement="top" title={<div>{data}</div>}>
                     <div>{data}</div>
                   </Tooltip>
                 );
@@ -476,16 +479,17 @@ function tulburTootsoo({ token }) {
             align: "center",
             render(a) {
               return (
-                <div className='flex items-center justify-center'>
+                <div className="flex items-center justify-center">
                   <Button
-                    size='small'
-                    shape='circle'
+                    size="small"
+                    shape="circle"
                     icon={
                       <div
-                        className={`text-500 flex items-center justify-center`}>
+                        className={`text-500 flex items-center justify-center`}
+                      >
                         {a?.kholbosonGereeniiId &&
                         a?.ebarimtAvsanEsekh === true ? (
-                          <Tooltip title='И-баримт хэвлэсэн байна'>
+                          <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
                             />
@@ -544,7 +548,7 @@ function tulburTootsoo({ token }) {
           render(a) {
             return (
               <Tooltip title={<div>{a}</div>}>
-                <div className='flex w-full truncate'>{a}</div>
+                <div className="flex w-full truncate">{a}</div>
               </Tooltip>
             );
           },
@@ -578,10 +582,10 @@ function tulburTootsoo({ token }) {
             align: "center",
             render(a) {
               return (
-                <div className='flex items-center justify-center'>
+                <div className="flex items-center justify-center">
                   <Button
-                    shape='circle'
-                    size='small'
+                    shape="circle"
+                    size="small"
                     onClick={() => guilgeeKholbyo(a)}
                     icon={iconAvya(a)}
                   />
@@ -602,16 +606,17 @@ function tulburTootsoo({ token }) {
             align: "center",
             render(a) {
               return (
-                <div className='flex items-center justify-center'>
+                <div className="flex items-center justify-center">
                   <Button
-                    size='small'
-                    shape='circle'
+                    size="small"
+                    shape="circle"
                     icon={
                       <div
-                        className={`text-500 flex items-center justify-center`}>
+                        className={`text-500 flex items-center justify-center`}
+                      >
                         {a?.kholbosonGereeniiId &&
                         a?.ebarimtAvsanEsekh === true ? (
-                          <Tooltip title='И-баримт хэвлэсэн байна'>
+                          <Tooltip title="И-баримт хэвлэсэн байна">
                             <CheckOutlined
                               style={{ fontSize: "16px", color: "green" }}
                             />
@@ -638,10 +643,10 @@ function tulburTootsoo({ token }) {
         align: "center",
         render(a) {
           return (
-            <div className='flex items-center justify-center'>
+            <div className="flex items-center justify-center">
               <Button
-                shape='circle'
-                size='small'
+                shape="circle"
+                size="small"
                 onClick={() => zardalKholbyo(a)}
                 icon={iconAvyaZardal(a)}
               />
@@ -655,9 +660,9 @@ function tulburTootsoo({ token }) {
 
   return (
     <Admin
-      title='Дансны хуулга'
-      khuudasniiNer='khuulga'
-      className='p-0 md:p-4'
+      title="Дансны хуулга"
+      khuudasniiNer="khuulga"
+      className="p-0 md:p-4"
       onSearch={(search) => {
         setDansniiKhuulgaKhuudaslalt((a) => ({
           ...a,
@@ -665,8 +670,9 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }));
       }}
-      tsonkhniiId='61c2c6a51c2830c4e6f90cad'
-      loading={isValidating}>
+      tsonkhniiId="61c2c6a51c2830c4e6f90cad"
+      loading={isValidating}
+    >
       {dansniiKhuulgaGaralt?.jagsaalt.length > 0 &&
         Number(bankniiGuilgeeToololt?.niit || 0) -
           Number(bankniiGuilgeeToololt?.kholboson || 0) >
@@ -678,8 +684,8 @@ function tulburTootsoo({ token }) {
               Number(bankniiGuilgeeToololt?.kholboson || 0),
           }),
         })}
-      <Card className='cardgrid col-span-12 md:p-5'>
-        <div className='hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12'>
+      <Card className="cardgrid col-span-12 md:p-5">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:py-0 md:gap-6 2xl:grid-cols-12">
           {[
             { too: bankniiGuilgeeToololt?.niit || 0, utga: "Нийт" },
             {
@@ -701,22 +707,23 @@ function tulburTootsoo({ token }) {
                     : ""
                 }`}
                 onClick={() => turulSongyo(mur.utga)}
-                data-aos='zoom-out-up'
-                data-aos-duration='1000'
-                data-aos-delay={1 + index + "00"}>
-                <div className='h-full w-[65vw] rounded-xl sm:w-auto'>
-                  <div className='rounded-xl p-3'>
-                    <div className='flex'>
+                data-aos="zoom-out-up"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
+              >
+                <div className="h-full w-[65vw] rounded-xl sm:w-auto">
+                  <div className="rounded-xl p-3">
+                    <div className="flex">
                       <div>
-                        <div className='text-3xl font-bold text-green-600'>
+                        <div className="text-3xl font-bold text-green-600">
                           {mur.too}
                         </div>
-                        <div className='text-base text-gray-500'>
+                        <div className="text-base text-gray-500">
                           {t(mur.utga)}
                         </div>
                       </div>
-                      <div className='ml-auto'>
-                        <div className='text-2xl text-green-600'>
+                      <div className="ml-auto">
+                        <div className="text-2xl text-green-600">
                           {mur.icon}
                         </div>
                       </div>
@@ -728,18 +735,20 @@ function tulburTootsoo({ token }) {
           })}
         </div>
         <div
-          className='mt-5 flex w-full flex-col md:flex-row'
-          data-aos='zoom-out-up'
-          data-aos-duration='1000'
-          data-aos-delay='200'>
-          <div className='flex'>
+          className="mt-5 flex w-full flex-col md:flex-row"
+          data-aos="zoom-out-up"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
+          <div className="flex">
             <RangePicker
+              className="min-w-max"
               style={{ marginBottom: "20px" }}
               value={ekhlekhOgnoo}
               onChange={setEkhlekhOgnoo}
             />
             {ajiltan?.erkh === "Admin" && (
-              <div className='mb-5 ml-4 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700'>
+              <div className="mb-5 ml-4 flex flex-row space-x-2 rounded-md bg-gray-200 dark:bg-gray-700">
                 {["orlogo", "zarlaga"].map((text) => (
                   <div
                     className={`cursor-pointer rounded-md p-2 ${
@@ -747,20 +756,22 @@ function tulburTootsoo({ token }) {
                         ? "dark bg-green-500 text-gray-50"
                         : ""
                     }`}
-                    onClick={() => setKhuulgaTurul(text)}>
+                    onClick={() => setKhuulgaTurul(text)}
+                  >
                     {t(text === "orlogo" ? "Орлого" : "Зарлага")}
                   </div>
                 ))}
               </div>
             )}
           </div>
-          <div className='flex w-full md:pt-1'>
-            <div className='w-40 md:ml-4'>
+          <div className="flex w-full md:pt-1">
+            <div className="w-40 md:ml-4">
               <Select
                 placeholder={t("Данс")}
                 style={{ width: "100%" }}
                 onChange={dansSongoy}
-                value={songogdsonDans?.dugaar}>
+                value={songogdsonDans?.dugaar}
+              >
                 {dansGaralt?.jagsaalt?.map((a) => (
                   <Select.Option key={a.dugaar} value={a.dugaar}>
                     <div>{a.dugaar}</div>
@@ -770,7 +781,7 @@ function tulburTootsoo({ token }) {
             </div>
 
             {songogdsonDans && (
-              <div className='ml-5 hidden flex-row space-x-2 p-1 font-medium md:flex'>
+              <div className="ml-5 hidden flex-row space-x-2 p-1 font-medium md:flex">
                 {t("Үлдэгдэл")}:{" "}
                 {uldegdel ? (
                   songogdsonDans?.bank === "tdb" ? (
@@ -785,12 +796,12 @@ function tulburTootsoo({ token }) {
               </div>
             )}
 
-            <div className='ml-auto'>
+            <div className="ml-auto">
               <Popover
                 content={() => (
-                  <div className='flex w-32 flex-col'>
+                  <div className="flex w-32 flex-col">
                     <a
-                      className='flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700'
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
                       onClick={() => {
                         const { Excel } = require("antd-table-saveas-excel");
                         const excelExport = new Excel();
@@ -837,17 +848,20 @@ function tulburTootsoo({ token }) {
                           ])
                           .addDataSource(dansniiKhuulgaGaralt?.jagsaalt || [])
                           .saveAs("Дансны хуулга.xlsx");
-                      }}>
+                      }}
+                    >
                       <DownloadOutlined style={{ fontSize: "18px" }} />
                       <label>{t("Татах")}</label>
                     </a>
                   </div>
                 )}
-                placement='bottom'
-                trigger='click'>
+                placement="bottom"
+                trigger="click"
+              >
                 <Button
-                  type='primary'
-                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
+                  type="primary"
+                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+                >
                   <span>Excel</span>
                   <DownOutlined width={5} />
                 </Button>
@@ -856,13 +870,14 @@ function tulburTootsoo({ token }) {
           </div>
         </div>
         <div
-          className='mt-5 overflow-auto '
-          data-aos='fade-left'
-          data-aos-duration='1000'
-          data-aos-delay='500'>
+          className="mt-5 overflow-auto "
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="500"
+        >
           <Table
             bordered
-            size='small'
+            size="small"
             scroll={{ y: "calc(100vh - 34rem)" }}
             columns={columns}
             dataSource={dansniiKhuulgaGaralt?.jagsaalt}
