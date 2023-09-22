@@ -395,7 +395,6 @@ function camera({ token }) {
           dunTuluv = false;
       });
       if (uilchluulegch) {
-        console.log("uilchluulegch", uilchluulegch);
         axios
           .get(
             `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${uilchluulegch?.mashiniiDugaar}/${uilchluulegch?.niitDun}`
@@ -991,6 +990,11 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.tuluv",
         render(v, parent, index) {
+          let dunTuluv = false;
+          parent?.tuukh?.map((mur)=>{
+            if(mur.tulukhDun > 0)
+              dunTuluv = true;
+          });
           const mur = parent.tuukh[0];
           if (parent.turul === "Үнэгүй") {
             return (
@@ -1002,8 +1006,7 @@ function camera({ token }) {
             );
           } else
             return (mur.tuluv === 0 ||
-              parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
-              !!mur?.tulukhDun ? (
+              parent?.zurchil === "Гарсан цаг тодорхойгүй!") && dunTuluv ? (
               <Popover
                 placement="bottom"
                 trigger="hover"
