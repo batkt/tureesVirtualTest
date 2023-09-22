@@ -970,15 +970,11 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.tuluv",
         render(v, parent, index) {
-          {
-            console.log("parnet", parent);
-          }
           let dunTuluv = false;
           parent?.tuukh?.map((mur) => {
             if (mur.tulukhDun > 0) dunTuluv = true;
           });
           const mur = parent.tuukh[0];
-          console.log("orj irj bui mur", mur);
           if (parent.turul === "Үнэгүй") {
             return (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
