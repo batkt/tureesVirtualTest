@@ -1695,8 +1695,8 @@ function camera({ token }) {
                 <div className="text-base font-bold">
                   {t("Сүүлийн гүйлгээ")}
                 </div>
-                <Button onClick={() => dansniiKhuulgaMutate()}>
-                  <ReloadOutlined />
+                <Button type="tertiary" onClick={() => dansniiKhuulgaMutate()}>
+                  Шалгах
                 </Button>
               </div>
               <div className="absolute right-3 top-3 text-3xl xl:hidden">
