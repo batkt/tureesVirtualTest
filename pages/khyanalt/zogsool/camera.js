@@ -338,6 +338,33 @@ function camera({ token }) {
           },
         ],
       };
+    if (!!khaikh) {
+      // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
+      result = {
+        $and: [
+          {
+            $or: [
+              {
+                "tuukh.tsagiinTuukh.garsanTsag": {
+                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                },
+              },
+              {
+                createdAt: {
+                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                },
+              },
+            ],
+          },
+          {
+            $or: [{ mashiniiDugaar: { $regex: khaikh, $options: "i" } }],
+          },
+        ],
+        ...result,
+      };
+    }
     if (!!khelber) {
       if (khelber === "tuluugui") {
         result = {
@@ -390,9 +417,8 @@ function camera({ token }) {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
       let dunTuluv = true;
-      uilchluulegch?.tuukh?.map((mur)=>{
-        if(mur.tulukhDun !== 0)
-          dunTuluv = false;
+      uilchluulegch?.tuukh?.map((mur) => {
+        if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
         console.log("uilchluulegch", uilchluulegch);
@@ -422,7 +448,10 @@ function camera({ token }) {
 
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
-        (uilchluulegch?.tuukh && uilchluulegch?.tuukh?.length > 0 && dunTuluv && uilchluulegch?.niitDun === 0)
+        (uilchluulegch?.tuukh &&
+          uilchluulegch?.tuukh?.length > 0 &&
+          dunTuluv &&
+          uilchluulegch?.niitDun === 0)
       ) {
         if (
           uilchluulegch?.tuukh &&
@@ -1957,12 +1986,12 @@ function camera({ token }) {
                           {t("Хөгжлийн бэрхшээлтэй иргэн")}
                         </Radio>
                         <Radio value="Хогны машин">{t("Хогны машин")}</Radio>
-                        {baiguullaga?._id === "63c0f31efe522048bf02086d"&&
-                        <>
-                          <Radio value="Түрээслэгч">{t("Түрээслэгч")}</Radio>
-                          <Radio value="Барилга">{t("Барилга")}</Radio>
-                        </>
-                        }
+                        {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
+                          <>
+                            <Radio value="Түрээслэгч">{t("Түрээслэгч")}</Radio>
+                            <Radio value="Барилга">{t("Барилга")}</Radio>
+                          </>
+                        )}
                       </Space>
                     ) : (
                       <Space direction="vertical">
