@@ -17,7 +17,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer }) {
         console.log("tuluv:", state);
       },
       style: {
-        controls: nemelteer ? false : true,
+        controls: nemelteer ? true : false,
       },
     });
 
