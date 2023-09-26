@@ -209,39 +209,39 @@ function KhuvaajTulukh({
     if (tuluv === 2 && songogdsonBank?.talbar === "khaan" && tulukhDun > 0) {
       setTerminal(true);
       axios
-          .post(
-              "http://127.0.0.1:27028",
-              {
-                service_name: "doSaleTransaction",
-                service_params: {
-                  db_ref_no: moment().format("YYYYMMDDhhmmss00"),
-                  amount: String(tulukhDun),
-                  vatps_bill_type: "1",
-                },
-              },
-              { timeout: 4000000 }
-          )
-          .then(({ data }) => {
-            if (data.status === true && data?.response?.response_code === "000") {
-              batalgaajuulya("khaan", data?.response);
-            } else if (
-                data.status === true &&
-                data?.response?.response_code === "366"
-            ) {
-              tulbur.find((a) => a.turul === "khaan").msg =
-                  data?.response?.response_msg;
-              setTulbur(tulbur);
-              message.warning(data?.response?.response_msg);
-              setLoading(false);
-              setTerminal(false);
-            }
-            setSongogdsonBank(null);
-          })
-          .catch((e) => {
-            // aldaaBarigch(e);
-            setTerminal(false);
+        .post(
+          "http://127.0.0.1:27028",
+          {
+            service_name: "doSaleTransaction",
+            service_params: {
+              db_ref_no: moment().format("YYYYMMDDhhmmss00"),
+              amount: String(tulukhDun),
+              vatps_bill_type: "1",
+            },
+          },
+          { timeout: 4000000 }
+        )
+        .then(({ data }) => {
+          if (data.status === true && data?.response?.response_code === "000") {
+            batalgaajuulya("khaan", data?.response);
+          } else if (
+            data.status === true &&
+            data?.response?.response_code === "366"
+          ) {
+            tulbur.find((a) => a.turul === "khaan").msg =
+              data?.response?.response_msg;
+            setTulbur(tulbur);
+            message.warning(data?.response?.response_msg);
             setLoading(false);
-          });
+            setTerminal(false);
+          }
+          setSongogdsonBank(null);
+        })
+        .catch((e) => {
+          // aldaaBarigch(e);
+          setTerminal(false);
+          setLoading(false);
+        });
     }
     // if()
   }
@@ -452,11 +452,11 @@ function KhuvaajTulukh({
                           {songogdsonBusadTurul.ner}
                         </div>
                         <InputNumber
-                          disabled={
-                            !value.khunglukh &&
-                            ((niitDun ? niitDun : data?.tulukhDun) -
-                              tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                          }
+                          // disabled={
+                          //   !value.khunglukh &&
+                          //   ((niitDun ? niitDun : data?.tulukhDun) -
+                          //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
+                          // }
                           autoComplete="off"
                           min={0}
                           ref={khunglukhRef}
@@ -539,11 +539,11 @@ function KhuvaajTulukh({
                       </div>
                       <InputNumber
                         placeholder="Мөнгөн дүн"
-                        disabled={
-                          !value[songogdsonBusadTurul.talbar] &&
-                          (data?.tulukhDun -
-                            tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                        }
+                        // disabled={
+                        //   !value[songogdsonBusadTurul.talbar] &&
+                        //   (data?.tulukhDun -
+                        //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
+                        // }
                         autoComplete="off"
                         ref={songogdsonBusadTurul.ref}
                         value={value[songogdsonBusadTurul.talbar]}
@@ -634,11 +634,11 @@ function KhuvaajTulukh({
                     </div>
                     <InputNumber
                       placeholder="Мөнгөн дүн"
-                      disabled={
-                        !value[songogdsonBank.talbar] &&
-                        (data?.tulukhDun -
-                          tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
-                      }
+                      // disabled={
+                      //   !value[songogdsonBank.talbar] &&
+                      //   (data?.tulukhDun -
+                      //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0
+                      // }
                       autoComplete="off"
                       ref={songogdsonBank.ref}
                       value={value[songogdsonBank.talbar]}
@@ -735,12 +735,12 @@ function KhuvaajTulukh({
                       </div>
                       <InputNumber
                         placeholder="Мөнгөн дүн"
-                        disabled={
-                          !value[songogdTulburiinKhelber.ner] &&
-                          ((data?.tulukhDun -
-                            tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
-                            !!qpayerTulukh)
-                        }
+                        // disabled={
+                        //   !value[songogdTulburiinKhelber.ner] &&
+                        //   ((data?.tulukhDun -
+                        //     tulbur.reduce((a, b) => a + b.dun, 0) || 0) === 0 ||
+                        //     !!qpayerTulukh)
+                        // }
                         autoComplete="off"
                         ref={songogdTulburiinKhelber.ref}
                         value={value[songogdTulburiinKhelber.ner]}

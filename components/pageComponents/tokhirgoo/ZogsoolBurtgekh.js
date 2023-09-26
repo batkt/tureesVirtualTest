@@ -25,8 +25,6 @@ import { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import moment from "moment";
-import useJagsaalt from "../../../hooks/useJagsaalt";
-import getConfig from "next/config";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
@@ -52,7 +50,6 @@ function ZogsoolBurtgekh(
           }
         else continue;
       }
-    console.log('  after- ',toForm);
     form.setFieldsValue({ ...toForm });
   } else method = createMethod;
   useEffect(() => {
@@ -100,9 +97,9 @@ function ZogsoolBurtgekh(
     <Form form={form} autoComplete="off">
       {!!data && <Form.Item name="_id" hidden></Form.Item>}
       <Form.Item name="barilgiinId" hidden></Form.Item>
-      <div className="grid grid-cols-4 gap-10">
-        <div className="col-span-2">
-          <div className="grid grid-cols-4 gap-5 p-3">
+      <div className="grid grid-cols-12 gap-6 h-[75vh]">
+        <div className="col-span-4">
+          <div className="grid grid-cols-4 gap-5">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
@@ -170,17 +167,19 @@ function ZogsoolBurtgekh(
                   className="m-0"
                   name="undsenMin"
               >
-                <Switch defaultChecked={data?.undsenMin} checkedChildren="мин" unCheckedChildren="цаг" />
+                <Switch className="bg-gray-400" defaultChecked={data?.undsenMin} checkedChildren="мин" unCheckedChildren="цаг" />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Гадна зогсоол сонгох")}
               </div>
+              <div className="text-xs text-gray-400">
+                Зөвхөн дотор зогсоол нэмэх үед сонгоно уу!
+              </div>
             </div>
             <div className="col-span-2">
               <Form.Item
-                extra="Зөвхөн дотор зогсоол нэмэх үед сонгоно уу!!"
                 className="m-0"
                 name="gadnaZogsooliinId"
               >
@@ -204,25 +203,33 @@ function ZogsoolBurtgekh(
             </div>
           </div>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-4">
           <Form.List name="tulburuud">
             {(fields, { add, remove }) => (
-              <>
-                <div
-                  className="my-5 space-y-3 overflow-y-auto py-2"
-                  style={{ maxHeight: "50vh" }}
-                >
-                  {fields.map(({ key, name, fieldKey, ...restField }) => (
-                      <Tariff
-                          key={key}
-                          name={name}
-                          fieldKey={fieldKey}
-                          restField={restField}
-                          fields={fields}
-                          remove={remove}
-                      />
-                  ))}
-{/*
+                <>
+                  <Button
+                      icon={<PlusOutlined />}
+                      className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                      type="dashed"
+                      onClick={() => add()}
+                  >
+                    Тариф нэмэх
+                  </Button>
+                  <div
+                      className="space-y-3 overflow-y-auto"
+                      style={{ maxHeight: "70vh" }}
+                  >
+                    {fields.map(({ key, name, fieldKey, ...restField }) => (
+                        <Tariff
+                            key={key}
+                            name={name}
+                            fieldKey={fieldKey}
+                            restField={restField}
+                            fields={fields}
+                            remove={remove}
+                        />
+                    ))}
+                    {/*
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div
                       key={fieldKey}
@@ -272,24 +279,26 @@ function ZogsoolBurtgekh(
                     </div>
                   ))}
 */}
-                </div>
-                <Button
-                  icon={<PlusOutlined />}
-                  className="mb-5 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
-                  type="dashed"
-                  onClick={() => add()}
-                >
-                  Тариф нэмэх
-                </Button>
-              </>
+                  </div>
+                </>
             )}
           </Form.List>
+        </div>
+        <div className="col-span-4">
           <Form.List name="khaalga">
             {(fields, { add, remove }) => (
               <>
+                <Button
+                    icon={<PlusOutlined />}
+                    className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                    type="dashed"
+                    onClick={() => add()}
+                >
+                  Хаалга нэмэх
+                </Button>
                 <div
-                  className="mb-5 space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "50vh" }}
+                  className="space-y-3 overflow-y-auto"
+                  style={{ maxHeight: "70vh" }}
                 >
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
@@ -303,14 +312,6 @@ function ZogsoolBurtgekh(
                     />
                   ))}
                 </div>
-                <Button
-                  icon={<PlusOutlined />}
-                  className="flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
-                  type="dashed"
-                  onClick={() => add()}
-                >
-                  Хаалга нэмэх
-                </Button>
               </>
             )}
           </Form.List>
@@ -337,11 +338,11 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
   return (
     <div
       key={fieldKey}
-      className=" relative mb-5 rounded-md border bg-yellow-50 px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
+      className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
-      <Divider className="pb-5">
+      <div className="text-base flex justify-center mb-2 font-bold">
         {t("Хаалга")} {fieldKey + 1}
-      </Divider>
+      </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">
         <div
           onClick={() => remove(name)}
@@ -378,6 +379,15 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
       <Form.List name={[name, "camera"]}>
         {(talbaruud, { add, remove }) => (
           <>
+            <Button
+                className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+            >
+              {t("Камер нэмэх")}
+            </Button>
             {talbaruud.map((talbar) => (
               <div className="mt-5 flex">
                 <Form.Item
@@ -396,20 +406,11 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
                   </Select>
                 </Form.Item>
                 <MinusCircleOutlined
-                  className="ml-2"
+                  className="ml-2 mt-2"
                   onClick={() => remove(talbar.name)}
                 />
               </div>
             ))}
-            <Button
-              className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-              type="dashed"
-              onClick={() => add()}
-              block
-              icon={<PlusOutlined />}
-            >
-              {t("Камер нэмэх")}
-            </Button>
           </>
         )}
       </Form.List>
@@ -423,11 +424,11 @@ function Tariff({ name, fieldKey, restField, remove }) {
   return (
       <div
           key={fieldKey}
-          className=" relative mb-5 rounded-md border bg-green-50  px-10 py-4 shadow-md dark:bg-gray-700 2xl:pr-20"
+          className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
       >
-        <Divider className="pb-5">
+        <div className="text-base flex justify-center mb-2 font-bold">
           {t("Тариф")} {fieldKey + 1}
-        </Divider>
+        </div>
         <div className="grid w-full grid-cols-4 items-center gap-5">
           <div
               onClick={() => remove(name)}
@@ -453,6 +454,16 @@ function Tariff({ name, fieldKey, restField, remove }) {
         <Form.List name={[name, "tariff"]}>
           {(muruud, { add, remove }) => (
               <>
+                <Button
+                    className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+                    type="dashed"
+                    onClick={() => add()}
+                    // id={"tariff"}
+                    block
+                    icon={<PlusOutlined />}
+                >
+                  {t("Нэмэх")}
+                </Button>
                 {muruud.map((mur, index) => (
                     <div key={index} className="grid mt-3 w-full grid-cols-4 items-end flex-center gap-5">
                       <Form.Item
@@ -496,16 +507,6 @@ function Tariff({ name, fieldKey, restField, remove }) {
                       </div>
                     </div>
                 ))}
-                <Button
-                    className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-                    type="dashed"
-                    onClick={() => add()}
-                    // id={"tariff"}
-                    block
-                    icon={<PlusOutlined />}
-                >
-                  {t("Нэмэх")}
-                </Button>
               </>
           )}
         </Form.List>

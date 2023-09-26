@@ -66,17 +66,17 @@ export const AuthProvider = ({ children }) => {
     setBaiguulgiinErkhiinJagsaalt(JSON.parse(erkh) || []);
 
     window.addEventListener("online", () =>
-      message.success(t("Интернэт ертөнцөд тавтай морил"))
+      message.success(t("Интернэтэд холбогдлоо"))
     );
     window.addEventListener("offline", () =>
-      message.warning(t("Таны интернэт тасарсан байна"))
+      message.warning(t("Таны интернэт тасарсан байна"), 20)
     );
     return () => {
       window.removeEventListener("online", () =>
-        message.success(t("Интернэт ертөнцөд тавтай морил"))
+        message.success(t("Интернэтэд холбогдлоо"))
       );
       window.removeEventListener("offline", () =>
-        message.warning(t("Таны интернэт тасарсан байна"))
+        message.warning(t("Таны интернэт тасарсан байна"), 20)
       );
     };
   }, []);

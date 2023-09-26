@@ -71,6 +71,7 @@ import StackStream from "./stackStream";
 import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
+import R2WPlayerComponent from "components/streamPlayer";
 
 function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -421,7 +422,6 @@ function camera({ token }) {
         if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
-        console.log("uilchluulegch", uilchluulegch);
         axios
           .get(
             `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${uilchluulegch?.mashiniiDugaar}/${uilchluulegch?.niitDun}`
@@ -1020,6 +1020,10 @@ function camera({ token }) {
         width: "10rem",
         dataIndex: "tuukh.tuluv",
         render(v, parent, index) {
+          let dunTuluv = false;
+          parent?.tuukh?.map((mur) => {
+            if (mur.tulukhDun > 0) dunTuluv = true;
+          });
           const mur = parent.tuukh[0];
           if (parent.turul === "Үнэгүй") {
             return (
@@ -1032,7 +1036,7 @@ function camera({ token }) {
           } else
             return (mur.tuluv === 0 ||
               parent?.zurchil === "Гарсан цаг тодорхойгүй!") &&
-              !!mur?.tulukhDun ? (
+              dunTuluv ? (
               <Popover
                 placement="bottom"
                 trigger="hover"
@@ -1041,7 +1045,7 @@ function camera({ token }) {
                     <a
                       className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                       onClick={() => {
-                        !!mur?.tulukhDun
+                        parent?.niitDun && parent?.niitDun > 0
                           ? tulburTulyu(
                               mur,
                               parent._id,
@@ -1515,6 +1519,12 @@ function camera({ token }) {
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream1 ip={camerVal[0]} />
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    PASSWD={"123456"}
+                    ip={camerVal[0]}
+                  />
                 ) : (
                   ""
                 )}
@@ -1602,6 +1612,12 @@ function camera({ token }) {
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream2 ip={camerVal[1]} />
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    PASSWD={"123456"}
+                    Camer={camerVal[1]}
+                  />
                 ) : (
                   ""
                 )}
