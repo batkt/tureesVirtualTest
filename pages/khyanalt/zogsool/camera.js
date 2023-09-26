@@ -1523,7 +1523,7 @@ function camera({ token }) {
                   <R2WPlayerComponent
                     USER={"admin"}
                     PASSWD={"123456"}
-                    ip={camerVal[0]}
+                    Camer={camerVal[0]}
                   />
                 ) : (
                   ""
