@@ -339,6 +339,33 @@ function camera({ token }) {
           },
         ],
       };
+    if (!!khaikh) {
+      // use uilchilgee search hiih regex querynd daragdsan uhchir queryn dotor search regex bijiw
+      result = {
+        $and: [
+          {
+            $or: [
+              {
+                "tuukh.tsagiinTuukh.garsanTsag": {
+                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                },
+              },
+              {
+                createdAt: {
+                  $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+                  $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+                },
+              },
+            ],
+          },
+          {
+            $or: [{ mashiniiDugaar: { $regex: khaikh, $options: "i" } }],
+          },
+        ],
+        ...result,
+      };
+    }
     if (!!khelber) {
       if (khelber === "tuluugui") {
         result = {
