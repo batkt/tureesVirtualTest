@@ -31,7 +31,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer }) {
   }, []);
 
   useEffect(() => {
-    if (Camer && player && !nemelteer) {
+    if (Camer && player) {
       player.play(rtspUrl);
     }
   }, [Camer, player]);
