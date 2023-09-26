@@ -72,6 +72,7 @@ import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
+import StackIkhNaydStream from "./stackIkhnaydStream";
 
 function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -1935,6 +1936,8 @@ function camera({ token }) {
                         {/*baiguullagiin id ni FoodCity.iin id */}
                         {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                           <StackStream tuluv={drawerOpen} />
+                        ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                          <StackIkhNaydStream barilgiinId={barilgiinId} />
                         ) : (
                           ""
                         )}
