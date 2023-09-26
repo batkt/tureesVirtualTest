@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import Loader from "./loader";
-import { Button, Drawer, Switch, Tooltip } from "antd";
+import {Button, Drawer, Switch, Tooltip, Alert} from "antd";
 import {
   CalendarOutlined,
   CloseOutlined,
@@ -71,6 +71,8 @@ function Admin({
   const [visible, setVisible] = useState(false);
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
+  const [isOnline, setIsOnline] = useState(false);
+
   function getOS() {
     var userAgent = navigator.userAgent,
       platform = navigator.platform,
@@ -99,6 +101,9 @@ function Admin({
     if (window) {
       i18n.changeLanguage(window.localStorage.getItem("Localelanguage"));
     }
+    window.addEventListener("offline", () =>
+        setIsOnline(true)
+    );
   }, []);
 
   function onClickSearch() {
@@ -160,6 +165,14 @@ function Admin({
           setTurulZagvar(false);
       }}
       className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4">
+      {isOnline&&
+      <Alert
+          style={{bottom:20}}
+          className="absolute bg-red-100"
+          message="Интернэт холболтоо шалгана уу!"
+          type="error"
+          showIcon
+      />}
       <Drawer
         placement={"right"}
         closable={false}

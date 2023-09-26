@@ -139,10 +139,16 @@ function useSonorduulga(token) {
         }
       });
     }
+    if(ajiltan?._id)
+      socket().on(`ajiltan${ajiltan?._id}`, (res) => {
+          if(res==='logout')
+              window.location.href = "/";
+      });
     return () => {
       socket().off(`baiguullaga${baiguullaga?._id}`);
+      socket().off(`ajiltan${ajiltan?._id}`);
     };
-  }, [baiguullaga]);
+  }, [baiguullaga, ajiltan]);
 
   return {
     setKhuudaslalt,
