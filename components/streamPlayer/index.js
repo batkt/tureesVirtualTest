@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
-function R2WPlayerComponent({ Camer, USER, PASSWD }) {
+function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer }) {
   const rtspUrl = useMemo(() => {
     return `rtsp://${USER}:${PASSWD}@${Camer}:554/stream`;
   }, [Camer, USER, PASSWD]);
@@ -16,6 +16,9 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
       },
+      style: {
+        controls: nemelteer ? false : true,
+      },
     });
 
     setPlayer(newPlayer);
@@ -28,7 +31,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
   }, []);
 
   useEffect(() => {
-    if (Camer && player) {
+    if (Camer && player && !nemelteer) {
       player.play(rtspUrl);
     }
   }, [Camer, player]);

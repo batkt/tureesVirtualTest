@@ -27,6 +27,7 @@ function StackIkhNaydStream({ barilgiinId }) {
                 Camer={mur}
                 PASSWD={"123456"}
                 USER={"admin"}
+                nemelteer={true}
               />
             </div>
           </div>
