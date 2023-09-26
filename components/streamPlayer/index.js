@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
-function R2WPlayerComponent({ camernuud, USER, PASSWD }) {
+function R2WPlayerComponent({ Camer, USER, PASSWD }) {
   const [rtspUrl, setRtspUrl] = useState(
-    `rtsp://${USER}:${PASSWD}@192.168.0.101:554/stream`
+    `rtsp://${USER}:${PASSWD}@${Camer}:554/stream`
   );
   console.log("url", rtspUrl);
   const [player, setPlayer] = useState(null);
-
-  console.log("camernuud", camernuud);
 
   useEffect(() => {
     const newPlayer = new R2WPlayer({

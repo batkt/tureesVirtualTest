@@ -1496,7 +1496,7 @@ function camera({ token }) {
                   <R2WPlayerComponent
                     USER={"admin"}
                     PASSWD={"123456"}
-                    ip={[camerVal[0], camerVal[1]]}
+                    ip={camerVal[0]}
                   />
                 ) : (
                   ""
@@ -1585,6 +1585,12 @@ function camera({ token }) {
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                   <Stream2 ip={camerVal[1]} />
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    PASSWD={"123456"}
+                    Camer={camerVal[1]}
+                  />
                 ) : (
                   ""
                 )}
