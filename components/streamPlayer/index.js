@@ -13,9 +13,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
       logEnabled: true,
-      style: {
-        controls: true,
-      },
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
       },
