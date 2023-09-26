@@ -11,7 +11,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
   useEffect(() => {
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
-      containerId: "videoContainer",
+      containerId: `videoContainer${Camer}`,
       logEnabled: true,
       style: {
         controls: true,
@@ -36,12 +36,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
     }
   }, [Camer, player]);
 
-  return (
-    <div
-      id="videoContainer"
-      style={{ border: "0", width: "100%", height: "100%" }}
-    ></div>
-  );
+  return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 }
 
 export default R2WPlayerComponent;
