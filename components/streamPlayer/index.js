@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD }) {
-  const [rtspUrl, setRtspUrl] = useState(
-    `rtsp://${USER}:${PASSWD}@${Camer}:554/stream`
-  );
-  console.log("url", rtspUrl);
+  const rtspUrl = useMemo(() => {
+    return `rtsp://${USER}:${PASSWD}@${Camer}:554/stream`;
+  }, [Camer, USER, PASSWD]);
+
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
@@ -30,51 +30,17 @@ function R2WPlayerComponent({ Camer, USER, PASSWD }) {
     };
   }, []);
 
-  const play = () => {
-    if (player) {
+  useEffect(() => {
+    if (Camer && player) {
       player.play(rtspUrl);
     }
-  };
-
-  const destroy = () => {
-    if (player) {
-      player.destroy();
-    }
-  };
-
-  const handleInputChange = (e) => {
-    setRtspUrl(e.target.value);
-  };
+  }, [Camer, player]);
 
   return (
-    <div>
-      <div
-        id="videoContainer"
-        style={{ border: "0", width: "100%", height: "100%" }}
-      ></div>
-      <br />
-      <input
-        type="text"
-        id="rtspUrl"
-        value={rtspUrl}
-        style={{ width: "704px" }}
-        onChange={handleInputChange}
-      />
-      <br />
-      <input
-        type="button"
-        value="Тоглуулах"
-        style={{ width: "100px" }}
-        onClick={play}
-      />
-      &nbsp;&nbsp;
-      <input
-        type="button"
-        value="Цуцлах"
-        style={{ width: "100px" }}
-        onClick={destroy}
-      />
-    </div>
+    <div
+      id="videoContainer"
+      style={{ border: "0", width: "100%", height: "100%" }}
+    ></div>
   );
 }
 
