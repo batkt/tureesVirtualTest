@@ -40,6 +40,7 @@ import {
   UploadOutlined,
   PrinterOutlined,
   CopyOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -1690,7 +1691,14 @@ function camera({ token }) {
                 guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
               }`}
             >
-              <div className="text-base font-bold">{t("Сүүлийн гүйлгээ")}</div>
+              <div className="flex w-full justify-between">
+                <div className="text-base font-bold">
+                  {t("Сүүлийн гүйлгээ")}
+                </div>
+                <Button onClick={() => dansniiKhuulgaMutate()}>
+                  <ReloadOutlined />
+                </Button>
+              </div>
               <div className="absolute right-3 top-3 text-3xl xl:hidden">
                 <CloseCircleOutlined
                   onClick={() => setGuilgeeKharakh(false)}
