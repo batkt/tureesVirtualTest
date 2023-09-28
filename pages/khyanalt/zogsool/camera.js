@@ -1516,7 +1516,7 @@ function camera({ token }) {
     setModalOpen({ bool: false, item: null, type: "" });
   };
   const excel = new Excel();
-  // console.log('0-0--0', baiguullaga);
+  console.log("0-0--0", baiguullaga);
   return (
     <Admin
       title="Камер"
@@ -1568,7 +1568,7 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={554}
                   />
-                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                ) : baiguullaga?._id === "64fe8edc54a669717ad657ac" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     PASSWD={"admin"}
@@ -1671,7 +1671,7 @@ function camera({ token }) {
                     Camer={camerVal[1]}
                     PORT={554}
                   />
-                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                ) : baiguullaga?._id === "64fe8edc54a669717ad657ac" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
                     PASSWD={"admin"}
