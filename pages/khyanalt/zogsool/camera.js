@@ -271,7 +271,10 @@ function camera({ token }) {
     };
   }, [baiguullaga?._id, ajiltan, barilgiinId]);
 
-  const { jagsaalt } = useJagsaalt("/zogsoolJagsaalt", que);
+  const { jagsaalt, mutate: toololtMutate } = useJagsaalt(
+    "/zogsoolJagsaalt",
+    que
+  );
 
   const query = useMemo(() => {
     let result = {};
@@ -444,6 +447,8 @@ function camera({ token }) {
       ) {
         console.log("orohKhaalga", uilchluulegch?.cameraIP);
         khaalgaNeey(uilchluulegch?.cameraIP);
+        toololtMutate();
+        zogsoolTusBuriinTooMutate();
       } else {
         onRefresh();
       }
@@ -465,6 +470,8 @@ function camera({ token }) {
             uilchluulegch?.tuukh?.[0]?.garsanKhaalga
           );
           khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
+          toololtMutate();
+          zogsoolTusBuriinTooMutate();
         }
       }
       // console.log(uilchluulegch);
@@ -499,11 +506,11 @@ function camera({ token }) {
     const todayEnd = moment().endOf("day").toDate();
     return {
       "tuukh.tsagiinTuukh.garsanTsag": { $exists: false },
+      "tuukh.tuluv": { $ne: -2 },
       createdAt: {
         $gte: todayStart,
         $lt: todayEnd,
       },
-      "tuukh.tuluv": { $ne: -2 },
     };
   }, [uilchluulegchGaralt]);
 
@@ -576,6 +583,8 @@ function camera({ token }) {
     return {
       ekhlekhOgnoo: moment().startOf("day").format("YYYY-MM-DD 00:00:00"),
       duusakhOgnoo: moment().endOf("day").format("YYYY-MM-DD 23:59:59"),
+      "tuukh.tsagiinTuukh.garsanTsag": { $exists: false },
+      "tuukh.tuluv": { $ne: -2 },
     };
   }, [uilchluulegchGaralt]);
   // console.log('----000', uilchluulegchTooGaralt);
@@ -600,8 +609,8 @@ function camera({ token }) {
   };
   const {
     dansniiKhuulgaGaralt,
-    setDansniiKhuulgaKhuudaslalt,
     dansniiKhuulgaMutate,
+    isValidating: dansKhuleelt,
   } = useDansKhuulga(
     token,
     baiguullaga?._id,
@@ -618,6 +627,8 @@ function camera({ token }) {
     uilchluulegchMutate();
     uilchluulegchTooMutate();
     dansniiKhuulgaMutate();
+    toololtMutate();
+    zogsoolTusBuriinTooMutate();
   }
   const minToHour = (m) => {
     let res;
@@ -1695,7 +1706,11 @@ function camera({ token }) {
                 <div className="text-base font-bold">
                   {t("Сүүлийн гүйлгээ")}
                 </div>
-                <Button type="tertiary" onClick={() => dansniiKhuulgaMutate()}>
+                <Button
+                  className={`${guilgeeKharakh === false ? "mr-0" : "mr-8"}`}
+                  type="tertiary"
+                  onClick={() => dansniiKhuulgaMutate()}
+                >
                   Шалгах
                 </Button>
               </div>
@@ -1710,6 +1725,7 @@ function camera({ token }) {
                 className="mt-3 overflow-auto"
                 scroll={{ y: "calc(100vh / 4.5)" }}
                 size="small"
+                loading={dansKhuleelt}
                 dataSource={dansniiKhuulgaGaralt?.jagsaalt}
                 columns={baganuud}
               />

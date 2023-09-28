@@ -220,11 +220,23 @@ function TulburiinDelgerenguiTailan(
         <div className="p-6" ref={printRef}>
           {tulburiinMedeelel.map((a, i) => {
             return (
-              <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${a.too}) : ${
-                a.dun
-              } ₮`}</div>
+              <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
+                a.too
+              }) : ${formatNumber(a.dun)} ₮`}</div>
             );
           })}
+          <div className="flex items-center justify-start gap-2">
+            <div>
+              Нийт дүн
+              {`(${tulburiinMedeelel?.reduce((a, b) => a + b?.too, 0) || 0})`}:
+            </div>
+            <div>
+              {formatNumber(
+                tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
+              )}
+              ₮
+            </div>
+          </div>
         </div>
       </div>
       <DatePicker.RangePicker
@@ -268,6 +280,15 @@ function TulburiinDelgerenguiTailan(
               </div>
             );
           })}
+          <div className="border border-dashed bg-gray-600" />
+          <div className="flex items-center justify-between text-lg font-[600]">
+            <div className="flex ">Нийт дүн:</div>
+            <div>
+              {formatNumber(
+                tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
+              ) + "₮"}
+            </div>
+          </div>
         </div>
       ) : (
         <div className="flex h-52 w-full items-center justify-center">
