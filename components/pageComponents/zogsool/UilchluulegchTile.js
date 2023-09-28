@@ -11,7 +11,6 @@ function UilchluulegchTile({
   ezemshigchiinUtas,
   ...props
 }) {
-  console.log("props", props);
   return (
     <div className="mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 shadow-2xl dark:bg-gray-900">
       <div className="flex w-full flex-row">
@@ -27,7 +26,7 @@ function UilchluulegchTile({
         <div>
           {props?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
             minToHour(
-              props?.tuukh?.reduce((a, b) => a + (b.niitKhugatsaa || 0), 0)
+              props?.tuukh?.reduce((a, b) => a + (b.niitKhugatsaa || 0), 0 || 0)
             )
           ) : (
             <TsagToololt

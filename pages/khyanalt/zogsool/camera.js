@@ -416,9 +416,7 @@ function camera({ token }) {
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
-    console.log("oroh camera", a1);
     const a2 = generateChild(jagsaalt, "Гарах");
-    console.log("garah camera", a2);
     setCameraData([a1, a2]);
   }, [jagsaalt]);
   useEffect(() => {
@@ -1518,7 +1516,6 @@ function camera({ token }) {
     setModalOpen({ bool: false, item: null, type: "" });
   };
   const excel = new Excel();
-  console.log("0-0--0", baiguullaga);
   return (
     <Admin
       title="Камер"
