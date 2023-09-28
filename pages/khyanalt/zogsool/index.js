@@ -121,19 +121,18 @@ function Zogsool({ token }) {
   const [zogsoolId, setZogsoolId] = useState();
   const [orlogo, setOrlogo] = useState([]);
   const [tulbur, setTulbur] = useState("");
+  const [selectionType] = useState("checkbox");
   const [tuluv, setTuluv] = useState("");
   const [idevkhteiSongoson, setIdevkhteiSongoson] = useState(false);
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
   const [selectedRowkeys, setSelectedRowkeys] = useState([]);
+  const onSelectChange = (newSelectedRowKeys) => {
+    setSelectedRowkeys(newSelectedRowKeys);
+  };
   const rowSelection = {
-    preserveSelectedRowKeys: true,
     selectedRowkeys,
     onChange: onSelectChange,
   };
-
-  function onSelectChange(e) {
-    setSelectedRowkeys(e);
-  }
 
   console.log("Songogdson Baganuud:", selectedRowkeys);
 
@@ -252,13 +251,16 @@ function Zogsool({ token }) {
         onOk: () => {
           uilchilgee(token)
             .post("/uilchluulegchTseverliy", { utguud: songogdson })
-            .then(({ status }) => {
-              if (status === 200) {
-                notification.info({
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                notification.success({
                   message: "Цэвэрлэгдлээ",
                   duration: 1,
                 });
-                uilchluulegchMutate();
+                setTimeout(() => {
+                  uilchluulegchMutate();
+                  setSelectedRowkeys([]);
+                }, 1000);
               }
             })
             .catch((err) => aldaaBarigch(err));
@@ -396,7 +398,6 @@ function Zogsool({ token }) {
     const shinecol =
       shuult.name === "Түрээслэгч"
         ? [
-            Table.SELECTION_COLUMN,
             {
               title: t("Талбай"),
               align: "center",
@@ -418,7 +419,6 @@ function Zogsool({ token }) {
           ]
         : [];
     return [
-      Table.SELECTION_COLUMN,
       {
         title: "№",
         align: "center",
@@ -780,7 +780,7 @@ function Zogsool({ token }) {
         ),
       },*/
     ];
-  }, [shuult, i18n.language, ajiltniiNers, tulbur, tuluv]);
+  }, [shuult, i18n.language, ajiltniiNers, tulbur, tuluv, selectedRowkeys]);
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -1104,8 +1104,8 @@ function Zogsool({ token }) {
             scroll={{ y: "calc(100vh - 30rem)" }}
             size="small"
             bordered
-            rowKey={(row) => row._id}
             rowSelection={rowSelection}
+            rowKey={"_id"}
             columns={columns}
             onChange={onChangeTable}
             pagination={{

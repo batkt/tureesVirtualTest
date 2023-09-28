@@ -75,7 +75,7 @@ import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraT
 import R2WPlayerComponent from "components/streamPlayer";
 import StackIkhNaydStream from "./stackIkhnaydStream";
 
-function TsagToololt({ ekhlekhTsag }) {
+export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
   const tsagTootsoolur = () => {
@@ -416,7 +416,9 @@ function camera({ token }) {
 
   useEffect(() => {
     const a1 = generateChild(jagsaalt, "Орох");
+    console.log("oroh camera", a1);
     const a2 = generateChild(jagsaalt, "Гарах");
+    console.log("garah camera", a2);
     setCameraData([a1, a2]);
   }, [jagsaalt]);
   useEffect(() => {
@@ -1524,7 +1526,7 @@ function camera({ token }) {
       khuudasniiNer="Camera"
       fixedZagvarNeegdsenEsekh={guilgeeKharakh}
       setTurulZagvar={setGuilgeeKharakh}
-      className="relative p-2 sm:p-4"
+      className="relative p-2 pb-24 sm:p-4"
       onSearch={(search) => {
         setUilchluulegchKhuudaslalt((a) => ({
           ...a,
@@ -1793,7 +1795,7 @@ function camera({ token }) {
                 {t("Гүйлгээ харах")}
               </Button>
             </div>
-            <div className="flex flex-col gap-2 md:flex-row">
+            <div className="flex flex-col gap-2 lg:flex-row">
               <div
                 data-aos="fade-right"
                 data-aos-duration="1000"
@@ -1814,7 +1816,7 @@ function camera({ token }) {
                 ></div> */}
               </div>
               <div
-                className="mb-5 flex w-full justify-between sm:justify-end md:mb-0 md:ml-auto lg:w-auto"
+                className="mb-5 flex w-full flex-col justify-between gap-2 sm:justify-end md:mb-0 md:ml-auto lg:w-auto lg:flex-row lg:gap-0"
                 data-aos="fade-left"
                 data-aos-duration="1000"
                 data-aos-delay="300"
@@ -1823,178 +1825,184 @@ function camera({ token }) {
                   ajiltan?.erkh === "Admin") && (
                   <Button
                     onClick={() => tulburiinDelgerengui()}
-                    className="mr-3 w-32 sm:w-auto"
+                    className="mr-3 w-auto"
                     icon={<PrinterOutlined />}
                   >
                     {t("Төлбөрийн дэлгэрэнгүй")}
                   </Button>
                 )}
-                <Button
-                  className="mr-3 w-32 sm:w-auto"
-                  onClick={() =>
-                    setModalOpen({
-                      bool: true,
-                      item: null,
-                      type: "dugaarBurtgekh",
-                    })
-                  }
-                  type="primary"
-                >
-                  {t("Машин бүртгэх")} [ + ]
-                </Button>
-                <Popover
-                  content={() => (
-                    <div className="flex w-32 flex-col">
-                      <a
-                        className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                        // onClick={() => {
-                        //     excelTatajAvya(
-                        //         token,
-                        //         "zogsoolUilchluulegch",
-                        //         uilchluulegchGaralt.niitMur,
-                        //         exlCol(),
-                        //         query,
-                        //         order,
-                        //         "Зогсоол"
-                        //     );
-                        // }}
-                        onClick={() => {
-                          uilchilgee(token)
-                            .get("zogsoolUilchluulegch", {
-                              params: {
-                                order: order,
-                                query: query,
-                                khuudasniiKhemjee: uilchluulegchGaralt?.niitMur,
-                              },
-                            })
-                            .then(({ data }) => {
-                              excel
-                                .addSheet("Камер")
-                                .addColumns([
-                                  {
-                                    title: "№",
-                                    align: "center",
-                                    dataIndex: "dugaar",
-                                    width: "2rem",
-                                    __style__: { h: "center" },
-                                    render: (text, record, index) =>
-                                      (data?.khuudasniiDugaar || 0) *
-                                        (data?.khuudasniiKhemjee || 0) -
-                                      (data?.khuudasniiKhemjee || 0) +
-                                      index +
-                                      1,
-                                  },
-                                  {
-                                    title: t("Дугаар1"),
-                                    dataIndex: "mashiniiDugaar",
-                                    __style__: { h: "center" },
-                                    render(v) {
-                                      return String(v).toUpperCase();
-                                    },
-                                  },
-                                  {
-                                    title: t("Орсон"),
-                                    dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
-                                    __style__: { h: "center" },
-                                    render(v, p) {
-                                      const d =
-                                        p.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag;
-                                      return (
-                                        d && moment(d).format("MM-DD HH:mm")
-                                      );
-                                    },
-                                  },
-                                  {
-                                    title: t("Гарсан"),
-                                    __style__: { h: "center" },
-                                    dataIndex: "tuukh.tsagiinTuukh.garsanTsag",
-                                    render(v, p) {
-                                      const d =
-                                        p.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
-                                      return (
-                                        d && moment(d).format("MM-DD HH:mm")
-                                      );
-                                    },
-                                  },
-                                  {
-                                    title: t("Хугацаа/мин"),
-                                    dataIndex: "tuukh",
-                                    __style__: { h: "center" },
-                                    render(v) {
-                                      const d1 = moment(
-                                        v?.[0]?.tsagiinTuukh[0]?.orsonTsag
-                                      );
-                                      const d2 = moment(
-                                        v?.[0]?.tsagiinTuukh[0]?.garsanTsag
-                                      );
-                                      const diff = d2.diff(d1, "minutes");
-                                      return diff && diff;
-                                    },
-                                  },
-                                  {
-                                    title: t("Төрөл"),
-                                    __style__: { h: "center" },
-                                    dataIndex: "turul",
-                                    render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
-                                  },
-                                  {
-                                    title: t("Дүн"),
-                                    dataIndex: "tuukh",
-                                    __style__: { h: "right" },
-                                    render(v, p, i) {
-                                      return formatNumber(
-                                        v?.[0]?.tulukhDun || 0
-                                      );
-                                    },
-                                  },
-                                  {
-                                    title: t("Шалтгаан"),
-                                    dataIndex: "tuukh",
-                                    render: (v, parent) => {
-                                      if (parent.turul === "Үнэгүй") {
-                                        return t(parent?.mashin?.temdeglel);
-                                      } else
-                                        return v?.[0]?.tuluv === -1
-                                          ? v?.[0]?.uneguiGarsan
-                                          : !!v?.[0]?.tsagiinTuukh[0]
-                                              ?.garsanTsag &&
-                                            v?.[0]?.niitKhugatsaa <= 30
-                                          ? t("30 мин")
-                                          : t(parent.zurchil);
-                                    },
-                                  },
-                                ])
-                                .addDataSource(data?.jagsaalt)
-                                .saveAs("Camera.xlsx");
-                            });
-                        }}
-                      >
-                        <DownloadOutlined style={{ fontSize: "18px" }} />
-                        <label>{t("Татах")}</label>
-                      </a>
-                    </div>
-                  )}
-                  style={{ padding: 0 }}
-                  placement="bottom"
-                  trigger="click"
-                >
+                <div className="flex w-full items-center justify-center">
                   <Button
+                    className="mr-3 w-auto text-ellipsis"
+                    onClick={() =>
+                      setModalOpen({
+                        bool: true,
+                        item: null,
+                        type: "dugaarBurtgekh",
+                      })
+                    }
                     type="primary"
-                    className="mr-3 w-32 sm:w-auto"
-                    icon={<FileExcelOutlined />}
                   >
-                    <span>Excel</span>
-                    <DownOutlined width={5} />
+                    {t("Машин")} [ + ]
                   </Button>
-                </Popover>
-                <Button
-                  className="w-32 sm:w-auto"
-                  icon={<CameraOutlined />}
-                  onClick={() => setDrawerOpen(true)}
-                  type="primary"
-                >
-                  {t("Камер")}
-                </Button>
+                  <Popover
+                    content={() => (
+                      <div className="flex flex-col text-ellipsis">
+                        <a
+                          className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                          // onClick={() => {
+                          //     excelTatajAvya(
+                          //         token,
+                          //         "zogsoolUilchluulegch",
+                          //         uilchluulegchGaralt.niitMur,
+                          //         exlCol(),
+                          //         query,
+                          //         order,
+                          //         "Зогсоол"
+                          //     );
+                          // }}
+                          onClick={() => {
+                            uilchilgee(token)
+                              .get("zogsoolUilchluulegch", {
+                                params: {
+                                  order: order,
+                                  query: query,
+                                  khuudasniiKhemjee:
+                                    uilchluulegchGaralt?.niitMur,
+                                },
+                              })
+                              .then(({ data }) => {
+                                excel
+                                  .addSheet("Камер")
+                                  .addColumns([
+                                    {
+                                      title: "№",
+                                      align: "center",
+                                      dataIndex: "dugaar",
+                                      width: "2rem",
+                                      __style__: { h: "center" },
+                                      render: (text, record, index) =>
+                                        (data?.khuudasniiDugaar || 0) *
+                                          (data?.khuudasniiKhemjee || 0) -
+                                        (data?.khuudasniiKhemjee || 0) +
+                                        index +
+                                        1,
+                                    },
+                                    {
+                                      title: t("Дугаар1"),
+                                      dataIndex: "mashiniiDugaar",
+                                      __style__: { h: "center" },
+                                      render(v) {
+                                        return String(v).toUpperCase();
+                                      },
+                                    },
+                                    {
+                                      title: t("Орсон"),
+                                      dataIndex: "tuukh.tsagiinTuukh.orsonTsag",
+                                      __style__: { h: "center" },
+                                      render(v, p) {
+                                        const d =
+                                          p.tuukh[0]?.tsagiinTuukh[0]
+                                            ?.orsonTsag;
+                                        return (
+                                          d && moment(d).format("MM-DD HH:mm")
+                                        );
+                                      },
+                                    },
+                                    {
+                                      title: t("Гарсан"),
+                                      __style__: { h: "center" },
+                                      dataIndex:
+                                        "tuukh.tsagiinTuukh.garsanTsag",
+                                      render(v, p) {
+                                        const d =
+                                          p.tuukh[0]?.tsagiinTuukh[0]
+                                            ?.garsanTsag;
+                                        return (
+                                          d && moment(d).format("MM-DD HH:mm")
+                                        );
+                                      },
+                                    },
+                                    {
+                                      title: t("Хугацаа/мин"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "center" },
+                                      render(v) {
+                                        const d1 = moment(
+                                          v?.[0]?.tsagiinTuukh[0]?.orsonTsag
+                                        );
+                                        const d2 = moment(
+                                          v?.[0]?.tsagiinTuukh[0]?.garsanTsag
+                                        );
+                                        const diff = d2.diff(d1, "minutes");
+                                        return diff && diff;
+                                      },
+                                    },
+                                    {
+                                      title: t("Төрөл"),
+                                      __style__: { h: "center" },
+                                      dataIndex: "turul",
+                                      render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
+                                    },
+                                    {
+                                      title: t("Дүн"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber(
+                                          v?.[0]?.tulukhDun || 0
+                                        );
+                                      },
+                                    },
+                                    {
+                                      title: t("Шалтгаан"),
+                                      dataIndex: "tuukh",
+                                      render: (v, parent) => {
+                                        if (parent.turul === "Үнэгүй") {
+                                          return t(parent?.mashin?.temdeglel);
+                                        } else
+                                          return v?.[0]?.tuluv === -1
+                                            ? v?.[0]?.uneguiGarsan
+                                            : !!v?.[0]?.tsagiinTuukh[0]
+                                                ?.garsanTsag &&
+                                              v?.[0]?.niitKhugatsaa <= 30
+                                            ? t("30 мин")
+                                            : t(parent.zurchil);
+                                      },
+                                    },
+                                  ])
+                                  .addDataSource(data?.jagsaalt)
+                                  .saveAs("Camera.xlsx");
+                              });
+                          }}
+                        >
+                          <DownloadOutlined style={{ fontSize: "18px" }} />
+                          <label>{t("Татах")}</label>
+                        </a>
+                      </div>
+                    )}
+                    style={{ padding: 0 }}
+                    placement="bottom"
+                    trigger="click"
+                  >
+                    <Button
+                      type="primary"
+                      className="mr-3 w-auto text-ellipsis"
+                      icon={<FileExcelOutlined />}
+                    >
+                      <span>Excel</span>
+                      <DownOutlined width={5} />
+                    </Button>
+                  </Popover>
+                  <Button
+                    className="w-auto text-ellipsis"
+                    icon={<CameraOutlined />}
+                    onClick={() => setDrawerOpen(true)}
+                    type="primary"
+                  >
+                    {t("Камер")}
+                  </Button>
+                </div>
                 <Drawer
                   width={"100vw"}
                   title={t("Камер")}
