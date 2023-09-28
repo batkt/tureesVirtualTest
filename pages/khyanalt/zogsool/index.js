@@ -252,12 +252,13 @@ function Zogsool({ token }) {
         onOk: () => {
           uilchilgee(token)
             .post("/uilchluulegchTseverliy", { utguud: songogdson })
-            .then(({ data }) => {
-              if (data === "Amjilttai") {
-                notification.success({
-                  message: "Амжилттай хадгалагдлаа",
+            .then(({ status }) => {
+              if (status === 200) {
+                notification.info({
+                  message: "Цэвэрлэгдлээ",
                   duration: 1,
                 });
+                uilchluulegchMutate();
               }
             })
             .catch((err) => aldaaBarigch(err));
@@ -814,7 +815,12 @@ function Zogsool({ token }) {
               className={`zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2  border-green-600 sm:col-span-3 xl:col-span-2 2xl:col-span-2 ${
                 a.name === shuult?.name ? "bg-green-50 dark:bg-gray-900" : ""
               }`}
-              onClick={() => setShuult({ query: a.query, name: a.name })}
+              onClick={() => {
+                setShuult({ query: a.query, name: a.name });
+                if (a.name !== "Зөрчилтэй") {
+                  setIdevkhteiSongoson(false);
+                }
+              }}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
               data-aos-delay={1 + i + "00"}

@@ -710,6 +710,32 @@ function camera({ token }) {
         ),
       },
     ];
+    if (baiguullaga?._id === "63c0f31efe522048bf02086d") {
+      col.push({
+        title: "Зогсоол",
+        align: "center",
+        width: "5rem",
+        render: (data) => {
+          const shalgakhId =
+            cameraData?.[0]?.[1]?.children?.[0]?.children?.[0]?.value;
+          var zogsojBuiTuluv = "Гадна";
+          for (const x of data.tuukh) {
+            if (x.orsonKhaalga === shalgakhId) {
+              zogsojBuiTuluv = "Дотор";
+            }
+          }
+          return (
+            <div
+              className={`flex w-full items-center justify-center rounded-lg px-2 py-1 font-[500] text-gray-600 dark:text-gray-200 ${
+                zogsojBuiTuluv === "Дотор" ? "bg-blue-300" : "bg-green-300"
+              } `}
+            >
+              {zogsojBuiTuluv}
+            </div>
+          );
+        },
+      });
+    }
     return [
       ...col,
       {
@@ -764,8 +790,9 @@ function camera({ token }) {
                   }
                   className={`relative ${
                     JSON.stringify(order) ==
-                      JSON.stringify({ "tuukh.tsagiinTuukh.orsonTsag": -1 }) &&
-                    "bg-green-500 text-white"
+                      JSON.stringify({
+                        "tuukh.tsagiinTuukh.orsonTsag": -1,
+                      }) && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Сүүлд орсон эхэнд")}
@@ -778,8 +805,9 @@ function camera({ token }) {
                   }
                   className={`relative ${
                     JSON.stringify(order) ==
-                      JSON.stringify({ "tuukh.tsagiinTuukh.garsanTsag": -1 }) &&
-                    "bg-green-500 text-white"
+                      JSON.stringify({
+                        "tuukh.tsagiinTuukh.garsanTsag": -1,
+                      }) && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Сүүлд гарсан эхэнд")}
@@ -1535,8 +1563,18 @@ function camera({ token }) {
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
+                    ROOT={"stream"}
                     PASSWD={"123456"}
                     Camer={camerVal[0]}
+                    PORT={554}
+                  />
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    PASSWD={"admin"}
+                    ROOT={"video"}
+                    Camer={camerVal[0]}
+                    PORT={50000}
                   />
                 ) : (
                   ""
@@ -1629,7 +1667,17 @@ function camera({ token }) {
                   <R2WPlayerComponent
                     USER={"admin"}
                     PASSWD={"123456"}
+                    ROOT={"stream"}
                     Camer={camerVal[1]}
+                    PORT={554}
+                  />
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    USER={"admin"}
+                    PASSWD={"admin"}
+                    ROOT={"video"}
+                    Camer={camerVal[1]}
+                    PORT={50000}
                   />
                 ) : (
                   ""
