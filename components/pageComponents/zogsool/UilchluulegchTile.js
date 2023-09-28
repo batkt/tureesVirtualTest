@@ -11,6 +11,16 @@ function UilchluulegchTile({
   ezemshigchiinUtas,
   ...props
 }) {
+  const minToHour = (m) => {
+    let res;
+    if (m < 60) res = m + " мин";
+    else {
+      const h = Math.floor(m / 60);
+      const min = m % 60;
+      res = h + " цаг " + (min && min + " мин");
+    }
+    return res;
+  };
   return (
     <div className="mb-3 rounded-md border border-solid border-gray-400 bg-white p-2 shadow-2xl dark:bg-gray-900">
       <div className="flex w-full flex-row">
@@ -24,7 +34,7 @@ function UilchluulegchTile({
 
       <div className="flex w-full flex-row dark:text-gray-100">
         <div>
-          {props?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag ? (
+          {props?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag ? (
             minToHour(
               props?.tuukh?.reduce((a, b) => a + (b.niitKhugatsaa || 0), 0 || 0)
             )
