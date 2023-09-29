@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   DatePicker,
+  Input,
   message,
   Modal,
   notification,
@@ -64,7 +65,6 @@ export function excelTatajAvya(
       params: { query, order, khuudasniiKhemjee: mur, khuudasniiDugaar: 1 },
     })
     .then(({ data }) => {
-      // console.log('-----------1-------jagsaalt', data?.jagsaalt);
       const excel = new Excel();
       excel
         .addSheet(sheetName)
@@ -121,20 +121,43 @@ function Zogsool({ token }) {
   const [zogsoolId, setZogsoolId] = useState();
   const [orlogo, setOrlogo] = useState([]);
   const [tulbur, setTulbur] = useState("");
-  const [selectionType] = useState("checkbox");
   const [tuluv, setTuluv] = useState("");
-  const [idevkhteiSongoson, setIdevkhteiSongoson] = useState(false);
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
   const [selectedRowkeys, setSelectedRowkeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowkeys(newSelectedRowKeys);
   };
+
+  const shalgakhTsag = 18;
+
+  const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const rowSelection = {
-    selectedRowkeys,
+    selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
+    getCheckboxProps: (record) => {
+      const tsagiinZuruu = moment
+        .duration(
+          moment().diff(
+            moment(record?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag)
+          )
+        )
+        .asHours();
+
+      const untraakh =
+        tsagiinZuruu > shalgakhTsag &&
+        record?.tuukh?.[0]?.tuluv === 0 &&
+        !record?.tuukh?.[0]?.uneguiGarsan &&
+        !record?.tuukh?.[0]?.garsanKhaalga;
+      return {
+        disabled: !untraakh,
+      };
+    },
   };
 
-  console.log("Songogdson Baganuud:", selectedRowkeys);
+  const tseverlekh = () => {
+    setSelectedRowkeys([]);
+    setShaltgaan("Цэвэрлэсэн");
+  };
 
   const [shuult, setShuult] = useState("");
 
@@ -234,7 +257,6 @@ function Zogsool({ token }) {
     uilchilgee(token)
       .post("/zogsoolUilchluulegchdiinDunAvay", orlogoQuery)
       .then((a) => {
-        // console.log('--------0-', a.data)
         setOrlogo(a.data);
       })
       .catch(aldaaBarigch);
@@ -247,23 +269,38 @@ function Zogsool({ token }) {
         title: t("Анхаар"),
         okText: t("Тийм"),
         cancelText: t("Үгүй"),
-        content: t("Та цэвэрлэхдээ итгэлтэй байна уу?"),
+        content: (
+          <div>
+            <div>Тайлбар:</div>
+            <Input
+              value={shaltgaan}
+              placeholder="Тайлбар оруулна уу..."
+              onChange={(v) => setShaltgaan(v)}
+            />
+          </div>
+        ),
         onOk: () => {
-          uilchilgee(token)
-            .post("/uilchluulegchTseverliy", { utguud: songogdson })
-            .then(({ data }) => {
-              if (data === "Amjilttai") {
-                notification.success({
-                  message: "Цэвэрлэгдлээ",
-                  duration: 1,
-                });
-                setTimeout(() => {
+          if (!shaltgaan) {
+            notification.warn({ message: "Тайлбар оруулна уу", duration: 2 });
+          } else {
+            uilchilgee(token)
+              .post("/uilchluulegchTseverliy", {
+                utguud: songogdson,
+                shalgakhTsag: 18,
+                shaltgaan: shaltgaan,
+              })
+              .then(({ data }) => {
+                if (data === "Amjilttai") {
+                  notification.success({
+                    message: "Амжилттай цэвэрлэгдлээ",
+                    duration: 2,
+                  });
                   uilchluulegchMutate();
-                  setSelectedRowkeys([]);
-                }, 1000);
-              }
-            })
-            .catch((err) => aldaaBarigch(err));
+                  tseverlekh();
+                }
+              })
+              .catch((err) => aldaaBarigch(err));
+          }
         },
       });
     } else {
@@ -326,6 +363,15 @@ function Zogsool({ token }) {
           0
         ),
         query: { "tuukh.tuluv": -2 },
+      },
+      {
+        name: "Цэвэрлэгдсэн",
+        too: formatNumber(
+          !!uilchiluulegchToololt &&
+            uilchiluulegchToololt[0].tuluv.find((a) => a._id === -3)?.too,
+          0
+        ),
+        query: { "tuukh.tuluv": -3 },
       },
       {
         name: "Бусад",
@@ -403,6 +449,7 @@ function Zogsool({ token }) {
               align: "center",
               width: "10rem",
               dataIndex: "mashin",
+              key: "mashinTalbai",
               render(v) {
                 return v && v.ezemshigchiinTalbainDugaar;
               },
@@ -412,6 +459,7 @@ function Zogsool({ token }) {
               align: "center",
               width: "10rem",
               dataIndex: "mashin",
+              key: "mashinUtas",
               render(v) {
                 return v && v.ezemshigchiinUtas;
               },
@@ -423,6 +471,7 @@ function Zogsool({ token }) {
         title: "№",
         align: "center",
         dataIndex: "dugaar",
+        key: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
           (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
@@ -436,6 +485,7 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "tuukh.0.tsagiinTuukh.0.orsonTsag",
+        key: "tuukh.0.tsagiinTuukh.0.orsonTsag",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, parents) {
@@ -447,6 +497,7 @@ function Zogsool({ token }) {
         title: t("Гарсан"),
         align: "center",
         width: "10rem",
+        key: "tuukh.0.tsagiinTuukh.0.garsanTsag",
         dataIndex: "tuukh.0.tsagiinTuukh.0.garsanTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -454,12 +505,16 @@ function Zogsool({ token }) {
           const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
+        render: () => {
+          return <div></div>;
+        },
       },
       {
         title: t("Төрөл"),
         align: "center",
         width: "10rem",
         dataIndex: "turul",
+        key: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
         render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
@@ -469,6 +524,7 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "mashiniiDugaar",
+        key: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -478,6 +534,7 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "tuukh",
+        key: "tuukh",
         render(v) {
           const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
@@ -492,6 +549,7 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "niitDun",
+        key: "niitDun",
         render(v, parents) {
           return v && formatNumber(v, 0);
         },
@@ -548,6 +606,7 @@ function Zogsool({ token }) {
         align: "right",
         width: "10rem",
         dataIndex: "tuukh",
+        key: "niitDun",
         render(v) {
           let r = null;
           if (v[0]?.tulbur?.length > 1) {
@@ -583,7 +642,6 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => {
                     setTuluv("");
-                    setIdevkhteiSongoson(false);
                   }}
                   className={`relative ${
                     tuluv === "" && "bg-green-500 text-white"
@@ -594,7 +652,6 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => {
                     setTuluv(1);
-                    setIdevkhteiSongoson(false);
                   }}
                   className={`relative ${
                     tuluv === 1 && "bg-green-500 text-white"
@@ -605,7 +662,6 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => {
                     setTuluv(0);
-                    setIdevkhteiSongoson(true);
                   }}
                   className={`relative ${
                     tuluv === 0 && "bg-green-500 text-white"
@@ -616,7 +672,6 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => {
                     setTuluv(-2);
-                    setIdevkhteiSongoson(false);
                   }}
                   className={`relative ${
                     tuluv === -2 && "bg-green-500 text-white"
@@ -627,7 +682,6 @@ function Zogsool({ token }) {
                 <div
                   onClick={() => {
                     setTuluv(2);
-                    setIdevkhteiSongoson(false);
                   }}
                   className={`relative ${
                     tuluv === 2 && "bg-green-500 text-white"
@@ -650,6 +704,7 @@ function Zogsool({ token }) {
         width: "10rem",
         showSorterTooltip: false,
         dataIndex: "tuukh",
+        key: "tuluv",
         render(v, data) {
           return (
             <div
@@ -665,8 +720,19 @@ function Zogsool({ token }) {
                   // ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
                   ? "bg-red-500 text-white dark:bg-red-700"
+                  : v[0]?.tuluv === 0 &&
+                    moment
+                      .duration(
+                        moment().diff(
+                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag)
+                        )
+                      )
+                      .asHours() > shalgakhTsag
+                  ? "bg-purple-500 text-white dark:bg-purple-700"
                   : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
                   ? "bg-blue-500 text-white dark:bg-blue-700"
+                  : v[0]?.tuluv === -3
+                  ? "bg-stone-500 text-white dark:bg-stone-700"
                   : "bg-gray-500 text-white dark:bg-gray-700"
               } flex select-none items-center justify-center rounded-md border px-5 py-[2px] font-medium dark:text-white`}
             >
@@ -680,8 +746,19 @@ function Zogsool({ token }) {
                   ? "Төлсөн"
                   : v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
                   ? "Зөрчилтэй"
+                  : v[0]?.tuluv === 0 &&
+                    moment
+                      .duration(
+                        moment().diff(
+                          moment(v[0]?.tsagiinTuukh?.[0]?.orsonTsag)
+                        )
+                      )
+                      .asHours() > shalgakhTsag
+                  ? "Тодорхойгүй"
                   : v[0]?.tuluv === 0 && !v[0]?.garsanKhaalga
                   ? "Идэвхтэй"
+                  : v[0]?.tuluv === -3
+                  ? "Цэвэрлэсэн"
                   : "Үнэгүй"
               }
             </div>
@@ -692,6 +769,7 @@ function Zogsool({ token }) {
         title: t("Шалтгаан"),
         align: "center",
         dataIndex: "tuukh",
+        key: "zurchil",
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
@@ -734,6 +812,7 @@ function Zogsool({ token }) {
         title: "Бүртгэсэн",
         align: "center",
         dataIndex: "tuukh",
+        key: "burtgesen",
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
@@ -817,9 +896,6 @@ function Zogsool({ token }) {
               }`}
               onClick={() => {
                 setShuult({ query: a.query, name: a.name });
-                if (a.name !== "Зөрчилтэй") {
-                  setIdevkhteiSongoson(false);
-                }
               }}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
@@ -1083,11 +1159,19 @@ function Zogsool({ token }) {
                 <DownOutlined width={5} />
               </Button>
             </Popover>
-            {(idevkhteiSongoson || shuult.name === "Зөрчилтэй") && (
-              <Button type="tertiary" onClick={() => tseverliy()}>
-                Цэвэрлэх
-              </Button>
-            )}
+            <Button
+              disabled={
+                selectedRowkeys && selectedRowkeys?.length > 0 ? false : true
+              }
+              type={`${
+                selectedRowkeys && selectedRowkeys?.length > 0
+                  ? "tertiary"
+                  : "default"
+              }`}
+              onClick={() => tseverliy()}
+            >
+              Цэвэрлэх
+            </Button>
           </div>
         </div>
         <div
