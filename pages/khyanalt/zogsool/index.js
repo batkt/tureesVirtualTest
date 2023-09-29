@@ -36,6 +36,7 @@ import { useUilchluulegchToololt } from "hooks/useUilchluulegch";
 import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
 import useJagsaalt from "hooks/useJagsaalt";
 import {
+  CloseSquareFilled,
   DeleteOutlined,
   DownloadOutlined,
   DownOutlined,
@@ -128,7 +129,7 @@ function Zogsool({ token }) {
     setSelectedRowkeys(newSelectedRowKeys);
   };
 
-  const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag 
+  const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const rowSelection = {
@@ -1154,19 +1155,29 @@ function Zogsool({ token }) {
                 <DownOutlined width={5} />
               </Button>
             </Popover>
-            <Button
-              disabled={
-                selectedRowkeys && selectedRowkeys?.length > 0 ? false : true
-              }
-              type={`${
-                selectedRowkeys && selectedRowkeys?.length > 0
-                  ? "tertiary"
-                  : "default"
-              }`}
-              onClick={() => tseverliy()}
-            >
-              Цэвэрлэх
-            </Button>
+            <div className="flex items-center justify-center gap-1">
+              <Button
+                disabled={
+                  selectedRowkeys && selectedRowkeys?.length > 0 ? false : true
+                }
+                type={`${
+                  selectedRowkeys && selectedRowkeys?.length > 0
+                    ? "tertiary"
+                    : "default"
+                }`}
+                onClick={() => tseverliy()}
+              >
+                Цэвэрлэх
+                {selectedRowkeys &&
+                  selectedRowkeys?.length > 0 &&
+                  `(${selectedRowkeys?.length})`}
+              </Button>
+              {selectedRowkeys && selectedRowkeys?.length > 0 && (
+                <Button onClick={tseverlekh}>
+                  <CloseSquareFilled />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
         <div
