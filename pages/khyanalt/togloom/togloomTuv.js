@@ -34,7 +34,6 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
-import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";

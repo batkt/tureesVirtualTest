@@ -23,7 +23,6 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
-import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
 import formatNumber from "tools/function/formatNumber";
 import { useRef, useEffect } from "react";
 import ExceleesOruulakh from "components/pageComponents/geree/zagvar/ExceleesOruulakh";
@@ -35,6 +34,7 @@ import moment from "moment";
 import Aos from "aos";
 import { useTranslation } from "react-i18next";
 import deleteMethod from "../../../tools/function/crud/deleteMethod";
+import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 
 function mashinBurtgel({ token }) {
   const { t } = useTranslation();
@@ -439,7 +439,7 @@ function mashinBurtgel({ token }) {
           keyValue="uilchluulegch"
           className="block overflow-auto md:hidden"
           jagsaalt={mashinGaralt?.jagsaalt}
-          Component={UilchluulegchTile}
+          Component={TogloomTile}
         />
       </Card>
     </Admin>
