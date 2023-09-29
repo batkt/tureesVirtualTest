@@ -449,7 +449,6 @@ function Zogsool({ token }) {
               align: "center",
               width: "10rem",
               dataIndex: "mashin",
-              key: "mashinTalbai",
               render(v) {
                 return v && v.ezemshigchiinTalbainDugaar;
               },
@@ -459,7 +458,6 @@ function Zogsool({ token }) {
               align: "center",
               width: "10rem",
               dataIndex: "mashin",
-              key: "mashinUtas",
               render(v) {
                 return v && v.ezemshigchiinUtas;
               },
@@ -471,7 +469,6 @@ function Zogsool({ token }) {
         title: "№",
         align: "center",
         dataIndex: "dugaar",
-        key: "dugaar",
         width: "2rem",
         render: (text, record, index) =>
           (uilchluulegchGaralt?.khuudasniiDugaar || 0) *
@@ -485,7 +482,6 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "tuukh.0.tsagiinTuukh.0.orsonTsag",
-        key: "tuukh.0.tsagiinTuukh.0.orsonTsag",
         showSorterTooltip: false,
         sorter: () => 0,
         render(v, parents) {
@@ -497,7 +493,6 @@ function Zogsool({ token }) {
         title: t("Гарсан"),
         align: "center",
         width: "10rem",
-        key: "tuukh.0.tsagiinTuukh.0.garsanTsag",
         dataIndex: "tuukh.0.tsagiinTuukh.0.garsanTsag",
         showSorterTooltip: false,
         sorter: () => 0,
@@ -505,16 +500,12 @@ function Zogsool({ token }) {
           const d = parents?.tuukh[0]?.tsagiinTuukh[0]?.garsanTsag;
           return d && moment(d).format("YYYY-MM-DD HH:mm");
         },
-        render: () => {
-          return <div></div>;
-        },
       },
       {
         title: t("Төрөл"),
         align: "center",
         width: "10rem",
         dataIndex: "turul",
-        key: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
         render: (v) => (!!v ? v : "Үйлчлүүлэгч"),
@@ -524,7 +515,6 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "mashiniiDugaar",
-        key: "mashiniiDugaar",
         showSorterTooltip: false,
         sorter: () => 0,
       },
@@ -534,7 +524,6 @@ function Zogsool({ token }) {
         align: "center",
         width: "10rem",
         dataIndex: "tuukh",
-        key: "tuukh",
         render(v) {
           const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
           const d2 = moment(v[0]?.tsagiinTuukh[0]?.garsanTsag);
@@ -549,7 +538,6 @@ function Zogsool({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
         dataIndex: "niitDun",
-        key: "niitDun",
         render(v, parents) {
           return v && formatNumber(v, 0);
         },
@@ -606,7 +594,6 @@ function Zogsool({ token }) {
         align: "right",
         width: "10rem",
         dataIndex: "tuukh",
-        key: "niitDun",
         render(v) {
           let r = null;
           if (v[0]?.tulbur?.length > 1) {
@@ -704,7 +691,6 @@ function Zogsool({ token }) {
         width: "10rem",
         showSorterTooltip: false,
         dataIndex: "tuukh",
-        key: "tuluv",
         render(v, data) {
           return (
             <div
@@ -769,15 +755,17 @@ function Zogsool({ token }) {
         title: t("Шалтгаан"),
         align: "center",
         dataIndex: "tuukh",
-        key: "zurchil",
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
             return (
-              <Tooltip placement="top" title={parent?.mashin?.temdeglel}>
+              <Tooltip
+                placement="top"
+                title={parent?.mashin?.temdeglel || parent?.zurchil}
+              >
                 <div className="max-w-[8rem] cursor-help truncate break-words">
-                  {parent?.mashin?.temdeglel}
+                  {parent?.mashin?.temdeglel || parent?.zurchil}
                 </div>
               </Tooltip>
             );
@@ -812,7 +800,6 @@ function Zogsool({ token }) {
         title: "Бүртгэсэн",
         align: "center",
         dataIndex: "tuukh",
-        key: "burtgesen",
         width: "7rem",
         showSorterTooltip: false,
         render: (v, parent) => {
