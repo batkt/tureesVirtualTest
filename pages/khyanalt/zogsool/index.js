@@ -365,22 +365,13 @@ function Zogsool({ token }) {
         query: { "tuukh.tuluv": -2 },
       },
       {
-        name: "Цэвэрлэгдсэн",
-        too: formatNumber(
-          !!uilchiluulegchToololt &&
-            uilchiluulegchToololt[0].tuluv.find((a) => a._id === -3)?.too,
-          0
-        ),
-        query: { "tuukh.tuluv": -3 },
-      },
-      {
         name: "Бусад",
         too: formatNumber(
           !!uilchiluulegchToololt &&
             uilchiluulegchToololt[0].tuluv.find((a) => a._id === -1)?.too,
           0
         ),
-        query: { "tuukh.tuluv": -1 },
+        query: { "tuukh.tuluv": { $in: [-1, -3] } },
       },
     ],
     [uilchiluulegchToololt, uilchluulegchGaralt]
@@ -1121,6 +1112,23 @@ function Zogsool({ token }) {
                                     : !!parent.zurchil
                                     ? parent.zurchil
                                     : "";
+                                },
+                              },
+                              {
+                                title: "Бүртгэсэн",
+                                dataIndex: "tuukh",
+                                render: (v) => {
+                                  return (
+                                    v &&
+                                    (String(
+                                      v[0]?.burtgesenAjiltaniiNer
+                                    ).replace(/\D/g, "").length > 9
+                                      ? ajiltniiNers.find(
+                                          (a) =>
+                                            a.id === v[0]?.burtgesenAjiltaniiId
+                                        )?.ner
+                                      : v[0]?.burtgesenAjiltaniiNer)
+                                  );
                                 },
                               },
                             ])
