@@ -59,6 +59,7 @@ import { useQRCode } from "next-qrcode";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
+import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 
 const DelegrenguiKharakh = React.forwardRef(
   ({ data, destroy, confirm }, ref) => {
@@ -1861,7 +1862,7 @@ function togloom1() {
             keyValue="uilchluulegch"
             className="block overflow-auto md:hidden"
             jagsaalt={togloominTuviinGaralt?.jagsaalt}
-            Component={UilchluulegchTile}
+            Component={TogloomTile}
           />
         </div>
       </Card>
