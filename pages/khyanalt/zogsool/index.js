@@ -128,7 +128,7 @@ function Zogsool({ token }) {
     setSelectedRowkeys(newSelectedRowKeys);
   };
 
-  const shalgakhTsag = 18;
+  const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag 
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
   const rowSelection = {
