@@ -36,11 +36,14 @@ function UilchluulegchTile({
         <div>
           {props?.tuukh?.[0]?.tsagiinTuukh?.[0]?.garsanTsag ? (
             minToHour(
-              props?.tuukh?.reduce((a, b) => a + (b.niitKhugatsaa || 0), 0 || 0)
+              props?.tuukh?.reduce(
+                (a, b) => a + (b?.niitKhugatsaa || 0),
+                0 || 0
+              )
             )
           ) : (
             <TsagToololt
-              ekhlekhTsag={props?.tuukh[0]?.tsagiinTuukh[0]?.orsonTsag}
+              ekhlekhTsag={props?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag || 0}
             />
           )}
         </div>
