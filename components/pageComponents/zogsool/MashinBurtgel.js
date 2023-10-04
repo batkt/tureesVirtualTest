@@ -4,7 +4,16 @@ import React, {
   useImperativeHandle,
   useState,
 } from "react";
-import { Form, Input, message, Modal, Select, DatePicker } from "antd";
+import {
+  Form,
+  Input,
+  message,
+  Modal,
+  Select,
+  DatePicker,
+  InputNumber,
+  Button,
+} from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import uilchilgee from "services/uilchilgee";
@@ -34,7 +43,15 @@ function MashinBurtgel(
   const [turulShalgah, setTurulShalgah] = useState(
     data?.turul ? data?.turul : undefined
   );
-  const [inputValue, setInputValue] = useState("");
+  const [nemeltTurulShalgah, setNemeltTurulShalgah] = useState(
+    data?.tuluv ? data?.tuluv : undefined
+  );
+  const [khungululttei, setKhungululttei] = useState(
+    data?.khungulultTurul ? true : false
+  );
+  const [khungulultiinTurul, setKhungulultiinTurul] = useState(
+    data?.khungulultTurul ? data?.khungulultTurul : undefined
+  );
   const [ognoo, setOgnoo] = useState(
     data?.ekhlekhOgnoo && data?.duusakhOgnoo
       ? [moment(data.ekhlekhOgnoo), moment(data.duusakhOgnoo)]
@@ -54,6 +71,8 @@ function MashinBurtgel(
     undefined,
     order
   );
+
+  const dataOrjIrsenEsekh = !!data ? true : false;
 
   // console.log(ognoo, "ognooognoo");
 
@@ -113,7 +132,12 @@ function MashinBurtgel(
       data.ezemshigchiinTalbainDugaar = geree?.talbainDugaar;
       data.gereeniiDugaar = geree?.gereeniiDugaar;
     }
-    console.log(data, "|dataa");
+    if (khungulultiinTurul === "togtmolTsag") {
+      data.khungulujEkhlesenOgnoo = new Date();
+      if (dataOrjIrsenEsekh === false) {
+        data.uldegdelKhungulukhKhugatsaa = data.khungulukhKhugatsaa;
+      }
+    }
     const method = data?._id ? updateMethod : createMethod;
     method("mashin", token, data).then(({ data }) => {
       if (data === "Amjilttai") {
@@ -167,13 +191,15 @@ function MashinBurtgel(
         });
   }
 
+  const tsagValue = Form.useWatch("tsagiinTurul", form);
+
   return (
     <Form
       form={form}
       onFinish={onFinish}
       initialValues={data}
       className="space-y-2"
-      labelCol={{ span: 6 }}
+      labelCol={{ span: 8 }}
       wrapperCol={{ span: 24 }}
     >
       <Form.Item name="_id" noStyle />
@@ -190,86 +216,195 @@ function MashinBurtgel(
       >
         <Select
           onChange={(e) => {
+            form.setFieldValue("tuluv", undefined);
+            form.setFieldValue("nemeltTuluv", undefined);
+            form.setFieldValue("khungulultTurul", undefined);
+            form.setFieldValue("khungulult", undefined);
+            form.setFieldValue("tsagiinTurul", undefined);
+            form.setFieldValue("khungulukhKhugatsaa", undefined);
             form.getFieldInstance("ezemshigchiinUtas").focus();
             setTurulShalgah(e);
+            setKhungulultiinTurul(undefined);
+            setNemeltTurulShalgah(undefined);
           }}
           placeholder={t("Төрөл")}
         >
-          {[
-            "Гэрээт",
-            "Түрээслэгч",
-            "Дотоод",
-            "Үнэгүй",
-            "Онцгой үйлчлүүлэгч",
-          ].map((a) => (
+          {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
-      {turulShalgah === "Онцгой үйлчлүүлэгч" && (
-        <div>
-          <Form.Item name="khariltsagchiinNer" noStyle />
-          <Form.Item name="gereeniiDugaar" noStyle />
+      {turulShalgah === "Түрээслэгч" && (
+        <React.Fragment>
           <Form.Item
-            name={"gereeniiId"}
+            label={t("Төлөв")}
+            name="tuluv"
             requiredMark={"optional"}
             rules={[
               {
                 required: true,
-                message: t("Гэрээ сонгоно уу!"),
+                message: t("Төлөв сонгоно уу!"),
               },
             ]}
-            label={t("Гэрээ сонгох")}
           >
             <Select
-              onChange={(v) => {
-                form.setFieldValue(
-                  "khariltsagchiinNer",
-                  gereeniiMedeelel?.jagsaalt?.find((a) => a._id === v)?.ner
-                );
-                form.setFieldValue(
-                  "gereeniiDugaar",
-                  gereeniiMedeelel?.jagsaalt?.find((a) => a._id === v)
-                    ?.gereeniiDugaar
-                );
+              onChange={(e) => {
+                form.setFieldValue("nemeltTuluv", undefined);
+                form.setFieldValue("khungulultTurul", undefined);
+                form.setFieldValue("khungulult", undefined);
+                form.setFieldValue("tsagiinTurul", undefined);
+                form.setFieldValue("khungulukhKhugatsaa", undefined);
+                setNemeltTurulShalgah(e);
+                setKhungulultiinTurul(undefined);
               }}
-              showSearch
-              filterOption={(o) => o}
-              allowClear
-              onSearch={(search) =>
-                setGereeniiKhuudaslalt((a) => ({
-                  ...a,
-                  search,
-                  khuudasniiDugaar: 1,
-                }))
-              }
-              placeholder={t("Гэрээ сонгох")}
+              placeholder={t("Төлөв сонгох")}
             >
-              {gereeniiMedeelel?.jagsaalt?.map((mur) => {
-                return (
-                  <Select.Option key={mur._id} value={mur._id}>
-                    <div className="flex flex-row justify-between">
-                      <div className="flex flex-row space-x-2">
-                        <label className="font-semibold">
-                          {t("Гэрээний №")}:
-                        </label>
-                        <div>{mur.gereeniiDugaar}</div>
-                      </div>
-                      <div className="flex flex-row space-x-2">
-                        <label className="font-semibold">
-                          {t("Түрээслэгч")}:
-                        </label>
-                        <div>{mur.ner}</div>
-                      </div>
-                    </div>
-                  </Select.Option>
-                );
-              })}
+              {["Үнэгүй", "Хөнгөлөлттэй", "Харилцагч"].map((a) => (
+                <Select.Option key={a} value={a}>
+                  {t(a)}
+                </Select.Option>
+              ))}
             </Select>
           </Form.Item>
-        </div>
+          {nemeltTurulShalgah === "Харилцагч" && (
+            <Form.Item
+              label={t("Харилцагч төлөв")}
+              name="nemeltTuluv"
+              requiredMark={"optional"}
+              rules={[
+                {
+                  required: true,
+                  message: t("Харилцагчийн төлөв сонгоно уу!"),
+                },
+              ]}
+            >
+              <Select
+                onChange={(e) => {
+                  form.setFieldValue("khungulultTurul", undefined);
+                  form.setFieldValue("khungulult", undefined);
+                  form.setFieldValue("tsagiinTurul", undefined);
+                  form.setFieldValue("khungulukhKhugatsaa", undefined);
+                  setKhungulultiinTurul(undefined);
+                  if (e === "Хөнгөлөлттэй") {
+                    setKhungululttei(true);
+                  } else {
+                    setKhungululttei(false);
+                  }
+                }}
+                placeholder={t("Харилцагчийн төлөв сонгох")}
+              >
+                {["Үнэгүй", "Хөнгөлөлттэй"].map((a) => (
+                  <Select.Option key={a} value={a}>
+                    {t(a)}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+          {(nemeltTurulShalgah === "Хөнгөлөлттэй" ||
+            khungululttei === true) && (
+            <Form.Item
+              label={t("Хөнгөлөлт сонгох")}
+              name="khungulultTurul"
+              requiredMark={"optional"}
+              rules={[
+                {
+                  required: true,
+                  message: t("Харилцагчийн хөнгөлөлт сонгоно уу!"),
+                },
+              ]}
+            >
+              <Select
+                onChange={(e) => {
+                  form.setFieldValue("khungulult", undefined);
+                  form.setFieldValue("tsagiinTurul", undefined);
+                  form.setFieldValue("khungulukhKhugatsaa", undefined);
+                  setKhungulultiinTurul(e);
+                }}
+                placeholder={t("Харилцагчийн хөнгөлөлт сонгох")}
+              >
+                {[
+                  { label: "Хувь хөнгөлөлт", key: 1, value: "khuviKhungulult" },
+                  { label: "Тогтмол цаг", key: 2, value: "togtmolTsag" },
+                ].map((a) => (
+                  <Select.Option key={a.key} value={a.value}>
+                    {t(a.label)}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          )}
+          {khungulultiinTurul === "khuviKhungulult" ? (
+            <Form.Item
+              label={t("Хувь хөнгөлөлт")}
+              name="khungulult"
+              requiredMark={"optional"}
+              rules={[
+                {
+                  required: true,
+                  message: t("Хувь хөнгөлөлт оруулна уу!"),
+                },
+              ]}
+            >
+              <InputNumber
+                type="number"
+                className="w-full"
+                min={0}
+                max={99}
+                placeholder={t("Хувь хөнгөлөлт оруулна уу")}
+              />
+            </Form.Item>
+          ) : khungulultiinTurul === "togtmolTsag" ? (
+            <React.Fragment>
+              <Form.Item
+                label={t("Цагийн төрөл")}
+                name="tsagiinTurul"
+                requiredMark={"optional"}
+                rules={[
+                  {
+                    required: true,
+                    message: t("Цагийн төрөл сонгоно уу!"),
+                  },
+                ]}
+              >
+                <Select
+                  onChange={() => {
+                    form.setFieldValue("khungulukhKhugatsaa", undefined);
+                  }}
+                  placeholder={t("Цагийн төрөл сонгоно уу")}
+                >
+                  {["Сараар", "Өдрөөр"].map((a) => (
+                    <Select.Option key={a} value={a}>
+                      {t(a)}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              {tsagValue && (
+                <Form.Item
+                  name={"khungulukhKhugatsaa"}
+                  requiredMark="optional"
+                  rules={[
+                    {
+                      required: true,
+                      message: t("Хөнгөлөх Хугацаа оруулна уу!"),
+                    },
+                  ]}
+                  label={t("Хугацаа/мин")}
+                >
+                  <InputNumber
+                    type="number"
+                    className="w-full"
+                    min={0}
+                    placeholder={t("Хөнгөлөх Хугацаа оруулна уу")}
+                  />
+                </Form.Item>
+              )}
+            </React.Fragment>
+          ) : null}
+        </React.Fragment>
       )}
       <Form.Item
         requiredMark={"optional"}

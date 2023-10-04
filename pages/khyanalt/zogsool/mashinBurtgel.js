@@ -157,6 +157,48 @@ function mashinBurtgel({ token }) {
         showSorterTooltip: false,
         sorter: () => 0,
       },
+      {
+        title: t("Хөнгөлөлт"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "khungulultTurul",
+        showSorterTooltip: false,
+        render: (a, b) => {
+          if (a === "togtmolTsag") {
+            return (
+              <div className="flex items-center justify-center">
+                {a && (
+                  <div
+                    className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
+                      b.uldegdelKhungulukhKhugatsaa > 0
+                        ? "bg-green-400 dark:bg-green-700"
+                        : "bg-yellow-400 dark:bg-yellow-700"
+                    }`}
+                  >
+                    {b.uldegdelKhungulukhKhugatsaa}
+                    {"/"}
+                    {""}
+                    {b.khungulukhKhugatsaa}
+                    {t("мин")}
+                  </div>
+                )}
+              </div>
+            );
+          }
+          if (a === "khuviKhungulult") {
+            return (
+              <div className="flex items-center justify-center">
+                {a && (
+                  <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                    {b.khungulult}
+                    {"%"}
+                  </div>
+                )}
+              </div>
+            );
+          }
+        },
+      },
       ...shinecol,
       {
         title: t("Тайлбар"),

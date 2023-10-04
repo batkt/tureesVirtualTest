@@ -212,11 +212,19 @@ function Zogsool({ token }) {
       } else if (tuluv === 0) {
         baseQuery["tuukh.0.tuluv"] = 0;
         baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
+        baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+      } else if (tuluv === 4) {
+        baseQuery["tuukh.0.tuluv"] = 0;
+        baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
+        baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+        baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
+          $gte: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
+        };
       }
     }
 
     return baseQuery;
-  }, [ognoo, zogsoolId, shuult, tuluv, tulbur]);
+  }, [ognoo, zogsoolId, shuult, tuluv, tulbur, shalgakhTsag]);
 
   const or = useMemo(() => {
     var nemeh;
@@ -647,6 +655,16 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
                 >
                   {t("Идэвхтэй")}
+                </div>
+                <div
+                  onClick={() => {
+                    setTuluv(4);
+                  }}
+                  className={`relative ${
+                    tuluv === 4 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Тодорхойгүй")}
                 </div>
                 <div
                   onClick={() => {

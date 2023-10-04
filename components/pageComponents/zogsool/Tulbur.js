@@ -105,6 +105,7 @@ function Tulbur(
             setEBarimt(data);
             setLoading(false);
             onRefresh();
+            destroy();
           }
         })
         .catch(aldaaBarigch);

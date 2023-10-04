@@ -716,12 +716,16 @@ function camera({ token }) {
         align: "center",
         width: "5rem",
         render: (data) => {
-          const shalgakhId =
+          const shalgakhIp =
             cameraData?.[0]?.[1]?.children?.[0]?.children?.[0]?.value;
           var zogsojBuiTuluv = "Гадна";
           for (const x of data.tuukh) {
-            if (x.orsonKhaalga === shalgakhId) {
-              zogsojBuiTuluv = "Дотор";
+            if (x.orsonKhaalga === shalgakhIp) {
+              if (!x.tsagiinTuukh?.[0]?.garsanTsag) {
+                zogsojBuiTuluv = "Дотор";
+              } else {
+                zogsojBuiTuluv = "Гадна";
+              }
             }
           }
           return (
@@ -916,6 +920,48 @@ function camera({ token }) {
           ) : (
             "Үйлчлүүлэгч"
           );
+        },
+      },
+      {
+        title: t("Хөнгөлөлт"),
+        align: "center",
+        width: "10rem",
+        dataIndex: "mashin",
+        showSorterTooltip: false,
+        render: (a) => {
+          if (a?.khungulultTurul === "togtmolTsag") {
+            return (
+              <div className="flex items-center justify-center">
+                {a && (
+                  <div
+                    className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
+                      a?.uldegdelKhungulukhKhugatsaa > 0
+                        ? "bg-green-400 dark:bg-green-700"
+                        : "bg-yellow-400 dark:bg-yellow-700"
+                    }`}
+                  >
+                    {a?.uldegdelKhungulukhKhugatsaa}
+                    {"/"}
+                    {""}
+                    {a?.khungulukhKhugatsaa}
+                    {t("мин")}
+                  </div>
+                )}
+              </div>
+            );
+          }
+          if (a?.khungulultTurul === "khuviKhungulult") {
+            return (
+              <div className="flex items-center justify-center">
+                {a?.khungulultTurul && (
+                  <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                    {a?.khungulult}
+                    {"%"}
+                  </div>
+                )}
+              </div>
+            );
+          }
         },
       },
       {
@@ -2253,7 +2299,15 @@ const ZogsooliinToo = ({ zogsoolTusBuriinToo, jagsaalt }) => {
     too.length > 0 &&
     too.map((mur) => (
       <div className="ml-10 flex">
-        <text style={{ width: 80 }} className="font-bold text-blue-600">
+        <text
+          style={{
+            width: 120,
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+          }}
+          className="font-bold text-blue-600"
+        >
           {mur.ner}
         </text>
         <div style={{ width: 100 }} className="flex text-blue-600">
