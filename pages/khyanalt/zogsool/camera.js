@@ -594,18 +594,10 @@ function camera({ token }) {
   // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
-    bank: "tdb",
-    barilgiinId: barilgiinId,
-    corporateAshiglakhEsekh: true,
-    corporateNevtrekhNer: "ikhnayd",
-    corporateNuutsUg: "Tsetseglen@8888",
-    createdAt: "2023-08-23T10:30:21.364Z",
-    dansniiNer: "Их Наяд Плаза Зогсоол",
-    dugaar: "416075707",
-    updatedAt: "2023-08-23T10:30:21.364Z",
-    valyut: "MNT",
-    __v: 0,
-    _id: "61f23b53d75a1b62d86f2987",
+    dugaar:
+      baiguullaga?._id === "64fe8edc54a669717ad657ac"
+        ? "432002947"
+        : "416075707",
   };
   const {
     dansniiKhuulgaGaralt,
