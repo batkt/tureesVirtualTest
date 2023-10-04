@@ -155,8 +155,8 @@ function UtasBurtgel(
       </Form.List>
       <div className='flex flex-wrap sm:justify-center'>
         <Radio.Group onChange={handleRadioChange} value={msgAvakhTurul}>
-          <Radio value='Системд бүртгэгдсэн дүн'>Системд бүртгэгдсэн дүн</Radio>
-          <Radio value='Дансанд орсон дүн'>Дансанд орсон дүн</Radio>
+          <Radio value='system'>Системд бүртгэгдсэн дүн</Radio>
+          <Radio value='dans'>Дансанд орсон дүн</Radio>
         </Radio.Group>
       </div>
     </Form>
