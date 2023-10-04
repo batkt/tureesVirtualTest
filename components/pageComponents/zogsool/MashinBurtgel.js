@@ -134,7 +134,7 @@ function MashinBurtgel(
     }
     if (khungulultiinTurul === "togtmolTsag") {
       data.khungulujEkhlesenOgnoo = new Date();
-      if (dataOrjIrsenEsekh === false) {
+      if (dataOrjIrsenEsekh === false || !data?.uldegdelKhungulukhKhugatsaa) {
         data.uldegdelKhungulukhKhugatsaa = data.khungulukhKhugatsaa;
       }
     }
