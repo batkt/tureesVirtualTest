@@ -598,6 +598,7 @@ function camera({ token }) {
       baiguullaga?._id === "64fe8edc54a669717ad657ac"
         ? "432002947"
         : "416075707",
+    bank: "tdb",
   };
   const {
     dansniiKhuulgaGaralt,
