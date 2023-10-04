@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Button,
   Checkbox,
   Form,
   Input,
   Popconfirm,
+  Radio,
   Switch,
   Tooltip,
   notification,
@@ -14,49 +15,8 @@ import { useTranslation } from "react-i18next";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import UtasBurtgel from "./UtasBurtgel";
-
-function DugaarTile({ data, dansMutate, zasya, token, t }) {
-  // function ustgaya() {
-  //   deleteMethod("dans", token, data?._id).then(
-  //     ({ data }) => data === "Amjilttai" && dansMutate()
-  //   );
-  // }
-
-  return (
-    <div className='box w-full'>
-      <div className='grid w-full grid-cols-2 items-center justify-between gap-2 p-5'>
-        <div className=''>
-          <div className='font-medium'>Утасны дугаар</div>
-          <div>
-            47887789
-            {/* {data.dugaar} */}
-          </div>
-        </div>
-        <div className='ml-auto flex space-x-2'>
-          <Popconfirm
-            title={`
-            dd дугаарыг устгах уу?`}
-            okText={t("Тийм")}
-            cancelText={t("Үгүй")}
-            onConfirm={() => ustgaya()}>
-            <div className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 fill-current p-2 text-white'>
-              <Tooltip title={t("Устгах")}>
-                <DeleteOutlined size={20} />
-              </Tooltip>
-            </div>
-          </Popconfirm>
-          <div
-            className='flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-yellow-500 fill-current p-2 text-white'
-            onClick={() => zasya(data)}>
-            <Tooltip title={t("Засах")}>
-              <EditOutlined />
-            </Tooltip>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import useJagsaalt from "hooks/useJagsaalt";
+import { useAuth } from "services/auth";
 
 function Medegdel({
   token,
@@ -65,14 +25,13 @@ function Medegdel({
   setSongogdsonTsonkhniiIndex,
 }) {
   const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(null);
-  const [utasniiDugaar, setUtasniiDugaar] = useState(null);
-  const ref = React.useRef(null);
 
+  const ref = React.useRef(null);
   const { t } = useTranslation();
 
   const khungulultiinTokhirgooKhadgalya = () => {
     uilchilgee(token)
-      .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
+      .post("/baiguullaga", { tokhirgoo: medegdelTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           notification.success({ message: t("Амжилттай засагдлаа") });
@@ -93,7 +52,14 @@ function Medegdel({
     modal({
       title: "Утасны бүртгэл",
       icon: <PlusOutlined />,
-      content: <UtasBurtgel ref={ref} token={token} />,
+      content: (
+        <UtasBurtgel
+          baiguullagaMutate={baiguullagaMutate}
+          baiguullaga={baiguullaga}
+          ref={ref}
+          token={token}
+        />
+      ),
       footer,
     });
   }
@@ -156,9 +122,10 @@ function Medegdel({
           </div>
         </div>
       </div>
-      {/* <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-6'>
+
+      <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-6'>
         <div className='box mt-5 lg:mt-0'>
-          <div className='dark:border-dark-5 flex flex-col border-b border-gray-200 px-5 pb-2 pt-5'>
+          <div className='flex flex-col px-5 pb-2 pt-5'>
             <div className='flex justify-between'>
               <h2 className='mr-auto text-base font-medium dark:text-gray-200'>
                 Мэдэгдэл илгээх дугаар
@@ -172,14 +139,10 @@ function Medegdel({
               </div>
             </div>
           </div>
-          <DugaarTile
-            t={t}
-            className='box'
-            zasya={utasBurtgey}
-          />
+          {/* <DugaarTile t={t} className='box' zasya={utasBurtgey} /> */}
         </div>
-      </div> */}
-      <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-5'></div>
+      </div>
+      {/* <div className='xxl:col-span-4 col-span-12 mt-5 lg:col-span-5'></div> */}
     </>
   );
 }
