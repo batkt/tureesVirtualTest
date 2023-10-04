@@ -142,12 +142,12 @@ function UtasBurtgel(
             <Form.Item className='flex justify-center'>
               <Button
                 // className='!w-[100%]'
-                style={{ minWidth: "340px" }}
+                style={{ minWidth: "320px" }}
                 type='dashed'
                 onClick={() => add()}
                 // block
-                icon={<PlusOutlined />}>
-                Дугаар нэмэх
+                icon={<PlusOutlined className='text-black dark:text-white' />}>
+                <div className='text-black dark:text-white'>Дугаар нэмэх</div>
               </Button>
             </Form.Item>
           </div>
