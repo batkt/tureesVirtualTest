@@ -174,14 +174,14 @@ function Drawer(props) {
 
   if (!plan)
     return (
-      <div className="space-y-6 ">
-        <div className="flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100">
+      <div className='space-y-6 '>
+        <div className='flex justify-center pt-10 text-4xl text-gray-400 dark:text-red-100'>
           {t("План зураг оруулаагүй байна")}
         </div>
-        <div className="flex justify-center  ">
+        <div className='flex justify-center  '>
           <img
-            src="https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0="
-            alt="no plan"
+            src='https://media.istockphoto.com/vectors/house-plan-on-paper-with-ruler-and-pencil-thin-line-icon-interior-vector-id1282413344?k=20&m=1282413344&s=612x612&w=0&h=C_0ZmwrBoUW-AJo6_JYctTcWBEi5zj4pizoij_4gbf0='
+            alt='no plan'
             width={"30%"}
             height={"30%"}
           />
@@ -190,14 +190,14 @@ function Drawer(props) {
     );
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-end space-x-3 pb-3 print:hidden">
-        <div className="flex space-x-3 border-2 border-dashed p-1">
-          <div className="h-5 w-5 border-2 bg-green-400"></div>
+    <div className='flex flex-col'>
+      <div className='flex justify-end space-x-3 pb-3 print:hidden'>
+        <div className='flex space-x-3 border-2 border-dashed p-1'>
+          <div className='h-5 w-5 border-2 bg-green-400'></div>
           <div> {t("Идэвхтэй")}</div>
         </div>
-        <div className="flex space-x-3 border-2 border-dashed p-1">
-          <div className="h-5 w-5 border-2 bg-red-400"></div>
+        <div className='flex space-x-3 border-2 border-dashed p-1'>
+          <div className='h-5 w-5 border-2 bg-red-400'></div>
           <div>{t("Идэвхгүй")} </div>
         </div>
       </div>
@@ -205,8 +205,7 @@ function Drawer(props) {
         width={!!props?.talbaiGereendKharakh ? 650 : urgun}
         height={!!props?.talbaiGereendKharakh ? 500 : undur}
         onMouseDown={handleClick}
-        onMouseMove={handleMouseMove}
-      >
+        onMouseMove={handleMouseMove}>
         <Layer>
           <URLImage
             width={!!props?.talbaiGereendKharakh ? 650 : urgun}
@@ -222,7 +221,7 @@ function Drawer(props) {
               <Line
                 key={mur._id}
                 points={flattenedPoints}
-                stroke="black"
+                stroke='black'
                 fill={mur.idevkhiteiEsekh ? "lightgreen" : "red"}
                 opacity={0.3}
                 strokeWidth={5}
@@ -246,7 +245,7 @@ function Drawer(props) {
                   y={y - 15}
                   width={50}
                   height={26}
-                  fill="white"
+                  fill='white'
                   stroke={1}
                   opacity={0.9}
                 />
@@ -257,15 +256,15 @@ function Drawer(props) {
                   text={mur.kod}
                   fill={"black"}
                   fontSize={15}
-                  align="center"
+                  align='center'
                 />
               </Group>
             );
           })}
           <Line
             points={flattenedPoints}
-            stroke="black"
-            fill="#00D2FF"
+            stroke='black'
+            fill='#00D2FF'
             opacity={0.3}
             strokeWidth={5}
             closed={isFinished}
@@ -283,8 +282,8 @@ function Drawer(props) {
                 y={y}
                 width={width}
                 height={width}
-                fill="white"
-                stroke="black"
+                fill='white'
+                stroke='black'
                 strokeWidth={3}
                 onDragStart={handleDragStartPoint}
                 onDragEnd={(e) => handleDragEndPoint(e, index)}
@@ -303,14 +302,13 @@ function Drawer(props) {
       </Stage>
 
       {!props?.talbaiGereendKharakh && (
-        <div className="flex items-center justify-between space-x-3">
-          <div className=" space-x-3 space-y-2 ">
+        <div className='flex items-center justify-between space-x-3'>
+          <div className=' space-x-3 space-y-2 '>
             <Button
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
               onClick={() =>
                 props.onFinish && props.onFinish(khurvuuljYavuulakh(points))
-              }
-            >
+              }>
               <SaveOutlined /> {t("Хадгалах")}
             </Button>
             <Button
@@ -318,10 +316,9 @@ function Drawer(props) {
                 setPoints([]);
                 setIsFinished(false);
                 setIsMouseOverStartPoint(false);
-              }}
-            >
-              <ClearOutlined className="pr-2 dark:text-white" />
-              <p className="dark:text-white">{t("Шинээр зурах")}</p>
+              }}>
+              <ClearOutlined className='pr-2 dark:text-white' />
+              <p className='dark:text-white'>{t("Шинээр зурах")}</p>
             </Button>
           </div>
         </div>
