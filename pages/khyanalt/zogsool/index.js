@@ -213,12 +213,14 @@ function Zogsool({ token }) {
         baseQuery["tuukh.0.tuluv"] = 0;
         baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
         baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+        baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
         baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
           $gt: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
         };
       } else if (tuluv === 4) {
         baseQuery["tuukh.0.tuluv"] = 0;
         baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
+        baseQuery["tuukh.0.tsagiinTuukh.0.garsanTsag"] = { $exists: false };
         baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
         baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
           $lte: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
@@ -720,6 +722,7 @@ function Zogsool({ token }) {
                   v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
                   ? "bg-red-500 text-white dark:bg-red-700"
                   : v[0]?.tuluv === 0 &&
+                    !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment
                       .duration(
                         moment().diff(
@@ -746,6 +749,7 @@ function Zogsool({ token }) {
                   : v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
                   ? "Зөрчилтэй"
                   : v[0]?.tuluv === 0 &&
+                    !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment
                       .duration(
                         moment().diff(
