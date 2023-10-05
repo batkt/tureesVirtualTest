@@ -213,12 +213,15 @@ function Zogsool({ token }) {
         baseQuery["tuukh.0.tuluv"] = 0;
         baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
         baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+        baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
+          $gt: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
+        };
       } else if (tuluv === 4) {
         baseQuery["tuukh.0.tuluv"] = 0;
         baseQuery["tuukh.0.garsanKhaalga"] = { $exists: false };
         baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
         baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
-          $gte: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
+          $lte: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
         };
       }
     }

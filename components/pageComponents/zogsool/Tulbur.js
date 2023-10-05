@@ -1,4 +1,13 @@
-import { Steps, Button, Spin, message, Switch, Form, Modal } from "antd";
+import {
+  Steps,
+  Button,
+  Spin,
+  message,
+  Switch,
+  Form,
+  Modal,
+  notification,
+} from "antd";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
@@ -187,6 +196,12 @@ function Tulbur(
       a.burtgesenAjiltaniiNer = ajiltan.ner;
       a.zogsooliinId = data?.zogsooliinId;
     });
+    const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + b?.dun, 0);
+
+    if (tulukhGejBuiNiitDun !== niitDun) {
+      setLoading(false);
+      return notification.warn({ message: "Төлбөр дутуу байна!", duration: 1 });
+    }
     // console.log('3434', tulbur)
     uilchilgee(token)
       .post("/zogsooliinTulburTulye", { tulbur, id: uilchluugchiinId })
