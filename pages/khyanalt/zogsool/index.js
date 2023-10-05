@@ -896,6 +896,7 @@ function Zogsool({ token }) {
               }`}
               onClick={() => {
                 setShuult({ query: a.query, name: a.name });
+                setTuluv("");
               }}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
