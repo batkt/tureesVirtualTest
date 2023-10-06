@@ -29,7 +29,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
         newPlayer.destroy();
       }
     };
-  }, []);
+  }, [Camer]);
 
   useEffect(() => {
     if (Camer && player) {
