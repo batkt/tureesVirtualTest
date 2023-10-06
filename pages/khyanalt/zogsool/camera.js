@@ -619,7 +619,6 @@ function camera({ token }) {
   function onRefresh() {
     uilchluulegchMutate();
     uilchluulegchTooMutate();
-    dansniiKhuulgaMutate();
     toololtMutate();
     zogsoolTusBuriinTooMutate();
   }
