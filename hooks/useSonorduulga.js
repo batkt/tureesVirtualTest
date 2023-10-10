@@ -1,4 +1,4 @@
-import { notification } from "antd";
+import {message, notification} from "antd";
 import axios, { socket, aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
 import Sonorduulga from "components/sonorduulga";
@@ -139,16 +139,25 @@ function useSonorduulga(token) {
         }
       });
     }
-    if(ajiltan?._id)
-      socket().on(`ajiltan${ajiltan?._id}`, (res) => {
-          if(res==='logout')
-              window.location.href = "/";
-      });
     return () => {
       socket().off(`baiguullaga${baiguullaga?._id}`);
-      socket().off(`ajiltan${ajiltan?._id}`);
     };
   }, [baiguullaga, ajiltan]);
+
+  useEffect(()=>{
+      if(ajiltan?._id)
+          socket().on(`ajiltan${ajiltan?._id}`, (res) => {
+              if(res.type==='logout'&&res?.ip){
+                  message.warn(''+res.ip+' IP-тай төхөөрөмжөөс давхар нэвтэрсэн тул таны холболт саллаа.', 5);
+                  setTimeout(()=>{
+                      window.location.href = "/";
+                  },4000)
+              }
+          });
+      return () => {
+          socket().off(`ajiltan${ajiltan?._id}`);
+      };
+  },[ajiltan]);
 
   return {
     setKhuudaslalt,
