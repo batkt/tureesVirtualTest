@@ -225,6 +225,13 @@ function Zogsool({ token }) {
         baseQuery["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
           $lte: new Date(Date.now() - shalgakhTsag * 60 * 60 * 1000),
         };
+      } else if (tuluv === 5) {
+        baseQuery["tuukh.0.tuluv"] = 0;
+        baseQuery["tuukh.0.uneguiGarsan"] = { $exists: false };
+        baseQuery["niitDun"] = {
+          $gt: 0,
+        };
+        baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
 
@@ -663,6 +670,16 @@ function Zogsool({ token }) {
                 </div>
                 <div
                   onClick={() => {
+                    setTuluv(5);
+                  }}
+                  className={`relative ${
+                    tuluv === 5 && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                >
+                  {t("Төлбөртэй")}
+                </div>
+                <div
+                  onClick={() => {
                     setTuluv(4);
                   }}
                   className={`relative ${
@@ -719,8 +736,10 @@ function Zogsool({ token }) {
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : // : v[0].tuluv === 0
                   // ? "bg-yellow-500 text-white dark:bg-yellow-700"
-                  v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
+                  v[0].tuluv === -2
                   ? "bg-red-500 text-white dark:bg-red-700"
+                  : v[0].tuluv === 0 && data.niitDun > 0
+                  ? "bg-yellow-500 text-white dark:bg-yellow-700"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment
@@ -746,8 +765,10 @@ function Zogsool({ token }) {
                 //   :
                 v[0].tuluv === 1
                   ? "Төлсөн"
-                  : v[0].tuluv === -2 || (v[0].tuluv === 0 && data.niitDun > 0)
+                  : v[0].tuluv === -2
                   ? "Зөрчилтэй"
+                  : v[0].tuluv === 0 && data.niitDun > 0
+                  ? "Төлбөртэй"
                   : v[0]?.tuluv === 0 &&
                     !v[0]?.tsagiinTuukh?.[0]?.garsanTsag &&
                     moment
