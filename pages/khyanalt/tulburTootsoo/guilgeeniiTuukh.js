@@ -708,6 +708,7 @@ useEffect(()=> {
           baiguullagiinId={baiguullaga?._id}
           barilgiinId={barilgiinId}
           onFinish={refresh}
+          date={ognoo}
         />
       ),
       footer,

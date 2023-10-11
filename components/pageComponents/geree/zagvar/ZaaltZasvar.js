@@ -101,7 +101,7 @@ const tulburiinTalbaruud = [
   { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
 ];
 
-function ZaaltZasvar({ destroy, value, change }, ref) {
+function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
   const editorRef = React.useRef();
   const plugins = React.useMemo(
     () => require("suneditor/src/plugins")?.default || {},
@@ -176,7 +176,25 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       title: t("Төлбөр"),
       button: renderToString(<DollarCircleOutlined />),
     });
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur];
+    let songokhTalbaruud = [];
+    zardal?.jagsaalt?.map((a) => {
+      /*songokhTalbaruud.push({
+        ner: `${a.ner}.Хэмжих нэгж`,
+        talbar: `${a.ner}.khemjikhNegj`,
+      });*/
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Тариф`,
+        talbar: `${a.ner}.tariff`,
+      });
+    });
+
+    const zardaluud = customPlugin({
+      songokhTalbaruud: songokhTalbaruud,
+      name: "zardaluud",
+      title: "Ашиглалтын зардал авлага",
+      button: renderToString(<DollarCircleOutlined />),
+    });
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur, zardaluud];
   }, []);
 
   if (_.isString(value))
@@ -196,6 +214,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
               "talbai",
               "baritsaa",
               "tulbur",
+              "zardaluud",
               "table",
               "fontSize",
               "font",
@@ -252,7 +271,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           buttonList: [
             ...formatting,
             ["table", "align", "fontSize", "font"],
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur", "zardaluud",],
           ],
         }}
         showToolbar={true}

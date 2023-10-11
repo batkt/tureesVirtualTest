@@ -318,11 +318,22 @@ function GereeBaiguulakh({ token }) {
     }
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
-      butsaakhUtga.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-        .map((b) => {
-          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-        });
+      if(key==='zardluud'){
+        value.map((mur)=>{
+          butsaakhUtga.dedKhesguud
+              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1)
+              .map((b) => {
+                b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), mur.tariff);
+              });
+        })
+        // console.log('^^^^^^^11111', key, ' -- ',value);
+      } else {
+        butsaakhUtga.dedKhesguud
+            .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            });
+      }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
         value

@@ -9,28 +9,7 @@ import { modal } from "components/ant/Modal";
 import { useReactToPrint } from "react-to-print";
 import _ from "lodash";
 import { t } from "i18next";
-
-const fetcher = (url, token, gereeniiId, ognoo) =>
-  axios(token)
-    .get(`${url}/${gereeniiId}`, {
-      params: {
-        duusakhOgnoo: moment(ognoo[1])
-          .endOf("month")
-          .format("YYYY-MM-DD 23:59:59"),
-      },
-    })
-    .then((res) => {
-      var uldegdel = 0;
-      res.data.forEach((x) => {
-        uldegdel =
-          uldegdel +
-          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
-        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
-        else x.uldegdel = uldegdel;
-      });
-      return res.data;
-    })
-    .catch(aldaaBarigch);
+import {useGereeGuilgee} from "hooks/useGereeniiJagsaalt";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -68,20 +47,8 @@ const turulAvya = (turul) => {
   else if (turul === "qpay") return "QPay";
 };
 
-function useGuilgee(token, gereeniiId, ognoo) {
-  const { data, mutate } = useSWR(
-    !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
-  return {
-    guilgeeniiTuukh: data,
-    guilgeeniiTuukhMutate: mutate,
-  };
-}
-
 function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId }, ref) {
-  const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGuilgee(
+  const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
     ognoo
