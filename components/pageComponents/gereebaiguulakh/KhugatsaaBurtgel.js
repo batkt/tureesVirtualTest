@@ -66,8 +66,12 @@ const YurunkhiiMedeele = ({
   if (gereeniiZagvar?.turGereeEsekh === true) {
     value.tulukhUdur = [moment(value?.gereeniiOgnoo).format("DD")];
   }
-  value.gereeniiOgnoo = moment(moment(value.gereeniiOgnoo).format("YYYY-MM-DD 00:00:00"));
-  value.duusakhOgnoo = moment(moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00"));
+  value.gereeniiOgnoo = moment(
+    moment(value.gereeniiOgnoo).format("YYYY-MM-DD 00:00:00")
+  );
+  value.duusakhOgnoo = moment(
+    moment(value.duusakhOgnoo).format("YYYY-MM-DD 00:00:00")
+  );
 
   useEffect(() => {
     Aos.init({ once: true });
@@ -107,7 +111,9 @@ const YurunkhiiMedeele = ({
     >
       <div data-aos="fade-right" data-aos-duration="1000">
         <Form.Item
-          rules={[{ required: true, message: t("Гэрээ хийх огноо бүртгэнэ үү!") }]}
+          rules={[
+            { required: true, message: t("Гэрээ хийх огноо бүртгэнэ үү!") },
+          ]}
           name="gereeniiOgnoo"
           label={t("Гэрээ хийх огноо")}
         >
@@ -122,7 +128,9 @@ const YurunkhiiMedeele = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
         <Form.Item
-          rules={[{ required: true, message: t("Гэрээний хугацаа бүртгэнэ үү!") }]}
+          rules={[
+            { required: true, message: t("Гэрээний хугацаа бүртгэнэ үү!") },
+          ]}
           name="khugatsaa"
           label={t("Гэрээний хугацаа")}
           required
@@ -133,17 +141,22 @@ const YurunkhiiMedeele = ({
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
-            max={100}
+            max={480}
             min={1}
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            placeholder={t(`Гэрээний хугацаа ${gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
-              }`)}
+            placeholder={t(
+              `Гэрээний хугацаа ${
+                gereeniiZagvar?.turGereeEsekh === true ? "(өдрөөр)" : "(сараар)"
+              }`
+            )}
           />
         </Form.Item>
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
         <Form.Item
-          rules={[{ required: true, message: t("Төлөлт хийх өдөр бүртгэнэ үү!") }]}
+          rules={[
+            { required: true, message: t("Төлөлт хийх өдөр бүртгэнэ үү!") },
+          ]}
           label={t("Төлөлт хийх өдөр")}
           extra={
             gereeniiZagvar?.turGereeEsekh !== true &&
@@ -198,7 +211,7 @@ const YurunkhiiMedeele = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="400">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="flex w-full flex-col gap-4 md:flex-row justify-between">
+          <div className="flex w-full flex-col justify-between gap-4 md:flex-row">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
