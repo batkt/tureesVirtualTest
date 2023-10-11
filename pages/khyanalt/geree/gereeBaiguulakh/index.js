@@ -311,6 +311,12 @@ function GereeBaiguulakh({ token }) {
       }
     }
 
+    if (khadgalakhGeree.gereeniiOgnoo) {
+      khadgalakhGeree.gereeniiOgnoo = moment(
+        khadgalakhGeree.gereeniiOgnoo
+      ).format("YYYY/MM/DD");
+    }
+
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       butsaakhUtga.dedKhesguud
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)

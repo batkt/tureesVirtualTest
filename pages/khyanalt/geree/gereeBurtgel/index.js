@@ -988,6 +988,11 @@ function ZakhialgiinKhyanalt() {
               />
             </span>
           );
+          if (geree.gereeniiOgnoo) {
+            geree.gereeniiOgnoo = moment(geree.gereeniiOgnoo).format(
+              "YYYY/MM/DD"
+            );
+          }
 
           for (const [key, value] of Object.entries(geree)) {
             data.dedKhesguud
