@@ -310,7 +310,7 @@ function GereeBaiguulakh({ token }) {
         khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
       }
     }
-
+    {console.log('9999999', khadgalakhGeree)}
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.gereeniiOgnoo = moment(
         khadgalakhGeree.gereeniiOgnoo
@@ -451,7 +451,7 @@ function GereeBaiguulakh({ token }) {
           </Steps>
         </div>
         <div className="mt-3 grid grid-cols-12 gap-6 md:col-span-12">
-          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
+          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">{console.log('111111khadgalakhGeree', khadgalakhGeree)}
             <currentItem.content
               t={t}
               next={next}
@@ -621,8 +621,15 @@ function GereeBaiguulakh({ token }) {
                       />
                       <div className="flex gap-3">
                         <div>{t("Хэмжээ")}:</div>
-                        <div>{a.talbainKhemjee || 0}m²</div>
+                        <div>{a.talbainKhemjee || 0}м<sup>2</sup></div>
                       </div>
+                      {a.talbainKhemjeeMetrKube &&
+                      (
+                          <div className="flex gap-3">
+                            <div>{t("Хэмжээ м3")}:</div>
+                            <div>{a.talbainKhemjeeMetrKube || 0}м<sup>3</sup></div>
+                          </div>
+                      )}
                       <div className="flex gap-3">
                         <div>{t("Сарын түрээс")}:</div>
                         <div>{formatNumber(a.tureesiinTulbur || 0)}₮</div>

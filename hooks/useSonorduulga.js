@@ -144,7 +144,7 @@ function useSonorduulga(token) {
     };
   }, [baiguullaga, ajiltan]);
 
-  useEffect(()=>{
+  /*useEffect(()=>{
       if(ajiltan?._id)
           socket().on(`ajiltan${ajiltan?._id}`, (res) => {
               if(res.type==='logout'&&res?.ip){
@@ -157,7 +157,7 @@ function useSonorduulga(token) {
       return () => {
           socket().off(`ajiltan${ajiltan?._id}`);
       };
-  },[ajiltan]);
+  },[ajiltan]);*/
 
   return {
     setKhuudaslalt,
