@@ -61,11 +61,12 @@ function tulburTootsoo() {
   useEffect(() => {
     Aos.init({ once: true });
   });
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ekhlekhOgnoo, setEkhlekhOgnoo] = useState([moment(), moment()]);
   const formRef = useRef();
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
+  const [ognoonuud, setOgnoonuud] = useState([]);
   const tailbarRef = React.useRef(null);
   const [shuult, setShuult] = React.useState({
     query: { tuluv: { $ne: -1 } },
@@ -110,6 +111,7 @@ function tulburTootsoo() {
   });
   const [selectedRowKeys, setRowKeys] = useState([]);
   const [waiting, setWaiting] = useState(false);
+  const [khungulukh, setKhungulukh] = useState('khuvi');
 
   const { Option } = Select;
   const rowSelection = {
@@ -176,9 +178,7 @@ function tulburTootsoo() {
     }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
-      ugugdul.ognoonuud = [
-        moment(ugugdul.ognoonuud).format("YYYY-MM-01 00:00:00"),
-      ];
+      ugugdul.ognoonuud = ognoonuud.map(mur=>moment(mur).format("YYYY-MM-01 00:00:00"));
       ugugdul.barilgiinId = barilgiinId;
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
@@ -186,7 +186,7 @@ function tulburTootsoo() {
       ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
         (x) => (x._id = x._id)
       );
-      if (baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi) {
+      if (khungulukh === 'khuvi' && baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi) {
         setWaiting(false); notification.warning({ message: "Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!" }); return
       }
 
@@ -197,6 +197,7 @@ function tulburTootsoo() {
             message.success("Хөнгөлөлт амжилттай хийгдлээ");
             formRef.current.resetFields();
             setTootsoolol({});
+            setOgnoonuud([]);
           }
         })
         .catch((e) => {
@@ -367,7 +368,7 @@ function tulburTootsoo() {
         case "control-ref_davkhar":
           formRef.current.getFieldInstance("khungulukhKhuvi").focus();
           break;
-        case "control-ref_khungulukhKhuvi":
+        case "control-ref_khungulukhDun":
           formRef.current.getFieldInstance("shaltgaan").focus();
           break;
         case "control-ref_shaltgaan":
@@ -385,23 +386,20 @@ function tulburTootsoo() {
   }
 
   function khungulukhDunTootsoolyo() {
-    var khuvi = form?.getFieldValue("khungulukhKhuvi");
-    if (khuvi > 100) {
+    var dun = form?.getFieldValue("khungulukhKhuvi");
+    if (khungulukh==='khuvi' && dun > 100) {
       form.setFieldsValue({ khungulukhKhuvi: 100 });
-      khuvi = 100;
+      dun = 100;
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
     tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
       (a, b) => a + Number(b?.sariinTurees || 0),
       0
     );
-    tootsoolol.khunglugdsunDun =
-      (Number(tootsoolol.niitSariinTurees) * khuvi) / 100;
-    tootsoolol.niitTulukhDun =
-      Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+    tootsoolol.khunglugdsunDun = khungulukh==='khuvi' ? (Number(tootsoolol.niitSariinTurees) * dun) / 100 : dun;
+    tootsoolol.niitTulukhDun = Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
     setTootsoolol({ ...tootsoolol });
   }
-
   return (
     <Admin
       title="Хөнгөлөлт"
@@ -427,6 +425,24 @@ function tulburTootsoo() {
                 data-aos="fade-right"
                 data-aos-duration="1000"
               >
+                { ognoonuud.length>0&&
+                  <>
+                    <div className="mb-2">Сонгогдсон сарууд:</div>
+                    <div className="w-full flex flex-row flex-wrap">
+                      {ognoonuud.map((a, index)=>(
+                          <div key={index} className="px-2 py-1 bg-gray-200 m rounded mr-2 mb-2 flex items-center">
+                            {moment(a).format('YYYY-MM')}
+                              <div onClick={()=>{
+                                const uOgnoonuud = [...ognoonuud];
+                                uOgnoonuud.splice(index, 1);
+                                setOgnoonuud(uOgnoonuud);
+                              }}
+                                   className='w-[15px] h-[15px] flex justify-center items-center ml-1 rounded-full text-[10px] text-white bg-red-400 cursor-pointer'>x</div>
+                          </div>
+                      ))}
+                    </div>
+                  </>
+                }
                 <Form
                   onFinish={khungulultKhadgalya}
                   form={form}
@@ -453,13 +469,21 @@ function tulburTootsoo() {
                     ]}
                   >
                     <DatePicker
+                      allowClear={false}
                       style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
                       placeholder={t("Сар")}
-                      onChange={() =>
-                        formRef.current.getFieldInstance("turul").focus()
-                      }
+                      onChange={(v) =>{
+                        let r = false;
+                        const c = moment(v).format('YYYY-MM');
+                        ognoonuud.map(a=>{
+                          if(c===moment(a).format('YYYY-MM'))
+                            r = true;
+                        });
+                        if(!r)
+                          setOgnoonuud([...ognoonuud, v]);
+                      }}
                     />
                   </Form.Item>
                   <Form.Item name="turul" label={t("Нөхцөл")}>
@@ -492,12 +516,28 @@ function tulburTootsoo() {
                         ))}
                     </Select>
                   </Form.Item>
-
-                  <Form.Item label={t("Хөнгөлөх хувь")} name="khungulukhKhuvi">
+                  <Form.Item label={t("Хөнгөлөх төрөл")}>
+                    <Select
+                        placeholder="Хөнгөлөх төрөл"
+                        className="w-32"
+                        value={khungulukh}
+                        onChange={(v) =>{
+                          setKhungulukh(v);
+                          form.setFieldsValue({ khungulukhKhuvi: 0})
+                        }}
+                    >
+                      <Select.Option key={"khuvi"}>Хувь</Select.Option>
+                      <Select.Option key={"mungunDun"}>
+                        Мөнгөн дүн
+                      </Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item label={khungulukh === "khuvi" ? "Хөнгөлөх хувь" : "Хөнгөлөх дүн"} name="khungulukhKhuvi">
                     <Input
+                        // formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       onKeyDown={focuser}
                       type={"number"}
-                      placeholder={t("Хөнгөлөх хувь")}
+                      placeholder={khungulukh === "khuvi" ? "Хөнгөлөх хувь" : "Хөнгөлөх дүн"}
                       onChange={khungulukhDunTootsoolyo}
                     />
                   </Form.Item>
@@ -643,7 +683,7 @@ function tulburTootsoo() {
               </div>
             </div>
           </Tabs.TabPane>
-          <Tabs.TabPane tab={t("Хөнгөлөлт түүх")} key="2">  
+          <Tabs.TabPane tab={t("Хөнгөлөлт түүх")} key="2">
             <div className="grid w-full grid-cols-12 gap-6">
               <div className="box col-span-12 p-5 md:col-span-8 xl:col-span-12">
                 <div className="mt-5 flex w-full flex-row justify-between">
