@@ -12,7 +12,7 @@ import {
   Tabs,
 } from "antd";
 import Admin from "components/Admin";
-import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
+import useGereeniiJagsaalt, {useGereeGuilgee} from "hooks/useGereeniiJagsaalt";
 import useKhungulultTuukh from "hooks/tulburTootsoo/useKhungulultTuukh";
 import _, { set } from "lodash";
 import moment from "moment";
@@ -31,6 +31,7 @@ import formatNumber from "tools/function/formatNumber";
 import Aos from "aos";
 import { modal } from "components/ant/Modal";
 import { useTranslation } from "react-i18next";
+import useJagsaalt from "hooks/useJagsaalt";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -67,9 +68,10 @@ function tulburTootsoo() {
   const formRef = useRef();
   const [songogdsonGereenuud, setSongogdsonGereenuud] = useState([]);
   const [ognoonuud, setOgnoonuud] = useState([]);
+  const [turul, setTurul] = useState('turees');
   const tailbarRef = React.useRef(null);
   const [shuult, setShuult] = React.useState({
-    query: { tuluv: { $ne: -1 } },
+    query: { tuluv: { $ne: -1 }},
   });
   const [songogdsonNuur, setSongogdsonNuur] = useState("1");
   const query = useMemo(() => {
@@ -119,6 +121,23 @@ function tulburTootsoo() {
     onChange: onSelectChange,
   };
 
+  const qZardal = useMemo(
+      () => ({
+        turul: { $in: ["Тогтмол", "1м2"] },
+        tariff: { $exists: true },
+        barilgiinId,
+      }),
+      [barilgiinId]
+  );
+
+  const zardal = useJagsaalt(
+      "/ashiglaltiinZardluud",
+      qZardal,
+      undefined,
+      undefined,
+      undefined,
+      token
+  );
   useEffect(() => {
     if (form.getFieldValue("turul") === "Бүгд") {
       onSelectChange(
@@ -189,7 +208,7 @@ function tulburTootsoo() {
       if (khungulukh === 'khuvi' && baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi) {
         setWaiting(false); notification.warning({ message: "Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!" }); return
       }
-
+      // console.log('******ugugdul', ugugdul);
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -386,16 +405,27 @@ function tulburTootsoo() {
   }
 
   function khungulukhDunTootsoolyo() {
-    var dun = form?.getFieldValue("khungulukhKhuvi");
+    let dun = form?.getFieldValue("khungulukhKhuvi");
+    if(turul==='turees')
+      tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
+          (a, b) => a + Number(b?.sariinTurees || 0), 0
+      );
+    else {
+      tootsoolol.niitSariinTurees = 0;
+      const fVal = form.getFieldValue('zardliinId');
+      songogdsonGereenuud.map(e=>{
+        const zardal = e?.zardluud.find((a)=>a._id===fVal);
+        if (zardal.turul==='1м2')
+          tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + (e.talbainKhemjee * zardal.tariff);
+        else
+          tootsoolol.niitSariinTurees = zardal.tariff + tootsoolol.niitSariinTurees;
+      });
+    }
     if (khungulukh==='khuvi' && dun > 100) {
       form.setFieldsValue({ khungulukhKhuvi: 100 });
       dun = 100;
     }
     tootsoolol.niitTalbai = songogdsonGereenuud?.length;
-    tootsoolol.niitSariinTurees = songogdsonGereenuud?.reduce(
-      (a, b) => a + Number(b?.sariinTurees || 0),
-      0
-    );
     tootsoolol.khunglugdsunDun = khungulukh==='khuvi' ? (Number(tootsoolol.niitSariinTurees) * dun) / 100 : dun;
     tootsoolol.niitTulukhDun = Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
     setTootsoolol({ ...tootsoolol });
@@ -425,24 +455,6 @@ function tulburTootsoo() {
                 data-aos="fade-right"
                 data-aos-duration="1000"
               >
-                { ognoonuud.length>0&&
-                  <>
-                    <div className="mb-2">Сонгогдсон сарууд:</div>
-                    <div className="w-full flex flex-row flex-wrap">
-                      {ognoonuud.map((a, index)=>(
-                          <div key={index} className="px-2 py-1 bg-gray-200 m rounded mr-2 mb-2 flex items-center">
-                            {moment(a).format('YYYY-MM')}
-                              <div onClick={()=>{
-                                const uOgnoonuud = [...ognoonuud];
-                                uOgnoonuud.splice(index, 1);
-                                setOgnoonuud(uOgnoonuud);
-                              }}
-                                   className='w-[15px] h-[15px] flex justify-center items-center ml-1 rounded-full text-[10px] text-white bg-red-400 cursor-pointer'>x</div>
-                          </div>
-                      ))}
-                    </div>
-                  </>
-                }
                 <Form
                   onFinish={khungulultKhadgalya}
                   form={form}
@@ -458,6 +470,82 @@ function tulburTootsoo() {
                   }}
                   layout="horizontal"
                 >
+                  <Form.Item name="khungulukhTurul" label={t("Төрөл")}>
+                    <Select
+                        className="flex-1 ml-1 mr-3"
+                        defaultValue="turees"
+                        onChange={(e)=>{
+                          setTurul(e);
+                          if(e==='turees'){
+                            setShuult({
+                              query: (!!shuult?.query?.davkhar) ? {davkhar: shuult.query.davkhar, tuluv: shuult.query.tuluv} : { tuluv: shuult.query.tuluv}
+                            });
+                            form.setFieldsValue({ zardliinId: undefined });
+                          }
+                          setTootsoolol({
+                            niitTalbai: 0,
+                            niitSariinTurees: 0,
+                            khunglugdsunDun: 0,
+                            niitTulukhDun: 0,
+                          });
+                        }}
+                    >
+                      <Select.Option value={'turees'}>
+                        Түрээс
+                      </Select.Option>
+                      <Select.Option value={'zardal'}>
+                        Зардал
+                      </Select.Option>
+                    </Select>
+                  </Form.Item>
+                  {
+                    (turul==='zardal'&&zardal&&zardal?.jagsaalt.length>0)&&(
+                        <Form.Item name="zardliinId" label={t("Зардал сонгох")}
+                                   rules={[
+                                     {
+                                       required: true,
+                                       message: t("Зардал сонгоно уу!"),
+                                     },
+                                   ]}
+                        >
+                          <Select
+                              className="flex-1 ml-1 mr-3"
+                              onChange={(e)=>{
+                                setShuult({
+                                  query: (!!shuult?.query?.davkhar) ? {davkhar: shuult.query.davkhar, tuluv: shuult.query.tuluv, "zardluud._id": e} : { tuluv: shuult.query.tuluv, "zardluud._id": e }
+                                });
+                                // setShuult({ query: { tuluv: { $ne: -1 } } });
+                              }}
+                          >
+                            {
+                              zardal.jagsaalt.map((z)=>(
+                                  <Select.Option value={z._id}>
+                                    {z.ner}
+                                  </Select.Option>
+                              ))
+                            }
+                          </Select>
+                        </Form.Item>
+                    )
+                  }
+                  { ognoonuud.length>0&&
+                  <>
+                    <div className="mb-2">Сонгогдсон сарууд:</div>
+                    <div className="w-full flex flex-row flex-wrap">
+                      {ognoonuud.map((a, index)=>(
+                          <div key={index} className="px-2 py-1 bg-gray-200 m rounded mr-2 mb-2 flex items-center">
+                            {moment(a).format('YYYY-MM')}
+                            <div onClick={()=>{
+                              const uOgnoonuud = [...ognoonuud];
+                              uOgnoonuud.splice(index, 1);
+                              setOgnoonuud(uOgnoonuud);
+                            }}
+                                 className='w-[15px] h-[15px] flex justify-center items-center ml-1 rounded-full text-[10px] text-white bg-red-400 cursor-pointer'>x</div>
+                          </div>
+                      ))}
+                    </div>
+                  </>
+                  }
                   <Form.Item
                     name="ognoonuud"
                     label={t("Хөнгөлөх сар")}
@@ -552,7 +640,7 @@ function tulburTootsoo() {
                       {t("Нийт талбайн тоо")} :<a>{tootsoolol.niitTalbai}</a>
                     </div>
                     <div className="flex justify-between">
-                      {t("Нийт түрээсийн орлого")} :
+                      {turul==='turees' ? t("Нийт түрээсийн орлого") : "Нийт зардлын дүн"} :
                       <a>{formatNumber(tootsoolol.niitSariinTurees || 0)}</a>
                     </div>
                     <div className="flex justify-between">
@@ -568,7 +656,7 @@ function tulburTootsoo() {
                       </a>
                     </div>
                   </div>
-                  <div className="mt-10 flex flex-row justify-between  ">
+                  <div className="mt-10 flex flex-row justify-between">
                     <Form.Item>
                       <Button
                         htmlType="submit"
