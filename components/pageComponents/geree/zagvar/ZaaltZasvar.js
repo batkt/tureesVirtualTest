@@ -81,7 +81,8 @@ const talbainiiTalbaruud = [
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-  { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
+  { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
+  { ner: "Талбайн хэмжээ м3", talbar: "talbainKhemjeeMetrKube" },
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
@@ -158,13 +159,13 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
       title: t("Хугацаа"),
       button: renderToString(<ClockCircleOutlined />),
     });
-    const baritsaa = customPlugin({
+    const talbai = customPlugin({
       songokhTalbaruud: talbainiiTalbaruud,
       name: "talbai",
       title: t("Түрээсийн талбай"),
       button: renderToString(<BankOutlined />),
     });
-    const talbai = customPlugin({
+    const baritsaa = customPlugin({
       songokhTalbaruud: baritsaaniiTalbaruud,
       name: "baritsaa",
       title: t("Барьцаа"),
