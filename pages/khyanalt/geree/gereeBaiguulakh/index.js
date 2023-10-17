@@ -310,7 +310,6 @@ function GereeBaiguulakh({ token }) {
         khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
       }
     }
-    {console.log('9999999', khadgalakhGeree)}
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.gereeniiOgnoo = moment(
         khadgalakhGeree.gereeniiOgnoo
@@ -326,7 +325,6 @@ function GereeBaiguulakh({ token }) {
                 b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), mur.tariff);
               });
         })
-        // console.log('^^^^^^^11111', key, ' -- ',value);
       } else {
         butsaakhUtga.dedKhesguud
             .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
