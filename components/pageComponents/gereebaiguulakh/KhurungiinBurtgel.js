@@ -103,7 +103,6 @@ const YurunkhiiMedeele = ({
   t,
 }) => {
   const [form] = Form.useForm();
-  console.log('2222222', value)
   useEffect(() => {
     if (!!value.talbainIdnuud && !value.talbainuud) {
       getListMethod("talbai", token, {
@@ -346,17 +345,8 @@ const YurunkhiiMedeele = ({
                     </div>
                   )}
                   {talbai.talbainKhemjeeMetrKube && (
-                      <div className="flex items-center justify-center text-center">
-                        <InputNumber
-                            size="small"
-                            formatter={(v) =>
-                                `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            }
-                            max={value?._id ? undefined : talbai?.talbainKhemjeeMetrKube}
-                            parser={(v) => v.replace(/\$\s?|(,*)/g, "")}
-                            value={value?.talbainKhemjeeMetrKube || 0}
-                            onChange={(v) => onChangeM2(index, v)}
-                        />
+                      <div className="text-center">
+                        {talbai?.talbainKhemjeeMetrKube}
                       </div>
                   )}
                   <div className="pr-2 text-right">
