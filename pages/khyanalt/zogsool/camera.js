@@ -708,16 +708,12 @@ function camera({ token }) {
         align: "center",
         width: "5rem",
         render: (data) => {
-          const shalgakhIp =
-            cameraData?.[0]?.[1]?.children?.[0]?.children?.[0]?.value;
           var zogsojBuiTuluv = "Гадна";
-          for (const x of data.tuukh) {
-            if (x.orsonKhaalga === shalgakhIp) {
-              if (!x.tsagiinTuukh?.[0]?.garsanTsag) {
-                zogsojBuiTuluv = "Дотор";
-              } else {
-                zogsojBuiTuluv = "Гадна";
-              }
+          if (data?.tuukh?.length > 1) {
+            if (!data.tuukh?.[1].tsagiinTuukh?.[0]?.garsanTsag) {
+              zogsojBuiTuluv = "Дотор";
+            } else {
+              zogsojBuiTuluv = "Гадна";
             }
           }
           return (
