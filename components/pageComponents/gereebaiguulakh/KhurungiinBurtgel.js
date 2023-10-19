@@ -103,7 +103,6 @@ const YurunkhiiMedeele = ({
   t,
 }) => {
   const [form] = Form.useForm();
-
   useEffect(() => {
     if (!!value.talbainIdnuud && !value.talbainuud) {
       getListMethod("talbai", token, {
@@ -141,6 +140,7 @@ const YurunkhiiMedeele = ({
   };
 
   function talbainBurtgelBugulyu(talbainuud) {
+    // console.log('talbainBurtgelBugulyu',talbainuud)
     gereeniiZagvar?.turGereeEsekh !== true
       ? (value.baritsaaAvakhDun = talbainuud.reduce(
           (a, b) => a + Number(b.talbainNiitUne || 0),
@@ -164,8 +164,7 @@ const YurunkhiiMedeele = ({
       );
     } else
       value.talbainKhemjee = talbainuud.reduce((a, b) => b.talbainKhemjee, 0);
-
-    value.talbainNegjUneUsgeer = toWords(value.talbainNegjUne);
+    value.talbainKhemjeeMetrKube = talbainuud.reduce((a, b) => b.talbainKhemjeeMetrKube, 0);
     value.talbainNiitUneUsgeer = toWords(value.talbainNiitUne);
     value.davkhar = [...new Set(talbainuud.map((a) => a.davkhar))].join(",");
     value.talbainIdnuud = talbainuud.map((a) => a._id);
@@ -289,9 +288,10 @@ const YurunkhiiMedeele = ({
               <div className="divide-y-2 border">
                 <div
                   className={`grid ${
-                    gereeniiZagvar?.turGereeEsekh
-                      ? "grid-cols-4"
-                      : "grid-cols-3"
+                      gereeniiZagvar?.turGereeEsekh && talbai.talbainKhemjeeMetrKube ?
+                          "grid-cols-5" :
+                          gereeniiZagvar?.turGereeEsekh || talbai.talbainKhemjeeMetrKube ?
+                              "grid-cols-4" : "grid-cols-3"
                   } divide-x-2 py-1`}
                 >
                   <div className="flex items-center justify-center text-center">
@@ -306,15 +306,22 @@ const YurunkhiiMedeele = ({
                     {t("м")}
                     <sup>2</sup>
                   </div>
+                  {talbai.talbainKhemjeeMetrKube && (
+                      <div className="flex items-center justify-center text-center">
+                        {t("м")}
+                        <sup>3</sup>
+                      </div>
+                  )}
                   <div className="flex items-center justify-center text-center">
                     {t("Түрээсийн төлбөр")}
                   </div>
                 </div>
                 <div
                   className={`grid ${
-                    gereeniiZagvar?.turGereeEsekh
-                      ? "grid-cols-4"
-                      : "grid-cols-3"
+                    gereeniiZagvar?.turGereeEsekh && talbai.talbainKhemjeeMetrKube ? 
+                        "grid-cols-5" : 
+                        gereeniiZagvar?.turGereeEsekh || talbai.talbainKhemjeeMetrKube ?
+                            "grid-cols-4" : "grid-cols-3" 
                   } divide-x-2 py-1`}
                 >
                   <div className="text-center">{talbai.davkhar}</div>
@@ -336,6 +343,11 @@ const YurunkhiiMedeele = ({
                         onChange={(v) => onChangeM2(index, v)}
                       />
                     </div>
+                  )}
+                  {talbai.talbainKhemjeeMetrKube && (
+                      <div className="text-center">
+                        {talbai?.talbainKhemjeeMetrKube}
+                      </div>
                   )}
                   <div className="pr-2 text-right">
                     {gereeniiZagvar.turGereeEsekh ? (

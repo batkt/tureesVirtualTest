@@ -19,6 +19,7 @@ import _ from "lodash";
 import { aldaaBarigch } from "services/uilchilgee";
 import compareFields from "tools/function/compareFields";
 import { t } from "i18next";
+import useJagsaalt from "../../../../../hooks/useJagsaalt";
 
 var defaultUtga = {
   dedKhesguud: [{ zaalt: "new" }],
@@ -36,7 +37,9 @@ function ZakhialgaNemekh({ token }) {
   });
   const [towchTuluv, setTowchTuluv] = useState(false);
   const ref = React.useRef();
-
+  const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
+    barilgiinId: barilgiinId,
+  });
   React.useEffect(() => {
     if (id !== "new")
       readMethod("gereeniiZagvar", token, id).then(({ data }) => {
@@ -102,7 +105,7 @@ function ZakhialgaNemekh({ token }) {
       title: t("Заалт засах"),
       icon: <FileExcelOutlined />,
       content: (
-        <ZaaltZasvar ref={ref} token={token} value={value} change={change} />
+        <ZaaltZasvar ref={ref} token={token} value={value} change={change} zardal={ashiglaltiinZardal} />
       ),
       footer,
     });

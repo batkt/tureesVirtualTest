@@ -119,7 +119,6 @@ function KhurunguudCard({
   t,
   ...restField
 }) {
-  console.log(data)
   const niitUneRef = useRef();
   const tooRef = useRef();
   const uneRef = useRef();
@@ -315,7 +314,7 @@ function TalbaiBurtgekh({ token }) {
     Aos.init({ once: true });
   });
   const router = useRouter();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const query = router.query;
   const data = JSON.parse(query.data || "{}");
   const barilgiinId = query.barilgiinId;
@@ -345,6 +344,7 @@ function TalbaiBurtgekh({ token }) {
   const [talbaiState, settalbaiState] = useState({
     kod: undefined,
     talbainKhemjee: undefined,
+    talbainKhemjeeMetrKube: undefined,
     tailbar: undefined,
     talbainNegjUne: undefined,
     talbainNiitUne: undefined,
@@ -477,8 +477,7 @@ function TalbaiBurtgekh({ token }) {
     const segmentuud = formRef.current.getFieldsValue(segmentuud);
     talbaiState.segmentuud = segmentuud.segmentuud;
     if (talbaiState.niitiinTalbaiEsekh)
-      talbaiState.sulKhemjee =
-        talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
+      talbaiState.sulKhemjee = talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
     setWaiting(true);
     if (!!talbaiState._id) {
       uilchilgee(token)
@@ -534,6 +533,7 @@ function TalbaiBurtgekh({ token }) {
       compareFields(values, data, [
         "kod",
         "talbainKhemjee",
+        "talbainKhemjeeMetrKube",
         "talbainNegjUne",
         "talbainNiitUne",
         "davkhar",
@@ -656,6 +656,25 @@ function TalbaiBurtgekh({ token }) {
                   placeholder={t("Талбайн хэмжээ/м2/")}
                   value={talbaiState.talbainKhemjee}
                   onChange={(v) => onChange("talbainKhemjee", v)}
+                ></InputNumber>
+              </Form.Item>
+            </div>
+            <div
+                data-aos="fade-right"
+                data-aos-duration="1000"
+                data-aos-delay="100"
+            >
+              <Form.Item
+                  label={t("Хэмжээ м3")}
+                  name="talbainKhemjeeMetrKube"
+              >
+                <InputNumber
+                    onKeyUp={focuser}
+                    style={{ width: "100%" }}
+                    allowClear
+                    placeholder={t("Талбайн хэмжээ/м3/")}
+                    value={talbaiState.talbainKhemjeeMetrKube}
+                    onChange={(v) => onChange("talbainKhemjeeMetrKube", v)}
                 ></InputNumber>
               </Form.Item>
             </div>

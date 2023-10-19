@@ -17,9 +17,11 @@ import locale from "antd/lib/date-picker/locale/mn_MN";
 import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
+import {useGereeGuilgee} from "hooks/useGereeniiJagsaalt";
+import {loadGetInitialProps} from "next/dist/shared/lib/utils";
 
 function GuilgeeKhiikh(
-  { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId },
+  { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId, date },
   ref
 ) {
   const [dun, setDun] = useState("");
@@ -27,8 +29,11 @@ function GuilgeeKhiikh(
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
+  const [umnukhZaalt, setUmnukhZaalt] = useState(0);
+  const [suuliinZaalt, setSuuliinZaalt] = useState(null);
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
-  const { t, i18n} = useTranslation()
+  const [suuriKhuraamj, setSuuriKhuraamj] = useState(0);
+  const { t, i18n} = useTranslation();
 
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
@@ -43,7 +48,11 @@ function GuilgeeKhiikh(
     }),
     [data, barilgiinId]
   );
-
+    const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
+        token,
+        data?._id,
+        date
+    );
   const zardal = useJagsaalt(
     data?.zardluud && "/ashiglaltiinZardluud",
     query,
@@ -60,13 +69,11 @@ function GuilgeeKhiikh(
         destroy();
       },
       khadgalya() {
-        if (!dun) {
+        if (!dun && !suuriKhuraamj) {
           notification.warning({ message: t("Та дүн оруулна уу") });
           return;
         }
-
-        var guilgee = {};
-
+        let guilgee = {};
         switch (turul) {
           case "busad":
             if (!busadTurul) {
@@ -102,12 +109,12 @@ function GuilgeeKhiikh(
                 turul === "avlaga" ? nekhemjlekhDeerKharagdakh : false,
             };
             break;
-          case "ahiglalt":
+          case "ashiglalt": {
             guilgee = {
               turul: "avlaga",
               tulsunDun: 0,
-              tulukhDun: negjUne * dun,
-              negj: dun,
+              tulukhDun: suuriKhuraamj+(negjUne * (dun || 0)),
+              negj: dun&&dun,
               khemjikhNegj: khemjikhNegj,
               tariff: negjUne,
               ognoo: moment(ognoo).format("YYYY-MM-DD 00:00:00"),
@@ -115,11 +122,16 @@ function GuilgeeKhiikh(
               tailbar,
               nekhemjlekhDeerKharagdakh,
             };
+            if(khemjikhNegj==='кВт')
+              guilgee['zaaltTog'] = suuliinZaalt;
+            else if(khemjikhNegj==='1м3')
+              guilgee['zaaltUs'] = suuliinZaalt;
+          }
             break;
           default:
             break;
         }
-
+         // console.log('hadgalah', guilgee, suuriKhuraamj);
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
@@ -225,7 +237,7 @@ function GuilgeeKhiikh(
         >
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
-          <Radio value={"ahiglalt"}>{t("Ашиглалт")}</Radio>
+          <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
           <Radio value={"busad"}>{t("Бусад")} </Radio>
         </Radio.Group>
       </div>
@@ -242,7 +254,7 @@ function GuilgeeKhiikh(
           }}
         />
       )}
-      {turul === "ahiglalt" && (
+      {turul === "ashiglalt" && (
         <DatePicker
           id="dataPicker2"
           locale={i18n.language === "mn" && locale}
@@ -272,52 +284,108 @@ function GuilgeeKhiikh(
           {t("Алдангийн үлдэгдэл")}: {formatNumber(data?.aldangiinUldegdel, 2)}
         </div>
       )}
-      {turul === "ahiglalt" && (
-        <Select
-          onChange={(v) => {
-            const utga = zardal.jagsaalt.find((a) => a._id === v);
-            setNegjUne(utga.tariff || 0);
-            setTailbar(utga.ner);
-            setKhemjikhNegj(utga.turul);
-            document.getElementById("guilgeeDunInputNumber").focus();
-          }}
-          id="select2"
-          placeholder={t("Зардлын төрөл")}
-        >
-          {zardal.jagsaalt?.map((mur) =>
-            mur.turul !== "1м2" ? (
-              <Select.Option key={mur._id} value={mur._id}>
-                <div>
-                  {mur.ner}/{mur.turul}
-                </div>
-              </Select.Option>
-            ) : (
-              ""
-            )
+      <div className="flex w-full justify-between items-center">
+        {turul === "ashiglalt" && (
+            <Select
+                style={{width: '49%'}}
+                onChange={(v) => {
+                  const utga = zardal.jagsaalt.find((a) => a._id === v);
+                  setNegjUne(utga.tariff || 0);
+                  setTailbar(utga.ner);
+                  setKhemjikhNegj(utga.turul);
+                  setSuuriKhuraamj(Number(utga.suuriKhuraamj));
+                  if(utga.turul==='кВт'||utga.turul==='1м3'){
+                    for (const a of guilgeeniiTuukh.reverse()) {
+                      if(utga.turul==='кВт'){
+                        if(!!a?.zaaltTog)setUmnukhZaalt(a?.zaaltTog);
+                        else setUmnukhZaalt(0);
+                        break;
+                      }
+                      else{
+                          if(!!a?.zaaltUs)setUmnukhZaalt(a?.zaaltUs);
+                          else setUmnukhZaalt(0);
+                          break;
+                        }
+                    }
+                  }
+                  document.getElementById("guilgeeDunInputNumber").focus();
+                }}
+                id="select2"
+                placeholder={t("Зардлын төрөл")}
+            >
+              {zardal.jagsaalt?.map((mur) =>
+                  mur.turul !== "1м2" ? (
+                      <Select.Option key={mur._id} value={mur._id}>
+                        <div>
+                          {mur.ner}/{mur.turul}
+                        </div>
+                      </Select.Option>
+                  ) : ("")
+              )}
+            </Select>
+        )}
+        {negjUne && turul === "ashiglalt" && (
+            <div className="p-2 dark:text-gray-100 flex justify-end" style={{width: '49%'}}>
+              {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
+            </div>
+        )}
+      </div>
+      {(khemjikhNegj === "кВт" || khemjikhNegj==="1м3") ? (
+          <div className="flex w-full justify-between">
+            <div style={{width: '49%'}}>
+              <div>Өмнөх заалт</div>
+              <InputNumber
+                  id="guilgeeDunInputNumber"
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
+                  style={{ width: "100%", textAlign: "center" }}
+                  value={umnukhZaalt}
+                  onChange={(v) => setUmnukhZaalt(v)}
+                  min={0}
+              />
+            </div>
+            <div style={{width: '49%'}}>
+              <div>Сүүлийн заалт </div>
+              <InputNumber
+                  id="guilgeeDunInputNumber"
+                  formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                  placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
+                  style={{ width: "100%", textAlign: "center" }}
+                  value={suuliinZaalt}
+                  onChange={(v) => {
+                    if(umnukhZaalt&&umnukhZaalt<v){
+                      setDun((v-umnukhZaalt));
+                      setSuuliinZaalt(v);
+                    } else setDun(0);
+                  }}
+                  min={0}
+              />
+            </div>
+          </div>
+        ):(
+          <InputNumber
+              onKeyDown={focuser}
+              id="guilgeeDunInputNumber"
+              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              placeholder={t(turul === "ashiglalt" ? "Нэгж" : "Дүн")}
+              style={{ width: "100%", textAlign: "center" }}
+              value={dun}
+              onChange={(v) => setDun(v)}
+              min={0}
+          />
+      )}
+      {turul === "ashiglalt" &&
+        <div className="flex w-full justify-between items-center">
+          <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
+          {negjUne && (
+              <div className="p-2 dark:text-gray-100">
+                {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
+              </div>
           )}
-        </Select>
-      )}
-      {negjUne && turul === "ahiglalt" && (
-        <div className="p-2 dark:text-gray-100">
-          {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
         </div>
-      )}
-      <InputNumber
-        onKeyDown={focuser}
-        id="guilgeeDunInputNumber"
-        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-        placeholder={t(turul === "ahiglalt" ? "Нэгж" : "Дүн")}
-        style={{ width: "100%", textAlign: "center" }}
-        value={dun}
-        onChange={(v) => setDun(v)}
-        min={0}
-      />
-      {negjUne && turul === "ahiglalt" && (
-        <div className="p-2 dark:text-gray-100">
-          {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
-        </div>
-      )}
+      }
       {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
           onKeyDown={focuser}
@@ -327,7 +395,7 @@ function GuilgeeKhiikh(
           onChange={(e) => setTailbar(e.target.value)}
         />
       )}
-      {(turul === "avlaga" || turul === "ahiglalt") && (
+      {(turul === "avlaga" || turul === "ashiglalt") && (
         <div className="flex flex-row justify-between">
           <div />
           <div className="space-x-2">

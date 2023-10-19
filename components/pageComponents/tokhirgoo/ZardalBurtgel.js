@@ -93,7 +93,7 @@ function ZardalBurtgel(
         <Input onKeyUp={focuser}/>
       </Form.Item>
       <Form.Item label={t("Нэгж")} name="turul">
-        {togtmolEsekh ? <Select onChange={(v)=> { 
+        {togtmolEsekh ? <Select onChange={(v)=> {
             form.getFieldInstance('tariff').focus()
             form.getFieldInstance('tariff').select()
             setHideTariff(v === 'Дурын')
@@ -111,12 +111,15 @@ function ZardalBurtgel(
           <Select.Option key="1м3" value="1м3">
             1{t("м")}<sup>3</sup>
           </Select.Option>
+          <Select.Option key="1м3/талбай" value="1м3/талбай">
+            1{t("м")}<sup>3</sup>/талбай
+          </Select.Option>
           <Select.Option key="1м2" value="1м2">
             1{t("м")}<sup>2</sup>
           </Select.Option>
         </Select>}
       </Form.Item>
-     <Form.Item label={t("Тариф")} name="tariff" hidden={hideTariff}> 
+     <Form.Item label={t("Тариф")} name="tariff" hidden={hideTariff}>
         <InputNumber
           min={0}
           style={{ width: "100%" }}
@@ -124,6 +127,16 @@ function ZardalBurtgel(
             `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
           }
           parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label={t("Суурь хураамж")} name="suuriKhuraamj" hidden={hideTariff}>
+        <InputNumber
+            min={0}
+            style={{ width: "100%" }}
+            formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
         />
       </Form.Item>
     </Form>

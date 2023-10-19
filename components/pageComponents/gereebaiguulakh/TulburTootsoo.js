@@ -51,10 +51,11 @@ const Tulbur = ({
       return (
         item.turul === "Дурын" ||
         item.turul === "1м2" ||
+        item.turul === "1м3/талбай" ||
         item.turul === "Тогтмол"
       );
     });
-
+// console.log('000000000', value);
     if (!!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
@@ -69,6 +70,7 @@ const Tulbur = ({
           ),
           zardluud: zardluud,
           mk: value.talbainKhemjee,
+          metrKube: value.talbainKhemjeeMetrKube,
           turGereeEsekh: gereeniiZagvar?.turGereeEsekh,
         })
         .then(({ data }) => {

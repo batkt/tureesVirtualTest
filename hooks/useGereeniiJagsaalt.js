@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "services/auth";
 import axios, { aldaaBarigch } from "services/uilchilgee";
 import useSWR from "swr";
+import moment from "moment";
 
 const fetcher = (
   url,
@@ -109,6 +110,40 @@ export function useGereeniiJagsaaltToollolt(token) {
     gereeToollolt: data,
     gereeToolloltMutate: mutate,
   };
+}
+const fetcherGuilgee = (url, token, gereeniiId, ognoo) =>
+    axios(token)
+        .get(`${url}/${gereeniiId}`, {
+            params: {
+                duusakhOgnoo: moment(ognoo[1])
+                    .endOf("month")
+                    .format("YYYY-MM-DD 23:59:59"),
+            },
+        })
+        .then((res) => {
+            var uldegdel = 0;
+            res.data.forEach((x) => {
+                uldegdel =
+                    uldegdel +
+                    (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
+                if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
+                else x.uldegdel = uldegdel;
+            });
+            return res.data;
+        })
+        .catch(aldaaBarigch);
+
+
+export function useGereeGuilgee(token, gereeniiId, ognoo) {
+    const { data, mutate } = useSWR(
+        !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
+        fetcherGuilgee,
+        { revalidateOnFocus: false }
+    );
+    return {
+        guilgeeniiTuukh: data,
+        guilgeeniiTuukhMutate: mutate,
+    };
 }
 
 export default useGereeniiJagsaalt;

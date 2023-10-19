@@ -235,6 +235,7 @@ const select = {
   talbainNegjUne: 1,
   talbainNiitUne: 1,
   talbainKhemjee: 1,
+  talbainKhemjeeMetrKube: 1,
   davkhar: 1,
   baritsaaBairshuulakhKhugatsaa: 1,
   baritsaaAvakhKhugatsaa: 1,
@@ -251,6 +252,7 @@ const select = {
   segmentuud: 1,
   turGereeEsekh: 1,
   talbainIdnuud: 1,
+  zardluud: 1,
 };
 
 function setURLSearchParam(key, value) {
@@ -993,16 +995,22 @@ function ZakhialgiinKhyanalt() {
               "YYYY/MM/DD"
             );
           }
-
           for (const [key, value] of Object.entries(geree)) {
-            data.dedKhesguud
-              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-              .map((b) => {
-                b.zaalt = b.zaalt.replace(
-                  new RegExp(`&lt;${key}&gt;`, "g"),
-                  value
-                );
-              });
+            if(key==='zardluud'){
+              value.map((mur)=>{
+                data.dedKhesguud
+                    .filter((a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1)
+                    .map((b) => {
+                      b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), mur.tariff);
+                    });
+              })
+            } else {
+              data.dedKhesguud
+                  .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+                  .map((b) => {
+                    b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+                  });
+            }
             data.baruunTolgoi = data.baruunTolgoi?.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
               value

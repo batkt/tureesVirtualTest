@@ -81,7 +81,8 @@ const talbainiiTalbaruud = [
   { ner: "Талбайн нэгж үнэ үсгээр", talbar: "talbainNegjUneUsgeer" },
   { ner: "Талбайн нийт үнэ", talbar: "talbainNiitUne" },
   { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
-  { ner: "Талбайн хэмжээ", talbar: "talbainKhemjee" },
+  { ner: "Талбайн хэмжээ м2", talbar: "talbainKhemjee" },
+  { ner: "Талбайн хэмжээ м3", talbar: "talbainKhemjeeMetrKube" },
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
@@ -101,7 +102,7 @@ const tulburiinTalbaruud = [
   { ner: t("Мөнгөн дүн үсгээр"), talbar: "mungunDunUsgeer" },
 ];
 
-function ZaaltZasvar({ destroy, value, change }, ref) {
+function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
   const editorRef = React.useRef();
   const plugins = React.useMemo(
     () => require("suneditor/src/plugins")?.default || {},
@@ -158,13 +159,13 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       title: t("Хугацаа"),
       button: renderToString(<ClockCircleOutlined />),
     });
-    const baritsaa = customPlugin({
+    const talbai = customPlugin({
       songokhTalbaruud: talbainiiTalbaruud,
       name: "talbai",
       title: t("Түрээсийн талбай"),
       button: renderToString(<BankOutlined />),
     });
-    const talbai = customPlugin({
+    const baritsaa = customPlugin({
       songokhTalbaruud: baritsaaniiTalbaruud,
       name: "baritsaa",
       title: t("Барьцаа"),
@@ -176,7 +177,25 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
       title: t("Төлбөр"),
       button: renderToString(<DollarCircleOutlined />),
     });
-    return [undsen, khugatsaa, baritsaa, talbai, tulbur];
+    let songokhTalbaruud = [];
+    zardal?.jagsaalt?.map((a) => {
+      /*songokhTalbaruud.push({
+        ner: `${a.ner}.Хэмжих нэгж`,
+        talbar: `${a.ner}.khemjikhNegj`,
+      });*/
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Тариф`,
+        talbar: `${a.ner}.tariff`,
+      });
+    });
+
+    const zardaluud = customPlugin({
+      songokhTalbaruud: songokhTalbaruud,
+      name: "zardaluud",
+      title: "Ашиглалтын зардал авлага",
+      button: renderToString(<DollarCircleOutlined />),
+    });
+    return [undsen, khugatsaa, baritsaa, talbai, tulbur, zardaluud];
   }, []);
 
   if (_.isString(value))
@@ -196,6 +215,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
               "talbai",
               "baritsaa",
               "tulbur",
+              "zardaluud",
               "table",
               "fontSize",
               "font",
@@ -252,7 +272,7 @@ function ZaaltZasvar({ destroy, value, change }, ref) {
           buttonList: [
             ...formatting,
             ["table", "align", "fontSize", "font"],
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur"],
+            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur", "zardaluud",],
           ],
         }}
         showToolbar={true}

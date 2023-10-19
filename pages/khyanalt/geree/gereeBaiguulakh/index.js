@@ -84,6 +84,7 @@ function GereeBaiguulakh({ token }) {
     baiguullaga?._id
   );
   const next = (data) => {
+    // console.log('****** data', data);
     if (current === 0 && !gereeniiZagvar) {
       message.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
@@ -310,7 +311,6 @@ function GereeBaiguulakh({ token }) {
         khadgalakhGeree.duusakhUdur = duusakhOgnoo.format("DD");
       }
     }
-
     if (khadgalakhGeree.gereeniiOgnoo) {
       khadgalakhGeree.gereeniiOgnoo = moment(
         khadgalakhGeree.gereeniiOgnoo
@@ -318,11 +318,21 @@ function GereeBaiguulakh({ token }) {
     }
 
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
-      butsaakhUtga.dedKhesguud
-        .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-        .map((b) => {
-          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-        });
+      if(key==='zardluud'){
+        value.map((mur)=>{
+          butsaakhUtga.dedKhesguud
+              .filter((a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1)
+              .map((b) => {
+                b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), mur.tariff);
+              });
+        })
+      } else {
+        butsaakhUtga.dedKhesguud
+            .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            });
+      }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
         value
@@ -610,8 +620,15 @@ function GereeBaiguulakh({ token }) {
                       />
                       <div className="flex gap-3">
                         <div>{t("Хэмжээ")}:</div>
-                        <div>{a.talbainKhemjee || 0}m²</div>
+                        <div>{a.talbainKhemjee || 0}м<sup>2</sup></div>
                       </div>
+                      {a.talbainKhemjeeMetrKube &&
+                      (
+                          <div className="flex gap-3">
+                            <div>{t("Хэмжээ м3")}:</div>
+                            <div>{a.talbainKhemjeeMetrKube || 0}м<sup>3</sup></div>
+                          </div>
+                      )}
                       <div className="flex gap-3">
                         <div>{t("Сарын түрээс")}:</div>
                         <div>{formatNumber(a.tureesiinTulbur || 0)}₮</div>
