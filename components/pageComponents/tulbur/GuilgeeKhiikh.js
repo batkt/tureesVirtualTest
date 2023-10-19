@@ -18,6 +18,7 @@ import formatNumber from "tools/function/formatNumber";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import {useGereeGuilgee} from "hooks/useGereeniiJagsaalt";
+import {loadGetInitialProps} from "next/dist/shared/lib/utils";
 
 function GuilgeeKhiikh(
   { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId, date },
@@ -31,6 +32,7 @@ function GuilgeeKhiikh(
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
+  const [suuriKhuraamj, setSuuriKhuraamj] = useState(0);
   const { t, i18n} = useTranslation();
 
   const [busadTurul, setBusadTurul] = useState();
@@ -67,13 +69,11 @@ function GuilgeeKhiikh(
         destroy();
       },
       khadgalya() {
-        if (!dun) {
+        if (!dun && !suuriKhuraamj) {
           notification.warning({ message: t("Та дүн оруулна уу") });
           return;
         }
-
         let guilgee = {};
-
         switch (turul) {
           case "busad":
             if (!busadTurul) {
@@ -113,8 +113,8 @@ function GuilgeeKhiikh(
             guilgee = {
               turul: "avlaga",
               tulsunDun: 0,
-              tulukhDun: negjUne * dun,
-              negj: dun,
+              tulukhDun: suuriKhuraamj+(negjUne * (dun || 0)),
+              negj: dun&&dun,
               khemjikhNegj: khemjikhNegj,
               tariff: negjUne,
               ognoo: moment(ognoo).format("YYYY-MM-DD 00:00:00"),
@@ -131,7 +131,7 @@ function GuilgeeKhiikh(
           default:
             break;
         }
-         // console.log('hadgalah', guilgee);
+         // console.log('hadgalah', guilgee, suuriKhuraamj);
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
@@ -293,13 +293,19 @@ function GuilgeeKhiikh(
                   setNegjUne(utga.tariff || 0);
                   setTailbar(utga.ner);
                   setKhemjikhNegj(utga.turul);
+                  setSuuriKhuraamj(Number(utga.suuriKhuraamj));
                   if(utga.turul==='кВт'||utga.turul==='1м3'){
                     for (const a of guilgeeniiTuukh.reverse()) {
-                      // console.log('guilgeeniiTuukh--- ', a);
                       if(utga.turul==='кВт'){
-                        if(!!a?.zaaltTog){setUmnukhZaalt(a?.zaaltTog);break;}}
-                      else {
-                        if(!!a?.zaaltUs){setUmnukhZaalt(a?.zaaltUs);break;}}
+                        if(!!a?.zaaltTog)setUmnukhZaalt(a?.zaaltTog);
+                        else setUmnukhZaalt(0);
+                        break;
+                      }
+                      else{
+                          if(!!a?.zaaltUs)setUmnukhZaalt(a?.zaaltUs);
+                          else setUmnukhZaalt(0);
+                          break;
+                        }
                     }
                   }
                   document.getElementById("guilgeeDunInputNumber").focus();
@@ -324,7 +330,7 @@ function GuilgeeKhiikh(
             </div>
         )}
       </div>
-      { (khemjikhNegj === "кВт" || khemjikhNegj==="1м3") ? (
+      {(khemjikhNegj === "кВт" || khemjikhNegj==="1м3") ? (
           <div className="flex w-full justify-between">
             <div style={{width: '49%'}}>
               <div>Өмнөх заалт</div>
@@ -369,13 +375,17 @@ function GuilgeeKhiikh(
               onChange={(v) => setDun(v)}
               min={0}
           />
-      )
-      }
-      {negjUne && turul === "ashiglalt" && (
-        <div className="p-2 dark:text-gray-100 flex justify-end">
-          {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
-        </div>
       )}
+      {turul === "ashiglalt" &&
+        <div className="flex w-full justify-between items-center">
+          <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
+          {negjUne && (
+              <div className="p-2 dark:text-gray-100">
+                {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
+              </div>
+          )}
+        </div>
+      }
       {(turul === "avlaga" || turul === "busad") && (
         <Input.TextArea
           onKeyDown={focuser}

@@ -84,6 +84,7 @@ function GereeBaiguulakh({ token }) {
     baiguullaga?._id
   );
   const next = (data) => {
+    // console.log('****** data', data);
     if (current === 0 && !gereeniiZagvar) {
       message.warning(t("Гэрээний загвар сонгоно уу!"));
       zagvarRef.current.focus();
@@ -449,7 +450,7 @@ function GereeBaiguulakh({ token }) {
           </Steps>
         </div>
         <div className="mt-3 grid grid-cols-12 gap-6 md:col-span-12">
-          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">{console.log('111111khadgalakhGeree', khadgalakhGeree)}
+          <div className="col-span-12 mt-3 bg-gray-50 p-2 dark:bg-gray-900 lg:col-span-6 2xl:col-span-4">
             <currentItem.content
               t={t}
               next={next}

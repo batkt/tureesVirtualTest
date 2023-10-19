@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { Input, InputNumber, Table } from "antd";
 import moment from "moment";
 import Aos from "aos";
@@ -24,13 +24,13 @@ function AvlagaiinKhuvaariUusgekh({ ugugdul, t }) {
               render: (a, b, index) => {
                 return index + 1;
               },
-              width: "0.5rem",
+              width: "0.4rem",
             },
             {
               title: t("Огноо"),
               dataIndex: "ognoo",
               ellipsis: true,
-              width: "2.5rem",
+              width: "1.5rem",
               align: "center",
               render(ognoo) {
                 return moment(ognoo).format("YYYY-MM-DD");

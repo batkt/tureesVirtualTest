@@ -144,6 +144,7 @@ function useSonorduulga(token) {
     };
   }, [baiguullaga, ajiltan]);
 
+/*
   useEffect(()=>{
       if(ajiltan?._id)
           socket().on(`ajiltan${ajiltan?._id}`, (res) => {
@@ -158,6 +159,7 @@ function useSonorduulga(token) {
           socket().off(`ajiltan${ajiltan?._id}`);
       };
   },[ajiltan]);
+*/
 
   return {
     setKhuudaslalt,

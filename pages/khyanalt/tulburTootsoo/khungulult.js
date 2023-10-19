@@ -123,7 +123,7 @@ function tulburTootsoo() {
 
   const qZardal = useMemo(
       () => ({
-        turul: { $in: ["Тогтмол", "1м2"] },
+        turul: { $in: ["Тогтмол", "1м2", "1м3/талбай"]},
         tariff: { $exists: true },
         barilgiinId,
       }),
