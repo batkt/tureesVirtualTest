@@ -208,7 +208,6 @@ function tulburTootsoo() {
       if (khungulukh === 'khuvi' && baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi) {
         setWaiting(false); notification.warning({ message: "Тохируулсан хөнгөлөх хувиас хэтэрсэн байна!" }); return
       }
-      // console.log('******ugugdul', ugugdul);
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -413,12 +412,16 @@ function tulburTootsoo() {
     else {
       tootsoolol.niitSariinTurees = 0;
       const fVal = form.getFieldValue('zardliinId');
-      songogdsonGereenuud.map(e=>{
+      songogdsonGereenuud.map(e => {
         const zardal = e?.zardluud.find((a)=>a._id===fVal);
-        if (zardal.turul==='1м2')
-          tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + (e.talbainKhemjee * zardal.tariff);
-        else
-          tootsoolol.niitSariinTurees = zardal.tariff + tootsoolol.niitSariinTurees;
+        if(!!zardal){
+          if (zardal.turul==='1м2')
+            tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + (e.talbainKhemjee * zardal.tariff);
+          else if(zardal.turul==='1м3/талбай')
+            tootsoolol.niitSariinTurees = tootsoolol.niitSariinTurees + (e.talbainKhemjeeMetrKube * zardal.tariff);
+          else
+            tootsoolol.niitSariinTurees = zardal.tariff + tootsoolol.niitSariinTurees;
+        }
       });
     }
     if (khungulukh==='khuvi' && dun > 100) {
@@ -482,6 +485,7 @@ function tulburTootsoo() {
                             });
                             form.setFieldsValue({ zardliinId: undefined });
                           }
+                          setRowKeys([]);
                           setTootsoolol({
                             niitTalbai: 0,
                             niitSariinTurees: 0,
@@ -611,7 +615,7 @@ function tulburTootsoo() {
                         value={khungulukh}
                         onChange={(v) =>{
                           setKhungulukh(v);
-                          form.setFieldsValue({ khungulukhKhuvi: 0})
+                          form.setFieldsValue({ khungulukhKhuvi: null})
                         }}
                     >
                       <Select.Option key={"khuvi"}>Хувь</Select.Option>

@@ -356,13 +356,13 @@ function ZakhialgaNemekh({ token }) {
             <Form.Item name="_id" noStyle />
             <Input
               value={nekhemjlelZagvar.ner}
-              onChange={inputOnchange}
               placeholder={t("Нэр")}
             />
             <Form.Item
               label="Нэхэмжлэхийн загвар"
               name="nekhemjlekh"
-              noStyle></Form.Item>
+              noStyle>
+            </Form.Item>
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 className="my-3"

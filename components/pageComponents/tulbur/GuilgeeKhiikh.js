@@ -32,7 +32,7 @@ function GuilgeeKhiikh(
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
-  const [suuriKhuraamj, setSuuriKhuraamj] = useState(0);
+  const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
   const { t, i18n} = useTranslation();
 
   const [busadTurul, setBusadTurul] = useState();
@@ -110,6 +110,10 @@ function GuilgeeKhiikh(
             };
             break;
           case "ashiglalt": {
+            if((khemjikhNegj === "кВт" || khemjikhNegj==="1м3") && umnukhZaalt>suuliinZaalt){
+              notification.warning({ message: t("Сүүлийн заалт өмнөх заалтаас их байх ёстой.") });
+              return;
+            }
             guilgee = {
               turul: "avlaga",
               tulsunDun: 0,
@@ -131,7 +135,6 @@ function GuilgeeKhiikh(
           default:
             break;
         }
-         // console.log('hadgalah', guilgee, suuriKhuraamj);
         uilchilgee(token)
           .post("/gereeniiGuilgeeKhadgalya", {
             guilgee: guilgee,
@@ -148,7 +151,7 @@ function GuilgeeKhiikh(
           .catch(aldaaBarigch);
       },
     }),
-    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul, negjUne, ognoo]
+    [dun, turul, tailbar, nekhemjlekhDeerKharagdakh, busadTurul, negjUne, ognoo, suuliinZaalt,umnukhZaalt]
   );
   function labelTurul(guilgeeTurul) {
     var text;
@@ -197,10 +200,6 @@ function GuilgeeKhiikh(
     return () => document.removeEventListener("keyup", keyUp);
   }, [dun, tailbar, negjUne, nekhemjlekhDeerKharagdakh, busadTurul]);
 
-  useEffect(() => {
-    document.getElementById("guilgeeDunInputNumber").focus();
-  }, []);
-
   const focuser = useCallback(
     (e) => {
       if (e.key === "Enter") {
@@ -222,6 +221,12 @@ function GuilgeeKhiikh(
     },
     [turul]
   );
+  function suuliinZaaltFn (v){
+    setSuuliinZaalt(v);
+    if(umnukhZaalt&&umnukhZaalt<v){
+      setDun((v-umnukhZaalt));
+    } else setDun(0);
+  }
 
   return (
     <div className="flex flex-col space-y-2">
@@ -250,7 +255,7 @@ function GuilgeeKhiikh(
           value={ognoo}
           onChange={(v) => {
             setOgnoo(v);
-            document.getElementById("guilgeeDunInputNumber").focus();
+            // document.getElementById("guilgeeDunInputNumber").focus();
           }}
         />
       )}
@@ -271,7 +276,6 @@ function GuilgeeKhiikh(
           placeholder={t("Гүйлгээ хийх төрөл")}
           onChange={(v) => {
             setBusadTurul(v);
-            document.getElementById("guilgeeDunInputNumber").focus();
           }}
         >
           <Option value="barter">{t("Бартер")}</Option>
@@ -294,21 +298,20 @@ function GuilgeeKhiikh(
                   setTailbar(utga.ner);
                   setKhemjikhNegj(utga.turul);
                   setSuuriKhuraamj(Number(utga.suuriKhuraamj));
+                  setSuuliinZaalt(null);
                   if(utga.turul==='кВт'||utga.turul==='1м3'){
-                    for (const a of guilgeeniiTuukh.reverse()) {
-                      if(utga.turul==='кВт'){
-                        if(!!a?.zaaltTog)setUmnukhZaalt(a?.zaaltTog);
-                        else setUmnukhZaalt(0);
-                        break;
+                    if(guilgeeniiTuukh.length>0){
+                      if(guilgeeniiTuukh[0].khemjikhNegj==='кВт'){
+                        if(!!guilgeeniiTuukh[0]?.zaaltTog)
+                          setUmnukhZaalt(guilgeeniiTuukh[0].zaaltTog);
+                        else setUmnukhZaalt(null);
+                      } else {
+                        if(!!guilgeeniiTuukh[0]?.zaaltUs)setUmnukhZaalt(guilgeeniiTuukh[0].zaaltUs);
+                        else setUmnukhZaalt(null);
                       }
-                      else{
-                          if(!!a?.zaaltUs)setUmnukhZaalt(a?.zaaltUs);
-                          else setUmnukhZaalt(0);
-                          break;
-                        }
+
                     }
                   }
-                  document.getElementById("guilgeeDunInputNumber").focus();
                 }}
                 id="select2"
                 placeholder={t("Зардлын төрөл")}
@@ -335,7 +338,6 @@ function GuilgeeKhiikh(
             <div style={{width: '49%'}}>
               <div>Өмнөх заалт</div>
               <InputNumber
-                  id="guilgeeDunInputNumber"
                   formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
                   style={{ width: "100%", textAlign: "center" }}
@@ -347,18 +349,12 @@ function GuilgeeKhiikh(
             <div style={{width: '49%'}}>
               <div>Сүүлийн заалт </div>
               <InputNumber
-                  id="guilgeeDunInputNumber"
                   formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
                   style={{ width: "100%", textAlign: "center" }}
                   value={suuliinZaalt}
-                  onChange={(v) => {
-                    if(umnukhZaalt&&umnukhZaalt<v){
-                      setDun((v-umnukhZaalt));
-                      setSuuliinZaalt(v);
-                    } else setDun(0);
-                  }}
+                  onChange={suuliinZaaltFn}
                   min={0}
               />
             </div>
@@ -379,11 +375,9 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" &&
         <div className="flex w-full justify-between items-center">
           <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
-          {negjUne && (
-              <div className="p-2 dark:text-gray-100">
-                {t("Нийт үнэ")}: {formatNumber(negjUne * dun || 0, 2)}
-              </div>
-          )}
+          <div className="p-2 dark:text-gray-100">
+            {t("Нийт үнэ")}: {negjUne && formatNumber((negjUne * dun + (suuriKhuraamj || 0)) || 0, 2)}
+          </div>
         </div>
       }
       {(turul === "avlaga" || turul === "busad") && (
