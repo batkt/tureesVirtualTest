@@ -301,12 +301,14 @@ function GuilgeeKhiikh(
                   setSuuliinZaalt(null);
                   if(utga.turul==='кВт'||utga.turul==='1м3'){
                     if(guilgeeniiTuukh.length>0){
-                      if(guilgeeniiTuukh[0].khemjikhNegj==='кВт'){
-                        if(!!guilgeeniiTuukh[0]?.zaaltTog)
-                          setUmnukhZaalt(guilgeeniiTuukh[0].zaaltTog);
+                      const i = (guilgeeniiTuukh.length-1);
+                      // console.log('******', guilgeeniiTuukh[i], '  - ', i);
+                      if(guilgeeniiTuukh[i].khemjikhNegj==='кВт'){
+                        if(!!guilgeeniiTuukh[i]?.zaaltTog)
+                          setUmnukhZaalt(guilgeeniiTuukh[i].zaaltTog);
                         else setUmnukhZaalt(null);
                       } else {
-                        if(!!guilgeeniiTuukh[0]?.zaaltUs)setUmnukhZaalt(guilgeeniiTuukh[0].zaaltUs);
+                        if(!!guilgeeniiTuukh[i]?.zaaltUs)setUmnukhZaalt(guilgeeniiTuukh[i].zaaltUs);
                         else setUmnukhZaalt(null);
                       }
 
