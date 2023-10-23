@@ -1613,14 +1613,6 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={554}
                   />
-                ) : baiguullaga?._id === "64fe8edc54a669717ad657ac" ? (
-                  <R2WPlayerComponent
-                    USER={"admin"}
-                    PASSWD={"admin"}
-                    ROOT={"video"}
-                    Camer={camerVal[0]}
-                    PORT={50000}
-                  />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
@@ -1734,14 +1726,6 @@ function camera({ token }) {
                     ROOT={"stream"}
                     Camer={camerVal[1]}
                     PORT={554}
-                  />
-                ) : baiguullaga?._id === "64fe8edc54a669717ad657ac" ? (
-                  <R2WPlayerComponent
-                    USER={"admin"}
-                    PASSWD={"admin"}
-                    ROOT={"video"}
-                    Camer={camerVal[1]}
-                    PORT={50000}
                   />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
