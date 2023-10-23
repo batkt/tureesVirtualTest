@@ -67,7 +67,7 @@ import uilchilgee from "services/uilchilgee";
 import { t } from "i18next";
 import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
-import Stream1, { Stream2 } from "./stream";
+import Stream1, { SocketStream, Stream2 } from "./stream";
 import StackStream from "./stackStream";
 import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
@@ -274,6 +274,18 @@ function camera({ token }) {
   const { jagsaalt, mutate: toololtMutate } = useJagsaalt(
     "/zogsoolJagsaalt",
     que
+  );
+
+  const streamQuery = useMemo(() => {
+    return {
+      baiguullagiinId: baiguullaga?._id,
+      barilgiinId: barilgiinId,
+    };
+  }, [baiguullaga?._id, barilgiinId]);
+
+  const { jagsaalt: parkingJagsaalt, mutate: parkingMutate } = useJagsaalt(
+    "/parking",
+    streamQuery
   );
 
   const query = useMemo(() => {
@@ -1609,6 +1621,25 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={50000}
                   />
+                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                  parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
+                    <SocketStream
+                      ip={camerVal[0]}
+                      CHANNEL={parkingJagsaalt?.[0]?.tokhirgoo?.CHANNEL}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                      TOKEN={parkingJagsaalt?.[0]?.tokhirgoo?.TOKEN}
+                    />
+                  ) : parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === false ? (
+                    <R2WPlayerComponent
+                      Camer={camerVal[0]}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                    />
+                  ) : (
+                    ""
+                  )
                 ) : (
                   ""
                 )}
@@ -1712,6 +1743,25 @@ function camera({ token }) {
                     Camer={camerVal[1]}
                     PORT={50000}
                   />
+                ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
+                  parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
+                    <SocketStream
+                      ip={camerVal[1]}
+                      CHANNEL={parkingJagsaalt?.[0]?.tokhirgoo?.CHANNEL}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.STREAMPORT}
+                      TOKEN={parkingJagsaalt?.[0]?.tokhirgoo?.TOKEN}
+                    />
+                  ) : parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === false ? (
+                    <R2WPlayerComponent
+                      Camer={camerVal[1]}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                    />
+                  ) : (
+                    ""
+                  )
                 ) : (
                   ""
                 )}

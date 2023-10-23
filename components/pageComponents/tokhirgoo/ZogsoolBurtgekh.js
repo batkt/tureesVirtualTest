@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -12,7 +13,8 @@ import {
   notification,
   InputNumber,
   Divider,
-  TimePicker, Switch
+  TimePicker,
+  Switch,
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -25,6 +27,8 @@ import { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 import moment from "moment";
+import StreamTokhirgoo from "./StreamTokhirgoo";
+import { modal } from "components/ant/Modal";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
@@ -37,15 +41,17 @@ function ZogsoolBurtgekh(
 ) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const [unshijBaina, setUnshijBaina] = useState(false);
+  const streamTokhirgooRef = useRef(null);
   let method;
   if (!!data) {
     let toForm = data;
     method = updateMethod;
-    if(toForm?.tulburuud.length>0)
-      for(let i=0; toForm?.tulburuud.length > i; i++){
+    if (toForm?.tulburuud.length > 0)
+      for (let i = 0; toForm?.tulburuud.length > i; i++) {
         const d = toForm?.tulburuud[i];
-        if(d?.tsag.length>0)
-          for(let k=0; d.tsag.length>k;k++ ){
+        if (d?.tsag.length > 0)
+          for (let k = 0; d.tsag.length > k; k++) {
             toForm.tulburuud[i].tsag[k] = moment(d.tsag[k]);
           }
         else continue;
@@ -66,21 +72,25 @@ function ZogsoolBurtgekh(
   useImperativeHandle(
     ref,
     () => ({
-      khadgalya() {
-        const body = form.getFieldsValue();
-        body.barilgiinId = barilgiinId;
-        // console.log('^^^^^^^', body);
-        method("parking", token, body)
-          .then(({ data }) => {
-            if (data === "Amjilttai") {
-              notification.success({ message: t("Амжилттай хадгаллаа") });
-              destroy();
-              refresh();
-            }
-          })
-          .catch((e) => {
-            aldaaBarigch(e);
-          });
+      async khadgalya() {
+        try {
+          let body = form.getFieldsValue();
+          body.barilgiinId = barilgiinId;
+
+          await method("parking", token, body)
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                notification.success({ message: t("Амжилттай хадгаллаа") });
+                destroy();
+                refresh();
+              }
+            })
+            .catch((e) => {
+              aldaaBarigch(e);
+            });
+        } catch (e) {
+          aldaaBarigch(e);
+        }
       },
       khaaya() {
         destroy();
@@ -88,16 +98,45 @@ function ZogsoolBurtgekh(
     }),
     [form]
   );
-  /*const onChangeTime = (e)=>{
-    console.log('11111111',moment(e[0]).format('hh:mm'));
-    console.log('222222222',moment(e[1]).format('hh:mm'));
-  };*/
+
+  function cameraTokhirgooOruulya() {
+    const footer = [
+      <Button onClick={() => streamTokhirgooRef.current.khaaya()}>
+        {t("Хаах")}
+      </Button>,
+      <Button
+        loading={unshijBaina}
+        type="primary"
+        onClick={() => streamTokhirgooRef.current.khadgalya()}
+      >
+        {t("Хадгалах")}
+      </Button>,
+    ];
+    const style = {
+      maxWidth: 400,
+    };
+    modal({
+      title: t("Камер Stream тохиргоо"),
+      icon: <PlusOutlined />,
+      style: { ...style },
+      content: (
+        <StreamTokhirgoo
+          ref={streamTokhirgooRef}
+          token={token}
+          data={data}
+          setUnshijBaina={setUnshijBaina}
+          refresh={refresh}
+        />
+      ),
+      footer,
+    });
+  }
 
   return (
     <Form form={form} autoComplete="off">
       {!!data && <Form.Item name="_id" hidden></Form.Item>}
       <Form.Item name="barilgiinId" hidden></Form.Item>
-      <div className="grid grid-cols-12 gap-6 h-[75vh]">
+      <div className="grid h-[75vh] grid-cols-12 gap-6">
         <div className="col-span-4">
           <div className="grid grid-cols-4 gap-5">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -163,11 +202,13 @@ function ZogsoolBurtgekh(
               </div>
             </div>
             <div className="col-span-2">
-              <Form.Item
-                  className="m-0"
-                  name="undsenMin"
-              >
-                <Switch className="bg-gray-400" defaultChecked={data?.undsenMin} checkedChildren="мин" unCheckedChildren="цаг" />
+              <Form.Item className="m-0" name="undsenMin">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.undsenMin}
+                  checkedChildren="мин"
+                  unCheckedChildren="цаг"
+                />
               </Form.Item>
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
@@ -179,10 +220,7 @@ function ZogsoolBurtgekh(
               </div>
             </div>
             <div className="col-span-2">
-              <Form.Item
-                className="m-0"
-                name="gadnaZogsooliinId"
-              >
+              <Form.Item className="m-0" name="gadnaZogsooliinId">
                 <Select placeholder="Зогсоол сонгох">
                   <Select.Option value={undefined}>---</Select.Option>
                   {jagsaalt.map((mur, i) =>
@@ -201,35 +239,52 @@ function ZogsoolBurtgekh(
                 </Select>
               </Form.Item>
             </div>
+            {!!data && (
+              <>
+                <div className="col-span-2 border-l-2 border-green-500 pl-4">
+                  <div className="font-medium dark:text-white">
+                    {t("Камер Stream тохиргоо")}
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    Stream гаргахад шаардлагатай тохиргоо
+                  </div>
+                </div>
+                <div className="col-span-2 flex items-center justify-start">
+                  <Button onClick={cameraTokhirgooOruulya}>
+                    Тохиргоо оруулах
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="col-span-4">
           <Form.List name="tulburuud">
             {(fields, { add, remove }) => (
-                <>
-                  <Button
-                      icon={<PlusOutlined />}
-                      className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
-                      type="dashed"
-                      onClick={() => add()}
-                  >
-                    Тариф нэмэх
-                  </Button>
-                  <div
-                      className="space-y-3 overflow-y-auto"
-                      style={{ maxHeight: "70vh" }}
-                  >
-                    {fields.map(({ key, name, fieldKey, ...restField }) => (
-                        <Tariff
-                            key={key}
-                            name={name}
-                            fieldKey={fieldKey}
-                            restField={restField}
-                            fields={fields}
-                            remove={remove}
-                        />
-                    ))}
-                    {/*
+              <>
+                <Button
+                  icon={<PlusOutlined />}
+                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  type="dashed"
+                  onClick={() => add()}
+                >
+                  Тариф нэмэх
+                </Button>
+                <div
+                  className="space-y-3 overflow-y-auto"
+                  style={{ maxHeight: "70vh" }}
+                >
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <Tariff
+                      key={key}
+                      name={name}
+                      fieldKey={fieldKey}
+                      restField={restField}
+                      fields={fields}
+                      remove={remove}
+                    />
+                  ))}
+                  {/*
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <div
                       key={fieldKey}
@@ -279,8 +334,8 @@ function ZogsoolBurtgekh(
                     </div>
                   ))}
 */}
-                  </div>
-                </>
+                </div>
+              </>
             )}
           </Form.List>
         </div>
@@ -289,10 +344,10 @@ function ZogsoolBurtgekh(
             {(fields, { add, remove }) => (
               <>
                 <Button
-                    icon={<PlusOutlined />}
-                    className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
-                    type="dashed"
-                    onClick={() => add()}
+                  icon={<PlusOutlined />}
+                  className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
+                  type="dashed"
+                  onClick={() => add()}
                 >
                   Хаалга нэмэх
                 </Button>
@@ -340,7 +395,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
       key={fieldKey}
       className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
-      <div className="text-base flex justify-center mb-2 font-bold">
+      <div className="mb-2 flex justify-center text-base font-bold">
         {t("Хаалга")} {fieldKey + 1}
       </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">
@@ -380,11 +435,11 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
         {(talbaruud, { add, remove }) => (
           <>
             <Button
-                className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-                type="dashed"
-                onClick={() => add()}
-                block
-                icon={<PlusOutlined />}
+              className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+              type="dashed"
+              onClick={() => add()}
+              block
+              icon={<PlusOutlined />}
             >
               {t("Камер нэмэх")}
             </Button>
@@ -419,100 +474,97 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
 }
 
 function Tariff({ name, fieldKey, restField, remove }) {
-
   const { t } = useTranslation();
   return (
-      <div
-          key={fieldKey}
-          className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
-      >
-        <div className="text-base flex justify-center mb-2 font-bold">
-          {t("Тариф")} {fieldKey + 1}
-        </div>
-        <div className="grid w-full grid-cols-4 items-center gap-5">
-          <div
-              onClick={() => remove(name)}
-              className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
-          >
-            <CloseCircleOutlined />
-          </div>
-          <Form.Item
-              label="Цаг:"
-              labelCol={{ span: 24 }}
-              {...restField}
-              name={[name, "tsag"]}
-              fieldKey={[fieldKey, "tsag"]}
-              // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
-              className="col-span-3 mb-0 h-20"
-          >
-            <TimePicker.RangePicker
-                format = 'HH:mm'
-                placeholder={['Эхлэх','Дуусах']}
-            />
-          </Form.Item>
-        </div>
-        <Form.List name={[name, "tariff"]}>
-          {(muruud, { add, remove }) => (
-              <>
-                <Button
-                    className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
-                    type="dashed"
-                    onClick={() => add()}
-                    // id={"tariff"}
-                    block
-                    icon={<PlusOutlined />}
-                >
-                  {t("Нэмэх")}
-                </Button>
-                {muruud.map((mur, index) => (
-                    <div key={index} className="grid mt-3 w-full grid-cols-4 items-end flex-center gap-5">
-                      <Form.Item
-                          label="Минут хүртэл:"
-                          labelCol={{ span: 24 }}
-                          {...mur.restField}
-                          name={[mur.name, "minut"]}
-                          fieldKey={[mur.key, "minut"]}
-                          rules={[
-                            { required: true, message: "Минут бөглөнө үү." },
-                          ]}
-                          className="col-span-2 mb-0"
-                      >
-                        <InputNumber placeholder="Минут" className="w-full" />
-                      </Form.Item>
-                      <div className='flex col-span-2 items-end'>
-                        <Form.Item
-                            label="Тариф/₮/:"
-                            labelCol={{ span: 24 }}
-                            {...mur.restField}
-                            name={[mur.name, "tulbur"]}
-                            fieldKey={[mur.key, "tulbur"]}
-                            rules={[
-                              { required: true, message: "Тариф бөглөнө үү." },
-                            ]}
-                            className="mb-0"
-                        >
-                          <InputNumber
-                              formatter={(value) =>
-                                  `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              }
-                              className="w-full"
-                              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                              placeholder="Тариф"
-                          />
-                        </Form.Item>
-                        <MinusCircleOutlined
-                            className="ml-2 mb-2.5"
-                            onClick={() => remove(mur.name)}
-                        />
-                      </div>
-                    </div>
-                ))}
-              </>
-          )}
-        </Form.List>
+    <div
+      key={fieldKey}
+      className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
+    >
+      <div className="mb-2 flex justify-center text-base font-bold">
+        {t("Тариф")} {fieldKey + 1}
       </div>
+      <div className="grid w-full grid-cols-4 items-center gap-5">
+        <div
+          onClick={() => remove(name)}
+          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
+        >
+          <CloseCircleOutlined />
+        </div>
+        <Form.Item
+          label="Цаг:"
+          labelCol={{ span: 24 }}
+          {...restField}
+          name={[name, "tsag"]}
+          fieldKey={[fieldKey, "tsag"]}
+          // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
+          className="col-span-3 mb-0 h-20"
+        >
+          <TimePicker.RangePicker
+            format="HH:mm"
+            placeholder={["Эхлэх", "Дуусах"]}
+          />
+        </Form.Item>
+      </div>
+      <Form.List name={[name, "tariff"]}>
+        {(muruud, { add, remove }) => (
+          <>
+            <Button
+              className="mt-5 h-8 w-full rounded-sm bg-white  hover:bg-green-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-700  "
+              type="dashed"
+              onClick={() => add()}
+              // id={"tariff"}
+              block
+              icon={<PlusOutlined />}
+            >
+              {t("Нэмэх")}
+            </Button>
+            {muruud.map((mur, index) => (
+              <div
+                key={index}
+                className="flex-center mt-3 grid w-full grid-cols-4 items-end gap-5"
+              >
+                <Form.Item
+                  label="Минут хүртэл:"
+                  labelCol={{ span: 24 }}
+                  {...mur.restField}
+                  name={[mur.name, "minut"]}
+                  fieldKey={[mur.key, "minut"]}
+                  rules={[{ required: true, message: "Минут бөглөнө үү." }]}
+                  className="col-span-2 mb-0"
+                >
+                  <InputNumber placeholder="Минут" className="w-full" />
+                </Form.Item>
+                <div className="col-span-2 flex items-end">
+                  <Form.Item
+                    label="Тариф/₮/:"
+                    labelCol={{ span: 24 }}
+                    {...mur.restField}
+                    name={[mur.name, "tulbur"]}
+                    fieldKey={[mur.key, "tulbur"]}
+                    rules={[{ required: true, message: "Тариф бөглөнө үү." }]}
+                    className="mb-0"
+                  >
+                    <InputNumber
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      className="w-full"
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      placeholder="Тариф"
+                    />
+                  </Form.Item>
+                  <MinusCircleOutlined
+                    className="mb-2.5 ml-2"
+                    onClick={() => remove(mur.name)}
+                  />
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+      </Form.List>
+    </div>
   );
 }
-
 
 export default React.forwardRef(ZogsoolBurtgekh);
