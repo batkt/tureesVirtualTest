@@ -16,6 +16,7 @@ import {
 import {
   DeleteOutlined,
   DownOutlined,
+  DownloadOutlined,
   EditOutlined,
   FileExcelOutlined,
   FilterOutlined,
@@ -374,6 +375,22 @@ function mashinBurtgel({ token }) {
     mashinToololtMutate();
   }
 
+  function excelTatajAvya(token, service, mur, sheet, query, order, sheetName) {
+    uilchilgee(token)
+      .get(service, {
+        params: { query, order, khuudasniiKhemjee: mur },
+      })
+      .then(({ data }) => {
+        const { Excel } = require("antd-table-saveas-excel");
+        const excel = new Excel();
+        excel
+          .addSheet(sheetName)
+          .addColumns(sheet)
+          .addDataSource(data?.jagsaalt)
+          .saveAs(sheetName + ".xlsx");
+      });
+  }
+
   function mashinOruulakhExcel() {
     const footer = [
       <Space>
@@ -503,14 +520,77 @@ function mashinBurtgel({ token }) {
 
             <Popover
               content={() => (
-                <div className="flex w-32 flex-col">
-                  <a
-                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                    onClick={mashinOruulakhExcel}
-                  >
-                    <UploadOutlined style={{ fontSize: "18px" }} />
-                    <label>{t("Татах")}</label>
-                  </a>
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="flex w-32 flex-col">
+                    <a
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      onClick={mashinOruulakhExcel}
+                    >
+                      <UploadOutlined style={{ fontSize: "18px" }} />
+                      <label>{t("Оруулах")}</label>
+                    </a>
+                  </div>
+                  <div className="flex w-32 flex-col">
+                    <a
+                      className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
+                      onClick={() =>
+                        excelTatajAvya(
+                          token,
+                          "/mashin",
+                          mashinGaralt?.niitMur,
+                          [
+                            {
+                              title: t("Бүртгэсэн"),
+                              dataIndex: "createdAt",
+                              render(date) {
+                                return moment(date).format("YYYY-MM-DD HH:mm");
+                              },
+                            },
+                            {
+                              title: t("Нэр"),
+                              dataIndex: "ezemshigchiinNer",
+                            },
+                            {
+                              title: t("Утас"),
+                              dataIndex: "ezemshigchiinUtas",
+                            },
+                            {
+                              title: t("Дугаар"),
+                              dataIndex: "dugaar",
+                            },
+                            {
+                              title: t("Төрөл"),
+                              dataIndex: "turul",
+                            },
+
+                            {
+                              title: "Хөнгөлөлт",
+                              dataIndex: "khungulultTurul",
+                              render: (a, b) => {
+                                return b.tuluv !== "Үнэгүй"
+                                  ? a === "togtmolTsag"
+                                    ? b.uldegdelKhungulukhKhugatsaa + "мин"
+                                    : a === "khuviKhungulult"
+                                    ? b.khungulult
+                                    : ""
+                                  : b.tuluv;
+                              },
+                            },
+                            {
+                              title: t("Тайлбар"),
+                              dataIndex: "temdeglel",
+                            },
+                          ],
+                          undefined,
+                          undefined,
+                          "Машин бүртгэл"
+                        )
+                      }
+                    >
+                      <DownloadOutlined style={{ fontSize: "18px" }} />
+                      <label>{t("Татах")}</label>
+                    </a>
+                  </div>
                 </div>
               )}
               placement="bottom"
