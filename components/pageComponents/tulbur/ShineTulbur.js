@@ -311,6 +311,12 @@ function ShineTulbur(
 
   async function batalgaajuulaltKhiiya(qpayTulugdsun, garaasSongosonTurul) {
     setLoading(true);
+    if (!tulbur || tulbur.length <= 0) {
+      return notification.warn({
+        message: "Төлбөрийн хэлбэр сонгоно уу",
+        duration: 1,
+      });
+    }
     const dun = await tulbur.find((a) => a.turul === "khaan")?.dun;
     if (garaasSongosonTurul === "khaan" && dun > 0) {
       setTerminal(true);
@@ -401,12 +407,15 @@ function ShineTulbur(
     setTurulruuKhiikhDun(parseInt(turulruuKhiikhDun) + parseInt(newUneValue));
   };
 
+  console.log("tulbur", tulbur);
+
   const turulruuTooKhiikhFunction = (v) => {
     const tulukhDun =
       (niitDun ? niitDun : data?.tulukhDun) -
       tulbur.filter((a) => a.turul !== v).reduce((a, b) => a + b.dun, 0);
     const tuljBuiDun = parseInt(turulruuKhiikhDun);
     const index = tulbur.findIndex((a) => a.turul === v);
+    const tukhainTulbur = tulbur.find((a) => a.turul === v);
     if (tulukhDun > 0) {
       const undsenModel = {
         ognoo: new Date(),
@@ -424,9 +433,14 @@ function ShineTulbur(
           setTuluv(1);
           setSongogdsonBank(null);
         }
+        setTurulruuKhiikhDun((e) => parseInt(e) + tukhainTulbur?.dun);
         tulbur.splice(index, 1);
-        setTurulruuKhiikhDun(niitDun.toString());
       } else {
+        if (tuljBuiDun > tulukhDun) {
+          return notification.warn({
+            message: "Төлөх дүнгээс их байж болохгүй",
+          });
+        }
         tulbur.push({ ...undsenModel, turul: v, dun: tuljBuiDun });
         setTurulruuKhiikhDun((e) => (parseInt(e) - tuljBuiDun).toString());
       }
@@ -461,8 +475,7 @@ function ShineTulbur(
   }, [turulruuKhiikhDun]);
 
   function handleTseverlekh() {
-    setTulbur([]);
-    setTurulruuKhiikhDun("");
+    setTurulruuKhiikhDun("0");
   }
 
   return (
@@ -639,76 +652,76 @@ function ShineTulbur(
               <div
                 onClick={() => turulruuTooKhiikhFunction("belen")}
                 style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl ${
-                  value.belen > 0 ? "border-[3px] border-[#4FD1C5]" : null
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
+                  value.belen > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
                 {value.belen > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-[#4FD1C5] bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold">
                       {formatNumber(value.belen)}₮
                     </div>
                   </div>
                 ) : null}
-                <FaMoneyBillWave className="text-[30px] text-[#4FD1C5]" />
-                <div className="text-[20px] text-lg font-bold text-[#4FD1C5]">
+                <FaMoneyBillWave className="text-[30px] text-green-600" />
+                <div className="text-[20px] text-lg font-bold text-green-600">
                   Бэлэн
                 </div>
               </div>
               <div
                 onClick={() => turulruuTooKhiikhFunction("khaan")}
                 style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl ${
-                  value.khaan > 0 ? "border-[3px] border-[#4FD1C5]" : null
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
+                  value.khaan > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
                 {value.khaan > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-[#4FD1C5] bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold">
                       {formatNumber(value.khaan)}₮
                     </div>
                   </div>
                 ) : null}
-                <BsFillCreditCardFill className="text-[30px] text-[#4FD1C5]" />
-                <div className="text-lg font-bold text-[#4FD1C5]">Карт</div>
+                <BsFillCreditCardFill className="text-[30px] text-green-600" />
+                <div className="text-lg font-bold text-green-600">Карт</div>
               </div>
             </div>
             <div className="flex gap-8">
               <div
                 onClick={() => turulruuTooKhiikhFunction("khariltsakh")}
                 style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl ${
-                  value.khariltsakh > 0 ? "border-[3px] border-[#4FD1C5]" : null
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
+                  value.khariltsakh > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
                 {value.khariltsakh > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-[#4FD1C5] bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold">
                       {formatNumber(value.khariltsakh)}₮
                     </div>
                   </div>
                 ) : null}
-                <FaArrowRight className="text-[30px] text-[#4FD1C5]" />
-                <div className=" text-lg font-bold text-[#4FD1C5]">
+                <FaArrowRight className="text-[30px] text-green-600" />
+                <div className=" text-lg font-bold text-green-600">
                   Харилцах
                 </div>
               </div>
               <div
                 onClick={() => turulruuTooKhiikhFunction("zeel")}
                 style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl ${
-                  value.zeel > 0 ? "border-[3px] border-[#4FD1C5]" : null
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
+                  value.zeel > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
                 {value.zeel > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-[#4FD1C5] bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold ">
                       {formatNumber(value.zeel)}₮
                     </div>
                   </div>
                 ) : null}
-                <FaArrowRight className="text-[30px] text-[#4FD1C5]" />
-                <div className="text-lg font-bold text-[#4FD1C5]">Зээл</div>
+                <FaArrowRight className="text-[30px] text-green-600" />
+                <div className="text-lg font-bold text-green-600">Зээл</div>
               </div>
             </div>
           </div>
@@ -717,14 +730,15 @@ function ShineTulbur(
             <div className="flex gap-[48px]">
               <div
                 className={`${
-                  value.qpay > 0 && "rounded-3xl border-[3px] border-[#4FD1C5]"
-                } relative  h-[85px] hover:scale-110 `}
+                  value.qpay > 0 &&
+                  "rounded-3xl border-[3px] border-green-600"
+                } relative h-[85px] hover:scale-110`}
                 onClick={() => {
                   turulruuTooKhiikhFunction("qpay");
                 }}
               >
                 {value.qpay > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] z-10 rounded-xl border-[1px] border-[#4FD1C5] bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] z-10 rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold">
                       {formatNumber(value.qpay)}₮
                     </div>
@@ -757,7 +771,7 @@ function ShineTulbur(
                 />
               </div>
               <div
-                className={`hover:scale-110" h-[85px] cursor-not-allowed overflow-hidden rounded-3xl`}
+                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle72.png" />
               </div>
@@ -765,7 +779,7 @@ function ShineTulbur(
 
             <div className="flex gap-[48px]">
               <div
-                className={`hover:scale-110" h-[85px] cursor-not-allowed overflow-hidden rounded-3xl`}
+                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle66.png" />
               </div>
@@ -787,31 +801,31 @@ function ShineTulbur(
             <div className="flex h-full w-[186px] flex-col gap-4">
               <div
                 onClick={() => hylbarNemekh("20000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-[#4FD1C5] hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
               >
                 <div className="font-bold">{formatNumber(20000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("10000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-[#4FD1C5] hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
               >
                 <div className="font-bold">{formatNumber(10000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("5000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-[#4FD1C5] hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
               >
                 <div className="font-bold">{formatNumber(5000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("1000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-[#4FD1C5] hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
               >
                 <div className="font-bold">{formatNumber(1000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("500")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-[#4FD1C5] hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
               >
                 <div className="font-bold">{formatNumber(500)}</div>
               </div>
@@ -826,7 +840,14 @@ function ShineTulbur(
           </div>
 
           <div className="flex h-full w-[45%] flex-col items-center gap-5">
-            <div className="flex h-[53px] w-[256px] cursor-pointer items-center justify-center rounded-full  border-[1px] border-[#4FD1C5]">
+            <div
+              onDoubleClick={() =>
+                setTurulruuKhiikhDun(
+                  niitDun - tulbur?.reduce((a, b) => a + b?.dun, 0)
+                )
+              }
+              className="flex h-[53px] w-[256px] cursor-pointer items-center justify-center rounded-full  border-[1px] border-green-600"
+            >
               <div className="text-[32px] font-bold text-[#00A35E]">
                 {formatNumber(turulruuKhiikhDun)}₮
               </div>
@@ -834,55 +855,55 @@ function ShineTulbur(
             <div className="flex flex-wrap items-center justify-center gap-4">
               <div
                 onClick={() => mungunDunNemekh("1")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 1
               </div>
               <div
                 onClick={() => mungunDunNemekh("2")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 2
               </div>
               <div
                 onClick={() => mungunDunNemekh("3")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 3
               </div>
               <div
                 onClick={() => mungunDunNemekh("4")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 4
               </div>
               <div
                 onClick={() => mungunDunNemekh("5")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 5
               </div>
               <div
                 onClick={() => mungunDunNemekh("6")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 6
               </div>
               <div
                 onClick={() => mungunDunNemekh("7")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 7
               </div>
               <div
                 onClick={() => mungunDunNemekh("8")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 8
               </div>
               <div
                 onClick={() => mungunDunNemekh("9")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 9
               </div>
@@ -906,7 +927,7 @@ function ShineTulbur(
               </div>
               <div
                 onClick={() => mungunDunNemekh("0")}
-                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-[#4FD1C5] text-[32px] font-bold hover:bg-[#4FD1C5] hover:text-white"
+                className="flex h-[70px] w-[30%] cursor-pointer items-center justify-center rounded-3xl border-[2px] border-green-600 text-[32px] font-bold hover:bg-green-600 hover:text-white"
               >
                 0
               </div>
@@ -935,7 +956,7 @@ function ShineTulbur(
             </div>
           </div>
           <div className="flex h-full w-[246px] flex-col items-center justify-end gap-6">
-            <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-[#4FD1C5] p-5">
+            <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5">
               <div className="flex flex-col gap-2 font-semibold">
                 <div className="flex w-full justify-between font-semibold">
                   <div>Нийт дүн:</div>
@@ -963,14 +984,14 @@ function ShineTulbur(
               <button
                 style={{ backgroundColor: "rgba(79, 209, 197, 0.2)" }}
                 type="primary"
-                className="h-[57px] w-[186px] rounded-[15px] border-[2px] border-[#4FD1C5] bg-[#4FD1C5] text-[#4FD1C5] shadow-xl"
+                className="h-[57px] w-[186px] rounded-[15px] border-[2px] border-green-600 bg-green-600 text-green-600 shadow-xl"
               >
                 Шууд хадгалах [F4]
               </button>
               <button
                 onClick={loading ? null : batalgaajuulaltKhiiya}
                 type="primary"
-                className="h-[57px] w-[186px] rounded-[15px] bg-[#4FD1C5] text-white shadow-xl"
+                className="h-[57px] w-[186px] rounded-[15px] bg-green-600 text-white shadow-xl"
               >
                 Хадгалах [F3]
               </button>
