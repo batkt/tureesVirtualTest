@@ -23,6 +23,7 @@ import { useQRCode } from "next-qrcode";
 import QpayModal from "./ShineQpay";
 import { FaMoneyBillWave, FaArrowRight } from "react-icons/fa";
 import { BsFillCreditCardFill } from "react-icons/bs";
+import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 //#endregion
 const { confirm } = Modal;
 function ShineTulbur(
@@ -126,6 +127,18 @@ function ShineTulbur(
       lend,
     };
   }, [tulbur]);
+
+  //Keyboard tovchlol ekhlel
+
+  useKeyboardTovchlol("F4", f4Darsan);
+
+  function f4Darsan() {
+    turulruuTooKhiikhFunction("belen");
+    batalgaajuulaltKhiiya();
+    ebarimtAvya(uilchluugchiinId);
+  }
+
+  //Keyboard tovchlol tugsgul
 
   function ebarimtAvya(id) {
     setLoading(true);
@@ -358,7 +371,7 @@ function ShineTulbur(
           // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
           setTerminal(false);
           setLoading(false);
-          guilgeeniiTuukhKhadgalya(tulbur);
+          // guilgeeniiTuukhKhadgalya(tulbur);
         });
     } else if (garaasSongosonTurul === "qpay") {
       qpayTulugdsun === "qpayTulugdsun"
@@ -407,8 +420,6 @@ function ShineTulbur(
     setTurulruuKhiikhDun(parseInt(turulruuKhiikhDun) + parseInt(newUneValue));
   };
 
-  console.log("tulbur", tulbur);
-
   const turulruuTooKhiikhFunction = (v) => {
     const tulukhDun =
       (niitDun ? niitDun : data?.tulukhDun) -
@@ -442,7 +453,8 @@ function ShineTulbur(
           });
         }
         tulbur.push({ ...undsenModel, turul: v, dun: tuljBuiDun });
-        setTurulruuKhiikhDun((e) => (parseInt(e) - tuljBuiDun).toString());
+        const uldegdelTulukhDun = tulukhDun - tuljBuiDun;
+        setTurulruuKhiikhDun(uldegdelTulukhDun);
       }
       setTulbur([...tulbur]);
       if (v === "khaan" && tulbur.find((a) => a.turul === v)?.dun > 0) {
@@ -730,8 +742,7 @@ function ShineTulbur(
             <div className="flex gap-[48px]">
               <div
                 className={`${
-                  value.qpay > 0 &&
-                  "rounded-3xl border-[3px] border-green-600"
+                  value.qpay > 0 && "rounded-3xl border-[3px] border-green-600"
                 } relative h-[85px] hover:scale-110`}
                 onClick={() => {
                   turulruuTooKhiikhFunction("qpay");
@@ -761,7 +772,7 @@ function ShineTulbur(
                 qpayerTulukhDun={value.qpay}
               />
               <div
-                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
+                className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image
                   id="SocialPay"
@@ -773,23 +784,23 @@ function ShineTulbur(
               <div
                 className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
               >
-                <Image preview={false} width={100} src="/Rectangle72.png" />
+                <Image preview={false} width={100} src="/Group_158.png" />
               </div>
             </div>
 
             <div className="flex gap-[48px]">
               <div
-                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
+                className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle66.png" />
               </div>
               <div
-                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
+                className={`h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle81.png" />
               </div>
               <div
-                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl  hover:scale-110`}
+                className={`h-[85px] cursor-not-allowed rounded-3xl  hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Rectangle83.png" />
               </div>
@@ -993,7 +1004,7 @@ function ShineTulbur(
                 type="primary"
                 className="h-[57px] w-[186px] rounded-[15px] bg-green-600 text-white shadow-xl"
               >
-                Хадгалах [F3]
+                Хадгалах
               </button>
             </div>
           </div>
