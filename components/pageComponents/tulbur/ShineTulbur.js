@@ -132,7 +132,9 @@ function ShineTulbur(
   useKeyboardTovchlol("F4", f4Darsan);
 
   function f4Darsan() {
-    turulruuTooKhiikhFunction("belen");
+    if (tulbur.length === 0) {
+      turulruuTooKhiikhFunction("belen");
+    }
     batalgaajuulaltKhiiya();
     ebarimtAvya(uilchluugchiinId);
   }
@@ -732,9 +734,9 @@ function ShineTulbur(
                 </div>
               </div>
               <div
-                onClick={() => turulruuTooKhiikhFunction("zeel")}
+                // onClick={() => turulruuTooKhiikhFunction("zeel")}
                 style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
+                className={`relative flex h-[85px] w-[184px] cursor-not-allowed items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
                   value.zeel > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
@@ -1006,7 +1008,15 @@ function ShineTulbur(
             </div>
             <div className="flex h-[120px] w-full flex-col items-center justify-center gap-4">
               <Popover
-                content={"Бэлнээр хадгалан, хувь хүнээр баримт хэвлэнэ."}
+                content={
+                  <div>
+                    <div>"1. Бэлнээр хадгалан, хувь хүнээр баримт хэвлэнэ.</div>
+                    <div>
+                      "2. Төлбөрийн өөр хэлбэр сонгогдсон бол хувь хүнээр баримт
+                      хэвлэнэ."
+                    </div>
+                  </div>
+                }
                 trigger={"hover"}
               >
                 <button
