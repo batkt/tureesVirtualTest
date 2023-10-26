@@ -1,4 +1,4 @@
-import { DatePicker } from "antd";
+import { DatePicker, Select } from "antd";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import usezogsooliinUdriinTailan from "hooks/usezogsooliinUdriinTailan";
 import React, {
@@ -10,17 +10,40 @@ import React, {
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
+import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
+import { t } from "i18next";
 
 const order = { createdAt: -1 };
 
 function TulburiinDelgerenguiTailan(
-  { barilgiinId, baiguullagiinId, token, destroy, defualtOgnoo, garsanKhaalga },
+  {
+    barilgiinId,
+    baiguullagiinId,
+    token,
+    destroy,
+    defualtOgnoo,
+    garsanKhaalga,
+    ajiltan,
+  },
   ref
 ) {
+  const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
   const [ognoo, setOgnoo] = useState([
     moment(defualtOgnoo[0]),
     moment(defualtOgnoo[1]),
   ]);
+
+  const zogsooAjiltanQuery = useMemo(() => {
+    return undefined;
+  }, [baiguullagiinId, barilgiinId]);
+
+  const query = useMemo(() => {
+    if (songogdsonAjiltan) {
+      return { ajiltniiId: songogdsonAjiltan };
+    }
+    return undefined;
+  }, [songogdsonAjiltan]);
+
   const { zogsoolTulburMedeelel, zogsoolTulburMedeelelMutate } =
     usezogsooliinUdriinTailan(
       token,
@@ -28,8 +51,16 @@ function TulburiinDelgerenguiTailan(
       ognoo[1],
       ognoo[0],
       garsanKhaalga,
-      baiguullagiinId
+      baiguullagiinId,
+      query
     );
+  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(
+    token,
+    baiguullagiinId,
+    zogsooAjiltanQuery
+  );
+
+  console.log("ajilchdiinGaralt", ajilchdiinGaralt);
   const printRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -239,12 +270,32 @@ function TulburiinDelgerenguiTailan(
           </div>
         </div>
       </div>
-      <DatePicker.RangePicker
-        value={ognoo}
-        onChange={setOgnoo}
-        allowClear={false}
-        locale={locale}
-      />
+      <div className="flex items-center justify-between gap-2">
+        <DatePicker.RangePicker
+          value={ognoo}
+          onChange={setOgnoo}
+          allowClear={false}
+          locale={locale}
+          style={{ width: "50%" }}
+        />
+        <Select
+          id="ajiltanSongokhInput"
+          placeholder={t("Ажилтан")}
+          style={{ width: "50%" }}
+          onChange={(e) => setSongogdsonAjiltan(e)}
+        >
+          {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
+            <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
+              <div className="flex flex-row justify-between">
+                <span className="truncate">
+                  {mur.ovog && mur.ovog[0]}.{mur.ner}
+                </span>
+                <span>{mur.register}</span>
+              </div>
+            </Select.Option>
+          ))}
+        </Select>
+      </div>
       {tulburiinMedeelel.length > 0 ? (
         <div className="mt-5 space-y-3">
           {tulburiinMedeelel.map((a, i) => {

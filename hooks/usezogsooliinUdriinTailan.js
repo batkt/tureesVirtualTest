@@ -10,7 +10,8 @@ const fetcher = (
   duusakhOgnoo,
   ekhlekhOgnoo,
   garsanKhaalga,
-  baiguullagiinId
+  baiguullagiinId,
+  query
 ) => {
   return axios(token)
     .post(url, {
@@ -19,6 +20,7 @@ const fetcher = (
       duusakhOgnoo: moment(duusakhOgnoo).format("YYYY-MM-DD 23:59:59"),
       garsanKhaalga: garsanKhaalga,
       baiguullagiinId,
+      ...query,
     })
     .then((res) => res.data)
     .catch(aldaaBarigch);
@@ -30,7 +32,8 @@ function usezogsooliinUdriinTailan(
   duusakhOgnoo,
   ekhlekhOgnoo,
   garsanKhaalga,
-  baiguullagiinId
+  baiguullagiinId,
+  query
 ) {
   const { data, mutate } = useSWR(
     !!token
@@ -42,6 +45,7 @@ function usezogsooliinUdriinTailan(
           ekhlekhOgnoo,
           garsanKhaalga,
           baiguullagiinId,
+          query,
         ]
       : null,
     fetcher,

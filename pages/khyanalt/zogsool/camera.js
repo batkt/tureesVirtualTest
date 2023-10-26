@@ -74,6 +74,7 @@ import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/Tulbur
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
 import StackIkhNaydStream from "./stackIkhnaydStream";
+import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -660,8 +661,9 @@ function camera({ token }) {
           </div>
         </div>
       ),
+      style: { top: 25 },
       content: (
-        <Tulbur
+        <ShineTulbur
           suuliikhEsekh={index === 0}
           niitDun={niitDun}
           camerVal={camerVal[1]}
@@ -675,8 +677,23 @@ function camera({ token }) {
           onRefresh={onRefresh}
           setModalNeelttei={setModalNeelttei}
         />
+        // <Tulbur
+        //   suuliikhEsekh={index === 0}
+        //   niitDun={niitDun}
+        //   camerVal={camerVal[1]}
+        //   ref={tulburRef}
+        //   data={_.cloneDeep(data)}
+        //   token={token}
+        //   baiguullaga={baiguullaga}
+        //   barilgiinId={barilgiinId}
+        //   ajiltan={ajiltan}
+        //   uilchluugchiinId={uilchluugchiinId}
+        //   onRefresh={onRefresh}
+        //   setModalNeelttei={setModalNeelttei}
+        // />
       ),
       footer: false,
+      className: "!w-fit",
     });
   }
   const columns = useMemo(() => {
@@ -1476,6 +1493,7 @@ function camera({ token }) {
         <TulburiinDelgerenguiTailan
           ref={tailanRef}
           defualtOgnoo={ognoo}
+          ajiltan={ajiltan}
           garsanKhaalga={camerVal[1]}
           token={token}
           baiguullagiinId={baiguullaga?._id}
