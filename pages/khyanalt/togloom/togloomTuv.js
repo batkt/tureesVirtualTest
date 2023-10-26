@@ -1531,7 +1531,7 @@ function togloom1() {
                 }
               >
                 <Button type="primary">
-                  <span>{t("Хаалт Нээх")}</span>
+                  <span>{t("Хаалт нээх")}</span>
                 </Button>
               </Popover>
               <Button
