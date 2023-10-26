@@ -7,7 +7,7 @@ import { t } from "i18next";
 const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
 
 export const url =
-  // "http://192.168.1.13:8081";
+  //  "http://192.168.1.13:8081";
   publicRuntimeConfig.URL || "https://turees.zevtabs.mn/api";
 
 export const socket = () =>
