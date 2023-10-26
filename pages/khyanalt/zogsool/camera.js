@@ -1493,6 +1493,7 @@ function camera({ token }) {
         <TulburiinDelgerenguiTailan
           ref={tailanRef}
           defualtOgnoo={ognoo}
+          ajiltan={ajiltan}
           garsanKhaalga={camerVal[1]}
           token={token}
           baiguullagiinId={baiguullaga?._id}
