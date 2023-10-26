@@ -1,78 +1,51 @@
-import {
-  Steps,
-  Button,
-  message,
-  Modal,
-  notification,
-  Image,
-  Popover,
-} from "antd";
+import { Steps, Button, message, notification, Image, Popover } from "antd";
 import React from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import moment from "moment";
-import EBarimt from "../togloomiinTuv/EBarimt";
 import QRCode from "react-qr-code";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import { useEffect } from "react";
 import { t } from "i18next";
-import { useQRCode } from "next-qrcode";
-import QpayModal from "./ShineQpay";
+import QpayModal from "../tulbur/ShineQpay";
 import { FaMoneyBillWave, FaArrowRight } from "react-icons/fa";
 import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
-import ShineEbarimt from "./ShineEbarimt";
+import ShineEbarimt from "../tulbur/ShineEbarimt";
 //#endregion
-const { confirm } = Modal;
-function ShineTulbur(
-  {
-    destroy,
-    data,
-    token,
-    ajiltan,
-    baiguullaga,
-    barilgiinId,
-    uilchluugchiinId,
-    onRefresh,
-    setModalNeelttei,
-    camerVal,
-    niitDun,
-    suuliikhEsekh,
-  },
+function ShineTogloomTulbur(
+  { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
   ref
 ) {
-  const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
-    !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
+    data?.tulburTulsunEsekh === true ? 2 : 1
   );
-  const [khaanbank, setTerminal] = React.useState(false);
   const [tulbur, setTulbur] = React.useState(
-    (niitDun ? [] : data?.tulbur) || []
+    (data?.dutuuDun ? [] : data?.tulbur) || []
   );
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
-  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({
     khungulukhDun: undefined,
     tailbar: undefined,
     tailbarTurul: undefined,
   });
   const [khungulukhEsekh, setKhungulukhEsekh] = React.useState(false);
-  const [qpayerTulukh, setQpayerTulukh] = React.useState(false);
-  const [songogdTulburiinKhelber, setSongogdsonTulburiinKhelber] =
-    React.useState();
-  const [songogdsonBank, setSongogdsonBank] = React.useState();
-  const [songogdsonBusadTurul, setSongogdsonBusadTurul] = React.useState();
+  const [qpayerTulukh, setQpayerTulukh] = React.useState(
+    !data?.dutuuDun && !!data?.tulbur?.find((data) => data.turul === "qpay")
+      ? "Tulugdsun"
+      : undefined
+  );
   const [loading, setLoading] = React.useState(false);
   const [tuluv, setTuluv] = React.useState(2);
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
-    niitDun?.toString()
+    data?.dutuuDun ? data?.dutuuDun : data?.niitDun
   );
 
   const eBarimtRef = React.useRef(null);
@@ -85,11 +58,11 @@ function ShineTulbur(
     ref,
     () => ({
       khaaya() {
-        setModalNeelttei(false);
+        onRefresh();
         destroy();
       },
     }),
-    [tulbur]
+    [tulbur, alkham]
   );
 
   const value = React.useMemo(() => {
@@ -134,7 +107,7 @@ function ShineTulbur(
   function f4Darsan() {
     turulruuTooKhiikhFunction("belen");
     batalgaajuulaltKhiiya();
-    ebarimtAvya(uilchluugchiinId);
+    ebarimtAvya(data?._id);
   }
 
   //Keyboard tovchlol tugsgul
@@ -150,7 +123,7 @@ function ShineTulbur(
       }
       const body = {
         id,
-        ebarimtiinTurul: "zogsool",
+        ebarimtiinTurul: "togloom",
       };
       if (baiguullagaEsekh || irgenEsekh) {
         body.register = register;
@@ -189,36 +162,14 @@ function ShineTulbur(
   function batalgaajuulya(turul, val) {
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
-      guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
-        onRefresh();
-      });
+      guilgeeniiTuukhKhadgalya(tulbur);
       setTulbur(tulbur);
     } else if (
-      (niitDun ? niitDun : data?.tulukhDun) ===
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) ===
       tulbur.reduce((a, b) => a + b.dun, 0)
     )
       setAlkham(2);
     else {
-      setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
-      setLoading(false);
-    }
-  }
-
-  function batalgaajuuljDuusgakh() {
-    setTerminal(false);
-    tulbur.find((a) => a.turul === "khaan").isPayed = true;
-    setTulbur([...tulbur]);
-    if (
-      (niitDun ? niitDun : data?.tulukhDun) ===
-      tulbur.reduce((a, b) => a + b.dun, 0)
-    ) {
-      guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
-        onRefresh();
-      });
-      setAlkham(2);
-    } else {
       setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
       setLoading(false);
     }
@@ -245,37 +196,17 @@ function ShineTulbur(
       a.barilgiinId = barilgiinId;
       a.burtgesenAjiltaniiId = ajiltan._id;
       a.burtgesenAjiltaniiNer = ajiltan.ner;
-      a.zogsooliinId = data?.zogsooliinId;
+      a.togloominId = data._id;
     });
-    const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + b?.dun, 0);
-
-    if (tulukhGejBuiNiitDun !== niitDun) {
-      setLoading(false);
-      return notification.warn({
-        message: "Төлбөр зөрүүтэй байна!",
-        duration: 1,
-      });
-    }
-    //Tuhain tulburiin dun ni too bolon 0 ees ih baih yostoi
-    const yavuulakhTulbur = tulbur.filter((a) => a.dun && a.dun > 0);
     uilchilgee(token)
-      .post("/zogsooliinTulburTulye", {
-        tulbur: yavuulakhTulbur,
-        id: uilchluugchiinId,
+      .post("/togloomiinTulburTulye", {
+        tulbur,
+        id: data._id,
       })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           setAlkham(2);
           onRefresh();
-          suuliikhEsekh === true &&
-            axios
-              .get("http://localhost:5000/api/neeye/" + camerVal + "")
-              .then(function (response) {
-                if (!!response) console.log("/api/neeye", response);
-              })
-              .catch(function (error) {
-                console.log("ERROR: /api/neeye", error);
-              });
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
@@ -283,7 +214,6 @@ function ShineTulbur(
           setLoading(false);
         }
         if (!!qpayEsekh && qpayEsekh === true) {
-          setSongogdsonTulburiinKhelber();
           setQpayerTulukh("Tulugdsun");
         }
       })
@@ -312,9 +242,9 @@ function ShineTulbur(
     setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
     uilchilgee(token)
       .post("/qpayGargaya", {
-        barilgiinId: barilgiinId,
         dun: ilgeekhDun,
-        zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
+        zakhialgiinDugaar: `${data?._id}${ilgeekhDun}`,
+        barilgiinId: barilgiinId,
       })
       .then(({ data }) => {
         setQpayerTulukh(data);
@@ -336,7 +266,6 @@ function ShineTulbur(
     }
     const dun = await tulbur.find((a) => a.turul === "khaan")?.dun;
     if (garaasSongosonTurul === "khaan" && dun > 0) {
-      setTerminal(true);
       await axios
         .post(
           "http://127.0.0.1:27028",
@@ -368,12 +297,9 @@ function ShineTulbur(
             message.warning(data?.response?.response_msg);
             setLoading(false);
           }
-          setSongogdsonBank(null);
-          setTerminal(false);
         })
         .catch((e) => {
           // tulbur.find((a) => a.turul === "khaan") ? null : aldaaBarigch(e);
-          setTerminal(false);
           setLoading(false);
           // guilgeeniiTuukhKhadgalya(tulbur);
         });
@@ -383,24 +309,8 @@ function ShineTulbur(
         : qpayAvakh();
     } else {
       guilgeeniiTuukhKhadgalya(tulbur);
-      if (tuluv === 1) {
-        setSongogdsonBusadTurul();
-      }
-      if (tuluv === 2) {
-        setSongogdsonBank();
-      }
     }
   }
-  const minToHour = (m) => {
-    let res;
-    if (m < 60) res = m + " мин";
-    else {
-      const h = Math.floor(m / 60);
-      const min = m % 60;
-      res = h + " цаг " + (min && min + " мин");
-    }
-    return res;
-  };
   useEffect(() => {
     function keyUp(e) {
       if (e.key === "Escape") {
@@ -426,7 +336,7 @@ function ShineTulbur(
 
   const turulruuTooKhiikhFunction = (v) => {
     const tulukhDun =
-      (niitDun ? niitDun : data?.tulukhDun) -
+      (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) -
       tulbur.filter((a) => a.turul !== v).reduce((a, b) => a + b.dun, 0);
     const tuljBuiDun = parseInt(turulruuKhiikhDun);
     const index = tulbur.findIndex((a) => a.turul === v);
@@ -446,7 +356,6 @@ function ShineTulbur(
       if (index !== -1) {
         if (tulbur[index]?.turul === "khaan" && tulbur[index]?.dun > 0) {
           setTuluv(1);
-          setSongogdsonBank(null);
         }
         setTurulruuKhiikhDun((e) => parseInt(e) + tukhainTulbur?.dun);
         tulbur.splice(index, 1);
@@ -551,18 +460,18 @@ function ShineTulbur(
               <p></p>
             </div>
             {/* {eBarimt?.stocks?.map((mur, index) => (
-                <div
-                  className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
-                    index === 0 && "border-t-2"
-                  }`}
-                  key={`${index}-zakhialga`}
-                >
-                  <div className="">{mur.name}:</div>
-                  <div className="-mt-1 text-right">
-                    {formatNumber(mur.totalAmount, 2)}₮
+                  <div
+                    className={`flex flex-col items-stretch justify-between border-b-2 border-dashed py-1 ${
+                      index === 0 && "border-t-2"
+                    }`}
+                    key={`${index}-zakhialga`}
+                  >
+                    <div className="">{mur.name}:</div>
+                    <div className="-mt-1 text-right">
+                      {formatNumber(mur.totalAmount, 2)}₮
+                    </div>
                   </div>
-                </div>
-              ))} */}
+                ))} */}
             <div>
               <p>
                 <br />
@@ -867,7 +776,9 @@ function ShineTulbur(
             <div
               onDoubleClick={() =>
                 setTurulruuKhiikhDun(
-                  niitDun - tulbur?.reduce((a, b) => a + b?.dun, 0)
+                  data?.dutuuDun
+                    ? data?.dutuuDun
+                    : data?.niitDun - tulbur?.reduce((a, b) => a + b?.dun, 0)
                 )
               }
               className="flex h-[53px] w-[256px] cursor-pointer items-center justify-center rounded-full  border-[1px] border-green-600"
@@ -984,12 +895,19 @@ function ShineTulbur(
               <div className="flex flex-col gap-2 font-semibold">
                 <div className="flex w-full justify-between font-semibold">
                   <div>Нийт дүн:</div>
-                  <div>{formatNumber(niitDun)}₮</div>
+                  <div>
+                    {formatNumber(
+                      data?.dutuuDun ? data?.dutuuDun : data?.niitDun
+                    )}
+                    ₮
+                  </div>
                 </div>
               </div>
               <div
                 className={`flex w-full justify-between font-semibold ${
-                  parseInt(turulruuKhiikhDun) - niitDun < 0
+                  parseInt(turulruuKhiikhDun) -
+                    (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) <
+                  0
                     ? "text-red-400"
                     : "text-[#00A35E]"
                 } `}
@@ -998,7 +916,10 @@ function ShineTulbur(
                 <div>
                   {formatNumber(
                     parseInt(turulruuKhiikhDun) -
-                      (niitDun - tulbur.reduce((a, b) => a + b.dun, 0)) || 0
+                      (data?.dutuuDun
+                        ? data?.dutuuDun
+                        : data?.niitDun -
+                          tulbur.reduce((a, b) => a + b.dun, 0)) || 0
                   )}
                   ₮
                 </div>
@@ -1040,7 +961,7 @@ function ShineTulbur(
         setIrgenEsekh={setIrgenEsekh}
         setRegister={setRegister}
       />
-      {alkham === 2 && barimtKhevlekhEsekh === true && (
+      {alkham === 2 && (
         <div className="mt-5 flex flex-row justify-between">
           <Button type="primary" danger onClick={() => ref.current.khaaya()}>
             {t("Хаах")}
@@ -1048,7 +969,7 @@ function ShineTulbur(
           <Button
             type="primary"
             loading={loading}
-            onClick={() => ebarimtAvya(uilchluugchiinId)}
+            onClick={() => ebarimtAvya(data?._id)}
           >
             {t("Хэвлэх")}
           </Button>
@@ -1058,4 +979,4 @@ function ShineTulbur(
   );
 }
 
-export default React.forwardRef(ShineTulbur);
+export default React.forwardRef(ShineTogloomTulbur);

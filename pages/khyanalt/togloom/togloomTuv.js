@@ -59,6 +59,7 @@ import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import TogloomTile from "components/pageComponents/togloom/TogloomTile";
+import ShineTogloomTulbur from "components/pageComponents/togloomiinTuv/ShineTogloomTulbur";
 
 const DelegrenguiKharakh = React.forwardRef(
   ({ data, destroy, confirm }, ref) => {
@@ -879,8 +880,10 @@ function togloom1() {
           </div>
         </div>
       ),
+      style: { top: 25 },
+      className: "!w-fit",
       content: (
-        <Tulbur
+        <ShineTogloomTulbur
           ref={tulburRef}
           data={_.cloneDeep(data)}
           token={token}
@@ -889,6 +892,15 @@ function togloom1() {
           ajiltan={ajiltan}
           onRefresh={onRefresh}
         />
+        // <Tulbur
+        //   ref={tulburRef}
+        //   data={_.cloneDeep(data)}
+        //   token={token}
+        //   baiguullaga={baiguullaga}
+        //   barilgiinId={barilgiinId}
+        //   ajiltan={ajiltan}
+        //   onRefresh={onRefresh}
+        // />
       ),
       footer: false,
     });

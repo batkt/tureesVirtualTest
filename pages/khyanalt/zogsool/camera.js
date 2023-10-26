@@ -661,7 +661,6 @@ function camera({ token }) {
           </div>
         </div>
       ),
-      width: 1024,
       style: { top: 25 },
       content: (
         <ShineTulbur
@@ -694,6 +693,7 @@ function camera({ token }) {
         // />
       ),
       footer: false,
+      className: "!w-fit",
     });
   }
   const columns = useMemo(() => {
