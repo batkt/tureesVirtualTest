@@ -74,6 +74,7 @@ function ShineTulbur(
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
     niitDun?.toString()
   );
+  const [refreshdekhEsekh, setRefreshdekhEsekh] = React.useState(true);
 
   const eBarimtRef = React.useRef(null);
 
@@ -419,11 +420,21 @@ function ShineTulbur(
   }
 
   const mungunDunNemekh = (newUneValue) => {
-    setTurulruuKhiikhDun(turulruuKhiikhDun + newUneValue);
+    if (refreshdekhEsekh) {
+      setTurulruuKhiikhDun(newUneValue.toString());
+      setRefreshdekhEsekh(false);
+    } else {
+      setTurulruuKhiikhDun(turulruuKhiikhDun + newUneValue);
+    }
   };
 
   const hylbarNemekh = (newUneValue) => {
-    setTurulruuKhiikhDun(parseInt(turulruuKhiikhDun) + parseInt(newUneValue));
+    if (refreshdekhEsekh) {
+      setTurulruuKhiikhDun(newUneValue.toString());
+      setRefreshdekhEsekh(false);
+    } else {
+      setTurulruuKhiikhDun(parseInt(turulruuKhiikhDun) + parseInt(newUneValue));
+    }
   };
 
   const turulruuTooKhiikhFunction = (v) => {
@@ -467,6 +478,7 @@ function ShineTulbur(
         const uldegdelTulukhDun = tulukhDun - tuljBuiDun;
         setTurulruuKhiikhDun(uldegdelTulukhDun);
       }
+      setRefreshdekhEsekh(true);
       setTulbur([...tulbur]);
       if (v === "khaan" && tulbur.find((a) => a.turul === v)?.dun > 0) {
         batalgaajuulaltKhiiya(null, v);
@@ -483,13 +495,23 @@ function ShineTulbur(
       const key = event.key;
       const validKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
       if (validKeys.includes(key)) {
-        setTurulruuKhiikhDun(
-          (turulruuKhiikhDun?.toString() || "") + key.toString()
-        );
+        if (refreshdekhEsekh) {
+          setRefreshdekhEsekh(false);
+          setTurulruuKhiikhDun(key.toString());
+        } else {
+          setTurulruuKhiikhDun(
+            (turulruuKhiikhDun?.toString() || "") + key.toString()
+          );
+        }
       }
       if (event.key === "Backspace") {
         if (turulruuKhiikhDun.toString().slice(0, -1).length > 0) {
-          setTurulruuKhiikhDun((e) => e.toString().slice(0, -1));
+          if (refreshdekhEsekh) {
+            setRefreshdekhEsekh(false);
+            setTurulruuKhiikhDun("0");
+          } else {
+            setTurulruuKhiikhDun((e) => e.toString().slice(0, -1));
+          }
         } else {
           setTurulruuKhiikhDun("0");
         }
