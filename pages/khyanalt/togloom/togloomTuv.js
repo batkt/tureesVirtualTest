@@ -880,19 +880,10 @@ function togloom1() {
           </div>
         </div>
       ),
-      style: { top: 25 },
-      className: "!w-fit",
+      // style: { top: 25 },
+      // className: "!w-fit",
       content: (
-        <ShineTogloomTulbur
-          ref={tulburRef}
-          data={_.cloneDeep(data)}
-          token={token}
-          baiguullaga={baiguullaga}
-          barilgiinId={barilgiinId}
-          ajiltan={ajiltan}
-          onRefresh={onRefresh}
-        />
-        // <Tulbur
+        // <ShineTogloomTulbur
         //   ref={tulburRef}
         //   data={_.cloneDeep(data)}
         //   token={token}
@@ -901,6 +892,15 @@ function togloom1() {
         //   ajiltan={ajiltan}
         //   onRefresh={onRefresh}
         // />
+        <Tulbur
+          ref={tulburRef}
+          data={_.cloneDeep(data)}
+          token={token}
+          baiguullaga={baiguullaga}
+          barilgiinId={barilgiinId}
+          ajiltan={ajiltan}
+          onRefresh={onRefresh}
+        />
       ),
       footer: false,
     });
