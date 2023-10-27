@@ -25,8 +25,13 @@ function StreamTokhirgoo(
         setUnshijBaina(true);
         let tokhirgoo = form.getFieldsValue();
         let body = {
+          ...data,
           tokhirgoo: {
             ...tokhirgoo,
+            ...(tokhirgoo &&
+              tokhirgoo.socketEsekh === undefined && {
+                socketEsekh: socketEsekh,
+              }),
           },
           _id: data?._id,
         };
