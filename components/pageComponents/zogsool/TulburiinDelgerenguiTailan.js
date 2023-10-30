@@ -12,6 +12,7 @@ import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
 import { t } from "i18next";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 const order = { createdAt: -1 };
 
@@ -39,7 +40,7 @@ function TulburiinDelgerenguiTailan(
 
   const query = useMemo(() => {
     if (songogdsonAjiltan) {
-      return { ajiltniiId: songogdsonAjiltan };
+      return { burtgesenAjiltaniiId: songogdsonAjiltan };
     }
     return undefined;
   }, [songogdsonAjiltan]);
@@ -281,6 +282,12 @@ function TulburiinDelgerenguiTailan(
         <Select
           id="ajiltanSongokhInput"
           placeholder={t("Ажилтан")}
+          allowClear
+          clearIcon={() => (
+            <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
+              <CloseCircleOutlined />
+            </div>
+          )}
           style={{ width: "50%" }}
           onChange={(e) => setSongogdsonAjiltan(e)}
         >
@@ -306,15 +313,15 @@ function TulburiinDelgerenguiTailan(
               >
                 <div
                   style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 `}
+                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
                 >
-                  <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 " />
+                  <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
                 </div>
                 <img
                   src={a.icon}
                   className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                 />
-                <div className="z-10 flex w-full justify-between text-lg font-semibold">
+                <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                   {a.ner}:
                   <div className="flex font-normal">
                     {formatNumber(a.dun) || 0}₮
@@ -332,7 +339,7 @@ function TulburiinDelgerenguiTailan(
             );
           })}
           <div className="border border-dashed bg-gray-600" />
-          <div className="flex items-center justify-between text-lg font-[600]">
+          <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
             <div className="flex ">Нийт дүн:</div>
             <div>
               {formatNumber(

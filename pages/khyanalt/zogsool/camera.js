@@ -648,7 +648,7 @@ function camera({ token }) {
   function tulburTulyu(data, uilchluugchiinId, mashiniiDugaar, niitDun, index) {
     modal({
       title: (
-        <div className="flex w-full flex-row justify-between">
+        <div className="flex w-full flex-row justify-between dark:text-gray-200">
           <div>{t("Тооцоо хийх")}</div>
           <div className="flex items-center">
             {mashiniiDugaar}
@@ -1457,6 +1457,9 @@ function camera({ token }) {
               ({ data }) => {
                 if (data === "Amjilttai") {
                   message.success(t("Амжилттай хадгаллаа"));
+                  if(value !== "Маргалдсан" || value !== "Журам зөрчсөн" || value !== "Зугтаасан"){
+                    khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
+                  }
                   onRefresh();
                 }
               }
