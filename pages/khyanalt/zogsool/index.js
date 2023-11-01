@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import useUilchluulegch, {
   useUilchluulegchZogsoolToo,
+  useUilchluulegchdiinDunAvay,
 } from "hooks/useUilchluulegch";
 import { useUilchluulegchToololt } from "hooks/useUilchluulegch";
 import BaganiinSongolt from "../../../components/table/BaganiinSongolt";
@@ -120,7 +121,6 @@ function Zogsool({ token }) {
     moment().endOf("day"),
   ]);
   const [zogsoolId, setZogsoolId] = useState();
-  const [orlogo, setOrlogo] = useState([]);
   const [tulbur, setTulbur] = useState("");
   const [tuluv, setTuluv] = useState("");
   const [ajiltniiNers, setAjiltniiNers] = useState([]);
@@ -274,14 +274,10 @@ function Zogsool({ token }) {
     };
   }, [ognoo, jagsaalt, uilchluulegchGaralt, barilgiinId]);
 
-  useEffect(() => {
-    uilchilgee(token)
-      .post("/zogsoolUilchluulegchdiinDunAvay", orlogoQuery)
-      .then((a) => {
-        setOrlogo(a.data);
-      })
-      .catch(aldaaBarigch);
-  }, [uilchluulegchGaralt, jagsaalt, orlogoQuery]);
+  const { uilchluulegchdiinDun } = useUilchluulegchdiinDunAvay(
+    token,
+    orlogoQuery
+  );
 
   function tseverliy() {
     const songogdson = [...selectedRowkeys];
@@ -982,16 +978,28 @@ function Zogsool({ token }) {
             data-aos-delay="200"
           >
             {/*<div className="flex flex-row space-x-2 p-1 font-medium">
-              {t("Зогсоолын орлого")} : {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}
+              {t("Зогсоолын орлого")} : {formatNumber(!!uilchluulegchdiinDun[0]?.dun ? uilchluulegchdiinDun[0].dun : 0, 0)}
               ₮
             </div>*/}
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
               {t("Нийт бодогдсон")} :{" "}
-              {formatNumber(!!orlogo[0]?.niitDun ? orlogo[0].niitDun : 0, 0)}₮
+              {formatNumber(
+                !!uilchluulegchdiinDun?.[0]?.niitDun
+                  ? uilchluulegchdiinDun?.[0]?.niitDun
+                  : 0,
+                0
+              )}
+              ₮
             </div>
             <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
               {t("Нийт төлсөн")} :{" "}
-              {formatNumber(!!orlogo[0]?.dun ? orlogo[0].dun : 0, 0)}₮
+              {formatNumber(
+                !!uilchluulegchdiinDun?.[0]?.dun
+                  ? uilchluulegchdiinDun?.[0]?.dun
+                  : 0,
+                0
+              )}
+              ₮
             </div>
           </div>
 

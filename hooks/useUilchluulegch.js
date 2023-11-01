@@ -75,6 +75,12 @@ const fetcherToololt = (url, token, barilgiinId, query) => {
       .then((res) => res.data)
       .catch(aldaaBarigch);
 };
+const fetcherDun = (url, token, query) => {
+  return axios(token)
+    .post(url, { ...query })
+    .then((res) => res.data)
+    .catch(aldaaBarigch);
+};
 
 export function useUilchluulegchToololt(token, query) {
   const { barilgiinId } = useAuth();
@@ -98,6 +104,14 @@ export function useUilchluulegchZogsoolToo(token, query) {
     { revalidateOnFocus: false }
   );
   return { zogsoolTusBuriinToo: data, zogsoolTusBuriinTooMutate: mutate };
+}
+export function useUilchluulegchdiinDunAvay(token, query) {
+  const { data, mutate } = useSWR(
+    !!token ? ["/zogsoolUilchluulegchdiinDunAvay", token, query] : null,
+    fetcherDun,
+    { revalidateOnFocus: false }
+  );
+  return { uilchluulegchdiinDun: data, uilchluulegchdiinDunMutate: mutate };
 }
 
 export default useUilchluulegch;
