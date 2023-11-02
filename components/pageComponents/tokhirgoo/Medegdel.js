@@ -60,18 +60,24 @@ function Medegdel({
   baiguullagaMutate,
   setSongogdsonTsonkhniiIndex,
 }) {
-  const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(null);
+  const [medegdelTokhirgoo, setMedegdelTokhirgoo] = useState(
+    baiguullaga
+      ? {
+          msgIlgeekhDugaar: baiguullaga.tokhirgoo.msgIlgeekhDugaar,
+          msgIlgeekhKey: baiguullaga.tokhirgoo.msgIlgeekhKey,
+        }
+      : null
+  );
 
   const ref = React.useRef(null);
   const { t } = useTranslation();
 
   const khungulultiinTokhirgooKhadgalya = () => {
     uilchilgee(token)
-      .post("/baiguullaga", { tokhirgoo: medegdelTokhirgoo })
+      .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
       .then(({ data }) => {
         if (data === "Amjilttai") {
           notification.success({ message: t("Амжилттай засагдлаа") });
-          setMedegdelTokhirgoo(null);
           baiguullagaMutate();
           setSongogdsonTsonkhniiIndex(5);
         }
