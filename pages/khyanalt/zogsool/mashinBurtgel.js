@@ -47,21 +47,37 @@ function mashinBurtgel({ token }) {
   const mashinref = useRef(null);
   const [turul, setTurul] = useState("Нийт");
   const [tuluv, setTuluv] = useState("");
+  const [udurShuult, setUdurShuult] = useState("niit");
 
   const query = useMemo(() => {
     var query = {};
     if (turul !== "Нийт") {
       query.turul = turul;
-    }
-    if (tuluv !== "") {
-      if (tuluv !== "Үнэгүй") {
-        query.khungulultTurul = tuluv;
-      } else {
-        query.tuluv = tuluv;
+      if (turul === "Гэрээт") {
+        if (udurShuult === "idevkhitei") {
+          query.duusakhOgnoo = {
+            $gt: moment(),
+          };
+        }
+        if (udurShuult === "idevkhigui") {
+          query.duusakhOgnoo = {
+            $lte: moment(),
+          };
+        }
+        if (udurShuult === "niit") {
+          query.duusakhOgnoo = undefined;
+        }
       }
+      if (tuluv !== "") {
+        if (tuluv !== "Үнэгүй") {
+          query.khungulultTurul = tuluv;
+        } else {
+          query.tuluv = tuluv;
+        }
+      }
+      return query;
     }
-    return query;
-  }, [turul, tuluv]);
+  }, [turul, tuluv, udurShuult]);
 
   // const [shineCol, setShineCol] = useState(() => {
   //   if (turul?.name === "Гэрээт") {
@@ -94,12 +110,89 @@ function mashinBurtgel({ token }) {
   const { mashinGaralt, setMashinKhuudaslalt, mashinMutate, isValidating } =
     useMashin(token, baiguullaga?._id, query, order);
 
+  const [butsaakh, setButsaakh] = useState(false);
+
+  useEffect(() => {
+    if (mashinGaralt && !butsaakh) {
+      const fetchData = async () => {
+        try {
+          const response = await uilchilgee(token).get("mashin/tooAvya", {
+            params: {
+              khuudasniiKhemjee: mashinGaralt.niitMur,
+              query: {
+                turul: "Гэрээт",
+                duusakhOgnoo: {
+                  $lte: moment().add(2, "day"),
+                  $gt: moment(),
+                },
+              },
+            },
+          });
+          if (response?.data?.niitMur > 0) {
+            notification.warning({
+              message: t(
+                `Хугацаа дуусах ${response?.data?.niitMur} машин байна`
+              ),
+            });
+          }
+          setButsaakh(true);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [mashinGaralt, butsaakh]);
+
   const columns = useMemo(() => {
     const shinecol =
       turul === "Гэрээт"
         ? [
             {
-              title: t("Өдөр"),
+              title: (
+                <Popover
+                  placement="bottom"
+                  content={
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => setUdurShuult("niit")}
+                        className={`relative flex ${
+                          udurShuult === "niit" ? "bg-green-500 text-white" : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Нийт")}
+                      </div>
+                      <div
+                        onClick={() => setUdurShuult("idevkhitei")}
+                        className={`relative flex ${
+                          udurShuult === "idevkhitei"
+                            ? "bg-green-500 text-white"
+                            : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Идэвхтэй")}
+                      </div>
+                      <div
+                        onClick={() => setUdurShuult("idevkhigui")}
+                        className={`relative flex ${
+                          udurShuult === "idevkhigui"
+                            ? "bg-green-500 text-white"
+                            : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Идэвхгүй")}
+                      </div>
+                    </div>
+                  }
+                >
+                  <div
+                    className={`flex cursor-pointer items-center justify-center gap-3`}
+                  >
+                    <FilterOutlined className="text-lg text-green-600" />
+                    {t("Өдөр")}
+                  </div>
+                </Popover>
+              ),
               align: "center",
               dataIndex: "duusakhOgnoo",
               width: "7rem",
@@ -335,7 +428,7 @@ function mashinBurtgel({ token }) {
         ),
       },
     ];
-  }, [turul, baiguullaga, barilgiinId, tuluv]);
+  }, [turul, baiguullaga, barilgiinId, tuluv, udurShuult]);
 
   const toololt = useMemo(() => {
     return [
@@ -472,7 +565,7 @@ function mashinBurtgel({ token }) {
       onSearch={(search) =>
         setMashinKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      loading={isValidating}
+      // loading={isValidating}
     >
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
