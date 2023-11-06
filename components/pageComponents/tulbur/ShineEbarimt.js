@@ -75,7 +75,7 @@ function ShineEbarimt({
             }}
             placeholder={`${irgenEsekh ? "Иргэн" : "ААН"}`}
           />
-          <div className="text-[15px] font-[700]">
+          <div className="text-[15px] font-[700] dark:text-gray-200">
             {baiguullagiinMedeelel?.name}
           </div>
         </div>

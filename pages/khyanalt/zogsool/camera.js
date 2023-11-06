@@ -262,6 +262,7 @@ function camera({ token }) {
   const [khaikh, setKhaikh] = useState("");
   // const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
+  const [guilgeeDrawerOpen, setGuilgeeDrawerOpen] = useState(false);
   const [form] = Form.useForm();
 
   const que = useMemo(() => {
@@ -1100,7 +1101,7 @@ function camera({ token }) {
                 <Popover
                   content={() =>
                     v[0]?.tulbur.map((mur) => (
-                      <div>
+                      <div className="dark:text-gray-200">
                         {t(tulburKhurvuulekh(mur.turul))}: {mur.dun}
                       </div>
                     ))
@@ -1457,7 +1458,11 @@ function camera({ token }) {
               ({ data }) => {
                 if (data === "Amjilttai") {
                   message.success(t("Амжилттай хадгаллаа"));
-                  if(value !== "Маргалдсан" || value !== "Журам зөрчсөн" || value !== "Зугтаасан"){
+                  if (
+                    value !== "Маргалдсан" ||
+                    value !== "Журам зөрчсөн" ||
+                    value !== "Зугтаасан"
+                  ) {
                     khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
                   }
                   onRefresh();
@@ -1582,12 +1587,20 @@ function camera({ token }) {
     setValue();
     setModalOpen({ bool: false, item: null, type: "" });
   };
+
+  function guilgeeDrawerOngoilgokh() {
+    setGuilgeeDrawerOpen(true);
+  }
+  function guilgeeDrawerKhaakh() {
+    setGuilgeeDrawerOpen(false);
+  }
   const excel = new Excel();
   return (
     <Admin
       title="Камер"
       tsonkhniiId={"64474e3e28c37d7cdda15d01"}
       khuudasniiNer="Camera"
+      dedKhuudas={true}
       fixedZagvarNeegdsenEsekh={guilgeeKharakh}
       setTurulZagvar={setGuilgeeKharakh}
       className="relative p-2 pb-24 sm:p-4"
@@ -1602,7 +1615,61 @@ function camera({ token }) {
     >
       {jagsaalt?.length > 0 ? (
         <div className="col-span-12">
-          <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+            <div className="fixed left-6 top-24 hidden h-[400px] md:block">
+              <div
+                className="h-12 w-12 cursor-pointer rounded-r-full border-y border-r bg-yellow-500 text-xl"
+                onClick={guilgeeDrawerOngoilgokh}
+              >
+                <DollarCircleOutlined />
+              </div>
+              <Drawer
+                title={t("Сүүлийн гүйлгээ")}
+                placement="left"
+                onClose={guilgeeDrawerKhaakh}
+                open={guilgeeDrawerOpen}
+                getContainer={false}
+                bodyStyle={{ paddingTop: 0, paddingBottom: 0 }}
+              >
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className={`relative right-[8%] top-1/2 z-50 w-full -translate-y-1/2 rounded-lg border bg-white px-5 shadow-xl transition-all xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
+                    guilgeeKharakh === false
+                      ? "scale-0 xl:scale-100"
+                      : "scale-100"
+                  }`}
+                >
+                  <div className="flex w-full justify-between">
+                    <Button
+                      className={`${
+                        guilgeeKharakh === false ? "mr-0" : "mr-8"
+                      }`}
+                      type="tertiary"
+                      onClick={() => dansniiKhuulgaMutate()}
+                    >
+                      Шалгах
+                    </Button>
+                  </div>
+                  <div className="absolute right-3 top-3 text-3xl xl:hidden">
+                    <CloseCircleOutlined
+                      onClick={() => setGuilgeeKharakh(false)}
+                      className="text-red-400"
+                    />
+                  </div>
+                  <Table
+                    pagination={false}
+                    className="mt-3 overflow-auto"
+                    scroll={{ y: "calc(100vh / 4.5)" }}
+                    size="small"
+                    loading={dansKhuleelt}
+                    dataSource={dansniiKhuulgaGaralt?.jagsaalt}
+                    columns={baganuud}
+                  />
+                </div>
+              </Drawer>
+            </div>
             <div
               onClick={() => {
                 setCamerKharakh(false);
@@ -1617,10 +1684,10 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(1);
                 }}
-                className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
+                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 1
                     ? "sm:h-[80vh] sm:w-[80%]"
-                    : "sm:h-[300px]"
+                    : "sm:h-[450px]"
                 }`}
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
@@ -1731,10 +1798,10 @@ function camera({ token }) {
                   e.stopPropagation();
                   setCamerKharakh(2);
                 }}
-                className={`w-full bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
+                className={`w-full rounded-md bg-[url('/notPlay.png')] bg-[length:100%_100%] bg-center bg-no-repeat ${
                   cameraKharakh === 2
                     ? "sm:h-[80vh] sm:w-[80%]"
-                    : "sm:h-[300px]"
+                    : "sm:h-[450px]"
                 }`}
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
@@ -1830,44 +1897,8 @@ function camera({ token }) {
                 />
               </div>
             </div>
-            <div
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              className={`fixed right-[8%] top-1/2 z-50 w-[84%] -translate-y-1/2 rounded-lg border bg-white p-5 shadow-xl transition-all xl:relative xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
-                guilgeeKharakh === false ? "scale-0 xl:scale-100" : "scale-100"
-              }`}
-            >
-              <div className="flex w-full justify-between">
-                <div className="text-base font-bold">
-                  {t("Сүүлийн гүйлгээ")}
-                </div>
-                <Button
-                  className={`${guilgeeKharakh === false ? "mr-0" : "mr-8"}`}
-                  type="tertiary"
-                  onClick={() => dansniiKhuulgaMutate()}
-                >
-                  Шалгах
-                </Button>
-              </div>
-              <div className="absolute right-3 top-3 text-3xl xl:hidden">
-                <CloseCircleOutlined
-                  onClick={() => setGuilgeeKharakh(false)}
-                  className="text-red-400"
-                />
-              </div>
-              <Table
-                pagination={false}
-                className="mt-3 overflow-auto"
-                scroll={{ y: "calc(100vh / 4.5)" }}
-                size="small"
-                loading={dansKhuleelt}
-                dataSource={dansniiKhuulgaGaralt?.jagsaalt}
-                columns={baganuud}
-              />
-            </div>
           </div>
-          <Card className="col-span-12 mt-2">
+          <div className="col-span-12 mt-2 bg-white !pt-0 dark:bg-gray-800">
             <div className="mb-5 xl:hidden">
               <Button
                 style={{ width: "100%" }}
@@ -2134,7 +2165,7 @@ function camera({ token }) {
                 Component={UilchluulegchTile}
               />
             </div>
-          </Card>
+          </div>
           <Modal
             title={
               modalOpen.type !== "zurchil"

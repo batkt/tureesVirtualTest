@@ -931,8 +931,10 @@ function ShineTogloomTulbur(
               <Popover
                 content={
                   <div>
-                    <div>1. Бэлнээр хадгалан, хувь хүнээр баримт хэвлэнэ.</div>
-                    <div>
+                    <div className="dark:text-gray-200">
+                      1. Бэлнээр хадгалан, хувь хүнээр баримт хэвлэнэ.
+                    </div>
+                    <div className="dark:text-gray-200">
                       2. Төлбөрийн өөр хэлбэр сонгогдсон бол хувь хүнээр баримт
                       хэвлэнэ.
                     </div>

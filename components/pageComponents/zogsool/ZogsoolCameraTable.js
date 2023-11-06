@@ -13,10 +13,10 @@ const ZogsoolCameraTable = ({
   return (
     <div>
       <Table
-        className="cameraTable mt-8 hidden overflow-auto md:block"
+        className="cameraTable mt-2 hidden overflow-auto md:block"
         tableLayout="auto"
         dataSource={uilchluulegchGaralt?.jagsaalt}
-        scroll={{ y: "calc(100vh - 39.5rem)" }}
+        scroll={{ y: "calc(100vh - 47.5rem)" }}
         size="small"
         bordered
         rowKey={(row) => row._id}
