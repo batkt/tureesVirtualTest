@@ -319,11 +319,13 @@ function ZakhialgaNemekh({ token }) {
       hideSearch
       dedKhuudas
       className="p-4"
-      loading={waiting}>
+      loading={waiting}
+    >
       <div className=" relative col-span-12 flex grid-cols-12 flex-col-reverse lg:grid ">
         <div
           style={{ height: "calc(100vh - 7rem)" }}
-          className="col-span-12 overflow-auto p-10 lg:col-span-9">
+          className="col-span-12 overflow-auto p-10 lg:col-span-9"
+        >
           {!ashiglaltiinZardal?.isValidating && (
             <SunEditor
               onChange={(e) => handleChange(e)}
@@ -356,18 +358,20 @@ function ZakhialgaNemekh({ token }) {
             <Form.Item name="_id" noStyle />
             <Input
               value={nekhemjlelZagvar.ner}
+              onChange={(v) => inputOnchange(v)}
               placeholder={t("Нэр")}
             />
             <Form.Item
               label="Нэхэмжлэхийн загвар"
               name="nekhemjlekh"
-              noStyle>
-            </Form.Item>
+              noStyle
+            ></Form.Item>
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 className="my-3"
                 onChange={onChange}
-                value={nekhemjlelZagvar.khuudasniiKhemjee}>
+                value={nekhemjlelZagvar.khuudasniiKhemjee}
+              >
                 <Radio value={"A4"}>A4</Radio>
                 <Radio value={"A5"}>A5</Radio>
               </Radio.Group>
@@ -376,7 +380,8 @@ function ZakhialgaNemekh({ token }) {
                 value={nekhemjlelZagvar.chiglel}
                 onChange={rotate}
                 menuItemSelectedIcon={<CheckOutlined />}
-                suffixIcon={<img src="/rotate.svg" width={"16px"} />}>
+                suffixIcon={<img src="/rotate.svg" width={"16px"} />}
+              >
                 <Select.Option value={"portrait"}>portrait</Select.Option>
                 <Select.Option value={"landscape"}>landscape</Select.Option>
               </Select>
@@ -389,7 +394,8 @@ function ZakhialgaNemekh({ token }) {
                   color: "#ffffff",
                   width: "100%",
                   marginTop: "20px",
-                }}>
+                }}
+              >
                 {t("Хадгалах")}
               </Button>
             </Form.Item>
