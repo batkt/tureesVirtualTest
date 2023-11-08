@@ -1626,6 +1626,7 @@ function camera({ token }) {
               <Drawer
                 title={t("Сүүлийн гүйлгээ")}
                 placement="left"
+                size="large"
                 onClose={guilgeeDrawerKhaakh}
                 open={guilgeeDrawerOpen}
                 getContainer={false}
@@ -1635,13 +1636,8 @@ function camera({ token }) {
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
-                  className={`relative right-[8%] top-1/2 z-50 w-full -translate-y-1/2 rounded-lg border bg-white px-5 shadow-xl transition-all xl:right-0 xl:z-0 xl:w-auto xl:border-none xl:bg-transparent xl:p-0 xl:shadow-none ${
-                    guilgeeKharakh === false
-                      ? "scale-0 xl:scale-100"
-                      : "scale-100"
-                  }`}
                 >
-                  <div className="flex w-full justify-between">
+                  <div className="absolute right-4 top-3">
                     <Button
                       className={`${
                         guilgeeKharakh === false ? "mr-0" : "mr-8"
@@ -1652,15 +1648,10 @@ function camera({ token }) {
                       Шалгах
                     </Button>
                   </div>
-                  <div className="absolute right-3 top-3 text-3xl xl:hidden">
-                    <CloseCircleOutlined
-                      onClick={() => setGuilgeeKharakh(false)}
-                      className="text-red-400"
-                    />
-                  </div>
                   <Table
                     pagination={false}
-                    className="mt-3 overflow-auto"
+                    tableLayout="fixed"
+                    className="mt-3"
                     scroll={{ y: "calc(100vh / 4.5)" }}
                     size="small"
                     loading={dansKhuleelt}
@@ -1898,7 +1889,7 @@ function camera({ token }) {
               </div>
             </div>
           </div>
-          <div className="col-span-12 mt-2 bg-white !pt-0 dark:bg-gray-800">
+          <div className="col-span-12 mt-1 pt-1 dark:bg-gray-800">
             <div className="mb-5 xl:hidden">
               <Button
                 style={{ width: "100%" }}
@@ -1912,7 +1903,7 @@ function camera({ token }) {
                 {t("Гүйлгээ харах")}
               </Button>
             </div>
-            <div className="flex flex-col gap-2 lg:flex-row">
+            <div className="flex flex-col gap-1 lg:flex-row">
               <div
                 data-aos="fade-right"
                 data-aos-duration="1000"
@@ -2336,7 +2327,7 @@ function camera({ token }) {
               )}
             </Space>
           </Modal>
-          <div style={{ position: "absolute", bottom: 45 }}>
+          <div style={{ position: "absolute", bottom: 25 }}>
             <ZogsooliinToo
               zogsoolTusBuriinToo={zogsoolTusBuriinToo}
               jagsaalt={jagsaalt}

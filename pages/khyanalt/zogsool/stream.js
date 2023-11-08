@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 
 function Stream1({ ip }) {
+  const canvasRef = useRef(null);
   const ws = useRef(null);
   const [onOpen, setOnOpen] = useState(false);
   useEffect(() => {
@@ -41,10 +42,10 @@ function Stream1({ ip }) {
       // console.log('464666545646111111', onOpen);
       ws.current.onmessage = async (event) => {
         const imageData = event.data;
-        const canvas = document.getElementById("canvas1");
+        const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-        const imgWidth = 515;
-        const imgHeight = 300;
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -62,14 +63,20 @@ function Stream1({ ip }) {
   }, [onOpen]);
 
   return (
-    <div>
-      <canvas id="canvas1" width="515" height="300" />
+    <div className="h-full w-full">
+      <canvas
+        ref={canvasRef}
+        width="100%"
+        height="100%"
+        style={{ width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
 
 export function Stream2({ ip }) {
   const ws2 = useRef(null);
+  const canvasRef = useRef(null);
   const [onOpen, setOnOpen] = useState(false);
 
   useEffect(() => {
@@ -109,10 +116,10 @@ export function Stream2({ ip }) {
     if (onOpen) {
       ws2.current.onmessage = async (event) => {
         const imageData = event.data;
-        const canvas = document.getElementById("canvas2");
+        const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-        const imgWidth = 515;
-        const imgHeight = 300;
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -130,14 +137,20 @@ export function Stream2({ ip }) {
   }, [onOpen]);
 
   return (
-    <div>
-      <canvas id="canvas2" width="515" height="300" />
+    <div className="h-full w-full">
+      <canvas
+        ref={canvasRef}
+        width="100%"
+        height="100%"
+        style={{ width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
 
 export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
   const ws2 = useRef(null);
+  const canvasRef = useRef(null);
   const [onOpen, setOnOpen] = useState(false);
 
   useEffect(() => {
@@ -173,10 +186,10 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
     if (onOpen) {
       ws2.current.onmessage = async (event) => {
         const imageData = event.data;
-        const canvas = document.getElementById("canvas2");
+        const canvas = canvasRef.current;
         const ctx = canvas.getContext("2d");
-        const imgWidth = 515;
-        const imgHeight = 300;
+        const imgWidth = canvas.width;
+        const imgHeight = canvas.height;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -194,8 +207,13 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
   }, [onOpen]);
 
   return (
-    <div>
-      <canvas id="canvas2" width="515" height="300" />
+    <div className="h-full w-full">
+      <canvas
+        ref={canvasRef}
+        width="100%"
+        height="100%"
+        style={{ width: "100%", height: "100%" }}
+      />
     </div>
   );
 }
