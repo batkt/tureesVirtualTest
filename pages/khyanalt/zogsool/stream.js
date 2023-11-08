@@ -43,8 +43,8 @@ function Stream1({ ip }) {
         const imageData = event.data;
         const canvas = document.getElementById("canvas1");
         const ctx = canvas.getContext("2d");
-        const imgWidth = 600;
-        const imgHeight = 400;
+        const imgWidth = 650;
+        const imgHeight = 450;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -63,7 +63,7 @@ function Stream1({ ip }) {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <canvas id="canvas1" width="600" height="400" />
+      <canvas id="canvas1" width="650" height="450" />
     </div>
   );
 }
@@ -111,8 +111,8 @@ export function Stream2({ ip }) {
         const imageData = event.data;
         const canvas = document.getElementById("canvas2");
         const ctx = canvas.getContext("2d");
-        const imgWidth = 600;
-        const imgHeight = 400;
+        const imgWidth = 650;
+        const imgHeight = 450;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -131,7 +131,7 @@ export function Stream2({ ip }) {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <canvas id="canvas2" width="600" height="400" />
+      <canvas id="canvas2" width="650" height="450" />
     </div>
   );
 }
@@ -175,8 +175,8 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
         const imageData = event.data;
         const canvas = document.getElementById("canvas2");
         const ctx = canvas.getContext("2d");
-        const imgWidth = 600;
-        const imgHeight = 400;
+        const imgWidth = 650;
+        const imgHeight = 450;
         try {
           const blob = new Blob([imageData]);
           const imageBitmap = await createImageBitmap(blob);
@@ -195,7 +195,7 @@ export function SocketStream({ ip, PORT, TOKEN, CHANNEL }) {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <canvas id="canvas2" width="600" height="400" />
+      <canvas id="canvas2" width="650" height="450" />
     </div>
   );
 }
