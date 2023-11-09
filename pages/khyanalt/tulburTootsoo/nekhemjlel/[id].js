@@ -213,6 +213,7 @@ function ZakhialgaNemekh({ token }) {
 
     var songokhTalbaruud = [];
     ashiglaltiinZardal?.jagsaalt?.map((a) => {
+      console.log("a", a);
       songokhTalbaruud.push({
         ner: `${a.ner}.Дүн`,
         talbar: `${a.ner}.tulukhDun`,
@@ -232,7 +233,7 @@ function ZakhialgaNemekh({ token }) {
         ner: `${a.ner}.Нэгж`,
         talbar: `${a.ner}.negj`,
       });
-      if (a.khemjikhNegj == "кВт" || a.khemjikhNegj == "1м3") {
+      if (a.turul == "кВт" || a.turul == "1м3") {
         songokhTalbaruud.push({
           ner: `${a.ner}.Өмнөх заалт`,
           talbar: `${a.ner}.umnukhZaalt`,
