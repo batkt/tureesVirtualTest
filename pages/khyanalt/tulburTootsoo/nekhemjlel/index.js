@@ -51,7 +51,7 @@ function tulburTootsoo({ token }) {
   const { baiguullaga, barilgiinId } = useAuth();
   const ref = useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [davkhar, setDavkhar] = React.useState();
   const [turul, setTurul] = useState("Mail");
   const [barimt, setBarimt] = useState();
@@ -284,6 +284,14 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
                 formatNumber(a.negj || 0)
               );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.suuliinZaalt&gt;`, "g"),
+                formatNumber(a.suuliinZaalt || 0)
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.umnukhZaalt&gt;`, "g"),
+                formatNumber(a.umnukhZaalt || 0)
+              );
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -304,6 +312,16 @@ function tulburTootsoo({ token }) {
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
+                0
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
+                0
+              );
+
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.umnukhZaalt&gt;`, "g"),
                 0
               );
             });
@@ -898,7 +916,9 @@ function tulburTootsoo({ token }) {
 
   function nekhemjlelZasya(mur, index) {
     const footer = [
-      <Button onClick={() => dunZasvarRef.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button onClick={() => dunZasvarRef.current.khaaya()}>
+        {t("Хаах")}
+      </Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
         onClick={() => dunZasvarRef.current.khadgalya()}
