@@ -232,14 +232,16 @@ function ZakhialgaNemekh({ token }) {
         ner: `${a.ner}.Нэгж`,
         talbar: `${a.ner}.negj`,
       });
-      songokhTalbaruud.push({
-        ner: `${a.ner}.Өмнөх заалт`,
-        talbar: `${a.ner}.umnukhZaalt`,
-      });
-      songokhTalbaruud.push({
-        ner: `${a.ner}.Сүүлийн заалт`,
-        talbar: `${a.ner}.suuliinZaalt`,
-      });
+      if (a.khemjikhNegj === "кВт" || a.khemjikhNegj === "1м3") {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Өмнөх заалт`,
+          talbar: `${a.ner}.umnukhZaalt`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Сүүлийн заалт`,
+          talbar: `${a.ner}.suuliinZaalt`,
+        });
+      }
     });
 
     songokhTalbaruud.push({
