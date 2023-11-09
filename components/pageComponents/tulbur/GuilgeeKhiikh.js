@@ -24,7 +24,7 @@ function GuilgeeKhiikh(
   { data, token, onFinish, destroy, barilgiinId, khadgalyaButtonId, date },
   ref
 ) {
-  const [dun, setDun] = useState("");
+  const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
@@ -244,6 +244,13 @@ function GuilgeeKhiikh(
     } else setDun(0);
   }
 
+  function umnukhZaaltFn(v) {
+    setUmnukhZaalt(v);
+    if (umnukhZaalt && umnukhZaalt < v) {
+      setDun(v - umnukhZaalt);
+    } else setDun(0);
+  }
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex w-full pb-4 ">
@@ -362,7 +369,7 @@ function GuilgeeKhiikh(
               placeholder={`Тоолуурын заалт (${khemjikhNegj})`}
               style={{ width: "100%", textAlign: "center" }}
               value={umnukhZaalt}
-              onChange={(v) => setUmnukhZaalt(v)}
+              onChange={umnukhZaaltFn}
               min={0}
             />
           </div>
