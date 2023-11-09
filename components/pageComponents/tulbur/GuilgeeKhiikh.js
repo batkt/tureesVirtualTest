@@ -246,8 +246,8 @@ function GuilgeeKhiikh(
 
   function umnukhZaaltFn(v) {
     setUmnukhZaalt(v);
-    if (umnukhZaalt && umnukhZaalt < v) {
-      setDun(v - umnukhZaalt);
+    if (suuliinZaalt && suuliinZaalt > v) {
+      setDun(suuliinZaalt - v);
     } else setDun(0);
   }
 
