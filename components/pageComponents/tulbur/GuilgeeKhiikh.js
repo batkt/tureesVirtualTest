@@ -317,7 +317,7 @@ function GuilgeeKhiikh(
               setSuuliinZaalt(null);
               if (utga.turul === "кВт" || utga.turul === "1м3") {
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
-                  (x) => (x.khemjikhNegj = utga.turul)
+                  (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
                 );
                 if (!!suuliinGuilgee && suuliinGuilgee.length > 0)
                   suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
