@@ -30,6 +30,7 @@ function GuilgeeKhiikh(
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
+  const [umnukhZaalttaiEsekh, setUmnukhZaalttaiEsekh] = useState(false);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
   const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
@@ -71,6 +72,10 @@ function GuilgeeKhiikh(
       khadgalya() {
         if (!dun && !suuriKhuraamj) {
           notification.warning({ message: t("Та дүн оруулна уу") });
+          return;
+        }
+        if (!ognoo) {
+          notification.warning({ message: t("Огноо сонгоно уу") });
           return;
         }
         let guilgee = {};
@@ -117,6 +122,15 @@ function GuilgeeKhiikh(
               ) {
                 notification.warning({
                   message: t("Сүүлийн заалт өмнөх заалтаас их байх ёстой."),
+                });
+                return;
+              }
+              if (
+                (khemjikhNegj === "кВт" || khemjikhNegj === "1м3") &&
+                ognoo > new Date()
+              ) {
+                notification.warning({
+                  message: t("Ирээдүйн огноогоор заалт оруулах боломжгүй!"),
                 });
                 return;
               }
@@ -239,7 +253,7 @@ function GuilgeeKhiikh(
   );
   function suuliinZaaltFn(v) {
     setSuuliinZaalt(v);
-    if (umnukhZaalt && umnukhZaalt < v) {
+    if ((umnukhZaalt || umnukhZaalt == 0) && umnukhZaalt < v) {
       setDun(v - umnukhZaalt);
     } else setDun(0);
   }
@@ -326,11 +340,14 @@ function GuilgeeKhiikh(
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
                 );
+                console.log("suuliinGuilgee", suuliinGuilgee);
                 if (!!suuliinGuilgee && suuliinGuilgee.length > 0)
                   suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
-                if (!!suuliinGuilgee?.umnukhZaalt)
-                  setUmnukhZaalt(suuliinGuilgee[i].umnukhZaalt);
-                else setUmnukhZaalt(0);
+                console.log("suuliinGuilgee", suuliinGuilgee);
+                if (!!suuliinGuilgee?.suuliinZaalt) {
+                  setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
+                  setUmnukhZaalttaiEsekh(true);
+                } else setUmnukhZaalt(0);
               }
             }}
             id="select2"
@@ -363,6 +380,7 @@ function GuilgeeKhiikh(
           <div style={{ width: "49%" }}>
             <div>Өмнөх заалт</div>
             <InputNumber
+              disabled={umnukhZaalttaiEsekh}
               formatter={(value) =>
                 `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
