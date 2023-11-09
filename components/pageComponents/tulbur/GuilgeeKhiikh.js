@@ -265,18 +265,27 @@ function GuilgeeKhiikh(
     } else setDun(0);
   }
 
+  function handleTurulUurchlult(e) {
+    const ankhanOgnoo = ognoo;
+    setTurul(e.target.value);
+    if (e.target.value === "ashiglalt") {
+      setOgnoo(moment());
+    } else {
+      setOgnoo(ankhanOgnoo);
+    }
+  }
+
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex w-full pb-4 ">
         <Radio.Group
           onChange={(e) => {
-            setTurul(e.target.value);
+            handleTurulUurchlult(e);
             setDun("");
             setTailbar("");
           }}
           value={turul}
-          className="grid w-full grid-cols-2 justify-between sm:flex"
-        >
+          className="grid w-full grid-cols-2 justify-between sm:flex">
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
@@ -313,8 +322,7 @@ function GuilgeeKhiikh(
           placeholder={t("Гүйлгээ хийх төрөл")}
           onChange={(v) => {
             setBusadTurul(v);
-          }}
-        >
+          }}>
           <Option value="barter">{t("Бартер")}</Option>
           <Option value="zalruulga">{t("Залруулга")}</Option>
           <Option value="aldangi">{t("Алданги")}</Option>
@@ -351,8 +359,7 @@ function GuilgeeKhiikh(
               }
             }}
             id="select2"
-            placeholder={t("Зардлын төрөл")}
-          >
+            placeholder={t("Зардлын төрөл")}>
             {zardal.jagsaalt?.map((mur) =>
               mur.turul !== "1м2" ? (
                 <Select.Option key={mur._id} value={mur._id}>
@@ -369,8 +376,7 @@ function GuilgeeKhiikh(
         {negjUne && turul === "ashiglalt" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
-            style={{ width: "49%" }}
-          >
+            style={{ width: "49%" }}>
             {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
           </div>
         )}
