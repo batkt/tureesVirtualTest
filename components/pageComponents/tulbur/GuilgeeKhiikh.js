@@ -323,7 +323,7 @@ function GuilgeeKhiikh(
                   suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
                 if (!!suuliinGuilgee?.umnukhZaalt)
                   setUmnukhZaalt(suuliinGuilgee[i].umnukhZaalt);
-                else setUmnukhZaalt(null);
+                else setUmnukhZaalt(0);
               }
             }}
             id="select2"
