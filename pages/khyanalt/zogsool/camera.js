@@ -513,7 +513,7 @@ function camera({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order);
+  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
