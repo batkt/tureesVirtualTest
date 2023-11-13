@@ -66,7 +66,6 @@ function tulburTootsoo({ token }) {
     davkhar,
     ilgeekhTurul
   );
-  const [content, setContent] = React.useState();
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
@@ -77,10 +76,15 @@ function tulburTootsoo({ token }) {
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);
+  const [excelZagvarSongogdson, setExcelZagvarSongogdson] =
+    React.useState(false);
+  const [songogdsonZagvar, setSongogdsonZagvar] = React.useState();
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
   }, [nekhemjlel]);
+
+  console.log("nekhemjleliinJagsaalt", nekhemjleliinJagsaalt);
 
   useEffect(() => {
     barilgiinId;
@@ -446,7 +450,6 @@ function tulburTootsoo({ token }) {
 
   function turulSongokh(mur) {
     setTurul(mur);
-    setContent(undefined);
     setBarimt(undefined);
     setDans(undefined);
   }
@@ -945,6 +948,12 @@ function tulburTootsoo({ token }) {
   }
   function zagvarUstgaya(mur) {
     setWaiting(true);
+    if (mur.nekhemjlekh === "excel") {
+      uilchilgee(token).post("/excelZagvarUstgaya", {
+        turul: "nekhemjlel",
+        excelNer: mur.ner,
+      });
+    }
     deleteMethod("nekhemjlekhiinZagvar", token, mur?._id)
       .then(({ data }) => {
         if (data === "Amjilttai") {
@@ -954,9 +963,55 @@ function tulburTootsoo({ token }) {
         }
       })
       .catch((e) => {
-        setwaiting(false);
+        setWaiting(false);
         aldaaBarigch(e);
       });
+  }
+
+  function handleSongosonTurul(v) {
+    const songogdsonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
+      (a) => a._id === v
+    );
+    if (songogdsonZagvar.nekhemjlekh === "excel") {
+      setExcelZagvarSongogdson(true);
+      setSongogdsonZagvar(songogdsonZagvar);
+    } else {
+      setExcelZagvarSongogdson(false);
+      setSongogdsonZagvar();
+    }
+  }
+
+  function excelTatakh() {
+    if (songogdsonZagvar) {
+      if (songogdsonGereenuud && songogdsonGereenuud?.length > 0) {
+        const songogdsonGeree = songogdsonGereenuud[0];
+        const songogdsonNekhemjlel = nekhemjleliinJagsaalt.find(
+          (a) => a._id === songogdsonGeree
+        );
+        const yavuulakhData = {
+          excelNer: songogdsonZagvar.ner,
+          nekhemjlekhiinJagsaalt: songogdsonNekhemjlel,
+        };
+        uilchilgee(token)
+          .post("/excelZagvarTatya", yavuulakhData, {
+            responseType: "blob",
+          })
+          .then((response) => {
+            const blob = new Blob([response.data], {
+              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "Нэхэмжлэл.xlsx";
+            link.click();
+          })
+          .catch((err) => console.log(err));
+      } else {
+        notification.warn({ message: "Гэрээ сонгогдоогүй байна", duration: 2 });
+      }
+    } else {
+      notification.warn({ message: "Загвар сонгогдоогүй байна", duration: 2 });
+    }
   }
 
   return (
@@ -1051,7 +1106,7 @@ function tulburTootsoo({ token }) {
                   value={barimt}
                   onChange={(content) => {
                     setBarimt(content);
-                    setContent(content);
+                    handleSongosonTurul(content);
                   }}
                 >
                   {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
@@ -1073,20 +1128,28 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
-              <div className="hidden justify-end gap-2 md:flex">
-                {turul === "Mail" ? (
-                  <Button
-                    hidden={turul !== "Mail"}
-                    type="primary"
-                    onClick={hevlekh}
-                  >
-                    {t("Хэвлэх")}
+              {!excelZagvarSongogdson ? (
+                <div className="hidden justify-end gap-2 md:flex">
+                  {turul === "Mail" ? (
+                    <Button
+                      hidden={turul !== "Mail"}
+                      type="primary"
+                      onClick={hevlekh}
+                    >
+                      {t("Хэвлэх")}
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                  <Button onClick={send}>{t("Илгээх")}</Button>
+                </div>
+              ) : (
+                <div className="hidden justify-end gap-2 md:flex">
+                  <Button type="primary" onClick={excelTatakh}>
+                    {t("Татах")}
                   </Button>
-                ) : (
-                  ""
-                )}
-                <Button onClick={send}>{t("Илгээх")}</Button>
-              </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-8 gap-2">
