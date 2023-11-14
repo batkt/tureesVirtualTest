@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
 import { useRouter } from "next/router";
@@ -13,16 +13,19 @@ import {
   CheckOutlined,
   ClockCircleOutlined,
   DollarCircleOutlined,
+  FileExcelOutlined,
   LockOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
-import { aldaaBarigch } from "services/uilchilgee";
+import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import useJagsaalt from "hooks/useJagsaalt";
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import ZagvarExceleesOruulakh from "components/pageComponents/geree/zagvar/ZagvarExceleesOruulakh";
+import { modal } from "components/ant/Modal";
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
@@ -138,6 +141,8 @@ function ZakhialgaNemekh({ token }) {
     khuudasniiKhemjee: "A4",
     chiglel: "landscape",
   });
+  const [kharuulakhExcel, setKharuulakhExcel] = React.useState(null);
+  const excelRef = useRef(null);
   const plugins = React.useMemo(
     () => require("suneditor/src/plugins")?.default || {},
     []
@@ -157,12 +162,30 @@ function ZakhialgaNemekh({ token }) {
       });
   }, [id]);
 
+  console.log("nekhemjlelZagvar: ", nekhemjlelZagvar);
+
+  React.useEffect(() => {
+    if (
+      nekhemjlelZagvar &&
+      nekhemjlelZagvar?._id &&
+      nekhemjlelZagvar?.nekhemjlekh === "excel"
+    ) {
+      uilchilgee(token)
+        .post("/excelZagvarKharya", { excelNer: nekhemjlelZagvar?.ner })
+        .then((res) => {
+          setKharuulakhExcel(res.data);
+        });
+    }
+  }, [nekhemjlelZagvar]);
+
   const { width, height } = React.useMemo(() => {
     return getSize(
       nekhemjlelZagvar?.khuudasniiKhemjee,
       nekhemjlelZagvar?.chiglel
     );
   }, [nekhemjlelZagvar.khuudasniiKhemjee, nekhemjlelZagvar.chiglel]);
+
+  console.log("nekhemjlelZagvar:", nekhemjlelZagvar);
 
   const custom = React.useMemo(() => {
     if (typeof window === "undefined") return [];
@@ -213,7 +236,6 @@ function ZakhialgaNemekh({ token }) {
 
     var songokhTalbaruud = [];
     ashiglaltiinZardal?.jagsaalt?.map((a) => {
-      console.log("a", a);
       songokhTalbaruud.push({
         ner: `${a.ner}.Дүн`,
         talbar: `${a.ner}.tulukhDun`,
@@ -279,11 +301,15 @@ function ZakhialgaNemekh({ token }) {
     ];
   }, [ashiglaltiinZardal]);
 
-  function khadgalya() {
+  function khadgalya(e) {
     if (nekhemjlelZagvar.ner) {
       setWaiting(true);
       nekhemjlelZagvar.barilgiinId = barilgiinId;
+      if (e === "excel") {
+        nekhemjlelZagvar.nekhemjlekh = "excel";
+      }
       const method = nekhemjlelZagvar?._id ? updateMethod : createMethod;
+      console.log("yavuulj bui data:", nekhemjlelZagvar);
       method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -323,6 +349,36 @@ function ZakhialgaNemekh({ token }) {
     }));
   }
 
+  function zagvarOruulakhExcel() {
+    const footer = [
+      <Button onClick={() => excelRef.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button
+        type="primary"
+        onClick={() => {
+          khadgalya("excel");
+          excelRef.current.khaaya();
+        }}
+      >
+        {t("Хадгалах")}
+      </Button>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <ZagvarExceleesOruulakh
+          ref={excelRef}
+          token={token}
+          nekhemjlelZagvar={nekhemjlelZagvar}
+          zam="excelZagvarOruulya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Нэхэмжлэл загварын excel файл"
+        />
+      ),
+      footer,
+    });
+  }
+
   return (
     <Admin
       khuudasniiNer="zakhialgiinKhyanalt"
@@ -337,7 +393,7 @@ function ZakhialgaNemekh({ token }) {
           style={{ height: "calc(100vh - 7rem)" }}
           className="col-span-12 overflow-auto p-10 lg:col-span-9"
         >
-          {!ashiglaltiinZardal?.isValidating && (
+          {!ashiglaltiinZardal?.isValidating && !kharuulakhExcel && (
             <SunEditor
               onChange={(e) => handleChange(e)}
               value={nekhemjlelZagvar?.nekhemjlekh}
@@ -363,11 +419,22 @@ function ZakhialgaNemekh({ token }) {
               height={height}
             />
           )}
+          {kharuulakhExcel && (
+            <div className="flex h-full w-full select-none overflow-y-auto rounded-lg bg-white p-4 shadow-lg ">
+              <div
+                className="flex h-full w-full"
+                dangerouslySetInnerHTML={{
+                  __html: kharuulakhExcel,
+                }}
+              />
+            </div>
+          )}
         </div>
         <div className="col-span-12 rounded-xl bg-white p-10 dark:bg-gray-900 lg:col-span-3">
           <div className="space-y-2">
             <Form.Item name="_id" noStyle />
             <Input
+              disabled={!!kharuulakhExcel}
               value={nekhemjlelZagvar.ner}
               onChange={(v) => inputOnchange(v)}
               placeholder={t("Нэр")}
@@ -377,8 +444,22 @@ function ZakhialgaNemekh({ token }) {
               name="nekhemjlekh"
               noStyle
             ></Form.Item>
+
+            {(id === "new" || nekhemjlelZagvar.nekhemjlekh === "excel") && (
+              <div className="flex w-full items-center justify-end">
+                <Button
+                  disabled={!nekhemjlelZagvar.ner}
+                  className="flex w-full items-center justify-center gap-2"
+                  onClick={zagvarOruulakhExcel}
+                >
+                  <FileExcelOutlined /> Загвар{" "}
+                  {id === "new" ? "оруулах" : "засах"}
+                </Button>
+              </div>
+            )}
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
+                disabled={!!kharuulakhExcel}
                 className="my-3"
                 onChange={onChange}
                 value={nekhemjlelZagvar.khuudasniiKhemjee}
@@ -387,6 +468,7 @@ function ZakhialgaNemekh({ token }) {
                 <Radio value={"A5"}>A5</Radio>
               </Radio.Group>
               <Select
+                disabled={!!kharuulakhExcel}
                 className="w-28"
                 value={nekhemjlelZagvar.chiglel}
                 onChange={rotate}
@@ -400,6 +482,7 @@ function ZakhialgaNemekh({ token }) {
             <Form.Item>
               <Button
                 onClick={khadgalya}
+                disabled={!!kharuulakhExcel}
                 style={{
                   backgroundColor: "#209669",
                   color: "#ffffff",

@@ -263,6 +263,7 @@ function camera({ token }) {
   // const [refresh, setRefresh] = useState(true);
   const [modalNeelttei, setModalNeelttei] = useState(false);
   const [guilgeeDrawerOpen, setGuilgeeDrawerOpen] = useState(false);
+  const [songogdsonBurtgel, setSongogdsonBurtgel] = useState("");
   const [form] = Form.useForm();
 
   const que = useMemo(() => {
@@ -513,7 +514,7 @@ function camera({ token }) {
     setUilchluulegchKhuudaslalt,
     uilchluulegchMutate,
     isValidating,
-  } = useUilchluulegch(token, baiguullaga?._id, query, order);
+  } = useUilchluulegch(token, baiguullaga?._id, query, order, undefined, 10);
 
   const tooQuery = useMemo(() => {
     const todayStart = moment().startOf("day").toDate();
@@ -2245,7 +2246,7 @@ function camera({ token }) {
                         },
                         {
                           required:
-                            form.getFieldValue("mashiniiDugaar")?.length > 0 &&
+                            form.getFieldValue("mashiniiDugaar")?.length > 0 && songogdsonBurtgel !== "Гарах" &&
                             true,
                           min: 7,
                           max: 7,
@@ -2280,7 +2281,11 @@ function camera({ token }) {
                         },
                       ]}
                     >
-                      <Select className="" placeholder={`${t("Камер")} IP`}>
+                      <Select
+                        onChange={(_, e) => setSongogdsonBurtgel(e.children)}
+                        className=""
+                        placeholder={`${t("Камер")} IP`}
+                      >
                         {camerVal[0] && (
                           <Select.Option key={camerVal[0]}>Орох</Select.Option>
                         )}

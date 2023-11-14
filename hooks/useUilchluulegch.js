@@ -37,11 +37,18 @@ const fetcher = (
     .catch(aldaaBarigch);
 };
 
-function useUilchluulegch(token, baiguullagiinId, query, order, or) {
+function useUilchluulegch(
+  token,
+  baiguullagiinId,
+  query,
+  order,
+  or,
+  defaultKhuudaslalt
+) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setUilchluulegchKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 100,
+    khuudasniiKhemjee: defaultKhuudaslalt ? defaultKhuudaslalt : 100,
     search: "",
     jagsaalt: [],
   });
