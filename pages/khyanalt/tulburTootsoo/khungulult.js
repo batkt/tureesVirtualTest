@@ -204,7 +204,6 @@ function tulburTootsoo() {
         moment(mur).format("YYYY-MM-01 00:00:00")
       );
       ugugdul.barilgiinId = barilgiinId;
-      ugugdul.turul = "khungulult";
       if (turul === "zardal") {
         ugugdul.tailbar = songogdsonZardal.ner;
       } else {

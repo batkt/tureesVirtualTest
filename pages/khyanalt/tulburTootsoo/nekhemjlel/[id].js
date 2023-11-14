@@ -87,6 +87,7 @@ const tulburiinTalbaruud = [
   { ner: "Нийт үлдэгдэл/Нөатгүй/", talbar: "niitUldegdelNuatgui" },
   { ner: "Нийт үлдэгдэл/Нөат/", talbar: "niitUldegdelNuat" },
   { ner: "Алдангын үлдэгдэл", talbar: "aldangiinUldegdel" },
+  { ner: "Түрээсийн хөнгөлөлт", talbar: "khungulult" },
 ];
 
 const nekhemjlekhiinTalbaruud = [
@@ -233,7 +234,6 @@ function ZakhialgaNemekh({ token }) {
       title: t("Нэхэмжлэхийн бусад авлага"),
       button: renderToString(<DollarCircleOutlined />),
     });
-
     var songokhTalbaruud = [];
     ashiglaltiinZardal?.jagsaalt?.map((a) => {
       songokhTalbaruud.push({
@@ -263,6 +263,11 @@ function ZakhialgaNemekh({ token }) {
         songokhTalbaruud.push({
           ner: `${a.ner}.Сүүлийн заалт`,
           talbar: `${a.ner}.suuliinZaalt`,
+        });
+      } else {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Хөнгөлөлт`,
+          talbar: `${a.ner}.khungulult`,
         });
       }
     });

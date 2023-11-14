@@ -214,6 +214,7 @@ function tulburTootsoo({ token }) {
               medeelel.talbainNiitUneNuat
             );
             medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+            medeelel.khungulult = formatNumber(medeelel.khungulult);
 
             medeelel.gariinUseg = renderToString(
               <span style={{ position: "absolute" }}>
@@ -296,6 +297,10 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.umnukhZaalt&gt;`, "g"),
                 formatNumber(a.umnukhZaalt || 0)
               );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
+                formatNumber(a.khungulult || 0)
+              );
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -326,6 +331,10 @@ function tulburTootsoo({ token }) {
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.ner}.umnukhZaalt&gt;`, "g"),
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.khungulult&gt;`, "g"),
                 0
               );
             });
