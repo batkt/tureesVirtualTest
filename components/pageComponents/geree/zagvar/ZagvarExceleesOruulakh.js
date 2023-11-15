@@ -6,14 +6,7 @@ import _ from "lodash";
 import { t } from "i18next";
 
 function ZagvarExceleesOruulakh(
-  {
-    token,
-    destroy,
-    zam,
-    garchig,
-    tailbar,
-    nekhemjlelZagvar,
-  },
+  { token, destroy, zam, garchig, tailbar, nekhemjlelZagvar, barilgiinId },
   ref
 ) {
   const [aldaa, setAldaa] = React.useState(null);
@@ -53,7 +46,11 @@ function ZagvarExceleesOruulakh(
         action={`${url}/${zam}`}
         method="POST"
         headers={{ Authorization: `bearer ${token}` }}
-        data={{ turul: "nekhemjlel", excelNer: nekhemjlelZagvar?.ner }}
+        data={{
+          turul: "nekhemjlel",
+          excelNer: nekhemjlelZagvar?.ner,
+          barilgiinId: barilgiinId,
+        }}
         onChange={({ file }) => {
           if (file.response === "Amjilttai") {
             message.success(t("Excel -ээс загвар амжилттай орууллаа"));

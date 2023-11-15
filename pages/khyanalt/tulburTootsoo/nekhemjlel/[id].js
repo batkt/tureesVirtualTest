@@ -172,7 +172,10 @@ function ZakhialgaNemekh({ token }) {
       nekhemjlelZagvar?.nekhemjlekh === "excel"
     ) {
       uilchilgee(token)
-        .post("/excelZagvarKharya", { excelNer: nekhemjlelZagvar?.ner })
+        .post("/excelZagvarKharya", {
+          excelNer: nekhemjlelZagvar?.ner,
+          barilgiinId: barilgiinId,
+        })
         .then((res) => {
           setKharuulakhExcel(res.data);
         });
@@ -314,7 +317,6 @@ function ZakhialgaNemekh({ token }) {
         nekhemjlelZagvar.nekhemjlekh = "excel";
       }
       const method = nekhemjlelZagvar?._id ? updateMethod : createMethod;
-      console.log("yavuulj bui data:", nekhemjlelZagvar);
       method("nekhemjlekhiinZagvar", token, nekhemjlelZagvar)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -378,6 +380,7 @@ function ZakhialgaNemekh({ token }) {
           zam="excelZagvarOruulya"
           garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
           tailbar="Нэхэмжлэл загварын excel файл"
+          barilgiinId={barilgiinId}
         />
       ),
       footer,
@@ -388,6 +391,7 @@ function ZakhialgaNemekh({ token }) {
     <Admin
       khuudasniiNer="zakhialgiinKhyanalt"
       title="Нэхэмжлэлийн загвар угсрах"
+      tsonkhniiId={"655445520b4208a0709c8105"}
       hideSearch
       dedKhuudas
       className="p-4"

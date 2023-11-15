@@ -16,6 +16,7 @@ import {
   EditOutlined,
   FileExcelOutlined,
   DeleteOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import router from "next/router";
@@ -79,12 +80,11 @@ function tulburTootsoo({ token }) {
   const [excelZagvarSongogdson, setExcelZagvarSongogdson] =
     React.useState(false);
   const [songogdsonZagvar, setSongogdsonZagvar] = React.useState();
+  const [unshijBaina, setUnshijBaina] = React.useState(false);
 
   useEffect(() => {
     if (!!nekhemjlel) setNekhemjleliinJagsaalt([...nekhemjlel?.jagsaalt]);
   }, [nekhemjlel]);
-
-  console.log("nekhemjleliinJagsaalt", nekhemjleliinJagsaalt);
 
   useEffect(() => {
     barilgiinId;
@@ -137,7 +137,7 @@ function tulburTootsoo({ token }) {
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
 
-          const barilga = baiguullaga.barilguud.find(
+          const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
 
@@ -338,8 +338,7 @@ function tulburTootsoo({ token }) {
                 0
               );
             });
-
-            if (medeelel?.zardluud.length > 0) {
+            if (medeelel?.zardluud?.length > 0) {
               const niitZardliinDun = medeelel?.zardluud.reduce(
                 (a, b) => a + b.tulukhDun,
                 0
@@ -961,6 +960,7 @@ function tulburTootsoo({ token }) {
       uilchilgee(token).post("/excelZagvarUstgaya", {
         turul: "nekhemjlel",
         excelNer: mur.ner,
+        barilgiinId: barilgiinId,
       });
     }
     deleteMethod("nekhemjlekhiinZagvar", token, mur?._id)
@@ -993,6 +993,7 @@ function tulburTootsoo({ token }) {
   function excelTatakh() {
     if (songogdsonZagvar) {
       if (songogdsonGereenuud && songogdsonGereenuud?.length > 0) {
+        setUnshijBaina(true);
         const songogdsonGeree = songogdsonGereenuud[0];
         const songogdsonNekhemjlel = nekhemjleliinJagsaalt.find(
           (a) => a._id === songogdsonGeree
@@ -1000,6 +1001,8 @@ function tulburTootsoo({ token }) {
         const yavuulakhData = {
           excelNer: songogdsonZagvar.ner,
           nekhemjlekhiinJagsaalt: songogdsonNekhemjlel,
+          ashiglaltiinZardluud: ashiglaltiinZardal?.jagsaalt,
+          barilgiinId: barilgiinId,
         };
         uilchilgee(token)
           .post("/excelZagvarTatya", yavuulakhData, {
@@ -1013,8 +1016,12 @@ function tulburTootsoo({ token }) {
             link.href = window.URL.createObjectURL(blob);
             link.download = "Нэхэмжлэл.xlsx";
             link.click();
+            setUnshijBaina(false);
           })
-          .catch((err) => console.log(err));
+          .catch((err) => {
+            setUnshijBaina(false);
+            console.log(err);
+          });
       } else {
         notification.warn({ message: "Гэрээ сонгогдоогүй байна", duration: 2 });
       }
@@ -1035,7 +1042,7 @@ function tulburTootsoo({ token }) {
           khuudasniiDugaar: 1,
         }));
       }}
-      tsonkhniiId="61c2c6d91c2830c4e6f90cbd"
+      tsonkhniiId="65543edf0b4208a0709c7ff2"
       loading={isValidating || waiting}
     >
       <Card
@@ -1154,7 +1161,11 @@ function tulburTootsoo({ token }) {
                 </div>
               ) : (
                 <div className="hidden justify-end gap-2 md:flex">
-                  <Button type="primary" onClick={excelTatakh}>
+                  <Button
+                    loading={unshijBaina}
+                    type="primary"
+                    onClick={excelTatakh}
+                  >
                     {t("Татах")}
                   </Button>
                 </div>
@@ -1229,7 +1240,13 @@ function tulburTootsoo({ token }) {
                       key={`zagvar${i}`}
                       className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md"
                     >
-                      <Image src="/invoice.png" width={32} height={32} />
+                      {a.nekhemjlekh !== "excel" ? (
+                        <Image src="/invoice.png" width={32} height={32} />
+                      ) : (
+                        <div className="h-8 w-8 text-xl text-green-500">
+                          <FileExcelOutlined />
+                        </div>
+                      )}
                       <div className="font-medium">{a.ner}</div>
                       <div style={{ marginLeft: "auto" }}>
                         <Popconfirm
@@ -1255,9 +1272,15 @@ function tulburTootsoo({ token }) {
                               )
                         }
                       >
-                        <EditOutlined
-                          style={{ display: "flex", color: "#85C1E9" }}
-                        />
+                        {a.nekhemjlekh !== "excel" ? (
+                          <EditOutlined
+                            style={{ display: "flex", color: "#85C1E9" }}
+                          />
+                        ) : (
+                          <EyeOutlined
+                            style={{ display: "flex", color: "#85C1E9" }}
+                          />
+                        )}
                       </div>
                     </div>
                   ) : turul === "Mail" ? (
