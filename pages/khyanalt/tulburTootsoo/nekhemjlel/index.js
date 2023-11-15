@@ -48,6 +48,7 @@ function tulburTootsoo({ token }) {
     Aos.init({ once: true });
   });
   const printRef = React.useRef(null);
+  const printExcelRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
   const { baiguullaga, barilgiinId } = useAuth();
   const ref = useRef(null);
@@ -67,6 +68,8 @@ function tulburTootsoo({ token }) {
     davkhar,
     ilgeekhTurul
   );
+  const [tatsanExcelZagvar, setTatsanExcelZagvar] = useState(null);
+  console.log(tatsanExcelZagvar);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
@@ -428,7 +431,8 @@ function tulburTootsoo({ token }) {
   }
 
   const handlePrint = useReactToPrint({
-    content: () => printRef.current,
+    content: () =>
+      excelZagvarSongogdson ? printExcelRef.current : printRef.current,
     onAfterPrint: () => {
       if (songogdsonGereenuud?.length > 0)
         dugaarlaltKhadgalya(songogdsonGereenuud?.length + dugaarlalt - 1, () =>
@@ -453,7 +457,17 @@ function tulburTootsoo({ token }) {
       message.warning(t("Гэрээ сонгоно уу"));
       return;
     }
-    handlePrint();
+    if (excelZagvarSongogdson) {
+      excelTatakh().then((res) => {
+        if (res === "Amjilttai") {
+          setTimeout(() => {
+            handlePrint();
+          }, 2000);
+        }
+      });
+    } else {
+      handlePrint();
+    }
   }
 
   function turulSongokh(mur) {
@@ -595,114 +609,138 @@ function tulburTootsoo({ token }) {
       message.warning(t("И-мэйл илгээгдсэн байна"));
       return;
     }
-    const mailuud = [];
-    songogdsonGereenuud.map((mur) => {
-      var nekhemjlekh = _.cloneDeep(
-        nekhemjleliinJagsaalt.find((a) => a._id === mur)
-      );
-      var text = nekhemjlekhiinZagvar?.jagsaalt?.find(
-        (a) => a._id === barimt
-      )?.nekhemjlekh;
+    if (!excelZagvarSongogdson) {
+      const mailuud = [];
+      songogdsonGereenuud.map((mur) => {
+        var nekhemjlekh = _.cloneDeep(
+          nekhemjleliinJagsaalt.find((a) => a._id === mur)
+        );
+        var text = nekhemjlekhiinZagvar?.jagsaalt?.find(
+          (a) => a._id === barimt
+        )?.nekhemjlekh;
 
-      nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
-        nekhemjlekh.eneSardTulukhDun *
-          (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
-        { fixed: 2, suffix: "n" },
-        "төгрөг",
-        "мөнгө"
-      );
+        nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
+          nekhemjlekh.eneSardTulukhDun *
+            (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
 
-      nekhemjlekh.niitUldegdelUsgeer = numberToWords(
-        nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
-        { fixed: 2, suffix: "n" },
-        "төгрөг",
-        "мөнгө"
-      );
-      nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
-        nekhemjlekh?.talbainNiitUne *
-          (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
-        { fixed: 2, suffix: "n" },
-        "төгрөг",
-        "мөнгө"
-      );
+        nekhemjlekh.niitUldegdelUsgeer = numberToWords(
+          nekhemjlekh.niitUldegdel * (nekhemjlekh.niitUldegdel < 0 ? -1 : 1),
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
+        nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
+          nekhemjlekh?.talbainNiitUne *
+            (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
 
-      nekhemjlekh.mungunDunUsgeer = numberToWords(
-        nekhemjlekh.sariinTurees,
-        { fixed: 2, suffix: "n" },
-        "төгрөг",
-        "мөнгө"
-      );
-      const dans = dansGaralt?.jagsaalt?.find(
-        (a) => a.dugaar === songogdsonDans
-      );
-      nekhemjlekh.dans = dans?.dugaar;
-      nekhemjlekh.bank =
-        dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
-      nekhemjlekh.dansniiNer = dans?.dansniiNer;
-      nekhemjlekh.khayag = nekhemjlekh.khayag || "";
-      nekhemjlekh.aldangiinUldegdel =
-        formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
-      nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
-      nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
-      nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
-      nekhemjlekh.khayag = nekhemjlekh.khayag || "";
-      nekhemjlekh.talbainNegjUneUsgeer = nekhemjlekh.talbainNegjUneUsgeer || "";
-      nekhemjlekh.talbainNiitUneUsgeer = nekhemjlekh.talbainNiitUneUsgeer || "";
-      nekhemjlekh.zoriulalt = nekhemjlekh.zoriulalt || "";
-      nekhemjlekh.khungulukhKhugatsaa = nekhemjlekh.khungulukhKhugatsaa || "";
-      nekhemjlekh.nemeltNekhemjlekh.tailbar =
-        nekhemjlekh.nemeltNekhemjlekh.tailbar || "";
-      nekhemjlekh.nemeltNekhemjlekh.tulukhDun =
-        nekhemjlekh.nemeltNekhemjlekh.tulukhDun || "";
-      nekhemjlekh.nemeltNekhemjlekh.ognoo =
-        nekhemjlekh.nemeltNekhemjlekh.ognoo || "";
-      nekhemjlekh.nemeltNekhemjlekh = nekhemjlekh.nemeltNekhemjlekh || "";
-      nekhemjlekh.zardliinDun = formatNumber(nekhemjlekh.zardliinDun) || "";
-      nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
-      nekhemjlekh.eneSardTulukhDun = formatNumber(nekhemjlekh.eneSardTulukhDun);
-      nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
-      nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
-      nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
-      nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
-        nekhemjlekh.umnukhSariinUrTulbur
-      );
+        nekhemjlekh.mungunDunUsgeer = numberToWords(
+          nekhemjlekh.sariinTurees,
+          { fixed: 2, suffix: "n" },
+          "төгрөг",
+          "мөнгө"
+        );
+        const dans = dansGaralt?.jagsaalt?.find(
+          (a) => a.dugaar === songogdsonDans
+        );
+        nekhemjlekh.dans = dans?.dugaar;
+        nekhemjlekh.bank =
+          dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
+        nekhemjlekh.dansniiNer = dans?.dansniiNer;
+        nekhemjlekh.khayag = nekhemjlekh.khayag || "";
+        nekhemjlekh.aldangiinUldegdel =
+          formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
+        nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
+        nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
+        nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
+        nekhemjlekh.khayag = nekhemjlekh.khayag || "";
+        nekhemjlekh.talbainNegjUneUsgeer =
+          nekhemjlekh.talbainNegjUneUsgeer || "";
+        nekhemjlekh.talbainNiitUneUsgeer =
+          nekhemjlekh.talbainNiitUneUsgeer || "";
+        nekhemjlekh.zoriulalt = nekhemjlekh.zoriulalt || "";
+        nekhemjlekh.khungulukhKhugatsaa = nekhemjlekh.khungulukhKhugatsaa || "";
+        nekhemjlekh.nemeltNekhemjlekh.tailbar =
+          nekhemjlekh.nemeltNekhemjlekh.tailbar || "";
+        nekhemjlekh.nemeltNekhemjlekh.tulukhDun =
+          nekhemjlekh.nemeltNekhemjlekh.tulukhDun || "";
+        nekhemjlekh.nemeltNekhemjlekh.ognoo =
+          nekhemjlekh.nemeltNekhemjlekh.ognoo || "";
+        nekhemjlekh.nemeltNekhemjlekh = nekhemjlekh.nemeltNekhemjlekh || "";
+        nekhemjlekh.zardliinDun = formatNumber(nekhemjlekh.zardliinDun) || "";
+        nekhemjlekh.sariinTurees = formatNumber(nekhemjlekh.sariinTurees);
+        nekhemjlekh.eneSardTulukhDun = formatNumber(
+          nekhemjlekh.eneSardTulukhDun
+        );
+        nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
+        nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
+        nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
+        nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
+          nekhemjlekh.umnukhSariinUrTulbur
+        );
 
-      nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
+        nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
-      nekhemjlekh.niitAshiglaltiinZardal =
-        formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
+        nekhemjlekh.niitAshiglaltiinZardal =
+          formatNumber(nekhemjlekh.niitAshiglaltiinZardal) || "";
 
-      nekhemjlekh.sar = moment().format("MM");
-      nekhemjlekh.ekhlekhOn = moment().format("YYYY");
-      nekhemjlekh.ekhelkhSar = moment().format("MM");
-      nekhemjlekh.ekhlekhUdur = moment().format("DD");
-      nekhemjlekh.duusakhOn = moment().format("YYYY");
-      nekhemjlekh.duusakhSar = moment().format("MM");
-      nekhemjlekh.duusakhUdur = moment().format("DD");
+        nekhemjlekh.sar = moment().format("MM");
+        nekhemjlekh.ekhlekhOn = moment().format("YYYY");
+        nekhemjlekh.ekhelkhSar = moment().format("MM");
+        nekhemjlekh.ekhlekhUdur = moment().format("DD");
+        nekhemjlekh.duusakhOn = moment().format("YYYY");
+        nekhemjlekh.duusakhSar = moment().format("MM");
+        nekhemjlekh.duusakhUdur = moment().format("DD");
 
-      for (const [key, value] of Object.entries(nekhemjlekh)) {
-        text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-      }
-      if (!!nekhemjlekh.mail) {
-        mailuud.push({
-          mail: nekhemjlekh.mail,
-          content: text,
-        });
-      }
-    });
-    setLoading(true);
-    uilchilgee(token)
-      .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
-      .then(({ data }) => {
-        if (data === "Amjilttai") {
-          notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
-          setLoading(false);
+        for (const [key, value] of Object.entries(nekhemjlekh)) {
+          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
         }
-      })
-      .catch((e) => {
-        setLoading(false);
-        aldaaBarigch(e);
+        if (!!nekhemjlekh.mail) {
+          mailuud.push({
+            mail: nekhemjlekh.mail,
+            content: text,
+          });
+        }
       });
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
+          setLoading(false);
+          aldaaBarigch(e);
+        });
+    } else {
+      const mailuud = [];
+      nekhemjlekhuud.map((mur, index) => {
+        mailuud.push({ mail: mur.mail, content: tatsanExcelZagvar[index] });
+      });
+      setLoading(true);
+      uilchilgee(token)
+        .post(`/mailOlnoorIlgeeye`, { mailuud, subject: "Түрээсийн төлбөр" })
+        .then(({ data }) => {
+          if (data === "Amjilttai") {
+            notification.success({ message: t("И-мэйл Амжилттай илгээлээ") });
+            setLoading(false);
+          }
+        })
+        .catch((e) => {
+          setLoading(false);
+          aldaaBarigch(e);
+        });
+    }
   }
   async function appIlgeeye() {
     if (songogdsonGereenuud.length > 0) {
@@ -990,45 +1028,50 @@ function tulburTootsoo({ token }) {
     }
   }
 
-  function excelTatakh() {
-    if (songogdsonZagvar) {
-      if (songogdsonGereenuud && songogdsonGereenuud?.length > 0) {
-        setUnshijBaina(true);
-        const songogdsonGeree = songogdsonGereenuud[0];
-        const songogdsonNekhemjlel = nekhemjleliinJagsaalt.find(
-          (a) => a._id === songogdsonGeree
-        );
-        const yavuulakhData = {
-          excelNer: songogdsonZagvar.ner,
-          nekhemjlekhiinJagsaalt: songogdsonNekhemjlel,
-          ashiglaltiinZardluud: ashiglaltiinZardal?.jagsaalt,
-          barilgiinId: barilgiinId,
-        };
-        uilchilgee(token)
-          .post("/excelZagvarTatya", yavuulakhData, {
-            responseType: "blob",
-          })
-          .then((response) => {
-            const blob = new Blob([response.data], {
-              type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  async function excelTatakh() {
+    console.log("printExcelRef.current", printExcelRef.current);
+    try {
+      if (songogdsonZagvar) {
+        if (songogdsonGereenuud && songogdsonGereenuud?.length > 0) {
+          setUnshijBaina(true);
+          const songogdsonNekhemjlel = nekhemjleliinJagsaalt.filter((a) =>
+            songogdsonGereenuud.includes(a._id)
+          );
+          const yavuulakhData = {
+            excelNer: songogdsonZagvar.ner,
+            nekhemjlekhiinJagsaalt: songogdsonNekhemjlel,
+            ashiglaltiinZardluud: ashiglaltiinZardal?.jagsaalt,
+            barilgiinId: barilgiinId,
+          };
+          await uilchilgee(token)
+            .post("/excelZagvarTatya", yavuulakhData)
+            .then((response) => {
+              setTatsanExcelZagvar(response.data);
+              setUnshijBaina(false);
+            })
+            .catch((err) => {
+              setUnshijBaina(false);
+              console.log(err);
             });
-            const link = document.createElement("a");
-            link.href = window.URL.createObjectURL(blob);
-            link.download = "Нэхэмжлэл.xlsx";
-            link.click();
-            setUnshijBaina(false);
-          })
-          .catch((err) => {
-            setUnshijBaina(false);
-            console.log(err);
+        } else {
+          notification.warn({
+            message: "Гэрээ сонгогдоогүй байна",
+            duration: 2,
           });
+        }
       } else {
-        notification.warn({ message: "Гэрээ сонгогдоогүй байна", duration: 2 });
+        notification.warn({
+          message: "Загвар сонгогдоогүй байна",
+          duration: 2,
+        });
       }
-    } else {
-      notification.warn({ message: "Загвар сонгогдоогүй байна", duration: 2 });
+      return "Amjilttai";
+    } catch (err) {
+      console.log(err);
     }
   }
+
+  console.log("nekhemjlekhuud:", nekhemjlekhuud);
 
   return (
     <Admin
@@ -1066,7 +1109,32 @@ function tulburTootsoo({ token }) {
                 <div
                   key={`khevlekhNekhemjlel${i}`}
                   className={`print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`}
-                  dangerouslySetInnerHTML={{ __html: nekhemjlekh.zagvar }}
+                  dangerouslySetInnerHTML={{
+                    __html: nekhemjlekh.zagvar,
+                  }}
+                />
+              );
+            })}
+          </div>
+          <div
+            className={`grid w-full
+            ${
+              nekhemjlekhuud?.find(
+                (a) => a.khuudasniiKhemjee === "A4" || a.chiglel === "portrait"
+              )
+                ? ""
+                : "grid-cols-2"
+            } `}
+            ref={printExcelRef}
+          >
+            {nekhemjlekhuud?.map((nekhemjlekh, i) => {
+              return (
+                <div
+                  key={`khevlekhNekhemjlel${i}`}
+                  className={`hidden print:block ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10" table`}
+                  dangerouslySetInnerHTML={{
+                    __html: tatsanExcelZagvar?.[i],
+                  }}
                 />
               );
             })}
@@ -1144,32 +1212,21 @@ function tulburTootsoo({ token }) {
                   )}
                 </Select>
               </div>
-              {!excelZagvarSongogdson ? (
-                <div className="hidden justify-end gap-2 md:flex">
-                  {turul === "Mail" ? (
-                    <Button
-                      hidden={turul !== "Mail"}
-                      type="primary"
-                      onClick={hevlekh}
-                    >
-                      {t("Хэвлэх")}
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                  <Button onClick={send}>{t("Илгээх")}</Button>
-                </div>
-              ) : (
-                <div className="hidden justify-end gap-2 md:flex">
+              <div className="hidden justify-end gap-2 md:flex">
+                {turul === "Mail" ? (
                   <Button
+                    hidden={turul !== "Mail"}
                     loading={unshijBaina}
                     type="primary"
-                    onClick={excelTatakh}
+                    onClick={hevlekh}
                   >
-                    {t("Татах")}
+                    {t("Хэвлэх")}
                   </Button>
-                </div>
-              )}
+                ) : (
+                  ""
+                )}
+                <Button onClick={send}>{t("Илгээх")}</Button>
+              </div>
             </div>
           </div>
           <div className="grid grid-cols-8 gap-2">
