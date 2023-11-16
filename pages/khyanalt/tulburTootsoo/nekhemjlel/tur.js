@@ -1,4 +1,4 @@
-export const khatuuZagvar = `
+export default khatuuZagvar = `
     <div class="h-[500px] w-full">
       <div class="flex w-full items-start justify-between gap-2">
         <div class="flex w-1/2 flex-col">
