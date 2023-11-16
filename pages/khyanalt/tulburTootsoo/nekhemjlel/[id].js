@@ -454,7 +454,7 @@ function ZakhialgaNemekh({ token }) {
               noStyle
             ></Form.Item>
 
-            {(id === "new" || nekhemjlelZagvar.nekhemjlekh === "excel") && (
+            {/* {(id === "new" || nekhemjlelZagvar.nekhemjlekh === "excel") && (
               <div className="flex w-full items-center justify-end">
                 <Button
                   disabled={!nekhemjlelZagvar.ner}
@@ -465,7 +465,7 @@ function ZakhialgaNemekh({ token }) {
                   {id === "new" ? "оруулах" : "засах"}
                 </Button>
               </div>
-            )}
+            )} */}
             <div className="mt-3 flex items-center justify-between">
               <Radio.Group
                 disabled={!!kharuulakhExcel}

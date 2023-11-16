@@ -35,12 +35,13 @@ import uilchilgee, { aldaaBarigch, url } from "services/uilchilgee";
 import Aos from "aos";
 import { renderToString } from "react-dom/server";
 import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
-
 import AppSmsZagvar from "components/pageComponents/nekhemjlel/AppSmsZagvar";
 import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
+import { khatuuZagvar } from "./tur";
+
 const ilgeekhTurul = "davkharaar";
 
 function tulburTootsoo({ token }) {
@@ -69,7 +70,6 @@ function tulburTootsoo({ token }) {
     ilgeekhTurul
   );
   const [tatsanExcelZagvar, setTatsanExcelZagvar] = useState(null);
-  console.log(tatsanExcelZagvar);
   const { dansGaralt } = useDans(token, baiguullaga?._id);
   const { nekhemjlekhiinZagvar, nekhemjlekhiinZagvarMutate } =
     useNekhemjlekhiinZagvar(token);
@@ -136,6 +136,9 @@ function tulburTootsoo({ token }) {
           var zagvar = _.cloneDeep(
             nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
           );
+          if (zagvar.khatuuZagvarEsekh) {
+            zagvar.nekhemjlekh = khatuuZagvar;
+          }
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
@@ -392,6 +395,7 @@ function tulburTootsoo({ token }) {
             mail: medeelel?.mail,
             khuudasniiKhemjee: zagvar?.khuudasniiKhemjee,
             chiglel: zagvar?.chiglel,
+            khatuuZagvarEsekh: zagvar.khatuuZagvarEsekh,
           };
         });
     return [];
@@ -460,9 +464,7 @@ function tulburTootsoo({ token }) {
     if (excelZagvarSongogdson) {
       excelTatakh().then((res) => {
         if (res === "Amjilttai") {
-          setTimeout(() => {
-            handlePrint();
-          }, 2000);
+          notification.info({ message: "Татагдаж эхэллээ" });
         }
       });
     } else {
@@ -1029,7 +1031,6 @@ function tulburTootsoo({ token }) {
   }
 
   async function excelTatakh() {
-    console.log("printExcelRef.current", printExcelRef.current);
     try {
       if (songogdsonZagvar) {
         if (songogdsonGereenuud && songogdsonGereenuud?.length > 0) {
@@ -1044,10 +1045,9 @@ function tulburTootsoo({ token }) {
             barilgiinId: barilgiinId,
           };
           await uilchilgee(token)
-            .post("/excelZagvarTatya", yavuulakhData)
+            .post("/excelZagvarTatya", yavuulakhData, { responseType: "blob" })
             .then((response) => {
-              setTatsanExcelZagvar(response.data);
-              setUnshijBaina(false);
+              console.log("response: ", response.blob);
             })
             .catch((err) => {
               setUnshijBaina(false);
@@ -1070,9 +1070,6 @@ function tulburTootsoo({ token }) {
       console.log(err);
     }
   }
-
-  console.log("nekhemjlekhuud:", nekhemjlekhuud);
-
   return (
     <Admin
       title="Нэхэмжлэл"
@@ -1108,7 +1105,11 @@ function tulburTootsoo({ token }) {
               return (
                 <div
                   key={`khevlekhNekhemjlel${i}`}
-                  className={`print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`}
+                  className={
+                    !nekhemjlekh.khatuuZagvarEsekh
+                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
+                      : "A4-portrait block overflow-hidden text-xs"
+                  }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
                   }}
