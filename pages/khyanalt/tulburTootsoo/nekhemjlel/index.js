@@ -40,7 +40,7 @@ import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
-import khatuuZagvar from "./tur";
+import khatuuZagvar from "tools/zagvar/tur";
 
 const ilgeekhTurul = "davkharaar";
 
