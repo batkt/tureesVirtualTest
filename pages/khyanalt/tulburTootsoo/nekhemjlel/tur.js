@@ -1,4 +1,4 @@
-export default khatuuZagvar = `
+const khatuuZagvar = `
     <div class="h-[500px] w-full">
       <div class="flex w-full items-start justify-between gap-2">
         <div class="flex w-1/2 flex-col">
@@ -95,8 +95,8 @@ export default khatuuZagvar = `
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuat&gt</td>
+            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuatgui&gt</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
               &lt;umnukhSariinUrTulbur&gt;
@@ -105,115 +105,110 @@ export default khatuuZagvar = `
           <tr>
             <td class="border border-black text-center">2</td>
             <td class="border border-black text-left">
-              Барьцаа төлбөрийн үлдэгдэл
+              Алданги
             </td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;aldangiinUldegdelNuat&gt;</td>
+            <td class="border border-black text-left">&lt;aldangiinUldegdelNuatgui&gt;</td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;aldangiinUldegdel&gt;</td>
           </tr>
           <tr>
             <td class="border border-black text-center">3</td>
             <td class="border border-black text-left">
-              Цахилгааны төлбөр-1 / 2023.11.15-12.16/
+              Түрээсийн төлбөр
             </td>
             <td class="border border-black text-center">
-              &lt;Цахилгаан.umnukhZaalt&gt;
             </td>
             <td class="border border-black text-center">
-              &lt;Цахилгаан.suuliinZaalt&gt;
             </td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;talbainNiitUneNuat&gt;</td>
+            <td class="border border-black text-left">&lt;talbainNiitUneNuatgui&gt;</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
-              &lt;Цахилгаан.tulukhDun&gt;
+              &lt;talbainNiitUne&gt;
             </td>
           </tr>
           <tr>
             <td class="border border-black text-center">4</td>
             <td class="border border-black text-left">
-              Усны төлбөр халуун /2023.11.15-ныг хүртэл/
+              Менежментийн төлбөр
             </td>
             <td class="border border-black text-left">
-              &lt;Халуун ус.umnukhZaalt&gt;
             </td>
             <td class="border border-black text-left">
-              &lt;Халуун ус.suuliinZaalt&gt;
             </td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;Management - НЭ.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Management - НЭ.tulukhDunNuatgui&gt;</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
-              &lt;Халуун ус.tulukhDun&gt;
+              &lt;Management - НЭ.tulukhDun&gt;
             </td>
           </tr>
           <tr>
             <td class="border border-black text-center">5</td>
             <td class="border border-black text-left">
-              Усны төлбөр хүйтэн /2023.11.15-ныг хүртэл/
+              Цахилгааны төлбөр
             </td>
             <td class="border border-black text-left">
-              &lt;Хүйтэн ус.umnukhZaalt&gt;
+              &lt;Цахилгаан.umnukhZaalt&gt;
             </td>
             <td class="border border-black text-left">
-              &lt;Хүйтэн ус.suuliinZaalt&gt;
+              &lt;Цахилгаан.suuliinZaalt&gt;
             </td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;Цахилгаан.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Цахилгаан.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
-              &lt;Хүйтэн ус.tulukhDun&gt;
+              &lt;Цахилгаан.tulukhDunNuattai&gt;
             </td>
           </tr>
           <tr>
             <td class="border border-black text-center">6</td>
             <td class="border border-black text-left">
-              Менежмент төлбөр /2023.10.15-11.15/
+              Дулаан
             </td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;Дулаан.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Дулаан.tulukhDun&gt;</td>
             <td class="border border-black text-left">
-              &lt;Management 0% Off.khungulult&gt;
             </td>
             <td class="border border-black text-left">
-              &lt;Management 0% Off.tulukhDun&gt;
+              &lt;Дулаан.tulukhDunNuattai&gt;
             </td>
           </tr>
           <tr>
             <td class="border border-black text-center">7</td>
             <td class="border border-black text-left">
-              Түрээсийн төлбөр /2023.11/
+              Усны төлбөр - Халуун
             </td>
+            <td class="border border-black text-left">&lt;Халуун ус.umnukhZaalt&gt;</td>
+            <td class="border border-black text-left">&lt;Халуун ус.suuliinZaalt&gt;</td>
             <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Халуун ус.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Халуун ус.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">&lt;sariinTurees&gt;</td>
+            <td class="border border-black text-left">&lt;Халуун ус.tulukhDunNuattai&gt;</td>
           </tr>
           <tr>
             <td class="border border-black text-center">8</td>
             <td class="border border-black text-left">
-              Түрээсийн төлбөр /2023.10.25-11.01
+              Усны төлбөр - Хүйтэн
             </td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.umnukhZaalt&gt;</td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.suuliinZaalt&gt;</td>
             <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left">0.00</td>
-            <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">0.00</td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.tulukhDunNuattai&gt;</td>
           </tr>
         </tbody>
         <tfoot class="bg-gray-400 font-semibold">
@@ -226,13 +221,13 @@ export default khatuuZagvar = `
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-right">&lt;eneSardTulukhDun&gt;</td>
+            <td class="text-right">&lt;garaasBodsonNiitDun&gt;</td>
           </tr>
         </tfoot>
       </table>
       <div class="mt-4 flex w-full flex-col items-center justify-center gap-4">
         <div class="flex w-1/2">
-          <p>&lt;eneSardTulukhUsgeer&gt;</p>
+          <p>&lt;garaasBodsonNiitDunUsgeer&gt;</p>
           <p>болно</p>
         </div>
 
@@ -248,3 +243,5 @@ export default khatuuZagvar = `
         </div>
       </div>
     </div>`;
+    
+export default khatuuZagvar;
