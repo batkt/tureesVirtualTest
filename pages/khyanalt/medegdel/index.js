@@ -36,7 +36,6 @@ import { modal } from "components/ant/Modal";
 import Aos from "aos";
 import useJagsaalt from "hooks/useJagsaalt";
 import useOrder from "tools/function/useOrder";
-import next from "next";
 import useKhariltsagchDavkhraarAvya from "hooks/useKhariltsagchDavkhraarAvya";
 import { useTranslation } from "react-i18next";
 
@@ -142,13 +141,7 @@ function Khyanalt({ token }) {
   }, [turul, khariltsagch]);
 
   const { order } = useOrder({ createdAt: -1 });
-  const medegdelAvya = useJagsaalt(
-    "/sonorduulga",
-    query,
-    order,
-    undefined,
-    next
-  );
+  const medegdelAvya = useJagsaalt("/sonorduulga", query, order, undefined);
 
   const khariltsagchiinMsjTuukhKharakh = useMemo(() => {
     return { barilgiinId: barilgiinId, dugaar: khariltsagch?.utas };
