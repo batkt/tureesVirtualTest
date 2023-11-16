@@ -304,15 +304,15 @@ function tulburTootsoo({ token }) {
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
-                a?.tulukhDun ? formatNumber(a.tulukhDun || 0) : " "
+                formatNumber(a.tulukhDun || 0)
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tulukhDunNuat&gt;`, "g"),
-                a?.tulukhDun ? formatNumber(a?.tulukhDun || 0 / 10 || 0) : " "
+                formatNumber(a.tulukhDun / 10 || 0)
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
-                a?.tulukhDun ? formatNumber(a?.tulukhDun || 0 * 1.1 || 0) : " "
+                formatNumber(a.tulukhDun * 1.1 || 0)
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tulukhDunNuatgui&gt;`, "g"),
