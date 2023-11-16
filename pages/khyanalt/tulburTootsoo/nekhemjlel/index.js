@@ -617,9 +617,15 @@ function tulburTootsoo({ token }) {
         var nekhemjlekh = _.cloneDeep(
           nekhemjleliinJagsaalt.find((a) => a._id === mur)
         );
-        var text = nekhemjlekhiinZagvar?.jagsaalt?.find(
+
+        const songosonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
           (a) => a._id === barimt
-        )?.nekhemjlekh;
+        );
+
+        var text = songosonZagvar?.khatuuZagvarEsekh
+          ? khatuuZagvar
+          : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
+              ?.nekhemjlekh;
 
         nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
           nekhemjlekh.eneSardTulukhDun *
