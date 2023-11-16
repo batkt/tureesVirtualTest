@@ -40,7 +40,7 @@ import numberToWords from "tools/function/numberToWords";
 import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
-import { default as khatuuZagvar } from "./tur";
+import khatuuZagvar from "./tur";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -146,6 +146,8 @@ function tulburTootsoo({ token }) {
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
+
+          var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
           if (!!zagvar?.nekhemjlekh) {
             medeelel.eneSardTulukhUsgeer = numberToWords(
@@ -285,6 +287,14 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
                 formatNumber(a.tulukhDun || 0)
               );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.tulukhDunNuat&gt;`, "g"),
+                formatNumber(a.tulukhDun / 10 || 0)
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
+                formatNumber(a.tulukhDun * 1.1 || 0)
+              );
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -307,6 +317,8 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0)
               );
+              kaidudZoriulsanNiitTulburiinNiilber =
+                kaidudZoriulsanNiitTulburiinNiilber + a.tulukhDun * 1.1;
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
