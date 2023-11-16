@@ -1,5 +1,5 @@
 const khatuuZagvar = `
-    <div class="h-[500px] w-full">
+    <div class="h-full w-full">
       <div class="flex w-full items-start justify-between gap-2">
         <div class="flex w-1/2 flex-col">
           <p class="font-semibold underline">Нэхэмжлэгч:</p>
@@ -95,8 +95,8 @@ const khatuuZagvar = `
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuat&gt</td>
-            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuatgui&gt</td>
+            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuat&gt;</td>
+            <td class="border border-black text-left">&lt;umnukhSariinUrTulburNuatgui&gt;</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
               &lt;umnukhSariinUrTulbur&gt;
@@ -141,12 +141,12 @@ const khatuuZagvar = `
             </td>
             <td class="border border-black text-left">
             </td>
-            <td class="border border-black text-left"></td>
-            <td class="border border-black text-left">&lt;Management - НЭ.tulukhDunNuat&gt;</td>
-            <td class="border border-black text-left">&lt;Management - НЭ.tulukhDunNuatgui&gt;</td>
+            <td class="border border-black text-left">&lt;Management 0% Off.tariff&gt;</td>
+            <td class="border border-black text-left">&lt;Management 0% Off.tulukhDunNuat&gt;</td>
+            <td class="border border-black text-left">&lt;Management 0% Off.tulukhDunNuatgui&gt;</td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left">
-              &lt;Management - НЭ.tulukhDun&gt;
+              &lt;Management 0% Off.tulukhDun&gt;
             </td>
           </tr>
           <tr>
@@ -160,7 +160,7 @@ const khatuuZagvar = `
             <td class="border border-black text-left">
               &lt;Цахилгаан.suuliinZaalt&gt;
             </td>
-            <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Цахилгаан.tariff&gt;</td>
             <td class="border border-black text-left">&lt;Цахилгаан.tulukhDunNuat&gt;</td>
             <td class="border border-black text-left">&lt;Цахилгаан.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
@@ -175,7 +175,7 @@ const khatuuZagvar = `
             </td>
             <td class="border border-black text-left"></td>
             <td class="border border-black text-left"></td>
-            <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Дулаан.tariff&gt;</td>
             <td class="border border-black text-left">&lt;Дулаан.tulukhDunNuat&gt;</td>
             <td class="border border-black text-left">&lt;Дулаан.tulukhDun&gt;</td>
             <td class="border border-black text-left">
@@ -191,7 +191,7 @@ const khatuuZagvar = `
             </td>
             <td class="border border-black text-left">&lt;Халуун ус.umnukhZaalt&gt;</td>
             <td class="border border-black text-left">&lt;Халуун ус.suuliinZaalt&gt;</td>
-            <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Халуун ус.tariff&gt;</td>
             <td class="border border-black text-left">&lt;Халуун ус.tulukhDunNuat&gt;</td>
             <td class="border border-black text-left">&lt;Халуун ус.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
@@ -204,7 +204,7 @@ const khatuuZagvar = `
             </td>
             <td class="border border-black text-left">&lt;Хүйтэн ус.umnukhZaalt&gt;</td>
             <td class="border border-black text-left">&lt;Хүйтэн ус.suuliinZaalt&gt;</td>
-            <td class="border border-black text-left"></td>
+            <td class="border border-black text-left">&lt;Хүйтэн ус.tariff&gt;</td>
             <td class="border border-black text-left">&lt;Хүйтэн ус.tulukhDunNuat&gt;</td>
             <td class="border border-black text-left">&lt;Хүйтэн ус.tulukhDun&gt;</td>
             <td class="border border-black text-left"></td>
@@ -243,5 +243,5 @@ const khatuuZagvar = `
         </div>
       </div>
     </div>`;
-    
+
 export default khatuuZagvar;
