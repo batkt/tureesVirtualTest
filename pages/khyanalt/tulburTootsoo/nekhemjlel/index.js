@@ -1458,26 +1458,28 @@ function tulburTootsoo({ token }) {
                           </div>
                         </Popconfirm>
                       </div>
-                      <div
-                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
-                        onClick={() =>
-                          turul === "SMS" || turul === "App"
-                            ? smsZagvarNemya(a)
-                            : router.push(
-                                `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
-                              )
-                        }
-                      >
-                        {a.nekhemjlekh !== "excel" ? (
-                          <EditOutlined
-                            style={{ display: "flex", color: "#85C1E9" }}
-                          />
-                        ) : (
-                          <EyeOutlined
-                            style={{ display: "flex", color: "#85C1E9" }}
-                          />
-                        )}
-                      </div>
+                      {!a.khatuuZagvarEsekh && (
+                        <div
+                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
+                          onClick={() =>
+                            turul === "SMS" || turul === "App"
+                              ? smsZagvarNemya(a)
+                              : router.push(
+                                  `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
+                                )
+                          }
+                        >
+                          {a.nekhemjlekh !== "excel" ? (
+                            <EditOutlined
+                              style={{ display: "flex", color: "#85C1E9" }}
+                            />
+                          ) : (
+                            <EyeOutlined
+                              style={{ display: "flex", color: "#85C1E9" }}
+                            />
+                          )}
+                        </div>
+                      )}
                     </div>
                   ) : turul === "Mail" ? (
                     a.turul === undefined ? (
@@ -1487,20 +1489,22 @@ function tulburTootsoo({ token }) {
                       >
                         <Image src="/invoice.png" width={32} height={32} />
                         <div className="font-medium">{a.ner}</div>
-                        <div style={{ marginLeft: "auto" }}>
-                          <Popconfirm
-                            title="Загвар устгах уу?"
-                            okText={t("Тийм")}
-                            cancelText={t("Үгүй")}
-                            onConfirm={() => zagvarUstgaya(a)}
-                          >
-                            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
-                              <DeleteOutlined
-                                style={{ color: "red", display: "flex" }}
-                              />
-                            </div>
-                          </Popconfirm>
-                        </div>
+                        {!a.khatuuZagvarEsekh && (
+                          <div style={{ marginLeft: "auto" }}>
+                            <Popconfirm
+                              title="Загвар устгах уу?"
+                              okText={t("Тийм")}
+                              cancelText={t("Үгүй")}
+                              onConfirm={() => zagvarUstgaya(a)}
+                            >
+                              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
+                                <DeleteOutlined
+                                  style={{ color: "red", display: "flex" }}
+                                />
+                              </div>
+                            </Popconfirm>
+                          </div>
+                        )}
                         <div
                           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
                           onClick={() =>
