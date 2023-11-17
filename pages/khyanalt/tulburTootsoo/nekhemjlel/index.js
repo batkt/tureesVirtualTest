@@ -322,6 +322,33 @@ function tulburTootsoo({ token }) {
                   ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
                   : " "
               );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`,
+                  "g"
+                ),
+                formatNumber(a.tulukhDun || 0 - a.khungulult || 0)
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
+                  "g"
+                ),
+                formatNumber((a.tulukhDun || 0 - a.khungulult || 0) / 10)
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
+                  "g"
+                ),
+                a?.tulukhDun
+                  ? formatNumber(
+                      a?.tulukhDun -
+                        a.khungulult -
+                        (a.tulukhDun - a.khungulult) / 10 || 0
+                    )
+                  : " "
+              );
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -344,8 +371,13 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0) || ""
               );
-              kaidudZoriulsanNiitTulburiinNiilber =
-                kaidudZoriulsanNiitTulburiinNiilber + (a.tulukhDun || 0 * 1.1);
+              if (a.tailbar !== "Management") {
+                kaidudZoriulsanNiitTulburiinNiilber +=
+                  ((a.tulukhDun || 0) - (a.khungulult || 0)) * 1.1;
+              } else {
+                kaidudZoriulsanNiitTulburiinNiilber +=
+                  (a.tulukhDun || 0) - (a.khungulult || 0);
+              }
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -368,6 +400,31 @@ function tulburTootsoo({ token }) {
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.ner}.tulukhDunNuatgui&gt;`, "g"),
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(`&lt;${a.ner}.khungulultKhassanTulukhDun&gt;`, "g"),
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.ner}.khungulultKhassanTulukhDunNuat&gt;`,
+                  "g"
+                ),
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.ner}.khungulultKhassanTulukhDunNuattai&gt;`,
+                  "g"
+                ),
+                0
+              );
+              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                new RegExp(
+                  `&lt;${a.ner}.khungulultKhassanTulukhDunNuatgui&gt;`,
+                  "g"
+                ),
                 0
               );
 
@@ -861,7 +918,30 @@ function tulburTootsoo({ token }) {
               ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
               : " "
           );
-
+          text = text?.replace(
+            new RegExp(`&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`, "g"),
+            formatNumber(a.tulukhDun || 0 - a.khungulult || 0)
+          );
+          text = text?.replace(
+            new RegExp(
+              `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
+              "g"
+            ),
+            formatNumber((a.tulukhDun || 0 - a.khungulult || 0) / 10)
+          );
+          text = text?.replace(
+            new RegExp(
+              `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
+              "g"
+            ),
+            a?.tulukhDun
+              ? formatNumber(
+                  a?.tulukhDun -
+                    a.khungulult -
+                    (a.tulukhDun - a.khungulult) / 10 || 0
+                )
+              : " "
+          );
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
             formatNumber(a.tariff || 0)
@@ -883,8 +963,13 @@ function tulburTootsoo({ token }) {
             new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
             formatNumber(a.khungulult || 0) || ""
           );
-          kaidudZoriulsanNiitTulburiinNiilber =
-            kaidudZoriulsanNiitTulburiinNiilber + (a.tulukhDun || 0 * 1.1);
+          if (a.tailbar !== "Management") {
+            kaidudZoriulsanNiitTulburiinNiilber +=
+              ((a.tulukhDun || 0) - (a.khungulult || 0)) * 1.1;
+          } else {
+            kaidudZoriulsanNiitTulburiinNiilber +=
+              (a.tulukhDun || 0) - (a.khungulult || 0);
+          }
         });
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {

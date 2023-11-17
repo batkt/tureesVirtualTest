@@ -156,14 +156,14 @@ const khatuuZagvar = `
           <td style="border: 1px solid #000; text-align: left;"></td>
           <td style="border: 1px solid #000; text-align: left;"></td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.tulukhDunNuat&gt;
+            &lt;Management.khungulultKhassanTulukhDunNuat&gt;
           </td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.tulukhDunNuatgui&gt;
+            &lt;Management.khungulultKhassanTulukhDunNuatgui&gt;
           </td>
           <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.tulukhDun&gt;
+            &lt;Management.khungulultKhassanTulukhDun&gt;
           </td>
         </tr>
         <tr>

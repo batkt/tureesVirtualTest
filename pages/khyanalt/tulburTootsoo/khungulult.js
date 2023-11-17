@@ -236,7 +236,6 @@ function tulburTootsoo() {
         });
         return;
       }
-      console.log("yavuulj bui ugugdul: ", ugugdul);
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
