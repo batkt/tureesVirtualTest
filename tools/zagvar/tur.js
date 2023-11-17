@@ -259,8 +259,8 @@ const khatuuZagvar = `
           <td></td>
           <td></td>
           <td><p>Хүлээн авсан</p></td>
-          <td><p>/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</p></td>
           <td></td>
+          <td><p>/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</p></td>
           <td></td>
           <td></td>
           <td></td>
@@ -269,8 +269,8 @@ const khatuuZagvar = `
           <td></td>
           <td></td>
           <td><p>Нэхэмжлэл бичсэн</p></td>
-          <td><p>/Т. Булган/</p></td>
           <td></td>
+          <td><p>/Т. Булган/</p></td>
           <td></td>
           <td></td>
           <td></td>

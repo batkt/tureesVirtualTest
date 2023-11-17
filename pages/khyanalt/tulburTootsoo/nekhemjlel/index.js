@@ -328,15 +328,17 @@ function tulburTootsoo({ token }) {
 
             for (const [key, value] of Object.entries(medeelel)) {
               if (key !== "nemeltNekhemjlekh") {
-                if (key === "khungulsunTalbainNiitUne") {
-                  console.log("uug ni orj irj bna");
+                if (value !== undefined && value !== null) {
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${key}&gt;`, "g"),
+                    value
+                  );
+                } else {
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${key}&gt;`, "g"),
+                    ""
+                  );
                 }
-                zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                  new RegExp(`&lt;${key}&gt;`, "g"),
-                  value
-                );
-              } else {
-                console.log("else dotorkh keyuud: ", key);
               }
             }
 
@@ -536,12 +538,14 @@ function tulburTootsoo({ token }) {
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-                capitalize(numberToWords(
-                  Math.abs(garaasBodsonNiitDun),
-                  { fixed: 2, suffix: "n" },
-                  "төгрөг",
-                  "мөнгө"
-                ))
+                capitalize(
+                  numberToWords(
+                    Math.abs(garaasBodsonNiitDun),
+                    { fixed: 2, suffix: "n" },
+                    "төгрөг",
+                    "мөнгө"
+                  )
+                )
               );
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
@@ -1131,12 +1135,14 @@ function tulburTootsoo({ token }) {
           );
           text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-            capitalize(numberToWords(
-              Math.abs(garaasBodsonNiitDun),
-              { fixed: 2, suffix: "n" },
-              "төгрөг",
-              "мөнгө"
-            ))
+            capitalize(
+              numberToWords(
+                Math.abs(garaasBodsonNiitDun),
+                { fixed: 2, suffix: "n" },
+                "төгрөг",
+                "мөнгө"
+              )
+            )
           );
 
           text = text?.replace(
@@ -1146,7 +1152,11 @@ function tulburTootsoo({ token }) {
         }
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
-          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          if (value !== undefined && value !== null) {
+            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          } else {
+            text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
+          }
         }
         if (!!nekhemjlekh.mail) {
           mailuud.push({
