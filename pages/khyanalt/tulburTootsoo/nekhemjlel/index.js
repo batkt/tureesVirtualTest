@@ -136,7 +136,7 @@ function tulburTootsoo({ token }) {
           var zagvar = _.cloneDeep(
             nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
           );
-          if (zagvar.khatuuZagvarEsekh) {
+          if (zagvar?.khatuuZagvarEsekh) {
             zagvar.nekhemjlekh = khatuuZagvar;
           }
           const medeelel = _.cloneDeep(
