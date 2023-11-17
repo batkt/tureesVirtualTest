@@ -136,9 +136,9 @@ function tulburTootsoo({ token }) {
           var zagvar = _.cloneDeep(
             nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
           );
-          if (zagvar.khatuuZagvarEsekh) {
-            zagvar.nekhemjlekh = khatuuZagvar;
-          }
+          // if (zagvar.khatuuZagvarEsekh) {
+          zagvar.nekhemjlekh = khatuuZagvar;
+          // }
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
@@ -233,7 +233,9 @@ function tulburTootsoo({ token }) {
             medeelel.talbainNiitUneNuat = formatNumber(
               medeelel.talbainNiitUneNuat
             );
-            medeelel.talbainNiitUne = formatNumber(medeelel.talbainNiitUne);
+            medeelel.talbainNiitUne = formatNumber(
+              medeelel.talbainNiitUne - medeelel.khungulult
+            );
             medeelel.khungulult = formatNumber(medeelel.khungulult);
 
             medeelel.gariinUseg = renderToString(
@@ -805,10 +807,13 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.talbainNiitUneNuatgui = formatNumber(
           nekhemjlekh.talbainNiitUne - nekhemjlekh.talbainNiitUneNuat
         );
-        nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
+        nekhemjlekh.talbainNiitUne = formatNumber(
+          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0)
+        );
         nekhemjlekh.talbainNiitUneNuat = formatNumber(
           nekhemjlekh.talbainNiitUneNuat
         );
+        nekhemjlekh.khungulult = formatNumber(nekhemjlekh.khungulult || 0);
         nekhemjlekh.umnukhSariinUrTulburNuat = formatNumber(
           nekhemjlekh.umnukhSariinUrTulbur / 10
         );
@@ -848,7 +853,7 @@ function tulburTootsoo({ token }) {
           );
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
-            formatNumber(a.tulukhDun * 1.1 || 0)
+            formatNumber(a.tulukhDun * 1.1 - a.khungulult || 0 || 0)
           );
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDunNuatgui&gt;`, "g"),
@@ -1392,7 +1397,7 @@ function tulburTootsoo({ token }) {
                   className={
                     !nekhemjlekh.khatuuZagvarEsekh
                       ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
-                      : `hidden h-[5.845in] text-xs print:block`
+                      : `h-[5.845in] text-xs`
                   }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,

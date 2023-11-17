@@ -177,6 +177,19 @@ function tulburTootsoo() {
       setSongogdsonGereenuud([]);
     }
   }
+
+  function dundakhSaruudAvya(ekhlekhOgnoo, duusakhOgnoo) {
+    const months = [];
+    let odooginOgnoo = moment(ekhlekhOgnoo).startOf("month");
+
+    while (odooginOgnoo.isSameOrBefore(moment(duusakhOgnoo).startOf("month"))) {
+      months.push(odooginOgnoo.format("YYYY-MM-01 00:00:00"));
+      odooginOgnoo.add(1, "months");
+    }
+
+    return months;
+  }
+
   function khungulultKhadgalya() {
     setWaiting(true);
     if (
@@ -200,9 +213,7 @@ function tulburTootsoo() {
     }
     if (songogdsonGereenuud.length > 0) {
       var ugugdul = form.getFieldsValue();
-      ugugdul.ognoonuud = ognoonuud.map((mur) =>
-        moment(mur).format("YYYY-MM-01 00:00:00")
-      );
+      ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
       if (turul === "zardal") {
         ugugdul.tailbar = songogdsonZardal.ner;
@@ -225,6 +236,7 @@ function tulburTootsoo() {
         });
         return;
       }
+      console.log("yavuulj bui ugugdul: ", ugugdul);
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -566,14 +578,14 @@ function tulburTootsoo() {
                         </Select>
                       </Form.Item>
                     )}
-                  {ognoonuud.length > 0 && (
+                  {/* {ognoonuud.length > 0 && (
                     <>
                       <div className="mb-2">Сонгогдсон сарууд:</div>
                       <div className="flex w-full flex-row flex-wrap">
                         {ognoonuud.map((a, index) => (
                           <div
                             key={index}
-                            className="m mr-2 mb-2 flex items-center rounded bg-gray-200 px-2 py-1"
+                            className="m mb-2 mr-2 flex items-center rounded bg-gray-200 px-2 py-1"
                           >
                             {moment(a).format("YYYY-MM")}
                             <div
@@ -590,7 +602,7 @@ function tulburTootsoo() {
                         ))}
                       </div>
                     </>
-                  )}
+                  )} */}
                   <Form.Item
                     name="ognoonuud"
                     label={t("Хөнгөлөх сар")}
@@ -601,19 +613,15 @@ function tulburTootsoo() {
                       },
                     ]}
                   >
-                    <DatePicker
+                    <DatePicker.RangePicker
                       allowClear={false}
                       style={{ width: "100%" }}
                       disabledDate={disabledDate}
                       picker="month"
-                      placeholder={t("Сар")}
+                      placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
                       onChange={(v) => {
-                        let r = false;
-                        const c = moment(v).format("YYYY-MM");
-                        ognoonuud.map((a) => {
-                          if (c === moment(a).format("YYYY-MM")) r = true;
-                        });
-                        if (!r) setOgnoonuud([...ognoonuud, v]);
+                        setOgnoonuud(v);
+                        console.log("v:", v);
                       }}
                     />
                   </Form.Item>
