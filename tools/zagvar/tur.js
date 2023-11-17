@@ -138,14 +138,14 @@ const khatuuZagvar = `
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;talbainNiitUneNuat&gt;
+            &lt;khungulsunTalbainNiitUneNuat&gt;
           </td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;talbainNiitUneNuatgui&gt;
+            &lt;khungulsunTalbainNiitUneNuatgui&gt;
           </td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">
-            &lt;talbainNiitUne&gt;
+            &lt;khungulsunTalbainNiitUne&gt;
           </td>
         </tr>
         <tr>
@@ -282,8 +282,8 @@ const khatuuZagvar = `
           <td></td>
           <td><p>Нэхэмжлэл бичсэн</p></td>
           <td><p>/Т. Булган/</p></td>
-          <td></td>
-          <td></td>
+          <td>&lt;gariinUseg&gt;</td>
+          <td>&lt;tamga&gt;</td>
           <td></td>
           <td></td>
         </tr>
