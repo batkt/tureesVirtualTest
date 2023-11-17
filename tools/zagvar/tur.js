@@ -143,7 +143,7 @@ const khatuuZagvar = `
           <td style="border: 1px solid #000; text-align: right;">
             &lt;talbainNiitUneNuatgui&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">
             &lt;talbainNiitUne&gt;
           </td>
@@ -161,7 +161,7 @@ const khatuuZagvar = `
           <td style="border: 1px solid #000; text-align: right;">
             &lt;Management.tulukhDunNuatgui&gt;
           </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">
             &lt;Management.tulukhDun&gt;
           </td>
