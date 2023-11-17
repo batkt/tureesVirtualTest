@@ -100,6 +100,10 @@ function tulburTootsoo({ token }) {
     setSongogdsonGereenuud([]);
   }, [ognoo]);
 
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   function smsZagvarNemya(data) {
     const footer = [
       <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
@@ -532,12 +536,12 @@ function tulburTootsoo({ token }) {
               );
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-                numberToWords(
+                capitalize(numberToWords(
                   Math.abs(garaasBodsonNiitDun),
                   { fixed: 2, suffix: "n" },
                   "төгрөг",
                   "мөнгө"
-                )
+                ))
               );
 
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
@@ -886,7 +890,19 @@ function tulburTootsoo({ token }) {
           ) || "";
         nekhemjlekh.aldangiinUldegdel =
           formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
-
+        nekhemjlekh.khuviinTamga = renderToString(
+          <span style={{ position: "absolute", zIndex: 1 }}>
+            <img
+              src={"/khuviinTamga.png"}
+              style={{
+                width: 115,
+                height: 100,
+                transform: "translate(-10%, -50%)",
+                opacity: 0.65,
+              }}
+            />
+          </span>
+        );
         nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
         nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
         nekhemjlekh.zakhirliinNer = nekhemjlekh.zakhirliinNer || "";
@@ -991,21 +1007,21 @@ function tulburTootsoo({ token }) {
             : 0;
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`, "g"),
-            formatNumber(khungulultKhassanTulukhDun)
+            formatNumber(khungulultKhassanTulukhDun || 0)
           );
           text = text?.replace(
             new RegExp(
               `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
               "g"
             ),
-            formatNumber(khungulultKhassanTulukhDunNuat)
+            formatNumber(khungulultKhassanTulukhDunNuat || 0)
           );
           text = text?.replace(
             new RegExp(
               `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
               "g"
             ),
-            formatNumber(khungulultKhassanTulukhDunNuatgui)
+            formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
           );
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
@@ -1115,12 +1131,12 @@ function tulburTootsoo({ token }) {
           );
           text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-            numberToWords(
+            capitalize(numberToWords(
               Math.abs(garaasBodsonNiitDun),
               { fixed: 2, suffix: "n" },
               "төгрөг",
               "мөнгө"
-            )
+            ))
           );
 
           text = text?.replace(
