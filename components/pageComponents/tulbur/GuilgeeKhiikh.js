@@ -43,7 +43,7 @@ function GuilgeeKhiikh(
   const query = useMemo(
     () => ({
       ner: data?.zardluud && { $in: data.zardluud.map((a) => a.ner) },
-      turul: { $nin: ["Тогтмол", "Дурын"] },
+      turul: { $in: ["кВт", "1м3"] },
       tariff: { $exists: true },
       barilgiinId,
     }),
@@ -285,7 +285,8 @@ function GuilgeeKhiikh(
             setTailbar("");
           }}
           value={turul}
-          className="grid w-full grid-cols-2 justify-between sm:flex">
+          className="grid w-full grid-cols-2 justify-between sm:flex"
+        >
           <Radio value={"voucher"}>{t("Ваучераар")}</Radio>
           <Radio value={"avlaga"}>{t("Авлага")}</Radio>
           <Radio value={"ashiglalt"}>{t("Ашиглалт")}</Radio>
@@ -322,7 +323,8 @@ function GuilgeeKhiikh(
           placeholder={t("Гүйлгээ хийх төрөл")}
           onChange={(v) => {
             setBusadTurul(v);
-          }}>
+          }}
+        >
           <Option value="barter">{t("Бартер")}</Option>
           <Option value="zalruulga">{t("Залруулга")}</Option>
           <Option value="aldangi">{t("Алданги")}</Option>
@@ -359,7 +361,8 @@ function GuilgeeKhiikh(
               }
             }}
             id="select2"
-            placeholder={t("Зардлын төрөл")}>
+            placeholder={t("Зардлын төрөл")}
+          >
             {zardal.jagsaalt?.map((mur) =>
               mur.turul !== "1м2" ? (
                 <Select.Option key={mur._id} value={mur._id}>
@@ -376,7 +379,8 @@ function GuilgeeKhiikh(
         {negjUne && turul === "ashiglalt" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
-            style={{ width: "49%" }}>
+            style={{ width: "49%" }}
+          >
             {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
           </div>
         )}

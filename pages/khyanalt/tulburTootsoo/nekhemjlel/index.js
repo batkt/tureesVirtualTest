@@ -809,9 +809,6 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.talbainNiitUneNuat = formatNumber(
           nekhemjlekh.talbainNiitUneNuat
         );
-        nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
-          nekhemjlekh.umnukhSariinUrTulbur
-        );
         nekhemjlekh.umnukhSariinUrTulburNuat = formatNumber(
           nekhemjlekh.umnukhSariinUrTulbur / 10
         );
@@ -819,7 +816,9 @@ function tulburTootsoo({ token }) {
           nekhemjlekh.umnukhSariinUrTulbur -
             nekhemjlekh.umnukhSariinUrTulburNuat
         );
-
+        nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
+          nekhemjlekh.umnukhSariinUrTulbur
+        );
         nekhemjlekh.khevlesenOgnoo = moment().format("YYYY-MM-DD");
 
         nekhemjlekh.niitAshiglaltiinZardal =
@@ -834,48 +833,48 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.duusakhUdur = moment().format("DD");
 
         nekhemjlekh?.zardluud?.map((a) => {
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
             a.khemjikhNegj || ""
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
             formatNumber(a.tulukhDun || 0)
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDunNuat&gt;`, "g"),
             formatNumber(a.tulukhDun / 10 || 0)
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
             formatNumber(a.tulukhDun * 1.1 || 0)
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tulukhDunNuatgui&gt;`, "g"),
             a?.tulukhDun
               ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
               : " "
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
             formatNumber(a.tariff || 0)
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
             formatNumber(a.negj || 0) || ""
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.suuliinZaalt&gt;`, "g"),
             formatNumber(a.suuliinZaalt || 0) || ""
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.umnukhZaalt&gt;`, "g"),
             formatNumber(a.umnukhZaalt || 0) || ""
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
             formatNumber(a.khungulult || 0) || ""
           );
@@ -884,48 +883,42 @@ function tulburTootsoo({ token }) {
         });
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
             ""
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
             0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.tulukhDunNuat&gt;`, "g"),
             0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.tulukhDunNuattai&gt;`, "g"),
             0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.tulukhDunNuatgui&gt;`, "g"),
             0
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
-            new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
-            0
-          );
+          text = text?.replace(new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"), 0);
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
-            new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
-            0
-          );
+          text = text?.replace(new RegExp(`&lt;${a.ner}.negj&gt;`, "g"), 0);
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
             0
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.umnukhZaalt&gt;`, "g"),
             0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;${a.ner}.khungulult&gt;`, "g"),
             0
           );
@@ -935,19 +928,19 @@ function tulburTootsoo({ token }) {
             (a, b) => a + b.tulukhDun,
             0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
             formatNumber(niitZardliinDun || 0)
           );
           let niitZardliinNoutiinDun = (niitZardliinDun / 1.1) * 0.1;
 
           let niitZardliinNoutguiDun = niitZardliinDun - niitZardliinNoutiinDun;
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;niitZardliinNuatguiDun&gt;`, "g"),
             formatNumber(niitZardliinNoutguiDun || 0)
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
             formatNumber(niitZardliinNoutiinDun || 0)
           );
@@ -956,15 +949,15 @@ function tulburTootsoo({ token }) {
           let garaasBodsonNiitDunNuatgui = formatNumber(
             garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
             formatNumber(garaasBodsonNiitDun || 0)
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
             garaasBodsonNiitDunNuatgui
           );
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
             numberToWords(
               Math.abs(garaasBodsonNiitDun),
@@ -974,7 +967,7 @@ function tulburTootsoo({ token }) {
             )
           );
 
-          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+          text = text?.replace(
             new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
             formatNumber(garaasBodsonNiitDunNuat || 0)
           );
