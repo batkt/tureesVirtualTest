@@ -137,16 +137,10 @@ const khatuuZagvar = `
           </td>
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;khungulsunTalbainNiitUneNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;khungulsunTalbainNiitUneNuatgui&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: right;"><khungulsunTalbainNiitUneNuat></td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;khungulsunTalbainNiitUne&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">4</td>
@@ -155,16 +149,10 @@ const khatuuZagvar = `
           </td>
           <td style="border: 1px solid #000; text-align: left;"></td>
           <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.khungulultKhassanTulukhDunNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.khungulultKhassanTulukhDunNuatgui&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDunNuat&gt;</td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDunNuatgui&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulult&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Management.khungulultKhassanTulukhDun&gt;
-          </td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDun&gt;</td>
         </tr>
         <tr>
           <td style="border: 1px solid #000; text-align: center;">5</td>
@@ -282,8 +270,18 @@ const khatuuZagvar = `
           <td></td>
           <td><p>Нэхэмжлэл бичсэн</p></td>
           <td><p>/Т. Булган/</p></td>
-          <td>&lt;gariinUseg&gt;</td>
-          <td>&lt;tamga&gt;</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr style="margin-top: 1rem;">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>&lt;khuviinTamga&gt;</td>
+          <td></td>
+          <td></td>
           <td></td>
           <td></td>
         </tr>

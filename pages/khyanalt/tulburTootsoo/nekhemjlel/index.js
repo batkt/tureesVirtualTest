@@ -147,12 +147,19 @@ function tulburTootsoo({ token }) {
             (a) => a._id === medeelel?.barilgiinId
           );
 
-          let khungulsunTailbainNiitUne =
+          let khungulsunTalbainNiitUne =
             medeelel.talbainNiitUne - (medeelel.khungulult || 0);
+
+          let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
+            ? khungulsunTalbainNiitUne / 10
+            : 0;
+          let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
+            ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
+            : 0;
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
-          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTailbainNiitUne;
+          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne;
           kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel;
           kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur;
 
@@ -239,20 +246,13 @@ function tulburTootsoo({ token }) {
             medeelel.talbainNiitUne = formatNumber(
               medeelel.talbainNiitUne - medeelel.khungulult
             );
-            let khungulsunTalbainNiitUneNuat = khungulsunTailbainNiitUne
-              ? khungulsunTailbainNiitUne / 10
-              : 0;
-            let khungulsunTalbainNiitUneNuatgui = khungulsunTailbainNiitUne
-              ? khungulsunTailbainNiitUne - khungulsunTalbainNiitUneNuat
-              : 0;
-
-            medeelel.khungulsunTailbainNiitUne = formatNumber(
-              khungulsunTailbainNiitUne || 0
+            medeelel.khungulsunTalbainNiitUne = formatNumber(
+              khungulsunTalbainNiitUne || 0
             );
-            medeelel.khungulsunTailbainNiitUneNuat = formatNumber(
+            medeelel.khungulsunTalbainNiitUneNuat = formatNumber(
               khungulsunTalbainNiitUneNuat || 0
             );
-            medeelel.khungulsunTailbainNiitUneNuatgui = formatNumber(
+            medeelel.khungulsunTalbainNiitUneNuatgui = formatNumber(
               khungulsunTalbainNiitUneNuatgui || 0
             );
             medeelel.khungulult = formatNumber(medeelel.khungulult);
@@ -273,6 +273,19 @@ function tulburTootsoo({ token }) {
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
                   src={`${url}/file?path=tamga/${barilga.tamga}`}
+                  style={{
+                    width: 115,
+                    height: 100,
+                    transform: "translate(-10%, -50%)",
+                    opacity: 0.65,
+                  }}
+                />
+              </span>
+            );
+            medeelel.khuviinTamga = renderToString(
+              <span style={{ position: "absolute", zIndex: 1 }}>
+                <img
+                  src={"/khuviinTamga.png"}
                   style={{
                     width: 115,
                     height: 100,
@@ -310,11 +323,17 @@ function tulburTootsoo({ token }) {
               moment().format("YY") + "/" + (dugaarlalt + i);
 
             for (const [key, value] of Object.entries(medeelel)) {
-              if (key !== "nemeltNekhemjlekh")
+              if (key !== "nemeltNekhemjlekh") {
+                if (key === "khungulsunTalbainNiitUne") {
+                  console.log("uug ni orj irj bna");
+                }
                 zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                   new RegExp(`&lt;${key}&gt;`, "g"),
                   value
                 );
+              } else {
+                console.log("else dotorkh keyuud: ", key);
+              }
             }
 
             medeelel?.zardluud?.map((a) => {
@@ -549,6 +568,7 @@ function tulburTootsoo({ token }) {
               ),
               nemeltNekhemjlekh
             );
+            console.log("medeelel: ", medeelel);
           }
           return {
             zagvar: zagvar?.nekhemjlekh,
@@ -725,7 +745,6 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.talbainNiitUneNuat = formatNumber(
         nekhemjlekh.talbainNiitUneNuat
       );
-      nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
       nekhemjlekh.umnukhSariinUrTulbur = formatNumber(
         nekhemjlekh.umnukhSariinUrTulbur
       );
@@ -830,8 +849,14 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
 
-        let khungulsunTailbainNiitUne =
+        let khungulsunTalbainNiitUne =
           nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0);
+        let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
+          ? khungulsunTalbainNiitUne / 10
+          : 0;
+        let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
+          ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
+          : 0;
 
         nekhemjlekh.mungunDunUsgeer = numberToWords(
           nekhemjlekh.sariinTurees,
@@ -840,7 +865,7 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
         var kaidudZoriulsanNiitTulburiinNiilber = 0;
-        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTailbainNiitUne;
+        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne;
         kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel;
         kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur;
         const dans = dansGaralt?.jagsaalt?.find(
@@ -897,20 +922,14 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.talbainNiitUneNuat = formatNumber(
           nekhemjlekh.talbainNiitUneNuat
         );
-        let khungulsunTalbainNiitUneNuat = khungulsunTailbainNiitUne
-          ? khungulsunTailbainNiitUne / 10
-          : 0;
-        let khungulsunTalbainNiitUneNuatgui = khungulsunTailbainNiitUne
-          ? khungulsunTailbainNiitUne - khungulsunTalbainNiitUneNuat
-          : 0;
 
-        nekhemjlekh.khungulsunTailbainNiitUne = formatNumber(
-          khungulsunTailbainNiitUne || 0
+        nekhemjlekh.khungulsunTalbainNiitUne = formatNumber(
+          khungulsunTalbainNiitUne || 0
         );
-        nekhemjlekh.khungulsunTailbainNiitUneNuat = formatNumber(
+        nekhemjlekh.khungulsunTalbainNiitUneNuat = formatNumber(
           khungulsunTalbainNiitUneNuat || 0
         );
-        nekhemjlekh.khungulsunTailbainNiitUneNuatgui = formatNumber(
+        nekhemjlekh.khungulsunTalbainNiitUneNuatgui = formatNumber(
           khungulsunTalbainNiitUneNuatgui || 0
         );
         nekhemjlekh.khungulult = formatNumber(nekhemjlekh.khungulult || 0);
@@ -972,21 +991,21 @@ function tulburTootsoo({ token }) {
             : 0;
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`, "g"),
-            formatNumber(khungulultKhassanTulukhDun || 0)
+            formatNumber(khungulultKhassanTulukhDun)
           );
           text = text?.replace(
             new RegExp(
               `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
               "g"
             ),
-            formatNumber(khungulultKhassanTulukhDunNuat || 0)
+            formatNumber(khungulultKhassanTulukhDunNuat)
           );
           text = text?.replace(
             new RegExp(
               `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
               "g"
             ),
-            formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
+            formatNumber(khungulultKhassanTulukhDunNuatgui)
           );
           text = text?.replace(
             new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
