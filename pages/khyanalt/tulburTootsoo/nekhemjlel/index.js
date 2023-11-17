@@ -1534,7 +1534,7 @@ function tulburTootsoo({ token }) {
                   className={
                     !nekhemjlekh.khatuuZagvarEsekh
                       ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
-                      : `h-[5.845in] text-xs`
+                      : `hidden h-[5.845in] text-xs print:block`
                   }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
