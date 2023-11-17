@@ -753,6 +753,10 @@ function tulburTootsoo({ token }) {
           "төгрөг",
           "мөнгө"
         );
+        var kaidudZoriulsanNiitTulburiinNiilber = 0;
+        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.talbainNiitUne;
+        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel;
+        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur;
         const dans = dansGaralt?.jagsaalt?.find(
           (a) => a.dugaar === songogdsonDans
         );
@@ -761,14 +765,16 @@ function tulburTootsoo({ token }) {
           dans?.bank === "tdb" ? "Худалдаа хөгжлийн банк" : "Хаан банк";
         nekhemjlekh.dansniiNer = dans?.dansniiNer;
         nekhemjlekh.khayag = nekhemjlekh.khayag || "";
-        nekhemjlekh.aldangiinUldegdel =
-          formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
-        nekhemjlekh.aldangiinUldegdelNuat =
-          formatNumber(nekhemjlekh.aldangiinUldegdel / 10) || "";
+        nekhemjlekh.aldangiinUldegdelNuat = formatNumber(
+          nekhemjlekh.aldangiinUldegdel / 10 || 0
+        );
         nekhemjlekh.aldangiinUldegdelNuatgui =
           formatNumber(
-            nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat
+            nekhemjlekh.aldangiinUldegdel - nekhemjlekh.aldangiinUldegdelNuat ||
+              0
           ) || "";
+        nekhemjlekh.aldangiinUldegdel =
+          formatNumber(nekhemjlekh.aldangiinUldegdel) || "";
 
         nekhemjlekh.albanTushaal = nekhemjlekh.albanTushaal || "";
         nekhemjlekh.zakhirliinOvog = nekhemjlekh.zakhirliinOvog || "";
@@ -794,12 +800,12 @@ function tulburTootsoo({ token }) {
         );
         nekhemjlekh.niitUldegdel = formatNumber(nekhemjlekh.niitUldegdel);
         nekhemjlekh.talbainNegjUne = formatNumber(nekhemjlekh.talbainNegjUne);
-        nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
         nekhemjlekh.talbainNiitUneNuat =
           (nekhemjlekh.talbainNiitUne / 1.1) * 0.1;
         nekhemjlekh.talbainNiitUneNuatgui = formatNumber(
           nekhemjlekh.talbainNiitUne - nekhemjlekh.talbainNiitUneNuat
         );
+        nekhemjlekh.talbainNiitUne = formatNumber(nekhemjlekh.talbainNiitUne);
         nekhemjlekh.talbainNiitUneNuat = formatNumber(
           nekhemjlekh.talbainNiitUneNuat
         );
@@ -826,6 +832,153 @@ function tulburTootsoo({ token }) {
         nekhemjlekh.duusakhOn = moment().format("YYYY");
         nekhemjlekh.duusakhSar = moment().format("MM");
         nekhemjlekh.duusakhUdur = moment().format("DD");
+
+        nekhemjlekh?.zardluud?.map((a) => {
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
+            a.khemjikhNegj || ""
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
+            formatNumber(a.tulukhDun || 0)
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.tulukhDunNuat&gt;`, "g"),
+            formatNumber(a.tulukhDun / 10 || 0)
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
+            formatNumber(a.tulukhDun * 1.1 || 0)
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.tulukhDunNuatgui&gt;`, "g"),
+            a?.tulukhDun
+              ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
+              : " "
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+            formatNumber(a.tariff || 0)
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+            formatNumber(a.negj || 0) || ""
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.suuliinZaalt&gt;`, "g"),
+            formatNumber(a.suuliinZaalt || 0) || ""
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.umnukhZaalt&gt;`, "g"),
+            formatNumber(a.umnukhZaalt || 0) || ""
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
+            formatNumber(a.khungulult || 0) || ""
+          );
+          kaidudZoriulsanNiitTulburiinNiilber =
+            kaidudZoriulsanNiitTulburiinNiilber + (a.tulukhDun || 0 * 1.1);
+        });
+
+        ashiglaltiinZardal?.jagsaalt?.map((a) => {
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
+            ""
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
+            0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.tulukhDunNuat&gt;`, "g"),
+            0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.tulukhDunNuattai&gt;`, "g"),
+            0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.tulukhDunNuatgui&gt;`, "g"),
+            0
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
+            0
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.negj&gt;`, "g"),
+            0
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
+            0
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.umnukhZaalt&gt;`, "g"),
+            0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;${a.ner}.khungulult&gt;`, "g"),
+            0
+          );
+        });
+        if (nekhemjlekh?.zardluud?.length > 0) {
+          const niitZardliinDun = nekhemjlekh?.zardluud.reduce(
+            (a, b) => a + b.tulukhDun,
+            0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
+            formatNumber(niitZardliinDun || 0)
+          );
+          let niitZardliinNoutiinDun = (niitZardliinDun / 1.1) * 0.1;
+
+          let niitZardliinNoutguiDun = niitZardliinDun - niitZardliinNoutiinDun;
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;niitZardliinNuatguiDun&gt;`, "g"),
+            formatNumber(niitZardliinNoutguiDun || 0)
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
+            formatNumber(niitZardliinNoutiinDun || 0)
+          );
+          let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+          let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
+          let garaasBodsonNiitDunNuatgui = formatNumber(
+            garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+            formatNumber(garaasBodsonNiitDun || 0)
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+            garaasBodsonNiitDunNuatgui
+          );
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
+            numberToWords(
+              Math.abs(garaasBodsonNiitDun),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            )
+          );
+
+          text.nekhemjlekh = text?.nekhemjlekh?.replace(
+            new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+            formatNumber(garaasBodsonNiitDunNuat || 0)
+          );
+        }
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
           text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
@@ -1444,20 +1597,22 @@ function tulburTootsoo({ token }) {
                         </div>
                       )}
                       <div className="font-medium">{a.ner}</div>
-                      <div style={{ marginLeft: "auto" }}>
-                        <Popconfirm
-                          title="Загвар устгах уу?"
-                          okText={t("Тийм")}
-                          cancelText={t("Үгүй")}
-                          onConfirm={() => zagvarUstgaya(a)}
-                        >
-                          <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
-                            <DeleteOutlined
-                              style={{ color: "red", display: "flex" }}
-                            />
-                          </div>
-                        </Popconfirm>
-                      </div>
+                      {!a.khatuuZagvarEsekh && (
+                        <div style={{ marginLeft: "auto" }}>
+                          <Popconfirm
+                            title="Загвар устгах уу?"
+                            okText={t("Тийм")}
+                            cancelText={t("Үгүй")}
+                            onConfirm={() => zagvarUstgaya(a)}
+                          >
+                            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
+                              <DeleteOutlined
+                                style={{ color: "red", display: "flex" }}
+                              />
+                            </div>
+                          </Popconfirm>
+                        </div>
+                      )}
                       {!a.khatuuZagvarEsekh && (
                         <div
                           className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100   fill-current  p-2 text-white dark:bg-gray-700"
