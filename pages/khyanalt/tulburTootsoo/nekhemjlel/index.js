@@ -155,7 +155,7 @@ function tulburTootsoo({ token }) {
             medeelel.talbainNiitUne - (medeelel.khungulult || 0);
 
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
-            ? khungulsunTalbainNiitUne / 10
+            ? khungulsunTalbainNiitUne / 1.1
             : 0;
           let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
@@ -376,7 +376,7 @@ function tulburTootsoo({ token }) {
                 ? a.tulukhDun || 0 - a.khungulult || 0
                 : 0;
               let khungulultKhassanTulukhDunNuat = a.tulukhDun
-                ? khungulultKhassanTulukhDun / 10
+                ? khungulultKhassanTulukhDun / 11
                 : 0;
               let khungulultKhassanTulukhDunNuatgui = a.tulukhDun
                 ? khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat
@@ -867,7 +867,7 @@ function tulburTootsoo({ token }) {
         let khungulsunTalbainNiitUne =
           nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0);
         let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
-          ? khungulsunTalbainNiitUne / 10
+          ? khungulsunTalbainNiitUne / 11
           : 0;
         let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
           ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
@@ -1017,7 +1017,7 @@ function tulburTootsoo({ token }) {
             ? a.tulukhDun || 0 - a.khungulult || 0
             : 0;
           let khungulultKhassanTulukhDunNuat = a.tulukhDun
-            ? khungulultKhassanTulukhDun / 10
+            ? khungulultKhassanTulukhDun / 11
             : 0;
           let khungulultKhassanTulukhDunNuatgui = a.tulukhDun
             ? khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat
