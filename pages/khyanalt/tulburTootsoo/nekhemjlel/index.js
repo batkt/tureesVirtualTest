@@ -1063,10 +1063,10 @@ function tulburTootsoo({ token }) {
           );
           if (a.tailbar !== "Management") {
             kaidudZoriulsanNiitTulburiinNiilber +=
-              ((a.tulukhDun || 0) - (a.khungulult || 0)) * 1.1;
+              ((a?.tulukhDun || 0) - (a?.khungulult || 0)) * 1.1;
           } else {
             kaidudZoriulsanNiitTulburiinNiilber += a.tulukhDun
-              ? (a.tulukhDun || 0) - (a.khungulult || 0)
+              ? (a?.tulukhDun || 0) - (a?.khungulult || 0)
               : 0;
           }
         });
@@ -1134,6 +1134,7 @@ function tulburTootsoo({ token }) {
             formatNumber(niitZardliinNoutiinDun || 0)
           );
           let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+          console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
           let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
           let garaasBodsonNiitDunNuatgui = formatNumber(
             garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
