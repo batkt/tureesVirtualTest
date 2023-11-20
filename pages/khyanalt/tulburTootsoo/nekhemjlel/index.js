@@ -163,9 +163,15 @@ function tulburTootsoo({ token }) {
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
-          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne;
-          kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel;
-          kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur;
+          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+            ? khungulsunTalbainNiitUne
+            : 0;
+          kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
+            ? medeelel?.aldangiinUldegdel
+            : 0;
+          kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur
+            ? medeelel.umnukhSariinUrTulbur
+            : 0;
 
           if (!!zagvar?.nekhemjlekh) {
             medeelel.eneSardTulukhUsgeer = numberToWords(
@@ -421,10 +427,10 @@ function tulburTootsoo({ token }) {
               );
               if (a.tailbar !== "Management") {
                 kaidudZoriulsanNiitTulburiinNiilber +=
-                  ((a.tulukhDun || 0) - (a.khungulult || 0)) * 1.1;
+                  ((a?.tulukhDun || 0) - (a?.khungulult || 0)) * 1.1;
               } else {
                 kaidudZoriulsanNiitTulburiinNiilber += a.tulukhDun
-                  ? (a.tulukhDun || 0) - (a.khungulult || 0)
+                  ? (a?.tulukhDun || 0) - (a?.khungulult || 0)
                   : 0;
               }
             });
