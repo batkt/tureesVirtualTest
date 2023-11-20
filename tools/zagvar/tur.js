@@ -137,7 +137,7 @@ const khatuuZagvar = `
           </td>
           <td style="border: 1px solid #000; text-align: center;"></td>
           <td style="border: 1px solid #000; text-align: center;"></td>
-          <td style="border: 1px solid #000; text-align: right;"><khungulsunTalbainNiitUneNuat></td>
+          <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuat&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUneNuatgui&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
