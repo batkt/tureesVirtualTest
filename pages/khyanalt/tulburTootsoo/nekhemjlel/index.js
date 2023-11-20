@@ -529,37 +529,37 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
                 formatNumber(niitZardliinNoutiinDun || 0)
               );
-              let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-              console.log("garaasBodsonNiitDun ", garaasBodsonNiitDun);
-              let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
-              let garaasBodsonNiitDunNuatgui = formatNumber(
-                garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
-                formatNumber(garaasBodsonNiitDun || 0)
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
-                garaasBodsonNiitDunNuatgui
-              );
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-                capitalize(
-                  numberToWords(
-                    Math.abs(garaasBodsonNiitDun),
-                    { fixed: 2, suffix: "n" },
-                    "төгрөг",
-                    "мөнгө"
-                  )
-                )
-              );
-
-              zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
-                new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
-                formatNumber(garaasBodsonNiitDunNuat || 0)
-              );
             }
+            let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+            console.log("garaasBodsonNiitDun ", garaasBodsonNiitDun);
+            let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
+            let garaasBodsonNiitDunNuatgui = formatNumber(
+              garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
+            );
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+              formatNumber(garaasBodsonNiitDun || 0)
+            );
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+              garaasBodsonNiitDunNuatgui
+            );
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
+              capitalize(
+                numberToWords(
+                  Math.abs(garaasBodsonNiitDun),
+                  { fixed: 2, suffix: "n" },
+                  "төгрөг",
+                  "мөнгө"
+                )
+              )
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+              formatNumber(garaasBodsonNiitDunNuat || 0)
+            );
             let nemeltNekhemjlekh = "";
             if (medeelel.hasOwnProperty("nemeltNekhemjlekh")) {
               medeelel.nemeltNekhemjlekh.forEach((a, index) => {
