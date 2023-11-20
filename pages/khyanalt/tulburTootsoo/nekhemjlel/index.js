@@ -322,12 +322,12 @@ function tulburTootsoo({ token }) {
               formatNumber(medeelel.niitAshiglaltiinZardal) || "";
 
             medeelel.sar = moment().format("MM");
-            medeelel.ekhlekhOn = moment().format("YYYY");
-            medeelel.ekhelkhSar = moment().format("MM");
-            medeelel.ekhlekhUdur = moment().format("DD");
-            medeelel.duusakhOn = moment().format("YYYY");
-            medeelel.duusakhSar = moment().format("MM");
-            medeelel.duusakhUdur = moment().format("DD");
+            medeelel.ekhlekhOn = moment(ognoo).format("YYYY");
+            medeelel.ekhelkhSar = moment(ognoo).format("MM");
+            medeelel.ekhlekhUdur = moment(ognoo).format("DD");
+            medeelel.duusakhOn = moment(ognoo).format("YYYY");
+            medeelel.duusakhSar = moment(ognoo).format("MM");
+            medeelel.duusakhUdur = moment(ognoo).set("date", 25).format("DD");
 
             medeelel.nekhemjlekhiinDugaar =
               moment().format("YY") + "/" + (dugaarlalt + i);
