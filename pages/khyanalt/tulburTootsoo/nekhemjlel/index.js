@@ -524,6 +524,7 @@ function tulburTootsoo({ token }) {
                 formatNumber(niitZardliinNoutiinDun || 0)
               );
               let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+              console.log("garaasBodsonNiitDun ", garaasBodsonNiitDun);
               let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
               let garaasBodsonNiitDunNuatgui = formatNumber(
                 garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
