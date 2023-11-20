@@ -873,9 +873,15 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
         var kaidudZoriulsanNiitTulburiinNiilber = 0;
-        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne;
-        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel;
-        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur;
+        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+          ? khungulsunTalbainNiitUne
+          : 0;
+        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel
+          ? nekhemjlekh?.aldangiinUldegdel
+          : 0;
+        kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur
+          ? nekhemjlekh.umnukhSariinUrTulbur
+          : 0;
         const dans = dansGaralt?.jagsaalt?.find(
           (a) => a.dugaar === songogdsonDans
         );
