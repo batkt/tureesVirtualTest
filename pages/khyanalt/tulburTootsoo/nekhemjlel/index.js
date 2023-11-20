@@ -1133,37 +1133,37 @@ function tulburTootsoo({ token }) {
             new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
             formatNumber(niitZardliinNoutiinDun || 0)
           );
-          let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
-          console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
-          let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
-          let garaasBodsonNiitDunNuatgui = formatNumber(
-            garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
-          );
-          text = text?.replace(
-            new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
-            formatNumber(garaasBodsonNiitDun || 0)
-          );
-          text = text?.replace(
-            new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
-            garaasBodsonNiitDunNuatgui
-          );
-          text = text?.replace(
-            new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
-            capitalize(
-              numberToWords(
-                Math.abs(garaasBodsonNiitDun),
-                { fixed: 2, suffix: "n" },
-                "төгрөг",
-                "мөнгө"
-              )
-            )
-          );
-
-          text = text?.replace(
-            new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
-            formatNumber(garaasBodsonNiitDunNuat || 0)
-          );
         }
+        let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+        console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
+        let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
+        let garaasBodsonNiitDunNuatgui = formatNumber(
+          garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+          formatNumber(garaasBodsonNiitDun || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+          garaasBodsonNiitDunNuatgui
+        );
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
+          capitalize(
+            numberToWords(
+              Math.abs(garaasBodsonNiitDun),
+              { fixed: 2, suffix: "n" },
+              "төгрөг",
+              "мөнгө"
+            )
+          )
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+          formatNumber(garaasBodsonNiitDunNuat || 0)
+        );
 
         for (const [key, value] of Object.entries(nekhemjlekh)) {
           if (value !== undefined && value !== null) {
