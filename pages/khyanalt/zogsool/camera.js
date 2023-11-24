@@ -1628,6 +1628,9 @@ function camera({ token }) {
                 title={t("Сүүлийн гүйлгээ")}
                 placement="left"
                 size="large"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
                 onClose={guilgeeDrawerKhaakh}
                 open={guilgeeDrawerOpen}
                 getContainer={false}
@@ -1644,7 +1647,10 @@ function camera({ token }) {
                         guilgeeKharakh === false ? "mr-0" : "mr-8"
                       }`}
                       type="tertiary"
-                      onClick={() => dansniiKhuulgaMutate()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        dansniiKhuulgaMutate();
+                      }}
                     >
                       Шалгах
                     </Button>
@@ -1943,13 +1949,16 @@ function camera({ token }) {
                 <div className="flex w-full items-center justify-center">
                   <Button
                     className="mr-3 w-auto text-ellipsis"
-                    onClick={() =>
+                    onClick={() => {
                       setModalOpen({
                         bool: true,
                         item: null,
                         type: "dugaarBurtgekh",
-                      })
-                    }
+                      });
+                      setTimeout(() => {
+                        mashiniiDugaarRef.current.focus();
+                      }, 200);
+                    }}
                     type="primary"
                   >
                     {t("Машин")} [ + ]
@@ -2246,7 +2255,8 @@ function camera({ token }) {
                         },
                         {
                           required:
-                            form.getFieldValue("mashiniiDugaar")?.length > 0 && songogdsonBurtgel !== "Гарах" &&
+                            form.getFieldValue("mashiniiDugaar")?.length > 0 &&
+                            songogdsonBurtgel !== "Гарах" &&
                             true,
                           min: 7,
                           max: 7,
