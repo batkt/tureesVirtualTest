@@ -2134,10 +2134,7 @@ function camera({ token }) {
                   <Radio.Group onChange={onChange} value={value}>
                     {modalOpen.type !== "zurchil" ? (
                       <Space align='start'>
-                        <Space.Compact
-                          className='!items-start'
-                          align='start'
-                          direction='vertical'>
+                        <Space.Compact direction='vertical'>
                           <Radio value='Цагдаа'>{t("Цагдаа")}</Radio>
                           <Radio value='Гал'>{t("Гал")}</Radio>
                           <Radio value='Эмнэлэг'>{t("Эмнэлэг")}</Radio>
@@ -2158,10 +2155,7 @@ function camera({ token }) {
                             </>
                           )}
                         </Space.Compact>
-                        <Space.Compact
-                          className='!items-start'
-                          align='start'
-                          direction='vertical'>
+                        <Space.Compact direction='vertical'>
                           <Radio value='Бүртгэл хийгдээгүй айл'>
                             Бүртгэл хийгдээгүй айл
                           </Radio>
