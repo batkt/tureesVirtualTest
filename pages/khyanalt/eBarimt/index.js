@@ -39,6 +39,8 @@ function EbarimtMedeelel({ token }) {
   const [waiting, setWaiting] = useState(false);
   const [uilchilgeeAvi, setUilchilgeeAvi] = useState();
 
+  console.log(uilchilgeeAvi, "uilchilgeeAviuilchilgeeAvi");
+
   const query = useMemo(() => {
     const yavuulahQuery = {
       $or: [{ ustgasanOgnoo: null }, { ustgasanOgnoo: { $exists: false } }],
@@ -72,11 +74,11 @@ function EbarimtMedeelel({ token }) {
 
     if (uilchilgeeAvi) {
       if (uilchilgeeAvi === "Зогсоол") {
-        query.barimtTurul = 'mashiniiDugaar';
+        query.barimtTurul = "mashiniiDugaar";
       } else if (uilchilgeeAvi === "Түрээс") {
-        query.barimtTurul = 'gereeniiDugaar';
+        query.barimtTurul = "gereeniiDugaar";
       } else if (uilchilgeeAvi === "Тоглоом") {
-        query.barimtTurul = 'togloomiinId';
+        query.barimtTurul = "togloomiinId";
       }
     }
     return query;
@@ -87,8 +89,6 @@ function EbarimtMedeelel({ token }) {
   const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidating } =
     useEBarimt(barilgiinId && token, ajiltan?.baiguullagiinId, query, order);
 
-  console.log(eBarimtGaralt, "eBarimtGaralt");
-
   const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(
     barilgiinId && token,
     barilgiinId
@@ -98,7 +98,6 @@ function EbarimtMedeelel({ token }) {
     queryToololt
   );
 
-  console.log(ebarimtiinToololt, "ebarimtiinToololt");
   const khyanaltiinDun = [
     {
       too:
@@ -161,6 +160,122 @@ function EbarimtMedeelel({ token }) {
         setLoading(false);
       });
   }
+
+  const columns = useMemo(() => {
+    var shineColumn =
+      uilchilgeeAvi === "Зогсоол"
+        ? [
+            {
+              title: t("Машины дугаар"),
+              dataIndex: "mashiniiDugaar",
+              ellipsis: true,
+              align: "center",
+              render: (data) => {
+                return data;
+              },
+              showSorterTooltip: false,
+              sorter: () => 0,
+            },
+          ]
+        : [];
+    return [
+      {
+        title: t("Огноо"),
+        dataIndex: "createdAt",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return moment(data).format("YYYY-MM-DD HH:mm:ss");
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Гэрээний дугаар"),
+        dataIndex: "gereeniiDugaar",
+        ellipsis: true,
+        align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: t("Регистр"),
+        dataIndex: "customerNo",
+        ellipsis: true,
+        align: "center",
+      },
+      {
+        title: t("Талбайн дугаар"),
+        dataIndex: "talbainDugaar",
+        ellipsis: true,
+        align: "center",
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      ...shineColumn,
+      {
+        title: t("ДДТД"),
+        dataIndex: "billId",
+        width: "300px",
+        align: "center",
+      },
+      {
+        title: t("Дүн"),
+        dataIndex: "cashAmount",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return formatNumber(data);
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        title: "Үйлчилгээ",
+        dataIndex: "",
+        ellipsis: true,
+        align: "center",
+        render: (data) => {
+          return (
+            <div>
+              {data.mashiniiDugaar
+                ? "Зогсоол"
+                : data.gereeniiDugaar
+                ? "Түрээс"
+                : "Тоглоом"}
+            </div>
+          );
+        },
+        showSorterTooltip: false,
+        sorter: () => 0,
+      },
+      {
+        width: "60px",
+        align: "center",
+        render(data) {
+          return (
+            <Popconfirm
+              title='ebarimt устгах уу?'
+              okText={t("Тийм")}
+              cancelText={t("Үгүй")}
+              onConfirm={() => ebarimtUstgaya(data)}>
+              <Button
+                danger
+                size='small'
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                shape='circle'
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
+          );
+        },
+      },
+    ];
+  }, [uilchilgeeAvi]);
 
   function ebarimtUstgaya(mur) {
     setWaiting(true);
@@ -306,102 +421,7 @@ function EbarimtMedeelel({ token }) {
             scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
             className='t-head'
-            columns={[
-              {
-                title: t("Огноо"),
-                dataIndex: "createdAt",
-                ellipsis: true,
-                align: "center",
-                render: (data) => {
-                  return moment(data).format("YYYY-MM-DD HH:mm:ss");
-                },
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
-              {
-                title: t("Гэрээний дугаар"),
-                dataIndex: "gereeniiDugaar",
-                ellipsis: true,
-                align: "center",
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
-              {
-                title: t("Регистр"),
-                dataIndex: "customerNo",
-                ellipsis: true,
-                align: "center",
-              },
-              {
-                title: t("Талбайн дугаар"),
-                dataIndex: "talbainDugaar",
-                ellipsis: true,
-                align: "center",
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
-              {
-                title: t("ДДТД"),
-                dataIndex: "billId",
-                width: "300px",
-                align: "center",
-              },
-              {
-                title: t("Дүн"),
-                dataIndex: "cashAmount",
-                ellipsis: true,
-                align: "center",
-                render: (data) => {
-                  return formatNumber(data);
-                },
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
-              {
-                title: "Үйлчилгээ",
-                dataIndex: "",
-                ellipsis: true,
-                align: "center",
-                render: (data) => {
-                  return (
-                    <div>
-                      {data.mashiniiDugaar
-                        ? "Зогсоол"
-                        : data.gereeniiDugaar
-                        ? "Түрээс"
-                        : "Тоглоом"}
-                    </div>
-                  );
-                },
-                showSorterTooltip: false,
-                sorter: () => 0,
-              },
-              {
-                width: "60px",
-                align: "center",
-                render(data) {
-                  return (
-                    <Popconfirm
-                      title='ebarimt устгах уу?'
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      onConfirm={() => ebarimtUstgaya(data)}>
-                      <Button
-                        danger
-                        size='small'
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                        shape='circle'
-                        icon={<DeleteOutlined />}
-                      />
-                    </Popconfirm>
-                  );
-                },
-              },
-            ]}
+            columns={columns}
           />
         </div>
       </Card>
