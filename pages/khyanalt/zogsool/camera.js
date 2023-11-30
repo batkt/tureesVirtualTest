@@ -2278,10 +2278,7 @@ function camera({ token }) {
                             true,
                           min: 7,
                           max: 7,
-                          pattern:
-                            songogdsonBurtgel == "Гарах"
-                              ? new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3|2}")
-                              : new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
+                          pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3|2}"),
                           message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
                         },
                       ]}
