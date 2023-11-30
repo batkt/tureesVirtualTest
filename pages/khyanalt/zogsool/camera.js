@@ -2276,9 +2276,12 @@ function camera({ token }) {
                             form.getFieldValue("mashiniiDugaar")?.length > 0 &&
                             songogdsonBurtgel !== "Гарах" &&
                             true,
-                          min: 7,
+                          min: songogdsonBurtgel == "Гарах" ? 6 : 7,
                           max: 7,
-                          pattern: new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3|2}"),
+                          pattern:
+                            songogdsonBurtgel == "Гарах"
+                              ? new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3|2}")
+                              : new RegExp("[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}"),
                           message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
                         },
                       ]}
