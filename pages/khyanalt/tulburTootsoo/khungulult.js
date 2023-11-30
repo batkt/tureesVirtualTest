@@ -155,7 +155,7 @@ function tulburTootsoo() {
   }, [songogdsonGereenuud]);
 
   function disabledDate(current) {
-    return current && current < moment().endOf("day");
+    return current && current < moment().startOf("day");
   }
   function handleChange(value) {
     if (value.length > 0) {
