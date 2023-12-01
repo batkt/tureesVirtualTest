@@ -38,7 +38,9 @@ function ShineTulbur(
     setModalNeelttei,
     camerVal,
     niitDun,
+    eBarimtAshiglakhEsekh,
     suuliikhEsekh,
+    eBarimtAutomataarShivikh,
   },
   ref
 ) {
@@ -55,7 +57,6 @@ function ShineTulbur(
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
   const [register, setRegister] = React.useState("");
   const [baiguullagiinMedeelel, setBaiguullaga] = React.useState();
-  const [barimtKhevlekhEsekh, setBarimtKhevlekhEsekh] = React.useState(true);
   const [khunglult, setKhunglult] = React.useState({
     khungulukhDun: undefined,
     tailbar: undefined,
@@ -136,10 +137,15 @@ function ShineTulbur(
     if (tulbur.length === 0) {
       turulruuTooKhiikhFunction("belen");
     }
-    batalgaajuulaltKhiiya();
-    ebarimtAvya(uilchluugchiinId);
+    alkham === 1 ? batalgaajuulaltKhiiya() : ebarimtAvya(uilchluugchiinId);
+    if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
+      eBarimtAutomataarShivikh ? ebarimtAvya(uilchluugchiinId) : setAlkham(2);
+    }
   }
-
+  function ebarimtguiTulburDuusgakh() {
+    ref.current.khaaya();
+    message.success("Төлбөр амжилттай хадгалагдлаа");
+  }
   //Keyboard tovchlol tugsgul
 
   function ebarimtAvya(id) {
@@ -193,7 +199,7 @@ function ShineTulbur(
     if (turul === "khaan") {
       tulbur.find((a) => a.turul === "khaan").khariu = val;
       guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
+        eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
         onRefresh();
       });
       setTulbur(tulbur);
@@ -201,7 +207,7 @@ function ShineTulbur(
       (niitDun ? niitDun : data?.tulukhDun) ===
       tulbur.reduce((a, b) => a + b.dun, 0)
     )
-      setAlkham(2);
+      eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
     else {
       setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
       setLoading(false);
@@ -217,10 +223,10 @@ function ShineTulbur(
       tulbur.reduce((a, b) => a + b.dun, 0)
     ) {
       guilgeeniiTuukhKhadgalya(tulbur, () => {
-        setAlkham(2);
+        eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
         onRefresh();
       });
-      setAlkham(2);
+      eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
     } else {
       setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
       setLoading(false);
@@ -268,7 +274,7 @@ function ShineTulbur(
       })
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          setAlkham(2);
+          eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
           onRefresh();
           suuliikhEsekh === true &&
             axios
@@ -681,13 +687,17 @@ function ShineTulbur(
             }
             onClick={() => setAlkham(1)}
           />
-          <Steps.Step
-            key="Төлбөрын баримт"
-            subTitle={
-              <span className="dark:text-gray-200">{t("Төлбөрын баримт")}</span>
-            }
-            onClick={() => setAlkham(2)}
-          />
+          {eBarimtAshiglakhEsekh && (
+            <Steps.Step
+              key="Төлбөрын баримт"
+              subTitle={
+                <span className="dark:text-gray-200">
+                  {t("Төлбөрын баримт")}
+                </span>
+              }
+              onClick={() => setAlkham(2)}
+            />
+          )}
         </Steps>
       </div>
       <div
@@ -1075,7 +1085,7 @@ function ShineTulbur(
         setIrgenEsekh={setIrgenEsekh}
         setRegister={setRegister}
       />
-      {alkham === 2 && barimtKhevlekhEsekh === true && (
+      {alkham === 2 && eBarimtAshiglakhEsekh === true && (
         <div className="mt-5 flex flex-row justify-between">
           <Button type="primary" danger onClick={() => ref.current.khaaya()}>
             {t("Хаах")}

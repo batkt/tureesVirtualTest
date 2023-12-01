@@ -671,6 +671,10 @@ function camera({ token }) {
           camerVal={camerVal[1]}
           ref={tulburRef}
           data={_.cloneDeep(data)}
+          eBarimtAshiglakhEsekh={baiguullaga?.tokhirgoo?.eBarimtAshiglakhEsekh}
+          eBarimtAutomataarShivikh={
+            baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
+          }
           token={token}
           baiguullaga={baiguullaga}
           barilgiinId={barilgiinId}
