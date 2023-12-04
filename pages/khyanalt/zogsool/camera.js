@@ -1635,6 +1635,7 @@ function camera({ token }) {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
+                zIndex={60}
                 onClose={guilgeeDrawerKhaakh}
                 open={guilgeeDrawerOpen}
                 getContainer={false}
