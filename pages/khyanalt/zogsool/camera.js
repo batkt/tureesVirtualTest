@@ -2158,12 +2158,7 @@ function camera({ token }) {
                 </Drawer>
               </div>
             </div>
-            <div
-              data-aos="fade-left"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-              data-aos-anchor-placement="top-bottom"
-            >
+            <div>
               <ZogsoolCameraTable
                 isValidating={isValidating}
                 uilchluulegchGaralt={uilchluulegchGaralt}
