@@ -977,7 +977,7 @@ function camera({ token }) {
             return (
               <div className="flex items-center justify-center">
                 {a?.khungulultTurul && (
-                  <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                  <div className="flex w-[7rem  ] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
                     {a?.khungulult}
                     {"%"}
                   </div>
