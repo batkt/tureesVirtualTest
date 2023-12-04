@@ -484,9 +484,17 @@ function camera({ token }) {
             "garakhHkaalga",
             uilchluulegch?.tuukh?.[0]?.garsanKhaalga
           );
-          khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
           toololtMutate();
           zogsoolTusBuriinTooMutate();
+          let khaalgaNeekhEsekh = true;
+          parkingJagsaalt.forEach((a) => {
+            if (a.uneguiMashinNeekhgui) {
+              khaalgaNeekhEsekh = false;
+            }
+          });
+          if (khaalgaNeekhEsekh) {
+            khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
+          }
         }
       }
       // console.log(uilchluulegch);
