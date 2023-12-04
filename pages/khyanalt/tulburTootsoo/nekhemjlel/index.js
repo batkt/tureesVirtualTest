@@ -1057,12 +1057,7 @@ function tulburTootsoo({ token }) {
             new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
             formatNumber(a.khungulult || 0) || ""
           );
-          if (a.tailbar !== "Management") {
-            kaidudZoriulsanNiitTulburiinNiilber +=
-              ((a?.tulukhDun || 0) - (a?.khungulult || 0)) * 1.1;
-          } else {
-            kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
-          }
+          kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
         });
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {

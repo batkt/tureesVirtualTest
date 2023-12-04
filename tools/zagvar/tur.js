@@ -144,18 +144,18 @@ const khatuuZagvar = (medeelel) => {
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
-        ${medeelel.zardluud.map((mur) => {
+        ${medeelel.zardluud.map((mur, index) => {
           return `
-            <tr>
+            <tr key={${index}}>
               <td style="border: 1px solid #000; text-align: center;">4</td>
               <td style="border: 1px solid #000; text-align: left;">
                 ${mur.tailbar}
               </td>
               <td style="border: 1px solid #000; text-align: left;">${
-                mur.umnukhZaalt || "-"
+                mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
               }</td>
               <td style="border: 1px solid #000; text-align: left;">${
-                mur.suuliinZaalt || "-"
+                mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
               }</td>
               <td style="border: 1px solid #000; text-align: right;">&lt;${
                 mur.tailbar
