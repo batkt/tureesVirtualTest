@@ -143,9 +143,9 @@ function tulburTootsoo({ token }) {
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
-          // if (zagvar?.khatuuZagvarEsekh) {
-          zagvar.nekhemjlekh = khatuuZagvar(medeelel);
-          // }
+          if (zagvar?.khatuuZagvarEsekh) {
+            zagvar.nekhemjlekh = khatuuZagvar(medeelel);
+          }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
@@ -154,7 +154,7 @@ function tulburTootsoo({ token }) {
             medeelel.talbainNiitUne - (medeelel.khungulult || 0);
 
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
-            ? khungulsunTalbainNiitUne / 1.1
+            ? (khungulsunTalbainNiitUne / 1.1) * 0.1
             : 0;
           let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
@@ -165,6 +165,7 @@ function tulburTootsoo({ token }) {
           kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne
             : 0;
+
           kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
             ? medeelel?.aldangiinUldegdel
             : 0;
@@ -426,8 +427,7 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0) || ""
               );
-                kaidudZoriulsanNiitTulburiinNiilber +=
-                  khungulultKhassanTulukhDun;
+              kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -1585,10 +1585,9 @@ function tulburTootsoo({ token }) {
                 <div
                   key={`khevlekhNekhemjlel${i}`}
                   className={
-                    // !nekhemjlekh.khatuuZagvarEsekh
-                    // ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
-                    // :
-                    `block h-[5.845in] text-xs`
+                    !nekhemjlekh.khatuuZagvarEsekh
+                      ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
+                      : `block h-[5.845in] text-xs`
                   }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
