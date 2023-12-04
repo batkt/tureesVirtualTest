@@ -147,7 +147,9 @@ const khatuuZagvar = (medeelel) => {
         ${medeelel.zardluud.map((mur, index) => {
           return `
             <tr key={${index}}>
-              <td style="border: 1px solid #000; text-align: center;">4</td>
+              <td style="border: 1px solid #000; text-align: center;">${
+                index + 4
+              }</td>
               <td style="border: 1px solid #000; text-align: left;">
                 ${mur.tailbar}
               </td>
@@ -182,7 +184,7 @@ const khatuuZagvar = (medeelel) => {
           <td></td>
           <td></td>
           <td></td>
-          <td styles="text-align: right;">&lt;garaasBodsonNiitDun&gt;</td>
+          <td style="text-align: right;">&lt;garaasBodsonNiitDun&gt;</td>
         </tr>
         <tr style="margin-top: 1rem;">
           <td></td>

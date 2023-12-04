@@ -150,8 +150,9 @@ function tulburTootsoo({ token }) {
             (a) => a._id === medeelel?.barilgiinId
           );
 
-          let khungulsunTalbainNiitUne =
-            medeelel.talbainNiitUne - (medeelel.khungulult || 0);
+          let khungulsunTalbainNiitUne = Math.abs(
+            medeelel.talbainNiitUne - (medeelel.khungulult || 0)
+          );
 
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
             ? (khungulsunTalbainNiitUne / 1.1) * 0.1
@@ -858,8 +859,9 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
 
-        let khungulsunTalbainNiitUne =
-          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0);
+        let khungulsunTalbainNiitUne = Math.abs(
+          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0)
+        );
         let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
           ? khungulsunTalbainNiitUne / 11
           : 0;
