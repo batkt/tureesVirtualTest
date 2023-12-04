@@ -1,4 +1,6 @@
-const khatuuZagvar = `
+const khatuuZagvar = (medeelel) => {
+  console.log("medeelel khatuuZagvarDotorh:", medeelel);
+  return `
   <div style="height: 100%; width: 100%;">
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
       <div style="display: block; width: 50%;">
@@ -142,100 +144,34 @@ const khatuuZagvar = `
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">4</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Менежментийн төлбөр
-          </td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: left;"></td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDunNuat&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDunNuatgui&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulult&gt;</td>
-          <td style="border: 1px solid #000; text-align: right;">&lt;Management.khungulultKhassanTulukhDun&gt;</td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">5</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Цахилгааны төлбөр
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Цахилгаан.umnukhZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Цахилгаан.suuliinZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Цахилгаан.tulukhDunNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Цахилгаан.tulukhDun&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Цахилгаан.tulukhDunNuattai&gt;
-          </td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">6</td>
-          <td style="border: 1px solid #000; text-align: left;">Дулаан</td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Дулаан.tulukhDunNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Дулаан.tulukhDun&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Дулаан.tulukhDunNuattai&gt;
-          </td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">7</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Усны төлбөр - Халуун
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Халуун ус.umnukhZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Халуун ус.suuliinZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Халуун ус.tulukhDunNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Халуун ус.tulukhDun&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Халуун ус.tulukhDunNuattai&gt;
-          </td>
-        </tr>
-        <tr>
-          <td style="border: 1px solid #000; text-align: center;">8</td>
-          <td style="border: 1px solid #000; text-align: left;">
-            Усны төлбөр - Хүйтэн
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Хүйтэн ус.umnukhZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: center;">
-            &lt;Хүйтэн ус.suuliinZaalt&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Хүйтэн ус.tulukhDunNuat&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Хүйтэн ус.tulukhDun&gt;
-          </td>
-          <td style="border: 1px solid #000; text-align: right;"></td>
-          <td style="border: 1px solid #000; text-align: right;">
-            &lt;Хүйтэн ус.tulukhDunNuattai&gt;
-          </td>
-        </tr>
+        ${medeelel.zardluud.map((mur) => {
+          return `
+            <tr>
+              <td style="border: 1px solid #000; text-align: center;">4</td>
+              <td style="border: 1px solid #000; text-align: left;">
+                ${mur.tailbar}
+              </td>
+              <td style="border: 1px solid #000; text-align: left;">${
+                mur.umnukhZaalt || "-"
+              }</td>
+              <td style="border: 1px solid #000; text-align: left;">${
+                mur.suuliinZaalt || "-"
+              }</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDunNuat&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDunNuatgui&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulult&gt;</td>
+              <td style="border: 1px solid #000; text-align: right;">&lt;${
+                mur.tailbar
+              }.khungulultKhassanTulukhDun&gt;</td>
+          </tr>
+            `;
+        })}
       </tbody>
       <tfoot>
         <tr style="background-color: #d1d5db; font-weight: 600;">
@@ -288,4 +224,5 @@ const khatuuZagvar = `
       </tfoot>
     </table>
   </div>`;
+};
 export default khatuuZagvar;
