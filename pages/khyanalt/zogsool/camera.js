@@ -957,7 +957,7 @@ function camera({ token }) {
               <div className="flex items-center justify-center">
                 {a && (
                   <div
-                    className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
+                    className={`flex w-[8rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
                       a?.uldegdelKhungulukhKhugatsaa > 0
                         ? "bg-green-400 dark:bg-green-700"
                         : "bg-yellow-400 dark:bg-yellow-700"
@@ -977,7 +977,7 @@ function camera({ token }) {
             return (
               <div className="flex items-center justify-center">
                 {a?.khungulultTurul && (
-                  <div className="flex w-[7rem  ] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                  <div className="flex w-[8rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
                     {a?.khungulult}
                     {"%"}
                   </div>
