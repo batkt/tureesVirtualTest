@@ -144,8 +144,14 @@ const khatuuZagvar = (medeelel) => {
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulult&gt;</td>
           <td style="border: 1px solid #000; text-align: right;">&lt;khungulsunTalbainNiitUne&gt;</td>
         </tr>
-        ${medeelel.zardluud.map((mur, index) => {
-          return `
+        ${medeelel.zardluud
+          .sort((a, b) => {
+            return a.tailbar.localeCompare(b.tailbar, "en", {
+              sensitivity: "base",
+            });
+          })
+          .map((mur, index) => {
+            return `
             <tr key={${index}}>
               <td style="border: 1px solid #000; text-align: center;">${
                 index + 4
@@ -173,7 +179,7 @@ const khatuuZagvar = (medeelel) => {
               }.khungulultKhassanTulukhDun&gt;</td>
           </tr>
             `;
-        })}
+          })}
       </tbody>
       <tfoot>
         <tr style="background-color: #d1d5db; font-weight: 600;">
