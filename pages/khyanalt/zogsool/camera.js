@@ -19,6 +19,7 @@ import {
   Drawer,
   Select,
   notification,
+  InputNumber,
 } from "antd";
 import {
   StarOutlined,
@@ -545,6 +546,7 @@ function camera({ token }) {
   useKeyboardTovchlol("F4", f5Darsan);
   useKeyboardTovchlol("F1", f3Darsan);
   useKeyboardTovchlol("F2", f4Darsan);
+  useKeyboardTovchlol("F8", f8Darsan);
   useKeyboardTovchlol("+", nemekhDarsan);
   useKeyboardTovchlol("-", khasakhDarsan);
 
@@ -586,6 +588,16 @@ function camera({ token }) {
       type: "dugaarBurtgekh",
     });
     !!camerVal[0] && form.setFieldValue("CAMERA_IP", camerVal[0]);
+    setTimeout(() => {
+      mashiniiDugaarRef.current.focus();
+    }, 200);
+  }
+  function f8Darsan() {
+    setModalOpen({
+      bool: true,
+      item: null,
+      type: "orlogo",
+    });
     setTimeout(() => {
       mashiniiDugaarRef.current.focus();
     }, 200);
@@ -1460,7 +1472,10 @@ function camera({ token }) {
                 "minutes"
               );
             }
-          } else if (modalOpen.type === "dugaarBurtgekh") {
+          } else if (
+            modalOpen.type === "dugaarBurtgekh" ||
+            modalOpen.type === "orlogo"
+          ) {
             form.submit();
           } else {
             body.tuukh[0].uneguiGarsan = value;
@@ -1593,6 +1608,33 @@ function camera({ token }) {
       hours: tsag.toString(),
       minutes: minut.toString(),
     };
+  };
+  const orlogoGaraasOruulya = () => {
+    const body = form.getFieldsValue();
+    let yavuulakhData = {};
+    yavuulakhData.mashiniiDugaar = body.mashiniiDugaar;
+    yavuulakhData.tulukhDun = body.tulukhDun;
+    yavuulakhData.barilgiinId = barilgiinId;
+    yavuulakhData.orsonCamera = camerVal[0];
+    yavuulakhData.garsanCamera = camerVal[1];
+    uilchilgee(token)
+      .post("/zogsoolOrlogoGaraas", yavuulakhData)
+      .then((res) => {
+        if (res.status === 200) {
+          notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+          setModalOpen({ bool: false, item: null, type: "" });
+          form.resetFields();
+          onRefresh();
+          tulburTulyu(
+            res.data.tuukh[0],
+            res.data._id,
+            res.data.mashiniiDugaar,
+            res.data.niitDun,
+            0
+          );
+        }
+      })
+      .catch(aldaaBarigch);
   };
 
   const modalKhaakh = () => {
@@ -1966,6 +2008,19 @@ function camera({ token }) {
                       setModalOpen({
                         bool: true,
                         item: null,
+                        type: "orlogo",
+                      });
+                    }}
+                    type="primary"
+                  >
+                    {t("Орлого")} [ F8 ]
+                  </Button>
+                  <Button
+                    className="mr-3 w-auto text-ellipsis"
+                    onClick={() => {
+                      setModalOpen({
+                        bool: true,
+                        item: null,
                         type: "dugaarBurtgekh",
                       });
                       setTimeout(() => {
@@ -2179,7 +2234,9 @@ function camera({ token }) {
             title={
               modalOpen.type !== "zurchil"
                 ? modalOpen.type !== "dugaarBurtgekh"
-                  ? t("Үнэгүй үйлчлүүлэгчийн төрөл сонгох")
+                  ? modalOpen.type !== "orlogo"
+                    ? t("Үнэгүй үйлчлүүлэгчийн төрөл сонгох")
+                    : t("Орлого")
                   : t("Машин бүртгэх")
                 : t("Зөрчил оруулах")
             }
@@ -2195,7 +2252,8 @@ function camera({ token }) {
             ]}
           >
             <Space direction="vertical" className="w-full">
-              {modalOpen.type !== "dugaarBurtgekh" ? (
+              {modalOpen.type !== "dugaarBurtgekh" &&
+              modalOpen.type !== "orlogo" ? (
                 <>
                   <Radio.Group onChange={onChange} value={value}>
                     {modalOpen.type !== "zurchil" ? (
@@ -2255,6 +2313,87 @@ function camera({ token }) {
                     />
                   </div>
                 </>
+              ) : modalOpen.type === "orlogo" ? (
+                <Form
+                  form={form}
+                  className="flex w-full gap-4"
+                  onFinish={orlogoGaraasOruulya}
+                >
+                  <Form.Item
+                    label={t("Дугаар1")}
+                    name="mashiniiDugaar"
+                    className="w-1/2"
+                    normalize={(input) => {
+                      const too = input.replace(/[^0-9]/g, "").slice(0, 4);
+                      const useg = Array.from(input)
+                        .filter((a) => /[А-Яа-яөӨүҮ]/.test(a))
+                        .slice(0, 3)
+                        .join("");
+                      return `${too}${useg}`.toUpperCase();
+                    }}
+                    rules={[
+                      {
+                        required: true,
+                        message: t("Машины дугаар бүртгэнэ үү!"),
+                      },
+                      {
+                        required:
+                          form.getFieldValue("mashiniiDugaar")?.length > 0 &&
+                          true,
+                        min: 7,
+                        max: 7,
+                        pattern: new RegExp(
+                          "[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{3}|[0-9]{4}[А-Я|а-я|ө|Ө|ү|Ү]{2}"
+                        ),
+                        message: t("Машины дугаар 4 тоо 3 үсэг байх ёстой"),
+                      },
+                    ]}
+                  >
+                    <Input
+                      onDoubleClick={() =>
+                        navigator.clipboard
+                          .readText()
+                          .then(
+                            (v) =>
+                              !!v && form.setFieldValue("mashiniiDugaar", v)
+                          )
+                      }
+                      maxLength={7}
+                      ref={mashiniiDugaarRef}
+                      placeholder="1234УБА"
+                      className="ml-[10px]"
+                    />
+                  </Form.Item>
+                  {/*{console.log(cameraData)}*/}
+                  <Form.Item
+                    name="tulukhDun"
+                    label={t("Дүн")}
+                    className="w-1/2"
+                    rules={[
+                      {
+                        required: true,
+                        message: t("Үнийн дүн оруулна уу."),
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      className="w-fit"
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      placeholder={t("Төлөх дүн...")}
+                      parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                      min={0}
+                      step={500}
+                    />
+                  </Form.Item>
+                  <a
+                    onClick={() => form.resetFields()}
+                    className="ml-2 flex h-8 items-center rounded border border-red-400 px-2 hover:bg-red-200 dark:text-white"
+                  >
+                    {t("Цэвэрлэх")}
+                  </a>
+                </Form>
               ) : (
                 <>
                   <Form
