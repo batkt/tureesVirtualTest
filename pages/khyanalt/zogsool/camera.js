@@ -506,11 +506,9 @@ function camera({ token }) {
           toololtMutate();
           zogsoolTusBuriinTooMutate();
           let khaalgaNeekhEsekh = true;
-          parkingJagsaalt.forEach((a) => {
-            if (a.uneguiMashinNeekhgui) {
-              khaalgaNeekhEsekh = false;
-            }
-          });
+          if (songogdzonZogsool.uneguiMashinNeekhgui) {
+            khaalgaNeekhEsekh = false;
+          }
           if (
             khaalgaNeekhEsekh &&
             !songogdzonZogsool?.garakhKhaalgaGarTokhirgoo
