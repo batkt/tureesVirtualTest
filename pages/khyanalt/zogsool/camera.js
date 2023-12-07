@@ -292,6 +292,24 @@ function camera({ token }) {
     streamQuery
   );
 
+  const songogdzonZogsool = useMemo(() => {
+    var zogsool = {};
+    if (parkingJagsaalt && camerVal[1]) {
+      parkingJagsaalt.forEach((item) => {
+        item.khaalga.forEach((khaalgaItem) => {
+          khaalgaItem.camera.forEach((cameraItem) => {
+            if (cameraItem.cameraIP === camerVal[1]) {
+              zogsool = item;
+            }
+          });
+        });
+      });
+    }
+    return zogsool;
+  }, [parkingJagsaalt, camerVal]);
+
+  console.log("songogdsonZogsool", songogdzonZogsool);
+
   const query = useMemo(() => {
     let result = {};
     if (!!camerVal[1]) {
@@ -493,7 +511,10 @@ function camera({ token }) {
               khaalgaNeekhEsekh = false;
             }
           });
-          if (khaalgaNeekhEsekh) {
+          if (
+            khaalgaNeekhEsekh &&
+            !songogdzonZogsool?.garakhKhaalgaGarTokhirgoo
+          ) {
             khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
           }
         }
@@ -702,6 +723,7 @@ function camera({ token }) {
           uilchluugchiinId={uilchluugchiinId}
           onRefresh={onRefresh}
           setModalNeelttei={setModalNeelttei}
+          songogdsonZogsool={songogdzonZogsool}
         />
         // <Tulbur
         //   suuliikhEsekh={index === 0}

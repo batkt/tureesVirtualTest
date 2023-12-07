@@ -41,6 +41,7 @@ function ShineTulbur(
     eBarimtAshiglakhEsekh,
     suuliikhEsekh,
     eBarimtAutomataarShivikh,
+    songogdsonZogsool,
   },
   ref
 ) {
@@ -277,14 +278,15 @@ function ShineTulbur(
           eBarimtAshiglakhEsekh ? setAlkham(2) : ebarimtguiTulburDuusgakh();
           onRefresh();
           suuliikhEsekh === true &&
-            axios
-              .get("http://localhost:5000/api/neeye/" + camerVal + "")
-              .then(function (response) {
-                if (!!response) console.log("/api/neeye", response);
-              })
-              .catch(function (error) {
-                console.log("ERROR: /api/neeye", error);
-              });
+            !songogdsonZogsool?.garakhKhaalgaGarTokhirgoo;
+          axios
+            .get("http://localhost:5000/api/neeye/" + camerVal + "")
+            .then(function (response) {
+              if (!!response) console.log("/api/neeye", response);
+            })
+            .catch(function (error) {
+              console.log("ERROR: /api/neeye", error);
+            });
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
@@ -663,7 +665,7 @@ function ShineTulbur(
             <div className={`flex justify-between border-b-2 border-dashed`}>
               <p className="">Гарсан цаг:</p>
               <p className="text-right">
-                {data?.tsagiinTuukh?.[0]?.garsanTsag && 
+                {data?.tsagiinTuukh?.[0]?.garsanTsag &&
                   moment(data?.tsagiinTuukh[0]?.garsanTsag).format(
                     "YYYY-MM-DD HH:mm"
                   )}

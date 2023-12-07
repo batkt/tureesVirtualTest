@@ -256,6 +256,44 @@ function ZogsoolBurtgekh(
                 </div>
               </>
             )}
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Орох хаалга гар тохиргоо")}
+              </div>
+              <div className="text-xs text-gray-400">
+                Идэвхжүүлснээр та орох хаалгыг гараас онгойлгох/автомат эсэхийг
+                тохируулна
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="orokhKhaalgaGarTokhirgoo">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.orokhKhaalgaGarTokhirgoo}
+                  checkedChildren="Гараас"
+                  unCheckedChildren="Автомат"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Гарах хаалга гар тохиргоо")}
+              </div>
+              <div className="text-xs text-gray-400">
+                Идэвхжүүлснээр та гарах хаалгыг гараас онгойлгох/автомат эсэхийг
+                тохируулна
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="garakhKhaalgaGarTokhirgoo">
+                <Switch
+                  className="bg-gray-400"
+                  defaultChecked={data?.garakhKhaalgaGarTokhirgoo}
+                  checkedChildren="Гараас"
+                  unCheckedChildren="Автомат"
+                />
+              </Form.Item>
+            </div>
           </div>
         </div>
         <div className="col-span-4">
