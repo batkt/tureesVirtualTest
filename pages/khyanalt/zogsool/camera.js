@@ -506,7 +506,7 @@ function camera({ token }) {
           toololtMutate();
           zogsoolTusBuriinTooMutate();
           let khaalgaNeekhEsekh = true;
-          if (songogdzonZogsool.uneguiMashinNeekhgui) {
+          if (songogdzonZogsool?.uneguiMashinNeekhgui) {
             khaalgaNeekhEsekh = false;
           }
           if (
