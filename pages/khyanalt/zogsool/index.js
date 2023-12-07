@@ -455,7 +455,7 @@ function Zogsool({ token }) {
             {
               title: t("Талбай"),
               align: "center",
-              width: "10rem",
+              width: "6rem",
               dataIndex: "mashin",
               render(v) {
                 return v && v.ezemshigchiinTalbainDugaar;
@@ -464,7 +464,7 @@ function Zogsool({ token }) {
             {
               title: t("Утас"),
               align: "center",
-              width: "10rem",
+              width: "8rem",
               dataIndex: "mashin",
               render(v) {
                 return v && v.ezemshigchiinUtas;
