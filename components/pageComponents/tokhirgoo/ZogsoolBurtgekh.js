@@ -262,7 +262,7 @@ function ZogsoolBurtgekh(
               </div>
               <div className="text-xs text-gray-400">
                 Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын
-                хаалт автоматаар ажилна.
+                хаалт автоматаар ажиллана.
               </div>
             </div>
             <div className="col-span-2">
@@ -281,7 +281,7 @@ function ZogsoolBurtgekh(
               </div>
               <div className="text-xs text-gray-400">
                 Асаах үед зогсоолын хаалтыг зөвхөн гараас, утраахад зогсоолын
-                хаалт автоматаар ажилна.
+                хаалт автоматаар ажиллана.
               </div>
             </div>
             <div className="col-span-2">
