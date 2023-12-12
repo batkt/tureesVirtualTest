@@ -109,7 +109,8 @@ function tulburTootsoo({ token }) {
       <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya(setWaiting(true))}>
+        onClick={() => ref.current.khadgalya(setWaiting(true))}
+      >
         {t("Бүртгэл нэмэх")}
       </Button>,
     ];
@@ -139,22 +140,22 @@ function tulburTootsoo({ token }) {
           var zagvar = _.cloneDeep(
             nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
           );
-          if (zagvar?.khatuuZagvarEsekh) {
-            zagvar.nekhemjlekh = khatuuZagvar;
-          }
           const medeelel = _.cloneDeep(
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
-
+          if (zagvar?.khatuuZagvarEsekh) {
+            zagvar.nekhemjlekh = khatuuZagvar(medeelel);
+          }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
           );
 
-          let khungulsunTalbainNiitUne =
-            medeelel.talbainNiitUne - (medeelel.khungulult || 0);
+          let khungulsunTalbainNiitUne = Math.abs(
+            medeelel.talbainNiitUne - (medeelel.khungulult || 0)
+          );
 
           let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
-            ? khungulsunTalbainNiitUne / 1.1
+            ? (khungulsunTalbainNiitUne / 1.1) * 0.1
             : 0;
           let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
@@ -165,6 +166,7 @@ function tulburTootsoo({ token }) {
           kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne
             : 0;
+
           kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
             ? medeelel?.aldangiinUldegdel
             : 0;
@@ -426,13 +428,7 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0) || ""
               );
-              if (a.tailbar !== "Management") {
-                kaidudZoriulsanNiitTulburiinNiilber +=
-                  ((a?.tulukhDun || 0) - (a?.khungulult || 0)) * 1.1;
-              } else {
-                kaidudZoriulsanNiitTulburiinNiilber +=
-                  khungulultKhassanTulukhDun;
-              }
+              kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
             });
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -583,7 +579,6 @@ function tulburTootsoo({ token }) {
               ),
               nemeltNekhemjlekh
             );
-            console.log("medeelel: ", medeelel);
           }
           return {
             zagvar: zagvar?.nekhemjlekh,
@@ -864,8 +859,9 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
 
-        let khungulsunTalbainNiitUne =
-          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0);
+        let khungulsunTalbainNiitUne = Math.abs(
+          nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0)
+        );
         let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
           ? khungulsunTalbainNiitUne / 11
           : 0;
@@ -1063,12 +1059,7 @@ function tulburTootsoo({ token }) {
             new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
             formatNumber(a.khungulult || 0) || ""
           );
-          if (a.tailbar !== "Management") {
-            kaidudZoriulsanNiitTulburiinNiilber +=
-              ((a?.tulukhDun || 0) - (a?.khungulult || 0)) * 1.1;
-          } else {
-            kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
-          }
+          kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
         });
 
         ashiglaltiinZardal?.jagsaalt?.map((a) => {
@@ -1457,7 +1448,8 @@ function tulburTootsoo({ token }) {
       </Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => dunZasvarRef.current.khadgalya()}>
+        onClick={() => dunZasvarRef.current.khadgalya()}
+      >
         {t("Хадгалах")}
       </Button>,
     ];
@@ -1567,10 +1559,12 @@ function tulburTootsoo({ token }) {
         }));
       }}
       tsonkhniiId="65543edf0b4208a0709c7ff2"
-      loading={isValidating || waiting}>
+      loading={isValidating || waiting}
+    >
       <Card
         className="cardgrid col-span-12"
-        style={{ minHeight: "calc(100vh - 8rem)" }}>
+        style={{ minHeight: "calc(100vh - 8rem)" }}
+      >
         <Spin spinning={loading}>
           <div
             className={`grid w-full
@@ -1581,7 +1575,8 @@ function tulburTootsoo({ token }) {
                 ? ""
                 : "grid-cols-2"
             } `}
-            ref={printRef}>
+            ref={printRef}
+          >
             {nekhemjlekhuud?.map((nekhemjlekh, i) => {
               return (
                 <div
@@ -1589,7 +1584,7 @@ function tulburTootsoo({ token }) {
                   className={
                     !nekhemjlekh.khatuuZagvarEsekh
                       ? `print ${nekhemjlekh.khuudasniiKhemjee}-${nekhemjlekh.chiglel} sun-editor-editable p-10"`
-                      : `h-[5.845in] text-xs block`
+                      : `block h-[5.845in] text-xs`
                   }
                   dangerouslySetInnerHTML={{
                     __html: nekhemjlekh.zagvar,
@@ -1598,7 +1593,7 @@ function tulburTootsoo({ token }) {
               );
             })}
           </div>
-          <div
+          {/* <div
             className={`grid w-full
             ${
               nekhemjlekhuud?.find(
@@ -1607,7 +1602,8 @@ function tulburTootsoo({ token }) {
                 ? ""
                 : "grid-cols-2"
             } `}
-            ref={printExcelRef}>
+            ref={printExcelRef}
+          >
             {nekhemjlekhuud?.map((nekhemjlekh, i) => {
               return (
                 <div
@@ -1619,11 +1615,12 @@ function tulburTootsoo({ token }) {
                 />
               );
             })}
-          </div>
+          </div> */}
           <div
             className=" flex w-full flex-row"
             data-aos="zoom-in-left"
-            data-aos-duration="1000">
+            data-aos-duration="1000"
+          >
             <div className="mb-3 flex w-full flex-col gap-2 md:ml-auto md:w-auto md:flex-row">
               <div className="flex w-full justify-between gap-2">
                 <DatePicker
@@ -1637,7 +1634,8 @@ function tulburTootsoo({ token }) {
                   className="w-1/2 lg:w-auto"
                   placeholder={t("Данс сонгох")}
                   value={songogdsonDans}
-                  onChange={setDans}>
+                  onChange={setDans}
+                >
                   {dansGaralt?.jagsaalt?.map((a) => (
                     <Select.Option key={a.dugaar} value={a.dugaar}>
                       <div>{a.dugaar}</div>
@@ -1653,7 +1651,8 @@ function tulburTootsoo({ token }) {
                   onChange={(v) => {
                     setDavkhar(v);
                     setSongogdsonGereenuud([]);
-                  }}>
+                  }}
+                >
                   {baiguullaga?.barilguud
                     ?.find((a) => a._id === barilgiinId)
                     ?.davkharuud.map((a) => (
@@ -1669,7 +1668,8 @@ function tulburTootsoo({ token }) {
                   onChange={(content) => {
                     setBarimt(content);
                     handleSongosonTurul(content);
-                  }}>
+                  }}
+                >
                   {nekhemjlekhiinZagvar?.jagsaalt?.map((a) =>
                     turul === a.turul ? (
                       <Select.Option key={a._id} value={a._id}>
@@ -1695,7 +1695,8 @@ function tulburTootsoo({ token }) {
                     hidden={turul !== "Mail"}
                     loading={unshijBaina}
                     type="primary"
-                    onClick={hevlekh}>
+                    onClick={hevlekh}
+                  >
                     {t("Хэвлэх")}
                   </Button>
                 ) : (
@@ -1710,11 +1711,13 @@ function tulburTootsoo({ token }) {
               className="col-span-8 rounded-md md:col-span-2 lg:p-2"
               data-aos="fade-left"
               data-aos-duration="1000"
-              data-aos-delay="500">
+              data-aos-delay="500"
+            >
               <div className="mb-3 rounded-md border p-2 shadow-md">
                 <div
                   className="grid grid-cols-3 gap-1  font-medium"
-                  role="tablist">
+                  role="tablist"
+                >
                   {["Mail", "SMS", "App"].map((mur) => (
                     <div
                       key={mur}
@@ -1723,7 +1726,8 @@ function tulburTootsoo({ token }) {
                           ? "bg-green-500 text-white"
                           : "border-x hover:bg-green-500"
                       }`}
-                      onClick={() => turulSongokh(mur)}>
+                      onClick={() => turulSongokh(mur)}
+                    >
                       {mur}
                     </div>
                   ))}
@@ -1736,7 +1740,8 @@ function tulburTootsoo({ token }) {
                       className="w-full"
                       hidden={turul !== "Mail"}
                       type="primary"
-                      onClick={hevlekh}>
+                      onClick={hevlekh}
+                    >
                       {t("Хэвлэх")}
                     </Button>
                   </div>
@@ -1757,7 +1762,8 @@ function tulburTootsoo({ token }) {
                       : turul === "App"
                       ? smsZagvarNemya()
                       : router.push("/khyanalt/tulburTootsoo/nekhemjlel/new")
-                  }>
+                  }
+                >
                   {t("Загвар үүсгэх")}
                 </Button>
               </div>
@@ -1766,7 +1772,8 @@ function tulburTootsoo({ token }) {
                   a.turul === turul ? (
                     <div
                       key={`zagvar${i}`}
-                      className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md">
+                      className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md"
+                    >
                       {a.nekhemjlekh !== "excel" ? (
                         <Image src="/invoice.png" width={32} height={32} />
                       ) : (
@@ -1781,7 +1788,8 @@ function tulburTootsoo({ token }) {
                             title="Загвар устгах уу?"
                             okText={t("Тийм")}
                             cancelText={t("Үгүй")}
-                            onConfirm={() => zagvarUstgaya(a)}>
+                            onConfirm={() => zagvarUstgaya(a)}
+                          >
                             <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
                               <DeleteOutlined
                                 style={{ color: "red", display: "flex" }}
@@ -1799,7 +1807,8 @@ function tulburTootsoo({ token }) {
                               : router.push(
                                   `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
                                 )
-                          }>
+                          }
+                        >
                           {a.nekhemjlekh !== "excel" ? (
                             <EditOutlined
                               style={{ display: "flex", color: "#85C1E9" }}
@@ -1816,7 +1825,8 @@ function tulburTootsoo({ token }) {
                     a.turul === undefined ? (
                       <div
                         key={`zagvar${i}`}
-                        className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md">
+                        className="flex flex-row items-center space-x-2 rounded-md border border-gray-200 p-2 shadow-md"
+                      >
                         <Image src="/invoice.png" width={32} height={32} />
                         <div className="font-medium">{a.ner}</div>
                         {!a.khatuuZagvarEsekh && (
@@ -1825,7 +1835,8 @@ function tulburTootsoo({ token }) {
                               title="Загвар устгах уу?"
                               okText={t("Тийм")}
                               cancelText={t("Үгүй")}
-                              onConfirm={() => zagvarUstgaya(a)}>
+                              onConfirm={() => zagvarUstgaya(a)}
+                            >
                               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-100 fill-current  p-2  text-white dark:bg-gray-700">
                                 <DeleteOutlined
                                   style={{ color: "red", display: "flex" }}
@@ -1840,7 +1851,8 @@ function tulburTootsoo({ token }) {
                             router.push(
                               `/khyanalt/tulburTootsoo/nekhemjlel/${a._id}`
                             )
-                          }>
+                          }
+                        >
                           <EditOutlined
                             style={{ display: "flex", color: "#85C1E9" }}
                           />
@@ -1858,7 +1870,8 @@ function tulburTootsoo({ token }) {
             <div
               className="col-span-8 md:col-span-6"
               data-aos="fade-up"
-              data-aos-duration="1000">
+              data-aos-duration="1000"
+            >
               <div className="hidden">
                 <ZagvarUusgekh value={zagvar} onTextChange={onTextChange} />
               </div>
@@ -1962,7 +1975,8 @@ function tulburTootsoo({ token }) {
                             icon={
                               <div
                                 className={`flex items-center justify-center  dark:bg-gray-700 `}
-                                onClick={() => nekhemjlelZasya(record, index)}>
+                                onClick={() => nekhemjlelZasya(record, index)}
+                              >
                                 <EditOutlined
                                   style={{ fontSize: "18px", color: "#85C1E9" }}
                                   className=" dark:bg-gray-700 "

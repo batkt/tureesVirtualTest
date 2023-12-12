@@ -455,7 +455,7 @@ function Zogsool({ token }) {
             {
               title: t("Талбай"),
               align: "center",
-              width: "10rem",
+              width: "6rem",
               dataIndex: "mashin",
               render(v) {
                 return v && v.ezemshigchiinTalbainDugaar;
@@ -464,7 +464,7 @@ function Zogsool({ token }) {
             {
               title: t("Утас"),
               align: "center",
-              width: "10rem",
+              width: "8rem",
               dataIndex: "mashin",
               render(v) {
                 return v && v.ezemshigchiinUtas;
@@ -972,7 +972,7 @@ function Zogsool({ token }) {
             ))}
           </Select>
           <div
-            className=" flex w-full items-center sm:justify-end md:mb-0 md:ml-auto xl:justify-start"
+            className=" flex w-full flex-col sm:flex-row sm:items-center sm:justify-end md:mb-0 md:ml-auto xl:justify-start"
             data-aos="fade-left"
             data-aos-duration="1000"
             data-aos-delay="200"
@@ -981,7 +981,7 @@ function Zogsool({ token }) {
               {t("Зогсоолын орлого")} : {formatNumber(!!uilchluulegchdiinDun[0]?.dun ? uilchluulegchdiinDun[0].dun : 0, 0)}
               ₮
             </div>*/}
-            <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
+            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
               {t("Нийт бодогдсон")} :{" "}
               {formatNumber(
                 !!uilchluulegchdiinDun?.[0]?.niitDun
@@ -991,7 +991,7 @@ function Zogsool({ token }) {
               )}
               ₮
             </div>
-            <div className="ml-5 flex space-x-2 p-1 text-base font-medium">
+            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
               {t("Нийт төлсөн")} :{" "}
               {formatNumber(
                 !!uilchluulegchdiinDun?.[0]?.dun
@@ -1012,7 +1012,7 @@ function Zogsool({ token }) {
             }
           </Radio.Group>*/}
           <div
-            className="col-span-2 ml-auto w-full place-content-end justify-between gap-4 sm:flex xl:justify-end"
+            className="col-span-2 ml-auto flex w-full place-content-end justify-start gap-4 xl:justify-end"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
             data-aos-delay="300"
@@ -1220,6 +1220,7 @@ function Zogsool({ token }) {
                     ? "tertiary"
                     : "default"
                 }`}
+                className="dark:bg-gray-800 dark:text-gray-200"
                 onClick={() => tseverliy()}
               >
                 Цэвэрлэх
