@@ -4,9 +4,10 @@ import Link from "next/link";
 import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { url } from "services/uilchilgee";
+import moment from "moment";
 
 function MenuItem({ mur, selected, khuudasniiNer }) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = React.useState(
     !!mur?.sub?.find((a) => a.khuudasniiNer === khuudasniiNer)
   );
@@ -50,18 +51,21 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
               <Link href={a.href} key={a.href}>
                 <a>
                   <li
-                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${open ? "ml-0" : "ml-56"
-                      } p-2 text-white ${a.khuudasniiNer === khuudasniiNer
+                    className={`relative cursor-pointer rounded-l-lg transition-all duration-300 ${
+                      open ? "ml-0" : "ml-56"
+                    } p-2 text-white ${
+                      a.khuudasniiNer === khuudasniiNer
                         ? "bg-white dark:bg-gray-800"
                         : ""
-                      }`}
+                    }`}
                   >
                     <div className={"flex flex-row px-1"}>
                       <div
-                        className={`${a.khuudasniiNer === khuudasniiNer
+                        className={`${
+                          a.khuudasniiNer === khuudasniiNer
                             ? "font-medium text-green-500"
                             : ""
-                          } flex flex-row whitespace-nowrap`}
+                        } flex flex-row whitespace-nowrap`}
                       >
                         <div className={`mr-2`}>{a.icon}</div>
                         {t(a.ner)}
@@ -76,20 +80,20 @@ function MenuItem({ mur, selected, khuudasniiNer }) {
       </div>
     );
   } else
-  return (
-    <Link href={mur.href}>
-      <a>
-        <li className={selected ? "selected-menu" : "menu-item"}>
-          <div className="flex flex-row p-1">
-            <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
-              {mur.icon}
+    return (
+      <Link href={mur.href}>
+        <a>
+          <li className={selected ? "selected-menu" : "menu-item"}>
+            <div className="flex flex-row p-1">
+              <div className={`mr-2 ${selected ? "text-green-600" : ""}`}>
+                {mur.icon}
+              </div>
+              {t(mur.ner)}
             </div>
-            {t(mur.ner)}
-          </div>
-        </li>
-      </a>
-    </Link>
-  );
+          </li>
+        </a>
+      </Link>
+    );
 }
 
 function NTses({
@@ -113,15 +117,23 @@ function NTses({
         <li className="mb-10 px-2">
           <div className="border-b px-2 pb-2">
             <div className="flex flex-col items-center">
-              <img
-                className="h-16 w-16 "
-                alt={baiguullaga?.ner}
-                src={
-                  baiguullaga?.zurgiinNer
-                    ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
-                    : "/rent.png"
-                }
-              />
+              <div className="relative flex">
+                {moment(new Date()).format("MM") === "12" ? (
+                  <img src="/hat.webp" className="absolute -top-4 right-2 " />
+                ) : null}
+                <img
+                  className={`h-16 w-16 ${
+                    moment(new Date()).format("MM") === "12" &&
+                    "rounded-full border-2 border-solid border-white p-1"
+                  }`}
+                  alt={baiguullaga?.ner}
+                  src={
+                    baiguullaga?.zurgiinNer
+                      ? `${url}/logoAvya/${baiguullaga?.zurgiinNer}`
+                      : "/rent.png"
+                  }
+                />
+              </div>
               {barilguud?.length > 0 ? (
                 <div className="relative mt-2 inline-block">
                   <select
@@ -154,15 +166,18 @@ function NTses({
             </div>
           </div>
         </li>
-        <div style={{height: "calc( 100vh - 12rem )"}} className="overflow-y-auto group menuScrollbar">
-        {khuudasnuud.map((mur) => (
-          <MenuItem
-            key={mur.href}
-            mur={mur}
-            selected={mur.khuudasniiNer === khuudasniiNer}
-            khuudasniiNer={khuudasniiNer}
-          />
-        ))}
+        <div
+          style={{ height: "calc( 100vh - 12rem )" }}
+          className="menuScrollbar group overflow-y-auto"
+        >
+          {khuudasnuud.map((mur) => (
+            <MenuItem
+              key={mur.href}
+              mur={mur}
+              selected={mur.khuudasniiNer === khuudasniiNer}
+              khuudasniiNer={khuudasniiNer}
+            />
+          ))}
         </div>
       </ul>
     </nav>

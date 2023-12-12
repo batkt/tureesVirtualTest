@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import Loader from "./loader";
-import {Button, Drawer, Switch, Tooltip, Alert} from "antd";
+import { Button, Drawer, Switch, Tooltip, Alert } from "antd";
 import {
   CalendarOutlined,
   CloseOutlined,
@@ -30,6 +30,7 @@ import { SiAnydesk } from "react-icons/si";
 import { modal } from "./ant/Modal";
 import SanalKhuseltIlgeekh from "./tolgoi/SanalKhuseltIlgeekh";
 import { useTranslation } from "react-i18next";
+import Snowfall from "react-snowfall";
 
 var timeout = null;
 
@@ -101,9 +102,7 @@ function Admin({
     if (window) {
       i18n.changeLanguage(window.localStorage.getItem("Localelanguage"));
     }
-    window.addEventListener("offline", () =>
-        setIsOnline(true)
-    );
+    window.addEventListener("offline", () => setIsOnline(true));
   }, []);
 
   function onClickSearch() {
@@ -131,7 +130,8 @@ function Admin({
         className="space-x-2"
         icon={<FiSend />}
         type="primary"
-        onClick={() => sanalKhuseltRef.current.ilgeeye()}>
+        onClick={() => sanalKhuseltRef.current.ilgeeye()}
+      >
         {t("Илгээх")}
       </Button>,
     ];
@@ -164,15 +164,17 @@ function Admin({
           fixedZagvarNeegdsenEsekh === true &&
           setTurulZagvar(false);
       }}
-      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4">
-      {isOnline&&
-      <Alert
-          style={{bottom:20}}
+      className="relative min-h-screen w-screen overflow-hidden bg-green-600 px-3 pb-5 dark:bg-gray-900 md:flex md:flex-row md:px-6 md:py-4"
+    >
+      {isOnline && (
+        <Alert
+          style={{ bottom: 20 }}
           className="absolute bg-red-100"
           message="Интернэт холболтоо шалгана уу!"
           type="error"
           showIcon
-      />}
+        />
+      )}
       <Drawer
         placement={"right"}
         closable={false}
@@ -180,9 +182,11 @@ function Admin({
         visible={showTuslamj}
         key={"righttuslamj"}
         width={600}
-        bodyStyle={{ padding: "10px 0" }}>
+        bodyStyle={{ padding: "10px 0" }}
+      >
         <Tuslamj />
       </Drawer>
+      {moment(new Date()).format("MM") === "12" ? <Snowfall /> : null}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`fixed top-1/3 z-50 flex h-48 items-center transition-all ${
@@ -193,14 +197,16 @@ function Admin({
                   ? "-right-full md:-right-[10.5rem]"
                   : "-right-[11.25rem] md:-right-[10.5rem]"
               } delay-200 `
-        }`}>
+        }`}
+      >
         <div
           onClick={() => setShowSidehelpBar(!showSidehelpBar)}
           className={`text-2xl ${
             showSidehelpBar
               ? "bg-white text-green-500 dark:border-green-500 dark:bg-gray-800"
               : " bg-yellow-500 text-white"
-          } flex  h-11  w-10 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 transition-all`}>
+          } flex  h-11  w-10 cursor-pointer items-center justify-center rounded-l-lg border border-r-0 transition-all`}
+        >
           <TbArrowBarLeft
             className="transition-all duration-200"
             style={{ rotate: showSidehelpBar ? "180deg" : "0deg" }}
@@ -211,21 +217,25 @@ function Admin({
             showSidehelpBar
               ? "h-48 rounded-l-lg border-r-0 bg-white delay-200 dark:bg-gray-800"
               : "h-11 border-none bg-green-600 dark:bg-gray-900"
-          } flex w-48 flex-col border py-5 pl-3 transition-all dark:border-green-500`}>
+          } flex w-48 flex-col border py-5 pl-3 transition-all dark:border-green-500`}
+        >
           <div
             className={`flex h-full w-full flex-col justify-between ${
               showSidehelpBar
                 ? "visible opacity-100 delay-200"
                 : "invisible opacity-0"
-            }`}>
+            }`}
+          >
             <div
               className={`group cursor-pointer rounded-l-lg border border-r-0 transition-all hover:scale-105 hover:bg-green-100 dark:border-green-500 dark:hover:bg-green-600 dark:hover:bg-opacity-30 `}
               onClick={() => {
                 setShowTuslamj(true);
                 setShowSidehelpBar(false);
-              }}>
+              }}
+            >
               <div
-                className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 `}>
+                className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 `}
+              >
                 <div className="rounded-md border bg-green-600 p-2 text-white transition-colors group-hover:bg-green-500">
                   <QuestionOutlined />
                 </div>
@@ -237,13 +247,15 @@ function Admin({
               onClick={() => {
                 showSanalKhuselt(ajiltan);
                 setShowSidehelpBar(false);
-              }}>
+              }}
+            >
               <div
                 className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 ${
                   showSidehelpBar
                     ? "visible opacity-100 delay-200"
                     : "invisible opacity-0"
-                }`}>
+                }`}
+              >
                 <div className="rounded-md border bg-yellow-600 p-2 text-white transition-colors group-hover:bg-yellow-500">
                   <FiSend />
                 </div>
@@ -257,13 +269,15 @@ function Admin({
               onClick={() => {
                 window.location.assign(getOS());
                 setShowSidehelpBar(false);
-              }}>
+              }}
+            >
               <div
                 className={`flex w-44 items-center space-x-2 p-1 text-black dark:text-gray-200 ${
                   showSidehelpBar
                     ? "visible opacity-100 delay-200"
                     : "invisible opacity-0"
-                }`}>
+                }`}
+              >
                 <div className="rounded-md border bg-red-600 p-2 text-white transition-colors group-hover:bg-red-500">
                   <SiAnydesk />
                 </div>
@@ -284,7 +298,8 @@ function Admin({
             className="flex h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:hidden"
             onClick={() =>
               _.isFunction(onBack) ? onBack(router.back) : router.back()
-            }>
+            }
+          >
             <LeftOutlined
               style={{ fontSize: "15px" }}
               className="flex items-center justify-center text-gray-50"
@@ -306,7 +321,8 @@ function Admin({
               <select
                 defaultValue={barilgiinId}
                 onChange={({ target }) => barilgaSoliyo(target.value)}
-                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200">
+                className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
+              >
                 {barilguud?.map((a) => (
                   <option key={a?._id} className="" value={a?._id}>
                     {a?.ner}
@@ -317,7 +333,8 @@ function Admin({
                 <svg
                   className="h-4 w-4 fill-current"
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20">
+                  viewBox="0 0 20 20"
+                >
                   <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                 </svg>
               </div>
@@ -332,7 +349,8 @@ function Admin({
             onClick={() => {
               setVisible(!visible);
               !!setNeesenEsekh && setNeesenEsekh(!visible);
-            }}>
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -343,7 +361,8 @@ function Admin({
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white">
+              className="feather feather-bar-chart-2 h-8 w-8 -rotate-90 text-white"
+            >
               <line x1="18" y1="20" x2="18" y2="10"></line>
               <line x1="12" y1="20" x2="12" y2="4"></line>
               <line x1="6" y1="20" x2="6" y2="14"></line>
@@ -375,13 +394,15 @@ function Admin({
       )}
       <h2
         id="garchig"
-        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden ">
+        className=" -mt-4 ml-3 flex text-base font-semibold text-white md:hidden "
+      >
         {t(title)}
       </h2>
       <div
         className={`rounded-3xl bg-gray-100 dark:bg-gray-800 md:px-2 ${
           dedKhuudas ? "w-full" : "main"
-        }`}>
+        }`}
+      >
         <div className="flex h-12 flex-row justify-between border-b p-2 ">
           <div className="flex">
             {dedKhuudas && (
@@ -389,7 +410,8 @@ function Admin({
                 className="hidden h-8 w-8 items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600  focus:ring-opacity-50 md:flex"
                 onClick={() =>
                   _.isFunction(onBack) ? onBack(router.back) : router.back()
-                }>
+                }
+              >
                 <LeftOutlined
                   style={{ fontSize: "15px" }}
                   className="flex items-center justify-center dark:text-gray-50"
@@ -398,7 +420,8 @@ function Admin({
             )}
             <h2
               id="garchig"
-              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex ">
+              className=" ml-3 hidden items-center justify-center text-base  font-semibold text-green-800  dark:text-gray-200 md:flex "
+            >
               {t(title)}
             </h2>
           </div>
@@ -456,7 +479,8 @@ function Admin({
               <>
                 <div
                   id="search"
-                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56">
+                  className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
+                >
                   <input
                     onChange={({ target }) => {
                       if (!!onSearch) {
@@ -486,7 +510,8 @@ function Admin({
                       strokeWidth="1.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4">
+                      className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
+                    >
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
@@ -510,7 +535,8 @@ function Admin({
                       { khonog: license() })
                     }
                   </div>
-                }>
+                }
+              >
                 <div className="ml-1 flex items-center gap-1 text-base md:hidden">
                   {license()}:
                   <svg
@@ -523,7 +549,8 @@ function Admin({
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-clock d-block mx-auto">
+                    className="feather feather-clock d-block mx-auto"
+                  >
                     <circle cx="12" cy="12" r="10"></circle>
                     <polyline points="12 6 12 12 16 14"></polyline>
                   </svg>
@@ -548,7 +575,8 @@ function Admin({
       <div
         className={`fixed bottom-[1.7rem] z-40 ${
           visible === true ? "-right-full" : "right-5"
-        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}>
+        } flex h-8 items-center justify-center rounded-3xl bg-green-600 px-3 py-5 shadow-md transition-all duration-500 dark:bg-gray-900 md:hidden`}
+      >
         <div className="mr-4 flex whitespace-nowrap text-white dark:text-gray-300">
           Dark Mode
         </div>

@@ -8,6 +8,7 @@ import { destroyCookie } from "nookies";
 import Aos from "aos";
 import "../services/i18n";
 import { useTranslation } from "react-i18next";
+import Snowfall from "react-snowfall";
 const { Password } = Input;
 
 export function useThemeValue() {
@@ -43,13 +44,15 @@ function Ajiltan() {
         <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {moment(new Date()).format("MM") === "12" ? <Snowfall /> : null}
       <div className="container sm:px-10">
         <div className="block grid-cols-2 gap-4 xl:grid">
           <div className="z-10 hidden min-h-screen flex-col xl:flex">
             <div
               className="my-auto"
               data-aos="fade-right"
-              data-aos-duration="1000">
+              data-aos-duration="1000"
+            >
               <img
                 className="-intro-x -mt-16 w-1/2"
                 data-aos="fade-left"
@@ -59,13 +62,14 @@ function Ajiltan() {
               <div
                 className="-intro-x animate__fadeInLeftBig mt-10 text-4xl font-medium leading-tight text-white"
                 data-aos="fade-right"
-                data-aos-duration="3000">
+                data-aos-duration="3000"
+              >
                 {t("Түрээсийн удирдлагын систем")}
               </div>
             </div>
           </div>
           <div className="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
-            <div className="my-auto mx-auto w-full rounded-md bg-white px-5 py-14 pb-5 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
+            <div className="mx-auto my-auto w-full rounded-md bg-white px-5 py-14 pb-5 shadow-md dark:bg-gray-900 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none xl:dark:bg-gray-800">
               <h2 className="intro-x text-center text-2xl font-bold dark:text-gray-300 xl:text-left xl:text-3xl"></h2>
               <div data-aos="flip-right">
                 <Form
@@ -75,7 +79,8 @@ function Ajiltan() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter")
                       newterya({ ...form.getFieldsValue(), namaigsana });
-                  }}>
+                  }}
+                >
                   <div data-aos="fade-up" data-aos-delay="500">
                     <Form.Item name="nevtrekhNer">
                       <Input
@@ -96,7 +101,8 @@ function Ajiltan() {
                 <div
                   className="intro-x mt-4 flex text-xs text-gray-700 dark:text-gray-600 sm:text-sm"
                   data-aos="fade-down"
-                  data-aos-delay="400">
+                  data-aos-delay="400"
+                >
                   <div className="mr-auto flex items-center">
                     <input
                       id="remember-me"
@@ -106,7 +112,8 @@ function Ajiltan() {
                     />
                     <label
                       className="cursor-pointer select-none"
-                      htmlFor="remember-me">
+                      htmlFor="remember-me"
+                    >
                       {t("Намайг сана")}
                     </label>
                   </div>
@@ -117,15 +124,17 @@ function Ajiltan() {
                   onClick={() =>
                     newterya({ ...form.getFieldsValue(), namaigsana })
                   }
-                  className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 py-2 px-4 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
+                  className="group relative mt-5 flex w-full justify-center rounded-md border border-transparent bg-green-700 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 xl:mt-8"
                   data-aos="fade-down"
-                  data-aos-delay="500">
+                  data-aos-delay="500"
+                >
                   <span className="absolute inset-y-0 left-0 flex items-center pl-3">
                     <svg
                       className="h-5 w-5 text-green-500 group-hover:text-green-400"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
-                      fill="currentColor">
+                      fill="currentColor"
+                    >
                       <path
                         fillRule="evenodd"
                         d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
@@ -140,7 +149,7 @@ function Ajiltan() {
                   {t("Бүх эрх хуулиар баталгаажсан")}
                 </div>
               </div>
-              <div className="fixed top-6 right-10 flex w-10 gap-2 transition-all hover:scale-105">
+              <div className="fixed right-10 top-6 flex w-10 gap-2 transition-all hover:scale-105">
                 {i18n.language === "en" ? (
                   <img
                     onClick={() => {
