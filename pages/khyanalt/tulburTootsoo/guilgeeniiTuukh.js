@@ -82,7 +82,6 @@ function TableGuilgee({
   setLoadingIndex,
   onChange,
 }) {
-
   function UilgelAvya({ garalt, columns }) {
     const [uldegdel, setUldegdel] = useState(0);
     useEffect(() => {
@@ -162,7 +161,7 @@ const searchKeys = [
 ];
 
 function guilgeeniiTuukh({ token }) {
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -286,9 +285,9 @@ function guilgeeniiTuukh({ token }) {
     }
     return { sericeName, query, turulColumns };
   }, [turul, ognoo, davkhar, barilgiinId, tulukhOgnoo, t]);
-useEffect(()=> {
-  setShineBagana([])
-},[i18n.language])
+  useEffect(() => {
+    setShineBagana([]);
+  }, [i18n.language]);
   const {
     data,
     mutate,
@@ -605,13 +604,15 @@ useEffect(()=> {
                   className="flex w-full items-center  justify-center px-[6px] "
                   title={
                     khuvi < 100
-                      ? t("Барьцаа дутуу", {too: formatNumber(
-                        (row.baritsaaAvakhDun || 0) -
-                          (row.baritsaaniiUldegdel || 0)
-                      )})
-                      : `${formatNumber(
-                          row.baritsaaniiUldegdel
-                        )} ${t("барьцаа төлөгдсөн байна")}`
+                      ? t("Барьцаа дутуу", {
+                          too: formatNumber(
+                            (row.baritsaaAvakhDun || 0) -
+                              (row.baritsaaniiUldegdel || 0)
+                          ),
+                        })
+                      : `${formatNumber(row.baritsaaniiUldegdel)} ${t(
+                          "барьцаа төлөгдсөн байна"
+                        )}`
                   }
                 >
                   <Progress
@@ -953,7 +954,11 @@ useEffect(()=> {
               clearIcon={false}
             />
             <div className="ml-5">
-              <Select placeholder={t("Давхар")} onChange={setDavkhar} allowClear>
+              <Select
+                placeholder={t("Давхар")}
+                onChange={setDavkhar}
+                allowClear
+              >
                 {baiguullaga?.barilguud
                   ?.find((a) => a._id === barilgiinId)
                   ?.davkharuud.map((a) => (
@@ -964,7 +969,7 @@ useEffect(()=> {
               </Select>
             </div>
           </div>
-          <div className="ml-auto flex w-full place-content-end md:w-auto">
+          <div className="ml-auto flex w-full place-content-end gap-2 md:w-auto">
             <div className="hidden md:flex">
               <BaganiinSongolt
                 shineBagana={shineBagana}
