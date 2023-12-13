@@ -9,6 +9,9 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
+    if (player) {
+      player.destroy();
+    }
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
@@ -21,7 +24,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
         controls: nemelteer ? true : false,
       },
     });
-
     setPlayer(newPlayer);
 
     return () => {
@@ -29,13 +31,13 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
         newPlayer.destroy();
       }
     };
-  }, [Camer]);
+  }, [Camer, nemelteer]);
 
   useEffect(() => {
     if (Camer && player) {
       player.play(rtspUrl);
     }
-  }, [Camer, player]);
+  }, [Camer, player, rtspUrl]);
 
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 }
