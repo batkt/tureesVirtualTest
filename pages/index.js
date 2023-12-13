@@ -53,7 +53,7 @@ function Ajiltan() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {moment(new Date()).format("MM") === "12" ? (
-        <Snowfall radius={[10, 30]} snowflakeCount={250} images={images} />
+        <Snowfall radius={[10, 30]} snowflakeCount={200} images={images} />
       ) : null}
       <div className="container sm:px-10">
         <div className="block grid-cols-2 gap-4 xl:grid">
