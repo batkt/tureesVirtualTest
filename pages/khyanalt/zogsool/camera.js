@@ -1691,7 +1691,7 @@ function camera({ token }) {
       {jagsaalt?.length > 0 ? (
         <div className="col-span-12">
           <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            <div className="fixed left-6 top-24 hidden h-[400px] md:block">
+            <div className="fixed left-6 top-24 z-[10000] hidden h-[400px] md:block">
               <div
                 className="h-12 w-12 cursor-pointer rounded-r-full border-y border-r bg-yellow-500 text-xl"
                 onClick={guilgeeDrawerOngoilgokh}
@@ -1705,7 +1705,6 @@ function camera({ token }) {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                drawerStyle={{ position: "relative", zIndex: 10000 }}
                 onClose={guilgeeDrawerKhaakh}
                 open={guilgeeDrawerOpen}
                 getContainer={false}
