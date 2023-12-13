@@ -1705,7 +1705,7 @@ function camera({ token }) {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                drawerStyle={{ zIndex: 10000 }}
+                drawerStyle={{ position: "relative", zIndex: 10000 }}
                 onClose={guilgeeDrawerKhaakh}
                 open={guilgeeDrawerOpen}
                 getContainer={false}
