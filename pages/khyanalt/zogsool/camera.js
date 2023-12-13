@@ -1749,7 +1749,7 @@ function camera({ token }) {
               }}
               className={`w-full ${
                 cameraKharakh === 1 &&
-                "fixed right-0 top-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
+                "fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2 md:py-[10%]"
               }`}
             >
               <div
@@ -1863,7 +1863,7 @@ function camera({ token }) {
               }}
               className={`w-full ${
                 cameraKharakh === 2 &&
-                "fixed right-0 top-0 z-50 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
+                "fixed right-0 top-0 z-10 flex h-screen w-screen items-center justify-center rounded-md bg-black bg-opacity-80 p-2"
               }`}
             >
               <div
