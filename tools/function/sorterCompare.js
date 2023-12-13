@@ -1,28 +1,31 @@
 function getSortValue(v) {
-  let response = undefined
+  let response = undefined;
   switch (v) {
-    case 'descend':
-      response = -1
+    case "descend":
+      response = -1;
       break;
-    case 'ascend':
-      response = 1
+    case "ascend":
+      response = 1;
       break;
     default:
       break;
   }
-  return response
+  return response;
 }
 
 export default function sorterCompare(s, setOrder, defaultValue) {
-  let sort = {}
+  let sort = {};
   if (_.isArray(s))
-    s.map(r => {
-      sort[r.field] = getSortValue(r.order)
-    })
+    s.map((r) => {
+      sort[r.field] = getSortValue(r.order);
+    });
   else if (_.isObject(s)) {
-    sort[s.field] = getSortValue(s.order)
-    if (s.order === undefined)
-      sort = _.clone(defaultValue)
+    sort[s.field] = getSortValue(s.order);
+    if (s.order === undefined) sort = _.clone(defaultValue);
   }
-  setOrder({ ...sort })
+  setOrder({ ...sort });
+  localStorage.setItem(
+    "order-" + window.location.href,
+    JSON.stringify({ ...sort })
+  );
 }
