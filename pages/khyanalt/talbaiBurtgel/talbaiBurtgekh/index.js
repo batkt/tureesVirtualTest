@@ -64,11 +64,11 @@ const normFile = (e) => {
 
 function TalbaiSegment({ token, ...a }) {
   return (
-    <div className='box dark:text-white'>
-      <div className='flex items-center px-5 py-2 shadow-none'>
-        <div className='flex gap-2 border-l-2 border-green-500 pl-4'>
-          <div className='font-medium'>{a.ner}</div>
-          <div className='font-medium text-gray-600 dark:text-gray-300'>
+    <div className="box dark:text-white">
+      <div className="flex items-center px-5 py-2 shadow-none">
+        <div className="flex gap-2 border-l-2 border-green-500 pl-4">
+          <div className="font-medium">{a.ner}</div>
+          <div className="font-medium text-gray-600 dark:text-gray-300">
             ({a.utga})
           </div>
         </div>
@@ -141,20 +141,21 @@ function talbaiBurtgekh({ token }) {
 
       icon: (
         <svg
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          strokeWidth='2'
-          stroke='currentColor'
-          fill='none'
-          strokeLinecap='round'
-          strokeLinejoin='round'>
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {" "}
-          <path stroke='none' d='M0 0h24v24H0z' />{" "}
-          <line x1='3' y1='21' x2='21' y2='21' />{" "}
-          <path d='M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4' />{" "}
-          <path d='M5 21v-10.15' /> <path d='M19 21v-10.15' />{" "}
-          <path d='M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4' />
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <line x1="3" y1="21" x2="21" y2="21" />{" "}
+          <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" />{" "}
+          <path d="M5 21v-10.15" /> <path d="M19 21v-10.15" />{" "}
+          <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" />
         </svg>
       ),
       khuvi: 100,
@@ -166,18 +167,19 @@ function talbaiBurtgekh({ token }) {
       mk: talbainToololt?.find((a) => a._id === true)?.khemjee || 0,
       icon: (
         <svg
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          fill='none'
-          stroke='currentColor'
-          strokeWidth='2'
-          strokeLinecap='round'
-          strokeLinejoin='round'>
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {" "}
-          <path d='M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' />{" "}
-          <circle cx='8.5' cy='7' r='4' />{" "}
-          <polyline points='17 11 19 13 23 9' />
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
+          <circle cx="8.5" cy="7" r="4" />{" "}
+          <polyline points="17 11 19 13 23 9" />
         </svg>
       ),
       khuvi: -30,
@@ -189,19 +191,20 @@ function talbaiBurtgekh({ token }) {
       mk: talbainToololt?.find((a) => a._id === false)?.khemjee || 0,
       icon: (
         <svg
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          fill='none'
-          stroke='currentColor'
-          strokeWidth='2'
-          strokeLinecap='round'
-          strokeLinejoin='round'>
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {" "}
-          <path d='M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2' />{" "}
-          <circle cx='8.5' cy='7' r='4' />{" "}
-          <line x1='18' y1='8' x2='23' y2='13' />{" "}
-          <line x1='23' y1='8' x2='18' y2='13' />
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />{" "}
+          <circle cx="8.5" cy="7" r="4" />{" "}
+          <line x1="18" y1="8" x2="23" y2="13" />{" "}
+          <line x1="23" y1="8" x2="18" y2="13" />
         </svg>
       ),
       khuvi: 100,
@@ -213,20 +216,21 @@ function talbaiBurtgekh({ token }) {
       mk: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0,
       icon: (
         <svg
-          width='24'
-          height='24'
-          viewBox='0 0 24 24'
-          strokeWidth='2'
-          stroke='currentColor'
-          fill='none'
-          strokeLinecap='round'
-          strokeLinejoin='round'>
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+          stroke="currentColor"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {" "}
-          <path stroke='none' d='M0 0h24v24H0z' />{" "}
-          <circle cx='9' cy='7' r='4' />{" "}
-          <path d='M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2' />{" "}
-          <line x1='19' y1='7' x2='19' y2='10' />{" "}
-          <line x1='19' y1='14' x2='19' y2='14.01' />
+          <path stroke="none" d="M0 0h24v24H0z" />{" "}
+          <circle cx="9" cy="7" r="4" />{" "}
+          <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />{" "}
+          <line x1="19" y1="7" x2="19" y2="10" />{" "}
+          <line x1="19" y1="14" x2="19" y2="14.01" />
         </svg>
       ),
       khuvi: 100,
@@ -437,7 +441,8 @@ function talbaiBurtgekh({ token }) {
         <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
         <Button
           style={{ backgroundColor: "#209669", color: "#ffffff" }}
-          onClick={() => talbainiiJagsaaltMutate().finally(() => duusgakh())}>
+          onClick={() => talbainiiJagsaaltMutate().finally(() => duusgakh())}
+        >
           {t("Хадгалах")}
         </Button>
       </Space>,
@@ -451,10 +456,10 @@ function talbaiBurtgekh({ token }) {
           token={token}
           onFinish={onRefresh}
           barilgiinId={barilgiinId}
-          zam='talbaiTatya'
-          garchig='Excel файл аа чирч оруулах эсвэл сонгоно уу'
-          tailbar='Талбайн excel файл'
-          zagvariinZam='talbainZagvarAvya'
+          zam="talbaiTatya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Талбайн excel файл"
+          zagvariinZam="talbainZagvarAvya"
         />
       ),
       footer,
@@ -467,19 +472,21 @@ function talbaiBurtgekh({ token }) {
 
   return (
     <Admin
-      title='Талбай бүртгэл'
-      khuudasniiNer='talbaiBurtgekh'
+      title="Талбай бүртгэл"
+      khuudasniiNer="talbaiBurtgekh"
       setNeesenEsekh={setNeesenEsekh}
       tsonkhniiId={"61c2c63e1c2830c4e6f90c8d"}
-      className='p-0 md:p-4'
+      className="p-0 md:p-4"
       onSearch={(search) =>
         setTalbaiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      loading={waiting || isValidating}>
+      loading={waiting || isValidating}
+    >
       <Card
-        size='small'
-        className='col-span-12 mb-14 md:col-span-12 md:mb-0 xl:col-span-12'>
-        <div className='hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12'>
+        size="small"
+        className="col-span-12 mb-14 md:col-span-12 md:mb-0 xl:col-span-12"
+      >
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
@@ -490,22 +497,23 @@ function talbaiBurtgekh({ token }) {
                     : ""
                 }`}
                 onClick={() => setQuery(mur.query)}
-                data-aos='fade-left'
-                data-aos-duration='1000'
-                data-aos-delay={1 + index + "00"}>
-                <div className='h-full  w-[70vw] rounded-xl sm:w-auto'>
-                  <div className='rounded-xl p-3'>
-                    <div className='flex justify-between'>
+                data-aos="fade-left"
+                data-aos-duration="1000"
+                data-aos-delay={1 + index + "00"}
+              >
+                <div className="h-full  w-[70vw] rounded-xl sm:w-auto">
+                  <div className="rounded-xl p-3">
+                    <div className="flex justify-between">
                       <div>
-                        <div className='text-3xl font-bold text-green-600'>
+                        <div className="text-3xl font-bold text-green-600">
                           {mur.too}
                         </div>
-                        <div className='text-base text-gray-500'>
+                        <div className="text-base text-gray-500">
                           {t(mur.utga)}
                         </div>
                       </div>
                       <div>
-                        <div className='absolute right-2 top-2 flex text-xs text-green-600'>
+                        <div className="absolute right-2 top-2 flex text-xs text-green-600">
                           {t("Нийт м")}²: {formatNumber(mur.mk)}
                         </div>
                       </div>
@@ -518,29 +526,33 @@ function talbaiBurtgekh({ token }) {
         </div>
 
         <div
-          className='ml-auto place-content-end p-5 md:flex'
-          data-aos='fade-right'
-          data-aos-duration='1000'
-          data-aos-delay='200'>
+          className="ml-auto place-content-end p-5 md:flex"
+          data-aos="fade-right"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+        >
           <div
-            className='  w-full place-content-end  md:pr-4'
-            data-aos='fade-right'
-            data-aos-duration='1000'
-            data-aos-delay='200'>
+            className="  w-full place-content-end  md:pr-4"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="200"
+          >
             <Button
               onClick={showDrawer}
-              type='primary'
-              className='w-full md:w-auto'
+              type="primary"
+              className="w-full md:w-auto"
               style={{ marginTop: "10px" }}
-              icon={<PictureOutlined style={{ fontSize: "16px" }} />}>
+              icon={<PictureOutlined style={{ fontSize: "16px" }} />}
+            >
               <span>{t("План зураг харах")}</span>
             </Button>
             <Drawer
               width={"100vw"}
               title={t("Нэгдсэн План зураг")}
-              placement='right'
+              placement="right"
               onClose={onClose}
-              visible={open}>
+              visible={open}
+            >
               {open && (
                 <Tailan
                   davkhar={talbaiState.davkhar}
@@ -557,35 +569,39 @@ function talbaiBurtgekh({ token }) {
             </Drawer>
           </div>
           <div
-            className='flex place-content-end justify-between gap-4 '
-            data-aos='fade-right'
-            data-aos-duration='1000'
-            data-aos-delay='200'>
+            className="flex place-content-end justify-between gap-4 "
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="200"
+          >
             <Link
               href={{
                 pathname: "/khyanalt/talbaiBurtgel/talbaiBurtgekh/new",
                 query: { barilgiinId },
-              }}>
+              }}
+            >
               <Button
-                type='primary'
-                className='w-full md:w-auto'
+                type="primary"
+                className="w-full md:w-auto"
                 style={{ marginTop: "10px" }}
-                icon={<PlusOutlined style={{ fontSize: "16px" }} />}>
+                icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+              >
                 <span>{t("Нэмэх")}</span>
               </Button>
             </Link>
 
             <Popover
               content={() => (
-                <div className='flex w-32 flex-col pl-4 '>
+                <div className="flex w-32 flex-col pl-4 ">
                   <a
-                    className='flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  '
-                    onClick={talbaiOruulakhExcel}>
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700  "
+                    onClick={talbaiOruulakhExcel}
+                  >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Оруулах")}</label>
                   </a>
                   <a
-                    className='flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 '
+                    className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
                     onClick={() => {
                       const { Excel } = require("antd-table-saveas-excel");
                       const excelExport = new Excel();
@@ -628,19 +644,22 @@ function talbaiBurtgekh({ token }) {
                         ])
                         .addDataSource(talbainiiGaralt?.jagsaalt)
                         .saveAs(`${t("түрээсийн талбай")}.xlsx`);
-                    }}>
+                    }}
+                  >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
                   </a>
                 </div>
               )}
-              placement='bottom'
-              trigger='click'>
+              placement="bottom"
+              trigger="click"
+            >
               <Button
-                type='primary'
-                className='w-full md:w-auto'
+                type="primary"
+                className="w-full md:w-auto"
                 style={{ marginTop: "10px" }}
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
                 <span>Excel</span>
                 <DownOutlined width={5} />
               </Button>
@@ -648,18 +667,19 @@ function talbaiBurtgekh({ token }) {
           </div>
         </div>
         <div
-          data-aos='fade-up-left'
-          data-aos-duration='1000'
-          data-aos-delay='200'
-          data-aos-anchor-placement='top-bottom'
-          className='mt-5 md:mt-0'>
-          <p className='py-2 font-medium md:hidden'>{t("Талбайн жагсаалт")}</p>
+          data-aos="fade-up-left"
+          data-aos-duration="1000"
+          data-aos-delay="200"
+          data-aos-anchor-placement="top-bottom"
+          className="mt-5 md:mt-0"
+        >
+          <p className="py-2 font-medium md:hidden">{t("Талбайн жагсаалт")}</p>
           <CardList
             tileProps={{ talbaiUstgay, barilgiinId }}
-            keyValue='talbai'
+            keyValue="talbai"
             cardListTuluv={"utas"}
             neesenEsekh={neesenEsekh}
-            className='block overflow-auto md:hidden'
+            className="block overflow-auto md:hidden"
             jagsaalt={talbainiiGaralt?.jagsaalt}
             Component={TalbaiTile}
             pagination={{
@@ -679,7 +699,7 @@ function talbaiBurtgekh({ token }) {
           <Table
             className={"mt-6 hidden md:block"}
             bordered
-            size='small'
+            size="small"
             loading={!talbainiiGaralt}
             tableLayout={"fixed"}
             rowKey={(row) => row._id}
@@ -752,6 +772,16 @@ function talbaiBurtgekh({ token }) {
                 sorter: () => 0,
               },
               {
+                title: t("Талбай/м3/"),
+                dataIndex: "talbainKhemjeeMetrKube",
+                align: "center",
+                ellipsis: true,
+                width: "2rem",
+                showSorterTooltip: false,
+                defaultSortOrder: "descend",
+                sorter: () => 0,
+              },
+              {
                 title: t("Нийт үнэ/₮/"),
                 dataIndex: "talbainNiitUne",
                 ellipsis: true,
@@ -796,7 +826,7 @@ function talbaiBurtgekh({ token }) {
                 width: "4.5rem",
                 align: "center",
                 render(a) {
-                  return <div className='text-left'>{a}</div>;
+                  return <div className="text-left">{a}</div>;
                 },
               },
 
@@ -816,7 +846,8 @@ function talbaiBurtgekh({ token }) {
                           ? "dark:bg-green-600 dark:text-white"
                           : "dark:bg-red-700 dark:text-white"
                       }
-                      color={idevkhiteiEsekh === true ? "green" : "red"}>
+                      color={idevkhiteiEsekh === true ? "green" : "red"}
+                    >
                       {idevkhiteiEsekh === true ? t("Идэвхтэй") : t("Идэвхгүй")}
                     </Tag>
                   );
@@ -832,27 +863,28 @@ function talbaiBurtgekh({ token }) {
                   if (segmentuud?.length > 0) {
                     return (
                       <Popover
-                        trigger='hover'
+                        trigger="hover"
                         content={
                           <div>
                             <CardList
-                              keyValue='segment'
-                              className='max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2'
+                              keyValue="segment"
+                              className="max-h-[70vh] overflow-y-scroll rounded-md bg-[#F3F4F6] px-3 py-2"
                               jagsaalt={segmentuud}
                               Component={TalbaiSegment}
                               componentProps={{ token }}
                             />
                           </div>
-                        }>
-                        <a className=' flex items-center justify-center  hover:scale-150 '>
-                          <ImFileText2 className='text-xl' />
+                        }
+                      >
+                        <a className=" flex items-center justify-center  hover:scale-150 ">
+                          <ImFileText2 className="text-xl" />
                         </a>
                       </Popover>
                     );
                   } else
                     return (
-                      <div className=' flex items-center justify-center'>
-                        <ImFileEmpty className='text-xl text-gray-500' />
+                      <div className=" flex items-center justify-center">
+                        <ImFileEmpty className="text-xl text-gray-500" />
                       </div>
                     );
                 },
@@ -865,13 +897,13 @@ function talbaiBurtgekh({ token }) {
                 render: (data) => {
                   return (
                     data?.khurunguud !== undefined && (
-                      <div className='flex flex-row justify-center'>
+                      <div className="flex flex-row justify-center">
                         <Popover
-                          trigger='hover'
+                          trigger="hover"
                           content={
                             <Table
                               pagination={false}
-                              size='small'
+                              size="small"
                               dataSource={data?.khurunguud}
                               columns={[
                                 {
@@ -899,11 +931,13 @@ function talbaiBurtgekh({ token }) {
                                     return formatNumber(data) + "₮";
                                   },
                                 },
-                              ]}></Table>
-                          }>
-                          <a className='flex items-center justify-center  hover:scale-125 '>
+                              ]}
+                            ></Table>
+                          }
+                        >
+                          <a className="flex items-center justify-center  hover:scale-125 ">
                             <Badge count={data?.khurunguud?.length}>
-                              <MdOutlineInventory className='text-xl dark:text-gray-300 ' />
+                              <MdOutlineInventory className="text-xl dark:text-gray-300 " />
                             </Badge>
                           </a>
                         </Popover>
@@ -918,17 +952,17 @@ function talbaiBurtgekh({ token }) {
                 align: "center",
                 render: (data) => {
                   return (
-                    <div className='flex flex-row justify-center'>
+                    <div className="flex flex-row justify-center">
                       <Popover
-                        trigger='click'
-                        placement='topLeft'
+                        trigger="click"
+                        placement="topLeft"
                         content={
                           <Table
                             style={{
                               display: "flex",
                             }}
                             pagination={false}
-                            size='small'
+                            size="small"
                             dataSource={gereeniiMedeelel?.jagsaalt}
                             columns={[
                               {
@@ -977,11 +1011,13 @@ function talbaiBurtgekh({ token }) {
                                   return formatNumber(data) + "₮";
                                 },
                               },
-                            ]}></Table>
-                        }>
-                        <a className='flex items-center justify-center hover:scale-150'>
+                            ]}
+                          ></Table>
+                        }
+                      >
+                        <a className="flex items-center justify-center hover:scale-150">
                           <GiBackwardTime
-                            className='text-2xl'
+                            className="text-2xl"
                             onClick={() =>
                               setShuult((a) => ({
                                 ...a,
@@ -1001,12 +1037,12 @@ function talbaiBurtgekh({ token }) {
                 width: "1rem",
                 align: "center",
                 render: (data) => (
-                  <div className='flex flex-row justify-center'>
+                  <div className="flex flex-row justify-center">
                     <Popover
-                      placement='bottom'
-                      trigger='click'
+                      placement="bottom"
+                      trigger="click"
                       content={() => (
-                        <div className='flex w-24 flex-col space-y-2'>
+                        <div className="flex w-24 flex-col space-y-2">
                           <Link
                             href={{
                               pathname: `/khyanalt/talbaiBurtgel/talbaiBurtgekh/${data._id}`,
@@ -1014,18 +1050,20 @@ function talbaiBurtgekh({ token }) {
                                 data: JSON.stringify(data),
                                 barilgiinId,
                               },
-                            }}>
-                            <a className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 '>
+                            }}
+                          >
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
                               <EditOutlined style={{ fontSize: "18px" }} />
                               <label>{t("Засах")}</label>
                             </a>
                           </Link>
                           <Popconfirm
-                            title='Талбай устгах уу?'
+                            title="Талбай устгах уу?"
                             okText={t("Тийм")}
                             cancelText={t("Үгүй")}
-                            onConfirm={() => talbaiUstgay(data)}>
-                            <a className='ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 '>
+                            onConfirm={() => talbaiUstgay(data)}
+                          >
+                            <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 ">
                               <DeleteOutlined
                                 style={{ fontSize: "18px", color: "red" }}
                               />
@@ -1033,8 +1071,9 @@ function talbaiBurtgekh({ token }) {
                             </a>
                           </Popconfirm>
                         </div>
-                      )}>
-                      <a className=' flex items-center justify-center  hover:scale-150'>
+                      )}
+                    >
+                      <a className=" flex items-center justify-center  hover:scale-150">
                         <MoreOutlined style={{ fontSize: "18px" }} />
                       </a>
                     </Popover>
