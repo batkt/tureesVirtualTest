@@ -27,7 +27,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
     return () => {
       if (newPlayer) {
         newPlayer.destroy();
-        setPlayer(null);
       }
     };
   }, [Camer]);
