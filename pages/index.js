@@ -37,14 +37,24 @@ function Ajiltan() {
   }, []);
 
   const { t, i18n } = useTranslation();
-
+  const images = [];
+  if (typeof window !== "undefined") {
+    const snowflake1 = document.createElement("img");
+    snowflake1.src = "/snowflake.png";
+    const snowflake2 = document.createElement("img");
+    snowflake2.src = "/snowflake1.png";
+    images.push(snowflake1);
+    images.push(snowflake2);
+  }
   return (
     <div className="login flex justify-center bg-green-600 dark:bg-gray-800 xl:bg-white ">
       <Head>
         <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {moment(new Date()).format("MM") === "12" ? <Snowfall /> : null}
+      {moment(new Date()).format("MM") === "12" ? (
+        <Snowfall radius={[10, 30]} snowflakeCount={250} images={images} />
+      ) : null}
       <div className="container sm:px-10">
         <div className="block grid-cols-2 gap-4 xl:grid">
           <div className="z-10 hidden min-h-screen flex-col xl:flex">

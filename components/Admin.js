@@ -155,6 +155,16 @@ function Admin({
       ajiltan?.erkh === "Admin"
   );
 
+  const images = [];
+  if (typeof window !== "undefined") {
+    const snowflake1 = document.createElement("img");
+    snowflake1.src = "/snowflake.png";
+    const snowflake2 = document.createElement("img");
+    snowflake2.src = "/snowflake1.png";
+    images.push(snowflake1);
+    images.push(snowflake2);
+  }
+
   return (
     <div
       onClick={() => {
@@ -186,7 +196,9 @@ function Admin({
       >
         <Tuslamj />
       </Drawer>
-      {moment(new Date()).format("MM") === "12" ? <Snowfall /> : null}
+      {moment(new Date()).format("MM") === "12" ? (
+        <Snowfall images={images} radius={[5, 30]} snowflakeCount={250} />
+      ) : null}
       <div
         onClick={(e) => e.stopPropagation()}
         className={`fixed top-1/3 z-50 flex h-48 items-center transition-all ${
