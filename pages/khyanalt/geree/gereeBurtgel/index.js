@@ -554,6 +554,18 @@ function ZakhialgiinKhyanalt() {
   const columns = useMemo(() => {
     var jagsaalt = [
       {
+        title: "№",
+        align: "center",
+        dataIndex: "dugaar",
+        width: "2rem",
+        render: (text, record, index) =>
+          (gereeniiMedeelel?.khuudasniiDugaar || 0) *
+            (gereeniiMedeelel?.khuudasniiKhemjee || 0) -
+          (gereeniiMedeelel?.khuudasniiKhemjee || 0) +
+          index +
+          1,
+      },
+      {
         title: t("Гэрээ"),
         fixed: "left",
         dataIndex: "gereeniiDugaar",
@@ -862,7 +874,16 @@ function ZakhialgiinKhyanalt() {
         ),
       },
     ];
-  }, [baiguullaga, token, gereeniiTokhirgoo, shuult, shineBagana, order, t]);
+  }, [
+    baiguullaga,
+    token,
+    gereeniiTokhirgoo,
+    gereeniiMedeelel?.jagsaalt,
+    shuult,
+    shineBagana,
+    order,
+    t,
+  ]);
 
   function refresh() {
     gereeniiMedeelelMutate();
@@ -996,20 +1017,29 @@ function ZakhialgiinKhyanalt() {
             );
           }
           for (const [key, value] of Object.entries(geree)) {
-            if(key==='zardluud'){
-              value.map((mur)=>{
+            if (key === "zardluud") {
+              value.map((mur) => {
                 data.dedKhesguud
-                    .filter((a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1)
-                    .map((b) => {
-                      b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), mur.tariff);
-                    });
-              })
+                  .filter(
+                    (a) =>
+                      !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
+                  )
+                  .map((b) => {
+                    b.zaalt = b.zaalt.replace(
+                      new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
+                      mur.tariff
+                    );
+                  });
+              });
             } else {
               data.dedKhesguud
-                  .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
-                  .map((b) => {
-                    b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
-                  });
+                .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+                .map((b) => {
+                  b.zaalt = b.zaalt.replace(
+                    new RegExp(`&lt;${key}&gt;`, "g"),
+                    value
+                  );
+                });
             }
             data.baruunTolgoi = data.baruunTolgoi?.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
