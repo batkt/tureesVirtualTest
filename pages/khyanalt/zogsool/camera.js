@@ -20,6 +20,7 @@ import {
   Select,
   notification,
   InputNumber,
+  Popconfirm,
 } from "antd";
 import {
   StarOutlined,
@@ -42,6 +43,8 @@ import {
   PrinterOutlined,
   CopyOutlined,
   ReloadOutlined,
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import CardList from "components/cardList";
 import UilchluulegchTile from "components/pageComponents/zogsool/UilchluulegchTile";
@@ -1251,11 +1254,33 @@ function camera({ token }) {
                 </Button>
               </Popover>
             ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
-              <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
-                <div className="flex items-center justify-center">
-                  {t("Идэвхтэй")}
+              <Popover
+                content={
+                  <Popconfirm
+                    okText={t("Тийм")}
+                    cancelText={t("Үгүй")}
+                    title={`${parent?.mashiniiDugaar} дугаартай машиныг гаргах уу?`}
+                    type={"warning"}
+                    onConfirm={() => {
+                      dugaarGaraasBurtgekh(parent);
+                    }}
+                    className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2"
+                  >
+                    <div className="flex items-center justify-center">
+                      <ArrowRightOutlined />
+                    </div>
+                    <div className="flex items-center justify-center">
+                      Гаргах
+                    </div>
+                  </Popconfirm>
+                }
+              >
+                <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
+                  <div className="flex items-center justify-center">
+                    {t("Идэвхтэй")}
+                  </div>
                 </div>
-              </div>
+              </Popover>
             ) : mur?.tuluv === 1 ? (
               mur?.ebarimtAvsanEsekh === false ? (
                 <div
@@ -1623,6 +1648,41 @@ function camera({ token }) {
       })
       .catch(aldaaBarigch);
   };
+
+  const dugaarGaraasBurtgekh = (data) => {
+    if (data) {
+      if (!camerVal[1]) {
+        return notification.warn({
+          message: "Гарах камер сонгоно уу.",
+          duration: 2,
+        });
+      }
+      const yavuulakhData = {
+        mashiniiDugaar: data.mashiniiDugaar,
+        CAMERA_IP: camerVal[1],
+      };
+      uilchilgee(token)
+        .post("/zogsoolSdkService", yavuulakhData)
+        .then((res) => {
+          if (res.status === 200) {
+            if (!!res?.data) notification.warn({ message: res.data.aldaa });
+            else notification.success({ message: t("Амжилттай бүртгэгдлээ") });
+            if (searchUtga.current?.value) {
+              searchUtga.current.value = "";
+              setUilchluulegchKhuudaslalt((a) => ({
+                ...a,
+                search: "",
+                khuudasniiDugaar: 1,
+              }));
+            }
+            form.resetFields();
+            onRefresh();
+          }
+        })
+        .catch(aldaaBarigch);
+    }
+  };
+
   const tsagTootsoolur = (v) => {
     const odooginTsag =
       Number(moment(new Date()).format("HH")) * 60 * 60 +
