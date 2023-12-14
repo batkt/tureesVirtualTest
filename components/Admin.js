@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Loader from "./loader";
 import { Button, Drawer, Switch, Tooltip, Alert } from "antd";
 import {
@@ -76,6 +76,7 @@ function Admin({
   const [showSidehelpBar, setShowSidehelpBar] = useState(false);
   const { i18n, t } = useTranslation();
   const [isOnline, setIsOnline] = useState(false);
+  const [focusaasGarsan, setFocusaasGarsan] = useState(false);
 
   function getOS() {
     var userAgent = navigator.userAgent,
@@ -497,8 +498,19 @@ function Admin({
                   className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
                 >
                   <input
+                    onFocus={() => setFocusaasGarsan(false)}
+                    onBlur={() =>
+                      setTimeout(() => {
+                        setFocusaasGarsan(true);
+                      }, 200)
+                    }
                     ref={searchUtga ? searchUtga : undefined}
                     onDoubleClick={khailtDoubleClick}
+                    onClick={() => {
+                      if (searchUtga) {
+                        searchUtga.current.select();
+                      }
+                    }}
                     onChange={({ target }) => {
                       if (!!onSearch) {
                         clearTimeout(timeout);
@@ -533,27 +545,40 @@ function Admin({
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                   )}
-                  {suggestionData && searchUtga.current.value !== "" && (
-                    <div className="box relative z-20 w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56">
-                      {suggestionData.length > 0 ? (
-                        suggestionData.map((mur, index) => (
-                          <div
-                            key={index}
-                            onClick={() => {
-                              if (searchUtga) {
-                                searchUtga.current.value = mur;
-                              }
-                            }}
-                            className="w-full cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
-                          >
-                            {mur.mashiniiDugaar}
-                          </div>
-                        ))
-                      ) : (
-                        <div>Машин олдсонгүй</div>
-                      )}
-                    </div>
-                  )}
+                  {suggestionData &&
+                    searchUtga.current.value !== "" &&
+                    !focusaasGarsan && (
+                      <div
+                        onClick={() => setFocusaasGarsan(false)}
+                        className="box relative z-20 mt-[2px] max-h-[200px] w-40 overflow-y-auto px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56"
+                      >
+                        {suggestionData.length > 0 ? (
+                          suggestionData.map((mur, index) => (
+                            <div
+                              key={index}
+                              onClick={() => {
+                                setFocusaasGarsan(false);
+                                if (searchUtga) {
+                                  searchUtga.current.value = mur.mashiniiDugaar;
+                                  if (!!onSearch) {
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout(function () {
+                                      onSearch(mur.mashiniiDugaar);
+                                    }, 300);
+                                  }
+                                  setFocusaasGarsan(true);
+                                }
+                              }}
+                              className="w-full cursor-pointer py-1 hover:bg-gray-300 dark:hover:bg-gray-600"
+                            >
+                              {mur.mashiniiDugaar}
+                            </div>
+                          ))
+                        ) : (
+                          <div>Машин олдсонгүй</div>
+                        )}
+                      </div>
+                    )}
                 </div>
                 <MSearch
                   className="relative block text-gray-700 dark:text-gray-300 md:hidden"
