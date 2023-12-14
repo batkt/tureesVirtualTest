@@ -49,6 +49,9 @@ function Admin({
   setTurulZagvar,
   fixedZagvarNeegdsenEsekh,
   onChangeBarilga,
+  searchUtga,
+  khailtDoubleClick,
+  suggestionData,
 }) {
   const [mSearch, setMSearch] = useState(false);
   const { themeValue, setTheme } = useThemeValue();
@@ -494,6 +497,8 @@ function Admin({
                   className="relative hidden w-40 text-gray-700 dark:text-gray-300 md:block xl:w-56"
                 >
                   <input
+                    ref={searchUtga ? searchUtga : undefined}
+                    onDoubleClick={khailtDoubleClick}
                     onChange={({ target }) => {
                       if (!!onSearch) {
                         clearTimeout(timeout);
@@ -527,6 +532,27 @@ function Admin({
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
+                  )}
+                  {suggestionData && searchUtga.current.value !== "" && (
+                    <div className="box relative z-20 w-40 px-3 py-1 pr-10 shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 xl:w-56">
+                      {suggestionData.length > 0 ? (
+                        suggestionData.map((mur, index) => (
+                          <div
+                            key={index}
+                            onClick={() => {
+                              if (searchUtga) {
+                                searchUtga.current.value = mur;
+                              }
+                            }}
+                            className="w-full cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600"
+                          >
+                            {mur.mashiniiDugaar}
+                          </div>
+                        ))
+                      ) : (
+                        <div>Машин олдсонгүй</div>
+                      )}
+                    </div>
                   )}
                 </div>
                 <MSearch

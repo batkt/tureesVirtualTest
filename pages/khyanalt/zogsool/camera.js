@@ -195,6 +195,9 @@ function tulburKhurvuulekh(v) {
     case "kapitron":
       utga = "Капитрон";
       break;
+    case "toki":
+      utga = "Токи";
+      break;
     default:
       utga = v;
       break;
@@ -266,6 +269,7 @@ function camera({ token }) {
   const [guilgeeDrawerOpen, setGuilgeeDrawerOpen] = useState(false);
   const [songogdsonBurtgel, setSongogdsonBurtgel] = useState("");
   const [form] = Form.useForm();
+  const searchUtga = useRef(null);
 
   const que = useMemo(() => {
     return {
@@ -1605,6 +1609,14 @@ function camera({ token }) {
           if (!!res?.data) notification.warn({ message: res.data.aldaa });
           else notification.success({ message: t("Амжилттай бүртгэгдлээ") });
           setModalOpen({ bool: false, item: null, type: "" });
+          if (searchUtga.current?.value) {
+            searchUtga.current.value = "";
+            setUilchluulegchKhuudaslalt((a) => ({
+              ...a,
+              search: "",
+              khuudasniiDugaar: 1,
+            }));
+          }
           form.resetFields();
           onRefresh();
         }
@@ -1669,6 +1681,19 @@ function camera({ token }) {
   function guilgeeDrawerKhaakh() {
     setGuilgeeDrawerOpen(false);
   }
+
+  function khailtDoubleClick() {
+    navigator.clipboard.readText().then((v) => {
+      if (!!v) {
+        searchUtga.current.value = v;
+        setUilchluulegchKhuudaslalt((a) => ({
+          ...a,
+          search: v,
+          khuudasniiDugaar: 1,
+        }));
+      }
+    });
+  }
   const excel = new Excel();
   return (
     <Admin
@@ -1678,6 +1703,8 @@ function camera({ token }) {
       dedKhuudas={true}
       fixedZagvarNeegdsenEsekh={guilgeeKharakh}
       setTurulZagvar={setGuilgeeKharakh}
+      searchUtga={searchUtga}
+      suggestionData={uilchluulegchGaralt?.jagsaalt}
       className="relative p-2 pb-24 sm:p-4"
       onSearch={(search) => {
         setUilchluulegchKhuudaslalt((a) => ({
@@ -1687,6 +1714,7 @@ function camera({ token }) {
         }));
         setKhaikh(search);
       }}
+      khailtDoubleClick={khailtDoubleClick}
     >
       {jagsaalt?.length > 0 ? (
         <div className="col-span-12">

@@ -50,9 +50,7 @@ function ShineTulbur(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
   );
   const [khaanbank, setTerminal] = React.useState(false);
-  const [tulbur, setTulbur] = React.useState(
-    (niitDun ? [] : data?.tulbur) || []
-  );
+  const [tulbur, setTulbur] = React.useState(data?.tulbur || []);
   const [eBarimt, setEBarimt] = React.useState(null);
   const [baiguullagaEsekh, setBaiguullagaEsekh] = React.useState(false);
   const [irgenEsekh, setIrgenEsekh] = React.useState(true);
@@ -74,7 +72,8 @@ function ShineTulbur(
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
-    niitDun?.toString()
+    niitDun?.toString() -
+      (data?.tulbur?.length > 0 && data?.tulbur?.reduce((a, b) => a + b.dun, 0))
   );
   const [refreshdekhEsekh, setRefreshdekhEsekh] = React.useState(true);
 
@@ -111,6 +110,7 @@ function ShineTulbur(
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
     const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const lend = tulbur.find((a) => a.turul === "lend")?.dun;
+    const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     return {
       belen,
       zeel,
@@ -127,6 +127,7 @@ function ShineTulbur(
       socialpay,
       pocket,
       lend,
+      toki,
     };
   }, [tulbur]);
 
@@ -826,9 +827,16 @@ function ShineTulbur(
                 />
               </div>
               <div
-                className={`h-[85px] cursor-not-allowed overflow-hidden rounded-3xl hover:scale-110`}
+                className={`relative h-[85px] cursor-not-allowed rounded-3xl hover:scale-110`}
               >
                 <Image preview={false} width={100} src="/Group_158.png" />
+                {value.toki > 0 ? (
+                  <div className="absolute right-[0] top-[-15px] z-10 rounded-xl border-[1px] border-green-600 bg-white p-1">
+                    <div className="font-semibold">
+                      {formatNumber(value.toki)}₮
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </div>
 
