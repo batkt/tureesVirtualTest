@@ -1674,6 +1674,7 @@ function camera({ token }) {
                 search: "",
                 khuudasniiDugaar: 1,
               }));
+              setKhaikh("");
             }
             form.resetFields();
             onRefresh();
