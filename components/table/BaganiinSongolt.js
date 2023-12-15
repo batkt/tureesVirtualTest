@@ -11,19 +11,14 @@ const BaganiinSongolt = ({
 }) => {
   const { t } = useTranslation();
   React.useEffect(() => {
-    async function fetchData() {
-      const baganuud = await localStorage.getItem(
-        "bagana-" + window.location.href
+    const baganuud = localStorage.getItem("bagana-" + window.location.href);
+    if (!!baganuud)
+      setShineBagana(
+        columns.filter((a) => {
+          let parsedBaganuud = JSON.parse(baganuud);
+          return parsedBaganuud.find((b) => b === a.dataIndex);
+        })
       );
-      if (!!baganuud) {
-        let parsedBaganuud = JSON.parse(baganuud);
-        var bagana = columns.filter(
-          (a) => !!parsedBaganuud.find((b) => b === a.dataIndex)
-        );
-        setShineBagana(bagana);
-      }
-    }
-    fetchData();
   }, []);
 
   function baganaNemekh(e, mur) {
@@ -60,8 +55,7 @@ const BaganiinSongolt = ({
                     checked={
                       !!shineBagana.find((a) => a.dataIndex === mur.dataIndex)
                     }
-                    onClick={(e) => baganaNemekh(e, mur)}
-                  >
+                    onClick={(e) => baganaNemekh(e, mur)}>
                     {mur.title}
                   </Checkbox>
                 </Menu.Item>
@@ -71,13 +65,11 @@ const BaganiinSongolt = ({
         )}
         style={{ padding: 0 }}
         placement="bottom"
-        trigger="click"
-      >
+        trigger="click">
         <Button
           className={ButtonStyle}
           type="primary"
-          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}
-        >
+          icon={<UnorderedListOutlined style={{ fontSize: "16px" }} />}>
           <span>{t("Багана")}</span>
         </Button>
       </Popover>
