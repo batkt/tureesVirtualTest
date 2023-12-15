@@ -1130,6 +1130,14 @@ function camera({ token }) {
                 >
                   {t("Төлөөгүй")}
                 </div>
+                <div
+                  onClick={() => setKhelber("toki")}
+                  className={`relative ${
+                    khelber === "toki" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  {t("Токи")}
+                </div>
               </div>
             }
           >

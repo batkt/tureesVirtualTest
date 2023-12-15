@@ -136,19 +136,8 @@ function Zogsool({ token }) {
     selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
     getCheckboxProps: (record) => {
-      const tsagiinZuruu = moment
-        .duration(
-          moment().diff(
-            moment(record?.tuukh?.[0]?.tsagiinTuukh?.[0]?.orsonTsag)
-          )
-        )
-        .asHours();
-
       const untraakh =
-        tsagiinZuruu > shalgakhTsag &&
-        record?.tuukh?.[0]?.tuluv === 0 &&
-        !record?.tuukh?.[0]?.uneguiGarsan &&
-        !record?.tuukh?.[0]?.garsanKhaalga;
+        !record?.tuukh?.[0]?.uneguiGarsan && !record?.tuukh?.[0]?.garsanKhaalga;
       return {
         disabled: !untraakh,
       };
@@ -303,7 +292,6 @@ function Zogsool({ token }) {
             uilchilgee(token)
               .post("/uilchluulegchTseverliy", {
                 utguud: songogdson,
-                shalgakhTsag: 18,
                 shaltgaan: shaltgaan,
               })
               .then(({ data }) => {
@@ -587,6 +575,14 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Харилцах
+                </div>
+                <div
+                  onClick={() => setTulbur("toki")}
+                  className={`relative ${
+                    tulbur === "toki" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Токи
                 </div>
               </div>
             }
