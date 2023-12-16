@@ -1272,7 +1272,7 @@ function camera({ token }) {
                     onConfirm={() => {
                       dugaarGaraasBurtgekh(parent);
                     }}
-                    className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2"
+                    className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
                   >
                     <div className="flex items-center justify-center">
                       <ArrowRightOutlined />
