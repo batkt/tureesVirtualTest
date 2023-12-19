@@ -251,7 +251,7 @@ function camera({ token }) {
   const tailanRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
-    "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
+    "tuukh.tsagiinTuukh.garsanTsag": -1,
   });
   const [modalOpen, setModalOpen] = useState({
     bool: false,
