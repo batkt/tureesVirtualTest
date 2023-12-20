@@ -1644,11 +1644,14 @@ function camera({ token }) {
           setModalOpen({ bool: false, item: null, type: "" });
           if (searchUtga.current?.value) {
             searchUtga.current.value = "";
-            setUilchluulegchKhuudaslalt((a) => ({
-              ...a,
-              search: "",
-              khuudasniiDugaar: 1,
-            }));
+            setTimeout(() => {
+              setUilchluulegchKhuudaslalt({
+                khuudasniiDugaar: 1,
+                khuudasniiKhemjee: 10,
+                search: "",
+                jagsaalt: [],
+              });
+            }, 300);
           }
           form.resetFields();
           onRefresh();
