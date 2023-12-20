@@ -302,10 +302,10 @@ function camera({ token }) {
   const songogdzonZogsool = useMemo(() => {
     var zogsool = {};
     if (parkingJagsaalt && camerVal[1]) {
-      parkingJagsaalt.forEach((item) => {
-        item.khaalga.forEach((khaalgaItem) => {
-          khaalgaItem.camera.forEach((cameraItem) => {
-            if (cameraItem.cameraIP === camerVal[1]) {
+      parkingJagsaalt?.forEach((item) => {
+        item?.khaalga?.forEach((khaalgaItem) => {
+          khaalgaItem?.camera?.forEach((cameraItem) => {
+            if (cameraItem?.cameraIP === camerVal[1]) {
               zogsool = item;
             }
           });
