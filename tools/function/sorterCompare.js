@@ -24,8 +24,4 @@ export default function sorterCompare(s, setOrder, defaultValue) {
     if (s.order === undefined) sort = _.clone(defaultValue);
   }
   setOrder({ ...sort });
-  localStorage.setItem(
-    "order-" + window.location.href,
-    JSON.stringify({ ...sort })
-  );
 }
