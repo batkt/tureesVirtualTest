@@ -152,34 +152,35 @@ const khatuuZagvar = (medeelel) => {
           })
           .map((mur, index) => {
             return `
-            <tr key={${index}}>
-              <td style="border: 1px solid #000; text-align: center;">${
-                index + 4
-              }</td>
-              <td style="border: 1px solid #000; text-align: left;">
-                ${mur.tailbar}
-              </td>
-              <td style="border: 1px solid #000; text-align: left;">${
-                mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
-              }</td>
-              <td style="border: 1px solid #000; text-align: left;">${
-                mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
-              }</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
-                mur.tailbar
-              }.khungulultKhassanTulukhDunNuat&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
-                mur.tailbar
-              }.khungulultKhassanTulukhDunNuatgui&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
-                mur.tailbar
-              }.khungulult&gt;</td>
-              <td style="border: 1px solid #000; text-align: right;">&lt;${
-                mur.tailbar
-              }.khungulultKhassanTulukhDun&gt;</td>
-          </tr>
+              <tr key=${index}>
+                <td style="border: 1px solid #000; text-align: center;">${
+                  index + 4
+                }</td>
+                <td style="border: 1px solid #000; text-align: left;">
+                  ${mur.tailbar}
+                </td>
+                <td style="border: 1px solid #000; text-align: left;">${
+                  mur.umnukhZaalt === null ? "" : mur.umnukhZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: left;">${
+                  mur.suuliinZaalt === null ? "" : mur.suuliinZaalt
+                }</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDunNuat&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDunNuatgui&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulult&gt;</td>
+                <td style="border: 1px solid #000; text-align: right;">&lt;${
+                  mur.tailbar
+                }.khungulultKhassanTulukhDun&gt;</td>
+              </tr>
             `;
-          })}
+          })
+          .join("")} 
       </tbody>
       <tfoot>
         <tr style="background-color: #d1d5db; font-weight: 600;">
