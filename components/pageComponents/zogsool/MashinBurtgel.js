@@ -13,6 +13,9 @@ import {
   DatePicker,
   InputNumber,
   Button,
+  Checkbox,
+  Switch,
+  TimePicker,
 } from "antd";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
@@ -56,6 +59,33 @@ function MashinBurtgel(
     data?.ekhlekhOgnoo && data?.duusakhOgnoo
       ? [moment(data.ekhlekhOgnoo), moment(data.duusakhOgnoo)]
       : [moment(new Date()), moment(new Date()).add(1, "months")]
+  );
+  const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
+    data?.gereetTulburBodokhEsekh || false
+  );
+  const [tulburBodokhTsag, setTulburBodokhTsag] = useState(
+    data?.tulburBodokhTsagEkhlekh
+      ? [
+          moment()
+            .set(
+              "hour",
+              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[0], 10)
+            )
+            .set(
+              "minute",
+              parseInt(data?.tulburBodokhTsagEkhlekh.split(":")[1], 10)
+            ),
+          moment()
+            .set(
+              "hour",
+              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[0], 10)
+            )
+            .set(
+              "minute",
+              parseInt(data?.tulburBodokhTsagDuusakh.split(":")[1], 10)
+            ),
+        ]
+      : null
   );
 
   const query = React.useMemo(() => {
@@ -138,6 +168,11 @@ function MashinBurtgel(
         data.uldegdelKhungulukhKhugatsaa = data.khungulukhKhugatsaa;
       }
     }
+    if (data.turul === "Гэрээт" && gereetTulburBodokhEsekh) {
+      data.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
+      data.tulburBodokhTsagEkhlekh = tulburBodokhTsag[0].format("HH:mm");
+      data.tulburBodokhTsagDuusakh = tulburBodokhTsag[1].format("HH:mm");
+    }
     const method = data?._id ? updateMethod : createMethod;
     method("mashin", token, data).then(({ data }) => {
       if (data === "Amjilttai") {
@@ -146,6 +181,7 @@ function MashinBurtgel(
         destroy();
       }
     });
+    console.log("data: ", data);
   }
 
   useEffect(() => {
@@ -501,6 +537,44 @@ function MashinBurtgel(
             placeholder={["Эхлэх огноо", "Дуусах огноо"]}
             value={ognoo}
             onChange={setOgnoo}
+          />
+        </Form.Item>
+      )}
+      {turulShalgah === "Гэрээт" && (
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: t("Төлбөр бодох эсэхийг сонгоно уу!"),
+            },
+          ]}
+          label={t("Tөлбөр бодох эсэх")}
+        >
+          <Switch
+            checked={gereetTulburBodokhEsekh}
+            onChange={(v) => setGereetTulburBodokhEsekh(v)}
+          />
+        </Form.Item>
+      )}
+      {turulShalgah === "Гэрээт" && gereetTulburBodokhEsekh && (
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: t("Төлбөр бодох цаг бүртгэнэ үү!"),
+            },
+          ]}
+          label={t("Төлбөр бодох цаг")}
+        >
+          <TimePicker.RangePicker
+            onClick={(e) => e.stopPropagation()}
+            className="flex w-full  rounded-md md:w-auto"
+            size="middle"
+            format="HH:mm"
+            allowClear={true}
+            placeholder={["Эхлэх цаг", "Дуусах цаг"]}
+            value={tulburBodokhTsag}
+            onChange={setTulburBodokhTsag}
           />
         </Form.Item>
       )}

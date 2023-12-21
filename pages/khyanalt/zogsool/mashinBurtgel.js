@@ -199,6 +199,19 @@ function mashinBurtgel({ token }) {
               render: (duusakhOgnoo) =>
                 moment(duusakhOgnoo)?.diff(moment(new Date()), "days"),
             },
+            {
+              title: "Цаг",
+              align: "center",
+              width: "7rem",
+              render: (data) => {
+                return (
+                  <div>
+                    {data?.tulburBodokhTsagEkhlekh} -{" "}
+                    {data?.tulburBodokhTsagDuusakh}
+                  </div>
+                );
+              },
+            },
           ]
         : turul === "Түрээслэгч"
         ? [
@@ -207,6 +220,113 @@ function mashinBurtgel({ token }) {
               align: "center",
               dataIndex: "ezemshigchiinTalbainDugaar",
               width: "7rem",
+            },
+
+            {
+              title: (
+                <Popover
+                  placement="bottom"
+                  content={
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => setTuluv("")}
+                        className={`relative flex ${
+                          tuluv === "" ? "bg-green-500 text-white" : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Нийт")}
+                      </div>
+                      <div
+                        onClick={() => setTuluv("togtmolTsag")}
+                        className={`relative flex ${
+                          tuluv === "togtmolTsag"
+                            ? "bg-green-500 text-white"
+                            : ""
+                        } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Тогтмол цаг")}
+                      </div>
+                      <div
+                        onClick={() => setTuluv("khuviKhungulult")}
+                        className={`relative ${
+                          tuluv == "khuviKhungulult"
+                            ? "bg-green-500 text-white"
+                            : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Хувь хөнгөлөлт")}
+                      </div>
+                      <div
+                        onClick={() => setTuluv("Үнэгүй")}
+                        className={`relative ${
+                          tuluv == "Үнэгүй" ? "bg-green-500 text-white" : ""
+                        } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
+                      >
+                        {t("Үнэгүй")}
+                      </div>
+                    </div>
+                  }
+                >
+                  <div
+                    className={`flex cursor-pointer items-center justify-center gap-3`}
+                  >
+                    <FilterOutlined className="text-lg text-green-600" />
+                    {t("Хөнгөлөлт")}
+                  </div>
+                </Popover>
+              ),
+              align: "center",
+              width: "10rem",
+              dataIndex: "khungulultTurul",
+              showSorterTooltip: false,
+              render: (a, b) => {
+                if (b.tuluv !== "Үнэгүй") {
+                  if (a === "togtmolTsag") {
+                    return (
+                      <div className="flex items-center justify-center">
+                        {a && (
+                          <div
+                            className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
+                              b.uldegdelKhungulukhKhugatsaa ===
+                              b.khungulukhKhugatsaa
+                                ? "bg-green-400 dark:bg-green-700"
+                                : b.uldegdelKhungulukhKhugatsaa > 0
+                                ? "bg-yellow-400 dark:bg-yellow-700"
+                                : "bg-red-400 dark:bg-red-700"
+                            }`}
+                          >
+                            {b.khungulukhKhugatsaa}
+                            {"/"}
+                            {""}
+                            {b.uldegdelKhungulukhKhugatsaa}
+                            {t("мин")}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                  if (a === "khuviKhungulult") {
+                    return (
+                      <div className="flex items-center justify-center">
+                        {a && (
+                          <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
+                            {b.khungulult}
+                            {"%"}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+                } else {
+                  return (
+                    <div className="flex items-center justify-center">
+                      <div className="flex w-[6rem] items-center justify-center rounded-lg bg-gray-400 px-2 py-1 font-[600] text-white dark:bg-gray-700">
+                        {b.tuluv}
+                      </div>
+                    </div>
+                  );
+                }
+              },
             },
           ]
         : [];
@@ -264,107 +384,6 @@ function mashinBurtgel({ token }) {
         dataIndex: "turul",
         showSorterTooltip: false,
         sorter: () => 0,
-      },
-      {
-        title: (
-          <Popover
-            placement="bottom"
-            content={
-              <div className="space-y-2">
-                <div
-                  onClick={() => setTuluv("")}
-                  className={`relative flex ${
-                    tuluv === "" ? "bg-green-500 text-white" : ""
-                  } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Нийт")}
-                </div>
-                <div
-                  onClick={() => setTuluv("togtmolTsag")}
-                  className={`relative flex ${
-                    tuluv === "togtmolTsag" ? "bg-green-500 text-white" : ""
-                  } cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Тогтмол цаг")}
-                </div>
-                <div
-                  onClick={() => setTuluv("khuviKhungulult")}
-                  className={`relative ${
-                    tuluv == "khuviKhungulult" ? "bg-green-500 text-white" : ""
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Хувь хөнгөлөлт")}
-                </div>
-                <div
-                  onClick={() => setTuluv("Үнэгүй")}
-                  className={`relative ${
-                    tuluv == "Үнэгүй" ? "bg-green-500 text-white" : ""
-                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white`}
-                >
-                  {t("Үнэгүй")}
-                </div>
-              </div>
-            }
-          >
-            <div
-              className={`flex cursor-pointer items-center justify-center gap-3`}
-            >
-              <FilterOutlined className="text-lg text-green-600" />
-              {t("Хөнгөлөлт")}
-            </div>
-          </Popover>
-        ),
-        align: "center",
-        width: "10rem",
-        dataIndex: "khungulultTurul",
-        showSorterTooltip: false,
-        render: (a, b) => {
-          if (b.tuluv !== "Үнэгүй") {
-            if (a === "togtmolTsag") {
-              return (
-                <div className="flex items-center justify-center">
-                  {a && (
-                    <div
-                      className={`flex w-[6rem] items-center justify-center rounded-lg px-2 py-1 font-[600] text-white ${
-                        b.uldegdelKhungulukhKhugatsaa === b.khungulukhKhugatsaa
-                          ? "bg-green-400 dark:bg-green-700"
-                          : b.uldegdelKhungulukhKhugatsaa > 0
-                          ? "bg-yellow-400 dark:bg-yellow-700"
-                          : "bg-red-400 dark:bg-red-700"
-                      }`}
-                    >
-                      {b.khungulukhKhugatsaa}
-                      {"/"}
-                      {""}
-                      {b.uldegdelKhungulukhKhugatsaa}
-                      {t("мин")}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-            if (a === "khuviKhungulult") {
-              return (
-                <div className="flex items-center justify-center">
-                  {a && (
-                    <div className="flex w-[6rem] items-center justify-center rounded-lg bg-blue-400 px-2 py-1 font-[600] text-white dark:bg-blue-700">
-                      {b.khungulult}
-                      {"%"}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          } else {
-            return (
-              <div className="flex items-center justify-center">
-                <div className="flex w-[6rem] items-center justify-center rounded-lg bg-gray-400 px-2 py-1 font-[600] text-white dark:bg-gray-700">
-                  {b.tuluv}
-                </div>
-              </div>
-            );
-          }
-        },
       },
       ...shinecol,
       {

@@ -1032,6 +1032,17 @@ function camera({ token }) {
               </div>
             );
           }
+          if (a?.gereetTulburBodokhEsekh) {
+            return (
+              <Tooltip
+                title={`${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh} хүртэл төлбөр бодогдоно.`}
+              >
+                <div className="flex cursor-help items-center justify-center">
+                  {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh}
+                </div>
+              </Tooltip>
+            );
+          }
         },
       },
       {
