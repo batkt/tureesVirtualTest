@@ -546,7 +546,7 @@ function Admin({
                     </svg>
                   )}
                   {suggestionData &&
-                    searchUtga.current.value !== "" &&
+                    searchUtga?.current?.value !== "" &&
                     !focusaasGarsan && (
                       <div
                         onClick={() => setFocusaasGarsan(false)}
