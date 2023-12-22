@@ -1519,6 +1519,7 @@ function camera({ token }) {
       // setGarakhKhaalgaIp(e);
     }
   };
+  
   const khadgalakh = () => {
     uilchilgee(token)
       .get("ognooAvya")
@@ -1532,6 +1533,8 @@ function camera({ token }) {
             }
             body.zurchil = value;
             body.tuukh[0].tuluv = -2;
+            body.tuukh[0].burtgesenAjiltaniiId = ajiltan?._id;
+            body.tuukh[0].burtgesenAjiltaniiNer = ajiltan?.ner;
             if (!!camerVal[1] && value === "Зугтаасан") {
               body.tuukh[0].garsanKhaalga = camerVal[1];
               body.tuukh[0].tsagiinTuukh[0].garsanTsag = data;
@@ -1560,6 +1563,15 @@ function camera({ token }) {
                     value !== "Зугтаасан"
                   ) {
                     khaalgaNeey(body?.tuukh?.[0]?.garsanKhaalga);
+                  }
+                  if (searchUtga.current?.value) {
+                    searchUtga.current.value = "";
+                    setUilchluulegchKhuudaslalt((e) => ({
+                      ...e,
+                      khuudasniiDugaar: 1,
+                      search: "",
+                    }));
+                    setKhaikh("");
                   }
                   onRefresh();
                 }
@@ -1655,14 +1667,12 @@ function camera({ token }) {
           setModalOpen({ bool: false, item: null, type: "" });
           if (searchUtga.current?.value) {
             searchUtga.current.value = "";
-            setTimeout(() => {
-              setUilchluulegchKhuudaslalt({
-                khuudasniiDugaar: 1,
-                khuudasniiKhemjee: 10,
-                search: "",
-                jagsaalt: [],
-              });
-            }, 300);
+            setUilchluulegchKhuudaslalt((e) => ({
+              ...e,
+              khuudasniiDugaar: 1,
+              search: "",
+            }));
+            setKhaikh("");
           }
           form.resetFields();
           onRefresh();
