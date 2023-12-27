@@ -25,6 +25,7 @@
     "i18next-http-backend": "^2.1.1",
     "konva": "^8.3.12",
     "lodash": "^4.17.21",
+    "lottie-web": "^5.12.2",
     "mon_num": "^1.0.3",
     "next": "^12.3.0",
     "next-qrcode": "^2.4.1",

@@ -10,17 +10,40 @@
   }
 }
 
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(-5%);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+@keyframes swipeAnimation {
+  from {
+    transform: translateX(100%);
   }
-  50% {
-    transform: translateY(5%);
-    opacity: 0.4;
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  to {
+    transform: translateX(0);
   }
+}
+
+.ring-gradient-45 {
+  border-image: linear-gradient(45deg, #3490dc, #6574cd) 1;
+}
+
+.swipe-container {
+  display: flex;
+  width: 300%;
+}
+
+.swipe-content {
+  width: 33.33%;
+  transition: transform 0.3s ease-in-out;
+  will-change: transform;
+}
+
+.translate-x-0 {
+  transform: translateX(0%);
+}
+
+.translate-x-minus-100 {
+  transform: translateX(-100%);
+}
+
+.translate-x-minus-200 {
+  transform: translateX(-200%);
 }
 
 .pvtAxisContainer,
@@ -61,6 +84,10 @@
   > .ant-collapse-header
   .ant-collapse-header-text {
   @apply dark:text-gray-100;
+}
+
+.khuviinDrawer .ant-drawer-content {
+  @apply rounded-t-[120px] bg-zinc-800;
 }
 
 .group:hover .animate-css-deer {
