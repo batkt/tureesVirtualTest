@@ -17,11 +17,13 @@ import moment, { utc } from "moment";
 import axios from "axios";
 import Lottie from "lottie-react";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
+import QRCode from "react-qr-code";
 // import shalgaltKhiikh from "services/shalgaltKhiikh";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const [register, setRegister] = useState("");
+  const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [eBarimtTurul, setEbarimtTurul] = useState("");
   const [drawerOngoikh, setDrawerOngoikh] = useState(false);
   const [songogdsonData, setSongogdsonData] = useState(null);
@@ -31,8 +33,9 @@ const Kiosk = () => {
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
   const [unshijBaina, setUnshijBaina] = useState(false);
-  const [alkham, setAlkham] = useState(3);
+  const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
+  const [seconds, setSeconds] = useState(59);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const query = useMemo(() => {
     var query = {};
@@ -65,6 +68,53 @@ const Kiosk = () => {
     };
   }, [khuleegdejBuiQpay, baiguullaga]);
 
+  useEffect(() => {
+    if (register.length > 6) {
+      uilchilgee()
+        .get(`/tatvaraasBaiguullagaAvya/${register}`)
+        .then(({ data }) => {
+          if (data) {
+            setBaiguullagaNer(data);
+          }
+        });
+    } else {
+      setBaiguullagaNer();
+    }
+  }, [register]);
+
+  useEffect(() => {
+    if (alkham === 4) {
+      const timer = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds > 0) {
+            return prevSeconds - 1;
+          } else {
+            clearInterval(timer);
+            if (onTimeout && typeof onTimeout === "function") {
+              onTimeout();
+            }
+            return 0;
+          }
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, []);
+
+  function onTimeout() {
+    setDrawerOngoikh(false);
+    setSongogdsonData(null);
+    setTerminal(false);
+    setTulburiinKhelber();
+    setKhuleegdejBuiQpay(null);
+    setDugaar(Array(4).fill(""));
+    setEbarimtTurul("");
+    setEbarimt();
+    setBaiguullagaNer();
+    setRegister("");
+    setSeconds(59);
+  }
+
   function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
     console.log("ene ajilsan: ");
     setUnshijBaina(true);
@@ -90,6 +140,7 @@ const Kiosk = () => {
     }
   }
   const dugaarRef = useRef(null);
+  const shineDugaarRef = useRef(null);
   const handleUrgeljluulekh = () => {
     var ongoilgokhEsekh = true;
     dugaar.forEach((dug) => {
@@ -240,6 +291,7 @@ const Kiosk = () => {
       .then(({ data }) => {
         if (!!data) {
           setEbarimt(data);
+          setAlkham(4);
         }
       })
       .catch((err) => {
@@ -396,23 +448,23 @@ const Kiosk = () => {
                 <div className="w-full pl-4">
                   Улсын дугаар: {songogdsonData.plate_number}
                 </div>
-                <div className="w-full border border-dashed border-zinc-800" />
+                <div className="w-full border border-zinc-800" />
                 <div className="w-full pl-4">
                   Орсон:{" "}
                   {moment(songogdsonData.enter_date).format("DD/MM/YYYY HH:mm")}
                 </div>
-                <div className="w-full border border-dashed border-zinc-800" />
+                <div className="w-full border border-zinc-800" />
                 <div className="w-full pl-4">
                   Гарсан: {moment().format("DD/MM/YYYY HH:mm")}
                 </div>
-                <div className="w-full border border-dashed border-zinc-800" />
+                <div className="w-full border border-zinc-800" />
                 <div className="w-full pl-4">
                   Зогссон хугацаа:{" "}
                   {utc(utc().diff(moment(songogdsonData.enter_date))).format(
                     "HH:mm"
                   )}
                 </div>
-                <div className="w-full border border-dashed border-zinc-800" />
+                <div className="w-full border border-zinc-800" />
                 <div className="w-full pl-4 text-red-400">
                   Төлбөр: {songogdsonData.pay_amount}₮
                 </div>
@@ -449,7 +501,7 @@ const Kiosk = () => {
           </div>
         </div>
         <div
-          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
+          className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
             alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
@@ -461,6 +513,7 @@ const Kiosk = () => {
               setTulburiinKhelber();
               setKhuleegdejBuiQpay(null);
               setDugaar(Array(4).fill(""));
+              setEbarimtTurul("");
               setEbarimt();
             }}
             className="flex w-full items-center justify-center text-7xl"
@@ -470,16 +523,20 @@ const Kiosk = () => {
           <div className="mt-8 flex w-full items-center justify-center px-12 text-center">
             И-Баримт төрөл сонгоно уу.
           </div>
-          <div className="mt-8 flex w-full items-center justify-between gap-4 px-12">
+          <div className="mt-32 flex w-full items-center justify-between gap-24 px-12">
             {ebarimtKhelberuud.map((mur) => {
               return (
                 <div
                   key={mur.key}
                   onClick={() => {
                     setEbarimtTurul(mur.ner);
+                    setRegister("");
+                    setBaiguullagaNer();
                   }}
-                  className={`flex w-full flex-col items-center justify-center rounded-xl bg-zinc-700 p-4 ${
-                    eBarimtTurul === mur.ner && "bg-zinc-600"
+                  className={`flex transition-all duration-300 ease-in-out ${
+                    eBarimtTurul !== "" ? "h-[200px]" : "h-[400px]"
+                  } w-full flex-col items-center justify-center rounded-xl p-4 ${
+                    eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-zinc-600"
                   }`}
                 >
                   <div className="h-[120px] w-[120px]">
@@ -490,6 +547,77 @@ const Kiosk = () => {
               );
             })}
           </div>
+          <div className="mt-8 flex w-full items-center justify-center gap-24 px-12">
+            <DugaarKeyboard
+              dugaar={register}
+              setDugaar={setRegister}
+              handleUrgeljluulekh={handleEbarimtAvya}
+              setRegister={setRegister}
+              eBarimtTurul={eBarimtTurul}
+              dugaarRef={shineDugaarRef}
+              shineTurul={true}
+              baiguullagaNer={baiguullagaNer}
+            />
+          </div>
+        </div>
+        <div
+          className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
+            alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
+          }`}
+        >
+          <div
+            onClick={() => {
+              setDrawerOngoikh(false);
+              setSongogdsonData(null);
+              setTerminal(false);
+              setTulburiinKhelber();
+              setKhuleegdejBuiQpay(null);
+              setDugaar(Array(4).fill(""));
+              setEbarimtTurul("");
+              setEbarimt();
+            }}
+            className="flex w-full items-center justify-center text-7xl"
+          >
+            <CloseCircleFilled />
+          </div>
+          <div className="fixed left-[60%] top-3">
+            {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
+          </div>
+          <div className="mt-8 flex items-center justify-center px-12 text-5xl text-zinc-200">
+            Амжилттай төлөгдлөө
+          </div>
+          {eBarimt && eBarimtTurul === "khuviKhun" && (
+            <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
+              <div className="flex w-full justify-between  pl-4">
+                <div>Сугалааны дугаар</div>
+                <div>{eBarimt?.lottery}</div>
+              </div>
+              <div className="w-full border border-zinc-800" />
+              <div className="flex w-full justify-between pl-4">
+                <div>Баримтын дүн</div>
+                <div>{eBarimt?.amount}</div>
+              </div>
+              <div className="mt-8 flex items-center justify-center px-12">
+                <QRCode level="L" value={eBarimt?.qrData} size={500} />
+              </div>
+            </div>
+          )}
+          {eBarimt && eBarimtTurul === "baiguullaga" && (
+            <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
+              <div className="flex w-full justify-between  pl-4">
+                <div>ТТД</div>
+                <div>{eBarimt?.registerNo}</div>
+              </div>
+              <div className="w-full border border-zinc-800" />
+              <div className="flex w-full justify-between pl-4">
+                <div>ТТН</div>
+                <div>{baiguullagaNer?.name}</div>
+              </div>
+              <div className="mt-8 flex items-center justify-center px-12">
+                <QRCode level="L" value={eBarimt?.qrData} size={500} />
+              </div>
+            </div>
+          )}
         </div>
       </Drawer>
       <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
