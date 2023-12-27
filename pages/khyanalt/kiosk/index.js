@@ -16,8 +16,9 @@ import {
 } from "tools/logic/tulburiinKhelberuud";
 import moment, { utc } from "moment";
 import axios from "axios";
-import lottie from "lottie-web";
-import { AiOutlineReload } from "react-icons/ai";
+import Lottie from "lottie-react";
+import amjilttaiAnimation from "./amjilttaiAnimation.json";
+// import shalgaltKhiikh from "services/shalgaltKhiikh";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
@@ -33,7 +34,6 @@ const Kiosk = () => {
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
-  const lottieContainer = useRef(null);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const query = useMemo(() => {
     var query = {};
@@ -53,16 +53,6 @@ const Kiosk = () => {
     baiguullaga?._id,
     query
   );
-
-  useEffect(() => {
-    lottie.loadAnimation({
-      container: lottieContainer.current,
-      renderer: "svg",
-      loop: true,
-      autoplay: true,
-      path: "/amjilttaiAnimation.json",
-    });
-  }, []);
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
@@ -274,8 +264,8 @@ const Kiosk = () => {
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
       <div className="fixed top-0 z-[9999] flex bg-zinc-800 px-[100px] text-center text-2xl text-[#00D987]">
-        Төлбөр төлснөөс хойш 30 минут дотор та зогсоолоос гараагүй бол 
-        төлбөр нэмэгдэж бодогдохыг анхаарна уу!
+        Төлбөр төлснөөс хойш 30 минут дотор та зогсоолоос гараагүй бол төлбөр
+        нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
         <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
@@ -446,7 +436,7 @@ const Kiosk = () => {
         >
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
-            <div ref={lottieContainer}></div>
+            <Lottie animationData={amjilttaiAnimation} />
           </div>
         </div>
         <div
@@ -513,5 +503,6 @@ const Kiosk = () => {
     </div>
   );
 };
+// export const getServerSideProps = shalgaltKhiikh;
 
 export default Kiosk;
