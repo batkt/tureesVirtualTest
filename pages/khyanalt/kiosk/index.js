@@ -594,11 +594,11 @@ const Kiosk = () => {
                 <div>Баримтын дүн</div>
                 <div>{eBarimt?.amount}</div>
               </div>
-              {eBarimt?.qrData && (
-                <div className="mt-8 flex items-center justify-center px-12">
-                  <QRCode level="L" value={eBarimt?.qrData} size={500} />
-                </div>
-              )}
+            </div>
+          )}
+          {eBarimt?.qrData && (
+            <div className="mt-8 flex items-center justify-center px-12">
+              <QRCode level="L" value={eBarimt?.qrData} size={500} />
             </div>
           )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
@@ -612,11 +612,6 @@ const Kiosk = () => {
                 <div>ТТН</div>
                 <div>{baiguullagaNer?.name}</div>
               </div>
-              {eBarimt?.qrData && (
-                <div className="mt-8 flex items-center justify-center px-12">
-                  <QRCode level="L" value={eBarimt?.qrData} size={500} />
-                </div>
-              )}
             </div>
           )}
         </div>
