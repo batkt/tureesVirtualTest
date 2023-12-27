@@ -99,7 +99,7 @@ const Kiosk = () => {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, []);
+  }, [alkham]);
 
   function onTimeout() {
     setDrawerOngoikh(false);
@@ -113,6 +113,7 @@ const Kiosk = () => {
     setBaiguullagaNer();
     setRegister("");
     setSeconds(59);
+    setAlkham(0);
   }
 
   function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
@@ -357,6 +358,7 @@ const Kiosk = () => {
               setKhuleegdejBuiQpay(null);
               setDugaar(Array(4).fill(""));
               setEbarimt();
+              setAlkham(0);
             }}
             className="flex w-full items-center justify-center text-7xl"
           >
@@ -514,6 +516,7 @@ const Kiosk = () => {
               setKhuleegdejBuiQpay(null);
               setDugaar(Array(4).fill(""));
               setEbarimtTurul("");
+              setAlkham(0);
               setEbarimt();
             }}
             className="flex w-full items-center justify-center text-7xl"
@@ -566,16 +569,7 @@ const Kiosk = () => {
           }`}
         >
           <div
-            onClick={() => {
-              setDrawerOngoikh(false);
-              setSongogdsonData(null);
-              setTerminal(false);
-              setTulburiinKhelber();
-              setKhuleegdejBuiQpay(null);
-              setDugaar(Array(4).fill(""));
-              setEbarimtTurul("");
-              setEbarimt();
-            }}
+            onClick={onTimeout}
             className="flex w-full items-center justify-center text-7xl"
           >
             <CloseCircleFilled />
