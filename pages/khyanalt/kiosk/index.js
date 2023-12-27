@@ -33,7 +33,7 @@ const Kiosk = () => {
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
   const [unshijBaina, setUnshijBaina] = useState(false);
-  const [alkham, setAlkham] = useState(2);
+  const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
   const lottieRef = useRef(null);
