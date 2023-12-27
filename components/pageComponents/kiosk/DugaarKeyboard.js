@@ -43,7 +43,9 @@ const DugaarKeyboard = ({
   const handleButtonClick = (num, shineTurul) => {
     if (shineTurul) {
       if (num !== "Butsakh") {
-        setDugaar((prevDugaar) => prevDugaar + num);
+        if (dugaar.length < 7) {
+          setDugaar((prevDugaar) => prevDugaar + num);
+        }
       }
       if (num === "Butsakh") {
         if (dugaar.length > 0) {

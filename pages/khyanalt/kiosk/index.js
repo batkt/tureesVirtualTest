@@ -596,11 +596,6 @@ const Kiosk = () => {
               </div>
             </div>
           )}
-          {eBarimt?.qrData && (
-            <div className="mt-8 flex items-center justify-center px-12">
-              <QRCode level="L" value={eBarimt?.qrData} size={500} />
-            </div>
-          )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
             <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
               <div className="flex w-full justify-between  pl-4">
@@ -612,6 +607,11 @@ const Kiosk = () => {
                 <div>ТТН</div>
                 <div>{baiguullagaNer?.name}</div>
               </div>
+            </div>
+          )}
+          {eBarimt?.qrData && (
+            <div className="mt-8 flex items-center justify-center px-12">
+              <QRCode value={eBarimt?.qrData} size={500} />
             </div>
           )}
         </div>
