@@ -310,7 +310,7 @@ const Kiosk = () => {
     setAlkham(2);
     setTimeout(() => {
       setAlkham(3);
-    }, 3000);
+    }, 2000);
   };
 
   const handleEbarimtAvya = () => {
@@ -497,7 +497,7 @@ const Kiosk = () => {
         >
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
-            <Lottie animationData={amjilttaiAnimation} />
+            <Lottie loop={false} animationData={amjilttaiAnimation} />
           </div>
         </div>
         <div
@@ -597,9 +597,11 @@ const Kiosk = () => {
                 <div>Баримтын дүн</div>
                 <div>{eBarimt?.amount}</div>
               </div>
-              <div className="mt-8 flex items-center justify-center px-12">
-                <QRCode level="L" value={eBarimt?.qrData} size={500} />
-              </div>
+              {eBarimt?.qrData && (
+                <div className="mt-8 flex items-center justify-center px-12">
+                  <QRCode level="L" value={eBarimt?.qrData} size={500} />
+                </div>
+              )}
             </div>
           )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
@@ -613,9 +615,11 @@ const Kiosk = () => {
                 <div>ТТН</div>
                 <div>{baiguullagaNer?.name}</div>
               </div>
-              <div className="mt-8 flex items-center justify-center px-12">
-                <QRCode level="L" value={eBarimt?.qrData} size={500} />
-              </div>
+              {eBarimt?.qrData && (
+                <div className="mt-8 flex items-center justify-center px-12">
+                  <QRCode level="L" value={eBarimt?.qrData} size={500} />
+                </div>
+              )}
             </div>
           )}
         </div>
