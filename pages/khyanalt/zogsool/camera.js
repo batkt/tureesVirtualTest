@@ -201,6 +201,9 @@ function tulburKhurvuulekh(v) {
     case "toki":
       utga = "Токи";
       break;
+    case "kiosk":
+      utga = "Киоск";
+      break;
     default:
       utga = v;
       break;
@@ -1519,7 +1522,7 @@ function camera({ token }) {
       // setGarakhKhaalgaIp(e);
     }
   };
-  
+
   const khadgalakh = () => {
     uilchilgee(token)
       .get("ognooAvya")

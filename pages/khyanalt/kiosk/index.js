@@ -61,7 +61,15 @@ const Kiosk = () => {
   useEffect(() => {
     if (khuleegdejBuiQpay) {
       socket().on(`qpay/${baiguullaga._id}/${khuleegdejBuiQpay}`, (qpay) => {
-        eBarimtTsonkhruuShiljye();
+        jinkheneTulburTulyo(
+          "kiosk",
+          songogdsonData?.session_id,
+          songogdsonData?.pay_amount,
+          songogdsonData?.plate_number,
+          barilgiinId,
+          ajiltan?.ner,
+          ajiltan?._id
+        );
       });
     }
     return () => {
@@ -202,7 +210,7 @@ const Kiosk = () => {
         .then(({ data }) => {
           if (data.status === true && data?.response?.response_code === "000") {
             jinkheneTulburTulyo(
-              tulburiinKhelber,
+              "kiosk",
               songogdsonData?.session_id,
               songogdsonData?.pay_amount,
               songogdsonData?.plate_number,
@@ -223,7 +231,7 @@ const Kiosk = () => {
           message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
           setTerminal(false);
           jinkheneTulburTulyo(
-            tulburiinKhelber,
+            "kiosk",
             songogdsonData?.session_id,
             songogdsonData?.pay_amount,
             songogdsonData?.plate_number,
