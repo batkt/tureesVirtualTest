@@ -33,9 +33,10 @@ const Kiosk = () => {
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
   const [unshijBaina, setUnshijBaina] = useState(false);
-  const [alkham, setAlkham] = useState(0);
+  const [alkham, setAlkham] = useState(2);
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
+  const lottieRef = useRef(null);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const query = useMemo(() => {
     var query = {};
@@ -117,7 +118,6 @@ const Kiosk = () => {
   }
 
   function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
-    console.log("ene ajilsan: ");
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
@@ -149,7 +149,6 @@ const Kiosk = () => {
         ongoilgokhEsekh = false;
       }
     });
-    console.log("urgeljluulekh: ", dugaar);
     if (ongoilgokhEsekh) {
       setDrawerOngoikh(true);
     } else {
@@ -169,7 +168,6 @@ const Kiosk = () => {
             },
           }
         );
-        console.log("response.data:", response.data);
         if (response.data.success == true) {
           setSongogdsonData(response.data?.data);
           setAlkham(1);
@@ -291,7 +289,7 @@ const Kiosk = () => {
       })
       .then(({ data }) => {
         if (!!data) {
-          setEbarimt(data);
+          setEbarimt(data.data);
           setAlkham(4);
         }
       })
@@ -309,6 +307,7 @@ const Kiosk = () => {
 
   const eBarimtTsonkhruuShiljye = () => {
     setAlkham(2);
+    lottieRef?.current?.play();
     setTimeout(() => {
       setAlkham(3);
     }, 2000);
@@ -499,7 +498,11 @@ const Kiosk = () => {
         >
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
-            <Lottie loop={false} animationData={amjilttaiAnimation} />
+            <Lottie
+              lottieRef={lottieRef}
+              loop={false}
+              animationData={amjilttaiAnimation}
+            />
           </div>
         </div>
         <div
