@@ -2,7 +2,6 @@ import {
   CloseCircleFilled,
   LeftCircleFilled,
   LoadingOutlined,
-  ReloadOutlined,
 } from "@ant-design/icons";
 import { Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
@@ -32,7 +31,7 @@ const Kiosk = () => {
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
   const [unshijBaina, setUnshijBaina] = useState(false);
-  const [alkham, setAlkham] = useState(0);
+  const [alkham, setAlkham] = useState(3);
   const [eBarimt, setEbarimt] = useState();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const query = useMemo(() => {
@@ -172,6 +171,15 @@ const Kiosk = () => {
           console.log("posaldaa: ", e.message);
           message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
           setTerminal(false);
+          jinkheneTulburTulyo(
+            tulburiinKhelber,
+            songogdsonData?.session_id,
+            songogdsonData?.pay_amount,
+            songogdsonData?.plate_number,
+            barilgiinId,
+            ajiltan?.ner,
+            ajiltan?._id
+          );
         });
     }
     if (data === "qpay") {
@@ -456,7 +464,7 @@ const Kiosk = () => {
             }}
             className="flex w-full items-center justify-center text-7xl"
           >
-            <ReloadOutlined />
+            <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center px-12 text-center">
             И-Баримт төрөл сонгоно уу.
