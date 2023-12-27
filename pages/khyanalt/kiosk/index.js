@@ -38,6 +38,7 @@ const Kiosk = () => {
     var query = {};
     if (drawerOngoikh) {
       query["tuukh.0.tuluv"] = 0;
+      query["tuukh.0.garsanKhaalga"] = { $exists: false };
       query["tuukh.0.tsagiinTuukh.0.orsonTsag"] = {
         $gte: moment().subtract(3, "days").startOf("day"),
         $lte: moment().endOf("day"),
