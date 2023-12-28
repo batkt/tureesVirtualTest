@@ -1,8 +1,11 @@
 import {
   CheckCircleFilled,
   CloseCircleFilled,
+  CloseOutlined,
+  InfoOutlined,
   LeftCircleFilled,
   LoadingOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 import { Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
@@ -23,6 +26,7 @@ import formatNumber from "tools/function/formatNumber";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
+  const [messageApi, contextHolder] = message.useMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
   const [eBarimtTurul, setEbarimtTurul] = useState("");
@@ -57,6 +61,16 @@ const Kiosk = () => {
     baiguullaga?._id,
     query
   );
+
+  const msgNotif = (content) => {
+    messageApi.open({
+      content: content,
+      style: {
+        marginTop: "5rem",
+      },
+      duration: 3,
+    });
+  };
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
@@ -182,7 +196,16 @@ const Kiosk = () => {
             setAlkham(1);
             setUnshijBaina(false);
           } else {
-            message.warn("Тухайн машинд төлбөр бодогдоогүй байна");
+            msgNotif(
+              <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
+                <div className="text-yellow-500">
+                  <WarningOutlined style={{ fontSize: "36px" }} size={100} />
+                </div>
+                <div className="text-4xl">
+                  Тухайн машинд төлбөр бодогдоогүй байна.
+                </div>
+              </div>
+            );
             setUnshijBaina(false);
           }
         } else {
@@ -231,7 +254,16 @@ const Kiosk = () => {
             data?.status == true &&
             data?.response?.Exception?.ErrorCode === "003"
           ) {
-            message.error("Нэг удаагийн гүйлгээний дүн хүрэхгүй");
+            msgNotif(
+              <div className="flex items-center justify-center gap-2 font-semibold">
+                <div className="text-red-500">
+                  <CloseOutlined style={{ fontSize: "36px" }} size={100} />
+                </div>
+                <div className="text-4xl">
+                  Нэг удаагийн гүйлгээний дүн хүрэхгүй.
+                </div>
+              </div>
+            );
             setTerminal();
           } else if (
             data?.status == true &&
@@ -245,7 +277,16 @@ const Kiosk = () => {
         })
         .catch((e) => {
           console.log("posaldaa: ", e.message);
-          message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
+          msgNotif(
+            <div className="flex items-center justify-center gap-2 font-semibold">
+              <div className="text-red-500">
+                <CloseOutlined style={{ fontSize: "36px" }} size={100} />
+              </div>
+              <div className="text-4xl">
+                Пос алдаа гарлаа. Та дахин оролдоно уу.
+              </div>
+            </div>
+          );
           setTerminal();
         });
     }
@@ -258,7 +299,14 @@ const Kiosk = () => {
       );
     }
     if (data === "pass") {
-      message.info("Тун удахгүй");
+      msgNotif(
+        <div className="flex items-center justify-center gap-2 font-semibold">
+          <div className="text-sky-500">
+            <InfoOutlined style={{ fontSize: "36px" }} size={100} />
+          </div>
+          <div className="text-4xl">Тун удахгүй.</div>
+        </div>
+      );
     }
   };
 
@@ -340,6 +388,7 @@ const Kiosk = () => {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
+      {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш 30 минут дотор та зогсоолоос гараагүй бол төлбөр
         нэмэгдэж бодогдохыг анхаарна уу!
