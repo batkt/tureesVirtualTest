@@ -471,9 +471,10 @@ function camera({ token }) {
         if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
+        const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace("???", "");
         axios
           .get(
-            `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${uilchluulegch?.mashiniiDugaar}/${uilchluulegch?.niitDun}`
+            `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${yanzalsanMashiniiDugaar}/${uilchluulegch?.niitDun}`
           )
           .then((res) => {
             if (res) {
