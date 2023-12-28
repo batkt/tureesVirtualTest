@@ -247,16 +247,6 @@ const Kiosk = () => {
           console.log("posaldaa: ", e.message);
           message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
           setTerminal();
-
-          jinkheneTulburTulyo(
-            "kiosk",
-            songogdsonData?.session_id,
-            songogdsonData?.pay_amount,
-            songogdsonData?.plate_number,
-            barilgiinId,
-            ajiltan?.ner,
-            ajiltan?._id
-          );
         });
     }
     if (data === "qpay") {
