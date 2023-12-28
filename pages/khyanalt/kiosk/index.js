@@ -1,4 +1,5 @@
 import {
+  CheckCircleFilled,
   CloseCircleFilled,
   LeftCircleFilled,
   LoadingOutlined,
@@ -27,7 +28,7 @@ const Kiosk = () => {
   const [eBarimtTurul, setEbarimtTurul] = useState("");
   const [drawerOngoikh, setDrawerOngoikh] = useState(false);
   const [songogdsonData, setSongogdsonData] = useState(null);
-  const [terminal, setTerminal] = useState(false);
+  const [terminal, setTerminal] = useState();
   const [qpayerTulukh, setQpayerTulukh] = useState(false);
   const [tulburiinKhelber, setTulburiinKhelber] = useState();
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
@@ -36,7 +37,6 @@ const Kiosk = () => {
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
-  const lottieRef = useRef(null);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const query = useMemo(() => {
     var query = {};
@@ -113,7 +113,7 @@ const Kiosk = () => {
   function onTimeout() {
     setDrawerOngoikh(false);
     setSongogdsonData(null);
-    setTerminal(false);
+    setTerminal();
     setTulburiinKhelber();
     setKhuleegdejBuiQpay(null);
     setDugaar(Array(4).fill(""));
@@ -164,7 +164,7 @@ const Kiosk = () => {
     }
   };
 
-  const tulburTulyo = async (data) => {
+  const mashinSongiy = async (data) => {
     try {
       setUnshijBaina(true);
       if (data) {
@@ -177,9 +177,14 @@ const Kiosk = () => {
           }
         );
         if (response.data.success == true) {
-          setSongogdsonData(response.data?.data);
-          setAlkham(1);
-          setUnshijBaina(false);
+          if (response.data?.data?.pay_amount > 0) {
+            setSongogdsonData(response.data?.data);
+            setAlkham(1);
+            setUnshijBaina(false);
+          } else {
+            message.warn("Тухайн машинд төлбөр бодогдоогүй байна");
+            setUnshijBaina(false);
+          }
         } else {
           setUnshijBaina(false);
         }
@@ -191,9 +196,9 @@ const Kiosk = () => {
   };
 
   const handleTulburiinKhelberSongolt = async (data) => {
-    setTulburiinKhelber(data);
     if (data === "card") {
-      setTerminal(true);
+      setTulburiinKhelber(data);
+      setTerminal("waiting");
       await axios
         .post(
           "http://127.0.0.1:27028",
@@ -218,30 +223,34 @@ const Kiosk = () => {
               ajiltan?.ner,
               ajiltan?._id
             );
+            setTerminal("success");
+            setTimeout(() => {
+              setTerminal();
+            }, 1000);
           } else if (
             data?.status == true &&
             data?.response?.Exception?.ErrorCode === "003"
           ) {
             message.error("Нэг удаагийн гүйлгээний дүн хүрэхгүй");
+            setTerminal();
+          } else if (
+            data?.status == true &&
+            data?.response?.response_code === "366"
+          ) {
+            setTerminal("canceled");
+            setTimeout(() => {
+              setTerminal();
+            }, 1000);
           }
-          setTerminal(false);
         })
         .catch((e) => {
           console.log("posaldaa: ", e.message);
           message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
-          setTerminal(false);
-          jinkheneTulburTulyo(
-            "kiosk",
-            songogdsonData?.session_id,
-            songogdsonData?.pay_amount,
-            songogdsonData?.plate_number,
-            barilgiinId,
-            ajiltan?.ner,
-            ajiltan?._id
-          );
+          setTerminal();
         });
     }
     if (data === "qpay") {
+      setTulburiinKhelber(data);
       qpayAvakh(
         songogdsonData?.session_id,
         barilgiinId,
@@ -249,7 +258,7 @@ const Kiosk = () => {
       );
     }
     if (data === "pass") {
-      // probably same??
+      message.info("Тун удахгүй");
     }
   };
 
@@ -315,10 +324,9 @@ const Kiosk = () => {
 
   const eBarimtTsonkhruuShiljye = () => {
     setAlkham(2);
-    lottieRef?.current?.play();
     setTimeout(() => {
       setAlkham(3);
-    }, 2000);
+    }, 1500);
   };
 
   const handleEbarimtAvya = () => {
@@ -360,7 +368,7 @@ const Kiosk = () => {
             onClick={() => {
               setDrawerOngoikh(false);
               setSongogdsonData(null);
-              setTerminal(false);
+              setTerminal();
               setTulburiinKhelber();
               setKhuleegdejBuiQpay(null);
               setDugaar(Array(4).fill(""));
@@ -381,11 +389,11 @@ const Kiosk = () => {
               />
             </div>
           ) : uilchluulegchGaralt?.jagsaalt?.length > 0 ? (
-            <div className="mt-8 grid w-full grid-cols-3 gap-8 overflow-y-scroll p-8">
+            <div className="mt-8 grid w-full grid-cols-2 place-content-center place-items-center gap-8 overflow-y-scroll p-8">
               {uilchluulegchGaralt?.jagsaalt?.map((mur) => {
                 return (
                   <div
-                    onClick={() => tulburTulyo(mur)}
+                    onClick={() => mashinSongiy(mur)}
                     className="w-fit rounded-xl border-4 border-zinc-600 px-6 py-4"
                   >
                     {mur?.mashiniiDugaar}
@@ -453,7 +461,7 @@ const Kiosk = () => {
           </div>
           {songogdsonData &&
             (!tulburiinKhelber || tulburiinKhelber === "card") && (
-              <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
+              <div className="relative mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
                 <div className="w-full pl-4">
                   Улсын дугаар: {songogdsonData.plate_number}
                 </div>
@@ -477,6 +485,38 @@ const Kiosk = () => {
                 <div className="w-full pl-4 text-red-400">
                   Төлбөр: {songogdsonData.pay_amount}₮
                 </div>
+                {terminal && (
+                  <div className="absolute top-[50%] z-[500] flex h-[100px] w-1/2 items-center justify-center bg-zinc-200">
+                    {terminal === "waiting" ? (
+                      <div className="flex w-full items-center justify-center gap-8">
+                        <div>
+                          <Spin />
+                        </div>
+                        <div className="text-4xl text-zinc-800">
+                          Пос хүлээгдэж байна
+                        </div>
+                      </div>
+                    ) : terminal === "canceled" ? (
+                      <div className="flex w-full items-center justify-center gap-8">
+                        <div className="text-red-500">
+                          <CloseCircleFilled />
+                        </div>
+                        <div className="text-4xl text-zinc-800">
+                          Пос цуцлагдлаа
+                        </div>
+                      </div>
+                    ) : terminal === "success" ? (
+                      <div className="flex w-full items-center justify-center gap-8">
+                        <div className="text-green-500">
+                          <CheckCircleFilled />
+                        </div>
+                        <div className="text-4xl text-zinc-800">
+                          Пос амжилттай
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
             )}
           {songogdsonData &&
@@ -506,11 +546,7 @@ const Kiosk = () => {
         >
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
-            <Lottie
-              lottieRef={lottieRef}
-              loop={false}
-              animationData={amjilttaiAnimation}
-            />
+            <Lottie animationData={amjilttaiAnimation} />
           </div>
         </div>
         <div
@@ -522,7 +558,7 @@ const Kiosk = () => {
             onClick={() => {
               setDrawerOngoikh(false);
               setSongogdsonData(null);
-              setTerminal(false);
+              setTerminal();
               setTulburiinKhelber();
               setKhuleegdejBuiQpay(null);
               setDugaar(Array(4).fill(""));
