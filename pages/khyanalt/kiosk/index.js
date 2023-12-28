@@ -721,7 +721,7 @@ const Kiosk = () => {
           )}
           {eBarimt?.qrData && (
             <div className="mx-36 mt-16 flex items-center justify-center bg-zinc-200 p-4">
-              <QRCode level="L" value={eBarimt?.qrData} size={500} />
+              <QRCode value={eBarimt?.qrData} />
             </div>
           )}
         </div>
