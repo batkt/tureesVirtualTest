@@ -91,7 +91,7 @@ const DugaarKeyboard = ({
           {dugaar.map((mur, index) => (
             <input
               key={index}
-              className="h-[150px] w-[150px] rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200 caret-transparent focus:outline-none"
+              className="h-[150px] w-[150px] select-none rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200 caret-transparent focus:outline-none"
               type="text"
               maxLength="1"
               value={mur}
@@ -105,7 +105,7 @@ const DugaarKeyboard = ({
       ) : eBarimtTurul === "baiguullaga" ? (
         <div className="flex gap-2">
           <input
-            className="h-[130px] w-full rounded-xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold caret-transparent focus:outline-none "
+            className="h-[130px] w-full select-none rounded-xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold caret-transparent focus:outline-none "
             type="text"
             onChange={(e) => setRegister(e.target.value)}
             value={dugaar}
