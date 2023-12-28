@@ -91,7 +91,7 @@ const DugaarKeyboard = ({
           {dugaar.map((mur, index) => (
             <input
               key={index}
-              className="h-[150px] w-[150px] rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200"
+              className="h-[150px] w-[150px] rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200 caret-transparent focus:outline-none"
               type="text"
               maxLength="1"
               value={mur}
@@ -105,7 +105,7 @@ const DugaarKeyboard = ({
       ) : eBarimtTurul === "baiguullaga" ? (
         <div className="flex gap-2">
           <input
-            className="h-[130px] w-full rounded-xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold "
+            className="h-[130px] w-full rounded-xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold caret-transparent focus:outline-none "
             type="text"
             onChange={(e) => setRegister(e.target.value)}
             value={dugaar}
@@ -135,7 +135,7 @@ const DugaarKeyboard = ({
       )}
       <button
         onClick={handleUrgeljluulekh}
-        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400"
+        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400 focus:outline-none"
       >
         <div>Үргэлжлүүлэх</div>
         <div className="mt-2 font-[800]">
