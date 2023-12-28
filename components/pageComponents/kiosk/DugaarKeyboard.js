@@ -91,7 +91,7 @@ const DugaarKeyboard = ({
           {dugaar.map((mur, index) => (
             <input
               key={index}
-              className="h-[150px] w-[150px] rounded-2xl border-4 border-zinc-200 bg-zinc-800 text-center text-5xl font-bold text-zinc-200"
+              className="h-[150px] w-[150px] rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200"
               type="text"
               maxLength="1"
               value={mur}
@@ -105,7 +105,7 @@ const DugaarKeyboard = ({
       ) : eBarimtTurul === "baiguullaga" ? (
         <div className="flex gap-2">
           <input
-            className="h-[130px] w-full rounded-xl border-4 border-zinc-200 bg-zinc-800 text-center text-5xl font-bold "
+            className="h-[130px] w-full rounded-xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold "
             type="text"
             onChange={(e) => setRegister(e.target.value)}
             value={dugaar}
@@ -123,8 +123,8 @@ const DugaarKeyboard = ({
               key={index}
               className={`col-span-1 flex items-center justify-center rounded-xl ${
                 num === "Butsakh"
-                  ? "row-span-2 h-full w-[130px] bg-red-800 bg-opacity-50 text-red-500"
-                  : "h-[130px] w-[130px] bg-zinc-600"
+                  ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500"
+                  : "h-[130px] w-[130px] bg-[#414143]"
               }`}
               onClick={() => handleButtonClick(num, shineTurul)}
             >
@@ -135,21 +135,11 @@ const DugaarKeyboard = ({
       )}
       <button
         onClick={handleUrgeljluulekh}
-        className="flex h-[90px] w-[490px] items-center justify-center gap-2 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400"
+        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400"
       >
-        Үргэлжлүүлэх
-        <div className="font-[800]">
-          <svg
-            viewBox="64 64 896 896"
-            focusable="false"
-            data-icon="right"
-            width="1em"
-            height="1em"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 00302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 000-50.4z"></path>
-          </svg>
+        <div>Үргэлжлүүлэх</div>
+        <div className="mt-2 font-[800]">
+          <img src="/rightCadet.png" />
         </div>
       </button>
     </div>

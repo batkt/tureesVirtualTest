@@ -19,7 +19,7 @@ import axios from "axios";
 import Lottie from "lottie-react";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
-// import shalgaltKhiikh from "services/shalgaltKhiikh";
+import formatNumber from "tools/function/formatNumber";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
@@ -247,6 +247,16 @@ const Kiosk = () => {
           console.log("posaldaa: ", e.message);
           message.error("Пос алдаа гарлаа. Та дахин оролдоно уу.");
           setTerminal();
+
+          jinkheneTulburTulyo(
+            "kiosk",
+            songogdsonData?.session_id,
+            songogdsonData?.pay_amount,
+            songogdsonData?.plate_number,
+            barilgiinId,
+            ajiltan?.ner,
+            ajiltan?._id
+          );
         });
     }
     if (data === "qpay") {
@@ -340,7 +350,7 @@ const Kiosk = () => {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden">
-      <div className="fixed top-0 z-[9999] flex bg-zinc-800 px-[100px] text-center text-2xl text-[#00D987]">
+      <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш 30 минут дотор та зогсоолоос гараагүй бол төлбөр
         нэмэгдэж бодогдохыг анхаарна уу!
       </div>
@@ -394,7 +404,7 @@ const Kiosk = () => {
                 return (
                   <div
                     onClick={() => mashinSongiy(mur)}
-                    className="w-fit rounded-xl border-4 border-zinc-600 px-6 py-4"
+                    className="w-fit rounded-xl border-[6px] border-[#414143] px-8 py-6 tracking-wider"
                   >
                     {mur?.mashiniiDugaar}
                   </div>
@@ -435,7 +445,7 @@ const Kiosk = () => {
             {tulburiinKhelber === "pass" &&
               "Pass апп-аас төлөн үргэлжлүүлэх дарна уу."}
           </div>
-          <div className="mt-8 flex w-full items-center justify-between gap-4 px-12">
+          <div className="my-16 flex w-full items-center justify-between px-12">
             {tulburiinKhelberuud.map((mur) => {
               return (
                 <div
@@ -447,11 +457,13 @@ const Kiosk = () => {
                       butsakhGuide();
                     }
                   }}
-                  className={`flex w-full flex-col items-center justify-center rounded-xl bg-zinc-600 p-4 ${
-                    tulburiinKhelber !== mur.ner && "bg-zinc-700"
+                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 ${
+                    tulburiinKhelber &&
+                    tulburiinKhelber !== mur.ner &&
+                    "opacity-50"
                   }`}
                 >
-                  <div className="h-[120px] w-[120px]">
+                  <div className="h-[120px] w-[120px] overflow-hidden">
                     <img src={mur.icon} alt="" />
                   </div>
                   <div>{mur.label}</div>
@@ -461,29 +473,38 @@ const Kiosk = () => {
           </div>
           {songogdsonData &&
             (!tulburiinKhelber || tulburiinKhelber === "card") && (
-              <div className="relative mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
-                <div className="w-full pl-4">
-                  Улсын дугаар: {songogdsonData.plate_number}
+              <div className="relative mx-12 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+                <div className="flex w-full justify-between px-6">
+                  <div>Улсын дугаар</div>
+                  <div>{songogdsonData.plate_number}</div>
                 </div>
-                <div className="w-full border border-zinc-800" />
-                <div className="w-full pl-4">
-                  Орсон:{" "}
-                  {moment(songogdsonData.enter_date).format("DD/MM/YYYY HH:mm")}
+                <div className="w-full border border-[#1E1E1E]" />
+                <div className="flex w-full justify-between px-6">
+                  <div>Орсон </div>
+                  <div>
+                    {moment(songogdsonData.enter_date).format(
+                      "DD/MM/YYYY HH:mm"
+                    )}
+                  </div>
                 </div>
-                <div className="w-full border border-zinc-800" />
-                <div className="w-full pl-4">
-                  Гарсан: {moment().format("DD/MM/YYYY HH:mm")}
+                <div className="w-full border border-[#1E1E1E]" />
+                <div className="flex w-full justify-between px-6">
+                  <div>Гарсан</div>
+                  <div>{moment().format("DD/MM/YYYY HH:mm")}</div>
                 </div>
-                <div className="w-full border border-zinc-800" />
-                <div className="w-full pl-4">
-                  Зогссон хугацаа:{" "}
-                  {utc(utc().diff(moment(songogdsonData.enter_date))).format(
-                    "HH:mm"
-                  )}
+                <div className="w-full border border-[#1E1E1E]" />
+                <div className="flex w-full justify-between px-6">
+                  <div>Зогссон хугацаа </div>
+                  <div>
+                    {utc(utc().diff(moment(songogdsonData.enter_date))).format(
+                      "HH:mm"
+                    )}
+                  </div>
                 </div>
-                <div className="w-full border border-zinc-800" />
-                <div className="w-full pl-4 text-red-400">
-                  Төлбөр: {songogdsonData.pay_amount}₮
+                <div className="w-full border border-[#1E1E1E]" />
+                <div className="flex w-full justify-between px-6 text-red-400">
+                  <div>Төлбөр</div>
+                  <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
                 </div>
                 {terminal && (
                   <div className="absolute top-[50%] z-[500] flex h-[100px] w-1/2 items-center justify-center bg-zinc-200">
@@ -492,7 +513,7 @@ const Kiosk = () => {
                         <div>
                           <Spin />
                         </div>
-                        <div className="text-4xl text-zinc-800">
+                        <div className="text-4xl text-[#1E1E1E]">
                           Пос хүлээгдэж байна
                         </div>
                       </div>
@@ -501,7 +522,7 @@ const Kiosk = () => {
                         <div className="text-red-500">
                           <CloseCircleFilled />
                         </div>
-                        <div className="text-4xl text-zinc-800">
+                        <div className="text-4xl text-[#1E1E1E]">
                           Пос цуцлагдлаа
                         </div>
                       </div>
@@ -510,7 +531,7 @@ const Kiosk = () => {
                         <div className="text-green-500">
                           <CheckCircleFilled />
                         </div>
-                        <div className="text-4xl text-zinc-800">
+                        <div className="text-4xl text-[#1E1E1E]">
                           Пос амжилттай
                         </div>
                       </div>
@@ -531,9 +552,10 @@ const Kiosk = () => {
                     />
                   </div>
                 )}
-                <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
-                  <div className="w-full pl-4 text-red-400">
-                    Төлбөр: {songogdsonData.pay_amount}₮
+                <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+                  <div className="flex w-full justify-between px-6 text-red-400">
+                    <div>Төлбөр:</div>
+                    <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
                   </div>
                 </div>
               </>
@@ -586,7 +608,7 @@ const Kiosk = () => {
                   className={`flex transition-all duration-300 ease-in-out ${
                     eBarimtTurul !== "" ? "h-[200px]" : "h-[400px]"
                   } w-full flex-col items-center justify-center rounded-xl p-4 ${
-                    eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-zinc-600"
+                    eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-[#414143]"
                   }`}
                 >
                   <div className="h-[120px] w-[120px]">
@@ -628,34 +650,39 @@ const Kiosk = () => {
             Амжилттай төлөгдлөө
           </div>
           {eBarimt && eBarimtTurul === "khuviKhun" && (
-            <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
+            <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
               <div className="flex w-full justify-between  pl-4">
                 <div>Сугалааны дугаар</div>
                 <div>{eBarimt?.lottery}</div>
               </div>
-              <div className="w-full border border-zinc-800" />
+              <div className="w-full border border-[#1E1E1E]" />
               <div className="flex w-full justify-between pl-4">
                 <div>Баримтын дүн</div>
-                <div>{eBarimt?.amount}</div>
+                <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
               </div>
             </div>
           )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
-            <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-zinc-600 p-4 py-8">
+            <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
               <div className="flex w-full justify-between  pl-4">
                 <div>ТТД</div>
                 <div>{eBarimt?.registerNo}</div>
               </div>
-              <div className="w-full border border-zinc-800" />
+              <div className="w-full border border-[#1E1E1E]" />
               <div className="flex w-full justify-between pl-4">
                 <div>ТТН</div>
                 <div>{baiguullagaNer?.name}</div>
               </div>
+              <div className="w-full border border-[#1E1E1E]" />
+              <div className="flex w-full justify-between pl-4">
+                <div>Баримтын дүн</div>
+                <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
+              </div>
             </div>
           )}
           {eBarimt?.qrData && (
-            <div className="mt-8 flex items-center justify-center px-12">
-              <QRCode value={eBarimt?.qrData} size={500} />
+            <div className="mx-36 mt-16 flex items-center justify-center bg-zinc-200 p-4">
+              <QRCode level="L" value={eBarimt?.qrData} size={500} />
             </div>
           )}
         </div>
@@ -664,7 +691,7 @@ const Kiosk = () => {
         <div className="">
           <img className="h-full w-full" src="/parkEaseLogo.png" alt="" />
         </div>
-        <div className="px-12 text-center text-5xl font-bold text-zinc-800">
+        <div className="px-12 text-center text-5xl font-bold text-[#1E1E1E]">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>
@@ -676,7 +703,7 @@ const Kiosk = () => {
           dugaarRef={dugaarRef}
         />
       </div>
-      <div className="fixed bottom-[-65vh] left-[-55vh] z-[-1] h-[135vh] w-[135vh] rounded-full bg-zinc-800" />
+      <div className="fixed bottom-[-65vh] left-[-55vh] z-[-1] h-[135vh] w-[135vh] rounded-full bg-[#1E1E1E]" />
     </div>
   );
 };

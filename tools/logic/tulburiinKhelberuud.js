@@ -8,7 +8,7 @@ export const tulburiinKhelberuud = [
   {
     ner: "qpay",
     key: "qpay",
-    label: "QPay",
+    label: "Qpay",
     icon: "/tulburiinKhelberuud/qpay.png",
   },
   {
