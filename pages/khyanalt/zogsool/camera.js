@@ -1335,6 +1335,12 @@ function camera({ token }) {
                   {t("Зөрчилтэй")}
                 </div>
               </div>
+            ) : mur?.tuluv === 2 ? (
+              <div className="mx-auto flex w-max items-center justify-center space-x-2 rounded bg-lime-500 px-3 text-white">
+                <div className="flex items-center justify-center">
+                  {t("Төлөгдсөн")}
+                </div>
+              </div>
             ) : (
               <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-gray-500 px-3 text-white">
                 <div className="flex items-center justify-center">

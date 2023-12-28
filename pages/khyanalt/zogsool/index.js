@@ -85,7 +85,7 @@ function tulburKhurvuulekh(v) {
       utga = "Бэлэн";
       break;
     case "khariltsakh":
-      utga = "Харилцах";
+      utga = "Данс";
       break;
     case "khaan":
       utga = "Хаан";
@@ -104,6 +104,12 @@ function tulburKhurvuulekh(v) {
       break;
     case "kapitron":
       utga = "Капитрон";
+      break;
+    case "toki":
+      utga = "Токи";
+      break;
+    case "kiosk":
+      utga = "Киоск";
       break;
     default:
       utga = v;
@@ -528,7 +534,7 @@ function Zogsool({ token }) {
         },
       },
       {
-        title: t("Дүн"),
+        title: t("Бодогдсон"),
         align: "right",
         width: "10rem",
         showSorterTooltip: false,
@@ -574,7 +580,7 @@ function Zogsool({ token }) {
                     tulbur === "khariltsakh" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
-                  Харилцах
+                  Данс
                 </div>
                 <div
                   onClick={() => setTulbur("toki")}
@@ -583,6 +589,14 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Токи
+                </div>
+                <div
+                  onClick={() => setTulbur("kiosk")}
+                  className={`relative ${
+                    tulbur === "kiosk" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Киоск
                 </div>
               </div>
             }
@@ -600,6 +614,7 @@ function Zogsool({ token }) {
         dataIndex: "tuukh",
         render(v) {
           let r = null;
+          let d = null;
           if (v[0]?.tulbur?.length > 1) {
             r = (
               <div className="flex justify-center">
@@ -620,8 +635,22 @@ function Zogsool({ token }) {
                 </Popover>
               </div>
             );
-          } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
-          return r && <div>{r}</div>;
+          } else {
+            r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
+            d = formatNumber(v[0]?.tulbur[0]?.dun, 0);
+          }
+          return (
+            r && (
+              <div
+                className={`flex items-center ${
+                  d ? "justify-between" : "justify-center"
+                } `}
+              >
+                <div>{r}</div>
+                {d && <div>{d}</div>}
+              </div>
+            )
+          );
         },
       },
       {
@@ -724,7 +753,7 @@ function Zogsool({ token }) {
                 // !!v[0].uneguiGarsan
                 //   ? null
                 //   :
-                v[0].tuluv === 1
+                v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "bg-green-500 text-white dark:bg-green-700"
                   : // : v[0].tuluv === 0
                   // ? "bg-yellow-500 text-white dark:bg-yellow-700"
@@ -755,7 +784,7 @@ function Zogsool({ token }) {
                 // (!!v[0].uneguiGarsan && v[0].tuluv !== -2)
                 //   ? "Үнэгүй"
                 //   :
-                v[0].tuluv === 1
+                v[0].tuluv === 1 || v[0].tuluv === 2
                   ? "Төлсөн"
                   : v[0].tuluv === -2
                   ? "Зөрчилтэй"

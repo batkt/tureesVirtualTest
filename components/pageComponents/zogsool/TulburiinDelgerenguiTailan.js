@@ -166,6 +166,24 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "toki":
+            ugugdul.push({
+              ner: "Токи",
+              icon: "/Group_158.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "kiosk":
+            ugugdul.push({
+              ner: "Киоск",
+              icon: "/kiosk.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
           case "monpay":
             ugugdul.push({
               ner: element._id,
