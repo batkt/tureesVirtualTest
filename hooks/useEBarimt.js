@@ -4,6 +4,12 @@ import useSWR from "swr";
 import moment from "moment";
 import { useAuth } from "services/auth";
 
+function searchGenerator(keys, search) {
+  if (keys.length > 0)
+    return keys.map((key) => ({ [key]: { $regex: search, $options: "i" } }));
+  return undefined;
+}
+
 const fetcher = (
   url,
   token,
@@ -11,7 +17,8 @@ const fetcher = (
   query,
   baiguullagiinId,
   barilgiinId,
-  order
+  order,
+  searchKeys = []
 ) =>
   axios(token)
     .get(url, {
@@ -20,6 +27,7 @@ const fetcher = (
           baiguullagiinId,
           barilgiinId,
           ...query,
+          $or: searchGenerator(searchKeys, search),
         },
         order,
         ...khuudaslalt,
@@ -33,7 +41,7 @@ const fetcherToololt = (url, token, query) =>
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-function useEBarimt(token, baiguullagiinId, query, order) {
+function useEBarimt(token, baiguullagiinId, query, order, searchKeys) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setEBarimtKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -51,6 +59,7 @@ function useEBarimt(token, baiguullagiinId, query, order) {
           baiguullagiinId,
           barilgiinId,
           order,
+          searchKeys,
         ]
       : null,
     fetcher,

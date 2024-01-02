@@ -25,6 +25,8 @@ import Aos from "aos";
 import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
+
+const searchKeys = ["customerNo", "cashAmount", "billId"];
 //#endregion
 
 function EbarimtMedeelel({ token }) {
@@ -87,7 +89,13 @@ function EbarimtMedeelel({ token }) {
   const { order, onChangeTable } = useOrder({ createAt: -1 });
 
   const { eBarimtGaralt, eBarimtMutate, setEBarimtKhuudaslalt, isValidating } =
-    useEBarimt(barilgiinId && token, ajiltan?.baiguullagiinId, query, order);
+    useEBarimt(
+      barilgiinId && token,
+      ajiltan?.baiguullagiinId,
+      query,
+      order,
+      searchKeys
+    );
 
   const { eBarimtMedeelel, eBarimtMedeelelMutate } = useEBarimtMedeelel(
     barilgiinId && token,
@@ -255,19 +263,20 @@ function EbarimtMedeelel({ token }) {
         render(data) {
           return (
             <Popconfirm
-              title='ebarimt устгах уу?'
+              title="ebarimt устгах уу?"
               okText={t("Тийм")}
               cancelText={t("Үгүй")}
-              onConfirm={() => ebarimtUstgaya(data)}>
+              onConfirm={() => ebarimtUstgaya(data)}
+            >
               <Button
                 danger
-                size='small'
+                size="small"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                shape='circle'
+                shape="circle"
                 icon={<DeleteOutlined />}
               />
             </Popconfirm>
@@ -300,30 +309,32 @@ function EbarimtMedeelel({ token }) {
   }
   return (
     <Admin
-      khuudasniiNer='eBarimt'
-      title='И-баримтын бүртгэл'
-      className='p-0 md:p-5'
-      onSearch={(search) => setKhuudaslalt((a) => ({ ...a, search }))}
-      tsonkhniiId='61c2c70a1c2830c4e6f90ccf'
-      loading={waiting || isValidating}>
-      <Card className='cardgrid col-span-12'>
-        <div className='hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12'>
+      khuudasniiNer="eBarimt"
+      title="И-баримтын бүртгэл"
+      className="p-0 md:p-5"
+      onSearch={(search) => setEBarimtKhuudaslalt((a) => ({ ...a, search }))}
+      tsonkhniiId="61c2c70a1c2830c4e6f90ccf"
+      loading={waiting || isValidating}
+    >
+      <Card className="cardgrid col-span-12">
+        <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {khyanaltiinDun.map((mur, index) => {
             return (
               <div
                 key={index}
-                className='zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2'
-                data-aos='zoom-out-down'
-                data-aos-duration='1000'
-                data-aos-delay={6 - index + "00"}>
-                <div className='h-full w-[67vw] rounded-xl md:w-auto'>
-                  <div className='rounded-xl p-3'>
-                    <div className='flex'>
+                className="zoom-in col-span-12 h-20 cursor-pointer rounded-xl border-2 border-green-600 sm:col-span-12 lg:col-span-2"
+                data-aos="zoom-out-down"
+                data-aos-duration="1000"
+                data-aos-delay={6 - index + "00"}
+              >
+                <div className="h-full w-[67vw] rounded-xl md:w-auto">
+                  <div className="rounded-xl p-3">
+                    <div className="flex">
                       <div>
-                        <div className='text-2xl font-bold text-green-600'>
+                        <div className="text-2xl font-bold text-green-600">
                           {mur.too}
                         </div>
-                        <div className='text-sm text-gray-500'>
+                        <div className="text-sm text-gray-500">
                           {t(mur.utga)}
                         </div>
                       </div>
@@ -335,50 +346,55 @@ function EbarimtMedeelel({ token }) {
           })}
         </div>
 
-        <div className='mt-5 flex w-full flex-col justify-between md:flex-row'>
-          <div className='flex gap-3'>
+        <div className="mt-5 flex w-full flex-col justify-between md:flex-row">
+          <div className="flex gap-3">
             <div
-              data-aos='fade-right'
-              data-aos-duration='1000'
-              data-aos-delay='100'>
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
+            >
               <RangePicker
-                className='w-full md:w-auto'
+                className="w-full md:w-auto"
                 clearIcon
                 style={{ marginBottom: "20px" }}
-                size='middle'
+                size="middle"
                 value={ekhlekhOgnoo}
                 onChange={setEkhlekhOgnoo}
               />
             </div>
             <div
-              data-aos='fade-right'
-              data-aos-duration='1000'
-              data-aos-delay='600'>
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="600"
+            >
               <Select
-                className='w-full sm:w-36'
-                placeholder='Үйлчилгээ'
+                className="w-full sm:w-36"
+                placeholder="Үйлчилгээ"
                 onChange={(v) => setUilchilgeeAvi(v)}
-                allowClear>
-                <Select.Option key='Зогсоол' value='Зогсоол'>
+                allowClear
+              >
+                <Select.Option key="Зогсоол" value="Зогсоол">
                   Зогсоол
                 </Select.Option>
-                <Select.Option key='Тоглоом' value='Тоглоом'>
+                <Select.Option key="Тоглоом" value="Тоглоом">
                   Тоглоом
                 </Select.Option>
-                <Select.Option key='Түрээс' value='Түрээс'>
+                <Select.Option key="Түрээс" value="Түрээс">
                   Түрээс
                 </Select.Option>
               </Select>
             </div>
           </div>
           <div
-            className='mb-5 flex flex-row justify-between md:mb-0 md:space-x-2'
-            data-aos='fade-left'
-            data-aos-duration='1000'
-            data-aos-delay='300'>
+            className="mb-5 flex flex-row justify-between md:mb-0 md:space-x-2"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="300"
+          >
             <Button
               title={t("Сүүлд илгээгдсэн огноо")}
-              className='dark:bg-gray-800 dark:text-white  '>
+              className="dark:bg-gray-800 dark:text-white  "
+            >
               {moment(eBarimtMedeelel?.extraInfo?.lastSentDate).format(
                 "YYYY-MM-DD"
               )}
@@ -387,7 +403,8 @@ function EbarimtMedeelel({ token }) {
             <Button
               danger
               onClick={ebarimtIlgeeye}
-              className='border-red-400 dark:border-red-400 dark:bg-gray-900 '>
+              className="border-red-400 dark:border-red-400 dark:bg-gray-900 "
+            >
               <Spin spinning={loading}>
                 {loading ? "" : t("Татварт илгээх")}{" "}
               </Spin>
@@ -395,15 +412,16 @@ function EbarimtMedeelel({ token }) {
           </div>
         </div>
         <div
-          data-aos='fade-left'
-          data-aos-duration='1000'
-          data-aos-delay='300'
-          data-aos-anchor-placement='top-bottom'>
+          data-aos="fade-left"
+          data-aos-duration="1000"
+          data-aos-delay="300"
+          data-aos-anchor-placement="top-bottom"
+        >
           <Table
             bordered
             tableLayout={"fixed"}
-            size='small'
-            rowClassName='hover:bg-blue-100'
+            size="small"
+            rowClassName="hover:bg-blue-100"
             dataSource={eBarimtGaralt?.jagsaalt}
             pagination={{
               current: eBarimtGaralt?.khuudasniiDugaar,
@@ -420,7 +438,7 @@ function EbarimtMedeelel({ token }) {
             onChange={onChangeTable}
             scroll={{ y: "calc(100vh - 27rem)" }}
             rowKey={(row) => row._id}
-            className='t-head'
+            className="t-head"
             columns={columns}
           />
         </div>
