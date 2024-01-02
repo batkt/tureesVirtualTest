@@ -1,7 +1,7 @@
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { BiCommentError } from "react-icons/bi";
 import { BiBellPlus } from "react-icons/bi";
-import { BsGraphUp } from "react-icons/bs";
+import { BsGraphUp, BsPcDisplay } from "react-icons/bs";
 import { MdOutlineAnalytics } from "react-icons/md";
 import { FiHome } from "react-icons/fi";
 import { FaSteam } from "react-icons/fa";
@@ -11,6 +11,7 @@ import useKhuudasniiJagsaalt from "hooks/useKhuudasniiJagsaalt";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { message } from "antd";
 import { t } from "i18next";
+import { MobileFilled, MobileOutlined } from "@ant-design/icons";
 
 export const tsonknuud = [
   {
@@ -862,24 +863,7 @@ export const khuudasnuud = [
     ner: "Киоск",
     khuudasniiNer: "kiosk",
     href: "/khyanalt/kiosk",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        preserveAspectRatio="xMidYMid meet"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M19 19H5V5h6V3H5a2.006 2.006 0 0 0-2 2v14a2.006 2.006 0 0 0 2 2h14a2.006 2.006 0 0 0 2-2v-4h-2Z"
-        />
-        <path
-          fill="currentColor"
-          d="M15 5h6v6a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1V5Zm7-2h-2l-.571-1h-2.858L16 3h-2v1h8V3z"
-        />
-      </svg>
-    ),
+    icon: <MobileOutlined className="text-2xl" />,
   },
   {
     ner: "Тоглоомын төв",
