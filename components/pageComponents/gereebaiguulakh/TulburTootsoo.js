@@ -42,6 +42,12 @@ const Tulbur = ({
     }
     onChange({ ...value });
   };
+  const baritsaaDunChange = (v) => {
+    if (v && value.baritsaaAvakhEsekh === true) {
+      value.baritsaaAvakhDun = v;
+    }
+    onChange({ ...value });
+  };
   useEffect(() => {
     form.getFieldInstance("baritsaaBairshuulakhKhugatsaa")?.focus();
   }, []);
@@ -55,7 +61,7 @@ const Tulbur = ({
         item.turul === "Тогтмол"
       );
     });
-// console.log('000000000', value);
+    // console.log('000000000', value);
     if (!!value.khugatsaa)
       uilchilgee(token)
         .post(`/khuvaariUusgey`, {
@@ -144,9 +150,9 @@ const Tulbur = ({
               <Form.Item label={t("Барьцаа дүн")}>
                 <InputNumber
                   value={value.baritsaaAvakhDun}
-                  disabled
                   placeholder={t("Барьцаа дүн")}
                   style={{ width: "100%" }}
+                  onChange={(e) => baritsaaDunChange(e)}
                   formatter={(value) => formatNumber(`${value}`)}
                 />
               </Form.Item>
@@ -178,11 +184,11 @@ const Tulbur = ({
           <div className="text-right text-lg font-medium dark:text-gray-100">
             {formatNumber(
               (value.sariinTurees || 0) * (value.buunTulult || 1) +
-              (value.baritsaaAvakhDun || 0) *
-              (value.baritsaaAvakhKhugatsaa || 0) -
-              (((value.sariinTurees || 0) * 12) / 365) *
-              (value.khungulukhKhugatsaa || 0) -
-              (value.khyamdaral || 0)
+                (value.baritsaaAvakhDun || 0) *
+                  (value.baritsaaAvakhKhugatsaa || 0) -
+                (((value.sariinTurees || 0) * 12) / 365) *
+                  (value.khungulukhKhugatsaa || 0) -
+                (value.khyamdaral || 0)
             )}
           </div>
         </Form.Item>
@@ -196,7 +202,7 @@ const Tulbur = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="mt-4 flex w-full flex-col gap-4 md:flex-row justify-between">
+          <div className="mt-4 flex w-full flex-col justify-between gap-4 md:flex-row">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}
