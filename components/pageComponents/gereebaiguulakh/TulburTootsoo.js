@@ -44,7 +44,7 @@ const Tulbur = ({
   };
   const baritsaaDunChange = (v) => {
     if (v && value.baritsaaAvakhEsekh === true) {
-      value.baritsaaAvakhDun = formatNumber(v);
+      value.baritsaaAvakhDun = v;
     }
     onChange({ ...value });
   };
