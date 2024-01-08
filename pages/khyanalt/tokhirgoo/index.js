@@ -11,7 +11,6 @@ import KhungulultiinTokhirgoo from "components/pageComponents/tokhirgoo/Khungulu
 import TalbainTokhirgoo from "components/pageComponents/tokhirgoo/TalbainTokhirgoo";
 import AshiglaltiinZardal from "components/pageComponents/tokhirgoo/AshiglaltiinZardal";
 import Medegdel from "components/pageComponents/tokhirgoo/Medegdel";
-import QPay from "components/pageComponents/tokhirgoo/QPay";
 import Dans from "components/pageComponents/tokhirgoo/Dans";
 import Email from "components/pageComponents/tokhirgoo/EmailTokhirgoo";
 import Zogsool from "components/pageComponents/tokhirgoo/Zogsool";
@@ -59,8 +58,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <circle cx="12" cy="12" r="3"></circle>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
             </svg>
@@ -80,8 +78,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
             </svg>
           ),
@@ -100,8 +97,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
               <polyline points="14 2 14 8 20 8"></polyline>
               <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -150,8 +146,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
             </svg>
           ),
@@ -170,8 +165,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
             </svg>
           ),
@@ -190,8 +184,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               {" "}
               <path stroke="none" d="M0 0h24v24H0z" />{" "}
               <rect x="3" y="5" width="18" height="14" rx="2" />{" "}
@@ -214,8 +207,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              dataLucide="stop-circle"
-            >
+              dataLucide="stop-circle">
               <circle cx="12" cy="12" r="10"></circle>
               <rect x="9" y="9" width="6" height="6"></rect>
             </svg>
@@ -228,58 +220,16 @@ function AjiltanBurtgel({ token }) {
             <svg
               version="1.0"
               xmlns="http://www.w3.org/2000/svg"
-              stroke="currentColor"
-              width="20"
-              height="20"
-              viewBox="0 0 309.000000 297.000000"
-              className="feather feather-settings mr-2 h-4 w-4"
-              preserveAspectRatio="xMidYMid meet"
-            >
-              <metadata>t</metadata>
-              <g
-                transform="translate(0.000000,297.000000) scale(0.100000,-0.100000)"
-                fill="currentColor"
-                stroke="none"
-              >
-                <path
-                  d="M1290 2964 c-203 -38 -311 -71 -447 -136 -354 -168 -645 -498 -771
-          -874 -57 -171 -67 -239 -67 -469 0 -230 10 -300 66 -470 74 -223 188 -405 363
-          -581 207 -206 413 -324 701 -400 89 -24 124 -27 310 -31 209 -5 318 5 423 38
-          l32 11 0 294 c0 162 -1 294 -3 294 -2 0 -22 -9 -44 -20 -22 -10 -74 -29 -114
-          -41 -93 -26 -318 -37 -412 -20 -367 70 -650 330 -749 689 -32 115 -32 353 0
-          470 91 338 342 585 687 678 56 15 102 19 230 18 143 -1 169 -3 248 -27 175
-          -54 306 -135 433 -269 85 -90 152 -197 191 -306 57 -154 56 -148 62 -840 l6
-          -643 72 66 c197 180 355 444 423 709 107 420 36 852 -199 1202 -216 323 -517
-          532 -906 631 -88 22 -125 25 -305 28 -113 2 -216 1 -230 -1z"
-                />
-                <path
-                  d="M1363 1876 c-104 -34 -204 -123 -251 -224 -24 -51 -27 -69 -27 -167
-          0 -104 2 -114 32 -175 82 -167 265 -264 436 -232 241 45 394 279 332 507 -33
-          122 -108 212 -226 272 -46 23 -68 28 -154 30 -65 2 -115 -2 -142 -11z"
-                />
-              </g>
-            </svg>
-          ),
-          text: "QPay",
-          tsonkh: QPay,
-        },
-        {
-          icon: (
-            <svg
-              version="1.0"
-              xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
               viewBox="0 0 861.000000 1024.000000"
               className="feather feather-settings mr-2 h-4 w-4"
               preserveAspectRatio="xMidYMid meet"
-              stroke="currentColor"
-            >
+              stroke="currentColor">
               <g
                 transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)"
                 fill="currentColor"
-                stroke="none"
-              >
+                stroke="none">
                 {" "}
                 <path
                   d="M116 10218 c-5 -25 -117 -2289 -116 -2350 l0 -38 144 0 c159 0 156
@@ -316,8 +266,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <rect x="1" y="3" width="15" height="13"></rect>
               <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
               <circle cx="5.5" cy="18.5" r="2.5"></circle>
@@ -338,8 +287,7 @@ function AjiltanBurtgel({ token }) {
               height="24"
               fill="currentColor"
               aria-hidden="true"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path>
             </svg>
           ),
@@ -357,8 +305,7 @@ function AjiltanBurtgel({ token }) {
               height="24"
               fill="currentColor"
               aria-hidden="true"
-              className="feather feather-settings mr-2 h-4 w-4"
-            >
+              className="feather feather-settings mr-2 h-4 w-4">
               <path d="M872 476H548V144h-72v332H152c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h324v332h72V548h324c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-166h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 498h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-664h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 498h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM650 216h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 592h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-332 0h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-56-592h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-166 0h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 592h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm-56-426h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm56 260h-56c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8z"></path>
             </svg>
           ),
@@ -407,8 +354,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-activity mr-2 h-4 w-4"
-            >
+              className="feather feather-activity mr-2 h-4 w-4">
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
             </svg>
           ),
@@ -427,8 +373,7 @@ function AjiltanBurtgel({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-lock mr-2 h-4 w-4"
-            >
+              className="feather feather-lock mr-2 h-4 w-4">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
@@ -447,8 +392,7 @@ function AjiltanBurtgel({ token }) {
     <Admin
       title="Тохиргоо"
       khuudasniiNer="tokhirgoo"
-      className="grid grid-cols-12 gap-6 px-4 pb-5"
-    >
+      className="grid grid-cols-12 gap-6 px-4 pb-5">
       <div className="col-span-12 mt-5 flex flex-col-reverse lg:col-span-3 lg:block xl:col-span-3">
         <div className="box mt-5 lg:mt-0">
           <div className="relative flex items-center p-5">
@@ -480,8 +424,7 @@ function AjiltanBurtgel({ token }) {
                     ? "text-yellow-500 dark:text-white"
                     : ""
                 } `}
-                onClick={() => setSongogdsonTsonkhniiIndex(index)}
-              >
+                onClick={() => setSongogdsonTsonkhniiIndex(index)}>
                 {mur.icon} {t(mur.text)}
               </div>
             ))}

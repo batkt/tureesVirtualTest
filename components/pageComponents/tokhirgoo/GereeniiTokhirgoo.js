@@ -190,57 +190,6 @@ function KhuviinMedeelel({
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алдангийн хувь")}</div>
-                <div className="text-gray-600">
-                  {t(
-                    "Гэрээний төлөлт хугацаа хэтэрсэн үед тооцох алдангийн хувь"
-                  )}
-                </div>
-              </div>
-              <div className="ml-auto">
-                <InputNumber
-                  min={0}
-                  max={0.5}
-                  defaultValue={baiguullaga?.tokhirgoo?.aldangiinKhuvi}
-                  onChange={(v) =>
-                    setGereeTokhirgoo((a) => ({
-                      ...(a || {}),
-                      aldangiinKhuvi: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Алданги чөлөөлөх хоног")}</div>
-                <div className="text-gray-600">
-                  {t(
-                    "Алданги хугацаа хэтэрсэн хоногоос хэд хоногийн дараагаас бодож эхлэх хоног"
-                  )}
-                </div>
-              </div>
-
-              <div className="ml-auto">
-                <InputNumber
-                  min={0}
-                  max={100}
-                  defaultValue={baiguullaga?.tokhirgoo?.aldangiChuluulukhKhonog}
-                  onChange={(v) =>
-                    setGereeTokhirgoo((a) => ({
-                      ...(a || {}),
-                      aldangiChuluulukhKhonog: v,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="box">
-            <div className="flex items-center p-5">
-              <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
                   {t("Гэрээнд 'Акт' ашиглах эсэх")}
                 </div>
@@ -264,8 +213,7 @@ function KhuviinMedeelel({
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}
-          >
+            }`}>
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
@@ -289,8 +237,7 @@ function KhuviinMedeelel({
                     action={`${url}/upload`}
                     method="POST"
                     onChange={(v) => setTamga(v.file.response)}
-                    onChanged={(a) => soligdsonZurag(a.file.response)}
-                  >
+                    onChanged={(a) => soligdsonZurag(a.file.response)}>
                     <div className="flex flex-row space-x-1">
                       {!barilga?.tamga && (
                         <Button icon={<UploadOutlined />}>
@@ -302,8 +249,7 @@ function KhuviinMedeelel({
                           icon={<EyeOutlined />}
                           onClick={(e) =>
                             tamgaZuragKharakh(e, `tamga/${barilga.tamga}`)
-                          }
-                        >
+                          }>
                           {t("Тамга зураг харах")}
                         </Button>
                       )}
@@ -320,8 +266,7 @@ function KhuviinMedeelel({
                     name="file"
                     action={`${url}/upload`}
                     method="POST"
-                    onChange={(v) => setGariinUseg(v.file.response)}
-                  >
+                    onChange={(v) => setGariinUseg(v.file.response)}>
                     <div className="flex flex-row space-x-1">
                       {!barilga?.gariinUseg && (
                         <Button icon={<UploadOutlined />}>
@@ -336,8 +281,7 @@ function KhuviinMedeelel({
                               e,
                               `gariinUseg/${barilga.gariinUseg}`
                             )
-                          }
-                        >
+                          }>
                           {t("Гарын үсэг зураг харах")}
                         </Button>
                       )}
