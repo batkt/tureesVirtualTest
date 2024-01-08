@@ -44,7 +44,7 @@ const Tulbur = ({
   };
   const baritsaaDunChange = (v) => {
     if (v && value.baritsaaAvakhEsekh === true) {
-      value.baritsaaAvakhDun = v;
+      value.baritsaaAvakhDun = formatNumber(v);
     }
     onChange({ ...value });
   };
@@ -153,7 +153,6 @@ const Tulbur = ({
                   placeholder={t("Барьцаа дүн")}
                   style={{ width: "100%" }}
                   onChange={(e) => baritsaaDunChange(e)}
-                  formatter={(value) => formatNumber(`${value}`)}
                 />
               </Form.Item>
             </div>
