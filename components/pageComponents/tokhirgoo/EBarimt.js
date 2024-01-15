@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { Button, InputNumber, notification, Switch } from "antd";
+import { Button, InputNumber, notification, Switch, Input } from "antd";
 import uilchilgee from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 
-function EBarimt({ token, baiguullaga, baiguullagaMutate, setSongogdsonTsonkhniiIndex }) {
+function EBarimt({
+  token,
+  baiguullaga,
+  baiguullagaMutate,
+  setSongogdsonTsonkhniiIndex,
+}) {
   const [gereeTokhirgoo, setGereeTokhirgoo] = useState(null);
-const { t } = useTranslation()
+  const { t } = useTranslation();
   const gereeTokhirgooKhadgalya = () => {
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: gereeTokhirgoo })
@@ -14,7 +19,7 @@ const { t } = useTranslation()
           notification.success({ message: t("Амжилттай засагдлаа") });
           setGereeTokhirgoo(null);
           baiguullagaMutate();
-          setSongogdsonTsonkhniiIndex(7)
+          setSongogdsonTsonkhniiIndex(7);
         }
       });
   };
@@ -23,7 +28,7 @@ const { t } = useTranslation()
     <>
       <div className="xxl:col-span-4 col-span-12 mt-5 lg:col-span-6">
         <div className="box mt-5 lg:mt-0">
-          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pt-5 pb-2">
+          <div className="dark:border-dark-5 flex items-center border-b border-gray-200 px-5 pb-2 pt-5">
             <h2 className="mr-auto text-base font-medium dark:text-gray-200">
               {t("Нийтээр тохируулах")}
             </h2>
@@ -69,10 +74,32 @@ const { t } = useTranslation()
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("Зогсоолын баримт дээр хэвлэгдэх нэр")}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Input
+                  className="w-[250px]"
+                  min={0}
+                  max={0.5}
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      zogsoolNer: v.target.value,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
           <div
-            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pt-2 pb-2 ${!!gereeTokhirgoo ? "flex" : "hidden"
-              }`}
-          >
+            className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pb-2 pt-2 ${
+              !!gereeTokhirgoo ? "flex" : "hidden"
+            }`}>
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
