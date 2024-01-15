@@ -545,7 +545,11 @@ function ShineTulbur(
             ref={eBarimtRef}
           >
             <div className="text-center">Авто зогсоолын үйлчилгээ</div>
-            <div className="text-center">{baiguullaga?.ner}</div>
+            <div className="text-center">
+              {baiguullaga?.zogsoolNer
+                ? baiguullaga?.zogsoolNer
+                : baiguullaga?.ner}
+            </div>
             {/* <div>Борлуулагч:</div> */}
             <div className="flex justify-between">
               <p>Огноо:</p>
