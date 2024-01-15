@@ -325,6 +325,31 @@ function tulburTootsoo() {
         },
       },
       {
+        title: t("Төрөл"),
+        dataIndex: "khungulukhTurul",
+        ellipsis: true,
+        width: "7rem",
+        align: "center",
+        render: (data) => {
+          switch (data) {
+            case "turees":
+              return (
+                <div className="flex items-center justify-center rounded-lg bg-green-400 px-2 py-1 dark:bg-green-700 dark:text-gray-200 ">
+                  Түрээс
+                </div>
+              );
+            case "zardal":
+              return (
+                <div className="flex items-center justify-center rounded-lg bg-yellow-400 px-2 py-1 dark:bg-yellow-700 dark:text-gray-200 ">
+                  Зардал
+                </div>
+              );
+            default:
+              return data;
+          }
+        },
+      },
+      {
         title: t("Төлөх дүн"),
         summary: true,
         width: "7rem",
