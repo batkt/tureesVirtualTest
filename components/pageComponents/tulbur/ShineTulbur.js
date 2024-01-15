@@ -546,8 +546,8 @@ function ShineTulbur(
           >
             <div className="text-center">Авто зогсоолын үйлчилгээ</div>
             <div className="text-center">
-              {baiguullaga?.zogsoolNer
-                ? baiguullaga?.zogsoolNer
+              {baiguullaga?.tokhirgoo?.zogsoolNer
+                ? baiguullaga?.tokhirgoo?.zogsoolNer
                 : baiguullaga?.ner}
             </div>
             {/* <div>Борлуулагч:</div> */}
