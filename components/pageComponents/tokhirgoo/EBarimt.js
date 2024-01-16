@@ -83,6 +83,7 @@ function EBarimt({
               </div>
               <div className="ml-auto">
                 <Input
+                  value={baiguullaga?.tokhirgoo?.zogsoolNer}
                   className="w-[250px]"
                   min={0}
                   max={0.5}
