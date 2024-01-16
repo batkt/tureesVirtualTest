@@ -35,6 +35,7 @@ function GuilgeeKhiikh(
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
   const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
   const { t, i18n } = useTranslation();
+  const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(false);
 
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
@@ -137,7 +138,9 @@ function GuilgeeKhiikh(
               guilgee = {
                 turul: "avlaga",
                 tulsunDun: 0,
-                tulukhDun: suuriKhuraamj + negjUne * (dun || 0),
+                tulukhDun: nuatBodokhEsekh
+                  ? (suuriKhuraamj + negjUne * (dun || 0)) * 1.1
+                  : suuriKhuraamj + negjUne * (dun || 0),
                 negj: dun && dun,
                 khemjikhNegj: khemjikhNegj,
                 tariff: negjUne,
@@ -459,6 +462,15 @@ function GuilgeeKhiikh(
               checked={nekhemjlekhDeerKharagdakh}
               onChange={setNekhemjlekhDeerKharagdakh}
             />
+          </div>
+        </div>
+      )}
+      {turul === "ashiglalt" && (
+        <div className="flex flex-row justify-between">
+          <div />
+          <div className="space-x-2">
+            <label>{t("НӨАТ бодох эсэх")}:</label>
+            <Switch checked={nuatBodokhEsekh} onChange={setNuatBodokhEsekh} />
           </div>
         </div>
       )}
