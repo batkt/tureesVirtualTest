@@ -60,15 +60,22 @@ function KhungulultTsonkh(
       const odoo = new Date();
       var bodsonTulbur = 0;
       if (!garaasDunOruulsan) {
-        bodsonTulbur = await tulburBodoy(
-          songogdsonZogsool?.tulburuud,
-          odoo.getTime(),
-          new Date(data?.tuukh[0].tsagiinTuukh[0].orsonTsag).getTime(),
-          songogdsonZogsool?.undsenUne,
-          songogdsonZogsool?.undsenMin,
-          0,
-          zuruuMinut
-        );
+        try {
+          bodsonTulbur = await tulburBodoy(
+            songogdsonZogsool?.tulburuud,
+            odoo.getTime(),
+            new Date(data?.tuukh[0].tsagiinTuukh[0].orsonTsag).getTime(),
+            songogdsonZogsool?.undsenUne,
+            songogdsonZogsool?.undsenMin,
+            0,
+            zuruuMinut
+          );
+        } catch (error) {
+          return notification.error({
+            message: "Тариф бодоход алдаа гарлаа. Та дахин оролдоно уу",
+            duration: 2,
+          });
+        }
       } else {
         bodsonTulbur = garaasDunOruulsan;
       }
