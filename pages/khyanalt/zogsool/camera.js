@@ -79,6 +79,8 @@ import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraT
 import R2WPlayerComponent from "components/streamPlayer";
 import StackIkhNaydStream from "./stackIkhnaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
+import { MdDiscount } from "react-icons/md";
+import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -252,6 +254,7 @@ function camera({ token }) {
   const tulburRef = React.useRef(null);
   const mashiniiDugaarRef = React.useRef(null);
   const tailanRef = React.useRef(null);
+  const khungulultRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
     "tuukh.tsagiinTuukh.garsanTsag": -1,
@@ -471,7 +474,10 @@ function camera({ token }) {
         if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
-        const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace("???", "");
+        const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
+          "???",
+          ""
+        );
         axios
           .get(
             `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${yanzalsanMashiniiDugaar}/${uilchluulegch?.niitDun}`
@@ -1279,23 +1285,36 @@ function camera({ token }) {
             ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
               <Popover
                 content={
-                  <Popconfirm
-                    okText={t("Тийм")}
-                    cancelText={t("Үгүй")}
-                    title={`${parent?.mashiniiDugaar} дугаартай машиныг гаргах уу?`}
-                    type={"warning"}
-                    onConfirm={() => {
-                      dugaarGaraasBurtgekh(parent);
-                    }}
-                    className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
-                  >
-                    <div className="flex items-center justify-center">
-                      <ArrowRightOutlined />
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <div
+                      onClick={() => khungulyu(parent, parent?._id)}
+                      className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
+                    >
+                      <div className="flex items-center justify-center">
+                        <MdDiscount />
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Хөнгөлөх
+                      </div>
                     </div>
-                    <div className="flex items-center justify-center">
-                      Гаргах
-                    </div>
-                  </Popconfirm>
+                    <Popconfirm
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
+                      title={`${parent?.mashiniiDugaar} дугаартай машиныг гаргах уу?`}
+                      type={"warning"}
+                      onConfirm={() => {
+                        dugaarGaraasBurtgekh(parent);
+                      }}
+                      className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
+                    >
+                      <div className="flex items-center justify-center">
+                        <ArrowRightOutlined />
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Гаргах
+                      </div>
+                    </Popconfirm>
+                  </div>
                 }
               >
                 <div className="mx-auto flex w-max cursor-pointer items-center justify-center space-x-2 rounded bg-blue-500 px-3 text-white">
@@ -1724,6 +1743,41 @@ function camera({ token }) {
         })
         .catch(aldaaBarigch);
     }
+  };
+
+  const khungulyu = (data, uilchluulegchiinId) => {
+    console.log("tukhainData: ", data);
+    const footer = [
+      <div className="flex w-full items-center justify-between">
+        <Button type="primary" onClick={() => khungulultRef?.current.khaaya()}>
+          {t("Хаах")}
+        </Button>
+        <Button
+          icon={<MdDiscount />}
+          onClick={() => khungulultRef?.current.khadgalya()}
+        >
+          {t("Хөнгөлөх")}
+        </Button>
+      </div>,
+    ];
+    modal({
+      title: t("Хөнгөлөх"),
+      icon: <FileExcelOutlined />,
+      content: (
+        <KhungulukhTsonkh
+          ref={khungulultRef}
+          token={token}
+          uilchluulegchiinId={uilchluulegchiinId}
+          data={data}
+          songogdsonZogsool={songogdzonZogsool}
+          mutate={uilchluulegchMutate}
+          ajiltan={ajiltan}
+          baiguullaga={baiguullaga}
+          barilgiinId={barilgiinId}
+        />
+      ),
+      footer,
+    });
   };
 
   const tsagTootsoolur = (v) => {
