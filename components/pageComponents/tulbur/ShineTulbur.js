@@ -7,7 +7,7 @@ import {
   Image,
   Popover,
 } from "antd";
-import React from "react";
+import React, { useMemo } from "react";
 import formatNumber from "tools/function/formatNumber";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
@@ -23,6 +23,7 @@ import { FaMoneyBillWave, FaArrowRight } from "react-icons/fa";
 import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "./ShineEbarimt";
+import { TbDiscount2 } from "react-icons/tb";
 //#endregion
 const { confirm } = Modal;
 function ShineTulbur(
@@ -75,6 +76,17 @@ function ShineTulbur(
     niitDun?.toString() -
       (data?.tulbur?.length > 0 && data?.tulbur?.reduce((a, b) => a + b.dun, 0))
   );
+  const khungulultAnkhOrjIrsen = useMemo(() => {
+    let orjIrsen = false;
+    if (
+      data?.tulbur?.length > 0 &&
+      data?.tulbur.some((tulbur) => tulbur?.turul === "khungulult")
+    ) {
+      orjIrsen = true;
+    }
+    return orjIrsen;
+  }, [data]);
+
   const [refreshdekhEsekh, setRefreshdekhEsekh] = React.useState(true);
 
   const eBarimtRef = React.useRef(null);
@@ -111,6 +123,7 @@ function ShineTulbur(
     const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const lend = tulbur.find((a) => a.turul === "lend")?.dun;
     const toki = tulbur.find((a) => a.turul === "toki")?.dun;
+    const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
     return {
       belen,
       zeel,
@@ -128,6 +141,7 @@ function ShineTulbur(
       pocket,
       lend,
       toki,
+      khungulult,
     };
   }, [tulbur]);
 
@@ -768,21 +782,30 @@ function ShineTulbur(
                 <div className=" text-lg font-bold text-green-600">Дансаар</div>
               </div>
               <div
-                // onClick={() => turulruuTooKhiikhFunction("zeel")}
-
-                className={`relative flex h-[85px] w-[184px] cursor-not-allowed items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
-                  value.zeel > 0 ? "border-[3px] border-green-600" : null
+                onClick={() => {
+                  if (!khungulultAnkhOrjIrsen) {
+                    turulruuTooKhiikhFunction("khungulult");
+                  }
+                }}
+                className={`relative flex h-[85px] w-[184px] ${
+                  khungulultAnkhOrjIrsen
+                    ? "cursor-not-allowed"
+                    : "cursor-pointer"
+                } items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
+                  value.khungulult > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
-                {value.zeel > 0 ? (
+                {value.khungulult > 0 ? (
                   <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold ">
-                      {formatNumber(value.zeel)}₮
+                      {formatNumber(value.khungulult)}₮
                     </div>
                   </div>
                 ) : null}
-                <FaArrowRight className="text-[30px] text-green-600" />
-                <div className="text-lg font-bold text-green-600">Зээл</div>
+                <TbDiscount2 className="text-[30px] text-green-600" />
+                <div className="text-lg font-bold text-green-600">
+                  Хөнгөлөлт
+                </div>
               </div>
             </div>
           </div>

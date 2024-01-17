@@ -79,8 +79,8 @@ import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraT
 import R2WPlayerComponent from "components/streamPlayer";
 import StackIkhNaydStream from "./stackIkhnaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
-import { MdDiscount } from "react-icons/md";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
+import { CiDiscount1 } from "react-icons/ci";
 
 export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
@@ -205,6 +205,9 @@ function tulburKhurvuulekh(v) {
       break;
     case "kiosk":
       utga = "Киоск";
+      break;
+    case "khungulult":
+      utga = "Хөнгөлөлт";
       break;
     default:
       utga = v;
@@ -1159,6 +1162,14 @@ function camera({ token }) {
                 >
                   {t("Токи")}
                 </div>
+                <div
+                  onClick={() => setKhelber("khungulult")}
+                  className={`relative ${
+                    khelber === "khungulult" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  {t("Хөнгөлөлт")}
+                </div>
               </div>
             }
           >
@@ -1291,7 +1302,7 @@ function camera({ token }) {
                       className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
                     >
                       <div className="flex items-center justify-center">
-                        <MdDiscount />
+                        <CiDiscount1 />
                       </div>
                       <div className="flex items-center justify-center">
                         Хөнгөлөх
@@ -1753,7 +1764,7 @@ function camera({ token }) {
           {t("Хаах")}
         </Button>
         <Button
-          icon={<MdDiscount />}
+          icon={<CiDiscount1 />}
           onClick={() => khungulultRef?.current.khadgalya()}
         >
           {t("Хөнгөлөх")}

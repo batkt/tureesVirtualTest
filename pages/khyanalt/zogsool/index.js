@@ -111,6 +111,9 @@ function tulburKhurvuulekh(v) {
     case "kiosk":
       utga = "Киоск";
       break;
+    case "khungulult":
+      utga = "Хөнгөлөлт";
+      break;
     default:
       utga = v;
       break;
@@ -525,6 +528,7 @@ function Zogsool({ token }) {
         title: t("Хугацаа/мин"),
         align: "center",
         width: "10rem",
+        ellipsis: true,
         dataIndex: "tuukh",
         render(v) {
           const d1 = moment(v[0]?.tsagiinTuukh[0]?.orsonTsag);
@@ -597,6 +601,14 @@ function Zogsool({ token }) {
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
                 >
                   Киоск
+                </div>
+                <div
+                  onClick={() => setTulbur("khungulult")}
+                  className={`relative ${
+                    tulbur === "khungulult" && "bg-green-500 text-white"
+                  } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}
+                >
+                  Хөнгөлөлт
                 </div>
               </div>
             }
@@ -1026,6 +1038,16 @@ function Zogsool({ token }) {
               )}
               ₮
             </div>
+            <div className="flex space-x-2 p-1 text-base font-medium xl:ml-5">
+              {t("Нийт хөнгөлсөн")} :{" "}
+              {formatNumber(
+                !!uilchluulegchdiinDun?.[0]?.khungulsun
+                  ? uilchluulegchdiinDun?.[0]?.khungulsun
+                  : 0,
+                0
+              )}
+              ₮
+            </div>
           </div>
 
           {/*<Radio.Group onChange={zogsoolChange} defaultValue={`${jagsaalt[0]?._id}`} buttonStyle="solid">
@@ -1037,7 +1059,7 @@ function Zogsool({ token }) {
             }
           </Radio.Group>*/}
           <div
-            className="col-span-2 ml-auto flex w-full place-content-end justify-start gap-4 xl:justify-end"
+            className="col-span-1 ml-auto flex w-fit place-content-end justify-start gap-4 xl:justify-end"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
             data-aos-delay="300"
@@ -1235,7 +1257,7 @@ function Zogsool({ token }) {
                 <DownOutlined width={5} />
               </Button>
             </Popover>
-            <div className="flex items-center justify-center gap-1">
+            <div className="flex items-start justify-center gap-1">
               <Button
                 disabled={
                   selectedRowkeys && selectedRowkeys?.length > 0 ? false : true
