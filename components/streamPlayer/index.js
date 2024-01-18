@@ -3,7 +3,11 @@ import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const rtspUrl = useMemo(() => {
-    return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
+    if (USER && PASSWD) {
+      return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
+    } else {
+      return `rtsp://${Camer}:${PORT}/${ROOT}`;
+    }
   }, [Camer, USER, PASSWD, PORT, ROOT]);
 
   const [player, setPlayer] = useState(null);
