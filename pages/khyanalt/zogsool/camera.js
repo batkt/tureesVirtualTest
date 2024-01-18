@@ -470,20 +470,27 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
   useEffect(() => {
-    socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
+    socket().on(`zogsool${baiguullaga?._id}`, async (zogsool) => {
       let uilchluulegch = zogsool;
       let dunTuluv = true;
       uilchluulegch?.tuukh?.map((mur) => {
         if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
+        const garsanKhaalga = await uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
         const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
           "???",
           ""
         );
-        axios
+        const yanzalsanNiitDun =
+          (await uilchluulegch?.niitDun) -
+          uilchluulegch?.tuukh.reduce(
+            (sav, niit) => sav + niit?.tulbur.reduce((a, b) => a + b.dun, 0),
+            0
+          );
+        await axios
           .get(
-            `http://localhost:5000/api/sambar/${uilchluulegch?.tuukh?.[0]?.garsanKhaalga}/${yanzalsanMashiniiDugaar}/${uilchluulegch?.niitDun}`
+            `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
           )
           .then((res) => {
             if (res) {
