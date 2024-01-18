@@ -484,8 +484,8 @@ function camera({ token }) {
         );
         const yanzalsanNiitDun =
           (await uilchluulegch?.niitDun) -
-          uilchluulegch?.tuukh.reduce(
-            (sav, niit) => sav + niit?.tulbur.reduce((a, b) => a + b.dun, 0),
+          uilchluulegch?.tuukh?.reduce(
+            (sav, niit) => sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
             0
           );
         await axios

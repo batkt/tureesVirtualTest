@@ -35,7 +35,7 @@ function GuilgeeKhiikh(
   const [khemjikhNegj, setKhemjikhNegj] = useState("");
   const [suuriKhuraamj, setSuuriKhuraamj] = useState(null);
   const { t, i18n } = useTranslation();
-  const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(false);
+  const [nuatBodokhEsekh, setNuatBodokhEsekh] = useState(true);
 
   const [busadTurul, setBusadTurul] = useState();
   const [nekhemjlekhDeerKharagdakh, setNekhemjlekhDeerKharagdakh] =
@@ -435,12 +435,48 @@ function GuilgeeKhiikh(
         />
       )}
       {turul === "ashiglalt" && (
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-start justify-between">
           <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
-          <div className="p-2 dark:text-gray-100">
-            {t("Нийт үнэ")}:{" "}
-            {negjUne &&
-              formatNumber(negjUne * dun + (suuriKhuraamj || 0) || 0, 2)}
+          <div
+            className={`${nuatBodokhEsekh ? "p-0" : "p-2"}dark:text-gray-100`}
+          >
+            {nuatBodokhEsekh && negjUne && (
+              <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
+                <div className="flex w-full items-center justify-between gap-2">
+                  <div>Бодсон үнэ:</div>
+                  <div>
+                    {formatNumber(negjUne * dun + (suuriKhuraamj || 0) || 0, 2)}
+                  </div>
+                </div>
+                <div className="flex w-full items-center justify-between gap-2">
+                  <div>НӨАТ:</div>
+                  <div>
+                    {console.log("aaa", negjUne, dun, suuriKhuraamj)}
+                    {formatNumber(
+                      (negjUne * dun + (suuriKhuraamj || 0) || 0) / 10
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {negjUne && !nuatBodokhEsekh && (
+              <div className="flex w-full items-center justify-between gap-2">
+                <div>{t("Нийт үнэ")}:</div>
+                <div>
+                  {formatNumber(negjUne * dun + (suuriKhuraamj || 0) || 0, 2)}
+                </div>
+              </div>
+            )}
+            {negjUne && nuatBodokhEsekh && (
+              <div className="flex w-full items-center justify-between gap-2">
+                <div>{t("Нийт үнэ")}:</div>
+                <div>
+                  {formatNumber(
+                    (negjUne * dun + (suuriKhuraamj || 0) || 0) * 1.1
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
