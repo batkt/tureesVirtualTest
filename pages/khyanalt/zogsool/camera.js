@@ -488,7 +488,7 @@ function camera({ token }) {
             (sav, niit) => sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
             0
           );
-        await axios
+        axios
           .get(
             `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
           )
