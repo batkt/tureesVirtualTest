@@ -477,17 +477,21 @@ function camera({ token }) {
         if (mur.tulukhDun !== 0) dunTuluv = false;
       });
       if (uilchluulegch) {
-        const garsanKhaalga = await uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
+        const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
         const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
           "???",
           ""
         );
-        const yanzalsanNiitDun =
-          (await uilchluulegch?.niitDun) -
-          uilchluulegch?.tuukh?.reduce(
-            (sav, niit) => sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
-            0
-          );
+        let yanzalsanNiitDun = uilchluulegch?.niitDun;
+        if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
+          yanzalsanNiitDun =
+            (await uilchluulegch?.niitDun) -
+            uilchluulegch?.tuukh?.reduce(
+              (sav, niit) =>
+                sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
+              0
+            );
+        }
         axios
           .get(
             `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
