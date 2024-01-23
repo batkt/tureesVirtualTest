@@ -260,7 +260,7 @@ function camera({ token }) {
   const khungulultRef = React.useRef(null);
   // const { order, onChangeTable } = useOrder({"tuukh.0.tsagiinTuukh.0.garsanTsag":-1});
   const { order, onChangeTable, setOrder } = useOrder({
-    "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
+    "tuukh.tsagiinTuukh.garsanTsag": -1,
   });
   const [modalOpen, setModalOpen] = useState({
     bool: false,
@@ -898,7 +898,7 @@ function camera({ token }) {
                 <div
                   onClick={() =>
                     setOrder({
-                      "tuukh.0.tsagiinTuukh.0.garsanTsag": -1,
+                      "tuukh.tsagiinTuukh.garsanTsag": -1,
                     })
                   }
                   className={`relative ${
