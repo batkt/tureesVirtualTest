@@ -73,7 +73,6 @@ import { Excel } from "antd-table-saveas-excel";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import Stream1, { SocketStream, Stream2 } from "./stream";
 import StackStream from "./stackStream";
-import useUilchluulegchToo from "hooks/useUilchluulegchToo";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
@@ -512,12 +511,8 @@ function camera({ token }) {
       ) {
         console.log("orohKhaalga", uilchluulegch?.cameraIP);
         khaalgaNeey(uilchluulegch?.cameraIP);
-        toololtMutate();
-        zogsoolTusBuriinTooMutate();
-      } else {
-        onRefresh();
       }
-
+      onRefresh();
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
         (uilchluulegch?.tuukh &&
@@ -587,9 +582,6 @@ function camera({ token }) {
       },
     };
   }, [uilchluulegchGaralt]);
-
-  const { uilchluulegchTooGaralt, uilchluulegchTooMutate } =
-    useUilchluulegchToo(token, baiguullaga?._id, tooQuery);
 
   // console.log("---------", uilchluulegchGaralt);
 
@@ -672,7 +664,6 @@ function camera({ token }) {
       "tuukh.tuluv": { $ne: -2 },
     };
   }, [uilchluulegchGaralt]);
-  // console.log('----000', uilchluulegchTooGaralt);
 
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
@@ -703,7 +694,6 @@ function camera({ token }) {
 
   function onRefresh() {
     uilchluulegchMutate();
-    uilchluulegchTooMutate();
     toololtMutate();
     zogsoolTusBuriinTooMutate();
   }
