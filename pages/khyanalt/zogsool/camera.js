@@ -469,7 +469,7 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
   useEffect(() => {
-    socket().on(`zogsool${baiguullaga?._id}`, async (zogsool) => {
+    socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
       let dunTuluv = true;
       uilchluulegch?.tuukh?.map((mur) => {
@@ -484,7 +484,7 @@ function camera({ token }) {
         let yanzalsanNiitDun = uilchluulegch?.niitDun;
         if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
           yanzalsanNiitDun =
-            (await uilchluulegch?.niitDun) -
+            uilchluulegch?.niitDun -
             uilchluulegch?.tuukh?.reduce(
               (sav, niit) =>
                 sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
