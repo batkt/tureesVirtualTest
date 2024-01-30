@@ -1318,6 +1318,7 @@ function camera({ token }) {
               </Popover>
             ) : mur?.tuluv === 0 && !mur?.tsagiinTuukh[0]?.garsanTsag ? (
               <Popover
+                trigger="click"
                 content={
                   <div className="flex flex-col items-center justify-center gap-2">
                     <div
