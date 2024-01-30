@@ -471,10 +471,10 @@ function camera({ token }) {
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
-      let dunTuluv = true;
-      uilchluulegch?.tuukh?.map((mur) => {
-        if (mur.tulukhDun !== 0) dunTuluv = false;
-      });
+      // let dunTuluv = true;
+      // uilchluulegch?.tuukh?.map((mur) => {
+      //   if (mur.tulukhDun !== 0) dunTuluv = false;
+      // });
       if (uilchluulegch) {
         const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
         const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
@@ -491,18 +491,39 @@ function camera({ token }) {
               0
             );
         }
-        axios
-          .get(
-            `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
-          )
-          .then((res) => {
-            if (res) {
-              console.log("amjilttai:", res);
-            }
-          })
-          .catch((err) => {
-            console.log("aldaa:", err);
-          });
+        if (baiguullaga?._id === "6557649773be02234592059b") {
+          const zogssonKhugatsaa = minToHour(
+            uilchluulegch?.tuukh?.reduce(
+              (a, b) => a + (b.niitKhugatsaa || 0),
+              0
+            )
+          );
+          axios
+            .get(
+              `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${zogssonKhugatsaa}`
+            )
+            .then((res) => {
+              if (res) {
+                console.log("amjilttai:", res);
+              }
+            })
+            .catch((err) => {
+              console.log("aldaa:", err);
+            });
+        } else {
+          axios
+            .get(
+              `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
+            )
+            .then((res) => {
+              if (res) {
+                console.log("amjilttai:", res);
+              }
+            })
+            .catch((err) => {
+              console.log("aldaa:", err);
+            });
+        }
       }
       if (
         !!uilchluulegch?.khaalgaTurul &&
@@ -515,10 +536,11 @@ function camera({ token }) {
       onRefresh();
       if (
         uilchluulegch?.turul === "Үнэгүй" ||
-        (uilchluulegch?.tuukh &&
-          uilchluulegch?.tuukh?.length > 0 &&
-          dunTuluv &&
-          uilchluulegch?.niitDun === 0)
+        // (uilchluulegch?.tuukh &&
+        //   uilchluulegch?.tuukh?.length > 0 &&
+        // dunTuluv &&
+        uilchluulegch?.niitDun === 0
+        // )
       ) {
         if (
           uilchluulegch?.tuukh &&
@@ -1309,12 +1331,8 @@ function camera({ token }) {
                         Хөнгөлөх
                       </div>
                     </div>
-                    <Popconfirm
-                      okText={t("Тийм")}
-                      cancelText={t("Үгүй")}
-                      title={`${parent?.mashiniiDugaar} дугаартай машиныг гаргах уу?`}
-                      type={"warning"}
-                      onConfirm={() => {
+                    <div
+                      onClick={() => {
                         dugaarGaraasBurtgekh(parent);
                       }}
                       className="flex w-28 cursor-pointer items-center justify-center gap-2 rounded-lg border px-2 py-1 hover:border-2 dark:bg-gray-600 dark:text-gray-200"
@@ -1325,7 +1343,7 @@ function camera({ token }) {
                       <div className="flex items-center justify-center">
                         Гаргах
                       </div>
-                    </Popconfirm>
+                    </div>
                   </div>
                 }
               >
