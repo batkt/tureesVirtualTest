@@ -107,8 +107,7 @@ function ZogsoolBurtgekh(
       <Button
         loading={unshijBaina}
         type="primary"
-        onClick={() => streamTokhirgooRef.current.khadgalya()}
-      >
+        onClick={() => streamTokhirgooRef.current.khadgalya()}>
         {t("Хадгалах")}
       </Button>,
     ];
@@ -153,8 +152,7 @@ function ZogsoolBurtgekh(
                     required: true,
                     message: t("Нэр оруулна уу!"),
                   },
-                ]}
-              >
+                ]}>
                 <Input placeholder="Нэр" autoFocus={true} />
               </Form.Item>
             </div>
@@ -172,8 +170,7 @@ function ZogsoolBurtgekh(
                     required: true,
                     message: t("Нийт зогсоолын тоо оруулна уу!"),
                   },
-                ]}
-              >
+                ]}>
                 <Input placeholder="Тоо" />
               </Form.Item>
             </div>
@@ -191,8 +188,7 @@ function ZogsoolBurtgekh(
                     required: true,
                     message: t("Үндсэн тариф оруулна уу!"),
                   },
-                ]}
-              >
+                ]}>
                 <Input placeholder="Тариф " />
               </Form.Item>
             </div>
@@ -304,14 +300,12 @@ function ZogsoolBurtgekh(
                   icon={<PlusOutlined />}
                   className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
-                  onClick={() => add()}
-                >
+                  onClick={() => add()}>
                   Тариф нэмэх
                 </Button>
                 <div
                   className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "70vh" }}
-                >
+                  style={{ maxHeight: "70vh" }}>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Tariff
                       key={key}
@@ -385,14 +379,12 @@ function ZogsoolBurtgekh(
                   icon={<PlusOutlined />}
                   className="mb-3 flex w-full bg-green-200 hover:bg-green-200 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-700"
                   type="dashed"
-                  onClick={() => add()}
-                >
+                  onClick={() => add()}>
                   Хаалга нэмэх
                 </Button>
                 <div
                   className="space-y-3 overflow-y-auto"
-                  style={{ maxHeight: "70vh" }}
-                >
+                  style={{ maxHeight: "70vh" }}>
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
                       barilgiinId={barilgiinId}
@@ -431,16 +423,14 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
   return (
     <div
       key={fieldKey}
-      className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
-    >
+      className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700">
       <div className="mb-2 flex justify-center text-base font-bold">
         {t("Хаалга")} {fieldKey + 1}
       </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">
         <div
           onClick={() => remove(name)}
-          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
-        >
+          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500">
           <CloseCircleOutlined />
         </div>
         <Form.Item
@@ -450,8 +440,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
           name={[name, "ner"]}
           fieldKey={[fieldKey, "ner"]}
           rules={[{ required: true, message: "Нэр бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
-        >
+          className="col-span-2 mb-0 h-20">
           <Input placeholder={t("Ялгах нэр")} />
         </Form.Item>
         <Form.Item
@@ -461,8 +450,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
           name={[name, "turul"]}
           fieldKey={[fieldKey, "turul"]}
           rules={[{ required: true, message: "Төрөл бөглөнө үү." }]}
-          className="col-span-2 mb-0 h-20"
-        >
+          className="col-span-2 mb-0 h-20">
           <Select style={{ width: "100%" }} placeholder={t("Орох / Гарах")}>
             <Select.Option value={"Орох"}>{t("Орох")}</Select.Option>
             <Select.Option value={"Гарах"}>{t("Гарах")}</Select.Option>
@@ -477,8 +465,7 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
               type="dashed"
               onClick={() => add()}
               block
-              icon={<PlusOutlined />}
-            >
+              icon={<PlusOutlined />}>
               {t("Камер нэмэх")}
             </Button>
             {talbaruud.map((talbar) => (
@@ -487,12 +474,10 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
                   {...talbar.restField}
                   name={[talbar.name, "cameraIP"]}
                   fieldKey={[talbar.key, "cameraIP"]}
-                  className="m-0 w-full"
-                >
+                  className="m-0 w-full">
                   <Select
                     style={{ width: "100%" }}
-                    placeholder={`${t("Камер")} IP`}
-                  >
+                    placeholder={`${t("Камер")} IP`}>
                     {cameraIps?.map((mur) => (
                       <Select.Option value={mur}>{mur}</Select.Option>
                     ))}
@@ -516,16 +501,14 @@ function Tariff({ name, fieldKey, restField, remove }) {
   return (
     <div
       key={fieldKey}
-      className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
-    >
+      className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700">
       <div className="mb-2 flex justify-center text-base font-bold">
         {t("Тариф")} {fieldKey + 1}
       </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">
         <div
           onClick={() => remove(name)}
-          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500"
-        >
+          className="absolute right-2 top-[2%] flex text-lg transition-all hover:text-red-500">
           <CloseCircleOutlined />
         </div>
         <Form.Item
@@ -535,8 +518,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
           name={[name, "tsag"]}
           fieldKey={[fieldKey, "tsag"]}
           // rules={[{ required: true, message: "Цаг бөглөнө үү." }]}
-          className="col-span-3 mb-0 h-20"
-        >
+          className="col-span-3 mb-0 h-20">
           <TimePicker.RangePicker
             format="HH:mm"
             placeholder={["Эхлэх", "Дуусах"]}
@@ -552,15 +534,13 @@ function Tariff({ name, fieldKey, restField, remove }) {
               onClick={() => add()}
               // id={"tariff"}
               block
-              icon={<PlusOutlined />}
-            >
+              icon={<PlusOutlined />}>
               {t("Нэмэх")}
             </Button>
             {muruud.map((mur, index) => (
               <div
                 key={index}
-                className="flex-center mt-3 grid w-full grid-cols-4 items-end gap-5"
-              >
+                className="flex-center mt-3 grid w-full grid-cols-4 items-end gap-5">
                 <Form.Item
                   label="Минут хүртэл:"
                   labelCol={{ span: 24 }}
@@ -568,8 +548,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
                   name={[mur.name, "minut"]}
                   fieldKey={[mur.key, "minut"]}
                   rules={[{ required: true, message: "Минут бөглөнө үү." }]}
-                  className="col-span-2 mb-0"
-                >
+                  className="col-span-2 mb-0">
                   <InputNumber placeholder="Минут" className="w-full" />
                 </Form.Item>
                 <div className="col-span-2 flex items-end">
@@ -580,8 +559,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
                     name={[mur.name, "tulbur"]}
                     fieldKey={[mur.key, "tulbur"]}
                     rules={[{ required: true, message: "Тариф бөглөнө үү." }]}
-                    className="mb-0"
-                  >
+                    className="mb-0">
                     <InputNumber
                       formatter={(value) =>
                         `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
