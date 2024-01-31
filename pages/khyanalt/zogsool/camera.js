@@ -491,40 +491,20 @@ function camera({ token }) {
               0
             );
         }
-        if (baiguullaga?._id === "6557649773be02234592059b") {
-          const zogssonKhugatsaa = minToHour(
-            uilchluulegch?.tuukh?.reduce(
-              (a, b) => a + (b.niitKhugatsaa || 0),
-              0
-            )
-          );
-          axios
-            .get(
-              `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${zogssonKhugatsaa}`
-            )
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
-        } else {
-          axios
-            .get(
-              `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
-            )
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
-        }
+        axios
+          .get(
+            `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
+          )
+          .then((res) => {
+            if (res) {
+              console.log("amjilttai:", res);
+            }
+          })
+          .catch((err) => {
+            console.log("aldaa:", err);
+          });
       }
+
       if (
         !!uilchluulegch?.khaalgaTurul &&
         uilchluulegch?.khaalgaTurul === "oroh" &&
