@@ -172,9 +172,9 @@ function Zogsool({
       width: "3rem",
       align: "center",
       render: (text, record, index) =>
-        (msjTuukh?.khuudaslalt?.khuudasniiDugaar || 0) *
-          (msjTuukh?.khuudaslalt?.khuudasniiKhemjee || 0) -
-        (msjTuukh?.khuudaslalt?.khuudasniiKhemjee || 0) +
+        (msjTuukh?.data?.khuudasniiDugaar || 0) *
+          (msjTuukh?.data?.khuudasniiKhemjee || 0) -
+        (msjTuukh?.data?.khuudasniiKhemjee || 0) +
         index +
         1,
     },
@@ -208,6 +208,26 @@ function Zogsool({
             }
             placement={"top"}>
             {data.dugaar[0]}
+          </Popover>
+        );
+      },
+    },
+    {
+      title: "",
+      dataIndex: "msg",
+      width: "9rem",
+      ellipsis: true,
+      align: "center",
+      render(a, data) {
+        return (
+          <Popover
+            content={
+              <div>
+                <div>{a}</div>
+              </div>
+            }
+            placement={"top"}>
+            <div className="truncate">{data?.msg}</div>
           </Popover>
         );
       },
@@ -334,9 +354,9 @@ function Zogsool({
             scroll={{ y: "calc( 100vh - 45rem )" }}
             columns={smsColumns}
             pagination={{
-              current: msjTuukh?.khuudaslalt?.khuudasniiDugaar,
-              pageSize: msjTuukh?.khuudaslalt?.khuudasniiKhemjee,
-              total: msjTuukh?.khuudaslalt?.niitMur,
+              current: msjTuukh?.data?.khuudasniiDugaar,
+              pageSize: msjTuukh?.data?.khuudasniiKhemjee,
+              total: msjTuukh?.data?.niitMur,
               showSizeChanger: true,
               onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
                 msjTuukh.setKhuudaslalt((kh) => ({
