@@ -1,5 +1,4 @@
-const khatuuZagvar = (medeelel) => {
-  console.log("medeelel khatuuZagvarDotorh:", medeelel);
+const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
   return `
   <div style="height: 100%; width: 100%;">
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
@@ -8,25 +7,25 @@ const khatuuZagvar = (medeelel) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            Өгөөмөр Монгол Групп ХХК
+            ${medeelel?.baiguullagiinNer}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хаяг:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            УБ хот, Баянзүрх дүүрэг, 40-р хороо, Улаанхуаран 101 тоот
+            ${baiguullaga?.khayag || ""}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Утас, Факс:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            77797777
+          ${baiguullaga?.utas?.join(",")}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">И-мэйл:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            uguumurmongolgroup@gmail.com
+          ${baiguullaga?.mail?.join(",")}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -53,7 +52,7 @@ const khatuuZagvar = (medeelel) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Хаяг:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            УБ, БЗД, 40-р хороо 16-р хороолол Улаанхуаран 101 тоот
+            ${medeelel?.khayag || ""}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -205,7 +204,7 @@ const khatuuZagvar = (medeelel) => {
           <td></td>
           <td><p>Хүлээн авсан</p></td>
           <td></td>
-          <td><p>/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/</p></td>
+          <td><p>/${medeelel?.ovog?.[0]}. ${medeelel?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>
@@ -215,7 +214,7 @@ const khatuuZagvar = (medeelel) => {
           <td></td>
           <td><p>Нэхэмжлэл бичсэн</p></td>
           <td></td>
-          <td><p>/Т. Булган/</p></td>
+          <td><p>/${ajiltan?.ovog?.[0]}. ${ajiltan?.ner}/</p></td>
           <td></td>
           <td></td>
           <td></td>

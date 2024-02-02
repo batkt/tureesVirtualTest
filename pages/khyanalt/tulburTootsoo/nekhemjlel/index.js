@@ -51,7 +51,7 @@ function tulburTootsoo({ token }) {
   const printRef = React.useRef(null);
   const printExcelRef = React.useRef(null);
   const dunZasvarRef = React.useRef(null);
-  const { baiguullaga, barilgiinId } = useAuth();
+  const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   const ref = useRef(null);
   const [ognoo, setOgnoo] = React.useState(moment());
   const { t } = useTranslation();
@@ -76,6 +76,8 @@ function tulburTootsoo({ token }) {
   const ashiglaltiinZardal = useJagsaalt("/ashiglaltiinZardluud", {
     barilgiinId: barilgiinId,
   });
+
+
 
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
@@ -144,7 +146,7 @@ function tulburTootsoo({ token }) {
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
           if (zagvar?.khatuuZagvarEsekh) {
-            zagvar.nekhemjlekh = khatuuZagvar(medeelel);
+            zagvar.nekhemjlekh = khatuuZagvar(medeelel, ajiltan, baiguullaga);
           }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
@@ -833,7 +835,7 @@ function tulburTootsoo({ token }) {
         );
 
         var text = songosonZagvar?.khatuuZagvarEsekh
-          ? khatuuZagvar(nekhemjlekh)
+          ? khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga)
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 
