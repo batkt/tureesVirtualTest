@@ -537,14 +537,7 @@ function camera({ token }) {
           );
           toololtMutate();
           zogsoolTusBuriinTooMutate();
-          let khaalgaNeekhEsekh = true;
-          if (songogdzonZogsool?.uneguiMashinNeekhgui) {
-            khaalgaNeekhEsekh = false;
-          }
-          if (
-            khaalgaNeekhEsekh &&
-            !songogdzonZogsool?.garakhKhaalgaGarTokhirgoo
-          ) {
+          if (!songogdzonZogsool?.garakhKhaalgaGarTokhirgoo) {
             khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
           }
         }
