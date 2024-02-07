@@ -481,10 +481,7 @@ function camera({ token }) {
           "???",
           ""
         );
-        let yanzalsanNiitDun =
-          uilchluulegch?.zurchil === "Бүртгэгдээгүй машин"
-            ? "Бүртгэлгүй"
-            : uilchluulegch?.niitDun;
+        let yanzalsanNiitDun = uilchluulegch?.niitDun;
         if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
           yanzalsanNiitDun =
             uilchluulegch?.niitDun -
@@ -528,8 +525,7 @@ function camera({ token }) {
         if (
           uilchluulegch?.tuukh &&
           uilchluulegch?.tuukh?.length > 0 &&
-          !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga &&
-          uilchluulegch?.zurchil !== "Бүртгэгдээгүй машин"
+          !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
         ) {
           console.log(
             "garakhHkaalga",
@@ -537,7 +533,7 @@ function camera({ token }) {
           );
           toololtMutate();
           zogsoolTusBuriinTooMutate();
-          if (!songogdzonZogsool?.garakhKhaalgaGarTokhirgoo) {
+          if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
             khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
           }
         }
