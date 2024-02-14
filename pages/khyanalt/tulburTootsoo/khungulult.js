@@ -1,4 +1,8 @@
-import { DeleteOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EyeOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   DatePicker,
@@ -7,6 +11,7 @@ import {
   message,
   notification,
   Popconfirm,
+  Popover,
   Select,
   Table,
   Tabs,
@@ -223,9 +228,11 @@ function tulburTootsoo() {
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
       ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
-      ugugdul.khamaataiGereenuud = songogdsonGereenuud.map(
-        (x) => (x._id = x._id)
-      );
+      ugugdul.khamaataiGereenuud = songogdsonGereenuud.map((x) => ({
+        gereeniiId: x._id,
+        gereeniiDugaar: x.gereeniiDugaar,
+        ner: x.ner,
+      }));
       if (
         khungulukh === "khuvi" &&
         baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi
@@ -255,6 +262,8 @@ function tulburTootsoo() {
       message.warning("Хөнгөлөх талбай сонгоно уу");
     }
   }
+
+  console.log("songogdsonGereenuud: ", songogdsonGereenuud);
   function ustgaya(mur) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
@@ -313,6 +322,68 @@ function tulburTootsoo() {
         ellipsis: true,
         width: "7rem",
         align: "center",
+      },
+      {
+        title: t("Гэрээнүүд"),
+        dataIndex: "khamaataiGereenuud",
+        ellipsis: true,
+        width: "7rem",
+        align: "center",
+        render: (data) => {
+          return (
+            <Popover
+              content={
+                <div>
+                  {data?.map((mur, index) => {
+                    return (
+                      <div>
+                        {mur?.gereeniiDugaar}
+                        {index < data?.length - 1 && ","}
+                      </div>
+                    );
+                  })}
+                </div>
+              }
+            >
+              {data?.length === 1 &&
+                data?.map((mur) => {
+                  return mur?.gereeniiDugaar;
+                })}
+              {data?.length > 1 && <EyeOutlined />}
+            </Popover>
+          );
+        },
+      },
+      {
+        title: t("Түрээслэгчид"),
+        dataIndex: "khamaataiGereenuud",
+        ellipsis: true,
+        width: "7rem",
+        align: "center",
+        render: (data) => {
+          return (
+            <Popover
+              content={
+                <div>
+                  {data?.map((mur, index) => {
+                    return (
+                      <div>
+                        {mur?.ner}
+                        {index < data?.length - 1 && ","}
+                      </div>
+                    );
+                  })}
+                </div>
+              }
+            >
+              {data?.length === 1 &&
+                data?.map((mur) => {
+                  return mur?.ner;
+                })}
+              {data?.length > 1 && <EyeOutlined />}
+            </Popover>
+          );
+        },
       },
       {
         title: t("Хугацаа"),
