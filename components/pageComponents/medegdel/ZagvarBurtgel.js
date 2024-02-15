@@ -7,7 +7,7 @@ import compareFields from "tools/function/compareFields";
 import { t } from "i18next";
 
 function ZagvarForm({ value, onChange }) {
-  return <ZagvarUusgekh value={value} change={onChange} />;
+  return <ZagvarUusgekh value={value} change={onChange} zogsoolEsekh={true} />;
 }
 
 function ZagvarBurtgel(

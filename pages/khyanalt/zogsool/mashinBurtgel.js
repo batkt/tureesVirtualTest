@@ -14,6 +14,7 @@ import {
   notification,
 } from "antd";
 import {
+  BellOutlined,
   DeleteOutlined,
   DownOutlined,
   DownloadOutlined,
@@ -39,9 +40,11 @@ import { useTranslation } from "react-i18next";
 import deleteMethod from "../../../tools/function/crud/deleteMethod";
 import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import uilchilgee from "services/uilchilgee";
+import { useRouter } from "next/router";
 
 function mashinBurtgel({ token }) {
   const { t } = useTranslation();
+  const router = useRouter();
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
   const mashinref = useRef(null);
@@ -575,6 +578,10 @@ function mashinBurtgel({ token }) {
     Aos.init({ once: true });
   });
 
+  function medegdelKhuudasruuOchiy() {
+    router.push("/khyanalt/zogsool/zogsoolMedegdel");
+  }
+
   return (
     <Admin
       title="Машин бүртгэл"
@@ -620,7 +627,15 @@ function mashinBurtgel({ token }) {
           data-aos-duration="1000"
           data-aos-delay="100"
         >
-          <div></div>
+          <div>
+            <Button
+              onClick={medegdelKhuudasruuOchiy}
+              type="primary"
+              icon={<BellOutlined />}
+            >
+              Мэдэгдэл
+            </Button>
+          </div>
           <div className="mb-5 ml-auto space-x-5 md:mb-0">
             <Button
               type="primary"
