@@ -26,6 +26,7 @@ function GuilgeeKhiikh(
 ) {
   const [dun, setDun] = useState(0);
   const [ognoo, setOgnoo] = useState(moment().add(1, "month").startOf("month"));
+  const [shineOgnoo, setShineOgnoo] = useState(moment());
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
@@ -94,7 +95,7 @@ function GuilgeeKhiikh(
               tulukhDun: 0,
               tulsunAldangi: busadTurul === "aldangi" ? dun : 0,
               tulukhAldangi: 0,
-              ognoo: new Date(),
+              ognoo: shineOgnoo,
               gereeniiId: data?._id,
               tailbar,
             };
@@ -331,6 +332,7 @@ function GuilgeeKhiikh(
           <Option value="barter">{t("Бартер")}</Option>
           <Option value="zalruulga">{t("Залруулга")}</Option>
           <Option value="aldangi">{t("Алданги")}</Option>
+          <Option value="tulultBurtgekh">{t("Төлөлт бүртгэх")}</Option>
         </Select>
       )}
       {busadTurul === "aldangi" && (
@@ -432,6 +434,15 @@ function GuilgeeKhiikh(
           value={dun}
           onChange={(v) => setDun(v)}
           min={0}
+        />
+      )}
+      {busadTurul === "tulultBurtgekh" && (
+        <DatePicker
+          locale={i18n.language === "mn" && locale}
+          value={shineOgnoo}
+          onChange={(v) => {
+            setShineOgnoo(v);
+          }}
         />
       )}
       {turul === "ashiglalt" && (
