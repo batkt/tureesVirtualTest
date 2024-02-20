@@ -1582,8 +1582,15 @@ function camera({ token }) {
           ) {
             form.submit();
           } else {
-            body.tuukh[0].uneguiGarsan = value;
-            body.tuukh[0].tuluv = -1;
+            if (value) {
+              body.tuukh[0].uneguiGarsan = value;
+              body.tuukh[0].tuluv = -1;
+            } else if (songogdzonZogsool?.zurchilZaavalBurtgekhEsekh) {
+              return notification.warn({
+                message: "Шалтгаан оруулна уу",
+                duration: 2,
+              });
+            }
           }
           if (modalOpen.type !== "dugaarBurtgekh") {
             updateMethod("zogsoolUilchluulegch", token, body).then(

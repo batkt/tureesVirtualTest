@@ -111,39 +111,51 @@ export function useGereeniiJagsaaltToollolt(token) {
     gereeToolloltMutate: mutate,
   };
 }
-const fetcherGuilgee = (url, token, gereeniiId, ognoo) =>
-    axios(token)
-        .get(`${url}/${gereeniiId}`, {
-            params: {
-                duusakhOgnoo: moment(ognoo[1])
-                    .endOf("month")
-                    .format("YYYY-MM-DD 23:59:59"),
-            },
-        })
-        .then((res) => {
-            var uldegdel = 0;
-            res.data.forEach((x) => {
-                uldegdel =
-                    uldegdel +
-                    (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
-                if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
-                else x.uldegdel = uldegdel;
-            });
-            return res.data;
-        })
-        .catch(aldaaBarigch);
-
-
-export function useGereeGuilgee(token, gereeniiId, ognoo) {
-    const { data, mutate } = useSWR(
-        !!token ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo] : null,
-        fetcherGuilgee,
-        { revalidateOnFocus: false }
-    );
-    return {
-        guilgeeniiTuukh: data,
-        guilgeeniiTuukhMutate: mutate,
+const fetcherGuilgee = (url, token, gereeniiId, ognoo, shineOgnoo) => {
+  let params = {
+    duusakhOgnoo: moment(ognoo[1]).endOf("month").format("YYYY-MM-DD 23:59:59"),
+  };
+  if (Array.isArray(shineOgnoo) && shineOgnoo.length > 1) {
+    params.shineOgnoo = {
+      startOgnoo: moment(shineOgnoo[0])
+        .startOf("month")
+        .format("YYYY-MM-DD HH:mm:ss"),
+      endOgnoo: moment(shineOgnoo[1])
+        .endOf("month")
+        .format("YYYY-MM-DD HH:mm:ss"),
     };
+  }
+
+  return axios(token)
+    .get(`${url}/${gereeniiId}`, {
+      params: params,
+    })
+    .then((res) => {
+      var uldegdel = 0;
+      res.data.forEach((x) => {
+        uldegdel =
+          uldegdel +
+          (x?.tulukhDun || 0 - (x?.tulsunDun || 0) - (x?.khyamdral || 0));
+        if (x.turul === "khyamdral" && uldegdel < 0) x.uldegdel = 0;
+        else x.uldegdel = uldegdel;
+      });
+      return res.data;
+    })
+    .catch(aldaaBarigch);
+};
+
+export function useGereeGuilgee(token, gereeniiId, ognoo, shineOgnoo) {
+  const { data, mutate } = useSWR(
+    !!token
+      ? ["/gereeniiTulultAvya", token, gereeniiId, ognoo, shineOgnoo]
+      : null,
+    fetcherGuilgee,
+    { revalidateOnFocus: false }
+  );
+  return {
+    guilgeeniiTuukh: data,
+    guilgeeniiTuukhMutate: mutate,
+  };
 }
 
 export default useGereeniiJagsaalt;

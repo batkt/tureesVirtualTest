@@ -1,15 +1,24 @@
-import { Badge, Button, Input, message, Popconfirm } from "antd";
-import React, { useImperativeHandle, useState } from "react";
+import {
+  Badge,
+  Button,
+  DatePicker,
+  Input,
+  message,
+  notification,
+  Popconfirm,
+} from "antd";
+import React, { useImperativeHandle, useMemo, useState } from "react";
 import axios, { aldaaBarigch } from "services/uilchilgee";
-import useSWR from "swr";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { DeleteOutlined } from "@ant-design/icons";
 import { modal } from "components/ant/Modal";
 import { useReactToPrint } from "react-to-print";
 import _ from "lodash";
-import { t } from "i18next";
-import {useGereeGuilgee} from "hooks/useGereeniiJagsaalt";
+import { useGereeGuilgee } from "hooks/useGereeniiJagsaalt";
+import { useTranslation } from "react-i18next";
+import locale from "antd/lib/date-picker/locale/mn_MN";
+// import * as XLSX from "xlsx";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -47,11 +56,17 @@ const turulAvya = (turul) => {
   else if (turul === "qpay") return "QPay";
 };
 
-function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId }, ref) {
+function GuilgeeniiTuukh(
+  { token, data, refreshData, ognoo, ajiltan, barilgiinId },
+  ref
+) {
+  const { t, i18n } = useTranslation();
+  const [shineOgnoo, setShineOgnoo] = useState(undefined);
   const { guilgeeniiTuukh, guilgeeniiTuukhMutate } = useGereeGuilgee(
     token,
     data?._id,
-    ognoo
+    ognoo,
+    shineOgnoo
   );
   const [sortOrders, setSortOrders] = useState({
     ognoo: null,
@@ -64,7 +79,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     ajiltan: null,
     helber: null,
     tailbar: null,
-    burtgesenOgnoo: null
+    burtgesenOgnoo: null,
   });
   const [sortColumn, setSortColumn] = useState(null);
   const tailbarRef = React.useRef(null);
@@ -93,13 +108,15 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
           if (data) {
             message.success(t("Төлөлт амжилттай устгагдлаа!"));
             refreshData();
-            guilgeeniiTuukhMutate()
+            guilgeeniiTuukhMutate();
           }
         })
         .catch(aldaaBarigch);
     else {
       const footer = [
-        <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
+        <Button onClick={() => tailbarRef.current.khaaya()}>
+          {t("Хаах")}
+        </Button>,
         <Button type="primary" onClick={() => tailbarRef.current.khadgalya()}>
           Устгах
         </Button>,
@@ -128,7 +145,7 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
                   if (data) {
                     message.success(t("Төлөлт амжилттай устгагдлаа!"));
                     uldegdelMutate();
-                    guilgeeniiTuukhMutate()
+                    guilgeeniiTuukhMutate();
                     refreshData();
                   }
                 })
@@ -147,25 +164,25 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
 
   const toggleSortOrder = (column) => {
     const newSortOrders = { ...sortOrders };
-    newSortOrders[column] = sortOrders[column] === 'asc' ? 'desc' : 'asc';
+    newSortOrders[column] = sortOrders[column] === "asc" ? "desc" : "asc";
     setSortOrders(newSortOrders);
     setSortColumn(column);
   };
 
   const sortedData = React.useMemo(() => {
-    if(!guilgeeniiTuukh){
+    if (!guilgeeniiTuukh) {
       return [];
     }
     const khuulsanData = [...guilgeeniiTuukh];
     khuulsanData.sort((a, b) => {
       const sortDaraalal = sortOrders[sortColumn];
-      if (sortDaraalal === 'asc') {
-        if (sortColumn === 'ognoo') {
+      if (sortDaraalal === "asc") {
+        if (sortColumn === "ognoo") {
           return new Date(a[sortColumn]) - new Date(b[sortColumn]);
         }
         return a[sortColumn] - b[sortColumn];
-      } else if (sortDaraalal === 'desc') {
-        if (sortColumn === 'ognoo') {
+      } else if (sortDaraalal === "desc") {
+        if (sortColumn === "ognoo") {
           return new Date(b[sortColumn]) - new Date(a[sortColumn]);
         }
         return b[sortColumn] - a[sortColumn];
@@ -174,13 +191,16 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     });
 
     return khuulsanData;
-  }, [guilgeeniiTuukh, sortOrders, sortColumn]);
+  }, [guilgeeniiTuukh, sortOrders, sortColumn, shineOgnoo]);
 
   useImperativeHandle(
     ref,
     () => ({
       khevlekh() {
         handlePrint();
+      },
+      excelTatakh() {
+        exceleerTatya();
       },
       refreshData() {
         guilgeeniiTuukhMutate();
@@ -189,78 +209,210 @@ function GuilgeeniiTuukh({ token, data, refreshData, ognoo, ajiltan, barilgiinId
     [printRef]
   );
 
+  const exceleerTatya = async () => {
+    console.log("tun udahgui");
+    // try {
+    //   const wb = XLSX?.utils.book_new();
+
+    //   const dataSubset = guilgeeniiTuukh?.map((item) => {
+    //     return {
+    //       ognoo: item.ognoo,
+    //       tulukhDun: item.tulukhDun,
+    //       khyamdral: item.khyamdral,
+    //       tailbar: item.tailbar,
+    //       nemeltTailbar: item.nemeltTailbar,
+    //       turul: item.turul,
+    //     };
+    //   });
+
+    //   const ws = XLSX?.utils.json_to_sheet(dataSubset);
+
+    //   if (ws) {
+    //     const dynamicColumnTitles = [
+    //       "Огноо",
+    //       "Төлөх дүн",
+    //       "Хямдрал",
+    //       "Тайлбар",
+    //       "Нэмэлт тайлбар",
+    //       "Төрөл",
+    //     ];
+    //     ws["!cols"]?.forEach((col, index) => {
+    //       ws[XLSX?.utils.encode_col(index) + "1"].v =
+    //         dynamicColumnTitles[index];
+    //     });
+    //     const styles = {
+    //       header: {
+    //         fill: { fgColor: { rgb: "FF000000" } },
+    //         font: { color: { rgb: "FFFFFFFF" }, bold: true },
+    //       },
+    //       cell: { font: { sz: 12 } },
+    //     };
+    //     ws["!rows"] = [{ hpt: 20, hpx: 16, s: styles.header }];
+    //     XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
+    //     XLSX?.writeFile(wb, "Гүйлгээний_Түүх.xlsx", { WTF: true });
+    //   }
+    // } catch (e) {
+    //   aldaaBarigch(e.message);
+    // }
+  };
+
   return (
     <div className="">
+      <div className="absolute right-6 top-3">
+        <DatePicker.RangePicker
+          value={shineOgnoo}
+          onChange={(v) => setShineOgnoo(v)}
+          locale={i18n.language === "mn" && locale}
+          allowClear
+          picker="month"
+          disabledDate={(e) => e && e > moment().endOf("day")}
+        />
+      </div>
       <div ref={printRef} className="flex flex-col">
         <div className="print mb-2 p-2">
           <div>{t("Гүйлгээний түүх")}</div>
-          <div className="ml-auto">{t("Талбайн дугаар")}:{data?.talbainDugaar}</div>
+          <div className="ml-auto">
+            {t("Талбайн дугаар")}:{data?.talbainDugaar}
+          </div>
         </div>
         <th className="w-full">
-          <tr className="flex pr-1 border-b divide-white divide-x min-w-[93rem] border-gray-200 bg-gray-200 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
-            <td onClick={()=>toggleSortOrder("ognoo")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Огноо")}</td>
-            <td onClick={()=>toggleSortOrder("turees")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Түрээс")}</td>
-            <td onClick={()=>toggleSortOrder("tulukhDun")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлөх дүн")}</td>
-            <td onClick={()=>toggleSortOrder("khyamdral")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хямдрал")}</td>
-            <td onClick={()=>toggleSortOrder("tulsunAldangi")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн алданги")}</td>
-            <td onClick={()=>toggleSortOrder("tulsunDun")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Төлсөн дүн")}</td>
-            <td onClick={()=>toggleSortOrder("uldegdel")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Үлдэгдэл")}</td>
-            <td onClick={()=>toggleSortOrder("ajiltan")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Ажилтан")}</td>
-            <td onClick={()=>toggleSortOrder("helber")} className="min-w-[8rem] overflow-hidden p-1 text-center">{t("Хэлбэр")}</td>
-            <td onClick={()=>toggleSortOrder("tailbar")} className="min-w-[8rem] overflow-hidden p-1 w-full text-center">{t("Тайлбар")}</td>
-            <td onClick={()=>toggleSortOrder("burtgesenOgnoo")} className="min-w-[10rem] text-center p-1">{t("Бүртгсэн огноо")}</td>
+          <tr className="flex min-w-[93rem] divide-x divide-white border-b border-gray-200 bg-gray-200 pr-1 text-gray-700  dark:bg-gray-800 dark:text-gray-400">
+            <td
+              onClick={() => toggleSortOrder("ognoo")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Огноо")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("turees")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Түрээс")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulukhDun")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Төлөх дүн")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("khyamdral")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Хямдрал")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulsunAldangi")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Төлсөн алданги")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tulsunDun")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Төлсөн дүн")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("uldegdel")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Үлдэгдэл")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("ajiltan")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Ажилтан")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("helber")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Хэлбэр")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("tailbar")}
+              className="w-full min-w-[8rem] overflow-hidden p-1 text-center"
+            >
+              {t("Тайлбар")}
+            </td>
+            <td
+              onClick={() => toggleSortOrder("burtgesenOgnoo")}
+              className="min-w-[10rem] p-1 text-center"
+            >
+              {t("Бүртгэсэн огноо")}
+            </td>
             <td className="min-w-[3rem] border-none p-1 text-center"></td>
           </tr>
         </th>
-        <tbody className=" overflownone min-w-[93.4rem] overflow-y-scroll" style={{ height: "calc(100vh - 15rem)" }}>
+        <tbody
+          className=" overflownone min-w-[93.4rem] overflow-y-scroll"
+          style={{ height: "calc(100vh - 15rem)" }}
+        >
           {sortedData
             ?.map((a, i) => (
-              <tr className="flex divide-x min-w-[93rem] border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
-                <td className="p-1 min-w-[8rem] text-center overflow-hidden">
+              <tr className="flex min-w-[93rem] divide-x border-b border-gray-200 bg-gray-50 text-gray-700 hover:bg-green-100 dark:bg-gray-700 dark:text-gray-400">
+                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </td>
-                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.undsenDun, 2)}</td>
-                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulukhDun, 2)}</td>
-                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.khyamdral, 2)}</td>
-                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunAldangi, 2)}</td>
-                <td className="p-1 min-w-[8rem] overflow-hidden text-end">{formatNumber(a.tulsunDun, 2)}</td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.undsenDun, 0)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulukhDun, 0)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.khyamdral, 0)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulsunAldangi, 0)}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-end">
+                  {formatNumber(a.tulsunDun, 0)}
+                </td>
                 <td
-                  className={`p-1 min-w-[8rem] overflow-hidden text-end ${a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
-                    }`}
+                  className={`min-w-[8rem] overflow-hidden p-1 text-end ${
+                    a?.uldegdel > 0 ? "text-red-500" : "text-green-500"
+                  }`}
                 >
                   {formatNumber(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
-                    2
+                    0
                   )}
                 </td>
 
-                <td className="p-1 min-w-[8rem] overflow-hidden">{a.guilgeeKhiisenAjiltniiNer}</td>
-                <td className="p-1 text-center min-w-[8rem] overflow-hidden">
+                <td className="min-w-[8rem] overflow-hidden p-1">
+                  {a.guilgeeKhiisenAjiltniiNer}
+                </td>
+                <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {a.turul === "bank"
                     ? a.tulsunDans !== " "
                       ? a.tulsunDans
                       : t("Банк")
                     : turulAvya(a.turul)}
                 </td>
-                <td className="flex min-w-[8rem] overflow-hidden w-full justify-between p-1">
+                <td className="flex w-full min-w-[8rem] justify-between overflow-hidden p-1">
                   {a.tailbar}
                 </td>
-                <td className="flex min-w-[10rem] text-center justify-center p-1 ">
+                <td className="flex min-w-[10rem] justify-center p-1 text-center ">
                   {a.guilgeeKhiisenOgnoo &&
                     moment(a.guilgeeKhiisenOgnoo).format("YYYY-MM-DD HH:mm:ss")}
                 </td>
-                <td className="flex min-w-[3rem] border-none justify-center">
-                  {(ajiltan?.erkh === "Admin" || !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
-                    (a) => a === barilgiinId
-                  )) && (a.turul === "avlaga" ||
-                    a.turul === "voucher" ||
-                    a.turul === "barter" ||
-                    a.turul === "bank" ||
-                    a.turul === "khyamdral" ||
-                    a.turul === "aldangi" ||
-                    a.turul === "zalruulga" ||
-                    a.turul === "baritsaa" ||
-                    a.turul === "qpay") && (
+                <td className="flex min-w-[3rem] justify-center border-none">
+                  {(ajiltan?.erkh === "Admin" ||
+                    !!_.get(ajiltan, `tokhirgoo.guilgeeUstgakhErkh`)?.find(
+                      (a) => a === barilgiinId
+                    )) &&
+                    (a.turul === "avlaga" ||
+                      a.turul === "voucher" ||
+                      a.turul === "barter" ||
+                      a.turul === "bank" ||
+                      a.turul === "khyamdral" ||
+                      a.turul === "aldangi" ||
+                      a.turul === "zalruulga" ||
+                      a.turul === "baritsaa" ||
+                      a.turul === "qpay") && (
                       <Popconfirm
                         title={t("Төлөлт устгах уу?")}
                         okText={t("Тийм")}

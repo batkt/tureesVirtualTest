@@ -2,7 +2,10 @@ import _ from "lodash";
 import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
 
-function Khuulga({ data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId }, ref) {
+function Khuulga(
+  { data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId, shineOgnoo },
+  ref
+) {
   const refTuukh = useRef(null);
 
   React.useImperativeHandle(
@@ -14,6 +17,9 @@ function Khuulga({ data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId }
       },
       khevlekh() {
         refTuukh.current.khevlekh();
+      },
+      excelTatakh() {
+        refTuukh.current.excelTatakh();
       },
     }),
     [refTuukh]
@@ -31,7 +37,10 @@ function Khuulga({ data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId }
   }, []);
 
   return (
-    <div className="flex flex-col space-y-2 overflow-x-auto" style={{ height: "calc(100vh - 12rem)" }}>
+    <div
+      className="flex flex-col space-y-2 overflow-x-auto"
+      style={{ height: "calc(100vh - 12rem)" }}
+    >
       <GuilgeeniiTuukh
         ajiltan={ajiltan}
         barilgiinId={barilgiinId}

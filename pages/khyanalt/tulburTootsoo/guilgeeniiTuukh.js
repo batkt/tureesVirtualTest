@@ -45,6 +45,7 @@ import useJagsaalt from "hooks/useJagsaalt";
 import useEneSardTuluuguiGereenuudAvya from "hooks/tulburTootsoo/useEneSardTuluuguiGereenuudAvya";
 import Khuulga from "components/pageComponents/tulbur/Khuulga";
 import { useTranslation } from "react-i18next";
+import locale from "antd/lib/date-picker/locale/mn_MN";
 
 //#endregion
 
@@ -752,6 +753,13 @@ function guilgeeniiTuukh({ token }) {
     const footer = [
       <Button
         type="primary"
+        onClick={() => ref.current.excelTatakh()}
+        icon={<FileExcelOutlined />}
+      >
+        {t("Татах")}
+      </Button>,
+      <Button
+        type="primary"
         onClick={() => ref.current.khevlekh()}
         icon={<PrinterOutlined />}
       >
@@ -765,7 +773,11 @@ function guilgeeniiTuukh({ token }) {
       </Button>,
     ];
     modal({
-      title: t("Хуулга"),
+      title: (
+        <div className="relative flex w-full justify-between">
+          {t("Хуулга")}
+        </div>
+      ),
       icon: <FileExcelOutlined />,
       width: "90vw",
       style: { top: 20 },
