@@ -18,7 +18,7 @@ import _ from "lodash";
 import { useGereeGuilgee } from "hooks/useGereeniiJagsaalt";
 import { useTranslation } from "react-i18next";
 import locale from "antd/lib/date-picker/locale/mn_MN";
-// import * as XLSX from "xlsx";
+import * as XLSX from "xlsx-js-style";
 
 const Tailbar = React.forwardRef(({ destroy, confirm }, ref) => {
   const [tailbar, setTailbar] = useState("");
@@ -210,50 +210,103 @@ function GuilgeeniiTuukh(
   );
 
   const exceleerTatya = async () => {
-    console.log("tun udahgui");
-    // try {
-    //   const wb = XLSX?.utils.book_new();
-
-    //   const dataSubset = guilgeeniiTuukh?.map((item) => {
-    //     return {
-    //       ognoo: item.ognoo,
-    //       tulukhDun: item.tulukhDun,
-    //       khyamdral: item.khyamdral,
-    //       tailbar: item.tailbar,
-    //       nemeltTailbar: item.nemeltTailbar,
-    //       turul: item.turul,
-    //     };
-    //   });
-
-    //   const ws = XLSX?.utils.json_to_sheet(dataSubset);
-
-    //   if (ws) {
-    //     const dynamicColumnTitles = [
-    //       "Огноо",
-    //       "Төлөх дүн",
-    //       "Хямдрал",
-    //       "Тайлбар",
-    //       "Нэмэлт тайлбар",
-    //       "Төрөл",
-    //     ];
-    //     ws["!cols"]?.forEach((col, index) => {
-    //       ws[XLSX?.utils.encode_col(index) + "1"].v =
-    //         dynamicColumnTitles[index];
-    //     });
-    //     const styles = {
-    //       header: {
-    //         fill: { fgColor: { rgb: "FF000000" } },
-    //         font: { color: { rgb: "FFFFFFFF" }, bold: true },
-    //       },
-    //       cell: { font: { sz: 12 } },
-    //     };
-    //     ws["!rows"] = [{ hpt: 20, hpx: 16, s: styles.header }];
-    //     XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
-    //     XLSX?.writeFile(wb, "Гүйлгээний_Түүх.xlsx", { WTF: true });
-    //   }
-    // } catch (e) {
-    //   aldaaBarigch(e.message);
-    // }
+    try {
+      const wb = XLSX?.utils.book_new();
+      const dataSubset = guilgeeniiTuukh?.map((item) => {
+        return {
+          Огноо: moment(item.ognoo).format("YYYY/MM/DD"),
+          Түрээс: item.undsenDun,
+          "Төлөх дүн": item.tulukhDun,
+          Хямдрал: item.khyamdral,
+          "Төлсөн алданги": item.tulsunAldangi,
+          "Төлсөн дүн": item.tulsunDun,
+          Үлдэгдэл: item.uldegdel,
+          Ажилтан: item.guilgeeKhiisenAjiltniiNer,
+          Хэлбэр: item.turul,
+          Тайлбар: item.tailbar,
+          "Нэмэлт тайлбар": item.nemeltTailbar,
+          "Бүртгэсэн огноо": moment(item.burtgesenOgnoo).format("YYYY/MM/DD"),
+        };
+      });
+      const ws = XLSX?.utils.json_to_sheet(dataSubset);
+      if (ws) {
+        const range = XLSX.utils.decode_range(ws["!ref"]);
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+          for (let C = range.s.c; C <= range.e.c; ++C) {
+            const cellAddress = { r: R, c: C };
+            const cell = ws[XLSX.utils.encode_cell(cellAddress)];
+            if (!cell.s) {
+              cell.s = {};
+            }
+            cell.s.border = {
+              top: { style: "thin", color: { auto: 1 } },
+              bottom: { style: "thin", color: { auto: 1 } },
+              left: { style: "thin", color: { auto: 1 } },
+              right: { style: "thin", color: { auto: 1 } },
+            };
+          }
+        }
+        var wscols = [
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 12 },
+          { wch: 10 },
+          { wch: 10 },
+          { wch: 13 },
+          { wch: 15 },
+          { wch: 10 },
+        ];
+        ws["!cols"] = wscols;
+        ws["A1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["B1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["C1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["D1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["E1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["F1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["G1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["H1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["I1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["J1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["K1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        ws["L1"].s = {
+          font: { bold: true, color: { rgb: "FF0000" } },
+        };
+        XLSX?.utils.book_append_sheet(wb, ws, "гүйлгээ");
+        wb.Custprops;
+        XLSX?.writeFile(wb, "Гүйлгээний_Түүх.xlsx", {
+          WTF: true,
+          cellStyles: true,
+        });
+      }
+    } catch (e) {
+      aldaaBarigch(e.message);
+    }
   };
 
   return (
