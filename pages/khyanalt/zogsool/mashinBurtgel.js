@@ -153,7 +153,11 @@ function mashinBurtgel({ token }) {
   const tsenegliy = (data) => {
     const footer = [
       <Space>
-        <Button type="secondary" onClick={() => tseneglekhRef.current.khaaya()}>
+        <Button
+          type="secondary"
+          className="dark:text-gray-200"
+          onClick={() => tseneglekhRef.current.khaaya()}
+        >
           {t("Хаах")}
         </Button>
         <Button
