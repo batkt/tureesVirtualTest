@@ -71,6 +71,19 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
         return turul;
     }
   }
+  function handleActiveKhuudas(v) {
+    if (
+      Array.isArray(data?.tsenegleltTuukh) &&
+      data?.tsenegleltTuukh?.length > 0
+    ) {
+      setActiveKhuudas(v);
+    } else {
+      return notification.warn({
+        message: "Цэнэглэлтийн түүх бүртгэгдээгүй байна",
+        duration: 2,
+      });
+    }
+  }
   const khuudsuud = [
     {
       key: 1,
@@ -176,7 +189,7 @@ function Tseneglekh({ data, destroy, token, barilgiinId, mutate }, ref) {
     <Tabs
       activeKey={activeKhuudas}
       items={khuudsuud}
-      onChange={(v) => setActiveKhuudas(v)}
+      onChange={(v) => handleActiveKhuudas(v)}
     />
   );
 }
