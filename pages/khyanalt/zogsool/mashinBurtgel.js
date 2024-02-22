@@ -165,7 +165,6 @@ function mashinBurtgel({ token }) {
       </Space>,
     ];
     modal({
-      title: "Цэнэглэх",
       content: (
         <Tseneglekh
           ref={tseneglekhRef}
@@ -436,29 +435,21 @@ function mashinBurtgel({ token }) {
         ),
       },
       {
-        title: () => <DollarCircleOutlined />,
+        title: t("Цэнэглэх"),
         width: "6rem",
         align: "center",
         dataIndex: "tsenegleltUldegdel",
-        render: (v, data) => {
+        render: (v) => {
           if (!!v) {
             return (
-              <Tooltip title={v}>
-                <div
-                  onClick={() => tsenegliy(data)}
-                  className="w-full cursor-help truncate rounded-lg bg-green-500 px-2 py-1 text-white"
-                >
-                  Цэнэглэх
-                </div>
-              </Tooltip>
+              <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
+                {formatNumber(v, 0)}
+              </div>
             );
           } else {
             return (
-              <div
-                onClick={() => tsenegliy(data)}
-                className="w-full cursor-pointer truncate rounded-lg bg-green-500 px-2 py-1 text-white"
-              >
-                Цэнэглэх
+              <div className="w-full truncate rounded-lg bg-green-500 px-2 py-1 text-white">
+                0
               </div>
             );
           }
@@ -476,6 +467,15 @@ function mashinBurtgel({ token }) {
               trigger="hover"
               content={() => (
                 <div className="flex w-24 flex-col space-y-2">
+                  <a
+                    className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
+                    onClick={() => {
+                      tsenegliy(data);
+                    }}
+                  >
+                    <DollarCircleOutlined style={{ fontSize: "18px" }} />
+                    <label>{t("Цэнэглэх")}</label>
+                  </a>
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
                     onClick={() => {
