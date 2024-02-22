@@ -16,6 +16,7 @@ import {
 import {
   BellOutlined,
   DeleteOutlined,
+  DollarCircleOutlined,
   DownOutlined,
   DownloadOutlined,
   EditOutlined,
@@ -41,12 +42,14 @@ import deleteMethod from "../../../tools/function/crud/deleteMethod";
 import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import uilchilgee from "services/uilchilgee";
 import { useRouter } from "next/router";
+import Tseneglekh from "components/pageComponents/zogsool/Tseneglekh";
 
 function mashinBurtgel({ token }) {
   const { t } = useTranslation();
   const router = useRouter();
   const { baiguullaga, barilgiinId } = useAuth();
   const excelref = useRef(null);
+  const tseneglekhRef = useRef(null);
   const mashinref = useRef(null);
   const [turul, setTurul] = useState("Нийт");
   const [tuluv, setTuluv] = useState("");
@@ -146,6 +149,35 @@ function mashinBurtgel({ token }) {
       fetchData();
     }
   }, [mashinGaralt, butsaakh]);
+
+  const tsenegliy = (data) => {
+    const footer = [
+      <Space>
+        <Button type="secondary" onClick={() => tseneglekhRef.current.khaaya()}>
+          {t("Хаах")}
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => tseneglekhRef.current.khadgalya()}
+        >
+          {t("Хадгалах")}
+        </Button>
+      </Space>,
+    ];
+    modal({
+      title: "Цэнэглэх",
+      content: (
+        <Tseneglekh
+          ref={tseneglekhRef}
+          token={token}
+          data={data}
+          barilgiinId={barilgiinId}
+          mutate={mashinMutate}
+        />
+      ),
+      footer,
+    });
+  };
 
   const columns = useMemo(() => {
     const shinecol =
@@ -402,6 +434,35 @@ function mashinBurtgel({ token }) {
             </div>
           </Tooltip>
         ),
+      },
+      {
+        title: () => <DollarCircleOutlined />,
+        width: "6rem",
+        align: "center",
+        dataIndex: "tsenegleltUldegdel",
+        render: (v, data) => {
+          if (!!v) {
+            return (
+              <Tooltip title={v}>
+                <div
+                  onClick={() => tsenegliy(data)}
+                  className="w-full cursor-help truncate rounded-lg bg-green-500 px-2 py-1 text-white"
+                >
+                  Цэнэглэх
+                </div>
+              </Tooltip>
+            );
+          } else {
+            return (
+              <div
+                onClick={() => tsenegliy(data)}
+                className="w-full cursor-pointer truncate rounded-lg bg-green-500 px-2 py-1 text-white"
+              >
+                Цэнэглэх
+              </div>
+            );
+          }
+        },
       },
       {
         title: () => <SettingOutlined />,

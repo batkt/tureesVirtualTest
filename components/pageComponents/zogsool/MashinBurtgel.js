@@ -265,7 +265,7 @@ function MashinBurtgel(
           }}
           placeholder={t("Төрөл")}
         >
-          {["Гэрээт", "Түрээслэгч", "Дотоод"].map((a) => (
+          {["Гэрээт", "Түрээслэгч", "Дотоод", "Дурын"].map((a) => (
             <Select.Option key={a} value={a}>
               {t(a)}
             </Select.Option>
