@@ -623,7 +623,7 @@ function ShineTulbur(
               <div className="flex justify-between">
                 <p className="w-1/2 text-right">НӨАТ-гүй:</p>
                 <p className="text-right">
-                  {formatNumber(data.tulukhDun / 1.1, 2)}₮
+                  {formatNumber(eBarimt?.amount || 0 - eBarimt?.vat || 0, 2)}₮
                 </p>
               </div>
               <div className="flex justify-between">
