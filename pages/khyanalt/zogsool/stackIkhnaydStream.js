@@ -1,12 +1,13 @@
 import axios from "axios";
 import R2WPlayerComponent from "components/streamPlayer";
 import React, { useEffect, useState } from "react";
+import uilchilgee from "services/uilchilgee";
 
-function StackIkhNaydStream({ barilgiinId }) {
+function StackIkhNaydStream({ barilgiinId, token }) {
   const [cameraIps, setCameraIps] = useState([]);
 
   useEffect(() => {
-    axios
+    uilchilgee(token)
       .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
       .then(function (response) {
         if (!!response) setCameraIps(response?.data?.ip);

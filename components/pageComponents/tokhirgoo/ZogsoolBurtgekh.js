@@ -432,19 +432,7 @@ function ZogsoolBurtgekh(
   );
 }
 
-function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
-  const [cameraIps, setCameraIps] = useState([]);
-  useEffect(() => {
-    axios
-      .get("https://turees.zevtabs.mn/api/zogsooliinIpAvaya/" + barilgiinId)
-      .then(function (response) {
-        if (!!response) setCameraIps(response.data.ip);
-      })
-      .catch(function (error) {
-        console.log("ERROR: /api/neeye", error);
-      });
-  }, []);
-  // console.log('11111111', name, 'fieldKey: ',fieldKey, 'restField ', restField, 'fields ', cameraIps);
+function Khaalga({ name, fieldKey, restField, remove }) {
   const { t } = useTranslation();
   return (
     <div
@@ -507,14 +495,10 @@ function Khaalga({ name, fieldKey, restField, remove, barilgiinId }) {
                   fieldKey={[talbar.key, "cameraIP"]}
                   className="m-0 w-full"
                 >
-                  <Select
+                  <Input
                     style={{ width: "100%" }}
-                    placeholder={`${t("Камер")} IP`}
-                  >
-                    {cameraIps?.map((mur) => (
-                      <Select.Option value={mur}>{mur}</Select.Option>
-                    ))}
-                  </Select>
+                    placeholder="Камер IP оруулна уу..."
+                  />
                 </Form.Item>
                 <MinusCircleOutlined
                   className="ml-2 mt-2"

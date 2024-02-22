@@ -2418,7 +2418,10 @@ function camera({ token }) {
                         {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                           <StackStream tuluv={drawerOpen} />
                         ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
-                          <StackIkhNaydStream barilgiinId={barilgiinId} />
+                          <StackIkhNaydStream
+                            barilgiinId={barilgiinId}
+                            token={token}
+                          />
                         ) : (
                           ""
                         )}

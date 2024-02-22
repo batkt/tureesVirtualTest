@@ -51,15 +51,11 @@ function Zogsool({
     };
   }, [baiguullaga._id, barilgiinId]);
 
-  console.log(baiguullaga, "baiguullagabaiguullagabaiguullaga");
-
   const msjTuukh = useJagsaalt(
     "/msgTuukh",
     khariltsagchiinMsjTuukhKharakh,
     order
   );
-
-  console.log(msjTuukh, "msjTuukhmsjTuukh");
 
   const jagsaalt = useJagsaalt("/zogsoolJagsaalt", query, { createdAt: -1 });
   useEffect(() => {
