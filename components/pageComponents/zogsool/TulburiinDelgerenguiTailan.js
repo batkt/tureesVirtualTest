@@ -106,7 +106,7 @@ function TulburiinDelgerenguiTailan(
           case "khaan":
             ugugdul.push({
               ner: "Карт", //tur cart bolgiy Хаан банк
-              icon: "https://static.vecteezy.com/system/resources/previews/008/490/560/original/credit-card-transparent-background-png.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
+              icon: "/cartniiZurag.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
