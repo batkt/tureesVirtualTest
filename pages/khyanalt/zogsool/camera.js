@@ -85,10 +85,10 @@ export function TsagToololt({ ekhlekhTsag }) {
   const [timeUp, setTimeUp] = useState("Тооцоолж байна");
 
   const tsagTootsoolur = () => {
-    var zoruu = moment(new Date()).diff(ekhlekhTsag, "seconds");
-    var tsag = Math.floor(zoruu / 60 / 60);
-    var minut = Math.floor((zoruu / 60) % 60);
-    var second = zoruu - minut * 60 - tsag * 60 * 60;
+    var zoruu = moment.duration(moment(new Date()).diff(ekhlekhTsag));
+    var tsag = Math.floor(zoruu.asHours());
+    var minut = Math.floor(zoruu.minutes());
+    var second = Math.floor(zoruu.seconds());
     return (
       <div>
         {tsag < 10 && "0"}
