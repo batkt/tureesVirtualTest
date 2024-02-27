@@ -333,7 +333,7 @@ const Kiosk = () => {
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
-            {"Дугаар соногно уу."}
+            {"Дугаар сонгоно уу."}
           </div>
           {isValidating ? (
             <div className="flex w-full items-center justify-center">
@@ -421,9 +421,8 @@ const Kiosk = () => {
               <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
                 {qpayerTulukh.urls.map((mur) => {
                   return (
-                    <div
-                      // href={mur.link}
-                      onClick={eBarimtTsonkhruuShiljye}
+                    <a
+                      href={mur.link}
                       className="col-span-1 flex w-full flex-col gap-2 overflow-hidden rounded-[15px] border border-[#414143] bg-[#1E1E1E] p-4 hover:border-2"
                     >
                       <div className="flex items-center justify-center rounded-xl">
@@ -436,7 +435,7 @@ const Kiosk = () => {
                       <div className="text-center text-buurJijig text-zinc-200">
                         {mur.description}
                       </div>
-                    </div>
+                    </a>
                   );
                 })}
               </div>
@@ -517,29 +516,29 @@ const Kiosk = () => {
           </div>
         </div>
         <div
-          className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
+          className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
           <div
             onClick={onTimeout}
-            className="flex w-full items-center justify-center text-7xl"
+            className="flex w-full items-center justify-center text-base"
           >
             <CloseCircleFilled />
           </div>
-          <div className="fixed left-[60%] top-3">
+          <div className="fixed left-[55%] top-0">
             {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
           </div>
-          <div className="mt-8 flex items-center justify-center px-12 text-5xl text-zinc-200">
+          <div className="mt-8 flex items-center justify-center text-lg text-zinc-200">
             Амжилттай төлөгдлөө
           </div>
           {eBarimt && eBarimtTurul === "khuviKhun" && (
-            <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
               <div className="flex w-full justify-between  pl-4">
                 <div>Сугалааны дугаар</div>
                 <div>{eBarimt?.lottery}</div>
               </div>
-              <div className="w-full border border-[#1E1E1E]" />
+              <div className="h-[1px] w-full bg-black dark:bg-black" />
               <div className="flex w-full justify-between pl-4">
                 <div>Баримтын дүн</div>
                 <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
@@ -547,17 +546,17 @@ const Kiosk = () => {
             </div>
           )}
           {eBarimt && eBarimtTurul === "baiguullaga" && (
-            <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
               <div className="flex w-full justify-between  pl-4">
                 <div>ТТД</div>
                 <div>{eBarimt?.registerNo}</div>
               </div>
-              <div className="w-full border border-[#1E1E1E]" />
+              <div className="h-[1px] w-full bg-black dark:bg-black" />
               <div className="flex w-full justify-between pl-4">
                 <div>ТТН</div>
                 <div>{baiguullagaNer?.name}</div>
               </div>
-              <div className="w-full border border-[#1E1E1E]" />
+              <div className="h-[1px] w-full bg-black dark:bg-black" />
               <div className="flex w-full justify-between pl-4">
                 <div>Баримтын дүн</div>
                 <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
@@ -565,7 +564,7 @@ const Kiosk = () => {
             </div>
           )}
           {eBarimt?.qrData && (
-            <div className="mx-36 mt-16 flex items-center justify-center bg-zinc-200 p-4">
+            <div className="mx-4 mt-4 flex items-center justify-center rounded-xl bg-zinc-200 p-4">
               <QRCode value={eBarimt?.qrData} />
             </div>
           )}
