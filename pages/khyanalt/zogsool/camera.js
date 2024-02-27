@@ -2513,6 +2513,11 @@ function camera({ token }) {
                           <Radio value="Компанийн ажилчдын машин">
                             Компанийн ажилчдын машин
                           </Radio>
+                          <Radio value="Такси">Такси</Radio>
+                          <Radio value="Бүртгэл хийгдэх тоот">
+                            Бүртгэл хийгдэх тоот
+                          </Radio>
+                          <Radio value="Тусгай зочид">Тусгай зочид</Radio>
                           <Radio value="Шуудан">Шуудан</Radio>
                           <Radio value="Захиралын зочин">Захиралын зочин</Radio>
                           <Radio value="Банк хамгаалалт">Банк хамгаалалт</Radio>
