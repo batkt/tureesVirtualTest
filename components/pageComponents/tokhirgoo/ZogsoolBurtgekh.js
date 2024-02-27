@@ -138,7 +138,7 @@ function ZogsoolBurtgekh(
       <Form.Item name="barilgiinId" hidden></Form.Item>
       <div className="grid h-[75vh] grid-cols-12 gap-6">
         <div className="col-span-4">
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid h-[75vh] grid-cols-4 gap-5 overflow-y-auto">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
@@ -198,6 +198,25 @@ function ZogsoolBurtgekh(
             </div>
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
+                {t("Зогсоолын данс")}
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item
+                className="m-0"
+                name="zogsooliinDans"
+                rules={[
+                  {
+                    required: false,
+                    message: t("Зогсоолын данс оруулна уу!"),
+                  },
+                ]}
+              >
+                <Input placeholder="Зогсоолын данс" />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
                 {t("Үндсэн тариф 30мин эсэх")}
               </div>
             </div>
@@ -208,6 +227,23 @@ function ZogsoolBurtgekh(
                   defaultChecked={data?.undsenMin}
                   checkedChildren="мин"
                   unCheckedChildren="цаг"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                {t("Гарах цаг")}
+              </div>
+              <div className="text-xs text-gray-400">
+                Төлбөрөө уридчилж төлсөн тохиолдолд зогсоолоос гарах ёстой
+                хугацаа/мин. Хоосон тохиолдолд 30мин байна
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="garakhTsag">
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Хугацаа/мин"
                 />
               </Form.Item>
             </div>

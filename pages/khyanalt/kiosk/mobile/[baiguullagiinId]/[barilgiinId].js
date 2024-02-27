@@ -17,8 +17,9 @@ import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import { useRouter } from "next/router";
 import { useZochinToken } from "hooks/useZochinToken";
+import useJagsaalt from "hooks/useJagsaalt";
 
-const Kiosk = () => {
+const KioskMobile = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const router = useRouter();
   const queryBaiguullagiinId = router?.query?.baiguullagiinId;
@@ -35,8 +36,22 @@ const Kiosk = () => {
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
-  const [seconds, setSeconds] = useState(59);
   const { token } = useZochinToken(queryBaiguullagiinId);
+  const zogsoolQuery = useMemo(() => {
+    return {
+      baiguullagiinId: queryBaiguullagiinId,
+      barilgiinId: barilgiinId,
+    };
+  }, [queryBaiguullagiinId, barilgiinId]);
+
+  const jagsaalt = useJagsaalt("/zogsoolJagsaalt", zogsoolQuery, {
+    createdAt: -1,
+  });
+
+  const songogdsonZogsool = useMemo(() => {
+    return jagsaalt?.jagsaalt?.[0];
+  }, [jagsaalt]);
+
   const query = useMemo(() => {
     var query = {};
     if (drawerOngoikh) {
@@ -104,25 +119,6 @@ const Kiosk = () => {
     }
   }, [register]);
 
-  useEffect(() => {
-    if (alkham === 4) {
-      const timer = setInterval(() => {
-        setSeconds((prevSeconds) => {
-          if (prevSeconds > 0) {
-            return prevSeconds - 1;
-          } else {
-            clearInterval(timer);
-            if (onTimeout && typeof onTimeout === "function") {
-              onTimeout();
-            }
-            return 0;
-          }
-        });
-      }, 1000);
-      return () => clearInterval(timer);
-    }
-  }, [alkham]);
-
   function onTimeout() {
     setDrawerOngoikh(false);
     setSongogdsonData(null);
@@ -133,7 +129,6 @@ const Kiosk = () => {
     setEbarimt();
     setBaiguullagaNer();
     setRegister("");
-    setSeconds(59);
     setAlkham(0);
   }
 
@@ -141,12 +136,16 @@ const Kiosk = () => {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
+      let yavuulakhBody = {
+        barilgiinId: barilgiinId,
+        dun: ilgeekhDun,
+        zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
+      };
+      if (songogdsonZogsool?.zogsooliinDans) {
+        yavuulakhBody["dansniiDugaar"] = songogdsonZogsool?.zogsooliinDans;
+      }
       uilchilgee(token)
-        .post("/qpayGargaya", {
-          barilgiinId: barilgiinId,
-          dun: ilgeekhDun,
-          zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
-        })
+        .post("/qpayGargaya", yavuulakhBody)
         .then(({ data }) => {
           setQpayerTulukh(data);
           setUnshijBaina(false);
@@ -295,8 +294,8 @@ const Kiosk = () => {
     <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
       {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
-        Төлбөр төлснөөс хойш 30 минут дотор та зогсоолоос гараагүй бол төлбөр
-        нэмэгдэж бодогдохыг анхаарна уу!
+        Төлбөр төлснөөс хойш {songogdsonZogsool?.garakhTsag || 30} минут дотор
+        та зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
         <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
@@ -526,14 +525,11 @@ const Kiosk = () => {
           >
             <CloseCircleFilled />
           </div>
-          <div className="fixed left-[55%] top-0">
-            {seconds > 9 ? `0:${seconds}` : `0:0${seconds}`}
-          </div>
           <div className="mt-8 flex items-center justify-center text-lg text-zinc-200">
             Амжилттай төлөгдлөө
           </div>
           {eBarimt && eBarimtTurul === "khuviKhun" && (
-            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+            <div className="mx-4 mt-8 flex flex-col items-center justify-center gap-2 rounded-xl bg-[#414143] p-2 py-4">
               <div className="flex w-full justify-between  pl-4">
                 <div>Сугалааны дугаар</div>
                 <div>{eBarimt?.lottery}</div>
@@ -590,4 +586,4 @@ const Kiosk = () => {
   );
 };
 
-export default Kiosk;
+export default KioskMobile;
