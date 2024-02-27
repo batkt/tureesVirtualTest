@@ -36,6 +36,11 @@ module.exports = {
         "spin-mid": "spin 2s linear infinite",
         "bounce-fast": "bounce 0.5s infinite",
       },
+      fontSize: {
+        mashJijigiinJijig: ["12px", "12px"],
+        mashJijigiinDundaj: ["10px", "10px"],
+        buurJijig: ["8px", "8px"],
+      },
     },
   },
   variants: {

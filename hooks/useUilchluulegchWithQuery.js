@@ -26,7 +26,12 @@ const fetcher = (
     .catch(aldaaBarigch);
 };
 
-function useUilchluulegchWithQuery(token, baiguullagiinId, query) {
+function useUilchluulegchWithQuery(
+  token,
+  baiguullagiinId,
+  query,
+  orjIrsenBarilgiinId
+) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setUilchluulegchKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
@@ -41,7 +46,7 @@ function useUilchluulegchWithQuery(token, baiguullagiinId, query) {
           token,
           baiguullagiinId,
           khuudaslalt,
-          barilgiinId,
+          orjIrsenBarilgiinId ? orjIrsenBarilgiinId : barilgiinId,
           query,
         ]
       : null,

@@ -89,6 +89,9 @@
 .khuviinDrawer .ant-drawer-content {
   @apply rounded-t-[120px] bg-[#1E1E1E];
 }
+.khuviinDrawerMobile .ant-drawer-content {
+  @apply rounded-t-[40px] bg-[#1E1E1E] dark:bg-[#1E1E1E];
+}
 
 .group:hover .animate-css-deer {
   animation: bounce 1s infinite;
