@@ -25,8 +25,7 @@ const DugaarTile = ({ t, baiguullaga, baiguullagaMutate, token }) => {
         }
       });
   }
-
-  console.log("baiguullaga", baiguullaga);
+  
   return data?.map((mur, index) => {
     return (
       <div className="box w-full border-y" key={index}>

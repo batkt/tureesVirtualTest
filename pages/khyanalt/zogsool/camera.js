@@ -208,6 +208,9 @@ function tulburKhurvuulekh(v) {
     case "khungulult":
       utga = "Хөнгөлөлт";
       break;
+    case "tseneglelt":
+      utga = "Цэнэглэлт";
+      break;
     default:
       utga = v;
       break;

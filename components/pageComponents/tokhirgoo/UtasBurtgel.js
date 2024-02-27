@@ -8,6 +8,7 @@ import {
   Button,
   Space,
   Input,
+  Switch,
 } from "antd";
 import compareFields from "tools/function/compareFields";
 import { useTranslation } from "react-i18next";
@@ -28,8 +29,33 @@ function UtasBurtgel(
       : ""
   );
 
-  const handleRadioChange = (e) => {
-    setMsgAvakhTurul(e.target.value);
+  useEffect(() => {
+    if (baiguullaga?.tokhirgoo?.msgAvakhTurul) {
+      if (baiguullaga.tokhirgoo.msgAvakhTurul === "bugd") {
+        form.setFieldValue("system", true);
+        form.setFieldValue("dans", true);
+      }
+      if (baiguullaga.tokhirgoo.msgAvakhTurul === "system") {
+        form.setFieldValue("system", true);
+      }
+      if (baiguullaga.tokhirgoo.msgAvakhTurul === "dans") {
+        form.setFieldValue("dans", true);
+      }
+    }
+  }, [baiguullaga.tokhirgoo.msgAvakhTurul]);
+
+  const handleSwitchChange = () => {
+    const systemChecklsen = form.getFieldValue("system");
+    const dansChecklsen = form.getFieldValue("dans");
+    if (systemChecklsen && dansChecklsen) {
+      setMsgAvakhTurul("bugd");
+    } else if (systemChecklsen) {
+      setMsgAvakhTurul("system");
+    } else if (dansChecklsen) {
+      setMsgAvakhTurul("dans");
+    } else {
+      setMsgAvakhTurul("");
+    }
   };
 
   function garya() {
@@ -99,13 +125,15 @@ function UtasBurtgel(
       form={form}
       onFinish={onFinish}
       initialValues={data}
-      autoComplete={"off"}>
-      <Form.List name='utasnuud'>
+      autoComplete={"off"}
+    >
+      <Form.List name="utasnuud">
         {(fields, { add, remove }) => (
-          <div className='flex flex-col gap-2'>
+          <div className="flex flex-col gap-2">
             <div
-              className='!max-h-[300px] !overflow-auto'
-              style={{ width: "100%" }}>
+              className="!max-h-[300px] !overflow-auto"
+              style={{ width: "100%" }}
+            >
               {fields.map(({ key, name, ...restField }) => (
                 <Space
                   width={"100%"}
@@ -116,7 +144,8 @@ function UtasBurtgel(
                     justifyContent: "center",
                     marginBottom: 8,
                   }}
-                  align='baseline'>
+                  align="baseline"
+                >
                   <Form.Item
                     style={{ minWidth: "293px" }}
                     {...restField}
@@ -126,38 +155,66 @@ function UtasBurtgel(
                         required: true,
                         message: "Утасны дугаар оруулаагүй байна.",
                       },
-                    ]}>
+                    ]}
+                  >
                     <InputNumber
                       maxLength={8}
                       style={{
                         width: "100%",
                       }}
-                      placeholder='Утасны дугаар'
+                      placeholder="Утасны дугаар"
                     />
                   </Form.Item>
                   <MinusCircleOutlined onClick={() => remove(name)} />
                 </Space>
               ))}
             </div>
-            <Form.Item className='flex justify-center'>
+            <Form.Item className="flex justify-center">
               <Button
                 // className='!w-[100%]'
                 style={{ minWidth: "320px" }}
-                type='dashed'
+                type="dashed"
                 onClick={() => add()}
                 // block
-                icon={<PlusOutlined className='text-black dark:text-white' />}>
-                <div className='text-black dark:text-white'>Дугаар нэмэх</div>
+                icon={<PlusOutlined className="text-black dark:text-white" />}
+              >
+                <div className="text-black dark:text-white">Дугаар нэмэх</div>
               </Button>
             </Form.Item>
           </div>
         )}
       </Form.List>
-      <div className='flex flex-wrap sm:justify-center'>
-        <Radio.Group onChange={handleRadioChange} value={msgAvakhTurul}>
-          <Radio value='system'>Системд бүртгэгдсэн дүн</Radio>
-          <Radio value='dans'>Дансанд орсон дүн</Radio>
-        </Radio.Group>
+      <div className="flex flex-wrap gap-2 sm:justify-center">
+        <Form.Item label={"Системд бүртгэгдсэн дүн"} name={"system"}>
+          <Switch
+            defaultChecked={
+              msgAvakhTurul === "bugd" || msgAvakhTurul === "system"
+                ? true
+                : false
+            }
+            checked={
+              msgAvakhTurul === "bugd" || msgAvakhTurul === "system"
+                ? true
+                : false
+            }
+            onChange={handleSwitchChange}
+          />
+        </Form.Item>
+        <Form.Item label={"Дансанд орсон дүн"} name={"dans"}>
+          <Switch
+            defaultChecked={
+              msgAvakhTurul === "bugd" || msgAvakhTurul === "dans"
+                ? true
+                : false
+            }
+            checked={
+              msgAvakhTurul === "bugd" || msgAvakhTurul === "dans"
+                ? true
+                : false
+            }
+            onChange={handleSwitchChange}
+          />
+        </Form.Item>
       </div>
     </Form>
   );

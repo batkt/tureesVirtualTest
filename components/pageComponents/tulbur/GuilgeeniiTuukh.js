@@ -322,10 +322,26 @@ function GuilgeeniiTuukh(
         />
       </div>
       <div ref={printRef} className="flex flex-col">
-        <div className="print mb-2 p-2">
-          <div>{t("Гүйлгээний түүх")}</div>
-          <div className="ml-auto">
-            {t("Талбайн дугаар")}:{data?.talbainDugaar}
+        <div className="mb-2 flex w-full items-center justify-between p-2">
+          <div className="flex flex-col">
+            <div className="flex gap-2">
+              <div className="font-bold">{t("Гэрээний дугаар")}:</div>
+              <div>{data?.gereeniiDugaar}</div>
+            </div>
+            <div className="flex gap-2">
+              <div className="font-bold">{t("Талбайн дугаар")}:</div>
+              <div>{data?.talbainDugaar}</div>
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <div className="flex gap-2">
+              <div className="font-bold">{t("Нэр")}:</div>
+              <div>{data?.ner}</div>
+            </div>
+            <div className="flex gap-2">
+              <div className="font-bold">{t("Утас")}:</div>
+              <div>{data?.utas.join(",")}</div>
+            </div>
           </div>
         </div>
         <th className="w-full">

@@ -3,11 +3,19 @@ import React, { useEffect, useRef } from "react";
 import GuilgeeniiTuukh from "./GuilgeeniiTuukh";
 
 function Khuulga(
-  { data, token, ognoo, onFinish, destroy, ajiltan, barilgiinId, shineOgnoo },
+  {
+    data,
+    token,
+    ognoo,
+    onFinish,
+    destroy,
+    ajiltan,
+    barilgiinId,
+    shineOgnoo,
+  },
   ref
 ) {
   const refTuukh = useRef(null);
-
   React.useImperativeHandle(
     ref,
     () => ({
@@ -35,7 +43,6 @@ function Khuulga(
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
-
   return (
     <div
       className="flex flex-col space-y-2 overflow-x-auto"
