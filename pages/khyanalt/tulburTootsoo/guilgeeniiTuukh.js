@@ -751,13 +751,13 @@ function guilgeeniiTuukh({ token }) {
 
   function khuulgaKharya(data) {
     const footer = [
-      <Button
-        type="primary"
-        onClick={() => ref.current.excelTatakh()}
-        icon={<FileExcelOutlined />}
-      >
-        {t("Татах")}
-      </Button>,
+      // <Button
+      //   type="primary"
+      //   onClick={() => ref.current.excelTatakh()}
+      //   icon={<FileExcelOutlined />}
+      // >
+      //   {t("Татах")}
+      // </Button>,
       <Button
         type="primary"
         onClick={() => ref.current.khevlekh()}
