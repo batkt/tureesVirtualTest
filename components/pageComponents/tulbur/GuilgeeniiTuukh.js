@@ -311,18 +311,18 @@ function GuilgeeniiTuukh(
 
   return (
     <div className="">
-      <div className="absolute right-6 top-3">
-        <DatePicker.RangePicker
-          value={shineOgnoo}
-          onChange={(v) => setShineOgnoo(v)}
-          locale={i18n.language === "mn" && locale}
-          allowClear
-          picker="month"
-          disabledDate={(e) => e && e > moment().endOf("day")}
-        />
-      </div>
       <div ref={printRef} className="flex flex-col">
-        <div className="mb-2 flex w-full items-center justify-between p-2">
+        <div className="flex w-full items-center justify-start gap-8">
+          <div className="">
+            <DatePicker.RangePicker
+              value={shineOgnoo}
+              onChange={(v) => setShineOgnoo(v)}
+              locale={i18n.language === "mn" && locale}
+              allowClear
+              picker="month"
+              disabledDate={(e) => e && e > moment().endOf("day")}
+            />
+          </div>
           <div className="flex flex-col">
             <div className="flex gap-2">
               <div className="font-bold">{t("Гэрээний дугаар")}:</div>
