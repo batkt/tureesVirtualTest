@@ -15,15 +15,9 @@ import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
-import { useRouter } from "next/router";
-import { useZochinToken } from "hooks/useZochinToken";
-import useJagsaalt from "hooks/useJagsaalt";
 
-const KioskMobile = () => {
+const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
-  const router = useRouter();
-  const queryBaiguullagiinId = router?.query?.baiguullagiinId;
-  const barilgiinId = router?.query?.barilgiinId;
   const [messageApi, contextHolder] = message.useMessage();
   const [register, setRegister] = useState("");
   const [baiguullagaNer, setBaiguullagaNer] = useState();
@@ -36,21 +30,6 @@ const KioskMobile = () => {
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
-  const { token } = useZochinToken(queryBaiguullagiinId);
-  const zogsoolQuery = useMemo(() => {
-    return {
-      baiguullagiinId: queryBaiguullagiinId,
-      barilgiinId: barilgiinId,
-    };
-  }, [queryBaiguullagiinId, barilgiinId]);
-
-  const jagsaalt = useJagsaalt("/zogsoolJagsaalt", zogsoolQuery, {
-    createdAt: -1,
-  });
-
-  const songogdsonZogsool = useMemo(() => {
-    return jagsaalt?.jagsaalt?.[0];
-  }, [jagsaalt]);
 
   const query = useMemo(() => {
     var query = {};
@@ -68,7 +47,7 @@ const KioskMobile = () => {
   }, [dugaar, drawerOngoikh]);
   const { uilchluulegchGaralt, isValidating } = useUilchluulegchWithQuery(
     token,
-    queryBaiguullagiinId,
+    baiguullagiinId,
     query,
     barilgiinId
   );
@@ -85,25 +64,22 @@ const KioskMobile = () => {
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
-      socket().on(
-        `qpay/${queryBaiguullagiinId}/${khuleegdejBuiQpay}`,
-        (qpay) => {
-          jinkheneTulburTulyo(
-            "kiosk",
-            songogdsonData?.session_id,
-            songogdsonData?.pay_amount,
-            songogdsonData?.plate_number,
-            barilgiinId,
-            "zochin",
-            "zochin"
-          );
-        }
-      );
+      socket().on(`qpay/${baiguullagiinId}/${khuleegdejBuiQpay}`, (qpay) => {
+        jinkheneTulburTulyo(
+          "kiosk",
+          songogdsonData?.session_id,
+          songogdsonData?.pay_amount,
+          songogdsonData?.plate_number,
+          barilgiinId,
+          "zochin",
+          "zochin"
+        );
+      });
     }
     return () => {
       socket().off(`qpay${khuleegdejBuiQpay}`);
     };
-  }, [khuleegdejBuiQpay, queryBaiguullagiinId]);
+  }, [khuleegdejBuiQpay, baiguullagiinId]);
 
   useEffect(() => {
     if (register.length > 6) {
@@ -141,8 +117,8 @@ const KioskMobile = () => {
         dun: ilgeekhDun,
         zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
       };
-      if (songogdsonZogsool?.zogsooliinDans) {
-        yavuulakhBody["dansniiDugaar"] = songogdsonZogsool?.zogsooliinDans;
+      if (zogsool?.zogsooliinDans) {
+        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDans;
       }
       uilchilgee(token)
         .post("/qpayGargaya", yavuulakhBody)
@@ -183,7 +159,7 @@ const KioskMobile = () => {
           `/v1/search_car/${data?.mashiniiDugaar}`,
           {
             params: {
-              baiguullagiinId: queryBaiguullagiinId,
+              baiguullagiinId: baiguullagiinId,
             },
           }
         );
@@ -294,8 +270,8 @@ const KioskMobile = () => {
     <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
       {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
-        Төлбөр төлснөөс хойш {songogdsonZogsool?.garakhTsag || 30} минут дотор
-        та зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
+        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор та
+        зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
         <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
@@ -584,6 +560,58 @@ const KioskMobile = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async (ctx) => {
+  try {
+    let token = null;
+    let zogsool = null;
+    if (!!ctx?.query?.baiguullagiinId && ctx.query.barilgiinId)
+      token = await uilchilgee()
+        .get(`/zochiniiTokenAvya/${ctx?.query?.baiguullagiinId}`)
+        .then((a) => a.data);
+    zogsool = await uilchilgee(token)
+      .get("/zogsoolJagsaalt", {
+        params: {
+          query: {
+            baiguullagiinId: ctx.query.baiguullagiinId,
+            barilgiinId: ctx.query.barilgiinId,
+          },
+        },
+      })
+      .then((a) => {
+        if (a.data && a.data?.jagsaalt?.length > 0) {
+          return a.data?.jagsaalt?.[0];
+        } else {
+          return false;
+        }
+      });
+    if (!zogsool) {
+      return {
+        redirect: {
+          destination: "/khyanalt/zogsool/404",
+          permanent: false,
+        },
+        props: {},
+      };
+    }
+    return {
+      props: {
+        token,
+        zogsool,
+        baiguullagiinId: ctx.query.baiguullagiinId,
+        barilgiinId: ctx.query.barilgiinId,
+      },
+    };
+  } catch (error) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+      props: {},
+    };
+  }
 };
 
 export default KioskMobile;
