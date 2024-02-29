@@ -164,6 +164,13 @@ function Admin({
       !!ajiltan?.barilguud?.find((b) => b === a._id) ||
       ajiltan?.erkh === "Admin"
   );
+  if (Array.isArray(ajiltan?.salbaruud) && ajiltan?.salbaruud?.length > 0) {
+    barilguud.forEach((a) => {
+      disabled =
+        ajiltan?.salbaruud?.find((mur) => mur.salbariinId === a._id)
+          ?.duusakhOgnoo < new Date();
+    });
+  }
 
   const images = [];
   if (typeof window !== "undefined") {
@@ -346,7 +353,12 @@ function Admin({
                 className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
               >
                 {barilguud?.map((a) => (
-                  <option key={a?._id} className="" value={a?._id}>
+                  <option
+                    key={a?._id}
+                    className=""
+                    value={a?._id}
+                    disabled={a?.disabled}
+                  >
                     {a?.ner}
                   </option>
                 ))}
