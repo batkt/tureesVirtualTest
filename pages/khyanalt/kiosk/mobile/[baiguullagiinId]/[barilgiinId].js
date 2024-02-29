@@ -267,19 +267,21 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
             alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
-          <div
-            onClick={() => {
-              setDrawerOngoikh(false);
-              setSongogdsonData(null);
-              setTulburiinKhelber();
-              setKhuleegdejBuiQpay(null);
-              setDugaar(Array(4).fill(""));
-              setEbarimt();
-              setAlkham(0);
-            }}
-            className="flex w-full items-center justify-center text-lg"
-          >
-            <CloseCircleFilled />
+          <div className="flex w-full items-center justify-center text-lg">
+            <div
+              onClick={() => {
+                setDrawerOngoikh(false);
+                setSongogdsonData(null);
+                setTulburiinKhelber();
+                setKhuleegdejBuiQpay(null);
+                setDugaar(Array(4).fill(""));
+                setEbarimt();
+                setAlkham(0);
+              }}
+              className="p-2"
+            >
+              <CloseCircleFilled />
+            </div>
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
             {"Дугаар сонгоно уу."}
@@ -314,15 +316,16 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
             alkham === 1 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
-          <div
-            onClick={() => {
-              setAlkham(0);
-              setTulburiinKhelber();
-              setQpayerTulukh(false);
-              setKhuleegdejBuiQpay();
-            }}
-            className={`flex w-full items-center justify-center text-lg`}
-          >
+          <div className={`flex w-full items-center justify-center text-lg`}>
+            <div
+              onClick={() => {
+                setAlkham(0);
+                setTulburiinKhelber();
+                setQpayerTulukh(false);
+                setKhuleegdejBuiQpay();
+              }}
+              className="p-2"
+            ></div>
             <LeftCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
@@ -409,20 +412,22 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
             alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
-          <div
-            onClick={() => {
-              setDrawerOngoikh(false);
-              setSongogdsonData(null);
-              setTulburiinKhelber();
-              setKhuleegdejBuiQpay(null);
-              setDugaar(Array(4).fill(""));
-              setEbarimtTurul("");
-              setAlkham(0);
-              setEbarimt();
-            }}
-            className="flex w-full items-center justify-center text-base"
-          >
-            <CloseCircleFilled />
+          <div className="flex w-full items-center justify-center text-base">
+            <div
+              onClick={() => {
+                setDrawerOngoikh(false);
+                setSongogdsonData(null);
+                setTulburiinKhelber();
+                setKhuleegdejBuiQpay(null);
+                setDugaar(Array(4).fill(""));
+                setEbarimtTurul("");
+                setAlkham(0);
+                setEbarimt();
+              }}
+              className="p-2"
+            >
+              <CloseCircleFilled />
+            </div>
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
             {"И-Баримт төрөл сонгоно уу."}
@@ -469,11 +474,10 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
             alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
           }`}
         >
-          <div
-            onClick={onTimeout}
-            className="flex w-full items-center justify-center text-base"
-          >
-            <CloseCircleFilled />
+          <div className="flex w-full items-center justify-center text-base">
+            <div onClick={onTimeout} className="p-2">
+              <CloseCircleFilled />
+            </div>
           </div>
           <div className="mt-8 flex items-center justify-center text-lg text-zinc-200">
             Амжилттай төлөгдлөө
