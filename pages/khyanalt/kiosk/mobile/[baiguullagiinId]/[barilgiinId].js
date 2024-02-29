@@ -15,6 +15,7 @@ import amjilttaiAnimation from "../../amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
+import useQpayObject from "hooks/useQpayObject";
 
 const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
@@ -52,34 +53,24 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
     barilgiinId
   );
 
+  const { qpayObject } = useQpayObject(token, qpayerTulukh?.id);
+
   const msgNotif = (content) => {
     messageApi.open({
       content: content,
       style: {
-        marginTop: "5rem",
+        marginTop: "2rem",
       },
-      duration: 3,
+      key: "1",
+      duration: 2,
     });
   };
 
   useEffect(() => {
-    if (khuleegdejBuiQpay) {
-      socket().on(`qpay/${baiguullagiinId}/${khuleegdejBuiQpay}`, (qpay) => {
-        jinkheneTulburTulyo(
-          "kiosk",
-          songogdsonData?.session_id,
-          songogdsonData?.pay_amount,
-          songogdsonData?.plate_number,
-          barilgiinId,
-          "zochin",
-          "zochin"
-        );
-      });
+    if (qpayObject && qpayObject.tulsunEsekh) {
+      eBarimtTsonkhruuShiljye();
     }
-    return () => {
-      socket().off(`qpay${khuleegdejBuiQpay}`);
-    };
-  }, [khuleegdejBuiQpay, baiguullagiinId]);
+  }, [qpayObject]);
 
   useEffect(() => {
     if (register.length > 6) {
@@ -108,7 +99,12 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
     setAlkham(0);
   }
 
-  function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
+  function qpayAvakh(
+    uilchluugchiinId,
+    barilgiinId,
+    ilgeekhDun,
+    mashiniiDugaar
+  ) {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
@@ -119,6 +115,12 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
       };
       if (zogsool?.zogsooliinDans) {
         yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDans;
+      }
+      if (!!mashiniiDugaar) {
+        yavuulakhBody["zogsooliinId"] = zogsool?._id;
+        yavuulakhBody["tulukhDun"] = ilgeekhDun;
+        yavuulakhBody["zogsoolUilchluulegchiinId"] = uilchluugchiinId;
+        yavuulakhBody["mashiniiDugaar"] = mashiniiDugaar;
       }
       uilchilgee(token)
         .post("/qpayGargaya", yavuulakhBody)
@@ -171,16 +173,17 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
             qpayAvakh(
               response.data?.data?.session_id,
               barilgiinId,
-              response.data?.data?.pay_amount
+              response.data?.data?.pay_amount,
+              response.data?.data?.plate_number
             );
             setUnshijBaina(false);
           } else {
             msgNotif(
               <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
                 <div className="text-yellow-500">
-                  <WarningOutlined style={{ fontSize: "36px" }} size={100} />
+                  <WarningOutlined style={{ fontSize: "14px" }} />
                 </div>
-                <div className="text-4xl">
+                <div className="text-base">
                   Тухайн машинд төлбөр бодогдоогүй байна.
                 </div>
               </div>
@@ -195,35 +198,6 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
       setUnshijBaina(false);
       console.log(err);
     }
-  };
-
-  const jinkheneTulburTulyo = (
-    turul,
-    uilchluulegchiinId,
-    paid_amount,
-    plate_number,
-    barilgiinId,
-    ajiltniiNer,
-    ajiltniiId
-  ) => {
-    uilchilgee(token)
-      .post("/v1/kioskPay", {
-        turul,
-        uilchluulegchiinId,
-        paid_amount,
-        plate_number,
-        barilgiinId,
-        ajiltniiNer,
-        ajiltniiId,
-      })
-      .then((res) => {
-        if (res.data === "Amjilttai") {
-          eBarimtTsonkhruuShiljye();
-        }
-      })
-      .catch((err) => {
-        aldaaBarigch(err);
-      });
   };
 
   const eBarimtAvya = (
