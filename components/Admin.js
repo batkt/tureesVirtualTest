@@ -147,12 +147,18 @@ function Admin({
     });
   }
 
-  function license() {
-    const duusakh = moment(ajiltan?.duusakhOgnoo).format("YYYY-MM-DD");
+  const license = useMemo(() => {
     const ognoo = moment(new Date()).format("YYYY-MM-DD");
+    let duusakh = moment(ajiltan?.duusakhOgnoo).format("YYYY-MM-DD");
+    if (Array.isArray(ajiltan?.salbaruud) && ajiltan?.salbaruud?.length > 0) {
+      let tukhainDuusakhOgnoo = ajiltan?.salbaruud?.find(
+        (mur) => mur.salbariinId === barilgiinId
+      )?.duusakhOgnoo;
+      duusakh = moment(tukhainDuusakhOgnoo).format("YYYY-MM-DD");
+    }
     const khonog = moment(duusakh).diff(moment(ognoo), "days");
     return <span className="font-bold text-red-500">{khonog}</span>;
-  }
+  }, [ajiltan, barilgiinId]);
   const barilguud = baiguullaga?.barilguud?.filter(
     (a) =>
       !!ajiltan?.barilguud?.find((b) => b === a._id) ||
@@ -489,7 +495,7 @@ function Admin({
               )}
             </div>
             <div className="hidden items-center justify-center md:flex">
-              {t("Лиценз")}- {license()}
+              {t("Лиценз")}- {license}
             </div>
             {!hideSearch ? (
               <>
@@ -595,13 +601,13 @@ function Admin({
                   <div>
                     {
                       ("Лицензийн хугацаа дуусахад хоног үлдлээ",
-                      { khonog: license() })
+                      { khonog: license })
                     }
                   </div>
                 }
               >
                 <div className="ml-1 flex items-center gap-1 text-base md:hidden">
-                  {license()}:
+                  {license}:
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
