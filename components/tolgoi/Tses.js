@@ -110,6 +110,21 @@ function NTses({
       !!ajiltan?.barilguud?.find((b) => b === a._id) ||
       ajiltan?.erkh === "Admin"
   );
+  if (
+    Array.isArray(ajiltan?.salbaruud) &&
+    ajiltan?.salbaruud?.length > 0 &&
+    !!barilguud &&
+    barilguud.length > 0
+  ) {
+    barilguud.forEach((a) => {
+      a.disabled =
+        new Date(
+          ajiltan?.salbaruud?.find(
+            (mur) => mur.salbariinId === a._id
+          )?.duusakhOgnoo
+        ) < new Date();
+    });
+  }
 
   return (
     <nav className="hidden h-full w-44 md:block">
@@ -145,8 +160,16 @@ function NTses({
                     className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800"
                   >
                     {barilguud?.map((a) => (
-                      <option key={a?._id} className="" value={a?._id}>
-                        {a?.ner}
+                      <option
+                        key={a?._id}
+                        className=""
+                        value={a?._id}
+                        disabled={a?.disabled}
+                      >
+                        <div>
+                          <div>{a?.ner}</div>
+                          {a.disabled && <div> хугацаа дууссан!</div>}
+                        </div>
                       </option>
                     ))}
                   </select>
