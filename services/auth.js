@@ -28,7 +28,7 @@ export const useBarilga = () => {
     const tukhainBarilga = ajiltan?.salbaruud?.find(
       (salbar) => salbar?.salbariinId === id
     );
-    if (!tukhainBarilga) {
+    if (!tukhainBarilga && ajiltan?.erkh !== "Admin") {
       return message.warn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
     } else {
       if (
@@ -124,7 +124,10 @@ export const AuthProvider = ({ children }) => {
                       ajiltanMutate(data.result);
                       if (data?.result?.barilguud?.length > 0) {
                         let solikhBarilgaOldsonEsekh = false;
-                        if (Array.isArray(data?.result?.salbaruud)) {
+                        if (
+                          Array.isArray(data?.result?.salbaruud) &&
+                          data.result.erkh !== "Admin"
+                        ) {
                           for (const salbar of data.result.salbaruud) {
                             for (const barilga of data.result.barilguud) {
                               if (salbar?.salbariinId === barilga) {
@@ -144,7 +147,7 @@ export const AuthProvider = ({ children }) => {
                             }
                             if (!solikhBarilgaOldsonEsekh) {
                               return message.warn(
-                                "Барилгуудын лиценз дууссан байна"
+                                t("Лицензийн хугацаа дууссан байна!")
                               );
                             }
                           }
