@@ -153,6 +153,7 @@ function NTses({
                 <div className="relative mt-2 inline-block">
                   <select
                     defaultValue={barilgiinId}
+                    value={barilgiinId}
                     onChange={({ target }) => {
                       onChangeBarilga && onChangeBarilga();
                       barilgaSoliyo(target.value, ajiltan);
