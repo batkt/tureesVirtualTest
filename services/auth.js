@@ -124,12 +124,17 @@ export const AuthProvider = ({ children }) => {
                       ajiltanMutate(data.result);
                       if (data?.result?.barilguud?.length > 0) {
                         let solikhBarilgaOldsonEsekh = false;
+
                         if (
                           Array.isArray(data?.result?.salbaruud) &&
                           data.result.erkh !== "Admin"
                         ) {
                           for (const salbar of data.result.salbaruud) {
+                            console.log("salbar ajilsan: ", salbar);
+
                             for (const barilga of data.result.barilguud) {
+                              console.log("barilga ajilsan: ", barilga);
+
                               if (salbar?.salbariinId === barilga) {
                                 if (
                                   moment(salbar?.duusakhOgnoo)
@@ -137,6 +142,7 @@ export const AuthProvider = ({ children }) => {
                                     .isAfter(moment().startOf("day"))
                                 ) {
                                   solikhBarilgaOldsonEsekh = true;
+                                  console.log("ene ajilsan");
                                   barilgaSoliyo(
                                     salbar?.salbariinId,
                                     data.result
@@ -145,14 +151,11 @@ export const AuthProvider = ({ children }) => {
                                 }
                               }
                             }
-                            if (!solikhBarilgaOldsonEsekh) {
-                              return message.warn(
-                                t("Лицензийн хугацаа дууссан байна!")
-                              );
-                            }
                           }
                         } else {
-                          barilgaSoliyo(data.result.barilguud[0], data.result);
+                          return message.warn(
+                            t("Лицензийн хугацаа дууссан байна!")
+                          );
                         }
                       }
                       ekhniiTsonkhruuOchyo(
