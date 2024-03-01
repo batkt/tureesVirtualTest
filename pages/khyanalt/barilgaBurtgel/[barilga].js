@@ -50,7 +50,7 @@ const formItemLayout = {
 const format = "HH:mm";
 
 function GereeBaiguulakh({ token }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { baiguullaga, baiguullagaMutate } = useAuth();
   const router = useRouter();
   const { barilga } = router.query;
@@ -206,12 +206,14 @@ function GereeBaiguulakh({ token }) {
     const burtgekhBarilga = form.getFieldsValue();
     burtgekhBarilga.davkharuud = [...davkhar, ...bdavkhar];
     if (!baiguullaga?.barilguud) baiguullaga.barilguud = [];
-
     if (barilga === "new") baiguullaga?.barilguud.push(burtgekhBarilga);
     else {
       const { _id } = _.get(baiguullaga, `barilguud.${barilga}`);
       _.set(burtgekhBarilga, `_id`, _id);
       _.set(baiguullaga, `barilguud.${barilga}`, burtgekhBarilga);
+      if (burtgekhBarilga?.licenseRegister) {
+        _.set(baiguullaga, "licenseRegister", burtgekhBarilga?.licenseRegister);
+      }
     }
     let data = _.get(baiguullaga, `barilguud.${barilga}`) || [];
     const index = baiguullaga.barilguud.findIndex((a) => a._id === data._id);
@@ -314,7 +316,9 @@ function GereeBaiguulakh({ token }) {
             >
               <div className="flex flex-row space-x-1">
                 {!logoMedeelel?.logo && (
-                  <Button icon={<UploadOutlined />}>{t("Лого зураг оруулах")}</Button>
+                  <Button icon={<UploadOutlined />}>
+                    {t("Лого зураг оруулах")}
+                  </Button>
                 )}
                 {!!logoMedeelel?.logo && (
                   <Button
@@ -338,6 +342,9 @@ function GereeBaiguulakh({ token }) {
             name="ner"
             label={t("Нэр")}
           >
+            <Input onKeyUp={focuser} />
+          </Form.Item>
+          <Form.Item name="licenseRegister" hidden>
             <Input onKeyUp={focuser} />
           </Form.Item>
           <Form.Item
@@ -401,7 +408,8 @@ function GereeBaiguulakh({ token }) {
             name="niitTalbai"
             label={
               <div className="text-black dark:text-gray-400">
-                {t("Нийт м")}<sup>2</sup>
+                {t("Нийт м")}
+                <sup>2</sup>
               </div>
             }
           >
@@ -436,7 +444,9 @@ function GereeBaiguulakh({ token }) {
             />
           </Form.Item>
           <Form.Item
-            rules={[{ required: true, message: t("Барилгын Хаяг оруулна уу!") }]}
+            rules={[
+              { required: true, message: t("Барилгын Хаяг оруулна уу!") },
+            ]}
             name="khayag"
             label={t("Хаяг")}
           >
@@ -465,7 +475,8 @@ function GereeBaiguulakh({ token }) {
             {
               title: (
                 <label>
-                  {t("Давхарын м")}<sup>2</sup>
+                  {t("Давхарын м")}
+                  <sup>2</sup>
                 </label>
               ),
               dataIndex: "talbai",

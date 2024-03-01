@@ -647,18 +647,6 @@ function BarilgaBurtgel({ token }) {
             </div>
           </div>
         </div>
-        <div className=" flex items-center pr-2">
-          <div className=" dark:text-theme-10 flex w-full  items-center justify-end text-blue-400 dark:text-gray-400">
-            <Button
-              type="primary"
-              onClick={() => barilgaBurtgel("new")}
-              icon={<PlusOutlined />}
-            >
-              {t("Нэмэх")}
-            </Button>
-          </div>
-        </div>
-
         <div
           className="overflow-y-scroll lg:h-[33vh] "
           data-aos="fade-up"

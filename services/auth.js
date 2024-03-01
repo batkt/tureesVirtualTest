@@ -126,20 +126,27 @@ export const AuthProvider = ({ children }) => {
                         let solikhBarilgaOldsonEsekh = false;
                         if (Array.isArray(data?.result?.salbaruud)) {
                           for (const salbar of data.result.salbaruud) {
-                            if (
-                              moment(salbar?.duusakhOgnoo)
-                                .startOf("day")
-                                .isAfter(moment().startOf("day"))
-                            ) {
-                              solikhBarilgaOldsonEsekh = true;
-                              barilgaSoliyo(salbar?.salbariinId, data.result);
-                              break;
+                            for (const barilga of data.result.barilguud) {
+                              if (salbar?.salbariinId === barilga) {
+                                if (
+                                  moment(salbar?.duusakhOgnoo)
+                                    .startOf("day")
+                                    .isAfter(moment().startOf("day"))
+                                ) {
+                                  solikhBarilgaOldsonEsekh = true;
+                                  barilgaSoliyo(
+                                    salbar?.salbariinId,
+                                    data.result
+                                  );
+                                  break;
+                                }
+                              }
                             }
-                          }
-                          if (!solikhBarilgaOldsonEsekh) {
-                            return message.warn(
-                              "Барилгуудын лиценз дууссан байна"
-                            );
+                            if (!solikhBarilgaOldsonEsekh) {
+                              return message.warn(
+                                "Барилгуудын лиценз дууссан байна"
+                              );
+                            }
                           }
                         } else {
                           barilgaSoliyo(data.result.barilguud[0], data.result);
