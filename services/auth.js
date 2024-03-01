@@ -13,6 +13,7 @@ import useAjiltan from "hooks/useAjiltan";
 import useBaiguullaga from "hooks/useBaiguullaga";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
+import moment from "moment";
 const AuthContext = createContext({});
 
 export const useBarilga = () => {
@@ -23,7 +24,21 @@ export const useBarilga = () => {
     if (barilgiinId && barilgiinId !== "undefined") setBarilgiinId(barilgiinId);
   }, []);
 
-  const barilgaSoliyo = (id) => {
+  const barilgaSoliyo = (id, ajiltan) => {
+    const tukhainBarilga = ajiltan?.salbaruud?.find(
+      (salbar) => salbar?.salbariinId === id
+    );
+    if (!tukhainBarilga) {
+      return message.warn("Ажилтанд барилгын тохиргоо хийгдээгүй байна");
+    } else {
+      if (
+        moment(tukhainBarilga?.duusakhOgnoo)
+          .startOf("day")
+          .isBefore(moment().startOf("day"))
+      ) {
+        return message.warn("Тухайн барилгын лиценз дууссан байна");
+      }
+    } //guard clause oruulya
     setBarilgiinId(id);
     setCookie(null, "barilgiinId", id, {
       maxAge: 30 * 24 * 60 * 60,
@@ -47,17 +62,6 @@ export const AuthProvider = ({ children }) => {
   const { barilgaSoliyo, barilgiinId } = useBarilga();
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    if (
-      (!barilgiinId && !!baiguullaga?.barilguud) ||
-      (!!barilgiinId &&
-        !!baiguullaga &&
-        !baiguullaga?.barilguud?.find((mur) => mur._id === barilgiinId))
-    ) {
-      barilgaSoliyo(_.get(baiguullaga, "barilguud.0._id"));
-    }
-  }, [barilgiinId, baiguullaga]);
 
   useEffect(() => {
     const d = parseCookies();
@@ -118,8 +122,29 @@ export const AuthProvider = ({ children }) => {
                       });
                       setToken(data.token);
                       ajiltanMutate(data.result);
-                      data?.result?.barilguud?.length > 0 &&
-                        barilgaSoliyo(data.result.barilguud[0]);
+                      if (data?.result?.barilguud?.length > 0) {
+                        let solikhBarilgaOldsonEsekh = false;
+                        if (Array.isArray(data?.result?.salbaruud)) {
+                          for (const salbar of data.result.salbaruud) {
+                            if (
+                              moment(salbar?.duusakhOgnoo)
+                                .startOf("day")
+                                .isAfter(moment().startOf("day"))
+                            ) {
+                              solikhBarilgaOldsonEsekh = true;
+                              barilgaSoliyo(salbar?.salbariinId, data.result);
+                              break;
+                            }
+                          }
+                          if (!solikhBarilgaOldsonEsekh) {
+                            return message.warn(
+                              "Барилгуудын лиценз дууссан байна"
+                            );
+                          }
+                        } else {
+                          barilgaSoliyo(data.result.barilguud[0], data.result);
+                        }
+                      }
                       ekhniiTsonkhruuOchyo(
                         data.result,
                         data.token,

@@ -273,23 +273,6 @@ export function ekhniiTsonkhruuOchyo(ajiltan, token) {
           message.warn("Байгууллагын эрхийн тохиргоог шалгуулна уу!");
         }
       } else if (erkhShalgakh.length > 0) {
-        // let licenseBaigaaEsekh = false;
-        // if (!Array.isArray(ajiltan?.salbaruud)) {
-        //   return message.error("Ажилтанд барилга байхгүй байна!");
-        // } else {
-        //   ajiltan?.salbaruud?.forEach((salbar) => {
-        //     if (
-        //       moment(salbar?.duusakhOgnoo)
-        //         .startOf("day")
-        //         .isAfter(moment().startOf("day"))
-        //     ) {
-        //       licenseBaigaaEsekh = true;
-        //     }
-        //   });
-        // }
-        // if (!licenseBaigaaEsekh) {
-        //   return message.error(t("Лицензийн хугацаа дууссан байна!"));
-        // }
         message.success(t("Тавтай морил"));
         window.location.href = erkhShalgakh[0];
       } else {

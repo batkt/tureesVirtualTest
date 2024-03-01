@@ -159,11 +159,13 @@ function Admin({
     const khonog = moment(duusakh).diff(moment(ognoo), "days");
     return <span className="font-bold text-red-500">{khonog}</span>;
   }, [ajiltan, barilgiinId]);
-  const barilguud = baiguullaga?.barilguud?.filter(
-    (a) =>
-      !!ajiltan?.barilguud?.find((b) => b === a._id) ||
-      ajiltan?.erkh === "Admin"
-  );
+  const barilguud = useMemo(() => {
+    return baiguullaga?.barilguud?.filter(
+      (a) =>
+        !!ajiltan?.barilguud?.find((b) => b === a._id) ||
+        ajiltan?.erkh === "Admin"
+    );
+  }, [baiguullaga, ajiltan]);
 
   const images = [];
   if (typeof window !== "undefined") {
@@ -342,7 +344,8 @@ function Admin({
             <div className="relative mt-2 inline-block">
               <select
                 defaultValue={barilgiinId}
-                onChange={({ target }) => barilgaSoliyo(target.value)}
+                value={barilgiinId}
+                onChange={({ target }) => barilgaSoliyo(target.value, ajiltan)}
                 className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight text-black shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800 dark:text-gray-200"
               >
                 {barilguud?.map((a) => (
@@ -350,7 +353,7 @@ function Admin({
                     key={a?._id}
                     className=""
                     value={a?._id}
-                    disabled={a?.disabled}
+                    disabled={a.disabled}
                   >
                     {a?.ner}
                   </option>

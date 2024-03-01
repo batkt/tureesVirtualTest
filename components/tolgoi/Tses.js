@@ -155,7 +155,7 @@ function NTses({
                     defaultValue={barilgiinId}
                     onChange={({ target }) => {
                       onChangeBarilga && onChangeBarilga();
-                      barilgaSoliyo(target.value);
+                      barilgaSoliyo(target.value, ajiltan);
                     }}
                     className="focus:shadow-outline block w-full appearance-none rounded border border-gray-400 bg-white px-4 py-1 pr-8 leading-tight shadow hover:border-gray-500 focus:outline-none dark:bg-gray-800"
                   >
@@ -164,7 +164,7 @@ function NTses({
                         key={a?._id}
                         className=""
                         value={a?._id}
-                        disabled={a?.disabled}
+                        disabled={a.disabled}
                       >
                         <div>
                           <div>{a?.ner}</div>
