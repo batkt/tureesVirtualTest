@@ -211,6 +211,9 @@ function tulburKhurvuulekh(v) {
     case "tseneglelt":
       utga = "Цэнэглэлт";
       break;
+    case "qpayUridchilsan":
+      utga = "QPay QR";
+      break;
     default:
       utga = v;
       break;
@@ -1207,7 +1210,14 @@ function camera({ token }) {
               </div>
             );
           } else r = tulburKhurvuulekh(v[0]?.tulbur[0]?.turul);
-          return r && <div>{v[0]?.tulbur?.length > 1 ? r : t(r)}</div>;
+          return (
+            r && (
+              <div>
+                {v[0]?.tulbur?.length > 1 ? r : t(r)}{" "}
+                {v[0]?.tulbur?.length === 1 && `: ${v[0]?.tulbur[0]?.dun}`}
+              </div>
+            )
+          );
         },
       },
       {
