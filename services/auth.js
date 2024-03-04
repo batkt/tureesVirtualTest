@@ -124,9 +124,8 @@ export const AuthProvider = ({ children }) => {
                       ajiltanMutate(data.result);
                       if (
                         data?.result?.barilguud?.length > 0 ||
-                        data.result.erkh !== "Admin"
+                        data.result.erkh === "Admin"
                       ) {
-                        let solikhBarilgaOldsonEsekh = false;
                         if (
                           Array.isArray(data?.result?.salbaruud) &&
                           data.result.erkh !== "Admin"
@@ -139,7 +138,6 @@ export const AuthProvider = ({ children }) => {
                                     .startOf("day")
                                     .isAfter(moment().startOf("day"))
                                 ) {
-                                  solikhBarilgaOldsonEsekh = true;
                                   barilgaSoliyo(
                                     salbar?.salbariinId,
                                     data.result
@@ -150,7 +148,10 @@ export const AuthProvider = ({ children }) => {
                             }
                           }
                         } else if (data.result.erkh === "Admin") {
-                          barilgaSoliyo(data.result.barilguud[0], data.result);
+                          barilgaSoliyo(
+                            data?.result?.salbaruud?.[0]?.salbariinId,
+                            data.result
+                          );
                         } else {
                           return message.warn(
                             t("Лицензийн хугацаа дууссан байна!")
