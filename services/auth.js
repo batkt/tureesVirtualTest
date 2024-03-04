@@ -122,12 +122,13 @@ export const AuthProvider = ({ children }) => {
                       });
                       setToken(data.token);
                       ajiltanMutate(data.result);
-                      if (data?.result?.barilguud?.length > 0) {
+                      if (
+                        data?.result?.barilguud?.length > 0 ||
+                        data.result.erkh !== "Admin"
+                      ) {
                         let solikhBarilgaOldsonEsekh = false;
-
                         if (
                           Array.isArray(data?.result?.salbaruud) &&
-                          data?.result?.salbaruud?.length > 1 &&
                           data.result.erkh !== "Admin"
                         ) {
                           for (const salbar of data.result.salbaruud) {
@@ -148,10 +149,7 @@ export const AuthProvider = ({ children }) => {
                               }
                             }
                           }
-                        } else if (
-                          data.result.erkh === "Admin" &&
-                          data?.result?.barilguud?.length == 1
-                        ) {
+                        } else if (data.result.erkh === "Admin") {
                           barilgaSoliyo(data.result.barilguud[0], data.result);
                         } else {
                           return message.warn(
