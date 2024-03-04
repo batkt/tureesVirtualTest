@@ -147,7 +147,10 @@ export const AuthProvider = ({ children }) => {
                               }
                             }
                           }
-                        } else if (data.result.erkh === "Admin") {
+                        } else if (
+                          data.result.erkh === "Admin" &&
+                          data?.result?.barilguud?.length == 1
+                        ) {
                           barilgaSoliyo(data.result.barilguud[0], data.result);
                         } else {
                           return message.warn(
