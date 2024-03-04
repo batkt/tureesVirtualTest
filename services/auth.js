@@ -127,6 +127,7 @@ export const AuthProvider = ({ children }) => {
 
                         if (
                           Array.isArray(data?.result?.salbaruud) &&
+                          data?.result?.salbaruud?.length > 1 &&
                           data.result.erkh !== "Admin"
                         ) {
                           for (const salbar of data.result.salbaruud) {
@@ -147,10 +148,7 @@ export const AuthProvider = ({ children }) => {
                               }
                             }
                           }
-                        } else if (
-                          data.result.erkh === "Admin" &&
-                          data?.result?.barilguud?.length == 1
-                        ) {
+                        } else if (data.result.erkh === "Admin") {
                           barilgaSoliyo(data.result.barilguud[0], data.result);
                         } else {
                           return message.warn(
