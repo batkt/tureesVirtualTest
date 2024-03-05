@@ -129,8 +129,8 @@ export const AuthProvider = ({ children }) => {
                         let solikhBarilgaOldsonEsekh = false;
                         if (Array.isArray(data?.result?.salbaruud)) {
                           for (const salbar of data.result.salbaruud) {
-                            for (const barilga of data.result.barilguud) {
-                              if (!data.result.erkh === "Admin") {
+                            if (data.result.erkh !== "Admin") {
+                              for (const barilga of data.result.barilguud) {
                                 if (salbar?.salbariinId === barilga) {
                                   if (
                                     moment(salbar?.duusakhOgnoo)
@@ -145,15 +145,15 @@ export const AuthProvider = ({ children }) => {
                                     break;
                                   }
                                 }
-                              } else if (
-                                moment(salbar?.duusakhOgnoo)
-                                  .startOf("day")
-                                  .isAfter(moment().startOf("day"))
-                              ) {
-                                solikhBarilgaOldsonEsekh = true;
-                                barilgaSoliyo(salbar?.salbariinId, data.result);
-                                break;
                               }
+                            } else if (
+                              moment(salbar?.duusakhOgnoo)
+                                .startOf("day")
+                                .isAfter(moment().startOf("day"))
+                            ) {
+                              solikhBarilgaOldsonEsekh = true;
+                              barilgaSoliyo(salbar?.salbariinId, data.result);
+                              break;
                             }
                           }
                           if (solikhBarilgaOldsonEsekh == false)
