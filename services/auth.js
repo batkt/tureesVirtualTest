@@ -127,10 +127,7 @@ export const AuthProvider = ({ children }) => {
                         data.result.erkh === "Admin"
                       ) {
                         let solikhBarilgaOldsonEsekh = false;
-                        if (
-                          Array.isArray(data?.result?.salbaruud) &&
-                          data.result.erkh !== "Admin"
-                        ) {
+                        if (Array.isArray(data?.result?.salbaruud)) {
                           for (const salbar of data.result.salbaruud) {
                             for (const barilga of data.result.barilguud) {
                               if (salbar?.salbariinId === barilga) {
@@ -153,11 +150,6 @@ export const AuthProvider = ({ children }) => {
                             return message.warn(
                               t("Лицензийн хугацаа дууссан байна!")
                             );
-                        } else if (data.result.erkh === "Admin") {
-                          barilgaSoliyo(
-                            data?.result?.salbaruud?.[0]?.salbariinId,
-                            data.result
-                          );
                         } else {
                           return message.warn(
                             t("Лицензийн хугацаа дууссан байна!")
