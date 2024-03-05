@@ -130,19 +130,29 @@ export const AuthProvider = ({ children }) => {
                         if (Array.isArray(data?.result?.salbaruud)) {
                           for (const salbar of data.result.salbaruud) {
                             for (const barilga of data.result.barilguud) {
-                              if (salbar?.salbariinId === barilga) {
-                                if (
-                                  moment(salbar?.duusakhOgnoo)
-                                    .startOf("day")
-                                    .isAfter(moment().startOf("day"))
-                                ) {
-                                  solikhBarilgaOldsonEsekh = true;
-                                  barilgaSoliyo(
-                                    salbar?.salbariinId,
-                                    data.result
-                                  );
-                                  break;
+                              if (!data.result.erkh === "Admin") {
+                                if (salbar?.salbariinId === barilga) {
+                                  if (
+                                    moment(salbar?.duusakhOgnoo)
+                                      .startOf("day")
+                                      .isAfter(moment().startOf("day"))
+                                  ) {
+                                    solikhBarilgaOldsonEsekh = true;
+                                    barilgaSoliyo(
+                                      salbar?.salbariinId,
+                                      data.result
+                                    );
+                                    break;
+                                  }
                                 }
+                              } else if (
+                                moment(salbar?.duusakhOgnoo)
+                                  .startOf("day")
+                                  .isAfter(moment().startOf("day"))
+                              ) {
+                                solikhBarilgaOldsonEsekh = true;
+                                barilgaSoliyo(salbar?.salbariinId, data.result);
+                                break;
                               }
                             }
                           }
