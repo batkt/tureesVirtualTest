@@ -7,7 +7,8 @@ export const useKeyboardTovchlol = (tovch, callback) => {
         event.key === "F4" ||
         event.key === "F1" ||
         event.key === "F2" ||
-        event.key === "+"
+        event.key === "+" ||
+        event.key === "F5"
       ) {
         event.preventDefault();
       }

@@ -1,6 +1,6 @@
 import shalgaltKhiikh from "services/shalgaltKhiikh";
 import Admin from "components/Admin";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useAuth } from "services/auth";
 import {
   Button,
@@ -584,26 +584,7 @@ function camera({ token }) {
     };
   }, [uilchluulegchGaralt]);
 
-  // console.log("---------", uilchluulegchGaralt);
-
-  useKeyboardTovchlol("F4", f5Darsan);
-  useKeyboardTovchlol("F1", f3Darsan);
-  useKeyboardTovchlol("F2", f4Darsan);
-  useKeyboardTovchlol("F8", f8Darsan);
-  useKeyboardTovchlol("+", nemekhDarsan);
-  useKeyboardTovchlol("-", khasakhDarsan);
-
-  function f3Darsan() {
-    khaalgaNeey(camerVal[0]);
-    document.getElementById("neekhKhaalgaID").focus();
-  }
-
-  function f4Darsan() {
-    khaalgaNeey(camerVal[1]);
-    document.getElementById("khaakhkhaalgaID").focus();
-  }
-
-  function f5Darsan() {
+  const f5Darsan = useCallback(() => {
     const data = uilchluulegchGaralt?.jagsaalt?.[0];
     const mur = data?.tuukh?.[0];
     if (!data) {
@@ -622,6 +603,25 @@ function camera({ token }) {
         message: "Төлбөр бодогдох боломжгүй",
         duration: 1,
       });
+  }, [uilchluulegchGaralt, modalNeelttei]);
+
+  // console.log("---------", uilchluulegchGaralt);
+
+  useKeyboardTovchlol("F4", f5Darsan);
+  useKeyboardTovchlol("F1", f3Darsan);
+  useKeyboardTovchlol("F2", f4Darsan);
+  useKeyboardTovchlol("F8", f8Darsan);
+  useKeyboardTovchlol("+", nemekhDarsan);
+  useKeyboardTovchlol("-", khasakhDarsan);
+
+  function f3Darsan() {
+    khaalgaNeey(camerVal[0]);
+    document.getElementById("neekhKhaalgaID").focus();
+  }
+
+  function f4Darsan() {
+    khaalgaNeey(camerVal[1]);
+    document.getElementById("khaakhkhaalgaID").focus();
   }
 
   function nemekhDarsan() {

@@ -148,6 +148,7 @@ function ShineTulbur(
   //Keyboard tovchlol ekhlel
 
   useKeyboardTovchlol("F4", f4Darsan);
+  useKeyboardTovchlol("F5", f5darsan);
 
   function f4Darsan() {
     if (tulbur.length === 0) {
@@ -157,6 +158,9 @@ function ShineTulbur(
     if (alkham === 1 && eBarimtAshiglakhEsekh === true) {
       eBarimtAutomataarShivikh ? ebarimtAvya(uilchluugchiinId) : setAlkham(2);
     }
+  }
+  function f5darsan() {
+    turulruuTooKhiikhFunction("khaan");
   }
   function ebarimtguiTulburDuusgakh() {
     ref.current.khaaya();
