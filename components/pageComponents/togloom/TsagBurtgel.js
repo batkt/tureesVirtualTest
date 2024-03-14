@@ -163,7 +163,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
         </Form.Item>
 
         <div className="flex gap-2">
-          <div>Тоголсон тоо:</div>
+          <div>{t("Тоглосон тоо")}:</div>
           <div>{togolsonToo}</div>
         </div>
       </div>

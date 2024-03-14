@@ -834,5 +834,7 @@
   "30 мин": "30 min",
   "Машины дугаар оруулна уу": "Enter car number",
   "Төлөв сонгоно уу": "Select type",
-  "Ирээдүйн огноогоор заалт оруулах боломжгүй!": "Can not enter future date!"
+  "Ирээдүйн огноогоор заалт оруулах боломжгүй!": "Can not enter future date!",
+  "Тоглосон тоо": "Recently played"
+
 }
