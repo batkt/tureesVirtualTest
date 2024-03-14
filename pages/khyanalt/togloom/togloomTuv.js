@@ -774,7 +774,12 @@ function togloom1() {
             toololt[0]?.tulsun +
             toololt[0]?.tuluugui +
             toololt[0]?.ekhlesen,
-        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.khuukhdiinToo,
+        KhuukdiinToo:
+          toololt?.length > 0 &&
+          toololt[0]?.tsutsalsanKhuukhed +
+            toololt[0]?.tulsunKhuukhed +
+            toololt[0]?.tuluuguKhuukhed +
+            toololt[0]?.ekhelsenKhuukhdiinToo,
         shuult: { tuluv: undefined },
       },
       {
