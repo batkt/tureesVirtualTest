@@ -805,7 +805,6 @@ function togloom1() {
         name: "Цуцлагдсан",
         too: formatNumber(toololt?.length > 0 ? toololt[0]?.tsutsalsan : 0, 0),
         KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.tsutsalsanKhuukhed,
-
         shuult: { tuluv: -1 },
       },
       {
