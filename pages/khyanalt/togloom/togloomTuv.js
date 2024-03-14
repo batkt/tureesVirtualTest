@@ -223,12 +223,10 @@ const DelegrenguiKharakh = React.forwardRef(
           return (
             <div
               className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
-              key={i}
-            >
+              key={i}>
               <div
                 style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 `}
-              >
+                className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 `}>
                 <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 " />
               </div>
               <img
@@ -289,8 +287,7 @@ const QrCodeAvakh = React.forwardRef(
       <div className="">
         <div
           ref={khevlekhRef}
-          className="flex h-full w-full flex-col items-center justify-center gap-5"
-        >
+          className="flex h-full w-full flex-col items-center justify-center gap-5">
           <div className="w-[80%] max-w-[400px] text-justify">
             <div>
               Эхлэх хугацаа: {moment(ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
@@ -436,8 +433,7 @@ const TsagSungakh = React.forwardRef(
             onChange={(v) => {
               setAsragch(v);
             }}
-            placeholder="Асран хамгаалагч"
-          >
+            placeholder="Асран хамгаалагч">
             {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Бусад"].map((a) => {
               return <Select.Option key={a}>{t(a)}</Select.Option>;
             })}
@@ -587,8 +583,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
       <div
         className={`bg-red-500 ${
           duussan === true && "animate-bounce-fast "
-        } cursor-default rounded-lg border font-medium text-white`}
-      >
+        } cursor-default rounded-lg border font-medium text-white`}>
         {t("Дууссан")}
       </div>
     );
@@ -599,8 +594,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
           timeLeft?.ekhlekhTsagBoloogui === true && (
             <div>{moment(data?.ekhlekhTsag).format("HH:mm")}-аас эхэлнэ</div>
           )
-        }
-      >
+        }>
         <div
           className={`${
             duussan === "duhsun"
@@ -608,8 +602,7 @@ function DuusakhTsagAvii({ v, data, onRefresh }) {
               : timeLeft?.ekhlekhTsagBoloogui === true
               ? "bg-blue-600"
               : "bg-green-500"
-          } cursor-default rounded-lg border font-medium text-white transition-colors`}
-        >
+          } cursor-default rounded-lg border font-medium text-white transition-colors`}>
           {FormatNumberLength(timeLeft.hours, 2)}:
           {FormatNumberLength(timeLeft.minutes, 2)}:
           {FormatNumberLength(timeLeft.seconds, 2)}
@@ -676,8 +669,7 @@ function togloom1() {
           {t("Цуцлах шалтгаан")}{" "}
           <div
             className="text-xl hover:text-red-400"
-            onClick={() => tailbarRef.current.khaaya()}
-          >
+            onClick={() => tailbarRef.current.khaaya()}>
             <CloseCircleOutlined />
           </div>
         </div>
@@ -716,8 +708,7 @@ function togloom1() {
           {t("Цаг сунгах")}
           <div
             className="text-xl hover:text-red-400"
-            onClick={() => sungakhRef.current.khaaya()}
-          >
+            onClick={() => sungakhRef.current.khaaya()}>
             <CloseCircleOutlined />
           </div>
         </div>
@@ -783,11 +774,14 @@ function togloom1() {
             toololt[0]?.tulsun +
             toololt[0]?.tuluugui +
             toololt[0]?.ekhlesen,
+        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.khuukhdiinToo,
         shuult: { tuluv: undefined },
       },
       {
         name: "Эхэлсэн",
         too: formatNumber(toololt?.length > 0 ? toololt[0]?.ekhlesen : 0, 0),
+        KhuukdiinToo:
+          toololt?.length > 0 && toololt?.[0]?.ekhelsenKhuukhdiinToo,
         shuult: {
           $and: [
             {
@@ -805,11 +799,15 @@ function togloom1() {
       {
         name: "Цуцлагдсан",
         too: formatNumber(toololt?.length > 0 ? toololt[0]?.tsutsalsan : 0, 0),
+        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.tsutsalsanKhuukhed,
+
         shuult: { tuluv: -1 },
       },
       {
         name: "Төлсөн",
         too: formatNumber(toololt?.length > 0 ? toololt[0]?.tulsun : 0, 0),
+        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.tulsunKhuukhed,
+
         shuult: {
           $and: [
             {
@@ -824,6 +822,8 @@ function togloom1() {
       {
         name: "Төлөөгүй",
         too: formatNumber(toololt?.length > 0 ? toololt[0].tuluugui : 0, 0),
+        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.tuluuguKhuukhed,
+
         shuult: {
           $and: [
             {
@@ -848,6 +848,8 @@ function togloom1() {
       {
         name: "Хөнгөлсөн",
         too: formatNumber(toololt?.length > 0 ? toololt[0]?.khungulsun : 0, 0),
+        KhuukdiinToo: toololt?.length > 0 && toololt?.[0]?.khungulsunKhuukhed,
+
         shuult: { khungulsunEsekh: true },
       },
     ],
@@ -873,8 +875,7 @@ function togloom1() {
             {data?.ovog?.charAt(0)}.{data?.ner}
             <div
               className="ml-5 text-xl hover:text-red-400"
-              onClick={() => tulburRef.current.khaaya()}
-            >
+              onClick={() => tulburRef.current.khaaya()}>
               <CloseCircleOutlined />
             </div>
           </div>
@@ -988,15 +989,13 @@ function togloom1() {
                   }
                 </div>
               )
-            }
-          >
+            }>
             <div
               className={`flex w-full cursor-default justify-center gap-2 px-3 font-medium text-white transition-colors ${
                 data?.khuukhdiinToo > 1
                   ? "bg-blue-500 hover:bg-blue-400"
                   : "bg-green-500 hover:bg-green-400"
-              } items-center rounded-md`}
-            >
+              } items-center rounded-md`}>
               <div className="w-full text-center">{data?.ner}</div>{" "}
               {data?.khuukhdiinToo > 1 ? (
                 <div className="px-1">{data.khuukhdiinToo}</div>
@@ -1075,8 +1074,7 @@ function togloom1() {
                     -{data?.tsutsalsanShaltgaan}
                   </div>
                 </div>
-              }
-            >
+              }>
               <div className="cursor-pointer rounded-lg border bg-gray-500 font-medium text-white">
                 {t("Цуцлагдсан")}
               </div>
@@ -1126,8 +1124,7 @@ function togloom1() {
                       <div className="font-medium">Тайлбар:</div>{" "}
                       <div className="text-center">{khunglukh?.tailbar}</div>
                     </div>
-                  }
-                >
+                  }>
                   <div className="flex w-full justify-center text-lg text-blue-500">
                     <EyeOutlined className="cursor-pointer" />
                   </div>
@@ -1149,8 +1146,7 @@ function togloom1() {
           <div className="flex w-full justify-center">
             <div
               onClick={() => qrKhevlekh(data?.duusakhTsag, data?.ekhlekhTsag)}
-              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 px-3 transition-all hover:bg-white hover:text-black dark:text-black"
-            >
+              className="cursor-pointer rounded-xl border-2 border-white bg-gray-200 p-1 px-3 transition-all hover:bg-white hover:text-black dark:text-black">
               <ImQrcode />
             </div>
           </div>
@@ -1179,8 +1175,7 @@ function togloom1() {
                 size="small"
                 // danger={data?.tuluv === "3"}
                 // icon={<DollarCircleOutlined className="text-white" />}
-                onClick={() => tulburTulyu(data)}
-              >
+                onClick={() => tulburTulyu(data)}>
                 {data?.tulburTulsunEsekh !== true ? (
                   <div className="flex items-center  justify-center space-x-2 text-white">
                     <div className="flex items-center justify-center">
@@ -1279,11 +1274,9 @@ function togloom1() {
                           }
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
-                          onConfirm={() => sungakh(data)}
-                        >
+                          onConfirm={() => sungakh(data)}>
                           <div
-                            className={`text-md cursor-pointer rounded-full bg-green-500 px-3 py-1 text-center font-medium text-gray-50`}
-                          >
+                            className={`text-md cursor-pointer rounded-full bg-green-500 px-3 py-1 text-center font-medium text-gray-50`}>
                             {t("Сунгах")}
                           </div>
                         </Popconfirm>
@@ -1297,11 +1290,9 @@ function togloom1() {
                             cancelText={t("Үгүй")}
                             onConfirm={() => {
                               tsutslakh(data);
-                            }}
-                          >
+                            }}>
                             <div
-                              className={`text-md cursor-pointer rounded-full bg-yellow-500 px-3 py-1 font-medium text-gray-50`}
-                            >
+                              className={`text-md cursor-pointer rounded-full bg-yellow-500 px-3 py-1 font-medium text-gray-50`}>
                               {t("Цуцлах")}
                             </div>
                           </Popconfirm>
@@ -1323,20 +1314,17 @@ function togloom1() {
                                 }
                               })
                               .finally(() => onRefresh())
-                          }
-                        >
+                          }>
                           <div
                             className={`text-md cursor-pointer rounded-full bg-${
                               3 === data?.tuluv ? "green" : "blue"
-                            }-500 px-3 py-1 font-medium text-gray-50`}
-                          >
+                            }-500 px-3 py-1 font-medium text-gray-50`}>
                             {3 === data?.tuluv ? t("Гарсан") : t("Гаргах")}
                           </div>
                         </Popconfirm>
                       )}
                     </div>
-                  )}
-                >
+                  )}>
                   <a className=" flex items-center justify-center  hover:scale-150">
                     <MoreOutlined style={{ fontSize: "18px" }} />
                   </a>
@@ -1392,8 +1380,7 @@ function togloom1() {
           {t("Хүүхдийн цаг бүртгэл")}{" "}
           <div
             className="text-xl hover:text-red-400"
-            onClick={() => mashinref.current.khaaya()}
-          >
+            onClick={() => mashinref.current.khaaya()}>
             <CloseCircleOutlined />
           </div>
         </div>
@@ -1438,8 +1425,7 @@ function togloom1() {
         }))
       }
       className="p-0 md:p-4"
-      tsonkhniiId={"64472c1628c37d7cdda11a3a"}
-    >
+      tsonkhniiId={"64472c1628c37d7cdda11a3a"}>
       <Card size="small" className="col-span-12 overflow-auto">
         <div className="hideScroll flex w-full gap-4 overflow-hidden overflow-x-auto border-solid py-3 sm:grid sm:grid-cols-6 sm:p-0 md:gap-6 2xl:grid-cols-12">
           {toololtGaralt.map((a, i) => (
@@ -1451,8 +1437,7 @@ function togloom1() {
               onClick={() => setTurul({ shuult: a.shuult, name: a.name })}
               data-aos="zoom-out-down"
               data-aos-duration="1000"
-              data-aos-delay={1 + i + "00"}
-            >
+              data-aos-delay={1 + i + "00"}>
               <div className="h-full w-[67vw] rounded-xl md:w-auto">
                 <div className="rounded-xl p-3">
                   <div className="flex flex-row items-center space-x-2">
@@ -1461,6 +1446,9 @@ function togloom1() {
                     </div>
                     <div className="text-base text-gray-500">
                       {t(`${a.name}`)}
+                    </div>
+                    <div className="text-base text-gray-500">
+                      /{a?.KhuukdiinToo || 0}/
                     </div>
                   </div>
                 </div>
@@ -1475,8 +1463,7 @@ function togloom1() {
             className="w-full items-center gap-3 xl:flex"
             data-aos="fade-right"
             data-aos-duration="1000"
-            data-aos-delay="100"
-          >
+            data-aos-delay="100">
             <DatePicker.RangePicker
               inputReadOnly
               className="w-full md:w-auto"
@@ -1487,8 +1474,7 @@ function togloom1() {
             />
             <div
               onClick={() => orlogiinDelegrengui(togloomiinDun?.toololt)}
-              className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
-            >
+              className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500">
               {t("Тоглоомын орлого")} :{" "}
               {!!togloomiinDun?.toololt
                 ? formatNumber(
@@ -1504,8 +1490,7 @@ function togloom1() {
             className="mb-5 flex w-full items-center justify-end md:mb-0 md:ml-auto"
             data-aos="fade-left"
             data-aos-duration="1000"
-            data-aos-delay="300"
-          >
+            data-aos-delay="300">
             <div className="grid w-full grid-cols-2 gap-2 sm:w-auto xl:flex">
               <Popover
                 open={khaaltPopoverNeegdsen}
@@ -1521,15 +1506,13 @@ function togloom1() {
                             khaaltNeey(a);
                             setKhaaltPopoverNeegdsen(false);
                           }}
-                          className="cursor-pointer select-none rounded-lg bg-green-300 p-2 dark:bg-gray-600 dark:text-gray-200"
-                        >
+                          className="cursor-pointer select-none rounded-lg bg-green-300 p-2 dark:bg-gray-600 dark:text-gray-200">
                           {t("Хаалт") + (index + 1)}
                         </div>
                       );
                     })}
                   </div>
-                }
-              >
+                }>
                 <Button type="primary">
                   <span>{t("Хаалт нээх")}</span>
                 </Button>
@@ -1537,8 +1520,7 @@ function togloom1() {
               <Button
                 className="col-span-2 w-full sm:w-auto"
                 type="primary"
-                onClick={() => khuukhedBurtgekh()}
-              >
+                onClick={() => khuukhedBurtgekh()}>
                 {t("Бүртгэл")} [ + ]
               </Button>
               <BaganiinSongolt
@@ -1619,8 +1601,7 @@ function togloom1() {
                                 );
                               })}
                             </div>
-                          )}
-                        >
+                          )}>
                           <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
                             <DollarTwoTone style={{ fontSize: "18px" }} />
                           </a>
@@ -1645,8 +1626,7 @@ function togloom1() {
                                 <div key={index}>{data}</div>
                               ))}
                             </div>
-                          }
-                        >
+                          }>
                           <div className="flex w-full justify-center text-lg text-blue-500">
                             <EyeOutlined className="cursor-pointer" />
                           </div>
@@ -1818,8 +1798,7 @@ function togloom1() {
                           order,
                           "Тоглоомын төв"
                         );
-                      }}
-                    >
+                      }}>
                       <DownloadOutlined style={{ fontSize: "18px" }} />
                       <label>{t("Татах")}</label>
                     </a>
@@ -1827,12 +1806,10 @@ function togloom1() {
                 )}
                 style={{ padding: 0 }}
                 placement="bottom"
-                trigger="click"
-              >
+                trigger="click">
                 <Button
                   type="primary"
-                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
-                >
+                  icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
                   <span>Excel</span>
                   <DownOutlined width={5} />
                 </Button>
@@ -1844,8 +1821,7 @@ function togloom1() {
           data-aos="fade-left"
           data-aos-duration="1000"
           data-aos-delay="300"
-          data-aos-anchor-placement="top-bottom"
-        >
+          data-aos-anchor-placement="top-bottom">
           <Table
             className="mt-8 hidden overflow-auto md:block"
             dataSource={togloominTuviinGaralt?.jagsaalt}
