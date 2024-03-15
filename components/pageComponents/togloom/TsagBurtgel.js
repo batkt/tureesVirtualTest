@@ -32,6 +32,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
   const [asragchiinToo, setAsragchiinToo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [bulegEsekh, setBulegEsekh] = useState(false);
+  const [togolsonToo, setTogolsonToo] = useState(0);
 
   useImperativeHandle(
     ref,
@@ -142,6 +143,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             form.setFieldValue("ner", data.ner);
             form.setFieldValue("nas", data.nas);
             form.setFieldValue("khuis", data.khuis);
+            setTogolsonToo(data?.togolsonToo);
           }
         });
     }
@@ -153,12 +155,18 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
       onFinish={onFinish}
       initialValues={data}
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 24 }}
-    >
+      wrapperCol={{ span: 24 }}>
       <Form.Item name="_id" noStyle />
-      <Form.Item label={t("Бүлэг хүүхэд")}>
-        <Switch checked={bulegEsekh} onChange={(v) => setBulegEsekh(v)} />
-      </Form.Item>
+      <div className="flex items-baseline justify-center gap-5">
+        <Form.Item labelCol={{ span: 17 }} label={t("Бүлэг хүүхэд")}>
+          <Switch checked={bulegEsekh} onChange={(v) => setBulegEsekh(v)} />
+        </Form.Item>
+
+        <div className="flex gap-2">
+          <div>{t("Тоглосон тоо")}:</div>
+          <div>{togolsonToo}</div>
+        </div>
+      </div>
 
       <Form.Item
         rules={[
@@ -174,8 +182,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
           },
         ]}
         label={t("Утас")}
-        name="utas"
-      >
+        name="utas">
         <Input
           maxLength={8}
           onKeyDown={focuser}
@@ -193,8 +200,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             },
           ]}
           label={t("Хүүхдийн тоо")}
-          name="khuukhdiinToo"
-        >
+          name="khuukhdiinToo">
           <InputNumber
             min={2}
             onKeyDown={focuser}
@@ -212,8 +218,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             },
           ]}
           label={t("Овог")}
-          name="ovog"
-        >
+          name="ovog">
           <Input
             onKeyDown={focuser}
             placeholder={t("Овог")}
@@ -229,8 +234,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
           },
         ]}
         label={t("Нэр")}
-        name="ner"
-      >
+        name="ner">
         <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
       {bulegEsekh === false && (
@@ -242,12 +246,10 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             },
           ]}
           label={t("Хүйс")}
-          name="khuis"
-        >
+          name="khuis">
           <Select
             onChange={() => form.getFieldInstance("nas").focus()}
-            placeholder={t("Хүйс")}
-          >
+            placeholder={t("Хүйс")}>
             {[
               { utga: "Эрэгтэй", v: 1 },
               { utga: "Эмэгтэй", v: 0 },
@@ -268,8 +270,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             },
           ]}
           label={t("Нас")}
-          name="nas"
-        >
+          name="nas">
           <InputNumber
             onKeyDown={focuser}
             className="w-40"
@@ -287,16 +288,14 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
           },
         ]}
         label={t("Асран хамгаалагч")}
-        name="asragchiinTurul"
-      >
+        name="asragchiinTurul">
         <Select
           mode="multiple"
           value={asragchiinToo}
           onChange={(v) => {
             setAsragchiinToo(v);
           }}
-          placeholder={t("Асран хамгаалагч")}
-        >
+          placeholder={t("Асран хамгаалагч")}>
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Багш", "Бусад"].map(
             (a) => {
               return <Select.Option key={a}>{a}</Select.Option>;
@@ -312,8 +311,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
           },
         ]}
         label={t("Тоглох цаг /Мин/")}
-        name="khugatsaa"
-      >
+        name="khugatsaa">
         <InputNumber
           max={moment()
             .endOf("day")
@@ -337,8 +335,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
           },
         ]}
         label={t("Эхлэх цаг")}
-        name="ekhlekhTsag"
-      >
+        name="ekhlekhTsag">
         <TimePicker
           value={tsag.ekhlekhtsag}
           className="w-40"
@@ -380,8 +377,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
             loading={loading}
             type="primary"
             id="khuukhedBurtgekhButtonId"
-            onClick={() => form.submit()}
-          >
+            onClick={() => form.submit()}>
             {t("Хадгалах")}
           </Button>
         </Space>
