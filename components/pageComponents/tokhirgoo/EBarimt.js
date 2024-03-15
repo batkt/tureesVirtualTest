@@ -78,6 +78,28 @@ function EBarimt({
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
                 <div className="font-medium">
+                  {t("И-Баримт автоматаар илгээх эсэх")}{" "}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  defaultChecked={
+                    baiguullaga?.tokhirgoo?.eBarimtAutomataarIlgeekh
+                  }
+                  onChange={(v) =>
+                    setGereeTokhirgoo((a) => ({
+                      ...(a || {}),
+                      eBarimtAutomataarIlgeekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
                   {t("Зогсоолын баримт дээр хэвлэгдэх нэр")}
                 </div>
               </div>
@@ -100,7 +122,8 @@ function EBarimt({
           <div
             className={`dark:border-dark-5 flex items-center justify-end border-b border-gray-200 px-5 pb-2 pt-2 ${
               !!gereeTokhirgoo ? "flex" : "hidden"
-            }`}>
+            }`}
+          >
             <Button type="primary" onClick={gereeTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
