@@ -1,10 +1,7 @@
 import { DatePicker, Select } from "antd";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import usezogsooliinUdriinTailan from "hooks/usezogsooliinUdriinTailan";
-import React, {
-  useMemo,
-  useState,
-} from "react";
+import React, { useMemo, useState } from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
@@ -344,12 +341,12 @@ export const getServerSideProps = async (ctx) => {
     let session = null;
     if (!!ctx?.query?.sessionId)
       session = await uilchilgee()
-        .get(`/session/${ctx?.query?.sessionId}`)
+        .get(`/sessionAvya/${ctx?.query?.sessionId}`)
         .then((a) => a.data);
     if (!session) {
       return {
         redirect: {
-          destination: "/khyanalt/zogsool/404",
+          destination: "/404",
           permanent: false,
         },
         props: {},
@@ -361,6 +358,15 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
+    if (error.response.data.aldaa === "Session олдсонгүй") {
+      return {
+        redirect: {
+          destination: "/404",
+          permanent: false,
+        },
+        props: {},
+      };
+    }
     return {
       redirect: {
         destination: "/",
