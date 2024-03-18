@@ -4,9 +4,6 @@ import usezogsooliinUdriinTailan from "hooks/usezogsooliinUdriinTailan";
 import React, { useMemo, useState } from "react";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
-import { useAjiltniiJagsaalt } from "hooks/useAjiltan";
-import { t } from "i18next";
-import { CloseCircleOutlined } from "@ant-design/icons";
 import uilchilgee from "services/uilchilgee";
 
 function TulburiinDelgerenguiTailan({ token }) {
@@ -32,9 +29,6 @@ function TulburiinDelgerenguiTailan({ token }) {
     undefined,
     query
   );
-  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(token);
-
-  console.log("ajilchdiinGaralt", ajilchdiinGaralt);
   const printRef = React.useRef(null);
 
   const tulburiinMedeelel = useMemo(() => {
@@ -254,31 +248,8 @@ function TulburiinDelgerenguiTailan({ token }) {
           onChange={setOgnoo}
           allowClear={false}
           locale={locale}
-          style={{ width: "50%" }}
+          style={{ width: "100%" }}
         />
-        <Select
-          id="ajiltanSongokhInput"
-          placeholder={t("Ажилтан")}
-          allowClear
-          clearIcon={() => (
-            <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
-              <CloseCircleOutlined />
-            </div>
-          )}
-          style={{ width: "50%" }}
-          onChange={(e) => setSongogdsonAjiltan(e)}
-        >
-          {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
-            <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
-              <div className="flex flex-row justify-between">
-                <span className="truncate">
-                  {mur.ovog && mur.ovog[0]}.{mur.ner}
-                </span>
-                <span>{mur.register}</span>
-              </div>
-            </Select.Option>
-          ))}
-        </Select>
       </div>
       {tulburiinMedeelel.length > 0 ? (
         <div className="mt-5 space-y-3">
@@ -358,6 +329,7 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   } catch (error) {
+    console.log("error");
     if (error.response.data.aldaa === "Session олдсонгүй") {
       return {
         redirect: {
