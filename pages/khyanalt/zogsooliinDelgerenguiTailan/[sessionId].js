@@ -227,7 +227,7 @@ function TulburiinDelgerenguiTailan({ token }) {
   }, [zogsoolTulburMedeelel]);
 
   return (
-    <div>
+    <div className="mx-2">
       <div className="hidden">
         <div className="p-6" ref={printRef}>
           {tulburiinMedeelel.map((a, i) => {
