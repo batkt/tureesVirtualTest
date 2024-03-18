@@ -192,7 +192,7 @@ export const tsonknuud = [
     tokhirgoo: [],
   },
   {
-    key: "/khyanalt/zogloosiinDelgerenguiTailan",
+    key: "/khyanalt/zogsooliinDelgerenguiTailan",
     ner: "Зогсоолын тайлан",
     tokhirgoo: [],
   },
@@ -783,8 +783,8 @@ export const khuudasnuud = [
   },
   {
     ner: "Зогсоолын тайлан",
-    khuudasniiNer: "zogloosiinDelgerenguiTailan",
-    href: "/khyanalt/zogloosiinDelgerenguiTailan",
+    khuudasniiNer: "zogsooliinDelgerenguiTailan",
+    href: "/khyanalt/zogsooliinDelgerenguiTailan",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
