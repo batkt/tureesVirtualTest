@@ -66,6 +66,15 @@ function TulburiinDelgerenguiTailan({ token }) {
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "khungulult":
+            ugugdul.push({
+              ner: "Хөнгөлөлт",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
           case "khaan":
             ugugdul.push({
               ner: "Карт", //tur cart bolgiy Хаан банк
