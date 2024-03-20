@@ -1973,7 +1973,17 @@ function camera({ token }) {
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
-                  <Stream1 ip={camerVal[0]} />
+                  camerVal[0] === "192.168.2.75" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"stream"}
+                      PASSWD={"123456"}
+                      Camer={camerVal[0]}
+                      PORT={554}
+                    />
+                  ) : (
+                    <Stream1 ip={camerVal[0]} />
+                  )
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent
                     USER={"admin"}
