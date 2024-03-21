@@ -30,15 +30,8 @@ function BarilgiinTokhirgoo({
     [songogdsonBarilga]
   );
 
-  console.log(baiguullaga, "baiguullaga");
-
-  console.log(songogdsonBarilga, "songogdsonBarilga");
-
-  console.log(barilga, "barilga");
-
   useEffect(() => {
     if (barilga) {
-      console.log(barilga, "rbhrbrb");
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
         aldangiBodojEkhlekhOgnoo: barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo
@@ -57,8 +50,6 @@ function BarilgiinTokhirgoo({
     }
   }, [barilga, songogdsonBarilga]);
 
-  console.log(barilgaTokhirgoo, "barilgaTokhirgoobarilgaTokhirgoo");
-
   const barilgaTokhirgooKhadgalya = () => {
     const yavuulakhData = { ...baiguullaga };
     const barilguudCopy = [...yavuulakhData?.barilguud];
@@ -73,7 +64,6 @@ function BarilgiinTokhirgoo({
       };
       barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
       yavuulakhData.barilguud = barilguudCopy;
-      console.log(yavuulakhData, "yavuulakhData");
       uilchilgee(token)
         .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
         .then(({ data }) => {
