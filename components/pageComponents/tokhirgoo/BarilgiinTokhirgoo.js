@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Button, DatePicker, InputNumber, notification, Select } from "antd";
+import {
+  Button,
+  DatePicker,
+  InputNumber,
+  notification,
+  Select,
+  Switch,
+  Input,
+} from "antd";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
@@ -16,20 +24,40 @@ function BarilgiinTokhirgoo({
     barilgiinId || null
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
+
   const barilga = useMemo(
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
     [songogdsonBarilga]
   );
+
+  console.log(baiguullaga, "baiguullaga");
+
+  console.log(songogdsonBarilga, "songogdsonBarilga");
+
+  console.log(barilga, "barilga");
+
   useEffect(() => {
     if (barilga) {
+      console.log(barilga, "rbhrbrb");
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
         aldangiBodojEkhlekhOgnoo: barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo
           ? moment(barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo)
           : undefined,
+        eBarimtAshiglakhEsekh: barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
+          ? barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
+          : undefined,
+        eBarimtAutomataarIlgeekh: barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
+          ? barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
+          : undefined,
+        nuatTulukhEsekh: barilga?.tokhirgoo?.nuatTulukhEsekh
+          ? barilga?.tokhirgoo?.nuatTulukhEsekh
+          : undefined,
       });
     }
-  }, [barilga]);
+  }, [barilga, songogdsonBarilga]);
+
+  console.log(barilgaTokhirgoo, "barilgaTokhirgoobarilgaTokhirgoo");
 
   const barilgaTokhirgooKhadgalya = () => {
     const yavuulakhData = { ...baiguullaga };
@@ -45,10 +73,11 @@ function BarilgiinTokhirgoo({
       };
       barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
       yavuulakhData.barilguud = barilguudCopy;
+      console.log(yavuulakhData, "yavuulakhData");
       uilchilgee(token)
         .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
         .then(({ data }) => {
-          if (data === "Amjilttai") {   
+          if (data === "Amjilttai") {
             notification.success({
               message: "Амжилттай хадгалагдлаа",
               duration: 2,
@@ -172,6 +201,65 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("И-Баримт ашиглах эсэх")}</div>
+                <div className="text-gray-600"></div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={barilgaTokhirgoo?.eBarimtAshiglakhEsekh}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      eBarimtAshiglakhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">
+                  {t("И-Баримт автоматаар илгээх эсэх")}{" "}
+                </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={barilgaTokhirgoo?.eBarimtAutomataarIlgeekh}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      eBarimtAutomataarIlgeekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("И-Баримт нөат эсэх")} </div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={barilgaTokhirgoo?.nuatTulukhEsekh}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      nuatTulukhEsekh: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!barilgaTokhirgoo ? "flex" : "hidden"

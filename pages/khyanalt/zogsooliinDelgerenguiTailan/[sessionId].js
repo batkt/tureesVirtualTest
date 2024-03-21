@@ -9,8 +9,8 @@ import uilchilgee from "services/uilchilgee";
 function TulburiinDelgerenguiTailan({ token }) {
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
   const [ognoo, setOgnoo] = useState([
-    moment().startOf("day"),
-    moment().endOf("day"),
+    moment().subtract(1, "days").startOf("day"),
+    moment().subtract(1, "days").endOf("day"),
   ]);
 
   const query = useMemo(() => {

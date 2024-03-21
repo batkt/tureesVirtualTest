@@ -330,6 +330,11 @@ function camera({ token }) {
   }, [parkingJagsaalt, camerVal]);
 
   console.log("songogdsonZogsool", songogdzonZogsool);
+  console.log(
+    baiguullaga?.barilguud?.find((e) => e._id === barilgiinId)?.tokhirgoo
+      ?.eBarimtAshiglakhEsekh,
+    "eeee"
+  );
 
   const query = useMemo(() => {
     let result = {};
@@ -732,7 +737,10 @@ function camera({ token }) {
           camerVal={camerVal[1]}
           ref={tulburRef}
           data={_.cloneDeep(data)}
-          eBarimtAshiglakhEsekh={baiguullaga?.tokhirgoo?.eBarimtAshiglakhEsekh}
+          eBarimtAshiglakhEsekh={
+            baiguullaga?.barilguud?.find((e) => e._id === barilgiinId)
+              ?.tokhirgoo?.eBarimtAshiglakhEsekh
+          }
           eBarimtAutomataarShivikh={
             baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
           }
