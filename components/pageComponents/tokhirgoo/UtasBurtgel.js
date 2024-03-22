@@ -6,6 +6,7 @@ import {
   Modal,
   Radio,
   Button,
+  Select,
   Space,
   Input,
   Switch,
@@ -107,6 +108,7 @@ function UtasBurtgel(
     var medegdelTokhirgoo = {
       msgAvakhTurul,
       msgAvakhDugaar: utasnuudArray,
+      msgAvakhTsag: formValues.msgAvakhTsag,
     };
     uilchilgee(token)
       .post("/baiguullagaTokhirgooZasya", { tokhirgoo: medegdelTokhirgoo })
@@ -184,6 +186,20 @@ function UtasBurtgel(
           </div>
         )}
       </Form.List>
+      <div className="flex !max-h-[300px] w-full justify-center !overflow-auto">
+        <Form.Item
+          style={{ minWidth: "320px" }}
+          label={t("Хүлээн авах цаг")}
+          name="msgAvakhTsag"
+        >
+          <Select placeholder="Хүлээн авах цаг" defaultValue={"09:30"}>
+            <Select.Option key={"07:00"}>{"07:00"}</Select.Option>
+            <Select.Option key={"09:30"}>{"09:30"}</Select.Option>
+            <Select.Option key={"20:00"}>{"20:00"}</Select.Option>
+            <Select.Option key={"22:00"}>{"22:00"}</Select.Option>
+          </Select>
+        </Form.Item>
+      </div>
       <div className="flex flex-wrap gap-2 sm:justify-center">
         <Form.Item label={"Системд бүртгэгдсэн дүн"} name={"system"}>
           <Switch
