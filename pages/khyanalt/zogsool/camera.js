@@ -480,7 +480,6 @@ function camera({ token }) {
     setCameraData([a1, a2]);
   }, [jagsaalt]);
 
-  
   useEffect(() => {
     socket().on(`zogsool${baiguullaga?._id}`, (zogsool) => {
       let uilchluulegch = zogsool;
@@ -510,11 +509,11 @@ function camera({ token }) {
             Г: "G",
             Д: "D",
             Е: "E",
-            Ё: "YO",
-            Ж: "ZH",
+            Ё: "Yo",
+            Ж: "J",
             З: "Z",
             И: "I",
-            Й: "Y",
+            Й: "I",
             К: "K",
             Л: "L",
             М: "M",
@@ -526,19 +525,17 @@ function camera({ token }) {
             С: "S",
             Т: "T",
             У: "U",
-            Ү: "U",
+            Ү: "Y",
             Ф: "F",
             Х: "KH",
             Ц: "TS",
             Ч: "CH",
             Ш: "SH",
-            Щ: "SHCH",
-            Ы: "Y",
+            Ы: "I",
             Э: "E",
-            Ю: "YU",
-            Я: "YA",
+            Ю: "Yu",
+            Я: "Ya",
           };
-
           function usegHorvuuleh(mongolTemdeg) {
             let angliTemdeg = "";
             for (let i = 0; i < mongolTemdeg.length; i++) {
@@ -549,25 +546,20 @@ function camera({ token }) {
             }
             return angliTemdeg;
           }
-
-          const mongolianCarNumber = yanzalsanMashiniiDugaar || "";
-          const angliCarNumber = usegHorvuuleh(mongolianCarNumber);
-          console.log(angliCarNumber, "test hiij baina");
-          axios
-            .get(
-              `http://localhost:5000/api/sambar/${garsanKhaalga}/${
-                angliCarNumber || yanzalsanMashiniiDugaar
-              }/${yanzalsanNiitDun}`
-            )
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
+          yanzalsanMashiniiDugaar = usegHorvuuleh(yanzalsanMashiniiDugaar);
         }
+        axios
+          .get(
+            `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
+          )
+          .then((res) => {
+            if (res) {
+              console.log("amjilttai:", res);
+            }
+          })
+          .catch((err) => {
+            console.log("aldaa:", err);
+          });
 
         if (
           !!uilchluulegch?.khaalgaTurul &&
