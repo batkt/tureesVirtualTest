@@ -486,7 +486,7 @@ function camera({ token }) {
 
       if (uilchluulegch) {
         const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
-        const yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
+        var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
           "???",
           ""
         );
