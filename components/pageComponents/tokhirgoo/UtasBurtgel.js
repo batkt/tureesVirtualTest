@@ -126,16 +126,14 @@ function UtasBurtgel(
       style={{ width: "100%" }}
       form={form}
       onFinish={onFinish}
-      initialValues={data}
-      autoComplete={"off"}
-    >
+      initialValues={baiguullaga?.tokhirgoo}
+      autoComplete={"off"}>
       <Form.List name="utasnuud">
         {(fields, { add, remove }) => (
           <div className="flex flex-col gap-2">
             <div
               className="!max-h-[300px] !overflow-auto"
-              style={{ width: "100%" }}
-            >
+              style={{ width: "100%" }}>
               {fields.map(({ key, name, ...restField }) => (
                 <Space
                   width={"100%"}
@@ -146,8 +144,7 @@ function UtasBurtgel(
                     justifyContent: "center",
                     marginBottom: 8,
                   }}
-                  align="baseline"
-                >
+                  align="baseline">
                   <Form.Item
                     style={{ minWidth: "293px" }}
                     {...restField}
@@ -157,8 +154,7 @@ function UtasBurtgel(
                         required: true,
                         message: "Утасны дугаар оруулаагүй байна.",
                       },
-                    ]}
-                  >
+                    ]}>
                     <InputNumber
                       maxLength={8}
                       style={{
@@ -178,8 +174,7 @@ function UtasBurtgel(
                 type="dashed"
                 onClick={() => add()}
                 // block
-                icon={<PlusOutlined className="text-black dark:text-white" />}
-              >
+                icon={<PlusOutlined className="text-black dark:text-white" />}>
                 <div className="text-black dark:text-white">Дугаар нэмэх</div>
               </Button>
             </Form.Item>
@@ -190,9 +185,8 @@ function UtasBurtgel(
         <Form.Item
           style={{ minWidth: "320px" }}
           label={t("Хүлээн авах цаг")}
-          name="msgAvakhTsag"
-        >
-          <Select placeholder="Хүлээн авах цаг" defaultValue={"09:30"}>
+          name="msgAvakhTsag">
+          <Select placeholder="Хүлээн авах цаг">
             <Select.Option key={"07:00"}>{"07:00"}</Select.Option>
             <Select.Option key={"09:30"}>{"09:30"}</Select.Option>
             <Select.Option key={"20:00"}>{"20:00"}</Select.Option>

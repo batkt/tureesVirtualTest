@@ -78,7 +78,7 @@ function TulburiinDelgerenguiTailan(
         switch (element?._id) {
           case "khariltsakh":
             ugugdul.push({
-              ner: "Харилцах",
+              ner: "Дансаар",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -106,7 +106,8 @@ function TulburiinDelgerenguiTailan(
           case "khungulult":
             ugugdul.push({
               ner: "Хөнгөлөлт",
-              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              icon: "/discount.png",
+              // icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -124,7 +125,7 @@ function TulburiinDelgerenguiTailan(
           case "tdb":
             ugugdul.push({
               ner: "TDB банк",
-              icon: "https://tz.mn/storage/uploads/slider/45adc5a14070aa.jpg",
+              icon: "/tdb.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -241,7 +242,8 @@ function TulburiinDelgerenguiTailan(
           case "tseneglelt":
             ugugdul.push({
               ner: "Цэнэглэлт",
-              icon: "/eWalletIcon.png",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+              // icon: "/eWalletIcon.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -334,8 +336,7 @@ function TulburiinDelgerenguiTailan(
             </div>
           )}
           style={{ width: "50%" }}
-          onChange={(e) => setSongogdsonAjiltan(e)}
-        >
+          onChange={(e) => setSongogdsonAjiltan(e)}>
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
             <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
               <div className="flex flex-row justify-between">
@@ -354,12 +355,10 @@ function TulburiinDelgerenguiTailan(
             return (
               <div
                 className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
-                key={i}
-              >
+                key={i}>
                 <div
                   style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
-                >
+                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}>
                   <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
                 </div>
                 <img
