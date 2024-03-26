@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
+  var reset = false;
+  var umnukhUtga = false;
   const rtspUrl = useMemo(() => {
     if (USER && PASSWD) {
       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
@@ -13,6 +15,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
+    umnukhUtga = reset;
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
@@ -20,6 +23,9 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       logEnabled: true,
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
+        if (state == "failed") {
+          reset = !umnukhUtga;
+        }
       },
       style: {
         controls: nemelteer ? true : false,
@@ -33,7 +39,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
         newPlayer.destroy();
       }
     };
-  }, [Camer]);
+  }, [Camer, reset]);
 
   useEffect(() => {
     if (Camer && player) {
