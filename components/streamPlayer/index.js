@@ -2,8 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
-  var reset = false;
-  var umnukhUtga = false;
+  const [reset, setReset] = useState(false);
   const rtspUrl = useMemo(() => {
     if (USER && PASSWD) {
       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
