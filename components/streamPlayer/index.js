@@ -24,7 +24,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
         if (state == "failed") {
-          reset = !umnukhUtga;
+          this.reset = !this.umnukhUtga;
         }
       },
       style: {
