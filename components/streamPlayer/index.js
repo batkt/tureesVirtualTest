@@ -15,7 +15,6 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    umnukhUtga = reset;
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
@@ -23,8 +22,8 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       logEnabled: true,
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
-        if (state == "failed") {
-          this.reset = !this.umnukhUtga;
+        if (state === "failed") {
+          setReset(true);
         }
       },
       style: {
@@ -45,7 +44,14 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
     if (Camer && player) {
       player.play(rtspUrl);
     }
-  }, [Camer, player]);
+  }, [Camer, player, rtspUrl]);
+
+  useEffect(() => {
+    if (reset && player) {
+      player.reset();
+      setReset(false);
+    }
+  }, [reset, player]);
 
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 }
