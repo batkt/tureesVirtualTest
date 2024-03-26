@@ -500,7 +500,7 @@ function camera({ token }) {
               0
             );
         }
-
+        if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
         if (barilgiinId === "656f2b5ca87f871379b2ba99") {
           const horvuulehUseg = {
             А: "A",
