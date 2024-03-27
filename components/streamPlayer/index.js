@@ -21,9 +21,9 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       logEnabled: true,
       onconnectionstatechange: (state) => {
         console.log("tuluv:", state);
-        if (state === "failed") {
-          setReset(true);
-        }
+        // if (state === "failed") {
+        //   setReset(true);
+        // }
       },
       style: {
         controls: nemelteer ? true : false,
@@ -48,7 +48,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   useEffect(() => {
     if (reset && player) {
       player.reset();
-      setReset(false);
+      //setReset(false);
     }
   }, [reset, player]);
 
