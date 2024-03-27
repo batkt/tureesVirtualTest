@@ -2138,7 +2138,7 @@ function camera({ token }) {
               >
                 {/*baiguullagiin id ni FoodCity.iin id */}
                 {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
-                  camerVal[1] === "192.168.2.75" ? (
+                  camerVal[1] === "192.168.2.76" ? (
                     <R2WPlayerComponent
                       USER={"admin"}
                       ROOT={"stream"}
