@@ -485,82 +485,6 @@ function camera({ token }) {
       let uilchluulegch = zogsool;
 
       if (uilchluulegch) {
-        const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
-        var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
-          "???",
-          ""
-        );
-        let yanzalsanNiitDun = uilchluulegch?.niitDun;
-        if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
-          yanzalsanNiitDun =
-            uilchluulegch?.niitDun -
-            uilchluulegch?.tuukh?.reduce(
-              (sav, niit) =>
-                sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
-              0
-            );
-        }
-        if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
-        if (barilgiinId === "656f2b5ca87f871379b2ba99") {
-          const horvuulehUseg = {
-            А: "A",
-            Б: "B",
-            В: "V",
-            Г: "G",
-            Д: "D",
-            Е: "E",
-            Ё: "Yo",
-            Ж: "J",
-            З: "Z",
-            И: "I",
-            Й: "I",
-            К: "K",
-            Л: "L",
-            М: "M",
-            Н: "N",
-            О: "O",
-            Ө: "O",
-            П: "P",
-            Р: "R",
-            С: "S",
-            Т: "T",
-            У: "U",
-            Ү: "Y",
-            Ф: "F",
-            Х: "KH",
-            Ц: "TS",
-            Ч: "CH",
-            Ш: "SH",
-            Ы: "I",
-            Э: "E",
-            Ю: "Yu",
-            Я: "Ya",
-          };
-          function usegHorvuuleh(mongolTemdeg) {
-            let angliTemdeg = "";
-            for (let i = 0; i < mongolTemdeg.length; i++) {
-              const mongolUseg = mongolTemdeg[i];
-              const angliUseg =
-                horvuulehUseg[mongolUseg.toUpperCase()] || mongolUseg;
-              angliTemdeg += angliUseg;
-            }
-            return angliTemdeg;
-          }
-          yanzalsanMashiniiDugaar = usegHorvuuleh(yanzalsanMashiniiDugaar);
-        }
-        axios
-          .get(
-            `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
-          )
-          .then((res) => {
-            if (res) {
-              console.log("amjilttai:", res);
-            }
-          })
-          .catch((err) => {
-            console.log("aldaa:", err);
-          });
-
         if (
           !!uilchluulegch?.khaalgaTurul &&
           uilchluulegch?.khaalgaTurul === "oroh" &&
@@ -568,29 +492,60 @@ function camera({ token }) {
         ) {
           console.log("orohKhaalga", uilchluulegch?.cameraIP);
           khaalgaNeey(uilchluulegch?.cameraIP);
-        }
-        onRefresh();
-        if (
-          uilchluulegch?.turul === "Үнэгүй" ||
-          // (uilchluulegch?.tuukh &&
-          //   uilchluulegch?.tuukh?.length > 0 &&
-          // dunTuluv &&
-          uilchluulegch?.niitDun === 0
-          // )
-        ) {
+          onRefresh();
+        } else {
+          const garsanKhaalga = uilchluulegch?.tuukh?.[0]?.garsanKhaalga;
+          var yanzalsanMashiniiDugaar = uilchluulegch?.mashiniiDugaar?.replace(
+            "???",
+            ""
+          );
+          let yanzalsanNiitDun = uilchluulegch?.niitDun;
+          if (uilchluulegch?.tuukh?.[0]?.tulbur?.length > 0) {
+            yanzalsanNiitDun =
+              uilchluulegch?.niitDun -
+              uilchluulegch?.tuukh?.reduce(
+                (sav, niit) =>
+                  sav + niit?.tulbur?.reduce((a, b) => a + b?.dun, 0),
+                0
+              );
+          }
+          if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
+          axios
+            .get(
+              `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`
+            )
+            .then((res) => {
+              if (res) {
+                console.log("amjilttai:", res);
+              }
+            })
+            .catch((err) => {
+              console.log("aldaa:", err);
+            });
+
+          onRefresh();
           if (
-            uilchluulegch?.tuukh &&
-            uilchluulegch?.tuukh?.length > 0 &&
-            !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
+            uilchluulegch?.turul === "Үнэгүй" ||
+            // (uilchluulegch?.tuukh &&
+            //   uilchluulegch?.tuukh?.length > 0 &&
+            // dunTuluv &&
+            uilchluulegch?.niitDun === 0
+            // )
           ) {
-            console.log(
-              "garakhHkaalga",
-              uilchluulegch?.tuukh?.[0]?.garsanKhaalga
-            );
-            toololtMutate();
-            zogsoolTusBuriinTooMutate();
-            if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
-              khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
+            if (
+              uilchluulegch?.tuukh &&
+              uilchluulegch?.tuukh?.length > 0 &&
+              !!uilchluulegch?.tuukh?.[0]?.garsanKhaalga
+            ) {
+              console.log(
+                "garakhHkaalga",
+                uilchluulegch?.tuukh?.[0]?.garsanKhaalga
+              );
+              toololtMutate();
+              zogsoolTusBuriinTooMutate();
+              if (songogdzonZogsool?.garakhKhaalgaGarTokhirgoo !== true) {
+                khaalgaNeey(uilchluulegch?.tuukh?.[0]?.garsanKhaalga);
+              }
             }
           }
         }
