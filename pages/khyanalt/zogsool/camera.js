@@ -511,11 +511,11 @@ function camera({ token }) {
           }
           if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
           var url = `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
-          if (baiguullagiinId == "65cf2f027fbc788f85e50b90") {
-            var ekhlekhOgnoo = moment(uilchluulegch.createdAt).format(
-              "YYYY-MM-DD HH:mm"
+          if (baiguullaga?._id == "65cf2f027fbc788f85e50b90") {
+            var ekhlekhOgnoo = moment(uilchluulegch?.createdAt).format(
+              "YYYY-MM-DD HH:mm:ss"
             );
-            var duusakhOgnoo = moment().format("YYYY-MM-DD HH:mm");
+            var duusakhOgnoo = moment().format("YYYY-MM-DD HH:mm:ss");
             url = `http://localhost:5000/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
           }
 
