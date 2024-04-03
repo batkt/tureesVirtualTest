@@ -214,6 +214,15 @@ function tulburKhurvuulekh(v) {
     case "qpayUridchilsan":
       utga = "QPay QR";
       break;
+    case "PosBelen":
+      utga = "Pos бэлэн";
+      break;
+    case "PosCard":
+      utga = "Pos карт";
+      break;
+    case "PosKhariltsakh":
+      utga = "Pos харилцах";
+      break;
     default:
       utga = v;
       break;
