@@ -54,7 +54,9 @@ function TulburiinDelgerenguiTailan({ token }) {
             case "khariltsakh":
               ugugdul.push({
                 ner: "Дансаар",
-                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+
+                // icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
                 dun: element.niitDun,
                 too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -218,6 +220,39 @@ function TulburiinDelgerenguiTailan({ token }) {
               ugugdul.push({
                 ner: "Цэнэглэлт",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+              });
+              break;
+
+            case "PosBelen":
+              ugugdul.push({
+                ner: "Pos бэлэн",
+                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+              });
+              break;
+
+            case "PosCard":
+              ugugdul.push({
+                ner: "Pos карт",
+                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+              });
+              break;
+
+            case "PosKhariltsakh":
+              ugugdul.push({
+                ner: "Pos харилцах",
+                icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
                 // icon: "/eWalletIcon.png",
                 dun: element.niitDun,
                 too: element.niitToo,
