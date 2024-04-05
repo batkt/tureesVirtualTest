@@ -323,8 +323,6 @@ function ZakhialgiinKhyanalt() {
     });
   }, [shineBagana]);
 
-  console.log(excelNemekhCol, "excelNemekhCol");
-
   const sheet = [
     // {
     //   title: t("Бүртгэсэн"),
