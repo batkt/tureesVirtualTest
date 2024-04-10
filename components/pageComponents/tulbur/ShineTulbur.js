@@ -76,6 +76,10 @@ function ShineTulbur(
     niitDun?.toString() -
       (data?.tulbur?.length > 0 && data?.tulbur?.reduce((a, b) => a + b.dun, 0))
   );
+
+
+
+
   const khungulultAnkhOrjIrsen = useMemo(() => {
     let orjIrsen = false;
     if (
@@ -277,6 +281,9 @@ function ShineTulbur(
       a.zogsooliinId = data?.zogsooliinId;
     });
     const tulukhGejBuiNiitDun = tulbur.reduce((a, b) => a + b?.dun, 0);
+
+    console.log(data,"datadatadata")
+
 
     if (tulukhGejBuiNiitDun !== niitDun) {
       setLoading(false);
@@ -503,7 +510,7 @@ function ShineTulbur(
         }
         tulbur.push({ ...undsenModel, turul: v, dun: tuljBuiDun });
         const uldegdelTulukhDun = tulukhDun - tuljBuiDun;
-        setTurulruuKhiikhDun(uldegdelTulukhDun);
+        setTurulruuKhiikhDun(uldegdelTulukhDun <= 0 ? 0 : uldegdelTulukhDun);
       }
       setRefreshdekhEsekh(true);
       setTulbur([...tulbur]);

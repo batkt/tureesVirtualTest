@@ -974,13 +974,9 @@ function ShineTogloomTulbur(
                     : "Дутуу:"}
                 </div>
                 <div>
+
                   {formatNumber(
-                    parseInt(turulruuKhiikhDun) -
-                      (data?.dutuuDun
-                        ? data?.dutuuDun
-                        : data?.niitDun -
-                          tulbur.reduce((a, b) => a + b.dun, 0)) || 0
-                  )}
+                    parseInt(turulruuKhiikhDun) )}
                   ₮
                 </div>
               </div>
