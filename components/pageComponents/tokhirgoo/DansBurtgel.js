@@ -28,7 +28,6 @@ function DansBurtgel(
   const [bank, setBank] = useState(data?.bank);
   const { dansGaralt } = useDans(token, baiguullagiinId);
 
-  console.log("dansGaralt", dansGaralt);
 
   function garya() {
     const values = form.getFieldsValue();

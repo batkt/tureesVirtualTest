@@ -1039,6 +1039,7 @@ function ShineTulbur(
                     : "Дутуу:"}
                 </div>
                 <div>
+                  {console.log(turulruuKhiikhDun,"turulruuKhiikhDun")}
                   {formatNumber(
                     parseInt(turulruuKhiikhDun) -
                       (niitDun - tulbur.reduce((a, b) => a + b.dun, 0)) || 0
