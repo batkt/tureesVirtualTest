@@ -60,6 +60,7 @@ import axios from "axios";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import TogloomTile from "components/pageComponents/togloom/TogloomTile";
 import ShineTogloomTulbur from "components/pageComponents/togloomiinTuv/ShineTogloomTulbur";
+import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 
 const DelegrenguiKharakh = React.forwardRef(
   ({ data, destroy, confirm }, ref) => {
@@ -870,6 +871,65 @@ function togloom1() {
     setShineBagana([]);
   }, [i18n.language]);
 
+  // function tulburTulyu(data) {
+  //   modal({
+  //     title: (
+  //       <div className="flex w-full flex-row justify-between dark:text-gray-200">
+  //         <div>{t("Тооцоо хийх")}</div>
+  //         <div className="flex items-center">
+  //           {mashiniiDugaar}
+  //           <div
+  //             className="ml-5 text-xl hover:text-red-400"
+  //             onClick={() => tulburRef.current.khaaya()}>
+  //             <CloseCircleOutlined />
+  //           </div>
+  //         </div>
+  //       </div>
+  //     ),
+  //     style: { top: 25 },
+  //     content: (
+  //       <ShineTulbur
+  //         suuliikhEsekh={index === 0}
+  //         niitDun={niitDun}
+  //         camerVal={camerVal[1]}
+  //         ref={tulburRef}
+  //         data={_.cloneDeep(data)}
+  //         eBarimtAshiglakhEsekh={
+  //           baiguullaga?.barilguud?.find((e) => e._id === barilgiinId)
+  //             ?.tokhirgoo?.eBarimtAshiglakhEsekh
+  //         }
+  //         eBarimtAutomataarShivikh={
+  //           baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
+  //         }
+  //         token={token}
+  //         baiguullaga={baiguullaga}
+  //         barilgiinId={barilgiinId}
+  //         ajiltan={ajiltan}
+  //         uilchluugchiinId={uilchluugchiinId}
+  //         onRefresh={onRefresh}
+  //         setModalNeelttei={setModalNeelttei}
+  //         songogdsonZogsool={songogdzonZogsool}
+  //       />
+  //       // <Tulbur
+  //       //   suuliikhEsekh={index === 0}
+  //       //   niitDun={niitDun}
+  //       //   camerVal={camerVal[1]}
+  //       //   ref={tulburRef}
+  //       //   data={_.cloneDeep(data)}
+  //       //   token={token}
+  //       //   baiguullaga={baiguullaga}
+  //       //   barilgiinId={barilgiinId}
+  //       //   ajiltan={ajiltan}
+  //       //   uilchluugchiinId={uilchluugchiinId}
+  //       //   onRefresh={onRefresh}
+  //       //   setModalNeelttei={setModalNeelttei}
+  //       // />
+  //     ),
+  //     footer: false,
+  //     className: "!w-fit",
+  //   });
+  // }
+
   function tulburTulyu(data) {
     modal({
       title: (
@@ -886,18 +946,9 @@ function togloom1() {
         </div>
       ),
       // style: { top: 25 },
-      // className: "!w-fit",
+      className: "!w-fit",
       content: (
-        // <ShineTogloomTulbur
-        //   ref={tulburRef}
-        //   data={_.cloneDeep(data)}
-        //   token={token}
-        //   baiguullaga={baiguullaga}
-        //   barilgiinId={barilgiinId}
-        //   ajiltan={ajiltan}
-        //   onRefresh={onRefresh}
-        // />
-        <Tulbur
+        <ShineTogloomTulbur
           ref={tulburRef}
           data={_.cloneDeep(data)}
           token={token}
@@ -906,6 +957,15 @@ function togloom1() {
           ajiltan={ajiltan}
           onRefresh={onRefresh}
         />
+        // <Tulbur
+        //   ref={tulburRef}
+        //   data={_.cloneDeep(data)}
+        //   token={token}
+        //   baiguullaga={baiguullaga}
+        //   barilgiinId={barilgiinId}
+        //   ajiltan={ajiltan}
+        //   onRefresh={onRefresh}
+        // />
       ),
       footer: false,
     });

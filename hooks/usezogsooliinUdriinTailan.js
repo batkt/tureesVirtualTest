@@ -35,7 +35,7 @@ function usezogsooliinUdriinTailan(
   baiguullagiinId,
   query
 ) {
-  const { data, mutate } = useSWR(
+  const { data, mutate, isValidating } = useSWR(
     !!token
       ? [
           "/zogsooliinUdriinTailanAvya",
@@ -54,6 +54,7 @@ function usezogsooliinUdriinTailan(
   return {
     zogsoolTulburMedeelel: data,
     zogsoolTulburMedeelelMutate: mutate,
+    zogsooliinUdriinTailanUnshijBaina: isValidating,
   };
 }
 

@@ -355,10 +355,8 @@ function GuilgeeKhiikh(
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
                 );
-                console.log("suuliinGuilgee", suuliinGuilgee);
                 if (!!suuliinGuilgee && suuliinGuilgee.length > 0)
                   suuliinGuilgee = suuliinGuilgee[suuliinGuilgee.length - 1];
-                console.log("suuliinGuilgee", suuliinGuilgee);
                 if (!!suuliinGuilgee?.suuliinZaalt) {
                   setUmnukhZaalt(suuliinGuilgee.suuliinZaalt);
                   setUmnukhZaalttaiEsekh(true);
@@ -462,7 +460,6 @@ function GuilgeeKhiikh(
                 <div className="flex w-full items-center justify-between gap-2">
                   <div>НӨАТ:</div>
                   <div>
-                    {console.log("aaa", negjUne, dun, suuriKhuraamj)}
                     {formatNumber(
                       (negjUne * dun + (suuriKhuraamj || 0) || 0) / 10
                     )}

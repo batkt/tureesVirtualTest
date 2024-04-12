@@ -35,6 +35,7 @@ function EBarimt({
         .then(({ data }) => setBaiguullaga(data));
   }
 
+
   if (alkham === 2)
     return (
       <div className={`flex flex-row p-3`}>

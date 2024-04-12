@@ -41,7 +41,6 @@ const Delegrengui = React.forwardRef(({ destroy,
         </div>
       </div>
       <div className="flex w-full gap-2 justify-between">
-        {console.log(ugugdul)}
         <Button onClick={() => zasakhLink()} className="w-full" icon={<EditOutlined style={{ fontSize: "18px" }} />}>{t("Засах")}</Button>
         <Popconfirm
           title="Харилцагч устгах уу?"
