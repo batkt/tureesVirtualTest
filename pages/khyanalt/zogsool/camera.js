@@ -530,7 +530,6 @@ function camera({ token }) {
               console.log("aldaa:", err);
             });
 
-          onRefresh();
           if (
             uilchluulegch?.turul === "Үнэгүй" ||
             // (uilchluulegch?.tuukh &&
@@ -555,6 +554,7 @@ function camera({ token }) {
               }
             }
           }
+          onRefresh();
         }
       }
     });
