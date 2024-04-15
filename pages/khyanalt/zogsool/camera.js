@@ -836,7 +836,7 @@ function camera({ token }) {
         render: (data) => {
           var zogsojBuiTuluv = "Гадна";
           if (data?.tuukh?.length > 1) {
-            if (!data.tuukh?.[1].tsagiinTuukh?.[0]?.garsanTsag) {
+            if (!!data.tuukh?.[1].tsagiinTuukh?.[0]?.garsanTsag) {
               zogsojBuiTuluv = "Дотор";
             } else {
               zogsojBuiTuluv = "Гадна";
