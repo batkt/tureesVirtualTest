@@ -251,7 +251,7 @@ function BarilgiinTokhirgoo({
                     onChange={({ target }) =>
                       setBarilgaTokhirgoo((a) => ({
                         ...(a || {}),
-                        merchantTin: v,
+                        merchantTin: target,
                       }))
                     }
                   />
@@ -272,7 +272,7 @@ function BarilgiinTokhirgoo({
                     onChange={({ target }) =>
                       setBarilgaTokhirgoo((a) => ({
                         ...(a || {}),
-                        districtCode: v,
+                        districtCode: target,
                       }))
                     }
                   />
