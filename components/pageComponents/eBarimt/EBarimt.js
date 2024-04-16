@@ -35,11 +35,9 @@ function EBarimt({
       register?.toString().length === 7 ||
       (irgenEsekh && register?.toString().length === 10)
     )
-      axios
-        .get(`/hicarapi/tatvaraasBaiguullagaAvya/${register}`)
-        .then(({ data }) => {
-          if (data?.found === true) setBaiguullaga(data);
-        });
+      axios.get(`/tatvaraasBaiguullagaAvya/${register}`).then(({ data }) => {
+        if (data?.found === true) setBaiguullaga(data);
+      });
   }
 
   useEffect(() => {
@@ -260,7 +258,13 @@ function EBarimt({
                     {t("НӨАТ-н дүн")}
                   </td>
                   <td className="border text-right">
-                    {formatNumber(eBarimt?.vat, 2)}
+                    {formatNumber(
+                      eBarimt.status == "SUCCESS"
+                        ? eBarimt?.totalVAT
+                        : eBarimt?.vat,
+                      2
+                    )}
+                    ₮
                   </td>
                 </tr>
                 <tr>
@@ -268,7 +272,12 @@ function EBarimt({
                     {t("Төлөх дүн")}
                   </td>
                   <td className="border text-right">
-                    {formatNumber(eBarimt?.amount)}
+                    {formatNumber(
+                      eBarimt.status == "SUCCESS"
+                        ? eBarimt?.totalAmount
+                        : eBarimt?.amount
+                    )}
+                    ₮
                   </td>
                 </tr>
                 {tulbur?.belen && (
@@ -306,7 +315,12 @@ function EBarimt({
                     baiguullagaEsekh ? "" : "уншуулах"
                   } дүн`}</td>
                   <td colSpan={2} className="border text-right">
-                    {formatNumber(eBarimt?.amount)}
+                    {formatNumber(
+                      eBarimt.status == "SUCCESS"
+                        ? eBarimt?.totalAmount
+                        : eBarimt?.amount
+                    )}
+                    ₮
                   </td>
                 </tr>
                 {(!baiguullagaEsekh || !irgenEsekh) && (

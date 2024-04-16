@@ -100,7 +100,7 @@ function Tulbur(
       uilchilgee(token)
         .post("/ebarimtShivye", body)
         .then(({ data }) => {
-          if (data.success === true) {
+          if (data.success === true || data.status == "SUCCESS") {
             setEBarimt(data);
             handlePrint();
           }

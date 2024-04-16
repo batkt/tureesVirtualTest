@@ -131,7 +131,7 @@ function GereeBaiguulakh({ token }) {
     }
     if (!!v?.register && v?.register?.length === 7)
       axios
-        .get(`/hicarapi/tatvaraasBaiguullagaAvya/${v?.register}`, {
+        .get(`/tatvaraasBaiguullagaAvya/${v?.register}`, {
           headers: {
             "Content-type": "application/json",
             Authorization: `bearer ${token}`,

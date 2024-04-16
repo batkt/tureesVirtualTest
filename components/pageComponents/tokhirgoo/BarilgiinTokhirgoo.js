@@ -40,6 +40,15 @@ function BarilgiinTokhirgoo({
         eBarimtAshiglakhEsekh: barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
           ? barilga?.tokhirgoo?.eBarimtAshiglakhEsekh
           : undefined,
+        eBarimtShine: barilga?.tokhirgoo?.eBarimtShine
+          ? barilga?.tokhirgoo?.eBarimtShine
+          : undefined,
+        merchantTin: barilga?.tokhirgoo?.merchantTin
+          ? barilga?.tokhirgoo?.merchantTin
+          : undefined,
+        districtCode: barilga?.tokhirgoo?.districtCode
+          ? barilga?.tokhirgoo?.districtCode
+          : undefined,
         eBarimtAutomataarIlgeekh: barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
           ? barilga?.tokhirgoo?.eBarimtAutomataarIlgeekh
           : undefined,
@@ -210,7 +219,67 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
-
+          <div className="box">
+            <div className="flex items-center p-5">
+              <div className="border-l-2 border-green-500 pl-4">
+                <div className="font-medium">{t("И-Баримт 3.0 эсэх")}</div>
+                <div className="text-gray-600"></div>
+              </div>
+              <div className="ml-auto">
+                <Switch
+                  checked={barilgaTokhirgoo?.eBarimtShine}
+                  onChange={(v) =>
+                    setBarilgaTokhirgoo((a) => ({
+                      ...(a || {}),
+                      eBarimtShine: v,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          {barilgaTokhirgoo?.eBarimtShine && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("ТИН дугаар")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Input
+                    value={barilgaTokhirgoo?.merchantTin}
+                    onChange={({ target }) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        merchantTin: v,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          {barilgaTokhirgoo?.eBarimtShine && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Дүүрэг")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Input
+                    value={barilgaTokhirgoo?.districtCode}
+                    onChange={({ target }) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        districtCode: v,
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
@@ -249,7 +318,6 @@ function BarilgiinTokhirgoo({
               </div>
             </div>
           </div>
-
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!barilgaTokhirgoo ? "flex" : "hidden"

@@ -422,11 +422,27 @@ function Tulbur(
               </div>
               <div className="flex justify-between">
                 <p className="w-1/2 text-right">НӨАТ:</p>
-                <p className="text-right">{formatNumber(eBarimt?.vat, 2)}₮</p>
+                <p className="text-right">
+                  {formatNumber(
+                    eBarimt.status == "SUCCESS"
+                      ? eBarimt?.totalVAT
+                      : eBarimt?.vat,
+                    2
+                  )}
+                  ₮
+                </p>
               </div>
               <div className="flex justify-between">
                 <p className="w-1/2 text-right">Төлөх дүн:</p>
-                <p className="text-right">{formatNumber(eBarimt?.amount)}₮</p>
+                <p className="text-right">
+                  {formatNumber(
+                    eBarimt.status == "SUCCESS"
+                      ? eBarimt?.totalVAT
+                      : eBarimt?.vat,
+                    2
+                  )}
+                  ₮
+                </p>
               </div>
               {tulbur?.belen && (
                 <div className="flex justify-between">
