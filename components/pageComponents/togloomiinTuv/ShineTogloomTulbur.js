@@ -13,6 +13,8 @@ import { FaMoneyBillWave, FaArrowRight } from "react-icons/fa";
 import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "../tulbur/ShineEbarimt";
+import { TbDiscount2 } from "react-icons/tb";
+
 //#endregion
 function ShineTogloomTulbur(
   { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
@@ -732,10 +734,11 @@ function ShineTogloomTulbur(
                 </div>
               </div>
               <div
-                // onClick={() => turulruuTooKhiikhFunction("zeel")}
-                style={{ backgroundColor: "rgba(00, 000, 000, 0.0)" }}
-                className={`relative flex h-[85px] w-[184px] cursor-not-allowed items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
-                  value.zeel > 0 ? "border-[3px] border-green-600" : null
+                onClick={() => {
+                  turulruuTooKhiikhFunction("khungulult");
+                }}
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
+                  value.khungulult > 0 ? "border-[3px] border-green-600" : null
                 } `}>
                 {value.khungulult > 0 ? (
                   <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
