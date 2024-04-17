@@ -106,17 +106,19 @@ const DelegrenguiKharakh = React.forwardRef(
             break;
           case "khaan":
             ugugdul.push({
-              ner: "Хаан банк",
-              icon: "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
+              ner: "Карт", //tur cart bolgiy Хаан банк
+              icon: "/cartniiZurag.png", // "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
               dun: element.niitDun,
+              too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
           case "tdb":
             ugugdul.push({
               ner: "TDB банк",
-              icon: "https://tz.mn/storage/uploads/slider/45adc5a14070aa.jpg",
+              icon: "/tdb.png",
               dun: element.niitDun,
+              too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;

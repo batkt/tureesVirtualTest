@@ -338,13 +338,6 @@ function camera({ token }) {
     return zogsool;
   }, [parkingJagsaalt, camerVal]);
 
-  console.log("songogdsonZogsool", songogdzonZogsool);
-  console.log(
-    baiguullaga?.barilguud?.find((e) => e._id === barilgiinId)?.tokhirgoo
-      ?.eBarimtAshiglakhEsekh,
-    "eeee"
-  );
-
   const query = useMemo(() => {
     let result = {};
     if (!!camerVal[1]) {
