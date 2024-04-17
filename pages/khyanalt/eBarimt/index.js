@@ -232,8 +232,9 @@ function EbarimtMedeelel({ token }) {
         dataIndex: "cashAmount",
         ellipsis: true,
         align: "center",
-        render: (data) => {
-          return formatNumber(data);
+        render: (data, object) => {
+          if (!!object.cashAmount) return formatNumber(data);
+          else return formatNumber(object.totalAmount);
         },
         showSorterTooltip: false,
         sorter: () => 0,
