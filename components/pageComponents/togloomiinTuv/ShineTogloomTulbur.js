@@ -81,6 +81,8 @@ function ShineTogloomTulbur(
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
     const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
     const lend = tulbur.find((a) => a.turul === "lend")?.dun;
+    const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
+
     return {
       belen,
       zeel,
@@ -97,6 +99,7 @@ function ShineTogloomTulbur(
       socialpay,
       pocket,
       lend,
+      khungulult,
     };
   }, [tulbur]);
 
@@ -734,15 +737,17 @@ function ShineTogloomTulbur(
                 className={`relative flex h-[85px] w-[184px] cursor-not-allowed items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 ${
                   value.zeel > 0 ? "border-[3px] border-green-600" : null
                 } `}>
-                {value.zeel > 0 ? (
+                {value.khungulult > 0 ? (
                   <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
                     <div className="font-semibold ">
-                      {formatNumber(value.zeel)}₮
+                      {formatNumber(value.khungulult)}₮
                     </div>
                   </div>
                 ) : null}
-                <FaArrowRight className="text-[30px] text-green-600" />
-                <div className="text-lg font-bold text-green-600">Зээл</div>
+                <TbDiscount2 className="text-[30px] text-green-600" />
+                <div className="text-lg font-bold text-green-600">
+                  Хөнгөлөлт
+                </div>
               </div>
             </div>
           </div>
