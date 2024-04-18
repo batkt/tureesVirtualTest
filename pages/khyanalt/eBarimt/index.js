@@ -26,7 +26,7 @@ import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 
-const searchKeys = ["customerNo", "cashAmount", "billId"];
+const searchKeys = ["customerNo", "cashAmount", "billId", "id", "customerTin"];
 //#endregion
 
 function EbarimtMedeelel({ token }) {
@@ -226,6 +226,10 @@ function EbarimtMedeelel({ token }) {
         dataIndex: "billId",
         width: "300px",
         align: "center",
+        render: (data, object) => {
+          if (!!object.billId) return object.billId;
+          else return object.id;
+        },
       },
       {
         title: t("Дүн"),
