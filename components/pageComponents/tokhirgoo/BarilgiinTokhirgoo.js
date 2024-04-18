@@ -29,6 +29,128 @@ function BarilgiinTokhirgoo({
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
     [songogdsonBarilga]
   );
+  const duurguud = [
+    {
+      branchCode: "0001",
+      branchName: "Архангай",
+    },
+    {
+      branchCode: "0002",
+      branchName: "Баян-Өлгий",
+    },
+    {
+      branchCode: "0003",
+      branchName: "Баянхонгор",
+    },
+    {
+      branchCode: "0004",
+      branchName: "Булган",
+    },
+    {
+      branchCode: "0005",
+      branchName: "Говь-Алтай",
+    },
+    {
+      branchCode: "0006",
+      branchName: "Дорноговь",
+    },
+    {
+      branchCode: "0007",
+      branchName: "Дорнод",
+    },
+    {
+      branchCode: "0008",
+      branchName: "Дундговь",
+    },
+    {
+      branchCode: "0009",
+      branchName: "Завхан",
+    },
+    {
+      branchCode: "0010",
+      branchName: "Өвөрхангай",
+    },
+    {
+      branchCode: "0011",
+      branchName: "Өмнөговь",
+    },
+    {
+      branchCode: "0012",
+      branchName: "Сүхбаатар",
+    },
+    {
+      branchCode: "0013",
+      branchName: "Сэлэнгэ",
+    },
+    {
+      branchCode: "0014",
+      branchName: "Төв",
+    },
+    {
+      branchCode: "0015",
+      branchName: "Увс",
+    },
+    {
+      branchCode: "0016",
+      branchName: "Ховд",
+    },
+    {
+      branchCode: "0017",
+      branchName: "Хөвсгөл",
+    },
+    {
+      branchCode: "0018",
+      branchName: "Хэнтий",
+    },
+    {
+      branchCode: "0019",
+      branchName: "Дархан-Уул",
+    },
+    {
+      branchCode: "0020",
+      branchName: "Орхон",
+    },
+    {
+      branchCode: "0023",
+      branchName: "Хан-Уул",
+    },
+    {
+      branchCode: "0024",
+      branchName: "Баянзүрх",
+    },
+    {
+      branchCode: "0025",
+      branchName: "Сүхбаатар дүүрэг",
+    },
+    {
+      branchCode: "0026",
+      branchName: "Баянгол",
+    },
+    {
+      branchCode: "0027",
+      branchName: "Багануур",
+    },
+    {
+      branchCode: "0028",
+      branchName: "Багахангай",
+    },
+    {
+      branchCode: "0029",
+      branchName: "Налайх",
+    },
+    {
+      branchCode: "0032",
+      branchName: "Говьсүмбэр",
+    },
+    {
+      branchCode: "0034",
+      branchName: "Сонгинохайрхан",
+    },
+    {
+      branchCode: "0035",
+      branchName: "Чингэлтэй",
+    },
+  ];
 
   useEffect(() => {
     if (barilga) {
@@ -267,15 +389,24 @@ function BarilgiinTokhirgoo({
                   <div className="text-gray-600"></div>
                 </div>
                 <div className="ml-auto">
-                  <Input
+                  <Select
+                    className="min-w-[150px]"
                     value={barilgaTokhirgoo?.districtCode}
-                    onChange={({ target }) =>
+                    onChange={(v) =>
                       setBarilgaTokhirgoo((a) => ({
                         ...(a || {}),
-                        districtCode: target.value,
+                        districtCode: v,
                       }))
                     }
-                  />
+                  >
+                    {duurguud.map((duureg) => {
+                      return (
+                        <Select.Option value={duureg?.branchCode}>
+                          {duureg?.branchName}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
                 </div>
               </div>
             </div>
