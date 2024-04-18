@@ -590,7 +590,7 @@ function ShineTulbur(
               <p>ДДТД:</p>
             </div>
             <div className="-mt-1 w-[80mm]">
-              <div>{eBarimt?.billId}</div>
+              <div>{eBarimt?.id}</div>
             </div>
             {baiguullagaEsekh && (
               <>
