@@ -392,10 +392,12 @@ function BarilgiinTokhirgoo({
                   <Select
                     className="min-w-[150px]"
                     value={barilgaTokhirgoo?.districtCode}
-                    onChange={(v) => (a) => ({
-                      ...(a || {}),
-                      districtCode: target.value,
-                    })}
+                    onChange={(v) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        districtCode: v,
+                      }))
+                    }
                   >
                     {duurguud.map((duureg) => {
                       return (
