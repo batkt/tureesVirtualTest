@@ -24,6 +24,7 @@ import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "./ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
+import { useAuth } from "services/auth";
 //#endregion
 const { confirm } = Modal;
 function ShineTulbur(
@@ -31,7 +32,7 @@ function ShineTulbur(
     destroy,
     data,
     token,
-    ajiltan,
+    // ajiltan,
     baiguullaga,
     barilgiinId,
     uilchluugchiinId,
@@ -46,6 +47,7 @@ function ShineTulbur(
   },
   ref
 ) {
+  const { ajiltan } = useAuth();
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
@@ -187,10 +189,8 @@ function ShineTulbur(
         body.register = register;
         if (baiguullagaEsekh) body.turul = "3";
         else if (irgenEsekh) body.turul = "1";
-        if(baiguullagaEsekh)
-        body.customerTin = tin
+        if (baiguullagaEsekh) body.customerTin = tin;
       }
-     
 
       uilchilgee(token)
         .post("/ebarimtShivye", body)
@@ -600,7 +600,10 @@ function ShineTulbur(
                 <div className="flex justify-between">
                   <p>ТТД:</p>
                   <p>{baiguullagiinMedeelel?.tin}</p>
-               {   console.log(baiguullagiinMedeelel, "baiguullaga mun uu???????????")}
+                  {console.log(
+                    baiguullagiinMedeelel,
+                    "baiguullaga mun uu???????????"
+                  )}
                 </div>
                 <div className="flex justify-between">
                   <p>Нэр:</p>
@@ -1150,7 +1153,7 @@ function ShineTulbur(
         baiguullagiinMedeelel={baiguullagiinMedeelel}
         irgenEsekh={irgenEsekh}
         register={register}
-        tin = {tin}
+        tin={tin}
         setBaiguullaga={setBaiguullaga}
         setBaiguullagaEsekh={setBaiguullagaEsekh}
         setIrgenEsekh={setIrgenEsekh}

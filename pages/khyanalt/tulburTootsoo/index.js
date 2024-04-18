@@ -313,11 +313,14 @@ function tulburTootsoo({ token }) {
           <Tulbur
             data={data}
             token={token}
+            ajiltan={ajiltan}
             defaultRegister={register}
             defaultTurul={turul}
             eBarimtAutomataarShivikh={
               baiguullaga?.tokhirgoo?.eBarimtAutomataarShivikh
             }
+            baiguullaga={baiguullaga}
+            barilgiinId={barilgiinId}
             dansniiKhuulgaMutate={dansniiKhuulgaMutate}
             onRefresh={refreshData}
           />

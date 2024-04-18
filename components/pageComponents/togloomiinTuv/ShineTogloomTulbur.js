@@ -14,12 +14,14 @@ import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "../tulbur/ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
+// import { useAuth } from "services/auth";
 
 //#endregion
 function ShineTogloomTulbur(
-  { destroy, data, token, ajiltan, baiguullaga, barilgiinId, onRefresh },
+  { destroy, data, token, baiguullaga, ajiltan, barilgiinId, onRefresh },
   ref
 ) {
+  // const {ajiltan}=useAuth();
   const [alkham, setAlkham] = React.useState(
     data?.tulburTulsunEsekh === true ? 2 : 1
   );
@@ -632,7 +634,8 @@ function ShineTogloomTulbur(
                     {formatNumber(eBarimt?.amount)}
                   </td>
                 </tr>
-                {(!baiguullagaEsekh || !irgenEsekh) && (
+              {/* baiguullaga deer hvlej bga tohioldold sugalaa no no */}
+                {(!!irgenEsekh) && (
                   <tr>
                     <td colSpan={4} className="border">
                       {t("Сугалааны дугаар")}

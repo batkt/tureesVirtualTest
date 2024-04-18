@@ -6,13 +6,15 @@ import { InputNumber, Input, Switch } from "antd";
 import axios from "axios";
 import { isString } from "lodash";
 import { t } from "i18next";
+import { useAuth } from "services/auth";
+import uilchilgee from "services/uilchilgee";
 
 function EBarimt({
   eBarimtRef,
   eBarimt,
   data,
-  tulbur,
   ajiltan,
+  tulbur,
   baiguullaga,
   register,
   setRegister,
@@ -26,6 +28,7 @@ function EBarimt({
   setBarimtKhevlekhEsekh,
   eBarimtAutomataarShivikh,
 }) {
+  // const { ajiltan } = useAuth();
   function registerShalgaya(register) {
     if (isString(register) && irgenEsekh === true)
       register = register?.toUpperCase();
@@ -35,10 +38,14 @@ function EBarimt({
       register?.toString().length === 7 ||
       (irgenEsekh && register?.toString().length === 10)
     )
-      axios.get(`/tatvaraasBaiguullagaAvya/${register}`).then(({ data }) => {
-        if (data?.found === true) setBaiguullaga(data);
-      });
+      uilchilgee()
+        .get(`/tatvaraasBaiguullagaAvya/${register}`)
+        .then(({ data }) => {
+          if (data?.found === true) setBaiguullaga(data);
+        });
   }
+
+  console.log(baiguullagiinMedeelel, "dddsadsa");
 
   useEffect(() => {
     if (eBarimtAutomataarShivikh === true && register.length > 6)
@@ -190,6 +197,8 @@ function EBarimt({
                   <td className="border" colSpan={3}>
                     {ajiltan?.ner}
                   </td>
+
+                  {console.log(ajiltan, "dddddddddddddddddddddddddd")}
                 </tr>
                 {baiguullagaEsekh && (
                   <>
@@ -323,7 +332,8 @@ function EBarimt({
                     ₮
                   </td>
                 </tr>
-                {(!baiguullagaEsekh || !irgenEsekh) && (
+                {/* hamaarahq */}
+                {!!irgenEsekh && (
                   <tr>
                     <td colSpan={4} className="border">
                       {t("Сугалааны дугаар")}
