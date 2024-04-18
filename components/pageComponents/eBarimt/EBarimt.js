@@ -164,7 +164,7 @@ function EBarimt({
                     {t("ТТД")}
                   </td>
                   <td className="border" colSpan={3}>
-                    {eBarimt?.registerNo}
+                    {eBarimt?.merchantTin}
                   </td>
                 </tr>
                 <tr>
@@ -172,7 +172,7 @@ function EBarimt({
                     {t("ДДТД")}
                   </td>
                   <td className="border" colSpan={3}>
-                    {eBarimt?.billId}
+                    {eBarimt?.id}
                   </td>
                 </tr>
                 <tr>
@@ -203,7 +203,7 @@ function EBarimt({
                         {t("ТТД")}
                       </td>
                       <td className="border" colSpan={5}>
-                        {register}
+                        {baiguullagiinMedeelel?.tin}
                       </td>
                     </tr>
                     <tr>
