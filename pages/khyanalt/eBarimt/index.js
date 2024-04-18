@@ -289,7 +289,7 @@ function EbarimtMedeelel({ token }) {
 
   function ebarimtUstgaya(mur) {
     setWaiting(true);
-    mur.barilgiinId = barilgiinId;
+    //mur.barilgiinId = barilgiinId;
     uilchilgee(token)
       .post("/ebarimtButsaaya", mur)
       .then(({ data }) => {
