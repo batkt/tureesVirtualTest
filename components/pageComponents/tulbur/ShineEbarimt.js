@@ -8,6 +8,7 @@ function ShineEbarimt({
   alkham,
   register,
   setRegister,
+  setTin,
   baiguullagaEsekh,
   setBaiguullagaEsekh,
   baiguullagiinMedeelel,
@@ -28,9 +29,12 @@ function ShineEbarimt({
   useEffect(() => {
     Aos.init();
   });
+  
 
   function registerShalgaya(register) {
     setRegister(register);
+    // setCustomerTin(customerTin);
+    setTin(null)
     setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh)
       uilchilgee()
