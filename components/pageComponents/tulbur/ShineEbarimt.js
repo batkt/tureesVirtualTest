@@ -34,7 +34,6 @@ function ShineEbarimt({
   function registerShalgaya(register) {
     setRegister(register);
     // setCustomerTin(customerTin);
-    setTin(null)
     setBaiguullaga(null);
     if (register?.toString().length === 7 && baiguullagaEsekh)
       uilchilgee()
