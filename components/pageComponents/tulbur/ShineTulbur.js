@@ -643,8 +643,8 @@ function ShineTulbur(
                   )}
                   {formatNumber(
                     eBarimt.status == "SUCCESS"
-                      ? eBarimt?.totalAmount  - eBarimt?.totalVAT
-                      : (eBarimt?.amount  - eBarimt?.vat),
+                      ? eBarimt?.totalAmount - eBarimt?.totalVAT
+                      : eBarimt?.amount - eBarimt?.vat,
                     2
                   )}
                   ₮

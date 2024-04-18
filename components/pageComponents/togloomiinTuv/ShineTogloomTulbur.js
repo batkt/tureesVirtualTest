@@ -161,8 +161,8 @@ function ShineTogloomTulbur(
             onRefresh();
             destroy();
           }
-        });
-      // .catch(aldaaBarigch);
+        })
+        .catch(aldaaBarigch);
     }
   }
 
@@ -634,8 +634,8 @@ function ShineTogloomTulbur(
                     {formatNumber(eBarimt?.amount)}
                   </td>
                 </tr>
-              {/* baiguullaga deer hvlej bga tohioldold sugalaa no no */}
-                {(!!irgenEsekh) && (
+                {/* baiguullaga deer hvlej bga tohioldold sugalaa no no */}
+                {!!irgenEsekh && (
                   <tr>
                     <td colSpan={4} className="border">
                       {t("Сугалааны дугаар")}
