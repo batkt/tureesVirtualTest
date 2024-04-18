@@ -26,14 +26,7 @@ import { useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 
-const searchKeys = [
-  "customerNo",
-  "cashAmount",
-  "billId",
-  "id",
-  "customerTin",
-  "totalAmount",
-];
+const searchKeys = ["customerNo", "cashAmount", "billId", "id", "customerTin"];
 //#endregion
 
 function EbarimtMedeelel({ token }) {
