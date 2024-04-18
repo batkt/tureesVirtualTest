@@ -24,7 +24,7 @@ import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "./ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
-import { useAuth } from "services/auth";
+// import { useAuth } from "services/auth";
 //#endregion
 const { confirm } = Modal;
 function ShineTulbur(
@@ -32,7 +32,7 @@ function ShineTulbur(
     destroy,
     data,
     token,
-    // ajiltan,
+    ajiltan,
     baiguullaga,
     barilgiinId,
     uilchluugchiinId,
@@ -47,7 +47,7 @@ function ShineTulbur(
   },
   ref
 ) {
-  const { ajiltan } = useAuth();
+  // const { ajiltan } = useAuth();
   const { Canvas } = useQRCode();
   const [alkham, setAlkham] = React.useState(
     !!data?.tuluv && data?.tuluv === 1 ? 2 : 1
@@ -636,10 +636,15 @@ function ShineTulbur(
               <div className="flex justify-between">
                 <p className="w-1/2 text-right">НӨАТ-гүй:</p>
                 <p className="text-right">
+                  {console.log(
+                    `${eBarimt?.totalAmount} - ${eBarimt?.totalVAT} = ${
+                      eBarimt?.totalAmount - eBarimt?.totalVAT
+                    }`
+                  )}
                   {formatNumber(
                     eBarimt.status == "SUCCESS"
-                      ? eBarimt?.totalAmount || 0 - eBarimt?.totalVAT || 0
-                      : (eBarimt?.amount || 0 - eBarimt?.vat || 0, 2),
+                      ? eBarimt?.totalAmount  - eBarimt?.totalVAT
+                      : (eBarimt?.amount  - eBarimt?.vat),
                     2
                   )}
                   ₮
