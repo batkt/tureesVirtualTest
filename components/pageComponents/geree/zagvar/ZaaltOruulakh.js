@@ -217,7 +217,7 @@ function index({ token, baiguullaga, destroy }, ref) {
           {[
             "Ерөнхий мэдээлэл",
             "Гэрээний хугацаа",
-            "Түрээсийн талбай",
+            "/khyanalt/tulburTootsooийн талбай",
             "Барьцаа бүртгэл",
             "Төлбөр тооцоо",
           ].map((a) => (

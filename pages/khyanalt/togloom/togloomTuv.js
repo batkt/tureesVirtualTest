@@ -82,7 +82,7 @@ const DelegrenguiKharakh = React.forwardRef(
         switch (element?._id) {
           case "khariltsakh":
             ugugdul.push({
-              ner: "Харилцах",
+              ner: "Данс",
               icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               dun: element.niitDun,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
