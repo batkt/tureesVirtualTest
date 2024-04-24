@@ -44,7 +44,7 @@ function BarilgiinTokhirgoo({
   const duurguud = useJagsaalt("/tatvariinAlba");
 
   useEffect(() => {
-    if (barilga && duurguud) {
+    if (barilga && duurguud.jagsaalt) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
         aldangiBodojEkhlekhOgnoo: barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo
@@ -79,7 +79,7 @@ function BarilgiinTokhirgoo({
 
       setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode.substring(2));
     }
-  }, [barilga, songogdsonBarilga, duurguud]);
+  }, [barilga, songogdsonBarilga, duurguud.jagsaalt]);
 
   const barilgaTokhirgooKhadgalya = () => {
     const yavuulakhData = { ...baiguullaga };
