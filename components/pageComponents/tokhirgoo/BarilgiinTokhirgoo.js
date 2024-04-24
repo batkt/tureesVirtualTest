@@ -7,10 +7,12 @@ import {
   Select,
   Switch,
   Input,
+  Alert,
 } from "antd";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
+import useJagsaalt from "hooks/useJagsaalt";
 
 function BarilgiinTokhirgoo({
   token,
@@ -25,135 +27,24 @@ function BarilgiinTokhirgoo({
   );
   const [barilgaTokhirgoo, setBarilgaTokhirgoo] = useState();
 
+  const [songogdsonDuureg, setSongogdsonDuureg] = useState();
+  const [songogdsonDuuregKod, setSongogdsonDuuregKod] = useState();
+  const [songogdsonHoroo, setSongogdsonHoroo] = useState();
+  const [songogdsonHorooKod, setSongogdsonHorooKod] = useState();
+
+  console.log(songogdsonDuureg, "songogdsonDuureg");
+
+  console.log(songogdsonHoroo, "songogdsonDuureg");
+
   const barilga = useMemo(
     () => baiguullaga?.barilguud?.find((a) => a._id === songogdsonBarilga),
     [songogdsonBarilga]
   );
-  const duurguud = [
-    {
-      branchCode: "0001",
-      branchName: "Архангай",
-    },
-    {
-      branchCode: "0002",
-      branchName: "Баян-Өлгий",
-    },
-    {
-      branchCode: "0003",
-      branchName: "Баянхонгор",
-    },
-    {
-      branchCode: "0004",
-      branchName: "Булган",
-    },
-    {
-      branchCode: "0005",
-      branchName: "Говь-Алтай",
-    },
-    {
-      branchCode: "0006",
-      branchName: "Дорноговь",
-    },
-    {
-      branchCode: "0007",
-      branchName: "Дорнод",
-    },
-    {
-      branchCode: "0008",
-      branchName: "Дундговь",
-    },
-    {
-      branchCode: "0009",
-      branchName: "Завхан",
-    },
-    {
-      branchCode: "0010",
-      branchName: "Өвөрхангай",
-    },
-    {
-      branchCode: "0011",
-      branchName: "Өмнөговь",
-    },
-    {
-      branchCode: "0012",
-      branchName: "Сүхбаатар",
-    },
-    {
-      branchCode: "0013",
-      branchName: "Сэлэнгэ",
-    },
-    {
-      branchCode: "0014",
-      branchName: "Төв",
-    },
-    {
-      branchCode: "0015",
-      branchName: "Увс",
-    },
-    {
-      branchCode: "0016",
-      branchName: "Ховд",
-    },
-    {
-      branchCode: "0017",
-      branchName: "Хөвсгөл",
-    },
-    {
-      branchCode: "0018",
-      branchName: "Хэнтий",
-    },
-    {
-      branchCode: "0019",
-      branchName: "Дархан-Уул",
-    },
-    {
-      branchCode: "0020",
-      branchName: "Орхон",
-    },
-    {
-      branchCode: "0023",
-      branchName: "Хан-Уул",
-    },
-    {
-      branchCode: "0024",
-      branchName: "Баянзүрх",
-    },
-    {
-      branchCode: "0025",
-      branchName: "Сүхбаатар дүүрэг",
-    },
-    {
-      branchCode: "0026",
-      branchName: "Баянгол",
-    },
-    {
-      branchCode: "0027",
-      branchName: "Багануур",
-    },
-    {
-      branchCode: "0028",
-      branchName: "Багахангай",
-    },
-    {
-      branchCode: "0029",
-      branchName: "Налайх",
-    },
-    {
-      branchCode: "0032",
-      branchName: "Говьсүмбэр",
-    },
-    {
-      branchCode: "0034",
-      branchName: "Сонгинохайрхан",
-    },
-    {
-      branchCode: "0035",
-      branchName: "Чингэлтэй",
-    },
-  ];
+
+  const duurguud = useJagsaalt("/tatvariinAlba");
 
   useEffect(() => {
-    if (barilga) {
+    if (barilga && duurguud) {
       setBarilgaTokhirgoo({
         ...barilga?.tokhirgoo,
         aldangiBodojEkhlekhOgnoo: barilga?.tokhirgoo?.aldangiBodojEkhlekhOgnoo
@@ -178,8 +69,17 @@ function BarilgiinTokhirgoo({
           ? barilga?.tokhirgoo?.nuatTulukhEsekh
           : undefined,
       });
+      setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode.substring(0, 2));
+
+      setSongogdsonDuureg(
+        duurguud?.jagsaalt?.find(
+          (e) => e.kod === barilga?.tokhirgoo?.districtCode.substring(0, 2)
+        )
+      );
+
+      setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode.substring(2));
     }
-  }, [barilga, songogdsonBarilga]);
+  }, [barilga, songogdsonBarilga, duurguud]);
 
   const barilgaTokhirgooKhadgalya = () => {
     const yavuulakhData = { ...baiguullaga };
@@ -195,21 +95,48 @@ function BarilgiinTokhirgoo({
       };
       barilguudCopy[tukhainBarilgiinIndex] = updatedBarilga;
       yavuulakhData.barilguud = barilguudCopy;
-      uilchilgee(token)
-        .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
-        .then(({ data }) => {
-          if (data === "Amjilttai") {
-            notification.success({
-              message: "Амжилттай хадгалагдлаа",
-              duration: 2,
+      if (!!barilgaTokhirgoo?.eBarimtShine) {
+        if (
+          !!barilgaTokhirgoo?.districtCode &&
+          !!barilgaTokhirgoo?.merchantTin
+        ) {
+          uilchilgee(token)
+            .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
+            .then(({ data }) => {
+              if (data === "Amjilttai") {
+                notification.success({
+                  message: "Амжилттай хадгалагдлаа",
+                  duration: 2,
+                });
+                baiguullagaMutate();
+                setSongogdsonTsonkhniiIndex(0);
+              }
+            })
+            .catch((err) => {
+              aldaaBarigch(err);
             });
-            baiguullagaMutate();
-            setSongogdsonTsonkhniiIndex(0);
-          }
-        })
-        .catch((err) => {
-          aldaaBarigch(err);
-        });
+        } else {
+          notification.warning({
+            description: "ТИН дугаар, дүүрэг, хороо сонгоогүй байна.",
+          });
+        }
+      } else {
+        uilchilgee(token)
+          .put(`/baiguullaga/${baiguullaga?._id}`, yavuulakhData)
+          .then(({ data }) => {
+            if (data === "Amjilttai") {
+              notification.success({
+                message: "Амжилттай хадгалагдлаа",
+                duration: 2,
+              });
+              baiguullagaMutate();
+              setSongogdsonTsonkhniiIndex(0);
+            }
+          })
+          .catch((err) => {
+            aldaaBarigch(err);
+          });
+      }
     }
   };
   return (
@@ -233,8 +160,7 @@ function BarilgiinTokhirgoo({
                 <Select
                   className="min-w-[150px]"
                   value={songogdsonBarilga}
-                  onChange={(v) => setSongogdsonBarilga(v)}
-                >
+                  onChange={(v) => setSongogdsonBarilga(v)}>
                   {baiguullaga?.barilguud?.map((barilga) => {
                     return (
                       <Select.Option value={barilga?._id}>
@@ -382,31 +308,70 @@ function BarilgiinTokhirgoo({
             </div>
           )}
           {barilgaTokhirgoo?.eBarimtShine && (
-            <div className="box">
-              <div className="flex items-center p-5">
-                <div className="border-l-2 border-green-500 pl-4">
-                  <div className="font-medium">{t("Дүүрэг")}</div>
-                  <div className="text-gray-600"></div>
+            <div>
+              <div className="box">
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{t("Дүүрэг")}</div>
+                    <div className="text-gray-600"></div>
+                  </div>
+                  <div className="ml-auto">
+                    <Select
+                      className="min-w-[150px]"
+                      value={songogdsonDuuregKod}
+                      onChange={(v) => {
+                        console.log(v, "vvv");
+                        setSongogdsonDuureg(
+                          duurguud?.jagsaalt?.find((e) => e.kod === v)
+                        );
+                        setSongogdsonDuuregKod(v);
+                        setSongogdsonHoroo();
+                        setSongogdsonHorooKod();
+                        setBarilgaTokhirgoo((a) => ({
+                          ...(a || {}),
+                          districtCode: undefined,
+                        }));
+                      }}>
+                      {duurguud.jagsaalt.map((duureg) => {
+                        return (
+                          <Select.Option value={duureg?.kod}>
+                            {duureg?.ner}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
-                <div className="ml-auto">
-                  <Select
-                    className="min-w-[150px]"
-                    value={barilgaTokhirgoo?.districtCode}
-                    onChange={(v) =>
-                      setBarilgaTokhirgoo((a) => ({
-                        ...(a || {}),
-                        districtCode: v,
-                      }))
-                    }
-                  >
-                    {duurguud.map((duureg) => {
-                      return (
-                        <Select.Option value={duureg?.branchCode}>
-                          {duureg?.branchName}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
+              </div>
+              <div className="box">
+                <div className="flex items-center p-5">
+                  <div className="border-l-2 border-green-500 pl-4">
+                    <div className="font-medium">{t("Хороо")}</div>
+                    <div className="text-gray-600"></div>
+                  </div>
+                  <div className="ml-auto">
+                    <Select
+                      className="min-w-[150px]"
+                      value={songogdsonHorooKod}
+                      onChange={(v) => {
+                        setSongogdsonHoroo(
+                          songogdsonDuureg?.ded?.find((e) => e.kod === v)
+                        );
+                        setSongogdsonHorooKod(v);
+                        setBarilgaTokhirgoo((a) => ({
+                          ...(a || {}),
+                          districtCode: songogdsonDuureg.kod + v,
+                        }));
+                      }}>
+                      {songogdsonDuureg?.ded.map((duureg) => {
+                        return (
+                          <Select.Option value={duureg?.kod}>
+                            {duureg?.ner}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -452,8 +417,7 @@ function BarilgiinTokhirgoo({
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!barilgaTokhirgoo ? "flex" : "hidden"
-            }`}
-          >
+            }`}>
             <Button type="primary" onClick={barilgaTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
