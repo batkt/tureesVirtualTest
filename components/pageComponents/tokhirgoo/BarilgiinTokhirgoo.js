@@ -69,15 +69,15 @@ function BarilgiinTokhirgoo({
           ? barilga?.tokhirgoo?.nuatTulukhEsekh
           : undefined,
       });
-      setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode.substring(0, 2));
+      setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 
       setSongogdsonDuureg(
         duurguud?.jagsaalt?.find(
-          (e) => e.kod === barilga?.tokhirgoo?.districtCode.substring(0, 2)
+          (e) => e.kod === barilga?.tokhirgoo?.districtCode?.substring(0, 2)
         )
       );
 
-      setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode.substring(2));
+      setSongogdsonHorooKod(barilga?.tokhirgoo?.districtCode?.substring(2));
     }
   }, [barilga, songogdsonBarilga, duurguud.jagsaalt]);
 
@@ -160,7 +160,8 @@ function BarilgiinTokhirgoo({
                 <Select
                   className="min-w-[150px]"
                   value={songogdsonBarilga}
-                  onChange={(v) => setSongogdsonBarilga(v)}>
+                  onChange={(v) => setSongogdsonBarilga(v)}
+                >
                   {baiguullaga?.barilguud?.map((barilga) => {
                     return (
                       <Select.Option value={barilga?._id}>
@@ -331,7 +332,8 @@ function BarilgiinTokhirgoo({
                           ...(a || {}),
                           districtCode: undefined,
                         }));
-                      }}>
+                      }}
+                    >
                       {duurguud.jagsaalt.map((duureg) => {
                         return (
                           <Select.Option value={duureg?.kod}>
@@ -362,7 +364,8 @@ function BarilgiinTokhirgoo({
                           ...(a || {}),
                           districtCode: songogdsonDuureg.kod + v,
                         }));
-                      }}>
+                      }}
+                    >
                       {songogdsonDuureg?.ded.map((duureg) => {
                         return (
                           <Select.Option value={duureg?.kod}>
@@ -417,7 +420,8 @@ function BarilgiinTokhirgoo({
           <div
             className={`dark:border-dark-5 absolute bottom-5 right-1 flex items-center justify-end border-gray-200 px-5 pb-2 pt-2 ${
               !!barilgaTokhirgoo ? "flex" : "hidden"
-            }`}>
+            }`}
+          >
             <Button type="primary" onClick={barilgaTokhirgooKhadgalya}>
               {t("Хадгалах")}
             </Button>
