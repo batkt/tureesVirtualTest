@@ -194,6 +194,15 @@ const DelegrenguiKharakh = React.forwardRef(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
+          case "khungulult":
+            ugugdul.push({
+              ner: "Хөнгөлөлт",
+              icon: "/discount.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
 
           default:
             ugugdul.push({
@@ -1180,15 +1189,17 @@ function togloom1() {
         width: "10rem",
         showSorterTooltip: false,
         render: (v, data) => {
-          const khunglukh = data?.tulbur?.find((a) => a.turul === "khunglukh");
+          const khungulult = data?.tulbur?.find(
+            (a) => a.turul === "khungulult"
+          );
           return (
             <div className="flex w-full items-center">
-              {!!khunglukh?.tailbar && (
+              {!!khungulult?.tailbar && (
                 <Popover
                   content={
                     <div className="dark:text-gray-200">
                       <div className="font-medium">Тайлбар:</div>{" "}
-                      <div className="text-center">{khunglukh?.tailbar}</div>
+                      <div className="text-center">{khungulult?.tailbar}</div>
                     </div>
                   }>
                   <div className="flex w-full justify-center text-lg text-blue-500">
@@ -1197,7 +1208,7 @@ function togloom1() {
                 </Popover>
               )}{" "}
               <div className="w-full text-right">
-                {khunglukh ? formatNumber(v, 0) : 0}
+                {khungulult ? formatNumber(v, 0) : 0}
               </div>
             </div>
           );
