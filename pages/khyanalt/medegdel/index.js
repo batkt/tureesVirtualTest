@@ -455,8 +455,7 @@ function Khyanalt({ token }) {
       <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya(setWaiting(true))}
-      >
+        onClick={() => ref.current.khadgalya(setWaiting(true))}>
         {t("Хадгалах")}
       </Button>,
     ];
@@ -553,13 +552,15 @@ function Khyanalt({ token }) {
   }
 
   function khariltsagchSongokh(mur) {
-    setKhariltsagch(mur);
+    let turHadgalakh = mur;
     const index = songogdsonKhariltsagch.findIndex((a) => a._id === mur._id);
     index !== -1
-      ? (songogdsonKhariltsagch.splice(index, 1), setKhariltsagch(null))
+      ? (songogdsonKhariltsagch.splice(index, 1), (turHadgalakh = undefined))
       : songogdsonKhariltsagch.push(mur);
     setSongogdsonKhariltsagch([...songogdsonKhariltsagch]);
   }
+
+  console.log(khariltsagch, "khariltsagch");
   return (
     <Admin
       title="Мэдэгдэл"
@@ -572,8 +573,7 @@ function Khyanalt({ token }) {
         setKhariltsagchKhuudaslalt((a) => ({ ...a, search }))
       }
       tsonkhniiId="61c2c68d1c2830c4e6f90ca5"
-      loading={waiting}
-    >
+      loading={waiting}>
       <div className="box col-span-12 xl:col-span-3">
         <div className="p-2" data-aos="fade-right" data-aos-duration="1000">
           <div className="rounded-md border p-2 shadow-md">
@@ -586,8 +586,7 @@ function Khyanalt({ token }) {
                       ? "bg-green-500 text-white"
                       : "border-x hover:bg-green-500"
                   }`}
-                  onClick={() => turulSongokh(mur)}
-                >
+                  onClick={() => turulSongokh(mur)}>
                   {mur}
                 </div>
               ))}
@@ -598,16 +597,14 @@ function Khyanalt({ token }) {
           className="mx-2 mt-2 grid grid-cols-12 items-center space-x-3 rounded-md border p-2 pl-3 shadow-md"
           data-aos="fade-left"
           data-aos-duration="1000"
-          data-aos-delay="100"
-        >
+          data-aos-delay="100">
           <div className="col-span-6">
             <Select
               className="w-full"
               placeholder="Төрөл сонгоно уу"
               value={tuluv}
               onChange={setTuluv}
-              style={{ width: "100%" }}
-            >
+              style={{ width: "100%" }}>
               {[
                 { key: true, v: "Идэвхтэй" },
                 { key: false, v: "Идэвхгүй" },
@@ -625,8 +622,7 @@ function Khyanalt({ token }) {
               allowClear
               placeholder={t("Давхар сонгох")}
               onChange={(e) => davkharuudSongokh(e)}
-              style={{ width: "100%" }}
-            >
+              style={{ width: "100%" }}>
               {baiguullaga?.barilguud
                 ?.find((a) => a._id === barilgiinId)
                 ?.davkharuud.map((a) => (
@@ -643,8 +639,7 @@ function Khyanalt({ token }) {
             className="mx-2 my-4 flex flex-row items-center justify-between rounded-md border p-2 px-10 shadow-md"
             data-aos="fade-left"
             data-aos-duration="1000"
-            data-aos-delay="100"
-          >
+            data-aos-delay="100">
             <div>
               <p className="rounded-md bg-white text-sm dark:bg-gray-900">
                 SMS
@@ -687,8 +682,7 @@ function Khyanalt({ token }) {
               : neesenEsekh
               ? "right-full top-[100vh]"
               : "right-5 top-[25vh]"
-          }`}
-        >
+          }`}>
           {turulZagvar !== true ? (
             <SnippetsOutlined />
           ) : (
@@ -701,8 +695,7 @@ function Khyanalt({ token }) {
               ? " right-[5vw] top-[10vh] w-[90vw] "
               : " -right-full top-[30vh] w-[90vw] "
           } flex-col p-2 font-medium  `}
-          onClick={(e) => e.stopPropagation()}
-        >
+          onClick={(e) => e.stopPropagation()}>
           <div className="flex px-1 pb-2">
             <p>
               {turul} {t("загвар")}
@@ -716,22 +709,19 @@ function Khyanalt({ token }) {
                   : turul === "App"
                   ? smsZagvarNemya()
                   : router.push("/khyanalt/medegdel/mailMedegdel/new")
-              }
-            >
+              }>
               {t("Загвар үүсгэх")}
             </button>
           </div>
           <div
-            className={` h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}
-          >
+            className={` h-medegdelHariltsagchPhone overflow-hidden overflow-y-scroll xl:block`}>
             {mailiinZagvarGaralt?.jagsaalt?.map((a) => (
               <div>
                 {a.turul === turul ? (
                   <div
                     key={a.ner}
                     className="intro-x relative mt-2 flex cursor-pointer items-center rounded-md border p-2 shadow-md"
-                    onClick={() => zagvarSongokh(a)}
-                  >
+                    onClick={() => zagvarSongokh(a)}>
                     <div className="image-fit mr-1 h-8 w-8 flex-none ">
                       <img alt="email" src="/email.png" />
                     </div>
@@ -745,8 +735,7 @@ function Khyanalt({ token }) {
                         title="Загвар устгах уу?"
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
-                        onConfirm={() => zagvarUstgaya(a)}
-                      >
+                        onConfirm={() => zagvarUstgaya(a)}>
                         <div className="flex h-8  w-8 items-center justify-center rounded-full bg-gray-100 fill-current p-2 text-white dark:bg-gray-800">
                           <DeleteOutlined style={{ color: "red" }} />
                         </div>
@@ -759,8 +748,7 @@ function Khyanalt({ token }) {
                             : router.push(
                                 `/khyanalt/medegdel/mailMedegdel/${a._id}`
                               )
-                        }
-                      >
+                        }>
                         <EditOutlined style={{ color: "#85C1E9" }} />
                       </div>
                     </div>
@@ -776,8 +764,7 @@ function Khyanalt({ token }) {
       <div
         className={`col-span-12 lg:col-span-6 xl:col-span-3`}
         data-aos="fade-up"
-        data-aos-duration="1000"
-      >
+        data-aos-duration="1000">
         <div className={`box p-5 xl:block`}>
           <div className="relative w-full text-gray-700   dark:text-gray-300">
             <input
@@ -805,8 +792,7 @@ function Khyanalt({ token }) {
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4"
-            >
+              className="feather feather-search absolute inset-y-0 right-0 my-auto mr-3 mt-2 h-4 w-4">
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
@@ -818,8 +804,7 @@ function Khyanalt({ token }) {
                 if (e.target.checked === true)
                   setSongogdsonKhariltsagch([...jagsaalt]);
                 else setSongogdsonKhariltsagch([]);
-              }}
-            >
+              }}>
               <p className="pl-3">{t("Бүгдийг сонгох")}</p>
             </Checkbox>
           </div>
@@ -834,8 +819,7 @@ function Khyanalt({ token }) {
                         : ""
                     } `}
                     key={mur?._id}
-                    onClick={() => khariltsagchSongokh(mur)}
-                  >
+                    onClick={() => khariltsagchSongokh(mur)}>
                     <div>
                       <Checkbox
                         onClick={(e) => e.stopPropagation()}
@@ -983,15 +967,13 @@ function Khyanalt({ token }) {
                     ? "calc(100vh - 24rem)"
                     : ""
                 } `,
-              }}
-            >
+              }}>
               <div
                 className={`box flex h-full items-center ${
                   turulZagvar ? "hidden" : "lg:flex"
                 }`}
                 data-aos="fade-left"
-                data-aos-duration="1000"
-              >
+                data-aos-duration="1000">
                 <div className="mx-auto text-center">
                   <div className="flex justify-center">
                     <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
@@ -1020,8 +1002,7 @@ function Khyanalt({ token }) {
             <div
               className="w-full"
               data-aos="fade-left"
-              data-aos-duration="1000"
-            >
+              data-aos-duration="1000">
               <div
                 className="col-span-12 flex min-h-[30vh] flex-col-reverse items-center overflow-y-scroll rounded-r-xl px-10 pb-10 dark:bg-[#121826] lg:col-span-6 lg:mt-5 xl:col-span-6 xl:h-H7HalfRem"
                 style={{
@@ -1035,8 +1016,7 @@ function Khyanalt({ token }) {
                       : ""
                   } `,
                 }}
-                onScroll={onScroll}
-              >
+                onScroll={onScroll}>
                 {medegdelAvya?.jagsaalt.map((a) => {
                   return (
                     <div
@@ -1044,8 +1024,7 @@ function Khyanalt({ token }) {
                         a.turul === "medegdel"
                           ? "ml-auto rounded-br-none bg-green-500"
                           : "rounded-bl-none"
-                      }`}
-                    >
+                      }`}>
                       <span className="w-full break-words text-justify text-white ">
                         {a.message}
                       </span>
@@ -1053,15 +1032,13 @@ function Khyanalt({ token }) {
                       <div
                         className={`absolute right-2 h-5 w-5 fill-current text-white ${
                           a.kharsanEsekh === true ? "" : "hidden"
-                        }`}
-                      >
+                        }`}>
                         <svg
                           width="20px"
                           height="20px"
                           viewBox="0 0 24 24"
                           fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
+                          xmlns="http://www.w3.org/2000/svg">
                           <path
                             d="M1.5 12.5L5.57574 16.5757C5.81005 16.8101 6.18995 16.8101 6.42426 16.5757L9 14"
                             stroke="currentColor"
@@ -1097,8 +1074,7 @@ function Khyanalt({ token }) {
           <div
             className="w-full space-y-2 p-2"
             data-aos="fade-right"
-            data-aos-duration="1000"
-          >
+            data-aos-duration="1000">
             {turul !== "SMS" && (
               <div>
                 <Input
@@ -1128,8 +1104,7 @@ function Khyanalt({ token }) {
                       name="file"
                       action={`${url}/upload`}
                       method="POST"
-                      onChange={(v) => setZurag(v.file.response)}
-                    >
+                      onChange={(v) => setZurag(v.file.response)}>
                       <div className="flex flex-row space-x-1">
                         <Button icon={<UploadOutlined />}>
                           {t("Зураг оруулах")}
@@ -1158,8 +1133,7 @@ function Khyanalt({ token }) {
                 onClick={send}
                 className={`h-8 w-8 cursor-pointer sm:h-10 sm:w-10 bg-green-${
                   loading ? "200" : "600"
-                } flex flex-none items-center justify-center rounded-full text-white`}
-              >
+                } flex flex-none items-center justify-center rounded-full text-white`}>
                 {loading ? (
                   <Spin size="small" />
                 ) : (
@@ -1173,8 +1147,7 @@ function Khyanalt({ token }) {
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="h-4 w-4"
-                  >
+                    className="h-4 w-4">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                   </svg>
@@ -1189,8 +1162,7 @@ function Khyanalt({ token }) {
             turulZagvar ? "hidden" : "lg:flex"
           }`}
           data-aos="fade-left"
-          data-aos-duration="1000"
-        >
+          data-aos-duration="1000">
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
