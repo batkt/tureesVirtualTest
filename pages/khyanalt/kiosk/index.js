@@ -446,7 +446,7 @@ const Kiosk = () => {
         height={"78vh"}
         closable={false}
         maskClosable={false}
-        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200">
+        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200 md:text-xl">
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
@@ -462,7 +462,7 @@ const Kiosk = () => {
               setEbarimt();
               setAlkham(0);
             }}
-            className="flex w-full items-center justify-center text-7xl">
+            className="flex w-full items-center justify-center text-7xl md:text-3xl">
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
@@ -506,7 +506,7 @@ const Kiosk = () => {
                 setAlkham(0);
               }
             }}
-            className={`flex w-full items-center justify-center text-7xl ${
+            className={`flex w-full items-center justify-center text-7xl md:text-3xl ${
               butsakhGuideDarsan && "animate-ping"
             }`}>
             <LeftCircleFilled />
@@ -518,7 +518,7 @@ const Kiosk = () => {
             {tulburiinKhelber === "pass" &&
               "Pass апп-аас төлөн үргэлжлүүлэх дарна уу."}
           </div>
-          <div className="my-16 flex w-full items-center justify-between px-12">
+          <div className="my-16 flex w-full items-center justify-between px-12 md:my-10">
             {tulburiinKhelberuud.map((mur) => {
               return (
                 <div
@@ -530,12 +530,12 @@ const Kiosk = () => {
                       butsakhGuide();
                     }
                   }}
-                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 ${
+                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 md:h-[150px] md:w-[150px] ${
                     tulburiinKhelber &&
                     tulburiinKhelber !== mur.ner &&
                     "opacity-50"
                   }`}>
-                  <div className="md:-[60px] h-[120px] w-[120px] overflow-hidden md:h-[60px]">
+                  <div className="h-[120px] w-[120px] overflow-hidden md:h-[60px] md:w-[60px]">
                     <img src={mur.icon} alt="" />
                   </div>
                   <div>{mur.label}</div>
@@ -545,7 +545,7 @@ const Kiosk = () => {
           </div>
           {songogdsonData &&
             (!tulburiinKhelber || tulburiinKhelber === "card") && (
-              <div className="relative mx-12 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+              <div className="relative mx-12 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8 md:gap-3">
                 <div className="flex w-full justify-between px-6">
                   <div>Улсын дугаар</div>
                   <div>{songogdsonData.plate_number}</div>
@@ -767,11 +767,11 @@ const Kiosk = () => {
           )}
         </div>
       </Drawer>
-      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
+      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8 md:pt-[100px]">
         <div className="">
           <img className="h-full w-full" src="/parkEaseLogo.png" alt="" />
         </div>
-        <div className="px-12 text-center text-5xl font-bold text-[#1E1E1E]">
+        <div className="px-12 text-center text-5xl text-[22px] font-bold text-[#1E1E1E]">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>
