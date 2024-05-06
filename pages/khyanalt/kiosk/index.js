@@ -511,7 +511,7 @@ const Kiosk = () => {
             }`}>
             <LeftCircleFilled />
           </div>
-          <div className="mt-8 flex w-full items-center justify-center">
+          <div className="mt-8 flex w-full items-center justify-center md:mt-3">
             {!tulburiinKhelber && "Төлбөрийн хэлбэр сонгоно уу."}
             {tulburiinKhelber === "card" && "Картаа уншуулна уу."}
             {tulburiinKhelber === "qpay" && "QR уншуулан төлбөрөө төлнө үү."}
@@ -530,7 +530,7 @@ const Kiosk = () => {
                       butsakhGuide();
                     }
                   }}
-                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 md:h-[150px] md:w-[150px] ${
+                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 md:h-[130px] md:w-[130px] md:gap-1 ${
                     tulburiinKhelber &&
                     tulburiinKhelber !== mur.ner &&
                     "opacity-50"
@@ -701,7 +701,7 @@ const Kiosk = () => {
               );
             })}
           </div>
-          <div className="mt-8 flex w-full items-center justify-center gap-24 px-12">
+          <div className="mt-8 flex w-full items-center justify-center gap-24 px-12 ">
             <DugaarKeyboard
               dugaar={register}
               setDugaar={setRegister}
