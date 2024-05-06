@@ -125,7 +125,7 @@ const DugaarKeyboard = ({
               key={index}
               className={`col-span-1 flex items-center justify-center rounded-xl ${
                 num === "Butsakh"
-                  ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500 md:h-[90px] md:w-[90px]"
+                  ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500  md:w-[90px]"
                   : "h-[130px] w-[130px] bg-[#414143] md:h-[90px] md:w-[90px]"
               }`}
               onClick={() => handleButtonClick(num, shineTurul)}>
