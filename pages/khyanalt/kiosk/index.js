@@ -66,10 +66,9 @@ const Kiosk = () => {
   useEffect(() => {
     if (token)
       uilchilgee(token)
-        .post("/servereesTsagAvyaa")
+        .get("/ognooAvya")
         .then(({ data }) => {
           if (!!data) {
-            console.log(data, "dataaaaaaaaaaaaaaaa");
             setServereesAvsonOdooTsag(data);
           }
         });
@@ -147,7 +146,8 @@ const Kiosk = () => {
       songogdsonData?.enter_date &&
       !songogdsonData?.fitnessHungulult
     ) {
-      const odooTsag = moment();
+      const odooTsag = moment(servereesAvsonOdooTsag);
+
       const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
         2,
         "hours"
@@ -163,7 +163,7 @@ const Kiosk = () => {
         });
       }
     }
-  }, [songogdsonData?.enter_date, ajiltan?._id]);
+  }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
   function onTimeout() {
     setDrawerOngoikh(false);
     setSongogdsonData(null);
@@ -535,7 +535,7 @@ const Kiosk = () => {
                     tulburiinKhelber !== mur.ner &&
                     "opacity-50"
                   }`}>
-                  <div className="h-[120px] w-[120px] overflow-hidden">
+                  <div className="md:-[60px] h-[120px] w-[120px] overflow-hidden md:h-[60px]">
                     <img src={mur.icon} alt="" />
                   </div>
                   <div>{mur.label}</div>
