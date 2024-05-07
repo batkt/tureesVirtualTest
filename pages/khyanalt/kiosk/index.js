@@ -615,12 +615,12 @@ const Kiosk = () => {
                     <div className="w-full border border-[#1E1E1E]" />
                     <div className="flex w-full justify-between px-6 ">
                       <div className="text-red-400">Хөнгөлөлт</div>
-                      <Button
-                        onClick={() => showKhunglult()}
-                        className="cursor-pointer">
-                        <MdOutlineDiscount className="text-green-400" />
-                      </Button>
-                      <div>
+                      <div className="flex gap-4">
+                        <Button
+                          onClick={() => showKhunglult()}
+                          className="cursor-pointer">
+                          <MdOutlineDiscount className="text-green-400" />
+                        </Button>
                         {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
                       </div>
                     </div>
