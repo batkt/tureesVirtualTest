@@ -14,7 +14,10 @@ import {
   Switch,
   Space,
   Button,
+  Row,
+  Col,
 } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
 import updateMethod from "tools/function/crud/updateMethod";
 import { t } from "i18next";
@@ -56,6 +59,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
   }
 
   function onFinish(formData) {
+    console.log(formData, "formData");
     setLoading(true);
     const data = formData;
     if (!data.turul) {
@@ -151,6 +155,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
 
   return (
     <Form
+      onValuesChange={(e) => console.log(e, "ene bol e")}
       form={form}
       onFinish={onFinish}
       initialValues={data}
@@ -168,29 +173,57 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
         </div>
       </div>
 
-      <Form.Item
-        rules={[
-          {
-            required: true,
-            message: t("Утас бүртгэнэ үү!"),
-          },
-          {
-            required: form.getFieldValue("utas")?.length > 0 && true,
-            min: 8,
-            max: 8,
-            message: t("Утасны дугаараа шалгана уу!"),
-          },
-        ]}
-        label={t("Утас")}
-        name="utas">
-        <Input
-          maxLength={8}
-          onKeyDown={focuser}
-          onChange={(v) => dugaarShalgay(v)}
-          placeholder={t("Утас")}
-          autoComplete="off"
-        />
-      </Form.Item>
+      <Form.List labelCol={{ span: 8 }} wrapperCol={{ span: 24 }} name="utas">
+        {(fields, { add, remove }) => (
+          <>
+            <div className={"max-h-[150px] overflow-auto "}>
+              {fields.map(({ key, name, ...restField }) => (
+                <Row className="flex items-baseline">
+                  <Col span={23}>
+                    <Form.Item
+                      name={name}
+                      rules={[
+                        {
+                          required: true,
+                          message: t("Утас бүртгэнэ үү!"),
+                        },
+                        {
+                          required:
+                            form.getFieldValue("utas")?.length > 0 && true,
+                          min: 8,
+                          max: 8,
+                          message: t("Утасны дугаараа шалгана уу!"),
+                        },
+                      ]}
+                      label={t("Утас")}>
+                      <Input
+                        maxLength={8}
+                        onKeyDown={focuser}
+                        onChange={(v) => dugaarShalgay(v)}
+                        placeholder={t("Утас")}
+                        autoComplete="off"
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col className="flex items-center justify-center">
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Col>
+                </Row>
+              ))}
+            </div>
+            <Form.Item>
+              <Button
+                type="dashed"
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}>
+                Дугаар нэмэх
+              </Button>
+            </Form.Item>
+          </>
+        )}
+      </Form.List>
+
       {bulegEsekh === true && (
         <Form.Item
           rules={[
@@ -211,12 +244,12 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
       )}
       {bulegEsekh === false && (
         <Form.Item
-          rules={[
-            {
-              required: true,
-              message: t("Овог бүртгэнэ үү!"),
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: t("Овог бүртгэнэ үү!"),
+          //   },
+          // ]}
           label={t("Овог")}
           name="ovog">
           <Input
@@ -227,24 +260,24 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
         </Form.Item>
       )}
       <Form.Item
-        rules={[
-          {
-            required: true,
-            message: t("Нэр бүртгэнэ үү!"),
-          },
-        ]}
+        // rules={[
+        //   {
+        //     required: true,
+        //     message: t("Нэр бүртгэнэ үү!"),
+        //   },
+        // ]}
         label={t("Нэр")}
         name="ner">
         <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
       {bulegEsekh === false && (
         <Form.Item
-          rules={[
-            {
-              required: true,
-              message: t("Хүйс бүртгэнэ үү!"),
-            },
-          ]}
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: t("Хүйс бүртгэнэ үү!"),
+          //   },
+          // ]}
           label={t("Хүйс")}
           name="khuis">
           <Select
