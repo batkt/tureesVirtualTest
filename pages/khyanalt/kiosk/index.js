@@ -6,6 +6,7 @@ import {
   LeftCircleFilled,
   LoadingOutlined,
   WarningOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
 import { Button, Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
@@ -17,6 +18,7 @@ import {
   ebarimtKhelberuud,
   tulburiinKhelberuud,
 } from "tools/logic/tulburiinKhelberuud";
+import { MdOutlineDiscount } from "react-icons/md";
 import moment, { utc } from "moment";
 import axios from "axios";
 import Lottie from "lottie-react";
@@ -608,15 +610,16 @@ const Kiosk = () => {
                   <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                 </div>
 
-                {console.log(songogdsonData, "songogdsonData")}
-
                 {ajiltan._id === "66384a9061eeda747d01a320" && (
                   <>
                     <div className="w-full border border-[#1E1E1E]" />
-                    <div
-                      onClick={() => showKhunglult()}
-                      className="flex w-full cursor-pointer justify-between px-6 text-red-400">
-                      <div>Хөнгөлөлт</div>
+                    <div className="flex w-full justify-between px-6 ">
+                      <div className="text-red-400">Хөнгөлөлт</div>
+                      <Button
+                        onClick={() => showKhunglult()}
+                        className="cursor-pointer">
+                        <MdOutlineDiscount className="text-green-400" />
+                      </Button>
                       <div>
                         {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
                       </div>
