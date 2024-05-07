@@ -7,7 +7,7 @@ import {
   LoadingOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Drawer, Spin, message } from "antd";
+import { Button, Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -23,6 +23,8 @@ import Lottie from "lottie-react";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
+import { modal } from "components/ant/Modal";
+import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
@@ -43,6 +45,8 @@ const Kiosk = () => {
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const khungulultRef = React.useRef(null);
+
   const query = useMemo(() => {
     var query = {};
     if (drawerOngoikh) {
@@ -83,6 +87,31 @@ const Kiosk = () => {
       duration: 3,
     });
   };
+
+  function showKhunglult() {
+    const footer = [
+      <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
+      <Button
+        className="space-x-2"
+        type="primary"
+        onClick={() => khungulultRef.current.ilgeeye()}>
+        Тийм
+      </Button>,
+    ];
+    modal({
+      title: "Хөнгөлөлт",
+      content: (
+        <ZuvhunKhunglukhModalContent
+          songogdsonData={songogdsonData}
+          barilgiinId={barilgiinId}
+          ajiltan={ajiltan}
+          token={token}
+          ref={khungulultRef}
+        />
+      ),
+      footer,
+    });
+  }
 
   console.log(ajiltan, ":ajiltan"); //"66384a9061eeda747d01a320"
 
@@ -584,7 +613,9 @@ const Kiosk = () => {
                 {ajiltan._id === "66384a9061eeda747d01a320" && (
                   <>
                     <div className="w-full border border-[#1E1E1E]" />
-                    <div className="flex w-full justify-between px-6 text-red-400">
+                    <div
+                      onClick={() => showKhunglult()}
+                      className="flex w-full cursor-pointer justify-between px-6 text-red-400">
                       <div>Хөнгөлөлт</div>
                       <div>
                         {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
