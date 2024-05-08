@@ -223,19 +223,19 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "pocket":
+          // case "pocket":
+          //   ugugdul.push({
+          //     ner: element._id,
+          //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
+          //     dun: element.niitDun,
+          //     too: element.niitToo,
+          //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          //   });
+          //   break;
+          case "toki":
             ugugdul.push({
               ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-              dun: element.niitDun,
-              too: element.niitToo,
-              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-            });
-            break;
-          case "lend":
-            ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/VEPdS1mrQMl-tmGa86GLKXiYt1WJFSSGrKeW83liDogKSTE5P0p0bei8i_QwatQhI0k=w240-h480-rw",
+              icon: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,

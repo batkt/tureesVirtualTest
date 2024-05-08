@@ -29,13 +29,13 @@ const qpayTulburiinKhelberuud = [
     ner: "socialpay",
     src: "https://play-lh.googleusercontent.com/-xjqjFYBmk1odZFvUnyobdiKu9pcgVf_7e-UnFXVL0pk2JpjSs71WkgFQUbpL47TmME",
   },
+  // {
+  //   ner: "pocket",
+  //   src: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Pocket_logo.png",
+  // },
   {
-    ner: "pocket",
-    src: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Pocket_logo.png",
-  },
-  {
-    ner: "lend",
-    src: "data:image/png;base64,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",
+    ner: "toki",
+    src: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
   },
 ];
 
@@ -93,8 +93,8 @@ function KhuvaajTulukh({
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
-    const lend = tulbur.find((a) => a.turul === "lend")?.dun;
+    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
+    const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     return {
       belen,
       khariltsakh,
@@ -108,8 +108,8 @@ function KhuvaajTulukh({
       qpay,
       monpay,
       socialpay,
-      pocket,
-      lend,
+      // pocket,
+      toki,
     };
   }, [tulbur]);
 
