@@ -223,19 +223,19 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          // case "pocket":
-          //   ugugdul.push({
-          //     ner: element._id,
-          //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
-          //     dun: element.niitDun,
-          //     too: element.niitToo,
-          //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
-          //   });
-          //   break;
-          case "toki":
+          case "pocket":
             ugugdul.push({
               ner: element._id,
-              icon: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
+              icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "lend":
+            ugugdul.push({
+              ner: element._id,
+              icon: "https://play-lh.googleusercontent.com/VEPdS1mrQMl-tmGa86GLKXiYt1WJFSSGrKeW83liDogKSTE5P0p0bei8i_QwatQhI0k=w240-h480-rw",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -284,7 +284,15 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-
+          case "zeel":
+            ugugdul.push({
+              ner: "Зээл",
+              icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;    
           default:
             ugugdul.push({
               ner: element._id,
@@ -332,6 +340,20 @@ function TulburiinDelgerenguiTailan(
     <div>
       <div className="hidden">
         <div className="p-6" ref={printRef}>
+          <div className="flex items-center justify-start gap-6">
+            <div className="flex gap-6">
+              <div>Огноо:   {moment(ognoo[0]).format("YYYY-MM-DD")}</div>
+              <div>{moment(ognoo[1]).format("YYYY-MM-DD")}</div>
+            </div>
+          </div>
+          <div className="flex items-center justify-start gap-2">
+            Ажилтан:{" "}
+            {songogdsonAjiltan === null || songogdsonAjiltan === undefined
+              ? "Бүх ажилтан"
+              : ajilchdiinGaralt?.jagsaalt
+                  ?.filter((a) => a._id === songogdsonAjiltan)
+                  .map((b) => b.ovog[0] + "." + b.ner + "     " + b.register)}
+          </div>
           {tulburiinMedeelel.map((a, i) => {
             return (
               <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
@@ -371,7 +393,8 @@ function TulburiinDelgerenguiTailan(
             </div>
           )}
           style={{ width: "50%" }}
-          onChange={(e) => setSongogdsonAjiltan(e)}>
+          onChange={(e) => setSongogdsonAjiltan(e)}
+        >
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
             <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>
               <div className="flex flex-row justify-between">
@@ -390,10 +413,12 @@ function TulburiinDelgerenguiTailan(
             return (
               <div
                 className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
-                key={i}>
+                key={i}
+              >
                 <div
                   style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}>
+                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
+                >
                   <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
                 </div>
                 <img
