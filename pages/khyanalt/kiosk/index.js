@@ -139,7 +139,7 @@ const Kiosk = () => {
     setAlkham(0);
   }
 
-  function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
+  function qpayAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun, zogsooliinId) {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
@@ -147,6 +147,7 @@ const Kiosk = () => {
         .post("/qpayGargaya", {
           barilgiinId: barilgiinId,
           dun: ilgeekhDun,
+          zogsooliinId: zogsooliinId,
           zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
         })
         .then(({ data }) => {
@@ -295,7 +296,8 @@ const Kiosk = () => {
       qpayAvakh(
         songogdsonData?.session_id,
         barilgiinId,
-        songogdsonData?.pay_amount
+        songogdsonData?.pay_amount,
+        songogdsonData?.parking_id
       );
     }
     if (data === "pass") {
