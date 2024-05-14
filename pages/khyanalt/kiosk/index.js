@@ -96,7 +96,8 @@ const Kiosk = () => {
       <Button
         className="space-x-2"
         type="primary"
-        onClick={() => khungulultRef.current.ilgeeye()}>
+        onClick={() => khungulultRef.current.ilgeeye()}
+      >
         Тийм
       </Button>,
     ];
@@ -218,6 +219,7 @@ const Kiosk = () => {
         .post("/qpayGargaya", {
           barilgiinId: barilgiinId,
           dun: ilgeekhDun,
+          zogsooliinId: uilchluugchiinId,
           zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
         })
         .then(({ data }) => {
@@ -477,11 +479,13 @@ const Kiosk = () => {
         height={"78vh"}
         closable={false}
         maskClosable={false}
-        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200 md:text-xl">
+        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200 md:text-xl"
+      >
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}>
+          }`}
+        >
           <div
             onClick={() => {
               setDrawerOngoikh(false);
@@ -493,7 +497,8 @@ const Kiosk = () => {
               setEbarimt();
               setAlkham(0);
             }}
-            className="flex w-full items-center justify-center text-7xl md:text-3xl">
+            className="flex w-full items-center justify-center text-7xl md:text-3xl"
+          >
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
@@ -511,7 +516,8 @@ const Kiosk = () => {
                 return (
                   <div
                     onClick={() => mashinSongiy(mur)}
-                    className="w-fit rounded-xl border-[6px] border-[#414143] px-8 py-6 tracking-wider">
+                    className="w-fit rounded-xl border-[6px] border-[#414143] px-8 py-6 tracking-wider"
+                  >
                     {mur?.mashiniiDugaar}
                   </div>
                 );
@@ -526,7 +532,8 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 1 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}>
+          }`}
+        >
           <div
             onClick={() => {
               if (tulburiinKhelber) {
@@ -539,7 +546,8 @@ const Kiosk = () => {
             }}
             className={`flex w-full items-center justify-center text-7xl md:text-3xl ${
               butsakhGuideDarsan && "animate-ping"
-            }`}>
+            }`}
+          >
             <LeftCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center md:mt-3">
@@ -565,7 +573,8 @@ const Kiosk = () => {
                     tulburiinKhelber &&
                     tulburiinKhelber !== mur.ner &&
                     "opacity-50"
-                  }`}>
+                  }`}
+                >
                   <div className="h-[120px] w-[120px] overflow-hidden md:h-[60px] md:w-[60px]">
                     <img src={mur.icon} alt="" />
                   </div>
@@ -618,7 +627,8 @@ const Kiosk = () => {
                       <div className="flex gap-4">
                         <Button
                           onClick={() => showKhunglult()}
-                          className="cursor-pointer">
+                          className="cursor-pointer"
+                        >
                           <MdOutlineDiscount className="text-green-400" />
                         </Button>
                         {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
@@ -684,7 +694,8 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 2 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}>
+          }`}
+        >
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
             <Lottie animationData={amjilttaiAnimation} />
@@ -693,7 +704,8 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
             alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}>
+          }`}
+        >
           <div
             onClick={() => {
               setDrawerOngoikh(false);
@@ -706,7 +718,8 @@ const Kiosk = () => {
               setAlkham(0);
               setEbarimt();
             }}
-            className="flex w-full items-center justify-center text-7xl">
+            className="flex w-full items-center justify-center text-7xl"
+          >
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center px-12 text-center">
@@ -726,7 +739,8 @@ const Kiosk = () => {
                     eBarimtTurul !== "" ? "h-[200px]" : "h-[400px]"
                   } w-full flex-col items-center justify-center rounded-xl p-4 ${
                     eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-[#414143]"
-                  }`}>
+                  }`}
+                >
                   <div className="h-[120px] w-[120px]">
                     <img src={mur.icon} alt="" />
                   </div>
@@ -751,10 +765,12 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
             alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}>
+          }`}
+        >
           <div
             onClick={onTimeout}
-            className="flex w-full items-center justify-center text-7xl">
+            className="flex w-full items-center justify-center text-7xl"
+          >
             <CloseCircleFilled />
           </div>
           <div className="fixed left-[60%] top-3">
