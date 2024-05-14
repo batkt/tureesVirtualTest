@@ -178,6 +178,9 @@ function tulburKhurvuulekh(v) {
     case "belen":
       utga = "Бэлэн";
       break;
+    case "zeel":
+      utga = "Зээл";
+        break;  
     case "khariltsakh":
       utga = "Харилцах";
       break;
@@ -1624,10 +1627,10 @@ function camera({ token }) {
   };
 
   function tulburiinDelgerengui() {
-    if (!camerVal[1]) {
-      message.warn("Гарах камер сонгоно уу.");
-      return;
-    }
+    // if (!camerVal[1]) {
+    //   message.warn("Гарах камер сонгоно уу.");
+    //   return;
+    // }
     const footer = [
       <div className="flex w-full items-center justify-between">
         <Button type="primary" onClick={() => tailanRef.current.khaaya()}>

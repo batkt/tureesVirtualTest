@@ -178,19 +178,28 @@ const DelegrenguiKharakh = React.forwardRef(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "pocket":
+          // case "pocket":
+          //   ugugdul.push({
+          //     ner: element._id,
+          //     icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
+          //     dun: element.niitDun,
+          //     khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+          //   });
+          //   break;
+          case "toki":
             ugugdul.push({
               ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/l0PMiUcleEv4dTZslRa9psOfrlB3S8NpBwctOoxQ6vlqfjamIf2ZxVlynfqiSelbTg=w240-h480-rw",
+              icon: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
               dun: element.niitDun,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-          case "lend":
+          case "khungulult":
             ugugdul.push({
-              ner: element._id,
-              icon: "https://play-lh.googleusercontent.com/VEPdS1mrQMl-tmGa86GLKXiYt1WJFSSGrKeW83liDogKSTE5P0p0bei8i_QwatQhI0k=w240-h480-rw",
+              ner: "Хөнгөлөлт",
+              icon: "/discount.png",
               dun: element.niitDun,
+              too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
@@ -1180,15 +1189,17 @@ function togloom1() {
         width: "10rem",
         showSorterTooltip: false,
         render: (v, data) => {
-          const khunglukh = data?.tulbur?.find((a) => a.turul === "khunglukh");
+          const khungulult = data?.tulbur?.find(
+            (a) => a.turul === "khungulult"
+          );
           return (
             <div className="flex w-full items-center">
-              {!!khunglukh?.tailbar && (
+              {!!khungulult?.tailbar && (
                 <Popover
                   content={
                     <div className="dark:text-gray-200">
                       <div className="font-medium">Тайлбар:</div>{" "}
-                      <div className="text-center">{khunglukh?.tailbar}</div>
+                      <div className="text-center">{khungulult?.tailbar}</div>
                     </div>
                   }>
                   <div className="flex w-full justify-center text-lg text-blue-500">
@@ -1197,7 +1208,7 @@ function togloom1() {
                 </Popover>
               )}{" "}
               <div className="w-full text-right">
-                {khunglukh ? formatNumber(v, 0) : 0}
+                {khungulult ? formatNumber(v, 0) : 0}
               </div>
             </div>
           );

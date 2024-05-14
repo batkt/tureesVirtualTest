@@ -83,8 +83,8 @@ function ShineTogloomTulbur(
     const qpay = tulbur.find((a) => a.turul === "qpay")?.dun;
     const monpay = tulbur.find((a) => a.turul === "monpay")?.dun;
     const socialpay = tulbur.find((a) => a.turul === "socialpay")?.dun;
-    const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
-    const lend = tulbur.find((a) => a.turul === "lend")?.dun;
+    // const pocket = tulbur.find((a) => a.turul === "pocket")?.dun;
+    const toki = tulbur.find((a) => a.turul === "toki")?.dun;
     const khungulult = tulbur.find((a) => a.turul === "khungulult")?.dun;
 
     return {
@@ -101,8 +101,8 @@ function ShineTogloomTulbur(
       qpay,
       monpay,
       socialpay,
-      pocket,
-      lend,
+      // pocket,
+      toki,
       khungulult,
     };
   }, [tulbur]);
@@ -831,7 +831,7 @@ function ShineTogloomTulbur(
               <div
                 className={`h-[85px] cursor-not-allowed rounded-3xl  hover:scale-110`}
               >
-                <Image preview={false} width={100} src="/Rectangle83.png" />
+                {/* <Image preview={false} width={100} src="/Rectangle83.png" /> */}
               </div>
             </div>
           </div>

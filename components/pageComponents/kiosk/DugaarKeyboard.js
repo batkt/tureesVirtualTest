@@ -82,7 +82,9 @@ const DugaarKeyboard = ({
   return (
     <div className="flex flex-col items-center justify-between gap-12">
       {!shineTurul ? (
-        <div className="text-5xl font-bold">Улсын дугаар оруулна уу</div>
+        <div className="text-5xl font-bold md:text-[20px]">
+          Улсын дугаар оруулна уу
+        </div>
       ) : (
         <div className="text-5xl font-bold">{baiguullagaNer?.name || ""}</div>
       )}
@@ -91,7 +93,7 @@ const DugaarKeyboard = ({
           {dugaar.map((mur, index) => (
             <input
               key={index}
-              className="h-[150px] w-[150px] select-none rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-5xl font-bold text-zinc-200 caret-transparent focus:outline-none"
+              className="h-[150px] w-[150px] select-none rounded-2xl border-4 border-zinc-200 bg-[#1E1E1E] text-center text-3xl font-bold text-zinc-200 caret-transparent focus:outline-none md:h-[80px] md:w-[80px] xl:text-5xl"
               type="text"
               maxLength="1"
               value={mur}
@@ -117,17 +119,16 @@ const DugaarKeyboard = ({
         ""
       )}
       {(!shineTurul || eBarimtTurul !== "khuviKhun") && (
-        <div className="grid grid-cols-4 place-items-center gap-2 text-5xl font-bold">
+        <div className="grid grid-cols-4 place-items-center gap-2 text-5xl font-bold md:gap-[4px]">
           {numbers.map((num, index) => (
             <div
               key={index}
               className={`col-span-1 flex items-center justify-center rounded-xl ${
                 num === "Butsakh"
-                  ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500"
-                  : "h-[130px] w-[130px] bg-[#414143]"
+                  ? "row-span-2 h-full w-[130px] bg-[#EB3223] bg-opacity-20 text-red-500  md:w-[90px]"
+                  : "h-[130px] w-[130px] bg-[#414143] md:h-[90px] md:w-[90px]"
               }`}
-              onClick={() => handleButtonClick(num, shineTurul)}
-            >
+              onClick={() => handleButtonClick(num, shineTurul)}>
               {num === "Butsakh" ? <BsBackspaceFill /> : num}
             </div>
           ))}
@@ -135,8 +136,7 @@ const DugaarKeyboard = ({
       )}
       <button
         onClick={handleUrgeljluulekh}
-        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400 focus:outline-none"
-      >
+        className="flex h-[90px] w-[490px] items-center justify-center gap-4 rounded-xl border-4 border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-4xl font-bold text-green-400 focus:outline-none md:h-[70px] md:w-[400px] md:text-2xl">
         <div>Үргэлжлүүлэх</div>
         <div className="mt-2 font-[800]">
           <img src="/rightCadet.png" />

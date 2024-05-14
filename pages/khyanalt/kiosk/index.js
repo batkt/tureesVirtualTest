@@ -6,8 +6,9 @@ import {
   LeftCircleFilled,
   LoadingOutlined,
   WarningOutlined,
+  SaveOutlined,
 } from "@ant-design/icons";
-import { Drawer, Spin, message } from "antd";
+import { Button, Drawer, Spin, message } from "antd";
 import DugaarKeyboard from "components/pageComponents/kiosk/DugaarKeyboard";
 import useUilchluulegchWithQuery from "hooks/useUilchluulegchWithQuery";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -17,12 +18,15 @@ import {
   ebarimtKhelberuud,
   tulburiinKhelberuud,
 } from "tools/logic/tulburiinKhelberuud";
+import { MdOutlineDiscount } from "react-icons/md";
 import moment, { utc } from "moment";
 import axios from "axios";
 import Lottie from "lottie-react";
 import amjilttaiAnimation from "./amjilttaiAnimation.json";
 import QRCode from "react-qr-code";
 import formatNumber from "tools/function/formatNumber";
+import { modal } from "components/ant/Modal";
+import ZuvhunKhunglukhModalContent from "./ZuvhunKhunglukhModalContent";
 
 const Kiosk = () => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
@@ -37,11 +41,14 @@ const Kiosk = () => {
   const [tulburiinKhelber, setTulburiinKhelber] = useState();
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
+  const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
+  const khungulultRef = React.useRef(null);
+
   const query = useMemo(() => {
     var query = {};
     if (drawerOngoikh) {
@@ -62,6 +69,17 @@ const Kiosk = () => {
     query
   );
 
+  useEffect(() => {
+    if (token)
+      uilchilgee(token)
+        .get("/ognooAvya")
+        .then(({ data }) => {
+          if (!!data) {
+            setServereesAvsonOdooTsag(data);
+          }
+        });
+  }, [token]);
+
   const msgNotif = (content) => {
     messageApi.open({
       content: content,
@@ -71,6 +89,33 @@ const Kiosk = () => {
       duration: 3,
     });
   };
+
+  function showKhunglult() {
+    const footer = [
+      <Button onClick={() => khungulultRef.current.khaaya()}>Үгүй</Button>,
+      <Button
+        className="space-x-2"
+        type="primary"
+        onClick={() => khungulultRef.current.ilgeeye()}>
+        Тийм
+      </Button>,
+    ];
+    modal({
+      title: "Хөнгөлөлт",
+      content: (
+        <ZuvhunKhunglukhModalContent
+          songogdsonData={songogdsonData}
+          barilgiinId={barilgiinId}
+          ajiltan={ajiltan}
+          token={token}
+          ref={khungulultRef}
+        />
+      ),
+      footer,
+    });
+  }
+
+  console.log(ajiltan, ":ajiltan"); //"66384a9061eeda747d01a320"
 
   useEffect(() => {
     if (khuleegdejBuiQpay) {
@@ -124,6 +169,32 @@ const Kiosk = () => {
     }
   }, [alkham]);
 
+  console.log(servereesAvsonOdooTsag, "eee");
+
+  useEffect(() => {
+    if (
+      ajiltan?._id === "66384a9061eeda747d01a320" &&
+      songogdsonData?.enter_date &&
+      !songogdsonData?.fitnessHungulult
+    ) {
+      const odooTsag = moment(servereesAvsonOdooTsag);
+
+      const hoyrTsagiinDaraa = moment(songogdsonData.enter_date).add(
+        2,
+        "hours"
+      );
+      const hoyrTsagiinDataaGarsanEsekh = odooTsag.isAfter(hoyrTsagiinDaraa);
+      if (hoyrTsagiinDataaGarsanEsekh) {
+        setSongogdsonData((prev) => {
+          return {
+            ...prev,
+            fitnessHungulult: 3000,
+            pay_amount: prev?.pay_amount - 3000,
+          };
+        });
+      }
+    }
+  }, [songogdsonData?.enter_date, servereesAvsonOdooTsag, ajiltan?._id]);
   function onTimeout() {
     setDrawerOngoikh(false);
     setSongogdsonData(null);
@@ -408,13 +479,11 @@ const Kiosk = () => {
         height={"78vh"}
         closable={false}
         maskClosable={false}
-        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200"
-      >
+        className="khuviinDrawer bg-transparent text-5xl font-semibold text-gray-200 md:text-xl">
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 0 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
+          }`}>
           <div
             onClick={() => {
               setDrawerOngoikh(false);
@@ -426,8 +495,7 @@ const Kiosk = () => {
               setEbarimt();
               setAlkham(0);
             }}
-            className="flex w-full items-center justify-center text-7xl"
-          >
+            className="flex w-full items-center justify-center text-7xl md:text-3xl">
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center">
@@ -445,8 +513,7 @@ const Kiosk = () => {
                 return (
                   <div
                     onClick={() => mashinSongiy(mur)}
-                    className="w-fit rounded-xl border-[6px] border-[#414143] px-8 py-6 tracking-wider"
-                  >
+                    className="w-fit rounded-xl border-[6px] border-[#414143] px-8 py-6 tracking-wider">
                     {mur?.mashiniiDugaar}
                   </div>
                 );
@@ -461,8 +528,7 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 1 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
+          }`}>
           <div
             onClick={() => {
               if (tulburiinKhelber) {
@@ -473,20 +539,19 @@ const Kiosk = () => {
                 setAlkham(0);
               }
             }}
-            className={`flex w-full items-center justify-center text-7xl ${
+            className={`flex w-full items-center justify-center text-7xl md:text-3xl ${
               butsakhGuideDarsan && "animate-ping"
-            }`}
-          >
+            }`}>
             <LeftCircleFilled />
           </div>
-          <div className="mt-8 flex w-full items-center justify-center">
+          <div className="mt-8 flex w-full items-center justify-center md:mt-3">
             {!tulburiinKhelber && "Төлбөрийн хэлбэр сонгоно уу."}
             {tulburiinKhelber === "card" && "Картаа уншуулна уу."}
             {tulburiinKhelber === "qpay" && "QR уншуулан төлбөрөө төлнө үү."}
             {tulburiinKhelber === "pass" &&
               "Pass апп-аас төлөн үргэлжлүүлэх дарна уу."}
           </div>
-          <div className="my-16 flex w-full items-center justify-between px-12">
+          <div className="my-16 flex w-full items-center justify-between px-12 md:my-10">
             {tulburiinKhelberuud.map((mur) => {
               return (
                 <div
@@ -498,13 +563,12 @@ const Kiosk = () => {
                       butsakhGuide();
                     }
                   }}
-                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 ${
+                  className={`flex h-[240px] w-[280px] flex-col items-center justify-center gap-4 rounded-xl bg-[#414143] p-4 md:h-[130px] md:w-[130px] md:gap-1 ${
                     tulburiinKhelber &&
                     tulburiinKhelber !== mur.ner &&
                     "opacity-50"
-                  }`}
-                >
-                  <div className="h-[120px] w-[120px] overflow-hidden">
+                  }`}>
+                  <div className="h-[120px] w-[120px] overflow-hidden md:h-[60px] md:w-[60px]">
                     <img src={mur.icon} alt="" />
                   </div>
                   <div>{mur.label}</div>
@@ -514,7 +578,7 @@ const Kiosk = () => {
           </div>
           {songogdsonData &&
             (!tulburiinKhelber || tulburiinKhelber === "card") && (
-              <div className="relative mx-12 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
+              <div className="relative mx-12 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8 md:gap-3">
                 <div className="flex w-full justify-between px-6">
                   <div>Улсын дугаар</div>
                   <div>{songogdsonData.plate_number}</div>
@@ -537,7 +601,7 @@ const Kiosk = () => {
                 <div className="flex w-full justify-between px-6">
                   <div>Зогссон хугацаа </div>
                   <div>
-                    {utc(utc().diff(moment(songogdsonData.enter_date))).format(
+                    {utc(utc().diff(moment(songogdsonData?.enter_date))).format(
                       "HH:mm"
                     )}
                   </div>
@@ -545,8 +609,25 @@ const Kiosk = () => {
                 <div className="w-full border border-[#1E1E1E]" />
                 <div className="flex w-full justify-between px-6 text-red-400">
                   <div>Төлбөр</div>
-                  <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
+                  <div>{formatNumber(songogdsonData?.pay_amount, 0)}₮</div>
                 </div>
+
+                {ajiltan._id === "66384a9061eeda747d01a320" && (
+                  <>
+                    <div className="w-full border border-[#1E1E1E]" />
+                    <div className="flex w-full justify-between px-6 ">
+                      <div className="text-red-400">Хөнгөлөлт</div>
+                      <div className="flex gap-4">
+                        <Button
+                          onClick={() => showKhunglult()}
+                          className="cursor-pointer">
+                          <MdOutlineDiscount className="text-green-400" />
+                        </Button>
+                        {formatNumber(songogdsonData?.fitnessHungulult, 0)}₮
+                      </div>
+                    </div>
+                  </>
+                )}
                 {terminal && (
                   <div className="absolute top-[50%] z-[500] flex h-[100px] w-1/2 items-center justify-center bg-zinc-200">
                     {terminal === "waiting" ? (
@@ -605,8 +686,7 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full transition-all duration-300 ${
             alkham === 2 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
+          }`}>
           <div className="flex h-full w-full flex-col items-center justify-center gap-16">
             <div className="text-4xl font-bold">Гүйлгээ амжилттай</div>
             <Lottie animationData={amjilttaiAnimation} />
@@ -615,8 +695,7 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
             alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
+          }`}>
           <div
             onClick={() => {
               setDrawerOngoikh(false);
@@ -629,8 +708,7 @@ const Kiosk = () => {
               setAlkham(0);
               setEbarimt();
             }}
-            className="flex w-full items-center justify-center text-7xl"
-          >
+            className="flex w-full items-center justify-center text-7xl">
             <CloseCircleFilled />
           </div>
           <div className="mt-8 flex w-full items-center justify-center px-12 text-center">
@@ -650,8 +728,7 @@ const Kiosk = () => {
                     eBarimtTurul !== "" ? "h-[200px]" : "h-[400px]"
                   } w-full flex-col items-center justify-center rounded-xl p-4 ${
                     eBarimtTurul === mur.ner ? "bg-zinc-700" : "bg-[#414143]"
-                  }`}
-                >
+                  }`}>
                   <div className="h-[120px] w-[120px]">
                     <img src={mur.icon} alt="" />
                   </div>
@@ -660,7 +737,7 @@ const Kiosk = () => {
               );
             })}
           </div>
-          <div className="mt-8 flex w-full items-center justify-center gap-24 px-12">
+          <div className="mt-8 flex w-full items-center justify-center gap-24 px-12 ">
             <DugaarKeyboard
               dugaar={register}
               setDugaar={setRegister}
@@ -676,12 +753,10 @@ const Kiosk = () => {
         <div
           className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
             alkham === 4 ? "scale-100 opacity-100" : "scale-0 opacity-0"
-          }`}
-        >
+          }`}>
           <div
             onClick={onTimeout}
-            className="flex w-full items-center justify-center text-7xl"
-          >
+            className="flex w-full items-center justify-center text-7xl">
             <CloseCircleFilled />
           </div>
           <div className="fixed left-[60%] top-3">
@@ -728,11 +803,11 @@ const Kiosk = () => {
           )}
         </div>
       </Drawer>
-      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8">
+      <div className="flex h-1/3 w-full flex-col items-center justify-center gap-8 md:pt-[100px]">
         <div className="">
           <img className="h-full w-full" src="/parkEaseLogo.png" alt="" />
         </div>
-        <div className="px-12 text-center text-5xl font-bold text-[#1E1E1E]">
+        <div className="px-12 text-center text-5xl text-[22px] font-bold text-[#1E1E1E]">
           Зогсоолын төлбөрөө энд төлөн хугацаагаа хэмнээрэй
         </div>
       </div>
