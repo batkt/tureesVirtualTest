@@ -52,6 +52,10 @@ function Ajiltan() {
         <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <img
+        className={`hidden w-full cursor-pointer object-contain transition-all`}
+        src="/favicon.ico"
+      />
       {moment(new Date()).format("MM") === "12" ? (
         <Snowfall radius={[10, 30]} snowflakeCount={200} images={images} />
       ) : null}
