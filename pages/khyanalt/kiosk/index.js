@@ -219,7 +219,6 @@ const Kiosk = () => {
         .post("/qpayGargaya", {
           barilgiinId: barilgiinId,
           dun: ilgeekhDun,
-          zogsooliinId: uilchluugchiinId,
           zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
         })
         .then(({ data }) => {
