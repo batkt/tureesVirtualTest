@@ -136,9 +136,9 @@ function ZogsoolBurtgekh(
     <Form form={form} autoComplete="off">
       {!!data && <Form.Item name="_id" hidden></Form.Item>}
       <Form.Item name="barilgiinId" hidden></Form.Item>
-      <div className="grid h-[75vh] grid-cols-12 gap-6">
+      <div className="grid h-[95vh] grid-cols-12 gap-6">
         <div className="col-span-4">
-          <div className="grid h-[75vh] grid-cols-4 gap-5 overflow-y-auto">
+          <div className="grid h-[95vh] grid-cols-4 gap-5 overflow-y-auto">
             <div className="col-span-2 border-l-2 border-green-500 pl-4">
               <div className="font-medium dark:text-white">
                 {t("Зогсоолын нэр")}
@@ -345,6 +345,32 @@ function ZogsoolBurtgekh(
                   defaultChecked={data?.zurchilZaavalBurtgekhEsekh}
                   checkedChildren="Тийм"
                   unCheckedChildren="Үгүй"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                Зогсоолоос машин автоматаар гаргах цагийн тохиргоо
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="mashinGargakhKhugatsaa">
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Хугацаа/цаг"
+                />
+              </Form.Item>
+            </div>
+            <div className="col-span-2 border-l-2 border-green-500 pl-4">
+              <div className="font-medium dark:text-white">
+                Баазаас машины түүхийн мэдээлэл цэвэрлэгдэх өдөр сонгох
+              </div>
+            </div>
+            <div className="col-span-2">
+              <Form.Item className="m-0" name="mashinUstgakhKhugatsaa">
+                <InputNumber
+                  style={{ width: "100%" }}
+                  placeholder="Хугацаа/Хоног"
                 />
               </Form.Item>
             </div>

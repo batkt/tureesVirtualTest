@@ -134,7 +134,8 @@ function Zogsool({
               <div className="flex w-24 flex-col space-y-2">
                 <a
                   className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                  onClick={() => zogsoolBurtegye(data, "zasah")}>
+                  onClick={() => zogsoolBurtegye(data, "zasah")}
+                >
                   <EditOutlined style={{ fontSize: "18px" }} />
                   <label>{t("Засах")}</label>
                 </a>
@@ -142,7 +143,8 @@ function Zogsool({
                   title={t("Зогсоол устгах уу?")}
                   okText={t("Тийм")}
                   cancelText={t("Үгүй")}
-                  onConfirm={() => zogsoolUstgaya(data)}>
+                  onConfirm={() => zogsoolUstgaya(data)}
+                >
                   <a className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700">
                     <DeleteOutlined
                       className="text-red-600"
@@ -152,7 +154,8 @@ function Zogsool({
                   </a>
                 </Popconfirm>
               </div>
-            )}>
+            )}
+          >
             <a className=" flex items-center justify-center  hover:scale-150 dark:hover:bg-gray-700">
               <MoreOutlined style={{ fontSize: "18px" }} />
             </a>
@@ -202,7 +205,8 @@ function Zogsool({
                 </div>
               </div>
             }
-            placement={"top"}>
+            placement={"top"}
+          >
             {data.dugaar[0]}
           </Popover>
         );
@@ -222,7 +226,8 @@ function Zogsool({
                 <div>{a}</div>
               </div>
             }
-            placement={"top"}>
+            placement={"top"}
+          >
             <div className="truncate">{data?.msg}</div>
           </Popover>
         );
@@ -247,7 +252,6 @@ function Zogsool({
     modal({
       top: 0,
       width: 1400,
-      height: 2200,
       title: t("Зогсоол бүртгэх"),
       icon: <PlusOutlined />,
       content: (
@@ -274,7 +278,6 @@ function Zogsool({
     modal({
       top: 0,
       width: 400,
-      height: 2200,
       title: "Загвар бүртгэх",
       icon: <PlusOutlined />,
       content: (
@@ -302,7 +305,8 @@ function Zogsool({
             </h2>
             <div
               className="dark:border-dark-5 flex items-center justify-end pb-2"
-              onClick={() => zogsoolBurtegye(jagsaalt, null)}>
+              onClick={() => zogsoolBurtegye(jagsaalt, null)}
+            >
               <Button type="primary">Зогсоол бүртгэх</Button>
             </div>
           </div>
@@ -337,7 +341,8 @@ function Zogsool({
             </h2>
             <div
               className="dark:border-dark-5 flex items-center justify-end pb-2"
-              onClick={() => smsZagvar()}>
+              onClick={() => smsZagvar()}
+            >
               <Button type="primary">СМС загвар</Button>
             </div>
           </div>
