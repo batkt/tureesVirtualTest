@@ -1646,7 +1646,7 @@ function togloom1() {
                               break;
                             case "khariltsakh":
                               utga.push({
-                                ner: "Харилцах",
+                                ner: "Дансаар",
                                 dun: element.dun,
                               });
                               break;
@@ -1852,7 +1852,7 @@ function togloom1() {
                                       utga = "Бэлэн";
                                       break;
                                     case "khariltsakh":
-                                      utga = "Харилцах";
+                                      utga = "Дансаар";
                                       break;
                                     default:
                                       utga = data?.[0].turul;

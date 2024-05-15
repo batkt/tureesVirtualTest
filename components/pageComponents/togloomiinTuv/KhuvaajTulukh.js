@@ -258,7 +258,7 @@ function KhuvaajTulukh({
         "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
     },
     {
-      ner: "Харилцах",
+      ner: "Дансаар",
       talbar: "khariltsakh",
       ref: khariltsakhRef,
       bgColor: "from-blue-800 to-yellow-700 border-blue-500",

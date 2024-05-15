@@ -741,7 +741,7 @@ function ShineTogloomTulbur(
                 ) : null}
                 <FaArrowRight className="text-[30px] text-green-600" />
                 <div className=" text-lg font-bold text-green-600">
-                  Харилцах
+                  Дансаар
                 </div>
               </div>
               <div
