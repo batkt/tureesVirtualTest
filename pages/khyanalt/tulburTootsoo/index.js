@@ -204,7 +204,7 @@ function tulburTootsoo({ token }) {
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
     setOrder(() => ({
       ...{},
-      [`${songogdsonDans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: -1,
+      [`${songogdsonDans?.bank === "tdb" ? "TxDt" : "createdAt"}`]: -1,
       [`${songogdsonDans?.bank === "tdb" ? "TxTime" : "time"}`]: undefined,
     }));
     setSongogdsonDans(songogdsonDans);
