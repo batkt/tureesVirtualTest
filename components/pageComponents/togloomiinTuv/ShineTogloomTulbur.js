@@ -14,6 +14,8 @@ import { BsFillCreditCardFill } from "react-icons/bs";
 import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "../tulbur/ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
+import { useQRCode } from "next-qrcode";
+
 // import { useAuth } from "services/auth";
 
 //#endregion
@@ -51,6 +53,8 @@ function ShineTogloomTulbur(
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
     data?.dutuuDun ? data?.dutuuDun : data?.niitDun
   );
+
+  const { Canvas } = useQRCode();
 
   const eBarimtRef = React.useRef(null);
 
@@ -658,6 +662,41 @@ function ShineTogloomTulbur(
                 </tr>
               </tbody>
             </table>
+            {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
+              <div>
+                <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
+                  <div className=" text-justify text-base">
+                    Эхлэх хугацаа:{" "}
+                    <div>
+                      {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+                    </div>{" "}
+                    Дуусах хугацаа:{" "}
+                    <div>
+                      {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
+                    </div>
+                  </div>
+                  <div className="flex w-full items-center justify-center">
+                    <Canvas
+                      text={moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")}
+                      options={{
+                        level: "M",
+                        margin: 3,
+                        scale: 4,
+                        width: 200,
+                        color: {
+                          dark: "#000000",
+                          light: "#FFFFFF",
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="max-w-[400px] text-center text-base">
+                    Энэхүү QR код нь тоглох хүчинтэй хугацаанд зөвхөн нэг удаа
+                    нэвтэрч ороход ашиглагдахыг анхаарна уу!
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -740,9 +779,7 @@ function ShineTogloomTulbur(
                   </div>
                 ) : null}
                 <FaArrowRight className="text-[30px] text-green-600" />
-                <div className=" text-lg font-bold text-green-600">
-                  Дансаар
-                </div>
+                <div className=" text-lg font-bold text-green-600">Дансаар</div>
               </div>
               <div
                 onClick={() => {
