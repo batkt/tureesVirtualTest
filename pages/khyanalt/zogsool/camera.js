@@ -182,7 +182,7 @@ function tulburKhurvuulekh(v) {
       utga = "Зээл";
         break;  
     case "khariltsakh":
-      utga = "Харилцах";
+      utga = "Дансаар";
       break;
     case "khaan":
       utga = "Хаан";
@@ -218,13 +218,13 @@ function tulburKhurvuulekh(v) {
       utga = "QPay QR";
       break;
     case "PosBelen":
-      utga = "Pos бэлэн";
+      utga = "Пос бэлэн";
       break;
     case "PosCard":
-      utga = "Pos карт";
+      utga = "Пос карт";
       break;
     case "PosKhariltsakh":
-      utga = "Pos харилцах";
+      utga = "Пос дансаар";
       break;
     default:
       utga = v;
@@ -1151,7 +1151,7 @@ function camera({ token }) {
                   className={`relative ${
                     khelber === "khariltsakh" && "bg-green-500 text-white"
                   } flex cursor-pointer items-center justify-center rounded-md border px-5 py-[2px] font-medium hover:bg-green-600 hover:bg-opacity-20 dark:text-white `}>
-                  {t("Харилцах")}
+                  {t("Дансаар")}
                 </div>
                 <div
                   onClick={() => setKhelber("tuluugui")}
