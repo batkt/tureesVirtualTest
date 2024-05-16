@@ -1,4 +1,4 @@
-import { DatePicker, Select } from "antd";
+import { DatePicker, Select, TreeSelect } from "antd";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import usezogsooliinUdriinTailan from "hooks/usezogsooliinUdriinTailan";
 import React, {
@@ -23,17 +23,22 @@ function TulburiinDelgerenguiTailan(
     token,
     destroy,
     defualtOgnoo,
-    garsanKhaalga,
+    // garsanKhaalga,
     ajiltan,
+    cameraData,
   },
   ref
 ) {
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
+  const [camerVal, setCamerVal] = useState([null, null]);
   const [ognoo, setOgnoo] = useState([
     moment(defualtOgnoo[0]),
     moment(defualtOgnoo[1]),
   ]);
 
+  const cameraChange = (e) => {
+    setCamerVal([camerVal[0], e]);
+  };
   const zogsooAjiltanQuery = useMemo(() => {
     return undefined;
   }, [baiguullagiinId, barilgiinId]);
@@ -44,6 +49,12 @@ function TulburiinDelgerenguiTailan(
     }
     return undefined;
   }, [songogdsonAjiltan]);
+
+  const garsanKhaalga = useMemo(() => {
+    return camerVal[1];
+  }, [camerVal[1]]);
+
+  console.log(garsanKhaalga, "garsanKhaalga");
 
   const { zogsoolTulburMedeelel, zogsoolTulburMedeelelMutate } =
     usezogsooliinUdriinTailan(
@@ -292,7 +303,7 @@ function TulburiinDelgerenguiTailan(
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
-            break;    
+            break;
           default:
             ugugdul.push({
               ner: element._id,
@@ -342,7 +353,7 @@ function TulburiinDelgerenguiTailan(
         <div className="p-6" ref={printRef}>
           <div className="flex items-center justify-start gap-6">
             <div className="flex gap-6">
-              <div>Огноо:   {moment(ognoo[0]).format("YYYY-MM-DD")}</div>
+              <div>Огноо: {moment(ognoo[0]).format("YYYY-MM-DD")}</div>
               <div>{moment(ognoo[1]).format("YYYY-MM-DD")}</div>
             </div>
           </div>
@@ -375,14 +386,38 @@ function TulburiinDelgerenguiTailan(
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap gap-2">
         <DatePicker.RangePicker
           value={ognoo}
           onChange={setOgnoo}
           allowClear={false}
           locale={locale}
-          style={{ width: "50%" }}
+          style={
+            cameraData[1].length > 1 ? { width: "100%" } : { width: "49%" }
+          }
         />
+        {cameraData[1].length > 1 && (
+          <TreeSelect
+            showSearch
+            style={{
+              backgroundColor: "#10B981",
+              borderColor: "#10B981",
+              width: "49%",
+            }}
+            value={camerVal[1]}
+            dropdownStyle={{
+              maxHeight: 600,
+              minWidth: 280,
+              overflow: "auto",
+            }}
+            className="custom-dropdown-bg"
+            placeholder={t("Камер сонгох")}
+            allowClear
+            treeDefaultExpandAll
+            onChange={(e) => cameraChange(e)}
+            treeData={cameraData[1]}
+          />
+        )}
         <Select
           id="ajiltanSongokhInput"
           placeholder={t("Ажилтан")}
@@ -392,7 +427,7 @@ function TulburiinDelgerenguiTailan(
               <CloseCircleOutlined />
             </div>
           )}
-          style={{ width: "50%" }}
+          style={{ width: "49%" }}
           onChange={(e) => setSongogdsonAjiltan(e)}
         >
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
@@ -406,6 +441,7 @@ function TulburiinDelgerenguiTailan(
             </Select.Option>
           ))}
         </Select>
+        {/* <div className="flex items-center justify-between gap-2"></div> */}
       </div>
       {tulburiinMedeelel.length > 0 ? (
         <div className="mt-5 space-y-3">
