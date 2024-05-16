@@ -52,9 +52,11 @@ function Ajiltan() {
         <title>{t("Нэвтрэх хуудас")}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      {/* copy paste  hiihed haragdakh zurag shuu ustgaj bolohgui  */}
       <img
         className={`hidden w-full cursor-pointer object-contain transition-all`}
-        src="/favicon.ico"
+        src="/copyPasteLogo.png"
       />
       {moment(new Date()).format("MM") === "12" ? (
         <Snowfall radius={[10, 30]} snowflakeCount={200} images={images} />
