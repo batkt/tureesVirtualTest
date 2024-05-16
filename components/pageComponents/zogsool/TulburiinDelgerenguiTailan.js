@@ -1,4 +1,4 @@
-import { DatePicker, Select, TreeSelect } from "antd";
+import { Checkbox, DatePicker, Select, TreeSelect } from "antd";
 import locale from "antd/lib/date-picker/locale/mn_MN";
 import usezogsooliinUdriinTailan from "hooks/usezogsooliinUdriinTailan";
 import React, {
@@ -346,6 +346,8 @@ function TulburiinDelgerenguiTailan(
     document.addEventListener("keyup", keyUp);
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
+
+  console.log(tulburiinMedeelel, "tulburiinMedeelel");
 
   return (
     <div>
