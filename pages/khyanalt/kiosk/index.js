@@ -46,6 +46,7 @@ const Kiosk = () => {
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
   const [seconds, setSeconds] = useState(59);
+  const [zogsool, setZogsool] = useState();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
   const khungulultRef = React.useRef(null);
 
@@ -170,8 +171,6 @@ const Kiosk = () => {
     }
   }, [alkham]);
 
-  console.log(servereesAvsonOdooTsag, "eee");
-
   useEffect(() => {
     if (
       ajiltan?._id === "66384a9061eeda747d01a320" &&
@@ -215,12 +214,18 @@ const Kiosk = () => {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
       setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
+      let yavuulakhBody = {
+        barilgiinId: barilgiinId,
+        dun: ilgeekhDun,
+        zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
+      };
+
+      if (zogsool?.zogsooliinDans) {
+        yavuulakhBody["dansniiDugaar"] = zogsool?.zogsooliinDans;
+      }
+
       uilchilgee(token)
-        .post("/qpayGargaya", {
-          barilgiinId: barilgiinId,
-          dun: ilgeekhDun,
-          zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
-        })
+        .post("/qpayGargaya", yavuulakhBody)
         .then(({ data }) => {
           setQpayerTulukh(data);
           setUnshijBaina(false);
@@ -441,6 +446,23 @@ const Kiosk = () => {
       setButsakhGuideDarsan(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    uilchilgee(token)
+      .get("/zogsoolJagsaalt", {
+        params: {
+          query: {
+            baiguullagiinId: baiguullaga?._id,
+            barilgiinId: barilgiinId,
+          },
+        },
+      })
+      .then((a) => {
+        if (a.data && a.data?.jagsaalt?.length > 0) {
+          setZogsool(a.data?.jagsaalt);
+        }
+      });
+  }, [baiguullaga, token]);
 
   const eBarimtTsonkhruuShiljye = () => {
     setAlkham(2);
