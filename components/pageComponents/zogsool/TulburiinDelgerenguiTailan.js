@@ -31,6 +31,7 @@ function TulburiinDelgerenguiTailan(
 ) {
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
   const [camerVal, setCamerVal] = useState([null, null]);
+  const [songogdson, setSongogdson] = useState([]);
   const [ognoo, setOgnoo] = useState([
     moment(defualtOgnoo[0]),
     moment(defualtOgnoo[1]),
@@ -54,8 +55,6 @@ function TulburiinDelgerenguiTailan(
     return camerVal[1];
   }, [camerVal[1]]);
 
-  console.log(garsanKhaalga, "garsanKhaalga");
-
   const { zogsoolTulburMedeelel, zogsoolTulburMedeelelMutate } =
     usezogsooliinUdriinTailan(
       token,
@@ -72,12 +71,21 @@ function TulburiinDelgerenguiTailan(
     zogsooAjiltanQuery
   );
 
-  console.log("ajilchdiinGaralt", ajilchdiinGaralt);
   const printRef = React.useRef(null);
 
   const handlePrint = useReactToPrint({
     content: () => printRef.current,
   });
+
+  const handleDivClick = (a) => {
+    setSongogdson((prev) => {
+      if (prev.findIndex((e) => e === a.ner) === -1) {
+        return [...prev, a.ner];
+      } else {
+        return prev.filter((item) => item !== a.ner);
+      }
+    });
+  };
 
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
@@ -347,8 +355,6 @@ function TulburiinDelgerenguiTailan(
     return () => document.removeEventListener("keyup", keyUp);
   }, []);
 
-  console.log(tulburiinMedeelel, "tulburiinMedeelel");
-
   return (
     <div>
       <div className="hidden">
@@ -367,11 +373,18 @@ function TulburiinDelgerenguiTailan(
                   ?.filter((a) => a._id === songogdsonAjiltan)
                   .map((b) => b.ovog[0] + "." + b.ner + "     " + b.register)}
           </div>
+
           {tulburiinMedeelel.map((a, i) => {
-            return (
+            return songogdson.length === 0 ? (
               <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
                 a.too
               }) : ${formatNumber(a.dun)} ₮`}</div>
+            ) : (
+              songogdson.some((item) => item === a.ner) && (
+                <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
+                  a.too
+                }) : ${formatNumber(a.dun)} ₮`}</div>
+              )
             );
           })}
           <div className="flex items-center justify-start gap-2">
@@ -443,16 +456,17 @@ function TulburiinDelgerenguiTailan(
             </Select.Option>
           ))}
         </Select>
-        {/* <div className="flex items-center justify-between gap-2"></div> */}
       </div>
       {tulburiinMedeelel.length > 0 ? (
-        <div className="mt-5 space-y-3">
+        <div className="mt-5 w-full space-y-3">
           {tulburiinMedeelel.map((a, i) => {
             return (
               <div
-                className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
+                className="relative flex h-14 w-full cursor-pointer items-center overflow-hidden rounded-md border-2 p-2"
                 key={i}
+                onClick={() => handleDivClick(a)}
               >
+                <Checkbox checked={songogdson.some((item) => item === a.ner)} />
                 <div
                   style={{ width: `${String(Math.round(a.khuvi))}%` }}
                   className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
