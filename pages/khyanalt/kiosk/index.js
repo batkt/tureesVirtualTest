@@ -46,7 +46,7 @@ const Kiosk = () => {
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
-  const [minutes, setMinutes] = useState(2);
+  const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(30);
   const [zogsool, setZogsool] = useState();
   const { token, baiguullaga, barilgiinId, ajiltan } = useAuth();
@@ -161,7 +161,7 @@ const Kiosk = () => {
       const timer = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds > 0) {
-            return prevSeconds - 1;
+            return prevSeconds + 1;
           } else {
             if (minutes > 0) {
               setMinutes((prevMinutes) => prevMinutes - 1);
@@ -443,6 +443,9 @@ const Kiosk = () => {
         if (!!data) {
           setEbarimt(data.data);
           setAlkham(4);
+          setMinutes((prev) => {
+            return prev + 1;
+          });
         }
       })
       .catch((err) => {
@@ -488,10 +491,19 @@ const Kiosk = () => {
       .slice(0, 2)
       .join("");
 
-    if (
-      (too.length == 8 && useg.length == 2) ||
-      (too.length == 7 && useg.length == 0)
-    ) {
+    if (eBarimtTurul !== "khuviKhun") {
+      if (
+        (too.length == 8 && useg.length == 2) ||
+        (too.length == 7 && useg.length == 0)
+      ) {
+        eBarimtAvya(
+          songogdsonData?.session_id,
+          register,
+          register !== "" ? false : true,
+          songogdsonData?.pay_amount
+        );
+      }
+    } else {
       eBarimtAvya(
         songogdsonData?.session_id,
         register,
@@ -525,7 +537,7 @@ const Kiosk = () => {
         className="khuviinDrawer relative bg-transparent text-5xl font-semibold text-gray-200 md:text-xl"
       >
         <div className="relative !h-full !w-full">
-          <div className="absolute right-[45%] top-5">
+          <div className="absolute right-[35vw] top-10">
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </div>
           <div
@@ -759,7 +771,7 @@ const Kiosk = () => {
             </div> */}
           </div>
           <div
-            className={`absolute left-0 top-5 h-full w-full px-24 transition-all duration-300 ${
+            className={`absolute left-0 top-5 h-full w-full px-3 transition-all duration-300 ${
               alkham === 3 ? "scale-100 opacity-100" : "scale-0 opacity-0"
             }`}
           >
@@ -808,7 +820,7 @@ const Kiosk = () => {
                 );
               })}
             </div>
-            <div className="mt-8 flex w-full items-center justify-center gap-24 px-12 ">
+            <div className="mt-8 flex w-full items-center justify-center gap-24  ">
               {/* <DugaarKeyboard
                 dugaar={register}
                 setDugaar={setRegister}
@@ -848,6 +860,14 @@ const Kiosk = () => {
             <div className="mt-8 flex items-center justify-center px-12 text-5xl text-zinc-200">
               Амжилттай төлөгдлөө
             </div>
+            {eBarimt?.lottery && (
+              <div>
+                <p className="mt-16 flex w-full items-center justify-center rounded-xl pl-4 text-center text-[24px] text-zinc-200 dark:!text-black">
+                  Та и-баримт аппликейшн ашиглаж баримтаа уншуулах эсвэл зургийн
+                  дараад боломжтой үедээ уншуулна уу.
+                </p>
+              </div>
+            )}
             {eBarimt && eBarimtTurul === "khuviKhun" && (
               <div className="mt-16 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
                 <div className="flex w-full justify-between  pl-4">
@@ -897,7 +917,7 @@ const Kiosk = () => {
               </div>
             )}
             {eBarimt?.qrData && (
-              <div className="mx-36 mt-16 flex items-center justify-center bg-zinc-200 p-4">
+              <div className="mx-36 mt-16 flex flex-col items-center justify-center gap-3 bg-zinc-200 p-4">
                 <QRCode value={eBarimt?.qrData} />
               </div>
             )}
