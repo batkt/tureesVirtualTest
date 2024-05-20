@@ -156,22 +156,6 @@ const Kiosk = () => {
 
   console.log(alkham, "test hiij baina");
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setSeconds((prevSeconds) => {
-  //       if (prevSeconds > 0) {
-  //         return prevSeconds - 1;
-  //       } else {
-  //         clearInterval(timer);
-  //         if (onTimeout && typeof onTimeout === "function") {
-  //           onTimeout();
-  //         }
-  //         return 0;
-  //       }
-  //     });
-  //   }, 1000);
-  //   return () => clearInterval(timer);
-  // }, [alkham]);
   useEffect(() => {
     if (drawerOngoikh) {
       const timer = setInterval(() => {
