@@ -491,7 +491,15 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
               <div className="h-[1px] w-full bg-black dark:bg-black" />
               <div className="flex w-full justify-between pl-4">
                 <div>Баримтын дүн</div>
-                <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
+                <div>
+                  {formatNumber(
+                    Number(
+                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                    ),
+                    0
+                  )}
+                  ₮
+                </div>
               </div>
             </div>
           )}
@@ -509,7 +517,15 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
               <div className="h-[1px] w-full bg-black dark:bg-black" />
               <div className="flex w-full justify-between pl-4">
                 <div>Баримтын дүн</div>
-                <div>{formatNumber(Number(eBarimt?.amount), 0)}₮</div>
+                <div>
+                  {formatNumber(
+                    Number(
+                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                    ),
+                    0
+                  )}
+                  ₮
+                </div>
               </div>
             </div>
           )}

@@ -635,7 +635,9 @@ function ShineTogloomTulbur(
                     baiguullagaEsekh ? "" : "уншуулах"
                   } дүн`}</td>
                   <td colSpan={2} className="border text-right">
-                    {formatNumber(eBarimt?.amount)}
+                    {formatNumber(
+                      eBarimt?.amount ? eBarimt?.amount : eBarimt?.totalAmount
+                    )}
                   </td>
                 </tr>
                 {/* baiguullaga deer hvlej bga tohioldold sugalaa no no */}
