@@ -161,7 +161,7 @@ const Kiosk = () => {
       const timer = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds > 0) {
-            return prevSeconds + 1;
+            return prevSeconds - 1;
           } else {
             if (minutes > 0) {
               setMinutes((prevMinutes) => prevMinutes - 1);
