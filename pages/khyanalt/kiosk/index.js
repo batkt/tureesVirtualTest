@@ -518,8 +518,8 @@ const Kiosk = () => {
       {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] px-[100px] text-center text-2xl text-[#00D987]">
         Төлбөр төлснөөс хойш{" "}
-        {zogsool?.find((e) => e?.gadnaZogsooliinId)?.garakhTsag || 30} минут
-        дотор та зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
+        {zogsool?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут дотор та
+        зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
         <div className="fixed left-0 top-0 z-[9999] flex h-full w-full items-center justify-center bg-white bg-opacity-40">
