@@ -335,7 +335,7 @@ function tulburTootsoo() {
 
     if (
       !!form.getFieldValue("zardliinId") &&
-      !!form.getFieldValue("khungulukhTurul")
+      form.getFieldValue("khungulukhTurul") === "zardal"
     ) {
       column.push({
         title: zardal.jagsaalt.find(
