@@ -81,6 +81,9 @@ function tulburTootsoo() {
     query: { tuluv: { $ne: -1 } },
   });
   const [songogdsonNuur, setSongogdsonNuur] = useState("1");
+
+  const [form] = Form.useForm();
+
   const query = useMemo(() => {
     return {
       createdAt: ekhlekhOgnoo
@@ -91,7 +94,9 @@ function tulburTootsoo() {
         : undefined,
     };
   }, [ekhlekhOgnoo]);
-  const [form] = Form.useForm();
+
+  // console.log(form.getFieldValue("zardliinId"), "test");
+
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, isValidating } =
     useGereeniiJagsaalt(
       songogdsonNuur === "1" && token,
@@ -111,6 +116,8 @@ function tulburTootsoo() {
     baiguullaga?._id,
     query
   );
+
+  console.log(gereeniiMedeelel, "gereeniiMedeelel");
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
@@ -263,7 +270,111 @@ function tulburTootsoo() {
     }
   }
 
+  const gereeniiColumn = useMemo(() => {
+    let column = [
+      {
+        title: t("Түрээслэгч"),
+        dataIndex: "ner",
+        className: "text-center",
+        align: "center",
+        width: "5rem",
+        showSorterTooltip: false,
+        sorter: (a, b) => a.ner?.localeCompare(b.ner),
+      },
+      {
+        title: t("Гэрээ"),
+        dataIndex: "gereeniiDugaar",
+        className: "text-center",
+        align: "center",
+        width: "7rem",
+        showSorterTooltip: false,
+        sorter: (a, b) => a.gereeniiDugaar?.localeCompare(b.gereeniiDugaar),
+      },
+      {
+        title: t("Талбай"),
+        dataIndex: "talbainDugaar",
+        className: "text-center",
+        align: "center",
+        width: "7rem",
+        showSorterTooltip: false,
+        sorter: (a, b) => a.talbainDugaar?.localeCompare(b.talbainDugaar),
+      },
+      {
+        title: t("Давхар"),
+        dataIndex: "davkhar",
+        align: "center",
+        width: "5rem",
+        className: "text-center",
+        showSorterTooltip: false,
+        sorter: (a, b) => Number(a.davkhar || 0) - Number(b.davkhar || 0),
+      },
+      {
+        title: t("Талбай /м2/"),
+        dataIndex: "talbainKhemjee",
+        align: "center",
+        width: "7rem",
+        className: "text-center",
+        render: (talbainKhemjee) => {
+          return `${talbainKhemjee} м2`;
+        },
+        showSorterTooltip: false,
+
+        sorter: (a, b) =>
+          Number(a.talbainKhemjee || 0) - Number(b.talbainKhemjee || 0),
+      },
+      {
+        title: t("Төлбөр"),
+        dataIndex: "sariinTurees",
+        className: "text-center",
+        width: "7rem",
+        align: "center",
+        render: (sariinTurees) => {
+          return formatNumber(sariinTurees || 0);
+        },
+        showSorterTooltip: false,
+        sorter: (a, b) =>
+          Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
+      },
+    ];
+
+    console.log(
+      zardal.jagsaalt.find((e) => e?._id === form.getFieldValue("zardliinId"))
+        ?.ner,
+      "test hiij bn"
+    );
+
+    console.log(form.getFieldValue("zardliinId"), "usememoo");
+
+    if (
+      !!form.getFieldValue("zardliinId") &&
+      !!form.getFieldValue("khungulukhTurul")
+    ) {
+      column.push({
+        title: zardal.jagsaalt.find(
+          (e) => e?._id === form.getFieldValue("zardliinId")
+        )?.ner,
+        dataIndex: "data",
+        className: "data",
+        width: "7rem",
+        align: "center",
+        render: (e, data) => {
+          return formatNumber(
+            data?.zardluud?.find(
+              (e) => e?._id === form.getFieldValue("zardliinId")
+            )?.tariff || 0
+          );
+        },
+        showSorterTooltip: false,
+        // sorter: (a, b) =>
+        //   Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
+      });
+    }
+
+    return column;
+  }, [form.getFieldValue("zardliinId"), zardal?.jagsaalt]);
+
   console.log("songogdsonGereenuud: ", songogdsonGereenuud);
+  console.log(zardal?.jagsaalt, "zardal?.jagsaalt");
   function ustgaya(mur) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
@@ -853,76 +964,7 @@ function tulburTootsoo() {
                   loading={!gereeniiMedeelel}
                   rowKey={(row) => row._id}
                   dataSource={gereeniiMedeelel?.jagsaalt}
-                  columns={[
-                    {
-                      title: t("Түрээслэгч"),
-                      dataIndex: "ner",
-                      className: "text-center",
-                      align: "center",
-                      width: "5rem",
-                      showSorterTooltip: false,
-                      sorter: (a, b) => a.ner?.localeCompare(b.ner),
-                    },
-                    {
-                      title: t("Гэрээ"),
-                      dataIndex: "gereeniiDugaar",
-                      className: "text-center",
-                      align: "center",
-                      width: "7rem",
-                      showSorterTooltip: false,
-                      sorter: (a, b) =>
-                        a.gereeniiDugaar?.localeCompare(b.gereeniiDugaar),
-                    },
-                    {
-                      title: t("Талбай"),
-                      dataIndex: "talbainDugaar",
-                      className: "text-center",
-                      align: "center",
-                      width: "7rem",
-                      showSorterTooltip: false,
-                      sorter: (a, b) =>
-                        a.talbainDugaar?.localeCompare(b.talbainDugaar),
-                    },
-                    {
-                      title: t("Давхар"),
-                      dataIndex: "davkhar",
-                      align: "center",
-                      width: "5rem",
-                      className: "text-center",
-                      showSorterTooltip: false,
-                      sorter: (a, b) =>
-                        Number(a.davkhar || 0) - Number(b.davkhar || 0),
-                    },
-                    {
-                      title: t("Талбай /м2/"),
-                      dataIndex: "talbainKhemjee",
-                      align: "center",
-                      width: "7rem",
-                      className: "text-center",
-                      render: (talbainKhemjee) => {
-                        return `${talbainKhemjee} м2`;
-                      },
-                      showSorterTooltip: false,
-
-                      sorter: (a, b) =>
-                        Number(a.talbainKhemjee || 0) -
-                        Number(b.talbainKhemjee || 0),
-                    },
-                    {
-                      title: t("Төлбөр"),
-                      dataIndex: "sariinTurees",
-                      className: "text-center",
-                      width: "7rem",
-                      align: "center",
-                      render: (sariinTurees) => {
-                        return formatNumber(sariinTurees || 0);
-                      },
-                      showSorterTooltip: false,
-                      sorter: (a, b) =>
-                        Number(a.sariinTurees || 0) -
-                        Number(b.sariinTurees || 0),
-                    },
-                  ]}
+                  columns={gereeniiColumn}
                   pagination={false}
                 />
               </div>
