@@ -95,8 +95,6 @@ function tulburTootsoo() {
     };
   }, [ekhlekhOgnoo]);
 
-  // console.log(form.getFieldValue("zardliinId"), "test");
-
   const { gereeniiMedeelel, setGereeniiKhuudaslalt, isValidating } =
     useGereeniiJagsaalt(
       songogdsonNuur === "1" && token,
@@ -116,8 +114,6 @@ function tulburTootsoo() {
     baiguullaga?._id,
     query
   );
-
-  console.log(gereeniiMedeelel, "gereeniiMedeelel");
 
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
@@ -337,14 +333,6 @@ function tulburTootsoo() {
       },
     ];
 
-    console.log(
-      zardal.jagsaalt.find((e) => e?._id === form.getFieldValue("zardliinId"))
-        ?.ner,
-      "test hiij bn"
-    );
-
-    console.log(form.getFieldValue("zardliinId"), "usememoo");
-
     if (
       !!form.getFieldValue("zardliinId") &&
       !!form.getFieldValue("khungulukhTurul")
@@ -364,17 +352,12 @@ function tulburTootsoo() {
             )?.tariff || 0
           );
         },
-        showSorterTooltip: false,
-        // sorter: (a, b) =>
-        //   Number(a.sariinTurees || 0) - Number(b.sariinTurees || 0),
       });
     }
 
     return column;
   }, [form.getFieldValue("zardliinId"), zardal?.jagsaalt]);
 
-  console.log("songogdsonGereenuud: ", songogdsonGereenuud);
-  console.log(zardal?.jagsaalt, "zardal?.jagsaalt");
   function ustgaya(mur) {
     const footer = [
       <Button onClick={() => tailbarRef.current.khaaya()}>{t("Хаах")}</Button>,
@@ -827,7 +810,6 @@ function tulburTootsoo() {
                       placeholder={[t("Эхлэх сар"), t("Дуусах сар")]}
                       onChange={(v) => {
                         setOgnoonuud(v);
-                        console.log("v:", v);
                       }}
                     />
                   </Form.Item>
