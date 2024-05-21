@@ -115,6 +115,8 @@ function tulburTootsoo() {
     query
   );
 
+  console.log(gereeniiMedeelel, "gereeniiMedeelel");
+
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
     niitSariinTurees: 0,
@@ -346,11 +348,23 @@ function tulburTootsoo() {
         width: "7rem",
         align: "center",
         render: (e, data) => {
-          return formatNumber(
-            data?.zardluud?.find(
-              (e) => e?._id === form.getFieldValue("zardliinId")
-            )?.tariff || 0
+          var zardliinData = data?.zardluud?.find(
+            (e) => e?._id === form.getFieldValue("zardliinId")
           );
+
+          var urjuulekhData =
+            zardliinData?.turul === "1м3/талбай"
+              ? data.talbainKhemjeeMetrKube || 1
+              : zardliinData?.turul === "1м2"
+              ? data?.talbainKhemjee
+              : zardliinData?.turul === "тогтмол" && 1;
+
+          var kharuulakhData = formatNumber(
+            zardliinData.tariff * urjuulekhData,
+            2
+          );
+
+          return kharuulakhData;
         },
       });
     }
