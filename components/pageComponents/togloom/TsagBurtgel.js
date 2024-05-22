@@ -25,7 +25,7 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import axios from "axios";
 
-function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
+function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, ref) {
   const [form] = Form.useForm();
   const [tsag, setTsag] = useState({
     ekhlekhtsag: moment(Date.now()),
@@ -66,6 +66,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh }, ref) {
       data.turul = "Үйлчлүүлэгч";
     }
     data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00");
+    data.burtgesenAjiltaniiId = ajiltan?._id;
     data.barilgiinId = barilgiinId;
     const method = data?._id ? updateMethod : createMethod;
     method("togloomiinTuvKhadgalya", token, data)
