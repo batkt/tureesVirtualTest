@@ -357,12 +357,14 @@ function tulburTootsoo() {
               ? data.talbainKhemjeeMetrKube || 1
               : zardliinData?.turul === "1м2"
               ? data?.talbainKhemjee
-              : zardliinData?.turul === "тогтмол" && 1;
+              : zardliinData?.turul === "Тогтмол" && 1;
 
           var kharuulakhData = formatNumber(
-            zardliinData.tariff * urjuulekhData,
+            zardliinData?.tariff * urjuulekhData,
             2
           );
+
+          console.log(zardliinData, "zardliinData");
 
           return kharuulakhData;
         },
@@ -644,7 +646,7 @@ function tulburTootsoo() {
     else {
       tootsoolol.niitSariinTurees = 0;
       const fVal = form.getFieldValue("zardliinId");
-      songogdsonGereenuud.map((e) => {
+      songogdsonGereenuud?.map((e) => {
         const zardal = e?.zardluud.find((a) => a._id === fVal);
         setSongogdsonZardal(zardal);
         if (!!zardal) {
