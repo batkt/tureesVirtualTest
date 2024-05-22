@@ -168,9 +168,9 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           <Switch checked={bulegEsekh} onChange={(v) => setBulegEsekh(v)} />
         </Form.Item>
 
-        <div className="flex gap-2">
-          <div>{t("Тоглосон тоо")}:</div>
-          <div>{togolsonToo}</div>
+        <div className="flex gap-2 dark:texxt-gray-500">
+          <div className="dark:text-gray-300">{t("Тоглосон тоо")}:</div>
+          <div className="dark:text-gray-300">{togolsonToo}</div>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           <>
             <div className={"max-h-[150px] overflow-auto "}>
               {fields.map(({ key, name, ...restField }) => (
-                <Row className="flex items-baseline">
+                <Row className="flex items-baseline gap-1">
                   <Col span={23}>
                     <Form.Item
                       name={name}
@@ -206,7 +206,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
                       />
                     </Form.Item>
                   </Col>
-                  <Col className="flex items-center justify-center">
+                  <Col className="flex items-center justify-center dark:text-gray-300">
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Col>
                 </Row>
@@ -406,7 +406,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
       </Form.Item>
       <div className="flex justify-end">
         <Space>
-          <Button onClick={() => destroy()}>{t("Хаах")}</Button>
+          <Button onClick={() => destroy()} ><div className="dark:text-blue-600">{t("Хаах")}</div></Button>
           <Button
             loading={loading}
             type="primary"
