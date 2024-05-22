@@ -545,7 +545,6 @@ function index({ token, data }) {
           </div>
         )}
 
-        {console.log(targetKeys, "targetKeys")}
         <div className="bottom-5 right-3 col-span-12 ml-auto mr-2 flex w-full py-3 lg:absolute lg:w-36">
           <Button className="w-full" type="primary" onClick={khadgalya}>
             {t("Хадгалах")}

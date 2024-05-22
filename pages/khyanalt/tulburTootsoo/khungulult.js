@@ -115,13 +115,12 @@ function tulburTootsoo() {
     query
   );
 
-  console.log(gereeniiMedeelel, "gereeniiMedeelel");
-
   const [tootsoolol, setTootsoolol] = useState({
     niitTalbai: 0,
     niitSariinTurees: 0,
     khunglugdsunDun: 0,
     niitTulukhDun: 0,
+    khungulukhKhuvi: 0,
   });
   const [selectedRowKeys, setRowKeys] = useState([]);
   const [waiting, setWaiting] = useState(false);
@@ -180,7 +179,10 @@ function tulburTootsoo() {
   }
   function nukhtulSongokh(value) {
     if (value === "Бүгд") {
-      setShuult({ query: { tuluv: { $ne: -1 } } });
+      setShuult((prev) => ({
+        ...prev,
+        tuluv: { $ne: -1 },
+      }));
       form.setFieldValue("davkhar", []);
     } else {
       setRowKeys([]);
@@ -233,11 +235,39 @@ function tulburTootsoo() {
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
       ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
-      ugugdul.khamaataiGereenuud = songogdsonGereenuud.map((x) => ({
-        gereeniiId: x._id,
-        gereeniiDugaar: x.gereeniiDugaar,
-        ner: x.ner,
-      }));
+      ugugdul.khamaataiGereenuud = songogdsonGereenuud.map((x) => {
+        var zardliinData = x?.zardluud?.find(
+          (e) => e?._id === form.getFieldValue("zardliinId")
+        );
+
+        console.log(zardliinData, "zardliinData");
+
+        var urjuulekhData =
+          zardliinData?.turul === "1м3/талбай"
+            ? x.talbainKhemjeeMetrKube || 1
+            : zardliinData?.turul === "1м2"
+            ? x?.talbainKhemjee
+            : zardliinData?.turul === "Тогтмол" && 1;
+
+        console.log(urjuulekhData, "urjuulekhData");
+
+        var khymdraaguiDun = zardliinData?.tariff * urjuulekhData;
+
+        if (khungulukh === "khuvi") {
+          var khymdarsanDun =
+            khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+        } else {
+          var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+        }
+
+        return {
+          gereeniiId: x._id,
+          gereeniiDugaar: x.gereeniiDugaar,
+          ner: x.ner,
+          khymdarsanDun,
+        };
+      });
+
       if (
         khungulukh === "khuvi" &&
         baiguullaga.tokhirgoo.deedKhungulultiinKhuvi < ugugdul.khungulukhKhuvi
@@ -248,6 +278,7 @@ function tulburTootsoo() {
         });
         return;
       }
+
       createMethod("khungulultKhadgalya", token, ugugdul)
         .then(({ data }) => {
           if (data === "Amjilttai") {
@@ -364,9 +395,7 @@ function tulburTootsoo() {
             2
           );
 
-          console.log(zardliinData, "zardliinData");
-
-          return kharuulakhData;
+          return kharuulakhData || 0;
         },
       });
     }
@@ -674,8 +703,14 @@ function tulburTootsoo() {
         : dun;
     tootsoolol.niitTulukhDun =
       Number(tootsoolol.niitSariinTurees) - Number(tootsoolol.khunglugdsunDun);
+
+    if (khungulukh === "khuvi") {
+      tootsoolol.khungulukhKhuvi = form.getFieldValue("khungulukhKhuvi");
+    }
+
     setTootsoolol({ ...tootsoolol });
   }
+
   return (
     <Admin
       title="Хөнгөлөлт"
@@ -867,6 +902,12 @@ function tulburTootsoo() {
                       onChange={(v) => {
                         setKhungulukh(v);
                         form.setFieldsValue({ khungulukhKhuvi: null });
+                        if (v === "khuvi") {
+                          setTootsoolol((prev) => ({
+                            ...prev,
+                            khungulukhKhuvi: 0,
+                          }));
+                        }
                       }}
                     >
                       <Select.Option key={"khuvi"}>Хувь</Select.Option>
