@@ -62,6 +62,9 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
     console.log(formData, "formData");
     setLoading(true);
     const data = formData;
+    if (data.utas.length === 0) {
+      data.utas = [""];
+    }
     if (!data.turul) {
       data.turul = "Үйлчлүүлэгч";
     }
@@ -74,6 +77,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
         if (data === "Amjilttai") {
           message.success(t("Амжилттай хадгаллаа"));
           onRefresh && onRefresh();
+          setLoading(false);
           destroy();
           axios
             .post("http://localhost:3000/qrBurtgey", {
@@ -90,6 +94,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
       })
       .catch((e) => {
         aldaaBarigch(e);
+        setLoading(false);
       });
   }
 
@@ -161,7 +166,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
       onFinish={onFinish}
       initialValues={data}
       labelCol={{ span: 8 }}
-      wrapperCol={{ span: 24 }}>
+      wrapperCol={{ span: 24 }}
+    >
       <Form.Item name="_id" noStyle />
       <div className="flex items-baseline justify-center gap-5">
         <Form.Item labelCol={{ span: 17 }} label={t("Бүлэг хүүхэд")}>
@@ -196,7 +202,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
                           message: t("Утасны дугаараа шалгана уу!"),
                         },
                       ]}
-                      label={t("Утас")}>
+                      label={t("Утас")}
+                    >
                       <Input
                         maxLength={8}
                         onKeyDown={focuser}
@@ -217,7 +224,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
                 type="dashed"
                 onClick={() => add()}
                 block
-                icon={<PlusOutlined />}>
+                icon={<PlusOutlined />}
+              >
                 Дугаар нэмэх
               </Button>
             </Form.Item>
@@ -234,7 +242,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
             },
           ]}
           label={t("Хүүхдийн тоо")}
-          name="khuukhdiinToo">
+          name="khuukhdiinToo"
+        >
           <InputNumber
             min={2}
             onKeyDown={focuser}
@@ -252,7 +261,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           //   },
           // ]}
           label={t("Овог")}
-          name="ovog">
+          name="ovog"
+        >
           <Input
             onKeyDown={focuser}
             placeholder={t("Овог")}
@@ -268,7 +278,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
         //   },
         // ]}
         label={t("Нэр")}
-        name="ner">
+        name="ner"
+      >
         <Input onKeyDown={focuser} placeholder={t("Нэр")} autoComplete="off" />
       </Form.Item>
       {bulegEsekh === false && (
@@ -280,10 +291,12 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           //   },
           // ]}
           label={t("Хүйс")}
-          name="khuis">
+          name="khuis"
+        >
           <Select
             onChange={() => form.getFieldInstance("nas").focus()}
-            placeholder={t("Хүйс")}>
+            placeholder={t("Хүйс")}
+          >
             {[
               { utga: "Эрэгтэй", v: 1 },
               { utga: "Эмэгтэй", v: 0 },
@@ -304,7 +317,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
             },
           ]}
           label={t("Нас")}
-          name="nas">
+          name="nas"
+        >
           <InputNumber
             onKeyDown={focuser}
             className="w-40"
@@ -322,14 +336,16 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           },
         ]}
         label={t("Асран хамгаалагч")}
-        name="asragchiinTurul">
+        name="asragchiinTurul"
+      >
         <Select
           mode="multiple"
           value={asragchiinToo}
           onChange={(v) => {
             setAsragchiinToo(v);
           }}
-          placeholder={t("Асран хамгаалагч")}>
+          placeholder={t("Асран хамгаалагч")}
+        >
           {["Аав", "Ээж", "Өвөө", "Эмээ", "Ах", "Эгч", "Багш", "Бусад"].map(
             (a) => {
               return <Select.Option key={a}>{a}</Select.Option>;
@@ -345,7 +361,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           },
         ]}
         label={t("Тоглох цаг /Мин/")}
-        name="khugatsaa">
+        name="khugatsaa"
+      >
         <InputNumber
           max={moment()
             .endOf("day")
@@ -369,7 +386,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           },
         ]}
         label={t("Эхлэх цаг")}
-        name="ekhlekhTsag">
+        name="ekhlekhTsag"
+      >
         <TimePicker
           value={tsag.ekhlekhtsag}
           className="w-40"
@@ -411,7 +429,8 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
             loading={loading}
             type="primary"
             id="khuukhedBurtgekhButtonId"
-            onClick={() => form.submit()}>
+            onClick={() => form.submit()}
+          >
             {t("Хадгалах")}
           </Button>
         </Space>
