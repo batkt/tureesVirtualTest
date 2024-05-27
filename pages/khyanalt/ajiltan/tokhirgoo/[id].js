@@ -521,21 +521,27 @@ function index({ token, data }) {
           <div className="box">
             <div className="flex items-center p-5">
               <div className="border-l-2 border-green-500 pl-4">
-                <div className="font-medium">{t("Нэгтгэл дүн харах эсэх")}</div>
+                <div className="font-medium">
+                  {t("Тоглоомын төвийн нэгтгэл дүн харах эсэх")}
+                </div>
                 <div className="text-gray-600 dark:text-gray-300">
                   {t(
-                    "Зогсоолын нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
+                    "Тоглоомын төвийн нэгтгэл дүн буюу системд бүртгэгдсэн нийт гүйлгээний задаргаа дүнг харах эсэх."
                   )}
                 </div>
               </div>
               <div className="ml-auto">
                 <Switch
-                  checked={_.get(tokhirgoo, `zogsoolNegtgelDunKharakhEsekh`)}
+                  checked={_.get(
+                    tokhirgoo,
+                    `togloomiinTuvNegtgelDunKharakhEsekh`
+                  )}
                   onChange={(checked) => {
                     setTokhirgoo((a) => {
                       if (!checked) {
-                        _.set(a, `zogsoolNegtgelDunKharakhEsekh`, false);
-                      } else _.set(a, `zogsoolNegtgelDunKharakhEsekh`, true);
+                        _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, false);
+                      } else
+                        _.set(a, `togloomiinTuvNegtgelDunKharakhEsekh`, true);
                       return { ...a };
                     });
                   }}

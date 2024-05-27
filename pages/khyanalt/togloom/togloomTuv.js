@@ -1043,8 +1043,8 @@ function togloom1() {
                         <div className="font-medium">Овог:</div>{" "}
                         <div>{data?.ovog}</div>
                       </div>
-                      <div className="flex w-full justify-between border-y p-1 px-2">
-                        <div className="font-medium">Нэр:</div>{" "}
+                      <div className="flex w-full justify-between border-y p-1 px-2 dark:bg-gray-200">
+                        <div className="font-medium ">Нэр:</div>{" "}
                         <div>{data?.ner}</div>
                       </div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
@@ -1565,19 +1565,23 @@ function togloom1() {
               value={ognoo}
               onChange={setOgnoo}
             />
-            <div
-              onClick={() => orlogiinDelegrengui()}
-              className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
-            >
-              {t("Тоглоомын орлого")} :{" "}
-              {!!togloomiinDun?.toololt
-                ? formatNumber(
-                    togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)
-                  )
-                : 0}
-              ₮
-              <EyeOutlined className="opacity-30 transition-opacity group-hover:opacity-100" />
-            </div>
+            {(ajiltan?.tokhirgoo?.togloomiinTuvNegtgelDunKharakhEsekh ===
+              true ||
+              ajiltan?.erkh === "Admin") && (
+              <div
+                onClick={() => orlogiinDelegrengui()}
+                className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
+              >
+                {t("Тоглоомын орлого")} :{" "}
+                {!!togloomiinDun?.toololt
+                  ? formatNumber(
+                      togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)
+                    )
+                  : 0}
+                ₮
+                <EyeOutlined className="opacity-30 transition-opacity group-hover:opacity-100" />
+              </div>
+            )}
           </div>
 
           <div
