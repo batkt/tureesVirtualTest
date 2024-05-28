@@ -244,8 +244,7 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
     <div className="relative flex h-[calc(100vh-25px)] w-screen flex-col overflow-hidden bg-[#1E1E1E]">
       {contextHolder}
       <div className="fixed top-0 z-[9999] flex bg-[#1E1E1E] text-center text-xs text-[#00D987]">
-        Төлбөр төлснөөс хойш{" "}
-        {zogsool?.find((e) => e?.garakhTsag)?.garakhTsag || 30} минут дотор та
+        Төлбөр төлснөөс хойш {zogsool?.garakhTsag || 30} минут дотор та
         зогсоолоос гараагүй бол төлбөр нэмэгдэж бодогдохыг анхаарна уу!
       </div>
       {unshijBaina && (
