@@ -54,7 +54,7 @@ function TogloomTulburiinDelgerenguiTailan(
       baiguullagiinId,
       query
     );
-  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(
+  const { ajilchdiinGaralt, setAjiltniiKhuudaslalt } = useAjiltniiJagsaalt(
     token,
     baiguullagiinId,
     togloomAjiltanQuery
@@ -313,6 +313,15 @@ function TogloomTulburiinDelgerenguiTailan(
           )}
           style={{ width: "49%" }}
           onChange={(e) => setSongogdsonAjiltan(e)}
+          showSearch
+          filterOption={(o) => o}
+          onSearch={(search) =>
+            setAjiltniiKhuudaslalt((a) => ({
+              ...a,
+              search,
+              khuudasniiDugaar: 1,
+            }))
+          }
         >
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
             <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>

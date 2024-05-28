@@ -65,7 +65,7 @@ function TulburiinDelgerenguiTailan(
       baiguullagiinId,
       query
     );
-  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(
+  const { ajilchdiinGaralt, setAjiltniiKhuudaslalt } = useAjiltniiJagsaalt(
     token,
     baiguullagiinId,
     zogsooAjiltanQuery
@@ -437,13 +437,22 @@ function TulburiinDelgerenguiTailan(
           id="ajiltanSongokhInput"
           placeholder={t("Ажилтан")}
           allowClear
+          showSearch
           clearIcon={() => (
             <div className="dark:bg-gray-800 dark:text-gray-200  hover:dark:text-gray-400">
               <CloseCircleOutlined />
             </div>
           )}
           style={{ width: "49%" }}
+          filterOption={(o) => o}
           onChange={(e) => setSongogdsonAjiltan(e)}
+          onSearch={(search) =>
+            setAjiltniiKhuudaslalt((a) => ({
+              ...a,
+              search,
+              khuudasniiDugaar: 1,
+            }))
+          }
         >
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
             <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>

@@ -7,9 +7,10 @@ const fetcherJagsaalt = (
   url,
   token,
   baiguullagiinId,
-  { search, jagsaalt, ...khuudaslalt },
-  query = {},
-  barilgiinId
+  { search = "", ...khuudaslalt },
+  query,
+  barilgiinId,
+  select
 ) =>
   axios(token)
     .get(url, {
@@ -18,6 +19,7 @@ const fetcherJagsaalt = (
           baiguullagiinId,
           barilguud: barilgiinId,
           erkh: { $nin: ["Admin"] },
+          tsonkhniiErkhuud: window.location.pathname,
           $or: [
             { ner: { $regex: search, $options: "i" } },
             { register: { $regex: search, $options: "i" } },
@@ -25,6 +27,7 @@ const fetcherJagsaalt = (
           ],
           ...query,
         },
+        select,
         ...khuudaslalt,
       },
     })
@@ -35,9 +38,8 @@ export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setAjiltniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 20,
+    khuudasniiKhemjee: 100,
     search: "",
-    jagsaalt: [],
   });
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId
