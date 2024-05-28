@@ -44,8 +44,8 @@ function TogloomTulburiinDelgerenguiTailan(
     return undefined;
   }, [songogdsonAjiltan]);
 
-
-  const { tolgoomTulburMedeelel, tolgoomTulburMedeelelMutate } =
+  
+  const { togloomTulburMedeelel, tolgoomTulburMedeelelMutate } =
   useTogloomiinUdriinTailan(
       token,
       barilgiinId,
@@ -78,9 +78,9 @@ function TogloomTulburiinDelgerenguiTailan(
 
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
-    var niitDun = tolgoomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
+    var niitDun = togloomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
-    tolgoomTulburMedeelel?.forEach((element) => {
+    togloomTulburMedeelel?.forEach((element) => {
       switch (element?._id) {
         case "khariltsakh":
           ugugdul.push({
@@ -218,7 +218,7 @@ function TogloomTulburiinDelgerenguiTailan(
     });
 
     return ugugdul;
-  }, [tolgoomTulburMedeelel]);
+  }, [togloomTulburMedeelel]);
 
   useImperativeHandle(
     ref,
