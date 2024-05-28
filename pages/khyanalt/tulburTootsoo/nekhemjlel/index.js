@@ -77,8 +77,6 @@ function tulburTootsoo({ token }) {
     barilgiinId: barilgiinId,
   });
 
-
-
   const { dugaarlalt, dugaarlaltMutate, dugaarlaltKhadgalya } =
     useNekhemjlekhDugaarlalt(token);
   const [songogdsonGereenuud, setSongogdsonGereenuud] = React.useState([]);

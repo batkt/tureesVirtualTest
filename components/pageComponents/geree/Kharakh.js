@@ -32,12 +32,68 @@ function Kharakh({ data, print, token, baiguullaga, barilgiinId }, ref) {
                 .map((b) => {
                   b.zaalt = b.zaalt.replace(
                     new RegExp(`&lt;${key}&gt;`, "g"),
-                    value
+                    key === "utas"
+                      ? value[0]
+                      : parseFloat(value) != NaN
+                      ? key != "register"
+                        ? value
+                        : formatNumber(value)
+                      : value
                   );
                 });
               data.baruunTolgoi = data.baruunTolgoi?.replace(
                 new RegExp(`&lt;${key}&gt;`, "g"),
-                value
+                key === "utas"
+                  ? value[0]
+                  : parseFloat(value) != NaN
+                  ? key != "register"
+                    ? value
+                    : formatNumber(value)
+                  : value
+              );
+
+              data.baruunKhul = data.baruunKhul?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                key === "utas"
+                  ? value[0]
+                  : parseFloat(value) != NaN
+                  ? key != "register"
+                    ? value
+                    : formatNumber(value)
+                  : value
+              );
+
+              data.baruunTolgoi = data.baruunTolgoi?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                key === "utas"
+                  ? value[0]
+                  : parseFloat(value) != NaN
+                  ? key != "register"
+                    ? value
+                    : formatNumber(value)
+                  : value
+              );
+
+              data.zuunKhul = data.zuunKhul?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                key === "utas"
+                  ? value[0]
+                  : parseFloat(value) != NaN
+                  ? key != "register"
+                    ? value
+                    : formatNumber(value)
+                  : value
+              );
+
+              data.zuunTolgoi = data.zuunTolgoi?.replace(
+                new RegExp(`&lt;${key}&gt;`, "g"),
+                key === "utas"
+                  ? value[0]
+                  : parseFloat(value) != NaN
+                  ? key != "register"
+                    ? value
+                    : formatNumber(value)
+                  : value
               );
             }
 

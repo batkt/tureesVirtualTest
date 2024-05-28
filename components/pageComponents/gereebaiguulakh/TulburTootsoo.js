@@ -7,6 +7,8 @@ import Aos from "aos";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import moment from "moment";
 import { t } from "i18next";
+import { toWords } from "mon_num";
+
 const formItemLayout = {
   labelCol: {
     span: 10,
@@ -36,15 +38,18 @@ const Tulbur = ({
     if (e === true) {
       value.baritsaaAvakhEsekh = e;
       value.baritsaaAvakhDun = value.sariinTurees;
+      value.baritsaaAvakhDunUsgeer = toWords(value.sariinTurees);
     } else {
       value.baritsaaAvakhDun = 0;
       value.baritsaaAvakhEsekh = e;
+      value.baritsaaAvakhDunUsgeer = toWords(" ");
     }
     onChange({ ...value });
   };
   const baritsaaDunChange = (v) => {
     if (v && value.baritsaaAvakhEsekh === true) {
       value.baritsaaAvakhDun = v;
+      value.baritsaaAvakhDunUsgeer = toWords(v);
     }
     onChange({ ...value });
   };

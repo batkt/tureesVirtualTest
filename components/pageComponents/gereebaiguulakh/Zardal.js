@@ -30,9 +30,10 @@ const formItemLayout = {
 const query = {};
 const searchKeys = ["ner"];
 
-const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id ,t}) => {
+const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
   const [valueState, setValueState] = useState(undefined);
   function onValueChange(v) {
+    console.log(v, "======================");
     onChange(ashiglaltiinZardal?.jagsaalt.find((a) => a._id === v));
     setValueState(null);
   }
@@ -94,7 +95,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
       `}
     >
       <div
-        className={`absolute top-0 -left-2/4 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
+        className={`absolute -left-2/4 top-0 z-0 h-[200%] w-[150%] rotate-12 bg-green-500 transition-all duration-300 
            dark:bg-green-600`}
       />
       <div className="z-10 flex gap-1">
@@ -105,7 +106,7 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
         {value?.zardluud && value?.zardluud[i]?.turul === "Дурын" ? (
           <div className="flex w-full items-center justify-center gap-1">
             <Form.Item
-              className="tariffInput absolute top-[3px] -right-5 w-44"
+              className="tariffInput absolute -right-5 top-[3px] w-44"
               name={[a.name, "dun"]}
               rules={[
                 {
@@ -142,7 +143,9 @@ function Zardluud({ a, i, zardalUstgaya, inputChange, value, inputRef }) {
           </div>
         )}
         <Popconfirm
-          title={t("зардал устгах уу?", {ner: value?.zardluud && value?.zardluud[i]?.ner})}
+          title={t("зардал устгах уу?", {
+            ner: value?.zardluud && value?.zardluud[i]?.ner,
+          })}
           okText={t("Тийм")}
           cancelText={t("Үгүй")}
           onConfirm={() => zardalUstgaya(value?.zardluud && value?.zardluud[i])}
@@ -165,7 +168,7 @@ const Zardal = ({
   value,
   barilgiinId,
   formSubmit,
-  t
+  t,
 }) => {
   const [form] = Form.useForm();
   useEffect(() => {
@@ -221,6 +224,9 @@ const Zardal = ({
   }, []);
 
   const inputChange = (e, a) => {
+    console.log(e, "eeeeeeeeeeeeeeeeeeeeee");
+    console.log(a, "aaaaaaaaaaaaaaaaaaaaaa");
+
     const index = value.zardluud.findIndex((object) => {
       return object._id === a._id;
     });
@@ -228,6 +234,8 @@ const Zardal = ({
     if (index !== -1) {
       value.zardluud[index].dun = e;
     }
+    console.log(value, "valuevalue");
+
     onChange({ ...value });
   };
   return (
@@ -246,7 +254,7 @@ const Zardal = ({
 
         <div className="w-full bg-white">
           <SongokhKheseg
-          t={t}
+            t={t}
             id={"songokhKheseg"}
             ashiglaltiinZardal={ashiglaltiinZardal}
             inputChange={inputChange}
@@ -256,7 +264,7 @@ const Zardal = ({
 
         <div className="space-y-5">
           <Form.List name="zardluud">
-            {(fields,) => (
+            {(fields) => (
               <>
                 {fields.map((a, i) => (
                   <Zardluud
@@ -275,7 +283,7 @@ const Zardal = ({
       </div>
       <div data-aos="fade-right" data-aos-duration="1000" data-aos-delay="100">
         <Form.Item wrapperCol={{ span: 24 }}>
-          <div className="mt-5 flex w-full flex-col gap-4 md:flex-row justify-between">
+          <div className="mt-5 flex w-full flex-col justify-between gap-4 md:flex-row">
             <Button
               onClick={prev}
               icon={<ArrowLeftOutlined />}

@@ -86,10 +86,12 @@ const talbainiiTalbaruud = [
   { ner: "Түрээсийн талбайн давхар", talbar: "davkhar" },
   { ner: "Зардлын дүн", talbar: "zardliinDun" },
   { ner: "Зориулалт", talbar: "zoriulalt" },
+  { ner: "Талбайн нийт үнэ үсгээр", talbar: "talbainNiitUneUsgeer" },
 ];
 
 const baritsaaniiTalbaruud = [
   { ner: "Барьцаа авах дүн", talbar: "baritsaaAvakhDun" },
+  { ner: "Барьцаа авах дүн үсгээр", talbar: "baritsaaAvakhDunUsgeer" },
   {
     ner: t("Барьцаа байршуулах хугацаа"),
     talbar: "baritsaaBairshuulakhKhugatsaa",
@@ -228,11 +230,11 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
     );
   return (
     <React.Fragment>
-      <div className='flex w-full flex-row'>
-        <span className='mr-3 w-1/3 text-right dark:text-gray-200'>
+      <div className="flex w-full flex-row">
+        <span className="mr-3 w-1/3 text-right dark:text-gray-200">
           {t("Харагдах дугаар")}:
         </span>
-        <div className='w-2/3'>
+        <div className="w-2/3">
           <Input
             placeholder={t("Харагдах дугаар")}
             value={utga?.kharagdakhDugaar}
@@ -242,15 +244,16 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
           />
         </div>
       </div>
-      <div className='mt-5 flex w-full flex-row'>
-        <span className='mr-3 w-1/3 text-right dark:text-gray-200'>
+      <div className="mt-5 flex w-full flex-row">
+        <span className="mr-3 w-1/3 text-right dark:text-gray-200">
           {t("Хамаарагдах хэсэг")}:
         </span>
         <Select
           placeholder={t("Хамаарагдах хэсэг")}
-          className='w-2/3'
+          className="w-2/3"
           value={utga?.khamaarakhKheseg}
-          onChange={(v) => setUtga((a) => ({ ...a, khamaarakhKheseg: v }))}>
+          onChange={(v) => setUtga((a) => ({ ...a, khamaarakhKheseg: v }))}
+        >
           {[
             "Ерөнхий мэдээлэл",
             "Гэрээний хугацаа",
@@ -262,7 +265,7 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
           ))}
         </Select>
       </div>
-      <div className='mt-5' />
+      <div className="mt-5" />
       <SunEditor
         onChange={(v) => setUtga((a) => ({ ...a, zaalt: v }))}
         defaultValue={utga?.zaalt}
@@ -272,7 +275,14 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
           buttonList: [
             ...formatting,
             ["table", "align", "fontSize", "font"],
-            ["undsen", "khugatsaa", "talbai", "baritsaa", "tulbur", "zardaluud",],
+            [
+              "undsen",
+              "khugatsaa",
+              "talbai",
+              "baritsaa",
+              "tulbur",
+              "zardaluud",
+            ],
           ],
         }}
         showToolbar={true}
