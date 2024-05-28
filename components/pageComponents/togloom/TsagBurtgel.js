@@ -25,7 +25,10 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import axios from "axios";
 
-function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, ref) {
+function TsagBurtgel(
+  { data, barilgiinId, token, destroy, onRefresh, ajiltan },
+  ref
+) {
   const [form] = Form.useForm();
   const [tsag, setTsag] = useState({
     ekhlekhtsag: moment(Date.now()),
@@ -62,7 +65,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
     console.log(formData, "formData");
     setLoading(true);
     const data = formData;
-    if (data.utas.length === 0) {
+    if (data.utas?.length === 0) {
       data.utas = [""];
     }
     if (!data.turul) {
@@ -174,7 +177,7 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
           <Switch checked={bulegEsekh} onChange={(v) => setBulegEsekh(v)} />
         </Form.Item>
 
-        <div className="flex gap-2 dark:texxt-gray-500">
+        <div className="dark:texxt-gray-500 flex gap-2">
           <div className="dark:text-gray-300">{t("Тоглосон тоо")}:</div>
           <div className="dark:text-gray-300">{togolsonToo}</div>
         </div>
@@ -424,7 +427,9 @@ function TsagBurtgel({ data, barilgiinId, token, destroy, onRefresh, ajiltan}, r
       </Form.Item>
       <div className="flex justify-end">
         <Space>
-          <Button onClick={() => destroy()} ><div className="dark:text-blue-600">{t("Хаах")}</div></Button>
+          <Button onClick={() => destroy()}>
+            <div className="dark:text-blue-600">{t("Хаах")}</div>
+          </Button>
           <Button
             loading={loading}
             type="primary"
