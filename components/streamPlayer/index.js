@@ -72,7 +72,7 @@
 
 // export default R2WPlayerComponent;
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
