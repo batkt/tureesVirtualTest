@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { R2WPlayer } from "./R2WPlayer.min";
 
 const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   const rtspUrl = useMemo(() => {
@@ -24,8 +25,8 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
       "11111111 ==-========"
     );
 
-    if (typeof window !== "undefined" && window.R2WPlayer) {
-      const newPlayer = new window.R2WPlayer({
+    if (typeof window !== "undefined" && R2WPlayer) {
+      const newPlayer = new R2WPlayer({
         serverPath: "http://127.0.0.1:8083",
         containerId: `videoContainer${Camer}`,
         crossOriginIsolated: true,
