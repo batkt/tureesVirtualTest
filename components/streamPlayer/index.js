@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { R2WPlayer } from "./R2WPlayer.min";
 
-function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
+const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   const rtspUrl = useMemo(() => {
     if (USER && PASSWD) {
       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
@@ -18,12 +17,11 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
     setConnectionState(state);
   }, []);
 
-  console.log(connectionState, "connectionState");
-
   useEffect(() => {
-    if (conntectionSetlekh) {
-      const newPlayer = new R2WPlayer({
-        serverPath: "http://127.0.0.1:8083",
+    if (typeof window !== "undefined" && window.R2WPlayer) {
+      // Ensure window is defined
+      const newPlayer = new window.R2WPlayer({
+        serverPath: "http://TEST",
         containerId: `videoContainer${Camer}`,
         crossOriginIsolated: true,
         logEnabled: true,
@@ -73,7 +71,9 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   }, [connectionState, player, rtspUrl]);
 
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
-}
+};
+
+export default R2WPlayerComponent;
 
 // export default R2WPlayerComponent;
 
