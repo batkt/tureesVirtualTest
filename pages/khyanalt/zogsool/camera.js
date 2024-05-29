@@ -76,6 +76,7 @@ import StackStream from "./stackStream";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
+import StackIkhNaydStream from "./StackIkhNaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
@@ -2013,6 +2014,19 @@ function camera({ token }) {
                   ) : (
                     <Stream1 ip={camerVal[0]} />
                   )
+                ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                  <R2WPlayerComponent
+                    // USER={"admin"}
+                    // ROOT={"stream"}
+                    // PASSWD={"123456"}
+                    // Camer={camerVal[0]}
+                    // PORT={554}
+                    USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                    ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                    PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                    Camer={camerVal[0]}
+                    PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                  />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
@@ -2476,6 +2490,11 @@ function camera({ token }) {
                         {/*baiguullagiin id ni FoodCity.iin id */}
                         {baiguullaga?._id === "63c0f31efe522048bf02086d" ? (
                           <StackStream tuluv={drawerOpen} />
+                        ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
+                          <StackIkhNaydStream
+                            barilgiinId={barilgiinId}
+                            token={token}
+                          />
                         ) : (
                           ""
                         )}
