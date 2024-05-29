@@ -1232,6 +1232,7 @@ function togloom1() {
         align: "center",
         ellipsis: true,
         render: (data) => {
+          console.log(data, "datadatadatadata");
           return data.tuluv !== -1 &&
             (data?.tulburTulsunEsekh !== true ||
               data?.ebarimtAvsanEsekh !== true) ? (

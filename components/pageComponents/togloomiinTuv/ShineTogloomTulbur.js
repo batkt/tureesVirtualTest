@@ -50,8 +50,24 @@ function ShineTogloomTulbur(
   const [tuluv, setTuluv] = React.useState(2);
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = React.useState();
   const [qpayModalTuluv, setQpayModalTuluv] = React.useState(false);
+  // const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
+  //   data?.dutuuDun ? data?.dutuuDun : data?.niitDun
+  // );
   const [turulruuKhiikhDun, setTurulruuKhiikhDun] = React.useState(
-    data?.dutuuDun ? data?.dutuuDun : data?.niitDun
+    data?.tulbur.length > 0
+      ? parseFloat(data.niitDun) -
+          parseFloat(data?.tulbur?.reduce((a, b) => a + b.dun, 0) || 0)
+      : data.niitDun
+  );
+
+  console.log(data, "datadatadatadatadata");
+  console.log(turulruuKhiikhDun, "turulruuKhiikhDun");
+
+  console.log(
+    parseFloat(data.niitDun) -
+      (parseFloat(turulruuKhiikhDun) +
+        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)),
+    "tulbur dotrokh dun"
   );
 
   const { Canvas } = useQRCode();
@@ -520,10 +536,6 @@ function ShineTogloomTulbur(
                       </td>
                       <td className="border" colSpan={5}>
                         {baiguullagiinMedeelel?.tin}
-                        {console.log(
-                          baiguullagiinMedeelel?.tin,
-                          "hflauehfileawhgfliesh''''''''''''''''''"
-                        )}
                       </td>
                     </tr>
                     <tr>
@@ -1015,7 +1027,7 @@ function ShineTogloomTulbur(
               <div
                 onClick={() =>
                   setTurulruuKhiikhDun(
-                    turulruuKhiikhDun.toString().slice(0, -1)
+                    turulruuKhiikhDun.toString().slice(0, -1) || 0
                   )
                 }
                 style={{ backgroundColor: "rgba(255, 70, 70, 0.1)" }}
@@ -1050,23 +1062,45 @@ function ShineTogloomTulbur(
                 </div>
               </div>
               <div
-                className={`flex w-full justify-between font-semibold ${
-                  parseInt(turulruuKhiikhDun) -
-                    (data?.dutuuDun ? data?.dutuuDun : data?.niitDun) <
-                  0
+                className={`flex w-full justify-between font-semibold
+                ${
+                  data.niitDun >
+                  parseFloat(turulruuKhiikhDun || 0) +
+                    parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
                     ? "text-red-400"
                     : "text-[#00A35E]"
-                } `}
+                }`}
               >
                 <div>
-                  {" "}
-                  {parseInt(turulruuKhiikhDun) -
-                    (data.niitDun - tulbur.reduce((a, b) => a + b.dun, 0)) >
-                  0
-                    ? "Хариулт:"
-                    : "Дутуу:"}
+                  {data.niitDun >
+                  parseFloat(turulruuKhiikhDun || 0) +
+                    parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
+                    ? "Дутуу:"
+                    : data.niitDun ===
+                      parseFloat(turulruuKhiikhDun || 0) +
+                        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
+                    ? "Нийт"
+                    : "Хариулт:"}
                 </div>
-                <div>{formatNumber(parseInt(turulruuKhiikhDun))}₮</div>
+
+                <div>
+                  {formatNumber(
+                    data.niitDun >
+                      parseFloat(turulruuKhiikhDun) +
+                        parseFloat(tulbur.reduce((a, b) => a + b.dun, 0) || 0)
+                      ? parseFloat(data.niitDun) -
+                          (parseFloat(turulruuKhiikhDun) +
+                            parseFloat(
+                              tulbur.reduce((a, b) => a + b.dun, 0) || 0
+                            ))
+                      : parseFloat(turulruuKhiikhDun) +
+                          parseFloat(
+                            tulbur.reduce((a, b) => a + b.dun, 0) || 0
+                          ) -
+                          parseFloat(data.niitDun)
+                  )}
+                  ₮
+                </div>
               </div>
             </div>
             <div className="flex h-[120px] w-full flex-col items-center justify-center gap-4">
