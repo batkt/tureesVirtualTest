@@ -32,15 +32,18 @@ const searchKeys = ["ner"];
 
 const SongokhKheseg = ({ value, ashiglaltiinZardal, onChange, id, t }) => {
   const [valueState, setValueState] = useState(undefined);
-  function onValueChange(v) {
-    console.log(v, "======================");
-    onChange(ashiglaltiinZardal?.jagsaalt.find((a) => a._id === v));
-    setValueState(null);
-  }
-
+  const onValueChange = (selectedValues) => {
+    console.log(selectedValues, "======================");
+    const selectedObjects = ashiglaltiinZardal?.jagsaalt.filter((a) =>
+      selectedValues.includes(a._id)
+    );
+    onChange(selectedObjects);
+    setValueState(selectedValues);
+  };
   return (
     <Select
       id={id}
+      mode={"multiple"}
       placeholder={t("Зардал сонгох")}
       filterOption={false}
       value={valueState}
@@ -187,31 +190,45 @@ const Zardal = ({
     next();
   }
   const inputRef = useRef();
+
   function onChangeZardal(v) {
-    if (!!value.zardluud?.find((a) => a._id === v._id)) {
-      notification.warning({
-        message: (
-          <div>
-            <b>{v.ner}</b> {t("зардал нь гэрээн дээр сонгогдсон байна.")}
-          </div>
-        ),
-      });
-      return;
-    }
+    // if (!!value.zardluud?.find((a) => a._id === v._id)) {
+    //   notification.warning({
+    //     message: (
+    //       <div>
+    //         <b>{v.ner}</b> {t("зардал нь гэрээн дээр сонгогдсон байна.")}
+    //       </div>
+    //     ),
+    //   });
+    //   return;
+    // }
+    console.log(v, "test hiij baina ");
     function zardalOruulya() {
-      value.zardluud = value.zardluud || [];
-      value.zardluud.push(v);
-      if (v.turul === "Дурын") {
-        setTimeout(() => {
-          inputRef.current !== undefined && inputRef?.current.focus();
-        }, 300);
-        v.dun = "";
-      }
+      value.zardluud = v || [];
+      value.zardluud.map((el) => {
+        if (el.turul === "Дурын") {
+          el.dun = "";
+        }
+      });
       form.setFieldsValue({ ...value });
       onChange({ ...value });
     }
     zardalOruulya();
+    // function zardalOruulya() {
+    //   value.zardluud = value.zardluud || [];
+    //   value.zardluud.push(v);
+    //   if (v.turul === "Дурын") {
+    //     setTimeout(() => {
+    //       inputRef.current !== undefined && inputRef?.current.focus();
+    //     }, 300);
+    //     v.dun = "";
+    //   }
+    //   form.setFieldsValue({ ...value });
+    //   onChange({ ...value });
+    // }
+    // zardalOruulya();
   }
+
   function zardalUstgaya(a) {
     value.zardluud = value.zardluud.filter(function (item) {
       return item._id !== a?._id;
