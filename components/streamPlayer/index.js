@@ -19,7 +19,7 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   }, []);
 
   useEffect(() => {
-    console.log(window.R2WPlayer, "test ==-========");
+    console.log(R2WPlayer, "test ==-========");
     console.log(
       typeof window !== "undefined" && window.R2WPlayer,
       "11111111 ==-========"
@@ -45,7 +45,7 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
         }
       };
     }
-  }, [Camer, conntectionSetlekh]);
+  }, [Camer, conntectionSetlekh, R2WPlayer]);
 
   useEffect(() => {
     if (Camer && player && connectionState !== "failed") {
