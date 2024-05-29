@@ -21,7 +21,7 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
     if (typeof window !== "undefined" && window.R2WPlayer) {
       // Ensure window is defined
       const newPlayer = new window.R2WPlayer({
-        serverPath: "http://TEST",
+        serverPath: "http://127.0.0.1:8083",
         containerId: `videoContainer${Camer}`,
         crossOriginIsolated: true,
         logEnabled: true,
