@@ -11,15 +11,16 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   }, [Camer, USER, PASSWD, PORT, ROOT]);
 
   const [player, setPlayer] = useState(null);
-  const [connectionState, setConnectionState] = useState("disconnected");
+  const [connectionState, setConnectionState] = useState("");
 
   const conntectionSetlekh = useCallback((state) => {
     console.log(state, "state:");
     setConnectionState(state);
   }, []);
 
+  console.log(conntectionSetlekh, "conntectionSetlekh");
+
   useEffect(() => {
-    console.log(conntectionSetlekh, "conntectionSetlekh");
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
