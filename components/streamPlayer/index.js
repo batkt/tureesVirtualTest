@@ -1,77 +1,3 @@
-// import React, { useState, useEffect, useMemo, useCallback } from "react";
-// import { R2WPlayer } from "./R2WPlayer.min";
-
-// function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
-//   const rtspUrl = useMemo(() => {
-//     if (USER && PASSWD) {
-//       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
-//     } else {
-//       return `rtsp://${Camer}:${PORT}/${ROOT}`;
-//     }
-//   }, [Camer, USER, PASSWD, PORT, ROOT]);
-
-//   const [player, setPlayer] = useState(null);
-//   const [connectionState, setConnectionState] = useState("connecting");
-
-//   const conntectionSetlekh = useCallback((state) => {
-//     setConnectionState(state);
-//   }, []);
-
-//   useEffect(() => {
-//     const newPlayer = new R2WPlayer({
-//       serverPath: "http://127.0.0.1:8083",
-//       containerId: `videoContainer${Camer}`,
-//       crossOriginIsolated: true,
-//       logEnabled: true,
-//       onconnectionstatechange: conntectionSetlekh,
-//       style: {
-//         controls: nemelteer ? true : false,
-//       },
-//     });
-
-//     setPlayer(newPlayer);
-
-//     return () => {
-//       if (newPlayer) {
-//         newPlayer.destroy();
-//       }
-//     };
-//   }, [Camer, conntectionSetlekh, nemelteer]);
-
-//   useEffect(() => {
-//     if (Camer && player && connectionState !== "failed") {
-//       player.play(rtspUrl);
-//     }
-//   }, [Camer, player, rtspUrl, connectionState]);
-
-//   useEffect(() => {
-//     if (player) {
-//       player.reset();
-//     }
-//   }, [player]);
-
-// useEffect(() => {
-//   let retryTimeout;
-//   if (connectionState === "failed") {
-//     retryTimeout = setTimeout(() => {
-//       if (player) {
-//         player.play(rtspUrl);
-//       }
-//     }, 5000);
-//   }
-
-//   return () => {
-//     if (retryTimeout) {
-//       clearTimeout(retryTimeout);
-//     }
-//   };
-// }, [connectionState, player, rtspUrl]);
-
-//   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
-// }
-
-// export default R2WPlayerComponent;
-
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
@@ -142,7 +68,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
         if (player) {
           player.play(rtspUrl);
         }
-      }, 5000);
+      }, 2000);
     }
 
     return () => {
