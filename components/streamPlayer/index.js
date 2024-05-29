@@ -50,22 +50,22 @@
 //     }
 //   }, [player]);
 
-//   useEffect(() => {
-//     let retryTimeout;
-//     if (connectionState === "failed") {
-//       retryTimeout = setTimeout(() => {
-//         if (player) {
-//           player.play(rtspUrl);
-//         }
-//       }, 5000);
-//     }
-
-//     return () => {
-//       if (retryTimeout) {
-//         clearTimeout(retryTimeout);
+// useEffect(() => {
+//   let retryTimeout;
+//   if (connectionState === "failed") {
+//     retryTimeout = setTimeout(() => {
+//       if (player) {
+//         player.play(rtspUrl);
 //       }
-//     };
-//   }, [connectionState, player, rtspUrl]);
+//     }, 5000);
+//   }
+
+//   return () => {
+//     if (retryTimeout) {
+//       clearTimeout(retryTimeout);
+//     }
+//   };
+// }, [connectionState, player, rtspUrl]);
 
 //   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 // }
@@ -134,6 +134,23 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
       //setReset(false);
     }
   }, [reset, player]);
+
+  useEffect(() => {
+    let retryTimeout;
+    if (connectionState === "failed") {
+      retryTimeout = setTimeout(() => {
+        if (player) {
+          player.play(rtspUrl);
+        }
+      }, 5000);
+    }
+
+    return () => {
+      if (retryTimeout) {
+        clearTimeout(retryTimeout);
+      }
+    };
+  }, [connectionState, player, rtspUrl]);
 
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 }
