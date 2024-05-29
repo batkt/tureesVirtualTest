@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { R2WPlayer } from "./R2WPlayer.min";
 
-const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
+function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const rtspUrl = useMemo(() => {
     if (USER && PASSWD) {
       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
@@ -11,49 +11,32 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   }, [Camer, USER, PASSWD, PORT, ROOT]);
 
   const [player, setPlayer] = useState(null);
-  const [connectionState, setConnectionState] = useState("");
+  const [connectionState, setConnectionState] = useState("connected");
 
   const conntectionSetlekh = useCallback((state) => {
-    console.log(state, "state:");
     setConnectionState(state);
   }, []);
 
   useEffect(() => {
-    console.log(R2WPlayer, "test ==-========");
-    console.log(
-      typeof window !== "undefined" &&
-        R2WPlayer &&
-        conntectionSetlekh &&
-        nemelteer,
-      "11111111 ==-========"
-    );
+    const newPlayer = new R2WPlayer({
+      serverPath: "http://127.0.0.1:8083",
+      containerId: `videoContainer${Camer}`,
+      crossOriginIsolated: true,
+      logEnabled: true,
+      onconnectionstatechange: conntectionSetlekh,
+      style: {
+        controls: nemelteer ? true : false,
+      },
+    });
 
-    if (
-      typeof window !== "undefined" &&
-      R2WPlayer &&
-      conntectionSetlekh &&
-      nemelteer
-    ) {
-      const newPlayer = new R2WPlayer({
-        serverPath: "http://127.0.0.1:8083",
-        containerId: `videoContainer${Camer}`,
-        crossOriginIsolated: true,
-        logEnabled: true,
-        onconnectionstatechange: conntectionSetlekh,
-        style: {
-          controls: nemelteer ? true : false,
-        },
-      });
+    setPlayer(newPlayer);
 
-      setPlayer(newPlayer);
-
-      return () => {
-        if (newPlayer) {
-          newPlayer.destroy();
-        }
-      };
-    }
-  }, [Camer, conntectionSetlekh, R2WPlayer, nemelteer]);
+    return () => {
+      if (newPlayer) {
+        newPlayer.destroy();
+      }
+    };
+  }, [Camer, conntectionSetlekh, nemelteer]);
 
   useEffect(() => {
     if (Camer && player && connectionState !== "failed") {
@@ -68,9 +51,9 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   }, [player]);
 
   useEffect(() => {
-    let timeOut;
+    let retryTimeout;
     if (connectionState === "failed") {
-      timeOut = setTimeout(() => {
+      retryTimeout = setTimeout(() => {
         if (player) {
           player.play(rtspUrl);
         }
@@ -78,18 +61,16 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
     }
 
     return () => {
-      if (timeOut) {
-        clearTimeout(timeOut);
+      if (retryTimeout) {
+        clearTimeout(retryTimeout);
       }
     };
   }, [connectionState, player, rtspUrl]);
 
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
-};
+}
 
 export default R2WPlayerComponent;
-
-// export default R2WPlayerComponent;
 
 // import React, { useState, useEffect, useMemo } from "react";
 // import { R2WPlayer } from "./R2WPlayer.min";
