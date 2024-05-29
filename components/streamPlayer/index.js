@@ -18,8 +18,13 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   }, []);
 
   useEffect(() => {
+    console.log(window.R2WPlayer, "test ==-========");
+    console.log(
+      typeof window !== "undefined" && window.R2WPlayer,
+      "11111111 ==-========"
+    );
+
     if (typeof window !== "undefined" && window.R2WPlayer) {
-      // Ensure window is defined
       const newPlayer = new window.R2WPlayer({
         serverPath: "http://127.0.0.1:8083",
         containerId: `videoContainer${Camer}`,
