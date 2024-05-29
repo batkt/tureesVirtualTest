@@ -21,11 +21,19 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
   useEffect(() => {
     console.log(R2WPlayer, "test ==-========");
     console.log(
-      typeof window !== "undefined" && window.R2WPlayer,
+      typeof window !== "undefined" &&
+        R2WPlayer &&
+        conntectionSetlekh &&
+        nemelteer,
       "11111111 ==-========"
     );
 
-    if (typeof window !== "undefined" && R2WPlayer) {
+    if (
+      typeof window !== "undefined" &&
+      R2WPlayer &&
+      conntectionSetlekh &&
+      nemelteer
+    ) {
       const newPlayer = new R2WPlayer({
         serverPath: "http://127.0.0.1:8083",
         containerId: `videoContainer${Camer}`,
@@ -45,7 +53,7 @@ const R2WPlayerComponent = ({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) => {
         }
       };
     }
-  }, [Camer, conntectionSetlekh, R2WPlayer]);
+  }, [Camer, conntectionSetlekh, R2WPlayer, nemelteer]);
 
   useEffect(() => {
     if (Camer && player && connectionState !== "failed") {
