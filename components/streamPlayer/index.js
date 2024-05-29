@@ -11,7 +11,7 @@
 //   }, [Camer, USER, PASSWD, PORT, ROOT]);
 
 //   const [player, setPlayer] = useState(null);
-//   const [connectionState, setConnectionState] = useState("connected");
+//   const [connectionState, setConnectionState] = useState("connecting");
 
 //   const conntectionSetlekh = useCallback((state) => {
 //     setConnectionState(state);
@@ -77,6 +77,8 @@ import { R2WPlayer } from "./R2WPlayer.min";
 
 function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   const [reset, setReset] = useState(false);
+  const [connectionState, setConnectionState] = useState("connecting");
+
   const rtspUrl = useMemo(() => {
     if (USER && PASSWD) {
       return `rtsp://${USER}:${PASSWD}@${Camer}:${PORT}/${ROOT}`;
@@ -87,18 +89,25 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
 
   const [player, setPlayer] = useState(null);
 
+  const conntectionSetlekh = useCallback((state) => {
+    console.log("TEST TULUV:", state);
+    setConnectionState(state);
+  }, []);
+
   useEffect(() => {
     const newPlayer = new R2WPlayer({
       serverPath: "http://127.0.0.1:8083",
       containerId: `videoContainer${Camer}`,
       crossOriginIsolated: true,
       logEnabled: true,
-      onconnectionstatechange: (state) => {
-        console.log("tuluv:", state);
-        // if (state === "failed") {
-        //   setReset(true);
-        // }
-      },
+      onconnectionstatechange: conntectionSetlekh,
+
+      // onconnectionstatechange: (state) => {
+      //   console.log("tuluv:", state);
+      //   // if (state === "failed") {
+      //   //   setReset(true);
+      //   // }
+      // },
       style: {
         controls: nemelteer ? true : false,
       },
