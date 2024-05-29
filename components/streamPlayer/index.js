@@ -18,27 +18,29 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
     setConnectionState(state);
   }, []);
 
-  console.log(conntectionSetlekh, "conntectionSetlekh");
+  console.log(connectionState, "connectionState");
 
   useEffect(() => {
-    const newPlayer = new R2WPlayer({
-      serverPath: "http://127.0.0.1:8083",
-      containerId: `videoContainer${Camer}`,
-      crossOriginIsolated: true,
-      logEnabled: true,
-      onconnectionstatechange: conntectionSetlekh,
-      style: {
-        controls: nemelteer ? true : false,
-      },
-    });
+    if (conntectionSetlekh) {
+      const newPlayer = new R2WPlayer({
+        serverPath: "http://127.0.0.1:8083",
+        containerId: `videoContainer${Camer}`,
+        crossOriginIsolated: true,
+        logEnabled: true,
+        onconnectionstatechange: conntectionSetlekh,
+        style: {
+          controls: nemelteer ? true : false,
+        },
+      });
 
-    setPlayer(newPlayer);
+      setPlayer(newPlayer);
 
-    return () => {
-      if (newPlayer) {
-        newPlayer.destroy();
-      }
-    };
+      return () => {
+        if (newPlayer) {
+          newPlayer.destroy();
+        }
+      };
+    }
   }, [Camer, conntectionSetlekh]);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ function R2WPlayerComponent({ Camer, USER, PASSWD, nemelteer, PORT, ROOT }) {
   return <div id={`videoContainer${Camer}`} className="h-full w-full"></div>;
 }
 
-export default R2WPlayerComponent;
+// export default R2WPlayerComponent;
 
 // import React, { useState, useEffect, useMemo } from "react";
 // import { R2WPlayer } from "./R2WPlayer.min";
