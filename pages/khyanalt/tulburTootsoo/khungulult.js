@@ -257,6 +257,7 @@ function tulburTootsoo() {
             var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
           }
         } else {
+          ugugdul.tailbar = "Түрээс";
           var khymdraaguiDun = x.sariinTurees;
           if (khungulukh === "khuvi") {
             var khymdarsanDun =
