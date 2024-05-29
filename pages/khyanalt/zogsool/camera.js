@@ -2016,11 +2016,16 @@ function camera({ token }) {
                   )
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent
-                    USER={"admin"}
-                    ROOT={"stream"}
-                    PASSWD={"123456"}
+                    // USER={"admin"}
+                    // ROOT={"stream"}
+                    // PASSWD={"123456"}
+                    // Camer={camerVal[0]}
+                    // PORT={554}
+                    USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                    ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                    PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
                     Camer={camerVal[0]}
-                    PORT={554}
+                    PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                   />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
@@ -2032,11 +2037,11 @@ function camera({ token }) {
                     />
                   ) : parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === false ? (
                     <R2WPlayerComponent
-                      Camer={camerVal[0]}
-                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
-                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
-                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
                       USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                     />
                   ) : (
                     ""
@@ -2140,11 +2145,16 @@ function camera({ token }) {
                   )
                 ) : baiguullaga?._id === "6115f350b35689cdbf1b9da3" ? (
                   <R2WPlayerComponent
-                    USER={"admin"}
-                    PASSWD={"123456"}
-                    ROOT={"stream"}
+                    // USER={"admin"}
+                    // PASSWD={"123456"}
+                    // ROOT={"stream"}
+                    // Camer={camerVal[1]}
+                    // PORT={554}
                     Camer={camerVal[1]}
-                    PORT={554}
+                    PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                    PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                    USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
                   />
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
