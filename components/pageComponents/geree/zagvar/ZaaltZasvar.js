@@ -206,7 +206,7 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         onChange={setUtga}
         defaultValue={utga}
         setOptions={{
-          height: 200,
+          height: 410,
           plugins: { ...plugins, ...custom },
           buttonList: [
             ...formatting,
@@ -271,7 +271,7 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         defaultValue={utga?.zaalt}
         setOptions={{
           plugins: { ...plugins, ...custom },
-          height: 200,
+          height: 410,
           buttonList: [
             ...formatting,
             ["table", "align", "fontSize", "font"],
