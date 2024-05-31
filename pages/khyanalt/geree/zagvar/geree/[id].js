@@ -102,7 +102,7 @@ function ZakhialgaNemekh({ token }) {
       setGereeniiZagvar(value);
     }
     modal({
-      width: "182mm",
+      width: "300mm",
       title: t("Заалт засах"),
       icon: <FileExcelOutlined />,
       content: (
@@ -181,7 +181,7 @@ function ZakhialgaNemekh({ token }) {
       <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10">
         <div
           className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm]"
-          style={{ width: "210mm" }}
+          style={{ width: "300mm" }}
         >
           <div className="grid grid-cols-2 gap-4">
             <div className="group relative">

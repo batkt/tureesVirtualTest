@@ -102,10 +102,12 @@ function index({ token }) {
       className={"gap-5 p-2 pb-14 sm:p-6 md:pb-0"}
       onSearch={(search) =>
         sanal.setKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
-      }>
+      }
+    >
       <div
         style={{ height: "calc(100vh - 8rem)" }}
-        className="col-span-12 flex flex-col space-y-5 rounded-2xl  bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl">
+        className="col-span-12 flex flex-col space-y-5 rounded-2xl  bg-white p-4 dark:bg-gray-900 md:p-8 xl:col-span-4 xl:rounded-l-2xl"
+      >
         <div className="mb-2 grid w-full gap-x-5 px-2">
           <RangePicker
             className="flex w-full"
@@ -130,7 +132,8 @@ function index({ token }) {
                 turul === status.utga
                   ? "bg-white text-gray-800 dark:bg-gray-800 dark:text-gray-50 "
                   : "text-gray-50"
-              }`}>
+              }`}
+            >
               {t(status.ner)}
             </div>
           ))}
@@ -142,10 +145,12 @@ function index({ token }) {
                 khariltsagch?._id === mur?._id
                   ? "rounded-l-full bg-green-200 shadow-lg saturate-50 dark:bg-green-500 "
                   : ""
-              } `}>
+              } `}
+            >
               <div
                 className={`flex h-[7vh] cursor-pointer flex-row  items-center space-x-2 rounded-md`}
-                onClick={() => setKhariltsagch(mur)}>
+                onClick={() => setKhariltsagch(mur)}
+              >
                 <div className="image-fit bg-blackrounded-full relative h-12 w-12 flex-none">
                   <img
                     alt="Rubick"
@@ -166,7 +171,8 @@ function index({ token }) {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           textOverflow: "ellipsis",
-                        }}>
+                        }}
+                      >
                         {mur.title}
                       </div>
                     </div>
@@ -190,7 +196,8 @@ function index({ token }) {
       {!!khariltsagch ? (
         <div
           style={{ height: "calc(100vh - 8rem)" }}
-          className="col-span-12 space-y-3 overflow-y-auto rounded-r-lg bg-green-50 px-5  dark:bg-gray-900 xl:col-span-8 xl:rounded-2xl">
+          className="col-span-12 space-y-3 overflow-y-auto rounded-r-lg bg-green-50 px-5  dark:bg-gray-900 xl:col-span-8 xl:rounded-2xl"
+        >
           {sanalGomdolTuukh.map((mur) => (
             <div>
               <div className="flex w-full items-center gap-3 px-5 pt-2 ">
@@ -212,17 +219,20 @@ function index({ token }) {
                       <div
                         className={`mb-3  ${
                           mur?.tuluv === -1 ? "hidden" : "flex"
-                        }`}>
+                        }`}
+                      >
                         <Popconfirm
                           disabled={mur?.tuluv === 1}
                           title={t("Хүлээн авах уу?")}
                           okText={t("Тийм")}
                           cancelText={t("Үгүй")}
-                          onConfirm={() => sanalGomdolAvakh(mur)}>
+                          onConfirm={() => sanalGomdolAvakh(mur)}
+                        >
                           <div
                             className={`text-md cursor-pointer rounded-full font-bold bg-${
                               0 === mur?.tuluv ? "red" : "green"
-                            }-500 py-1 px-3 font-medium text-gray-50`}>
+                            }-500 px-3 py-1 font-medium text-gray-50`}
+                          >
                             {t(
                               0 !== mur?.tuluv ? "Хүлээж aвсан" : "Хүлээж авах"
                             )}
@@ -258,7 +268,8 @@ function index({ token }) {
         <div
           className="box col-span-12 flex h-[40vh] items-center xl:col-span-8 xl:h-full"
           data-aos="fade-left"
-          data-aos-duration="1000">
+          data-aos-duration="1000"
+        >
           <div className="mx-auto text-center">
             <div className="flex justify-center">
               <div className="image-fit z-10 h-16 w-16 flex-none overflow-hidden rounded-full">
