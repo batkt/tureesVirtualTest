@@ -223,7 +223,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
           <td></td>
           <td></td>
           <td></td>
-          <td>&lt;khuviinTamga&gt;</td>
+          <td>&lt;tamga&gt;</td>
           <td></td>
           <td></td>
           <td></td>
