@@ -41,7 +41,7 @@ function TulburiinDelgerenguiTailan(
     setCamerVal([camerVal[0], e]);
   };
   const zogsooAjiltanQuery = useMemo(() => {
-    return undefined;
+    return {tsonkhniiErkhuud: window.location.pathname};
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {

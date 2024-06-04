@@ -19,7 +19,6 @@ const fetcherJagsaalt = (
           baiguullagiinId,
           barilguud: barilgiinId,
           erkh: { $nin: ["Admin"] },
-          tsonkhniiErkhuud: window.location.pathname,
           $or: [
             { ner: { $regex: search, $options: "i" } },
             { register: { $regex: search, $options: "i" } },

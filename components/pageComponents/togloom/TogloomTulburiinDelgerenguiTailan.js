@@ -34,7 +34,7 @@ function TogloomTulburiinDelgerenguiTailan(
   ]);
 
   const togloomAjiltanQuery = useMemo(() => {
-    return undefined;
+    return {tsonkhniiErkhuud: window.location.pathname};;
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {
