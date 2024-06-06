@@ -994,7 +994,7 @@ function togloom1() {
       if (difference > 0) {
         const footer = [
           <Button onClick={() => qrRef.current.khaaya()}>{t("Хаах")}</Button>,
-          <Button onClick={() => qrRef.current.khadgalya()}>
+          <Button onClick={() => qrRef.current.khadgalya()} >
             {t("Хэвлэх")}
           </Button>,
         ];
