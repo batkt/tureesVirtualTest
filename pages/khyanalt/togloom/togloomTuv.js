@@ -1570,9 +1570,9 @@ function togloom1() {
               ajiltan?.erkh === "Admin") && (
               <div
                 onClick={() => orlogiinDelegrengui()}
-                className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-lg font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
+                className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-md font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
               >
-                {t("Тоглоомын орлого")} :{" "}
+                {t("Нийт орлого")} :{" "}
                 {!!togloomiinDun?.toololt
                   ? formatNumber(
                       togloomiinDun?.toololt?.reduce((a, b) => a + b.niitDun, 0)

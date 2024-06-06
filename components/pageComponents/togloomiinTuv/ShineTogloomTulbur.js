@@ -736,7 +736,7 @@ function ShineTogloomTulbur(
                 } `}
               >
                 {value.belen > 0 ? (
-                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1">
+                  <div className="absolute right-[0] top-[-15px] rounded-xl border-[1px] border-green-600 bg-white p-1 dark:bg-gray-800 dark:text-gray-300">
                     <div className="font-semibold">
                       {formatNumber(value.belen)}₮
                     </div>
@@ -787,7 +787,7 @@ function ShineTogloomTulbur(
                 onClick={() => {
                   turulruuTooKhiikhFunction("khungulult");
                 }}
-                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-700 ${
+                className={`relative flex h-[85px] w-[184px] cursor-pointer items-center justify-center gap-4 rounded-3xl shadow-xl hover:scale-110 dark:bg-gray-800 shadow-4xl ${
                   value.khungulult > 0 ? "border-[3px] border-green-600" : null
                 } `}
               >
@@ -880,31 +880,31 @@ function ShineTogloomTulbur(
             <div className="flex h-full w-[186px] flex-col gap-4">
               <div
                 onClick={() => hylbarNemekh("20000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white dark:text-gray-300"
               >
                 <div className="font-bold">{formatNumber(20000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("10000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white dark:text-gray-300"
               >
                 <div className="font-bold">{formatNumber(10000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("5000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white dark:text-gray-300"
               >
                 <div className="font-bold">{formatNumber(5000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("1000")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white dark:text-gray-300"
               >
                 <div className="font-bold">{formatNumber(1000)}</div>
               </div>
               <div
                 onClick={() => hylbarNemekh("500")}
-                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white"
+                className="flex h-[53px] cursor-pointer items-center justify-center rounded-full border-[1px] border-green-600 hover:bg-green-600 hover:text-white dark:text-gray-300"
               >
                 <div className="font-bold">{formatNumber(500)}</div>
               </div>
@@ -912,13 +912,13 @@ function ShineTogloomTulbur(
             <div
               onClick={() => destroy()}
               style={{ backgroundColor: "rgba(255, 70, 70, 0.1)" }}
-              className="flex h-[57px] cursor-pointer items-center justify-center rounded-xl border-[1px] border-[#FF4646] shadow-xl hover:bg-[#FF4646] hover:text-white"
+              className="flex h-[57px] cursor-pointer items-center justify-center rounded-xl border-[1px] border-[#FF4646] shadow-xl hover:bg-[#FF4646] hover:text-white dark:text-gray-300"
             >
               <div className="font-bold text-[#FF4646]">Цуцлах [ESC]</div>
             </div>
           </div>
 
-          <div className="flex h-full w-[45%] flex-col items-center gap-5">
+          <div className="flex h-full w-[45%] flex-col items-center gap-5 dark:text-gray-300">
             <div
               onDoubleClick={() =>
                 setTurulruuKhiikhDun(
@@ -1037,7 +1037,7 @@ function ShineTogloomTulbur(
             </div>
           </div>
           <div className="flex h-full w-[246px] flex-col items-center justify-end gap-6">
-            <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5">
+            <div className="flex h-[256px] w-[100%] flex-col justify-between rounded-[25px] border-2 border-dotted border-green-600 p-5 dark:text-gray-300">
               <div className="flex flex-col gap-2 font-semibold">
                 <div className="flex w-full justify-between font-semibold">
                   <div>Нийт дүн:</div>
@@ -1088,7 +1088,7 @@ function ShineTogloomTulbur(
                   style={{ backgroundColor: "rgba(79, 209, 197, 0.2)" }}
                   type="primary"
                   onClick={f4Darsan}
-                  className="h-[57px] w-[186px] rounded-[15px] border-[2px] border-green-600 bg-green-600 text-green-600 shadow-xl"
+                  className="h-[57px] w-[186px] rounded-[15px] border-[2px] border-green-600 bg-green-600 text-green-600 shadow-xl dark:font-semibold"
                 >
                   Шууд хадгалах [F4]
                 </button>
