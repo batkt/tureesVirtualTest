@@ -88,8 +88,8 @@ function ToolTip({ pointer }) {
         text={`${t("Талбайн Дугаар")}:`}
         fill={"black"}
         fontSize={15}
-        fontStyle='bold'
-        align='center'
+        fontStyle="bold"
+        align="center"
       />
       <Text
         x={pointer.x + 155}
@@ -97,7 +97,7 @@ function ToolTip({ pointer }) {
         text={pointer.kod}
         fill={"black"}
         fontSize={15}
-        align='left'
+        align="left"
       />
       <Text
         x={pointer.x + 30}
@@ -105,8 +105,8 @@ function ToolTip({ pointer }) {
         text={`${t("Талбайн Хэмжээ")}:`}
         fill={"black"}
         fontSize={15}
-        fontStyle='bold'
-        align='center'
+        fontStyle="bold"
+        align="center"
       />
       <Text
         x={pointer.x + 163}
@@ -114,7 +114,7 @@ function ToolTip({ pointer }) {
         text={pointer.talbainKhemjee}
         fill={"black"}
         fontSize={15}
-        align='left'
+        align="left"
       />
       <Text
         x={pointer.x + 30}
@@ -122,8 +122,8 @@ function ToolTip({ pointer }) {
         text={`${t("Талбайн үнэ")}:`}
         fill={"black"}
         fontSize={15}
-        fontStyle='bold'
-        align='center'
+        fontStyle="bold"
+        align="center"
       />
       <Text
         x={pointer.x + 130}
@@ -131,7 +131,7 @@ function ToolTip({ pointer }) {
         text={pointer.talbainNiitUne}
         fill={"black"}
         fontSize={15}
-        align='left'
+        align="left"
       />
       {pointer.idevkhiteiEsekh === true && (
         <Text
@@ -140,8 +140,8 @@ function ToolTip({ pointer }) {
           text={`${t("Гэрээний Дугаар")}:`}
           fill={"black"}
           fontSize={15}
-          fontStyle='bold'
-          align='center'
+          fontStyle="bold"
+          align="center"
         />
       )}
       {pointer.idevkhiteiEsekh === true && (
@@ -151,7 +151,7 @@ function ToolTip({ pointer }) {
           text={_.get(gereeMedeelel, "jagsaalt.0.gereeniiDugaar")}
           fill={"black"}
           fontSize={15}
-          align='center'
+          align="center"
         />
       )}
       {pointer.idevkhiteiEsekh === true && (
@@ -161,8 +161,8 @@ function ToolTip({ pointer }) {
           text={`${t("Эзэмшигчийн нэр")}:`}
           fill={"black"}
           fontSize={15}
-          fontStyle='bold'
-          align='center'
+          fontStyle="bold"
+          align="center"
         />
       )}
       {pointer.idevkhiteiEsekh === true && (
@@ -172,7 +172,7 @@ function ToolTip({ pointer }) {
           text={_.get(gereeMedeelel, "jagsaalt.0.ner")}
           fill={"black"}
           fontSize={15}
-          align='center'
+          align="center"
         />
       )}
     </Group>
@@ -210,15 +210,15 @@ class App extends Component {
 
     return (
       <div>
-        <div className='flex space-x-3'>
-          <div className=' flex h-8 w-full  items-end justify-end space-x-10 pb-1 '>
-            <div className='flex'>
-              <div className='w-5 border-2 bg-green-300 ' />
-              <div className='pl-2 pr-10'>{t("Идэвхтэй")}</div>
+        <div className="flex space-x-3">
+          <div className=" flex h-8 w-full  items-end justify-end space-x-10 pb-1 ">
+            <div className="flex">
+              <div className="w-5 border-2 bg-green-300 " />
+              <div className="pl-2 pr-10">{t("Идэвхтэй")}</div>
             </div>
-            <div className='flex '>
-              <div className='w-5 border-2 bg-red-400 ' />
-              <div className='pl-2'>{t("Идэвхгүй")}</div>
+            <div className="flex ">
+              <div className="w-5 border-2 bg-red-400 " />
+              <div className="pl-2">{t("Идэвхгүй")}</div>
             </div>
           </div>
         </div>
@@ -260,7 +260,7 @@ class App extends Component {
                   }}
                   key={mur._id}
                   points={flattenedPoints}
-                  stroke='black'
+                  stroke="black"
                   fill={
                     pointer?._id === mur._id
                       ? mur.idevkhiteiEsekh
@@ -291,13 +291,13 @@ class App extends Component {
                   <Text
                     x={x - (mur.kod.length * 4) / 2}
                     y={y - 15 / 2}
-                    fontStyle='bold'
+                    fontStyle="bold"
                     text={mur.kod}
-                    stroke='white'
+                    stroke="white"
                     strokeWidth={0.3}
                     fill={"black"}
                     fontSize={13}
-                    align='center'
+                    align="center"
                   />
                 </Group>
               );

@@ -125,7 +125,7 @@ function KhurunguudCard({
   return (
     <Card className="shadow-md">
       <div key={key}>
-        <div className="absolute -top-2 -right-3 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
+        <div className="absolute -right-3 -top-2 rounded-full bg-white text-3xl text-black dark:bg-red-600 dark:text-white">
           <CloseCircleOutlined
             onClick={() => {
               remove(name);
@@ -477,7 +477,8 @@ function TalbaiBurtgekh({ token }) {
     const segmentuud = formRef.current.getFieldsValue(segmentuud);
     talbaiState.segmentuud = segmentuud.segmentuud;
     if (talbaiState.niitiinTalbaiEsekh)
-      talbaiState.sulKhemjee = talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
+      talbaiState.sulKhemjee =
+        talbaiState.sulKhemjee || talbaiState.talbainKhemjee;
     setWaiting(true);
     if (!!talbaiState._id) {
       uilchilgee(token)
@@ -660,21 +661,18 @@ function TalbaiBurtgekh({ token }) {
               </Form.Item>
             </div>
             <div
-                data-aos="fade-right"
-                data-aos-duration="1000"
-                data-aos-delay="100"
+              data-aos="fade-right"
+              data-aos-duration="1000"
+              data-aos-delay="100"
             >
-              <Form.Item
-                  label={t("Хэмжээ м3")}
-                  name="talbainKhemjeeMetrKube"
-              >
+              <Form.Item label={t("Хэмжээ м3")} name="talbainKhemjeeMetrKube">
                 <InputNumber
-                    onKeyUp={focuser}
-                    style={{ width: "100%" }}
-                    allowClear
-                    placeholder={t("Талбайн хэмжээ/м3/")}
-                    value={talbaiState.talbainKhemjeeMetrKube}
-                    onChange={(v) => onChange("talbainKhemjeeMetrKube", v)}
+                  onKeyUp={focuser}
+                  style={{ width: "100%" }}
+                  allowClear
+                  placeholder={t("Талбайн хэмжээ/м3/")}
+                  value={talbaiState.talbainKhemjeeMetrKube}
+                  onChange={(v) => onChange("talbainKhemjeeMetrKube", v)}
                 ></InputNumber>
               </Form.Item>
             </div>
@@ -830,7 +828,9 @@ function TalbaiBurtgekh({ token }) {
                     <span className="mr-2 text-white">
                       <SettingOutlined />
                     </span>
-                    <span className="text-white ">{t("План зураг тохируулах")}</span>
+                    <span className="text-white ">
+                      {t("План зураг тохируулах")}
+                    </span>
                   </Button>
                   <Drawer
                     width={"100vw"}
@@ -859,30 +859,34 @@ function TalbaiBurtgekh({ token }) {
                   </Drawer>
                 </div>
                 <div className=" w-2/4 ">
-                  {!!gereeteiEsekh && <Popconfirm
-                    title="Гэрээтэй байна. Засварлахдаа итгэлтэй байна уу?"
-                    okText={t("Тийм")}
-                    cancelText={t("Үгүй")}
-                    onConfirm={() => {
-                      formRef.current.submit();
-                    }}
-                  >
-                    <Button
-                      className="w-full"
-                      id="talbaiBurtgekhButton"
-                      type="primary"
+                  {!!gereeteiEsekh && (
+                    <Popconfirm
+                      title="Гэрээтэй байна. Засварлахдаа итгэлтэй байна уу?"
+                      okText={t("Тийм")}
+                      cancelText={t("Үгүй")}
+                      onConfirm={() => {
+                        formRef.current.submit();
+                      }}
                     >
-                      {t("Хадгалах")}
-                    </Button>
-                  </Popconfirm>}
-                  {!gereeteiEsekh && <Button
+                      <Button
+                        className="w-full"
+                        id="talbaiBurtgekhButton"
+                        type="primary"
+                      >
+                        {t("Хадгалах")}
+                      </Button>
+                    </Popconfirm>
+                  )}
+                  {!gereeteiEsekh && (
+                    <Button
                       className="w-full"
                       id="talbaiBurtgekhButton"
                       onClick={() => formRef.current.submit()}
                       type="primary"
                     >
                       {t("Хадгалах")}
-                    </Button>}
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -896,12 +900,12 @@ function TalbaiBurtgekh({ token }) {
                 <>
                   <div
                     className={`max-h-maxScrollH space-y-4 overflow-y-scroll ${
-                      fields.length > 0 && "py-5 px-3 pb-10 lg:px-10"
+                      fields.length > 0 && "px-3 py-5 pb-10 lg:px-10"
                     }`}
                   >
                     {fields.map(({ key, name, fieldKey, ...restField }) => (
                       <KhurunguudCard
-                      t={t}
+                        t={t}
                         key={key}
                         name={name}
                         fieldKey={fieldKey}
@@ -923,7 +927,7 @@ function TalbaiBurtgekh({ token }) {
                       block
                       icon={<PlusOutlined />}
                     >
-                     {t("Хөрөнгө бүртгэх")}
+                      {t("Хөрөнгө бүртгэх")}
                     </Button>
                   </div>
                 </>

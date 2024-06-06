@@ -1045,7 +1045,7 @@ function togloom1() {
                       </div>
                       <div className="flex w-full justify-between border-y p-1 px-2 dark:bg-gray-200">
                         <div className="font-medium ">Нэр:</div>{" "}
-                        <div >{data?.ner}</div>
+                        <div>{data?.ner}</div>
                       </div>
                       <div className="flex w-full justify-between bg-green-50 p-1 px-2">
                         <div className="font-medium">Нас:</div>{" "}
@@ -1232,6 +1232,7 @@ function togloom1() {
         align: "center",
         ellipsis: true,
         render: (data) => {
+          console.log(data, "datadatadatadata");
           return data.tuluv !== -1 &&
             (data?.tulburTulsunEsekh !== true ||
               data?.ebarimtAvsanEsekh !== true) ? (

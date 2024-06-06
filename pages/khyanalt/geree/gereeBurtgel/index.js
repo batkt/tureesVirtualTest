@@ -602,7 +602,8 @@ function ZakhialgiinKhyanalt() {
                 a.turGereeEsekh === true
                   ? "rounded-md border-purple-600 bg-gradient-to-r from-purple-200 dark:border-purple-400 dark:from-purple-900 "
                   : "rounded-md border-blue-500 bg-gradient-to-r from-blue-200 dark:border-blue-400 dark:from-blue-900 "
-              }`}>
+              }`}
+            >
               <div
                 className={`absolute -left-[7px] top-[5px] h-3 w-3 rounded-full ${
                   a.turGereeEsekh === true
@@ -726,7 +727,8 @@ function ZakhialgiinKhyanalt() {
                       componentProps={{ token }}
                     />
                   </div>
-                }>
+                }
+              >
                 <a className=" flex items-center justify-center  hover:scale-150 ">
                   <ImFileText2 className="text-xl" />
                 </a>
@@ -770,13 +772,15 @@ function ZakhialgiinKhyanalt() {
                   <div className="dark:text-gray-200">
                     {gereeniiTuukhuud.map((a) => a.tsutslasanShaltgaan)}
                   </div>
-                }>
+                }
+              >
                 <a className=" flex items-center justify-center hover:scale-150 dark:invert ">
                   <img
                     src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
                     data-src="https://cdn-icons-png.flaticon.com/128/1979/1979288.png"
                     alt="Cancel"
-                    width={23}></img>
+                    width={23}
+                  ></img>
                 </a>
               </Popover>
             </div>
@@ -808,7 +812,8 @@ function ZakhialgiinKhyanalt() {
                 <div className="flex w-24 flex-col space-y-2">
                   <a
                     className="ant-dropdown-link flex w-full items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:hover:bg-gray-700"
-                    onClick={() => gereeKharya(data)}>
+                    onClick={() => gereeKharya(data)}
+                  >
                     <EyeOutlined style={{ fontSize: "18px" }} />{" "}
                     <label> {t("Харах")}</label>
                   </a>
@@ -829,7 +834,8 @@ function ZakhialgiinKhyanalt() {
                           notification.warning({
                             message: t("Таньд гэрээ засах эрх байхгүй байна."),
                           });
-                      }}>
+                      }}
+                    >
                       <EditOutlined style={{ fontSize: "18px" }} />
                       <label> {t("Засах")}</label>
                     </a>
@@ -837,7 +843,8 @@ function ZakhialgiinKhyanalt() {
                   {shuult.utga !== "Цуцласан" && (
                     <a
                       className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700"
-                      onClick={() => gereeSungaya(data)}>
+                      onClick={() => gereeSungaya(data)}
+                    >
                       <FieldTimeOutlined style={{ fontSize: "18px" }} />
                       <label> {t("Сунгах")}</label>
                     </a>
@@ -847,7 +854,8 @@ function ZakhialgiinKhyanalt() {
                       title="Цуцлахдаа итгэлтэй байна уу?"
                       okText={t("Тийм")}
                       cancelText={t("Үгүй")}
-                      onConfirm={() => gereeTsutsalya(data)}>
+                      onConfirm={() => gereeTsutsalya(data)}
+                    >
                       <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                         <MinusCircleOutlined style={{ fontSize: "18px" }} />
                         <label> {t("Цуцлах")}</label>
@@ -860,7 +868,8 @@ function ZakhialgiinKhyanalt() {
                         title="Сэргээх үйлдэл хийхдээ итгэлтэй байна уу?"
                         okText={t("Тийм")}
                         cancelText={t("Үгүй")}
-                        onConfirm={() => gereeSergeeye(data)}>
+                        onConfirm={() => gereeSergeeye(data)}
+                      >
                         <a className="ant-dropdown-link flex items-center justify-between rounded-lg p-2 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700">
                           <RedoOutlined style={{ fontSize: "18px" }} />
                           <label> {t("Сэргээх")}</label>
@@ -875,7 +884,8 @@ function ZakhialgiinKhyanalt() {
                 </div>
               )}
               placement="bottom"
-              trigger="click">
+              trigger="click"
+            >
               <a className="flex items-center justify-center rounded-full hover:bg-gray-200">
                 <MoreOutlined style={{ fontSize: "18px" }} />
               </a>
@@ -979,6 +989,7 @@ function ZakhialgiinKhyanalt() {
     );
     readMethod("gereeniiZagvar", token, geree.gereeniiZagvariinId).then(
       ({ data }) => {
+        console.log(data, "data");
         if (!!data) {
           if (geree.gereeniiOgnoo) {
             geree.ekhlekhOn = moment(geree.gereeniiOgnoo).format("YYYY");
@@ -1035,25 +1046,44 @@ function ZakhialgiinKhyanalt() {
                       !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
                   )
                   .map((b) => {
-                    b.zaalt = b.zaalt.replace(
+                    return (b.zaalt = b.zaalt.replace(
                       new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                      mur.tariff
-                    );
+                      key === "utas"
+                        ? mur.tariff || mur.dun
+                        : parseFloat(mur.tariff || mur.dun) != NaN
+                        ? key != "register"
+                          ? formatNumber(mur.tariff || mur.dun)
+                          : mur.tariff || mur.dun
+                        : formatNumber(mur.tariff || mur.dun)
+                    ));
                   });
               });
             } else {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
                 .map((b) => {
-                  b.zaalt = b.zaalt.replace(
+                  console.log(value, "key");
+                  return (b.zaalt = b.zaalt.replace(
                     new RegExp(`&lt;${key}&gt;`, "g"),
-                    value
-                  );
+                    key === "utas"
+                      ? value[0]
+                      : parseFloat(value) != NaN
+                      ? key != "register"
+                        ? value
+                        : formatNumber(value)
+                      : value
+                  ));
                 });
             }
             data.baruunTolgoi = data.baruunTolgoi?.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
-              value
+              key === "utas"
+                ? value[0]
+                : parseFloat(value) != NaN
+                ? key != "register"
+                  ? value
+                  : formatNumber(value)
+                : value
             );
           }
           data.geree = geree;
@@ -1115,7 +1145,8 @@ function ZakhialgiinKhyanalt() {
       onSearch={(search) =>
         setGereeniiKhuudaslalt((a) => ({ ...a, search, khuudasniiDugaar: 1 }))
       }
-      loading={isValidating}>
+      loading={isValidating}
+    >
       <Drawer
         title={kharuulakhGeree?.gereeniiDugaar}
         width={"230mm"}
@@ -1125,11 +1156,13 @@ function ZakhialgiinKhyanalt() {
           <div>
             <Button
               style={{ backgroundColor: "#209669", color: "#ffffff" }}
-              onClick={handlePrint}>
+              onClick={handlePrint}
+            >
               {t("Хэвлэх")}
             </Button>
           </div>
-        }>
+        }
+      >
         {!!kharuulakhGeree && (
           <GereeKharakh
             ref={componentRef}
@@ -1155,7 +1188,8 @@ function ZakhialgiinKhyanalt() {
                 onClick={() => setShuult(mur)}
                 data-aos="zoom-in-up"
                 data-aos-duration="1000"
-                data-aos-delay={1 + index + "00"}>
+                data-aos-delay={1 + index + "00"}
+              >
                 <div className="h-full w-[67vw] rounded-xl sm:w-auto">
                   <div className="rounded-xl p-3">
                     <div className="flex">
@@ -1165,7 +1199,8 @@ function ZakhialgiinKhyanalt() {
                             mur?.utga === shuult?.utga
                               ? mur.color
                               : "text-green-500"
-                          } font-bold`}>
+                          } font-bold`}
+                        >
                           {mur.too}
                         </div>
                         <div className="text-base text-gray-500">
@@ -1178,7 +1213,8 @@ function ZakhialgiinKhyanalt() {
                             mur?.utga === shuult?.utga
                               ? mur.color
                               : "text-green-500"
-                          } text-2xl`}>
+                          } text-2xl`}
+                        >
                           {mur.icon}
                         </div>
                       </div>
@@ -1193,7 +1229,8 @@ function ZakhialgiinKhyanalt() {
           <div
             data-aos="zoom-in-right"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <DatePicker.RangePicker
               className="w-full sm:w-auto"
               locale={i18n.language === "mn" && locale}
@@ -1203,7 +1240,8 @@ function ZakhialgiinKhyanalt() {
             className="ml-auto flex place-content-end gap-3"
             data-aos="zoom-in-left"
             data-aos-duration="1000"
-            data-aos-delay="300">
+            data-aos-delay="300"
+          >
             <BaganiinSongolt
               shineBagana={shineBagana}
               setShineBagana={setShineBagana}
@@ -1289,13 +1327,15 @@ function ZakhialgiinKhyanalt() {
                 <div className="flex w-32 flex-col">
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                    onClick={gereeOruulakhExcel}>
+                    onClick={gereeOruulakhExcel}
+                  >
                     <UploadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Оруулах")}</label>
                   </a>
                   <a
                     className="flex cursor-pointer items-center space-x-2 rounded-lg p-1 hover:bg-green-100 dark:text-white dark:hover:bg-gray-700 "
-                    onClick={excelTatakh}>
+                    onClick={excelTatakh}
+                  >
                     <DownloadOutlined style={{ fontSize: "18px" }} />
                     <label>{t("Татах")}</label>
                   </a>
@@ -1303,10 +1343,12 @@ function ZakhialgiinKhyanalt() {
               )}
               style={{ padding: 0 }}
               placement="bottom"
-              trigger="click">
+              trigger="click"
+            >
               <Button
                 type="primary"
-                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}>
+                icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
                 <span>Excel</span>
                 <DownOutlined width={5} />
               </Button>
@@ -1338,7 +1380,8 @@ function ZakhialgiinKhyanalt() {
           data-aos-duration="1000"
           data-aos-delay="300"
           data-aos-anchor-placement="top-bottom"
-          className="mt-2 hidden  md:block ">
+          className="mt-2 hidden  md:block "
+        >
           <Table
             bordered
             scroll={{ y: "calc(100vh - 29rem)", x: "calc(100vw - 25rem)" }}

@@ -90,7 +90,8 @@ function ZakhialgaNemekh({ token }) {
       <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button
         style={{ backgroundColor: "#209669", color: "#ffffff" }}
-        onClick={() => ref.current.khadgalya()}>
+        onClick={() => ref.current.khadgalya()}
+      >
         {t("Хадгалах")}
       </Button>,
     ];
@@ -101,11 +102,17 @@ function ZakhialgaNemekh({ token }) {
       setGereeniiZagvar(value);
     }
     modal({
-      width: "182mm",
+      width: "300mm",
       title: t("Заалт засах"),
       icon: <FileExcelOutlined />,
       content: (
-        <ZaaltZasvar ref={ref} token={token} value={value} change={change} zardal={ashiglaltiinZardal} />
+        <ZaaltZasvar
+          ref={ref}
+          token={token}
+          value={value}
+          change={change}
+          zardal={ashiglaltiinZardal}
+        />
       ),
       footer,
     });
@@ -116,7 +123,7 @@ function ZakhialgaNemekh({ token }) {
       content: (
         <div>
           <div dangerouslySetInnerHTML={{ __html: mur.zaalt }} />
-          <span className='font-medium'>
+          <span className="font-medium">
             Заалтыг гэрээний загвараас устгахдаа итгэлтэй байна уу?
           </span>
         </div>
@@ -165,19 +172,21 @@ function ZakhialgaNemekh({ token }) {
 
   return (
     <Admin
-      khuudasniiNer='zakhialgiinKhyanalt'
-      title='Гэрээний загвар угсрах'
+      khuudasniiNer="zakhialgiinKhyanalt"
+      title="Гэрээний загвар угсрах"
       hideSearch
       dedKhuudas
-      className='p-4'>
-      <div className='col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10'>
+      className="p-4"
+    >
+      <div className="col-span-12 flex justify-center p-4 lg:col-span-9 xl:col-span-10">
         <div
-          className='flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm]'
-          style={{ width: "210mm" }}>
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='group relative'>
+          className="flex w-full flex-col space-y-1 bg-white p-[15mm] pl-[24mm] pr-[14mm]"
+          style={{ width: "300mm" }}
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <div className="group relative">
               <div
-                className='rounded-md border border-dashed border-gray-600 p-2'
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunTolgoi ||
@@ -185,16 +194,17 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className='absolute -right-2 -top-2 hidden group-hover:block'
+                className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("zuunTolgoi", gereeniiZagvar.zuunTolgoi || "")
-                }>
-                <EditOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800' />
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
-            <div className='group relative'>
+            <div className="group relative">
               <div
-                className='rounded-md border border-dashed border-gray-600 p-2'
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunTolgoi ||
@@ -202,11 +212,12 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className='absolute -right-2 -top-2 hidden group-hover:block'
+                className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("baruunTolgoi", gereeniiZagvar.baruunTolgoi || "")
-                }>
-                <EditOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800' />
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
           </div>
@@ -214,47 +225,49 @@ function ZakhialgaNemekh({ token }) {
             return (
               <div
                 key={mur._id}
-                className='group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700'>
+                className="group relative flex w-full flex-row rounded-md p-1 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
                 <div
-                  className='sun-editor-editable w-full'
+                  className="sun-editor-editable w-full"
                   dangerouslySetInnerHTML={{ __html: mur.zaalt }}
                 />
-                <div className='absolute -right-2 -top-2 hidden flex-row space-x-2 group-hover:flex'>
+                <div className="absolute -right-2 -top-2 hidden flex-row space-x-2 group-hover:flex">
                   <div onClick={() => docZasya(`dedKhesguud.${index}`, mur)}>
-                    <EditOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800' />
+                    <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                   <div onClick={() => docUstgaya(index, mur)}>
-                    <DeleteOutlined className='cursor-pointer rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800' />
+                    <DeleteOutlined className="cursor-pointer rounded-full border bg-white fill-current p-1 hover:bg-red-400 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                 </div>
-                <div className='absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex'>
+                <div className="absolute -bottom-2 -right-2 hidden flex-row space-x-2 group-hover:flex">
                   <div onClick={() => docNemekh(index, _.cloneDeep(mur))}>
-                    <FileAddOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-green-400 dark:bg-black dark:hover:bg-gray-800' />
+                    <FileAddOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-green-400 dark:bg-black dark:hover:bg-gray-800" />
                   </div>
                 </div>
               </div>
             );
           })}
-          <div className='grid grid-cols-2 gap-4'>
-            <div className='group relative'>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="group relative">
               <div
-                className='rounded-md border border-dashed border-gray-600 p-2'
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.zuunKhul || t("Гэрээний загварын зүүн хөл"),
                 }}
               />
               <div
-                className='absolute -right-2 -top-2 hidden group-hover:block'
+                className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("zuunKhul", gereeniiZagvar.zuunKhul || "")
-                }>
-                <EditOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800' />
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
-            <div className='group relative'>
+            <div className="group relative">
               <div
-                className='rounded-md border border-dashed border-gray-600 p-2'
+                className="rounded-md border border-dashed border-gray-600 p-2"
                 dangerouslySetInnerHTML={{
                   __html:
                     gereeniiZagvar.baruunKhul ||
@@ -262,41 +275,44 @@ function ZakhialgaNemekh({ token }) {
                 }}
               />
               <div
-                className='absolute -right-2 -top-2 hidden group-hover:block'
+                className="absolute -right-2 -top-2 hidden group-hover:block"
                 onClick={() =>
                   docZasya("baruunKhul", gereeniiZagvar.baruunKhul || "")
-                }>
-                <EditOutlined className='cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800' />
+                }
+              >
+                <EditOutlined className="cursor-pointer rounded-full border bg-white p-1 hover:bg-gray-200 dark:bg-black dark:hover:bg-gray-800" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className='col-span-12 lg:col-span-3 xl:col-span-2'>
-        <div className='box p-5'>
+      <div className="col-span-12 lg:col-span-3 xl:col-span-2">
+        <div className="box p-5">
           <Form form={form} autoComplete={"off"} onFinish={onFinish}>
             <Form.Item
-              name='ner'
+              name="ner"
               rules={[
                 {
                   required: true,
                   message: t("Гэрээний загварын нэр оруулна уу"),
                 },
-              ]}>
+              ]}
+            >
               <Input placeholder={t("Гэрээний загварын нэр")} />
             </Form.Item>
-            <div className='flex justify-end gap-2'>
-              <p className='mt-1'>{t("Түр гэрээ эсэх")} :</p>
-              <Form.Item name='turGereeEsekh' valuePropName='checked'>
+            <div className="flex justify-end gap-2">
+              <p className="mt-1">{t("Түр гэрээ эсэх")} :</p>
+              <Form.Item name="turGereeEsekh" valuePropName="checked">
                 <Switch />
               </Form.Item>
             </div>
             <Form.Item>
               <Button
-                className='w-full'
-                type='primary'
+                className="w-full"
+                type="primary"
                 onClick={() => form.submit()}
-                loading={towchTuluv}>
+                loading={towchTuluv}
+              >
                 {t("Хадгалах")}
               </Button>
             </Form.Item>

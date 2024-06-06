@@ -34,7 +34,7 @@ function TogloomTulburiinDelgerenguiTailan(
   ]);
 
   const togloomAjiltanQuery = useMemo(() => {
-    return undefined;
+    return {tsonkhniiErkhuud: window.location.pathname};;
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {
@@ -44,8 +44,8 @@ function TogloomTulburiinDelgerenguiTailan(
     return undefined;
   }, [songogdsonAjiltan]);
 
-
-  const { tolgoomTulburMedeelel, tolgoomTulburMedeelelMutate } =
+  
+  const { togloomTulburMedeelel, tolgoomTulburMedeelelMutate } =
   useTogloomiinUdriinTailan(
       token,
       barilgiinId,
@@ -54,7 +54,7 @@ function TogloomTulburiinDelgerenguiTailan(
       baiguullagiinId,
       query
     );
-  const { ajilchdiinGaralt } = useAjiltniiJagsaalt(
+  const { ajilchdiinGaralt, setAjiltniiKhuudaslalt } = useAjiltniiJagsaalt(
     token,
     baiguullagiinId,
     togloomAjiltanQuery
@@ -78,9 +78,9 @@ function TogloomTulburiinDelgerenguiTailan(
 
   const tulburiinMedeelel = useMemo(() => {
     var ugugdul = [];
-    var niitDun = tolgoomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
+    var niitDun = togloomTulburMedeelel?.reduce((a, b) => a + b.niitDun, 0) || 0;
 
-    tolgoomTulburMedeelel?.forEach((element) => {
+    togloomTulburMedeelel?.forEach((element) => {
       switch (element?._id) {
         case "khariltsakh":
           ugugdul.push({
@@ -218,7 +218,7 @@ function TogloomTulburiinDelgerenguiTailan(
     });
 
     return ugugdul;
-  }, [tolgoomTulburMedeelel]);
+  }, [togloomTulburMedeelel]);
 
   useImperativeHandle(
     ref,
@@ -313,6 +313,15 @@ function TogloomTulburiinDelgerenguiTailan(
           )}
           style={{ width: "49%" }}
           onChange={(e) => setSongogdsonAjiltan(e)}
+          showSearch
+          filterOption={(o) => o}
+          onSearch={(search) =>
+            setAjiltniiKhuudaslalt((a) => ({
+              ...a,
+              search,
+              khuudasniiDugaar: 1,
+            }))
+          }
         >
           {ajilchdiinGaralt?.jagsaalt?.map((mur) => (
             <Select.Option key={`${mur._id}ajiltan`} value={mur._id}>

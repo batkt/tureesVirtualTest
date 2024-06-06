@@ -227,11 +227,6 @@ function tulburTootsoo() {
       var ugugdul = form.getFieldsValue();
       ugugdul.ognoonuud = dundakhSaruudAvya(ognoonuud[0], ognoonuud[1]);
       ugugdul.barilgiinId = barilgiinId;
-      if (turul === "zardal") {
-        ugugdul.tailbar = songogdsonZardal.ner;
-      } else {
-        ugugdul.tailbar = "Түрээс";
-      }
       ugugdul.tulukhDun = tootsoolol.niitSariinTurees;
       ugugdul.khungulsunDun = tootsoolol.niitTulukhDun;
       ugugdul.khungulultiinDun = tootsoolol.khunglugdsunDun;
@@ -242,22 +237,34 @@ function tulburTootsoo() {
 
         console.log(zardliinData, "zardliinData");
 
-        var urjuulekhData =
-          zardliinData?.turul === "1м3/талбай"
-            ? x.talbainKhemjeeMetrKube || 1
-            : zardliinData?.turul === "1м2"
-            ? x?.talbainKhemjee
-            : zardliinData?.turul === "Тогтмол" && 1;
+        if (turul === "zardal") {
+          ugugdul.tailbar = songogdsonZardal.ner;
+          var urjuulekhData =
+            zardliinData?.turul === "1м3/талбай"
+              ? x.talbainKhemjeeMetrKube || 1
+              : zardliinData?.turul === "1м2"
+              ? x?.talbainKhemjee
+              : zardliinData?.turul === "Тогтмол" && 1;
 
-        console.log(urjuulekhData, "urjuulekhData");
+          console.log(urjuulekhData, "urjuulekhData");
 
-        var khymdraaguiDun = zardliinData?.tariff * urjuulekhData;
+          var khymdraaguiDun = zardliinData?.tariff * urjuulekhData;
 
-        if (khungulukh === "khuvi") {
-          var khymdarsanDun =
-            khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+          if (khungulukh === "khuvi") {
+            var khymdarsanDun =
+              khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+          } else {
+            var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+          }
         } else {
-          var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+          ugugdul.tailbar = "Түрээс";
+          var khymdraaguiDun = x.sariinTurees;
+          if (khungulukh === "khuvi") {
+            var khymdarsanDun =
+              khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
+          } else {
+            var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+          }
         }
 
         return {

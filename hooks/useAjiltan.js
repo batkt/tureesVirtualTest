@@ -7,9 +7,10 @@ const fetcherJagsaalt = (
   url,
   token,
   baiguullagiinId,
-  { search, jagsaalt, ...khuudaslalt },
-  query = {},
-  barilgiinId
+  { search = "", ...khuudaslalt },
+  query,
+  barilgiinId,
+  select
 ) =>
   axios(token)
     .get(url, {
@@ -25,6 +26,7 @@ const fetcherJagsaalt = (
           ],
           ...query,
         },
+        select,
         ...khuudaslalt,
       },
     })
@@ -35,9 +37,8 @@ export function useAjiltniiJagsaalt(token, baiguullagiinId, query) {
   const { barilgiinId } = useAuth();
   const [khuudaslalt, setAjiltniiKhuudaslalt] = useState({
     khuudasniiDugaar: 1,
-    khuudasniiKhemjee: 20,
+    khuudasniiKhemjee: 100,
     search: "",
-    jagsaalt: [],
   });
   const { data, mutate, isValidating } = useSWR(
     !!token && !!baiguullagiinId

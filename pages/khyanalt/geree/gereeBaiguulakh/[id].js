@@ -309,11 +309,26 @@ function GereeBaiguulakh({ token, data }) {
       butsaakhUtga.dedKhesguud
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
         .map((b) => {
-          b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+          b.zaalt = b.zaalt.replace(
+            new RegExp(`&lt;${key}&gt;`, "g"),
+            key === "utas"
+              ? value[0]
+              : parseFloat(value) != NaN
+              ? key != "register"
+                ? value
+                : formatNumber(value)
+              : value
+          );
         });
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        key === "utas"
+          ? value[0]
+          : parseFloat(value) != NaN
+          ? key != "register"
+            ? value
+            : formatNumber(value)
+          : value
       );
     }
     return butsaakhUtga;
@@ -359,7 +374,13 @@ function GereeBaiguulakh({ token, data }) {
             .map((b) => {
               b.zaalt = b.zaalt.replace(
                 new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                mur.tariff
+                key === "utas"
+                  ? mur.tariff[0]
+                  : parseFloat(mur.tariff) != NaN
+                  ? key != "register"
+                    ? mur.tariff
+                    : formatNumber(mur.tariff)
+                  : mur.tariff
               );
             });
         });
@@ -367,12 +388,27 @@ function GereeBaiguulakh({ token, data }) {
         butsaakhUtga.dedKhesguud
           ?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           .map((b) => {
-            b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            b.zaalt = b.zaalt.replace(
+              new RegExp(`&lt;${key}&gt;`, "g"),
+              key === "utas"
+                ? value[0]
+                : parseFloat(value) != NaN
+                ? key != "register"
+                  ? value
+                  : formatNumber(value)
+                : value
+            );
           });
       }
       butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
         new RegExp(`&lt;${key}&gt;`, "g"),
-        value
+        key === "utas"
+          ? value[0]
+          : parseFloat(value) != NaN
+          ? key != "register"
+            ? value
+            : formatNumber(value)
+          : value
       );
     }
 
@@ -606,7 +642,7 @@ function GereeBaiguulakh({ token, data }) {
                       </div>
                       {a.talbainKhemjeeMetrKube && (
                         <div className="flex gap-3">
-                          <div>{t("Хэмжээ м3")}:</div>
+                          <div>{t("Хэмжээ м3")}:</div>talbainNiitUne
                           <div>
                             {a.talbainKhemjeeMetrKube || 0}м<sup>3</sup>
                           </div>

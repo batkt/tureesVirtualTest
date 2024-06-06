@@ -25,11 +25,17 @@ function StackIkhNaydStream({ barilgiinId, token }) {
           <div key={index} className="border">
             <div className="h-[200px] w-[300px] sm:h-[300px] sm:w-[400px] xl:h-[400px] xl:w-[600px]">
               <R2WPlayerComponent
-                Camer={mur}
-                PASSWD={"123456"}
-                USER={"admin"}
-                ROOT={"stream"}
-                PORT={554}
+                // Camer={mur}
+                // PASSWD={"123456"}
+                // USER={"admin"}
+                // ROOT={"stream"}
+                // PORT={554}
+                // nemelteer={true}
+                Camer={camerVal[1]}
+                PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
                 nemelteer={true}
               />
             </div>

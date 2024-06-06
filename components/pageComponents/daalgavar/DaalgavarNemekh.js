@@ -17,11 +17,19 @@ const ognoonuud = new Array(30)
   .fill("")
   .map((v, i) => moment().add(i, "d").format("YYYY-MM-DD 23:59:59"));
 
-function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }) {
+function DaalgavarNemekh({
+  className,
+  token,
+  onRefresh,
+  data,
+  onClose,
+  t,
+  i18n,
+}) {
   const ajitanRef = React.useRef(null);
   const { barilgiinId, baiguullaga } = useAuth();
   const [daalgavar, setDaalgavar] = React.useState({});
-  const [zuragnuud, setZuragnuud] = useState([])
+  const [zuragnuud, setZuragnuud] = useState([]);
 
   function onChange(k, v) {
     setDaalgavar((a) => ({ ...a, [k]: v }));
@@ -43,7 +51,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
       icon: <FileExcelOutlined />,
       content: (
         <AjiltanNemekh
-        t={t}
+          t={t}
           daalgavar={daalgavar}
           ref={ajitanRef}
           token={token}
@@ -88,34 +96,43 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
       .post("/daalgavarOruulya", daalgavar)
       .then(({ data }) => {
         if (data === "Amjilttai") {
-          notification.success({ message: t("Даалгавар амжилттай бүртгэгдлээ") });
+          notification.success({
+            message: t("Даалгавар амжилттай бүртгэгдлээ"),
+          });
           setDaalgavar({});
           setZuragnuud([]);
           onRefresh();
           onClose();
         }
-      }).catch(aldaaBarigch);
+      })
+      .catch(aldaaBarigch);
   }
   return (
     <div
       data-aos="fade-right"
       data-aos-delay="200"
       data-aos-anchor-placement="top-bottom"
-      className={`relative col-span-12 space-y-10 rounded-2xl md:rounded-none md:rounded-r-2xl bg-white p-8 dark:bg-gray-900 xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
+      className={`relative col-span-12 space-y-10 rounded-2xl bg-white p-8 dark:bg-gray-900 md:rounded-none md:rounded-r-2xl xl:col-span-7 xl:px-12 2xl:px-28 ${className}`}
     >
-      <div className="text-left text-xl font-medium">{t("Даалгаварын хугацааг сонгоно уу.")}</div>
+      <div className="text-left text-xl font-medium">
+        {t("Даалгаварын хугацааг сонгоно уу.")}
+      </div>
       <div className="flex justify-between gap-2 overflow-x-scroll p-2 lg:justify-center xl:justify-between">
         {ognoonuud.map((ognoo) => (
           <div
             key={ognoo}
             onClick={() => onChange("duusakhOgnoo", ognoo)}
-            className={`w-16 cursor-pointer rounded-2xl ${ognoo === daalgavar.duusakhOgnoo
-              ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
-              : ""
-              } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
+            className={`w-16 cursor-pointer rounded-2xl ${
+              ognoo === daalgavar.duusakhOgnoo
+                ? "bg-green-400 text-white dark:bg-green-400 dark:text-opacity-95"
+                : ""
+            } bg-gray-200 py-2 text-center font-bold transition-colors duration-500 hover:bg-green-400 dark:bg-gray-800 dark:text-white dark:text-opacity-40 dark:hover:bg-green-800 dark:hover:text-opacity-100`}
           >
             <div className="text-xl">{moment(ognoo).format("DD")}</div>
-            <div className="w-16">{moment(ognoo).format(i18n.language === "mn" ? "MM" : "MMM")} {i18n.language === "mn" && "сар"}</div>
+            <div className="w-16">
+              {moment(ognoo).format(i18n.language === "mn" ? "MM" : "MMM")}{" "}
+              {i18n.language === "mn" && "сар"}
+            </div>
           </div>
         ))}
       </div>
@@ -129,7 +146,8 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
             <UserOutlined className="text-xl" />
             <div>
               <div className="text-lg font-medium">
-                {t("Ажилтан")}{daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
+                {t("Ажилтан")}
+                {daalgavar?.ajiltniiNer && `: ${daalgavar?.ajiltniiNer}`}
               </div>
               <div>{t("Даалгавар илгээх ажилтан сонгоно уу")}</div>
             </div>
@@ -149,13 +167,12 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
           data={{ turul: "jpg" }}
           headers={{ Authorization: `bearer ${token}` }}
           onChange={(v) => {
-            setZuragnuud(v.fileList)
+            setZuragnuud(v.fileList);
             onChange(
               "zurguud",
               v.fileList.map((v) => v.response?.id)
-            )
-          }
-          }
+            );
+          }}
           className="flex w-2/3 flex-col rounded-full"
         >
           <div className="flex w-full cursor-pointer justify-between rounded-xl bg-gray-200 p-5 transition-colors duration-500 hover:bg-green-400 hover:text-white dark:bg-gray-800 dark:hover:bg-green-600">
@@ -188,7 +205,7 @@ function DaalgavarNemekh({ className, token, onRefresh, data, onClose, t, i18n }
       </div>
       <div className="flex w-full justify-center">
         <button
-          className="rounded-xl bg-green-500 py-1 px-24 text-lg font-medium text-white"
+          className="rounded-xl bg-green-500 px-24 py-1 text-lg font-medium text-white"
           onClick={khadgalakh}
         >
           {t("Хадгалах")}
