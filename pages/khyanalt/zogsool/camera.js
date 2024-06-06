@@ -2533,6 +2533,7 @@ function camera({ token }) {
             }
             open={modalOpen.bool}
             onCancel={() => modalKhaakh()}
+            width={564}
             footer={[
               <Button key="back" onClick={() => modalKhaakh()}>
                 {t("Хаах")}
@@ -2557,11 +2558,12 @@ function camera({ token }) {
                           <Radio value="Борлуулалтын машин">
                             {t("Борлуулалтын машин")}
                           </Radio>
-                          <Radio value="Хөгжлийн бэрхшээлтэй иргэн">
-                            {t("Хөгжлийн бэрхшээлтэй иргэн")}
+                          <Radio value="Хөгжлийн бэрхшээлтэй">
+                            {t("Хөгжлийн бэрхшээлтэй")}
                           </Radio>
                           <Radio value="Хогны машин">{t("Хогны машин")}</Radio>
                           <Radio value="Шуудан">Шуудан</Radio>
+                          <Radio value="Дэлгүүрийн үйлчлүүлэгч">{t("Дэлгүүрийн үйлчлүүлэгч")}</Radio>
                           {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
                             <>
                               <Radio value="Түрээслэгч">

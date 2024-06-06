@@ -125,6 +125,7 @@ function tulburTootsoo({ token }) {
           token={token}
           turul={turul}
           barilgiinId={barilgiinId}
+          ashiglaltiinZardal={ashiglaltiinZardal}
           onRefresh={nekhemjlekhiinZagvarMutate}
         />
       ),
@@ -677,6 +678,16 @@ function tulburTootsoo({ token }) {
       var nekhemjlekh = _.cloneDeep(
         nekhemjleliinJagsaalt.find((a) => a._id === mur)
       );
+
+      const songosonZagvar = nekhemjlekhiinZagvar?.jagsaalt?.find(
+        (a) => a._id === barimt
+      );
+
+      var text = songosonZagvar?.khatuuZagvarEsekh
+          ? khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga)
+          : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
+              ?.nekhemjlekh;
+
       nekhemjlekh.eneSardTulukhUsgeer = numberToWords(
         nekhemjlekh.eneSardTulukhDun *
           (nekhemjlekh.eneSardTulukhDun < 0 ? -1 : 1),
@@ -698,6 +709,16 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+      let khungulsunTalbainNiitUne = Math.abs(
+        nekhemjlekh.talbainNiitUne - (nekhemjlekh.khungulult || 0)
+      );
+      let khungulsunTalbainNiitUneNuat = khungulsunTalbainNiitUne
+        ? khungulsunTalbainNiitUne / 11
+        : 0;
+      let khungulsunTalbainNiitUneNuatgui = khungulsunTalbainNiitUne
+        ? khungulsunTalbainNiitUne - khungulsunTalbainNiitUneNuat
+        : 0;
+
       nekhemjlekh.talbainNiitUneUsgeer = numberToWords(
         nekhemjlekh?.talbainNiitUne *
           (nekhemjlekh?.talbainNiitUne < 0 ? -1 : 1),
@@ -712,6 +733,17 @@ function tulburTootsoo({ token }) {
         "төгрөг",
         "мөнгө"
       );
+
+      var kaidudZoriulsanNiitTulburiinNiilber = 0;
+      kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+        ? khungulsunTalbainNiitUne
+        : 0;
+      kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel
+        ? nekhemjlekh?.aldangiinUldegdel
+        : 0;
+      kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh.umnukhSariinUrTulbur
+        ? nekhemjlekh.umnukhSariinUrTulbur
+        : 0;
       const dans = dansGaralt?.jagsaalt?.find(
         (a) => a.dugaar === songogdsonDans
       );
@@ -779,24 +811,202 @@ function tulburTootsoo({ token }) {
       nekhemjlekh.duusakhSar = moment().format("MM");
       nekhemjlekh.duusakhUdur = moment().format("DD");
 
-      var text = msj;
-      for (const [key, value] of Object.entries(nekhemjlekh)) {
-        text = text?.replace(new RegExp(`<${key}>`, "g"), value);
+      nekhemjlekh?.zardluud?.map((a) => {
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
+          a.khemjikhNegj || ""
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.tulukhDun&gt;`, "g"),
+          formatNumber(a.tulukhDun || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.tulukhDunNuat&gt;`, "g"),
+          formatNumber(a.tulukhDun / 10 || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.tulukhDunNuattai&gt;`, "g"),
+          formatNumber(a.tulukhDun * 1.1 - a.khungulult || 0 || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.tulukhDunNuatgui&gt;`, "g"),
+          a?.tulukhDun
+            ? formatNumber(a?.tulukhDun - a.tulukhDun / 10 || 0)
+            : " "
+        );
+        let khungulultKhassanTulukhDun = a.tulukhDun
+          ? a.khungulult
+            ? a.tulukhDun - a.khungulult
+            : a.tulukhDun
+          : 0;
+        let khungulultKhassanTulukhDunNuat = a.tulukhDun
+          ? khungulultKhassanTulukhDun / 11
+          : 0;
+        let khungulultKhassanTulukhDunNuatgui = a.tulukhDun
+          ? khungulultKhassanTulukhDun - khungulultKhassanTulukhDunNuat
+          : 0;
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.khungulultKhassanTulukhDun&gt;`, "g"),
+          formatNumber(khungulultKhassanTulukhDun || 0)
+        );
+        text = text?.replace(
+          new RegExp(
+            `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuat&gt;`,
+            "g"
+          ),
+          formatNumber(khungulultKhassanTulukhDunNuat || 0)
+        );
+        text = text?.replace(
+          new RegExp(
+            `&lt;${a.tailbar}.khungulultKhassanTulukhDunNuatgui&gt;`,
+            "g"
+          ),
+          formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
+          formatNumber(a.tariff || 0)
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.negj&gt;`, "g"),
+          formatNumber(a.negj || 0) || ""
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.suuliinZaalt&gt;`, "g"),
+          formatNumber(a.suuliinZaalt || 0) || ""
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.umnukhZaalt&gt;`, "g"),
+          formatNumber(a.umnukhZaalt || 0) || ""
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
+          formatNumber(a.khungulult || 0) || ""
+        );
+        kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
+      });
+
+      ashiglaltiinZardal?.jagsaalt?.map((a) => {
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.khemjikhNegj&gt;`, "g"),
+          ""
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.tulukhDun&gt;`, "g"),
+          0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.tulukhDunNuat&gt;`, "g"),
+          0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.tulukhDunNuattai&gt;`, "g"),
+          0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.tulukhDunNuatgui&gt;`, "g"),
+          0
+        );
+
+        text = text?.replace(new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"), 0);
+
+        text = text?.replace(new RegExp(`&lt;${a.ner}.negj&gt;`, "g"), 0);
+
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.suuliinZaalt&gt;`, "g"),
+          0
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.umnukhZaalt&gt;`, "g"),
+          0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;${a.ner}.khungulult&gt;`, "g"),
+          0
+        );
+      });
+      if (nekhemjlekh?.zardluud?.length > 0) {
+        const niitZardliinDun = nekhemjlekh?.zardluud.reduce(
+          (a, b) => a + b.tulukhDun,
+          0
+        );
+        text = text?.replace(
+          new RegExp(`&lt;niitZardliinDun&gt;`, "g"),
+          formatNumber(niitZardliinDun || 0)
+        );
+        let niitZardliinNoutiinDun = (niitZardliinDun / 1.1) * 0.1;
+
+        let niitZardliinNoutguiDun = niitZardliinDun - niitZardliinNoutiinDun;
+        text = text?.replace(
+          new RegExp(`&lt;niitZardliinNuatguiDun&gt;`, "g"),
+          formatNumber(niitZardliinNoutguiDun || 0)
+        );
+
+        text = text?.replace(
+          new RegExp(`&lt;niitZardliinNuatiinDun&gt;`, "g"),
+          formatNumber(niitZardliinNoutiinDun || 0)
+        );
       }
+      let garaasBodsonNiitDun = kaidudZoriulsanNiitTulburiinNiilber;
+      console.log("garaasBodsonNiitDun1 ", garaasBodsonNiitDun);
+      let garaasBodsonNiitDunNuat = garaasBodsonNiitDun / 10;
+      let garaasBodsonNiitDunNuatgui = formatNumber(
+        garaasBodsonNiitDun - garaasBodsonNiitDunNuat || 0
+      );
+      text = text?.replace(
+        new RegExp(`&lt;garaasBodsonNiitDun&gt;`, "g"),
+        formatNumber(garaasBodsonNiitDun || 0)
+      );
+      text = text?.replace(
+        new RegExp(`&lt;garaasBodsonNiitDunNuatgui&gt;`, "g"),
+        garaasBodsonNiitDunNuatgui
+      );
+      text = text?.replace(
+        new RegExp(`&lt;garaasBodsonNiitDunUsgeer&gt;`, "g"),
+        capitalize(
+          numberToWords(
+            Math.abs(garaasBodsonNiitDun),
+            { fixed: 2, suffix: "n" },
+            "төгрөг",
+            "мөнгө"
+          )
+        )
+      );
+      text = text?.replace(
+        new RegExp(`&lt;garaasBodsonNiitDunNuat&gt;`, "g"),
+        formatNumber(garaasBodsonNiitDunNuat || 0)
+      );
+      // var text = msj;
+      for (const [key, value] of Object.entries(nekhemjlekh)) {
+        if (value !== undefined && value !== null) {
+          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+        } else {
+          text = text?.replace(new RegExp(`&lt;${key}&gt;`, "g"), "");
+        }
+      }
+      var tempP = document.createElement("p")
+      tempP.innerHTML = text
+      var tempText = tempP.textContent;
+      console.log("text---->innerText ", tempText);
+      // tempText = text.replace(/<[^>]+>/g, '');
       if (_.isArray(nekhemjlekh.utas))
         nekhemjlekh.utas.map((to) =>
           msgnuud.push({
             to,
-            text,
+            text: t(tempText),
           })
         );
       else
         msgnuud.push({
           to: nekhemjlekh.utas,
-          text,
+          text: t(tempText),
         });
     });
-
+    console.log("msgnuud ---->>"+JSON.stringify(msgnuud));
     uilchilgee(token)
       .post(`/msgIlgeeye`, { barilgiinId, msgnuud })
       .then(({ data }) => {

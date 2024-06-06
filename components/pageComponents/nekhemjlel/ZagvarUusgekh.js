@@ -13,7 +13,7 @@ import {
 
 import { formatting } from "../geree/zagvar/ZaaltZasvar";
 
-var instance = null;
+// var instance = null;
 
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
@@ -91,13 +91,15 @@ const nekhemjlekhiinNemelt = [
 
 function NekhemjlekhZasvar({
   value,
+  ashiglaltiinZardal,
   change,
   onTextChange,
   buttonListCustom = [],
   otherProps,
 }) {
+
   useEffect(() => {
-    onTextChange && onTextChange(instance?.getText());
+    // onTextChange && onTextChange(instance?.getText());
   }, [value]);
 
   const SunEditor = React.useMemo(
@@ -148,6 +150,65 @@ function NekhemjlekhZasvar({
       title: "Нэхэмжлэхийн бусад авлага",
       button: renderToString(<DollarCircleOutlined />),
     });
+    var songokhTalbaruud = [];
+    ashiglaltiinZardal?.jagsaalt?.map((a) => {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Дүн`,
+          talbar: `${a.ner}.tulukhDun`,
+        });
+
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Хэмжих нэгж`,
+          talbar: `${a.ner}.khemjikhNegj`,
+        });
+
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Тариф`,
+          talbar: `${a.ner}.tariff`,
+        });
+
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Нэгж`,
+          talbar: `${a.ner}.negj`,
+        });
+        if (a.turul == "кВт" || a.turul == "1м3") {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Өмнөх заалт`,
+          talbar: `${a.ner}.umnukhZaalt`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Сүүлийн заалт`,
+          talbar: `${a.ner}.suuliinZaalt`,
+        });
+        } else {
+        songokhTalbaruud.push({
+            ner: `${a.ner}.Хөнгөлөлт`,
+            talbar: `${a.ner}.khungulult`,
+        });
+      }
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал`,
+      talbar: `niitZardliinDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал/Нөатгүй/`,
+      talbar: `niitZardliinNuatguiDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нөат (10%)`,
+      talbar: `niitZardliinNuatiinDun`,
+    });
+
+    const zardaluud = customPlugin({
+      songokhTalbaruud,
+      name: "zardaluud",
+      title: "Ашиглалтын зардал авлага",
+      button: renderToString(<DollarCircleOutlined />),
+    });
     return [
       undsen,
       khugatsaa,
@@ -156,6 +217,7 @@ function NekhemjlekhZasvar({
       tulbur,
       nekhemjlel,
       nekhemjlelNemelt,
+      zardaluud,
     ];
   }, []);
   if (SunEditor)
@@ -176,13 +238,14 @@ function NekhemjlekhZasvar({
               "tulbur",
               "nekhemjlel",
               "nekhemjlekhiinNemelt",
+              "zardaluud",
             ],
             ...buttonListCustom,
           ],
         }}
-        getSunEditorInstance={(e) => {
-          instance = e;
-        }}
+        // getSunEditorInstance={(e) => {
+        //   instance = e;
+        // }}
         showToolbar={true}
         {...otherProps}
       />

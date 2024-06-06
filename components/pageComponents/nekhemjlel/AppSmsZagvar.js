@@ -6,16 +6,16 @@ import createMethod from "tools/function/crud/createMethod";
 import ZagvarUusgekh from "components/pageComponents/nekhemjlel/ZagvarUusgekh";
 import { t } from "i18next";
 
-function ZagvarForm({ value, onChange }) {
-  return <ZagvarUusgekh value={value} change={onChange} />;
+function ZagvarForm({ ashiglaltiinZardal, value, onChange }) {
+  return <ZagvarUusgekh value={value} ashiglaltiinZardal={ashiglaltiinZardal} change={onChange}/>;
 }
 
 function AppSmsZagvar(
-  { barilgiinId, destroy, data, token, setWaiting, turul, onRefresh },
+  { barilgiinId, ashiglaltiinZardal, destroy, data, token, setWaiting, turul, onRefresh },
   ref
 ) {
   const [form] = Form.useForm();
-
+ 
   useImperativeHandle(
     ref,
     () => ({
@@ -55,7 +55,7 @@ function AppSmsZagvar(
         <Input placeholder={t("Нэр")} />
       </Form.Item>
       <Form.Item name="nekhemjlekh">
-        <ZagvarForm />
+        <ZagvarForm ashiglaltiinZardal={ashiglaltiinZardal} />
       </Form.Item>
     </Form>
   );
