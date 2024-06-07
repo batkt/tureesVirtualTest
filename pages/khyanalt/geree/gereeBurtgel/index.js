@@ -1047,14 +1047,7 @@ function ZakhialgiinKhyanalt() {
                   )
                   .map((b) => {
                     return (b.zaalt = b.zaalt.replace(
-                      new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                      key === "utas"
-                        ? mur.tariff || mur.dun
-                        : parseFloat(mur.tariff || mur.dun) != NaN
-                        ? key != "register"
-                          ? formatNumber(mur.tariff || mur.dun)
-                          : mur.tariff || mur.dun
-                        : formatNumber(mur.tariff || mur.dun)
+                      new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), formatNumber(mur.tariff || mur.dun)
                     ));
                   });
               });
@@ -1062,29 +1055,27 @@ function ZakhialgiinKhyanalt() {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
                 .map((b) => {
-                  console.log(value, "key");
+                  console.log(value, "--key");
                   return (b.zaalt = b.zaalt.replace(
                     new RegExp(`&lt;${key}&gt;`, "g"),
                     key === "utas"
-                      ? value[0]
-                      : parseFloat(value) != NaN
-                      ? key != "register"
-                        ? value
-                        : formatNumber(value)
+                      ? value[0] :
+                    (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun")
+                      ? formatNumber(value)
                       : value
+                    // key === "register"
+
+                    //   : parseFloat(value) != NaN
+                    //   ? key !== "register"
+                    //     ? value
+                    //     : formatNumber(value)
+                    //   : value
                   ));
                 });
             }
-            data.baruunTolgoi = data.baruunTolgoi?.replace(
-              new RegExp(`&lt;${key}&gt;`, "g"),
-              key === "utas"
-                ? value[0]
-                : parseFloat(value) != NaN
-                ? key != "register"
-                  ? value
-                  : formatNumber(value)
-                : value
-            );
+            data.baruunTolgoi = data.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            data.zuunKhul = data.zuunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
+            data.baruunKhul = data.baruunKhul?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
           }
           data.geree = geree;
           setKharuulakhGeree(data);

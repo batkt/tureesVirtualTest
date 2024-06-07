@@ -310,26 +310,16 @@ function GereeBaiguulakh({ token, data }) {
         .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
         .map((b) => {
           b.zaalt = b.zaalt.replace(
-            new RegExp(`&lt;${key}&gt;`, "g"),
-            key === "utas"
-              ? value[0]
-              : parseFloat(value) != NaN
-              ? key != "register"
-                ? value
-                : formatNumber(value)
-              : value
+            new RegExp(`&lt;${key}&gt;`, "g"), 
+            key === "utas" ? value[0] : (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun") ? formatNumber(value) : value
+              // : parseFloat(value) != NaN
+              // ? key != "register"
+              //   ? value
+              //   : formatNumber(value)
+              // : value
           );
         });
-      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
-        new RegExp(`&lt;${key}&gt;`, "g"),
-        key === "utas"
-          ? value[0]
-          : parseFloat(value) != NaN
-          ? key != "register"
-            ? value
-            : formatNumber(value)
-          : value
-      );
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
     }
     return butsaakhUtga;
   }, [aktiinZagvar, khadgalakhGeree, current]);
@@ -372,16 +362,7 @@ function GereeBaiguulakh({ token, data }) {
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
             )
             .map((b) => {
-              b.zaalt = b.zaalt.replace(
-                new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"),
-                key === "utas"
-                  ? mur.tariff[0]
-                  : parseFloat(mur.tariff) != NaN
-                  ? key != "register"
-                    ? mur.tariff
-                    : formatNumber(mur.tariff)
-                  : mur.tariff
-              );
+              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), formatNumber(mur.tariff));
             });
         });
       } else {
@@ -390,26 +371,16 @@ function GereeBaiguulakh({ token, data }) {
           .map((b) => {
             b.zaalt = b.zaalt.replace(
               new RegExp(`&lt;${key}&gt;`, "g"),
-              key === "utas"
-                ? value[0]
-                : parseFloat(value) != NaN
-                ? key != "register"
-                  ? value
-                  : formatNumber(value)
-                : value
+              key === "utas" ? value[0] : (key === "talbainNegjUne" || key === "talbainNiitUne" || key === "baritsaaAvakhDun") ? formatNumber(value) : value
+                // : parseFloat(value) != NaN
+                // ? key != "register"
+                //   ? value
+                //   : formatNumber(value)
+                // : value
             );
           });
       }
-      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(
-        new RegExp(`&lt;${key}&gt;`, "g"),
-        key === "utas"
-          ? value[0]
-          : parseFloat(value) != NaN
-          ? key != "register"
-            ? value
-            : formatNumber(value)
-          : value
-      );
+      butsaakhUtga.baruunTolgoi = butsaakhUtga.baruunTolgoi?.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
     }
 
     return butsaakhUtga;
