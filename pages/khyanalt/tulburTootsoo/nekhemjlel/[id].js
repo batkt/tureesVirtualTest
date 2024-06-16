@@ -30,6 +30,20 @@ const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
 });
 
+export const complex = [
+  ["undo", "redo"],
+  ["font", "fontSize", "formatBlock"],
+  ["bold", "underline", "italic", "strike", "subscript", "superscript"],
+  ["removeFormat"],
+  
+  ["fontColor", "hiliteColor"],
+  ["outdent", "indent"],
+  ["align", "horizontalRule", "list", "table"],
+  ["image"],
+  ["fullScreen", "showBlocks", "codeView"],
+  ["preview", "print"],
+];
+
 const undsenTalbaruud = [
   { ner: "Овог", talbar: "ovog" },
   { ner: "Нэр", talbar: "ner" },
@@ -420,8 +434,9 @@ function ZakhialgaNemekh({ token }) {
                     "nekhemjlekhiinNemelt",
                     "zardaluud",
                   ],
-                  ["image", "table", "list", "align", "codeView"],
-                  ["font", "fontSize", "fontColor"],
+                  ...complex,
+                  // ["image", "table", "list", "align", "codeView"],
+                  // ["font", "fontSize", "fontColor"],
                 ],
               }}
               width={width}

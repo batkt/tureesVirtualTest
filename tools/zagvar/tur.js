@@ -7,7 +7,7 @@ const khatuuZagvar = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            ${medeelel?.baiguullagiinNer}
+            ${baiguullaga.ner}
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">

@@ -41,6 +41,7 @@ import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
+import khatuuZagvarFoodCity from "tools/zagvar/turFoodCity";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -145,7 +146,7 @@ function tulburTootsoo({ token }) {
             nekhemjleliinJagsaalt.find((n) => n._id === a)
           );
           if (zagvar?.khatuuZagvarEsekh) {
-            zagvar.nekhemjlekh = khatuuZagvar(medeelel, ajiltan, baiguullaga);
+            zagvar.nekhemjlekh = ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6417dd077ea800d9021a2365" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga);
           }
           const barilga = baiguullaga?.barilguud?.find(
             (a) => a._id === medeelel?.barilgiinId
@@ -330,6 +331,8 @@ function tulburTootsoo({ token }) {
             medeelel.duusakhOn = moment(ognoo).format("YYYY");
             medeelel.duusakhSar = moment(ognoo).format("MM");
             medeelel.duusakhUdur = moment(ognoo).set("date", 25).format("DD");
+            medeelel.eneEkhlehUdur = moment(ognoo).startOf("month").format("YYYY/MM/DD");
+            medeelel.eneDuusakhUdur = moment(ognoo).endOf("month").format("YYYY/MM/DD");
 
             medeelel.nekhemjlekhiinDugaar =
               moment().format("YY") + "/" + (dugaarlalt + i);
@@ -349,7 +352,11 @@ function tulburTootsoo({ token }) {
                 }
               }
             }
-
+            var zuruuDun = 0
+            var tseverusDun = 0
+            var boxirusDun = 0
+            var usxalaasniitulburDun = 0
+            var niilberDun = 0
             medeelel?.zardluud?.map((a) => {
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.khemjikhNegj&gt;`, "g"),
@@ -407,7 +414,9 @@ function tulburTootsoo({ token }) {
                 ),
                 formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
               );
-
+              
+              a.tariff = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tariff); 
+              
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
                 formatNumber(a.tariff || 0)
@@ -429,8 +438,75 @@ function tulburTootsoo({ token }) {
                 new RegExp(`&lt;${a.tailbar}.khungulult&gt;`, "g"),
                 formatNumber(a.khungulult || 0) || ""
               );
+              
+              // { tailbar : "Халуун ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
+              // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
+              if(a.tailbar === "Цахилгаан" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
+              {
+                a.zuruuZaalt = formatNumber(a.suuliinZaalt || 0) - formatNumber(a.umnukhZaalt || 0)
+                zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                  new RegExp(`&lt;${a.tailbar}.zuruuZaalt&gt;`, "g"),
+                  formatNumber(a.zuruuZaalt || 0) || ""
+                );
+                if(a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
+                {
+                  zuruuDun += a.zuruuZaalt 
+                  tseverusDun += a.tseverus // Халуун ус + Хүйтэн ус
+                  boxirusDun += a.boxirus   // Халуун ус + Хүйтэн ус
+                  usxalaasniitulburDun += a.tailbar === "Хүйтэн ус" ? 0 : a.usxalaasniitulbur // Халуун ус
+                  niilberDun += a.dun
+
+                  a.tseverusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Цэвэр ус").map((b) => b.tariff); 
+                  a.boxirusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Бохир ус").map((b) => b.tariff); 
+                  a.usxalaasniitulburTariff =  a.tailbar === "Хүйтэн ус" ? 0 : ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Ус халаасны төлбөр").map((b) => b.tariff);
+
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${a.tailbar}.tseverusTariff&gt;`, "g"),
+                    formatNumber(a.tseverusTariff || 0) || ""
+                  );
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${a.tailbar}.boxirusTariff&gt;`, "g"),
+                    formatNumber(a.boxirusTariff || 0) || ""
+                  );
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${a.tailbar}.usxalaasniitulburTariff&gt;`, "g"),
+                    formatNumber(a.usxalaasniitulburTariff || 0) || ""
+                  );
+                }
+              }
+              
               kaidudZoriulsanNiitTulburiinNiilber += khungulultKhassanTulukhDun;
             });
+            medeelel.zuruuDun = zuruuDun
+            medeelel.tseverusDun = tseverusDun
+            medeelel.boxirusDun = boxirusDun
+            medeelel.usxalaasniitulburDun = usxalaasniitulburDun
+            medeelel.niilberDun = niilberDun 
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;zuruuDun&gt;`, "g"),
+              formatNumber(medeelel.zuruuDun || 0)
+            );
+            
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;tseverusDun&gt;`, "g"),
+              formatNumber(medeelel.tseverusDun || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;boxirusDun&gt;`, "g"),
+              formatNumber(medeelel.boxirusDun || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;usxalaasniitulburDun&gt;`, "g"),
+              formatNumber(medeelel.usxalaasniitulburDun || 0)
+            );
+
+            zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+              new RegExp(`&lt;niilberDun&gt;`, "g"),
+              formatNumber(medeelel.niilberDun || 0)
+            );
 
             ashiglaltiinZardal?.jagsaalt?.map((a) => {
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
@@ -479,7 +555,6 @@ function tulburTootsoo({ token }) {
                 ),
                 0
               );
-
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.ner}.tariff&gt;`, "g"),
                 0
@@ -684,7 +759,7 @@ function tulburTootsoo({ token }) {
       );
 
       var text = songosonZagvar?.khatuuZagvarEsekh
-          ? khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga)
+          ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6417dd077ea800d9021a2365" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga))
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 
@@ -1043,7 +1118,7 @@ function tulburTootsoo({ token }) {
         );
 
         var text = songosonZagvar?.khatuuZagvarEsekh
-          ? khatuuZagvar(nekhemjlekh, ajiltan, baiguullaga)
+          ? (ajiltan?.baiguullagiinId === "63c0f31efe522048bf02086d" && barilgiinId === "6417dd077ea800d9021a2365" ? khatuuZagvarFoodCity(medeelel, ajiltan, baiguullaga) : khatuuZagvar(medeelel, ajiltan, baiguullaga))
           : nekhemjlekhiinZagvar?.jagsaalt?.find((a) => a._id === barimt)
               ?.nekhemjlekh;
 

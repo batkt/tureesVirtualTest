@@ -255,6 +255,11 @@ function KhuviinMedeelel({
                         onChange={(v) => zuragKhadgalakh(v, "tamga")}
                       >
                         <div className="flex flex-row space-x-1">
+                          {!barilga?.tamga && (
+                            <Button icon={<UploadOutlined />}>
+                              {t("Тамга зураг оруулах")}
+                            </Button>
+                          )}  
                           <Button
                             icon={<EyeOutlined />}
                             onClick={(e) =>
@@ -263,6 +268,9 @@ function KhuviinMedeelel({
                           >
                             {t("Тамга зураг харах")}
                           </Button>
+                          {!!barilga?.tamga && (
+                            <Button icon={<EditOutlined />}></Button>
+                          )}
                         </div>
                       </Upload>
                     </ImgCrop>

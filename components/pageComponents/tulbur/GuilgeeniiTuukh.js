@@ -1,4 +1,4 @@
-import {
+  import {
   Badge,
   Button,
   DatePicker,
@@ -352,6 +352,11 @@ function GuilgeeniiTuukh(
               {t("Огноо")}
             </td>
             <td
+              onClick={() => toggleSortOrder("ajiltan")}
+              className="min-w-[8rem] overflow-hidden p-1 text-center">
+              {t("Ажилтан")}
+            </td>
+            <td
               onClick={() => toggleSortOrder("turees")}
               className="min-w-[8rem] overflow-hidden p-1 text-center">
               {t("Түрээс")}
@@ -382,11 +387,6 @@ function GuilgeeniiTuukh(
               {t("Үлдэгдэл")}
             </td>
             <td
-              onClick={() => toggleSortOrder("ajiltan")}
-              className="min-w-[8rem] overflow-hidden p-1 text-center">
-              {t("Ажилтан")}
-            </td>
-            <td
               onClick={() => toggleSortOrder("helber")}
               className="min-w-[8rem] overflow-hidden p-1 text-center">
               {t("Хэлбэр")}
@@ -413,6 +413,9 @@ function GuilgeeniiTuukh(
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {moment(a.ognoo).format("YYYY-MM-DD")}
                 </td>
+                <td className="min-w-[8rem] overflow-hidden p-1">
+                  {a.guilgeeKhiisenAjiltniiNer}
+                </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-end">
                   {formatNumber(a.undsenDun, 0)}
                 </td>
@@ -436,10 +439,6 @@ function GuilgeeniiTuukh(
                     a.turul === "khyamdral" && a.uldegdel < 0 ? 0 : a.uldegdel,
                     0
                   )}
-                </td>
-
-                <td className="min-w-[8rem] overflow-hidden p-1">
-                  {a.guilgeeKhiisenAjiltniiNer}
                 </td>
                 <td className="min-w-[8rem] overflow-hidden p-1 text-center">
                   {a.turul === "bank"
