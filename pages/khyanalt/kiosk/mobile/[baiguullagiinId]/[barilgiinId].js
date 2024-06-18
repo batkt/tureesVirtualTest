@@ -17,7 +17,13 @@ import formatNumber from "tools/function/formatNumber";
 import DugaarKeyboardMobile from "components/pageComponents/kiosk/DugaarKeyboardMobile";
 import useQpayObject from "hooks/useQpayObject";
 
-const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
+const KioskMobile = ({
+  token,
+  zogsool,
+  baiguullagiinId,
+  barilgiinId,
+  khungulukh,
+}) => {
   const [dugaar, setDugaar] = useState(Array(4).fill(""));
   const [messageApi, contextHolder] = message.useMessage();
   const [register, setRegister] = useState("");
@@ -31,6 +37,7 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
   const [unshijBaina, setUnshijBaina] = useState(false);
   const [alkham, setAlkham] = useState(0);
   const [eBarimt, setEbarimt] = useState();
+  const [khungulukhDun, setKhungulukhDun] = useState(khungulukh);
 
   const query = useMemo(() => {
     var query = {};
@@ -69,6 +76,11 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
   useEffect(() => {
     if (qpayObject && qpayObject.tulsunEsekh) {
       eBarimtTsonkhruuShiljye();
+      if (khungulukhDun > 0)
+        khungulultKhadgalya(
+          songogdsonData.session_id,
+          songogdsonData.parking_id
+        );
     }
   }, [qpayObject]);
 
@@ -167,16 +179,51 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
         );
         if (response.data.success == true) {
           if (response.data?.data?.pay_amount > 0) {
-            setSongogdsonData(response.data?.data);
-            setAlkham(1);
-            setTulburiinKhelber("qpay");
-            qpayAvakh(
-              response.data?.data?.session_id,
-              barilgiinId,
-              response.data?.data?.pay_amount,
-              response.data?.data?.plate_number
-            );
-            setUnshijBaina(false);
+            if (
+              !!data?.tuukh[0]?.tulbur?.find((x) => x.turul == "qpayKhungulult")
+            ) {
+              console.log("data?.tuukh[0]?.tulbur", data?.tuukh[0]?.tulbur);
+              setKhungulukhDun(0);
+            }
+            console.log("khungulukhDun11", khungulukhDun);
+            if (khungulukhDun > 0) {
+              console.log("end2");
+              if (khungulukhDun < response.data?.data?.pay_amount) {
+                setSongogdsonData({
+                  ...response.data?.data,
+                  pay_amount: response.data?.data?.pay_amount - khungulukhDun,
+                });
+                setAlkham(1);
+                setTulburiinKhelber("qpay");
+                qpayAvakh(
+                  response.data?.data?.session_id,
+                  barilgiinId,
+                  response.data?.data?.pay_amount - khungulukhDun,
+                  response.data?.data?.plate_number
+                );
+                setUnshijBaina(false);
+              } else {
+                setKhungulukhDun(
+                  khungulukhDun - response.data?.data?.pay_amount
+                );
+                setSongogdsonData(response.data?.data);
+                setAlkham(1);
+                setTulburiinKhelber("qpay");
+                setUnshijBaina(false);
+              }
+            } else {
+              console.log("end1");
+              setSongogdsonData(response.data?.data);
+              setAlkham(1);
+              setTulburiinKhelber("qpay");
+              qpayAvakh(
+                response.data?.data?.session_id,
+                barilgiinId,
+                response.data?.data?.pay_amount,
+                response.data?.data?.plate_number
+              );
+              setUnshijBaina(false);
+            }
           } else {
             msgNotif(
               <div className="flex items-center justify-center gap-2 rounded-full font-semibold">
@@ -217,6 +264,25 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
         if (!!data) {
           setEbarimt(data.data);
           setAlkham(4);
+        }
+      })
+      .catch((err) => {
+        aldaaBarigch(err);
+      });
+  };
+
+  const khungulultKhadgalya = (uilchluulegchiinId, zogsooliinId) => {
+    uilchilgee(token)
+      .post("/v1/kioskPay", {
+        uilchluulegchiinId,
+        turul: "qpayKhungulult",
+        zogsooliinId,
+        paid_amount: khungulukhDun,
+      })
+      .then(({ data }) => {
+        if (!!data) {
+          setAlkham(4);
+          setKhungulukhDun(0);
         }
       })
       .catch((err) => {
@@ -392,6 +458,24 @@ const KioskMobile = ({ token, zogsool, baiguullagiinId, barilgiinId }) => {
                 })}
               </div>
             )}
+            {console.log("khungulukhDun", khungulukhDun)}
+            {khungulukhDun > 0 && (
+              <div
+                className={`gap mt-auto flex w-full flex-col flex-col items-center items-center justify-center justify-center text-white`}
+              >
+                <button
+                  onClick={() =>
+                    khungulultKhadgalya(
+                      songogdsonData.session_id,
+                      songogdsonData.parking_id
+                    )
+                  }
+                  className="my-4 flex items-center justify-center gap-1 rounded-xl border border-green-400 bg-green-800 bg-opacity-70 px-4 py-2 text-base font-bold text-green-400 focus:outline-none"
+                >
+                  <div>Хөнгөлөх</div>
+                </button>
+              </div>
+            )}
           </>
         </div>
         <div
@@ -564,12 +648,18 @@ export const getServerSideProps = async (ctx) => {
       token = await uilchilgee()
         .get(`/zochiniiTokenAvya/${ctx?.query?.baiguullagiinId}`)
         .then((a) => a.data);
+    var barilgiinId = ctx.query.barilgiinId;
+    var khungululttei = false;
+    if (barilgiinId.length == 25) {
+      barilgiinId = barilgiinId.substring(0, barilgiinId.length - 1);
+      khungululttei = true;
+    }
     zogsool = await uilchilgee(token)
       .get("/zogsoolJagsaalt", {
         params: {
           query: {
             baiguullagiinId: ctx.query.baiguullagiinId,
-            barilgiinId: ctx.query.barilgiinId,
+            barilgiinId: barilgiinId,
           },
         },
       })
@@ -594,7 +684,11 @@ export const getServerSideProps = async (ctx) => {
         token,
         zogsool,
         baiguullagiinId: ctx.query.baiguullagiinId,
-        barilgiinId: ctx.query.barilgiinId,
+        barilgiinId,
+        khungulukh:
+          khungululttei && zogsool?.qrKhungulukhDun
+            ? zogsool?.qrKhungulukhDun
+            : 0,
       },
     };
   } catch (error) {
