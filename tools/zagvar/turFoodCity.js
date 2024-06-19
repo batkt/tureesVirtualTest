@@ -94,7 +94,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
       </div>
     </div>
     <div style="text-align: right;">
-      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${medeelel.umnukhSariinUrTulbur}&nbsp;&nbsp;</b><br />
+      <b>Эхний үлдэгдэл: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;umnukhSariinUrTulbur&gt;&nbsp;&nbsp;</b><br />
     </div>
     <div>
       <table style="width: 100%;">
@@ -122,7 +122,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                 sensitivity: "base",
               });
             })
-            .filter(a => a.tailbar === "Менежментийн төлбөр")
+            .filter(a => a.tailbar === "Менежментийн төлбөр" || a.tailbar === "Менежментийн зардал" || a.tailbar === "Менежмент")
             .map((mur, index) => {
               return `
                 <tr key=${index}>
@@ -185,7 +185,8 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
                       &lt;${mur.tailbar}.zuruuZaalt&gt;
                     </td>
                     <td style="border: 1px solid #000; text-align: right; width: 16%;">
-                      &lt;${mur.tailbar}.tariff&gt;
+                      &lt;${mur.tailbar}.tariff&gt;/
+                      &lt;${mur.tailbar}.tsakhilgaanUrjver&gt;
                     </td>
                     <td style="border: 1px solid #000; text-align: right;">
                       &lt;${mur.tailbar}.tulukhDun&gt;

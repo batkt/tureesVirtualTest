@@ -448,17 +448,28 @@ function tulburTootsoo({ token }) {
                   new RegExp(`&lt;${a.tailbar}.zuruuZaalt&gt;`, "g"),
                   formatNumber(a.zuruuZaalt || 0) || ""
                 );
+                if(a.tailbar === "Цахилгаан")
+                {
+                  a.tsakhilgaanUrjver = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tsakhilgaanUrjver); 
+                  zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
+                    new RegExp(`&lt;${a.tailbar}.tsakhilgaanUrjver&gt;`, "g"),
+                    formatNumber(a.tsakhilgaanUrjver || 0) || ""
+                  );
+                }
+                
                 if(a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
                 {
-                  zuruuDun += a.zuruuZaalt 
-                  tseverusDun += a.tseverus // Халуун ус + Хүйтэн ус
-                  boxirusDun += a.boxirus   // Халуун ус + Хүйтэн ус
-                  usxalaasniitulburDun += a.tailbar === "Хүйтэн ус" ? 0 : a.usxalaasniitulbur // Халуун ус
-                  niilberDun += a.dun
+                  a.tseverusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tseverUsDun); 
+                  a.boxirusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.bokhirUsDun); 
+                  a.usxalaasniitulburTariff =  a.tailbar === "Хүйтэн ус" ? 0 : ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.usKhalaasniiDun);
 
-                  a.tseverusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Цэвэр ус").map((b) => b.tariff); 
-                  a.boxirusTariff =  ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Бохир ус").map((b) => b.tariff); 
-                  a.usxalaasniitulburTariff =  a.tailbar === "Хүйтэн ус" ? 0 : ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === "Ус халаасны төлбөр").map((b) => b.tariff);
+                  zuruuDun += a.zuruuZaalt 
+                  tseverusDun += a.zuruuZaalt * a.tseverusTariff  // Халуун ус + Хүйтэн ус
+                  boxirusDun += a.zuruuZaalt * a.boxirusTariff  // Халуун ус + Хүйтэн ус
+                  usxalaasniitulburDun += a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff) // Халуун ус
+                  niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
+
+                  
 
                   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                     new RegExp(`&lt;${a.tailbar}.tseverusTariff&gt;`, "g"),

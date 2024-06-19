@@ -12,6 +12,9 @@ function ZardalBurtgel(
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [hideTariff,setHideTariff] = useState(false)
+  const [hideCoefficent,setHideCoefficent] = useState(true)
+  const [hideKhaluunus,setHideKhaluunus] = useState(true)
+  const [hideKhuitenus,setHideKhuitenus] = useState(true)
 
   function garya() {
     const values = form.getFieldsValue()
@@ -33,6 +36,7 @@ function ZardalBurtgel(
       }
     }
     form.getFieldInstance('ner').focus()
+    keyDowner()
     document.addEventListener("keyup", keyUp);
     return ()=>document.removeEventListener("keyup", keyUp);
   },[])
@@ -80,6 +84,14 @@ function ZardalBurtgel(
     }
   },[])
 
+  const keyDowner = useCallback((e)=>{
+    var valueNer = form.getFieldValue('ner');
+    setHideCoefficent(valueNer !== "Цахилгаан");
+    setHideKhaluunus(valueNer !== "Халуун ус");
+    setHideKhuitenus(valueNer !== "Халуун ус" && valueNer !== "Хүйтэн ус");
+    setHideTariff(valueNer === "Халуун ус" || valueNer === "Хүйтэн ус");
+  },[])
+
   return (
     <Form
       form={form}
@@ -90,7 +102,7 @@ function ZardalBurtgel(
     >
       <Form.Item hidden name="_id"></Form.Item>
       <Form.Item label={t("Нэр")} name="ner">
-        <Input onKeyUp={focuser}/>
+        <Input onKeyUp={focuser} onKeyDown={keyDowner}/>
       </Form.Item>
       <Form.Item label={t("Нэгж")} name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> {
@@ -118,6 +130,46 @@ function ZardalBurtgel(
             1{t("м")}<sup>2</sup>
           </Select.Option>
         </Select>}
+      </Form.Item>
+     <Form.Item label={t("КВЦТ")} name="tsakhilgaanUrjver" hidden={hideCoefficent}>
+        <InputNumber
+          defaultValue={1}
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />     
+      </Form.Item>
+      <Form.Item label={t("Цэвэр усны тариф")} name="tseverUsDun" hidden={hideKhuitenus}>
+        <InputNumber
+          min={0}
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label={t("Бохир усны тариф")} name="bokhirUsDun" hidden={hideKhuitenus}>
+        <InputNumber
+          min={0}
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
+      </Form.Item>
+      <Form.Item label={t("Ус халаасны тариф")} name="usKhalaasniiDun" hidden={hideKhaluunus}>
+        <InputNumber
+          min={0}
+          style={{ width: "100%" }}
+          formatter={(value) =>
+            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          }
+          parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+        />
       </Form.Item>
      <Form.Item label={t("Тариф")} name="tariff" hidden={hideTariff}>
         <InputNumber

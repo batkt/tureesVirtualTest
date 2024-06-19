@@ -30,6 +30,10 @@ function GuilgeeKhiikh(
   const [turul, setTurul] = useState("voucher");
   const [tailbar, setTailbar] = useState("");
   const [negjUne, setNegjUne] = useState("");
+  const [tseverUsDun, setTseverUsDun] = useState("");
+  const [bokhirUsDun, setBokhirUsDun] = useState("");
+  const [usKhalaasniiDun, setUsKhalaasniiDun] = useState("");
+  const [tsakhilgaanUrjver, setTsakhilgaanUrjver] = useState("");
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
   const [umnukhZaalttaiEsekh, setUmnukhZaalttaiEsekh] = useState(false);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
@@ -46,7 +50,7 @@ function GuilgeeKhiikh(
     () => ({
       ner: data?.zardluud && { $in: data.zardluud.map((a) => a.ner) },
       turul: { $in: ["кВт", "1м3"] },
-      tariff: { $exists: true },
+      // tariff: { $exists: true },
       barilgiinId,
     }),
     [data, barilgiinId]
@@ -136,15 +140,21 @@ function GuilgeeKhiikh(
                 });
                 return;
               }
+              var tempDun = (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") ? (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0)) : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0)
               guilgee = {
                 turul: "avlaga",
                 tulsunDun: 0,
                 tulukhDun: nuatBodokhEsekh
-                  ? (suuriKhuraamj + negjUne * (dun || 0)) * 1.1
-                  : suuriKhuraamj + negjUne * (dun || 0),
+                  ? (suuriKhuraamj +  tempDun) * 1.1
+                  : (suuriKhuraamj + tempDun),
                 negj: dun && dun,
                 khemjikhNegj: khemjikhNegj,
                 tariff: negjUne,
+                tseverUsDun: tseverUsDun * dun,
+                bokhirUsDun: bokhirUsDun * dun,
+                usKhalaasanDun: (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0),
+                suuriKhuraamj: suuriKhuraamj,
+                tsakhilgaanUrjver: tsakhilgaanUrjver,
                 ognoo: moment(ognoo).format("YYYY-MM-DD 00:00:00"),
                 gereeniiId: data?._id,
                 tailbar,
@@ -285,7 +295,7 @@ function GuilgeeKhiikh(
         <Radio.Group
           onChange={(e) => {
             handleTurulUurchlult(e);
-            setDun("");
+            setDun(0);
             setTailbar("");
           }}
           value={turul}
@@ -346,11 +356,16 @@ function GuilgeeKhiikh(
             style={{ width: "49%" }}
             onChange={(v) => {
               const utga = zardal.jagsaalt.find((a) => a._id === v);
+              setTsakhilgaanUrjver(utga.ner === "Цахилгаан" ? (utga.tsakhilgaanUrjver || 1) : 1);
               setNegjUne(utga.tariff || 0);
+              setTseverUsDun(utga.tseverUsDun || 0)
+              setBokhirUsDun(utga.bokhirUsDun || 0)
+              setUsKhalaasniiDun(utga.usKhalaasniiDun || 0)
               setTailbar(utga.ner);
               setKhemjikhNegj(utga.turul);
-              setSuuriKhuraamj(Number(utga.suuriKhuraamj));
+              setSuuriKhuraamj(Number(utga.suuriKhuraamj || 0));
               setSuuliinZaalt(null);
+              setDun(0);
               if (utga.turul === "кВт" || utga.turul === "1м3") {
                 var suuliinGuilgee = guilgeeniiTuukh.filter(
                   (x) => x.khemjikhNegj == utga.turul && x.tailbar == utga.ner
@@ -379,12 +394,36 @@ function GuilgeeKhiikh(
             )}
           </Select>
         )}
-        {negjUne && turul === "ashiglalt" && (
+        {negjUne > 0 && turul === "ashiglalt" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
             style={{ width: "49%" }}
           >
             {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
+          </div>
+        )}
+        {tseverUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+          <div
+            className="flex justify-end p-2 dark:text-gray-100"
+            style={{ width: "49%" }}
+          >
+            {t("Цэвэр ус")}: {formatNumber(tseverUsDun, 2)}
+          </div>
+        )}
+        {bokhirUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+          <div
+            className="flex justify-end p-2 dark:text-gray-100"
+            style={{ width: "49%" }}
+          >
+            {t("Бохир ус")}: {formatNumber(bokhirUsDun, 2)}
+          </div>
+        )}
+        {usKhalaasniiDun > 0 && tailbar === "Халуун ус" && (
+          <div
+            className="flex justify-end p-2 dark:text-gray-100"
+            style={{ width: "49%" }}
+          >
+            {t("Ус халаасан")}: {formatNumber(usKhalaasniiDun, 2)}
           </div>
         )}
       </div>
@@ -446,41 +485,92 @@ function GuilgeeKhiikh(
       {turul === "ashiglalt" && (
         <div className="flex w-full items-start justify-between">
           <div>Суурь хураамж: {formatNumber(suuriKhuraamj || 0, 2)}</div>
+          {tailbar === "Цахилгаан" ? (<div>КВЦТ: {formatNumber(tsakhilgaanUrjver || 1)}</div>) : ""}
           <div
             className={`${nuatBodokhEsekh ? "p-0" : "p-2"}dark:text-gray-100`}
           >
-            {nuatBodokhEsekh && negjUne && (
+            {nuatBodokhEsekh && negjUne > 0 && (
               <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
                 <div className="flex w-full items-center justify-between gap-2">
-                  <div>Бодсон үнэ:</div>
+                  <div>Бодсон үнэ: </div>
                   <div>
-                    {formatNumber(negjUne * dun + (suuriKhuraamj || 0) || 0, 2)}
+                    {formatNumber(negjUne * dun * tsakhilgaanUrjver + (suuriKhuraamj || 0) || 0, 2)}
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between gap-2">
                   <div>НӨАТ:</div>
                   <div>
                     {formatNumber(
-                      (negjUne * dun + (suuriKhuraamj || 0) || 0) / 10
+                      (negjUne * dun * tsakhilgaanUrjver + (suuriKhuraamj || 0) || 0) / 10
                     )}
                   </div>
                 </div>
               </div>
             )}
-            {negjUne && !nuatBodokhEsekh && (
+            {negjUne > 0 && !nuatBodokhEsekh && (
               <div className="flex w-full items-center justify-between gap-2">
                 <div>{t("Нийт үнэ")}:</div>
                 <div>
-                  {formatNumber(negjUne * dun + (suuriKhuraamj || 0) || 0, 2)}
+                  {formatNumber(negjUne * dun * tsakhilgaanUrjver + (suuriKhuraamj || 0) || 0, 2)}
                 </div>
               </div>
             )}
-            {negjUne && nuatBodokhEsekh && (
+            {negjUne > 0 && nuatBodokhEsekh && (
               <div className="flex w-full items-center justify-between gap-2">
                 <div>{t("Нийт үнэ")}:</div>
                 <div>
                   {formatNumber(
-                    (negjUne * dun + (suuriKhuraamj || 0) || 0) * 1.1
+                    (negjUne * dun * tsakhilgaanUrjver + (suuriKhuraamj || 0) || 0) * 1.1
+                  )}
+                </div>
+              </div>
+            )}
+
+            {nuatBodokhEsekh && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+              <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
+                <div className="flex w-full items-center justify-between gap-2">
+                  <div>Цэвэр усны дүн: </div>
+                  <div>
+                    {formatNumber(tseverUsDun * dun || 0, 2)}
+                  </div>
+                </div>  
+                <div className="flex w-full items-center justify-between gap-2">  
+                  <div>Бохир усны дүн: </div>
+                  <div>
+                    {formatNumber(bokhirUsDun * dun || 0, 2)}
+                  </div>
+                </div>  
+                {tailbar === "Халуун ус" ? 
+                  (<div className="flex w-full items-center justify-between gap-2"> 
+                    <div>Ус халаасны дүн: </div>
+                    <div>
+                      {formatNumber(usKhalaasniiDun * dun || 0, 2)}
+                    </div>
+                  </div>) : ""}
+                <div className="flex w-full items-center justify-between gap-2">
+                  <div>НӨАТ:</div>
+                  <div>
+                    {formatNumber(
+                      (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0) + (suuriKhuraamj || 0) || 0) / 10
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && !nuatBodokhEsekh && (
+              <div className="flex w-full items-center justify-between gap-2">
+                <div>{t("Нийт дүн")}:</div>
+                <div>
+                  {formatNumber(tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0) + (suuriKhuraamj || 0) || 0, 2)}
+                </div>
+              </div>
+            )}
+            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && nuatBodokhEsekh && (
+              <div className="flex w-full items-center justify-between gap-2">
+                <div>Нийт дүн: </div>
+                <div>
+                  {formatNumber(
+                    (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0) + (suuriKhuraamj || 0) || 0) * 1.1
                   )}
                 </div>
               </div>
