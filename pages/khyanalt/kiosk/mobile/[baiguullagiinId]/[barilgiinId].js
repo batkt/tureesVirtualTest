@@ -432,9 +432,17 @@ const KioskMobile = ({
                   <div>Төлбөр</div>
                   <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
                 </div>
+                {khungulukhDun > 0 && (
+                  <div>
+                    <div className="h-[1px] w-full bg-black dark:bg-black" />
+                    <div className="flex w-full justify-between px-6 text-red-400">
+                      <div>Хөнгөлөлт</div>
+                      <div>{formatNumber(khungulukhDun, 0)}₮</div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-
             {qpayerTulukh && (
               <div className="mt-2 grid max-h-[400px] w-full grid-cols-4 gap-2 overflow-y-auto px-4 py-2">
                 {qpayerTulukh.urls.map((mur) => {
@@ -458,7 +466,6 @@ const KioskMobile = ({
                 })}
               </div>
             )}
-            {console.log("khungulukhDun", khungulukhDun)}
             {khungulukhDun > 0 && (
               <div
                 className={`gap mt-auto flex w-full flex-col flex-col items-center items-center justify-center justify-center text-white`}
