@@ -433,12 +433,12 @@ const KioskMobile = ({
                   <div>{formatNumber(songogdsonData.pay_amount, 0)}₮</div>
                 </div>
                 {khungulukhDun > 0 && (
-                  <div className="relative m-4 flex flex-col items-center justify-center rounded-xl bg-[#414143] p-2 py-4">
-                    <div className="h-[1px] w-full bg-black dark:bg-black" />
-                    <div className="flex w-full justify-between px-6 text-red-400">
-                      <div>Хөнгөлөлт</div>
-                      <div>{formatNumber(khungulukhDun, 0)}₮</div>
-                    </div>
+                  <div className="h-[1px] w-full bg-black dark:bg-black" />
+                )}
+                {khungulukhDun > 0 && (
+                  <div className="flex w-full justify-between px-6 text-red-400">
+                    <div>Хөнгөлөлт</div>
+                    <div>{formatNumber(khungulukhDun, 0)}₮</div>
                   </div>
                 )}
               </div>
