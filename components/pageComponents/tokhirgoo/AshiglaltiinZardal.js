@@ -83,7 +83,9 @@ function AshiglaltiinZardal({ baiguullaga, token }) {
                     <div className='font-medium'>{mur.ner}</div>
                     <div className='text-gray-600'>{mur.turul}</div>
                   </div>
-                  <div className='ml-auto'>{formatNumber(mur.tariff, 2)}</div>
+                  <div className='ml-auto'>{(mur.ner === 'Хүйтэн ус' || mur.ner === 'Халуун ус' ? ("Цэвэр ус: " + formatNumber(mur.tseverUsDun, 2)) : formatNumber(mur.tariff, 2)) 
+                                              + " "+ (mur.ner === 'Хүйтэн ус' || mur.ner === 'Халуун ус' ? "Бохир ус: " + formatNumber(mur.bokhirUsDun, 2) : "")
+                                              + " "+ ( mur.ner === 'Халуун ус' ? "Ус халаасны: " + formatNumber(mur.usKhalaasniiDun, 2) : "")}</div>
                   <div className='ml-5 flex space-x-2'>
                     <Popconfirm
                       title={t("зардал устгах уу?", { ner: mur.ner })}

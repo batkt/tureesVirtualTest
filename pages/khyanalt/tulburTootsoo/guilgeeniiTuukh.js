@@ -701,6 +701,7 @@ function guilgeeniiTuukh({ token }) {
     modal({
       title: t("Гүйлгээ хийх"),
       icon: <FileExcelOutlined />,
+      width: "600px",
       content: (
         <GuilgeeKhiikh
           khadgalyaButtonId={khadgalyaButtonId}
