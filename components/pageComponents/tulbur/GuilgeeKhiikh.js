@@ -34,6 +34,7 @@ function GuilgeeKhiikh(
   const [bokhirUsDun, setBokhirUsDun] = useState("");
   const [usKhalaasniiDun, setUsKhalaasniiDun] = useState("");
   const [tsakhilgaanUrjver, setTsakhilgaanUrjver] = useState("");
+  const [bodokhArga, setBodokhArga] = useState("");
   const [umnukhZaalt, setUmnukhZaalt] = useState(0);
   const [umnukhZaalttaiEsekh, setUmnukhZaalttaiEsekh] = useState(false);
   const [suuliinZaalt, setSuuliinZaalt] = useState(null);
@@ -140,7 +141,7 @@ function GuilgeeKhiikh(
                 });
                 return;
               }
-              var tempDun = (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") ? (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0)) : negjUne * (tsakhilgaanUrjver || 1) * (dun || 0)
+              var tempDun = (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" ? (tseverUsDun * dun + bokhirUsDun * dun + (tailbar === "Халуун ус" ? usKhalaasniiDun * dun : 0)) : (negjUne * (tsakhilgaanUrjver || 1) * (dun || 0))
               guilgee = {
                 turul: "avlaga",
                 tulsunDun: 0,
@@ -356,6 +357,7 @@ function GuilgeeKhiikh(
             style={{ width: "49%" }}
             onChange={(v) => {
               const utga = zardal.jagsaalt.find((a) => a._id === v);
+              setBodokhArga(utga.bodokhArga);
               setTsakhilgaanUrjver(utga.ner === "Цахилгаан" ? (utga.tsakhilgaanUrjver || 1) : 1);
               setNegjUne(utga.tariff || 0);
               setTseverUsDun(utga.tseverUsDun || 0)
@@ -402,7 +404,7 @@ function GuilgeeKhiikh(
             {t("Нэгж үнэ")}: {formatNumber(negjUne, 2)}
           </div>
         )}
-        {tseverUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+        {tseverUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус")  && bodokhArga === "Khatuu" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
             style={{ width: "49%" }}
@@ -410,7 +412,7 @@ function GuilgeeKhiikh(
             {t("Цэвэр ус")}: {formatNumber(tseverUsDun, 2)}
           </div>
         )}
-        {bokhirUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+        {bokhirUsDun > 0 && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
             style={{ width: "49%" }}
@@ -418,7 +420,7 @@ function GuilgeeKhiikh(
             {t("Бохир ус")}: {formatNumber(bokhirUsDun, 2)}
           </div>
         )}
-        {usKhalaasniiDun > 0 && tailbar === "Халуун ус" && (
+        {usKhalaasniiDun > 0 && tailbar === "Халуун ус" && bodokhArga === "Khatuu" && (
           <div
             className="flex justify-end p-2 dark:text-gray-100"
             style={{ width: "49%" }}
@@ -526,7 +528,7 @@ function GuilgeeKhiikh(
               </div>
             )}
 
-            {nuatBodokhEsekh && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && (
+            {nuatBodokhEsekh && (tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" && (
               <div className="flex w-full flex-col items-start justify-center gap-2 border-b border-dashed">
                 <div className="flex w-full items-center justify-between gap-2">
                   <div>Цэвэр усны дүн: </div>
@@ -557,7 +559,7 @@ function GuilgeeKhiikh(
                 </div>
               </div>
             )}
-            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && !nuatBodokhEsekh && (
+            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" && !nuatBodokhEsekh && (
               <div className="flex w-full items-center justify-between gap-2">
                 <div>{t("Нийт дүн")}:</div>
                 <div>
@@ -565,7 +567,7 @@ function GuilgeeKhiikh(
                 </div>
               </div>
             )}
-            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && nuatBodokhEsekh && (
+            {(tailbar === "Хүйтэн ус" || tailbar === "Халуун ус") && bodokhArga === "Khatuu" && nuatBodokhEsekh && (
               <div className="flex w-full items-center justify-between gap-2">
                 <div>Нийт дүн: </div>
                 <div>
