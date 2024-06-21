@@ -103,7 +103,7 @@ function ZardalBurtgel(
     >
       <Form.Item hidden name="_id"></Form.Item>
       <Form.Item label={t("Нэр")} name="ner">
-        <Input onKeyUp={focuser} onKeyDown={keyDowner}/>
+        <Input onKeyUp={focuser} onChange={keyDowner}/>
       </Form.Item>
       <Form.Item label={t("Нэгж")} name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> {
