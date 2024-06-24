@@ -196,6 +196,7 @@ function GuilgeeKhiikh(
       ognoo,
       suuliinZaalt,
       umnukhZaalt,
+      nuatBodokhEsekh,
     ]
   );
   function labelTurul(guilgeeTurul) {
