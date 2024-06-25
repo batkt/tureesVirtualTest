@@ -677,7 +677,7 @@ function tulburTootsoo({ token }) {
           align: "center",
           width: "7rem",
           render(date) {
-            return moment(date).format("YYYY-MM-DD hh:mm:ss");
+            return moment(date).format("YYYY-MM-DD HH:mm:ss");
           },
           showSorterTooltip: false,
           sorter: {
