@@ -50,6 +50,7 @@ function ZardalBurtgel(
         const method = ugugdul?._id ? updateMethod : createMethod;
         ugugdul["barilgiinId"] = barilgiinId;
         ugugdul["baiguullagiinId"] = baiguullagiinId;
+        ugugdul["bodokhArga"] = (ugugdul.ner === "Халуун ус" || ugugdul.ner === "Хүйтэн ус" || ugugdul.ner === "Цахилгаан") ? "Khatuu" : undefined; 
         method("ashiglaltiinZardluud", token, { ...data, ...ugugdul }).then(
           ({ data }) => {
             if (data === "Amjilttai") {
@@ -102,7 +103,7 @@ function ZardalBurtgel(
     >
       <Form.Item hidden name="_id"></Form.Item>
       <Form.Item label={t("Нэр")} name="ner">
-        <Input onKeyUp={focuser} onKeyDown={keyDowner}/>
+        <Input onKeyUp={focuser} onChange={keyDowner}/>
       </Form.Item>
       <Form.Item label={t("Нэгж")} name="turul">
         {togtmolEsekh ? <Select onChange={(v)=> {

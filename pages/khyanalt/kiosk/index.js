@@ -80,6 +80,9 @@ const Kiosk = () => {
           if (!!data) {
             setServereesAvsonOdooTsag(data);
           }
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
         });
   }, [token]);
 
@@ -148,6 +151,8 @@ const Kiosk = () => {
           if (data) {
             setBaiguullagaNer(data);
           }
+        }).catch((e) => {
+          aldaaBarigch(e);
         });
     } else {
       setBaiguullagaNer();
@@ -474,6 +479,9 @@ const Kiosk = () => {
         if (a.data && a.data?.jagsaalt?.length > 0) {
           setZogsool(a.data?.jagsaalt);
         }
+      })
+      .catch((e) => {
+        aldaaBarigch(e);
       });
   }, [baiguullaga, token]);
 
