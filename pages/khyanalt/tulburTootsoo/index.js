@@ -673,7 +673,7 @@ function tulburTootsoo({ token }) {
       baganuud = [
         {
           title: t("Огноо"),
-          dataIndex: "tranDesc",
+          dataIndex: "tranPostedDate",
           align: "center",
           width: "7rem",
           render(date) {
