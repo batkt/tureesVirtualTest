@@ -50,6 +50,8 @@ function iconAvya(a, bank) {
   if (
     bank === "tdb"
       ? a?.TxAddInf.includes("QPAY") || a?.TxAddInf.includes("qpay")
+      : bank === "golomt"
+      ? a?.tranDesc.includes("QPAY") || a?.tranDesc.includes("qpay")
       : a?.description.includes("QPAY") || a?.description.includes("qpay")
   ) {
     Icon = CheckOutlined;
@@ -204,7 +206,13 @@ function tulburTootsoo({ token }) {
     setDansniiKhuulgaKhuudaslalt((a) => ({ ...a, khuudasniiDugaar: 1 }));
     setOrder(() => ({
       ...{},
-      [`${songogdsonDans?.bank === "tdb" ? "TxDt" : "createdAt"}`]: -1,
+      [`${
+        songogdsonDans?.bank === "tdb"
+          ? "TxDt"
+          : songogdsonDans?.bank === "golomt"
+          ? "tranPostedDate"
+          : "createdAt"
+      }`]: -1,
       [`${songogdsonDans?.bank === "tdb" ? "TxTime" : "time"}`]: undefined,
     }));
     setSongogdsonDans(songogdsonDans);
@@ -222,9 +230,19 @@ function tulburTootsoo({ token }) {
       if (
         (data?.kholbosonGereeniiId &&
           data?.kholbosonDun ===
-            data[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`]) ||
+            data[
+              `${
+                songogdsonDans?.bank === "tdb"
+                  ? "Amt"
+                  : songogdsonDans?.bank === "golomt"
+                  ? "tranAmount"
+                  : "amount"
+              }`
+            ]) ||
         songogdsonDans?.bank === "tdb"
           ? data?.TxAddInf?.includes("QPAY") || data?.TxAddInf?.includes("qpay")
+          : songogdsonDans?.bank === "golomt"
+          ? data?.tranDesc?.includes("QPAY") || data?.tranDesc?.includes("qpay")
           : data?.description.includes("QPAY") ||
             data?.description.includes("qpay")
       ) {
@@ -606,6 +624,156 @@ function tulburTootsoo({ token }) {
           {
             title: "НӨАТУС",
             width: "4.5rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    size="small"
+                    shape="circle"
+                    icon={
+                      <div
+                        className={`text-500 flex items-center justify-center`}
+                      >
+                        {a?.kholbosonGereeniiId &&
+                        a?.ebarimtAvsanEsekh === true ? (
+                          <Tooltip title="И-баримт хэвлэсэн байна">
+                            <CheckOutlined
+                              style={{ fontSize: "16px", color: "green" }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <ExclamationOutlined
+                            style={{ fontSize: "16px", color: "red" }}
+                            onClick={() => ebarimtUgukh(a)}
+                          />
+                        )}
+                      </div>
+                    }
+                  />
+                </div>
+              );
+            },
+          },
+        ];
+    } else if (songogdsonDans?.bank === "tdb") {
+      baganuud = [
+        {
+          title: t("Огноо"),
+          dataIndex: "tranDesc",
+          align: "center",
+          width: "7rem",
+          render(date) {
+            return moment(date).format("YYYY-MM-DD hh:mm:ss");
+          },
+          showSorterTooltip: false,
+          sorter: {
+            compare: () => 0,
+            multiple: 1,
+          },
+        },
+        {
+          title: t("Гүйлгээний утга"),
+          width: "20rem",
+          align: "center",
+          dataIndex: "tranDesc",
+          render(a) {
+            return (
+              <Tooltip title={<div>{a}</div>}>
+                <div className="flex w-full truncate">{a}</div>
+              </Tooltip>
+            );
+          },
+        },
+        {
+          title: t("Гүйлгээний дүн"),
+          sorter: () => 0,
+          dataIndex: "tranAmount",
+          ellipsis: true,
+          width: "9rem",
+          className: "text-right",
+          showSorterTooltip: false,
+          render(a) {
+            return `${formatNumber(a, 2)}₮`;
+          },
+        },
+        {
+          title: t("Шилжүүлсэн данс"),
+          align: "center",
+          dataIndex: "accNum",
+          ellipsis: true,
+          width: "10rem",
+        },
+      ];
+      if (khuulgaTurul === "orlogo")
+        baganuud = [
+          ...baganuud,
+          {
+            title: t("Төлөв"),
+            width: "4rem",
+            align: "center",
+            render(a) {
+              return (
+                <div className="flex items-center justify-center">
+                  <Button
+                    shape="circle"
+                    size="small"
+                    onClick={() => guilgeeKholbyo(a)}
+                    icon={iconAvya(a, "golomt")}
+                  />
+                </div>
+              );
+            },
+          },
+          {
+            title: t("Талбай"),
+            dataIndex: "kholbosonTalbainId",
+            ellipsis: true,
+            align: "center",
+            width: "5rem",
+            render(data) {
+              if (data.length > 1) {
+                return (
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <div className="flex justify-center truncate">
+                        {data.map((a, i) => (
+                          <div
+                            key={i}
+                            className={`${data.length - 1 !== i && "pr-1"}`}
+                          >
+                            {a}
+                            {data.length - 1 !== i && ","}
+                          </div>
+                        ))}
+                      </div>
+                    }
+                  >
+                    <div className="flex justify-center truncate">
+                      {data.map((a, i) => (
+                        <div
+                          key={i}
+                          className={`${data.length - 1 !== i && "pr-1"}`}
+                        >
+                          {a}
+                          {data.length - 1 !== i && ","}
+                        </div>
+                      ))}
+                    </div>
+                  </Tooltip>
+                );
+              } else
+                return (
+                  <Tooltip placement="top" title={<div>{data}</div>}>
+                    <div>{data}</div>
+                  </Tooltip>
+                );
+            },
+          },
+          {
+            title: "НӨАТУС",
+            width: "5rem",
             align: "center",
             render(a) {
               return (
