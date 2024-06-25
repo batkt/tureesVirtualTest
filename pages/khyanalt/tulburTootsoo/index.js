@@ -171,9 +171,22 @@ function tulburTootsoo({ token }) {
       query.kholbosonGereeniiId = { $size: 0 };
     }
 
-    query[`${songogdsonDans?.bank === "tdb" ? "Amt" : "amount"}`] = {
-      [khuulgaTurul === "orlogo" ? "$gt" : "$lt"]: 0,
-    };
+    query[
+      `${
+        songogdsonDans?.bank === "tdb"
+          ? "Amt"
+          : songogdsonDans?.bank === "golomt"
+          ? "drOrCr"
+          : "amount"
+      }`
+    ] =
+      songogdsonDans?.bank === "golomt"
+        ? khuulgaTurul === "orlogo"
+          ? "Credit"
+          : "$lt"
+        : {
+            [khuulgaTurul === "orlogo" ? "$gt" : "$lt"]: 0,
+          };
 
     return query;
   }, [songogdsonTurul, khuulgaTurul, songogdsonDans]);

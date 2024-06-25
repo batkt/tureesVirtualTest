@@ -7,7 +7,13 @@ import { useAuth } from "services/auth";
 function getSearch(search, bank) {
   var fallback = [
     {
-      [`${bank === "tdb" ? "TxAddInf" : "description"}`]: {
+      [`${
+        bank === "tdb"
+          ? "TxAddInf"
+          : bank === "golomt"
+          ? "tranDesc"
+          : "description"
+      }`]: {
         $regex: search,
         $options: "i",
       },
@@ -17,13 +23,22 @@ function getSearch(search, bank) {
     },
   ];
   fallback.push({
-    [`${bank === "tdb" ? "CtAcntOrg" : "relatedAccount"}`]: {
+    [`${
+      bank === "tdb"
+        ? "CtAcntOrg"
+        : bank === "golomt"
+        ? "accNum"
+        : "relatedAccount"
+    }`]: {
       $regex: search,
       $options: "i",
     },
   });
   if (/^\d+$/.test(search)) {
-    fallback.push({ [`${bank === "tdb" ? "Amt" : "amount"}`]: search });
+    fallback.push({
+      [`${bank === "tdb" ? "Amt" : bank === "tdb" ? "tranAmount" : "amount"}`]:
+        search,
+    });
   }
   return fallback;
 }
@@ -47,8 +62,20 @@ const fetcher = (
           dansniiDugaar: dans?.dugaar,
           barilgiinId,
           baiguullagiinId,
-          [`${dans?.bank === "tdb" ? "Amt" : "amount"}`]: { $gt: 0 },
-          [`${dans?.bank === "tdb" ? "TxDt" : "tranDate"}`]: {
+          [`${
+            dans?.bank === "tdb"
+              ? "Amt"
+              : dans?.bank === "golomt"
+              ? "tranAmount"
+              : "amount"
+          }`]: { $gt: 0 },
+          [`${
+            dans?.bank === "tdb"
+              ? "TxDt"
+              : dans?.bank === "golomt"
+              ? "tranPostedDate"
+              : "tranDate"
+          }`]: {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
             $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
           },
