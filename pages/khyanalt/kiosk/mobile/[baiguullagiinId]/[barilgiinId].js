@@ -203,9 +203,7 @@ const KioskMobile = ({
                 );
                 setUnshijBaina(false);
               } else {
-                setKhungulukhDun(
-                  khungulukhDun - response.data?.data?.pay_amount
-                );
+                setKhungulukhDun(response.data?.data?.pay_amount);
                 setSongogdsonData(response.data?.data);
                 setAlkham(1);
                 setTulburiinKhelber("qpay");
