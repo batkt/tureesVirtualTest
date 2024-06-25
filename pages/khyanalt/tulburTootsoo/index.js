@@ -669,7 +669,7 @@ function tulburTootsoo({ token }) {
             },
           },
         ];
-    } else if (songogdsonDans?.bank === "tdb") {
+    } else if (songogdsonDans?.bank === "golomt") {
       baganuud = [
         {
           title: t("Огноо"),
