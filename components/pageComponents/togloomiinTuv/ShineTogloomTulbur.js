@@ -712,8 +712,8 @@ function ShineTogloomTulbur(
                       />
                     </div>
                     <div className="max-w-[400px] text-center text-base">
-                      Энэхүү QR код нь тоглох хугацаанд хүчинтэй байхыг анхаарна
-                      уу!
+                      Энэхүү QR код нь зөвхөн тоглох хугацаанд хүчинтэй байхыг
+                      анхаарна уу!
                     </div>
                   </div>
                 </div>
