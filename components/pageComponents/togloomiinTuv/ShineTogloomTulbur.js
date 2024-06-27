@@ -693,7 +693,7 @@ function ShineTogloomTulbur(
                     <div className="flex w-full items-center justify-center">
                       <Canvas
                         text={
-                          baiguullagiinId == "664ac9b28bfeed5bdce01388"
+                          baiguullaga?._id == "664ac9b28bfeed5bdce01388"
                             ? moment(data?.duusakhTsag)
                                 .format("MMDDHHmmss")
                                 .substring(1)

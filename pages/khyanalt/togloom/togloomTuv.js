@@ -293,7 +293,7 @@ const QrCodeAvakh = React.forwardRef(
           {!!duusakhTsag ? (
             <Canvas
               text={
-                baiguullagiinId == "664ac9b28bfeed5bdce01388"
+                baiguullaga?._id == "664ac9b28bfeed5bdce01388"
                   ? moment(duusakhTsag).format("MMDDHHmmss").substring(1)
                   : moment(duusakhTsag).format("YYYYMMDDHHmmss")
               }
