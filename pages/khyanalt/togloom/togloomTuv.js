@@ -292,7 +292,11 @@ const QrCodeAvakh = React.forwardRef(
           </div>
           {!!duusakhTsag ? (
             <Canvas
-              text={moment(duusakhTsag).format("YYYYMMDDHHmmss")}
+              text={
+                baiguullagiinId == "664ac9b28bfeed5bdce01388"
+                  ? moment(duusakhTsag).format("MMDDHHmmss").substring(1)
+                  : moment(duusakhTsag).format("YYYYMMDDHHmmss")
+              }
               options={{
                 level: "M",
                 margin: 3,
@@ -994,7 +998,7 @@ function togloom1() {
       if (difference > 0) {
         const footer = [
           <Button onClick={() => qrRef.current.khaaya()}>{t("Хаах")}</Button>,
-          <Button onClick={() => qrRef.current.khadgalya()} >
+          <Button onClick={() => qrRef.current.khadgalya()}>
             {t("Хэвлэх")}
           </Button>,
         ];
@@ -1571,7 +1575,7 @@ function togloom1() {
               ajiltan?.erkh === "Admin") && (
               <div
                 onClick={() => orlogiinDelegrengui()}
-                className="group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 text-md font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
+                className="text-md group flex h-11 cursor-pointer flex-row items-center gap-3 space-x-2 rounded-md border px-3 font-medium transition-colors hover:border-blue-500 hover:text-blue-500"
               >
                 {t("Нийт орлого")} :{" "}
                 {!!togloomiinDun?.toololt
