@@ -535,7 +535,10 @@ function camera({ token }) {
           }
           if (yanzalsanNiitDun < 0) yanzalsanNiitDun = 0;
           var url = `http://localhost:5000/api/sambar/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}`;
-          if (baiguullaga?._id == "65cf2f027fbc788f85e50b90") {
+          if (
+            baiguullaga?._id == "65cf2f027fbc788f85e50b90" ||
+            baiguullaga?._id == "6549bbe0d437e6d25d557341"
+          ) {
             var ekhlekhOgnoo = moment(uilchluulegch?.createdAt).format(
               "YYYY-MM-DD HH:mm:ss"
             );
@@ -2563,7 +2566,9 @@ function camera({ token }) {
                           </Radio>
                           <Radio value="Хогны машин">{t("Хогны машин")}</Radio>
                           <Radio value="Шуудан">Шуудан</Radio>
-                          <Radio value="Дэлгүүрийн үйлчлүүлэгч">{t("Дэлгүүрийн үйлчлүүлэгч")}</Radio>
+                          <Radio value="Дэлгүүрийн үйлчлүүлэгч">
+                            {t("Дэлгүүрийн үйлчлүүлэгч")}
+                          </Radio>
                           {baiguullaga?._id === "63c0f31efe522048bf02086d" && (
                             <>
                               <Radio value="Түрээслэгч">
