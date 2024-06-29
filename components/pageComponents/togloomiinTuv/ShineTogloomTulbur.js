@@ -676,48 +676,48 @@ function ShineTogloomTulbur(
                 </tr>
               </tbody>
             </table>
-            {baiguullaga?._id === "63c0f31efe522048bf02086d" ||
-              (baiguullaga?._id === "664ac9b28bfeed5bdce01388" && (
-                <div>
-                  <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
-                    <div className=" text-justify text-base">
-                      Эхлэх хугацаа:{" "}
-                      <div>
-                        {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
-                      </div>{" "}
-                      Дуусах хугацаа:{" "}
-                      <div>
-                        {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
-                      </div>
-                    </div>
-                    <div className="flex w-full items-center justify-center">
-                      <Canvas
-                        text={
-                          baiguullaga?._id == "664ac9b28bfeed5bdce01388"
-                            ? moment(data?.duusakhTsag)
-                                .format("MMDDHHmmss")
-                                .substring(1)
-                            : moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")
-                        }
-                        options={{
-                          level: "M",
-                          margin: 3,
-                          scale: 4,
-                          width: 200,
-                          color: {
-                            dark: "#000000",
-                            light: "#FFFFFF",
-                          },
-                        }}
-                      />
-                    </div>
-                    <div className="max-w-[400px] text-center text-base">
-                      Энэхүү QR код нь зөвхөн тоглох хугацаанд хүчинтэй байхыг
-                      анхаарна уу!
+            {(baiguullaga?._id === "63c0f31efe522048bf02086d" ||
+              baiguullaga?._id === "664ac9b28bfeed5bdce01388") && (
+              <div>
+                <div className="mt-3 flex h-full w-full flex-col items-center justify-center border-t-2 border-dashed border-black pt-5">
+                  <div className=" text-justify text-base">
+                    Эхлэх хугацаа:{" "}
+                    <div>
+                      {moment(data?.ekhlekhTsag).format("YYYY-MM-DD HH:mm")}
+                    </div>{" "}
+                    Дуусах хугацаа:{" "}
+                    <div>
+                      {moment(data?.duusakhTsag).format("YYYY-MM-DD HH:mm")}
                     </div>
                   </div>
+                  <div className="flex w-full items-center justify-center">
+                    <Canvas
+                      text={
+                        baiguullaga?._id == "664ac9b28bfeed5bdce01388"
+                          ? moment(data?.duusakhTsag)
+                              .format("MMDDHHmmss")
+                              .substring(1)
+                          : moment(data?.duusakhTsag).format("YYYYMMDDHHmmss")
+                      }
+                      options={{
+                        level: "M",
+                        margin: 3,
+                        scale: 4,
+                        width: 200,
+                        color: {
+                          dark: "#000000",
+                          light: "#FFFFFF",
+                        },
+                      }}
+                    />
+                  </div>
+                  <div className="max-w-[400px] text-center text-base">
+                    Энэхүү QR код нь зөвхөн тоглох хугацаанд хүчинтэй байхыг
+                    анхаарна уу!
+                  </div>
                 </div>
-              ))}
+              </div>
+            )}
           </div>
         </div>
       )}
