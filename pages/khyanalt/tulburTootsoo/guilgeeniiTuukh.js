@@ -14,6 +14,7 @@ import {
   Progress,
   Select,
   Popover,
+  Space,
 } from "antd";
 import {
   FileExcelOutlined,
@@ -23,6 +24,7 @@ import {
   PrinterOutlined,
   CloseCircleOutlined,
   FilterOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
@@ -31,6 +33,7 @@ import useOrder from "tools/function/useOrder";
 import NekhemjlelIlgeekh from "components/pageComponents/tulbur/NekhemjlelIlgeekh";
 import MedegdelIlgeekh from "components/pageComponents/tulbur/MedegdelIlgeekh";
 import GuilgeeKhiikh from "components/pageComponents/tulbur/GuilgeeKhiikh";
+import GuilgeeExceleesOruulakhOlnoor from "components/pageComponents/tulbur/GuilgeeExceleesOruulakhOlnoor";
 import BaritsaaUdirdlaga from "components/pageComponents/tulbur/BaritsaaUdirdlaga";
 import _ from "lodash";
 import { modal } from "components/ant/Modal";
@@ -168,6 +171,7 @@ function guilgeeniiTuukh({ token }) {
   });
   //#region state
   const ref = React.useRef(null);
+  const excelref = React.useRef();
   const baritsaaref = React.useRef(null);
   const { baiguullaga, barilgiinId, ajiltan } = useAuth();
   const [ognoo, setOgnoo] = React.useState([
@@ -798,6 +802,37 @@ function guilgeeniiTuukh({ token }) {
     });
   }
 
+  function refresh() {
+    // gereeniiMedeelelMutate();
+    // gereeToolloltMutate();
+  }
+
+  function olnoorGuilgeeOruulakhExcel() {
+    const footer = [
+      <Space>
+        <Button onClick={() => excelref.current.khaaya()}>{t("Хаах")}</Button>
+      </Space>,
+    ];
+    modal({
+      title: "",
+      icon: <FileExcelOutlined />,
+      content: (
+        <GuilgeeExceleesOruulakhOlnoor
+          ref={excelref}
+          token={token}
+          barilgiinId={barilgiinId}
+          baiguullaga={baiguullaga}
+          onFinish={refresh}
+          zam="tooluurZaaltOruulya"
+          garchig="Excel файл аа чирч оруулах эсвэл сонгоно уу"
+          tailbar="Гүйлгээний загвар excel файл"
+          zagvariinZam="tooluurZaaltZagvarAvya"
+        />
+      ),
+      footer,
+    });
+  }
+
   const excelColumns = useMemo(() => {
     var forExcel = [];
     columns.forEach((a) => {
@@ -1095,6 +1130,16 @@ function guilgeeniiTuukh({ token }) {
                 icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
               >
                 <span>Excel</span>
+                <DownOutlined width={5} />
+              </Button>
+            </Popover>
+            <Popover>
+              <Button
+              type="primary"
+              onClick={olnoorGuilgeeOruulakhExcel}
+              icon={<FileExcelOutlined style={{ fontSize: "16px" }} />}
+              >
+              <span>Заалт оруулах</span>
                 <DownOutlined width={5} />
               </Button>
             </Popover>
