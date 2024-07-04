@@ -133,7 +133,6 @@ function GuilgeeExceleesOruulakhOlnoor(
             return file;
           }}
           onChange={({ file }) => {
-            alert(JSON.stringify(file.response))
             if (file.response === "Amjilttai") {
               message.success(
                 t("Гүйлгээний мэдээлэл Excel -ээс амжилттай орууллаа")
