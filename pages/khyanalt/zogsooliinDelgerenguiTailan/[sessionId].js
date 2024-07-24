@@ -260,7 +260,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "Зөрчилтэй":
               ugugdul.push({
-                ner: "Зөрчилтэй машин",
+                ner: "Зөрчилтэй",
                 icon: "/exclamation.png",
                 // icon: "/eWalletIcon.png",
                 dun: element.niitDun,
@@ -268,7 +268,16 @@ function TulburiinDelgerenguiTailan({ token }) {
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
-
+            case "Үнэгүй":
+              ugugdul.push({
+                ner: "Үнэгүй",
+                icon: "/free.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+              });
+              break;
             default:
               ugugdul.push({
                 ner: element._id,
