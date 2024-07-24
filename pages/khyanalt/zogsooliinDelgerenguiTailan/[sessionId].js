@@ -258,6 +258,16 @@ function TulburiinDelgerenguiTailan({ token }) {
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
+            case "Зөрчилтэй":
+              ugugdul.push({
+                ner: "Зөрчилтэй машин",
+                icon: "/exclamation.png",
+                // icon: "/eWalletIcon.png",
+                dun: element.niitDun,
+                too: element.niitToo,
+                khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+              });
+              break;
 
             default:
               ugugdul.push({
@@ -283,7 +293,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Дансаар",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -292,7 +301,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Бэлэн",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -301,7 +309,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Хөнгөлөх",
                 icon: "https://static.vecteezy.com/system/resources/previews/012/487/845/original/3d-wallet-floating-in-hand-isolated-on-transparent-business-man-holding-purple-purse-icon-mobile-banking-online-service-cashback-refund-loan-concept-saving-money-wealth-cartoon-3d-render-png.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -310,7 +317,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Хаан банк",
                 icon: "https://play-lh.googleusercontent.com/Aw4bwCDJgAzu6AFAbbcfCFpheVMB6ZKiEM3JlrJ3cAM65fK-1QaTZZs_Vk4UFBzykQ=s480-rw",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -319,7 +325,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "TDB банк",
                 icon: "https://tz.mn/storage/uploads/slider/45adc5a14070aa.jpg",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -328,7 +333,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Xac банк",
                 icon: "https://cdn6.aptoide.com/imgs/0/6/d/06df97a06fbc7622a775a7c414b69e87_icon.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -337,7 +341,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Голомт банк",
                 icon: "https://play-lh.googleusercontent.com/9tUBesUsI4UIkpgO1MPIMLFvhDa_4vZE75TrVAUHFA7a0bJ7IIgeyh2r1QXs9VlmXmkX",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -346,7 +349,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Капитрон банк",
                 icon: "https://play-lh.googleusercontent.com/1PMmu0x2x_07XdPtLyTRe_4cffXDLFCG3xEoUTqUpy3eSJeB-C81dbyzZSnJjW907OA=w240-h480-rw",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -355,7 +357,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: "Төрийн банк",
                 icon: "https://play-lh.googleusercontent.com/KYQyVTgP4ZV60gxNOsKYssScNe17NMgHpO_nRY4WRBYj_4YTZ0e8t6zwh38sTFmyCco",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -364,7 +365,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: element._id,
                 icon: "https://qpay.mn/q/img/q.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -373,7 +373,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: element._id,
                 icon: "https://play-lh.googleusercontent.com/GofyFzRM2Kwf3d47fl6FibZB7kE16Aljaodzc-ghiJmdiPpGljaqeop2T6JaURd8rw=s480-rw",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -382,7 +381,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: element._id,
                 icon: "https://play-lh.googleusercontent.com/Jg_jjsNezlkTuxWT5ADzfqhjwHVvqZEDqQGbXJlkplNrYPyyMGXtmLA6dGrH37_paOY=w240-h480-rw",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -399,7 +397,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: element._id,
                 icon: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.toki.mn%2F&psig=AOvVaw1ej7t5Vo6qLIhInQ0XNMEm&ust=1715243807766000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCJjD-6DT_YUDFQAAAAAdAAAAABAE",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -409,7 +406,6 @@ function TulburiinDelgerenguiTailan({ token }) {
                 ner: element._id,
                 icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
                 dun: element.niitDun,
-                too: element.niitToo,
                 khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
               });
               break;
@@ -503,7 +499,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                     <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                       {a.ner}:
                       <div className="flex font-normal">
-                        {formatNumber(a.dun) || 0}₮
+                        {formatNumber(a.dun) || 0}₮({a.too})
                         <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
                           <div>
                             {a.khuvi - Math.floor(a.khuvi) > 0
@@ -555,7 +551,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                   <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                     {a.ner}:
                     <div className="flex font-normal">
-                      {formatNumber(a.dun) || 0}₮ ({a.too})
+                      {formatNumber(a.dun) || 0}₮
                       <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
                         <div>
                           {a.khuvi - Math.floor(a.khuvi) > 0
