@@ -527,10 +527,38 @@ function TulburiinDelgerenguiTailan({ token }) {
               })}
               <div className="border border-dashed bg-gray-600" />
               <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-                <div className="flex ">Нийт дүн:</div>
+                <div className="flex ">Бодогдсон дүн:</div>
                 <div>
                   {formatNumber(
                     tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
+                  ) + "₮"}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+                <div className="flex ">Төлбөр авсан:</div>
+                <div>
+                  {formatNumber(
+                    tulburiinMedeelel?.reduce(
+                      (a, b) =>
+                        a + (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй")
+                          ? b?.dun
+                          : 0,
+                      0
+                    ) || 0
+                  ) + "₮"}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+                <div className="flex ">Төлбөр аваагүй:</div>
+                <div>
+                  {formatNumber(
+                    tulburiinMedeelel?.reduce(
+                      (a, b) =>
+                        a + (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй")
+                          ? b?.dun
+                          : 0,
+                      0
+                    ) || 0
                   ) + "₮"}
                 </div>
               </div>
