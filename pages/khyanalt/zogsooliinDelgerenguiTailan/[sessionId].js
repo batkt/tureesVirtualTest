@@ -414,7 +414,7 @@ function TulburiinDelgerenguiTailan({ token }) {
             return (
               <div className="my-1" key={i}>{`${i + 1}. ${a.ner} (${
                 a.too
-              }) : ${formatNumber(a.dun)} ₮`}</div>
+              }) : ${formatNumber(a.dun)} ₮ (${a.too})`}</div>
             );
           })}
           <div className="flex items-center justify-start gap-2">
