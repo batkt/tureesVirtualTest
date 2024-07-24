@@ -540,9 +540,10 @@ function TulburiinDelgerenguiTailan({ token }) {
                   {formatNumber(
                     tulburiinMedeelel?.reduce(
                       (a, b) =>
-                        a + (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй")
+                        a +
+                        (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй"
                           ? b?.dun
-                          : 0,
+                          : 0),
                       0
                     ) || 0
                   ) + "₮"}
@@ -554,9 +555,10 @@ function TulburiinDelgerenguiTailan({ token }) {
                   {formatNumber(
                     tulburiinMedeelel?.reduce(
                       (a, b) =>
-                        a + (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй")
+                        a +
+                        (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй"
                           ? b?.dun
-                          : 0,
+                          : 0),
                       0
                     ) || 0
                   ) + "₮"}
