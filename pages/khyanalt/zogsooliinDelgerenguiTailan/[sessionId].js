@@ -499,7 +499,10 @@ function TulburiinDelgerenguiTailan({ token }) {
                     <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
                       {a.ner}:
                       <div className="flex font-normal">
-                        {formatNumber(a.dun) || 0}₮({a.too})
+                        {formatNumber(a.dun) || 0}₮
+                        <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
+                          <div>{a.too}</div>
+                        </div>
                         <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
                           <div>
                             {a.khuvi - Math.floor(a.khuvi) > 0
