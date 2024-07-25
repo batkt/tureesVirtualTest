@@ -489,52 +489,56 @@ function TulburiinDelgerenguiTailan({ token }) {
         turul === "Zogsool" ? (
           tulburiinMedeelel.length > 0 ? (
             <div className="mt-5 space-y-3">
-              {tulburiinMedeelel.map((a, i) => {
-                return (
-                  <div
-                    className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
-                    key={i}
-                  >
+              {tulburiinMedeelel
+                .sort(function (a, b) {
+                  return b.khuvi - a.khuvi;
+                })
+                .map((a, i) => {
+                  return (
                     <div
-                      style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                      className={
-                        a.ner == "Зөрчилтэй"
-                          ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
-                          : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
-                      }
+                      className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2"
+                      key={i}
                     >
                       <div
+                        style={{ width: `${String(Math.round(a.khuvi))}%` }}
                         className={
                           a.ner == "Зөрчилтэй"
-                            ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
-                            : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
+                            ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
+                            : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
                         }
+                      >
+                        <div
+                          className={
+                            a.ner == "Зөрчилтэй"
+                              ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
+                              : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
+                          }
+                        />
+                      </div>
+                      <img
+                        src={a.icon}
+                        className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
                       />
-                    </div>
-                    <img
-                      src={a.icon}
-                      className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-                    />
-                    <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                      {a.ner}:
-                      <div className="flex font-normal">
-                        {formatNumber(a.dun) || 0}₮
-                        <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
-                          <div className="ml-5 mr-5">{a.too}</div>
-                        </div>
-                        <div className="ml-5 flex w-10 items-center justify-center border-green-600 pr-5 text-center">
-                          <div className="ml-10 ">
-                            {a.khuvi - Math.floor(a.khuvi) > 0
-                              ? Number(a.khuvi).toFixed(2)
-                              : a.khuvi || 0}
+                      <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
+                        {a.ner}:
+                        <div className="flex font-normal">
+                          {formatNumber(a.dun) || 0}₮
+                          <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
+                            <div className="ml-5 mr-5">{a.too}</div>
                           </div>
-                          <div className="mr-10">%</div>
+                          <div className="ml-5 flex w-10 items-center justify-center border-green-600 pr-5 text-center">
+                            <div className="ml-10 ">
+                              {a.khuvi - Math.floor(a.khuvi) > 0
+                                ? Number(a.khuvi).toFixed(2)
+                                : a.khuvi || 0}
+                            </div>
+                            <div className="mr-10">%</div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
               <div className="border border-dashed bg-gray-600" />
               <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
                 <div className="flex ">Бодогдсон дүн:</div>
