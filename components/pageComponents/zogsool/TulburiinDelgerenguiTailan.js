@@ -41,7 +41,7 @@ function TulburiinDelgerenguiTailan(
     setCamerVal([camerVal[0], e]);
   };
   const zogsooAjiltanQuery = useMemo(() => {
-    return {tsonkhniiErkhuud: window.location.pathname};
+    return { tsonkhniiErkhuud: window.location.pathname };
   }, [baiguullagiinId, barilgiinId]);
 
   const query = useMemo(() => {
@@ -270,7 +270,6 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-
           case "PosBelen":
             ugugdul.push({
               ner: "ПОС бэлэн",
@@ -281,7 +280,6 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-
           case "PosCard":
             ugugdul.push({
               ner: "ПОС карт",
@@ -292,7 +290,6 @@ function TulburiinDelgerenguiTailan(
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
             });
             break;
-
           case "PosKhariltsakh":
             ugugdul.push({
               ner: "ПОС дансаар",
@@ -307,6 +304,26 @@ function TulburiinDelgerenguiTailan(
             ugugdul.push({
               ner: "Зээл",
               icon: "https://static.vecteezy.com/system/resources/previews/012/958/770/original/payment-icon-for-shopping-online-3d-hand-holding-banknote-cartoon-businessman-wearing-suit-holds-money-floating-isolated-on-transparent-withdraw-money-easy-shopping-concept-3d-minimal-rendering-png.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "Зөрчилтэй":
+            ugugdul.push({
+              ner: "Зөрчилтэй",
+              icon: "/exclamation.png",
+              // icon: "/eWalletIcon.png",
+              dun: element.niitDun,
+              too: element.niitToo,
+              khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
+            });
+            break;
+          case "Үнэгүй":
+            ugugdul.push({
+              ner: "Үнэгүй",
+              icon: "/free.png",
+              // icon: "/eWalletIcon.png",
               dun: element.niitDun,
               too: element.niitToo,
               khuvi: (Number(element.niitDun) / Number(niitDun)) * 100,
@@ -468,47 +485,69 @@ function TulburiinDelgerenguiTailan(
       </div>
       {tulburiinMedeelel.length > 0 ? (
         <div className="mt-5 w-full space-y-3">
-          {tulburiinMedeelel.map((a, i) => {
-            return (
-              <div
-                className="relative flex h-14 w-full cursor-pointer items-center overflow-hidden rounded-md border-2 p-2"
-                key={i}
-                onClick={() => handleDivClick(a)}
-              >
-                <Checkbox checked={songogdson.some((item) => item === a.ner)} />
+          {tulburiinMedeelel
+            .sort(function (a, b) {
+              return b.khuvi - a.khuvi;
+            })
+            .map((a, i) => {
+              return (
                 <div
-                  style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                  className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
+                  className="relative flex h-14 w-full cursor-pointer items-center overflow-hidden rounded-md border-2 p-2"
+                  key={i}
+                  onClick={() => handleDivClick(a)}
                 >
-                  <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
-                </div>
-                <img
-                  src={a.icon}
-                  className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
-                />
-                <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
-                  {a.ner}:
-                  <div className="flex font-normal">
-                    {formatNumber(a.dun) || 0}₮
-                    <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
-                      <div>
-                        {a.khuvi - Math.floor(a.khuvi) > 0
-                          ? Number(a.khuvi).toFixed(2)
-                          : a.khuvi || 0}
+                  <Checkbox
+                    checked={songogdson.some((item) => item === a.ner)}
+                  />
+                  <div
+                    style={{ width: `${String(Math.round(a.khuvi))}%` }}
+                    className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
+                  >
+                    <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
+                  </div>
+                  <img
+                    src={a.icon}
+                    className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
+                  />
+                  <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
+                    {a.ner}:
+                    <div className="flex font-normal">
+                      {formatNumber(a.dun) || 0}₮
+                      <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
+                        <div className="ml-5 mr-5">{a.too}</div>
                       </div>
-                      %
+                      <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
+                        <div>
+                          {a.khuvi - Math.floor(a.khuvi) > 0
+                            ? Number(a.khuvi).toFixed(2)
+                            : a.khuvi || 0}
+                        </div>
+                        %
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
           <div className="border border-dashed bg-gray-600" />
           <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
-            <div className="flex ">Нийт дүн:</div>
+            <div className="flex ">Бодогдсон дүн:</div>
             <div>
               {formatNumber(
                 tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
+              ) + "₮"}
+            </div>
+          </div>
+          <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+            <div className="flex ">Төлбөр авсан:</div>
+            <div>
+              {formatNumber(
+                tulburiinMedeelel?.reduce(
+                  (a, b) =>
+                    a +
+                    (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй" ? b?.dun : 0),
+                  0
+                ) || 0
               ) + "₮"}
             </div>
           </div>
