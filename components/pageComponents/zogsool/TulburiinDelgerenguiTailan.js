@@ -97,9 +97,8 @@ function TulburiinDelgerenguiTailan(
         switch (element?._id) {
           case "khariltsakh":
             ugugdul.push({
-              ner: "Дансаар",
+              ner: "Данс",
               icon: "/mobile.png",
-
               // icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
               dun: element.niitDun,
               too: element.niitToo,
@@ -311,7 +310,7 @@ function TulburiinDelgerenguiTailan(
             break;
           case "Зөрчилтэй":
             ugugdul.push({
-              ner: "Зөрчилтэй",
+              ner: "Зөрчил",
               icon: "/exclamation.png",
               // icon: "/eWalletIcon.png",
               dun: element.niitDun,
@@ -544,8 +543,7 @@ function TulburiinDelgerenguiTailan(
               {formatNumber(
                 tulburiinMedeelel?.reduce(
                   (a, b) =>
-                    a +
-                    (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй" ? b?.dun : 0),
+                    a + (b.ner != "Үнэгүй" && b.ner != "Зөрчил" ? b?.dun : 0),
                   0
                 ) || 0
               ) + "₮"}
@@ -557,8 +555,7 @@ function TulburiinDelgerenguiTailan(
               {formatNumber(
                 tulburiinMedeelel?.reduce(
                   (a, b) =>
-                    a +
-                    (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй" ? b?.dun : 0),
+                    a + (b.ner == "Үнэгүй" || b.ner == "Зөрчил" ? b?.dun : 0),
                   0
                 ) || 0
               ) + "₮"}

@@ -53,7 +53,7 @@ function TulburiinDelgerenguiTailan({ token }) {
           switch (element?._id) {
             case "khariltsakh":
               ugugdul.push({
-                ner: "Дансаар",
+                ner: "Данс",
                 icon: "/mobile.png",
                 // icon: "https://static.vecteezy.com/system/resources/previews/012/487/823/original/3d-hand-press-pay-button-icon-phone-with-credit-card-float-on-transparent-mobile-banking-online-payment-service-withdraw-money-easy-shop-cashless-society-concept-cartoon-minimal-3d-render-png.png",
                 dun: element.niitDun,
@@ -257,7 +257,7 @@ function TulburiinDelgerenguiTailan({ token }) {
               break;
             case "Зөрчилтэй":
               ugugdul.push({
-                ner: "Зөрчилтэй",
+                ner: "Зөрчил",
                 icon: "/exclamation.png",
                 // icon: "/eWalletIcon.png",
                 dun: element.niitDun,
@@ -499,14 +499,14 @@ function TulburiinDelgerenguiTailan({ token }) {
                       <div
                         style={{ width: `${String(Math.round(a.khuvi))}%` }}
                         className={
-                          a.ner == "Зөрчилтэй"
+                          a.ner == "Зөрчил"
                             ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
                             : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
                         }
                       >
                         <div
                           className={
-                            a.ner == "Зөрчилтэй"
+                            a.ner == "Зөрчил"
                               ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
                               : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
                           }
@@ -552,9 +552,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                     tulburiinMedeelel?.reduce(
                       (a, b) =>
                         a +
-                        (b.ner != "Үнэгүй" && b.ner != "Зөрчилтэй"
-                          ? b?.dun
-                          : 0),
+                        (b.ner != "Үнэгүй" && b.ner != "Зөрчил" ? b?.dun : 0),
                       0
                     ) || 0
                   ) + "₮"}
@@ -567,9 +565,7 @@ function TulburiinDelgerenguiTailan({ token }) {
                     tulburiinMedeelel?.reduce(
                       (a, b) =>
                         a +
-                        (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй"
-                          ? b?.dun
-                          : 0),
+                        (b.ner == "Үнэгүй" || b.ner == "Зөрчил" ? b?.dun : 0),
                       0
                     ) || 0
                   ) + "₮"}
