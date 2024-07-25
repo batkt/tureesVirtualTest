@@ -551,6 +551,19 @@ function TulburiinDelgerenguiTailan(
               ) + "₮"}
             </div>
           </div>
+          <div className="flex items-center justify-between text-lg font-[600] dark:text-gray-200">
+            <div className="flex ">Төлбөр аваагүй:</div>
+            <div>
+              {formatNumber(
+                tulburiinMedeelel?.reduce(
+                  (a, b) =>
+                    a +
+                    (b.ner == "Үнэгүй" || b.ner == "Зөрчилтэй" ? b?.dun : 0),
+                  0
+                ) || 0
+              ) + "₮"}
+            </div>
+          </div>
         </div>
       ) : (
         <div className="flex h-52 w-full items-center justify-center">
