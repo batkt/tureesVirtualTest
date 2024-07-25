@@ -497,9 +497,19 @@ function TulburiinDelgerenguiTailan({ token }) {
                   >
                     <div
                       style={{ width: `${String(Math.round(a.khuvi))}%` }}
-                      className={`absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `}
+                      className={
+                        a.ner == "Зөрчилтэй"
+                          ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
+                          : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
+                      }
                     >
-                      <div className="absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 " />
+                      <div
+                        className={
+                          a.ner == "Зөрчилтэй"
+                            ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
+                            : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
+                        }
+                      />
                     </div>
                     <img
                       src={a.icon}
