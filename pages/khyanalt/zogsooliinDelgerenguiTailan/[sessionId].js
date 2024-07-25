@@ -509,16 +509,16 @@ function TulburiinDelgerenguiTailan({ token }) {
                       {a.ner}:
                       <div className="flex font-normal">
                         {formatNumber(a.dun) || 0}₮
-                        <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
-                          <div>{a.too}</div>
+                        <div className=" ml-3 mr-3 flex w-10 items-center justify-center border-x border-green-600 text-center">
+                          <div className="ml-5 mr-5">{a.too}</div>
                         </div>
-                        <div className="ml-3 flex w-14 items-center justify-center border-l border-green-600 pl-2 text-center">
-                          <div>
+                        <div className="ml-5 flex w-10 items-center justify-center border-green-600 pr-5 text-center">
+                          <div className="ml-10 ">
                             {a.khuvi - Math.floor(a.khuvi) > 0
                               ? Number(a.khuvi).toFixed(2)
                               : a.khuvi || 0}
                           </div>
-                          %
+                          <div className="mr-10">%</div>
                         </div>
                       </div>
                     </div>
