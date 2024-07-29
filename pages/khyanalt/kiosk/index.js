@@ -39,6 +39,7 @@ const Kiosk = () => {
   const [songogdsonData, setSongogdsonData] = useState(null);
   const [terminal, setTerminal] = useState();
   const [qpayerTulukh, setQpayerTulukh] = useState(false);
+  const [passaarTulukh, setPassaarTulukh] = useState(false);
   const [tulburiinKhelber, setTulburiinKhelber] = useState();
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
@@ -151,7 +152,8 @@ const Kiosk = () => {
           if (data) {
             setBaiguullagaNer(data);
           }
-        }).catch((e) => {
+        })
+        .catch((e) => {
           aldaaBarigch(e);
         });
     } else {
@@ -250,6 +252,34 @@ const Kiosk = () => {
           setUnshijBaina(false);
           setTulburiinKhelber();
           setQpayerTulukh(false);
+          setPassaarTulukh(false);
+          setKhuleegdejBuiQpay();
+        });
+    }
+  }
+
+  function passAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
+    setUnshijBaina(true);
+    if (uilchluugchiinId && ilgeekhDun) {
+      setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
+      let yavuulakhBody = {
+        barilgiinId: barilgiinId,
+        dun: ilgeekhDun,
+        zakhialgiinDugaar: `${uilchluugchiinId}${ilgeekhDun}`,
+      };
+      uilchilgee(token)
+        .post("/passGargaya", yavuulakhBody)
+        .then(({ data }) => {
+          //setQpayerTulukh(data);
+          setPassaarTulukh(data);
+          setUnshijBaina(false);
+        })
+        .catch((e) => {
+          aldaaBarigch(e);
+          setUnshijBaina(false);
+          setTulburiinKhelber();
+          //setQpayerTulukh(false);
+          setPassaarTulukh(data);
           setKhuleegdejBuiQpay();
         });
     }
@@ -391,13 +421,11 @@ const Kiosk = () => {
       );
     }
     if (data === "pass") {
-      msgNotif(
-        <div className="flex items-center justify-center gap-2 font-semibold">
-          <div className="text-sky-500">
-            <InfoOutlined style={{ fontSize: "36px" }} size={100} />
-          </div>
-          <div className="text-4xl">Тун удахгүй.</div>
-        </div>
+      setTulburiinKhelber(data);
+      passAvakh(
+        songogdsonData?.session_id,
+        barilgiinId,
+        songogdsonData?.pay_amount
       );
     }
   };
@@ -610,6 +638,7 @@ const Kiosk = () => {
                 if (tulburiinKhelber) {
                   setTulburiinKhelber();
                   setQpayerTulukh(false);
+                  setPassaarTulukh(false);
                   setKhuleegdejBuiQpay();
                 } else {
                   setAlkham(0);
@@ -756,6 +785,15 @@ const Kiosk = () => {
                       />
                     </div>
                   )}
+                  <div className="flex items-center justify-center">
+                    {passaarTulukh && passaarTulukh?.qr_image && (
+                      <QRCode
+                        className=" border-8 border-white"
+                        value={passaarTulukh?.qr_image}
+                      />
+                    )}
+                  </div>
+
                   <div className="mx-12 mt-8 flex flex-col items-center justify-center gap-8 rounded-xl bg-[#414143] p-4 py-8">
                     <div className="flex w-full justify-between px-6 text-red-400">
                       <div>Төлбөр:</div>
