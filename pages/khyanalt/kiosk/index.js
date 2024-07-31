@@ -42,6 +42,7 @@ const Kiosk = () => {
   const [passaarTulukh, setPassaarTulukh] = useState(false);
   const [tulburiinKhelber, setTulburiinKhelber] = useState();
   const [khuleegdejBuiQpay, setKhuleegdejBuiQpay] = useState();
+  const [khuleegdejBuiPass, setKhuleegdejBuiPass] = useState();
   const [butsakhGuideDarsan, setButsakhGuideDarsan] = useState(false);
   const [servereesAvsonOdooTsag, setServereesAvsonOdooTsag] = useState();
   const [unshijBaina, setUnshijBaina] = useState(false);
@@ -145,6 +146,25 @@ const Kiosk = () => {
   }, [khuleegdejBuiQpay, baiguullaga]);
 
   useEffect(() => {
+    if (khuleegdejBuiPass) {
+      socket().on(`pass/${baiguullaga._id}/${khuleegdejBuiPass}`, (pass) => {
+        jinkheneTulburTulyo(
+          "kiosk",
+          songogdsonData?.session_id,
+          songogdsonData?.pay_amount,
+          songogdsonData?.plate_number,
+          barilgiinId,
+          ajiltan?.ner,
+          ajiltan?._id
+        );
+      });
+    }
+    return () => {
+      socket().off(`pass${khuleegdejBuiPass}`);
+    };
+  }, [khuleegdejBuiPass, baiguullaga]);
+
+  useEffect(() => {
     if (register.length > 6) {
       uilchilgee()
         .get(`/tatvaraasBaiguullagaAvya/${register}`)
@@ -217,6 +237,7 @@ const Kiosk = () => {
     setTerminal();
     setTulburiinKhelber();
     setKhuleegdejBuiQpay(null);
+    setKhuleegdejBuiPass(null);
     setDugaar(Array(4).fill(""));
     setEbarimtTurul("");
     setEbarimt();
@@ -261,7 +282,7 @@ const Kiosk = () => {
   function passAvakh(uilchluugchiinId, barilgiinId, ilgeekhDun) {
     setUnshijBaina(true);
     if (uilchluugchiinId && ilgeekhDun) {
-      setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
+      setKhuleegdejBuiPass(`${uilchluugchiinId}${ilgeekhDun}`);
       let yavuulakhBody = {
         barilgiinId: barilgiinId,
         dun: ilgeekhDun,
@@ -280,7 +301,7 @@ const Kiosk = () => {
           setTulburiinKhelber();
           //setQpayerTulukh(false);
           setPassaarTulukh(data);
-          setKhuleegdejBuiQpay();
+          setKhuleegdejBuiPass();
         });
     }
   }
@@ -588,6 +609,7 @@ const Kiosk = () => {
                 setTerminal();
                 setTulburiinKhelber();
                 setKhuleegdejBuiQpay(null);
+                setKhuleegdejBuiPass(null);
                 setDugaar(Array(4).fill(""));
                 setEbarimt();
                 setAlkham(0);
@@ -640,6 +662,7 @@ const Kiosk = () => {
                   setQpayerTulukh(false);
                   setPassaarTulukh(false);
                   setKhuleegdejBuiQpay();
+                  setKhuleegdejBuiPass();
                 } else {
                   setAlkham(0);
                 }
@@ -828,6 +851,7 @@ const Kiosk = () => {
                 setTerminal();
                 setTulburiinKhelber();
                 setKhuleegdejBuiQpay(null);
+                setKhuleegdejBuiPass(null);
                 setDugaar(Array(4).fill(""));
                 setEbarimtTurul("");
                 setAlkham(0);
