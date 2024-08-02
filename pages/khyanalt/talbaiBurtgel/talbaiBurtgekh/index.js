@@ -117,7 +117,7 @@ function talbaiBurtgekh({ token }) {
     ...data,
   });
 
-  const { talbainToololt } = useTalbainToololt(token);
+  const { talbainToololt } = useTalbainToololt(token, barilgiinId);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [neesenEsekh, setNeesenEsekh] = useState(false);

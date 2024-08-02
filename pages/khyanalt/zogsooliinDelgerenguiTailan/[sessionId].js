@@ -6,6 +6,9 @@ import moment from "moment";
 import formatNumber from "tools/function/formatNumber";
 import uilchilgee from "services/uilchilgee";
 import { useToololt } from "hooks/useToololt";
+import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
+import _ from "lodash";
+import useTalbainToololt from "hooks/useTalbainToololt";
 
 function TulburiinDelgerenguiTailan({ token }) {
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
@@ -14,6 +17,9 @@ function TulburiinDelgerenguiTailan({ token }) {
     moment().subtract(1, "days").startOf("day"),
     moment().subtract(1, "days").endOf("day"),
   ]);
+
+  const { guilgeeniiToololt, guilgeeniiToololtMutate } = useGuilgeeniiToololtAvya(turul === "Turees" &&  token, ognoo, undefined);
+  const { talbainToololt } = useTalbainToololt(turul === "Turees" && token, undefined);
 
   const togloomiinDun = useToololt(
     "/togloomiinDunAvya",
@@ -418,9 +424,75 @@ function TulburiinDelgerenguiTailan({ token }) {
           }
         });
       }
+    } else if(turul === "Turees" && !!guilgeeniiToololt)
+    {
+      ugugdul.push({
+        icon: "/plan.png",
+        ner: "Төлөвлөгөө / сар",
+        dun: _.get(guilgeeniiToololt, "eneSardTulukh.0.dun") || 0,
+      });
+      ugugdul.push({
+        icon: "/performance.png",
+        ner: "Гүйцэтгэл / сар",
+        dun: _.get(guilgeeniiToololt, "eneSardTulsun.0.dun") || 0,
+      });
+      ugugdul.push({
+        icon: "/gift-voucher.png",
+        ner: "Ваучер төлөлт",
+        dun: _.get(guilgeeniiToololt, "voucher.0.dun") || 0,
+      });
+      ugugdul.push({
+        icon: "/sale.png",
+        ner: "Хөнгөлөлт / сар",
+        dun: _.get(guilgeeniiToololt, "khungulult.0.dun") || 0,
+      });
+      ugugdul.push({
+        icon: "/avlaga.png",
+        ner: "Хуримтлагдсан авлага",
+        dun: _.get(guilgeeniiToololt, "avlaga.0.dun") || 0,
+      });
+      ugugdul.push({
+        icon: "/tsutsalsan.png",
+        ner: "Цуцлагдсан авлага",
+        dun: _.get(guilgeeniiToololt, "tsutslagdsanAvlaga.0.dun") || 0,
+      });
+
+      var niitHhemjee = talbainToololt?.reduce((a, b) => a + b.khemjee, 0) || 0;
+      ugugdul.push({
+        checkToo: true,
+        icon: "/niitTurees.png",
+        ner: "Нийт талбай",
+        dun: talbainToololt?.reduce((a, b) => a + b?.too, 0),
+        khemjee: talbainToololt?.reduce((a, b) => a + b?.khemjee, 0),
+        khuvi: 100,
+      });
+      ugugdul.push({
+        checkToo: true,
+        icon: "/niitTurees.png",
+        ner: "Нийт идэвхтэй",
+        dun: talbainToololt?.find((a) => a._id === true)?.too || 0,
+        khemjee: talbainToololt?.find((a) => a._id === true)?.khemjee || 0,
+        khuvi: (Number(talbainToololt?.find((a) => a._id === true)?.khemjee || 0) / Number(niitHhemjee)) * 100,
+      });
+      ugugdul.push({
+        icon: "/niitTurees.png",
+        checkToo: true,
+        ner: "Нийт идэвхгүй",
+        dun: talbainToololt?.find((a) => a._id === false)?.too || 0,
+        khemjee: talbainToololt?.find((a) => a._id === false)?.khemjee || 0,
+        khuvi: (Number(talbainToololt?.find((a) => a._id === false)?.khemjee || 0) / Number(niitHhemjee)) * 100,
+      });
+      ugugdul.push({
+        icon: "/niitTurees.png",
+        checkToo: true,
+        ner: "Нийтийн талбай",
+        dun: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.too || 0,
+        khemjee: talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0,
+        khuvi: (Number(talbainToololt?.find((a) => a._id === "niitiinTalbai")?.khemjee || 0) / Number(niitHhemjee)) * 100,
+      });
     }
     return ugugdul;
-  }, [zogsoolTulburMedeelel, turul, togloomiinDun]);
+  }, [zogsoolTulburMedeelel, turul, togloomiinDun, guilgeeniiToololt, talbainToololt]);
 
   return (
     <div className="mx-2">
@@ -579,7 +651,60 @@ function TulburiinDelgerenguiTailan({ token }) {
               </div>
             </div>
           )
-        ) : tulburiinMedeelel?.length > 0 ? (
+        ) :
+          turul === "Turees" ? 
+          (tulburiinMedeelel?.length > 0 ? (
+            <div className="mt-5 space-y-3">
+              {tulburiinMedeelel
+                .sort(function (a, b) {
+                  return b.khuvi - a.khuvi;
+                })
+                .map((a, i) => {
+                return (
+                  <div className="relative flex h-14 w-full items-center overflow-hidden rounded-md border-2 p-2" key={i}>
+                    {a.checkToo === true ? (<div
+                      style={{ width: `${String(Math.round(a.khuvi))}%` }}
+                      className={
+                        a.ner == "Зөрчил"
+                          ? `absolute left-0 top-0 z-0 flex h-full items-center bg-red-200 dark:bg-red-500 `
+                          : `absolute left-0 top-0 z-0 flex h-full items-center bg-green-100 dark:bg-green-500 `
+                      }
+                    >
+                      <div
+                        className={
+                          a.ner == "Зөрчил"
+                            ? "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-red-200 dark:bg-red-500 "
+                            : "absolute -right-1 h-20 w-16 animate-spin-slow rounded-3xl bg-green-100 dark:bg-green-500 "
+                        }
+                      />
+                    </div>) : "" }
+                    <img
+                      src={a.icon}
+                      className="z-10 mx-2 h-11 w-12 overflow-hidden rounded-md"
+                    />
+                    <div className="z-10 flex w-full justify-between text-lg font-semibold dark:text-gray-200">
+                      {a.ner}:
+                      <div className="flex font-normal">
+                        {formatNumber(a.dun, 0) || 0}{a.checkToo === true ? "" : "₮"}
+                        { a.checkToo === true ? 
+                          (<span className="border-l border-green-600 ml-2 pl-2"> {formatNumber(a.khemjee, 0) + "м²"}</span>
+                          ) : ""
+                        }
+                      </div>
+                    </div>
+                  </div>
+                );
+                
+              })}  
+            </div>
+          ) : 
+          (<div className="flex h-52 w-full items-center justify-center">
+            <div className="text-lg font-semibold text-black text-opacity-30 dark:text-gray-400">
+              Гүйлгээний тоололтын мэдээлэл байхгүй байна.
+            </div>
+          </div>))
+        
+          : tulburiinMedeelel?.length > 0 ? (
           <div className="mt-5 space-y-3">
             {tulburiinMedeelel.map((a, i) => {
               return (

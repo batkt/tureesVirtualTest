@@ -8,10 +8,9 @@ const toololtAvya = (url, token, barilgiinId) =>
     .then((res) => res.data)
     .catch(aldaaBarigch);
 
-export default function useTalbainToololt(token) {
-  const { barilgiinId } = useAuth();
+export default function useTalbainToololt(token, barilgiinId) {
   const { data, mutate } = useSWR(
-    !!token && !!barilgiinId ? ["/talbainTooAvya", token, barilgiinId] : null,
+    !!token ? ["/talbainTooAvya", token, barilgiinId] : null,
     toololtAvya,
     { revalidateOnFocus: false }
   );

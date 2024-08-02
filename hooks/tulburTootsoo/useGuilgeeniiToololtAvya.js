@@ -18,8 +18,7 @@ const fetcher = (url, token, ognoo, barilgiinId) => {
     .catch(aldaaBarigch)
 }
 
-function useGuilgeeniiToololtAvya(token, ognoo) {
-  const { barilgiinId } = useAuth()
+function useGuilgeeniiToololtAvya(token, ognoo, barilgiinId) {
   const { data, mutate } = useSWR(
     !!token ? ["/guilgeeniiToololtAvya", token, ognoo, barilgiinId] : null,
     fetcher,

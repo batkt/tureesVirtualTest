@@ -185,7 +185,7 @@ function guilgeeniiTuukh({ token }) {
   const [davkhar, setDavkhar] = React.useState(undefined);
 
   const { guilgeeniiToololt, guilgeeniiToololtMutate } =
-    useGuilgeeniiToololtAvya(token, ognoo);
+    useGuilgeeniiToololtAvya(token, ognoo, barilgiinId);
   const { tolooguiGereeniiToo, tolooguiGereeniiTooMutate } =
     useTuluugiiGereeniiToololtAvya(token, ognoo);
 
