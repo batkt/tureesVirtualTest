@@ -45,7 +45,7 @@ function QpayModal({
         onCancel={handleCancelQpay}
       >
         <div className="flex h-[450px] w-full flex-col items-center justify-center gap-[60px] pb-0">
-          <img src={qpayerTulukh?.qr_image} />
+          <img src={`data:image/png;base64,${qpayerTulukh?.qr_image}`} />
         </div>
         <div className="w-full text-center text-green-400">
           {formatNumber(qpayerTulukhDun)} ₮
