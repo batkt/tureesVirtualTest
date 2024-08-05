@@ -280,7 +280,7 @@ function ShineTogloomTulbur(
       setLoading(false);
       return;
     }
-    setKhuleegdejBuiQpay(`${uilchluugchiinId}${ilgeekhDun}`);
+    setKhuleegdejBuiQpay(`${data?._id}${ilgeekhDun}`);
     uilchilgee(token)
       .post("/qpayGargaya", {
         dun: ilgeekhDun,
