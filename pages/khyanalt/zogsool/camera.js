@@ -2505,22 +2505,22 @@ function camera({ token }) {
                                         return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosBelen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
                                       },
                                     },
-                                    // {
-                                    //   title: t("Пос карт"),
-                                    //   dataIndex: "tuukh",
-                                    //   __style__: { h: "right" },
-                                    //   render(v, p, i) {
-                                    //     return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosCard").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
-                                    //   },
-                                    // },
-                                    // {
-                                    //   title: t("Пос дансаар"),
-                                    //   dataIndex: "tuukh",
-                                    //   __style__: { h: "right" },
-                                    //   render(v, p, i) {
-                                    //     return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosKhariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
-                                    //   },
-                                    // },
+                                    {
+                                      title: t("Пос карт"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosCard").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                      },
+                                    },
+                                    {
+                                      title: t("Пос дансаар"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosKhariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                      },
+                                    },
                                     {
                                       title: t("Шалтгаан"),
                                       dataIndex: "tuukh",
