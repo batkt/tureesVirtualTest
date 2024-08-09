@@ -1185,19 +1185,20 @@ function Zogsool({ token }) {
                                 title: "Дүн",
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render: (v) => {
-                                  return (
-                                    v?.length > 0 &&
-                                    formatNumber(v[0]?.tulukhDun, 0)
-                                  );
+                                  return (v?.length > 0 && v[0]?.tulukhDun, 0);
                                 },
                               },
                               {
                                 title: t("Бэлэн"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               // {
@@ -1214,16 +1215,20 @@ function Zogsool({ token }) {
                                 title: t("Дансаар"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
                                 title: t("Карт"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khaan" || e.turul === "tdb" || e.turul === "khas" || e.turul === "golomt" || e.turul === "kapitron" || e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khaan" || e.turul === "tdb" || e.turul === "khas" || e.turul === "golomt" || e.turul === "kapitron" || e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               // {
@@ -1246,40 +1251,50 @@ function Zogsool({ token }) {
                                 title: t("Хөнгөлөлт"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khungulult").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khungulult").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
                                 title: t("qpay"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
                                 title: t("Пос бэлэн"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosBelen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosBelen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
                                 title: t("Пос карт"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosCard").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosCard").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
                                 title: t("Пос дансаар"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
                                 render(v, p, i) {
-                                  return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosKhariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosKhariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                 },
                               },
                               {
