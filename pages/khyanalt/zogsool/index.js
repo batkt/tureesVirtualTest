@@ -1188,7 +1188,7 @@ function Zogsool({ token }) {
                                 __numFmt__: '#,##0.00',
                                 __cellType__: 'TypeNumeric',
                                 render: (v) => {
-                                  return (v?.length > 0 && v[0]?.tulukhDun, 0);
+                                  return v[0]?.tulukhDun || 0;
                                 },
                               },
                               {
