@@ -334,6 +334,7 @@ function Zogsool({ token }) {
             uilchiluulegchToololt[0].turul.find((a) => a._id === null)?.too,
           0
         ),
+        query: { turul: { $nin : ["Дотоод", "Түрээслэгч", "Гэрээт"] } },
       },
       {
         name: "Түрээслэгч",
