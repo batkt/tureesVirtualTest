@@ -41,7 +41,7 @@ import useDans from "hooks/useDans";
 import useJagsaalt from "hooks/useJagsaalt";
 import { useTranslation } from "react-i18next";
 import khatuuZagvar from "tools/zagvar/tur";
-import khatuuZagvarFoodCity from "tools/zagvar/turFoodCity";
+import khatuuZagvarFoodCity from "tools/zagvar/turFoodCityTemp";
 
 const ilgeekhTurul = "davkharaar";
 
@@ -415,7 +415,8 @@ function tulburTootsoo({ token }) {
                 formatNumber(khungulultKhassanTulukhDunNuatgui || 0)
               );
               
-              a.tariff = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tariff); 
+              if(a.tailbar === "Цахилгаан" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
+                a.tariff = ashiglaltiinZardal?.jagsaalt?.filter(b => b.ner === a.tailbar).map((b) => b.tariff); 
               
               zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                 new RegExp(`&lt;${a.tailbar}.tariff&gt;`, "g"),
