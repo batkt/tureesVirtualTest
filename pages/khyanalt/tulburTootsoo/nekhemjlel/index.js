@@ -165,17 +165,20 @@ function tulburTootsoo({ token }) {
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
-          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
-            ? khungulsunTalbainNiitUne
-            : 0;
-
-          kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
-            ? medeelel?.aldangiinUldegdel
-            : 0;
-          kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur
-            ? medeelel.umnukhSariinUrTulbur
-            : 0;
-
+          if(ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" && barilgiinId !== "6659717af6cab41f3ec723b5") // Foodcity uyd
+          {
+            kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+              ? khungulsunTalbainNiitUne
+              : 0;
+          }
+          
+            kaidudZoriulsanNiitTulburiinNiilber += medeelel?.aldangiinUldegdel
+              ? medeelel?.aldangiinUldegdel
+              : 0;
+            kaidudZoriulsanNiitTulburiinNiilber += medeelel.umnukhSariinUrTulbur
+              ? medeelel.umnukhSariinUrTulbur
+              : 0;
+          
           if (!!zagvar?.nekhemjlekh) {
             medeelel.eneSardTulukhUsgeer = numberToWords(
               medeelel?.eneSardTulukhDun *
