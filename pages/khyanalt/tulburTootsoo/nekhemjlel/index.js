@@ -857,9 +857,13 @@ function tulburTootsoo({ token }) {
       );
 
       var kaidudZoriulsanNiitTulburiinNiilber = 0;
-      kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
-        ? khungulsunTalbainNiitUne
-        : 0;
+      var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
+      if(!!zardluud && zardluud.length > 0)
+      {
+        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+          ? khungulsunTalbainNiitUne
+          : 0;
+      }
       kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel
         ? nekhemjlekh?.aldangiinUldegdel
         : 0;
@@ -1208,9 +1212,13 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
         var kaidudZoriulsanNiitTulburiinNiilber = 0;
-        kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
-          ? khungulsunTalbainNiitUne
-          : 0;
+        var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
+        if(!!zardluud && zardluud.length > 0)
+        {
+          kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
+            ? khungulsunTalbainNiitUne
+            : 0;
+        }
         kaidudZoriulsanNiitTulburiinNiilber += nekhemjlekh?.aldangiinUldegdel
           ? nekhemjlekh?.aldangiinUldegdel
           : 0;
