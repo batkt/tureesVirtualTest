@@ -2441,16 +2441,14 @@ function camera({ token }) {
                                         return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                       },
                                     },
-                                    // {
-                                    //   title: t("Зээл"),
-                                    //   dataIndex: "tuukh",
-                                    //   __style__: { h: "right" },
-                                    //   render(v, p, i) {
-                                    //     return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "zeel").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
-                                    //   },
-                                    // },
-                                    // { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
-
+                                    {
+                                      title: t("Зээл"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "zeel").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                      },
+                                    },
                                     {
                                       title: t("Дансаар"),
                                       dataIndex: "tuukh",
@@ -2471,22 +2469,22 @@ function camera({ token }) {
                                         return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khaan" || e.turul === "tdb" || e.turul === "khas" || e.turul === "golomt" || e.turul === "kapitron" || e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
                                       },
                                     },
-                                    // {
-                                    //   title: t("Токи"),
-                                    //   dataIndex: "tuukh",
-                                    //   __style__: { h: "right" },
-                                    //   render(v, p, i) {
-                                    //     return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "toki").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
-                                    //   },
-                                    // },
-                                    // {
-                                    //   title: t("Киоск"),
-                                    //   dataIndex: "tuukh",
-                                    //   __style__: { h: "right" },
-                                    //   render(v, p, i) {
-                                    //     return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "kiosk").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
-                                    //   },
-                                    // },
+                                    {
+                                      title: t("Токи"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "toki").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                      },
+                                    },
+                                    {
+                                      title: t("Киоск"),
+                                      dataIndex: "tuukh",
+                                      __style__: { h: "right" },
+                                      render(v, p, i) {
+                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "kiosk").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                      },
+                                    },
                                     {
                                       title: t("Хөнгөлөлт"),
                                       dataIndex: "tuukh",

@@ -165,7 +165,8 @@ function tulburTootsoo({ token }) {
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
-          if(ajiltan?.baiguullagiinId !== "63c0f31efe522048bf02086d" && barilgiinId !== "6659717af6cab41f3ec723b5") // Foodcity uyd
+          var zardluud = medeelel.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
+          if(!!zardluud && zardluud.length > 0)
           {
             kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
               ? khungulsunTalbainNiitUne
@@ -301,16 +302,43 @@ function tulburTootsoo({ token }) {
             medeelel.khuviinTamga = renderToString(
               <span style={{ position: "absolute", zIndex: 1 }}>
                 <img
-                  src={"/khuviinTamga.png"}
+                  src={"/Tamga1.png"}
                   style={{
-                    width: 115,
-                    height: 100,
+                    width: 250,
+                    height: 150,
                     transform: "translate(-10%, -50%)",
                     opacity: 0.65,
                   }}
                 />
               </span>
             );
+
+            medeelel.signature1 = renderToString(
+              <span style={{ position: "absolute" }}>
+                <img
+                  src={"/signature1.png"}
+                  style={{
+                    width: 320,
+                    height: 85,
+                    transform: "translate(-45%, -45%)",
+                  }}
+                />
+              </span>
+            );
+
+            medeelel.signature2 = renderToString(
+              <span style={{ position: "absolute" }}>
+                <img
+                  src={"/signature2.png"}
+                  style={{
+                    width: 330,
+                    height: 135,
+                    transform: "translate(-28%, -44%)",
+                  }}
+                />
+              </span>
+            );
+
             medeelel.umnukhSariinUrTulbur = formatNumber(
               medeelel.umnukhSariinUrTulbur
             );

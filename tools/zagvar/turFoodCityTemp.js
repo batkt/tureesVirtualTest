@@ -390,7 +390,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
     <div style="display: flex; width: 100%; align-items: flex-start; justify-content: space-between; gap: 0.5rem;">
       <div style="display: block; width: 20%; margin: 4rem;">
         <div>
-          &lt;tamga&gt;
+          &lt;khuviinTamga&gt;
         </div>
       </div>
       <div style="display: block; width: 60%;">
@@ -398,10 +398,10 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
           <p>Мөнгөн дүн үсгээр:&nbsp;&lt;garaasBodsonNiitDunUsgeer&gt; болно</p>
         </div>
         <div style="margin-top: 1rem;"> 
-          Дарга:&nbsp;..................................................................................................../П.Гүндэгмаа/
+          Дарга:&nbsp;..........................................&lt;signature1&gt;........................................................../П.Гүндэгмаа/
         </div>
         <div style="margin-top: 0.5rem;"> 
-          Нягтлан бодогч:&nbsp;................................................................................/Г. Хонгорзул/
+          Нягтлан бодогч:&nbsp;.................................&lt;signature2&gt;.............................................../Г. Хонгорзул/
         </div>
         <div style="margin-top: 0.5rem;"> 
           Хүлээн авсан:&nbsp;...................................................................................../&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/
