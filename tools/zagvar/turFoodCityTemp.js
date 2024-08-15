@@ -16,7 +16,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <p style="white-space: nowrap;">Байгууллагын нэр:</p>
           <p style="width: 100%; text-align: left; font-weight: 600;">
-            &nbsp;${baiguullaga.ner}
+            &nbsp;${baiguullaga.ner} РД:2565935
           </p>
         </div>
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
@@ -411,7 +411,7 @@ const khatuuZagvarFoodCity = (medeelel, ajiltan, baiguullaga) => {
       </div>
     </div> 
     <div style="margin-left: 2rem;">
-      <b>Санамж:&nbsp;Хугацаандаа төлөөгүй бол Гэрээний дагуу хоногийн 0.5% алданги төлөхийг анхааруулая</br>Төлбөрөө хугацаанд нь төлсөнд баярлалаа.</br>        
+      <b>Санамж:&nbsp;Хугацаандаа төлөөгүй бол Гэрээний дагуу хоногийн 0.5% алданги төлөхийг анхааруулъя</br>Төлбөрөө хугацаандаа төлсөнд баярлалаа.</br>        
     </div>
   </div>`;
 };
