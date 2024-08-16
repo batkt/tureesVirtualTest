@@ -475,7 +475,7 @@ function tulburTootsoo({ token }) {
               // { tailbar : "Хүйтэн ус", umnukhzaalt, suuliin zaalt, dun, nuat, boxirus, tseverus, usxalaasniitulbur }
               if(a.tailbar === "Цахилгаан" || a.tailbar === "Халуун ус" || a.tailbar === "Хүйтэн ус")
               {
-                a.zuruuZaalt = formatNumber(a.suuliinZaalt || 0) - formatNumber(a.umnukhZaalt || 0)
+                a.zuruuZaalt = (a.suuliinZaalt || 0) - (a.umnukhZaalt || 0)
                 zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                   new RegExp(`&lt;${a.tailbar}.zuruuZaalt&gt;`, "g"),
                   formatNumber(a.zuruuZaalt || 0) || ""
