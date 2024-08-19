@@ -165,8 +165,8 @@ function tulburTootsoo({ token }) {
 
           var kaidudZoriulsanNiitTulburiinNiilber = 0;
 
-          var zardluud = medeelel.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
-          if(!!zardluud && zardluud.length > 0)
+          var zardluud = medeelel.zardluud.filter(a => a.tailbar === "Менежмент төлбөр хуучин");
+          if(!zardluud || zardluud.length === 0)
           {
             kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
               ? khungulsunTalbainNiitUne
@@ -857,8 +857,8 @@ function tulburTootsoo({ token }) {
       );
 
       var kaidudZoriulsanNiitTulburiinNiilber = 0;
-      var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
-      if(!!zardluud && zardluud.length > 0)
+      var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежмент төлбөр хуучин");
+      if(!zardluud || zardluud.length === 0)
       {
         kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
           ? khungulsunTalbainNiitUne
@@ -1212,8 +1212,8 @@ function tulburTootsoo({ token }) {
           "мөнгө"
         );
         var kaidudZoriulsanNiitTulburiinNiilber = 0;
-        var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежментийн төлбөр");
-        if(!!zardluud && zardluud.length > 0)
+        var zardluud = nekhemjlekh.zardluud.filter(a => a.tailbar === "Менежмент төлбөр хуучин");
+        if(!zardluud || zardluud.length === 0)
         {
           kaidudZoriulsanNiitTulburiinNiilber += khungulsunTalbainNiitUne
             ? khungulsunTalbainNiitUne
