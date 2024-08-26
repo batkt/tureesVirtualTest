@@ -76,7 +76,7 @@ import StackStream from "./stackStream";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
-import StackIkhNaydStream from "./StackIkhNaydStream";
+import StackIkhNaydStream from "./stackIkhNaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
@@ -2030,6 +2030,24 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                   />
+                ) : baiguullaga?._id === "669e28beb13f35e669e773a6" ? (
+                  camerVal[0] === "192.168.0.109" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"Admin123"}
+                      Camer={camerVal[0]}
+                      PORT={554}
+                    />
+                  ) : (
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
+                  )
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
@@ -2436,7 +2454,19 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "belen"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     // {
@@ -2454,7 +2484,20 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khariltsakh"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2462,7 +2505,25 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khaan" || e.turul === "tdb" || e.turul === "khas" || e.turul === "golomt" || e.turul === "kapitron" || e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khaan" ||
+                                                    e.turul === "tdb" ||
+                                                    e.turul === "khas" ||
+                                                    e.turul === "golomt" ||
+                                                    e.turul === "kapitron" ||
+                                                    e.turul === "tur"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     // {
@@ -2486,7 +2547,20 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khungulult").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khungulult"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2494,7 +2568,19 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "qpay"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2502,7 +2588,19 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosBelen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "PosBelen"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     // {
