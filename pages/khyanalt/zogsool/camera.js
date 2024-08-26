@@ -546,23 +546,12 @@ function camera({ token }) {
             url = `http://localhost:5000/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
           }
 
-          axios
-            .get(url)
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
-
           if (
             uilchluulegch?.turul === "Үнэгүй" ||
             // (uilchluulegch?.tuukh &&
             //   uilchluulegch?.tuukh?.length > 0 &&
             // dunTuluv &&
-            yanzalsanNiitDun === 0
+            uilchluulegch?.niitDun === 0
             // )
           ) {
             if (
@@ -581,6 +570,17 @@ function camera({ token }) {
               }
             }
           }
+          axios
+            .get(url)
+            .then((res) => {
+              if (res) {
+                console.log("amjilttai:", res);
+              }
+            })
+            .catch((err) => {
+              console.log("aldaa:", err);
+            });
+
           onRefresh();
         }
       }
