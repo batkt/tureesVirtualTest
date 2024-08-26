@@ -254,7 +254,7 @@ function tulburTootsoo() {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
           } else {
-            var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
           }
         } else {
           ugugdul.tailbar = "Түрээс";
@@ -263,7 +263,7 @@ function tulburTootsoo() {
             var khymdarsanDun =
               khymdraaguiDun * (parseFloat(tootsoolol?.khungulukhKhuvi) / 100);
           } else {
-            var khymdarsanDun = khymdraaguiDun - parseFloat(khunglugdsunDun);
+            var khymdarsanDun = parseFloat(tootsoolol?.khunglugdsunDun);
           }
         }
 
