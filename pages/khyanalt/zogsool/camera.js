@@ -562,7 +562,7 @@ function camera({ token }) {
             // (uilchluulegch?.tuukh &&
             //   uilchluulegch?.tuukh?.length > 0 &&
             // dunTuluv &&
-            uilchluulegch?.niitDun === 0
+            yanzalsanNiitDun === 0
             // )
           ) {
             if (
