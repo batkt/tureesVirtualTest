@@ -76,7 +76,7 @@ import StackStream from "./stackStream";
 import TulburiinDelgerenguiTailan from "components/pageComponents/zogsool/TulburiinDelgerenguiTailan";
 import ZogsoolCameraTable from "components/pageComponents/zogsool/ZogsoolCameraTable";
 import R2WPlayerComponent from "components/streamPlayer";
-import StackIkhNaydStream from "./stackIkhNaydStream";
+import StackIkhNaydStream from "./StackIkhNaydStream";
 import ShineTulbur from "components/pageComponents/tulbur/ShineTulbur";
 import KhungulukhTsonkh from "components/pageComponents/zogsool/KhungulukhTsonkh";
 import { CiDiscount1 } from "react-icons/ci";
