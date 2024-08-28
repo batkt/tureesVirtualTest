@@ -499,9 +499,8 @@ function tulburTootsoo({ token }) {
                   tseverusDun += a.zuruuZaalt * a.tseverusTariff  // Халуун ус + Хүйтэн ус
                   boxirusDun += a.zuruuZaalt * a.boxirusTariff  // Халуун ус + Хүйтэн ус
                   usxalaasniitulburDun += a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff) // Халуун ус
-                  niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
-
-                  
+                  // niilberDun += a.zuruuZaalt * a.tseverusTariff + a.zuruuZaalt * a.boxirusTariff + (a.tailbar === "Хүйтэн ус" ? 0 : (a.zuruuZaalt * a.usxalaasniitulburTariff))
+                  niilberDun += a.tulukhDun
 
                   zagvar.nekhemjlekh = zagvar?.nekhemjlekh?.replace(
                     new RegExp(`&lt;${a.tailbar}.tseverusTariff&gt;`, "g"),
