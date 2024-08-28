@@ -546,23 +546,12 @@ function camera({ token }) {
             url = `http://localhost:5000/api/sambarOgnootoi/${garsanKhaalga}/${yanzalsanMashiniiDugaar}/${yanzalsanNiitDun}/${ekhlekhOgnoo}/${duusakhOgnoo}`;
           }
 
-          axios
-            .get(url)
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
-
           if (
             uilchluulegch?.turul === "Үнэгүй" ||
             // (uilchluulegch?.tuukh &&
             //   uilchluulegch?.tuukh?.length > 0 &&
             // dunTuluv &&
-            uilchluulegch?.niitDun === 0
+            yanzalsanNiitDun === 0
             // )
           ) {
             if (
@@ -581,6 +570,17 @@ function camera({ token }) {
               }
             }
           }
+          axios
+            .get(url)
+            .then((res) => {
+              if (res) {
+                console.log("amjilttai:", res);
+              }
+            })
+            .catch((err) => {
+              console.log("aldaa:", err);
+            });
+
           onRefresh();
         }
       }
@@ -2030,6 +2030,24 @@ function camera({ token }) {
                     Camer={camerVal[0]}
                     PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
                   />
+                ) : baiguullaga?._id === "669e28beb13f35e669e773a6" ? (
+                  camerVal[0] === "192.168.0.109" ? (
+                    <R2WPlayerComponent
+                      USER={"admin"}
+                      ROOT={"live"}
+                      PASSWD={"Admin123"}
+                      Camer={camerVal[0]}
+                      PORT={554}
+                    />
+                  ) : (
+                    <R2WPlayerComponent
+                      USER={parkingJagsaalt?.[0]?.tokhirgoo?.USER}
+                      ROOT={parkingJagsaalt?.[0]?.tokhirgoo?.ROOT}
+                      PASSWD={parkingJagsaalt?.[0]?.tokhirgoo?.PASSWD}
+                      Camer={camerVal[0]}
+                      PORT={parkingJagsaalt?.[0]?.tokhirgoo?.PORT}
+                    />
+                  )
                 ) : parkingJagsaalt?.[0]?.tokhirgoo ? (
                   parkingJagsaalt?.[0]?.tokhirgoo?.socketEsekh === true ? (
                     <SocketStream
@@ -2425,8 +2443,8 @@ function camera({ token }) {
                                       title: t("Дүн"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
                                         return v?.[0]?.tulukhDun || 0;
                                       },
@@ -2435,10 +2453,22 @@ function camera({ token }) {
                                       title: t("Бэлэн"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "belen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "belen"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2446,27 +2476,70 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "zeel").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "zeel"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Дансаар"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khariltsakh"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Карт"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khaan" || e.turul === "tdb" || e.turul === "khas" || e.turul === "golomt" || e.turul === "kapitron" || e.turul === "tur").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khaan" ||
+                                                    e.turul === "tdb" ||
+                                                    e.turul === "khas" ||
+                                                    e.turul === "golomt" ||
+                                                    e.turul === "kapitron" ||
+                                                    e.turul === "tur"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2474,7 +2547,19 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "toki").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "toki"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
@@ -2482,57 +2567,131 @@ function camera({ token }) {
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
                                       render(v, p, i) {
-                                        return formatNumber((v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "kiosk").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0);
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "kiosk"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Хөнгөлөлт"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "khungulult").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "khungulult"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("qpay"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpay").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "qpay"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Пос бэлэн"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosBelen").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return formatNumber(
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "PosBelen"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Пос карт"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosCard").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) => e.turul === "PosCard"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
                                       title: t("Пос дансаар"),
                                       dataIndex: "tuukh",
                                       __style__: { h: "right" },
-                                      __numFmt__: '#,##0.00',
-                                      __cellType__: 'TypeNumeric',
+                                      __numFmt__: "#,##0.00",
+                                      __cellType__: "TypeNumeric",
                                       render(v, p, i) {
-                                        return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "PosKhariltsakh").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                        return (
+                                          (v[0]?.tulbur?.length > 0
+                                            ? v[0]?.tulbur
+                                                ?.filter(
+                                                  (e) =>
+                                                    e.turul === "PosKhariltsakh"
+                                                )
+                                                .reduce(
+                                                  (a, b) =>
+                                                    a + Number(b.dun || 0),
+                                                  0
+                                                )
+                                            : 0) || 0
+                                        );
                                       },
                                     },
                                     {
