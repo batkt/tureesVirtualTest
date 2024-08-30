@@ -201,11 +201,6 @@ function Zogsool({ token }) {
         !!tulbur && tulbur === "card"
           ? { $in: ["khaan", "tdb", "khas", "golomt", "kapitron", "tur"] }
           : tulbur;
-      baseQuery["tuukh.tulbur.ognoo"] = {
-        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-      };
-      delete baseQuery.createdAt;
     }
     if (tuluv !== "") {
       if (tuluv === -2) {
@@ -252,7 +247,21 @@ function Zogsool({ token }) {
         ];
       }
     }
-
+    if (nemeh == null && !!ognoo) {
+      nemeh = [
+        {
+          "tuukh.0.tulbur": [],
+        },
+        {
+          "tuukh.tulbur.ognoo": {
+            createdAt: {
+              $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+              $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+            },
+          },
+        },
+      ];
+    }
     return nemeh;
   }, [ognoo, zogsoolId, shuult, tuluv, tulbur]);
 
