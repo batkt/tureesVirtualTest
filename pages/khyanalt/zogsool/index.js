@@ -232,9 +232,6 @@ function Zogsool({ token }) {
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
-    if (baiguullaga?._id === "669e28beb13f35e669e773a6") {
-      delete baseQuery.createdAt;
-    }
     return baseQuery;
   }, [ognoo, zogsoolId, shuult, tuluv, tulbur, shalgakhTsag]);
 
@@ -248,29 +245,6 @@ function Zogsool({ token }) {
           { "tuukh.0.uneguiGarsan": { $exists: true } },
         ];
       }
-    }
-    if (nemeh == null && !!ognoo) {
-      nemeh = [
-        {
-          $and: [
-            {
-              "tuukh.0.tulbur": [],
-            },
-            {
-              createdAt: {
-                $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-                $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-              },
-            },
-          ],
-        },
-        {
-          "tuukh.tulbur.ognoo": {
-            $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
-            $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
-          },
-        },
-      ];
     }
     return nemeh;
   }, [ognoo, zogsoolId, shuult, tuluv, tulbur]);
