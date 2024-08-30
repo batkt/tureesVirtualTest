@@ -1267,6 +1267,16 @@ function Zogsool({ token }) {
                                 },
                               },
                               {
+                                title: t("QPAY Урьдчилсан"),
+                                dataIndex: "tuukh",
+                                __style__: { h: "right" },
+                                __numFmt__: '#,##0.00',
+                                __cellType__: 'TypeNumeric',
+                                render(v, p, i) {
+                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpayUridchilsan").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                },
+                              },
+                              {
                                 title: t("Пос бэлэн"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
