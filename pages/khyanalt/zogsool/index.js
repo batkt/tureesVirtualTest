@@ -232,7 +232,7 @@ function Zogsool({ token }) {
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
-    if (baiguullaga?._id == "669e28beb13f35e669e773a6") {
+    if (baiguullaga?._id === "669e28beb13f35e669e773a6") {
       delete baseQuery.createdAt;
     }
     return baseQuery;
