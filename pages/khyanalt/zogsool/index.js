@@ -205,6 +205,7 @@ function Zogsool({ token }) {
         $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
         $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
       };
+      delete baseQuery.ognoo;
     }
     if (tuluv !== "") {
       if (tuluv === -2) {
