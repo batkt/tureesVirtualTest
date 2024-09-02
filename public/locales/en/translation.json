@@ -837,5 +837,22 @@
   "Төлөв сонгоно уу": "Select type",
   "Ирээдүйн огноогоор заалт оруулах боломжгүй!": "Can not enter future date!",
   "Тоглосон тоо": "Recently played",
-  "QPay Урьдчилсан": "qpayUridchilsan"
+  "QPay Урьдчилсан": "qpayUridchilsan",
+  "Цонжин цогцолбороор зочилж Монгол орны түүх, уламжлалтай танилцаарай.": "Get to know the history and traditions of Mongolia by visiting the Tsonjin monument complex.",
+  "Тасалбар авах": "Ticket here",
+  "Төлөх": "Pay", 
+  "Төлбөрийн аргыг сонгоно уу": "Select the payment method",
+  "Үргэлжлүүлэх": "Contiune",
+  "QR код уншуулах": "Scan the QR code",
+  "Шалгах": "Done",
+  "Картаа оруулна уу.": "Please insert the card.",
+  "Баримтын төрлийг сонгоно уу": "Select the receipt type",
+  "Хувь хүн": "Individual",
+  "Байгууллага": "Entity",
+  "Амжилттай төлсөн": "Successfully paid",
+  "Баримтын дугаар": "Number",
+  "Баримтын дүн": "Receipt amount",
+  "Зэв ТАБС ХХК": "Zev Tabs Ltd",
+  "Гүйлгээ амжилттай": "Transaction successful",
+  "Гүйлгээ амжилтгүй": "Transaction failed"
 }
