@@ -251,6 +251,8 @@ function ShineTogloomTulbur(
           setLoading(false);
         } else {
           setTuluv(tuluv === 1 ? 2 : tuluv === 2 ? 3 : 1);
+          setAlkham(2);
+          onRefresh();
           message.success("Төлбөр амжилттай хадгалагдлаа");
           setLoading(false);
         }

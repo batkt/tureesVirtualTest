@@ -89,6 +89,35 @@
 .khuviinDrawer .ant-drawer-content {
   @apply rounded-t-[120px] bg-[#1E1E1E];
 }
+.togloomDrawer .ant-drawer-content {
+  @apply rounded-t-[120px] bg-[#FFFFFF];
+}
+
+.togloomDrawer .ant-drawer-body {
+  padding: 0px !important;
+}
+
+.togloomKhaakh {
+  background-color: #E9E9E9;
+  width: 250px;
+  height: 124px;
+  border-bottom-right-radius: 60px;
+  border-bottom-left-radius: 60px;
+}
+
+.togloomKhaakh45 {
+  background-color: #E9E9E9;
+  width: 256px;
+  height: 218px;
+  border-radius: 45px;
+}
+
+.togloomKhaakhNone {
+  width: 256px;
+  height: 218px;
+  border-radius: 45px;
+}
+
 .khuviinDrawerMobile .ant-drawer-content {
   @apply rounded-t-[40px] bg-[#1E1E1E] dark:bg-[#1E1E1E];
 }
@@ -1016,6 +1045,7 @@ input:-webkit-autofill {
 }
 .ant-switch {
   @apply ring-1 ring-gray-200 dark:ring-gray-700 !important;
+  background-color: #1db771 !important;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -1173,4 +1203,25 @@ input[type="number"] {
 
 .ant-cascader-menu-item-active {
   @apply dark:bg-gray-800 !important;
+}
+
+.antdInputTextCenter .ant-input-number-input {
+  /* font-size: 32px; */
+  @apply text-center h-[100%] !important;
+}
+
+.antdInputTextRight .ant-input-number-input {
+  /* font-size: 32px; */
+  @apply text-right !important;
+}
+.border-5 {
+  border-width: 5px !important;
+}
+
+.rounded-80 {
+  border-radius: 80px;
+}
+
+.rounded-45 {
+  border-radius: 45px;
 }

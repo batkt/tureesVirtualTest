@@ -210,6 +210,10 @@ export const tsonknuud = [
     key: "/khyanalt/togloom/togloomTuv",
   },
   {
+    ner: "Тоглоомын киоск",
+    key: "/khyanalt/togloomKiosk",
+  },
+  {
     key: "/khyanalt/tailan",
     ner: "Тайлан",
     tailbar:
@@ -893,6 +897,12 @@ export const khuudasnuud = [
     ner: "Киоск",
     khuudasniiNer: "kiosk",
     href: "/khyanalt/kiosk",
+    icon: <MobileOutlined className="text-2xl" />,
+  },
+  {
+    ner: "Тоглоомын киоск",
+    khuudasniiNer: "togloomKiosk",
+    href: "/khyanalt/togloomKiosk",
     icon: <MobileOutlined className="text-2xl" />,
   },
   {
