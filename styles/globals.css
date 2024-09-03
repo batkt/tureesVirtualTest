@@ -195,6 +195,7 @@ audio::-webkit-media-controls-volume-control-container {
     overflow: unset;
     height: auto !important;
   }
+  .pagebreak { page-break-inside: avoid; }
 }
 
 .A4 {

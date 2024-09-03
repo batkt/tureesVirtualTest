@@ -11,7 +11,7 @@ import moment from "moment";
 import uilchilgee, { aldaaBarigch, socket } from "services/uilchilgee";
 import QRCode from "react-qr-code";
 import { useReactToPrint } from "react-to-print";
-import { useQRCode } from "next-qrcode";
+import Barcode from 'react-barcode';
 
 export function useThemeValue() {
         const { theme, setTheme } = useTheme();
@@ -45,8 +45,7 @@ const TogloomKiosk = () => {
     const [baiguullagaNer, setBaiguullagaNer] = useState();
     const [register, setRegister] = useState("");
     const [barCodes, setBarCodes] = useState([]);
-    const { Canvas } = useQRCode();
-
+    
     const eBarimtRef = React.useRef(null);
     
     const handlePrint = useReactToPrint({
@@ -55,6 +54,7 @@ const TogloomKiosk = () => {
       });
 
     function khaaya() {
+        khaalgaNeey(barCodes);
         setAlkham(0);
         setDrawerOngoikh(false);
         setMinutes(4);
@@ -72,6 +72,17 @@ const TogloomKiosk = () => {
         setRegister("");
         setBarCodes([]);
     }
+
+    const khaalgaNeey = (barCodes) => {
+        axios
+        .get("http://localhost:5000/api/userKhadgalakh/" + barCodes + "")
+        .then(function (response) {
+            if (!!response.message) console.log("/api/userKhadgalakh", response);
+        })
+        .catch(function (error) {
+        console.log("ERROR: /api/userKhadgalakh", error);
+        });
+    };
 
     const value = React.useMemo(() => {
         const belen = tulbur.find((a) => a.turul === "belen")?.dun;
@@ -432,7 +443,19 @@ const TogloomKiosk = () => {
         setBarCodes([])
         if(!!tasalbarShirkheg && tasalbarShirkheg > 0)
             for(var i = 0; i < tasalbarShirkheg; i++)
-                barCodes.push(moment(new Date()).format("YYYYMMDDHHmmss") + (i < 10 ? ("0" + i) :  i));
+            {
+                const nowDate = new Date();
+                const year = nowDate.getFullYear();
+                const month = nowDate.getMonth() + 1;
+                const day = nowDate.getDate();
+                const hours = nowDate.getHours();
+                const minutes = nowDate.getMinutes();
+                const seconds = nowDate.getSeconds();
+                console.log('a: ------------ %d %d %d %d %d %d', year, month, day, hours, minutes, seconds);
+                const value = ((year-2000)*12*31 + (month -1)*31 + (day-1))*(24*60*60) + hours* 60 *60 + minutes*60 + seconds + i;
+                console.log('value: ------------ %d', value);
+                barCodes.push(value);
+            }
         setBarCodes(barCodes);   
     };
 
@@ -773,7 +796,7 @@ const TogloomKiosk = () => {
                             <button
                                 className="flex h-[151px] w-[450px] items-center justify-center gap-4 rounded-45 bg-[#1DB771] px-4 py-2 text-5xl font-bold text-white focus:outline-none"
                                 onClick={() => {
-                                    handlePrint();
+                                    handlePrint(); 
                                 }}>
                                 <div className="pl-10 pr-10">{t("Хэвлэх")}</div>
                                 <div className="mt-2 font-[800]">
@@ -932,27 +955,16 @@ const TogloomKiosk = () => {
                                     {formatNumber(tasalbarDun, 2)}₮
                                 </td>
                             </tr>
-                            {barCodes?.map((mur) => {
+                            {barCodes?.map((mur, index) => {
+                                index++
                                 return (
                                     <tr>
-                                        <td colSpan={2} className="text-center">
-                                            <div className="flex w-full items-center justify-center">
-                                                Дугаар: {mur}
+                                        <td colSpan={2} className="pagebreak text-center border-dashed border-b-4 border-black">
+                                            <div className="text-5xl font-bold text-black m-5">
+                                                {index}
                                             </div>
-                                            <div className="flex w-full items-center justify-center">
-                                                <Canvas
-                                                    text={mur}
-                                                    options={{
-                                                        level: "M",
-                                                        margin: 3,
-                                                        scale: 4,
-                                                        width: 200,
-                                                        color: {
-                                                        dark: "#000000",
-                                                        light: "#FFFFFF",
-                                                        },
-                                                    }}
-                                                />
+                                            <div className="flex w-full items-center justify-center mb-20">
+                                                <Barcode value={mur}/>
                                             </div>
                                         </td>
                                     </tr>  
@@ -1001,24 +1013,16 @@ const TogloomKiosk = () => {
                                     {formatNumber(tasalbarDun, 2)}₮
                                 </td>
                             </tr>
-                            {barCodes?.map((mur) => {
+                            {barCodes?.map((mur, index) => {
+                                index++
                                 return (
                                     <tr>
-                                        <td colSpan={2} className="text-center">
-                                            <div className="flex w-full items-center justify-center">
-                                                <Canvas
-                                                    text={mur}
-                                                    options={{
-                                                        level: "M",
-                                                        margin: 3,
-                                                        scale: 4,
-                                                        width: 200,
-                                                        color: {
-                                                        dark: "#000000",
-                                                        light: "#FFFFFF",
-                                                        },
-                                                    }}
-                                                />
+                                        <td colSpan={2} className="pagebreak text-center border-dashed border-b-4 border-black">
+                                            <div className="text-5xl font-bold text-black m-5">
+                                                {index}
+                                            </div>
+                                            <div className="flex w-full items-center justify-center mb-20">
+                                                <Barcode value={mur}/>
                                             </div>
                                         </td>
                                     </tr>  
