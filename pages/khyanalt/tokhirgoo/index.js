@@ -28,7 +28,8 @@ import {
 import NevtreltiinTuukh from "components/pageComponents/tokhirgoo/NevtreltiinTuukh";
 import { useTranslation } from "react-i18next";
 import TogloominTuv from "components/pageComponents/tokhirgoo/TogloominTuv";
-import { TbLego } from "react-icons/tb";
+import Tasalbar from "components/pageComponents/tokhirgoo/Tasalbar";
+import { TbLego, TbTicket } from "react-icons/tb";
 import BarilgiinTokhirgoo from "components/pageComponents/tokhirgoo/BarilgiinTokhirgoo";
 import { BiBuilding } from "react-icons/bi";
 
@@ -340,6 +341,15 @@ function AjiltanBurtgel({ token }) {
           ),
           text: "Тоглоомын төв",
           tsonkh: TogloominTuv,
+        },
+        {
+          icon: (
+            <div className="mr-2 flex items-center justify-center text-base">
+              <TbTicket />
+            </div>
+          ),
+          text: "Тасалбар",
+          tsonkh: Tasalbar,
         },
         {
           icon: (

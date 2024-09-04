@@ -377,7 +377,7 @@ function TogloomTulburiinDelgerenguiTailan(
             <div className="flex ">Нийт дүн:</div>
             <div>
               {formatNumber(
-                tulburiinMedeelel?.reduce((a, b) => a + b?.dun, 0) || 0
+                tulburiinMedeelel?.filter((a) => a.ner !== "Хөнгөлөлт") .reduce((a, b) => a + b?.dun, 0) || 0
               ) + "₮"}
             </div>
           </div>
