@@ -1738,7 +1738,7 @@ function camera({ token }) {
         },
         headers: {
           Accept: "*/*",
-          "X-Requested-With": "XMLHttpRequest",
+          Connection: "keep-alive",
           "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         data: data,
