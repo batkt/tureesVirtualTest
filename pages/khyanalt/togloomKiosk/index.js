@@ -271,7 +271,8 @@ const TogloomKiosk = () => {
     function batalgaajuulya(turul, val) {
         if (turul === "khaan") {
             tulbur.find((a) => a.turul === "khaan").khariu = val;
-            guilgeeniiTuukhKhadgalya(tulbur, () => { setAlkham(4) });
+            setAlkham(4);
+            guilgeeniiTuukhKhadgalya(tulbur, false);
             setTulbur(tulbur);
         }
     }
