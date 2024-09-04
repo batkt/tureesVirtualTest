@@ -1739,6 +1739,7 @@ function camera({ token }) {
         headers: {
           Accept: "*/*",
           "X-Requested-With": "XMLHttpRequest",
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         },
         data: data,
       };
@@ -2664,7 +2665,9 @@ function camera({ token }) {
                                           (v[0]?.tulbur?.length > 0
                                             ? v[0]?.tulbur
                                                 ?.filter(
-                                                  (e) => e.turul === "qpayUridchilsan"
+                                                  (e) =>
+                                                    e.turul ===
+                                                    "qpayUridchilsan"
                                                 )
                                                 .reduce(
                                                   (a, b) =>
