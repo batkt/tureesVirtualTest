@@ -1855,17 +1855,21 @@ function togloom1() {
                               dataIndex: "niitDun",
                               ellipsis: true,
                               __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
                               render: (data) => {
-                                return formatNumber(data, 0);
+                                return Number(data || 0);
                               },
                             },
                             {
                               title: t("Хөнгөлсөн дүн"),
                               dataIndex: "khungulsunDun",
-                              __style__: { h: "right" },
                               ellipsis: true,
+                              __style__: { h: "right" },
+                              __numFmt__: "#,##0.00",
+                              __cellType__: "TypeNumeric",
                               render: (data) => {
-                                return formatNumber(data, 0);
+                                return Number(data || 0);
                               },
                             },
                             {

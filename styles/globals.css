@@ -1046,7 +1046,6 @@ input:-webkit-autofill {
 }
 .ant-switch {
   @apply ring-1 ring-gray-200 dark:ring-gray-700 !important;
-  background-color: #1db771 !important;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
