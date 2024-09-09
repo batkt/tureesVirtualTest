@@ -72,8 +72,6 @@ const fetcher = (
           [`${
             dans?.bank === "tdb"
               ? "TxDt"
-              : dans?.bank === "golomt"
-              ? "tranPostedDate"
               : "tranDate"
           }`]: {
             $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),

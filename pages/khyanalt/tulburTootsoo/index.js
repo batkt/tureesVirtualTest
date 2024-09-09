@@ -223,7 +223,7 @@ function tulburTootsoo({ token }) {
         songogdsonDans?.bank === "tdb"
           ? "TxDt"
           : songogdsonDans?.bank === "golomt"
-          ? "tranPostedDate"
+          ? "tranDate"
           : "createdAt"
       }`]: -1,
       [`${songogdsonDans?.bank === "tdb" ? "TxTime" : "time"}`]: undefined,
