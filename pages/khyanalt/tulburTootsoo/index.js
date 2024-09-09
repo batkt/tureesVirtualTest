@@ -183,7 +183,7 @@ function tulburTootsoo({ token }) {
       songogdsonDans?.bank === "golomt"
         ? khuulgaTurul === "orlogo"
           ? "Credit"
-          : "$lt"
+          : "Debit"
         : {
             [khuulgaTurul === "orlogo" ? "$gt" : "$lt"]: 0,
           };
