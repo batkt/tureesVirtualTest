@@ -361,7 +361,7 @@ function tulburTootsoo({ token }) {
             medeelel.ekhlekhUdur = moment(ognoo).format("DD");
             medeelel.duusakhOn = moment(ognoo).format("YYYY");
             medeelel.duusakhSar = moment(ognoo).format("MM");
-            medeelel.duusakhUdur = moment(ognoo).set("date", 10).format("DD");
+            medeelel.duusakhUdur = moment(ognoo).set("date", 15).format("DD");
             medeelel.eneEkhlehUdur = moment(ognoo).startOf("month").format("YYYY/MM/DD");
             medeelel.eneDuusakhUdur = moment(ognoo).endOf("month").format("YYYY/MM/DD");
 
