@@ -698,8 +698,8 @@ function camera({ token }) {
   // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
-    dugaar: !!zogsool?.zogsooliinDans
-      ? zogsool?.zogsooliinDans
+    dugaar: !!songogdzonZogsool?.zogsooliinDans
+      ? songogdzonZogsool?.zogsooliinDans
       : baiguullaga?._id === "64fe8edc54a669717ad657ac"
       ? "432002947"
       : "416075707",
