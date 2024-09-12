@@ -15,6 +15,7 @@ import {
   Radio,
   Select,
   Table,
+  Tabs,
   Tooltip,
 } from "antd";
 import CardList from "components/cardList";
@@ -141,6 +142,7 @@ function Zogsool({ token }) {
   const shalgakhTsag = 18; //idevkhtei => todorkhoigui bolgoh shalguur tsag
 
   const [shaltgaan, setShaltgaan] = useState("Цэвэрлэсэн");
+  const [tootsooKhelber, setTootsooKhelber] = useState("");
   const rowSelection = {
     selectedRowKeys: selectedRowkeys,
     onChange: onSelectChange,
@@ -232,8 +234,16 @@ function Zogsool({ token }) {
         baseQuery["tuukh"] = { $elemMatch: { tulbur: { $eq: [] } } };
       }
     }
+    console.log("tootsooKhelber", tootsooKhelber);
+    if (tootsooKhelber == 2) {
+      delete baseQuery.createdAt;
+      baseQuery["tuukh.tulbur.ognoo"] = {
+        $gte: moment(ognoo[0]).format("YYYY-MM-DD 00:00:00"),
+        $lte: moment(ognoo[1]).format("YYYY-MM-DD 23:59:59"),
+      };
+    }
     return baseQuery;
-  }, [ognoo, zogsoolId, shuult, tuluv, tulbur, shalgakhTsag]);
+  }, [ognoo, zogsoolId, shuult, tuluv, tulbur, shalgakhTsag, tootsooKhelber]);
 
   const or = useMemo(() => {
     var nemeh;
@@ -1352,10 +1362,21 @@ function Zogsool({ token }) {
                                 title: t("QPAY Урьдчилсан"),
                                 dataIndex: "tuukh",
                                 __style__: { h: "right" },
-                                __numFmt__: '#,##0.00',
-                                __cellType__: 'TypeNumeric',
+                                __numFmt__: "#,##0.00",
+                                __cellType__: "TypeNumeric",
                                 render(v, p, i) {
-                                  return (v[0]?.tulbur?.length > 0 ? (v[0]?.tulbur?.filter((e) => e.turul === "qpayUridchilsan").reduce((a, b) => a + Number(b.dun || 0), 0)) : 0) || 0;
+                                  return (
+                                    (v[0]?.tulbur?.length > 0
+                                      ? v[0]?.tulbur
+                                          ?.filter(
+                                            (e) => e.turul === "qpayUridchilsan"
+                                          )
+                                          .reduce(
+                                            (a, b) => a + Number(b.dun || 0),
+                                            0
+                                          )
+                                      : 0) || 0
+                                  );
                                 },
                               },
                               {
@@ -1516,30 +1537,73 @@ function Zogsool({ token }) {
           data-aos-delay="400"
           data-aos-anchor-placement="top-bottom"
         >
-          <Table
-            className="mt-8 hidden overflow-auto md:block"
-            tableLayout="auto"
-            loading={!uilchluulegchGaralt}
-            dataSource={uilchluulegchGaralt?.jagsaalt}
-            scroll={{ y: "calc(100vh - 30rem)" }}
-            size="small"
-            bordered
-            rowSelection={rowSelection}
-            rowKey={"_id"}
-            columns={columns}
-            onChange={onChangeTable}
-            pagination={{
-              current: uilchluulegchGaralt?.khuudasniiDugaar,
-              pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
-              total: uilchluulegchGaralt?.niitMur,
-              showSizeChanger: true,
-              onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
-                setUilchluulegchKhuudaslalt((kh) => ({
-                  ...kh,
-                  khuudasniiDugaar,
-                  khuudasniiKhemjee,
-                })),
-            }}
+          <Tabs
+            defaultActiveKey="1"
+            items={[
+              {
+                key: "1",
+                label: "Машинаар",
+                children: (
+                  <Table
+                    className="mt-8 hidden overflow-auto md:block"
+                    tableLayout="auto"
+                    loading={!uilchluulegchGaralt}
+                    dataSource={uilchluulegchGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)" }}
+                    size="small"
+                    bordered
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
+                    columns={columns}
+                    onChange={onChangeTable}
+                    pagination={{
+                      current: uilchluulegchGaralt?.khuudasniiDugaar,
+                      pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
+                      total: uilchluulegchGaralt?.niitMur,
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setUilchluulegchKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                  />
+                ),
+              },
+              {
+                key: "2",
+                label: "Мөнгөн дүнгээр",
+                children: (
+                  <Table
+                    className="mt-8 hidden overflow-auto md:block"
+                    tableLayout="auto"
+                    loading={!uilchluulegchGaralt}
+                    dataSource={uilchluulegchGaralt?.jagsaalt}
+                    scroll={{ y: "calc(100vh - 30rem)" }}
+                    size="small"
+                    bordered
+                    rowSelection={rowSelection}
+                    rowKey={"_id"}
+                    columns={columns}
+                    onChange={onChangeTable}
+                    pagination={{
+                      current: uilchluulegchGaralt?.khuudasniiDugaar,
+                      pageSize: uilchluulegchGaralt?.khuudasniiKhemjee,
+                      total: uilchluulegchGaralt?.niitMur,
+                      showSizeChanger: true,
+                      onChange: (khuudasniiDugaar, khuudasniiKhemjee) =>
+                        setUilchluulegchKhuudaslalt((kh) => ({
+                          ...kh,
+                          khuudasniiDugaar,
+                          khuudasniiKhemjee,
+                        })),
+                    }}
+                  />
+                ),
+              },
+            ]}
+            onChange={(v) => setTootsooKhelber(v)}
           />
           <CardList
             cardListTuluv={"utas"}

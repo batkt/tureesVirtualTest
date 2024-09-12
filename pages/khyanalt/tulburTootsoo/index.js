@@ -183,7 +183,7 @@ function tulburTootsoo({ token }) {
       songogdsonDans?.bank === "golomt"
         ? khuulgaTurul === "orlogo"
           ? "Credit"
-          : "$lt"
+          : "Debit"
         : {
             [khuulgaTurul === "orlogo" ? "$gt" : "$lt"]: 0,
           };
@@ -223,7 +223,7 @@ function tulburTootsoo({ token }) {
         songogdsonDans?.bank === "tdb"
           ? "TxDt"
           : songogdsonDans?.bank === "golomt"
-          ? "tranPostedDate"
+          ? "tranDate"
           : "createdAt"
       }`]: -1,
       [`${songogdsonDans?.bank === "tdb" ? "TxTime" : "time"}`]: undefined,
