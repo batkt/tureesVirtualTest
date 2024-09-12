@@ -705,7 +705,12 @@ function camera({ token }) {
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     dugaar,
-    bank: dugaar[0] == "4" ? "tdb" : dugaar[0] == "5" ? "khaan" : "golomt",
+    bank:
+      dugaar.subString(0, 1) == "4"
+        ? "tdb"
+        : dugaar.subString(0, 1) == "5"
+        ? "khaan"
+        : "golomt",
   };
   const {
     dansniiKhuulgaGaralt,
