@@ -15,12 +15,13 @@ import { useKeyboardTovchlol } from "hooks/useKeyboardTovchlol";
 import ShineEbarimt from "../tulbur/ShineEbarimt";
 import { TbDiscount2 } from "react-icons/tb";
 import { useQRCode } from "next-qrcode";
+import Barcode from 'react-barcode';
 
 // import { useAuth } from "services/auth";
 
 //#endregion
 function ShineTogloomTulbur(
-  { destroy, data, token, baiguullaga, ajiltan, barilgiinId, onRefresh },
+  { destroy, data, token, baiguullaga, ajiltan, barilgiinId, onRefresh, barCodes, setBarCodes },
   ref
 ) {
   // const {ajiltan}=useAuth();
@@ -76,7 +77,27 @@ function ShineTogloomTulbur(
 
   const handlePrint = useReactToPrint({
     content: () => eBarimtRef.current,
+    onAfterPrint: () => khaaya(),
   });
+
+  function khaaya() {
+    if(baiguullaga?._id === "66cd8c682375830948ea46ca")
+    {
+      khaalgaNeey(barCodes);
+      setBarCodes([]);
+    }
+  }
+
+  const khaalgaNeey = (barCodes) => {
+    axios
+    .get("http://localhost:5000/api/userKhadgalakh/" + barCodes + "")
+    .then(function (response) {
+        if (!!response.message) console.log("/api/userKhadgalakh", response);
+    })
+    .catch(function (error) {
+    console.log("ERROR: /api/userKhadgalakh", error);
+    });
+  };
 
   React.useImperativeHandle(
     ref,
@@ -719,6 +740,33 @@ function ShineTogloomTulbur(
                   </div>
                 </div>
               </div>
+            )}
+            {(baiguullaga?._id === "66cd8c682375830948ea46ca") && (
+              <div className="p-2" style={{ minWidth: "20rem" }}>
+                <table className="w-full">
+                    <colgroup>
+                        <col className="w-1/2" />
+                        <col className="w-1/2" />
+                    </colgroup>
+                    <tbody>
+                        {barCodes?.map((mur, index) => {
+                            index++
+                            return (
+                                <tr>
+                                    <td colSpan={2} className="pagebreak text-center border-dashed border-b-4 border-black">
+                                        <div className="text-5xl font-bold text-black m-5">
+                                            {index}
+                                        </div>
+                                        <div className="flex w-full items-center justify-center mb-20">
+                                            <Barcode value={mur}/>
+                                        </div>
+                                    </td>
+                                </tr>  
+                            );
+                        })}
+                    </tbody>
+                </table>    
+            </div>
             )}
           </div>
         </div>

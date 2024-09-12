@@ -26,7 +26,7 @@ import uilchilgee, { aldaaBarigch } from "services/uilchilgee";
 import axios from "axios";
 
 function TsagBurtgel(
-  { data, barilgiinId, token, destroy, onRefresh, ajiltan },
+  { data, barilgiinId, baiguullagiinId, token, destroy, onRefresh, ajiltan, barCodes, setBarCodes },
   ref
 ) {
   const [form] = Form.useForm();
@@ -39,7 +39,7 @@ function TsagBurtgel(
   const [loading, setLoading] = useState(false);
   const [bulegEsekh, setBulegEsekh] = useState(false);
   const [togolsonToo, setTogolsonToo] = useState(0);
-
+  
   useImperativeHandle(
     ref,
     () => ({
@@ -74,10 +74,13 @@ function TsagBurtgel(
     data.ognoo = moment(tsag.ekhlekhtsag).format("YYYY-MM-DD 00:00:00");
     data.burtgesenAjiltaniiId = ajiltan?._id;
     data.barilgiinId = barilgiinId;
+    const tasalbarShirkheg = data.khuukhdiinToo;
     const method = data?._id ? updateMethod : createMethod;
     method("togloomiinTuvKhadgalya", token, data)
       .then(({ data }) => {
         if (data === "Amjilttai") {
+          if(baiguullagiinId === "66cd8c682375830948ea46ca")
+            handleTasalbariinBarCode(tasalbarShirkheg || 1);
           message.success(t("Амжилттай хадгаллаа"));
           onRefresh && onRefresh();
           setLoading(false);
@@ -100,6 +103,27 @@ function TsagBurtgel(
         setLoading(false);
       });
   }
+
+  const handleTasalbariinBarCode = (tasalbarShirkheg) => {
+    barCodes = [];
+    setBarCodes([])
+    if(!!tasalbarShirkheg && tasalbarShirkheg > 0)
+        for(var i = 0; i < tasalbarShirkheg; i++)
+        {
+            const nowDate = new Date();
+            const year = nowDate.getFullYear();
+            const month = nowDate.getMonth() + 1;
+            const day = nowDate.getDate();
+            const hours = nowDate.getHours();
+            const minutes = nowDate.getMinutes();
+            const seconds = nowDate.getSeconds();
+            console.log('a: ------------ %d %d %d %d %d %d', year, month, day, hours, minutes, seconds);
+            const value = ((year-2000)*12*31 + (month -1)*31 + (day-1))*(24*60*60) + hours* 60 *60 + minutes*60 + seconds + i;
+            console.log('value: ------------ %d', value);
+            barCodes.push(value);
+        }
+    setBarCodes(barCodes);   
+  };
 
   useEffect(() => {
     function keyUp(e) {

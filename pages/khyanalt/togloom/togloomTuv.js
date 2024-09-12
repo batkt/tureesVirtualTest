@@ -626,6 +626,7 @@ function togloom1() {
   const tulburRef = React.useRef(null);
   const [shineBagana, setShineBagana] = useState([]);
   const [khaalga, setKhaalga] = useState(["a", "b"]);
+  const [barCodes, setBarCodes] = useState([]);
 
   const { toololt, toololtMutate } = useToololt(
     "/togloomiinToololtAvya",
@@ -962,6 +963,8 @@ function togloom1() {
           barilgiinId={barilgiinId}
           ajiltan={ajiltan}
           onRefresh={onRefresh}
+          barCodes={barCodes}
+          setBarCodes={setBarCodes}
         />
         // <Tulbur
         //   ref={tulburRef}
@@ -1486,8 +1489,11 @@ function togloom1() {
           token={token}
           onRefresh={onRefresh}
           barilgiinId={barilgiinId}
+          baiguullagiinId={baiguullaga?._id}
           data={data}
           ajiltan={ajiltan}
+          barCodes={barCodes}
+          setBarCodes={setBarCodes}
         />
       ),
       footer: false,
