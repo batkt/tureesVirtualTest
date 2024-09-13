@@ -696,7 +696,6 @@ function camera({ token }) {
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
   // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
-  console.log("----songogdzonZogsool", songogdzonZogsool);
   var dugaar = !!songogdzonZogsool?.zogsooliinDans
     ? songogdzonZogsool?.zogsooliinDans
     : baiguullaga?._id === "64fe8edc54a669717ad657ac"
@@ -705,7 +704,7 @@ function camera({ token }) {
   const dasniiMedeelel = {
     baiguullagiinId: baiguullaga?._id,
     dugaar,
-    bank: dugaar[0] == "4" ? "tdb" : dugaar[0] == "5" ? "khaan" : "golomt",
+    bank: dugaar[0] == 4 ? "tdb" : dugaar[0] == 5 ? "khaan" : "golomt",
   };
   const {
     dansniiKhuulgaGaralt,
