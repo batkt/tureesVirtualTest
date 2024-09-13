@@ -9,8 +9,10 @@ import { useToololt } from "hooks/useToololt";
 import useGuilgeeniiToololtAvya from "hooks/tulburTootsoo/useGuilgeeniiToololtAvya";
 import _ from "lodash";
 import useTalbainToololt from "hooks/useTalbainToololt";
+import useBaiguullagaIdgaarAvya from "hooks/useBaiguullagaIdgaarAvya";
 
-function TulburiinDelgerenguiTailan({ token }) {
+function TulburiinDelgerenguiTailan({ token}) {
+  const [barilgiinId, setBarilgiinId] = useState("All");
   const [songogdsonAjiltan, setSongogdsonAjiltan] = useState(null);
   const [turul, setTurul] = useState("Zogsool");
   const [ognoo, setOgnoo] = useState([
@@ -18,17 +20,20 @@ function TulburiinDelgerenguiTailan({ token }) {
     moment().subtract(1, "days").endOf("day"),
   ]);
 
-  const { guilgeeniiToololt, guilgeeniiToololtMutate } = useGuilgeeniiToololtAvya(turul === "Turees" &&  token, ognoo, undefined);
-  const { talbainToololt } = useTalbainToololt(turul === "Turees" && token, undefined);
+  const { guilgeeniiToololt, guilgeeniiToololtMutate } = useGuilgeeniiToololtAvya(turul === "Turees" &&  token, ognoo, barilgiinId === "All" ? undefined : barilgiinId);
+  const { talbainToololt } = useTalbainToololt(turul === "Turees" && token, barilgiinId === "All" ? undefined : barilgiinId);
 
   const togloomiinDun = useToololt(
     "/togloomiinDunAvya",
     turul === "Togloomiin tuv" && token,
     ognoo
   );
+  const { baiguullagaIdgaarAvya, baiguullagaIdgaarAvyaMutate } = useBaiguullagaIdgaarAvya(token)
+  
 
   console.log(togloomiinDun, "33333333333333");
-
+  console.log(baiguullagaIdgaarAvya?.barilguud, "----baiguullagiinJagsaalt");
+  
   const query = useMemo(() => {
     if (songogdsonAjiltan) {
       return { burtgesenAjiltaniiId: songogdsonAjiltan };
@@ -39,7 +44,7 @@ function TulburiinDelgerenguiTailan({ token }) {
   const { zogsoolTulburMedeelel, zogsooliinUdriinTailanUnshijBaina } =
     usezogsooliinUdriinTailan(
       turul === "Zogsool" && token,
-      undefined,
+      barilgiinId === "All" ? undefined : barilgiinId,
       ognoo[1],
       ognoo[0],
       undefined,
@@ -551,6 +556,28 @@ function TulburiinDelgerenguiTailan({ token }) {
             },
           ]}
         />
+        <Select
+          defaultValue={barilgiinId}
+          value={barilgiinId}
+          onChange={(v) => setBarilgiinId(v)}
+          style={{ width: "100%" }}
+          placeholder={"Барилга"}
+        >
+          <option
+              key={"All"}
+              value={"All"}
+            >
+              Бүгд
+          </option>
+          {baiguullagaIdgaarAvya?.barilguud?.map((a) => (
+            <option
+              key={a?._id}
+              value={a?._id}
+            >
+              {a?.ner}
+            </option>
+          ))}
+        </Select>
       </div>
 
       {!togloomiinDun.toololtUnshijBaina &&
