@@ -101,7 +101,7 @@ function ZogsoolBurtgekh(
 
   function cameraTokhirgooOruulya() {
     const footer = [
-      <Button onClick={() => streamTokhirgooRef.current.khaaya()}>
+      <Button type="primary" onClick={() => streamTokhirgooRef.current.khaaya()}>
         {t("Хаах")}
       </Button>,
       <Button
@@ -286,7 +286,7 @@ function ZogsoolBurtgekh(
                   </div>
                 </div>
                 <div className="col-span-2 flex items-center justify-start">
-                  <Button onClick={cameraTokhirgooOruulya}>
+                  <Button type="primary" onClick={cameraTokhirgooOruulya}>
                     Тохиргоо оруулах
                   </Button>
                 </div>
@@ -501,7 +501,7 @@ function Khaalga({ name, fieldKey, restField, remove }) {
       key={fieldKey}
       className="relative mb-2 rounded-md border bg-yellow-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
-      <div className="mb-2 flex justify-center text-base font-bold">
+      <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
         {t("Хаалга")} {fieldKey + 1}
       </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">
@@ -582,7 +582,7 @@ function Tariff({ name, fieldKey, restField, remove }) {
       key={fieldKey}
       className="relative mb-5 rounded-md border bg-green-50 px-5 py-4 shadow-md dark:bg-gray-700"
     >
-      <div className="mb-2 flex justify-center text-base font-bold">
+      <div className="mb-2 flex justify-center text-base font-bold dark:text-white">
         {t("Тариф")} {fieldKey + 1}
       </div>
       <div className="grid w-full grid-cols-4 items-center gap-5">

@@ -244,7 +244,7 @@ function Zogsool({
   function zogsoolBurtegye(data, p) {
     const d = p === "zasah" ? data : null;
     const footer = [
-      <Button onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
+      <Button type="primary" onClick={() => ref.current.khaaya()}>{t("Хаах")}</Button>,
       <Button type="primary" onClick={() => ref.current.khadgalya()}>
         {t("Хадгалах")}
       </Button>,
