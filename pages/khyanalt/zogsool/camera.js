@@ -1219,7 +1219,7 @@ function camera({ token }) {
         ),
         align: "center",
         dataIndex: "tuukh",
-        width: "7rem",
+        width: "15rem",
         showSorterTooltip: false,
         render: (v) => {
           let r = null;
@@ -1230,7 +1230,7 @@ function camera({ token }) {
                   content={() =>
                     v[0]?.tulbur.map((mur) => (
                       <div className="dark:text-gray-200">
-                        {t(tulburKhurvuulekh(mur.turul))}: {mur.dun}
+                        {t(tulburKhurvuulekh(mur.turul))}: {formatNumber(mur.dun, 0)}
                       </div>
                     ))
                   }
@@ -1248,7 +1248,7 @@ function camera({ token }) {
             r && (
               <div>
                 {v[0]?.tulbur?.length > 1 ? r : t(r)}{" "}
-                {v[0]?.tulbur?.length === 1 && `: ${v[0]?.tulbur[0]?.dun}`}
+                {v[0]?.tulbur?.length === 1 && `: ${formatNumber(v[0]?.tulbur[0]?.dun, 0)}`}
               </div>
             )
           );
@@ -1453,7 +1453,7 @@ function camera({ token }) {
         title: t("Шалтгаан"),
         align: "center",
         dataIndex: "tuukh",
-        width: "7rem",
+        width: "10rem",
         showSorterTooltip: false,
         render: (v, parent) => {
           if (parent.turul === "Үнэгүй" || parent.turul === "Дотоод") {
@@ -1682,6 +1682,7 @@ function camera({ token }) {
           {t("Хаах")}
         </Button>
         <Button
+          type="primary"
           icon={<PrinterOutlined />}
           onClick={() => tailanRef.current.khadgalya()}
         >
@@ -2335,8 +2336,9 @@ function camera({ token }) {
                   ajiltan?.erkh === "Admin") && (
                   <Button
                     onClick={() => tulburiinDelgerengui()}
-                    className="mr-3 w-auto"
+                    className="mr-3 w-auto text-ellipsis"
                     icon={<PrinterOutlined />}
+                    type="primary"
                   >
                     {t("Төлбөрийн дэлгэрэнгүй")}
                   </Button>
@@ -2856,7 +2858,7 @@ function camera({ token }) {
             onCancel={() => modalKhaakh()}
             width={564}
             footer={[
-              <Button key="back" onClick={() => modalKhaakh()}>
+              <Button type="primary" key="back" onClick={() => modalKhaakh()}>
                 {t("Хаах")}
               </Button>,
               <Button type="primary" onClick={khadgalakh}>
