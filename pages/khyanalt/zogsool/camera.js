@@ -504,16 +504,17 @@ function camera({ token }) {
             uilchluulegch?.cameraIP
           }/${yanzalsanMashiniiDugaar}/${moment().format("HH:mm:ss")}`;
 
-          axios
-            .get(url)
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
+          if (!!yanzalsanMashiniiDugaar)
+            axios
+              .get(url)
+              .then((res) => {
+                if (res) {
+                  console.log("amjilttai:", res);
+                }
+              })
+              .catch((err) => {
+                console.log("aldaa:", err);
+              });
 
           khaalgaNeey(uilchluulegch?.cameraIP);
           onRefresh();
@@ -570,16 +571,17 @@ function camera({ token }) {
               }
             }
           }
-          axios
-            .get(url)
-            .then((res) => {
-              if (res) {
-                console.log("amjilttai:", res);
-              }
-            })
-            .catch((err) => {
-              console.log("aldaa:", err);
-            });
+          if (!!yanzalsanMashiniiDugaar)
+            axios
+              .get(url)
+              .then((res) => {
+                if (res) {
+                  console.log("amjilttai:", res);
+                }
+              })
+              .catch((err) => {
+                console.log("aldaa:", err);
+              });
 
           onRefresh();
         }
