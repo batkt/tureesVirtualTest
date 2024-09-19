@@ -1079,7 +1079,7 @@ function camera({ token }) {
               </div>
             );
           }
-          if (a?.gereetTulburBodokhEsekh) {
+          if (a?.gereetTulburBodokhEsekh && !a.tulburBodokhTsagEkhlekhNeg) {
             return (
               <Tooltip
                 title={`${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh} хүртэл төлбөр бодогдоно.`}
@@ -1093,10 +1093,10 @@ function camera({ token }) {
           if (a?.gereetTulburBodokhEsekh && !!a.tulburBodokhTsagEkhlekhNeg) {
             return (
               <Tooltip
-                title={`${a?.tulburBodokhTsagEkhlekhNeg}-аас ${a?.tulburBodokhTsagDuusakhNeg}, ${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh} хүртэл төлбөр бодогдоно.`}
+                title={`${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh}, ${a?.tulburBodokhTsagEkhlekhNeg}-аас ${a?.tulburBodokhTsagDuusakhNeg} хүртэл төлбөр бодогдоно.`}
               >
                 <div className="flex cursor-help items-center justify-center">
-                  {a?.tulburBodokhTsagEkhlekhNeg} - {a?.tulburBodokhTsagDuusakhNeg}, {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh}
+                {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh}, {a?.tulburBodokhTsagEkhlekhNeg} - {a?.tulburBodokhTsagDuusakhNeg}
                 </div>
               </Tooltip>
             );
