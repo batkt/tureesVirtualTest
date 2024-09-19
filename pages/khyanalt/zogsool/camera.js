@@ -1093,10 +1093,10 @@ function camera({ token }) {
           if (a?.gereetTulburBodokhEsekh && !!a.tulburBodokhTsagEkhlekhNeg) {
             return (
               <Tooltip
-                title={`${a?.tulburBodokhTsagEkhlekhNeg}-аас ${a?.tulburBodokhTsagDuusakhNeg} хүртэл төлбөр бодогдоно.`}
+                title={`${a?.tulburBodokhTsagEkhlekhNeg}-аас ${a?.tulburBodokhTsagDuusakhNeg}, ${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh} хүртэл төлбөр бодогдоно.`}
               >
                 <div className="flex cursor-help items-center justify-center">
-                  {a?.tulburBodokhTsagEkhlekhNeg} - {a?.tulburBodokhTsagDuusakhNeg}
+                  {a?.tulburBodokhTsagEkhlekhNeg} - {a?.tulburBodokhTsagDuusakhNeg}, {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh}
                 </div>
               </Tooltip>
             );
