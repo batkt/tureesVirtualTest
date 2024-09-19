@@ -25,7 +25,7 @@ import moment from "moment";
 import { t } from "i18next";
 import useGereeniiJagsaalt from "hooks/useGereeniiJagsaalt";
 import formatNumber from "tools/function/formatNumber";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 
 const order = { createdAt: -1 };
 
@@ -63,6 +63,9 @@ function MashinBurtgel(
   const [gereetTulburBodokhEsekh, setGereetTulburBodokhEsekh] = useState(
     data?.gereetTulburBodokhEsekh || false
   );
+  const [gereetTulburBodokhEsekhNemelt, setGereetTulburBodokhEsekhNemelt] = useState(
+    !!data?.tulburBodokhTsagEkhlekhNeg || false
+  );
   const [tulburBodokhTsag, setTulburBodokhTsag] = useState(
     data?.tulburBodokhTsagEkhlekh
       ? [
@@ -83,6 +86,31 @@ function MashinBurtgel(
             .set(
               "minute",
               parseInt(data?.tulburBodokhTsagDuusakh.split(":")[1], 10)
+            ),
+        ]
+      : null
+  );
+
+  const [tulburBodokhTsagNemelt, setTulburBodokhTsagNemelt] = useState(
+    data?.tulburBodokhTsagEkhlekhNeg
+      ? [
+          moment()
+            .set(
+              "hour",
+              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[0], 10)
+            )
+            .set(
+              "minute",
+              parseInt(data?.tulburBodokhTsagEkhlekhNeg.split(":")[1], 10)
+            ),
+          moment()
+            .set(
+              "hour",
+              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[0], 10)
+            )
+            .set(
+              "minute",
+              parseInt(data?.tulburBodokhTsagDuusakhNeg.split(":")[1], 10)
             ),
         ]
       : null
@@ -172,6 +200,11 @@ function MashinBurtgel(
       data.gereetTulburBodokhEsekh = gereetTulburBodokhEsekh;
       data.tulburBodokhTsagEkhlekh = tulburBodokhTsag[0].format("HH:mm");
       data.tulburBodokhTsagDuusakh = tulburBodokhTsag[1].format("HH:mm");
+      if(!!tulburBodokhTsagNemelt)
+      {
+        data.tulburBodokhTsagEkhlekhNeg = tulburBodokhTsagNemelt[0].format("HH:mm");
+        data.tulburBodokhTsagDuusakhNeg = tulburBodokhTsagNemelt[1].format("HH:mm");
+      }
     }
     const method = data?._id ? updateMethod : createMethod;
     method("mashin", token, data).then(({ data }) => {
@@ -568,13 +601,42 @@ function MashinBurtgel(
         >
           <TimePicker.RangePicker
             onClick={(e) => e.stopPropagation()}
-            className="flex w-full  rounded-md md:w-auto"
+            className="flex-end w-full  rounded-md md:w-auto"
             size="middle"
             format="HH:mm"
             allowClear={true}
             placeholder={["Эхлэх цаг", "Дуусах цаг"]}
             value={tulburBodokhTsag}
             onChange={setTulburBodokhTsag}
+          />
+          <Button
+              className="flex ml-1"
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setGereetTulburBodokhEsekhNemelt(true)}
+            >
+          </Button>
+        </Form.Item>
+      )}
+      {turulShalgah === "Гэрээт" && gereetTulburBodokhEsekh && gereetTulburBodokhEsekhNemelt && (
+        <Form.Item
+          rules={[
+            {
+              required: true,
+              message: t("Нэмэлт төлбөр бодох цаг бүртгэнэ үү!"),
+            },
+          ]}
+          label={t("Нэмэлт цаг")}
+        >
+          <TimePicker.RangePicker
+            onClick={(e) => e.stopPropagation()}
+            className="flex-end w-full  rounded-md md:w-auto"
+            size="middle"
+            format="HH:mm"
+            allowClear={true}
+            placeholder={["Эхлэх цаг", "Дуусах цаг"]}
+            value={tulburBodokhTsagNemelt}
+            onChange={setTulburBodokhTsagNemelt}
           />
         </Form.Item>
       )}
