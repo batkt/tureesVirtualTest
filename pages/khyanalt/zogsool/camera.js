@@ -464,7 +464,9 @@ function camera({ token }) {
   }, [ognoo, khelber, dun, camerVal, khaikh]);
 
   const dansQuery = useMemo(() => {
-    return dugaar[0] == 4
+    return !dugaar
+      ? { Amt: { $gt: 0, $lt: 1000000 } }
+      : dugaar[0] == 4
       ? { Amt: { $gt: 0, $lt: 1000000 } }
       : dugaar[0] == 5
       ? { amount: { $gt: 0, $lt: 1000000 } }
