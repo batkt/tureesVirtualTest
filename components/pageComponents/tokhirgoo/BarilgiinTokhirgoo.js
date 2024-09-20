@@ -68,6 +68,9 @@ function BarilgiinTokhirgoo({
         nuatTulukhEsekh: barilga?.tokhirgoo?.nuatTulukhEsekh
           ? barilga?.tokhirgoo?.nuatTulukhEsekh
           : undefined,
+        eBarimtBugdShivikh: barilga?.tokhirgoo?.eBarimtBugdShivikh
+          ? barilga?.tokhirgoo?.eBarimtBugdShivikh
+          : undefined,  
       });
       setSongogdsonDuuregKod(barilga?.tokhirgoo?.districtCode?.substring(0, 2));
 
@@ -375,6 +378,27 @@ function BarilgiinTokhirgoo({
                       })}
                     </Select>
                   </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {barilgaTokhirgoo?.eBarimtShine && (
+            <div className="box">
+              <div className="flex items-center p-5">
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="font-medium">{t("Бүх баримт татвар руу илгээх")}</div>
+                  <div className="text-gray-600"></div>
+                </div>
+                <div className="ml-auto">
+                  <Switch
+                    checked={barilgaTokhirgoo?.eBarimtBugdShivikh}
+                    onChange={(v) =>
+                      setBarilgaTokhirgoo((a) => ({
+                        ...(a || {}),
+                        eBarimtBugdShivikh: v,
+                      }))
+                    }
+                  />
                 </div>
               </div>
             </div>
