@@ -1569,12 +1569,22 @@ function camera({ token }) {
         return (
           <Tooltip
             placement="top"
-            title={e?.description ? e?.description : e?.TxAddInf}
+            title={
+              e?.description
+                ? e?.description
+                : e?.TxAddInf
+                ? e?.TxAddInf
+                : e?.tranDesc
+            }
             mouseLeaveDelay={0}
             mouseEnterDelay={1}
           >
             <div className="truncate text-left">
-              {e?.description ? e?.description : e?.TxAddInf}
+              {e?.description
+                ? e?.description
+                : e?.TxAddInf
+                ? e?.TxAddInf
+                : e?.tranDesc}
             </div>
           </Tooltip>
         );
@@ -1589,7 +1599,11 @@ function camera({ token }) {
         return (
           (e?.amount || e?.Amt) && (
             <div className="text-right">
-              {formatNumber(e?.amount ? e?.amount : e?.Amt, 0)} ₮
+              {formatNumber(
+                e?.amount ? e?.amount : e?.Amt ? e?.Amt : e?.tranAmount,
+                0
+              )}{" "}
+              ₮
             </div>
           )
         );
