@@ -1597,7 +1597,7 @@ function camera({ token }) {
       align: "center",
       render(_v, e) {
         return (
-          (e?.amount || e?.Amt) && (
+          (e?.amount || e?.Amt || e?.tranAmount) && (
             <div className="text-right">
               {formatNumber(
                 e?.amount ? e?.amount : e?.Amt ? e?.Amt : e?.tranAmount,
