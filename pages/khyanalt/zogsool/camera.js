@@ -464,7 +464,11 @@ function camera({ token }) {
   }, [ognoo, khelber, dun, camerVal, khaikh]);
 
   const dansQuery = useMemo(() => {
-    return { Amt: { $gt: 0, $lt: 1000000 } };
+    return dugaar[0] == 4
+      ? { Amt: { $gt: 0, $lt: 1000000 } }
+      : dugaar[0] == 5
+      ? { amount: { $gt: 0, $lt: 1000000 } }
+      : { tranAmount: { $gt: 0, $lt: 1000000 } };
   }, [ognoo]);
 
   useEffect(() => {
@@ -698,7 +702,7 @@ function camera({ token }) {
   const { zogsoolTusBuriinToo, zogsoolTusBuriinTooMutate } =
     useUilchluulegchZogsoolToo(token, tooQue);
   // console.log('----zogsoolTusBuriinToo', zogsoolTusBuriinToo);
-  var dugaar = !!songogdzonZogsool?.zogsooliinDans
+  const dugaar = !!songogdzonZogsool?.zogsooliinDans
     ? songogdzonZogsool?.zogsooliinDans
     : baiguullaga?._id === "64fe8edc54a669717ad657ac"
     ? "432002947"
@@ -1098,7 +1102,9 @@ function camera({ token }) {
                 title={`${a?.tulburBodokhTsagEkhlekh}-аас ${a?.tulburBodokhTsagDuusakh}, ${a?.tulburBodokhTsagEkhlekhNeg}-аас ${a?.tulburBodokhTsagDuusakhNeg} хүртэл төлбөр бодогдоно.`}
               >
                 <div className="flex cursor-help items-center justify-center">
-                {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh}, {a?.tulburBodokhTsagEkhlekhNeg} - {a?.tulburBodokhTsagDuusakhNeg}
+                  {a?.tulburBodokhTsagEkhlekh} - {a?.tulburBodokhTsagDuusakh},{" "}
+                  {a?.tulburBodokhTsagEkhlekhNeg} -{" "}
+                  {a?.tulburBodokhTsagDuusakhNeg}
                 </div>
               </Tooltip>
             );
@@ -1241,7 +1247,8 @@ function camera({ token }) {
                   content={() =>
                     v[0]?.tulbur.map((mur) => (
                       <div className="dark:text-gray-200">
-                        {t(tulburKhurvuulekh(mur.turul))}: {formatNumber(mur.dun, 0)}
+                        {t(tulburKhurvuulekh(mur.turul))}:{" "}
+                        {formatNumber(mur.dun, 0)}
                       </div>
                     ))
                   }
@@ -1259,7 +1266,8 @@ function camera({ token }) {
             r && (
               <div>
                 {v[0]?.tulbur?.length > 1 ? r : t(r)}{" "}
-                {v[0]?.tulbur?.length === 1 && `: ${formatNumber(v[0]?.tulbur[0]?.dun, 0)}`}
+                {v[0]?.tulbur?.length === 1 &&
+                  `: ${formatNumber(v[0]?.tulbur[0]?.dun, 0)}`}
               </div>
             )
           );
