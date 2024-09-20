@@ -463,16 +463,6 @@ function camera({ token }) {
     return result;
   }, [ognoo, khelber, dun, camerVal, khaikh]);
 
-  const dansQuery = useMemo(() => {
-    return !dugaar
-      ? { Amt: { $gt: 0, $lt: 1000000 } }
-      : dugaar[0] == 4
-      ? { Amt: { $gt: 0, $lt: 1000000 } }
-      : dugaar[0] == 5
-      ? { amount: { $gt: 0, $lt: 1000000 } }
-      : { tranAmount: { $gt: 0, $lt: 1000000 } };
-  }, [ognoo]);
-
   useEffect(() => {
     Aos.init({ once: true });
   });
@@ -726,8 +716,7 @@ function camera({ token }) {
       moment().subtract(30, "days").format("YYYY-MM-DD 00:00:00"),
       moment().format("YYYY-MM-DD 23:59:59"),
     ],
-    { createdAt: -1 },
-    dansQuery
+    { createdAt: -1 }
   );
 
   function onRefresh() {
