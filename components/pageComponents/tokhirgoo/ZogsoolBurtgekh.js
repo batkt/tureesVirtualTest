@@ -19,6 +19,7 @@ import {
 import {
   CloseCircleOutlined,
   MinusCircleOutlined,
+  SettingOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
 import createMethod from "tools/function/crud/createMethod";
@@ -28,7 +29,9 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import moment from "moment";
 import StreamTokhirgoo from "./StreamTokhirgoo";
+import StreamTokhirgooIp from "./StreamTokhirgooIp";
 import { modal } from "components/ant/Modal";
+import camera from "pages/khyanalt/zogsool/camera";
 
 /**
  * khaalga.turul Select.Option value(Орох, Гарах) гэснийг өөрчилж болохгүй
@@ -75,6 +78,7 @@ function ZogsoolBurtgekh(
       async khadgalya() {
         try {
           let body = form.getFieldsValue();
+          console.log("from -------save -----------------" + JSON.stringify(body));
           body.barilgiinId = barilgiinId;
 
           await method("parking", token, body)
@@ -475,6 +479,9 @@ function ZogsoolBurtgekh(
                 >
                   {fields.map(({ key, name, fieldKey, ...restField }) => (
                     <Khaalga
+                      form={form}
+                      token={token}
+                      refresh={refresh}
                       barilgiinId={barilgiinId}
                       key={key}
                       name={name}
@@ -494,8 +501,56 @@ function ZogsoolBurtgekh(
   );
 }
 
-function Khaalga({ name, fieldKey, restField, remove }) {
+function Khaalga({ form, token, refresh, barilgiinId, name, fieldKey, restField, remove }) {
   const { t } = useTranslation();
+  const streamTokhirgooRefIP = useRef(null);
+  const [unshijBaina, setUnshijBaina] = useState(false);
+  
+  function cameraTokhirgooOruulyaIp(data, index) {
+    const values = form.getFieldsValue();
+    const cameraIP = values?.khaalga[name]?.camera[index]?.cameraIP;
+    const footer = [
+      <Button type="primary" onClick={() => streamTokhirgooRefIP.current.khaaya()}>
+        {t("Хаах")}
+      </Button>,
+      <Button
+        loading={unshijBaina}
+        type="primary"
+        onClick={() => streamTokhirgooRefIP.current.khadgalya()}
+      >
+        {t("Хадгалах")}
+      </Button>,
+    ];
+    const style = {
+      maxWidth: 400,
+    };
+    const cameraObject = values?.khaalga[name]?.camera[index];
+    function saveTokhirgoo(value) {
+      const values = form.getFieldsValue();
+      values.khaalga[name].camera[index].tokhirgoo = value;
+      form.setFieldsValue(values); 
+      const a = form.getFieldsValue();
+      console.log("getFieldsValue ------------>>"+JSON.stringify(a));
+    }
+    
+    modal({
+      title: cameraIP + " " + t("камерын stream тохиргоо"),
+      icon: <PlusOutlined />,
+      style: { ...style },
+      content: (
+        <StreamTokhirgooIp
+          ref={streamTokhirgooRefIP}
+          token={token}
+          cameraObject={cameraObject}
+          setUnshijBaina={setUnshijBaina}
+          refresh={refresh}
+          saveTokhirgoo={saveTokhirgoo}
+        />
+      ),
+      footer,
+    });
+  }
+
   return (
     <div
       key={fieldKey}
@@ -562,6 +617,9 @@ function Khaalga({ name, fieldKey, restField, remove }) {
                     placeholder="Камер IP оруулна уу..."
                   />
                 </Form.Item>
+                <SettingOutlined 
+                  className="ml-2 mt-2"
+                  onClick={() => cameraTokhirgooOruulyaIp(talbar, talbar.name)}/>
                 <MinusCircleOutlined
                   className="ml-2 mt-2"
                   onClick={() => remove(talbar.name)}
