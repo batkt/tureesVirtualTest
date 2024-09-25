@@ -286,7 +286,7 @@ function GereeBaiguulakh({ token }) {
     if (gereeniiZagvar === undefined) return;
     let butsaakhUtga = _.cloneDeep(gereeniiZagvar);
     if (!butsaakhUtga?.dedKhesguud)
-      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud.filter(
+      butsaakhUtga.dedKhesguud = butsaakhUtga.dedKhesguud?.filter(
         (a) => a.khamaarakhKheseg === steps[current].title
       );
     if (khadgalakhGeree.gereeniiOgnoo) {
@@ -320,8 +320,7 @@ function GereeBaiguulakh({ token }) {
     for (const [key, value] of Object.entries(khadgalakhGeree)) {
       if (key === "zardluud") {
         value.map((mur) => {
-          butsaakhUtga.dedKhesguud
-            .filter(
+          butsaakhUtga.dedKhesguud?.filter(
               (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
             )
             .map((b) => {
@@ -337,9 +336,18 @@ function GereeBaiguulakh({ token }) {
               );
             });
         });
+
+        value.map((mur) => {
+          butsaakhUtga?.dedKhesguud
+            ?.filter(
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+            )
+            .map((b) => {
+              b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
+            });
+        });
       } else {
-        butsaakhUtga.dedKhesguud
-          .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
+        butsaakhUtga.dedKhesguud?.filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)
           .map((b) => {
             b.zaalt = b.zaalt.replace(new RegExp(`&lt;${key}&gt;`, "g"), value);
           });

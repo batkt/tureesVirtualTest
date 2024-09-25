@@ -1051,6 +1051,16 @@ function ZakhialgiinKhyanalt() {
                     ));
                   });
               });
+
+              value.map((mur) => {
+                butsaakhUtga?.dedKhesguud
+                  ?.filter(
+                    (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+                  )
+                  .map((b) => {
+                    b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
+                  });
+              });
             } else {
               data.dedKhesguud
                 .filter((a) => !!a.zaalt && a.zaalt?.indexOf(key) !== -1)

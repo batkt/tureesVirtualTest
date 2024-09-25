@@ -359,10 +359,18 @@ function GereeBaiguulakh({ token, data }) {
         value.map((mur) => {
           butsaakhUtga?.dedKhesguud
             ?.filter(
-              (a) => !!a.zaalt && (a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1 || a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1)
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tariff`) !== -1
             )
             .map((b) => {
               b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tariff&gt;`, "g"), formatNumber(mur.tariff));
+            });
+        });
+        value.map((mur) => {
+          butsaakhUtga?.dedKhesguud
+            ?.filter(
+              (a) => !!a.zaalt && a.zaalt?.indexOf(`${mur.ner}.tulukhDun`) !== -1
+            )
+            .map((b) => {
               b.zaalt = b.zaalt.replace(new RegExp(`&lt;${mur.ner}.tulukhDun&gt;`, "g"), formatNumber(mur.tulukhDun));
             });
         });
