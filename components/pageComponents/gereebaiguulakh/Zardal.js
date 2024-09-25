@@ -209,6 +209,8 @@ const Zardal = ({
         if (el.turul === "Дурын") {
           el.dun = "";
         }
+        var urjuulekhData = el?.turul === "1м2" ? value.talbainKhemjee : el?.turul === "Тогтмол" && 1;
+        el.tulukhDun = el.tariff * urjuulekhData;
       });
       form.setFieldsValue({ ...value });
       onChange({ ...value });
