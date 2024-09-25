@@ -113,7 +113,7 @@ function cameraVals({ token }) {
     return (
     <Admin
         khuudasniiNer='cameraVals'
-        title='Камерын жагсаалт'
+        title='Камерын хяналт'
         className='p-4'
         dedKhuudas={true}
         tsonkhniiId={"66f17b724035091d77aa0136"}>

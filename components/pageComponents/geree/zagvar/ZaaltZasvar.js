@@ -186,9 +186,54 @@ function ZaaltZasvar({ destroy, value, change, zardal }, ref) {
         talbar: `${a.ner}.khemjikhNegj`,
       });*/
       songokhTalbaruud.push({
+        ner: `${a.ner}.Дүн`,
+        talbar: `${a.ner}.tulukhDun`,
+      });
+
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Хэмжих нэгж`,
+        talbar: `${a.ner}.khemjikhNegj`,
+      });
+
+      songokhTalbaruud.push({
         ner: `${a.ner}.Тариф`,
         talbar: `${a.ner}.tariff`,
       });
+
+      songokhTalbaruud.push({
+        ner: `${a.ner}.Нэгж`,
+        talbar: `${a.ner}.negj`,
+      });
+      if (a.turul == "кВт" || a.turul == "1м3") {
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Өмнөх заалт`,
+          talbar: `${a.ner}.umnukhZaalt`,
+        });
+        songokhTalbaruud.push({
+          ner: `${a.ner}.Сүүлийн заалт`,
+          talbar: `${a.ner}.suuliinZaalt`,
+        });
+      } else {
+        songokhTalbaruud.push({
+            ner: `${a.ner}.Хөнгөлөлт`,
+            talbar: `${a.ner}.khungulult`,
+        });
+      }
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал`,
+      talbar: `niitZardliinDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нийт ашиглалтын зардал/Нөатгүй/`,
+      talbar: `niitZardliinNuatguiDun`,
+    });
+
+    songokhTalbaruud.push({
+      ner: `Нөат (10%)`,
+      talbar: `niitZardliinNuatiinDun`,
     });
 
     const zardaluud = customPlugin({

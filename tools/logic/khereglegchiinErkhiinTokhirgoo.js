@@ -183,11 +183,11 @@ export const tsonknuud = [
     key: "/khyanalt/zogsool/mashinBurtgel",
   },
   {
-    ner: "Камер",
+    ner: "Камер - Касс",
     key: "/khyanalt/zogsool/camera",
   },
   {
-    ner: "Камерын жагсаалт",
+    ner: "Камерын хяналт",
     key: "/khyanalt/zogsool/cameraVals",
   },
   {
@@ -739,7 +739,7 @@ export const khuudasnuud = [
         ),
       },
       {
-        ner: "Камер",
+        ner: "Камер - Касс",
         khuudasniiNer: "Camera",
         href: "/khyanalt/zogsool/camera",
         icon: (
@@ -763,7 +763,7 @@ export const khuudasnuud = [
         ),
       },
       {
-        ner: "Камерын жагсаалт",
+        ner: "Камерын хяналт",
         khuudasniiNer: "CameraVals",
         href: "/khyanalt/zogsool/cameraVals",
         icon: (
